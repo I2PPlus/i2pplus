@@ -122,23 +122,21 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
     /**
-     *  Quote:
-     *  Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
-     *  above 5 ms there is very little or no improvement in utilization.
+     * Quote:
+     * Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
+     * above 5 ms there is very little or no improvement in utilization.
      *
-     *  I2P: Lowered to 5ms for reduced latency in high-performance scenarios
-     *
+     * I2P: Lowered to 5ms for reduced latency in high-performance scenarios
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
     /** CoDel target delay in ms. */
     private volatile long _target;
 
     /**
-     *  Quote:
-     *  A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
+     * Quote:
+     * A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
      *
-     *  I2P: Lowered to 50ms for faster reaction to congestion
-     *
+     * I2P: Lowered to 50ms for faster reaction to congestion
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
     /** CoDel interval in ms. */
@@ -160,14 +158,14 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     *  Queue with explicit CoDel target and interval.
+     * Queue with explicit CoDel target and interval.
      *
-     *  @param ctx the I2P application context
-     *  @param name for stats
-     *  @param capacity the maximum capacity of the queue
-     *  @param target the target
-     *  @param interval how long above target to start dropping (ms)
-     *  @since 0.9.50
+     * @param ctx the I2P application context
+     * @param name for stats
+     * @param capacity the maximum capacity of the queue
+     * @param target the target
+     * @param interval how long above target to start dropping (ms)
+     * @since 0.9.50
      */
     public CoDelBlockingQueue(I2PAppContext ctx, String name, int capacity, int target, int interval) {
         super(capacity);
@@ -287,8 +285,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     *  Updates stats and possibly drops while draining.
-     *  May exit early if a CoDel drop occurs (poll() returns null for a dropped item).
+     * Updates stats and possibly drops while draining.
+     * May exit early if a CoDel drop occurs (poll() returns null for a dropped item).
      */
     @Override
     public int drainTo(Collection<? super E> c) {
@@ -302,8 +300,8 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     *  Updates stats and possibly drops while draining.
-     *  May exit early if a CoDel drop occurs (poll() returns null for a dropped item).
+     * Updates stats and possibly drops while draining.
+     * May exit early if a CoDel drop occurs (poll() returns null for a dropped item).
      */
     @Override
     public int drainTo(Collection<? super E> c, int maxElements) {
@@ -317,20 +315,20 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     *  Drains all, without updating stats or dropping.
+     * Drains all, without updating stats or dropping.
      *
-     *  @param c the collection to drain into
-     *  @return the number of elements drained
+     * @param c the collection to drain into
+     * @return the number of elements drained
      */
     public int drainAllTo(Collection<? super E> c) {
         return super.drainTo(c);
     }
 
     /**
-     *  Has the head of the queue been waiting too long,
-     *  or is the queue almost full?
+     * Has the head of the queue been waiting too long,
+     * or is the queue almost full?
      *
-     *  @return true if the queue is backlogged
+     * @return true if the queue is backlogged
      */
     public synchronized boolean isBacklogged() {
         E e = peek();
@@ -344,9 +342,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     /////// private below here
 
     /**
-     *  Caller must synch on this
+     * Caller must synch on this
      *
-     *  @param entry may be null
+     * @param entry may be null
      */
     private boolean updateVars(E entry) {
         // This is a helper routine that tracks whether the sojourn time
@@ -377,9 +375,9 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     *  Dequeue the next element, applying CoDel drops as needed.
+     * Dequeue the next element, applying CoDel drops as needed.
      *
-     *  @return if null, call again
+     * @return if null, call again
      */
     private E deque() throws InterruptedException {
         E rv = super.take();
@@ -389,10 +387,10 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private static final int MAX_DROPS_PER_CALL = 8;
 
     /**
-     *  Apply CoDel control to the given entry, dropping if needed.
+     * Apply CoDel control to the given entry, dropping if needed.
      *
-     *  @param rv may be null
-     *  @return rv or a subequent entry or null if dropped
+     * @param rv may be null
+     * @return rv or a subequent entry or null if dropped
      */
     private E codel(E rv) {
         synchronized (this) {
@@ -471,7 +469,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     *  Caller must synch on this
+     * Caller must synch on this
      */
     private void control_law(long t) {
         _drop_next = t + (long) (_interval / Math.sqrt(_count));

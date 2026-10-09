@@ -19,9 +19,9 @@ import net.i2p.util.PortMapper;
  * then fetch the first 56 bytes of the URL, extract the version,
  * and compare.
  *
- *  Moved from web/ and turned into an UpdateTask.
+ * Moved from web/ and turned into an UpdateTask.
  *
- *  @since 0.7.12
+ * @since 0.7.12
  */
 class PluginUpdateChecker extends UpdateRunner {
     private final String _appName;

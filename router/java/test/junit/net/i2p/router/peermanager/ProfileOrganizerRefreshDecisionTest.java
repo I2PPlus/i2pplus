@@ -10,16 +10,16 @@ import net.i2p.data.router.RouterInfo;
 import org.junit.Test;
 
 /**
- *  Tests for the pure decision logic behind the promotion hold on a stale
- *  RouterInfo: whether a RouterInfo is too old to promote on, and when a tier is
- *  too short to afford to leave the peer out.
+ * Tests for the pure decision logic behind the promotion hold on a stale
+ * RouterInfo: whether a RouterInfo is too old to promote on, and when a tier is
+ * too short to afford to leave the peer out.
  *
- *  <p>Both predicates are pure so the promotion path's behaviour can be pinned
- *  without a router: the threshold has to be exactly where the RouterInfo age
- *  comparison says it is, or a peer is either promoted while its entry is still
- *  authoritative or held back on an entry that should have been replaced.
+ * <p>Both predicates are pure so the promotion path's behaviour can be pinned
+ * without a router: the threshold has to be exactly where the RouterInfo age
+ * comparison says it is, or a peer is either promoted while its entry is still
+ * authoritative or held back on an entry that should have been replaced.
  *
- *  @since 0.9.72
+ * @since 0.9.72
  */
 public class ProfileOrganizerRefreshDecisionTest {
 

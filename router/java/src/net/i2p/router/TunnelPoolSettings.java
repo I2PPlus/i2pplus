@@ -14,7 +14,6 @@ import net.i2p.util.SystemVersion;
 
 /**
  * Wrap up the settings for a pool of tunnels.
- *
  */
 public class TunnelPoolSettings {
     private final Hash _destination;
@@ -118,14 +117,14 @@ public class TunnelPoolSettings {
     private final long _msgIDBloomXor;
 
     /**
-     *  Exploratory tunnel
+     * Exploratory tunnel
      */
     public TunnelPoolSettings(boolean isInbound) {
         this(null, isInbound);
     }
 
     /**
-     *  Client tunnel unless dest == null
+     * Client tunnel unless dest == null
      */
     public TunnelPoolSettings(Hash dest, boolean isInbound) {
         _destination = dest;
@@ -176,26 +175,26 @@ public class TunnelPoolSettings {
     public void setBackupQuantity(int quantity) { _backupQuantity = quantity; }
 
     /**
-     *  Convenience
+     * Convenience
      *
-     *  @return getQuantity() + getBackupQuantity()
-     *  @since 0.8.11
+     * @return getQuantity() + getBackupQuantity()
+     * @since 0.8.11
      */
     public int getTotalQuantity() {
         return _quantity + _backupQuantity;
     }
 
     /**
-     *  How many remote hops should be in the tunnel NOT including us
+     * How many remote hops should be in the tunnel NOT including us
      *
-     *  @return 0 to 7
+     * @return 0 to 7
      */
     public int getLength() { return _length; }
 
     /**
-     *  How many remote hops should be in the tunnel NOT including us
+     * How many remote hops should be in the tunnel NOT including us
      *
-     *  @param length 0 to 7 (not enforced here)
+     * @param length 0 to 7 (not enforced here)
      */
     public void setLength(int length) { _length = length; }
 
@@ -216,21 +215,21 @@ public class TunnelPoolSettings {
     }
 
     /**
-     *  Whether the pool is expressly configured for zero-hop tunnels,
-     *  by length 0 or lengthOverride 0.  Excludes the allowZeroHop fallback
-     *  flag, which permits zero hops only as a last resort.
+     * Whether the pool is expressly configured for zero-hop tunnels,
+     * by length 0 or lengthOverride 0.  Excludes the allowZeroHop fallback
+     * flag, which permits zero hops only as a last resort.
      *
-     *  @return true if zero hops are the configured tunnel length
+     * @return true if zero hops are the configured tunnel length
      */
     public boolean isZeroHop() {
         return _length + Math.min(_lengthVariance, 0) <= 0 || _lengthOverride == 0;
     }
 
     /**
-     *  Should tunnels in this pool be tested?
+     * Should tunnels in this pool be tested?
      *
-     *  @return true for normal pools, false for hostchecker/ping tunnels
-     *  @since 0.9.68+
+     * @return true for normal pools, false for hostchecker/ping tunnels
+     * @since 0.9.68+
      */
     public boolean shouldTest() {
         return _shouldTest;
@@ -276,22 +275,22 @@ public class TunnelPoolSettings {
     public Hash getDestination() { return _destination; }
 
     /**
-     *  Other destinations that use the same tunnel (or null if exploratory).
-     *  Modifiable, concurrent, not a copy
+     * Other destinations that use the same tunnel (or null if exploratory).
+     * Modifiable, concurrent, not a copy
      *
-     *  @return the aliases
-     *  @since 0.9.21
+     * @return the aliases
+     * @since 0.9.21
      */
     public Set<Hash> getAliases() {
         return _aliases;
     }
 
     /**
-     *  Other destination that this is an alias of (or null).
-     *  If non-null, don't build tunnels.
+     * Other destination that this is an alias of (or null).
+     * If non-null, don't build tunnels.
      *
-     *  @return the alias of
-     *  @since 0.9.21
+     * @return the alias of
+     * @since 0.9.21
      */
     public Hash getAliasOf() {
         return _aliasOf;
@@ -299,61 +298,61 @@ public class TunnelPoolSettings {
 
 
     /**
-     *  Other destination that this is an alias of (or null).
-     *  If non-null, don't build tunnels.
+     * Other destination that this is an alias of (or null).
+     * If non-null, don't build tunnels.
      *
-     *  @since 0.9.21
+     * @since 0.9.21
      */
     public void setAliasOf(Hash h) {
         _aliasOf = h;
     }
 
     /**
-     *  First peer exclusions for diversity.
-     *  These are peers that should not be used as the first hop in new tunnels.
+     * First peer exclusions for diversity.
+     * These are peers that should not be used as the first hop in new tunnels.
      *
-     *  @return Set of peer hashes to exclude, or null if none set
-     *  @since 0.9.68+
+     * @return Set of peer hashes to exclude, or null if none set
+     * @since 0.9.68+
      */
     public Set<Hash> getFirstPeerExclusions() {
         return _firstPeerExclusions;
     }
 
     /**
-     *  First peer exclusions for diversity.
+     * First peer exclusions for diversity.
      *
-     *  @param exclusions Set of peer hashes to exclude, or null to clear
-     *  @since 0.9.68+
+     * @param exclusions Set of peer hashes to exclude, or null to clear
+     * @since 0.9.68+
      */
     public void setFirstPeerExclusions(Set<Hash> exclusions) {
         _firstPeerExclusions = exclusions;
     }
 
     /**
-     *  Last peer exclusions for diversity.
-     *  These are peers that should not be used as the last hop in new tunnels.
+     * Last peer exclusions for diversity.
+     * These are peers that should not be used as the last hop in new tunnels.
      *
-     *  @return Set of peer hashes to exclude, or null if none set
-     *  @since 0.9.68+
+     * @return Set of peer hashes to exclude, or null if none set
+     * @since 0.9.68+
      */
     public Set<Hash> getLastPeerExclusions() {
         return _lastPeerExclusions;
     }
 
     /**
-     *  Last peer exclusions for diversity.
+     * Last peer exclusions for diversity.
      *
-     *  @param exclusions Set of peer hashes to exclude, or null to clear
-     *  @since 0.9.68+
+     * @param exclusions Set of peer hashes to exclude, or null to clear
+     * @since 0.9.68+
      */
     public void setLastPeerExclusions(Set<Hash> exclusions) {
         _lastPeerExclusions = exclusions;
     }
 
     /**
-     *  Random key used for peer ordering.
+     * Random key used for peer ordering.
      *
-     *  @return non-null
+     * @return non-null
      */
     public SessionKey getRandomKey() { return _randomKey; }
 
@@ -367,29 +366,29 @@ public class TunnelPoolSettings {
     public void setDestinationNickname(String name) { _destinationNickname = name; }
 
     /**
-     *  How many bytes to match to determine if a router's IP is too close to another's
-     *  to be in the same tunnel
-     *  (1-4, 0 to disable)
+     * How many bytes to match to determine if a router's IP is too close to another's
+     * to be in the same tunnel
+     * (1-4, 0 to disable)
      *
-     *  Support removed in the ClientPeerSelector in 0.8.6; restored in 0.9.53
+     * Support removed in the ClientPeerSelector in 0.8.6; restored in 0.9.53
      *
-     *  @return 0-4 Number of bytes to match to determine if peers in the same IP range should
-     *          not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     * @return 0-4 Number of bytes to match to determine if peers in the same IP range should
+     * not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
      */
     public int getIPRestriction() { return _IPRestriction; }
 
     /**
-     *  Outbound message priority - for outbound tunnels only
+     * Outbound message priority - for outbound tunnels only
      *
-     *  @return -25 to +30, default 30 for outbound exploratory and 0 for others
-     *  @since 0.9.4
+     * @return -25 to +30, default 30 for outbound exploratory and 0 for others
+     * @since 0.9.4
      */
     public int getPriority() { return _priority; }
 
     /**
-     *  Options not recognized when reading from properties.
+     * Options not recognized when reading from properties.
      *
-     *  @return non-null
+     * @return non-null
      */
     public Properties getUnknownOptions() { return _unknownOptions; }
 
@@ -401,10 +400,10 @@ public class TunnelPoolSettings {
     public long getMsgIdBloomXor() { return _msgIDBloomXor; }
 
     /**
-     *  Defaults in props are NOT honored.
-     *  In-JVM client side must promote defaults to the primary map.
+     * Defaults in props are NOT honored.
+     * In-JVM client side must promote defaults to the primary map.
      *
-     *  @param prefix non-null
+     * @param prefix non-null
      */
     public void readFromProperties(String prefix, Properties props) {
         for (Map.Entry<Object, Object> e : props.entrySet()) {
@@ -452,9 +451,9 @@ public class TunnelPoolSettings {
     }
 
     /**
-     *  Write the settings into the given properties map.
+     * Write the settings into the given properties map.
      *
-     *  @param prefix non-null
+     * @param prefix non-null
      */
     public void writeToProperties(String prefix, Properties props) {
         if (props == null) return;

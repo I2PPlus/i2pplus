@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -18,7 +17,6 @@ import java.util.Date;
 
 /**
  * Render a log record according to the log manager's settings
- *
  */
 class LogRecordFormatter {
     /** Line separator. */
@@ -44,8 +42,8 @@ class LogRecordFormatter {
     }
 
     /**
-     *  @param showDate if false, skip any date in the format (use when writing to wrapper log)
-     *  @since 0.8.2
+     * @param showDate if false, skip any date in the format (use when writing to wrapper log)
+     * @since 0.8.2
      */
     static String formatRecord(LogManager manager, LogRecord rec, boolean showDate) {
         int size = 128 + rec.getMessage().length();
@@ -145,8 +143,8 @@ class LogRecordFormatter {
      * @param str the raw name, or null (treated as empty)
      * @param size the exact output width, must be &gt; 3
      * @return a string of exactly {@code size} chars: right-padded with spaces
-     *         when short, or the last {@code size - 3} chars prefixed with "…"
-     *         when longer than {@code size}
+     * when short, or the last {@code size - 3} chars prefixed with "…"
+     * when longer than {@code size}
      * @since 0.9.71+
      */
     static String padOrTruncate(String str, int size) {
@@ -162,11 +160,11 @@ class LogRecordFormatter {
     }
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers.
+     * It does not translate!
      *
-     *  @return s
+     * @return s
      */
     private static String _x(String s) {
         return s;

@@ -8,14 +8,14 @@ package net.i2p.data.i2np;
 import net.i2p.data.SimpleDataStructure;
 
 /**
- *  ElGamal-encrypted request or response.
- *  528 bytes. Previously stored in a ByteArray.
- *  May or may not be AES layer-encrypted.
+ * ElGamal-encrypted request or response.
+ * 528 bytes. Previously stored in a ByteArray.
+ * May or may not be AES layer-encrypted.
  *
- *  Note that these are layer-encrypted and layer-decrypted in-place.
- *  Do not cache.
+ * Note that these are layer-encrypted and layer-decrypted in-place.
+ * Do not cache.
  *
- *  @since 0.9.18
+ * @since 0.9.18
  */
 public class EncryptedBuildRecord extends SimpleDataStructure {
 

@@ -7,20 +7,20 @@ import net.i2p.i2ptunnel.TunnelControllerGroup;
 import org.junit.Test;
 
 /**
- *  Tests per-server handler-pool sizing from each pool's own demand.
+ * Tests per-server handler-pool sizing from each pool's own demand.
  *
- *  <p>The defect: handler threads came out of one global budget that was
- *  divided across every open server tunnel, with a floor charged to each before
- *  any load weighting. On a router with twenty eepsites the floor consumed the
- *  budget, so the pool actually serving requests was left with a ceiling of
- *  about a dozen threads and started refusing connections outright — while
- *  nineteen idle eepsites held reservations they were not using, since
- *  {@code allowCoreThreadTimeOut(true)} reclaims idle threads anyway.
+ * <p>The defect: handler threads came out of one global budget that was
+ * divided across every open server tunnel, with a floor charged to each before
+ * any load weighting. On a router with twenty eepsites the floor consumed the
+ * budget, so the pool actually serving requests was left with a ceiling of
+ * about a dozen threads and started refusing connections outright — while
+ * nineteen idle eepsites held reservations they were not using, since
+ * {@code allowCoreThreadTimeOut(true)} reclaims idle threads anyway.
  *
- *  <p>Each pool is now sized from its own queue depth and active count, and the
- *  global value is only a proportional safety trim.
+ * <p>Each pool is now sized from its own queue depth and active count, and the
+ * global value is only a proportional safety trim.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class ServerHandlerDemandTest {
 

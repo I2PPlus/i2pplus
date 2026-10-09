@@ -5,7 +5,6 @@ package net.i2p.i2ptunnel.web;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.File;
@@ -55,20 +54,20 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The target host for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the target host for the tunnel
-     *  @since 0.8.3
+     * The target host for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the target host for the tunnel
+     * @since 0.8.3
      */
     public String getTargetHost(int tunnel) {
         return DataHelper.escapeHTML(_helper.getTargetHost(tunnel));
     }
 
     /**
-     *  The target port for the tunnel, or empty string if none.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the target port, or "" if none
-     *  @since 0.8.3
+     * The target port for the tunnel, or empty string if none.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the target port, or "" if none
+     * @since 0.8.3
      */
     public String getTargetPort(int tunnel) {
         int port = _helper.getTargetPort(tunnel);
@@ -76,30 +75,30 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The private key file for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the private key file
-     *  @since 0.8.3
+     * The private key file for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the private key file
+     * @since 0.8.3
      */
     public String getPrivateKeyFile(int tunnel) {
         return _helper.getPrivateKeyFile(tunnel);
     }
 
     /**
-     *  The alternate private key file for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return path or ""
-     *  @since 0.9.30
+     * The alternate private key file for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return path or ""
+     * @since 0.9.30
      */
     public String getAltPrivateKeyFile(int tunnel) {
         return _helper.getAltPrivateKeyFile(tunnel);
     }
 
     /**
-     *  The signing private key for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return key or null
-     *  @since 0.9.26
+     * The signing private key for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return key or null
+     * @since 0.9.26
      */
     public SigningPrivateKey getSigningPrivateKey(int tunnel) {
         TunnelController tun = getController(tunnel);
@@ -117,20 +116,20 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Whether the tunnel is configured to start when the router starts.
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if the tunnel starts automatically
-     *  @since 0.8.3
+     * Whether the tunnel is configured to start when the router starts.
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if the tunnel starts automatically
+     * @since 0.8.3
      */
     public boolean startAutomatically(int tunnel) {
         return _helper.shouldStartAutomatically(tunnel);
     }
 
     /**
-     *  The minimum startup delay in seconds for server tunnels.
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return the minimum startup delay in seconds
-     *  @since 0.9.68+
+     * The minimum startup delay in seconds for server tunnels.
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return the minimum startup delay in seconds
+     * @since 0.9.68+
      */
     public int getStartupDelayMin(int tunnel) {
         TunnelController tc = _helper.getController(tunnel);
@@ -139,10 +138,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The maximum startup delay in seconds for server tunnels.
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return the maximum startup delay in seconds
-     *  @since 0.9.68+
+     * The maximum startup delay in seconds for server tunnels.
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return the maximum startup delay in seconds
+     * @since 0.9.68+
      */
     public int getStartupDelayMax(int tunnel) {
         TunnelController tc = _helper.getController(tunnel);
@@ -151,10 +150,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The minimum shutdown delay in seconds for server tunnels.
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return the minimum shutdown delay in seconds
-     *  @since 0.9.68+
+     * The minimum shutdown delay in seconds for server tunnels.
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return the minimum shutdown delay in seconds
+     * @since 0.9.68+
      */
     public int getShutdownDelayMin(int tunnel) {
         TunnelController tc = _helper.getController(tunnel);
@@ -163,10 +162,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The maximum shutdown delay in seconds for server tunnels.
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return the maximum shutdown delay in seconds
-     *  @since 0.9.68+
+     * The maximum shutdown delay in seconds for server tunnels.
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return the maximum shutdown delay in seconds
+     * @since 0.9.68+
      */
     public int getShutdownDelayMax(int tunnel) {
         TunnelController tc = _helper.getController(tunnel);
@@ -175,20 +174,20 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Whether the tunnel connection should be delayed until the first client connects.
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if the connection is delayed
-     *  @since 0.8.3
+     * Whether the tunnel connection should be delayed until the first client connects.
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if the connection is delayed
+     * @since 0.8.3
      */
     public boolean shouldDelay(int tunnel) {
         return _helper.shouldDelayConnect(tunnel);
     }
 
     /**
-     *  Whether the tunnel is interactive (requires immediate response).
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if the tunnel is interactive
-     *  @since 0.8.3
+     * Whether the tunnel is interactive (requires immediate response).
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if the tunnel is interactive
+     * @since 0.8.3
      */
     public boolean isInteractive(int tunnel) {
         return _helper.isInteractive(tunnel);
@@ -239,187 +238,187 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Returns the outbound tunnel depth.
+     * Returns the outbound tunnel depth.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @param defaultLength the default depth if not configured
-     *  @return the outbound tunnel depth, or -1 for default
-     *  @since 0.9.33
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @param defaultLength the default depth if not configured
+     * @return the outbound tunnel depth, or -1 for default
+     * @since 0.9.33
      */
     public int getTunnelDepthOut(int tunnel, int defaultLength) {
         return _helper.getTunnelDepthOut(tunnel, defaultLength);
     }
 
     /**
-     *  Returns the outbound tunnel quantity.
+     * Returns the outbound tunnel quantity.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @param defaultQuantity the default quantity if not configured
-     *  @return the outbound tunnel quantity
-     *  @since 0.9.33
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @param defaultQuantity the default quantity if not configured
+     * @return the outbound tunnel quantity
+     * @since 0.9.33
      */
     public int getTunnelQuantityOut(int tunnel, int defaultQuantity) {
         return _helper.getTunnelQuantityOut(tunnel, defaultQuantity);
     }
 
     /**
-     *  Returns the outbound backup tunnel quantity.
+     * Returns the outbound backup tunnel quantity.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @param defaultBackupQuantity the default backup quantity if not configured
-     *  @return the outbound backup tunnel quantity
-     *  @since 0.9.33
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @param defaultBackupQuantity the default backup quantity if not configured
+     * @return the outbound backup tunnel quantity
+     * @since 0.9.33
      */
     public int getTunnelBackupQuantityOut(int tunnel, int defaultBackupQuantity) {
         return _helper.getTunnelBackupQuantityOut(tunnel, defaultBackupQuantity);
     }
 
     /**
-     *  Returns the outbound tunnel variance.
+     * Returns the outbound tunnel variance.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @param defaultVariance the default variance if not configured
-     *  @return the outbound tunnel variance
-     *  @since 0.9.33
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @param defaultVariance the default variance if not configured
+     * @return the outbound tunnel variance
+     * @since 0.9.33
      */
     public int getTunnelVarianceOut(int tunnel, int defaultVariance) {
         return _helper.getTunnelVarianceOut(tunnel, defaultVariance);
     }
 
     /**
-     *  Whether the tunnel should reduce on idle.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if the tunnel should reduce on idle
-     *  @since 0.8.3
+     * Whether the tunnel should reduce on idle.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if the tunnel should reduce on idle
+     * @since 0.8.3
      */
     public boolean getReduce(int tunnel) {
         return _helper.getReduceOnIdle(tunnel, false);
     }
 
     /**
-     *  The reduce count for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the reduce count for the tunnel
-     *  @since 0.8.3
+     * The reduce count for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the reduce count for the tunnel
+     * @since 0.8.3
      */
     public int getReduceCount(int tunnel) {
         return _helper.getReduceCount(tunnel, 1);
     }
 
     /**
-     *  The reduce time in minutes for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the reduce time in minutes for the tunnel
-     *  @since 0.8.3
+     * The reduce time in minutes for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the reduce time in minutes for the tunnel
+     * @since 0.8.3
      */
     public int getReduceTime(int tunnel) {
         return _helper.getReduceTime(tunnel, 20);
     }
 
     /**
-     *  The certificate for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the certificate for the tunnel
-     *  @since 0.8.3
+     * The certificate for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the certificate for the tunnel
+     * @since 0.8.3
      */
     public int getCert(int tunnel) {
         return _helper.getCert(tunnel);
     }
 
     /**
-     *  The encryption effort for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the encryption effort for the tunnel
-     *  @since 0.8.3
+     * The encryption effort for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the encryption effort for the tunnel
+     * @since 0.8.3
      */
     public int getEffort(int tunnel) {
         return _helper.getEffort(tunnel);
     }
 
     /**
-     *  The signer for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the signer for the tunnel
-     *  @since 0.8.3
+     * The signer for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the signer for the tunnel
+     * @since 0.8.3
      */
     public String getSigner(int tunnel) {
         return _helper.getSigner(tunnel);
     }
 
     /**
-     *  Whether encryption is enabled for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if encryption is enabled for the tunnel
-     *  @since 0.8.3
+     * Whether encryption is enabled for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if encryption is enabled for the tunnel
+     * @since 0.8.3
      */
     public boolean getEncrypt(int tunnel) {
         return _helper.getEncrypt(tunnel);
     }
 
     /**
-     *  Returns the encryption mode for the tunnel.
+     * Returns the encryption mode for the tunnel.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return the encryption mode as a string
-     *  @since 0.9.40
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return the encryption mode as a string
+     * @since 0.9.40
      */
     public String getEncryptMode(int tunnel) {
         return Integer.toString(_helper.getEncryptMode(tunnel));
     }
 
     /**
-     *  Returns the blinded password for the tunnel.
+     * Returns the blinded password for the tunnel.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return the blinded password, or empty string if none
-     *  @since 0.9.40
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return the blinded password, or empty string if none
+     * @since 0.9.40
      */
     public String getBlindedPassword(int tunnel) {
         return _helper.getBlindedPassword(tunnel);
     }
 
     /**
-     *  List of b64 name : b64key
-     *  Pubkeys for DH, privkeys for PSK
-     *  @param tunnel index of the tunnel in the configured list
-     *  @param isDH true for DH, false for PSK
-     *  @return non-null
-     *  @since 0.9.41
+     * List of b64 name : b64key
+     * Pubkeys for DH, privkeys for PSK
+     * @param tunnel index of the tunnel in the configured list
+     * @param isDH true for DH, false for PSK
+     * @return non-null
+     * @since 0.9.41
      */
     public List<String> getClientAuths(int tunnel, boolean isDH) {
         return _helper.getClientAuths(tunnel, isDH);
     }
 
     /**
-     *  Returns the signature type for the tunnel.
+     * Returns the signature type for the tunnel.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @param newTunnelType used if tunnel &lt; 0
-     *  @return the signature type code
-     *  @since 0.9.12
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @param newTunnelType used if tunnel &lt; 0
+     * @return the signature type code
+     * @since 0.9.12
      */
     public int getSigType(int tunnel, String newTunnelType) {
         return _helper.getSigType(tunnel, newTunnelType);
     }
 
     /**
-     *  Returns whether the given signature type is available.
+     * Returns whether the given signature type is available.
      *
-     *  @param code the signature type code
-     *  @return true if available
-     *  @since 0.9.12
+     * @param code the signature type code
+     * @return true if available
+     * @since 0.9.12
      */
     public boolean isSigTypeAvailable(int code) {
         return SigType.isAvailable(code);
     }
 
     /**
-     *  Returns whether the tunnel signature type can be changed.
-     *  The type is fixed if the tunnel has an existing destination.
+     * Returns whether the tunnel signature type can be changed.
+     * The type is fixed if the tunnel has an existing destination.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if the signature type can be changed
-     *  @since 0.9.33
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if the signature type can be changed
+     * @since 0.9.33
      */
     public boolean canChangeSigType(int tunnel) {
         if (tunnel < 0) {return true;}
@@ -428,11 +427,11 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Returns whether the tunnel encryption type can be changed.
+     * Returns whether the tunnel encryption type can be changed.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if the encryption type can be changed
-     *  @since 0.9.46
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if the encryption type can be changed
+     * @since 0.9.46
      */
     public boolean canChangeEncType(int tunnel) {
         if (tunnel < 0) {return true;}
@@ -440,11 +439,11 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Returns whether the tunnel port setting can be changed.
+     * Returns whether the tunnel port setting can be changed.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if the port can be changed
-     *  @since 0.9.46
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if the port can be changed
+     * @since 0.9.46
      */
     public boolean canChangePort(int tunnel) {
         if (tunnel < 0) {return true;}
@@ -452,23 +451,23 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Returns whether the tunnel supports the specified encryption type.
+     * Returns whether the tunnel supports the specified encryption type.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @param encType the encryption type code
-     *  @return true if the tunnel has the encryption type
-     *  @since 0.9.44
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @param encType the encryption type code
+     * @return true if the tunnel has the encryption type
+     * @since 0.9.44
      */
     public boolean hasEncType(int tunnel, int encType) {
         return _helper.hasEncType(tunnel, encType);
     }
 
     /**
-     *  Returns the encrypted inbound random key, hidden in forms.
+     * Returns the encrypted inbound random key, hidden in forms.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return the encrypted inbound random key
-     *  @since 0.9.18
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return the encrypted inbound random key
+     * @since 0.9.18
      */
     public String getKey1(int tunnel) {
         String v = _helper.getInboundRandomKey(tunnel);
@@ -476,10 +475,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The encrypted outbound random key.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the encrypted outbound random key
-     *  @since 0.8.3
+     * The encrypted outbound random key.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the encrypted outbound random key
+     * @since 0.8.3
      */
     public String getKey2(int tunnel) {
         String v = _helper.getOutboundRandomKey(tunnel);
@@ -487,10 +486,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The encrypted lease set signing private key.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the encrypted lease set signing private key
-     *  @since 0.8.3
+     * The encrypted lease set signing private key.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the encrypted lease set signing private key
+     * @since 0.8.3
      */
     public String getKey3(int tunnel) {
         String v = _helper.getLeaseSetSigningPrivateKey(tunnel);
@@ -498,10 +497,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The encrypted lease set private key.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the encrypted lease set private key
-     *  @since 0.8.3
+     * The encrypted lease set private key.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the encrypted lease set private key
+     * @since 0.8.3
      */
     public String getKey4(int tunnel) {
         String v = _helper.getLeaseSetPrivateKey(tunnel);
@@ -509,194 +508,194 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Whether DCC is enabled for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if DCC is enabled for the tunnel
-     *  @since 0.8.9
+     * Whether DCC is enabled for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if DCC is enabled for the tunnel
+     * @since 0.8.9
      */
     public boolean getDCC(int tunnel) {
         return _helper.getDCC(tunnel);
     }
 
     /**
-     *  The encryption key for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the encryption key for the tunnel
-     *  @since 0.8.3
+     * The encryption key for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the encryption key for the tunnel
+     * @since 0.8.3
      */
     public String getEncryptKey(int tunnel) {
         return _helper.getEncryptKey(tunnel);
     }
 
     /**
-     *  The access mode for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the access mode for the tunnel
-     *  @since 0.8.3
+     * The access mode for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the access mode for the tunnel
+     * @since 0.8.3
      */
     public String getAccessMode(int tunnel) {
         return Integer.toString(_helper.getAccessMode(tunnel));
     }
 
     /**
-     *  The access list for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the access list for the tunnel
-     *  @since 0.8.3
+     * The access list for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the access list for the tunnel
+     * @since 0.8.3
      */
     public String getAccessList(int tunnel) {
         return _helper.getAccessList(tunnel);
     }
 
     /**
-     *  Returns the filter definition for the tunnel.
+     * Returns the filter definition for the tunnel.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return the filter definition, or empty string if none
-     *  @since 0.9.40
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return the filter definition, or empty string if none
+     * @since 0.9.40
      */
     public String getFilterDefinition(int tunnel) {
         return _helper.getFilterDefinition(tunnel);
     }
 
     /**
-     *  The jump list for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the jump list for the tunnel
-     *  @since 0.8.3
+     * The jump list for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the jump list for the tunnel
+     * @since 0.8.3
      */
     public String getJumpList(int tunnel) {
         return _helper.getJumpList(tunnel);
     }
 
     /**
-     *  Whether the tunnel should close on idle.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if the tunnel should close on idle
-     *  @since 0.8.3
+     * Whether the tunnel should close on idle.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if the tunnel should close on idle
+     * @since 0.8.3
      */
     public boolean getClose(int tunnel) {
         return _helper.getCloseOnIdle(tunnel, false);
     }
 
     /**
-     *  The close time in minutes for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the close time in minutes for the tunnel
-     *  @since 0.8.3
+     * The close time in minutes for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the close time in minutes for the tunnel
+     * @since 0.8.3
      */
     public int getCloseTime(int tunnel) {
         return _helper.getCloseTime(tunnel, 30);
     }
 
     /**
-     *  Whether a new destination should be created.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if a new destination should be created
-     *  @since 0.8.3
+     * Whether a new destination should be created.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if a new destination should be created
+     * @since 0.8.3
      */
     public boolean getNewDest(int tunnel) {
         return _helper.getNewDest(tunnel);
     }
 
     /**
-     *  Whether the client key should be persistent.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if the client key should be persistent
-     *  @since 0.8.3
+     * Whether the client key should be persistent.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if the client key should be persistent
+     * @since 0.8.3
      */
     public boolean getPersistentClientKey(int tunnel) {
         return _helper.getPersistentClientKey(tunnel);
     }
 
     /**
-     *  Whether the tunnel open should be delayed.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if the tunnel open should be delayed
-     *  @since 0.8.3
+     * Whether the tunnel open should be delayed.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if the tunnel open should be delayed
+     * @since 0.8.3
      */
     public boolean getDelayOpen(int tunnel) {
         return _helper.getDelayOpen(tunnel);
     }
 
     /**
-     *  Returns whether User-Agent header passthrough is allowed.
+     * Returns whether User-Agent header passthrough is allowed.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if User-Agent passthrough is allowed
-     *  @since 0.9.14
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if User-Agent passthrough is allowed
+     * @since 0.9.14
      */
     public boolean getAllowUserAgent(int tunnel) {
         return _helper.getAllowUserAgent(tunnel);
     }
 
     /**
-     *  Returns whether Referer header passthrough is allowed.
+     * Returns whether Referer header passthrough is allowed.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if Referer passthrough is allowed
-     *  @since 0.9.14
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if Referer passthrough is allowed
+     * @since 0.9.14
      */
     public boolean getAllowReferer(int tunnel) {
         return _helper.getAllowReferer(tunnel);
     }
 
     /**
-     *  Returns whether Accept header passthrough is allowed.
+     * Returns whether Accept header passthrough is allowed.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if Accept passthrough is allowed
-     *  @since 0.9.14
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if Accept passthrough is allowed
+     * @since 0.9.14
      */
     public boolean getAllowAccept(int tunnel) {
         return _helper.getAllowAccept(tunnel);
     }
 
     /**
-     *  Returns whether internal SSL connections are allowed.
+     * Returns whether internal SSL connections are allowed.
      *
-     *  @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
-     *  @return true if internal SSL is allowed
-     *  @since 0.9.14
+     * @param tunnel index of the tunnel in the configured list, or -1 for a new tunnel
+     * @return true if internal SSL is allowed
+     * @since 0.9.14
      */
     public boolean getAllowInternalSSL(int tunnel) {
         return _helper.getAllowInternalSSL(tunnel);
     }
 
     /**
-     *  Whether multihoming is enabled.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if multihoming is enabled
-     *  @since 0.9.18
+     * Whether multihoming is enabled.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if multihoming is enabled
+     * @since 0.9.18
      */
     public boolean getMultihome(int tunnel) {
         return _helper.getMultihome(tunnel);
     }
 
     /**
-     *  The user agents string.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the user agents string
-     *  @since 0.9.25
+     * The user agents string.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the user agents string
+     * @since 0.9.25
      */
     public String getUserAgents(int tunnel) {
         return _helper.getUserAgents(tunnel);
     }
 
     /**
-     *  Whether proxy authentication is enabled.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if proxy authentication is enabled
-     *  @since 0.8.2
+     * Whether proxy authentication is enabled.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if proxy authentication is enabled
+     * @since 0.8.2
      */
     public boolean getProxyAuth(int tunnel) {
         return !_helper.getProxyAuth(tunnel).equals("false");
     }
     /**
-     *  Whether outproxy authentication is enabled.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if outproxy authentication is enabled
-     *  @since 0.8.3
+     * Whether outproxy authentication is enabled.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if outproxy authentication is enabled
+     * @since 0.8.3
      */
     public boolean getOutproxyAuth(int tunnel) {
         return _helper.getOutproxyAuth(tunnel) &&
@@ -705,120 +704,120 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The outproxy username.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the outproxy username
-     *  @since 0.8.3
+     * The outproxy username.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the outproxy username
+     * @since 0.8.3
      */
     public String getOutproxyUsername(int tunnel) {
         return _helper.getOutproxyUsername(tunnel);
     }
 
     /**
-     *  The outproxy password.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the outproxy password
-     *  @since 0.8.3
+     * The outproxy password.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the outproxy password
+     * @since 0.8.3
      */
     public String getOutproxyPassword(int tunnel) {
         return _helper.getOutproxyPassword(tunnel);
     }
 
     /**
-     *  The SSL proxies string.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the SSL proxies string
-     *  @since 0.9.11
+     * The SSL proxies string.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the SSL proxies string
+     * @since 0.9.11
      */
     public String getSslProxies(int tunnel) {
         return _helper.getSslProxies(tunnel);
     }
 
     /**
-     *  Whether the outproxy plugin should be used.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if the outproxy plugin should be used
-     *  @since 0.9.11
+     * Whether the outproxy plugin should be used.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if the outproxy plugin should be used
+     * @since 0.9.11
      */
     public boolean getUseOutproxyPlugin(int tunnel) {
         return _helper.getUseOutproxyPlugin(tunnel);
     }
 
     /**
-     *  The outproxy type.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the outproxy type
-     *  @since 0.9.57
+     * The outproxy type.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the outproxy type
+     * @since 0.9.57
      */
     public String getOutproxyType(int tunnel) {
         return _helper.getOutproxyType(tunnel);
     }
 
     /**
-     *  The per-minute limit for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the per-minute limit for the tunnel
-     *  @since 0.8.3
+     * The per-minute limit for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the per-minute limit for the tunnel
+     * @since 0.8.3
      */
     public int getLimitMinute(int tunnel) {
         return _helper.getLimitMinute(tunnel);
     }
 
     /**
-     *  The per-hour limit for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the per-hour limit for the tunnel
-     *  @since 0.8.3
+     * The per-hour limit for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the per-hour limit for the tunnel
+     * @since 0.8.3
      */
     public int getLimitHour(int tunnel) {
         return _helper.getLimitHour(tunnel);
     }
 
     /**
-     *  The per-day limit for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the per-day limit for the tunnel
-     *  @since 0.8.3
+     * The per-day limit for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the per-day limit for the tunnel
+     * @since 0.8.3
      */
     public int getLimitDay(int tunnel) {
         return _helper.getLimitDay(tunnel);
     }
 
     /**
-     *  The per-minute total for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the per-minute total for the tunnel
-     *  @since 0.8.3
+     * The per-minute total for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the per-minute total for the tunnel
+     * @since 0.8.3
      */
     public int getTotalMinute(int tunnel) {
         return _helper.getTotalMinute(tunnel);
     }
 
     /**
-     *  The per-hour total for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the per-hour total for the tunnel
-     *  @since 0.8.3
+     * The per-hour total for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the per-hour total for the tunnel
+     * @since 0.8.3
      */
     public int getTotalHour(int tunnel) {
         return _helper.getTotalHour(tunnel);
     }
 
     /**
-     *  The per-day total for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the per-day total for the tunnel
-     *  @since 0.8.3
+     * The per-day total for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the per-day total for the tunnel
+     * @since 0.8.3
      */
     public int getTotalDay(int tunnel) {
         return _helper.getTotalDay(tunnel);
     }
 
     /**
-     *  The maximum number of streams for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the maximum number of streams for the tunnel
-     *  @since 0.8.3
+     * The maximum number of streams for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the maximum number of streams for the tunnel
+     * @since 0.8.3
      */
     public int getMaxStreams(int tunnel) {
         return _helper.getMaxStreams(tunnel);
@@ -835,9 +834,9 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The POST total max for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the POST total max for the tunnel
+     * The POST total max for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the POST total max for the tunnel
      * @since 0.9.9
      */
     public int getPostTotalMax(int tunnel) {
@@ -845,58 +844,58 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The POST check time for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the POST check time for the tunnel
-     *  @since 0.9.9
+     * The POST check time for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the POST check time for the tunnel
+     * @since 0.9.9
      */
     public int getPostCheckTime(int tunnel) {
         return _helper.getPostCheckTime(tunnel);
     }
 
     /**
-     *  The POST ban time for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the POST ban time for the tunnel
-     *  @since 0.9.9
+     * The POST ban time for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the POST ban time for the tunnel
+     * @since 0.9.9
      */
     public int getPostBanTime(int tunnel) {
         return _helper.getPostBanTime(tunnel);
     }
 
     /**
-     *  The POST total ban time for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the POST total ban time for the tunnel
-     *  @since 0.9.9
+     * The POST total ban time for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the POST total ban time for the tunnel
+     * @since 0.9.9
      */
     public int getPostTotalBanTime(int tunnel) {
         return _helper.getPostTotalBanTime(tunnel);
     }
 
     /**
-     *  Whether unique local addresses should be used.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return true if unique local addresses should be used
-     *  @since 0.9.13
+     * Whether unique local addresses should be used.
+     * @param tunnel index of the tunnel in the configured list
+     * @return true if unique local addresses should be used
+     * @since 0.9.13
      */
     public boolean getUniqueLocal(int tunnel) {
         return _helper.getUniqueLocal(tunnel);
     }
 
     /**
-     *  Whether running in router context.
-     *  @return true if running in router context
-     *  @since 0.8.3
+     * Whether running in router context.
+     * @return true if running in router context
+     * @since 0.8.3
      */
     public boolean isRouterContext() {
         return _context.isRouterContext();
     }
 
     /**
-     *  The set of network interfaces.
-     *  @return the set of network interfaces
-     *  @since 0.8.3
+     * The set of network interfaces.
+     * @return the set of network interfaces
+     * @since 0.8.3
      */
     public Set<String> interfaceSet() {
         // exclude IPv6 temporary
@@ -904,19 +903,19 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  Whether advanced mode is enabled.
-     *  @return true if advanced mode is enabled
-     *  @since 0.9.12
+     * Whether advanced mode is enabled.
+     * @return true if advanced mode is enabled
+     * @since 0.9.12
      */
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);
     }
 
     /**
-     *  The I2CP host for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the I2CP host for the tunnel
-     *  @since 0.8.3
+     * The I2CP host for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the I2CP host for the tunnel
+     * @since 0.8.3
      */
     public String getI2CPHost(int tunnel) {
         if (_context.isRouterContext()) {return _t("internal");}
@@ -926,10 +925,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The I2CP port for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the I2CP port for the tunnel
-     *  @since 0.8.3
+     * The I2CP port for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the I2CP port for the tunnel
+     * @since 0.8.3
      */
     public String getI2CPPort(int tunnel) {
         if (_context.isRouterContext()) {return _t("internal");}
@@ -939,10 +938,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The custom options string for the tunnel.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @return the custom options string for the tunnel
-     *  @since 0.8.3
+     * The custom options string for the tunnel.
+     * @param tunnel index of the tunnel in the configured list
+     * @return the custom options string for the tunnel
+     * @since 0.8.3
      */
     public String getCustomOptions(int tunnel) {
         return _helper.getCustomOptionsString(tunnel);
@@ -956,11 +955,11 @@ public class EditBean extends IndexBean {
     private static final int MAX_SERVER_QUANTITY = 8;
 
     /**
-     *  The quantity options for the tunnel, as HTML.
-     *  @param tunnel index of the tunnel in the configured list
-     *  @param mode 0=both, 1=in, 2=out
-     *  @return the quantity options
-     *  @since 0.9.7
+     * The quantity options for the tunnel, as HTML.
+     * @param tunnel index of the tunnel in the configured list
+     * @param mode 0=both, 1=in, 2=out
+     * @return the quantity options
+     * @since 0.9.7
      */
     public String getQuantityOptions(int tunnel, int mode) {
         int tunnelDepth = getTunnelDepth(tunnel, DFLT_LENGTH);
@@ -1004,10 +1003,10 @@ public class EditBean extends IndexBean {
     }
 
     /**
-     *  The translated string wrapped in parentheses, or empty in advanced mode.
-     *  @param s the string to translate
-     *  @return translated s or ""
-     *  @since 0.9.47
+     * The translated string wrapped in parentheses, or empty in advanced mode.
+     * @param s the string to translate
+     * @return translated s or ""
+     * @since 0.9.47
      */
     public String unlessAdvanced(String s) {
         if (isAdvanced()) {return "";}

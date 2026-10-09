@@ -367,8 +367,8 @@ public class PeerStateCongestionDecisionTest {
     }
 
     /**
-     *  A Mockito mock is enough for isTotalFail() (it only null-checks the
-     *  message, so the real constructor's dependencies are never exercised).
+     * A Mockito mock is enough for isTotalFail() (it only null-checks the
+     * message, so the real constructor's dependencies are never exercised).
      */
     private static OutNetMessage newObjectStub() {
         return mock(OutNetMessage.class);

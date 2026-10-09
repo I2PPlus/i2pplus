@@ -29,8 +29,8 @@
 --graph_plotLineWidthFilled:1.5;
 --graph_plotLineWidthFilledWide:2;
 --graph_plotLineWidthFilledCondensed:1;
---graphTooltipLevel:repeating-linear-gradient(90deg,#0000,#0000 1px,#000 1px,#000 2px),linear-gradient(90deg,#0000,#ff38 5%,#ff38 95%,#0000);
---graphTooltipCrosshair:repeating-linear-gradient(180deg,#0000,#0000 1px,#000 1px,#000 2px),linear-gradient(180deg,#0000,#ff38 5%,#ff38 95%,#0000);
+--graphTooltipLevel:repeating-linear-gradient(90deg,#0000,#0000 1px,#000 1px,#000 2px),linear-gradient(90deg,#0000,#ff38 calc(0% + 16px),#ff38 calc(100% - 16px),#0000);
+--graphTooltipCrosshair:repeating-linear-gradient(180deg,#0000,#0000 1px,#000 1px,#000 2px),linear-gradient(180deg,#0000,#ff38 calc(0% + 16px),#ff38 calc(100% - 16px),#0000);
 --tunerGraph:#f60;
 --tier:linear-gradient(180deg,#397,#021);
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);

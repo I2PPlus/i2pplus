@@ -28,11 +28,11 @@ public class BuildCorrelationIdTest {
     private static final int MAX_ID_CHARS = 20;
 
     /**
-     *  Build a config with a stubbed pool.
+     * Build a config with a stubbed pool.
      *
-     *  <p>The constructor only reads {@code getSettings().getDestinationNickname()},
-     *  so a mock pool with a real settings object is enough. No router context is
-     *  dereferenced on this path.
+     * <p>The constructor only reads {@code getSettings().getDestinationNickname()},
+     * so a mock pool with a real settings object is enough. No router context is
+     * dereferenced on this path.
      */
     private PooledTunnelCreatorConfig config() {
         TunnelPool pool = mock(TunnelPool.class);

@@ -39,7 +39,7 @@ public class TestJobPartnerDeferTest {
     }
 
     /** A usable multi-hop partner in GOOD standing: the normal case, where the
-     *  failure is evidence about the tunnel under test and must be counted. */
+     * failure is evidence about the tunnel under test and must be counted. */
     @Test
     public void usablePartnerCountsTheFailure() {
         TunnelInfo p = partner(3, false, TunnelTestStatus.GOOD);
@@ -54,11 +54,11 @@ public class TestJobPartnerDeferTest {
     }
 
     /** With no partner at all the reply leg never existed, so the round is no
-     *  evidence about the tunnel under test and must defer.  This used to
-     *  charge the tunnel, which condemned healthy tunnels whenever the paired
-     *  pool was momentarily empty.  The defer is still bounded by
-     *  MAX_PARTNER_DEFERRALS in testFailed(), so a partner that never returns
-     *  cannot shield a genuinely dead tunnel. */
+     * evidence about the tunnel under test and must defer.  This used to
+     * charge the tunnel, which condemned healthy tunnels whenever the paired
+     * pool was momentarily empty.  The defer is still bounded by
+     * MAX_PARTNER_DEFERRALS in testFailed(), so a partner that never returns
+     * cannot shield a genuinely dead tunnel. */
     @Test
     public void missingPartnerDefers() {
         assertTrue(TestJob.shouldDeferForPartner(null, false));
@@ -66,43 +66,43 @@ public class TestJobPartnerDeferTest {
     }
 
     /** A 0-hop partner cannot carry the reply: the paired pool is degraded and
-     *  the round says nothing about this tunnel. */
+     * the round says nothing about this tunnel. */
     @Test
     public void zeroHopPartnerDefers() {
         assertTrue(TestJob.shouldDeferForPartner(partner(0, false, TunnelTestStatus.GOOD), false));
     }
 
     /** A 1-hop partner has no entry through which the reply can return, so it
-     *  is the same artifact as a 0-hop one. */
+     * is the same artifact as a 0-hop one. */
     @Test
     public void oneHopPartnerDefers() {
         assertTrue(TestJob.shouldDeferForPartner(partner(1, false, TunnelTestStatus.GOOD), false));
     }
 
     /** A partner already condemned by the hard-failure counter makes every
-     *  round routed through it uninformative. */
+     * round routed through it uninformative. */
     @Test
     public void hardFailedPartnerDefers() {
         assertTrue(TestJob.shouldDeferForPartner(partner(3, true, TunnelTestStatus.GOOD), false));
     }
 
     /** A partner marked FAILING is retained but out of service; a round
-     *  through it is still evidence about the partner pool. */
+     * through it is still evidence about the partner pool. */
     @Test
     public void failingPartnerDefers() {
         assertTrue(TestJob.shouldDeferForPartner(partner(3, false, TunnelTestStatus.FAILING), false));
     }
 
     /** Same for FAILED: the mark is what excludes the partner from selection,
-     *  so a round through it cannot clear this tunnel either. */
+     * so a round through it cannot clear this tunnel either. */
     @Test
     public void failedPartnerDefers() {
         assertTrue(TestJob.shouldDeferForPartner(partner(3, false, TunnelTestStatus.FAILED), false));
     }
 
     /** A partner borrowed from the exploratory pool because the paired pool
-     *  had nothing to offer is degraded by construction, even when the
-     *  borrowed tunnel itself is healthy. */
+     * had nothing to offer is degraded by construction, even when the
+     * borrowed tunnel itself is healthy. */
     @Test
     public void exploratoryFallbackDefers() {
         TunnelInfo p = partner(3, false, TunnelTestStatus.GOOD);
@@ -110,7 +110,7 @@ public class TestJobPartnerDeferTest {
     }
 
     /** A stub partner short-circuits regardless of its reported status: the
-     *  length alone makes the round uninformative. */
+     * length alone makes the round uninformative. */
     @Test
     public void stubLengthWinsOverHealthyStatus() {
         assertTrue(TestJob.shouldDeferForPartner(partner(1, false, TunnelTestStatus.GOOD), true));

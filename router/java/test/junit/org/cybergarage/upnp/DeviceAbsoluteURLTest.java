@@ -5,16 +5,16 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- *  Tests for relative and absolute URL resolution in Device.getAbsoluteURL().
+ * Tests for relative and absolute URL resolution in Device.getAbsoluteURL().
  *
- *  Replaces the commented-out main()/test() in Device, which printed the
- *  resolved URLs for a handful of path/base combinations but asserted
- *  nothing. getAbsoluteURL() is live code - Service uses it to build
- *  device description URLs - and previously had no test at all.
+ * Replaces the commented-out main()/test() in Device, which printed the
+ * resolved URLs for a handful of path/base combinations but asserted
+ * nothing. getAbsoluteURL() is live code - Service uses it to build
+ * device description URLs - and previously had no test at all.
  *
- *  Expected values follow RFC 3986 relative resolution: an absolute path
- *  ("/foo/x") is resolved against the host root and discards the base path,
- *  while a relative path ("foo/x") is resolved against the base directory.
+ * Expected values follow RFC 3986 relative resolution: an absolute path
+ * ("/foo/x") is resolved against the host root and discards the base path,
+ * while a relative path ("foo/x") is resolved against the base directory.
  */
 public class DeviceAbsoluteURLTest {
 
@@ -83,9 +83,9 @@ public class DeviceAbsoluteURLTest {
     }
 
     /**
-     *  A parent-relative path is concatenated, not normalized: the ".."
-     *  segment is left in place. This pins the current behaviour rather than
-     *  RFC 3986 normalization, which HTTP.getAbsoluteURL() does not do.
+     * A parent-relative path is concatenated, not normalized: the ".."
+     * segment is left in place. This pins the current behaviour rather than
+     * RFC 3986 normalization, which HTTP.getAbsoluteURL() does not do.
      */
     @Test
     public void testParentRelativePathIsNotNormalized() {

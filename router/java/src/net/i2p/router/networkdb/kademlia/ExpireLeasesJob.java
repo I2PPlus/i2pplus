@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.ArrayList;
@@ -141,7 +140,6 @@ class ExpireLeasesJob extends JobImpl {
     /**
      * Run through the entire data store, finding all expired leaseSets (ones that
      * don't have any leases that haven't yet passed, even with the CLOCK_FUDGE_FACTOR)
-     *
      */
     private List<Hash> selectKeysToExpire() {
         RouterContext ctx = getContext();
@@ -207,8 +205,8 @@ class ExpireLeasesJob extends JobImpl {
     }
 
     /**
-     *  Oldest first
-     *  @since 0.9.65
+     * Oldest first
+     * @since 0.9.65
      */
     private static class LeaseSetComparator implements Comparator<LeaseSet>, Serializable {
         /**

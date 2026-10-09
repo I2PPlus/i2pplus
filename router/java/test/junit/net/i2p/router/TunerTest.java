@@ -1183,10 +1183,10 @@ public class TunerTest {
     }
 
 /**
-     * Consistently near-empty backlog converges the buffer toward the idle floor,
-     * not the hard min: an oversized buffer shrinks one step down toward
-     * SERVER_BACKLOG_IDLE_FLOOR.
-     */
+ * Consistently near-empty backlog converges the buffer toward the idle floor,
+ * not the hard min: an oversized buffer shrinks one step down toward
+ * SERVER_BACKLOG_IDLE_FLOOR.
+ */
     @Test
     public void testQueueCapacityShrinksWhenIdle() {
         int current = 1024;
@@ -1280,8 +1280,8 @@ public class TunerTest {
     }
 
     /** Shedding with a saturated executor still raises: the worker pool is floored at the
-     *  gate (TunnelControllerGroup.setClientRunnerMax), so growing the gate pulls the
-     *  executor ceiling up and serves the burst instead of the old no-op that left it shedding. */
+     * gate (TunnelControllerGroup.setClientRunnerMax), so growing the gate pulls the
+     * executor ceiling up and serves the burst instead of the old no-op that left it shedding. */
     @Test
     public void testClientMaxConnectionsSheddingButExecutorSaturated() {
         int next = Tuner.computeClientMaxConnections(96, 32, 1024, 5.0, 900.0, 1024);
@@ -1492,7 +1492,7 @@ public class TunerTest {
     // =====================================================================
 
     /** BDP uses the real streaming message size (1730), not the legacy 4096:
-     *  1 MB/s at 1 s RTT fits the pipe in 578 window slots, not 244. */
+     * 1 MB/s at 1 s RTT fits the pipe in 578 window slots, not 244. */
     @Test
     public void testBdpTargetUsesRealMessageSize() {
         assertEquals(578, Tuner.computeStreamingBdpTarget(1_000_000.0, 1000.0, 1730, 128, 4096));
@@ -1517,7 +1517,7 @@ public class TunerTest {
     }
 
     /** The runtime clamps the configured message size to >= 512 before calling us;
-     *  1 MB/s at 1 s RTT then yields 1953 slots and stays within range. */
+     * 1 MB/s at 1 s RTT then yields 1953 slots and stays within range. */
     @Test
     public void testBdpTargetSaneWithFloorMessageSize() {
         assertEquals(1953, Tuner.computeStreamingBdpTarget(1_000_000.0, 1000.0, 512, 128, 4096));
@@ -1543,7 +1543,7 @@ public class TunerTest {
     // params: current, min, max, step, defaultValue, failLifetime, lossRate, memPct
 
     /** Clean path with strong heap headroom climbs four steps toward the cap —
-     *  the hyper-responsive ramp lever (NaN memory reads as no pressure). */
+     * the hyper-responsive ramp lever (NaN memory reads as no pressure). */
     @Test
     public void testMaxWindowCleanClimbsFourSteps() {
         assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
@@ -1563,9 +1563,9 @@ public class TunerTest {
     }
 
     /** REGRESSION: the former code shrunk the ceiling when measured bandwidth was
-     *  below current — a low average read THROUGH the cap, so the cap ratcheted
-     *  itself down in a spiral. A clean path at a normal ceiling must climb, not
-     *  shrink, regardless of how low the bandwidth average is. */
+     * below current — a low average read THROUGH the cap, so the cap ratcheted
+     * itself down in a spiral. A clean path at a normal ceiling must climb, not
+     * shrink, regardless of how low the bandwidth average is. */
     @Test
     public void testMaxWindowLowBdpNoLongerShrinks() {
         assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
@@ -1582,7 +1582,7 @@ public class TunerTest {
     }
 
     /** Loss under the 20% threshold is tunnel churn, not a full path: the
-     *  ceiling keeps climbing instead of backing off. */
+     * ceiling keeps climbing instead of backing off. */
     @Test
     public void testMaxWindowMildLossStillClimbs() {
         assertEquals(1024, Tuner.computeStreamingMaxWindowTarget(512, 128, 4096, 128, 512,
@@ -1599,9 +1599,9 @@ public class TunerTest {
     }
 
     /** The heap-headroom ladder: four steps below 40%, two below 50%, hold at
-     *  50% and above, shrink above 60%. The hold-at-50% rung is what makes the
-     *  large increments safe — a big jump can never be the event that pushes
-     *  the heap into pressure. */
+     * 50% and above, shrink above 60%. The hold-at-50% rung is what makes the
+     * large increments safe — a big jump can never be the event that pushes
+     * the heap into pressure. */
     @Test
     public void testMaxWindowMemoryHeadroomLadder() {
         // strong headroom: four steps
@@ -1624,7 +1624,7 @@ public class TunerTest {
     }
 
     /** A negative signal under strong headroom still shrinks — the ladder only
-     *  ever gates climbs. */
+     * ever gates climbs. */
     @Test
     public void testMaxWindowNegativeSignalBeatsStrongHeadroom() {
         assertEquals(960, Tuner.computeStreamingMaxWindowTarget(1024, 128, 4096, 128, 512,
@@ -1632,7 +1632,7 @@ public class TunerTest {
     }
 
     /** Below the recovery floor (max(min, default/2)) and healthy, climb two steps
-     *  toward the factory default. */
+     * toward the factory default. */
     @Test
     public void testMaxWindowBelowFloorClimbsToDefault() {
         assertEquals(384, Tuner.computeStreamingMaxWindowTarget(128, 128, 4096, 128, 512,

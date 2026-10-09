@@ -26,11 +26,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests for the tier-promotion skip gate in ProfileOrganizer.
- *  Peers are seeded through the dummy netdb so the profiling-exclusion
- *  and netDb-lookup checks behave like a live router.
+ * Tests for the tier-promotion skip gate in ProfileOrganizer.
+ * Peers are seeded through the dummy netdb so the profiling-exclusion
+ * and netDb-lookup checks behave like a live router.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class ProfileOrganizerPromotionTest {
 

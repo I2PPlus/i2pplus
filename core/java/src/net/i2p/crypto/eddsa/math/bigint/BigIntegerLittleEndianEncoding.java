@@ -40,12 +40,12 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
     }
 
     /**
-     *  Convert $x$ to little endian.
-     *  Constant time.
+     * Convert $x$ to little endian.
+     * Constant time.
      *
-     *  @param x the BigInteger value to encode
-     *  @return array of length $b/8$
-     *  @throws IllegalStateException if field not set
+     * @param x the BigInteger value to encode
+     * @return array of length $b/8$
+     * @throws IllegalStateException if field not set
      */
     public byte[] encode(BigInteger x) {
         if (f == null) throw new IllegalStateException("field not set");
@@ -61,13 +61,13 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
     }
 
     /**
-     *  Decode a FieldElement from its $(b-1)$-bit encoding.
-     *  The highest bit is masked out.
+     * Decode a FieldElement from its $(b-1)$-bit encoding.
+     * The highest bit is masked out.
      *
-     *  @param in the $(b-1)$-bit encoding of a FieldElement.
-     *  @return the FieldElement represented by 'val'.
-     *  @throws IllegalStateException if field not set
-     *  @throws IllegalArgumentException if encoding is invalid
+     * @param in the $(b-1)$-bit encoding of a FieldElement.
+     * @return the FieldElement represented by 'val'.
+     * @throws IllegalStateException if field not set
+     * @throws IllegalArgumentException if encoding is invalid
      */
     @Override
     public FieldElement decode(byte[] in) {
@@ -77,10 +77,10 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
     }
 
     /**
-     *  Convert in to big endian
+     * Convert in to big endian
      *
-     *  @param in the $(b-1)$-bit encoding of a FieldElement.
-     *  @return the decoded value as a BigInteger
+     * @param in the $(b-1)$-bit encoding of a FieldElement.
+     * @return the decoded value as a BigInteger
      */
     public BigInteger toBigInteger(byte[] in) {
         byte[] out = new byte[in.length];

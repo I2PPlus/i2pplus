@@ -121,7 +121,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     *  Inflater statistic
+     * Inflater statistic
      * @return the total read
      */
     public long getTotalRead() {
@@ -133,7 +133,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     *  Inflater statistic
+     * Inflater statistic
      * @return the total expanded
      */
     public long getTotalExpanded() {
@@ -146,7 +146,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     *  Inflater statistic
+     * Inflater statistic
      * @return the remaining
      */
     public long getRemaining() {
@@ -159,7 +159,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     *  Inflater statistic
+     * Inflater statistic
      * @return the finished
      */
     public boolean getFinished() {
@@ -188,7 +188,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     *  @throws IOException on CRC or length check fail
+     * @throws IOException on CRC or length check fail
      */
     private void verifyFooter() throws IOException {
         int idx = (int) (_bytesReceived % FOOTER_SIZE);
@@ -354,8 +354,8 @@ public class GunzipOutputStream extends InflaterOutputStream {
     }
 
     /**
-     *  Calculate CRC32 along the way
-     *  @since 0.9.61
+     * Calculate CRC32 along the way
+     * @since 0.9.61
      */
     private static class CRC32OutputStream extends FilterOutputStream {
 

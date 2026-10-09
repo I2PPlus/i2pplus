@@ -5,7 +5,6 @@ package net.i2p.router.transport;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.BufferedReader;
@@ -89,20 +88,20 @@ public class ReverseDnsLookup {
     private static final int MAX_RDNS_CACHE_SIZE = maxCacheSize(HAS_512_MB, HAS_1_GB);
 
     /**
-     *  How many cache entries the map may exceed its cap by before a sweep
-     *  runs immediately. Trades a few hundred surplus entries (CHM node wins
-     *  are negligible) for avoiding a synchronous full-map sweep on every put.
+     * How many cache entries the map may exceed its cap by before a sweep
+     * runs immediately. Trades a few hundred surplus entries (CHM node wins
+     * are negligible) for avoiding a synchronous full-map sweep on every put.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int MAX_SLACK = 512;
 
     /**
-     *  Cleanup frequency once the cache is at or over its cap: a full sweep
-     *  runs on every 1&lt;&lt;CLEANUP_BITS puts that happen while over/at the cap,
-     *  instead of on every put.
+     * Cleanup frequency once the cache is at or over its cap: a full sweep
+     * runs on every 1&lt;&lt;CLEANUP_BITS puts that happen while over/at the cap,
+     * instead of on every put.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int CLEANUP_BITS = 10;
 
@@ -137,17 +136,17 @@ public class ReverseDnsLookup {
     private static Timer _rdnsTimer;
 
     /**
-     *  rDNS cache entry lifetime in hours, based on available memory.
+     * rDNS cache entry lifetime in hours, based on available memory.
      *
-     *  Routers with less than 512 MB keep entries for 24 h; routers with at
-     *  least 1 GB keep them for 48 h; everything else for 36 h. This bounds
-     *  how stale a cached hostname may be before it is re-resolved, trading
-     *  freshness against load on small memory-constrained routers.
+     * Routers with less than 512 MB keep entries for 24 h; routers with at
+     * least 1 GB keep them for 48 h; everything else for 36 h. This bounds
+     * how stale a cached hostname may be before it is re-resolved, trading
+     * freshness against load on small memory-constrained routers.
      *
-     *  @param has512MB true if the router has at least 512 MB of max memory
-     *  @param has1GB true if the router has at least 1 GB of max memory
-     *  @return entry lifetime in hours (24, 36, or 48)
-     *  @since 0.9.71
+     * @param has512MB true if the router has at least 512 MB of max memory
+     * @param has1GB true if the router has at least 1 GB of max memory
+     * @return entry lifetime in hours (24, 36, or 48)
+     * @since 0.9.71
      */
     static int expireHours(boolean has512MB, boolean has1GB) {
         if (!has512MB) {
@@ -160,17 +159,17 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Maximum rDNS cache size, based on available memory.
+     * Maximum rDNS cache size, based on available memory.
      *
-     *  Caches 8000 entries on very limited routers, 24000 on routers with at
-     *  least 1 GB, and 16000 otherwise. The bound prevents the persistence
-     *  file and the in-memory map from growing without limit on the control
-     *  path.
+     * Caches 8000 entries on very limited routers, 24000 on routers with at
+     * least 1 GB, and 16000 otherwise. The bound prevents the persistence
+     * file and the in-memory map from growing without limit on the control
+     * path.
      *
-     *  @param has512MB true if the router has at least 512 MB of max memory
-     *  @param has1GB true if the router has at least 1 GB of max memory
-     *  @return maximum number of cached entries (8000, 16000, or 24000)
-     *  @since 0.9.71
+     * @param has512MB true if the router has at least 512 MB of max memory
+     * @param has1GB true if the router has at least 1 GB of max memory
+     * @return maximum number of cached entries (8000, 16000, or 24000)
+     * @since 0.9.71
      */
     static int maxCacheSize(boolean has512MB, boolean has1GB) {
         if (!has512MB) {
@@ -183,66 +182,66 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Whether a full cache should evict entries at an accelerated rate.
+     * Whether a full cache should evict entries at an accelerated rate.
      *
-     *  When the cache exceeds 90% of its maximum size, the TTL applied by
-     *  {@link #entryExpired(long, long, boolean)} is halved so eviction keeps
-     *  up with insertion load. Choosing the threshold as a percentage of the
-     *  max (not an absolute number) keeps behavior consistent across the
-     *  memory-dependent cache sizes.
+     * When the cache exceeds 90% of its maximum size, the TTL applied by
+     * {@link #entryExpired(long, long, boolean)} is halved so eviction keeps
+     * up with insertion load. Choosing the threshold as a percentage of the
+     * max (not an absolute number) keeps behavior consistent across the
+     * memory-dependent cache sizes.
      *
-     *  @param size current cache entry count
-     *  @param maxSize maximum cache entry count
-     *  @return true if the cache is more than 90% full
-     *  @since 0.9.71
+     * @param size current cache entry count
+     * @param maxSize maximum cache entry count
+     * @return true if the cache is more than 90% full
+     * @since 0.9.71
      */
     static boolean accelerateEviction(int size, int maxSize) {
         return size > maxSize * 90 / 100;
     }
 
     /**
-     *  Whether a cache entry has outlived its permitted lifetime.
+     * Whether a cache entry has outlived its permitted lifetime.
      *
-     *  "unknown" entries (failed lookups) expire after a short fixed window so
-     *  dead IPs are re-probed; all other entries use the caller-supplied base
-     *  TTL, which itself may be halved by {@link #accelerateEviction(int, int)}.
+     * "unknown" entries (failed lookups) expire after a short fixed window so
+     * dead IPs are re-probed; all other entries use the caller-supplied base
+     * TTL, which itself may be halved by {@link #accelerateEviction(int, int)}.
      *
-     *  @param ageMs age of the entry in milliseconds
-     *  @param baseExpireMs normal entry TTL in milliseconds
-     *  @param isUnknown true if the cached hostname is the "unknown" marker
-     *  @return true if the entry should be evicted
-     *  @since 0.9.71
+     * @param ageMs age of the entry in milliseconds
+     * @param baseExpireMs normal entry TTL in milliseconds
+     * @param isUnknown true if the cached hostname is the "unknown" marker
+     * @return true if the entry should be evicted
+     * @since 0.9.71
      */
     static boolean entryExpired(long ageMs, long baseExpireMs, boolean isUnknown) {
         return ageMs > (isUnknown ? UNKNOWN_ENTRY_EXPIRE_MS : baseExpireMs);
     }
 
     /**
-     *  Whether an entry read from the persistence file is fresh enough to reuse.
+     * Whether an entry read from the persistence file is fresh enough to reuse.
      *
-     *  Applies only at startup when the file is loaded; entries older than the
-     *  eviction threshold are skipped so a long-idle router does not resurrect
-     *  months-old hostnames.
+     * Applies only at startup when the file is loaded; entries older than the
+     * eviction threshold are skipped so a long-idle router does not resurrect
+     * months-old hostnames.
      *
-     *  @param ageMs age of the entry in milliseconds
-     *  @param evictThresholdMs maximum age accepted at load time
-     *  @return true if the entry is fresh enough to cache
-     *  @since 0.9.71
+     * @param ageMs age of the entry in milliseconds
+     * @param evictThresholdMs maximum age accepted at load time
+     * @return true if the entry is fresh enough to cache
+     * @since 0.9.71
      */
     static boolean cacheFileEntryFresh(long ageMs, long evictThresholdMs) {
         return ageMs <= evictThresholdMs;
     }
 
     /**
-     *  Create the resolver and its background executor.
+     * Create the resolver and its background executor.
      *
-     *  The executor is started eagerly so the queue-size rate stat is ready
-     *  before the first lookup, avoiding a first-hit initialization stall on
-     *  the page-rendering path.
+     * The executor is started eagerly so the queue-size rate stat is ready
+     * before the first lookup, avoiding a first-hit initialization stall on
+     * the page-rendering path.
      *
-     *  @param ctx the router context
-     *  @param geoIP already-constructed GeoIP database for ASN fallback
-     *  @since 0.9.71
+     * @param ctx the router context
+     * @param geoIP already-constructed GeoIP database for ASN fallback
+     * @since 0.9.71
      */
     public ReverseDnsLookup(RouterContext ctx, GeoIP geoIP) {
         _context = ctx;
@@ -452,14 +451,14 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Stop the periodic cache writer and shut down the lookup executor.
+     * Stop the periodic cache writer and shut down the lookup executor.
      *
-     *  Cancels the background cache-file timer and the rDNS executor, waiting
-     *  up to 5 seconds for in-flight lookups to drain before force-interrupting
-     *  them, and clears the in-flight marker set so a later restart does not
-     *  inherit stale pending state.
+     * Cancels the background cache-file timer and the rDNS executor, waiting
+     * up to 5 seconds for in-flight lookups to drain before force-interrupting
+     * them, and clears the in-flight marker set so a later restart does not
+     * inherit stale pending state.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public void shutdown() {
         if (_rdnsTimer != null) {
@@ -541,15 +540,15 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Load the persistence file into the in-memory cache at startup.
+     * Load the persistence file into the in-memory cache at startup.
      *
-     *  Skips "#" comment lines and entries older than the eviction threshold,
-     *  then schedules the periodic cache-file writer task ({@code RDNSCacheFileWriter}).
-     *  A missing file
-     *  is created so the periodic writer always has a valid target. Invoked
-     *  from the facade once reverse lookups are enabled after the netdb settles.
+     * Skips "#" comment lines and entries older than the eviction threshold,
+     * then schedules the periodic cache-file writer task ({@code RDNSCacheFileWriter}).
+     * A missing file
+     * is created so the periodic writer always has a valid target. Invoked
+     * from the facade once reverse lookups are enabled after the netdb settles.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     static void readRDNSCacheFromFile() {
         File fCache = new File(RDNS_CACHE_FILE);
@@ -583,30 +582,30 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Serialize a cache entry for persistence.
+     * Serialize a cache entry for persistence.
      *
-     *  Format is "ip,hostname,timestamp" — one line per entry. The timestamp
-     *  enables expiration and startup filtering, and distinguishes the current
-     *  format from the two-part legacy format (see {@link #rdnsEntryFromString}).
+     * Format is "ip,hostname,timestamp" — one line per entry. The timestamp
+     * enables expiration and startup filtering, and distinguishes the current
+     * format from the two-part legacy format (see {@link #rdnsEntryFromString}).
      *
-     *  @param entry the entry to serialize
-     *  @return the serialized entry line
-     *  @since 0.9.71
+     * @param entry the entry to serialize
+     * @return the serialized entry line
+     * @since 0.9.71
      */
     static String rdnsEntryToString(CacheEntry entry) {
         return entry.getIpAddress() + "," + entry.getHostname() + "," + entry.getTimestamp();
     }
 
     /**
-     *  Parse a persisted line back into a cache entry.
+     * Parse a persisted line back into a cache entry.
      *
-     *  Three-part lines carry an explicit timestamp. Two-part lines are the
-     *  pre-timestamp legacy format and are migrated with the current time.
-     *  Any other shape returns null and the caller skips the line.
+     * Three-part lines carry an explicit timestamp. Two-part lines are the
+     * pre-timestamp legacy format and are migrated with the current time.
+     * Any other shape returns null and the caller skips the line.
      *
-     *  @param s the persisted line
-     *  @return the parsed entry, or null if the line is malformed
-     *  @since 0.9.71
+     * @param s the persisted line
+     * @return the parsed entry, or null if the line is malformed
+     * @since 0.9.71
      */
     static CacheEntry rdnsEntryFromString(String s) {
         String[] parts = s.split(",", 3);
@@ -737,26 +736,26 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Decide whether a cache insert must run a full-cache cleanup sweep.
-     *  See {@link #needRdnscacheSweep(int, int, int)} for the amortization rule.
+     * Decide whether a cache insert must run a full-cache cleanup sweep.
+     * See {@link #needRdnscacheSweep(int, int, int)} for the amortization rule.
      *
-     *  Sweeping on every put when the cache sits at its cap is O(n) per insert
-     *  and shows up as CHM iterator churn on the rDNS hot path. Instead the
-     *  sweep is amortized: once the map is at/over its cap it runs at most
-     *  once every {@link #CLEANUP_BITS} inserts (it usually stays pegged at the
-     *  cap in steady state), while exceeding the cap by more than
-     *  {@link #MAX_SLACK} entries still sweeps immediately so the memory bound
-     *  stays hard.
+     * Sweeping on every put when the cache sits at its cap is O(n) per insert
+     * and shows up as CHM iterator churn on the rDNS hot path. Instead the
+     * sweep is amortized: once the map is at/over its cap it runs at most
+     * once every {@link #CLEANUP_BITS} inserts (it usually stays pegged at the
+     * cap in steady state), while exceeding the cap by more than
+     * {@link #MAX_SLACK} entries still sweeps immediately so the memory bound
+     * stays hard.
      *
-     *  A benign race on the shared {@code _rdnsCleanupCounter} only changes
-     *  which insert triggers the sweep; it never under-sweeps below the slack
-     *  guard (the size check is made against the live map by the caller).
+     * A benign race on the shared {@code _rdnsCleanupCounter} only changes
+     * which insert triggers the sweep; it never under-sweeps below the slack
+     * guard (the size check is made against the live map by the caller).
      *
-     *  @param size current cache size; use {@code rdnsCache.size()}
-     *  @param maxSize the cache cap, e.g. {@link #MAX_RDNS_CACHE_SIZE}
-     *  @param counter a per-put counter, e.g. an incrementing static int
-     *  @return true if a cleanup sweep must run before the insert
-     *  @since 0.9.71+
+     * @param size current cache size; use {@code rdnsCache.size()}
+     * @param maxSize the cache cap, e.g. {@link #MAX_RDNS_CACHE_SIZE}
+     * @param counter a per-put counter, e.g. an incrementing static int
+     * @return true if a cleanup sweep must run before the insert
+     * @since 0.9.71+
      */
     static boolean needRdnscacheSweep(int size, int maxSize, int counter) {
         if (size >= maxSize + MAX_SLACK) {
@@ -820,12 +819,12 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Background RDNS/ASN resolution task submitted to the reverse-DNS executor.
-     *  Performs a reverse lookup, falling back to the local ASN database when the
-     *  result is the IP itself or unknown. Always clears the in-flight marker.
+     * Background RDNS/ASN resolution task submitted to the reverse-DNS executor.
+     * Performs a reverse lookup, falling back to the local ASN database when the
+     * result is the IP itself or unknown. Always clears the in-flight marker.
      *
-     *  @param ipAddress non-null IP to resolve
-     *  @since 0.9.70+
+     * @param ipAddress non-null IP to resolve
+     * @since 0.9.70+
      */
     private void lookupHostNameAsync(String ipAddress) {
         try {
@@ -851,12 +850,12 @@ public class ReverseDnsLookup {
     }
 
     /**
-     *  Background ASN-first resolution task submitted to the reverse-DNS executor.
-     *  Prefers the local ASN organization database, falling back to reverse DNS.
-     *  Always clears the in-flight marker.
+     * Background ASN-first resolution task submitted to the reverse-DNS executor.
+     * Prefers the local ASN organization database, falling back to reverse DNS.
+     * Always clears the in-flight marker.
      *
-     *  @param ipAddress non-null IP to resolve
-     *  @since 0.9.70+
+     * @param ipAddress non-null IP to resolve
+     * @since 0.9.70+
      */
     private void lookupOrgNameAsync(String ipAddress) {
         try {

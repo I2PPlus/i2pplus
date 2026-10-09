@@ -5,7 +5,6 @@ package net.i2p.sam;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.ArrayList;
@@ -14,10 +13,10 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- *  A record of a SAM session stored in the {@link SessionsDB}.
- *  Contains the destination, properties, and handler for a session.
+ * A record of a SAM session stored in the {@link SessionsDB}.
+ * Contains the destination, properties, and handler for a session.
  *
- *  @since 0.9.25 moved from SAMv3Handler
+ * @since 0.9.25 moved from SAMv3Handler
  */
 class SessionRecord {
 	private final String m_dest;
@@ -43,15 +42,15 @@ class SessionRecord {
 	}
 
 	/**
-	 *  Update the last-accessed timestamp.
-	 *  Called by SessionsDB.get().
+	 * Update the last-accessed timestamp.
+	 * Called by SessionsDB.get().
 	 */
 	void touch() {
 		_lastAccessed = System.currentTimeMillis();
 	}
 
 	/**
-	 *  @return timestamp of last access via get(), or construction time
+	 * @return timestamp of last access via get(), or construction time
 	 */
 	long getLastAccessed() {
 		return _lastAccessed;

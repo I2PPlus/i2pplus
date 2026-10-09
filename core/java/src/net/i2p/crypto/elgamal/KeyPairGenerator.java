@@ -35,8 +35,8 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
     /**
      * Initialize the key pair generator with the specified strength.
      *
-     *  @param strength must be 2048
-     *  @param random ignored
+     * @param strength must be 2048
+     * @param random ignored
      */
     @Override
     public void initialize(int strength, SecureRandom random) {
@@ -52,7 +52,7 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
     /**
      * Initialize the key pair generator with the specified parameters.
      *
-     *  @param random ignored
+     * @param random ignored
      */
     @Override
     public void initialize(AlgorithmParameterSpec params, SecureRandom random) throws InvalidAlgorithmParameterException {

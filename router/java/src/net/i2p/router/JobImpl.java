@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.concurrent.atomic.AtomicLong;
@@ -65,18 +64,18 @@ public abstract class JobImpl implements Job {
     public long getMadeReadyOn() { return _madeReadyOn; }
 
     /**
-     *  Deprecated to avoid JobQueue deadlocks
+     * Deprecated to avoid JobQueue deadlocks
      *
-     *  @deprecated use madeReady(long)
+     * @deprecated use madeReady(long)
      */
     @Deprecated
     public void madeReady() { _madeReadyOn = _context.clock().now(); }
 
     /**
-     *  For JobQueue only, not for external use
+     * For JobQueue only, not for external use
      *
-     *  @param now the current time in milliseconds
-     *  @since 0.9.55
+     * @param now the current time in milliseconds
+     * @since 0.9.55
      */
     public void madeReady(long now) { _madeReadyOn = now; }
 

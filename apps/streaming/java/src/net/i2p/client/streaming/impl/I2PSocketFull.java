@@ -13,7 +13,6 @@ import net.i2p.util.Log;
 
 /**
  * Bridge between the full streaming lib and the I2PSocket API
- *
  */
 class I2PSocketFull implements I2PSocket {
     private final Log log;
@@ -206,8 +205,8 @@ class I2PSocketFull implements I2PSocket {
     }
 
     /**
-     *  Call from Connection.disconnectComplete()
-     *  @since 0.8.13
+     * Call from Connection.disconnectComplete()
+     * @since 0.8.13
      */
     void destroy2() {
         destroy();

@@ -6,7 +6,6 @@ package net.i2p.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -17,39 +16,39 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- *  A concurrent implementation using ConcurrentHashSet.
- *  The max size (K) may be temporarily exceeded due to concurrency,
- *  a pending split, or the behavior of the supplied trimmer,
- *  as explained below.
- *  The creator is responsible for splits.
+ * A concurrent implementation using ConcurrentHashSet.
+ * The max size (K) may be temporarily exceeded due to concurrency,
+ * a pending split, or the behavior of the supplied trimmer,
+ * as explained below.
+ * The creator is responsible for splits.
  *
- *  This class has no knowledge of the DHT base used for XORing,
- *  and thus there are no validity checks in add/remove.
+ * This class has no knowledge of the DHT base used for XORing,
+ * and thus there are no validity checks in add/remove.
  *
- *  The begin and end values are immutable.
- *  All entries in this bucket will have at least one bit different
- *  from us in the range [begin, end] inclusive.
- *  Splits must be implemented by creating two new buckets
- *  and discarding this one.
+ * The begin and end values are immutable.
+ * All entries in this bucket will have at least one bit different
+ * from us in the range [begin, end] inclusive.
+ * Splits must be implemented by creating two new buckets
+ * and discarding this one.
  *
- *  The keys are kept in a Set and are NOT sorted by last-seen.
- *  Per-key last-seen-time, failures, etc. must be tracked elsewhere.
+ * The keys are kept in a Set and are NOT sorted by last-seen.
+ * Per-key last-seen-time, failures, etc. must be tracked elsewhere.
  *
- *  If this bucket is full (i.e. begin == end &amp;&amp; size == max)
- *  then add() will call KBucketTrimmer.trim() do
- *  (possibly) remove older entries, and indicate whether
- *  to add the new entry. If the trimmer returns true without
- *  removing entries, this KBucket will exceed the max size.
+ * If this bucket is full (i.e. begin == end &amp;&amp; size == max)
+ * then add() will call KBucketTrimmer.trim() do
+ * (possibly) remove older entries, and indicate whether
+ * to add the new entry. If the trimmer returns true without
+ * removing entries, this KBucket will exceed the max size.
  *
- *  Refactored from net.i2p.router.networkdb.kademlia
+ * Refactored from net.i2p.router.networkdb.kademlia
  *
  *
- *  @param <T> type of SimpleDataStructure objects stored in this bucket
- *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ * @param <T> type of SimpleDataStructure objects stored in this bucket
+ * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**
-     *  The peers in the kbucket, stored in a set.
+     * The peers in the kbucket, stored in a set.
      */
     private final Set<T> _entries;
 
@@ -103,9 +102,9 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     }
 
     /**
-     *  Unmodifiable view of the entries in this bucket.
+     * Unmodifiable view of the entries in this bucket.
      *
-     *  @return an unmodifiable view; not a copy
+     * @return an unmodifiable view; not a copy
      */
     @Override
     public Set<T> getEntries() {
@@ -125,11 +124,11 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     }
 
     /**
-     *  Updates last-changed if rv is true OR if the peer is already present.
-     *  Calls the trimmer if begin == end and we are full.
-     *  If begin != end then add it and caller must do bucket splitting.
+     * Updates last-changed if rv is true OR if the peer is already present.
+     * Calls the trimmer if begin == end and we are full.
+     * If begin != end then add it and caller must do bucket splitting.
      *
-     *  @return true if added
+     * @return true if added
      */
     @Override
     public boolean add(T peer) {
@@ -143,9 +142,9 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     }
 
     /**
-     *  Remove the peer from this bucket.
+     * Remove the peer from this bucket.
      *
-     *  @return if removed. Does NOT set lastChanged.
+     * @return if removed. Does NOT set lastChanged.
      */
     @Override
     public boolean remove(T peer) {
@@ -155,7 +154,7 @@ class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     }
 
     /**
-     *  Update the last-changed timestamp to now.
+     * Update the last-changed timestamp to now.
      */
     @Override
     public void setLastChanged() {

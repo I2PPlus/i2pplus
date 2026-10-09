@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 
@@ -14,7 +13,6 @@ import net.i2p.util.Log;
 
 /**
  * Handle messages from router to router.  This class is NOT threadsafe
- *
  */
 public class I2NPMessageHandler {
     private final Log _log;
@@ -40,7 +38,7 @@ public class I2NPMessageHandler {
      * @param data the data
      * @return the result
      * @throws I2NPMessageException if there is a problem handling the particular
-     *          message - if it is an unknown type or has improper formatting, etc.
+     * message - if it is an unknown type or has improper formatting, etc.
      */
     public I2NPMessage readMessage(byte[] data) throws I2NPMessageException {
         readMessage(data, 0, data.length);
@@ -48,30 +46,30 @@ public class I2NPMessageHandler {
     }
 
     /**
-     *  Result is retreived with lastRead()
+     * Result is retreived with lastRead()
      *
-     *  @param data the data
-     *  @param offset the offset
-     *  @return the result
-     *  @throws net.i2p.data.i2np.I2NPMessageException on error
+     * @param data the data
+     * @param offset the offset
+     * @return the result
+     * @throws net.i2p.data.i2np.I2NPMessageException on error
      */
     public int readMessage(byte[] data, int offset) throws I2NPMessageException {
         return readMessage(data, offset, data.length - offset);
     }
 
     /**
-     *  Limit the max to read from the data buffer, so that
-     *  we can use a large buffer but prevent the reader from reading off the end.
+     * Limit the max to read from the data buffer, so that
+     * we can use a large buffer but prevent the reader from reading off the end.
      *
-     *  Result is retreived with lastRead()
+     * Result is retreived with lastRead()
      *
-     *  @param data the data
-     *  @param offset the offset
-     *  @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
-     *                must be at least 16
-     *  @return the result
-     *  @throws net.i2p.data.i2np.I2NPMessageException on error
-     *  @since 0.8.12
+     * @param data the data
+     * @param offset the offset
+     * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
+     * must be at least 16
+     * @return the result
+     * @throws net.i2p.data.i2np.I2NPMessageException on error
+     * @since 0.8.12
      */
     public int readMessage(byte[] data, int offset, int maxLen) throws I2NPMessageException {
         int cur = offset;

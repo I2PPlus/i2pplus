@@ -10,7 +10,6 @@ import net.i2p.client.streaming.I2PSocketManager;
 
 /**
  * Bridge to allow accepting new connections
- *
  */
 class I2PServerSocketFull implements I2PServerSocket {
     private final I2PSocketManagerFull _socketManager;
@@ -34,7 +33,7 @@ class I2PServerSocketFull implements I2PServerSocket {
      * @return a connected I2PSocket, never null
      *
      * @throws I2PException if there is a problem with reading a new socket
-     *         from the data available (e.g. the I2PSession is closed)
+     * from the data available (e.g. the I2PSession is closed)
      * @throws net.i2p.client.streaming.RouterRestartException (extends I2PException) if the router is apparently restarting
      * @throws ConnectException if the I2PServerSocket is closed, or if interrupted.
      * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.
@@ -45,11 +44,11 @@ class I2PServerSocketFull implements I2PServerSocket {
     }
 
     /**
-     *  Unimplemented, unlikely to ever be implemented.
+     * Unimplemented, unlikely to ever be implemented.
      *
-     *  @deprecated
-     *  @return null always
-     *  @since 0.8.11
+     * @deprecated
+     * @return null always
+     * @since 0.8.11
      */
     @Deprecated
     @Override

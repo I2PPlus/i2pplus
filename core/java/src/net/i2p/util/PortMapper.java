@@ -38,8 +38,8 @@ public class PortMapper {
     public static final String SVC_EEPSITE = "eepsite";
 
     /** HTTPS eepsite service name.
-    *
-     *  @since 0.9.34
+     *
+     * @since 0.9.34
      */
     public static final String SVC_HTTPS_EEPSITE = "https_eepsite";
 
@@ -57,14 +57,14 @@ public class PortMapper {
     public static final String SVC_SAM = "SAM";
 
     /** SAM-UDP service name.
-    *
-     *  @since 0.9.24
+     *
+     * @since 0.9.24
      */
     public static final String SVC_SAM_UDP = "SAM-UDP";
 
     /** SAM-SSL service name.
-    *
-     *  @since 0.9.24
+     *
+     * @since 0.9.24
      */
     public static final String SVC_SAM_SSL = "SAM-SSL";
 
@@ -75,96 +75,96 @@ public class PortMapper {
     public static final String SVC_I2CP = "I2CP";
 
     /** I2CP-SSL service name.
-    *
-     *  @since 0.9.23
+     *
+     * @since 0.9.23
      */
     public static final String SVC_I2CP_SSL = "I2CP-SSL";
 
     /** HTTP I2PControl service name.
-    *
-     *  @since 0.9.34
+     *
+     * @since 0.9.34
      */
     public static final String SVC_HTTP_I2PCONTROL = "http_i2pcontrol";
 
     /** HTTPS I2PControl service name.
-    *
-     *  @since 0.9.34
+     *
+     * @since 0.9.34
      */
     public static final String SVC_HTTPS_I2PCONTROL = "https_i2pcontrol";
 
     /**
-     *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     *  For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
+     * For actual base URL, use getConsoleURL()
      *
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public static final String SVC_I2PSNARK = "i2psnark";
 
     /**
-     *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     *  For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
+     * For actual base URL, use getConsoleURL()
      *
-     *  Note: This is only the webapp. Also requires TCG running to be useful.
-     *  The webapp does not start TCG.
+     * Note: This is only the webapp. Also requires TCG running to be useful.
+     * The webapp does not start TCG.
      *
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public static final String SVC_I2PTUNNEL = "i2ptunnel";
 
     /**
-     *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     *  For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
+     * For actual base URL, use getConsoleURL()
      *
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public static final String SVC_IMAGEGEN = "imagegen";
 
     /**
-     *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     *  For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
+     * For actual base URL, use getConsoleURL()
      *
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public static final String SVC_SUSIDNS = "susidns";
 
     /**
-     *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     *  For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
+     * For actual base URL, use getConsoleURL()
      *
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public static final String SVC_SUSIMAIL = "susimail";
 
     /**
-     *  To indicate presence, alternative to WebAppStarter.isWebappRunning().
-     *  For actual base URL, use getConsoleURL()
+     * To indicate presence, alternative to WebAppStarter.isWebappRunning().
+     * For actual base URL, use getConsoleURL()
      *
-     *  @since 0.9.39
+     * @since 0.9.39
      */
     public static final String SVC_JSONRPC = "jsonrpc";
 
     /** Default HTTP console port.
-    *
-     *  @since 0.9.34
+     *
+     * @since 0.9.34
      */
     public static final int DEFAULT_CONSOLE_PORT = 7657;
 
     /** Default HTTPS console port.
-    *
-     *  @since 0.9.34
+     *
+     * @since 0.9.34
      */
     public static final int DEFAULT_HTTPS_CONSOLE_PORT = 7667;
 
     /** Default host for local services.
-    *
-     *  @since 0.9.34
+     *
+     * @since 0.9.34
      */
     public static final String DEFAULT_HOST = "127.0.0.1";
 
     /**
-     *  Create a port mapper
+     * Create a port mapper
      *
-     *  @param context unused for now
+     * @param context unused for now
      */
     public PortMapper(I2PAppContext context) {
         _dir = new ConcurrentHashMap<>(8);
@@ -172,26 +172,26 @@ public class PortMapper {
     }
 
     /**
-     *  Add the service
+     * Add the service
      *
-     *  @param service the service name
-     *  @param port &gt; 0
-     *  @return success, false if already registered
+     * @param service the service name
+     * @param port &gt; 0
+     * @return success, false if already registered
      */
     public boolean register(String service, int port) {
         return register(service, DEFAULT_HOST, port);
     }
 
     /**
-     *  Add the service.
-     *  If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
-     *  the URL will be included in getEepsites()
+     * Add the service.
+     * If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
+     * the URL will be included in getEepsites()
      *
-     *  @param service the service name
-     *  @param host the hostname
-     *  @param port &gt; 0
-     *  @return success, false if already registered
-     *  @since 0.9.21
+     * @param service the service name
+     * @param host the hostname
+     * @param port &gt; 0
+     * @return success, false if already registered
+     * @since 0.9.21
      */
     public boolean register(String service, String host, int port) {
         if (port <= 0 || port > 65535) return false;
@@ -201,34 +201,34 @@ public class PortMapper {
     }
 
     /**
-     *  Is the service registered?
+     * Is the service registered?
      *
-     *  @param service the service name
-     *  @return true if registered
-     *  @since 0.9.34
+     * @param service the service name
+     * @return true if registered
+     * @since 0.9.34
      */
     public boolean isRegistered(String service) {
         return _dir.containsKey(service);
     }
 
     /**
-     *  Remove the service
+     * Remove the service
      *
-     *  @param service the service name
+     * @param service the service name
      */
     public void unregister(String service) {
         _dir.remove(service);
     }
 
     /**
-     *  Remove the service,
-     *  only if it is registered with the supplied port.
-     *  If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
-     *  the URL will be removed from getEepsites()
+     * Remove the service,
+     * only if it is registered with the supplied port.
+     * If service is SVC_EEPSITE or SVC_HTTPS_EEPSITE,
+     * the URL will be removed from getEepsites()
      *
-     *  @param service the service name
-     *  @param port the port number
-     *  @since 0.9.34
+     * @param service the service name
+     * @param port the port number
+     * @since 0.9.34
      */
     public void unregister(String service, int port) {
         if (service.equals(SVC_EEPSITE) || service.equals(SVC_HTTPS_EEPSITE)) {
@@ -242,10 +242,10 @@ public class PortMapper {
     }
 
     /**
-     *  The registered port for a service
+     * The registered port for a service
      *
-     *  @param service the service name
-     *  @return -1 if not registered
+     * @param service the service name
+     * @return -1 if not registered
      */
     public int getPort(String service) {
         int port = getPort(service, -1);
@@ -253,11 +253,11 @@ public class PortMapper {
     }
 
     /**
-     *  The registered port for a service
+     * The registered port for a service
      *
-     *  @param service the service name
-     *  @param def default
-     *  @return def if not registered
+     * @param service the service name
+     * @param def default
+     * @return def if not registered
      */
     public int getPort(String service, int def) {
         InetSocketAddress ia = _dir.get(service);
@@ -266,12 +266,12 @@ public class PortMapper {
     }
 
     /**
-     *  The registered host for a service.
-     *  Will return "127.0.0.1" if the service was registered without a host.
+     * The registered host for a service.
+     * Will return "127.0.0.1" if the service was registered without a host.
      *
-     *  @param def default
-     *  @return def if not registered
-     *  @since 0.9.21
+     * @param def default
+     * @return def if not registered
+     * @since 0.9.21
      */
     public String getHost(String service, String def) {
         InetSocketAddress ia = _dir.get(service);
@@ -280,16 +280,16 @@ public class PortMapper {
     }
 
     /**
-     *  The actual host for a service.
-     *  Will return "127.0.0.1" if the service was registered without a host.
-     *  If the service was registered with the host "0.0.0.0", "::", or "0:0:0:0:0:0:0:0",
-     *  it will return a public IP if we have one,
-     *  else a local IP if we have one, else def.
-     *  If it was not registered with a wildcard address, it will return the registered host.
+     * The actual host for a service.
+     * Will return "127.0.0.1" if the service was registered without a host.
+     * If the service was registered with the host "0.0.0.0", "::", or "0:0:0:0:0:0:0:0",
+     * it will return a public IP if we have one,
+     * else a local IP if we have one, else def.
+     * If it was not registered with a wildcard address, it will return the registered host.
      *
-     *  @param def default
-     *  @return def if not registered
-     *  @since 0.9.24
+     * @param def default
+     * @return def if not registered
+     * @since 0.9.24
      */
     public String getActualHost(String service, String def) {
         InetSocketAddress ia = _dir.get(service);
@@ -298,10 +298,10 @@ public class PortMapper {
     }
 
     /*
-     *  See above
-     *  @param def default
-     *  @return def if no ips
-     *  @since 0.9.24
+     * See above
+     * @param def default
+     * @return def if no ips
+     * @since 0.9.24
      */
     private static String convertWildcard(String ip, String def) {
         String rv = ip;
@@ -341,35 +341,35 @@ public class PortMapper {
     }
 
     /**
-     *  If PROP_PREFER_HTTPS is true or unset,
-     *  return https URL unless console is http only. Default https://127.0.0.1:7667/
-     *  If PROP_PREFER_HTTPS is set to false,
-     *  return http URL unless console is https only. Default http://127.0.0.1:7657/
+     * If PROP_PREFER_HTTPS is true or unset,
+     * return https URL unless console is http only. Default https://127.0.0.1:7667/
+     * If PROP_PREFER_HTTPS is set to false,
+     * return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
-     *  @return the console u r l
-     *  @since 0.9.33 consolidated from i2ptunnel and desktopgui
+     * @return the console u r l
+     * @since 0.9.33 consolidated from i2ptunnel and desktopgui
      */
     public String getConsoleURL() {
         return getConsoleURL(I2PAppContext.getGlobalContext().getBooleanPropertyDefaultTrue(PROP_PREFER_HTTPS));
     }
 
     /**
-     *  If preferHTTPS is true,
-     *  return https URL unless console is http only. Default https://127.0.0.1:7667/
-     *  If preferHTTPS is false,
-     *  return http URL unless console is https only. Default http://127.0.0.1:7657/
+     * If preferHTTPS is true,
+     * return https URL unless console is http only. Default https://127.0.0.1:7667/
+     * If preferHTTPS is false,
+     * return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
-     *  @return the console u r l
-     *  @since 0.9.34
+     * @return the console u r l
+     * @since 0.9.34
      */
     public String getConsoleURL(boolean preferHTTPS) {
         return preferHTTPS ? getHTTPSConsoleURL() : getHTTPConsoleURL();
     }
 
     /**
-     *  The console URL, https if the console is https only.
+     * The console URL, https if the console is https only.
      *
-     *  @return http URL unless console is https only. Default http://127.0.0.1:7657/
+     * @return http URL unless console is https only. Default http://127.0.0.1:7657/
      */
     private String getHTTPConsoleURL() {
         String unset = "*unset*";
@@ -388,10 +388,10 @@ public class PortMapper {
     }
 
     /**
-     *  The console URL, http if the console is http only.
+     * The console URL, http if the console is http only.
      *
-     *  @return https URL unless console is http only. Default http://127.0.0.1:7657/
-     *  @since 0.9.34
+     * @return https URL unless console is http only. Default http://127.0.0.1:7657/
+     * @since 0.9.34
      */
     private String getHTTPSConsoleURL() {
         String unset = "*unset*";
@@ -421,7 +421,7 @@ public class PortMapper {
     }
 
     /**
-     *  @since 0.9.50 from SummaryBarRenderer
+     * @since 0.9.50 from SummaryBarRenderer
      */
     private static String toURL(String svc, String host, int port) {
         StringBuilder buf = new StringBuilder(64); // NOPMD - AvoidUnnecessaryStringBuilderCreation
@@ -435,9 +435,9 @@ public class PortMapper {
     }
 
     /**
-     *  For debugging only
+     * For debugging only
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     public void renderStatusHTML(Writer out) throws IOException {
         List<String> services = new ArrayList<>(_dir.keySet());

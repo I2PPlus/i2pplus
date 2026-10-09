@@ -1,7 +1,8 @@
 package net.i2p.client.streaming;
 
 /**
- *
+ * Manual throughput probe for a streaming receiver: connects to a host and port,
+ * opens one stream and reports bytes per second until the server closes it.
  */
 public class StreamSinkTestClient {
     public static void main(String[] args) {

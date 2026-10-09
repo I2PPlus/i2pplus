@@ -12,54 +12,54 @@ import java.io.OutputStream;
  *
  * <p>KeyCertificate specifies the encryption and signature algorithms for I2P identities:</p>
  * <ul>
- *   <li><strong>Signature Type:</strong> Algorithm used for signing (2 bytes)</li>
- *   <li><strong>Encryption Type:</strong> Algorithm used for encryption (2 bytes)</li>
- *   <li><strong>Excess Data:</strong> Additional key-specific data if needed</li>
- *   <li><strong>Optimized:</strong> Frequently used, so has dedicated class for performance</li>
+ * <li><strong>Signature Type:</strong> Algorithm used for signing (2 bytes)</li>
+ * <li><strong>Encryption Type:</strong> Algorithm used for encryption (2 bytes)</li>
+ * <li><strong>Excess Data:</strong> Additional key-specific data if needed</li>
+ * <li><strong>Optimized:</strong> Frequently used, so has dedicated class for performance</li>
  * </ul>
  *
  * <p><strong>Format Structure:</strong></p>
  * <ul>
- *   <li><strong>Header:</strong> 4 bytes total (2-byte sig type + 2-byte crypto type)</li>
- *   <li><strong>Signature Data:</strong> Optional excess data for signature algorithm</li>
- *   <li><strong>Encryption Data:</strong> Optional excess data for encryption algorithm</li>
+ * <li><strong>Header:</strong> 4 bytes total (2-byte sig type + 2-byte crypto type)</li>
+ * <li><strong>Signature Data:</strong> Optional excess data for signature algorithm</li>
+ * <li><strong>Encryption Data:</strong> Optional excess data for encryption algorithm</li>
  * </ul>
  *
  * <p><strong>Supported Combinations:</strong></p>
  * <ul>
- *   <li><strong>ElGamal + DSA-SHA1:</strong> Legacy combination (crypto type 0x0000)</li>
- *   <li><strong>ElGamal + Ed25519:</strong> Modern signing with legacy encryption</li>
- *   <li><strong>ElGamal + ECDSA-P256:</strong> Modern signing with legacy encryption</li>
- *   <li><strong>X25519 + Ed25519:</strong> Modern combination (both algorithms)</li>
+ * <li><strong>ElGamal + DSA-SHA1:</strong> Legacy combination (crypto type 0x0000)</li>
+ * <li><strong>ElGamal + Ed25519:</strong> Modern signing with legacy encryption</li>
+ * <li><strong>ElGamal + ECDSA-P256:</strong> Modern signing with legacy encryption</li>
+ * <li><strong>X25519 + Ed25519:</strong> Modern combination (both algorithms)</li>
  * </ul>
  *
  * <p><strong>Predefined Certificates:</strong></p>
  * <ul>
- *   <li><strong>Ed25519:</strong> ElGamal + Ed25519 signing key</li>
- *   <li><strong>ECDSA256:</strong> ElGamal + ECDSA-P256 signing key</li>
- *   <li><strong>X25519_Ed25519:</strong> X25519 encryption + Ed25519 signing</li>
+ * <li><strong>Ed25519:</strong> ElGamal + Ed25519 signing key</li>
+ * <li><strong>ECDSA256:</strong> ElGamal + ECDSA-P256 signing key</li>
+ * <li><strong>X25519_Ed25519:</strong> X25519 encryption + Ed25519 signing</li>
  * </ul>
  *
  * <p><strong>Usage:</strong></p>
  * <ul>
- *   <li><strong>Identity Specification:</strong> Defines algorithms for {@link Destination}</li>
- *   <li><strong>Algorithm Negotiation:</strong> Communicates supported crypto to peers</li>
- *   <li><strong>Backward Compatibility:</strong> Supports legacy and modern algorithms</li>
- *   <li><strong>Future Proofing:</strong> Extensible for new algorithm combinations</li>
+ * <li><strong>Identity Specification:</strong> Defines algorithms for {@link Destination}</li>
+ * <li><strong>Algorithm Negotiation:</strong> Communicates supported crypto to peers</li>
+ * <li><strong>Backward Compatibility:</strong> Supports legacy and modern algorithms</li>
+ * <li><strong>Future Proofing:</strong> Extensible for new algorithm combinations</li>
  * </ul>
  *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
- *   <li><strong>Legacy:</strong> ElGamal encryption (assumed 0x0000) with various signing</li>
- *   <li><strong>Modern:</strong> X25519 encryption with Ed25519 signing</li>
- *   <li><strong>Transition:</strong> Mixed combinations during migration period</li>
+ * <li><strong>Legacy:</strong> ElGamal encryption (assumed 0x0000) with various signing</li>
+ * <li><strong>Modern:</strong> X25519 encryption with Ed25519 signing</li>
+ * <li><strong>Transition:</strong> Mixed combinations during migration period</li>
  * </ul>
  *
  * <p><strong>Performance Considerations:</strong></p>
  * <ul>
- *   <li><strong>Frequently Used:</strong> Every Destination contains a KeyCertificate</li>
- *   <li><strong>Optimized Creation:</strong> Pre-defined certificates for common combinations</li>
- *   <li><strong>Caching:</strong> Immutable instances can be safely shared</li>
+ * <li><strong>Frequently Used:</strong> Every Destination contains a KeyCertificate</li>
+ * <li><strong>Optimized Creation:</strong> Pre-defined certificates for common combinations</li>
+ * <li><strong>Caching:</strong> Immutable instances can be safely shared</li>
  * </ul>
  *
  * @since 0.9.12
@@ -98,21 +98,21 @@ public class KeyCertificate extends Certificate {
     static final byte[] X25519_Ed25519_PAYLOAD = new byte[] {0, (byte) SigType.EdDSA_SHA512_Ed25519.getCode(), 0, (byte) EncType.ECIES_X25519.getCode()};
 
     /**
-     *  An immutable ElG/ECDSA-P256 certificate.
+     * An immutable ElG/ECDSA-P256 certificate.
      */
     public static final KeyCertificate ELG_ECDSA256_CERT;
 
     /**
-     *  An immutable ElG/Ed25519 certificate.
+     * An immutable ElG/Ed25519 certificate.
      *
-     *  @since 0.9.22
+     * @since 0.9.22
      */
     public static final KeyCertificate ELG_Ed25519_CERT;
 
     /**
-     *  An immutable X25519/Ed25519 certificate.
+     * An immutable X25519/Ed25519 certificate.
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     public static final KeyCertificate X25519_Ed25519_CERT;
 
@@ -140,8 +140,8 @@ public class KeyCertificate extends Certificate {
 
     /**
      * 4 bytes minimum if non-null.
-     *  @param payload 4 bytes minimum if non-null
-     *  @throws DataFormatException if payload is too short
+     * @param payload 4 bytes minimum if non-null
+     * @throws DataFormatException if payload is too short
      */
     public KeyCertificate(byte[] payload) throws DataFormatException {
         super(CERTIFICATE_TYPE_KEY, payload);
@@ -149,11 +149,11 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  A KeyCertificate with crypto type 0 (ElGamal)
-     *  and the signature type and extra data from the given public key.
+     * A KeyCertificate with crypto type 0 (ElGamal)
+     * and the signature type and extra data from the given public key.
      *
-     *  @param spk non-null data non-null
-     *  @throws IllegalArgumentException if spk or spk data is null
+     * @param spk non-null data non-null
+     * @throws IllegalArgumentException if spk or spk data is null
      */
     public KeyCertificate(SigningPublicKey spk) {
         super(CERTIFICATE_TYPE_KEY, null);
@@ -170,14 +170,14 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  A KeyCertificate with enc type from the given public key,
-     *  and the signature type and extra data from the given public key.
-     *  EncType lengths greater than 256 not supported.
+     * A KeyCertificate with enc type from the given public key,
+     * and the signature type and extra data from the given public key.
+     * EncType lengths greater than 256 not supported.
      *
-     *  @param spk non-null data non-null
-     *  @param pk non-null
-     *  @throws IllegalArgumentException if spk, pk, or their data is null
-     *  @since 0.9.42
+     * @param spk non-null data non-null
+     * @param pk non-null
+     * @throws IllegalArgumentException if spk, pk, or their data is null
+     * @since 0.9.42
      */
     public KeyCertificate(SigningPublicKey spk, PublicKey pk) {
         super(CERTIFICATE_TYPE_KEY, null);
@@ -196,31 +196,31 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  A KeyCertificate with crypto type 0 (ElGamal)
-     *  and the signature type as specified.
-     *  Payload is created.
-     *  If type.getPubkeyLen() is greater than 128, caller MUST
-     *  fill in the extra key data in the payload.
+     * A KeyCertificate with crypto type 0 (ElGamal)
+     * and the signature type as specified.
+     * Payload is created.
+     * If type.getPubkeyLen() is greater than 128, caller MUST
+     * fill in the extra key data in the payload.
      *
-     *  @param type non-null
-     *  @throws IllegalArgumentException if type is null
+     * @param type non-null
+     * @throws IllegalArgumentException if type is null
      */
     public KeyCertificate(SigType type) {
         this(type, EncType.ELGAMAL_2048);
     }
 
     /**
-     *  A KeyCertificate with crypto type
-     *  and the signature type as specified.
-     *  Payload is created.
-     *  If type.getPubkeyLen() is greater than 128, caller MUST
-     *  fill in the extra key data in the payload.
-     *  EncType lengths greater than 256 not supported.
+     * A KeyCertificate with crypto type
+     * and the signature type as specified.
+     * Payload is created.
+     * If type.getPubkeyLen() is greater than 128, caller MUST
+     * fill in the extra key data in the payload.
+     * EncType lengths greater than 256 not supported.
      *
-     *  @param type non-null
-     *  @param etype non-null
-     *  @throws IllegalArgumentException if type or etype is null
-     *  @since 0.9.42
+     * @param type non-null
+     * @param etype non-null
+     * @throws IllegalArgumentException if type or etype is null
+     * @since 0.9.42
      */
     public KeyCertificate(SigType type, EncType etype) {
         super(CERTIFICATE_TYPE_KEY, null);
@@ -236,10 +236,10 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  Up-convert a cert to this class
+     * Up-convert a cert to this class
      *
-     *  @param cert payload 4 bytes minimum if non-null
-     *  @throws DataFormatException if cert type != CERTIFICATE_TYPE_KEY
+     * @param cert payload 4 bytes minimum if non-null
+     * @throws DataFormatException if cert type != CERTIFICATE_TYPE_KEY
      */
     public KeyCertificate(Certificate cert) throws DataFormatException {
         this(cert.getPayload());
@@ -247,9 +247,9 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  Gets the signature type code from the certificate.
+     * Gets the signature type code from the certificate.
      *
-     *  @return -1 if unset
+     * @return -1 if unset
      */
     public int getSigTypeCode() {
         if (_payload == null) return -1;
@@ -257,9 +257,9 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  Gets the crypto type code from the certificate.
+     * Gets the crypto type code from the certificate.
      *
-     *  @return -1 if unset
+     * @return -1 if unset
      */
     public int getCryptoTypeCode() {
         if (_payload == null) return -1;
@@ -267,30 +267,30 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  Gets the signature type from the certificate.
+     * Gets the signature type from the certificate.
      *
-     *  @return null if unset or unknown
+     * @return null if unset or unknown
      */
     public SigType getSigType() {
         return SigType.getByCode(getSigTypeCode());
     }
 
     /**
-     *  Gets the encryption type from the certificate.
+     * Gets the encryption type from the certificate.
      *
-     *  @return null if unset or unknown
-     *  @since 0.9.42
+     * @return null if unset or unknown
+     * @since 0.9.42
      */
     public EncType getEncType() {
         return EncType.getByCode(getCryptoTypeCode());
     }
 
     /**
-     *  Signing Key extra data, if any, is first in the array.
-     *  Crypto Key extra data, if any, is second in the array,
-     *  at offset max(0, getSigType().getPubkeyLen() - 128)
+     * Signing Key extra data, if any, is first in the array.
+     * Crypto Key extra data, if any, is second in the array,
+     * at offset max(0, getSigType().getPubkeyLen() - 128)
      *
-     *  @return empty array if unset or none
+     * @return empty array if unset or none
      */
     public byte[] getExtraKeyData() {
         if (_payload == null || _payload.length <= HEADER_LENGTH) return EMPTY;
@@ -300,10 +300,10 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  Signing Key extra data, if any.
+     * Signing Key extra data, if any.
      *
-     *  @return empty array if unset or none
-     *  @throws UnsupportedOperationException if the sig type is unsupported
+     * @return empty array if unset or none
+     * @throws UnsupportedOperationException if the sig type is unsupported
      */
     public byte[] getExtraSigningKeyData() {
         // we assume no crypto key data
@@ -343,7 +343,7 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  An immutable ElG/ECDSA-256 certificate.
+     * An immutable ElG/ECDSA-256 certificate.
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class ECDSA256Cert extends KeyCertificate {
@@ -408,9 +408,9 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  An immutable ElG/Ed25519 certificate.
+     * An immutable ElG/Ed25519 certificate.
      *
-     *  @since 0.9.22
+     * @since 0.9.22
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class Ed25519Cert extends KeyCertificate {
@@ -475,9 +475,9 @@ public class KeyCertificate extends Certificate {
     }
 
     /**
-     *  An immutable X25519/Ed25519 certificate.
+     * An immutable X25519/Ed25519 certificate.
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class X25519_Ed25519Cert extends KeyCertificate {

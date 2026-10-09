@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataHelper;
@@ -49,9 +48,9 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     *  File may not exist or have old logs in it if not opened yet
+     * File may not exist or have old logs in it if not opened yet
      *
-     *  @return non-null
+     * @return non-null
      */
     @Override
     public synchronized String currentFile() {
@@ -70,7 +69,7 @@ class FileLogWriter extends LogWriter {
      *
      * @param dir the directory to test
      * @return true if the group has execute/search permission, or if permissions
-     *         cannot be determined
+     * cannot be determined
      */
     static boolean isGroupTraversable(File dir) {
         if (!SecureFileOutputStream.canSetPerms() || !SecureDirectory.isNotWindows)
@@ -120,7 +119,7 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     *  @since 0.9.19
+     * @since 0.9.19
      */
     @Override
     protected void flushWriter() {
@@ -132,7 +131,7 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     *  @since 0.9.19 renamed from closeFile()
+     * @since 0.9.19 renamed from closeFile()
      */
     @Override
     protected void closeWriter() {
@@ -140,10 +139,10 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
-     *  Gzip the closed file
+     * Gzip the closed file
      *
-     *  @param threadGzipper if true, spin off a thread
-     *  @since 0.9.55
+     * @param threadGzipper if true, spin off a thread
+     * @since 0.9.55
      */
     private void closeWriter(File currentFile, boolean threadGzipper) {
         Writer out = _currentOut;

@@ -13,95 +13,95 @@ import java.util.List;
  */
 interface SSU2Sender {
     /**
-     *  Remote host ID.
+     * Remote host ID.
      *
-     *  @return remote host ID
+     * @return remote host ID
      */
     RemoteHostId getRemoteHostId();
     /**
-     *  Whether the remote is IPv6.
+     * Whether the remote is IPv6.
      *
-     *  @return true for IPv6
+     * @return true for IPv6
      */
     boolean isIPv6();
     /**
-     *  Remote IP address.
+     * Remote IP address.
      *
-     *  @return remote IP address
+     * @return remote IP address
      */
     InetAddress getRemoteIPAddress();
     /**
-     *  Remote port.
+     * Remote port.
      *
-     *  @return remote port
+     * @return remote port
      */
     int getRemotePort();
     /**
-     *  Maximum transmission unit.
+     * Maximum transmission unit.
      *
-     *  @return MTU
+     * @return MTU
      */
     int getMTU();
     /**
-     *  Next packet number to use.
+     * Next packet number to use.
      *
-     *  @return next packet number
+     * @return next packet number
      */
     long getNextPacketNumber() throws IOException;
     /**
-     *  Connection ID to use when sending.
+     * Connection ID to use when sending.
      *
-     *  @return send connection ID
+     * @return send connection ID
      */
     long getSendConnID();
     /**
-     *  Cipher to use when sending.
+     * Cipher to use when sending.
      *
-     *  @return send cipher
+     * @return send cipher
      */
     CipherState getSendCipher();
     /**
-     *  Header encryption key 1.
+     * Header encryption key 1.
      *
-     *  @return send header encrypt key 1
+     * @return send header encrypt key 1
      */
     byte[] getSendHeaderEncryptKey1();
     /**
-     *  Header encryption key 2.
+     * Header encryption key 2.
      *
-     *  @return send header encrypt key 2
+     * @return send header encrypt key 2
      */
     byte[] getSendHeaderEncryptKey2();
     /**
-     *  Reason the connection was destroyed.
+     * Reason the connection was destroyed.
      *
-     *  @param reason destroy reason
+     * @param reason destroy reason
      */
     void setDestroyReason(int reason);
     /**
-     *  Bitfield of received messages.
+     * Bitfield of received messages.
      *
-     *  @return received messages bitfield
+     * @return received messages bitfield
      */
     SSU2Bitfield getReceivedMessages();
     /**
-     *  Bitfield of acked messages.
+     * Bitfield of acked messages.
      *
-     *  @return acked messages bitfield
+     * @return acked messages bitfield
      */
     SSU2Bitfield getAckedMessages();
     /**
-     *  Records that a set of fragments was sent.
+     * Records that a set of fragments was sent.
      *
-     *  @param pktNum packet number
-     *  @param length fragment length
-     *  @param fragments fragment list
+     * @param pktNum packet number
+     * @param length fragment length
+     * @param fragments fragment list
      */
     void fragmentsSent(long pktNum, int length, List<PacketBuilder2.Fragment> fragments);
     /**
-     *  Flags byte.
+     * Flags byte.
      *
-     *  @return flags byte
+     * @return flags byte
      */
     byte getFlags();
 }

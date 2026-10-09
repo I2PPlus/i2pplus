@@ -14,7 +14,6 @@ import net.i2p.util.OrderedProperties;
 /**
  * Static configuration manager.
  * Warning: Not suitable for multiple applications or prefixes.
- *
  */
 public class Config {
     /** Default constructor */
@@ -59,10 +58,10 @@ public class Config {
 	}
 
 	/**
-	 *  Don't bother showing a reload config button if this returns false.
+	 * Don't bother showing a reload config button if this returns false.
 	 *
-	 *  @return true if the config file exists
-	 *  @since 0.9.13
+	 * @return true if the config file exists
+	 * @since 0.9.13
 	 */
 	public synchronized static boolean hasConfigFile() {
 		File cfg = new File(I2PAppContext.getGlobalContext().getConfigDir(), "susimail.config");

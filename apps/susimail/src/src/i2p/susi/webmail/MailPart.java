@@ -70,9 +70,9 @@ class MailPart {
      */
     public final String cid;
     /** begin, end, and beginBody are relative to readBuffer.getOffset().
-     *  begin is before the headers
-     *  beginBody is after the headers
-     *  warning - end is exclusive
+     * begin is before the headers
+     * beginBody is after the headers
+     * warning - end is exclusive
      */
     private final int beginBody;
     private final int begin;
@@ -98,25 +98,25 @@ class MailPart {
     private final Log _log;
 
     /**
-     *  the decoded length if known, else -1
-     *  @since 0.9.34
+     * the decoded length if known, else -1
+     * @since 0.9.34
      */
     public int decodedLength = -1;
 
     /**
-     *  the UIDL of the mail, same for all parts
-     *  @since 0.9.33
+     * the UIDL of the mail, same for all parts
+     * @since 0.9.33
      */
     public final String uidl;
     private final int intID;
 
     /**
-     *  @param readBuffer has zero offset for top-level MailPart.
-     *  @param in used for reading (NOT readBuffer.getInputStream())
-     *  @param counter used for counting how much we have read.
-     *                 Probably the same as InputStream but a different interface.
-     *  @param hdrlines non-null for top-level MailPart, where they
-     *         were already parsed in Mail. Null otherwise
+     * @param readBuffer has zero offset for top-level MailPart.
+     * @param in used for reading (NOT readBuffer.getInputStream())
+     * @param counter used for counting how much we have read.
+     * Probably the same as InputStream but a different interface.
+     * @param hdrlines non-null for top-level MailPart, where they
+     * were already parsed in Mail. Null otherwise
      */
     public MailPart(String uidl, AtomicInteger id, Buffer readBuffer, InputStream in,
                     ReadCounter counter, String[] hdrlines) throws IOException {
@@ -273,19 +273,19 @@ class MailPart {
     }
 
     /**
-     *  A value unique across all the parts of this Mail,
-     *  and constant across restarts, so it may be part of a bookmark.
+     * A value unique across all the parts of this Mail,
+     * and constant across restarts, so it may be part of a bookmark.
      *
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     public int getID() {return intID;}
 
 
     /**
-     *  Swallow "\r\n" or "--\r\n".
-     *  We don't have any pushback if this goes wrong.
+     * Swallow "\r\n" or "--\r\n".
+     * We don't have any pushback if this goes wrong.
      *
-     *  @return true if end of input
+     * @return true if end of input
      */
     private boolean readBoundaryTrailer(InputStream in) throws IOException {
         int c = in.read();
@@ -319,10 +319,10 @@ class MailPart {
     }
 
     /**
-     *  Synched because FileBuffer keeps stream open
+     * Synched because FileBuffer keeps stream open
      *
-     *  @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
-     *  @since 0.9.13
+     * @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
+     * @since 0.9.13
      */
     public synchronized void decode(int offset, Buffer out) throws IOException {
         Encoding enc = EncodingFactory.getEncoding(encoding);
@@ -359,10 +359,10 @@ class MailPart {
     }
 
     /**
-     *  Synched because FileBuffer keeps stream open
-     *  Caller must close out
+     * Synched because FileBuffer keeps stream open
+     * Caller must close out
      *
-     *  @since 0.9.35
+     * @since 0.9.35
      */
     public synchronized void outputRaw(OutputStream out) throws IOException {
         LimitInputStream lin = null;
@@ -382,12 +382,12 @@ class MailPart {
     }
 
     /**
-     *  Synched because FileBuffer keeps stream open
-     *  Caller must call readComplete() on buffer
+     * Synched because FileBuffer keeps stream open
+     * Caller must call readComplete() on buffer
      *
-     *  @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
-     *  @return the raw input stream
-     *  @since 0.9.35
+     * @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
+     * @return the raw input stream
+     * @since 0.9.35
      */
     private synchronized LimitInputStream getRawInputStream(int offset) throws IOException {
         InputStream in = buffer.getInputStream();
@@ -408,8 +408,8 @@ class MailPart {
     }
 
     /**
-     *  @param attributeName must be lower case, will be matched case-insensitively
-     *  @return as found, not necessarily lower case
+     * @param attributeName must be lower case, will be matched case-insensitively
+     * @return as found, not necessarily lower case
      */
     private static String getHeaderLineAttribute( String line, String attributeName)
     {

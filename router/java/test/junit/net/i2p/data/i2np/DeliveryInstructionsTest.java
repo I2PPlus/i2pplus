@@ -6,7 +6,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -26,7 +25,7 @@ import org.junit.Test;
 public class DeliveryInstructionsTest extends StructureTest {
 
     /**
-     *  Override because DI doesn't support input/output streams any more
+     * Override because DI doesn't support input/output streams any more
      */
     @Override
     @Test

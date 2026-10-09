@@ -17,19 +17,19 @@ import java.util.Map;
  *
  * <p>Key characteristics of MetaLeaseSet:</p>
  * <ul>
- *   <li>Contains {@link MetaLease} objects instead of regular {@link Lease} objects</li>
- *   <li>Does not support encryption keys (throws {@link UnsupportedOperationException})</li>
- *   <li>References other LeaseSets by hash rather than containing tunnel endpoints directly</li>
- *   <li>Supports offline signatures for reduced router load</li>
- *   <li>Includes options and statistics support</li>
+ * <li>Contains {@link MetaLease} objects instead of regular {@link Lease} objects</li>
+ * <li>Does not support encryption keys (throws {@link UnsupportedOperationException})</li>
+ * <li>References other LeaseSets by hash rather than containing tunnel endpoints directly</li>
+ * <li>Supports offline signatures for reduced router load</li>
+ * <li>Includes options and statistics support</li>
  * </ul>
  *
  * <p><strong>Usage:</strong> MetaLeaseSets are used for:</p>
  * <ul>
- *   <li>Load balancing across multiple LeaseSets</li>
- *   <li>Geographic or performance-based routing decisions</li>
- *   <li>Fallback and redundancy strategies</li>
- *   <li>Service discovery and aggregation</li>
+ * <li>Load balancing across multiple LeaseSets</li>
+ * <li>Geographic or performance-based routing decisions</li>
+ * <li>Fallback and redundancy strategies</li>
+ * <li>Service discovery and aggregation</li>
  * </ul>
  *
  * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves</p>
@@ -57,7 +57,7 @@ public class MetaLeaseSet extends LeaseSet2 {
 
     /**
      * UnsupportedOperationException always.
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void setEncryptionKey(PublicKey key) {
@@ -66,7 +66,7 @@ public class MetaLeaseSet extends LeaseSet2 {
 
     /**
      * UnsupportedOperationException always.
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void addEncryptionKey(PublicKey key) {
@@ -74,9 +74,9 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  This does NOT validate the signature
+     * This does NOT validate the signature
      *
-     *  @throws IllegalStateException if called more than once or Destination already set
+     * @throws IllegalStateException if called more than once or Destination already set
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
@@ -102,7 +102,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Without sig. This does NOT validate the signature
+     * Without sig. This does NOT validate the signature
      */
     @Override
     protected void writeBytesWithoutSig(OutputStream out) throws DataFormatException, IOException {
@@ -125,7 +125,7 @@ public class MetaLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Number of bytes, NOT including signature
+     * Number of bytes, NOT including signature
      */
     @Override
     public int size() {

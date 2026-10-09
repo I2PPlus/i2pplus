@@ -5,7 +5,6 @@ package net.i2p.router.startup;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.File;
@@ -34,7 +33,6 @@ import net.i2p.util.SecureFileOutputStream;
  * 45 seconds (the current check frequency), the router info will be rebuilt with new
  * addresses and stats, as well as a new version, then republished.  Afterwards, the
  * router.info.rebuild file is deleted
- *
  */
 class RebuildRouterInfoJob extends JobImpl {
     private final Log _log;
@@ -49,9 +47,9 @@ class RebuildRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Name of this job.
+     * Name of this job.
      *
-     *  @return the name
+     * @return the name
      */
     @Override
     public String getName() { return "Rebuild RouterInfo"; }
@@ -72,9 +70,9 @@ class RebuildRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Rebuild the router info and keys.
+     * Rebuild the router info and keys.
      *
-     *  @param alreadyRunning unused
+     * @param alreadyRunning unused
      */
     void rebuildRouterInfo(boolean alreadyRunning) {
         _log.debug("Rebuilding the new router info");

@@ -506,14 +506,14 @@ public class RateSampleDeliveryTest {
     }
 
     /**
- * A null listener must be refused, not enqueued.
- *
- * <p>Regression guard for a production failure: {@code Rate.coalesce()} briefly
- * lost its null-listener guard when delivery moved off-thread, so every
- * listener-less rate - the overwhelming majority - enqueued a null listener that
- * threw on the consumer thread once per coalesce cycle, producing thousands of
- * logged NullPointerExceptions.
- */
+     * A null listener must be refused, not enqueued.
+     *
+     * <p>Regression guard for a production failure: {@code Rate.coalesce()} briefly
+     * lost its null-listener guard when delivery moved off-thread, so every
+     * listener-less rate - the overwhelming majority - enqueued a null listener that
+     * threw on the consumer thread once per coalesce cycle, producing thousands of
+     * logged NullPointerExceptions.
+     */
 @Test
 public void nullListenerIsRefusedRatherThanEnqueued() throws Exception {
     RateSampleDelivery delivery = new RateSampleDelivery(null, 8);

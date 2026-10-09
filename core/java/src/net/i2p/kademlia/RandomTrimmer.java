@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Removes a random element. Not resistant to flooding.
+ * Removes a random element. Not resistant to flooding.
  *
  *
- *  @param <T> type of SimpleDataStructure objects in the bucket
- *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ * @param <T> type of SimpleDataStructure objects in the bucket
+ * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrimmer<T> {
     /** The router context, used for timing. */

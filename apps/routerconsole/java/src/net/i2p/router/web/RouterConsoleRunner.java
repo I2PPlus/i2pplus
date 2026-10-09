@@ -76,7 +76,7 @@ import java.nio.charset.StandardCharsets;
 import net.i2p.desktopgui.Main;
 import static net.i2p.util.Log.WARN;
 /**
- *  Start the router console.
+ * Start the router console.
  */
 public class RouterConsoleRunner implements RouterApp {
 
@@ -153,7 +153,7 @@ public class RouterConsoleRunner implements RouterApp {
     static final FileFilter WAR_FILTER = new WarFilenameFilter();
 
     /**
-     *  <pre>
+     * <pre>
      *  non-SSL:
      *  RouterConsoleRunner
      *  RouterConsoleRunner 7657
@@ -161,25 +161,25 @@ public class RouterConsoleRunner implements RouterApp {
      *  RouterConsoleRunner 7657 127.0.0.1,::1
      *  RouterConsoleRunner 7657 127.0.0.1,::1 ./webapps/
      *
-     *  SSL:
+     * SSL:
      *  RouterConsoleRunner -s 7657
      *  RouterConsoleRunner -s 7657 127.0.0.1
      *  RouterConsoleRunner -s 7657 127.0.0.1,::1
      *  RouterConsoleRunner -s 7657 127.0.0.1,::1 ./webapps/
      *
-     *  If using both, non-SSL must be first:
+     * If using both, non-SSL must be first:
      *  RouterConsoleRunner 7657 127.0.0.1 -s 7667
      *  RouterConsoleRunner 7657 127.0.0.1 -s 7667 127.0.0.1
      *  RouterConsoleRunner 7657 127.0.0.1,::1 -s 7667 127.0.0.1,::1
      *  RouterConsoleRunner 7657 127.0.0.1,::1 -s 7667 127.0.0.1,::1 ./webapps/
-     *  </pre>
+     * </pre>
      *
-     *  @param args second arg may be a comma-separated list of bind addresses,
-     *              for example ::1,127.0.0.1
-     *              On XP, the other order (127.0.0.1,::1) fails the IPV6 bind,
-     *              because 127.0.0.1 will bind ::1 also. But even though it's bound
-     *              to both, we can't connect to [::1]:7657 for some reason.
-     *              So the wise choice is ::1,127.0.0.1
+     * @param args second arg may be a comma-separated list of bind addresses,
+     * for example ::1,127.0.0.1
+     * On XP, the other order (127.0.0.1,::1) fails the IPV6 bind,
+     * because 127.0.0.1 will bind ::1 also. But even though it's bound
+     * to both, we can't connect to [::1]:7657 for some reason.
+     * So the wise choice is ::1,127.0.0.1
      */
     public RouterConsoleRunner(RouterContext ctx, ClientAppManager mgr, String[] args) {
         _context = ctx;
@@ -316,19 +316,18 @@ public class RouterConsoleRunner implements RouterApp {
      * The Jetty server backing the console.
      *
      * @return the server, may be null or stopped
-     * @since Jetty 6 since it doesn't have Server.getServers()
      */
     synchronized Server getConsoleServer() {
         return _server;
     }
 
     /**
-     *  To get to Jetty.
-     *  Warning, this will NOT work during shutdown, because
-     *  changeState(STOPPING) will unregister us first.
+     * To get to Jetty.
+     * Warning, this will NOT work during shutdown, because
+     * changeState(STOPPING) will unregister us first.
      *
-     *  @return may be null or stopped perhaps
-     *  @since 0.9.38
+     * @return may be null or stopped perhaps
+     * @since 0.9.38
      */
     static Server getConsoleServer(I2PAppContext ctx) {
         ClientApp app = ctx.clientAppManager().getRegisteredApp(NAME);
@@ -342,8 +341,8 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
-     *  Package private for ConfigServiceHandler
-     *  @since 0.9.48 pulled out of startTrayApp
+     * Package private for ConfigServiceHandler
+     * @since 0.9.48 pulled out of startTrayApp
      */
     static boolean isSystrayEnabled(I2PAppContext context) {
         return context.getProperty(PROP_DTG_ENABLED, false);
@@ -1170,12 +1169,12 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
     /**
-     *  Stops all but the root webapp (routerconsole.war)
-     *  In Jetty 9, stopping the server doesn't stop the non-root webapps,
-     *  so we must do it here.
-     *  There should be a better way to do this, possibly by
-     *  making the webapps "managed".
-     *  @since 0.9.30
+     * Stops all but the root webapp (routerconsole.war)
+     * In Jetty 9, stopping the server doesn't stop the non-root webapps,
+     * so we must do it here.
+     * There should be a better way to do this, possibly by
+     * making the webapps "managed".
+     * @since 0.9.30
      */
     private void stopAllWebApps() {
         Log log = _context.logManager().getLog(RouterConsoleRunner.class);

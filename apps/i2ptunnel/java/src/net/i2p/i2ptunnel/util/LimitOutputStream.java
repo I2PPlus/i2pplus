@@ -32,7 +32,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     }
 
     /**
-     *  @param done non-null
+     * @param done non-null
      */
     public LimitOutputStream(OutputStream out, DoneCallback done) {
         super(out);
@@ -65,7 +65,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     protected boolean isDone() { return _isDone; }
 
     /**
-     *  flush(), call the callback, and set _isDone
+     * flush(), call the callback, and set _isDone
      */
     protected void setDone() throws IOException {
         if (_isDone)

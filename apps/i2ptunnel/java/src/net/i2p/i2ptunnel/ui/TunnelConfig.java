@@ -102,7 +102,7 @@ public class TunnelConfig {
     private boolean _addClientAuth;
 
     /**
-     *  Creates an empty config, using the global context.
+     * Creates an empty config, using the global context.
      */
     public TunnelConfig() {
         _context = I2PAppContext.getGlobalContext();
@@ -120,8 +120,8 @@ public class TunnelConfig {
         _type = (type != null ? type.trim() : null);
     }
     /**
-     *  The type of tunnel.
-     *  @return the type
+     * The type of tunnel.
+     * @return the type
      */
     public String getType() {
         return _type;
@@ -154,64 +154,64 @@ public class TunnelConfig {
     }
 
     /** how many hops to use for inbound tunnels
-     *  In or both in/out
-     *  @param tunnelDepth hops per tunnel, negative for the default
+     * In or both in/out
+     * @param tunnelDepth hops per tunnel, negative for the default
      */
     public void setTunnelDepth(int tunnelDepth) {
         _tunnelDepth = tunnelDepth;
     }
 
     /** how many parallel inbound tunnels to use
-     *  In or both in/out
-     *  @param tunnelQuantity tunnels to maintain, negative for the default
+     * In or both in/out
+     * @param tunnelQuantity tunnels to maintain, negative for the default
      */
     public void setTunnelQuantity(int tunnelQuantity) {
         _tunnelQuantity = tunnelQuantity;
     }
 
     /** how much randomisation to apply to the depth of tunnels
-     *  In or both in/out
-     *  @param tunnelVariance depth spread, -2 or higher is meaningful
+     * In or both in/out
+     * @param tunnelVariance depth spread, -2 or higher is meaningful
      */
     public void setTunnelVariance(int tunnelVariance) {
         _tunnelVariance = tunnelVariance;
     }
 
     /** how many tunnels to hold in reserve to guard against failures
-     *  In or both in/out
-     *  @param tunnelBackupQuantity spare tunnels, negative for the default
+     * In or both in/out
+     * @param tunnelBackupQuantity spare tunnels, negative for the default
      */
     public void setTunnelBackupQuantity(int tunnelBackupQuantity) {
         _tunnelBackupQuantity = tunnelBackupQuantity;
     }
 
     /** how many hops to use for outbound tunnels
-     *  @param tunnelDepth hops per tunnel, negative copies the inbound depth
-     *  @since 0.9.33
+     * @param tunnelDepth hops per tunnel, negative copies the inbound depth
+     * @since 0.9.33
      */
     public void setTunnelDepthOut(int tunnelDepth) {
         _tunnelDepthOut = tunnelDepth;
     }
 
     /** how many parallel outbound tunnels to use
-     *  @param tunnelQuantity tunnels to maintain, negative copies the inbound quantity
-     *  @since 0.9.33
+     * @param tunnelQuantity tunnels to maintain, negative copies the inbound quantity
+     * @since 0.9.33
      */
     public void setTunnelQuantityOut(int tunnelQuantity) {
         _tunnelQuantityOut = tunnelQuantity;
     }
 
     /** how much randomisation to apply to the depth of outbound tunnels
-     *  @param tunnelVariance depth spread, below -2 copies the inbound variance
-     *  @since 0.9.33
+     * @param tunnelVariance depth spread, below -2 copies the inbound variance
+     * @since 0.9.33
      */
     public void setTunnelVarianceOut(int tunnelVariance) {
         _tunnelVarianceOut = tunnelVariance;
     }
 
     /** how many tunnels to hold in reserve to guard against failures
-     *  @param tunnelBackupQuantity spare tunnels, negative copies the inbound count
-     *  @since 0.9.33
+     * @param tunnelBackupQuantity spare tunnels, negative copies the inbound count
+     * @since 0.9.33
      */
     public void setTunnelBackupQuantityOut(int tunnelBackupQuantity) {
         _tunnelBackupQuantityOut = tunnelBackupQuantity;
@@ -267,11 +267,11 @@ public class TunnelConfig {
         _spoofedHost = (host != null ? host.trim() : null);
     }
     /**
-     *  Set the private key filename for this server tunnel.
-     *  Absolute paths and paths containing ".." are rejected to prevent
-     *  writes outside the config directory.
+     * Set the private key filename for this server tunnel.
+     * Absolute paths and paths containing ".." are rejected to prevent
+     * writes outside the config directory.
      *
-     *  @param file the private key filename, or null to clear
+     * @param file the private key filename, or null to clear
      */
     public void setPrivKeyFile(String file) {
         if (file != null) {
@@ -281,17 +281,17 @@ public class TunnelConfig {
         _privKeyFile = file;
     }
     /**
-     *  The filename of the private key file.
-     *  @return the priv key file
+     * The filename of the private key file.
+     * @return the priv key file
      */
     public String getPrivKeyFile() {
         return _privKeyFile;
     }
 
     /**
-     *  What filename is this server tunnel's alternate private keys stored in
-     *  @param file key file path used only if the primary one is unusable
-     *  @since 0.9.30
+     * What filename is this server tunnel's alternate private keys stored in
+     * @param file key file path used only if the primary one is unusable
+     * @since 0.9.30
      */
     public void setAltPrivKeyFile(String file) {
         if (file != null)
@@ -308,88 +308,88 @@ public class TunnelConfig {
     }
 
     /**
-     *  Share the private key with other client tunnels.
-     *  @param val true to share the private key with other client tunnels
+     * Share the private key with other client tunnels.
+     * @param val true to share the private key with other client tunnels
      */
     public void setShared(boolean val) {
         _sharedClient = val;
     }
 
     /**
-     *  The minimum startup delay in seconds for server tunnels.
-     *  @param val the minimum startup delay in seconds for server tunnels
-     *  @since 0.9.68+
+     * The minimum startup delay in seconds for server tunnels.
+     * @param val the minimum startup delay in seconds for server tunnels
+     * @since 0.9.68+
      */
     public void setStartupDelayMin(int val) {
         _startupDelayMin = Math.max(0, val);
     }
 
     /**
-     *  The minimum startup delay in seconds.
-     *  @return the minimum startup delay in seconds
-     *  @since 0.9.68+
+     * The minimum startup delay in seconds.
+     * @return the minimum startup delay in seconds
+     * @since 0.9.68+
      */
     public int getStartupDelayMin() {
         return _startupDelayMin;
     }
 
     /**
-     *  The maximum startup delay in seconds for server tunnels.
-     *  @param val the maximum startup delay in seconds for server tunnels
-     *  @since 0.9.68+
+     * The maximum startup delay in seconds for server tunnels.
+     * @param val the maximum startup delay in seconds for server tunnels
+     * @since 0.9.68+
      */
     public void setStartupDelayMax(int val) {
         _startupDelayMax = Math.max(0, val);
     }
 
     /**
-     *  The maximum startup delay in seconds.
-     *  @return the maximum startup delay in seconds
-     *  @since 0.9.68+
+     * The maximum startup delay in seconds.
+     * @return the maximum startup delay in seconds
+     * @since 0.9.68+
      */
     public int getStartupDelayMax() {
         return _startupDelayMax;
     }
 
     /**
-     *  The minimum shutdown delay in seconds for server tunnels.
-     *  @param val the minimum shutdown delay in seconds for server tunnels
-     *  @since 0.9.68+
+     * The minimum shutdown delay in seconds for server tunnels.
+     * @param val the minimum shutdown delay in seconds for server tunnels
+     * @since 0.9.68+
      */
     public void setShutdownDelayMin(int val) {
         _shutdownDelayMin = Math.max(0, val);
     }
 
     /**
-     *  The minimum shutdown delay in seconds.
-     *  @return the minimum shutdown delay in seconds
-     *  @since 0.9.68+
+     * The minimum shutdown delay in seconds.
+     * @return the minimum shutdown delay in seconds
+     * @since 0.9.68+
      */
     public int getShutdownDelayMin() {
         return _shutdownDelayMin;
     }
 
     /**
-     *  The maximum shutdown delay in seconds for server tunnels.
-     *  @param val the maximum shutdown delay in seconds for server tunnels
-     *  @since 0.9.68+
+     * The maximum shutdown delay in seconds for server tunnels.
+     * @param val the maximum shutdown delay in seconds for server tunnels
+     * @since 0.9.68+
      */
     public void setShutdownDelayMax(int val) {
         _shutdownDelayMax = Math.max(0, val);
     }
 
     /**
-     *  The maximum shutdown delay in seconds.
-     *  @return the maximum shutdown delay in seconds
-     *  @since 0.9.68+
+     * The maximum shutdown delay in seconds.
+     * @return the maximum shutdown delay in seconds
+     * @since 0.9.68+
      */
     public int getShutdownDelayMax() {
         return _shutdownDelayMax;
     }
 
     /**
-     *  Delay the connection to the target until the first client connects.
-     *  @param val true to delay the connection to the target until the first client connects
+     * Delay the connection to the target until the first client connects.
+     * @param val true to delay the connection to the target until the first client connects
      */
     public void setConnectDelay(boolean val) {
         _connectDelay = val;
@@ -820,9 +820,9 @@ public class TunnelConfig {
     }
 
     /**
-     *  Set the type of the outproxy.
-     *  @param s "connect" or "socks"
-     *  @since 0.9.57
+     * Set the type of the outproxy.
+     * @param s "connect" or "socks"
+     * @since 0.9.57
      */
     public void setOutproxyType(String s) {
         if (s != null)
@@ -1288,8 +1288,8 @@ public class TunnelConfig {
     }
 
     /**
-     *  Servers only.
-     *  @since 0.9.41 pulled out from getConfig() above
+     * Servers only.
+     * @since 0.9.41 pulled out from getConfig() above
      */
     private void processEncryptMode(Properties config) {
         switch (_encryptMode) {
@@ -1450,9 +1450,9 @@ public class TunnelConfig {
     }
 
     /**
-     *  Servers only.
-     *  Also sets/clears i2cp.leaseSetType
-     *  @since 0.9.41
+     * Servers only.
+     * Also sets/clears i2cp.leaseSetType
+     * @since 0.9.41
      */
     private void addLeaseSetPrivKey(Properties config, boolean isBlinded) {
         // LS1 is AES, blinded is X25519, both are 32 random bytes.
@@ -1537,8 +1537,8 @@ public class TunnelConfig {
         };
 
     /**
-     *  Do NOT add these to noShoOpts, we must leave them in for HTTPClient, Connect, and SOCKS
-     *  so they will get migrated to MD5 / SHA256 digest authentication
+     * Do NOT add these to noShoOpts, we must leave them in for HTTPClient, Connect, and SOCKS
+     * so they will get migrated to MD5 / SHA256 digest authentication
      */
     private static final String[] _otherProxyOpts = {
         "proxyUsername", "proxyPassword"
@@ -1657,19 +1657,19 @@ public class TunnelConfig {
     }
 
     /**
-     *  Parse the args submitted in the custom options field.
+     * Parse the args submitted in the custom options field.
      *
-     *  Modified from EepGet.parseAuthArgs()
-     *  Spaces or tabs separate args.
-     *  Args may be single- or double-quoted if they contain spaces or tabs.
-     *  There is no provision for escaping quotes.
-     *  A quoted string may not contain a quote of any kind.
-     *  Double quotes around values are stripped.
-     *  No quotes allowed for keys.
-     *  Keys without values, e.g. key= or key will be returned with "" for the value.
+     * Modified from EepGet.parseAuthArgs()
+     * Spaces or tabs separate args.
+     * Args may be single- or double-quoted if they contain spaces or tabs.
+     * There is no provision for escaping quotes.
+     * A quoted string may not contain a quote of any kind.
+     * Double quotes around values are stripped.
+     * No quotes allowed for keys.
+     * Keys without values, e.g. key= or key will be returned with "" for the value.
      *
-     *  @param args non-null
-     *  @since 0.9.43
+     * @param args non-null
+     * @since 0.9.43
      */
     private static Map<String, String> parseCustomOptions(String args) {
         Map<String, String> rv = new HashMap<>(8);

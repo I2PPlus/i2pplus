@@ -258,9 +258,9 @@ class NegativeLookupCache {
     }
 
     /**
-     *  Stops the timer. May not be restarted.
+     * Stops the timer. May not be restarted.
      *
-     *  @since 0.9.61
+     * @since 0.9.61
      */
     public void stop() {
         clear();
@@ -321,9 +321,9 @@ class NegativeLookupCache {
 
     private class Cleaner extends SimpleTimer2.TimedEvent {
         /**
-         *  Schedules itself.
+         * Schedules itself.
          *
-         *  @since 0.9.61
+         * @since 0.9.61
          */
         public Cleaner(SimpleTimer2 pool) {
             super(pool, cleanTime);

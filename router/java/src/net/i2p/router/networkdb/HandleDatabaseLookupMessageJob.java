@@ -5,7 +5,6 @@ package net.i2p.router.networkdb;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Collections;
@@ -119,20 +118,20 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
                                                lookupType == DatabaseLookupMessage.Type.LS)) {
             LeaseSet ls = (LeaseSet) dbe;
             /**
-             *  Answer any request for a LeaseSet if it has been published to us.
-             *  getReceivedAsPublished:
-             *  - false for received over a client tunnel(if associated with a client, goes to client subDB)
-             *  - true for received in a DatabaseStoreMessage unsolicited(goes to main Db)
+             * Answer any request for a LeaseSet if it has been published to us.
+             * getReceivedAsPublished:
+             * - false for received over a client tunnel(if associated with a client, goes to client subDB)
+             * - true for received in a DatabaseStoreMessage unsolicited(goes to main Db)
              */
             if (ls != null && ls.getReceivedAsPublished()) {
                 /**
-                 *  Answer anything that was stored to us directly.
-                 *  (i.e. "received as published" - not the result of a query).
-                 *  LeaseSets received over a client tunnel will be routed into subDbs.
-                 *  subDbs are responsible for publishing their "own" client LeaseSets.
-                 *  The "main" netDb can safely store it's own copies of a LeaseSet
-                 *  belonging to a Local client, when it is published back to it. Therefore,
-                 *  they do not require special handling and are handled here.
+                 * Answer anything that was stored to us directly.
+                 * (i.e. "received as published" - not the result of a query).
+                 * LeaseSets received over a client tunnel will be routed into subDbs.
+                 * subDbs are responsible for publishing their "own" client LeaseSets.
+                 * The "main" netDb can safely store it's own copies of a LeaseSet
+                 * belonging to a Local client, when it is published back to it. Therefore,
+                 * they do not require special handling and are handled here.
                  */
                 if (_log.shouldInfo()) {
                     _log.info("We have the published LeaseSet [" + searchKey.toBase64().substring(0,6) + "] -> Answering query...");
@@ -201,10 +200,10 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
     }
 
     /**
-     *  Closest to the message's search key,
-     *  honoring the message's dontInclude set.
-     *  Will not include us.
-     *  Side effect - adds us to the message's dontInclude set.
+     * Closest to the message's search key,
+     * honoring the message's dontInclude set.
+     * Will not include us.
+     * Side effect - adds us to the message's dontInclude set.
      * @return the nearest routers
      */
     private Set<Hash> getNearestRouters(DatabaseLookupMessage.Type lookupType) {

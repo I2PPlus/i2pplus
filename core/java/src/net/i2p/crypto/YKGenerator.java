@@ -6,7 +6,6 @@ package net.i2p.crypto;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -49,9 +48,9 @@ final class YKGenerator {
     private final int CALC_DELAY;
     private final LinkedBlockingQueue<BigInteger[]> _values;
     /**
-     *  Pool occupancy, maintained alongside {@link #_values}: sampling
-     *  LinkedBlockingQueue.size() takes both the put and the take lock, so it
-     *  contends with poll() on the encryption path.
+     * Pool occupancy, maintained alongside {@link #_values}: sampling
+     * LinkedBlockingQueue.size() takes both the put and the take lock, so it
+     * contends with poll() on the encryption path.
      */
     private final AtomicInteger _size = new AtomicInteger();
     private Thread _precalcThread;
@@ -72,8 +71,8 @@ final class YKGenerator {
     public static final int DEFAULT_YK_PRECALC_DELAY = SystemVersion.isSlow() ? 200 : 150;
 
     /**
-     *  Caller must also call start() to start the background precalc thread.
-     *  Unit tests will still work without calling start().
+     * Caller must also call start() to start the background precalc thread.
+     * Unit tests will still work without calling start().
      */
     public YKGenerator(I2PAppContext context) {
         ctx = context;
@@ -90,12 +89,12 @@ final class YKGenerator {
     }
 
     /**
-     *  Start the background precalc thread.
-     *  Must be called for normal operation.
-     *  If not called, all generation happens in the foreground.
-     *  Not required for unit tests.
+     * Start the background precalc thread.
+     * Must be called for normal operation.
+     * If not called, all generation happens in the foreground.
+     * Not required for unit tests.
      *
-     *  @since 0.9.14
+     * @since 0.9.14
      */
     public synchronized void start() {
         if (_isRunning) {
@@ -108,11 +107,11 @@ final class YKGenerator {
     }
 
     /**
-     *  Stop the background precalc thread.
-     *  Can be restarted.
-     *  Not required for unit tests.
+     * Stop the background precalc thread.
+     * Can be restarted.
+     * Not required for unit tests.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public synchronized void shutdown() {
         _isRunning = false;
@@ -137,7 +136,7 @@ final class YKGenerator {
 
     /** Next precomputed YK value.
      *
-     *  @return rv[0] = Y; rv[1] = K
+     * @return rv[0] = Y; rv[1] = K
      */
     public BigInteger[] getNextYK() {
         BigInteger[] rv = _values.poll();
@@ -185,8 +184,8 @@ final class YKGenerator {
     /** Precalculation thread. */
     private class YKPrecalcRunner implements Runnable {
         /**
-         *  Refill headroom for a pool that saw no consumption yet, covering the
-         *  jitter between a drain and this thread noticing it.
+         * Refill headroom for a pool that saw no consumption yet, covering the
+         * jitter between a drain and this thread noticing it.
          */
         private static final int MIN_SLACK = 5;
 
@@ -254,14 +253,14 @@ final class YKGenerator {
         }
 
         /**
-         *  How far above the minimum to refill: scoped to one check interval's
-         *  worth of observed consumption, so the expensive modular exponentiations
-         *  track real demand. Only consulted once the pool is already below the
-         *  minimum, so it never changes when a refill starts, only how far it goes.
+         * How far above the minimum to refill: scoped to one check interval's
+         * worth of observed consumption, so the expensive modular exponentiations
+         * track real demand. Only consulted once the pool is already below the
+         * minimum, so it never changes when a refill starts, only how far it goes.
          *
-         *  @param drained how many values the pool lost since the previous cycle
-         *  @param elapsedMs how long ago the previous cycle ended
-         *  @return the size to fill to, never above the configured maximum
+         * @param drained how many values the pool lost since the previous cycle
+         * @param elapsedMs how long ago the previous cycle ended
+         * @return the size to fill to, never above the configured maximum
          */
         private int refillTarget(int drained, long elapsedMs) {
             int room = _maxSize - _minSize;

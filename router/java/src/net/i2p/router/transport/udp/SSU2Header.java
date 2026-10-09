@@ -8,9 +8,9 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
 /**
- *  Encrypt/decrypt headers
+ * Encrypt/decrypt headers
  *
- *  @since 0.9.54
+ * @since 0.9.54
  */
 final class SSU2Header {
 
@@ -20,17 +20,17 @@ final class SSU2Header {
     public static final byte[] CHACHA_IV_0 = new byte[CHACHA_IV_LEN];
 
     /**
-     *  Thread-scoped scratch for the trial decrypts, which run 3-6 times per
-     *  inbound datagram on the UDP handle threads.
+     * Thread-scoped scratch for the trial decrypts, which run 3-6 times per
+     * inbound datagram on the UDP handle threads.
      *
-     *  Safe because a trial-decrypted Header never escapes the calling method:
-     *  acceptTrialDecrypt() copies the bytes into the packet, and no caller
-     *  stores the Header. One scratch per header size, because Header.toString()
-     *  and getEphemeralKey() infer the header type from the array length, and
-     *  because PacketHandler may hold a handshake header while falling back to
-     *  a long-header decrypt of the same packet.
+     * Safe because a trial-decrypted Header never escapes the calling method:
+     * acceptTrialDecrypt() copies the bytes into the packet, and no caller
+     * stores the Header. One scratch per header size, because Header.toString()
+     * and getEphemeralKey() infer the header type from the array length, and
+     * because PacketHandler may hold a handshake header while falling back to
+     * a long-header decrypt of the same packet.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final class Scratch {
         final Header session = new Header(SESSION_HEADER_SIZE);
@@ -48,14 +48,14 @@ final class SSU2Header {
     private SSU2Header() { /* no-op */ }
 
     /**
-     *  Session Request and Session Created only. 64 bytes.
-     *  Packet is unmodified.
+     * Session Request and Session Created only. 64 bytes.
+     * Packet is unmodified.
      *
-     *  The returned Header is scratch, valid only until the next trial decrypt
-     *  on this thread. It must not be retained.
+     * The returned Header is scratch, valid only until the next trial decrypt
+     * on this thread. It must not be retained.
      *
-     *  @param packet must be 88 bytes min
-     *  @return 64 byte header, null if data too short
+     * @param packet must be 88 bytes min
+     * @return 64 byte header, null if data too short
      */
     public static Header trialDecryptHandshakeHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
@@ -68,14 +68,14 @@ final class SSU2Header {
     }
 
     /**
-     *  Retry, Token Request, Peer Test only. 32 bytes.
-     *  Packet is unmodified.
+     * Retry, Token Request, Peer Test only. 32 bytes.
+     * Packet is unmodified.
      *
-     *  The returned Header is scratch, valid only until the next trial decrypt
-     *  on this thread. It must not be retained.
+     * The returned Header is scratch, valid only until the next trial decrypt
+     * on this thread. It must not be retained.
      *
-     *  @param packet must be 56 bytes min
-     *  @return 32 byte header, null if data too short
+     * @param packet must be 56 bytes min
+     * @return 32 byte header, null if data too short
      */
     public static Header trialDecryptLongHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
@@ -88,14 +88,14 @@ final class SSU2Header {
     }
 
     /**
-     *  Session Confirmed and data phase. 16 bytes.
-     *  Packet is unmodified.
+     * Session Confirmed and data phase. 16 bytes.
+     * Packet is unmodified.
      *
-     *  The returned Header is scratch, valid only until the next trial decrypt
-     *  on this thread. It must not be retained.
+     * The returned Header is scratch, valid only until the next trial decrypt
+     * on this thread. It must not be retained.
      *
-     *  @param packet must be 40 bytes min
-     *  @return 16 byte header, null if data too short, must be 40 bytes min
+     * @param packet must be 40 bytes min
+     * @return 16 byte header, null if data too short, must be 40 bytes min
      */
     public static Header trialDecryptShortHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
@@ -108,12 +108,12 @@ final class SSU2Header {
     }
 
     /**
-     *  Decrypt bytes 0-7 in header.
-     *  Packet is unmodified.
+     * Decrypt bytes 0-7 in header.
+     * Packet is unmodified.
      *
-     *  @param pkt must be 8 bytes min
-     *  @return the destination connection ID
-     *  @throws IndexOutOfBoundsException if too short
+     * @param pkt must be 8 bytes min
+     * @return the destination connection ID
+     * @throws IndexOutOfBoundsException if too short
      */
     public static long decryptDestConnID(DatagramPacket pkt, byte[] key1) {
         byte[] data = pkt.getData();
@@ -129,7 +129,7 @@ final class SSU2Header {
     }
 
     /**
-     *  Copy the header back to the packet. Cannot be undone.
+     * Copy the header back to the packet. Cannot be undone.
      */
     public static void acceptTrialDecrypt(UDPPacket packet, Header header) {
         DatagramPacket pkt = packet.getPacket();
@@ -140,9 +140,9 @@ final class SSU2Header {
 
 
     /**
-     *  Decrypt bytes 0-63 from pkt to header
-     *  First 64 bytes
-     *  Packet is unmodified.
+     * Decrypt bytes 0-63 from pkt to header
+     * First 64 bytes
+     * Packet is unmodified.
      */
     private static void decryptHandshakeHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
@@ -152,9 +152,9 @@ final class SSU2Header {
     }
 
     /**
-     *  Decrypt bytes 0-31 from pkt to header.
-     *  First 32 bytes
-     *  Packet is unmodified.
+     * Decrypt bytes 0-31 from pkt to header.
+     * First 32 bytes
+     * Packet is unmodified.
      */
     private static void decryptLongHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
@@ -164,11 +164,11 @@ final class SSU2Header {
     }
 
     /**
-     *  Decrypt bytes 0-15 to header.
-     *  Packet is unmodified.
+     * Decrypt bytes 0-15 to header.
+     * Packet is unmodified.
      *
-     *  First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
-     *  Next 8 bytes uses key2 and the last 12 bytes as the IV.
+     * First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
+     * Next 8 bytes uses key2 and the last 12 bytes as the IV.
      */
     private static void decryptShortHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
@@ -251,7 +251,7 @@ final class SSU2Header {
     ////////// Encryption ///////////
 
     /**
-     *  First 64 bytes
+     * First 64 bytes
      */
     public static void encryptHandshakeHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
@@ -262,7 +262,7 @@ final class SSU2Header {
     }
 
     /**
-     *  First 32 bytes
+     * First 32 bytes
      */
     public static void encryptLongHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
@@ -273,10 +273,10 @@ final class SSU2Header {
     }
 
     /**
-     *  First 16 bytes.
+     * First 16 bytes.
      *
-     *  First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
-     *  Next 8 bytes uses key2 and the last 12 bytes as the IV.
+     * First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
+     * Next 8 bytes uses key2 and the last 12 bytes as the IV.
      */
     public static void encryptShortHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();

@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- *  Tests for DummyValidator.
- *  No I2P context needed.
+ * Tests for DummyValidator.
+ * No I2P context needed.
  */
 public class DummyValidatorTest {
 

@@ -15,15 +15,13 @@ import java.util.Arrays;
  * torrent is available (set) or not available (unset). It's used to:
  *
  * <ul>
- *   <li>Track which pieces a peer has available
- *   <li>Track which pieces the local client has downloaded
- *   <li>Determine which pieces are still needed
- *   <li>Optimize piece selection strategies
+ * <li>Track which pieces a peer has available
+ * <li>Track which pieces the local client has downloaded
+ * <li>Determine which pieces are still needed
+ * <li>Optimize piece selection strategies
  * </ul>
  *
  * <p>The bit field is stored efficiently in a byte array, with 8 bits per byte.
- *
- * @since 0.1.0
  */
 public class BitField {
 
@@ -205,9 +203,9 @@ public class BitField {
     }
 
     /**
-     *  Compact range representation - "BitField(128)[0-4 9 22-30]" instead
-     *  of enumerating every set bit. Piece counts run into the thousands,
-     *  and this is called from logging on hot paths.
+     * Compact range representation - "BitField(128)[0-4 9 22-30]" instead
+     * of enumerating every set bit. Piece counts run into the thousands,
+     * and this is called from logging on hot paths.
      */
     @Override
     public String toString() {

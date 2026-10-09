@@ -12,42 +12,42 @@ import java.time.Instant;
  *
  * <p>BlindData provides the infrastructure for cryptographic key blinding in I2P:</p>
  * <ul>
- *   <li>Manages blinded and unblinded EdDSA signing key pairs</li>
- *   <li>Supports multiple authentication methods for encrypted LeaseSets</li>
- *   <li>Caches computed blinded keys and related metadata</li>
- *   <li>Handles time-based key rotation and expiration</li>
- *   <li>Generates blinded destination addresses (.b32.i2p)</li>
+ * <li>Manages blinded and unblinded EdDSA signing key pairs</li>
+ * <li>Supports multiple authentication methods for encrypted LeaseSets</li>
+ * <li>Caches computed blinded keys and related metadata</li>
+ * <li>Handles time-based key rotation and expiration</li>
+ * <li>Generates blinded destination addresses (.b32.i2p)</li>
  * </ul>
  *
  * <p><strong>Key Components:</strong></p>
  * <ul>
- *   <li><strong>Key Blinding:</strong> Transforms clear signing keys into blinded equivalents</li>
- *   <li><strong>Authentication:</strong> Supports DH, PSK, and no-authentication modes</li>
- *   <li><strong>Caching:</strong> Stores computed values to avoid expensive recalculation</li>
- *   <li><strong>Address Generation:</strong> Creates blinded .b32 addresses for services</li>
+ * <li><strong>Key Blinding:</strong> Transforms clear signing keys into blinded equivalents</li>
+ * <li><strong>Authentication:</strong> Supports DH, PSK, and no-authentication modes</li>
+ * <li><strong>Caching:</strong> Stores computed values to avoid expensive recalculation</li>
+ * <li><strong>Address Generation:</strong> Creates blinded .b32 addresses for services</li>
  * </ul>
  *
  * <p><strong>Authentication Types:</strong></p>
  * <ul>
- *   <li>{@link #AUTH_NONE} - No authentication required</li>
- *   <li>{@link #AUTH_DH} - Diffie-Hellman key exchange for per-client keys</li>
- *   <li>{@link #AUTH_PSK} - Pre-shared key authentication</li>
+ * <li>{@link #AUTH_NONE} - No authentication required</li>
+ * <li>{@link #AUTH_DH} - Diffie-Hellman key exchange for per-client keys</li>
+ * <li>{@link #AUTH_PSK} - Pre-shared key authentication</li>
  * </ul>
  *
  * <p><strong>Usage Scenarios:</strong></p>
  * <ul>
- *   <li><strong>Encrypted LeaseSets:</strong> Generate blinded keys for restricted access</li>
- *   <li><strong>Destination Blinding:</strong> Create anonymous service endpoints</li>
- *   <li><strong>Access Control:</strong> Implement authentication for private services</li>
- *   <li><strong>Key Rotation:</strong> Manage time-based blinded key updates</li>
+ * <li><strong>Encrypted LeaseSets:</strong> Generate blinded keys for restricted access</li>
+ * <li><strong>Destination Blinding:</strong> Create anonymous service endpoints</li>
+ * <li><strong>Access Control:</strong> Implement authentication for private services</li>
+ * <li><strong>Key Rotation:</strong> Manage time-based blinded key updates</li>
  * </ul>
  *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
- *   <li>Blinded keys provide unlinkability between clear and blinded identities</li>
- *   <li>Authentication data must be securely stored and transmitted</li>
- *   <li>Key rotation intervals should balance security and usability</li>
- *   <li>Proper validation of blinded signatures is essential</li>
+ * <li>Blinded keys provide unlinkability between clear and blinded identities</li>
+ * <li>Authentication data must be securely stored and transmitted</li>
+ * <li>Key rotation intervals should balance security and usability</li>
+ * <li>Proper validation of blinded signatures is essential</li>
  * </ul>
  *
  * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as proposal evolves</p>
@@ -102,29 +102,29 @@ public class BlindData {
     public static final int AUTH_ON = 999;
 
     /**
-     *  Creates a new BlindData instance for the given destination.
+     * Creates a new BlindData instance for the given destination.
      *
-     *  @param ctx the application context
-     *  @param dest the destination
-     *  @param blindType the type of blinded signature
-     *  @param secret may be null or zero-length
-     *  @throws IllegalArgumentException on various errors
+     * @param ctx the application context
+     * @param dest the destination
+     * @param blindType the type of blinded signature
+     * @param secret may be null or zero-length
+     * @throws IllegalArgumentException on various errors
      */
     public BlindData(I2PAppContext ctx, Destination dest, SigType blindType, String secret) {
         this(ctx, dest, blindType, secret, AUTH_NONE, null);
     }
 
     /**
-     *  Creates a new BlindData instance for the given destination with authentication.
+     * Creates a new BlindData instance for the given destination with authentication.
      *
-     *  @param ctx the application context
-     *  @param dest the destination
-     *  @param blindType the type of blinded signature
-     *  @param secret may be null or zero-length
-     *  @param authType the authentication type
-     *  @param authKey the authentication key
-     *  @throws IllegalArgumentException on various errors
-     *  @since 0.9.41
+     * @param ctx the application context
+     * @param dest the destination
+     * @param blindType the type of blinded signature
+     * @param secret may be null or zero-length
+     * @param authType the authentication type
+     * @param authKey the authentication key
+     * @throws IllegalArgumentException on various errors
+     * @since 0.9.41
      */
     public BlindData(I2PAppContext ctx, Destination dest, SigType blindType, String secret, int authType, PrivateKey authKey) {
         this(ctx, dest.getSigningPublicKey(), blindType, secret, authType, authKey);
@@ -132,29 +132,29 @@ public class BlindData {
     }
 
     /**
-     *  Creates a new BlindData instance for the given signing public key.
+     * Creates a new BlindData instance for the given signing public key.
      *
-     *  @param ctx the application context
-     *  @param spk the signing public key
-     *  @param blindType the type of blinded signature
-     *  @param secret may be null or zero-length
-     *  @throws IllegalArgumentException on various errors
+     * @param ctx the application context
+     * @param spk the signing public key
+     * @param blindType the type of blinded signature
+     * @param secret may be null or zero-length
+     * @throws IllegalArgumentException on various errors
      */
     public BlindData(I2PAppContext ctx, SigningPublicKey spk, SigType blindType, String secret) {
         this(ctx, spk, blindType, secret, AUTH_NONE, null);
     }
 
     /**
-     *  Creates a new BlindData instance for the given signing public key with authentication.
+     * Creates a new BlindData instance for the given signing public key with authentication.
      *
-     *  @param ctx the application context
-     *  @param spk the signing public key
-     *  @param blindType the type of blinded signature
-     *  @param secret may be null or zero-length
-     *  @param authType the authentication type
-     *  @param authKey the authentication key
-     *  @throws IllegalArgumentException on various errors
-     *  @since 0.9.41
+     * @param ctx the application context
+     * @param spk the signing public key
+     * @param blindType the type of blinded signature
+     * @param secret may be null or zero-length
+     * @param authType the authentication type
+     * @param authKey the authentication key
+     * @throws IllegalArgumentException on various errors
+     * @since 0.9.41
      */
     public BlindData(I2PAppContext ctx, SigningPublicKey spk, SigType blindType, String secret, int authType, PrivateKey authKey) {
         _context = ctx;
@@ -172,27 +172,27 @@ public class BlindData {
     }
 
     /**
-     *  Gets the unblinded signing public key.
+     * Gets the unblinded signing public key.
      *
-     *  @return The unblinded SPK, non-null
+     * @return The unblinded SPK, non-null
      */
     public SigningPublicKey getUnblindedPubKey() {
         return _clearSPK;
     }
 
     /**
-     *  Gets the type of the blinded signature.
+     * Gets the type of the blinded signature.
      *
-     *  @return The type of the blinded key
+     * @return The type of the blinded key
      */
     public SigType getBlindedSigType() {
         return _blindType;
     }
 
     /**
-     *  Gets the blinded signing public key for the current day.
+     * Gets the blinded signing public key for the current day.
      *
-     *  @return The blinded key for the current day, non-null
+     * @return The blinded key for the current day, non-null
      */
     public SigningPublicKey getBlindedPubKey() {
         calculate();
@@ -200,9 +200,9 @@ public class BlindData {
     }
 
     /**
-     *  Gets the destination hash if known.
+     * Gets the destination hash if known.
      *
-     *  @return The hash of the destination if known, or null
+     * @return The hash of the destination if known, or null
      */
     public Hash getDestHash() {
         Destination d = _dest;
@@ -210,9 +210,9 @@ public class BlindData {
     }
 
     /**
-     *  Gets the hash of the blinded key for the current day.
+     * Gets the hash of the blinded key for the current day.
      *
-     *  @return The hash of the blinded key for the current day
+     * @return The hash of the blinded key for the current day
      */
     public Hash getBlindedHash() {
         calculate();
@@ -220,9 +220,9 @@ public class BlindData {
     }
 
     /**
-     *  Gets the alpha value for the current day.
+     * Gets the alpha value for the current day.
      *
-     *  @return Alpha for the current day
+     * @return Alpha for the current day
      */
     public SigningPrivateKey getAlpha() {
         calculate();
@@ -230,16 +230,16 @@ public class BlindData {
     }
 
     /**
-     *  Gets the destination if known.
+     * Gets the destination if known.
      *
-     *  @return null if unknown
+     * @return null if unknown
      */
     public Destination getDestination() {
         return _dest;
     }
 
     /**
-     *  Sets the destination for this blinded data.
+     * Sets the destination for this blinded data.
      *
      * @param d the destination to set
      * @throws IllegalArgumentException on SigningPublicKey mismatch
@@ -254,27 +254,27 @@ public class BlindData {
     }
 
     /**
-     *  Gets the secret if set.
+     * Gets the secret if set.
      *
-     *  @return null if none
+     * @return null if none
      */
     public String getSecret() {
         return _secret;
     }
 
     /**
-     *  Gets the authentication type.
+     * Gets the authentication type.
      *
-     *  @return 0 for no client auth, 1 for DH, 3 for PSK
+     * @return 0 for no client auth, 1 for DH, 3 for PSK
      */
     public int getAuthType() {
         return _authType;
     }
 
     /**
-     *  Gets the authentication private key.
+     * Gets the authentication private key.
      *
-     *  @return null for no client auth
+     * @return null for no client auth
      */
     public PrivateKey getAuthPrivKey() {
         return _authKey;
@@ -303,7 +303,7 @@ public class BlindData {
     }
 
     /**
-     *  Encodes the blinded key in b33 format.
+     * Encodes the blinded key in b33 format.
      *
      * @return the b33 encoded string
      * @since 0.9.41
@@ -318,7 +318,7 @@ public class BlindData {
     }
 
     /**
-     *  Marks that a secret is required for this blinded key.
+     * Marks that a secret is required for this blinded key.
      *
      * @since 0.9.41
      */
@@ -328,7 +328,7 @@ public class BlindData {
     }
 
     /**
-     *  Checks if a secret is required.
+     * Checks if a secret is required.
      *
      * @return true if a secret is required
      * @since 0.9.41
@@ -338,7 +338,7 @@ public class BlindData {
     }
 
     /**
-     *  Marks that authentication is required for this blinded key.
+     * Marks that authentication is required for this blinded key.
      *
      * @since 0.9.41
      */
@@ -348,7 +348,7 @@ public class BlindData {
     }
 
     /**
-     *  Checks if authentication is required.
+     * Checks if authentication is required.
      *
      * @return true if authentication is required
      * @since 0.9.41
@@ -358,7 +358,7 @@ public class BlindData {
     }
 
     /**
-     *  Creation date. Absolute timestamp.
+     * Creation date. Absolute timestamp.
      *
      * @param date the creation date in milliseconds
      * @since 0.9.41
@@ -368,18 +368,18 @@ public class BlindData {
     }
 
     /**
-     *  Creation date. Absolute timestamp.
-     *  Returns zero if not specified.
+     * Creation date. Absolute timestamp.
+     * Returns zero if not specified.
      *
-     *  @return creation date or as overridden by setDate()
-     *  @since 0.9.41
+     * @return creation date or as overridden by setDate()
+     * @since 0.9.41
      */
     public long getDate() {
         return _date;
     }
 
     /**
-     *  Expiration date. Absolute timestamp.
+     * Expiration date. Absolute timestamp.
      *
      * @param date the expiration date in milliseconds
      * @since 0.9.43
@@ -389,11 +389,11 @@ public class BlindData {
     }
 
     /**
-     *  Expiration date. Absolute timestamp.
-     *  Returns zero if not specified.
+     * Expiration date. Absolute timestamp.
+     * Returns zero if not specified.
      *
-     *  @return expiration date or as overridden by setExpiration()
-     *  @since 0.9.43
+     * @return expiration date or as overridden by setExpiration()
+     * @since 0.9.43
      */
     public long getExpiration() {
         return _expiration;

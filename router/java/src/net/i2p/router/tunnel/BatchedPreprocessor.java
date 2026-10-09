@@ -32,12 +32,12 @@ import net.i2p.util.SystemVersion;
  * If we are in the middle of a tunnel msg and starting a new i2np msg, and this one won't
  * fit, let's look to see if we have somthing that would fit instead by reordering:
  * if (allocated &gt; 0 &amp;&amp; msg.getFragment == 0) {
- *       for (j = i+1, j &lt; pending.size(); j++) {
- *           if it will fit and it is fragment 0 {
- *               msg = pending.remove(j)
- *               pending.add(0, msg)
- *           }
- *       }
+ * for (j = i+1, j &lt; pending.size(); j++) {
+ * if it will fit and it is fragment 0 {
+ * msg = pending.remove(j)
+ * pending.add(0, msg)
+ * }
+ * }
  * }
  */
 class BatchedPreprocessor extends TrivialPreprocessor {
@@ -46,12 +46,12 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     private final String _name;
 
     /**
-     *  Fragment number of each flushed message, accumulated over the flush and
-     *  reported as one mean sample.  Both stats here were sampled per
-     *  fragment, which is two stat lookups and two monitors per rate period
-     *  for every fragment leaving the gateway; both are means, so one sample
-     *  per flush reports the same quantity.
-     *  @since 0.9.71+
+     * Fragment number of each flushed message, accumulated over the flush and
+     * reported as one mean sample.  Both stats here were sampled per
+     * fragment, which is two stat lookups and two monitors per rate period
+     * for every fragment leaving the gateway; both are means, so one sample
+     * per flush reports the same quantity.
+     * @since 0.9.71+
      */
     private final RateStatMeanBatch _fragmentationBatch = new RateStatMeanBatch();
     /** Gateway lifetime of each flushed message, weight = its byte length. */
@@ -85,27 +85,27 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     /** Not final or private so the test code can adjust. */
     static long DEFAULT_DELAY = SystemVersion.isSlow() ? 100 : 20;
     /**
-     *  Wait up to this long before sending (flushing) a small tunnel message
-     *  Warning - overridden in BatchedRouterPreprocessor
+     * Wait up to this long before sending (flushing) a small tunnel message
+     * Warning - overridden in BatchedRouterPreprocessor
      *
-     *  @return the send delay in ms
+     * @return the send delay in ms
      */
     protected long getSendDelay() { return DEFAULT_DELAY; }
 
     /**
-     *  If we have this many messages queued that are too small, flush them anyway
-     *  Even small messages take up about 200 bytes or so.
+     * If we have this many messages queued that are too small, flush them anyway
+     * Even small messages take up about 200 bytes or so.
      */
     private static final int FORCE_BATCH_FLUSH = 5;
 
     /** If we have this much allocated, flush anyway.
-     *  Tune this to trade off padding vs. fragmentation.
-     *  The lower the value, the more we are willing to send off
-     *  a tunnel msg that isn't full so the next message can start
-     *  in a new tunnel msg to minimize fragmentation.
+     * Tune this to trade off padding vs. fragmentation.
+     * The lower the value, the more we are willing to send off
+     * a tunnel msg that isn't full so the next message can start
+     * in a new tunnel msg to minimize fragmentation.
      *
-     *  This should be at most FULL_SIZE - (39 + a few), since
-     *  you want to at least fit in the instructions and a few bytes.
+     * This should be at most FULL_SIZE - (39 + a few), since
+     * you want to at least fit in the instructions and a few bytes.
      */
     private static final int FULL_ENOUGH_SIZE = (FULL_SIZE * 80) / 100;
 
@@ -167,13 +167,13 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     }
 
     /**
-     *  Body of {@link #preprocessQueue(List, TunnelGateway.Sender, TunnelGateway.Receiver)},
-     *  split out so the per-flush stat batches are flushed on every return path.
+     * Body of {@link #preprocessQueue(List, TunnelGateway.Sender, TunnelGateway.Receiver)},
+     * split out so the per-flush stat batches are flushed on every return path.
      *
-     *  @param pending the list of pending messages
-     *  @param sender the sender
-     *  @param rec the receiver for preprocessed data
-     *  @return true if messages remain queued for a later flush
+     * @param pending the list of pending messages
+     * @param sender the sender
+     * @param rec the receiver for preprocessed data
+     * @return true if messages remain queued for a later flush
      */
     private boolean preprocessAndSend(List<PendingGatewayMessage> pending, TunnelGateway.Sender sender, TunnelGateway.Receiver rec) {
         if (_log.shouldInfo())

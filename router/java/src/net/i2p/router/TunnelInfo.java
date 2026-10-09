@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.Hash;
@@ -37,26 +36,26 @@ public interface TunnelInfo {
     public Hash getPeer(int hop);
 
     /**
-     *  For convenience
+     * For convenience
      *
-     *  @return getPeer(0)
-     *  @since 0.8.9
+     * @return getPeer(0)
+     * @since 0.8.9
      */
     public Hash getGateway();
 
     /**
-     *  For convenience
+     * For convenience
      *
-     *  @return getPeer(getLength() - 1)
-     *  @since 0.8.9
+     * @return getPeer(getLength() - 1)
+     * @since 0.8.9
      */
     public Hash getEndpoint();
 
     /**
-     *  For convenience
+     * For convenience
      *
-     *  @return isInbound() ? getGateway() : getEndpoint()
-     *  @since 0.8.9
+     * @return isInbound() ? getGateway() : getEndpoint()
+     * @since 0.8.9
      */
     public Hash getFarEnd();
 
@@ -98,33 +97,33 @@ public interface TunnelInfo {
     public void incrementVerifiedBytesTransferred(int numBytes);
 
     /**
-     *  Record that the tunnel carried real (non-test) traffic.  Updated only
-     *  at the real traffic delivery sites — inbound data arrival
-     *  (InboundEndpointProcessor) and outbound message dispatch
-     *  (OutboundClientMessageOneShotJob) — never by TestJob, so test traffic
-     *  cannot pollute the proof that the tunnel works.
-     *  @since 0.9.71+
+     * Record that the tunnel carried real (non-test) traffic.  Updated only
+     * at the real traffic delivery sites — inbound data arrival
+     * (InboundEndpointProcessor) and outbound message dispatch
+     * (OutboundClientMessageOneShotJob) — never by TestJob, so test traffic
+     * cannot pollute the proof that the tunnel works.
+     * @since 0.9.71+
      */
     public void recordRealTraffic();
 
     /**
-     *  When the tunnel last carried real traffic.
-     *  @return the timestamp, or 0 if it never carried real traffic
-     *  @since 0.9.71+
+     * When the tunnel last carried real traffic.
+     * @return the timestamp, or 0 if it never carried real traffic
+     * @since 0.9.71+
      */
     public long getLastRealTraffic();
 
     /**
-     *  Did we reuse this tunnel?
+     * Did we reuse this tunnel?
      *
-     *  @since 0.8.11
+     * @since 0.8.11
      */
     public boolean wasReused();
 
     /**
-     *  Note that we reused this tunnel
+     * Note that we reused this tunnel
      *
-     *  @since 0.8.11
+     * @since 0.8.11
      */
     public void setReused();
 
@@ -180,30 +179,30 @@ public interface TunnelInfo {
     public int getConsecutiveFailures();
 
     /**
-     *  Increment the failure count without triggering pool removal or reuse flag.
-     *  Used when a previously GOOD tunnel fails a retest or a data-phase send —
-     *  we want to track the failure for selection deprioritization but keep the
-     *  tunnel alive for further testing and data delivery.
+     * Increment the failure count without triggering pool removal or reuse flag.
+     * Used when a previously GOOD tunnel fails a retest or a data-phase send —
+     * we want to track the failure for selection deprioritization but keep the
+     * tunnel alive for further testing and data delivery.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public void incrementTestFailures();
 
     /**
-     *  Increment the soft (best-effort timeout) failure count only.
-     *  Soft status-3 timeouts must not touch the hard/test counter that
-     *  drives {@link #getTunnelFailed()} and selection gates.
+     * Increment the soft (best-effort timeout) failure count only.
+     * Soft status-3 timeouts must not touch the hard/test counter that
+     * drives {@link #getTunnelFailed()} and selection gates.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public void incrementSoftFailures();
 
     /**
-     *  Soft best-effort timeout count (status 3). Independent of
-     *  {@link #getConsecutiveFailures()}.
+     * Soft best-effort timeout count (status 3). Independent of
+     * {@link #getConsecutiveFailures()}.
      *
-     *  @return the soft failure count
-     *  @since 0.9.71+
+     * @return the soft failure count
+     * @since 0.9.71+
      */
     public int getSoftFailures();
 

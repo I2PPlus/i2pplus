@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.util.LHMCache;
@@ -21,73 +20,73 @@ import java.util.Map;
  *
  * <p>Destination represents the fundamental addressing and identity concept in I2P:</p>
  * <ul>
- *   <li><strong>Network Endpoint:</strong> Messages sent to a Destination will find it regardless of location</li>
- *   <li><strong>Cryptographic Identity:</strong> Contains encryption and signing keys</li>
- *   <li><strong>Certificate:</strong> Optional metadata about the identity</li>
- *   <li><strong>Addressing:</strong> Can be encoded as Base64 or Base32 (.b32.i2p)</li>
- *   <li><strong>Immutability:</strong> Identity becomes immutable after keys are set</li>
+ * <li><strong>Network Endpoint:</strong> Messages sent to a Destination will find it regardless of location</li>
+ * <li><strong>Cryptographic Identity:</strong> Contains encryption and signing keys</li>
+ * <li><strong>Certificate:</strong> Optional metadata about the identity</li>
+ * <li><strong>Addressing:</strong> Can be encoded as Base64 or Base32 (.b32.i2p)</li>
+ * <li><strong>Immutability:</strong> Identity becomes immutable after keys are set</li>
  * </ul>
  *
  * <p><strong>Key Components:</strong></p>
  * <ul>
- *   <li><strong>Public Encryption Key:</strong> Historically used for end-to-end encryption</li>
- *   <li><strong>Signing Public Key:</strong> Used for identity verification and LeaseSet signing</li>
- *   <li><strong>Certificate:</strong> Optional metadata (NULL, HIDDEN, SIGNED, etc.)</li>
- *   <li><strong>Cached Hash:</strong> SHA-256 hash for efficient identification</li>
+ * <li><strong>Public Encryption Key:</strong> Historically used for end-to-end encryption</li>
+ * <li><strong>Signing Public Key:</strong> Used for identity verification and LeaseSet signing</li>
+ * <li><strong>Certificate:</strong> Optional metadata (NULL, HIDDEN, SIGNED, etc.)</li>
+ * <li><strong>Cached Hash:</strong> SHA-256 hash for efficient identification</li>
  * </ul>
  *
  * <p><strong>Address Formats:</strong></p>
  * <ul>
- *   <li><strong>Base64:</strong> Full binary encoding for configuration files</li>
- *   <li><strong>Base32:</strong> Human-readable .b32.i2p addresses</li>
- *   <li><strong>Hash:</strong> 32-byte SHA-256 for internal identification</li>
+ * <li><strong>Base64:</strong> Full binary encoding for configuration files</li>
+ * <li><strong>Base32:</strong> Human-readable .b32.i2p addresses</li>
+ * <li><strong>Hash:</strong> 32-byte SHA-256 for internal identification</li>
  * </ul>
  *
  * <p><strong>Historical Changes:</strong></p>
  * <ul>
- *   <li><strong>Pre-0.6:</strong> Public key used for end-to-end encryption</li>
- *   <li><strong>Post-0.6:</strong> End-to-end encryption removed, LeaseSet keys used instead</li>
- *   <li><strong>LeaseSet Encryption:</strong> Public key first bytes used as IV (deprecated)</li>
- *   <li><strong>0.9.9:</strong> Immutable after keys and certificate are set</li>
+ * <li><strong>Pre-0.6:</strong> Public key used for end-to-end encryption</li>
+ * <li><strong>Post-0.6:</strong> End-to-end encryption removed, LeaseSet keys used instead</li>
+ * <li><strong>LeaseSet Encryption:</strong> Public key first bytes used as IV (deprecated)</li>
+ * <li><strong>0.9.9:</strong> Immutable after keys and certificate are set</li>
  * </ul>
  *
  * <p><strong>Usage:</strong></p>
  * <ul>
- *   <li><strong>Client Connections:</strong> Target for I2P client communications</li>
- *   <li><strong>Service Hosting:</strong> Identity for hosting I2P services</li>
- *   <li><strong>Message Routing:</strong> Destination for I2NP message delivery</li>
- *   <li><strong>Address Book:</strong> Entry in address books and contact lists</li>
+ * <li><strong>Client Connections:</strong> Target for I2P client communications</li>
+ * <li><strong>Service Hosting:</strong> Identity for hosting I2P services</li>
+ * <li><strong>Message Routing:</strong> Destination for I2NP message delivery</li>
+ * <li><strong>Address Book:</strong> Entry in address books and contact lists</li>
  * </ul>
  *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
- *   <li><strong>Key Protection:</strong> Private keys must be securely stored</li>
- *   <li><strong>Identity Verification:</strong> Always verify signatures from destinations</li>
- *   <li><strong>Certificate Validation:</strong> Check certificate types and content</li>
- *   <li><strong>Deprecated Features:</strong> Avoid legacy encryption mechanisms</li>
+ * <li><strong>Key Protection:</strong> Private keys must be securely stored</li>
+ * <li><strong>Identity Verification:</strong> Always verify signatures from destinations</li>
+ * <li><strong>Certificate Validation:</strong> Check certificate types and content</li>
+ * <li><strong>Deprecated Features:</strong> Avoid legacy encryption mechanisms</li>
  * </ul>
  *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
- *   <li><strong>Caching:</strong> LRU cache for frequently used destinations</li>
- *   <li><strong>Lazy Computation:</strong> Base32 address computed on demand</li>
- *   <li><strong>Efficient Storage:</strong> Optimized memory usage and serialization</li>
- *   <li><strong>Fast Lookup:</strong> Hash-based identification for quick comparisons</li>
+ * <li><strong>Caching:</strong> LRU cache for frequently used destinations</li>
+ * <li><strong>Lazy Computation:</strong> Base32 address computed on demand</li>
+ * <li><strong>Efficient Storage:</strong> Optimized memory usage and serialization</li>
+ * <li><strong>Fast Lookup:</strong> Hash-based identification for quick comparisons</li>
  * </ul>
  *
  * <p><strong>Immutability:</strong></p>
  * <ul>
- *   <li><strong>After 0.9.9:</strong> Keys and certificate cannot be changed after setting</li>
- *   <li><strong>Thread Safety:</strong> Immutable objects are inherently thread-safe</li>
- *   <li><strong>Corruption Prevention:</strong> Protects against accidental modification</li>
- *   <li><strong>Exception:</strong> Modification attempts throw {@link IllegalStateException}</li>
+ * <li><strong>After 0.9.9:</strong> Keys and certificate cannot be changed after setting</li>
+ * <li><strong>Thread Safety:</strong> Immutable objects are inherently thread-safe</li>
+ * <li><strong>Corruption Prevention:</strong> Protects against accidental modification</li>
+ * <li><strong>Exception:</strong> Modification attempts throw {@link IllegalStateException}</li>
  * </ul>
  *
  * <p><strong>Migration Notes:</strong></p>
  * <ul>
- *   <li><strong>Legacy Encryption:</strong> Public key usage deprecated in favor of LeaseSet encryption</li>
- *   <li><strong>Modern Alternatives:</strong> Use EncryptedLeaseSet for proper encryption</li>
- *   <li><strong>IV Generation:</strong> LeaseSet encryption IV should not use public key bytes</li>
+ * <li><strong>Legacy Encryption:</strong> Public key usage deprecated in favor of LeaseSet encryption</li>
+ * <li><strong>Modern Alternatives:</strong> Use EncryptedLeaseSet for proper encryption</li>
+ * <li><strong>IV Generation:</strong> LeaseSet encryption IV should not use public key bytes</li>
  * </ul>
  *
  * @author jrandom
@@ -175,15 +174,15 @@ public class Destination extends KeysAndCert {
     }
 
     /**
-     *  Deprecated, used only by Packet.java in streaming.
-     *  Minimal variant of writeBytes(OutputStream) that writes a typed
-     *  (XDH/PQ) destination too; the KEYSIZE_BYTES hardcode broke 32-byte
-     *  key destinations with ArrayIndexOutOfBoundsException.
-     *  Broken for sig types P521 and RSA before 0.9.15
+     * Deprecated, used only by Packet.java in streaming.
+     * Minimal variant of writeBytes(OutputStream) that writes a typed
+     * (XDH/PQ) destination too; the KEYSIZE_BYTES hardcode broke 32-byte
+     * key destinations with ArrayIndexOutOfBoundsException.
+     * Broken for sig types P521 and RSA before 0.9.15
      *
-     *  @param target the target
-     *  @param offset the offset to start writing
-     *  @return the written length (NOT the new offset)
+     * @param target the target
+     * @param offset the offset to start writing
+     * @return the written length (NOT the new offset)
      */
     public int writeBytes(byte[] target, int offset) {
         int cur = offset;
@@ -223,10 +222,10 @@ public class Destination extends KeysAndCert {
     }
 
     /**
-     *  Cache it.
-     *  Useful in I2PTunnelHTTPServer where it is added to the headers
+     * Cache it.
+     * Useful in I2PTunnelHTTPServer where it is added to the headers
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     @Override
     public String toBase64() {
@@ -235,10 +234,10 @@ public class Destination extends KeysAndCert {
     }
 
     /**
-     *  For convenience.
+     * For convenience.
      *
-     *  @return "{52 chars}.b32.i2p" or null if fields not set.
-     *  @since 0.9.14
+     * @return "{52 chars}.b32.i2p" or null if fields not set.
+     * @since 0.9.14
      */
     public String toBase32() {
         try {
@@ -249,9 +248,9 @@ public class Destination extends KeysAndCert {
     }
 
     /**
-     *  Clear the cache.
+     * Clear the cache.
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     public static void clearCache() {
         synchronized (_cache) {

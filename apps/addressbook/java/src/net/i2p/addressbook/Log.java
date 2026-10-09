@@ -17,7 +17,6 @@ import java.nio.charset.StandardCharsets;
  * A simple log with automatic time stamping.
  *
  * @author Ragnarok
- *
  */
 class Log {
 
@@ -30,7 +29,7 @@ class Log {
      * Construct a Log instance that writes to the File file.
      *
      * @param file
-     *            A File for the log to write to.
+     * A File for the log to write to.
      */
     public Log(File file) {
         this.file = file;
@@ -40,7 +39,7 @@ class Log {
      * Write entry to a new line in the log, with appropriate time stamp.
      *
      * @param entry
-     *            A String containing a message to append to the log.
+     * A String containing a message to append to the log.
      */
     public void append(String entry) {
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(this.file, true)), StandardCharsets.UTF_8))) {

@@ -40,9 +40,9 @@ public class CDPStatusBlock {
     final double primary_value;
 
     /**
-     *  Constructs a CDP status block by reading from an RRD file.
+     * Constructs a CDP status block by reading from an RRD file.
      *
-     *  @param file the RRD file to read from
+     * @param file the RRD file to read from
      */
     CDPStatusBlock(RRDFile file) {
         // Should read MAX_CDP_PAR_EN = 10
@@ -76,9 +76,9 @@ public class CDPStatusBlock {
     }
 
     /**
-     *  Writes the CDP status block as XML to the given print stream.
+     * Writes the CDP status block as XML to the given print stream.
      *
-     *  @param s the print stream to write to
+     * @param s the print stream to write to
      */
     void toXml(PrintStream s) {
         s.print("\t\t\t<ds><value> ");

@@ -5,7 +5,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.Destination;
@@ -22,7 +21,6 @@ import net.i2p.util.Log;
 /**
  * Async job to notify the client that a new message is available for them,
  * or just send it directly if specified.
- *
  */
 class MessageReceivedJob extends JobImpl {
     private final Log _log;
@@ -32,12 +30,12 @@ class MessageReceivedJob extends JobImpl {
     private final boolean _sendDirect;
 
     /**
-     *  @param ctx the router context
-     *  @param runner the client connection runner
-     *  @param toDest non-null, required to pick session
-     *  @param fromDest sending destination, generally null
-     *  @param payload the message payload
-     *  @param sendDirect if true send directly
+     * @param ctx the router context
+     * @param runner the client connection runner
+     * @param toDest non-null, required to pick session
+     * @param fromDest sending destination, generally null
+     * @param payload the message payload
+     * @param sendDirect if true send directly
      */
     public MessageReceivedJob(RouterContext ctx, ClientConnectionRunner runner, Destination toDest,
                               Destination fromDest, Payload payload, boolean sendDirect) {
@@ -56,10 +54,10 @@ class MessageReceivedJob extends JobImpl {
     }
 
     /**
-     *  Same as runJob() but with a return value
+     * Same as runJob() but with a return value
      *
-     *  @return success
-     *  @since 0.9.29
+     * @return success
+     * @since 0.9.29
      */
     public boolean receiveMessage() {
         if (_runner.isDead())
@@ -108,10 +106,10 @@ class MessageReceivedJob extends JobImpl {
     }
 
     /**
- * Deliver the message directly, skip notification
- *
- * @since 0.9.4
- */
+     * Deliver the message directly, skip notification
+     *
+     * @since 0.9.4
+     */
     private void sendMessage(long id) throws I2CPMessageException {
         SessionId sid = _runner.getSessionId(_toDest.calculateHash());
         if (sid == null) {

@@ -12,39 +12,39 @@ import net.i2p.data.SigningPublicKey;
 import java.util.Arrays;
 
 /**
- *  SSU2 Utils and constants
+ * SSU2 Utils and constants
  *
- *  @since 0.9.54
+ * @since 0.9.54
  */
 final class SSU2Util {
     /**
-     *  SSU2 protocol version number
+     * SSU2 protocol version number
      */
     public static final int PROTOCOL_VERSION = 2;
 
     /**
-     *  The oldest SSU2 version accepted when establishing.
-     *  Reject earlier versions as unsupported.
+     * The oldest SSU2 version accepted when establishing.
+     * Reject earlier versions as unsupported.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int MIN_SUPPORTED_VERSION = 2;
 
     /**
-     *  The newest SSU2 version accepted when establishing.
+     * The newest SSU2 version accepted when establishing.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int MAX_SUPPORTED_VERSION = 4;
 
     /**
-     *  True if the given version is accepted when establishing.
-     *  The only supported versions are in {@link #MIN_SUPPORTED_VERSION}
-     *  to {@link #MAX_SUPPORTED_VERSION} inclusive.
+     * True if the given version is accepted when establishing.
+     * The only supported versions are in {@link #MIN_SUPPORTED_VERSION}
+     * to {@link #MAX_SUPPORTED_VERSION} inclusive.
      *
-     *  @param version the peer's SSU2 version
-     *  @return true if the version is supported
-     *  @since 0.9.71
+     * @param version the peer's SSU2 version
+     * @return true if the version is supported
+     * @since 0.9.71
      */
     public static boolean isSupportedVersion(int version) {
         return version >= MIN_SUPPORTED_VERSION && version <= MAX_SUPPORTED_VERSION;
@@ -145,8 +145,8 @@ final class SSU2Util {
     public static final int DATA_HEADER_SIZE = SHORT_HEADER_SIZE;
 
     /**
-     *  The message types, 0-11, as bytes.
-     *  Message type flag for session request.
+     * The message types, 0-11, as bytes.
+     * Message type flag for session request.
      */
     public static final byte SESSION_REQUEST_FLAG_BYTE = UDPPacket.PAYLOAD_TYPE_SESSION_REQUEST;
     /** Message type flag for session created */
@@ -293,10 +293,10 @@ final class SSU2Util {
     public static final int REASON_REPLACED = 22;
 
     /**
-     *  Convert a termination reason code to a human-readable string
+     * Convert a termination reason code to a human-readable string
      *
-     *  @param code one of the REASON_* constants
-     *  @return human-readable description
+     * @param code one of the REASON_* constants
+     * @return human-readable description
      */
     public static String terminationCodeToString(int code) {
         switch (code) {
@@ -330,7 +330,7 @@ final class SSU2Util {
     private SSU2Util() { /* no-op */ }
 
     /**
-     *  32 byte output, ZEROLEN data
+     * 32 byte output, ZEROLEN data
      */
     public static byte[] hkdf(I2PAppContext ctx, byte[] key, String info) {
         HKDF hkdf = new HKDF(ctx);
@@ -340,13 +340,13 @@ final class SSU2Util {
     }
 
     /**
-     *  Make the data for the peer test block
+     * Make the data for the peer test block
      *
-     *  @param h to be included in sig, not included in data
-     *  @param h2 may be null, to be included in sig, not included in data
-     *  @param role unused
-     *  @param ip may be null
-     *  @return null on failure
+     * @param h to be included in sig, not included in data
+     * @param h2 may be null, to be included in sig, not included in data
+     * @param role unused
+     * @param ip may be null
+     * @return null on failure
      */
     public static byte[] createPeerTestData(I2PAppContext ctx, Hash h, Hash h2,
                                             PeerTestState.Role role, long nonce, byte[] ip, int port,
@@ -371,13 +371,13 @@ final class SSU2Util {
     }
 
     /**
-     *  Make the data for the relay request block
+     * Make the data for the relay request block
      *
-     *  @param h Bob hash to be included in sig, not included in data
-     *  @param h2 Charlie hash to be included in sig, not included in data
-     *  @param ip non-null
-     *  @return null on failure
-     *  @since 0.9.55
+     * @param h Bob hash to be included in sig, not included in data
+     * @param h2 Charlie hash to be included in sig, not included in data
+     * @param ip non-null
+     * @return null on failure
+     * @since 0.9.55
      */
     public static byte[] createRelayRequestData(I2PAppContext ctx, Hash h, Hash h2,
                                                 long nonce, long tag, byte[] ip, int port,
@@ -403,120 +403,120 @@ final class SSU2Util {
     }
 
     /**
-     *  The trailing 8-byte token in a signed relay response with a
-     *  zero code. When present it is appended after the signature.
+     * The trailing 8-byte token in a signed relay response with a
+     * zero code. When present it is appended after the signature.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int RELAY_RESPONSE_TOKEN_LEN = 8;
 
     /**
-     *  IPv4 address length in bytes.
+     * IPv4 address length in bytes.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int IPV4_LEN = 4;
 
     /**
-     *  IPv6 address length in bytes.
+     * IPv6 address length in bytes.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int IPV6_LEN = 16;
 
     /**
-     *  Length of the port field in the relay/peer-test address block.
+     * Length of the port field in the relay/peer-test address block.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int RELAY_DATA_PORT_LEN = 2;
 
     /**
-     *  Offset of the version byte in relay response / peer test data.
+     * Offset of the version byte in relay response / peer test data.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int RELAY_DATA_VERSION_OFFSET = 8;
 
     /**
-     *  Offset of the address length byte in relay response / peer test data.
-     *  The byte encodes the IP address length plus the port field length.
+     * Offset of the address length byte in relay response / peer test data.
+     * The byte encodes the IP address length plus the port field length.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int RELAY_DATA_ADDR_LEN_OFFSET = 9;
 
     /**
-     *  Offset of the 2-byte port in relay response / peer test data.
+     * Offset of the 2-byte port in relay response / peer test data.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int RELAY_DATA_PORT_OFFSET = 10;
 
     /**
-     *  Offset of the IP address bytes in relay response / peer test data.
+     * Offset of the IP address bytes in relay response / peer test data.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int RELAY_DATA_IP_OFFSET = 12;
 
     /**
-     *  The encoded address length value in relay response / peer test data
-     *  for an IPv4 address.
+     * The encoded address length value in relay response / peer test data
+     * for an IPv4 address.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int RELAY_DATA_ADDR_LEN_IPV4 = IPV4_LEN + RELAY_DATA_PORT_LEN;
 
     /**
-     *  The encoded address length value in relay response / peer test data
-     *  for an IPv6 address.
+     * The encoded address length value in relay response / peer test data
+     * for an IPv6 address.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public static final int RELAY_DATA_ADDR_LEN_IPV6 = IPV6_LEN + RELAY_DATA_PORT_LEN;
 
     /**
-     *  Parse the encoded address length byte out of relay response / peer test data.
-     *  The byte encodes the IP address length plus the port field length.
+     * Parse the encoded address length byte out of relay response / peer test data.
+     * The byte encodes the IP address length plus the port field length.
      *
-     *  @param data the data after the signature
-     *  @return the encoded address length
-     *  @since 0.9.71
+     * @param data the data after the signature
+     * @return the encoded address length
+     * @since 0.9.71
      */
     public static int getRelayDataAddrLen(byte[] data) {
         return data[RELAY_DATA_ADDR_LEN_OFFSET] & 0xff;
     }
 
     /**
-     *  Is the given encoded address length valid (IPv4 or IPv6)?
+     * Is the given encoded address length valid (IPv4 or IPv6)?
      *
-     *  @param addrLen the encoded address length
-     *  @return true if valid
-     *  @since 0.9.71
+     * @param addrLen the encoded address length
+     * @return true if valid
+     * @since 0.9.71
      */
     public static boolean isValidRelayDataAddrLen(int addrLen) {
         return addrLen == RELAY_DATA_ADDR_LEN_IPV4 || addrLen == RELAY_DATA_ADDR_LEN_IPV6;
     }
 
     /**
-     *  Parse the 2-byte port out of relay response / peer test data.
+     * Parse the 2-byte port out of relay response / peer test data.
      *
-     *  @param data the data after the signature
-     *  @return the port
-     *  @since 0.9.71
+     * @param data the data after the signature
+     * @return the port
+     * @since 0.9.71
      */
     public static int getRelayDataPort(byte[] data) {
         return (int) DataHelper.fromLong(data, RELAY_DATA_PORT_OFFSET, RELAY_DATA_PORT_LEN);
     }
 
     /**
-     *  Parse the IP address out of relay response / peer test data.
+     * Parse the IP address out of relay response / peer test data.
      *
-     *  @param data the data after the signature
-     *  @param addrLen the encoded address length
-     *  @return the IP address bytes
-     *  @since 0.9.71
+     * @param data the data after the signature
+     * @param addrLen the encoded address length
+     * @return the IP address bytes
+     * @since 0.9.71
      */
     public static byte[] getRelayDataIP(byte[] data, int addrLen) {
         byte[] ip = new byte[addrLen - RELAY_DATA_PORT_LEN];
@@ -525,38 +525,38 @@ final class SSU2Util {
     }
 
     /**
-     *  Parse the trailing token out of the relay response signed data.
+     * Parse the trailing token out of the relay response signed data.
      *
-     *  @param data the signed data
-     *  @return the token
-     *  @throws ArrayIndexOutOfBoundsException if the token is not present
-     *  @since 0.9.71
+     * @param data the signed data
+     * @return the token
+     * @throws ArrayIndexOutOfBoundsException if the token is not present
+     * @since 0.9.71
      */
     public static long getRelayResponseToken(byte[] data) {
         return DataHelper.fromLong8(data, data.length - RELAY_RESPONSE_TOKEN_LEN);
     }
 
     /**
-     *  Trim the trailing token off the relay response signed data,
-     *  returning the portion that was signed.
+     * Trim the trailing token off the relay response signed data,
+     * returning the portion that was signed.
      *
-     *  @param data the signed data
-     *  @return the data without the trailing token
-     *  @since 0.9.71
+     * @param data the signed data
+     * @return the data without the trailing token
+     * @since 0.9.71
      */
     public static byte[] trimRelayResponseToken(byte[] data) {
         return Arrays.copyOfRange(data, 0, data.length - RELAY_RESPONSE_TOKEN_LEN);
     }
 
     /**
-     *  Make the data for the relay response block
+     * Make the data for the relay response block
      *
-     *  @param h Bob hash to be included in sig, not included in data
-     *  @param ip may be null
-     *  @param port the UDP port number if ip is null
-     *  @param token if nonzero, append it
-     *  @return null on failure
-     *  @since 0.9.55
+     * @param h Bob hash to be included in sig, not included in data
+     * @param ip may be null
+     * @param port the UDP port number if ip is null
+     * @param token if nonzero, append it
+     * @return null on failure
+     * @since 0.9.55
      */
     public static byte[] createRelayResponseData(I2PAppContext ctx, Hash h, int code,
                                                  long nonce, byte[] ip, int port,
@@ -592,15 +592,15 @@ final class SSU2Util {
     }
 
     /**
-     *  Sign the relay or peer test data, using
-     *  the prologue and hash as the initial data,
-     *  and then the provided data.
+     * Sign the relay or peer test data, using
+     * the prologue and hash as the initial data,
+     * and then the provided data.
      *
-     *  @param data if desired, leave room at end for sig
-     *  @param datalen the length of the data to be signed
-     *  @param h to be included in sig, not included in data
-     *  @param h2 may be null, to be included in sig, not included in data
-     *  @return null on failure
+     * @param data if desired, leave room at end for sig
+     * @param datalen the length of the data to be signed
+     * @param h to be included in sig, not included in data
+     * @param h2 may be null, to be included in sig, not included in data
+     * @return null on failure
      */
     public static Signature sign(I2PAppContext ctx, byte[] prologue, Hash h, Hash h2,
                                  byte[] data, int datalen, SigningPrivateKey spk) {
@@ -620,12 +620,12 @@ final class SSU2Util {
     }
 
     /**
-     *  Validate the signed relay or peer test data, using
-     *  the prologue and hash as the initial data,
-     *  and then the provided data which ends with a signature of the specified type.
+     * Validate the signed relay or peer test data, using
+     * the prologue and hash as the initial data,
+     * and then the provided data which ends with a signature of the specified type.
      *
-     *  @param h2 may be null
-     *  @param data not including relay response token
+     * @param h2 may be null
+     * @param data not including relay response token
      */
     public static boolean validateSig(I2PAppContext ctx, byte[] prologue, Hash h, Hash h2, byte[] data, SigningPublicKey spk) {
         if (h == null) return false;

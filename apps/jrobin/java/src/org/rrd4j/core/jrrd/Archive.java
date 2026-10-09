@@ -62,8 +62,8 @@ public class Archive {
     private double[][] values;
 
     /**
-     *  Create an Archive from an RRD file.
-     *  @param db the RRD database
+     * Create an Archive from an RRD file.
+     * @param db the RRD database
      */
     Archive(RRDatabase db) {
 
@@ -363,7 +363,7 @@ public class Archive {
      * archive.
      *
      * @return the number of primary data points required for a consolidated data point in this
-     *     archive.
+     * archive.
      */
     public int getPdpCount() {
         return pdpCount;

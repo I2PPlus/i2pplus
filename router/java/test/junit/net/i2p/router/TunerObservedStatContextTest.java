@@ -74,9 +74,9 @@ public class TunerObservedStatContextTest {
     }
 
     /**
-     *  A param shaped exactly like the one that broke: it reads the
-     *  cross-reference helper using the {@code ctx} <em>argument</em> rather
-     *  than the inherited field.
+     * A param shaped exactly like the one that broke: it reads the
+     * cross-reference helper using the {@code ctx} <em>argument</em> rather
+     * than the inherited field.
      */
     private static class ArgumentUsingParam extends Tuner.BaseParam {
         boolean sawNullContext;
@@ -105,8 +105,8 @@ public class TunerObservedStatContextTest {
     }
 
     /**
-     *  The core fix. Before it, {@code update()} called
-     *  {@code getObservedStat(null)} and this threw.
+     * The core fix. Before it, {@code update()} called
+     * {@code getObservedStat(null)} and this threw.
      */
     @Test
     public void updateNeverHandsTheImplementationANullContext() {
@@ -121,7 +121,7 @@ public class TunerObservedStatContextTest {
     }
 
     /**
-     *  The snapshot path has the same defect and needs the same fix.
+     * The snapshot path has the same defect and needs the same fix.
      */
     @Test
     public void snapshotNeverHandsTheImplementationANullContext() {
@@ -132,8 +132,8 @@ public class TunerObservedStatContextTest {
     }
 
     /**
-     *  An unregistered stat name is the common case and must yield NaN, not an
-     *  exception — the helper is expected to tolerate a missing stat.
+     * An unregistered stat name is the common case and must yield NaN, not an
+     * exception — the helper is expected to tolerate a missing stat.
      */
     @Test
     public void missingStatYieldsNaNRatherThanThrowing() {

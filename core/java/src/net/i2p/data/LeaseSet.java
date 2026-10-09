@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -30,58 +29,58 @@ import java.util.Set;
  *
  * <p>LeaseSet is the fundamental routing structure in I2P, containing:</p>
  * <ul>
- *   <li><strong>Destination:</strong> The service endpoint identity</li>
- *   <li><strong>Encryption Key:</strong> Public key for encrypting messages to the destination</li>
- *   <li><strong>Signing Key:</strong> Public key for verifying LeaseSet authenticity</li>
- *   <li><strong>Leases:</strong> List of tunnel endpoints and their validity periods</li>
- *   <li><strong>Signature:</strong> Cryptographic signature proving authenticity</li>
+ * <li><strong>Destination:</strong> The service endpoint identity</li>
+ * <li><strong>Encryption Key:</strong> Public key for encrypting messages to the destination</li>
+ * <li><strong>Signing Key:</strong> Public key for verifying LeaseSet authenticity</li>
+ * <li><strong>Leases:</strong> List of tunnel endpoints and their validity periods</li>
+ * <li><strong>Signature:</strong> Cryptographic signature proving authenticity</li>
  * </ul>
  *
  * <p><strong>Lease Structure:</strong></p>
  * <ul>
- *   <li><strong>Gateway:</strong> Router identity that hosts the tunnel endpoint</li>
- *   <li><strong>Tunnel ID:</strong> Unique identifier for the tunnel on the gateway</li>
- *   <li><strong>Expiration:</strong> Time when the lease becomes invalid</li>
+ * <li><strong>Gateway:</strong> Router identity that hosts the tunnel endpoint</li>
+ * <li><strong>Tunnel ID:</strong> Unique identifier for the tunnel on the gateway</li>
+ * <li><strong>Expiration:</strong> Time when the lease becomes invalid</li>
  * </ul>
  *
  * <p><strong>Encryption Support (Legacy):</strong></p>
  * <ul>
- *   <li><strong>⚠️ SECURITY WARNING:</strong> Encryption is poorly designed and probably insecure</li>
- *   <li><strong>Not Recommended:</strong> Use modern alternatives like EncryptedLeaseSet</li>
- *   <li><strong>Limited Scope:</strong> Only encrypts gateway and tunnel ID data</li>
- *   <li><strong>No Indication:</strong> Encrypted leases appear identical to unencrypted ones</li>
- *   <li><strong>Keyring Required:</strong> Routers need desthash and key to decrypt</li>
+ * <li><strong>⚠️ SECURITY WARNING:</strong> Encryption is poorly designed and probably insecure</li>
+ * <li><strong>Not Recommended:</strong> Use modern alternatives like EncryptedLeaseSet</li>
+ * <li><strong>Limited Scope:</strong> Only encrypts gateway and tunnel ID data</li>
+ * <li><strong>No Indication:</strong> Encrypted leases appear identical to unencrypted ones</li>
+ * <li><strong>Keyring Required:</strong> Routers need desthash and key to decrypt</li>
  * </ul>
  *
  * <p><strong>Encryption Process:</strong></p>
  * <ul>
- *   <li><strong>Client Side:</strong> Encryption performed in I2CP client</li>
- *   <li><strong>Router Side:</strong> Local router must decrypt for usage</li>
- *   <li><strong>Network:</strong> Encrypted form transmitted to floodfills</li>
- *   <li><strong>Access:</strong> Decrypted leases only available via {@link #getLease(int)}</li>
+ * <li><strong>Client Side:</strong> Encryption performed in I2CP client</li>
+ * <li><strong>Router Side:</strong> Local router must decrypt for usage</li>
+ * <li><strong>Network:</strong> Encrypted form transmitted to floodfills</li>
+ * <li><strong>Access:</strong> Decrypted leases only available via {@link #getLease(int)}</li>
  * </ul>
  *
  * <p><strong>Usage:</strong></p>
  * <ul>
- *   <li><strong>Routing:</strong> Primary mechanism for message delivery in I2P</li>
- *   <li><strong>Load Balancing:</strong> Multiple leases provide redundancy and distribution</li>
- *   <li><strong>Mobility:</strong> Leases can be updated as endpoints change</li>
- *   <li><strong>Discovery:</strong> Published to network database for lookup</li>
+ * <li><strong>Routing:</strong> Primary mechanism for message delivery in I2P</li>
+ * <li><strong>Load Balancing:</strong> Multiple leases provide redundancy and distribution</li>
+ * <li><strong>Mobility:</strong> Leases can be updated as endpoints change</li>
+ * <li><strong>Discovery:</strong> Published to network database for lookup</li>
  * </ul>
  *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
- *   <li><strong>Signature Verification:</strong> Always verify LeaseSet signatures</li>
- *   <li><strong>Expiration Checking:</strong> Ensure leases are still valid</li>
- *   <li><strong>Encryption Avoidance:</strong> Legacy encryption should not be used</li>
- *   <li><strong>Modern Alternatives:</strong> Use LeaseSet2, EncryptedLeaseSet, or MetaLeaseSet</li>
+ * <li><strong>Signature Verification:</strong> Always verify LeaseSet signatures</li>
+ * <li><strong>Expiration Checking:</strong> Ensure leases are still valid</li>
+ * <li><strong>Encryption Avoidance:</strong> Legacy encryption should not be used</li>
+ * <li><strong>Modern Alternatives:</strong> Use LeaseSet2, EncryptedLeaseSet, or MetaLeaseSet</li>
  * </ul>
  *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
- *   <li><strong>LeaseSet2:</strong> Enhanced format with better security and features</li>
- *   <li><strong>EncryptedLeaseSet:</strong> Proper encryption with authentication</li>
- *   <li><strong>MetaLeaseSet:</strong> Advanced routing and load balancing</li>
+ * <li><strong>LeaseSet2:</strong> Enhanced format with better security and features</li>
+ * <li><strong>EncryptedLeaseSet:</strong> Proper encryption with authentication</li>
+ * <li><strong>MetaLeaseSet:</strong> Advanced routing and load balancing</li>
  * </ul>
  * leases and the original leaseset signature.
  *
@@ -124,19 +123,19 @@ public class LeaseSet extends DatabaseEntry {
     protected volatile byte[] _byteified;
 
     /**
-     *  Unlimited before 0.6.3;
-     *  6 as of 0.6.3;
-     *  Increased in version 0.9.
+     * Unlimited before 0.6.3;
+     * 6 as of 0.6.3;
+     * Increased in version 0.9.
      *
-     *  Leasesets larger than 6 should be used with caution,
-     *  as each lease adds 44 bytes, and routers older than version 0.9
-     *  will not be able to connect as they will throw an exception in
-     *  readBytes(). Also, the churn will be quite rapid, leading to
-     *  frequent netdb stores and transmission on existing connections.
+     * Leasesets larger than 6 should be used with caution,
+     * as each lease adds 44 bytes, and routers older than version 0.9
+     * will not be able to connect as they will throw an exception in
+     * readBytes(). Also, the churn will be quite rapid, leading to
+     * frequent netdb stores and transmission on existing connections.
      *
-     *  However we increase it now in case some hugely popular eepsite arrives.
-     *  Strategies elsewhere in the router to efficiently handle
-     *  large leasesets are TBD.
+     * However we increase it now in case some hugely popular eepsite arrives.
+     * Strategies elsewhere in the router to efficiently handle
+     * large leasesets are TBD.
      */
     public static final int MAX_LEASES = 16;
 
@@ -168,9 +167,9 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Warning - will be null for LS2 EncryptedLeaseSets if not decrypted
+     * Warning - will be null for LS2 EncryptedLeaseSets if not decrypted
      *
-     *  @return Destination or null
+     * @return Destination or null
      */
     public Destination getDestination() {
         return _destination;
@@ -189,20 +188,20 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Encryption public key.
-     *  @return the encryption public key
+     * Encryption public key.
+     * @return the encryption public key
      */
     public PublicKey getEncryptionKey() {
         return _encryptionKey;
     }
 
     /**
-     *  If more than one key, return the first supported one.
-     *  If none supported, return null.
+     * If more than one key, return the first supported one.
+     * If none supported, return null.
      *
-     *  @param supported what return types are allowed
-     *  @return ElGamal key or null if ElGamal not in supported
-     *  @since 0.9.44
+     * @param supported what return types are allowed
+     * @return ElGamal key or null if ElGamal not in supported
+     * @since 0.9.44
      */
     public PublicKey getEncryptionKey(Set<EncType> supported) {
         if (supported.contains(EncType.ELGAMAL_2048)) {
@@ -224,20 +223,20 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  The revocation key.
-     *  Undeprecated as of 0.9.38, used for the blinded key in EncryptedLeaseSet.
+     * The revocation key.
+     * Undeprecated as of 0.9.38, used for the blinded key in EncryptedLeaseSet.
      *
-     *  @return the revocation key for LS1, null for LS2 except blinded key for encrypted LS2
+     * @return the revocation key for LS1, null for LS2 except blinded key for encrypted LS2
      */
     public SigningPublicKey getSigningKey() {
         return _signingKey;
     }
 
     /**
-     *  The revocation key. Unused except for encrypted LS2.
-     *  Must be the same type as the Destination's SigningPublicKey.
+     * The revocation key. Unused except for encrypted LS2.
+     * Must be the same type as the Destination's SigningPublicKey.
      *
-     *  @throws IllegalArgumentException if different type
+     * @throws IllegalArgumentException if different type
      */
     public void setSigningKey(SigningPublicKey key) {
         if (key != null && _destination != null && key.getType() != _destination.getSigningPublicKey().getType()) {
@@ -285,10 +284,10 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Number of leases in this leaseset.
+     * Number of leases in this leaseset.
      *
-     *  @return 0-16
-     *  A LeaseSet with no leases is revoked.
+     * @return 0-16
+     * A LeaseSet with no leases is revoked.
      */
     public int getLeaseCount() {
         if (isEncrypted()) {
@@ -299,10 +298,10 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Lease at the given index.
+     * Lease at the given index.
      *
-     *  @param index the lease index
-     *  @return the lease
+     * @param index the lease index
+     * @return the lease
      */
     public Lease getLease(int index) {
         if (isEncrypted()) {
@@ -415,9 +414,9 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  This does NOT validate the signature
+     * This does NOT validate the signature
      *
-     *  @throws IllegalStateException if called more than once or Destination already set
+     * @throws IllegalStateException if called more than once or Destination already set
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
@@ -451,7 +450,7 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  This does NOT validate the signature
+     * This does NOT validate the signature
      */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
@@ -469,9 +468,9 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Number of bytes, NOT including signature
+     * Number of bytes, NOT including signature
      *
-     *  @return the size in bytes
+     * @return the size in bytes
      */
     public int size() {
         return _destination.size() + PublicKey.KEYSIZE_BYTES // encryptionKey
@@ -530,10 +529,10 @@ public class LeaseSet extends DatabaseEntry {
     private static final int IV_LEN = 16;
 
     /**
-     *  Encrypt the gateway and tunnel ID of each lease, leaving the expire dates unchanged.
-     *  This adds an extra dummy lease, because AES data must be padded to 16 bytes.
-     *  The fact that it is encrypted is not stored anywhere.
-     *  Must be called after all the leases are in place, but before sign().
+     * Encrypt the gateway and tunnel ID of each lease, leaving the expire dates unchanged.
+     * This adds an extra dummy lease, because AES data must be padded to 16 bytes.
+     * The fact that it is encrypted is not stored anywhere.
+     * Must be called after all the leases are in place, but before sign().
      */
     public void encrypt(SessionKey key) {
         try {
@@ -548,13 +547,13 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  - Put the {Gateway Hash, TunnelID} pairs for all the leases in a buffer
-     *  - Pad with random data to a multiple of 16 bytes
-     *  - Use the first part of the dest's public key as an IV
-     *  - Encrypt
-     *  - Pad with random data to a multiple of 36 bytes
-     *  - Add an extra lease
-     *  - Replace the Hash and TunnelID in each Lease
+     * - Put the {Gateway Hash, TunnelID} pairs for all the leases in a buffer
+     * - Pad with random data to a multiple of 16 bytes
+     * - Use the first part of the dest's public key as an IV
+     * - Encrypt
+     * - Pad with random data to a multiple of 36 bytes
+     * - Add an extra lease
+     * - Replace the Hash and TunnelID in each Lease
      */
     private void encryp(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();
@@ -597,10 +596,10 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
-     *  Decrypt the leases, except for the last one which is partially padding.
-     *  Store the new decrypted leases in a backing store,
-     *  and keep the original leases so that verify() still works and the
-     *  encrypted leaseset can be sent on to others (via writeBytes())
+     * Decrypt the leases, except for the last one which is partially padding.
+     * Store the new decrypted leases in a backing store,
+     * and keep the original leases so that verify() still works and the
+     * encrypted leaseset can be sent on to others (via writeBytes())
      */
     private void decrypt(SessionKey key) throws DataFormatException, IOException {
         int size = _leases.size();

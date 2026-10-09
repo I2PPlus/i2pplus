@@ -42,10 +42,8 @@ import org.rrd4j.graph.RrdGraphMeta;
 import org.rrd4j.graph.SVGImageWorker;
 
 /**
- *  Generate the RRD graph png images,
- *  including the combined rate graph.
- *
- *  @since 0.6.1.13
+ * Generate the RRD graph png images,
+ * including the combined rate graph.
  */
 class GraphRenderer {
     private final Log _log;
@@ -140,10 +138,10 @@ class GraphRenderer {
     private static final boolean IS_WIN = SystemVersion.isWindows();
     private static final String PROP_SMOOTH = "routerconsole.graphSmooth";
     /**
-     *  Keep the historical zero-floored y-axis even when the window's data lives in a
-     *  narrow band far from zero. Off by default, so the data-driven floor applies.
+     * Keep the historical zero-floored y-axis even when the window's data lives in a
+     * narrow band far from zero. Off by default, so the data-driven floor applies.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final String PROP_ZERO_BASE = "routerconsole.graphZeroBase";
     private static final String PROP_FONT_MONO = "routerconsole.graphFont.unit";
@@ -153,12 +151,12 @@ class GraphRenderer {
     private static final int SIZE_LEGEND = 11;
     private static final int SIZE_TITLE = 12;
     /**
-     *  Headroom left under the data minimum, as a fraction of the window's data range.
+     * Headroom left under the data minimum, as a fraction of the window's data range.
      *
-     *  <p>Proportional rather than absolute, so it behaves the same for a rate that
-     *  hovers around 0.05 and one that sits at 100,000.
+     * <p>Proportional rather than absolute, so it behaves the same for a rate that
+     * hovers around 0.05 and one that sits at 100,000.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final double AXIS_FLOOR_MARGIN = 0.1d;
     private static final Stroke GRID_STROKE =
@@ -166,9 +164,9 @@ class GraphRenderer {
     private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile("(?<=[a-z])([A-Z])");
 
     /**
-     *  SimpleDateFormats are expensive to construct and not thread-safe, so
-     *  cache one per thread for each timezone variant instead of allocating
-     *  new ones on every render() call.
+     * SimpleDateFormats are expensive to construct and not thread-safe, so
+     * cache one per thread for each timezone variant instead of allocating
+     * new ones on every render() call.
      */
     private static final ThreadLocal<SimpleDateFormat> LOCAL_DATE_FMT =
             ThreadLocal.withInitial(() -> new SimpleDateFormat("dd MMM HH:mm", Locale.US));
@@ -204,19 +202,19 @@ class GraphRenderer {
     }
 
     /**
-     *  Single graph, drawn as a filled area under a line.
+     * Single graph, drawn as a filled area under a line.
      *
-     *  @param out where the SVG is written
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend true to omit the legend
-     *  @param hideGrid true to omit the grid lines
-     *  @param hideTitle true to omit the derived title
-     *  @param showEvents true to plot the event count rather than the stat
-     *  @param periodCount periods in the window; zero or more than the archive draws all of them
-     *  @param endp number of periods before now
-     *  @param showCredit true to show the signature line
-     *  @throws IOException if the graph cannot be produced
+     * @param out where the SVG is written
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the archive draws all of them
+     * @param endp number of periods before now
+     * @param showCredit true to show the signature line
+     * @throws IOException if the graph cannot be produced
      */
     public void render(
             OutputStream out,
@@ -247,23 +245,23 @@ class GraphRenderer {
     }
 
     /**
-     *  Single or two-data-source graph.
+     * Single or two-data-source graph.
      *
-     *  @param out where the SVG is written
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend true to omit the legend
-     *  @param hideGrid true to omit the grid lines
-     *  @param hideTitle true to omit the derived title
-     *  @param showEvents true to plot the event count rather than the stat
-     *  @param periodCount periods in the window; zero or more than the archive draws all of them
-     *  @param endp number of periods before now
-     *  @param showCredit true to show the signature line
-     *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
-     *  @param titleOverride If non-null, overrides the title
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
-     *  @throws IOException if the graph cannot be produced
-     *  @since 0.9.6 consolidated from GraphGenerator for bw.combined
+     * @param out where the SVG is written
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the archive draws all of them
+     * @param endp number of periods before now
+     * @param showCredit true to show the signature line
+     * @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
+     * @param titleOverride If non-null, overrides the title
+     * @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     * @throws IOException if the graph cannot be produced
+     * @since 0.9.6 consolidated from GraphGenerator for bw.combined
      */
     public void render(
             OutputStream out,
@@ -717,20 +715,20 @@ class GraphRenderer {
     }
 
 /**
-     *  Measure the window's data range so {@link #axisFloor} has something to scale.
-     *
-     *  <p>The values cannot be taken off the definition before the graph is built:
-     *  rrd4j computes them internally, while rendering. So this reads the same window
-     *  from the listener's already-open RRD - the read {@link RrdGraph} performs a
-     *  moment later anyway - and reduces it in one pass.
-     *
-     *  <p>Skipped entirely when a floor could not take effect anyway: {@code forceZero}
-     *  asks for the historical axis, and {@link #usesMrtgScaling} means rrd4j rebuilds
-     *  the range itself.
-     *
-     *  @param cfg the render configuration, whose range fields are filled in
-     *  @since 0.9.71+
-     */
+ * Measure the window's data range so {@link #axisFloor} has something to scale.
+ *
+ * <p>The values cannot be taken off the definition before the graph is built:
+ * rrd4j computes them internally, while rendering. So this reads the same window
+ * from the listener's already-open RRD - the read {@link RrdGraph} performs a
+ * moment later anyway - and reduces it in one pass.
+ *
+ * <p>Skipped entirely when a floor could not take effect anyway: {@code forceZero}
+ * asks for the historical axis, and {@link #usesMrtgScaling} means rrd4j rebuilds
+ * the range itself.
+ *
+ * @param cfg the render configuration, whose range fields are filled in
+ * @since 0.9.71+
+ */
     private void resolveAxisRange(GraphRenderConfig cfg) {
         cfg.dataMin = Double.NaN;
         cfg.dataMax = Double.NaN;
@@ -752,13 +750,13 @@ class GraphRenderer {
     }
 
     /**
-     *  Read one datasource over the render window.
+     * Read one datasource over the render window.
      *
-     *  @param lsnr the listener holding the RRD, or null
-     *  @param dsName datasource to read
-     *  @param startSec window start, in seconds
-     *  @param endSec window end, in seconds
-     *  @return the archived values, or null if they could not be read
+     * @param lsnr the listener holding the RRD, or null
+     * @param dsName datasource to read
+     * @param startSec window start, in seconds
+     * @param endSec window end, in seconds
+     * @return the archived values, or null if they could not be read
      * @since 0.9.71+
      */
     private double[] fetchWindow(GraphListener lsnr, String dsName, long startSec, long endSec) {
@@ -783,14 +781,14 @@ class GraphRenderer {
     }
 
     /**
-     *  Fold one series into the running range, ignoring missing and infinite points.
+     * Fold one series into the running range, ignoring missing and infinite points.
      *
-     *  <p>One pass over a primitive array: no boxing, no sorting, nothing
-     *  allocated per point.
+     * <p>One pass over a primitive array: no boxing, no sorting, nothing
+     * allocated per point.
      *
-     *  @param cfg the render configuration, updated in place
-     *  @param values archived values, or null if unavailable
-     *  @since 0.9.71+
+     * @param cfg the render configuration, updated in place
+     * @param values archived values, or null if unavailable
+     * @since 0.9.71+
      */
     private static void accumulateRange(GraphRenderConfig cfg, double[] values) {
         if (values == null) {
@@ -821,20 +819,20 @@ class GraphRenderer {
     }
 
     /**
-     *  Whether rrd4j scales the value axis itself, ignoring a floor set on the definition.
+     * Whether rrd4j scales the value axis itself, ignoring a floor set on the definition.
      *
-     *  <p>With {@link RrdGraphDef#setAltYMrtg(boolean)} on, rrd4j's MRTG range expansion
-     *  rebuilds the y range from the maximum alone and pins the floor at zero, so a floor
-     *  set on the definition cannot move it. Small graphs turn the option off, which is why
-     *  they are the ones the data-driven floor helps.
+     * <p>With {@link RrdGraphDef#setAltYMrtg(boolean)} on, rrd4j's MRTG range expansion
+     * rebuilds the y range from the maximum alone and pins the floor at zero, so a floor
+     * set on the definition cannot move it. Small graphs turn the option off, which is why
+     * they are the ones the data-driven floor helps.
      *
-     *  <p>Mirrors the decision in {@link #configureGridAndRendering} so the two cannot
-     *  drift apart, and is only read after {@link #configureBaseAndDecimals} has filled in
-     *  {@code noDecimalPlace}.
+     * <p>Mirrors the decision in {@link #configureGridAndRendering} so the two cannot
+     * drift apart, and is only read after {@link #configureBaseAndDecimals} has filled in
+     * {@code noDecimalPlace}.
      *
-     *  @param cfg the render configuration
-     *  @return true if rrd4j overwrites the range, so {@link #axisFloor} cannot take effect
-     *  @since 0.9.71+
+     * @param cfg the render configuration
+     * @return true if rrd4j overwrites the range, so {@link #axisFloor} cannot take effect
+     * @since 0.9.71+
      */
     private static boolean usesMrtgScaling(GraphRenderConfig cfg) {
         return !cfg.noDecimalPlace && cfg.width >= 400 && cfg.height >= 200;
@@ -1041,17 +1039,17 @@ class GraphRenderer {
     }
 
     /**
-     *  Declare and plot every extra series of a combined graph.
+     * Declare and plot every extra series of a combined graph.
      *
-     *  <p>Each member becomes its own datasource drawn as a line, never an area,
-     *  with a per-series colour and its description in the legend. Areas are
-     *  reserved for the primary series: filling several overlaid series hides
-     *  whichever one is behind.
+     * <p>Each member becomes its own datasource drawn as a line, never an area,
+     * with a per-series colour and its description in the legend. Areas are
+     * reserved for the primary series: filling several overlaid series hides
+     * whichever one is behind.
      *
-     *  <p>The max/min/avg/now summary block is emitted for the first extra
-     *  series only when there is exactly one, matching the long-standing
-     *  combined-bandwidth graph; with more, four legend lines per series would
-     *  bury the plot.
+     * <p>The max/min/avg/now summary block is emitted for the first extra
+     * series only when there is exactly one, matching the long-standing
+     * combined-bandwidth graph; with more, four legend lines per series would
+     * bury the plot.
      */
     private void configureExtraDataSources(RrdGraphDef def, GraphRenderConfig cfg) throws IOException {
         List<GraphListener> extras = cfg.extras;
@@ -1114,12 +1112,12 @@ class GraphRenderer {
      * one layout rather than a look the console wants:
      *
      * <ul>
-     *   <li>Grouped graphs stack up to six lines on one axis and are drawn thinner so they
-     *       stay separable and the dense case does not fill in.</li>
-     *   <li>The sidebar sparkline is drawn thick because it is small and unlabelled, and a
-     *       hairline nearly vanishes at that size.</li>
-     *   <li>A tile carrying many periods is drawn thinner for the same reason the grouped
-     *       case is: the series is crowded.</li>
+     * <li>Grouped graphs stack up to six lines on one axis and are drawn thinner so they
+     * stay separable and the dense case does not fill in.</li>
+     * <li>The sidebar sparkline is drawn thick because it is small and unlabelled, and a
+     * hairline nearly vanishes at that size.</li>
+     * <li>A tile carrying many periods is drawn thinner for the same reason the grouped
+     * case is: the series is crowded.</li>
      * </ul>
      *
      * <p>Everything else - an ordinary plot, including one carrying a group of series - takes
@@ -1202,7 +1200,7 @@ class GraphRenderer {
     private static final int CONDENSED_PERIODS = 180;
 
 /**
-     * The colour for an extra series: plot ordinal 1, i.e. the theme's second hue.
+ * The colour for an extra series: plot ordinal 1, i.e. the theme's second hue.
  *
  * <p>A frame carries at most two plots ({@link GraphGroups#MAX_SERIES}), so
  * "which colour is the extra series" has exactly one answer and it is a
@@ -1745,8 +1743,8 @@ class GraphRenderer {
         /** Date format for the legend and signature lines, UTC-aware when useUtc is set. */
         SimpleDateFormat legendSdf;
         /** Date suffix for the legend/signature; " UTC" when rendering in UTC.
-         *  Derived from useUtc here so every path prints a consistent label,
-         *  never a literal "null".
+         * Derived from useUtc here so every path prints a consistent label,
+         * never a literal "null".
          */
         String timeLabel;
         /** Datasource id plotted as the primary series. */
@@ -2093,7 +2091,7 @@ class GraphRenderer {
     }
 
     /**
-     *  translate a string with a parameter
+     * translate a string with a parameter
      */
     private String _t(String s, String o) {
         // the RRD font doesn't have zh chars, at least on my system

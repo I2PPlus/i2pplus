@@ -6,7 +6,6 @@ package net.i2p.router.web.helpers;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import static net.i2p.router.sybil.Util.biLog2;
@@ -81,9 +80,9 @@ import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
 
 /**
- *  Renders the network database (netdb) information for the router console.
- *  Handles router and leaseset listings, search, and statistics.
- *  Optimized for performance with parallel rendering and optional reverse DNS lookups.
+ * Renders the network database (netdb) information for the router console.
+ * Handles router and leaseset listings, search, and statistics.
+ * Optimized for performance with parallel rendering and optional reverse DNS lookups.
  */
 class NetDbRenderer {
     private final RouterContext _context;
@@ -93,9 +92,9 @@ class NetDbRenderer {
     private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
 
     /**
-     *  Create a renderer bound to the given context.
+     * Create a renderer bound to the given context.
      *
-     *  @param ctx the router context
+     * @param ctx the router context
      */
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
@@ -105,12 +104,12 @@ class NetDbRenderer {
     }
     private static final Pattern COMMA_SPACE_SPLIT = Pattern.compile("[, ]+");
     /**
-     *  How long to wait for a router lookup before giving up.
+     * How long to wait for a router lookup before giving up.
      */
     public static final int LOOKUP_WAIT = 3 * 1000;
     /**
-     *  How long to wait for a remote lease set lookup.
-     *  @since 0.9.70+
+     * How long to wait for a remote lease set lookup.
+     * @since 0.9.70+
      */
     public static final int LS_LOOKUP_WAIT = 10 * 1000;
     /**
@@ -123,9 +122,9 @@ class NetDbRenderer {
      */
     public int localLSCount;
 /**
- *  LeaseSet keys already rendered for this request, so a LeaseSet stored in
- *  more than one facade is shown only once. A fresh NetDbRenderer is created
- *  per request, so no reset is needed.
+ * LeaseSet keys already rendered for this request, so a LeaseSet stored in
+ * more than one facade is shown only once. A fresh NetDbRenderer is created
+ * per request, so no reset is needed.
  */
     private final Set<Hash> _renderedLeaseSetKeys = new HashSet<>();
     private final ProfileOrganizer _organizer;
@@ -145,18 +144,18 @@ class NetDbRenderer {
     private long now;
 
 /**
- *  Memoized "{0} ago" translations.
+ * Memoized "{0} ago" translations.
  *
- *  <p>{@link Translate#getString} rebuilds a {@code MessageFormat} and
- *  re-parses the pattern on every call, and a full /netdb page asks for this
- *  text once or twice per router row. Keying on the already-formatted duration
- *  string is therefore exact and callers may pass dynamic ages freely.
+ * <p>{@link Translate#getString} rebuilds a {@code MessageFormat} and
+ * re-parses the pattern on every call, and a full /netdb page asks for this
+ * text once or twice per router row. Keying on the already-formatted duration
+ * string is therefore exact and callers may pass dynamic ages freely.
  *
- *  <p>Entries are dropped wholesale when the UI language changes; a race
- *  between two render threads can only cost a redundant translation, never a
- *  wrong result.
+ * <p>Entries are dropped wholesale when the UI language changes; a race
+ * between two render threads can only cost a redundant translation, never a
+ * wrong result.
  *
- *  @since 0.9.72+
+ * @since 0.9.72+
  */
     static class AgoMemo {
         /** Upper bound on retained durations; formatDuration2() yields far fewer distinct strings. */
@@ -167,10 +166,10 @@ class NetDbRenderer {
         private final Map<String, String> _byDuration = new ConcurrentHashMap<>();
 
         /**
-         *  @param duration the age, already run through {@link DataHelper#formatDuration2}
-         *  @param lang the current UI language
-         *  @param format the translator to memoize
-         *  @return the localized "&lt;duration&gt; ago", or null if either argument was null
+         * @param duration the age, already run through {@link DataHelper#formatDuration2}
+         * @param lang the current UI language
+         * @param format the translator to memoize
+         * @return the localized "&lt;duration&gt; ago", or null if either argument was null
          */
         String ago(String duration, String lang, Function<String, String> format) {
             if (duration == null || format == null) {return null;}
@@ -187,11 +186,11 @@ class NetDbRenderer {
     }
 
     /**
-     *  Whether the router matches all capability characters in the filter.
+     * Whether the router matches all capability characters in the filter.
      *
-     *  @param ri the router to check
-     *  @param capabilities capability characters that must all be present (e.g. "fK")
-     *  @return whether the router's capability string contains every character
+     * @param ri the router to check
+     * @param capabilities capability characters that must all be present (e.g. "fK")
+     * @return whether the router's capability string contains every character
      */
     private boolean matchesCapabilities(RouterInfo ri, String capabilities) {
         String caps = ri.getCapabilities();
@@ -204,32 +203,32 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders router information matching search criteria to the given writer.
-     *  Supports filtering by version, country, family, capabilities, IP, port, etc.
-     *  Streams results to reduce memory pressure on low-memory systems.
-     *  Performs reverse DNS lookups in parallel if enabled.
+     * Renders router information matching search criteria to the given writer.
+     * Supports filtering by version, country, family, capabilities, IP, port, etc.
+     * Streams results to reduce memory pressure on low-memory systems.
+     * Performs reverse DNS lookups in parallel if enabled.
      *
-     *  @param out Writer to output HTML
-     *  @param pageSize number of results per page
-     *  @param page zero-based page index
-     *  @param routerPrefix optional base64 hash prefix to filter routers (null for all)
-     *  @param version optional version string to filter routers
-     *  @param country optional country code(s) (comma/space separated) to filter routers
-     *  @param family optional router family name to filter routers
-     *  @param capabilities optional capability characters (e.g. "fK") to match all
-     *  @param ipAddress optional IPv4 address or prefix to filter routers
-     *  @param sybil optional; if non-null, collects hashes for Sybil analysis
-     *  @param port optional port or start of range (used with highPort)
-     *  @param highPort optional end of port range
-     *  @param signatureType optional signature type to filter routers
-     *  @param encryptionType optional encryption type to filter routers
-     *  @param mtu optional MTU value to filter routers
-     *  @param ipv6Address optional IPv6 address or prefix to filter routers
-     *  @param ssuCapabilities optional SSU capability characters to match
-     *  @param transport optional transport style (e.g., "NTCP", "SSU")
-     *  @param cost optional cost value to filter router addresses
-     *  @param introducerCount unused
-     *  @throws IOException if writing fails
+     * @param out Writer to output HTML
+     * @param pageSize number of results per page
+     * @param page zero-based page index
+     * @param routerPrefix optional base64 hash prefix to filter routers (null for all)
+     * @param version optional version string to filter routers
+     * @param country optional country code(s) (comma/space separated) to filter routers
+     * @param family optional router family name to filter routers
+     * @param capabilities optional capability characters (e.g. "fK") to match all
+     * @param ipAddress optional IPv4 address or prefix to filter routers
+     * @param sybil optional; if non-null, collects hashes for Sybil analysis
+     * @param port optional port or start of range (used with highPort)
+     * @param highPort optional end of port range
+     * @param signatureType optional signature type to filter routers
+     * @param encryptionType optional encryption type to filter routers
+     * @param mtu optional MTU value to filter routers
+     * @param ipv6Address optional IPv6 address or prefix to filter routers
+     * @param ssuCapabilities optional SSU capability characters to match
+     * @param transport optional transport style (e.g., "NTCP", "SSU")
+     * @param cost optional cost value to filter router addresses
+     * @param introducerCount unused
+     * @throws IOException if writing fails
      */
     public void renderRouterInfoHTML(Writer out, int pageSize, int page, String routerPrefix, String version,
                                      String country, String family, String capabilities, String ipAddress, String sybil,
@@ -387,11 +386,11 @@ class NetDbRenderer {
     }
 
     /**
-     *  Appends a URL parameter to the given StringBuilder if the value is not null.
+     * Appends a URL parameter to the given StringBuilder if the value is not null.
      *
-     *  @param sb StringBuilder to append to
-     *  @param key URL parameter name
-     *  @param value parameter value, may be null
+     * @param sb StringBuilder to append to
+     * @param key URL parameter name
+     * @param value parameter value, may be null
      */
     private void appendUrlParam(StringBuilder sb, String key, String value) {
         if (value != null) {
@@ -400,24 +399,24 @@ class NetDbRenderer {
     }
 
     /**
-     *  Writes a message indicating no routers matched the search criteria.
+     * Writes a message indicating no routers matched the search criteria.
      *
-     *  @param buf output buffer
-     *  @param routerPrefix optional router hash prefix
-     *  @param version optional version string
-     *  @param country optional country code
-     *  @param family optional family name
-     *  @param capabilities optional capability string
-     *  @param ipAddress optional IPv4 address
-     *  @param port optional port or start of range
-     *  @param highPort optional end of port range
-     *  @param mtu optional MTU value
-     *  @param ipv6Address optional IPv6 address
-     *  @param ssuCapabilities optional SSU capabilities
-     *  @param cost optional address cost
-     *  @param signatureType optional signature type
-     *  @param encryptionType optional encryption type
-     *  @param transport optional transport style
+     * @param buf output buffer
+     * @param routerPrefix optional router hash prefix
+     * @param version optional version string
+     * @param country optional country code
+     * @param family optional family name
+     * @param capabilities optional capability string
+     * @param ipAddress optional IPv4 address
+     * @param port optional port or start of range
+     * @param highPort optional end of port range
+     * @param mtu optional MTU value
+     * @param ipv6Address optional IPv6 address
+     * @param ssuCapabilities optional SSU capabilities
+     * @param cost optional address cost
+     * @param signatureType optional signature type
+     * @param encryptionType optional encryption type
+     * @param transport optional transport style
      */
     private void writeNoResults(StringBuilder buf, String routerPrefix, String version, String country, String family,
                                 String capabilities, String ipAddress, int port, int highPort, String mtu,
@@ -446,15 +445,15 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders pagination controls.
+     * Renders pagination controls.
      *
-     *  @param buf output buffer
-     *  @param ubuf URL parameters for links
-     *  @param page current page (0-based)
-     *  @param pageSize results per page
-     *  @param morePages true if there are more pages after this one
-     *  @param sz total number of results
-     *  @since 0.9.64
+     * @param buf output buffer
+     * @param ubuf URL parameters for links
+     * @param page current page (0-based)
+     * @param pageSize results per page
+     * @param morePages true if there are more pages after this one
+     * @param sz total number of results
+     * @since 0.9.64
      */
     private void paginate(StringBuilder buf, StringBuilder ubuf, int page, int pageSize, boolean morePages, int sz) {
         int totalPages = (int) Math.ceil((double) sz / pageSize);
@@ -497,8 +496,8 @@ class NetDbRenderer {
     }
 
     /**
-     *  Job used to wait for a router lookup.
-     *  @since 0.9.48
+     * Job used to wait for a router lookup.
+     * @since 0.9.48
      */
     private class LookupWaiter extends JobImpl {
         public LookupWaiter() {super(_context);}
@@ -507,14 +506,14 @@ class NetDbRenderer {
     }
 
     /**
-     *  Looks up a RouterInfo by its hash with a timeout.
-     *  Tries local lookup first, then remote, then local again.
+     * Looks up a RouterInfo by its hash with a timeout.
+     * Tries local lookup first, then remote, then local again.
      *
-     *  @param networkDatabase the network database facade
-     *  @param hash the router hash
-     *  @param timeout max time to wait in milliseconds
-     *  @return the RouterInfo or null if not found
-     *  @since 0.9.68+
+     * @param networkDatabase the network database facade
+     * @param hash the router hash
+     * @param timeout max time to wait in milliseconds
+     * @return the RouterInfo or null if not found
+     * @since 0.9.68+
      */
     private RouterInfo lookupRouterInfoWithWait(NetworkDatabaseFacade networkDatabase, Hash hash, long timeout) {
         RouterInfo routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
@@ -532,14 +531,14 @@ class NetDbRenderer {
     }
 
     /**
-     *  Interval between background reverse DNS lookups.
-     *  100ms = 10 lookups/second. Gentle on the system, no burst.
+     * Interval between background reverse DNS lookups.
+     * 100ms = 10 lookups/second. Gentle on the system, no burst.
      */
     private static final long LOOKUP_INTERVAL_MS = 100;
 
     /**
-     *  Pause after this many lookups to let the system breathe.
-     *  500 lookups at 10/sec = 50 seconds, then 1 second pause.
+     * Pause after this many lookups to let the system breathe.
+     * 500 lookups at 10/sec = 50 seconds, then 1 second pause.
      */
     private static final int LOOKUPS_BEFORE_PAUSE = 500;
 
@@ -555,11 +554,11 @@ class NetDbRenderer {
     private static final AtomicBoolean _rdnsWorkerRunning = new AtomicBoolean(false);
 
     /**
-     *  Pre-resolves reverse DNS for the given routers, returning the cached
-     *  results and queuing the rest for background staggered lookups.
+     * Pre-resolves reverse DNS for the given routers, returning the cached
+     * results and queuing the rest for background staggered lookups.
      *
-     *  @param routers routers whose primary IPs to resolve
-     *  @return map of IP to hostname for already-cached lookups
+     * @param routers routers whose primary IPs to resolve
+     * @return map of IP to hostname for already-cached lookups
      */
     public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
         if (_context.router().isHidden()) {
@@ -598,10 +597,10 @@ class NetDbRenderer {
     }
 
     /**
-     *  Queue uncached IPs for background staggered reverse DNS lookup.
-     *  The background worker processes one lookup every {@link #LOOKUP_INTERVAL_MS},
-     *  with a pause after every {@link #LOOKUPS_BEFORE_PAUSE} lookups.
-     *  Results accumulate in rdnsCache for future page loads.
+     * Queue uncached IPs for background staggered reverse DNS lookup.
+     * The background worker processes one lookup every {@link #LOOKUP_INTERVAL_MS},
+     * with a pause after every {@link #LOOKUPS_BEFORE_PAUSE} lookups.
+     * Results accumulate in rdnsCache for future page loads.
      */
     private void enqueueRdnsLookups(List<String> ips) {
         for (String ip : ips) {
@@ -613,8 +612,8 @@ class NetDbRenderer {
     }
 
 /**
- *  Start the background staggered rdns worker if not already running.
- *  Uses the async getCanonicalHostName() to avoid blocking on DNS/WHOIS.
+ * Start the background staggered rdns worker if not already running.
+ * Uses the async getCanonicalHostName() to avoid blocking on DNS/WHOIS.
  */
     private void startRdnsWorker() {
         if (!_rdnsWorkerRunning.compareAndSet(false, true)) {
@@ -626,10 +625,10 @@ class NetDbRenderer {
     }
 
 /**
- *  Staggered reverse-DNS worker: drains the RDNS queue one lookup per
- *  {@link #LOOKUP_INTERVAL_MS}, pausing after every
- *  {@link #LOOKUPS_BEFORE_PAUSE}. Runs on a daemon thread.
- *  @since 0.9.70+
+ * Staggered reverse-DNS worker: drains the RDNS queue one lookup per
+ * {@link #LOOKUP_INTERVAL_MS}, pausing after every
+ * {@link #LOOKUPS_BEFORE_PAUSE}. Runs on a daemon thread.
+ * @since 0.9.70+
  */
     private void runRdnsWorker() {
         int count = 0;
@@ -659,13 +658,13 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders all leasesets.
+     * Renders all leasesets.
      *
-     *  @param out Writer to output HTML
-     *  @param debug if true, sort by distance and show debug info
-     *  @param client if non-null, render only leasesets for that client
-     *  @throws java.io.IOException if an I/O error occurs
-     *  @since 0.7.14
+     * @param out Writer to output HTML
+     * @param debug if true, sort by distance and show debug info
+     * @param client if non-null, render only leasesets for that client
+     * @throws java.io.IOException if an I/O error occurs
+     * @since 0.7.14
      */
     public void renderLeaseSetHTML(Writer out, boolean debug, Hash client) throws IOException {
         StringBuilder buf = new StringBuilder(4*1024);
@@ -779,28 +778,28 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders the leaseset listing and keyspace estimate for the contentonly
-     *  fragment mode of the netdb page, reusing the full lease list render.
+     * Renders the leaseset listing and keyspace estimate for the contentonly
+     * fragment mode of the netdb page, reusing the full lease list render.
      *
-     *  @param out output
-     *  @param debug if true, show debug info
-     *  @throws java.io.IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param out output
+     * @param debug if true, show debug info
+     * @throws java.io.IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     public void renderLeaseSetListFragment(Writer out, boolean debug) throws IOException {
         renderLeaseSetHTML(out, debug, null);
     }
 
     /**
-     *  Renders the local (per-client) leaseset listing, wrapping the lease
-     *  tables in the #lsWrapper div so the netdb page refreshes them with the
-     *  same contentonly fragment path as the remote listing. The summary table
-     *  is emitted before the div, mirroring the remote layout. Used by both the
-     *  full local netdb page and the fragment mode.
+     * Renders the local (per-client) leaseset listing, wrapping the lease
+     * tables in the #lsWrapper div so the netdb page refreshes them with the
+     * same contentonly fragment path as the remote listing. The summary table
+     * is emitted before the div, mirroring the remote layout. Used by both the
+     * full local netdb page and the fragment mode.
      *
-     *  @param out output
-     *  @throws java.io.IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param out output
+     * @throws java.io.IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     public void renderLocalLeaseSetList(Writer out) throws IOException {
         renderLocalSummary(out);
@@ -814,7 +813,7 @@ class NetDbRenderer {
     private boolean isRendered = false;
 
     /**
-     *  Renders the local leaseset summary header (hidden until JS shows it).
+     * Renders the local leaseset summary header (hidden until JS shows it).
      */
     public void renderLocalSummary(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
@@ -832,13 +831,13 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders a single leaseset by hostname or b32.
+     * Renders a single leaseset by hostname or b32.
      *
-     *  @param out Writer to output HTML
-     *  @param hostname the destination b32, full hash, or hostname
-     *  @param debug if true, show debug info
-     *  @throws java.io.IOException if an I/O error occurs
-     *  @since 0.9.57
+     * @param out Writer to output HTML
+     * @param hostname the destination b32, full hash, or hostname
+     * @param debug if true, show debug info
+     * @throws java.io.IOException if an I/O error occurs
+     * @since 0.9.57
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderLeaseSet(Writer out, String hostname, boolean debug) throws IOException {
@@ -879,15 +878,15 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders a single LeaseSet as HTML.
+     * Renders a single LeaseSet as HTML.
      *
-     *  @param buf output buffer
-     *  @param ls the LeaseSet to render
-     *  @param debug if true, include debug info like distance
-     *  @param now current time for expiry calculation
-     *  @param linkSusi if true, link to susidns (unused)
-     *  @param distance hash distance from local router (for debug)
-     *  @since 0.9.57
+     * @param buf output buffer
+     * @param ls the LeaseSet to render
+     * @param debug if true, include debug info like distance
+     * @param now current time for expiry calculation
+     * @param linkSusi if true, link to susidns (unused)
+     * @param distance hash distance from local router (for debug)
+     * @since 0.9.57
      */
     private void renderLeaseSet(StringBuilder buf, LeaseSet ls, boolean debug, long now, boolean linkSusi, String distance) {
         if (!_context.netDb().isInitialized()) {
@@ -1061,11 +1060,11 @@ class NetDbRenderer {
     }
 
     /**
-     *  Local client nickname for a destination hash.
+     * Local client nickname for a destination hash.
      *
-     *  @param key the destination hash
-     *  @return the nickname or a truncated base64 hash
-     *  @since 0.9.67+
+     * @param key the destination hash
+     * @return the nickname or a truncated base64 hash
+     * @since 0.9.67+
      */
     private String getLocalClientNickname(Hash key) {
         if (key == null) {return _t("Unknown");}
@@ -1080,17 +1079,17 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders the network database status page.
+     * Renders the network database status page.
      *
-     *  @param out Writer to output HTML
-     *  @param pageSize number of routers per page
-     *  @param page zero-based page index
-     *  @param mode rendering mode:
-     *              0 = summary charts,
-     *              1 = full router infos,
-     *              2 = compact router infos,
-     *              3 = summary charts sorted by country count
-     *  @throws java.io.IOException if an I/O error occurs
+     * @param out Writer to output HTML
+     * @param pageSize number of routers per page
+     * @param page zero-based page index
+     * @param mode rendering mode:
+     * 0 = summary charts,
+     * 1 = full router infos,
+     * 2 = compact router infos,
+     * 3 = summary charts sorted by country count
+     * @throws java.io.IOException if an I/O error occurs
      */
     public void renderStatusHTML(Writer out, int pageSize, int page, int mode) throws IOException {
         if (!_context.netDb().isInitialized()) {
@@ -1206,8 +1205,8 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders the summary tables (versions, bandwidth, transports, countries).
-     *  @param countryTiers per-country [X-tier, floodfill] counts
+     * Renders the summary tables (versions, bandwidth, transports, countries).
+     * @param countryTiers per-country [X-tier, floodfill] counts
      */
     private void renderSummaryTables(StringBuilder buf, ObjectCounterUnsafe<String> versions,
                                      ObjectCounterUnsafe<String> countries, int[] transportCount,
@@ -1226,7 +1225,7 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders the router versions table.
+     * Renders the router versions table.
      */
     private void renderVersionsTable(StringBuilder buf, ObjectCounterUnsafe<String> versions) {
         List<String> versionList = new ArrayList<>(versions.objects());
@@ -1262,7 +1261,7 @@ class NetDbRenderer {
     };
 
     /**
-     *  Renders the bandwidth tiers table.
+     * Renders the bandwidth tiers table.
      */
     private void renderBandwidthTiers(StringBuilder buf) {
         String showAll = _t("Show all routers with this capability in the NetDb");
@@ -1289,7 +1288,7 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders the congestion capabilities table.
+     * Renders the congestion capabilities table.
      */
     private void renderCongestionCaps(StringBuilder buf) {
         String showAll = _t("Show all routers with this capability in the NetDb");
@@ -1322,7 +1321,7 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders the transports table.
+     * Renders the transports table.
      */
     private void renderTransportsTable(StringBuilder buf, int[] transportCount) {
         buf.append("<table id=netdbtransports>\n<thead><tr><th data-sort-default data-sort-direction=ascending>")
@@ -1338,7 +1337,7 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders the country list table.
+     * Renders the country list table.
      */
     private void renderCountryTable(StringBuilder buf, ObjectCounterUnsafe<String> countries,
                                     Map<String, int[]> countryTiers) {
@@ -1381,8 +1380,8 @@ class NetDbRenderer {
     }
 
     /**
-     *  Summary tallies for the /netdb overview, all read-only once built.
-     *  @since 0.9.72+
+     * Summary tallies for the /netdb overview, all read-only once built.
+     * @since 0.9.72+
      */
     private static class RouterTallies {
         /** router.version option value to count */
@@ -1403,9 +1402,9 @@ class NetDbRenderer {
     }
 
 /**
- *  How long cached overview tallies stay valid. Well under the ten second
- *  /netdb auto-refresh, so it only bounds how long a hash whose country
- *  resolves late stays uncounted.
+ * How long cached overview tallies stay valid. Well under the ten second
+ * /netdb auto-refresh, so it only bounds how long a hash whose country
+ * resolves late stays uncounted.
  */
     private static final long TALLIES_CACHE_MS = 3 * 1000L;
     /** Tally source list the cached tallies were computed from */
@@ -1416,16 +1415,16 @@ class NetDbRenderer {
     private static volatile long _cachedTalliesUntil;
 
 /**
- *  Overview tallies for the sorted router list, memoized for a few seconds.
+ * Overview tallies for the sorted router list, memoized for a few seconds.
  *
- *  <p>Counting costs a country lookup, an option read and a transport
- *  classification per known router, and the sorted list is only replaced on
- *  its own expiry — so the list's identity is the stamp the tallies belong
- *  to, and the TTL bounds a country that resolves later.
+ * <p>Counting costs a country lookup, an option read and a transport
+ * classification per known router, and the sorted list is only replaced on
+ * its own expiry — so the list's identity is the stamp the tallies belong
+ * to, and the TTL bounds a country that resolves later.
  *
- *  @param routers the sorted list from {@link NetDbRouterCache}
- *  @return tallies for that list, never null
- *  @since 0.9.72+
+ * @param routers the sorted list from {@link NetDbRouterCache}
+ * @return tallies for that list, never null
+ * @since 0.9.72+
  */
     private RouterTallies cachedTallies(List<RouterInfo> routers) {
         RouterTallies cached = _cachedTallies;
@@ -1442,9 +1441,9 @@ class NetDbRenderer {
     }
 
     /**
-     *  Counts the summary statistics for the /netdb overview in a single
-     *  pass: versions, countries, transports, and per-country X-tier /
-     *  floodfill totals.
+     * Counts the summary statistics for the /netdb overview in a single
+     * pass: versions, countries, transports, and per-country X-tier /
+     * floodfill totals.
      */
     private void countFullRouterStats(List<RouterInfo> routers, ObjectCounterUnsafe<String> versions,
                                      ObjectCounterUnsafe<String> countries, int[] transportCount,
@@ -1525,23 +1524,23 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders a single RouterInfo as HTML.
+     * Renders a single RouterInfo as HTML.
      *
-     *  @param buf output buffer
-     *  @param routerInfo the router to render
-     *  @param isLocalRouter true if this is the local router
+     * @param buf output buffer
+     * @param routerInfo the router to render
+     * @param isLocalRouter true if this is the local router
      */
     private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter) {
         renderRouterInfo(buf, routerInfo, isLocalRouter, null);
     }
 
     /**
-     *  Renders a single RouterInfo as HTML with optional pre-resolved reverse DNS lookups.
+     * Renders a single RouterInfo as HTML with optional pre-resolved reverse DNS lookups.
      *
-     *  @param buf output buffer
-     *  @param routerInfo the router to render
-     *  @param isLocalRouter true if this is the local router
-     *  @param rdnsLookups map of IP to hostname for reverse DNS, may be null
+     * @param buf output buffer
+     * @param routerInfo the router to render
+     * @param isLocalRouter true if this is the local router
+     * @param rdnsLookups map of IP to hostname for reverse DNS, may be null
      */
     private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter, Map<String, String> rdnsLookups) {
         RouterIdentity identity = routerInfo.getIdentity();
@@ -1909,15 +1908,15 @@ class NetDbRenderer {
     }
 
 /**
- *  Renders a single RouterInfo, isolating any failure to this one entry.
+ * Renders a single RouterInfo, isolating any failure to this one entry.
  *
- *  <p>The netdb listing streams progressively, so an exception escaping a
- *  single render would truncate the rest of the page with no way to re-render.
+ * <p>The netdb listing streams progressively, so an exception escaping a
+ * single render would truncate the rest of the page with no way to re-render.
  *
- *  @param sb output buffer
- *  @param ri the router to render
- *  @param isLocalRouter true if this is the local router
- *  @param rdnsLookups map of IP to hostname for reverse DNS, may be null
+ * @param sb output buffer
+ * @param ri the router to render
+ * @param isLocalRouter true if this is the local router
+ * @param rdnsLookups map of IP to hostname for reverse DNS, may be null
  */
     private void renderRouterInfoSafe(StringBuilder sb, RouterInfo ri, boolean isLocalRouter,
                                       Map<String, String> rdnsLookups) {
@@ -1935,13 +1934,13 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders multiple RouterInfo objects in parallel, in ordered chunks
-     *  of BATCH_SIZE. Falls back to synchronous rendering when the set is
-     *  larger than one batch, to bound peak memory.
+     * Renders multiple RouterInfo objects in parallel, in ordered chunks
+     * of BATCH_SIZE. Falls back to synchronous rendering when the set is
+     * larger than one batch, to bound peak memory.
      *
-     *  @param routerInfos collection of routers to render
-     *  @param isLocalRouter true if rendering the local router
-     *  @return concatenated HTML
+     * @param routerInfos collection of routers to render
+     * @param isLocalRouter true if rendering the local router
+     * @return concatenated HTML
      */
     public String renderRouterInfosInParallel(Collection<RouterInfo> routerInfos, boolean isLocalRouter) {
         if (routerInfos.size() > BATCH_SIZE) {
@@ -1996,11 +1995,11 @@ class NetDbRenderer {
     }
 
     /**
-     *  True if the needle is a prefix of the haystack.
+     * True if the needle is a prefix of the haystack.
      *
-     *  @param haystack the data to check, never null
-     *  @param needle non-empty prefix to find
-     *  @return whether haystack starts with needle
+     * @param haystack the data to check, never null
+     * @param needle non-empty prefix to find
+     * @return whether haystack starts with needle
      */
     private static boolean startsWith(byte[] haystack, byte[] needle) {
         if (needle.length > haystack.length) {return false;}
@@ -2022,7 +2021,7 @@ class NetDbRenderer {
                                            };
 
     /**
-     *  Classifies router transports into bit flags.
+     * Classifies router transports into bit flags.
      */
     private static int classifyTransports(RouterInfo info) {
         int rv = 0;
@@ -2047,11 +2046,11 @@ class NetDbRenderer {
     }
 
     /**
-     *  Peer profile tier name or CSS class.
+     * Peer profile tier name or CSS class.
      *
-     *  @param peer the peer
-     *  @param fullname if true, return full name; else CSS class
-     *  @return the tier name or class
+     * @param peer the peer
+     * @param fullname if true, return full name; else CSS class
+     * @return the tier name or class
      */
     public String getPeerProfileTier(Hash peer, boolean fullname) {
         if (peer == null || _context.routerHash().equals(peer)) return (fullname ? _t("Local") : "isLocal");
@@ -2067,34 +2066,34 @@ class NetDbRenderer {
     private static final String _x(String s) {return s;}
 
     /**
-     *  Translate a string with a parameter via the router console messages bundle.
+     * Translate a string with a parameter via the router console messages bundle.
      *
-     *  @param s string to be translated containing {0}
-     *  @param o parameter, not translated
-     *  @return translated string
+     * @param s string to be translated containing {0}
+     * @param o parameter, not translated
+     * @return translated string
      */
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /**
-     *  Translate and memoize "{0} ago" for one rendered row.
+     * Translate and memoize "{0} ago" for one rendered row.
      *
-     *  @param duration the age, already run through {@link DataHelper#formatDuration2}
-     *  @return the localized "&lt;duration&gt; ago"
-     *  @see AgoMemo
+     * @param duration the age, already run through {@link DataHelper#formatDuration2}
+     * @return the localized "&lt;duration&gt; ago"
+     * @see AgoMemo
      */
     private String agoMemo(String duration) {
         return _agoMemo.ago(duration, Translate.getLanguage(_context), _agoFormat);
     }
 
 /**
- *  Resident memory in whole megabytes, for the local row's "Memory usage" cell.
+ * Resident memory in whole megabytes, for the local row's "Memory usage" cell.
  *
- *  <p>Memoized because {@code renderRoutersToWriter} hands every row in a list
- *  the same isLocal flag, so this would otherwise run once per row rather than
- *  once per page. The rate itself averages over a minute, longer than any
- *  render.
+ * <p>Memoized because {@code renderRoutersToWriter} hands every row in a list
+ * the same isLocal flag, so this would otherwise run once per row rather than
+ * once per page. The rate itself averages over a minute, longer than any
+ * render.
  *
- *  @return megabytes of memory in use, 0 if the stat is not registered yet
+ * @return megabytes of memory in use, 0 if the stat is not registered yet
  */
     private long memoryUsedMB() {
         RateStat stat = _context.statManager().getRate("router.memoryUsed");
@@ -2110,11 +2109,11 @@ class NetDbRenderer {
     }
 
 /**
- *  The capability link tooltip, resolved once per render pass. The value
- *  depends only on the UI language and a renderer is created per request, so
- *  the memo cannot go stale within a pass.
+ * The capability link tooltip, resolved once per render pass. The value
+ * depends only on the UI language and a renderer is created per request, so
+ * the memo cannot go stale within a pass.
  *
- *  @return the tooltip suffix inserted before each capability link's span
+ * @return the tooltip suffix inserted before each capability link's span
  */
     private String capTooltip() {
         String cached = _capTooltip;

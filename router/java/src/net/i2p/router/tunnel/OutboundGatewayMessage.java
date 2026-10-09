@@ -6,9 +6,9 @@ import net.i2p.data.i2np.*;
 import net.i2p.router.util.CDPQEntry;
 
 /**
- *  Stores all the state for an unsent or partially-sent message.
+ * Stores all the state for an unsent or partially-sent message.
  *
- *  @since 0.9.3
+ * @since 0.9.3
  */
 class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry {
     private long _seqNum;
@@ -23,7 +23,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     }
 
     /**
-     *  For CDPQ
+     * For CDPQ
      */
     @Override
     public void setSeqNum(long num) {
@@ -31,7 +31,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     }
 
     /**
-     *  For CDPQ
+     * For CDPQ
      * @return the seq num
      */
     public long getSeqNum() {
@@ -39,7 +39,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     }
 
     /**
-     *  For CDPQ
+     * For CDPQ
      * @return the priority
      */
     public int getPriority() {
@@ -47,15 +47,15 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     }
 
     /**
-     *  This is just for priority in the queue waiting for the fragmenter.
-     *  After the fragmenter, they will be OutNetMessages with priority 400.
-     *  We use the same 100-500 priority as OutNetMessage so the stats
-     *  in CoDelPriorityBlockingQueue work.
+     * This is just for priority in the queue waiting for the fragmenter.
+     * After the fragmenter, they will be OutNetMessages with priority 400.
+     * We use the same 100-500 priority as OutNetMessage so the stats
+     * in CoDelPriorityBlockingQueue work.
      *
-     *  We could - perhaps - have BatchedPreprocessor pass the max priority of
-     *  any message fragment in a TunnelDataMessage to the OutboundReceiver, to
-     *  set the OutNetMessage priority - but that may just make more of an
-     *  out-of-order mess and failed reconstruction of fragments.
+     * We could - perhaps - have BatchedPreprocessor pass the max priority of
+     * any message fragment in a TunnelDataMessage to the OutboundReceiver, to
+     * set the OutNetMessage priority - but that may just make more of an
+     * out-of-order mess and failed reconstruction of fragments.
      * @return the priority
      */
     private static int getPriority(I2NPMessage message) {

@@ -74,13 +74,13 @@ import java.nio.charset.StandardCharsets;
 public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runnable {
 
     /**
-     *  Map of host name to base64 destination for destinations collected
-     *  via address helper links
+     * Map of host name to base64 destination for destinations collected
+     * via address helper links
      */
     private final ConcurrentHashMap<String, String> addressHelpers = new ConcurrentHashMap<>(8);
 
     /**
-     *  Used to protect actions via http://proxy.i2p/
+     * Used to protect actions via http://proxy.i2p/
      */
     private final String _pageNonce;
 
@@ -109,80 +109,80 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /** Default reconnects on an empty upstream response before giving up. */
     private static final int DEFAULT_EMPTY_RETRIES = 9;
     /**
-     *  In-session b32/b33 naming lookup budget, clamped to the shared
-     *  request connect deadline so naming cannot outlive the request.
-     *  @since 0.9.71+
+     * In-session b32/b33 naming lookup budget, clamped to the shared
+     * request connect deadline so naming cannot outlive the request.
+     * @since 0.9.71+
      */
     static final long NAMING_IN_SESSION_TIMEOUT_MS = 20 * 1000;
     /**
-     *  Naming-service lookup budget for out-of-session and hostname lookups,
-     *  clamped to the shared request connect deadline.
-     *  @since 0.9.71+
+     * Naming-service lookup budget for out-of-session and hostname lookups,
+     * clamped to the shared request connect deadline.
+     * @since 0.9.71+
      */
     static final long NAMING_SERVICE_TIMEOUT_MS = 30 * 1000;
 
     /**
-     *  Per-destination concurrent outbound connection limit.
-     *  Caps the number of simultaneous I2P sockets the HTTP proxy opens to the
-     *  same destination.  Without any gate, a misbehaving client page-load can
-     *  fire many parallel requests that each independently call
-     *  {@code createI2PSocket()}, creating a SYN storm to the remote server
-     *  (20+ simultaneous SYNs observed).  The server's inbound SYN-burst gate
-     *  ({@code ConnectionManager.checkSynBurst}) records a strike for exceeding
-     *  {@code tempBanSynBurst} SYNs in {@code tempBanSynRate} ms and autobans
-     *  on a second strike within 60 seconds.
+     * Per-destination concurrent outbound connection limit.
+     * Caps the number of simultaneous I2P sockets the HTTP proxy opens to the
+     * same destination.  Without any gate, a misbehaving client page-load can
+     * fire many parallel requests that each independently call
+     * {@code createI2PSocket()}, creating a SYN storm to the remote server
+     * (20+ simultaneous SYNs observed).  The server's inbound SYN-burst gate
+     * ({@code ConnectionManager.checkSynBurst}) records a strike for exceeding
+     * {@code tempBanSynBurst} SYNs in {@code tempBanSynRate} ms and autobans
+     * on a second strike within 60 seconds.
      *
-     *  <p>The gate is pure insurance: browsers already self-limit parallel
-     *  connections per host (typically 6 over HTTP/1.1, fewer under HTTP/2),
-     *  and keep-alive means steady-state concurrency per destination is low.
-     *  The cap is therefore set high enough that a legitimate page-load burst
-     *  can never hit it -- being tied to the same destination means kicking a
-     *  5th+ parallel request would make a browser asset silently fail -- while
-     *  still bounding an out-of-control client (hundreds of connections) far
-     *  below the network-path burst that trips the remote SYN-burst gate.
+     * <p>The gate is pure insurance: browsers already self-limit parallel
+     * connections per host (typically 6 over HTTP/1.1, fewer under HTTP/2),
+     * and keep-alive means steady-state concurrency per destination is low.
+     * The cap is therefore set high enough that a legitimate page-load burst
+     * can never hit it -- being tied to the same destination means kicking a
+     * 5th+ parallel request would make a browser asset silently fail -- while
+     * still bounding an out-of-control client (hundreds of connections) far
+     * below the network-path burst that trips the remote SYN-burst gate.
      *
-     *  <p>A permit is acquired before {@code createI2PSocket()} and released when
-     *  the I2P socket is closed (after the tunnel-runner completes).  With I2P
-     *  keepalive the socket is reopened per request, so the permit lifecycle
-     *  matches the actual connection lifetime.  A dual-race secondary socket
-     *  holds an extra permit only until the race settles.
+     * <p>A permit is acquired before {@code createI2PSocket()} and released when
+     * the I2P socket is closed (after the tunnel-runner completes).  With I2P
+     * keepalive the socket is reopened per request, so the permit lifecycle
+     * matches the actual connection lifetime.  A dual-race secondary socket
+     * holds an extra permit only until the race settles.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final int MAX_CONNS_PER_DEST = 32;
 
     /**
-     *  Active outbound I2P socket count per destination hash.
-     *  {@link AtomicInteger} values; incremented
-     *  before {@code createI2PSocket()}, decremented when the socket closes.
+     * Active outbound I2P socket count per destination hash.
+     * {@link AtomicInteger} values; incremented
+     * before {@code createI2PSocket()}, decremented when the socket closes.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final ConcurrentHashMap<Hash, AtomicInteger> _activeConns =
         new ConcurrentHashMap<>(8);
 
     /**
-     *  Per-remote-dest race token bucket for empty-response dual-race opens.
-     *  Values are {@code long[2]} = {@code {tokensMilli, lastRefillMs}}, shared
-     *  across all parallel requests to the same dest so the SYN budget is a
-     *  property of the remote (one source dest from their view), not of a
-     *  single browser request. See {@link I2PTunnelRunner#tryConsumeRaceBudget}.
+     * Per-remote-dest race token bucket for empty-response dual-race opens.
+     * Values are {@code long[2]} = {@code {tokensMilli, lastRefillMs}}, shared
+     * across all parallel requests to the same dest so the SYN budget is a
+     * property of the remote (one source dest from their view), not of a
+     * single browser request. See {@link I2PTunnelRunner#tryConsumeRaceBudget}.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final ConcurrentHashMap<Hash, long[]> _raceBudget =
         new ConcurrentHashMap<>(8);
 
     /**
-     *  Try to acquire a concurrent-connection permit for {@code dest}.
-     *  The acquire is a per-key atomic remap on {@link #_activeConns}: on
-     *  rejection the map value is left untouched at the limit (never a
-     *  sentinel), so the count can never be corrupted by writes of -1/0 and
-     *  over-admission is impossible even under heavy parallel load.
+     * Try to acquire a concurrent-connection permit for {@code dest}.
+     * The acquire is a per-key atomic remap on {@link #_activeConns}: on
+     * rejection the map value is left untouched at the limit (never a
+     * sentinel), so the count can never be corrupted by writes of -1/0 and
+     * over-admission is impossible even under heavy parallel load.
      *
-     *  @return true if the permit was acquired, false if the destination is at
-     *          its connection limit
-     *  @since 0.9.71+
+     * @return true if the permit was acquired, false if the destination is at
+     * its connection limit
+     * @since 0.9.71+
      */
     private static boolean tryAcquireConnPermit(Hash dest) {
         if (dest == null) {return true;}
@@ -199,13 +199,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Release a concurrent-connection permit for {@code dest}.
-     *  Per-key atomic remap: the entry is removed from {@link #_activeConns}
-     *  exactly when the count reaches zero, so the map cannot grow without
-     *  bound over the lifetime of the process.  Safe to call with null or when
-     *  the count is already zero (underflow-guarded).
+     * Release a concurrent-connection permit for {@code dest}.
+     * Per-key atomic remap: the entry is removed from {@link #_activeConns}
+     * exactly when the count reaches zero, so the map cannot grow without
+     * bound over the lifetime of the process.  Safe to call with null or when
+     * the count is already zero (underflow-guarded).
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static void releaseConnPermit(Hash dest) {
         if (dest == null) {return;}
@@ -219,7 +219,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  These are backups if the xxx.ht error page is missing.
+     * These are backups if the xxx.ht error page is missing.
      */
     private final static String ERR_REQUEST_DENIED =
         "HTTP/1.1 403 Access Denied\r\n" +
@@ -328,13 +328,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         "You may change the configuration in I2PTunnel";
 
     /**
-     *  This constructor always starts the tunnel (ignoring the i2cp.delayOpen option).
-     *  It is used to add a client to an existing socket manager.
+     * This constructor always starts the tunnel (ignoring the i2cp.delayOpen option).
+     * It is used to add a client to an existing socket manager.
      *
-     *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
-     *  or open the local socket. You MUST call startRunning() for that.
+     * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
+     * or open the local socket. You MUST call startRunning() for that.
      *
-     *  @param sockMgr the existing socket manager
+     * @param sockMgr the existing socket manager
      */
     public I2PTunnelHTTPClient(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);
@@ -344,11 +344,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
-     *  or open the local socket. You MUST call startRunning() for that.
+     * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
+     * or open the local socket. You MUST call startRunning() for that.
      *
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     *                                  valid config to contact the router
+     * valid config to contact the router
      */
     public I2PTunnelHTTPClient(int localPort, Logging l, boolean ownDest,
                                String wwwProxy, EventDispatcher notifyThis,
@@ -427,7 +427,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      * Actually start working on incoming connections.
      * Overridden to start an internal socket too.
-     *
      */
     @Override
     public void startRunning() {
@@ -491,12 +490,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String PROP_SSL_SET = "sslManuallySet";
 
     /**
-     *  Write an error page and drain any remaining request data.
+     * Write an error page and drain any remaining request data.
      *
-     *  @param out the output stream
-     *  @param reader reads the browser's request data
-     *  @param page the error page type
-     *  @param body the error body
+     * @param out the output stream
+     * @param reader reads the browser's request data
+     * @param page the error page type
+     * @param body the error body
      */
     private void writeErrorPage(OutputStream out, InputReader reader, String page, String body) {
         try {
@@ -508,8 +507,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
     /**
      *
-     *  Note: This does not handle RFC 2616 header line splitting,
-     *  which is obsoleted in RFC 7230.
+     * Note: This does not handle RFC 2616 header line splitting,
+     * which is obsoleted in RFC 7230.
      */
     @Override
     protected void clientConnectionRun(Socket s) {
@@ -1920,11 +1919,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Write a minimal 503 response and close the connection.
-     *  The socket close in the caller's finally block flushes the response.
+     * Write a minimal 503 response and close the connection.
+     * The socket close in the caller's finally block flushes the response.
      *
-     *  @param out the output stream for the error response
-     *  @param message the reason, or null
+     * @param out the output stream for the error response
+     * @param message the reason, or null
      */
     static void writeServiceUnavailable(OutputStream out, String message) {
         if (out == null) {return;}
@@ -1937,16 +1936,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Probe whether the browser peer has closed while we wait on I2P connect.
-     *  Only meaningful for GET/HEAD (no request body still unread). A timed
-     *  read returns -1 on FIN (peer closed), times out when still open, or
-     *  yields a pipelined byte which is pushed back so it is not lost.
+     * Probe whether the browser peer has closed while we wait on I2P connect.
+     * Only meaningful for GET/HEAD (no request body still unread). A timed
+     * read returns -1 on FIN (peer closed), times out when still open, or
+     * yields a pipelined byte which is pushed back so it is not lost.
      *
-     *  @param s      browser-facing socket
-     *  @param reader the request reader wrapping a PushbackInputStream
-     *  @param method HTTP method, or null
-     *  @return true if the peer has closed (or the socket is unusable)
-     *  @since 0.9.71+
+     * @param s      browser-facing socket
+     * @param reader the request reader wrapping a PushbackInputStream
+     * @param method HTTP method, or null
+     * @return true if the peer has closed (or the socket is unusable)
+     * @since 0.9.71+
      */
     static boolean isBrowserPeerClosed(Socket s, InputReader reader, String method) {
         if (s == null || reader == null) {return false;}
@@ -1958,27 +1957,27 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Request-scoped state machine for one speculative warm socket.
-     *  <p>
-     *  The slot leases a per-destination connection permit from
-     *  {@link #open(Hash, int, Hash)} until the socket is handed to the
-     *  request by {@link #take(Hash, int)} or the attempt is abandoned by
-     *  {@link #releaseLease()} / {@link #cancel()}; the releaser callback
-     *  fires at most once per acquisition. Each attempt carries a generation
-     *  so a background connect that completes after the slot moved on cannot
-     *  install its socket or leak its permit into a later attempt — the
-     *  failure modes of a plain holder: late install after teardown, handing
-     *  a socket to a different destination, and double or missing permit
-     *  release. All state is guarded by one lock because the background
-     *  connect races request teardown.
+     * Request-scoped state machine for one speculative warm socket.
+     * <p>
+     * The slot leases a per-destination connection permit from
+     * {@link #open(Hash, int, Hash)} until the socket is handed to the
+     * request by {@link #take(Hash, int)} or the attempt is abandoned by
+     * {@link #releaseLease()} / {@link #cancel()}; the releaser callback
+     * fires at most once per acquisition. Each attempt carries a generation
+     * so a background connect that completes after the slot moved on cannot
+     * install its socket or leak its permit into a later attempt — the
+     * failure modes of a plain holder: late install after teardown, handing
+     * a socket to a different destination, and double or missing permit
+     * release. All state is guarded by one lock because the background
+     * connect races request teardown.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final class WarmSlot {
 
         /**
-         *  Slot lifecycle. Only {@link #OPEN} may start an attempt or hold an
-         *  installed socket; {@link #CANCELLED} is terminal for the request.
+         * Slot lifecycle. Only {@link #OPEN} may start an attempt or hold an
+         * installed socket; {@link #CANCELLED} is terminal for the request.
          */
         enum State {
             /** Idle, or an attempt in flight (see {@code isIdle()}). */
@@ -2000,26 +1999,26 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         private State _state = State.OPEN;
 
         /**
-         *  @param releaser callback that returns a permit to the pool; invoked
-         *         at most once per permit the slot has held
+         * @param releaser callback that returns a permit to the pool; invoked
+         * at most once per permit the slot has held
          */
         WarmSlot(Consumer<Hash> releaser) {
             _releaser = releaser;
         }
 
         /**
-         *  Begin a warm-connect attempt, taking a lease on {@code permit}.
-         *  The lease is owned by the attempt until it installs, fails, or is
-         *  rejected — {@link #install(long, I2PSocket)} on success,
-         *  {@link #releaseLease()} otherwise.
+         * Begin a warm-connect attempt, taking a lease on {@code permit}.
+         * The lease is owned by the attempt until it installs, fails, or is
+         * rejected — {@link #install(long, I2PSocket)} on success,
+         * {@link #releaseLease()} otherwise.
          *
-         *  @param destHash destination the attempt will connect to
-         *  @param port remote port (0 = default)
-         *  @param permit connection permit this attempt leases
-         *  @return the attempt generation, or -1 when the slot is not idle
-         *          (cancelled, full, or another attempt in flight); on -1 the
-         *          caller keeps ownership of {@code permit}
-         *  @since 0.9.71+
+         * @param destHash destination the attempt will connect to
+         * @param port remote port (0 = default)
+         * @param permit connection permit this attempt leases
+         * @return the attempt generation, or -1 when the slot is not idle
+         * (cancelled, full, or another attempt in flight); on -1 the
+         * caller keeps ownership of {@code permit}
+         * @since 0.9.71+
          */
         long open(Hash destHash, int port, Hash permit) {
             synchronized (_lock) {
@@ -2034,17 +2033,17 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  Install the socket produced by the attempt for {@code gen}.
-         *  Rejects a stale generation (the attempt already failed or the slot
-         *  was cancelled) so a late completion can never surface as the
-         *  request's socket; the caller must close {@code sock} and call
-         *  {@link #releaseLease()} when this returns false.
+         * Install the socket produced by the attempt for {@code gen}.
+         * Rejects a stale generation (the attempt already failed or the slot
+         * was cancelled) so a late completion can never surface as the
+         * request's socket; the caller must close {@code sock} and call
+         * {@link #releaseLease()} when this returns false.
          *
-         *  @param gen generation returned by {@link #open(Hash, int, Hash)}
-         *  @param sock the connected socket
-         *  @return true when installed (slot is now {@link State#FULL}),
-         *          false when the attempt is stale or the slot retired
-         *  @since 0.9.71+
+         * @param gen generation returned by {@link #open(Hash, int, Hash)}
+         * @param sock the connected socket
+         * @return true when installed (slot is now {@link State#FULL}),
+         * false when the attempt is stale or the slot retired
+         * @since 0.9.71+
          */
         boolean install(long gen, I2PSocket sock) {
             synchronized (_lock) {
@@ -2057,19 +2056,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  Take an installed socket for the request.
-         *  On a destination/port match the socket is returned and its lease
-         *  is released — the request already holds its own permit
-         *  ({@code heldPermitDest}), so keeping the warm one would
-         *  double-count. On a mismatch the socket is discarded rather than
-         *  handed to a request it was not opened for, and the slot returns to
-         *  {@link State#OPEN} so a fresh attempt can be opened.
+         * Take an installed socket for the request.
+         * On a destination/port match the socket is returned and its lease
+         * is released — the request already holds its own permit
+         * ({@code heldPermitDest}), so keeping the warm one would
+         * double-count. On a mismatch the socket is discarded rather than
+         * handed to a request it was not opened for, and the slot returns to
+         * {@link State#OPEN} so a fresh attempt can be opened.
          *
-         *  @param destHash destination the caller needs
-         *  @param port remote port the caller needs (0 = default)
-         *  @return the installed socket, or null when the slot is not full or
-         *          the installed socket was for a different destination/port
-         *  @since 0.9.71+
+         * @param destHash destination the caller needs
+         * @param port remote port the caller needs (0 = default)
+         * @return the installed socket, or null when the slot is not full or
+         * the installed socket was for a different destination/port
+         * @since 0.9.71+
          */
         I2PSocket take(Hash destHash, int port) {
             I2PSocket sock;
@@ -2096,13 +2095,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  Give back the lease held by the current attempt (failed, rejected,
-         *  or interrupted connect). No-op while a socket is installed — the
-         *  installed connection keeps its permit until taken or cancelled —
-         *  and no-op when nothing is held, so it is safe to call from every
-         *  attempt exit path without counting.
+         * Give back the lease held by the current attempt (failed, rejected,
+         * or interrupted connect). No-op while a socket is installed — the
+         * installed connection keeps its permit until taken or cancelled —
+         * and no-op when nothing is held, so it is safe to call from every
+         * attempt exit path without counting.
          *
-         *  @since 0.9.71+
+         * @since 0.9.71+
          */
         void releaseLease() {
             Hash permit;
@@ -2118,12 +2117,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  Retire the slot: close an installed socket if any and release the
-         *  permit the slot still holds. An attempt still in flight keeps its
-         *  lease — it releases it itself when {@link #install(long,
-         *  I2PSocket)} rejects it. Idempotent.
+         * Retire the slot: close an installed socket if any and release the
+         * permit the slot still holds. An attempt still in flight keeps its
+         * lease — it releases it itself when {@link #install(long,
+         * I2PSocket)} rejects it. Idempotent.
          *
-         *  @since 0.9.71+
+         * @since 0.9.71+
          */
         void cancel() {
             I2PSocket sock = null;
@@ -2145,9 +2144,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  @return true when the slot is open with no attempt in flight and
-         *          no installed socket, i.e. free to start a warm connect
-         *  @since 0.9.71+
+         * @return true when the slot is open with no attempt in flight and
+         * no installed socket, i.e. free to start a warm connect
+         * @since 0.9.71+
          */
         boolean isIdle() {
             synchronized (_lock) {
@@ -2156,8 +2155,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  @return the current lifecycle state (for tests and diagnostics)
-         *  @since 0.9.71+
+         * @return the current lifecycle state (for tests and diagnostics)
+         * @since 0.9.71+
          */
         State getState() {
             synchronized (_lock) {
@@ -2166,8 +2165,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  @return the last issued attempt generation (0 before any open)
-         *  @since 0.9.71+
+         * @return the last issued attempt generation (0 before any open)
+         * @since 0.9.71+
          */
         long getGeneration() {
             synchronized (_lock) {
@@ -2177,35 +2176,35 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Retire a request's warm slot: closes an installed socket, releases the
-     *  permit the slot still holds, and rejects an attempt still in flight
-     *  (its thread releases the lease when the install is refused). Idempotent
-     *  and null-safe — called from per-iteration cleanup and the request's
-     *  finally block, where either may already have run.
+     * Retire a request's warm slot: closes an installed socket, releases the
+     * permit the slot still holds, and rejects an attempt still in flight
+     * (its thread releases the lease when the install is refused). Idempotent
+     * and null-safe — called from per-iteration cleanup and the request's
+     * finally block, where either may already have run.
      *
-     *  @param slot the warm slot to retire, or null
-     *  @since 0.9.71+
+     * @param slot the warm slot to retire, or null
+     * @since 0.9.71+
      */
     static void cancelWarmSlot(WarmSlot slot) {
         if (slot != null) {slot.cancel();}
     }
 
     /**
-     *  Open one secondary I2P socket in the background while the primary is
-     *  healthy. Fail-open: if the slot is not idle, the per-dest permit is
-     *  unavailable, or the connect fails, no warm socket is installed and
-     *  resume falls back to a cold open. Skipped when
-     *  {@link #poolIsDefinitivelyDown()} so a dead outbound pool does not
-     *  accumulate speculative connect storms. The attempt is tagged with the
-     *  slot's generation, so a completion that races teardown is refused and
-     *  its permit released by this thread instead of leaking.
+     * Open one secondary I2P socket in the background while the primary is
+     * healthy. Fail-open: if the slot is not idle, the per-dest permit is
+     * unavailable, or the connect fails, no warm socket is installed and
+     * resume falls back to a cold open. Skipped when
+     * {@link #poolIsDefinitivelyDown()} so a dead outbound pool does not
+     * accumulate speculative connect storms. The attempt is tagged with the
+     * slot's generation, so a completion that races teardown is refused and
+     * its permit released by this thread instead of leaking.
      *
-     *  @param dest remote destination
-     *  @param port remote port (0 = default)
-     *  @param emptyBudget connect attempt budget for the secondary
-     *  @param requestId logging prefix id
-     *  @param slot request-scoped warm slot, or null
-     *  @since 0.9.71+
+     * @param dest remote destination
+     * @param port remote port (0 = default)
+     * @param emptyBudget connect attempt budget for the secondary
+     * @param requestId logging prefix id
+     * @param slot request-scoped warm slot, or null
+     * @since 0.9.71+
      */
     private void openSpeculativeWarm(final Destination dest, final int port,
                                      final int emptyBudget, final long requestId,
@@ -2264,19 +2263,19 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Open a single fresh I2P socket for an empty-response / body-resume
-     *  reconnect, with the standard attempt budget and dead-pool fail-fast.
-     *  Shared by the {@code reconnect()} and {@code reconnectPair()} legs of
-     *  the callback so both paths get identical backoff and stop conditions.
+     * Open a single fresh I2P socket for an empty-response / body-resume
+     * reconnect, with the standard attempt budget and dead-pool fail-fast.
+     * Shared by the {@code reconnect()} and {@code reconnectPair()} legs of
+     * the callback so both paths get identical backoff and stop conditions.
      *
-     *  @param dest remote destination
-     *  @param port remote port (0 = default)
-     *  @param emptyBudget max connect attempts for this request
-     *  @param requestId logging prefix id
-     *  @param quiet when true, suppress per-attempt Info logs (used for the
-     *         staggered first race leg so the second leg's log is the pair marker)
-     *  @return a connected socket, or null if the budget / dead pool stopped us
-     *  @since 0.9.71+
+     * @param dest remote destination
+     * @param port remote port (0 = default)
+     * @param emptyBudget max connect attempts for this request
+     * @param requestId logging prefix id
+     * @param quiet when true, suppress per-attempt Info logs (used for the
+     * staggered first race leg so the second leg's log is the pair marker)
+     * @return a connected socket, or null if the budget / dead pool stopped us
+     * @since 0.9.71+
      */
     private I2PSocket openEmptyReconnect(Destination dest, int port, int emptyBudget,
                                          long requestId, boolean quiet) {
@@ -2318,11 +2317,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Sleep for the given delay, restoring the interrupt flag if interrupted.
+     * Sleep for the given delay, restoring the interrupt flag if interrupted.
      *
-     *  @param delayMs the delay in ms
-     *  @return false if the current thread was interrupted during the sleep
-     *  @since 0.9.62
+     * @param delayMs the delay in ms
+     * @return false if the current thread was interrupted during the sleep
+     * @since 0.9.62
      */
     static boolean sleepQuietly(long delayMs) {
         if (delayMs <= 0) {return true;}
@@ -2336,14 +2335,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Parse the empty-response retry count from a client option value.
+     * Parse the empty-response retry count from a client option value.
      *
-     *  <p>Clamps to {@code >= 0}; malformed or negative input falls back to 0.
-     *  Pure decision — no context access, safe for unit tests.
+     * <p>Clamps to {@code >= 0}; malformed or negative input falls back to 0.
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param value the raw property value, may be null
-     *  @return the retry count: 0 (never retry) on null, empty, or unparseable input
-     *  @since 0.9.62
+     * @param value the raw property value, may be null
+     * @return the retry count: 0 (never retry) on null, empty, or unparseable input
+     * @since 0.9.62
      */
     static int parseEmptyRetries(String value) {
         if (value == null) {return 0;}
@@ -2356,23 +2355,23 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Scale the reconnect attempt budget by the entity size already verified
-     *  from this exchange's Content-Length header.
+     * Scale the reconnect attempt budget by the entity size already verified
+     * from this exchange's Content-Length header.
      *
-     *  <p>Body-resume reconnects run after response headers have arrived, so
-     *  the size is known and verifiable; the budget gains one attempt per
-     *  {@link I2PTunnelRunner#RETRY_RAMP_UNIT_BYTES} of entity, capped at 9x
-     *  the configured budget so a large file cannot pin the runner across an
-     *  unbounded connect-retry marathon.  The 9x cap saturates at the same
-     *  entity size as the original 3x cap at 4MB granularity (8MB per base
-     *  attempt).  Unknown length (empty-response
-     *  retry with no headers, or a sub-1MB entity) returns the base budget
-     *  unchanged.  Pure decision — no context access, safe for unit tests.
+     * <p>Body-resume reconnects run after response headers have arrived, so
+     * the size is known and verifiable; the budget gains one attempt per
+     * {@link I2PTunnelRunner#RETRY_RAMP_UNIT_BYTES} of entity, capped at 9x
+     * the configured budget so a large file cannot pin the runner across an
+     * unbounded connect-retry marathon.  The 9x cap saturates at the same
+     * entity size as the original 3x cap at 4MB granularity (8MB per base
+     * attempt).  Unknown length (empty-response
+     * retry with no headers, or a sub-1MB entity) returns the base budget
+     * unchanged.  Pure decision — no context access, safe for unit tests.
      *
-     *  @param baseBudget configured attempt budget for this request
-     *  @param contentLength entity Content-Length in bytes, or -1 if unknown
-     *  @return the scaled attempt budget; never below 0
-     *  @since 0.9.71+
+     * @param baseBudget configured attempt budget for this request
+     * @param contentLength entity Content-Length in bytes, or -1 if unknown
+     * @return the scaled attempt budget; never below 0
+     * @since 0.9.71+
      */
     static int scaledEmptyReconnectBudget(int baseBudget, long contentLength) {
         if (baseBudget <= 0 || contentLength <= 0) {return Math.max(0, baseBudget);}
@@ -2381,17 +2380,17 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Exponential backoff delay (in ms) before the given connect retry.
-     *  The first retry waits {@link #I2P_CONNECT_RETRY_BASE_DELAY} (1s), doubling
-     *  per attempt up to a hard cap of 8s.  During a tunnel-pool stall the capped
-     *  backoff gives the pool time to recover instead of hammering it every 2s,
-     *  and it still fails fast once {@link #poolIsDefinitivelyDown()} trips.
-     *  Pure decision — no context access, safe for unit tests.
+     * Exponential backoff delay (in ms) before the given connect retry.
+     * The first retry waits {@link #I2P_CONNECT_RETRY_BASE_DELAY} (1s), doubling
+     * per attempt up to a hard cap of 8s.  During a tunnel-pool stall the capped
+     * backoff gives the pool time to recover instead of hammering it every 2s,
+     * and it still fails fast once {@link #poolIsDefinitivelyDown()} trips.
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param attempt the 1-based connect failure count (how many failures so far)
-     *  @return the delay in ms: 0 for attempt &lt;= 0, else 1000 &lt;&lt; (attempt-1)
-     *          bounded to 8000
-     *  @since 0.9.71+
+     * @param attempt the 1-based connect failure count (how many failures so far)
+     * @return the delay in ms: 0 for attempt &lt;= 0, else 1000 &lt;&lt; (attempt-1)
+     * bounded to 8000
+     * @since 0.9.71+
      */
     static long getConnectRetryDelayMs(int attempt) {
         if (attempt <= 0) {return 0;}
@@ -2400,31 +2399,31 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Whether the empty-response reconnect loop should stop instead of trying again.
-     *  A connect attempt that just failed should not be re-driven when the client
-     *  outbound pool is provably dead ({@code poolState == -1}): no further attempt
-     *  can succeed, so retrying only stalls the browser for the full backoff budget
-     *  (~39s at the default 9 attempts) and adds load to a mesh already failing to
-     *  build replacement tunnels. Budget exhaustion is handled separately by the
-     *  loop's exit condition, so this method only answers the "should we bail early
-     *  on a dead pool" question.
+     * Whether the empty-response reconnect loop should stop instead of trying again.
+     * A connect attempt that just failed should not be re-driven when the client
+     * outbound pool is provably dead ({@code poolState == -1}): no further attempt
+     * can succeed, so retrying only stalls the browser for the full backoff budget
+     * (~39s at the default 9 attempts) and adds load to a mesh already failing to
+     * build replacement tunnels. Budget exhaustion is handled separately by the
+     * loop's exit condition, so this method only answers the "should we bail early
+     * on a dead pool" question.
      *
-     *  <p>A {@code poolState == -2} (unknown: standalone client, or the reflective
-     *  check failed) deliberately does NOT fail fast — there is no live router pool
-     *  to observe, so the budget is the only sane bound. Mirroring the initial-connect
-     *  guard's {@code &lt;= -1} test here would make standalone clients (outproxy, no
-     *  router) abort every empty-response retry because they always read {@code -2}.
+     * <p>A {@code poolState == -2} (unknown: standalone client, or the reflective
+     * check failed) deliberately does NOT fail fast — there is no live router pool
+     * to observe, so the budget is the only sane bound. Mirroring the initial-connect
+     * guard's {@code &lt;= -1} test here would make standalone clients (outproxy, no
+     * router) abort every empty-response retry because they always read {@code -2}.
      *
-     *  @param poolState the {@link #poolState()} value from the last failed attempt
-     *  @return true to stop retrying (fail to the normal empty-response error path)
-     *  @since 0.9.71+
+     * @param poolState the {@link #poolState()} value from the last failed attempt
+     * @return true to stop retrying (fail to the normal empty-response error path)
+     * @since 0.9.71+
      */
     static boolean shouldStopEmptyReconnect(int poolState) {
         return poolState == -1;
     }
 
     /**
-     *  Write the HTML form that prompts the user to save an address helper destination.
+     * Write the HTML form that prompts the user to save an address helper destination.
      *
      * @param destination the hostname
      * @since 0.8.7
@@ -2494,8 +2493,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Write the HTML form that prompts the user to supply decryption/authentication data.
-     *  @since 0.9.43
+     * Write the HTML form that prompts the user to supply decryption/authentication data.
+     * @since 0.9.43
      */
     private void writeB32SaveForm(OutputStream outs, String destination, int code,
                                      String targetRequest) throws IOException {
@@ -2550,11 +2549,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Read the first line unbuffered, then subsequent lines.
-     *  We can't use a BufferedReader for POST because we can't have readahead,
-     *  since we are passing the stream on to I2PTunnelRunner for the POST data.
+     * Read the first line unbuffered, then subsequent lines.
+     * We can't use a BufferedReader for POST because we can't have readahead,
+     * since we are passing the stream on to I2PTunnelRunner for the POST data.
      *
-     *  Warning - DataHelper limits line length
+     * Warning - DataHelper limits line length
      */
     private static class InputReader {
         InputStream _s;
@@ -2571,13 +2570,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  Probe whether the peer closed during a long wait. A timed read
-         *  returns -1 on FIN (peer closed), times out when still open, or
-         *  yields a pipelined byte which is pushed back so it is not lost.
+         * Probe whether the peer closed during a long wait. A timed read
+         * returns -1 on FIN (peer closed), times out when still open, or
+         * yields a pipelined byte which is pushed back so it is not lost.
          *
-         *  @param sock the peer-facing socket (used only for SO_TIMEOUT)
-         *  @return true if the peer has closed (or the stream is unusable)
-         *  @since 0.9.71+
+         * @param sock the peer-facing socket (used only for SO_TIMEOUT)
+         * @return true if the peer has closed (or the stream is unusable)
+         * @since 0.9.71+
          */
         boolean peerClosed(Socket sock) {
             if (sock == null) {return false;}
@@ -2607,10 +2606,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         *  Read the rest of the headers, which keeps firefox
-         *  from complaining about connection reset after
-         *  an error on the first line.
-         *  @since 0.9.14
+         * Read the rest of the headers, which keeps firefox
+         * from complaining about connection reset after
+         * an error on the first line.
+         * @since 0.9.14
          */
         public void drain() {
             try {
@@ -2624,9 +2623,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  The hostname of the given host.
-     *  @return b32hash.b32.i2p, or "i2p" on lookup failure.
-     *  Prior to 0.7.12, returned b64 key
+     * The hostname of the given host.
+     * @return b32hash.b32.i2p, or "i2p" on lookup failure.
+     * Prior to 0.7.12, returned b64 key
      */
     private String getHostName(String host) {
         if (host == null) {return null;}
@@ -2658,7 +2657,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @param request the raw URI string from the request line
      * @return the URI, percent-escaped if a fixup was required
      * @throws URISyntaxException if the URI is invalid even after fixup
-     * @since 0.9
      */
     static URI fixupURI(String request) throws URISyntaxException {
         try {
@@ -2703,18 +2701,16 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             "Address helpers disabled";
 
     /**
-     *  Change various parts of the URI.
-     *  String parameters are all non-encoded.
+     * Change various parts of the URI.
+     * String parameters are all non-encoded.
      *
-     *  Scheme always preserved.
-     *  Userinfo always cleared.
-     *  Host changed if non-null.
-     *  Port changed if non-zero.
-     *  Path changed if non-null.
-     *  Query always preserved.
-     *  Fragment always cleared.
-     *
-     *  @since 0.9
+     * Scheme always preserved.
+     * Userinfo always cleared.
+     * Host changed if non-null.
+     * Port changed if non-zero.
+     * Path changed if non-null.
+     * Query always preserved.
+     * Fragment always cleared.
      */
     private static URI changeURI(URI uri, String host, int port, String path) throws URISyntaxException {
         return new URI(uri.getScheme(),
@@ -2727,12 +2723,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Replace query in the URI.
-     *  Userinfo cleared if uri contained a query.
-     *  Fragment cleared if uri contained a query.
+     * Replace query in the URI.
+     * Userinfo cleared if uri contained a query.
+     * Fragment cleared if uri contained a query.
      *
-     *  @param query an ENCODED query, removed if null
-     *  @since 0.9
+     * @param query an ENCODED query, removed if null
      */
     private static URI replaceQuery(URI uri, String query) throws URISyntaxException {
         URI rv = uri;
@@ -2753,13 +2748,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     *  Remove the address helper from an encoded query.
+     * Remove the address helper from an encoded query.
      *
-     *  @param query an ENCODED query, removed if null
-     *  @return rv[0] is ENCODED query with helper removed, non-null but possibly empty;
-     *          rv[1] is DECODED helper value, non-null but possibly empty;
-     *          rv null if no helper present
-     *  @since 0.9
+     * @param query an ENCODED query, removed if null
+     * @return rv[0] is ENCODED query with helper removed, non-null but possibly empty;
+     * rv[1] is DECODED helper value, non-null but possibly empty;
+     * rv null if no helper present
      */
     private static String[] removeHelper(String query) {
         int keystart = 0;
@@ -2799,14 +2793,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
 
 
     /**
-     *  Look up a hostname with a timeout to prevent blocking the request handler.
-     *  Naming service lookups can block on NetDB searches or network fetches
-     *  for minutes if the destination isn't cached locally.
+     * Look up a hostname with a timeout to prevent blocking the request handler.
+     * Naming service lookups can block on NetDB searches or network fetches
+     * for minutes if the destination isn't cached locally.
      *
-     *  @param hostname to resolve
-     *  @param timeoutMs maximum time to wait
-     *  @return resolved Destination or null if lookup failed or timed out
-     *  @since 0.9.70+
+     * @param hostname to resolve
+     * @param timeoutMs maximum time to wait
+     * @return resolved Destination or null if lookup failed or timed out
+     * @since 0.9.70+
      */
     private Destination lookupWithTimeout(String hostname, long timeoutMs) {
         final Destination[] result = new Destination[1];

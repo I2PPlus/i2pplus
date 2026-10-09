@@ -4,10 +4,10 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
 /**
- *  8-byte session tag for ratchet protocol messages with efficient long-based storage representation for memory optimization
- *  Does not extend SessionTag or DataStructure to save space
+ * 8-byte session tag for ratchet protocol messages with efficient long-based storage representation for memory optimization
+ * Does not extend SessionTag or DataStructure to save space
  *
- *  @since 0.9.44
+ * @since 0.9.44
  */
 public class RatchetSessionTag {
     /** Length of the tag in bytes */
@@ -21,9 +21,9 @@ public class RatchetSessionTag {
     }
 
     /**
-     *  First 8 bytes of the given value are copied; the reference is not kept.
+     * First 8 bytes of the given value are copied; the reference is not kept.
      *
-     *  @param val will copy the first 8 bytes. Reference will not be kept.
+     * @param val will copy the first 8 bytes. Reference will not be kept.
      */
     public RatchetSessionTag(byte[] val) {
         if (val.length < LENGTH)
@@ -32,9 +32,9 @@ public class RatchetSessionTag {
     }
 
     /**
-     *  The tag as a byte array.
+     * The tag as a byte array.
      *
-     *  @return data as a byte array
+     * @return data as a byte array
      */
     public byte[] getData() {
         byte[] rv = new byte[LENGTH];
@@ -43,18 +43,18 @@ public class RatchetSessionTag {
     }
 
     /**
-     *  The tag as a long value.
+     * The tag as a long value.
      *
-     *  @return data as a long value
-     *  @since 0.9.46
+     * @return data as a long value
+     * @since 0.9.46
      */
     public long getLong() {
         return _data;
     }
     /**
-     *  Tag size in bytes (always 8).
+     * Tag size in bytes (always 8).
      *
-     *  @return the tag size in bytes (always 8)
+     * @return the tag size in bytes (always 8)
      */
     public int length() { // NOSONAR S1845 length() is standard Java naming
         return LENGTH;
@@ -90,9 +90,9 @@ public class RatchetSessionTag {
     }
 
     /**
-     *  Base64-encoded tag string.
+     * Base64-encoded tag string.
      *
-     *  @return base64-encoded tag string
+     * @return base64-encoded tag string
      */
     @Override
     public String toString() {

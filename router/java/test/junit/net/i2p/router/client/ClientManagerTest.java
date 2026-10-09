@@ -6,7 +6,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import static org.junit.Assert.assertEquals;
@@ -41,11 +40,9 @@ import net.i2p.util.RandomSource;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  A client that reconnects with a destination that a previous dead connection
- *  still owns must replace the stale registration instead of being refused,
- *  and the stale connection's teardown must not drop the new registration.
- *
- *  @since 2.13.0
+ * A client that reconnects with a destination that a previous dead connection
+ * still owns must replace the stale registration instead of being refused,
+ * and the stale connection's teardown must not drop the new registration.
  */
 public class ClientManagerTest {
     private static final int PORT = 7654;
@@ -84,9 +81,9 @@ public class ClientManagerTest {
     }
 
     /**
-     *  A second connection that claims the same destination gets
-     *  STATUS_CREATED and the stale runner is disconnected, so the client can
-     *  re-establish immediately after a session loss.
+     * A second connection that claims the same destination gets
+     * STATUS_CREATED and the stale runner is disconnected, so the client can
+     * re-establish immediately after a session loss.
      */
     @Test
     public void testSecondConnectionReplacesStaleOne() {
@@ -104,9 +101,9 @@ public class ClientManagerTest {
     }
 
     /**
-     *  The stale runner's teardown (unregisterConnection) must not drop
-     *  the replacement registration, so the new connection survives even if
-     *  the old one is cleaned up later.
+     * The stale runner's teardown (unregisterConnection) must not drop
+     * the replacement registration, so the new connection survives even if
+     * the old one is cleaned up later.
      */
     @Test
     public void testStaleTeardownDoesNotRemoveReplacement() {
@@ -133,8 +130,8 @@ public class ClientManagerTest {
     }
 
     /**
-     *  Different destinations on different connections coexist
-     *  normally, no replacement involved.
+     * Different destinations on different connections coexist
+     * normally, no replacement involved.
      */
     @Test
     public void testDistinctDestinationsCoexist() {

@@ -37,10 +37,10 @@ import net.i2p.util.EventDispatcher;
 public class I2PSOCKSTunnel extends I2PTunnelClientBase {
 
     /**
-     *  This is a standard soTimeout, not a total timeout.
-     *  We have no slowloris protection on the client side.
-     *  See I2PTunnelHTTPServer or SAM's ReadLine if we need that.
-     *  @since 0.9.33
+     * This is a standard soTimeout, not a total timeout.
+     * We have no slowloris protection on the client side.
+     * See I2PTunnelHTTPServer or SAM's ReadLine if we need that.
+     * @since 0.9.33
      */
     protected static final int INITIAL_SO_TIMEOUT = 30*1000;
 
@@ -52,15 +52,15 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     public static final String PROP_OUTPROXY_TYPE = "outproxyType";
 
     /**
-     *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
-     *  or open the local socket. You MUST call startRunning() for that.
+     * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
+     * or open the local socket. You MUST call startRunning() for that.
      *
-     *  @param localPort the local port to listen on
-     *  @param l the logging instance
-     *  @param ownDest whether to use own destination
-     *  @param notifyThis the event dispatcher for notifications
-     *  @param tunnel the I2P tunnel
-     *  @param pkf private key file name or null for transient key
+     * @param localPort the local port to listen on
+     * @param l the logging instance
+     * @param ownDest whether to use own destination
+     * @param notifyThis the event dispatcher for notifications
+     * @param tunnel the I2P tunnel
+     * @param pkf private key file name or null for transient key
      */
     public I2PSOCKSTunnel(int localPort, Logging l, boolean ownDest, EventDispatcher notifyThis, I2PTunnel tunnel, String pkf) {
         super(localPort, ownDest, l, notifyThis, "SOCKS Proxy on " + tunnel.listenHost + ':' + localPort, tunnel, pkf);
@@ -106,9 +106,9 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     public static final String PROP_PROXY_DEFAULT = PROP_PROXY_PREFIX + DEFAULT;
 
     /**
-     *  Update the outproxy list then call super.
+     * Update the outproxy list then call super.
      *
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
@@ -150,7 +150,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     }
 
     /**
-     *  Gets the proxy map for all configured ports.
+     * Gets the proxy map for all configured ports.
      *
      * @return a map of port strings to proxy lists
      */
@@ -164,7 +164,7 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
     public List<String> getDefaultProxies() {return proxies.get(DEFAULT);}
 
     /**
-     *  Gets the proxy list for a specific port.
+     * Gets the proxy list for a specific port.
      * <p>
      * If no proxies are configured for the port, returns the default proxies.
      * </p>

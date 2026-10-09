@@ -7,12 +7,12 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.web.HelperBase;
 
 /**
- *  The new user wizard.
+ * The new user wizard.
  *
- *  This bean has SESSION scope so the results may be retrieved.
- *  All necessary methods are synchronized.
+ * This bean has SESSION scope so the results may be retrieved.
+ * All necessary methods are synchronized.
  *
- *  @since 0.9.38
+ * @since 0.9.38
  */
 public class WizardHelper extends HelperBase {
 
@@ -63,7 +63,7 @@ public class WizardHelper extends HelperBase {
     public synchronized boolean isNDTSuccessful() {return isNDTComplete() && getUpBandwidth() > 0 && getDownBandwidth() > 0;}
 
     /**
-     *  Return the current NDT bandwidth test status.
+     * Return the current NDT bandwidth test status.
      *
      * @return HTML-escaped status string or ""
      */
@@ -99,7 +99,7 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
-     *  Return the NDT test completion status.
+     * Return the NDT test completion status.
      *
      * @return HTML-escaped status string or ""
      */
@@ -113,7 +113,7 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
-     *  Return detailed NDT test status information.
+     * Return detailed NDT test status information.
      *
      * @return HTML-escaped status string or ""
      */
@@ -127,21 +127,21 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
-     *  Return the measured upload bandwidth.
+     * Return the measured upload bandwidth.
      *
      * @return bytes per second or 0
      */
     public long getUpBandwidth() {return getLongResult("up");}
 
     /**
-     *  Return the measured download bandwidth.
+     * Return the measured download bandwidth.
      *
      * @return bytes per second or 0
      */
     public long getDownBandwidth() {return getLongResult("down");}
 
     /**
-     *  Return the NDT test server location.
+     * Return the NDT test server location.
      *
      * @return HTML-escaped location or ""
      */
@@ -237,8 +237,8 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
-     *  Adapted from ConfigNetHelper.
-     *  @return in binary KBytes per second
+     * Adapted from ConfigNetHelper.
+     * @return in binary KBytes per second
      */
     public int getShareBandwidth() {
         float irateKBps;
@@ -255,8 +255,8 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
-     *  Start the test. Called from the Handler.
-     *  @return success
+     * Start the test. Called from the Handler.
+     * @return success
      */
     synchronized boolean startNDT() {
         if (_mlab.isRunning() || _listener != null && !_listener.isComplete()) {
@@ -274,8 +274,8 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
-     *  Cancel the test. Called from the Handler.
-     *  @return success
+     * Cancel the test. Called from the Handler.
+     * @return success
      */
     synchronized boolean cancelNDT() {
         if (!_mlab.isRunning()) {return false;}

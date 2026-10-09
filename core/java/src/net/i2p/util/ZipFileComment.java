@@ -33,31 +33,31 @@ public abstract class ZipFileComment {
     private static final int MAGIC_LEN = magicDirEnd.length;
 
     /**
-     *  @param max The max length of the comment in bytes.
-     *             If the actual comment is longer, it will not be found and
-     *             this method will throw an IOE
+     * @param max The max length of the comment in bytes.
+     * If the actual comment is longer, it will not be found and
+     * this method will throw an IOE
      *
-     *  @return empty string if no comment, or the comment.
-     *          The string is decoded with UTF-8
+     * @return empty string if no comment, or the comment.
+     * The string is decoded with UTF-8
      *
-     *  @throws IOException if no valid end-of-central-directory record found
+     * @throws IOException if no valid end-of-central-directory record found
      */
     public static String getComment(File file, int max) throws IOException {
         return getComment(file, max, 0);
     }
 
     /**
-     *  @param max The max length of the comment in bytes.
-     *             If the actual comment is longer, it will not be found and
-     *             this method will throw an IOE
+     * @param max The max length of the comment in bytes.
+     * If the actual comment is longer, it will not be found and
+     * this method will throw an IOE
      *
-     *  @param skip Number of bytes to skip in the file before looking for the
-     *              zip header. Use 56 for sud/su2 files.
+     * @param skip Number of bytes to skip in the file before looking for the
+     * zip header. Use 56 for sud/su2 files.
      *
-     *  @return empty string if no comment, or the comment.
-     *          The string is decoded with UTF-8
+     * @return empty string if no comment, or the comment.
+     * The string is decoded with UTF-8
      *
-     *  @throws IOException if no valid end-of-central-directory record found
+     * @throws IOException if no valid end-of-central-directory record found
      */
     public static String getComment(File file, int max, int skip) throws IOException {
         if (!file.exists()) throw new FileNotFoundException("File not found: " + file);
@@ -78,7 +78,7 @@ public abstract class ZipFileComment {
     }
 
     /**
-     *  go backwards from the end
+     * go backwards from the end
      * @return the comment
      */
     private static String getComment(byte[] buffer) throws IOException {

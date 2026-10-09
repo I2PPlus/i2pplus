@@ -39,7 +39,7 @@ class ConnectionHandler {
     private final SimpleTimer2 _timer;
     private volatile boolean _active;
     /** Explicit per-manager override, or -1 to use the live configured {@link #getAcceptTimeout()}.
-     *  @since 0.9.71+ */
+     * @since 0.9.71+ */
     private volatile int _acceptTimeout = -1;
     private boolean _restartPending;
 
@@ -70,17 +70,17 @@ class ConnectionHandler {
     /** Minimum SYN accept-queue timeout (ms) kept even on a genuinely stressed, fast fabric. */
     static final int SYN_STRESS_MIN_TIMEOUT = 10 * 1000;
     /** Default RTT scale factor: the adaptive SYN floor is {@code scale * recentRTT} (capped at the
-     *  configured timeout) whenever a positive stall is detected.  4 keeps a handshake alive through
-     *  roughly four round-trips of server/queue latency, matching live 3-10s-RTT fabrics while still
-     *  failing fast on genuinely dead fast tunnels. Tunable via {@link I2PSocketManagerFull#setRttSynTimeoutScale}. */
+     * configured timeout) whenever a positive stall is detected.  4 keeps a handshake alive through
+     * roughly four round-trips of server/queue latency, matching live 3-10s-RTT fabrics while still
+     * failing fast on genuinely dead fast tunnels. Tunable via {@link I2PSocketManagerFull#setRttSynTimeoutScale}. */
     static final int SYN_RTT_SCALE_DEFAULT = 4;
     /** Baseline recent-SYN expire rate (percent) that must be exceeded, along with low
-     *  build success, before the clamp is armed. 100 disables the clamp. */
+     * build success, before the clamp is armed. 100 disables the clamp. */
     static final int SYN_EXPIRE_THRESHOLD_DEFAULT = 60;
     /** Minimum interval between re-sampling tunnel build success (ms). */
     private static final long SYN_STRESS_SAMPLE_INTERVAL = 10 * 1000;
     /** Interval between SYN accept-queue sweeps (ms). Far shorter than any
-     *  accept timeout, so expiry latency is dominated by the timeout itself. */
+     * accept timeout, so expiry latency is dominated by the timeout itself. */
     static final long SYN_SWEEP_INTERVAL = 1000;
 
     /** Default max SYN queue size — large enough to absorb bursts. */
@@ -149,7 +149,7 @@ class ConnectionHandler {
      * @param configuredTimeoutMs the configured accept timeout (i2p.streaming.acceptTimeout)
      * @param buildSuccess tunnel build success as a fraction [0.0, 1.0]; NaN when unavailable
      * @param recentExpireRatePct percent of recent SYN-queue entries that expired un-accepted,
-     *                            or a negative value when the rate is not known yet
+     * or a negative value when the rate is not known yet
      * @param rttMs a recent round-trip time sample in milliseconds, or &lt;=0 when unavailable
      * @return the timeout (ms) to arm the SYN reap with
      */
@@ -178,9 +178,9 @@ class ConnectionHandler {
     /** Router-clock time of the last tunnel-stress sample. */
     private volatile long _lastStressSampleAt;
     /** Router-clock time of the last SYN expire-rate sample. Kept separate from
-     *  {@link #_lastStressSampleAt} because each sampler has its own window and
-     *  one must not refresh the other's (that would starve this window's
-     *  rollover: {@link #getSynExpireRatePct} would never publish). */
+     * {@link #_lastStressSampleAt} because each sampler has its own window and
+     * one must not refresh the other's (that would starve this window's
+     * rollover: {@link #getSynExpireRatePct} would never publish). */
     private volatile long _lastSynExpireSampleAt;
     /** Cached tunnel build success fraction; NaN when unavailable. */
     private volatile double _tunnelBuildSuccess;
@@ -189,14 +189,14 @@ class ConnectionHandler {
     /** SYNs that expired un-accepted (removed by {@code SynReaper}) in the current window. */
     private volatile int _synQueueExpired;
     /** Most recently observed SYN accept-queue residence time (ms), i.e. how long a fresh SYN
-     *  waited in the queue before being accepted. 0 until the first acceptance. */
+     * waited in the queue before being accepted. 0 until the first acceptance. */
     private volatile int _synQueueResidenceMs;
     /** Enqueue records for packets currently in (or just polled from) the accept queue,
-     *  keyed by packet identity. Value holds the enqueue clock-time and the accept
-     *  timeout snapshot taken at that moment; a worker that polls a SYN refreshes the
-     *  entry so the expiry matches the timeout the client was quoted.
-     *  Swept by {@code SynReaper}; re-arming is O(1) per SYN instead of the
-     *  two per-packet timer events of the old {@code TimeoutSyn} design. */
+     * keyed by packet identity. Value holds the enqueue clock-time and the accept
+     * timeout snapshot taken at that moment; a worker that polls a SYN refreshes the
+     * entry so the expiry matches the timeout the client was quoted.
+     * Swept by {@code SynReaper}; re-arming is O(1) per SYN instead of the
+     * two per-packet timer events of the old {@code TimeoutSyn} design. */
     private final ConcurrentHashMap<Packet, SynEntry> _synEnqueueTimes =
             new ConcurrentHashMap<Packet, SynEntry>();
 
@@ -239,7 +239,7 @@ class ConnectionHandler {
      * reported as {@code -1} so the adaptive clamp never fires on startup.
      *
      * @return percent of queued SYNs that expired un-accepted [0,100], or -1 when
-     *         not enough history has accumulated yet
+     * not enough history has accumulated yet
      */
     private int getSynExpireRatePct() {
         long now = _context.clock().now();
@@ -593,9 +593,9 @@ class ConnectionHandler {
      * by accept worker threads.
      *
      * @param timeoutMs max amount of time to wait for a connection (if less
-     *                  than 1ms, wait indefinitely)
+     * than 1ms, wait indefinitely)
      * @return the connection received, never null; a timeout or a shut-down
-     *         handler is reported by throwing instead
+     * handler is reported by throwing instead
      * @throws RouterRestartException (extends I2PException) if the router is apparently restarting
      * @throws ConnectException if the I2PServerSocket is closed, or if interrupted.
      * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.
@@ -664,8 +664,8 @@ class ConnectionHandler {
     }
 
     /**
-      *  We found a non-SYN packet that was queued in the syn queue,
-     *  check to see if it has a home now, else drop it ...
+     * We found a non-SYN packet that was queued in the syn queue,
+     * check to see if it has a home now, else drop it ...
      */
     private void reReceivePacket(Packet packet) {
         if (packet == null) {
@@ -695,10 +695,10 @@ class ConnectionHandler {
     }
 
     /**
-     *  Send a reset in response to this packet, but only if it
-     *  contains a FROM field and Signature that can be verified.
+     * Send a reset in response to this packet, but only if it
+     * contains a FROM field and Signature that can be verified.
      *
-     *  @param packet the incoming packet we're responding to
+     * @param packet the incoming packet we're responding to
      */
     private void sendReset(Packet packet) {
         if (packet == null) {
@@ -724,18 +724,18 @@ class ConnectionHandler {
     }
 
     /**
-     *  Re-send a SYN-ACK in response to a retransmitted SYN for an existing connection.
-     *  This prevents the race condition where:
-     *  1. Client sends SYN, server creates connection, sends SYN-ACK
-     *  2. Client retransmits SYN before receiving SYN-ACK (RTT > RTO)
-     *  3. Server destroys the old connection (which the client already completed handshake on)
-     *  4. Client's data arrives on dead stream IDs - dropped forever
+     * Re-send a SYN-ACK in response to a retransmitted SYN for an existing connection.
+     * This prevents the race condition where:
+     * 1. Client sends SYN, server creates connection, sends SYN-ACK
+     * 2. Client retransmits SYN before receiving SYN-ACK (RTT > RTO)
+     * 3. Server destroys the old connection (which the client already completed handshake on)
+     * 4. Client's data arrives on dead stream IDs - dropped forever
      *
-     *  Instead, we just re-send the SYN-ACK for the existing connection, which is
-     *  the standard TCP behavior for retransmitted SYNs.
+     * Instead, we just re-send the SYN-ACK for the existing connection, which is
+     * the standard TCP behavior for retransmitted SYNs.
      *
-     *  @param con the existing connection to re-send the SYN-ACK for
-     *  @param syn the retransmitted SYN packet
+     * @param con the existing connection to re-send the SYN-ACK for
+     * @param syn the retransmitted SYN packet
      */
     private void resendSynAck(Connection con, Packet syn) {
         PacketLocal reply = new PacketLocal(_context, con.getRemotePeer(), syn.getSession());
@@ -768,7 +768,7 @@ class ConnectionHandler {
      * "many legit clients the app never accepted":
      * <ul>
      * <li>the <em>source</em> dest hash (short base32 prefix), which is the
-     *     peer that sent the SYN and what the per-dest flood gate keys on;</li>
+     * peer that sent the SYN and what the per-dest flood gate keys on;</li>
      * <li>current queue depth vs max, so a spike is visible as near-full;</li>
      * <li>the effective accept timeout that expired it (evidence-gated clamp).</li>
      * </ul>

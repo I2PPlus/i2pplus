@@ -63,8 +63,8 @@ public class FirstHopRttTest {
     // ---- the eviction policy, as a pure decision ----
 
     /**
-     *  Unknown is not slow. A peer we have not measured must never be evicted,
-     *  or the tier drains of exactly the peers we have not probed yet.
+     * Unknown is not slow. A peer we have not measured must never be evicted,
+     * or the tier drains of exactly the peers we have not probed yet.
      */
     @Test
     public void unknownIsNotSlow() {
@@ -90,8 +90,8 @@ public class FirstHopRttTest {
     }
 
     /**
-     *  A zero reading is "unmeasured", not "impossibly fast", and must not be
-     *  treated as either slow or valid evidence.
+     * A zero reading is "unmeasured", not "impossibly fast", and must not be
+     * treated as either slow or valid evidence.
      */
     @Test
     public void zeroIsUnknownNotInstant() {
@@ -99,9 +99,9 @@ public class FirstHopRttTest {
     }
 
     /**
-     *  The regression in one assertion: a fast direct link must survive even
-     *  when the full-tunnel figure was terrible. The tunnel round trip is not an
-     *  input to this decision at all.
+     * The regression in one assertion: a fast direct link must survive even
+     * when the full-tunnel figure was terrible. The tunnel round trip is not an
+     * input to this decision at all.
      */
     @Test
     public void fastFirstHopSurvivesATerribleTunnelTime() {
@@ -113,8 +113,8 @@ public class FirstHopRttTest {
     }
 
     /**
-     *  Decay: a recorded RTT is usable for exactly the Active tier window and
-     *  no longer, matching the profile's other active-tier evidence.
+     * Decay: a recorded RTT is usable for exactly the Active tier window and
+     * no longer, matching the profile's other active-tier evidence.
      */
     @Test
     public void recordedRttAgesOutAfterTheRetentionWindow() {
@@ -159,10 +159,10 @@ public class FirstHopRttTest {
     // ---- the two-driver low-latency rule ----
 
     /**
-     *  The floor is absolute: a peer qualifies on its own direct-link RTT, with
-     *  no population average consulted. Measured against a live fast tier this
-     *  admits 69% and evicts 31%; the 0.5x-mean rule it replaced sat below the
-     *  population median and demoted two thirds of every measured peer.
+     * The floor is absolute: a peer qualifies on its own direct-link RTT, with
+     * no population average consulted. Measured against a live fast tier this
+     * admits 69% and evicts 31%; the 0.5x-mean rule it replaced sat below the
+     * population median and demoted two thirds of every measured peer.
      */
     @Test
     public void floorDecidesOnItsOwn() {
@@ -182,9 +182,9 @@ public class FirstHopRttTest {
     }
 
     /**
-     *  The regression. There is no longer any path by which a population mean
-     *  can move the bar, so the flag cannot ratchet tighter as the measured set
-     *  ages out from under it.
+     * The regression. There is no longer any path by which a population mean
+     * can move the bar, so the flag cannot ratchet tighter as the measured set
+     * ages out from under it.
      */
     @Test
     public void noPopulationAverageCanMoveTheBar() {
@@ -232,10 +232,10 @@ public class FirstHopRttTest {
         return profile.getLowLatencyForFirstHopRtt(NOW, ceiling);
     }
     /**
-     *  Eviction may only be driven by latency once the measurement covers the tier
-     *  it is applied to. A judgement drawn from a small measured subset describes
-     *  that subset: the peers holding sessions are the ones we have been talking
-     *  to, so an early sample is whoever was contacted most recently.
+     * Eviction may only be driven by latency once the measurement covers the tier
+     * it is applied to. A judgement drawn from a small measured subset describes
+     * that subset: the peers holding sessions are the ones we have been talking
+     * to, so an early sample is whoever was contacted most recently.
      */
     @Test
     public void evictionWaitsForBroadCoverage() {
@@ -263,10 +263,10 @@ public class FirstHopRttTest {
         assertFalse(ProfileOrganizer.latencySampleIsBroadEnough(0, 10));
     }
     /**
-     *  The retention window. Lengthened from one hour so a measurement survives
-     *  the gap between talking to a peer, now that the sampler refreshes values
-     *  on every reorganize and the window only governs how long a value outlives
-     *  its session.
+     * The retention window. Lengthened from one hour so a measurement survives
+     * the gap between talking to a peer, now that the sampler refreshes values
+     * on every reorganize and the window only governs how long a value outlives
+     * its session.
      */
     @Test
     public void retentionIsFourHours() {

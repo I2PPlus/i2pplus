@@ -27,9 +27,9 @@ public class NavHelper implements NavService, ClientApp {
      *
      * @param appName standard name for the app (plugin)
      * @param displayName translated name the app will be called in the link
-     *             warning, this is the display name aka ConsoleLinkName, not the plugin name
+     * warning, this is the display name aka ConsoleLinkName, not the plugin name
      * @param path full path pointing to the application's root
-     *             (e.g. /i2ptunnel/index.jsp), non-null
+     * (e.g. /i2ptunnel/index.jsp), non-null
      * @param tooltip HTML escaped text or null
      * @param iconpath path-only URL starting with /, HTML escaped, or null
      * @since 0.9.20 added iconpath parameter
@@ -50,10 +50,10 @@ public class NavHelper implements NavService, ClientApp {
     }
 
     /**
-     *  Retrieve binary icon for a plugin
-     *  @param name plugin name
-     *  @return null if not found
-     *  @since 0.9.25
+     * Retrieve binary icon for a plugin
+     * @param name plugin name
+     * @return null if not found
+     * @since 0.9.25
      */
     public byte[] getBinary(String name){
         if (name != null)
@@ -63,9 +63,9 @@ public class NavHelper implements NavService, ClientApp {
     }
 
     /**
-     *  Store binary icon for a plugin
-     *  @param name plugin name
-     *  @since 0.9.25
+     * Store binary icon for a plugin
+     * @param name plugin name
+     * @since 0.9.25
      */
     public void setBinary(String name, byte[] arr){
         _binary.put(name, arr);
@@ -73,8 +73,8 @@ public class NavHelper implements NavService, ClientApp {
 
 
     /**
-     *  Translated string is loaded by PluginStarter
-     *  @return map of translated name to HTML string, or null if none
+     * Translated string is loaded by PluginStarter
+     * @return map of translated name to HTML string, or null if none
      */
     public Map<String, String> getClientAppLinks() {
         if (_apps.isEmpty())
@@ -103,9 +103,9 @@ public class NavHelper implements NavService, ClientApp {
     }
 
     /**
-     *  Get 16x16 icon img and append to buf
-     *  @param name standard app name
-     *  @since 0.9.45
+     * Get 16x16 icon img and append to buf
+     * @param name standard app name
+     * @since 0.9.45
      */
     private void getClientAppImg(StringBuilder buf, String name, String iconpath) {
             if (iconpath != null) {
@@ -117,10 +117,9 @@ public class NavHelper implements NavService, ClientApp {
     }
 
     /**
-     *  For HomeHelper. 32x32 icon paths.
-     *  @param ctx unused
-     *  @return non-null, possibly empty, unsorted
-     *  @since 0.9, public since 0.9.33, was package private
+     * For HomeHelper. 32x32 icon paths.
+     * @param ctx unused
+     * @return non-null, possibly empty, unsorted
      */
     public List<App> getClientApps(I2PAppContext ctx) {
         if (_apps.isEmpty())

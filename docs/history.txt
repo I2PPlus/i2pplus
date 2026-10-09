@@ -1,20 +1,39 @@
 2026-10-08 dr|z3d
-  * Graphs: Add a hover readout over the graph images, with a crosshair, a
-    level line per series and swatches coloured from the plot definition,
-    served by a format=meta request that skips the SVG render
+  * Graphs: Add a hover readout with a crosshair, per-series level line and
+    legend-matched swatches, served by a format=meta request that skips the
+    SVG render, and hide what exists rather than throwing on a missing part
   * Router:
     - Name the hop that answered an expired build, and rate-limit the report
     - Correct the build-duration comment to what was measured
-  * Tuner: Let the build reply timeout reach the ladder's ceiling
-  * Peermanager: Pin the peer-pick write bound the fixed-capacity callers rely
-    on
+    - Account for every keepalive peer, so a shrinking pool names its cause
+    - Reap a session idle in both directions past the expiry window, which the
+      consecutive-failure count alone never reached, and name the build and its
+      budget on the expiry line so a send can be paired with its answer
+    - Hold a kept profile whose peer the network database cannot resolve, and
+      request the missing RouterInfo back in backgrounded batches
+  * Tuner:
+    - Let the build reply timeout reach the ladder's ceiling
+    - Size the profile cap from free heap rather than peer quality, which the
+      two could deadlock on, and let the build budget follow measured
+      completion time instead of the timeout rate
+  * Peermanager:
+    - Pin the peer-pick write bound the fixed-capacity callers rely on, stop
+      promoting peers whose RouterInfo has no usable address, refresh those
+      held out of the tiers, and report why the tiers stay short
+    - Profile no peer advertising a bandwidth tier it will not host a tunnel
+      on, retain stored profiles below the disk floor unless one is genuinely
+      stale, and evict by staleness before capacity
   * UDP: Let the inbound retry budget extend the deadline instead of
     shortening it
   * SSU: Schedule the inbound resend from the deadline, so a due attempt
     cannot spin
+  * Streaming: Report the duplicate CLOSE safety net once a minute
   * Console:
     - Keep the /tunnels footers and latency populated across refreshes
-    - Hide a Sites of Interest link the router can no longer reach
+    - Hide a Sites of Interest link the router can no longer reach or has
+      blacklisted
+  * Tunnel: Cap a ghost exclusion at ten minutes, and report how many peers
+    it holds
 
 2026-10-07 dr|z3d
   * Router:

@@ -802,7 +802,7 @@ public class AddressbookBean extends BaseBean {
     /**
      * Gets the beginning index into results.
      * @return beginning index into results
-     *  @since 0.8.7
+     * @since 0.8.7
      */
     public String getResultBegin() {
         if (isPrefiltered()) {
@@ -814,7 +814,7 @@ public class AddressbookBean extends BaseBean {
     /**
      * Gets ending index into results.
      * @return ending index into results
-     *  @since 0.8.7
+     * @since 0.8.7
      */
     public String getResultEnd() {
         if (isPrefiltered()) {
@@ -847,7 +847,7 @@ public class AddressbookBean extends BaseBean {
     /**
      * Gets the size of the lookup result.
      * @return the size of the lookup result
-     *  @since 0.8.7
+     * @since 0.8.7
      */
     protected int resultSize() {
         return entries.length;
@@ -866,7 +866,7 @@ public class AddressbookBean extends BaseBean {
     /**
      * Gets the total size of the address book.
      * @return the total size of the address book
-     *  @since 0.8.7
+     * @since 0.8.7
      */
     protected int totalSize() {
         return entries.length;

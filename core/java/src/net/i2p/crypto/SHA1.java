@@ -40,18 +40,18 @@ import net.i2p.util.SystemVersion;
  *
  * <p><b>References:</b></p>
  * <ol>
- *   <li> NIST FIPS PUB 180-2, "Secure Hash Signature Standard (SHS) with
- *      change notice", National Institute of Standards and Technology (NIST),
- *      2002 August 1, and U.S. Department of Commerce, August 26.<br>
- *      <a href="http://csrc.ncsl.nist.gov/CryptoToolkit/Hash.html">
- *      http://csrc.ncsl.nist.gov/CryptoToolkit/Hash.html</a>
- *   <li> NIST FIPS PUB 180-1, "Secure Hash Standard",
- *      U.S. Department of Commerce, May 1993.<br>
- *      <a href="http://www.itl.nist.gov/div897/pubs/fip180-1.htm">
- *      http://www.itl.nist.gov/div897/pubs/fip180-1.htm</a></li>
- *   <li> Bruce Schneier, "Section 18.7 Secure Hash Algorithm (SHA)",
- *      <cite>Applied Cryptography, 2nd edition</cite>, <br>
- *      John Wiley &amp; Sons, 1996</li>
+ * <li> NIST FIPS PUB 180-2, "Secure Hash Signature Standard (SHS) with
+ * change notice", National Institute of Standards and Technology (NIST),
+ * 2002 August 1, and U.S. Department of Commerce, August 26.<br>
+ * <a href="http://csrc.ncsl.nist.gov/CryptoToolkit/Hash.html">
+ * http://csrc.ncsl.nist.gov/CryptoToolkit/Hash.html</a>
+ * <li> NIST FIPS PUB 180-1, "Secure Hash Standard",
+ * U.S. Department of Commerce, May 1993.<br>
+ * <a href="http://www.itl.nist.gov/div897/pubs/fip180-1.htm">
+ * http://www.itl.nist.gov/div897/pubs/fip180-1.htm</a></li>
+ * <li> Bruce Schneier, "Section 18.7 Secure Hash Algorithm (SHA)",
+ * <cite>Applied Cryptography, 2nd edition</cite>, <br>
+ * John Wiley &amp; Sons, 1996</li>
  * </ol>
  */
 public final class SHA1 extends MessageDigest implements Cloneable {
@@ -306,14 +306,14 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * @param hashvalue  the output buffer in which to store the digest.
      * @param offset  offset to start from in the output buffer
      * @param len  number of bytes within buf allotted for the digest.
-     *             Both this default implementation and the SUN provider
-     *             do not return partial digests.  The presence of this
-     *             parameter is solely for consistency in our API's.
-     *             If the value of this parameter is less than the
-     *             actual digest length, the method will throw a
-     *             DigestException.  This parameter is ignored if its
-     *             value is greater than or equal to the actual digest
-     *             length.
+     * Both this default implementation and the SUN provider
+     * do not return partial digests.  The presence of this
+     * parameter is solely for consistency in our API's.
+     * If the value of this parameter is less than the
+     * actual digest length, the method will throw a
+     * DigestException.  This parameter is ignored if its
+     * value is greater than or equal to the actual digest
+     * length.
      *
      * @return  the length of the digest stored in the output buffer.
      */
@@ -438,7 +438,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         int i00, i01, i02, i03, i04, i05, i06, i07,
             i08, i09, i10, i11, i12, i13, i14, i15;
         /* Use hash schedule function Ch (rounds 0..19):
-         *   Ch(x,y,z) = (x & y) ^ (~x & z) = (x & (y ^ z)) ^ z,
+         * Ch(x,y,z) = (x & y) ^ (~x & z) = (x & (y ^ z)) ^ z,
          * and K00 = .... = K19 = 0x5a827999. */
         /* First pass, on big endian input (rounds 0..15). */
         e =  hE
@@ -552,7 +552,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
             +  ((c & ((d = (d << 30) | (d >>> 2)) ^ e)) ^ e) // Ch(c,d,e)
             +  (i03 = ((i03 ^= i05 ^ i11 ^ i00) << 1) | (i03 >>> 31)); // W19
         /* Use hash schedule function Parity (rounds 20..39):
-         *   Parity(x,y,z) = x ^ y ^ z,
+         * Parity(x,y,z) = x ^ y ^ z,
          * and K20 = .... = K39 = 0x6ed9eba1. */
         e += ((a << 5) | (a >>> 27)) + 0x6ed9eba1 // K20
             +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
@@ -616,7 +616,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
             +  (c ^ (d = (d << 30) | (d >>> 2)) ^ e) // Parity(c,d,e)
             +  (i07 = ((i07 ^= i09 ^ i15 ^ i04) << 1) | (i07 >>> 31)); // W39
         /* Use hash schedule function Maj (rounds 40..59):
-         *   Maj(x,y,z) = (x&y) ^ (x&z) ^ (y&z) = (x & y) | ((x | y) & z),
+         * Maj(x,y,z) = (x&y) ^ (x&z) ^ (y&z) = (x & y) | ((x | y) & z),
          * and K40 = .... = K59 = 0x8f1bbcdc. */
         e += ((a << 5) | (a >>> 27)) + 0x8f1bbcdc // K40
             +  ((b & (c = (c << 30) | (c >>> 2))) | ((b | c) & d)) // Maj(b,c,d)
@@ -680,7 +680,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
             +  ((c & (d = (d << 30) | (d >>> 2))) | ((c | d) & e)) // Maj(c,d,e)
             +  (i11 = ((i11 ^= i13 ^ i03 ^ i08) << 1) | (i11 >>> 31)); // W59
         /* Use hash schedule function Parity (rounds 60..79):
-         *   Parity(x,y,z) = x ^ y ^ z,
+         * Parity(x,y,z) = x ^ y ^ z,
          * and K60 = .... = K79 = 0xca62c1d6. */
         e += ((a << 5) | (a >>> 27)) + 0xca62c1d6 // K60
             +  (b ^ (c = (c << 30) | (c >>> 2)) ^ d) // Parity(b,c,d)
@@ -753,9 +753,9 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     }
 
     /**
-     *  Test the GNU and the JVM's implementations for speed
+     * Test the GNU and the JVM's implementations for speed
      *
-     *  Results: 2011-05 eeepc Atom
+     * Results: 2011-05 eeepc Atom
      *  <pre>
      *  JVM strlen  GNU ms  JVM  ms
      *  Oracle  387   1406   2357
@@ -766,9 +766,9 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      *  JamVM    40   5380   4195
      *  gij 387  47225   3501
      *  gij  40   9861    919
-     *  </pre>
+     * </pre>
      *
-     *  @since 0.8.7
+     * @since 0.8.7
      */
 
 }

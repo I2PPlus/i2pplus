@@ -19,7 +19,6 @@ import net.i2p.util.SimpleTimer2;
  * Run any client applications specified in clients.config.  If any clientApp
  * contains the config property ".onBoot=true" it'll be launched immediately, otherwise
  * it'll get queued up for starting 2 minutes later.
- *
  */
 public class LoadClientAppsJob extends JobImpl {
     private final Log _log;
@@ -77,7 +76,7 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     *  Public for router console only, not for use by others, subject to change
+     * Public for router console only, not for use by others, subject to change
      */
     public static class DelayedRunClient extends SimpleTimer2.TimedEvent {
         /**
@@ -137,14 +136,14 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     *  Parse arg string into an array of args.
-     *  Spaces or tabs separate args.
-     *  Args may be single- or double-quoted if they contain spaces or tabs.
-     *  There is no provision for escaping quotes.
-     *  A quoted string may not contain a quote of any kind.
+     * Parse arg string into an array of args.
+     * Spaces or tabs separate args.
+     * Args may be single- or double-quoted if they contain spaces or tabs.
+     * There is no provision for escaping quotes.
+     * A quoted string may not contain a quote of any kind.
      *
-     *  @param args may be null
-     *  @return non-null, 0-length if args is null
+     * @param args may be null
+     * @return non-null, 0-length if args is null
      */
     public static String[] parseArgs(String args) {
         List<String> argList = new ArrayList<>(4);
@@ -196,12 +195,12 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     *  Use to test if the class is present,
-     *  to propagate an error back to the user,
-     *  since runClient() runs in a separate thread.
+     * Use to test if the class is present,
+     * to propagate an error back to the user,
+     * since runClient() runs in a separate thread.
      *
-     *  @param cl can be null
-     *  @since 0.7.13
+     * @param cl can be null
+     * @since 0.7.13
      */
     public static void testClient(String className, ClassLoader cl) throws ClassNotFoundException {
         if (cl == null)
@@ -210,27 +209,27 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     *  Run client in this thread.
-     *  Used for plugin sub-clients only. Does not register with the ClientAppManager.
+     * Run client in this thread.
+     * Used for plugin sub-clients only. Does not register with the ClientAppManager.
      *
-     *  @param clientName can be null
-     *  @param args can be null
-     *  @throws Exception just about anything, caller would be wise to catch Throwable
-     *  @since 0.7.13
+     * @param clientName can be null
+     * @param args can be null
+     * @throws Exception just about anything, caller would be wise to catch Throwable
+     * @since 0.7.13
      */
     public static void runClientInline(String className, String clientName, String[] args, Log log) throws Exception {
         runClientInline(className, clientName, args, log, null);
     }
 
     /**
-     *  Run client in this thread.
-     *  Used for plugin sub-clients only. Does not register with the ClientAppManager.
+     * Run client in this thread.
+     * Used for plugin sub-clients only. Does not register with the ClientAppManager.
      *
-     *  @param clientName can be null
-     *  @param args can be null
-     *  @param cl can be null
-     *  @throws Exception just about anything, caller would be wise to catch Throwable
-     *  @since 0.7.14
+     * @param clientName can be null
+     * @param args can be null
+     * @param cl can be null
+     * @throws Exception just about anything, caller would be wise to catch Throwable
+     * @since 0.7.14
      */
     public static void runClientInline(String className, String clientName, String[] args,
                                        Log log, ClassLoader cl) throws Exception {
@@ -244,23 +243,23 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     *  Run client in a new thread.
+     * Run client in a new thread.
      *
-     *  @param clientName can be null
-     *  @param args can be null
+     * @param clientName can be null
+     * @param args can be null
      */
     public static void runClient(String className, String clientName, String[] args, RouterContext ctx, Log log) {
         runClient(className, clientName, args, ctx, log, null, null);
     }
 
     /**
-     *  Run client in a new thread.
+     * Run client in a new thread.
      *
-     *  @param clientName can be null
-     *  @param args can be null
-     *  @param threadGroup can be null
-     *  @param cl can be null
-     *  @since 0.7.13
+     * @param clientName can be null
+     * @param args can be null
+     * @param threadGroup can be null
+     * @param cl can be null
+     * @since 0.7.13
      */
     public static void runClient(String className, String clientName, String[] args, RouterContext ctx, Log log,
                                  ThreadGroup threadGroup, ClassLoader cl) { // NOSONAR S3014
@@ -362,9 +361,9 @@ public class LoadClientAppsJob extends JobImpl {
     }
 
     /**
-     *  Name of this job.
+     * Name of this job.
      *
-     *  @return the name
+     * @return the name
      */
     public String getName() { return "Load Client Applications"; }
 

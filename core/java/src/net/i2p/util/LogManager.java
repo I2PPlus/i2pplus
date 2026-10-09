@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -38,7 +37,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * writes them where appropriate.
  *
  * As of 0.9.41, this class may be overridden via I2PAppContext.setLogManager()
- *
  */
 public class LogManager implements Flushable {
     /**
@@ -399,10 +397,10 @@ public class LogManager implements Flushable {
     }
 
     /**
-     *  If the log already exists, its priority is set here but cannot
-     *  be changed later, as it becomes an "orphan" not tracked by the manager.
+     * If the log already exists, its priority is set here but cannot
+     * be changed later, as it becomes an "orphan" not tracked by the manager.
      *
-     *  @param log the Log to add and track
+     * @param log the Log to add and track
      */
     void addLog(Log log) {
         Log old = _logs.putIfAbsent(log.getScope(), log);
@@ -462,9 +460,9 @@ public class LogManager implements Flushable {
     }
 
     /**
-     *  File may not exist or have old logs in it if not opened yet
+     * File may not exist or have old logs in it if not opened yet
      *
-     *  @return non-null
+     * @return non-null
      */
     public synchronized String currentFile() {
         if (_writer == null) return ("No log file created yet");
@@ -707,7 +705,7 @@ public class LogManager implements Flushable {
      * Do not log here, deadlock of LogWriter via rereadConfig().
      *
      * @param format null or empty string means use default format for the locale
-     *               (with a SHORT date and a MEDIUM time - see DateFormat)
+     * (with a SHORT date and a MEDIUM time - see DateFormat)
      *
      * @return true if the format was updated, false if it was invalid
      */
@@ -979,10 +977,10 @@ public class LogManager implements Flushable {
     }
 
     /**
-     *  Zero-copy.
-     *  For the LogWriter
+     * Zero-copy.
+     * For the LogWriter
      *
-     *  @since 0.8.2
+     * @since 0.8.2
      */
     Queue<LogRecord> getQueue() {
         return _records;
@@ -1024,10 +1022,10 @@ public class LogManager implements Flushable {
     }
 
     /**
-     *  Flush any pending records to disk.
-     *  Blocking up to 250 ms.
+     * Flush any pending records to disk.
+     * Blocking up to 250 ms.
      *
-     *  @since 0.9.3
+     * @since 0.9.3
      */
     @Override
     public void flush() {
@@ -1082,9 +1080,9 @@ public class LogManager implements Flushable {
     }
 
     /**
-     *  Convenience method for LogRecordFormatter
+     * Convenience method for LogRecordFormatter
      *
-     *  @since 0.7.14
+     * @since 0.7.14
      */
     I2PAppContext getContext() {
         return _context;

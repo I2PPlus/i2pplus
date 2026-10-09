@@ -45,15 +45,15 @@ class LookupDestJob extends JobImpl {
     }
 
     /**
-     *  One of h or name non-null.
+     * One of h or name non-null.
      *
-     *  For hash or b32 name, the dest will be returned if the LS can be found,
-     *  even if the dest uses unsupported crypto.
+     * For hash or b32 name, the dest will be returned if the LS can be found,
+     * even if the dest uses unsupported crypto.
      *
-     *  @param reqID must be &gt;= 0 if name != null
-     *  @param sessID must non-null if reqID &gt;= 0
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @since 0.9.11
+     * @param reqID must be &gt;= 0 if name != null
+     * @param sessID must non-null if reqID &gt;= 0
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @since 0.9.11
      */
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner,
                          long reqID, long timeout, SessionId sessID, Hash h, String name,
@@ -227,17 +227,17 @@ class LookupDestJob extends JobImpl {
     }
 
     /**
- * Return the request ID or failed hash so the client can correlate replies with requests
- *
- * @since 0.8.3
- */
+     * Return the request ID or failed hash so the client can correlate replies with requests
+     *
+     * @since 0.8.3
+     */
     private void returnFail() {returnFail(HostReplyMessage.RESULT_FAILURE);}
 
     /**
-     *  Return the request ID or failed hash so the client can correlate replies with requests
+     * Return the request ID or failed hash so the client can correlate replies with requests
      *
-     *  @param code failure code, greater than zero, only used for HostReplyMessage
-     *  @since 0.9.43
+     * @param code failure code, greater than zero, only used for HostReplyMessage
+     * @since 0.9.43
      */
     private void returnFail(int code) {
         I2CPMessage msg;

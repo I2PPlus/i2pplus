@@ -1,20 +1,20 @@
 package net.i2p.router.news;
 
 /******************************************************************
-*  Contains code modified from JaxpParser:
-*
-*    CyberXML for Java
-*
-*    Copyright (C) Satoshi Konno 2004
-*
-*    Author: Markus Thurner (http://thoean.com)
-*
-*  Contains code modified from Node:
-*
-*    CyberXML for Java
-*
-*    Copyright (C) Satoshi Konno 2002
-******************************************************************/
+ * Contains code modified from JaxpParser:
+ *
+ * CyberXML for Java
+ *
+ * Copyright (C) Satoshi Konno 2004
+ *
+ * Author: Markus Thurner (http://thoean.com)
+ *
+ * Contains code modified from Node:
+ *
+ * CyberXML for Java
+ *
+ * Copyright (C) Satoshi Konno 2002
+ * *****************************************************************/
 
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
@@ -57,11 +57,11 @@ public class XMLParser extends JaxpParser {
     }
 
     /**
-     *  Modified from UPnP JaxpParser
+     * Modified from UPnP JaxpParser
      *
-     *  @param parentNode null if at top
-     *  @param rank parse level, only for debug
-     *  @return the parsed node, or the parent node, unused except at top level
+     * @param parentNode null if at top
+     * @param rank parse level, only for debug
+     * @return the parsed node, or the parent node, unused except at top level
      */
     @Override
     public org.cybergarage.xml.Node parse(Node parentNode, org.w3c.dom.Node domNode, int rank) {
@@ -140,7 +140,7 @@ public class XMLParser extends JaxpParser {
     }
 
     /**
-     *  A replacement for Node.toString(), which does not recognize #text.
+     * A replacement for Node.toString(), which does not recognize #text.
      */
     public static void toString(StringBuilder buf, Node node) {
         output(buf, node, 0);
@@ -148,8 +148,8 @@ public class XMLParser extends JaxpParser {
 
 
     /**
-     *  A replacement for Node.output(), which does not recognize #text.
-     *  Also, we use the empty entity, so <br /> does not turn into <br></br>.
+     * A replacement for Node.output(), which does not recognize #text.
+     * Also, we use the empty entity, so <br /> does not turn into <br></br>.
      */
     private static void output(StringBuilder buf, Node node, int indentLevel) {
         String name = node.getName();

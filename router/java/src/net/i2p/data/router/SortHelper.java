@@ -6,7 +6,6 @@ package net.i2p.data.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.Serializable;
@@ -29,16 +28,16 @@ class SortHelper {
     SortHelper() {}
 
     /**
-     *  Sort based on the Hash of the DataStructure.
-     *  Warning - relatively slow.
-     *  WARNING - this sort order must be consistent network-wide, so while the order is arbitrary,
-     *  it cannot be changed.
-     *  Why? Just because it has to be consistent so signing will work.
-     *  DEPRECATED - Only used by RouterInfo.
+     * Sort based on the Hash of the DataStructure.
+     * Warning - relatively slow.
+     * WARNING - this sort order must be consistent network-wide, so while the order is arbitrary,
+     * it cannot be changed.
+     * Why? Just because it has to be consistent so signing will work.
+     * DEPRECATED - Only used by RouterInfo.
      *
-     *  @param <T> the DataStructure subtype being ordered
-     *  @param dataStructures the structures to order, or null to get an empty result
-     *  @return a new list
+     * @param <T> the DataStructure subtype being ordered
+     * @param dataStructures the structures to order, or null to get an empty result
+     * @return a new list
      */
     public static <T extends DataStructure> List<T> sortStructures(Collection<T> dataStructures) {
         if (dataStructures == null) return Collections.emptyList();
@@ -54,11 +53,10 @@ class SortHelper {
     }
 
     /**
-     *  See above.
-     *  DEPRECATED - Only used by RouterInfo.
+     * See above.
+     * DEPRECATED - Only used by RouterInfo.
      *
-     *  @param dataStructures the list to reorder in place by hash
-     *  @since 0.9
+     * @param dataStructures the list to reorder in place by hash
      */
     static void sortStructureList(List<? extends DataStructure> dataStructures) {
         Collections.sort(dataStructures, new DataStructureComparator());

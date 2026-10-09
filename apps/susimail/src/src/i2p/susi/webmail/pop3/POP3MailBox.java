@@ -32,7 +32,6 @@ import net.i2p.util.Log;
  * POP3 client for retrieving email from POP3 servers over I2P.
  * Supports standard POP3 commands, background checking, and delayed deletion.
  * Optimized for high-latency I2P connections with pipelining and idle timeout management.
- *
  */
 public class POP3MailBox implements NewMailListener {
     private final String host;
@@ -476,7 +475,7 @@ public class POP3MailBox implements NewMailListener {
         private final NewMailListener _nml;
 
         /**
-         *  @param nml listener to notify on connect
+         * @param nml listener to notify on connect
          */
         public ConnectRunner(NewMailListener nml) {_nml = nml;}
 
@@ -493,7 +492,7 @@ public class POP3MailBox implements NewMailListener {
         private final NewMailListener _nml;
 
         /**
-         *  @param nml listener to notify on recheck
+         * @param nml listener to notify on recheck
          */
         public RecheckRunner(NewMailListener nml) {_nml = nml;}
 
@@ -1069,20 +1068,20 @@ public class POP3MailBox implements NewMailListener {
 
 
     /**
-     *  Relay from the checker to the webmail session object,
-     *  which relays to MailCache, which will fetch the mail from us
-     *  in a big circle
+     * Relay from the checker to the webmail session object,
+     * which relays to MailCache, which will fetch the mail from us
+     * in a big circle
      *
-     *  @since 0.9.13
+     * @since 0.9.13
      */
     public void setNewMailListener(NewMailListener nml) {newMailListener = nml;}
 
     /**
-     *  Relay from the checker to the webmail session object,
-     *  which relays to MailCache, which will fetch the mail from us
-     *  in a big circle
+     * Relay from the checker to the webmail session object,
+     * which relays to MailCache, which will fetch the mail from us
+     * in a big circle
      *
-     *  @since 0.9.13
+     * @since 0.9.13
      */
     @Override
     public void foundNewMail(boolean yes) {
@@ -1091,8 +1090,8 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     *  Close without waiting for response,
-     *  and remove any delayed tasks and resources.
+     * Close without waiting for response,
+     * and remove any delayed tasks and resources.
      */
     public void destroy() {
         delayedDeleter.cancel();
@@ -1103,27 +1102,27 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     *  For helper threads to lock
-     *  @since 0.9.13
+     * For helper threads to lock
+     * @since 0.9.13
      */
     Object getLock() {return synchronizer;}
 
     /**
-     *  Do we have UIDLs to delete?
-     *  @since 0.9.13
+     * Do we have UIDLs to delete?
+     * @since 0.9.13
      */
     boolean hasQueuedDeletions() {return !delayedDeleter.getQueued().isEmpty();}
 
     /**
-     *  Close without waiting for response.
-     *  Deletes all queued deletions.
+     * Close without waiting for response.
+     * Deletes all queued deletions.
      */
     public void close() {close(false);}
 
     /**
-     *  Close and optionally wait for response.
-     *  Deletes all queued deletions.
-     *  @since 0.9.13
+     * Close and optionally wait for response.
+     * Deletes all queued deletions.
+     * @since 0.9.13
      */
     void close(boolean shouldWait) {
         synchronized(synchronizer) {
@@ -1188,8 +1187,8 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     *  A command to send and a mode to receive and return the results
-     *  @since 0.9.13
+     * A command to send and a mode to receive and return the results
+     * @since 0.9.13
      */
     private static class SendRecv {
         public final String send;
@@ -1211,9 +1210,9 @@ public class POP3MailBox implements NewMailListener {
         }
 
         /**
-         *  RB mode only
-         *  @param s may be null
-         *  @since 0.9.34
+         * RB mode only
+         * @param s may be null
+         * @since 0.9.34
          */
         public SendRecv(String s, Buffer buffer) {
             send = s;

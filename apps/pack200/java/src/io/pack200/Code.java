@@ -228,11 +228,11 @@ class Code extends Attribute.Holder {
     }
 
     /** Encode the given BCI as an instruction boundary number.
-     *  For completeness, irregular (non-boundary) BCIs are
-     *  encoded compactly immediately after the boundary numbers.
-     *  This encoding is the identity mapping outside 0..length,
-     *  and it is 1-1 everywhere.  All by itself this technique
-     *  improved zipped rt.jar compression by 2.6%.
+     * For completeness, irregular (non-boundary) BCIs are
+     * encoded compactly immediately after the boundary numbers.
+     * This encoding is the identity mapping outside 0..length,
+     * and it is 1-1 everywhere.  All by itself this technique
+     * improved zipped rt.jar compression by 2.6%.
      */
     public int encodeBCI(int bci) {
         if (bci <= 0 || bci > getLength())  return bci;

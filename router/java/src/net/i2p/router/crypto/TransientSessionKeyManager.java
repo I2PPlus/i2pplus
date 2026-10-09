@@ -6,7 +6,6 @@ package net.i2p.router.crypto;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -70,7 +69,6 @@ import net.i2p.util.SimpleTimer2;
  * Should the tag threshold and quantity be adaptive?
  *
  * Todo: Switch to ConcurrentHashMaps and ReadWriteLocks, only get write lock during cleanup
- *
  */
 public class TransientSessionKeyManager extends SessionKeyManager {
     private final Log _log;
@@ -114,7 +112,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     public static final int MAX_INBOUND_SESSION_TAGS = 800 * 1000;
 
     /**
-     *  This was 100 since 0.6.1.10 (50 before that). It's important because:
+     * This was 100 since 0.6.1.10 (50 before that). It's important because:
      *  <pre>
      *  - Tags are 32 bytes. So it previously added 3200 bytes to an initial message.
      *  - Too many tags adds a huge overhead to short-duration connections
@@ -124,9 +122,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  - This reduces the effective maximum datagram size because the client doesn't
      *  know when tags will be bundled, so the tag size must be subtracted from the
      *  maximum I2NP size or transport limit.
-     *  </pre>
+     * </pre>
      *
-     *  Issues with too small a value:
+     * Issues with too small a value:
      * <pre>
      *  - When tags are sent, a reply leaseset (~1KB) is always bundled. Maybe we don't need
      *  to bundle more than every minute or so rather than every time?
@@ -135,16 +133,16 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      *  the message rate?
      * </pre>
      *
-     *  We have to be very careful if we implement an adaptive scheme, since the key manager
-     *  is per-router, not per-local-dest. Or maybe that's a bad idea, and we need to move to
-     *  a per-dest manager. This needs further investigation.
+     * We have to be very careful if we implement an adaptive scheme, since the key manager
+     * is per-router, not per-local-dest. Or maybe that's a bad idea, and we need to move to
+     * a per-dest manager. This needs further investigation.
      *
-     *  So a value somewhat higher than the low threshold seems appropriate.
+     * So a value somewhat higher than the low threshold seems appropriate.
      *
-     *  Use care when adjusting these values. See ConnectionOptions in streaming,
-     *  and TransientSessionKeyManager in crypto, for more information.
+     * Use care when adjusting these values. See ConnectionOptions in streaming,
+     * and TransientSessionKeyManager in crypto, for more information.
      *
-     *  @since 0.9.2 moved from GarlicMessageBuilder to per-SKM config
+     * @since 0.9.2 moved from GarlicMessageBuilder to per-SKM config
      */
     public static final int DEFAULT_TAGS = 40;
     /** Same as DEFAULT_RECHECK_INTERVAL. */
@@ -154,16 +152,15 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * The session key manager should only be constructed and accessed through the
      * application context.  This constructor should only be used by the
      * appropriate application context itself.
-     *
      */
     public TransientSessionKeyManager(I2PAppContext context) {
         this(context, DEFAULT_TAGS, LOW_THRESHOLD);
     }
 
     /**
-     *  @param tagsToSend how many to send at a time, may be lower or higher than lowThreshold. 1-128
-     *  @param lowThreshold below this, send more. 1-128
-     *  @since 0.9.2
+     * @param tagsToSend how many to send at a time, may be lower or higher than lowThreshold. 1-128
+     * @param lowThreshold below this, send more. 1-128
+     * @since 0.9.2
      */
     public TransientSessionKeyManager(I2PAppContext context, int tagsToSend, int lowThreshold) {
         super(context);
@@ -251,7 +248,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
      * @throws IllegalArgumentException on bad target EncType
      * @return non-null
-     * @since 0.9
      */
     @Override
     public SessionKey getCurrentOrNewKey(PublicKey target) {
@@ -289,7 +285,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     /**
      * Same as above but for internal use, returns OutboundSession so we don't have
      * to do a subsequent getSession()
-     *
      */
     private OutboundSession createAndReturnSession(PublicKey target, SessionKey key) {
         EncType type = target.getType();
@@ -308,7 +303,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * key when communicating with the target.  If this returns null, no tags are
      * available so ElG should be used with the given key (a new sessionKey should
      * NOT be used)
-     *
      */
     @Override
     public SessionTag consumeNextAvailableTag(PublicKey target, SessionKey key) {
@@ -328,24 +322,24 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
-     *  How many to send, IF we need to.
+     * How many to send, IF we need to.
      *
-     *  @return the configured value (not adjusted for current available)
-     *  @since 0.9.2
+     * @return the configured value (not adjusted for current available)
+     * @since 0.9.2
      */
     @Override
     public int getTagsToSend() { return _tagsToSend; }
 
     /**
-     *  @return the configured value
-     *  @since 0.9.2
+     * @return the configured value
+     * @since 0.9.2
      */
     @Override
     public int getLowThreshold() { return _lowThreshold; }
 
     /**
-     *  @return true if we have less than the threshold or what we have is about to expire
-     *  @since 0.9.2
+     * @return true if we have less than the threshold or what we have is about to expire
+     * @since 0.9.2
      */
     @Override
     public boolean shouldSendTags(PublicKey target, SessionKey key, int lowThreshold) {
@@ -407,8 +401,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * @param key the session key the tags are bound to
      * @param sessionTags the tags that were sent
      * @return the TagSetHandle, or null if the session could not be created.
-     *         Caller MUST subsequently call failTags() or tagsAcked()
-     *         with this handle.
+     * Caller MUST subsequently call failTags() or tagsAcked()
+     * with this handle.
      */
     @Override
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) {
@@ -607,7 +601,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * and if so, discard it (but keep track for frequent dups) and return the decryption
      * key it was received with (via tagsReceived(...)).  returns null if no session key
      * matches
-     *
      */
     @Override
     public SessionKey consumeTag(SessionTag tag) {
@@ -729,10 +722,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
-     *  Return a map of session key to a set of inbound TagSets for that SessionKey
+     * Return a map of session key to a set of inbound TagSets for that SessionKey
      *
-     *  @return the inbound tag sets by session key
-     *  @since 0.9.33 split out from renderStatusHTML()
+     * @return the inbound tag sets by session key
+     * @since 0.9.33 split out from renderStatusHTML()
      */
     private Map<SessionKey, Set<TagSet>> getInboundTagSetsBySessionKey() {
         Set<TagSet> inbound = getInboundTagSets();
@@ -827,10 +820,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
- * For debugging
- *
- * @since 0.9
- */
+     * For debugging
+     */
     private static String toString(PublicKey target) {
         if (target == null)
             return "null";
@@ -838,8 +829,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
-     *  Just for the HTML method above so we can see what's going on easier
-     *  Earliest first
+     * Just for the HTML method above so we can see what's going on easier
+     * Earliest first
      */
     private static class TagSetComparator implements Comparator<TagSet>, Serializable {
          /** Compare two entries for ordering */
@@ -852,7 +843,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
-     *  The state for a crypto session to a single public key
+     * The state for a crypto session to a single public key
      */
     private static class OutboundSession {
         private final I2PAppContext _context;
@@ -862,29 +853,29 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         private final long _established;
         private long _lastUsed;
         /**
-         *  Before the first ack, all tagsets go here. These are never expired, we rely
-         *  on the callers to call failTags() or ackTags() to remove them from this list.
-         *  Actually we now do a failsafe expire.
-         *  Synch on _tagSets to access this.
-         *  No particular order.
+         * Before the first ack, all tagsets go here. These are never expired, we rely
+         * on the callers to call failTags() or ackTags() to remove them from this list.
+         * Actually we now do a failsafe expire.
+         * Synch on _tagSets to access this.
+         * No particular order.
          */
         private final Set<TagSet> _unackedTagSets;
         /**
-         *  As tagsets are acked, they go here.
-         *  After the first ack, new tagsets go here (i.e. presumed acked)
-         *  In order, earliest first.
+         * As tagsets are acked, they go here.
+         * After the first ack, new tagsets go here (i.e. presumed acked)
+         * In order, earliest first.
          */
         private final List<TagSet> _tagSets;
         /**
-         *  Set to true after first tagset is acked.
-         *  Upon repeated failures, we may revert back to false.
-         *  This prevents us getting "stuck" forever, using tags that weren't acked
-         *  to deliver the next set of tags.
+         * Set to true after first tagset is acked.
+         * Upon repeated failures, we may revert back to false.
+         * This prevents us getting "stuck" forever, using tags that weren't acked
+         * to deliver the next set of tags.
          */
         private volatile boolean _acked;
         /**
-         *  Fail count
-         *  Synch on _tagSets to access this.
+         * Fail count
+         * Synch on _tagSets to access this.
          */
         private int _consecutiveFailures;
 
@@ -903,9 +894,9 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
 
         /**
-         *  @return list of TagSet objects
-         *  This is used only by renderStatusHTML().
-         *  It includes both acked and unacked TagSets.
+         * @return list of TagSet objects
+         * This is used only by renderStatusHTML().
+         * It includes both acked and unacked TagSets.
          */
         List<TagSet> getTagSets() {
             List<TagSet> rv;
@@ -917,10 +908,10 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
 
         /**
-         *  got an ack for these tags
-         *  For tagsets delivered after the session was acked, this is a nop
-         *  because the tagset was originally placed directly on the acked list.
-         *  If the set was previously failed, it will be added back in.
+         * got an ack for these tags
+         * For tagsets delivered after the session was acked, this is a nop
+         * because the tagset was originally placed directly on the acked list.
+         * If the set was previously failed, it will be added back in.
          */
         void ackTags(TagSet set) {
             synchronized (_tagSets) {
@@ -1120,7 +1111,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         /**
          * Whether the outbound tag set has been acknowledged.
          * @return the ack received
-         * @since 0.9 for debugging
          */
         public boolean getAckReceived() {
             return _acked;
@@ -1137,7 +1127,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         private boolean _acked;
 
         /**
-         *  @param date For inbound: when the TagSet will expire; for outbound: creation time
+         * @param date For inbound: when the TagSet will expire; for outbound: creation time
          */
         public TagSet(Set<SessionTag> tags, SessionKey key, long date, int id) {
             if (key == null) throw new IllegalArgumentException("Missing key");
@@ -1177,17 +1167,17 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
 
         /**
-         *  Caller must synch.
+         * Caller must synch.
          */
         public void consume(SessionTag tag) {
             _sessionTags.remove(tag);
         }
 
         /**
-         *  For outbound only.
-         *  Caller must synch.
+         * For outbound only.
+         * Caller must synch.
          *
-         *  @return a tag or null
+         * @return a tag or null
          */
         public SessionTag consumeNext() {
             Iterator<SessionTag> iter = _sessionTags.iterator();
@@ -1199,7 +1189,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         }
 
         /**
-         *  For outbound only.
+         * For outbound only.
          */
         public void setAcked() { _acked = true; }
 
@@ -1212,7 +1202,6 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         /**
          * Unique identifier for this tag set.
          * @return the i d
-         * @since 0.9 for debugging
          */
         public int getID() {return _id;}
 

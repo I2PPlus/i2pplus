@@ -48,11 +48,11 @@ public final class MLKEM {
     }
 
     /**
-     *  Alice side, key generation.
+     * Alice side, key generation.
      *
-     *  @param type must be one of the internal types MLKEM*_INT
-     *  @return the key pair, public key in [0] and private key in [1]
-     *  @throws GeneralSecurityException if the type is not an ML-KEM type
+     * @param type must be one of the internal types MLKEM*_INT
+     * @return the key pair, public key in [0] and private key in [1]
+     * @throws GeneralSecurityException if the type is not an ML-KEM type
      */
     public static KeyPair getKeys(EncType type) throws GeneralSecurityException {
         byte[][] keys = generateKeys(type);
@@ -62,12 +62,12 @@ public final class MLKEM {
     }
 
     /**
-     *  Alice side, raw key generation.
+     * Alice side, raw key generation.
      *
-     *  @param type must be one of the internal types MLKEM*_INT
-     *  @return a two element array holding the encoded public key in [0] and
-     *          the encoded private key in [1]
-     *  @throws GeneralSecurityException if the type is not an ML-KEM type
+     * @param type must be one of the internal types MLKEM*_INT
+     * @return a two element array holding the encoded public key in [0] and
+     * the encoded private key in [1]
+     * @throws GeneralSecurityException if the type is not an ML-KEM type
      */
     public static byte[][] generateKeys(EncType type) throws GeneralSecurityException {
         MLKEMParameters param = getParam(type);
@@ -83,15 +83,15 @@ public final class MLKEM {
     }
 
     /**
-     *  Bob side.
+     * Bob side.
      *
-     *  <p>Fails if the public key is not a well formed ML-KEM public key of the
-     *  given parameter set, or if the type is not an ML-KEM type.
+     * <p>Fails if the public key is not a well formed ML-KEM public key of the
+     * given parameter set, or if the type is not an ML-KEM type.
      *
-     *  @param type the encryption type
-     *  @param pub the public key, of exactly the length for this parameter set
-     *  @return ciphertext and shared secret, both non-null
-     *  @throws GeneralSecurityException if the type is unsupported or the key is malformed
+     * @param type the encryption type
+     * @param pub the public key, of exactly the length for this parameter set
+     * @return ciphertext and shared secret, both non-null
+     * @throws GeneralSecurityException if the type is unsupported or the key is malformed
      */
     public static byte[][] encaps(EncType type, byte[] pub)
                         throws GeneralSecurityException {
@@ -111,26 +111,26 @@ public final class MLKEM {
     }
 
     /**
-     *  Alice side.
+     * Alice side.
      *
-     *  <p>Decapsulation implements the implicit rejection required by FIPS 203
-     *  section 7.3: a ciphertext that is malformed, truncated, tampered with, or
-     *  addressed to a different key never raises. Instead the shared secret is
-     *  replaced by a pseudorandom value derived from the decapsulation key and
-     *  the rejected ciphertext, so the result simply does not match the peer's.
-     *  The replacement is deterministic, so retrying learns nothing.
+     * <p>Decapsulation implements the implicit rejection required by FIPS 203
+     * section 7.3: a ciphertext that is malformed, truncated, tampered with, or
+     * addressed to a different key never raises. Instead the shared secret is
+     * replaced by a pseudorandom value derived from the decapsulation key and
+     * the rejected ciphertext, so the result simply does not match the peer's.
+     * The replacement is deterministic, so retrying learns nothing.
      *
-     *  <p>A caller that needs to authenticate the peer must therefore compare
-     *  the returned secret against the expected one, because no exception
-     *  distinguishes a bad ciphertext. A mismatched 32 byte secret is the only
-     *  signal of rejection.
+     * <p>A caller that needs to authenticate the peer must therefore compare
+     * the returned secret against the expected one, because no exception
+     * distinguishes a bad ciphertext. A mismatched 32 byte secret is the only
+     * signal of rejection.
      *
-     *  @param type the encryption type
-     *  @param ciphertext the ciphertext to decrypt
-     *  @param decapkey the decapsulation key
-     *  @return the 32 byte shared secret, never null; a rejected ciphertext
-     *          yields a pseudorandom value rather than an error
-     *  @throws GeneralSecurityException if the type is not an ML-KEM type
+     * @param type the encryption type
+     * @param ciphertext the ciphertext to decrypt
+     * @param decapkey the decapsulation key
+     * @return the 32 byte shared secret, never null; a rejected ciphertext
+     * yields a pseudorandom value rather than an error
+     * @throws GeneralSecurityException if the type is not an ML-KEM type
      */
     public static byte[] decaps(EncType type, byte[] ciphertext, byte[] decapkey)
                         throws GeneralSecurityException {
@@ -141,11 +141,11 @@ public final class MLKEM {
     }
 
     /**
-     *  EncType to ML-KEM parameters.
+     * EncType to ML-KEM parameters.
      *
-     *  @param type the encryption type
-     *  @return the parameters for the parameter set named by the type
-     *  @throws GeneralSecurityException if the type is not an ML-KEM type
+     * @param type the encryption type
+     * @return the parameters for the parameter set named by the type
+     * @throws GeneralSecurityException if the type is not an ML-KEM type
      */
     private static MLKEMParameters getParam(EncType type) throws GeneralSecurityException {
         switch(type) {

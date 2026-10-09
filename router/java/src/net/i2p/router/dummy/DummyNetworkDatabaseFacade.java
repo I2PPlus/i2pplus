@@ -5,7 +5,6 @@ package net.i2p.router.dummy;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Collections;
@@ -35,14 +34,14 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     }
 
     /**
-     *  Restart the network database, retaining the in-memory store.
+     * Restart the network database, retaining the in-memory store.
      */
     @Override
     public void restart() { /* Intentionally empty - dummy implementation */ }
     /** Shut down and release resources */
     public void shutdown() { /* Intentionally empty - dummy implementation */ }
     /**
-     *  Start the network database and register the local router info.
+     * Start the network database and register the local router info.
      */
     @Override
     public void startup() {
@@ -52,7 +51,7 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     public DatabaseEntry lookupLocally(Hash key) { return null; }
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) { return null; }
     /**
-     *  Look up a lease set in the network database.
+     * Look up a lease set in the network database.
      */
     @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) { /* Intentionally empty - dummy implementation */ }
@@ -64,19 +63,19 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
                                        long timeoutMs, Hash fromLocalDest) { /* Intentionally empty - dummy implementation */ }
 
     /**
-     *  Look up a destination using the client's tunnels.
+     * Look up a destination using the client's tunnels.
      */
     @Override
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) { /* Intentionally empty - dummy implementation */ }
 
     /**
-     *  Look up a destination in the in-memory store.
+     * Look up a destination in the in-memory store.
      */
     @Override
     public Destination lookupDestinationLocally(Hash key) { return null; }
 
     /**
-     *  Look up a router info in the network database.
+     * Look up a router info in the network database.
      */
     @Override
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
@@ -87,7 +86,7 @@ public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
             _context.jobQueue().addJob(onFindJob);
     }
     /**
-     *  Look up a router info in the in-memory store.
+     * Look up a router info in the in-memory store.
      */
     @Override
     public RouterInfo lookupRouterInfoLocally(Hash key) { return _routers.get(key); }

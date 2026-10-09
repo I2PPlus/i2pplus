@@ -1,7 +1,8 @@
 package net.i2p.client.streaming;
 
 /**
- *
+ * Manual throughput probe for a streaming sender: accepts one connection,
+ * streams fixed-size chunks and reports bytes per second to the peer.
  */
 public class StreamSinkTestServer {
     public static void main(String[] args) {

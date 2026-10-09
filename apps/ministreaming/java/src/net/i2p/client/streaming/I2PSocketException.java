@@ -7,10 +7,10 @@ import net.i2p.data.i2cp.MessageStatusMessage;
 import net.i2p.util.Translate;
 
 /**
- *  An I2P-specific IOException thrown from input and output streams,
- *  with a stored status code to be used for programmatic responses.
+ * An I2P-specific IOException thrown from input and output streams,
+ * with a stored status code to be used for programmatic responses.
  *
- *  @since 0.9.14
+ * @since 0.9.14
  */
 public class I2PSocketException extends SocketException {
 
@@ -22,19 +22,19 @@ public class I2PSocketException extends SocketException {
     private static final String BUNDLE_NAME = "net.i2p.client.streaming.messages";
 
     /**
-     *  Router and I2CP status codes are 0 - 511. Start ours at 512.
-     *  @since 0.9.19
+     * Router and I2CP status codes are 0 - 511. Start ours at 512.
+     * @since 0.9.19
      */
     public static final int STATUS_CONNECTION_RESET = 512;
 
     /**
-     *  Use canned message for this status code.
+     * Use canned message for this status code.
      *
-     *  Standard codes from the router are 0-255, defined in MessageStatusMessage.
-     *  Standard codes from client-side I2CP are 256-511, defined in SendMessageStatusListener.
-     *  Standard codes from streaming are 512-767, defined here.
+     * Standard codes from the router are 0-255, defined in MessageStatusMessage.
+     * Standard codes from client-side I2CP are 256-511, defined in SendMessageStatusListener.
+     * Standard codes from streaming are 512-767, defined here.
      *
-     *  @param status &gt;= 0 from MessageStatusMessage or SendMessageStatusListener
+     * @param status &gt;= 0 from MessageStatusMessage or SendMessageStatusListener
      */
     public I2PSocketException(int status) {
         super();
@@ -42,9 +42,9 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     *  Use message provided
+     * Use message provided
      *
-     *  @param message the detail message
+     * @param message the detail message
      */
     public I2PSocketException(String message) {
         super(message);
@@ -52,7 +52,7 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     *  For programmatic action based on specific failure code
+     * For programmatic action based on specific failure code
      *
      * @return the status
      */
@@ -61,9 +61,9 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     *  For programmatic action based on specific failure code
+     * For programmatic action based on specific failure code
      *
-     *  @return canned message based on status in int constructor or message from String constructor
+     * @return canned message based on status in int constructor or message from String constructor
      */
     @Override
     public String getMessage() {
@@ -140,7 +140,7 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     *  Translated
+     * Translated
      * @return the localized message
      */
     @Override
@@ -152,14 +152,14 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     *  Translate
+     * Translate
      */
     private static String _t(String s) {
         return Translate.getString(s, I2PAppContext.getGlobalContext(), BUNDLE_NAME);
     }
 
     /**
-     *  Tag for translation
+     * Tag for translation
      */
     private static String _x(String s) {
         return s;

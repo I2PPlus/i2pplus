@@ -40,7 +40,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * |    64K    |    64   |     4M   | UDP MessageReceiver                |
  * +---------------------------------------------------------------------+
  * </pre>
- *
  */
 public final class ByteCache extends TryCache<ByteArray> {
 
@@ -48,10 +47,10 @@ public final class ByteCache extends TryCache<ByteArray> {
     private static final Map<Integer, ByteCache> _caches = new ConcurrentHashMap<>(16);
 
     /**
-     *  max size in bytes of each cache
-     *  Set to max memory / 128, with a min of 256KB and a max of 8MB
+     * max size in bytes of each cache
+     * Set to max memory / 128, with a min of 256KB and a max of 8MB
      *
-     *  @since 0.7.14
+     * @since 0.7.14
      */
     private static final int MIN_CACHE = 256 * 1024; // 256KB
 
@@ -146,9 +145,9 @@ public final class ByteCache extends TryCache<ByteArray> {
     }
 
     /**
-     *  Clear everything (memory pressure)
+     * Clear everything (memory pressure)
      *
-     *  @since 0.7.14
+     * @since 0.7.14
      */
     public static void clearAll() {
         for (ByteCache bc : _caches.values()) {
@@ -201,7 +200,6 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     /**
      * Put this structure back onto the available cache for reuse
-     *
      */
     @Override
     public final void release(ByteArray entry) {

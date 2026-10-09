@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Collections;
@@ -35,66 +34,48 @@ public class LeaseSetKeys {
     public static final Set<EncType> SET_ELG = Collections.unmodifiableSet(EnumSet.of(EncType.ELGAMAL_2048));
     /**
      * Unmodifiable, ECIES-X25519 only
-     *
-     * @since public since 0.9.46
      */
     public static final Set<EncType> SET_EC = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519));
     /**
      * Unmodifiable, ElGamal and ECIES-X25519.
-     *
-     * @since public since 0.9.48
      */
     public static final Set<EncType> SET_BOTH = Collections.unmodifiableSet(EnumSet.of(EncType.ELGAMAL_2048, EncType.ECIES_X25519));
     private static final Set<EncType> SET_NONE = Collections.emptySet();
     /**
      * Unmodifiable, PQ only
-     *
-     * @since public since 0.9.67
      */
     public static final Set<EncType> SET_PQ1 = Collections.unmodifiableSet(EnumSet.of(EncType.MLKEM512_X25519));
     /**
      * Unmodifiable, PQ only
-     *
-     * @since public since 0.9.67
      */
     public static final Set<EncType> SET_PQ2 = Collections.unmodifiableSet(EnumSet.of(EncType.MLKEM768_X25519));
     /**
      * Unmodifiable, PQ only
-     *
-     * @since public since 0.9.67
      */
     public static final Set<EncType> SET_PQ3 = Collections.unmodifiableSet(EnumSet.of(EncType.MLKEM1024_X25519));
     /**
      * Unmodifiable, ECIES-X25519 and PQ only
-     *
-     * @since public since 0.9.67
      */
     public static final Set<EncType> SET_EC_PQ1 = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519, EncType.MLKEM512_X25519));
     /**
      * Unmodifiable, ECIES-X25519 and PQ only
-     *
-     * @since public since 0.9.67
      */
     public static final Set<EncType> SET_EC_PQ2 = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519, EncType.MLKEM768_X25519));
     /**
      * Unmodifiable, ECIES-X25519 and PQ only
-     *
-     * @since public since 0.9.67
      */
     public static final Set<EncType> SET_EC_PQ3 = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519, EncType.MLKEM1024_X25519));
     /**
      * Unmodifiable, ECIES-X25519 and PQ only
-     *
-     * @since public since 0.9.67
      */
     public static final Set<EncType> SET_EC_PQ_ALL = Collections.unmodifiableSet(EnumSet.of(EncType.ECIES_X25519, EncType.MLKEM512_X25519, EncType.MLKEM768_X25519, EncType.MLKEM1024_X25519));
 
     /**
-     *  Client with a single key
+     * Client with a single key
      *
-     *  @param dest unused
-     *  @param revocationKey unused, may be null
-     *  @param decryptionKey non-null
+     * @param dest unused
+     * @param revocationKey unused, may be null
+     * @param decryptionKey non-null
      */
     public LeaseSetKeys(Destination dest, SigningPrivateKey revocationKey, PrivateKey decryptionKey) {
         _revocationKey = revocationKey;
@@ -117,16 +98,16 @@ public class LeaseSetKeys {
     }
 
     /**
-     *  Client with multiple keys
+     * Client with multiple keys
      *
-     *  The ONLY valid combinations are X25519 + ElG or X25519 + (MLKEM512 OR MLKEM768 OR MLKEM1024).
-     *  Other combinations will throw IllegalArgumentException.
+     * The ONLY valid combinations are X25519 + ElG or X25519 + (MLKEM512 OR MLKEM768 OR MLKEM1024).
+     * Other combinations will throw IllegalArgumentException.
      *
-     *  @param dest unused
-     *  @param revocationKey unused, may be null
-     *  @param decryptionKeys non-null, non-empty
-     *  @throws IllegalArgumentException
-     *  @since 0.9.44
+     * @param dest unused
+     * @param revocationKey unused, may be null
+     * @param decryptionKeys non-null, non-empty
+     * @throws IllegalArgumentException
+     * @since 0.9.44
      */
     public LeaseSetKeys(Destination dest, SigningPrivateKey revocationKey, List<PrivateKey> decryptionKeys) {
         if (decryptionKeys.isEmpty())

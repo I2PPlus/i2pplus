@@ -8,15 +8,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  Tests that in-flight permits cannot be orphaned by arming a new round.
+ * Tests that in-flight permits cannot be orphaned by arming a new round.
  *
- *  Every release path (reply, timeout, abandon, cancel) reaches the permits
- *  only after {@link TestJob#claimRound}, which requires the token to still be
- *  the active round. A round that is still holding permits when the next round
- *  arms therefore becomes unreachable and its permits are never returned. The
- *  gauge drifted upward by one per occurrence until it reached the global cap,
- *  at which point every test was refused and none dispatched while builds
- *  continued — the symptom seen in production on 2026-09-30.
+ * Every release path (reply, timeout, abandon, cancel) reaches the permits
+ * only after {@link TestJob#claimRound}, which requires the token to still be
+ * the active round. A round that is still holding permits when the next round
+ * arms therefore becomes unreachable and its permits are never returned. The
+ * gauge drifted upward by one per occurrence until it reached the global cap,
+ * at which point every test was refused and none dispatched while builds
+ * continued — the symptom seen in production on 2026-09-30.
  */
 public class TestJobSupersedeLeakTest {
 
@@ -30,9 +30,9 @@ public class TestJobSupersedeLeakTest {
     }
 
     /**
-     *  The regression itself: arm a second round while the first still holds
-     *  permits, exactly as {@code reserveInFlightForToken} does. Without the
-     *  release the gauge climbs to 1 and stays there forever.
+     * The regression itself: arm a second round while the first still holds
+     * permits, exactly as {@code reserveInFlightForToken} does. Without the
+     * release the gauge climbs to 1 and stays there forever.
      */
     @Test
     public void armingOverALiveRoundReturnsItsPermits() {
@@ -55,9 +55,9 @@ public class TestJobSupersedeLeakTest {
     }
 
     /**
-     *  The leak is cumulative. Repeating the arm-over-live-round pattern must
-     *  not walk the gauge up; this is the property whose failure wedged the
-     *  router at a 100% refusal rate.
+     * The leak is cumulative. Repeating the arm-over-live-round pattern must
+     * not walk the gauge up; this is the property whose failure wedged the
+     * router at a 100% refusal rate.
      */
     @Test
     public void repeatedSupersedeDoesNotDriftTheGauge() {
@@ -73,9 +73,9 @@ public class TestJobSupersedeLeakTest {
     }
 
     /**
-     *  A superseded round can never be claimed again, so nothing else will ever
-     *  return its permit. This pins the unreachability that made the leak
-     *  permanent rather than merely slow to recover.
+     * A superseded round can never be claimed again, so nothing else will ever
+     * return its permit. This pins the unreachability that made the leak
+     * permanent rather than merely slow to recover.
      */
     @Test
     public void supersededRoundCannotBeClaimed() {
@@ -93,9 +93,9 @@ public class TestJobSupersedeLeakTest {
     }
 
     /**
-     *  Releasing the prior round is idempotent: if it already completed and
-     *  returned its own permit, the supersede call must not decrement again and
-     *  drive the gauge negative.
+     * Releasing the prior round is idempotent: if it already completed and
+     * returned its own permit, the supersede call must not decrement again and
+     * drive the gauge negative.
      */
     @Test
     public void releasingAnAlreadyReleasedRoundIsSafe() {
@@ -121,8 +121,8 @@ public class TestJobSupersedeLeakTest {
     }
 
     /**
-     *  End-to-end invariant: after a round completes and the next is armed, the
-     *  per-pool counter must be unlinked at zero, not left dangling.
+     * End-to-end invariant: after a round completes and the next is armed, the
+     * per-pool counter must be unlinked at zero, not left dangling.
      */
     @Test
     public void poolCounterUnlinksAtZeroAfterSupersede() {

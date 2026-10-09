@@ -24,12 +24,12 @@ import java.io.IOException;
 public class PTR extends RRWithTarget {
 
     /**
-     *  Parse a PTR record from a data stream.
+     * Parse a PTR record from a data stream.
      *
-     *  @param dis the data input stream
-     *  @param data the raw DNS message data
-     *  @return the parsed PTR record
-     *  @throws IOException if parsing fails
+     * @param dis the data input stream
+     * @param data the raw DNS message data
+     * @return the parsed PTR record
+     * @throws IOException if parsing fails
      */
     public static PTR parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName target = DnsName.parse(dis, data);
@@ -37,14 +37,14 @@ public class PTR extends RRWithTarget {
     }
 
     /**
-     *  @param name the domain name
+     * @param name the domain name
      */
     PTR(String name) {
         this(DnsName.from(name));
     }
 
     /**
-     *  @param name the domain name
+     * @param name the domain name
      */
     PTR(DnsName name) {
         super(name);

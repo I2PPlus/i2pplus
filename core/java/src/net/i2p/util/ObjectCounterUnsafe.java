@@ -33,9 +33,9 @@ public class ObjectCounterUnsafe<K> {
     private final HashMap<K, Int> map = new HashMap<>();
 
     /**
-     *  Add one.
+     * Add one.
      *
-     *  @return count after increment
+     * @return count after increment
      */
     public int increment(K h) {
         Int i = map.get(h);
@@ -47,9 +47,9 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     *  Add a value
+     * Add a value
      *
-     *  @return count after adding
+     * @return count after adding
      */
     public int add(K h, int val) {
         Int i = map.get(h);
@@ -62,7 +62,7 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     *  @return current count
+     * @return current count
      */
     public int count(K h) {
         Int i = map.get(h);
@@ -71,14 +71,14 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     *  @return set of objects with counts &gt; 0
+     * @return set of objects with counts &gt; 0
      */
     public Set<K> objects() {
         return map.keySet();
     }
 
     /**
-     *  @return list of objects reverse sorted by count, highest to lowest
+     * @return list of objects reverse sorted by count, highest to lowest
      */
     public List<K> sortedObjects() {
         List<K> rv = new ArrayList<>(map.keySet());
@@ -87,21 +87,21 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     *  Start over. Reset the count for all keys to zero.
+     * Start over. Reset the count for all keys to zero.
      */
     public void clear() {
         map.clear();
     }
 
     /**
-     *  Reset the count for this key to zero
+     * Reset the count for this key to zero
      */
     public void clear(K h) {
         map.remove(h);
     }
 
     /**
-     *  Modifiable integer
+     * Modifiable integer
      */
     private static class Int {
         int c;
@@ -112,7 +112,7 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
-     *  reverse sort
+     * reverse sort
      */
     private class ObjComparator implements Comparator<K> {
         @Override

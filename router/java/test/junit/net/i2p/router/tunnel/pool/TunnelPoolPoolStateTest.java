@@ -88,9 +88,9 @@ public class TunnelPoolPoolStateTest {
     // ---- the case the old warning could not express ----
 
     /**
-     *  A full pool with nothing selectable in it. This is the diagnostic that
-     *  matters: it is distinguishable from empty only because the counts are
-     *  reported.
+     * A full pool with nothing selectable in it. This is the diagnostic that
+     * matters: it is distinguishable from empty only because the counts are
+     * reported.
      */
     @Test
     public void fullPoolWithNothingUsableIsDistinguishableFromEmpty() {
@@ -105,10 +105,10 @@ public class TunnelPoolPoolStateTest {
     }
 
     /**
-     *  "Usable" here means selectable for a send, NOT lease-worthy: the gates use
-     *  plain expiry, so a tunnel with seconds left still counts. Anyone reading
-     *  these counts must not mistake them for lease adequacy, which is
-     *  {@code countLeaseViableTunnels} and the lease admission floor.
+     * "Usable" here means selectable for a send, NOT lease-worthy: the gates use
+     * plain expiry, so a tunnel with seconds left still counts. Anyone reading
+     * these counts must not mistake them for lease adequacy, which is
+     * {@code countLeaseViableTunnels} and the lease admission floor.
      */
     @Test
     public void nearExpiryTunnelStillCountsAsSelectable() {
@@ -194,9 +194,9 @@ public class TunnelPoolPoolStateTest {
     }
 
     /**
-     *  Last-resort tunnels are reported in their own bucket, not as usable. They
-     *  clear every gate, so without the isLastResort() branch they would be
-     *  counted as usable and this case would be invisible.
+     * Last-resort tunnels are reported in their own bucket, not as usable. They
+     * clear every gate, so without the isLastResort() branch they would be
+     * counted as usable and this case would be invisible.
      */
     @Test
     public void lastResortTunnelsGetTheirOwnBucket() {

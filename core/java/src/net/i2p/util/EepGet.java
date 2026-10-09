@@ -37,10 +37,10 @@ import net.i2p.data.DataHelper;
 
 /**
  * EepGet [-p 127.0.0.1:4444]
- *        [-n #retries]
- *        [-o outputFile]
- *        [-m markSize lineLen]
- *        url
+ * [-n #retries]
+ * [-o outputFile]
+ * [-m markSize lineLen]
+ * url
  */
 @SuppressWarnings("PMD.CloseResource")
 public class EepGet {
@@ -445,8 +445,8 @@ public class EepGet {
      * Command-line entry point for EepGet.
      *
      * Usage: eepget [-p 127.0.0.1:4444 | -c] [-n #retries] [-e etag] [-o outputFile]
-     *              [-t inactivityTimeout] [-u username] [-x password]
-     *              [-h name=value] [-m markSize] [-l lineLen] url
+     * [-t inactivityTimeout] [-u username] [-x password]
+     * [-h name=value] [-m markSize] [-l lineLen] url
      *
      * All timeouts are in seconds. The header timeout is not settable from the
      * command line; it comes from the eepget.connectTimeout property, and the
@@ -692,12 +692,12 @@ public class EepGet {
     }
 
     /**
-     *  The command-line help text, listing every option accepted by main().
-     *  The defaults shown must match the constants and properties read in
-     *  main().
+     * The command-line help text, listing every option accepted by main().
+     * The defaults shown must match the constants and properties read in
+     * main().
      *
-     *  @return the usage help text
-     *  @since 0.9.71+
+     * @return the usage help text
+     * @since 0.9.71+
      */
     static String usageText() {
         return
@@ -719,88 +719,87 @@ public class EepGet {
     }
 
     /**
-     *  Print the command-line help to stdout.
+     * Print the command-line help to stdout.
      *
-     *  @see #usageText()
+     * @see #usageText()
      */
     private static void usage() { System.out.println(usageText()); }
 
     /**
-     *  Callback interface for monitoring EepGet transfer progress.
+     * Callback interface for monitoring EepGet transfer progress.
      */
     public static interface StatusListener {
         /**
-         *  Total length should be == alreadyTransferred + currentWrite + bytesRemaining for all calls.
+         * Total length should be == alreadyTransferred + currentWrite + bytesRemaining for all calls.
          *
-         *  @param alreadyTransferred total of all attempts, not including currentWrite
-         *                       If nonzero on the first call, a partial file of that length was found,
-         *                       _and_ the server supports resume.
-         *                       If zero on a subsequent call after some bytes are transferred
-         *                       (and presumably after an attemptFailed), the server does _not_
-         *                       support resume and we had to start over.
-         *                       To track _actual_ transfer if the output file could already exist,
-         *                       the listener should keep its own counter,
-         *                       or subtract the initial alreadyTransferred value.
-         *                       And watch out for alreadyTransferred resetting if a resume failed...
+         * @param alreadyTransferred total of all attempts, not including currentWrite
+         * If nonzero on the first call, a partial file of that length was found,
+         * _and_ the server supports resume.
+         * If zero on a subsequent call after some bytes are transferred
+         * (and presumably after an attemptFailed), the server does _not_
+         * support resume and we had to start over.
+         * To track _actual_ transfer if the output file could already exist,
+         * the listener should keep its own counter,
+         * or subtract the initial alreadyTransferred value.
+         * And watch out for alreadyTransferred resetting if a resume failed...
          *
-         *  @param currentWrite since last call to the listener
-         *  @param bytesTransferred includes headers, retries, redirects, discarded partial downloads, ...
-         *  @param bytesRemaining on this attempt only, currentWrite already subtracted -
-         *                   or -1 if chunked encoding or server does not return a length
-         *  @param url the URL being fetched
-         *
+         * @param currentWrite since last call to the listener
+         * @param bytesTransferred includes headers, retries, redirects, discarded partial downloads, ...
+         * @param bytesRemaining on this attempt only, currentWrite already subtracted -
+         * or -1 if chunked encoding or server does not return a length
+         * @param url the URL being fetched
          */
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url);
         /**
-         *  Transfer complete notification.
+         * Transfer complete notification.
          *
-         *  @see #bytesTransferred
-         *  @param alreadyTransferred total bytes transferred
-         *  @param bytesTransferred total incl headers
-         *  @param bytesRemaining remaining bytes
-         *  @param url the URL
-         *  @param outputFile null if unknown (output stream constructor)
-         *  @param notModified whether 304
+         * @see #bytesTransferred
+         * @param alreadyTransferred total bytes transferred
+         * @param bytesTransferred total incl headers
+         * @param bytesRemaining remaining bytes
+         * @param url the URL
+         * @param outputFile null if unknown (output stream constructor)
+         * @param notModified whether 304
          */
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified);
         /**
-         *  Attempt failed notification.
+         * Attempt failed notification.
          *
-         *  @see #bytesTransferred
-         *  @param url the URL
-         *  @param bytesTransferred total transferred
-         *  @param bytesRemaining remaining
-         *  @param currentAttempt attempt index
-         *  @param numRetries retry limit
-         *  @param cause failure cause
+         * @see #bytesTransferred
+         * @param url the URL
+         * @param bytesTransferred total transferred
+         * @param bytesRemaining remaining
+         * @param currentAttempt attempt index
+         * @param numRetries retry limit
+         * @param cause failure cause
          */
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause);
         /**
-         *  Transfer failed notification.
+         * Transfer failed notification.
          *
-         *  @see #bytesTransferred
-         *  @param url the URL
-         *  @param bytesTransferred total transferred
-         *  @param bytesRemaining remaining
-         *  @param currentAttempt attempt index
+         * @see #bytesTransferred
+         * @param url the URL
+         * @param bytesTransferred total transferred
+         * @param bytesRemaining remaining
+         * @param currentAttempt attempt index
          */
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt);
 
         /**
-         *  Note: Headers are not processed, and this is not called, for most error response codes,
-         *  unless setWriteErrorToOutput() is called before fetch().
-         *  To be changed?
+         * Note: Headers are not processed, and this is not called, for most error response codes,
+         * unless setWriteErrorToOutput() is called before fetch().
+         * To be changed?
          *
-         *  @param url the URL
-         *  @param currentAttempt attempt index
-         *  @param key header key
-         *  @param val header value
+         * @param url the URL
+         * @param currentAttempt attempt index
+         * @param key header key
+         * @param val header value
          */
         public void headerReceived(String url, int currentAttempt, String key, String val);
 
         /**
-         *  Called when a new attempt to fetch the URL is starting.
-         *  @param url the URL being attempted
+         * Called when a new attempt to fetch the URL is starting.
+         * @param url the URL being attempted
          */
         public void attempting(String url);
     }
@@ -1091,9 +1090,9 @@ public class EepGet {
      * inactivity timeout covers the wait between bytes once the body has started.
      *
      * @param fetchHeaderTimeout &lt;= 0 for none (proxy will timeout if none, none isn't recommended if no proxy)
-     *                      forced to totalTimeout if totalTimeout is set and this is &lt;= 0
+     * forced to totalTimeout if totalTimeout is set and this is &lt;= 0
      * @param totalTimeout operation-wide deadline for the whole fetch, including retries and
-     *                      backoff between attempts; &lt;= 0 for default none
+     * backoff between attempts; &lt;= 0 for default none
      * @param inactivityTimeout &lt;= 0 for default {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes)
      * @return success
      */
@@ -1269,24 +1268,24 @@ public class EepGet {
     }
 
     /**
-     *  Whether a failed attempt was a data-phase stall on an otherwise working
-     *  path: the read timed out or our SocketTimeout watchdog aborted the
-     *  transfer (which closes the socket first, surfacing as a raw
-     *  SocketException, so the explicit {@code aborted} signal — flag set or
-     *  socket closed by the watchdog — not exception shape, identifies that
-     *  path) but the attempt still appended bytes.  Wrapped timeout causes
-     *  are walked so a single hop of context cannot hide a socket timeout.
-     *  Header-phase timeouts make no progress within the attempt and
-     *  non-timeout failures return false, so callers only skip the default
-     *  backoff for one immediate Range-resume retry.
+     * Whether a failed attempt was a data-phase stall on an otherwise working
+     * path: the read timed out or our SocketTimeout watchdog aborted the
+     * transfer (which closes the socket first, surfacing as a raw
+     * SocketException, so the explicit {@code aborted} signal — flag set or
+     * socket closed by the watchdog — not exception shape, identifies that
+     * path) but the attempt still appended bytes.  Wrapped timeout causes
+     * are walked so a single hop of context cannot hide a socket timeout.
+     * Header-phase timeouts make no progress within the attempt and
+     * non-timeout failures return false, so callers only skip the default
+     * backoff for one immediate Range-resume retry.
      *
-     *  @param ioe failure raised by the attempt
-     *  @param aborted whether our SocketTimeout watchdog aborted this attempt
-     *  @param attemptStartBytes body bytes transferred when the attempt started;
-     *                           header and connect phases advance no body bytes
-     *  @param bytesTransferred body bytes transferred now, after the failure
-     *  @return true when the attempt timed out after making progress
-     *  @since 0.9.71+
+     * @param ioe failure raised by the attempt
+     * @param aborted whether our SocketTimeout watchdog aborted this attempt
+     * @param attemptStartBytes body bytes transferred when the attempt started;
+     * header and connect phases advance no body bytes
+     * @param bytesTransferred body bytes transferred now, after the failure
+     * @return true when the attempt timed out after making progress
+     * @since 0.9.71+
      */
     static boolean isStalledButProgressing(IOException ioe, boolean aborted,
                                            long attemptStartBytes, long bytesTransferred) {
@@ -1298,33 +1297,33 @@ public class EepGet {
     }
 
     /**
-     *  Whether an attempt has already consumed its total-timeout budget.
-     *  The budget is operation-wide: SocketTimeout's total period and
-     *  fetch()'s deadline both start at fetch() entry, so a failure at or
-     *  past that deadline is the caller's overall timeout, not a transient
-     *  stall; it must take the default retry backoff instead of an immediate
-     *  Range-resume retry.
+     * Whether an attempt has already consumed its total-timeout budget.
+     * The budget is operation-wide: SocketTimeout's total period and
+     * fetch()'s deadline both start at fetch() entry, so a failure at or
+     * past that deadline is the caller's overall timeout, not a transient
+     * stall; it must take the default retry backoff instead of an immediate
+     * Range-resume retry.
      *
-     *  @param totalTimeoutMs total timeout for the fetch, &lt;= 0 for none
-     *  @param attemptStartMs when fetch() started the operation
-     *  @param nowMs when the failure was classified
-     *  @return true if the total budget is exhausted
-     *  @since 0.9.71+
+     * @param totalTimeoutMs total timeout for the fetch, &lt;= 0 for none
+     * @param attemptStartMs when fetch() started the operation
+     * @param nowMs when the failure was classified
+     * @return true if the total budget is exhausted
+     * @since 0.9.71+
      */
     static boolean isTotalBudgetExhausted(long totalTimeoutMs, long attemptStartMs, long nowMs) {
         return totalTimeoutMs > 0 && nowMs - attemptStartMs >= totalTimeoutMs;
     }
 
     /**
-     *  Whether the exception (or any cause within a bounded depth) is a read
-     *  timeout: SocketTimeoutException, or the canonical watchdog abort
-     *  message.  A bare InterruptedIOException is not classified; modern
-     *  socket reads do not throw it on interrupt, so it cannot be attributed
-     *  to our watchdog without the explicit abort signal.
+     * Whether the exception (or any cause within a bounded depth) is a read
+     * timeout: SocketTimeoutException, or the canonical watchdog abort
+     * message.  A bare InterruptedIOException is not classified; modern
+     * socket reads do not throw it on interrupt, so it cannot be attributed
+     * to our watchdog without the explicit abort signal.
      *
-     *  @param t exception or cause chain head, may be null
-     *  @return true when a timeout cause is found
-     *  @since 0.9.71+
+     * @param t exception or cause chain head, may be null
+     * @return true when a timeout cause is found
+     * @since 0.9.71+
      */
     private static boolean hasTimeoutCause(Throwable t) {
         for (int depth = 0; t != null && depth < 8; depth++, t = t.getCause()) {
@@ -1337,10 +1336,10 @@ public class EepGet {
     }
 
     /**
-     *  Read response body for a single fetch. Call after sendRequest().
+     * Read response body for a single fetch. Call after sendRequest().
      *
-     *  @param timeout may be null
-     *  @throws IOException on IO error
+     * @param timeout may be null
+     * @throws IOException on IO error
      */
     protected void doFetch(SocketTimeout timeout) throws IOException {
         readHeaders();
@@ -1798,22 +1797,22 @@ public class EepGet {
     }
 
     /**
-     *  Whether to read the response body.
+     * Whether to read the response body.
      *
-     *  @return true always, overridden in EepHead
-     *  @since 0.9.50
+     * @return true always, overridden in EepHead
+     * @since 0.9.50
      */
     protected boolean shouldReadBody() { return true; }
 
     /**
-     *  Parse a chunk length from the HTTP response stream.
-     *  The chunk-size line is read whole, so any chunk extensions
-     *  (RFC 9112 sec. 7.1.1, "chunk-ext") come along with it and are
-     *  discarded rather than rejected. A trailer section after the
-     *  terminating zero-length chunk is not consumed.
+     * Parse a chunk length from the HTTP response stream.
+     * The chunk-size line is read whole, so any chunk extensions
+     * (RFC 9112 sec. 7.1.1, "chunk-ext") come along with it and are
+     * discarded rather than rejected. A trailer section after the
+     * terminating zero-length chunk is not consumed.
      *
-     *  @return the chunk length
-     *  @throws IOException on IO error, or if the chunk-size line is not hex
+     * @return the chunk length
+     * @throws IOException on IO error, or if the chunk-size line is not hex
      */
     protected long readChunkLength() throws IOException {
         StringBuilder buf = new StringBuilder(8);
@@ -1840,16 +1839,16 @@ public class EepGet {
     }
 
     /**
-     *  Extract the chunk size from a chunk-size line, dropping any
-     *  chunk extensions. Only the hex digits before the first ';' are
-     *  significant, per RFC 9112 sec. 7.1, so a negative size, which is
-     *  outside that grammar, is rejected rather than silently ending the
-     *  transfer early.
+     * Extract the chunk size from a chunk-size line, dropping any
+     * chunk extensions. Only the hex digits before the first ';' are
+     * significant, per RFC 9112 sec. 7.1, so a negative size, which is
+     * outside that grammar, is rejected rather than silently ending the
+     * transfer early.
      *
-     *  @param line the raw chunk-size line, without the trailing CRLF
-     *  @return the chunk length, never negative
-     *  @throws IOException if the chunk size is not a hex number
-     *  @since 0.9.71+
+     * @param line the raw chunk-size line, without the trailing CRLF
+     * @return the chunk length, never negative
+     * @throws IOException if the chunk size is not a hex number
+     * @since 0.9.71+
      */
     static long parseChunkLength(String line) throws IOException {
         String len = line.trim();
@@ -1867,19 +1866,19 @@ public class EepGet {
     }
 
     /**
-     *  Decide whether a watchdog abort observed after the body loop must
-     *  fail the attempt.  A transfer whose declared body completed — fixed
-     *  length reached, chunked terminator read, or EOF on an
-     *  unknown-length body — carries all its bytes, so an abort landing
-     *  between the last read and finalization must not report failure;
-     *  anything less is a genuine abort.
+     * Decide whether a watchdog abort observed after the body loop must
+     * fail the attempt.  A transfer whose declared body completed — fixed
+     * length reached, chunked terminator read, or EOF on an
+     * unknown-length body — carries all its bytes, so an abort landing
+     * between the last read and finalization must not report failure;
+     * anything less is a genuine abort.
      *
-     *  @param aborted the watchdog aborted this attempt
-     *  @param strictSize whether Content-Length framed the body
-     *  @param remaining declared bytes still unread after the loop
-     *  @param sawEof the body stream reached end of stream
-     *  @return true when the abort must fail the attempt
-     *  @since 0.9.71+
+     * @param aborted the watchdog aborted this attempt
+     * @param strictSize whether Content-Length framed the body
+     * @param remaining declared bytes still unread after the loop
+     * @param sawEof the body stream reached end of stream
+     * @return true when the abort must fail the attempt
+     * @since 0.9.71+
      */
     static boolean fatalAbort(boolean aborted, boolean strictSize, long remaining, boolean sawEof) {
         if (!aborted)
@@ -1888,18 +1887,18 @@ public class EepGet {
     }
 
     /**
-     *  Validate a resume-sensitive response once all headers are parsed.
-     *  A 206 must carry a Content-Range whose start matches the start we
-     *  requested — our resume offset or a caller-supplied Range — and
-     *  whose span matches the declared Content-Length, or appending its
-     *  body would corrupt the output.  A 416 to a partial fetch is only a
-     *  success when the server proves our offset equals the complete
-     *  length; anything else fails without a retry, since the same Range
-     *  would produce the same answer.  Other responses are untouched here.
+     * Validate a resume-sensitive response once all headers are parsed.
+     * A 206 must carry a Content-Range whose start matches the start we
+     * requested — our resume offset or a caller-supplied Range — and
+     * whose span matches the declared Content-Length, or appending its
+     * body would corrupt the output.  A 416 to a partial fetch is only a
+     * success when the server proves our offset equals the complete
+     * length; anything else fails without a retry, since the same Range
+     * would produce the same answer.  Other responses are untouched here.
      *
-     *  @return true when the response body must be skipped
-     *  @throws IOException when the response cannot safely be applied
-     *  @since 0.9.71+
+     * @return true when the response body must be skipped
+     * @throws IOException when the response cannot safely be applied
+     * @since 0.9.71+
      */
     boolean validateResumeResponse() throws IOException {
         if (_responseCode == 206) {
@@ -1935,20 +1934,20 @@ public class EepGet {
     }
 
     /**
-     *  Determine the start offset this fetch requested, so a 206's
-     *  Content-Range can be validated against what was actually asked for.
-     *  A resume Range generated by this class (alreadyTransferred &gt; 0) is
-     *  written before any caller-supplied headers and wins; otherwise a
-     *  caller-supplied "Range: bytes=N-..." header (webseed piece fetches)
-     *  provides the offset; with no Range at all a 206 must start at zero.
-     *  A present but unparseable Range yields -1, leaving the start check to
-     *  the caller's own contract.
+     * Determine the start offset this fetch requested, so a 206's
+     * Content-Range can be validated against what was actually asked for.
+     * A resume Range generated by this class (alreadyTransferred &gt; 0) is
+     * written before any caller-supplied headers and wins; otherwise a
+     * caller-supplied "Range: bytes=N-..." header (webseed piece fetches)
+     * provides the offset; with no Range at all a 206 must start at zero.
+     * A present but unparseable Range yields -1, leaving the start check to
+     * the caller's own contract.
      *
-     *  @param alreadyTransferred resume offset; greater than zero when this
-     *                            class generated the Range header
-     *  @param extraHeaders caller headers as "Name: value", may be null
-     *  @return the expected Content-Range start, or -1 when unknown
-     *  @since 0.9.71+
+     * @param alreadyTransferred resume offset; greater than zero when this
+     * class generated the Range header
+     * @param extraHeaders caller headers as "Name: value", may be null
+     * @return the expected Content-Range start, or -1 when unknown
+     * @since 0.9.71+
      */
     static long requestedRangeStart(long alreadyTransferred, List<String> extraHeaders) {
         if (alreadyTransferred > 0)
@@ -1963,13 +1962,13 @@ public class EepGet {
     }
 
     /**
-     *  Parse the start of a Range header value.  Only a simple single range
-     *  ("bytes=start-end" or "bytes=start-") is usable here; multi-ranges
-     *  and suffix ranges yield -1.
+     * Parse the start of a Range header value.  Only a simple single range
+     * ("bytes=start-end" or "bytes=start-") is usable here; multi-ranges
+     * and suffix ranges yield -1.
      *
-     *  @param val Range header value without the field name, may be null
-     *  @return the requested start, or -1 if not a simple single range
-     *  @since 0.9.71+
+     * @param val Range header value without the field name, may be null
+     * @return the requested start, or -1 if not a simple single range
+     * @since 0.9.71+
      */
     private static long parseRangeHeaderStart(String val) {
         if (val == null || val.length() < 8 || !val.regionMatches(true, 0, "bytes=", 0, 6))
@@ -1984,9 +1983,9 @@ public class EepGet {
     }
 
     /**
-     *  Parsed Content-Range header value.
+     * Parsed Content-Range header value.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final class ContentRange {
         /** First byte of the range, or -1 for the unsatisfied form sent with 416 */
@@ -2009,13 +2008,13 @@ public class EepGet {
     }
 
     /**
-     *  Parse a Content-Range header value.  Accepts the satisfiable form
-     *  ("bytes start-end/total") and the unsatisfied form sent with 416
-     *  ("bytes star&#47;total"), with the total optionally a star.
+     * Parse a Content-Range header value.  Accepts the satisfiable form
+     * ("bytes start-end/total") and the unsatisfied form sent with 416
+     * ("bytes star&#47;total"), with the total optionally a star.
      *
-     *  @param val header value, may be null
-     *  @return the parsed range, or null if missing or invalid
-     *  @since 0.9.71+
+     * @param val header value, may be null
+     * @return the parsed range, or null if missing or invalid
+     * @since 0.9.71+
      */
     static ContentRange parseContentRange(String val) {
         if (val == null)
@@ -2052,11 +2051,11 @@ public class EepGet {
     }
 
     /**
-     *  Parse an unsigned decimal byte count.
+     * Parse an unsigned decimal byte count.
      *
-     *  @param s digits, non-null
-     *  @return the value, or -1 if empty, non-digit, or too large
-     *  @since 0.9.71+
+     * @param s digits, non-null
+     * @return the value, or -1 if empty, non-digit, or too large
+     * @since 0.9.71+
      */
     private static long parseDigits(String s) {
         if (s.isEmpty() || s.length() > 18)
@@ -2408,23 +2407,23 @@ public class EepGet {
     }
 
     /**
-     *  The sidecar marker file recording gunzipped state for outFile.
+     * The sidecar marker file recording gunzipped state for outFile.
      *
-     *  @param outFile output file, non-null
-     *  @return the marker file
-     *  @since 0.9.71+
+     * @param outFile output file, non-null
+     * @return the marker file
+     * @since 0.9.71+
      */
     private static File gzipMarkerFor(File outFile) {
         return new File(outFile.getPath() + GZIP_PARTIAL_MARKER_SUFFIX);
     }
 
     /**
-     *  Whether this fetch's output file was written by the transparent
-     *  gunzipper, so its length is a decompressed size that must not be used
-     *  as a Range resume offset.
+     * Whether this fetch's output file was written by the transparent
+     * gunzipper, so its length is a decompressed size that must not be used
+     * as a Range resume offset.
      *
-     *  @return true when a gzip marker exists for the output file
-     *  @since 0.9.71+
+     * @return true when a gzip marker exists for the output file
+     * @since 0.9.71+
      */
     boolean gzipMarkerExists() {
         if (_outputFile == null || _outputStream != null)
@@ -2433,13 +2432,13 @@ public class EepGet {
     }
 
     /**
-     *  Record that the output file now holds decompressed bytes.  Called
-     *  before the first decompressed byte is written, so an interrupted
-     *  fetch cannot leave decompressed content without its marker.
+     * Record that the output file now holds decompressed bytes.  Called
+     * before the first decompressed byte is written, so an interrupted
+     * fetch cannot leave decompressed content without its marker.
      *
-     *  @param outFile output file being written by the gunzipper, non-null
-     *  @throws IOException if the marker cannot be persisted
-     *  @since 0.9.71+
+     * @param outFile output file being written by the gunzipper, non-null
+     * @throws IOException if the marker cannot be persisted
+     * @since 0.9.71+
      */
     void markGzipPartial(File outFile) throws IOException {
         File marker = gzipMarkerFor(outFile);
@@ -2450,25 +2449,25 @@ public class EepGet {
     }
 
     /**
-     *  Drop the gunzip marker; called when the output file is rewritten
-     *  from scratch.
+     * Drop the gunzip marker; called when the output file is rewritten
+     * from scratch.
      *
-     *  @param outFile output file, non-null
-     *  @since 0.9.71+
+     * @param outFile output file, non-null
+     * @since 0.9.71+
      */
     private static void clearGzipMarker(File outFile) {
         gzipMarkerFor(outFile).delete();
     }
 
     /**
-     *  Byte offset to resume from for a file-based fetch, accounting for the
-     *  persisted gunzip state: a marker means the file holds decompressed
-     *  bytes, whose length is not a valid offset into the compressed
-     *  representation, so the fetch restarts instead of resuming.
+     * Byte offset to resume from for a file-based fetch, accounting for the
+     * persisted gunzip state: a marker means the file holds decompressed
+     * bytes, whose length is not a valid offset into the compressed
+     * representation, so the fetch restarts instead of resuming.
      *
-     *  @param outFile output file, may be absent
-     *  @return resume offset; 0 when the file is absent or must be restarted
-     *  @since 0.9.71+
+     * @param outFile output file, may be absent
+     * @return resume offset; 0 when the file is absent or must be restarted
+     * @since 0.9.71+
      */
     protected long getResumeOffset(File outFile) {
         File marker = gzipMarkerFor(outFile);
@@ -2483,10 +2482,10 @@ public class EepGet {
     }
 
     /**
-     *  Open connection and send HTTP request.
+     * Open connection and send HTTP request.
      *
-     *  @param timeout may be null
-     *  @throws IOException on IO error
+     * @param timeout may be null
+     * @throws IOException on IO error
      */
     protected void sendRequest(SocketTimeout timeout) throws IOException {
         if (_outputStream != null) {
@@ -2699,57 +2698,57 @@ public class EepGet {
     }
 
     /**
-     *  After fetch, the received value from the server, or null if none.
-     *  Before fetch, and after some errors, may be the value passed in the constructor.
+     * After fetch, the received value from the server, or null if none.
+     * Before fetch, and after some errors, may be the value passed in the constructor.
      *
-     *  @return the etag
+     * @return the etag
      */
     public String getEtag() {
         return _etag;
     }
 
     /**
-     *  After fetch, the received value from the server, or null if none.
-     *  Before fetch, and after some errors, may be the value passed in the constructor.
+     * After fetch, the received value from the server, or null if none.
+     * Before fetch, and after some errors, may be the value passed in the constructor.
      *
-     *  @return the last modified date
+     * @return the last modified date
      */
     public String getLastModified() {
         return _lastModified;
     }
 
     /**
-     *  Whether the server returned 304.
-     *  @return true if the server returned 304
+     * Whether the server returned 304.
+     * @return true if the server returned 304
      */
     public boolean getNotModified() {
         return _notModified;
     }
 
     /**
-     *  After fetch, the received value from the server, or null if none.
+     * After fetch, the received value from the server, or null if none.
      *
-     *  @return the content type
+     * @return the content type
      */
     public String getContentType() {
         return _contentType;
     }
 
     /**
-     *  Show the Server field
+     * Show the Server field
      *
-     *  @return the server
-     *  @since 0.9.47
+     * @return the server
+     * @since 0.9.47
      */
     public String getServer() {
         return _server;
     }
 
     /**
-     *  Show the Content-Language field
+     * Show the Content-Language field
      *
-     *  @return the content language
-     *  @since 0.9.47
+     * @return the content language
+     * @since 0.9.47
      */
     public String getContentLanguage() {
         if (_contentLanguage != null && _contentLanguage.equals("und"))
@@ -2759,157 +2758,157 @@ public class EepGet {
     }
 
     /**
-     *  Show the Transfer-Encoding field
+     * Show the Transfer-Encoding field
      *
-     *  @return the transfer encoding
-     *  @since 0.9.47
+     * @return the transfer encoding
+     * @since 0.9.47
      */
     public String getTransferEncoding() {
         return _transferEncoding;
     }
 
     /**
-     *  Show the Content-Encoding field
+     * Show the Content-Encoding field
      *
-     *  @return the content encoding
-     *  @since 0.9.47
+     * @return the content encoding
+     * @since 0.9.47
      */
     public String getContentEncoding() {
         return _contentEncoding;
     }
 
     /**
-     *  Show the Cache-Control field
+     * Show the Cache-Control field
      *
-     *  @return the cache control
-     *  @since 0.9.47
+     * @return the cache control
+     * @since 0.9.47
      */
     public String getCacheControl() {
         return _cacheControl;
     }
 
     /**
-     *  Show the Accept-Ranges field
+     * Show the Accept-Ranges field
      *
-     *  @return the accept ranges
-     *  @since 0.9.47
+     * @return the accept ranges
+     * @since 0.9.47
      */
     public String getAcceptRanges() {
         return _acceptRanges;
     }
 
     /**
-     *  Show the Expires field
+     * Show the Expires field
      *
-     *  @return the expiry date
-     *  @since 0.9.47
+     * @return the expiry date
+     * @since 0.9.47
      */
     public String getExpiryDate() {
         return _expiryDate;
     }
 
     /**
-     *  Show the Set-Cookie field
+     * Show the Set-Cookie field
      *
-     *  @return the cookie
-     *  @since 0.9.47
+     * @return the cookie
+     * @since 0.9.47
      */
     public String getCookie() {
         return _cookie;
     }
 
     /**
-     *  Referrer-Policy header.
-     *  @return the referrer policy, or null
+     * Referrer-Policy header.
+     * @return the referrer policy, or null
      */
     public String getReferrerPolicy() {
         return _referrerPolicy;
     }
 
     /**
-     *  Vary header.
-     *  @return the vary value, or null
+     * Vary header.
+     * @return the vary value, or null
      */
     public String getVary() {
         return _vary;
     }
 
     /**
-     *  X-Frame-Options header.
-     *  @return the frame options, or null
+     * X-Frame-Options header.
+     * @return the frame options, or null
      */
     public String getXframeOptions() {
         return _xframeOptions;
     }
 
     /**
-     *  Content-Security-Policy header.
-     *  @return the CSP value, or null
+     * Content-Security-Policy header.
+     * @return the CSP value, or null
      */
     public String getCSP() {
         return _csp;
     }
 
     /**
-     *  X-XSS-Protection header.
-     *  @return the XSS protection value, or null
+     * X-XSS-Protection header.
+     * @return the XSS protection value, or null
      */
     public String getXSSProtection() {
         return _xssProtection;
     }
 
     /**
-     *  X-Content-Type-Options header.
-     *  @return the content type options, or null
+     * X-Content-Type-Options header.
+     * @return the content type options, or null
      */
     public String getXContentTypeOptions() {
         return _xContentTypeOptions;
     }
 
     /**
-     *  X-Powered-By header.
-     *  @return the powered-by value, or null
+     * X-Powered-By header.
+     * @return the powered-by value, or null
      */
     public String getXPoweredBy() {
         return _xPoweredBy;
     }
 
     /**
-     *  The server response (200, etc).
+     * The server response (200, etc).
      *
-     *  @return -1 if invalid, or if the proxy never responded,
-     *  or if no proxy was used and the server never responded.
-     *  If a non-proxied request partially succeeded (for example a redirect followed
-     *  by a fail, or a partial fetch followed by a fail), this will
-     *  be the last status code received.
-     *  Note that fetch() may return false even if this returns 200.
+     * @return -1 if invalid, or if the proxy never responded,
+     * or if no proxy was used and the server never responded.
+     * If a non-proxied request partially succeeded (for example a redirect followed
+     * by a fail, or a partial fetch followed by a fail), this will
+     * be the last status code received.
+     * Note that fetch() may return false even if this returns 200.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public int getStatusCode() {
         return _responseCode;
     }
 
     /**
-     *  The server text ("OK", "Not Found",  etc).
-     *  Note that the text may contain % encoding.
+     * The server text ("OK", "Not Found",  etc).
+     * Note that the text may contain % encoding.
      *
-     *  @return null if invalid, or if the proxy never responded,
-     *  or if no proxy was used and the server never responded.
-     *  If a non-proxied request partially succeeded (for example a redirect followed
-     *  by a fail, or a partial fetch followed by a fail), this will
-     *  be the last status code received.
-     *  Note that fetch() may return false even if this returns "OK".
+     * @return null if invalid, or if the proxy never responded,
+     * or if no proxy was used and the server never responded.
+     * If a non-proxied request partially succeeded (for example a redirect followed
+     * by a fail, or a partial fetch followed by a fail), this will
+     * be the last status code received.
+     * Note that fetch() may return false even if this returns "OK".
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     public String getStatusText() {
         return _responseText;
     }
 
     /**
-     *  Combined server status message e.g. "200 OK".
-     *  @return the status string
+     * Combined server status message e.g. "200 OK".
+     * @return the status string
      */
     public String getStatus() {
         StringBuilder buf = new StringBuilder(64);
@@ -2922,33 +2921,33 @@ public class EepGet {
     }
 
     /**
-     *  If called (before calling fetch()),
-     *  data from the server or proxy will be written to the
-     *  output file or stream even on an error response code (4xx, 5xx, etc).
-     *  The error data will only be written if no previous data was written
-     *  on an earlier try.
-     *  Caller must of course check getStatusCode() or the
-     *  fetch() return value.
+     * If called (before calling fetch()),
+     * data from the server or proxy will be written to the
+     * output file or stream even on an error response code (4xx, 5xx, etc).
+     * The error data will only be written if no previous data was written
+     * on an earlier try.
+     * Caller must of course check getStatusCode() or the
+     * fetch() return value.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public void setWriteErrorToOutput() {
         _shouldWriteErrorToOutput = true;
     }
 
     /**
-     *  Add an extra header to the request.
-     *  Must be called before fetch().
-     *  Not supported by EepHead.
-     *  As of 0.9.10, If name is User-Agent, this will replace the default User-Agent header.
-     *  As of 0.9.14, If name is If-None-Match or If-Modified-Since,
-     *  this will replace the etag or last-modified value given in the constructor.
-     *  Note that headers may be subsequently modified or removed in the I2PTunnel HTTP Client proxy.
+     * Add an extra header to the request.
+     * Must be called before fetch().
+     * Not supported by EepHead.
+     * As of 0.9.10, If name is User-Agent, this will replace the default User-Agent header.
+     * As of 0.9.14, If name is If-None-Match or If-Modified-Since,
+     * this will replace the etag or last-modified value given in the constructor.
+     * Note that headers may be subsequently modified or removed in the I2PTunnel HTTP Client proxy.
      *
-     *  In proxied SSLEepGet, these headers are sent to the remote server, NOT the proxy.
+     * In proxied SSLEepGet, these headers are sent to the remote server, NOT the proxy.
      *
-     *  @param name header name
-     *  @param value header value
+     * @param name header name
+     * @param value header value
      */
     public void addHeader(String name, String value) {
         if (_extraHeaders == null)
@@ -2957,12 +2956,12 @@ public class EepGet {
     }
 
     /**
-     *  Add basic authorization header for the proxy.
-     *  Only added if the request is going through a proxy.
-     *  Must be called before fetch().
+     * Add basic authorization header for the proxy.
+     * Only added if the request is going through a proxy.
+     * Must be called before fetch().
      *
-     *  @param userName proxy username
-     *  @param password proxy password
+     * @param userName proxy username
+     * @param password proxy password
      */
     public void addAuthorization(String userName, String password) {
         if (_shouldProxy) {
@@ -2977,12 +2976,12 @@ public class EepGet {
     }
 
     /**
-     *  Set post data (string body).
-     *  Must be called before fetch().
+     * Set post data (string body).
+     * Must be called before fetch().
      *
-     *  @param contentType Content-Type header value
-     *  @param data POST body
-     *  @throws IllegalStateException if already set
+     * @param contentType Content-Type header value
+     * @param data POST body
+     * @throws IllegalStateException if already set
      */
     protected void setPostData(String contentType, String data) {
         if (_postData != null || _postBinaryData != null || _postDataFile != null)
@@ -2992,12 +2991,12 @@ public class EepGet {
     }
 
     /**
-     *  Set post data (file body).
-     *  Must be called before fetch().
+     * Set post data (file body).
+     * Must be called before fetch().
      *
-     *  @param contentType Content-Type header value
-     *  @param data file containing POST body
-     *  @throws IllegalStateException if already set
+     * @param contentType Content-Type header value
+     * @param data file containing POST body
+     * @throws IllegalStateException if already set
      */
     protected void setPostData(String contentType, File data) {
         if (_postData != null || _postBinaryData != null || _postDataFile != null)
@@ -3007,12 +3006,12 @@ public class EepGet {
     }
 
     /**
-     *  Set post data (binary body).
-     *  Must be called before fetch().
+     * Set post data (binary body).
+     * Must be called before fetch().
      *
-     *  @param contentType Content-Type header value
-     *  @param data POST body bytes
-     *  @throws IllegalStateException if already set
+     * @param contentType Content-Type header value
+     * @param data POST body bytes
+     * @throws IllegalStateException if already set
      */
     protected void setPostData(String contentType, byte[] data) {
         if (_postData != null || _postBinaryData != null || _postDataFile != null)
@@ -3022,17 +3021,17 @@ public class EepGet {
     }
 
     /**
-     *  Parse the args in an authentication header.
+     * Parse the args in an authentication header.
      *
-     *  Modified from LoadClientAppsJob.
-     *  All keys are mapped to lower case.
-     *  Double quotes around values are stripped.
-     *  Ref: RFC 2617
+     * Modified from LoadClientAppsJob.
+     * All keys are mapped to lower case.
+     * Double quotes around values are stripped.
+     * Ref: RFC 2617
      *
-     *  Public for I2PTunnelHTTPClientBase; use outside of tree at own risk, subject to change or removal
+     * Public for I2PTunnelHTTPClientBase; use outside of tree at own risk, subject to change or removal
      *
-     *  @param args non-null, starting after "Digest " or "Basic "
-     *  @return parsed key-value pairs
+     * @param args non-null, starting after "Digest " or "Basic "
+     * @return parsed key-value pairs
      */
     public static Map<String, String> parseAuthArgs(String args) {
         Map<String, String> rv = new HashMap<>(8);
@@ -3092,7 +3091,7 @@ public class EepGet {
     }
 
     /**
-     *  Authentication mode enumeration.
+     * Authentication mode enumeration.
      */
     protected enum AUTH_MODE {
         /** No authentication */
@@ -3106,12 +3105,12 @@ public class EepGet {
     }
 
     /**
-     *  Manage the authentication parameters
-     *  Ref: RFC 2617
-     *  Supports both Basic and Digest, however i2ptunnel HTTP proxy
-     *  has migrated all previous Basic support to Digest.
+     * Manage the authentication parameters
+     * Ref: RFC 2617
+     * Supports both Basic and Digest, however i2ptunnel HTTP proxy
+     * has migrated all previous Basic support to Digest.
      *
-     *  @since 0.9.12
+     * @since 0.9.12
      */
     protected class AuthState {
         private final String username;
@@ -3144,8 +3143,8 @@ public class EepGet {
         }
 
         /**
-         *  May be called multiple times, save the best one.
-         *  @param auth challenge string from 407 response
+         * May be called multiple times, save the best one.
+         * @param auth challenge string from 407 response
          */
         public void setAuthChallenge(String auth) {
             String authLC = auth.toLowerCase(Locale.US);
@@ -3222,10 +3221,10 @@ public class EepGet {
         }
 
         /**
-         *  Generate the digest authentication parameters
-         *  Ref: RFC 2617
+         * Generate the digest authentication parameters
+         * Ref: RFC 2617
          *
-         *  @since 0.9.12 modified from I2PTunnelHTTPClientBase.validateDigest()
+         * @since 0.9.12 modified from I2PTunnelHTTPClientBase.validateDigest()
          */
         public Map<String, String> generateAuthArgs(String method, String uri) throws IOException {
             Map<String, String> rv = new HashMap<>(12);
@@ -3289,8 +3288,8 @@ public class EepGet {
     }
 
     /**
-     *  @return 8 hex chars, lower case, e.g. 00000001
-     *  @since 0.8.10
+     * @return 8 hex chars, lower case, e.g. 00000001
+     * @since 0.8.10
      */
     private static String lc8hex(int nc) {
         StringBuilder buf = new StringBuilder(8);
@@ -3305,10 +3304,10 @@ public class EepGet {
     }
 
     /**
-     *  Decompressor thread.
-     *  Copied / modified from i2ptunnel HTTPResponseOutputStream (GPL)
+     * Decompressor thread.
+     * Copied / modified from i2ptunnel HTTPResponseOutputStream (GPL)
      *
-     *  @since 0.8.10
+     * @since 0.8.10
      */
     protected class Gunzipper implements Runnable {
         private final InputStream _inRaw;

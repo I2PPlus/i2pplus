@@ -5,7 +5,6 @@ package net.i2p.router.startup;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 
@@ -24,7 +23,6 @@ import net.i2p.util.SystemVersion;
  * is followed by the BootNetworkDbJob, though BuildTrustedLinksJob may occur
  * as well.  After running the BootNetworkDbJob, the final
  * StartAcceptingClientsJob is queued up, which finishes the startup.
- *
  */
 public class StartupJob extends JobImpl {
 
@@ -36,9 +34,9 @@ public class StartupJob extends JobImpl {
     }
 
     /**
-     *  Name of this job.
+     * Name of this job.
      *
-     *  @return the name
+     * @return the name
      */
     public String getName() { return "Boot Router"; }
     /**

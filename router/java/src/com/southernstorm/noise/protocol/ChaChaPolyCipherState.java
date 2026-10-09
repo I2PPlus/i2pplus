@@ -171,8 +171,8 @@ public class ChaChaPolyCipherState implements CipherState {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.54
+     * I2P
+     * @since 0.9.54
      */
     @Override
     public int encryptWithAd(byte[] ad, int adOffset, int adLength, byte[] plaintext, int plaintextOffset,
@@ -207,8 +207,8 @@ public class ChaChaPolyCipherState implements CipherState {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.54
+     * I2P
+     * @since 0.9.54
      */
     @Override
     public int decryptWithAd(byte[] ad, int adOffset, int adLength, byte[] ciphertext,
@@ -255,8 +255,8 @@ public class ChaChaPolyCipherState implements CipherState {
     public void setNonce(long nonce) {n = nonce;}
 
     /**
-     *  I2P
-     *  @since 0.9.44
+     * I2P
+     * @since 0.9.44
      */
     @Override
     public ChaChaPolyCipherState clone() throws CloneNotSupportedException {
@@ -264,7 +264,7 @@ public class ChaChaPolyCipherState implements CipherState {
     }
 
     /**
-     *  I2P debug
+     * I2P debug
      */
     @Override
     public String toString() {

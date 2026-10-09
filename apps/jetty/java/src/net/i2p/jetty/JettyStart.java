@@ -27,14 +27,14 @@ import org.eclipse.jetty.util.component.LifeCycle;
 import org.eclipse.jetty.xml.XmlConfiguration;
 
 /**
- *  Start Jetty where the args are one or more XML files.
- *  Save a reference to the Server so it can be cleanly stopped later.
- *  Caller must call startup()
+ * Start Jetty where the args are one or more XML files.
+ * Save a reference to the Server so it can be cleanly stopped later.
+ * Caller must call startup()
  *
- *  This is like XmlConfiguration.main(), which is essentially what
- *  org.mortbay.start.Main does.
+ * This is like XmlConfiguration.main(), which is essentially what
+ * org.mortbay.start.Main does.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public class JettyStart implements ClientApp {
 
@@ -52,11 +52,11 @@ public class JettyStart implements ClientApp {
     private static final String REWRITE_DIR = "eepsite-jetty9";
     private static final String REWRITE_CONFIG = "jetty-rewrite.xml";
     /**
-     *  All args must be XML file names.
-     *  Does not support any of the other argument types from org.mortbay.start.Main.
+     * All args must be XML file names.
+     * Does not support any of the other argument types from org.mortbay.start.Main.
      *
-     *  @param context may be null
-     *  @param mgr may be null e.g. for use in plugins
+     * @param context may be null
+     * @param mgr may be null e.g. for use in plugins
      */
     public JettyStart(I2PAppContext context, ClientAppManager mgr, String[] args) throws Exception {
         _state = UNINITIALIZED;
@@ -69,7 +69,7 @@ public class JettyStart implements ClientApp {
     }
 
     /**
-     *  Modified from XmlConfiguration.main()
+     * Modified from XmlConfiguration.main()
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void parseArgs(String[] args) throws Exception {
@@ -191,7 +191,7 @@ public class JettyStart implements ClientApp {
         }
 
         /**
-         *  Modified from XmlConfiguration.main()
+         * Modified from XmlConfiguration.main()
          */
         public void run() {
             for (LifeCycle lc : _jettys) {
@@ -318,9 +318,9 @@ public class JettyStart implements ClientApp {
     }
 
     /**
-     *  For use in a plugin clients.config
-     *  @param args passed to constructor
-     *  @since 0.9.6
+     * For use in a plugin clients.config
+     * @param args passed to constructor
+     * @since 0.9.6
      */
     public static void main(String[] args) {
         try {

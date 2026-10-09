@@ -1136,24 +1136,24 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
     }
 
     /**
-     *  I2P for mixing in padding in messages 1 and 2
+     * I2P for mixing in padding in messages 1 and 2
      */
     public void mixHash(byte[] data, int offset, int length) {
         symmetric.mixHash(data, offset, length);
     }
 
     /**
-     *  I2P for getting chaining key for siphash calc
-     *  @return a copy
+     * I2P for getting chaining key for siphash calc
+     * @return a copy
      */
     public byte[] getChainingKey() {
         return symmetric.getChainingKey();
     }
 
     /**
-     *  I2P
-     *  Must be called before both eph. keys set.
-     *  @since 0.9.44
+     * I2P
+     * Must be called before both eph. keys set.
+     * @since 0.9.44
      */
     @Override
     public synchronized HandshakeState clone() throws CloneNotSupportedException {
@@ -1163,7 +1163,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
     }
 
     /**
-     *  I2P debug
+     * I2P debug
      */
     @Override
     public String toString() {

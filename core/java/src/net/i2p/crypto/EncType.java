@@ -18,116 +18,116 @@ import java.util.Locale;
  */
 public enum EncType {
     /**
-     *  2048-bit MODP Group from RFC 3526.
-     *  This is the default.
-     *  Pubkey 256 bytes, privkey 256 bytes.
+     * 2048-bit MODP Group from RFC 3526.
+     * This is the default.
+     * Pubkey 256 bytes, privkey 256 bytes.
      */
     ELGAMAL_2048(0, 256, 256, EncAlgo.ELGAMAL, "ElGamal/None/NoPadding", CryptoConstants.I2P_ELGAMAL_2048_SPEC, "0"),
 
     /**
-     *  Used by i2pd. Not yet supported by Java I2P.
-     *  Pubkey 64 bytes; privkey 32 bytes.
-     *  See proposal 145.
+     * Used by i2pd. Not yet supported by Java I2P.
+     * Pubkey 64 bytes; privkey 32 bytes.
+     * See proposal 145.
      */
     EC_P256(1, 64, 32, EncAlgo.EC, "EC/None/NoPadding", ECConstants.P256_SPEC, "0.9.38"),
 
     /**
-     *  Reserved, not used by anybody.
-     *  Pubkey 96 bytes; privkey 48 bytes.
-     *  See proposal 145.
+     * Reserved, not used by anybody.
+     * Pubkey 96 bytes; privkey 48 bytes.
+     * See proposal 145.
      */
     EC_P384(2, 96, 48, EncAlgo.EC, "EC/None/NoPadding", ECConstants.P384_SPEC, "0.9.38"),
 
     /**
-     *  Reserved, not used by anybody.
-     *  Pubkey 132 bytes; privkey 66 bytes.
-     *  See proposal 145.
+     * Reserved, not used by anybody.
+     * Pubkey 132 bytes; privkey 66 bytes.
+     * See proposal 145.
      */
     EC_P521(3, 132, 66, EncAlgo.EC, "EC/None/NoPadding", ECConstants.P521_SPEC, "0.9.38"),
 
     /**
-     *  Proposal 144.
-     *  Pubkey 32 bytes; privkey 32 bytes
+     * Proposal 144.
+     * Pubkey 32 bytes; privkey 32 bytes
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     ECIES_X25519(4, 32, 32, EncAlgo.ECIES, "EC/None/NoPadding", X25519_SPEC, "0.9.38"),
 
     /**
-     *  Proposal 169.
-     *  Pubkey 32 bytes; privkey 32 bytes
+     * Proposal 169.
+     * Pubkey 32 bytes; privkey 32 bytes
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM512_X25519(5, 32, 32, EncAlgo.ECIES_MLKEM, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
 
     /**
-     *  Proposal 169.
-     *  Pubkey 32 bytes; privkey 32 bytes
+     * Proposal 169.
+     * Pubkey 32 bytes; privkey 32 bytes
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM768_X25519(6, 32, 32, EncAlgo.ECIES_MLKEM, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
 
     /**
-     *  Proposal 169.
-     *  Pubkey 32 bytes; privkey 32 bytes
+     * Proposal 169.
+     * Pubkey 32 bytes; privkey 32 bytes
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM1024_X25519(7, 32, 32, EncAlgo.ECIES_MLKEM, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
 
     /**
-     *  For internal use only (Alice side)
-     *  Proposal 169.
-     *  Pubkey 800 bytes; privkey 1632 bytes
+     * For internal use only (Alice side)
+     * Proposal 169.
+     * Pubkey 800 bytes; privkey 1632 bytes
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM512_X25519_INT(100005, 800, 1632, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
 
     /**
-     *  For internal use only (Alice side)
-     *  Proposal 169.
-     *  Pubkey 1184 bytes; privkey 2400 bytes
+     * For internal use only (Alice side)
+     * Proposal 169.
+     * Pubkey 1184 bytes; privkey 2400 bytes
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM768_X25519_INT(100006, 1184, 2400, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
 
     /**
-     *  For internal use only (Alice side)
-     *  Proposal 169.
-     *  Pubkey 1568 bytes; privkey 3168 bytes
+     * For internal use only (Alice side)
+     * Proposal 169.
+     * Pubkey 1568 bytes; privkey 3168 bytes
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM1024_X25519_INT(100007, 1568, 3168, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
 
     /**
-     *  For internal use only (Bob side ciphertext)
-     *  Proposal 169.
-     *  Pubkey 768 bytes; privkey 0
+     * For internal use only (Bob side ciphertext)
+     * Proposal 169.
+     * Pubkey 768 bytes; privkey 0
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM512_X25519_CT(100008, 768, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
 
     /**
-     *  For internal use only (Bob side ciphertext)
-     *  Proposal 169.
-     *  Pubkey 1088 bytes; privkey 0
+     * For internal use only (Bob side ciphertext)
+     * Proposal 169.
+     * Pubkey 1088 bytes; privkey 0
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM768_X25519_CT(100009, 1088, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67"),
 
     /**
-     *  For internal use only (Bob side ciphertext)
-     *  Proposal 169.
-     *  Pubkey 1568 bytes; privkey 0
+     * For internal use only (Bob side ciphertext)
+     * Proposal 169.
+     * Pubkey 1568 bytes; privkey 0
      *
-     *  @since 0.9.67
+     * @since 0.9.67
      */
     MLKEM1024_X25519_CT(100010, 1568, 0, EncAlgo.ECIES_MLKEM_INT, "EC/None/NoPadding", X25519_SPEC, "0.9.67");
     private final int code;
@@ -142,8 +142,7 @@ public enum EncType {
 
     /**
      *
-     *  @param transformation algorithm/mode/padding
-     *
+     * @param transformation algorithm/mode/padding
      */
     EncType(
             int cod,
@@ -192,10 +191,10 @@ public enum EncType {
     }
 
     /**
-     *  The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
+     * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *
-     *  @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
-     *  @return the params
+     * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
+     * @return the params
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
         if (params == null) throw new InvalidParameterSpecException(toString() + " is not available in this JVM");
@@ -211,9 +210,9 @@ public enum EncType {
     }
 
     /**
-     *  Checks if this encryption type is available in the JVM.
+     * Checks if this encryption type is available in the JVM.
      *
-     *  @return true if supported in this JVM
+     * @return true if supported in this JVM
      */
     public boolean isAvailable() {
         return isAvail;
@@ -239,9 +238,9 @@ public enum EncType {
     }
 
     /**
-     *  Checks if the encryption type with the given code is available.
+     * Checks if the encryption type with the given code is available.
      *
-     *  @return true if supported in this JVM
+     * @return true if supported in this JVM
      */
     public static boolean isAvailable(int code) {
         EncType type = getByCode(code);
@@ -250,10 +249,10 @@ public enum EncType {
     }
 
     /**
-     *  Checks if the encryption type with the given name or number is available.
+     * Checks if the encryption type with the given name or number is available.
      *
-     *  @param stype number or name
-     *  @return true if supported in this JVM
+     * @param stype number or name
+     * @return true if supported in this JVM
      */
     public static boolean isAvailable(String stype) {
         EncType type = parseEncType(stype);
@@ -262,11 +261,11 @@ public enum EncType {
     }
 
     /**
-     *  Checks if this is a post-quantum encryption type.
+     * Checks if this is a post-quantum encryption type.
      *
      *
-     *  @return true if this is a PQ type
-     *  @since 0.9.67
+     * @return true if this is a PQ type
+     * @since 0.9.67
      */
     public boolean isPQ() {
         return isPQ;
@@ -287,7 +286,7 @@ public enum EncType {
 
     /** Encryption type by code.
      *
-     *  @return Null if not supported.
+     * @return Null if not supported.
      */
     public static EncType getByCode(int code) {
         if (code < 0 || code >= BY_CODE.length) return null;
@@ -295,10 +294,10 @@ public enum EncType {
     }
 
     /**
-     *  Convenience for user apps
+     * Convenience for user apps
      *
-     *  @param stype number or name
-     *  @return null if not found
+     * @param stype number or name
+     * @return null if not found
      */
     public static EncType parseEncType(String stype) {
         try {

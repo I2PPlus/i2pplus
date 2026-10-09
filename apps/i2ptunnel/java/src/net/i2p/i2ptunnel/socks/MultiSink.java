@@ -15,7 +15,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     private final Map<Integer, S> cache;
 
     /**
-     *  @param cache map of toPort to Sink
+     * @param cache map of toPort to Sink
      */
     public MultiSink(Map<Integer, S> cache) {
         this.cache = cache;
@@ -28,15 +28,15 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     public void start() { /* no-op */ }
 
     /**
-     *  Send to a single sink looked up by toPort
+     * Send to a single sink looked up by toPort
      *
-     *  May throw RuntimeException from underlying sinks
+     * May throw RuntimeException from underlying sinks
      *
-     *  @param from passed along
-     *  @param fromPort passed along
-     *  @param toPort passed along
-     *  @throws RuntimeException
-     *  @since 0.9.53 added fromPort and toPort parameters
+     * @param from passed along
+     * @param fromPort passed along
+     * @param toPort passed along
+     * @throws RuntimeException
+     * @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
         Sink s = cache.get(toPort);

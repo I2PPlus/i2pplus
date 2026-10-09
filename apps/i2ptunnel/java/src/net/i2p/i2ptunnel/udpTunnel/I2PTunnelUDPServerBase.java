@@ -21,24 +21,24 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.Log;
 
 /**
-     * Base client class that sets up an I2P Datagram server destination.
-     * The UDP side is not implemented here, as there are at least
-     * two possibilities:
-     *
-     * 1) UDP side is a "client"
-     *    Example: Streamr Producer
-     *    - configure an inbound port
-     *    - External application receives no data
-     *    - Extending class must have a constructor with a port argument
-     *
-     * 2) UDP side is a client/server
-     *    Example: DNS
-     *    - configure an inbound port and a destination host and port
-     *    - External application sends and receives data
-     *    - Extending class must have a constructor with host and 2 port arguments
-     *
-     * So the implementing class must create a UDPSource and/or UDPSink,
-     * and must call setSink().
+ * Base client class that sets up an I2P Datagram server destination.
+ * The UDP side is not implemented here, as there are at least
+ * two possibilities:
+ *
+ * 1) UDP side is a "client"
+ * Example: Streamr Producer
+ * - configure an inbound port
+ * - External application receives no data
+ * - Extending class must have a constructor with a port argument
+ *
+ * 2) UDP side is a client/server
+ * Example: DNS
+ * - configure an inbound port and a destination host and port
+ * - External application sends and receives data
+ * - Extending class must have a constructor with host and 2 port arguments
+ *
+ * So the implementing class must create a UDPSource and/or UDPSink,
+ * and must call setSink().
  */
 
 public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sink {
@@ -67,8 +67,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      * @param notifyThis event dispatcher for notifications
      * @param tunnel the tunnel
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     *                                  badly that we cant create a socketManager
-     *
+     * badly that we cant create a socketManager
      */
     public I2PTunnelUDPServerBase(File privkey, String privkeyname, Logging l,
                            EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -102,10 +101,10 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     }
 
     /**
-     *  Starts the tunnel and begins processing datagrams.
-     *  Classes should override to start UDP side as well.
+     * Starts the tunnel and begins processing datagrams.
+     * Classes should override to start UDP side as well.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     public void startRunning() {
         try {
@@ -140,11 +139,11 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     }
 
     /**
-     *  Closes the tunnel and destroys the session.
+     * Closes the tunnel and destroys the session.
      *
-     *  @param forced if true, force immediate close without graceful shutdown
-     *  @return true if closed successfully
-     *  @since 0.9.53
+     * @param forced if true, force immediate close without graceful shutdown
+     * @return true if closed successfully
+     * @since 0.9.53
      */
     public boolean close(boolean forced) {
         if (!open) return true;
@@ -164,20 +163,20 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
     }
 
     /**
-     *  Sets the receiver of the UDP datagrams from I2P.
-     *  Subclass must call this after constructor and before start().
+     * Sets the receiver of the UDP datagrams from I2P.
+     * Subclass must call this after constructor and before start().
      *
-     *  @param s the sink to receive incoming datagrams
-     *  @since 0.9.53
+     * @param s the sink to receive incoming datagrams
+     * @since 0.9.53
      */
     public void setSink(Sink s) {
         _i2pSource.setSink(s);
     }
 
     /**
-     *  Starts the I2P source to begin receiving datagrams.
+     * Starts the I2P source to begin receiving datagrams.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     public void start() {
         _i2pSource.start();

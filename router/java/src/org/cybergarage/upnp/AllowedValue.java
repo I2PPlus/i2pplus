@@ -17,18 +17,17 @@ import org.cybergarage.xml.Node;
  * <p>Key features:
  *
  * <ul>
- *   <li>XML node wrapping for allowed values
- *   <li>Element name constant for XML parsing
- *   <li>Service description integration
- *   <li>State variable constraint management
- *   <li>UPnP specification compliance
+ * <li>XML node wrapping for allowed values
+ * <li>Element name constant for XML parsing
+ * <li>Service description integration
+ * <li>State variable constraint management
+ * <li>UPnP specification compliance
  * </ul>
  *
  * <p>This class is used by UPnP services to manage allowed value constraints for state variables,
  * enabling proper validation and description generation for variables with restricted value sets.
  *
  * @author Satoshi Konno
- * @since 1.0
  */
 public class AllowedValue {
     ////////////////////////////////////////////////
@@ -59,9 +58,9 @@ public class AllowedValue {
     ////////////////////////////////////////////////
 
     /**
-     *  Create an AllowedValue wrapping the given XML node.
+     * Create an AllowedValue wrapping the given XML node.
      *
-     *  @param node the XML node containing the allowed value
+     * @param node the XML node containing the allowed value
      */
     public AllowedValue(Node node) {
         allowedValueNode = node;

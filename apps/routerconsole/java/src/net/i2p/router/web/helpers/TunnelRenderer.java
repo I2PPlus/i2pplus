@@ -44,7 +44,7 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.ObjectCounterUnsafe;
 
 /**
- *  For /tunnels.jsp, used by TunnelHelper.
+ * For /tunnels.jsp, used by TunnelHelper.
  */
 class TunnelRenderer {
     private static final Pattern TUNNEL_PAREN = Pattern.compile("\\([^)]+\\)");
@@ -704,14 +704,14 @@ class TunnelRenderer {
     }
 
     /**
-     *  Render the tunnel peer count table, the "all peers" tbody, or the
-     *  totals footer row.
-     *  <p>
-     *  Full-page mode renders header, rows, and footer as one table; fragment
-     *  mode (contentonly) renders just the named element so the page can
-     *  refresh the tbody rows and footer without re-sending the full table.
+     * Render the tunnel peer count table, the "all peers" tbody, or the
+     * totals footer row.
+     * <p>
+     * Full-page mode renders header, rows, and footer as one table; fragment
+     * mode (contentonly) renders just the named element so the page can
+     * refresh the tbody rows and footer without re-sending the full table.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void renderPeers(Writer out) throws IOException {
@@ -770,14 +770,14 @@ class TunnelRenderer {
     }
 
     /**
-     *  Render a single named element for the contentonly fragment mode of the
-     *  tunnel peer count page: the "all peers" tbody with data-key rows, or
-     *  the totals footer row. Renders nothing for unknown ids.
+     * Render a single named element for the contentonly fragment mode of the
+     * tunnel peer count page: the "all peers" tbody with data-key rows, or
+     * the totals footer row. Renders nothing for unknown ids.
      *
-     *  @param out the writer to render to
-     *  @param id the element id
-     *  @throws IOException if writing fails
-     *  @since 0.9.70+
+     * @param out the writer to render to
+     * @param id the element id
+     * @throws IOException if writing fails
+     * @since 0.9.70+
      */
     public void renderPeerFragment(Writer out, String id) throws IOException {
         PeerRows pr = preparePeerRows();
@@ -809,8 +809,8 @@ class TunnelRenderer {
     }
 
     /**
-     *  Data for the tunnel peer count page: the counts per peer plus the
-     *  validated, sorted peer list shared by the full and fragment renders.
+     * Data for the tunnel peer count page: the counts per peer plus the
+     * validated, sorted peer list shared by the full and fragment renders.
      */
     private static class PeerRows {
         final ObjectCounter<Hash> localCount = new ObjectCounter<>();
@@ -821,11 +821,11 @@ class TunnelRenderer {
     }
 
     /**
-     *  Count tunnels per peer, resolve RouterInfos and reverse lookups, and
-     *  build the validated peer list shared by the full and fragment renders.
+     * Count tunnels per peer, resolve RouterInfos and reverse lookups, and
+     * build the validated peer list shared by the full and fragment renders.
      *
-     *  @return the prepared counts and peer list
-     *  @since 0.9.70+
+     * @return the prepared counts and peer list
+     * @since 0.9.70+
      */
     private PeerRows preparePeerRows() {
         PeerRows pr = new PeerRows();
@@ -852,10 +852,10 @@ class TunnelRenderer {
     }
 
     /**
-     *  Append one tunnel peer count row: identity cells plus local and transit
-     *  tunnel bars and the edit link.
+     * Append one tunnel peer count row: identity cells plus local and transit
+     * tunnel bars and the edit link.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void appendPeerRow(StringBuilder chunkSb, Hash h, RouterInfo info, int tunnelCount, int partCount,
                                int localTunnelCount, int transitTunnelCount, String versionTip,
@@ -903,9 +903,9 @@ class TunnelRenderer {
     }
 
     /**
-     *  Append the totals footer row of the tunnel peer count table.
+     * Append the totals footer row of the tunnel peer count table.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void appendPeerFooterRow(StringBuilder footerSb, int validPeerCount, int tunnelCount, int partCount) {
         footerSb.append("<tr class=tablefooter data-sort-method=none><td colspan=4><b>")
@@ -932,9 +932,9 @@ class TunnelRenderer {
     }
 
     /**
-     *  Append the closing tfoot and wrapper for the tunnel peer count table.
+     * Append the closing tfoot and wrapper for the tunnel peer count table.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void appendPeerFooter(StringBuilder footerSb, int validPeerCount, int tunnelCount, int partCount) {
         footerSb.append("</tbody>\n<tfoot>");
@@ -1128,8 +1128,8 @@ class TunnelRenderer {
     }
 
     /**
-     *  Sort tunnels by the name of the tunnel
-     *  @since 0.9.57
+     * Sort tunnels by the name of the tunnel
+     * @since 0.9.57
      */
     private class TPComparator implements Comparator<TunnelPool> {
           private final Collator _comp = Collator.getInstance();
@@ -1168,13 +1168,13 @@ class TunnelRenderer {
     }
 
     /**
-     *  Get the pool's torrent names for the tooltip, when the tunnel is a shared
-     *  I2PSnark pool destination and the i2psnark.poolMembers session property is set.
-     *  Single-torrent pools have the torrent's name for a nickname, so the check matches
-     *  all I2PSnark tunnels; dedicated destinations have no poolMembers property.
+     * Get the pool's torrent names for the tooltip, when the tunnel is a shared
+     * I2PSnark pool destination and the i2psnark.poolMembers session property is set.
+     * Single-torrent pools have the torrent's name for a nickname, so the check matches
+     * all I2PSnark tunnels; dedicated destinations have no poolMembers property.
      *
-     *  @param in the tunnel pool
-     *  @return the escaped tooltip text, or null for a dedicated destination
+     * @param in the tunnel pool
+     * @return the escaped tooltip text, or null for a dedicated destination
      */
     private String getPoolTip(TunnelPool in) {
         String name = in.getSettings().getDestinationNickname();
@@ -1260,11 +1260,11 @@ class TunnelRenderer {
 
 
     /**
-     *  Append the tunnel table header row: In/Out, Status, Expiry, Latency,
-     *  Data, Gateway, Participants, and Endpoint columns. The Participants
-     *  column spans the longest tunnel minus the first and last hops.
+     * Append the tunnel table header row: In/Out, Status, Expiry, Latency,
+     * Data, Gateway, Participants, and Endpoint columns. The Participants
+     * column spans the longest tunnel minus the first and last hops.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void appendTableHeader(StringBuilder buf, int maxLength) {
         buf.append("<table class=\"tunneldisplay tunnels_client\">\n<thead>\n<tr><th title=\"")
@@ -1301,14 +1301,14 @@ class TunnelRenderer {
 
 
     /**
-     *  Append one tunnel row: direction badge, test status, expiry bar,
-     *  latency, data transferred, and the peer cells.
+     * Append one tunnel row: direction badge, test status, expiry bar,
+     * latency, data transferred, and the peer cells.
      *
-     *  <p>Terminates the row only - the caller closes {@code </tbody>} once,
-     *  after the last row.
+     * <p>Terminates the row only - the caller closes {@code </tbody>} once,
+     * after the last row.
      *
-     *  @return the processed message count, for the bandwidth footer
-     *  @since 0.9.70+
+     * @return the processed message count, for the bandwidth footer
+     * @since 0.9.70+
      */
     private int renderTunnelRow(StringBuilder buf, TunnelInfo info, long timeLeft, int maxLength,
                                 String tib, String tob, String localHopTip, String localLabel, String tunnelIdTip) {
@@ -1371,12 +1371,12 @@ class TunnelRenderer {
 
 
     /**
-     *  Append the peer cells for one tunnel: the local hop renders as a
-     *  "Local" badge with the tunnel id when advanced mode is on, other hops
-     *  render as netdb links with their tunnel ids. Zero-hop and short tunnels
-     *  are padded with empty cells to align the table columns.
+     * Append the peer cells for one tunnel: the local hop renders as a
+     * "Local" badge with the tunnel id when advanced mode is on, other hops
+     * render as netdb links with their tunnel ids. Zero-hop and short tunnels
+     * are padded with empty cells to align the table columns.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void appendPeerCells(StringBuilder buf, TunnelInfo info, int length, int maxLength,
                                  boolean isAdvanced, String localHopTip, String localLabel, String tunnelIdTip) {
@@ -1413,10 +1413,10 @@ class TunnelRenderer {
     }
 
     /**
-     *  Write the buffered HTML to the output writer and clear the buffer,
-     *  used to flush large tables in batches so the page paints progressively.
+     * Write the buffered HTML to the output writer and clear the buffer,
+     * used to flush large tables in batches so the page paints progressively.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void flushBuf(Writer out, StringBuilder buf) throws IOException {
         out.append(buf);
@@ -1572,23 +1572,23 @@ class TunnelRenderer {
     }
 
     /**
-     *  Append the identity cells shared by the peer tables: country flag,
-     *  router hash link, version with netdb link, tier caps, IP address,
-     *  and reverse-lookup domain. The callers append the data cells and
-     *  the row terminator.
+     * Append the identity cells shared by the peer tables: country flag,
+     * router hash link, version with netdb link, tier caps, IP address,
+     * and reverse-lookup domain. The callers append the data cells and
+     * the row terminator.
      *
-     *  @param sb target buffer
-     *  @param h peer hash
-     *  @param hB64 base64 of the peer hash for the netdb link
-     *  @param truncHash short hash label
-     *  @param version router version, may be null
-     *  @param info RouterInfo for the caps cell, may be null
-     *  @param ip primary IP address, may be null
-     *  @param rl reverse lookup result, may be null
-     *  @param versionTip tooltip for the version link
-     *  @param banlistedTip tooltip for the banlisted marker
-     *  @param unknownLabel fallback label for missing domains
-     *  @param isBanned whether the peer is banlisted
+     * @param sb target buffer
+     * @param h peer hash
+     * @param hB64 base64 of the peer hash for the netdb link
+     * @param truncHash short hash label
+     * @param version router version, may be null
+     * @param info RouterInfo for the caps cell, may be null
+     * @param ip primary IP address, may be null
+     * @param rl reverse lookup result, may be null
+     * @param versionTip tooltip for the version link
+     * @param banlistedTip tooltip for the banlisted marker
+     * @param unknownLabel fallback label for missing domains
+     * @param isBanned whether the peer is banlisted
      */
     private void appendPeerIdentity(StringBuilder sb, Hash h, String hB64, String truncHash,
                                     String version, RouterInfo info, String ip, ReverseLookupResult rl,
@@ -1680,8 +1680,8 @@ class TunnelRenderer {
     }
 
     /**
-     *  Render a summary table for a tunnel pool.
-     *  @since 0.9.68+
+     * Render a summary table for a tunnel pool.
+     * @since 0.9.68+
      */
     private void renderPoolSummary(Writer out, TunnelPool in, TunnelPool outPool, Hash client) throws IOException {
         int inCount = in.getActiveTunnelCount();

@@ -6,7 +6,6 @@ package net.i2p.crypto;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -22,24 +21,22 @@ import net.i2p.data.SessionTag;
  * This base implementation simply ignores sessions and acts as if everything is
  * unknown (and hence always forces a full ElGamal encryption for each message).
  * See TransientSessionKeyManager subclass which manages and persists keys and tags.
- *
  */
 public class SessionKeyManager {
 
     /**
-     *  A dummy SessionKeyManager for testing or for passing to
-     *  ElGamalAESEngine.decrypt()
+     * A dummy SessionKeyManager for testing or for passing to
+     * ElGamalAESEngine.decrypt()
      *
-     *  @since 0.9.14
+     * @since 0.9.14
      */
     public SessionKeyManager() {}
 
     /**
-     *  A dummy SessionKeyManager for testing or for passing to
-     *  ElGamalAESEngine.decrypt()
+     * A dummy SessionKeyManager for testing or for passing to
+     * ElGamalAESEngine.decrypt()
      *
-     *  @param context unused
-     *  @since public since 0.9.14; protected before that
+     * @param context unused
      */
     public SessionKeyManager(I2PAppContext context) { // nop
     }
@@ -60,7 +57,6 @@ public class SessionKeyManager {
      * Generates a new session and session key if not previously exising.
      *
      * @return non-null
-     * @since 0.9
      */
     public SessionKey getCurrentOrNewKey(PublicKey target) {
         return null;
@@ -175,7 +171,6 @@ public class SessionKeyManager {
      * Mark all of the tags delivered to the target up to this point as invalid, since the peer
      * has failed to respond when they should have.  This call essentially lets the system recover
      * from corrupted tag sets and crashes
-     *
      */
     public void failTags(PublicKey target) { // nop
     }
@@ -213,7 +208,6 @@ public class SessionKeyManager {
     /**
      * Called when the system is closing down, instructing the session key manager to take
      * whatever precautions are necessary (saving state, etc)
-     *
      */
     public void shutdown() { // nop
     }

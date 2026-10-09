@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Collection;
@@ -105,52 +104,52 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
 
             try {
                 /**
-                 *  With the introduction of segmented netDb, the handling of
-                 *  local LeaseSets has changed substantially, based on the role
-                 *  being assumed.
-                 *  Role #1) The 'floodfill' netDb when the router is a FloodFill
-                 *           The LS will be checked to make sure it arrived directly,
-                 *           and handled as a normal LS.
-                 *  Role #2) The 'floodfill' netDb when the router is *NOT* an I2P
-                 *           network Floodfill.
-                 *           In this case, the 'floodfill' netDb primarily stores RouterInfos.
-                 *           However, there are a number of normal cases where it might contain
-                 *           one or more LeaseSets:
-                 *             1. We used to be a floodfill but aren't anymore
-                 *             2. We performed a lookup without an active session locally(It won't be RAP)
-                 *  Role #3) Client netDb will only receive LeaseSets from their client
-                 *           tunnels, and clients will only publish their LeaseSet out
-                 *           their client tunnel.
-                 *           In this role, the only LeaseSet store that should be rejected
-                 *           is the subDb's client's own LeaseSet.
+                 * With the introduction of segmented netDb, the handling of
+                 * local LeaseSets has changed substantially, based on the role
+                 * being assumed.
+                 * Role #1) The 'floodfill' netDb when the router is a FloodFill
+                 * The LS will be checked to make sure it arrived directly,
+                 * and handled as a normal LS.
+                 * Role #2) The 'floodfill' netDb when the router is *NOT* an I2P
+                 * network Floodfill.
+                 * In this case, the 'floodfill' netDb primarily stores RouterInfos.
+                 * However, there are a number of normal cases where it might contain
+                 * one or more LeaseSets:
+                 * 1. We used to be a floodfill but aren't anymore
+                 * 2. We performed a lookup without an active session locally(It won't be RAP)
+                 * Role #3) Client netDb will only receive LeaseSets from their client
+                 * tunnels, and clients will only publish their LeaseSet out
+                 * their client tunnel.
+                 * In this role, the only LeaseSet store that should be rejected
+                 * is the subDb's client's own LeaseSet.
                  *
-                 *           Currently, the 'floodfill' netDb will be excluded
-                 *           from directly receiving a client LeaseSet, due to the
-                 *           way the selection of FloodFill routers are selected
-                 *           when flooding a LS.
-                 *           But even if the host router does not directly receive the
-                 *           LeaseSets of the clients it hosts, those LeaseSets will
-                 *           usually be flooded back to it.
+                 * Currently, the 'floodfill' netDb will be excluded
+                 * from directly receiving a client LeaseSet, due to the
+                 * way the selection of FloodFill routers are selected
+                 * when flooding a LS.
+                 * But even if the host router does not directly receive the
+                 * LeaseSets of the clients it hosts, those LeaseSets will
+                 * usually be flooded back to it.
                  */
                 LeaseSet ls = (LeaseSet) entry;
                 /**
-                 *  If this was received as a response to a query,
-                 *  FloodOnlyLookupMatchJob called setReceivedAsReply(),
-                 *  and we are seeing this only as a duplicate,
-                 *  so we don't set the receivedAsPublished() flag.
-                 *  Otherwise, mark it as something we received unsolicited, so we'll answer queries
-                 *  for it.  This flag must NOT get set on entries that we
-                 *  receive in response to our own lookups.
-                 *  See ../HDLMJ for more info
+                 * If this was received as a response to a query,
+                 * FloodOnlyLookupMatchJob called setReceivedAsReply(),
+                 * and we are seeing this only as a duplicate,
+                 * so we don't set the receivedAsPublished() flag.
+                 * Otherwise, mark it as something we received unsolicited, so we'll answer queries
+                 * for it.  This flag must NOT get set on entries that we
+                 * receive in response to our own lookups.
+                 * See ../HDLMJ for more info
                  */
                 if (!_facade.isClientDb()) {
                     if (!ls.getReceivedAsReply()) {ls.setReceivedAsPublished();}
                 } else {
                     /**
-                     *  A client subDB whose owner tries to store its own
-                     *  LeaseSet is rejected: resolve the LeaseSet hash in the
-                     *  netDbSegmentor and compare it to the owning _facade.  If
-                     *  they are equal, reject the store without blaming the peer.
+                     * A client subDB whose owner tries to store its own
+                     * LeaseSet is rejected: resolve the LeaseSet hash in the
+                     * netDbSegmentor and compare it to the owning _facade.  If
+                     * they are equal, reject the store without blaming the peer.
                      */
                     if (getContext().netDbSegmentor().clientNetDB(ls.getHash()).equals(_facade)) {
                         getContext().statManager().addRateData("netDb.storeLocalLeaseSetToLocalClient", 1, 0);
@@ -164,14 +163,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 LeaseSet match = _facade.store(key, ls);
                 if (match == null || KademliaNetworkDatabaseFacade.isNewer(ls, match)) {wasNew = true;}
                 /**
-                 *  The FloodOnlyLookupSelector goes away after the first good reply
-                 *  So on the second reply, FloodOnlyMatchJob is not called to set ReceivedAsReply.
-                 *  So then we think it's an unsolicited store.
-                 *  So we should skip this.
-                 *  If the 2nd reply is newer than the first, ReceivedAsPublished will be set incorrectly,
-                 *  that will hopefully be rare.
-                 *  A more elaborate solution would be a List of recent ReceivedAsReply LeaseSets, with receive time ?
-                 *  A real unsolicited store is likely to be new - hopefully...
+                 * The FloodOnlyLookupSelector goes away after the first good reply
+                 * So on the second reply, FloodOnlyMatchJob is not called to set ReceivedAsReply.
+                 * So then we think it's an unsolicited store.
+                 * So we should skip this.
+                 * If the 2nd reply is newer than the first, ReceivedAsPublished will be set incorrectly,
+                 * that will hopefully be rare.
+                 * A more elaborate solution would be a List of recent ReceivedAsReply LeaseSets, with receive time ?
+                 * A real unsolicited store is likely to be new - hopefully...
                  */
                 else {wasNew = false;}
             } catch (UnsupportedCryptoException uce) {
@@ -224,22 +223,22 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
             }
             try {
                 /**
-                 *  Never store our RouterInfo received from somebody else.
-                 *  This generally happens from a FloodfillVerifyStoreJob.
-                 *  If it is valid, it shouldn't be newer than what we have - unless
-                 *  somebody has our keys...
+                 * Never store our RouterInfo received from somebody else.
+                 * This generally happens from a FloodfillVerifyStoreJob.
+                 * If it is valid, it shouldn't be newer than what we have - unless
+                 * somebody has our keys...
                  */
                 if (isUs) {
                     /**
-                     *  This is initiated by PeerTestJob from another peer
-                     *  throw rather than return, so that we send the ack below (prevent easy attack)
+                     * This is initiated by PeerTestJob from another peer
+                     * throw rather than return, so that we send the ack below (prevent easy attack)
                      */
                     dontBlamePeer = true;
                     throw new IllegalArgumentException("Router [" + key.toBase64().substring(0, 6) + "] attempted to store our RouterInfo");
                 }
                 /**
-                 *  If we're in the client netDb context, log a warning since this is not expected.
-                 *  This is probably impossible but log it if we ever see it so it can be investigated.
+                 * If we're in the client netDb context, log a warning since this is not expected.
+                 * This is probably impossible but log it if we ever see it so it can be investigated.
                  */
                 if (_facade.isClientDb() && _log.shouldWarn()) {
                     _log.warn("Handling RouterInfo [" + key.toBase64().substring(0,6) + "] store request in client NetDb context of router");

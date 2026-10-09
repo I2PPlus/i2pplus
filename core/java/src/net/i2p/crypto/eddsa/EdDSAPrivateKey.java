@@ -20,7 +20,7 @@ import java.util.Arrays;
  *
  * @see <a href="https://tools.ietf.org/html/rfc8410">RFC 8410</a>
  * @see <a href="https://tools.ietf.org/html/draft-josefsson-pkix-eddsa-04">Older draft
- *      specification</a>
+ * specification</a>
  * @since 0.9.15
  */
 public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
@@ -145,7 +145,6 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      * </pre>
      *
      * @return 48 bytes for Ed25519, null for other curves
-     * @since implemented in 0.9.25
      */
     @Override
     public byte[] getEncoded() {
@@ -279,7 +278,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
      * The 32-byte seed.
      *
      * @return Will be null if constructed from a spec which was directly
-     *         constructed from H.
+     * constructed from H.
      */
     public byte[] getSeed() {
         return seed;
@@ -333,10 +332,10 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     }
 
     /**
-     *  Whether this key is equal to the given key.
+     * Whether this key is equal to the given key.
      *
-     *  @return true if equal
-     *  @since 0.9.25
+     * @return true if equal
+     * @since 0.9.25
      */
     @Override
     public boolean equals(Object o) {

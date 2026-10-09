@@ -17,10 +17,10 @@ import java.security.spec.EllipticCurve;
  *
  * <p>Key operations include:</p>
  * <ul>
- *   <li>Scalar multiplication of curve points</li>
- *   <li>Point addition and doubling operations</li>
- *   <li>Curve parameter validation and extraction</li>
- *   <li>Support for standard NIST curves (P-192, P-256, P-384, P-521)</li>
+ * <li>Scalar multiplication of curve points</li>
+ * <li>Point addition and doubling operations</li>
+ * <li>Curve parameter validation and extraction</li>
+ * <li>Support for standard NIST curves (P-192, P-256, P-384, P-521)</li>
  * </ul>
  *
  * @since 0.9.16
@@ -83,8 +83,8 @@ final class ECUtil {
     }
 
     /**
-     *  P-192 test only.
-     *  See KeyGenerator.main() for a test of all supported curves.
+     * P-192 test only.
+     * See KeyGenerator.main() for a test of all supported curves.
      */
 
 }

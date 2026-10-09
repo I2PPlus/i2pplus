@@ -5,7 +5,6 @@ package net.i2p.i2ptunnel;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.FilterOutputStream;
@@ -59,7 +58,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     /** Body bytes to drop from the next response before forwarding (200 after Range). */
     private long _resumeSkipBytes;
     /** True when a transient status (408/502/503/504) aborted a Range resume —
-     *  next attempt must re-request from byte 0 without Range. */
+     * next attempt must re-request from byte 0 without Range. */
     private volatile boolean _transientResumeFailure;
 
     private static final int CACHE_SIZE = 16*1024;
@@ -94,9 +93,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
      * Optionally keep sockets alive and call callback when we're done.
      *
      * @param allowKeepAliveIn We may, but are not required to, keep the input socket alive.
-     *                         This is the server on the server side and I2P on the client side.
+     * This is the server on the server side and I2P on the client side.
      * @param allowKeepAliveOut We may, but are not required to, keep the output socket alive.
-     *                          This is I2P on the server side and the browser on the client side.
+     * This is I2P on the server side and the browser on the client side.
      * @param isHead is this a response to a HEAD, and thus no data is expected (RFC 2616 sec. 4.4)
      * @param cb non-null if allowKeepAlive is true
      * @since 0.9.62
@@ -272,8 +271,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     /**
-     *  grow (and free) the buffer as necessary
-     *  @throws IOException if the headers are too big
+     * grow (and free) the buffer as necessary
+     * @throws IOException if the headers are too big
      */
     private void ensureCapacity() throws IOException {
         int valid = _headerBuffer.getValid();

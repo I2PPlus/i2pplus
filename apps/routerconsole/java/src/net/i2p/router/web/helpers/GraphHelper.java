@@ -20,11 +20,11 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
 
 /**
- *  Renders the graphs list (/graphs.jsp) and the single-stat page (/graph.jsp),
- *  plus the graph display configuration form.
+ * Renders the graphs list (/graphs.jsp) and the single-stat page (/graph.jsp),
+ * plus the graph display configuration form.
  *
- *  Stateless across requests except for per-request form state set via the
- *  {@code setXxx()} accessors; preferences are read from context properties.
+ * Stateless across requests except for per-request form state set via the
+ * {@code setXxx()} accessors; preferences are read from context properties.
  */
 public class GraphHelper extends FormHandler {
 
@@ -150,7 +150,7 @@ public class GraphHelper extends FormHandler {
      * setPeriodCount.
      *
      * @param str period count in minutes; non-numeric text is ignored and numbers
-     *            are clamped to MIN_C..MAX_C
+     * are clamped to MIN_C..MAX_C
      */
     public void setPeriodCount(String str) {
         setC(str);
@@ -160,8 +160,7 @@ public class GraphHelper extends FormHandler {
      * Ends the view window that many periods before the most recent one.
      *
      * @param str how many periods back to end, so 0 ends at the latest period;
-     *            non-numeric text is ignored
-     * @since 0.9
+     * non-numeric text is ignored
      */
     public void setE(String str) {
         try {_end = Math.max(0, Integer.parseInt(str));}
@@ -172,8 +171,7 @@ public class GraphHelper extends FormHandler {
      * Shorter form of {@link #setPeriodCount} bound to the c= URL parameter.
      *
      * @param str period count in minutes; non-numeric text is ignored and numbers
-     *            are clamped to MIN_C..MAX_C
-     * @since 0.9
+     * are clamped to MIN_C..MAX_C
      */
     public void setC(String str) {
         try {_periodCount = Math.max(MIN_C, Math.min(Integer.parseInt(str), MAX_C));}
@@ -184,32 +182,32 @@ public class GraphHelper extends FormHandler {
      * setShowEvents.
      *
      * @param b true to plot individual events, false to plot averages; an absent,
-     *          empty or unrecognised value leaves the current mode in force
+     * empty or unrecognised value leaves the current mode in force
      */
     public void setShowEvents(String b) {
         _showEvents = resolveShowEvents(b, _showEvents);
     }
 
     /**
-     *  Resolves the requested events mode against the mode in force.
+     * Resolves the requested events mode against the mode in force.
      *
-     *  <p>An absent or empty parameter means "not specified", and the mode already in force -
-     *  which came from {@code routerconsole.graphEvents} - stands. It must not be read as a
-     *  request for events: the enlarged-graph link only emits {@code showEvents} when events
-     *  are on, so a time-mode link omits it, and the old {@code !"false".equals(b)} turned that
-     *  omission into {@code true}. Opening the larger view of a time graph silently switched it
-     *  to events and contradicted the configured default. The two URL-building sites disagreed
-     *  about whether the parameter is always present; this makes the reader tolerant of its
-     *  absence instead.
+     * <p>An absent or empty parameter means "not specified", and the mode already in force -
+     * which came from {@code routerconsole.graphEvents} - stands. It must not be read as a
+     * request for events: the enlarged-graph link only emits {@code showEvents} when events
+     * are on, so a time-mode link omits it, and the old {@code !"false".equals(b)} turned that
+     * omission into {@code true}. Opening the larger view of a time graph silently switched it
+     * to events and contradicted the configured default. The two URL-building sites disagreed
+     * about whether the parameter is always present; this makes the reader tolerant of its
+     * absence instead.
      *
-     *  <p>The value is also parsed symmetrically with the way it is written. One link emits
-     *  {@code showEvents=1} and the image sources emit {@code showEvents=true|false}, but the
-     *  reader recognised only the literal string {@code "false"} - so {@code showEvents=0}, a
-     *  perfectly ordinary way to spell it, was read as a request for <em>events</em>.
+     * <p>The value is also parsed symmetrically with the way it is written. One link emits
+     * {@code showEvents=1} and the image sources emit {@code showEvents=true|false}, but the
+     * reader recognised only the literal string {@code "false"} - so {@code showEvents=0}, a
+     * perfectly ordinary way to spell it, was read as a request for <em>events</em>.
      *
-     *  @param param the request parameter, may be null or empty
-     *  @param current the mode currently in force
-     *  @return the mode to use
+     * @param param the request parameter, may be null or empty
+     * @param current the mode currently in force
+     * @return the mode to use
      */
     static boolean resolveShowEvents(String param, boolean current) {
         if (param == null || param.isEmpty()) {return current;}
@@ -223,7 +221,7 @@ public class GraphHelper extends FormHandler {
      * setHeight.
      *
      * @param str image height in pixels; non-numeric text is ignored and numbers
-     *            are clamped to MIN_Y..MAX_Y
+     * are clamped to MIN_Y..MAX_Y
      */
     public void setHeight(String str) {
         setH(str);
@@ -233,8 +231,7 @@ public class GraphHelper extends FormHandler {
      * Shorter form of {@link #setHeight} bound to the h= URL parameter.
      *
      * @param str image height in pixels; non-numeric text is ignored and numbers
-     *            are clamped to MIN_Y..MAX_Y
-     * @since 0.9
+     * are clamped to MIN_Y..MAX_Y
      */
     public void setH(String str) {
         try {_height = Math.max(MIN_Y, Math.min(Integer.parseInt(str), MAX_Y));}
@@ -245,7 +242,7 @@ public class GraphHelper extends FormHandler {
      * setWidth.
      *
      * @param str image width in pixels; non-numeric text is ignored and numbers
-     *            are clamped to MIN_X..MAX_X
+     * are clamped to MIN_X..MAX_X
      */
     public void setWidth(String str) {
         setW(str);
@@ -255,8 +252,7 @@ public class GraphHelper extends FormHandler {
      * Shorter form of {@link #setWidth} bound to the w= URL parameter.
      *
      * @param str image width in pixels; non-numeric text is ignored and numbers
-     *            are clamped to MIN_X..MAX_X
-     * @since 0.9
+     * are clamped to MIN_X..MAX_X
      */
     public void setW(String str) {
         try {_width = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));}
@@ -267,8 +263,8 @@ public class GraphHelper extends FormHandler {
      * setRefreshDelay.
      *
      * @param str refresh delay in seconds; a positive value is raised to
-     *            MIN_REFRESH, zero or negative selects never refresh, and
-     *            non-numeric text is ignored
+     * MIN_REFRESH, zero or negative selects never refresh, and
+     * non-numeric text is ignored
      */
     public void setRefreshDelay(String str) {
         try {
@@ -290,7 +286,7 @@ public class GraphHelper extends FormHandler {
      * Sets the glow effect drawn around graph lines.
      *
      * @param foo only the exact text {@code false} turns the glow off; any other
-     *            value enables it
+     * value enables it
      * @since 0.9.70+
      */
     public void setGraphGlow(String foo) {_graphGlow = !"false".equals(foo);}
@@ -299,7 +295,7 @@ public class GraphHelper extends FormHandler {
      * Sets bezier curves in place of a staircase plot.
      *
      * @param foo only the exact text {@code false} turns smoothing off; any other
-     *            value enables it
+     * value enables it
      */
     public void setGraphSmooth(String foo) {_graphSmooth = !"false".equals(foo);}
 
@@ -307,7 +303,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether graphs are drawn with filled areas.
      *
      * @param foo only the exact text {@code false} turns filling off; any other
-     *            value enables it
+     * value enables it
      */
     public void setGraphFill(String foo) {_graphFill = !"false".equals(foo);}
 
@@ -315,7 +311,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether related stats are merged into one overlaid plot.
      *
      * @param foo only the exact text {@code false} turns combining off; any other
-     *            value enables it
+     * value enables it
      * @since 0.9.71+
      */
     public void setGraphCombine(String foo) {_graphCombine = !"false".equals(foo);}
@@ -324,7 +320,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether graph axes are labelled in UTC instead of local time.
      *
      * @param foo only the exact text {@code false} turns UTC off; any other
-     *            value enables it
+     * value enables it
      * @since 0.9.70+
      */
     public void setUseUtc(String foo) {_useUtc = !"false".equals(foo);}
@@ -333,7 +329,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether the legend is suppressed on graphs.
      *
      * @param foo {@code true} hides the legend and {@code false} shows it; any
-     *            other value leaves the current setting alone
+     * other value leaves the current setting alone
      * @since 0.9.32
      */
     public void setHideLegend(String foo) {
@@ -350,7 +346,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether restart markers are suppressed on graphs.
      *
      * @param foo {@code true} suppresses them and {@code false} restores them;
-     *            any other value leaves the current setting alone
+     * any other value leaves the current setting alone
      * @since 0.9.70+
      */
     public void setHideRestarts(String foo) {
@@ -362,9 +358,8 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  For single stat page
-     *  @param stat the rate name to plot, or a group id when combining is on
-     *  @since 0.9
+     * For single stat page
+     * @param stat the rate name to plot, or a group id when combining is on
      */
     public void setStat(String stat) {_stat = stat;}
 
@@ -476,13 +471,13 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  Emit one tile per active group, each plotting its members as overlaid lines.
+     * Emit one tile per active group, each plotting its members as overlaid lines.
      *
-     *  <p>A group appears only when at least two members are enabled and carry data, so
-     *  enabling a single stat is never silently turned into a combined plot.
+     * <p>A group appears only when at least two members are enabled and carry data, so
+     * enabling a single stat is never silently turned into a combined plot.
      *
-     *  @return markup for every qualifying group, empty when none qualify
-     *  @since 0.9.71+
+     * @return markup for every qualifying group, empty when none qualify
+     * @since 0.9.71+
      */
     private String renderGroupTiles(Set<String> enabledStats, boolean hideLegend,
                                     boolean hideRestarts, long now) {
@@ -564,7 +559,6 @@ public class GraphHelper extends FormHandler {
      * stat = "bw.combined" treated specially
      *
      * @return the single stat
-     * @since 0.9
      */
     public String getSingleStat() {
         GraphGenerator ss = GraphGenerator.instance(_context);
@@ -872,8 +866,8 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  This was a HelperBase but now it's a FormHandler
-     *  @since 0.8.2
+     * This was a HelperBase but now it's a FormHandler
+     * @since 0.8.2
      */
     @Override
     protected void processForm() {
@@ -883,8 +877,8 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  Silently save settings if changed, no indication of success or failure
-     *  @since 0.7.10
+     * Silently save settings if changed, no indication of success or failure
+     * @since 0.7.10
      */
     private void saveSettings() {
         if (_width != _context.getProperty(PROP_X, DEFAULT_X) ||
@@ -928,8 +922,8 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     *  Orders graphs for display: "Router" group first, then remaining groups
-     *  alphabetically, then by stat name and period.
+     * Orders graphs for display: "Router" group first, then remaining groups
+     * alphabetically, then by stat name and period.
      */
     private static class AlphaComparator implements Comparator<GraphListener>, Serializable {
         /**

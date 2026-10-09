@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Collection;
@@ -83,14 +82,14 @@ class TransientDataStore implements DataStore {
     public void rescan() { /* No-op - in-memory store has no external state to rescan */ }
 
     /**
-     *  @return total size (RI and LS)
-     *  @since 0.8.8
+     * @return total size (RI and LS)
+     * @since 0.8.8
      */
     @Override
     public int size() {return _data.size();}
 
     /**
-     *  @return Unmodifiable view, not a copy
+     * @return Unmodifiable view, not a copy
      */
     @Override
     public Set<Hash> getKeys() {
@@ -98,8 +97,8 @@ class TransientDataStore implements DataStore {
     }
 
     /**
-     *  @return Unmodifiable view, not a copy
-     *  @since 0.8.3
+     * @return Unmodifiable view, not a copy
+     * @since 0.8.3
      */
     @Override
     public Collection<DatabaseEntry> getEntries() {
@@ -107,16 +106,16 @@ class TransientDataStore implements DataStore {
     }
 
     /**
-     *  @return Unmodifiable view, not a copy
-     *  @since 0.8.3
+     * @return Unmodifiable view, not a copy
+     * @since 0.8.3
      */
     public Set<Map.Entry<Hash, DatabaseEntry>> getMapEntries() {
         return Collections.unmodifiableSet(_data.entrySet());
     }
 
     /** For PersistentDataStore only - don't use here.
-      * @throws UnsupportedOperationException always
-      */
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public DatabaseEntry get(Hash key, boolean persist) {
         throw new UnsupportedOperationException();
@@ -155,15 +154,15 @@ class TransientDataStore implements DataStore {
     }
 
     /** For PersistentDataStore only - don't use here.
-      * @throws UnsupportedOperationException always
-      */
+     * @throws UnsupportedOperationException always
+     */
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
         throw new UnsupportedOperationException();
     }
 
     /**
-     *  @param data must be validated before here
-     *  @return success
+     * @param data must be validated before here
+     * @return success
      */
     public boolean put(Hash key, DatabaseEntry data) {
         if (data == null) return false;
@@ -329,8 +328,8 @@ class TransientDataStore implements DataStore {
     }
 
     /** For PersistentDataStore only - don't use here.
-      * @throws UnsupportedOperationException always
-      */
+     * @throws UnsupportedOperationException always
+     */
     public DatabaseEntry remove(Hash key, boolean persist) {
         throw new UnsupportedOperationException();
     }

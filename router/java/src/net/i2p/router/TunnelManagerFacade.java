@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.List;
@@ -18,7 +17,6 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 
 /**
  * Manages tunnel creation, maintenance, and selection for encrypted routing. Coordinates exploratory and client-specific tunnels for secure message delivery.
- *
  */
 public interface TunnelManagerFacade extends Service {
 
@@ -126,7 +124,7 @@ public interface TunnelManagerFacade extends Service {
      * @param client hash of the destination whose pool is checked
      * @param tunnel candidate, rejected if failed or expired
      * @return true only if unfailed, unexpired and listed in that client's
-     *              inbound or outbound pool, matching the tunnel's direction
+     * inbound or outbound pool, matching the tunnel's direction
      */
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel);
 
@@ -152,14 +150,14 @@ public interface TunnelManagerFacade extends Service {
      * How many free inbound client tunnels do we have available?
      *
      * @return total over all destinations of GOOD (tested and passed)
-     *               inbound client tunnels
+     * inbound client tunnels
      */
     public int getInboundClientTunnelCount();
     /**
      * How many outbound client tunnels do we have available?
      *
      * @return total over all destinations of GOOD (tested and passed)
-     *               outbound client tunnels
+     * outbound client tunnels
      */
     public int getOutboundClientTunnelCount();
     /**
@@ -167,7 +165,7 @@ public interface TunnelManagerFacade extends Service {
      *
      * @param destination hash of the destination owning the outbound pool
      * @return GOOD tunnel count, or the count including untested tunnels
-     *              while bootstrapping, or 0 if no pool is registered
+     * while bootstrapping, or 0 if no pool is registered
      */
     public int getOutboundClientTunnelCount(Hash destination);
     /**
@@ -175,7 +173,7 @@ public interface TunnelManagerFacade extends Service {
      *
      * @param destination hash of the destination owning the inbound pool
      * @return GOOD tunnel count, or the count including untested tunnels
-     *              while bootstrapping, or 0 if no pool is registered
+     * while bootstrapping, or 0 if no pool is registered
      */
     public int getInboundClientTunnelCount(Hash destination);
     /**
@@ -189,7 +187,7 @@ public interface TunnelManagerFacade extends Service {
      * When does the last tunnel we are participating in expire?
      *
      * @return expiration of the latest-expiring participating tunnel in
-     *                    milliseconds since the epoch, or -1 if we participate in none
+     * milliseconds since the epoch, or -1 if we participate in none
      */
     public long getLastParticipatingExpiration();
 
@@ -201,9 +199,9 @@ public interface TunnelManagerFacade extends Service {
     public int getInboundBuildQueueSize();
 
     /**
-     *  Peers that should not be allowed to be in another tunnel.
+     * Peers that should not be allowed to be in another tunnel.
      *
-     *  @return Set of peers that should not be allowed to be in another tunnel
+     * @return Set of peers that should not be allowed to be in another tunnel
      */
     public Set<Hash> selectPeersInTooManyTunnels();
 
@@ -213,37 +211,37 @@ public interface TunnelManagerFacade extends Service {
      *
      * @param client connecting destination, whose hash keys the pools created here
      * @param settings per-destination inbound and outbound pool settings, which
-     *                 replace those of any pools that already exist
+     * replace those of any pools that already exist
      */
     public void buildTunnels(Destination client, ClientTunnelSettings settings);
 
     /**
-     *  Must be called AFTER deregistration by the client manager.
+     * Must be called AFTER deregistration by the client manager.
      *
-     *  @param client destination whose pools are scheduled for removal, deferred
-     *                so its tunnels keep operating until they expire
-     *  @since 0.9.48
+     * @param client destination whose pools are scheduled for removal, deferred
+     * so its tunnels keep operating until they expire
+     * @since 0.9.48
      */
     public void removeTunnels(Destination client);
 
     /**
-     *  Add another destination to the same tunnels.
-     *  Must have same encryption key and a different signing key.
+     * Add another destination to the same tunnels.
+     * Must have same encryption key and a different signing key.
      *
-     *  @param dest alias destination, which gets its own pools flagged as aliased
-     *  @param settings settings for the alias pools, retained under the primary hash
-     *  @param existingClient primary destination whose tunnels are being shared
-     *  @throws IllegalArgumentException if not
-     *  @return success
-     *  @since 0.9.21
+     * @param dest alias destination, which gets its own pools flagged as aliased
+     * @param settings settings for the alias pools, retained under the primary hash
+     * @param existingClient primary destination whose tunnels are being shared
+     * @throws IllegalArgumentException if not
+     * @return success
+     * @since 0.9.21
      */
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient);
 
     /**
-     *  Remove another destination to the same tunnels.
+     * Remove another destination to the same tunnels.
      *
-     *  @param dest alias destination to drop from the primary's alias set
-     *  @since 0.9.21
+     * @param dest alias destination to drop from the primary's alias set
+     * @since 0.9.21
      */
     public void removeAlias(Destination dest);
 
@@ -303,7 +301,7 @@ public interface TunnelManagerFacade extends Service {
      * For TunnelRenderer in router console
      *
      * @param out list that the client inbound, client outbound and both
-     *            exploratory pools are appended to
+     * exploratory pools are appended to
      */
     public void listPools(List<TunnelPool> out);
     /**
@@ -332,43 +330,43 @@ public interface TunnelManagerFacade extends Service {
     public TunnelPool getOutboundExploratoryPool();
 
     /**
-     *  Inbound tunnel pool for the given client, or null if none.
+     * Inbound tunnel pool for the given client, or null if none.
      *
-     *  @param client hash of the destination that owns the pool
-     *  @return pool or null
-     *  @since 0.9.34
+     * @param client hash of the destination that owns the pool
+     * @return pool or null
+     * @since 0.9.34
      */
     public TunnelPool getInboundPool(Hash client);
 
     /**
-     *  Outbound tunnel pool for the given client, or null if none.
+     * Outbound tunnel pool for the given client, or null if none.
      *
-     *  @param client hash of the destination that owns the pool
-     *  @return pool or null
-     *  @since 0.9.34
+     * @param client hash of the destination that owns the pool
+     * @return pool or null
+     * @since 0.9.34
      */
     public TunnelPool getOutboundPool(Hash client);
 
     /**
-     *  Run both of a client's pools' ensure logic on demand instead of
-     *  waiting for the next build-timer interval.  Called from the data
-     *  phase when a send failed for pool-empty reasons (message expired
-     *  while queued, no tunnels available) — a liveness signal that the
-     *  pools need rebuilding now.  Each pool's internal ensure throttle
-     *  still applies, so a failure storm cannot become a build storm.
+     * Run both of a client's pools' ensure logic on demand instead of
+     * waiting for the next build-timer interval.  Called from the data
+     * phase when a send failed for pool-empty reasons (message expired
+     * while queued, no tunnels available) — a liveness signal that the
+     * pools need rebuilding now.  Each pool's internal ensure throttle
+     * still applies, so a failure storm cannot become a build storm.
      *
-     *  <p>The pool maps are keyed by the <b>local</b> client (source)
-     *  destination hash, never the remote destination: passing a remote
-     *  hash finds no pools and silently does nothing.
+     * <p>The pool maps are keyed by the <b>local</b> client (source)
+     * destination hash, never the remote destination: passing a remote
+     * hash finds no pools and silently does nothing.
      *
-     *  <p>Additive ABI: this method and its {@code int} return both postdate
-     *  0.9.70+ (no release ever shipped a {@code void} variant), so
-     *  implementations and callers only ever saw this signature; callers may
-     *  still ignore the returned count.
+     * <p>Additive ABI: this method and its {@code int} return both postdate
+     * 0.9.70+ (no release ever shipped a {@code void} variant), so
+     * implementations and callers only ever saw this signature; callers may
+     * still ignore the returned count.
      *
-     *  @param client the LOCAL client destination hash whose pools should rebuild
-     *  @return how many pools were nudged; 0 when none are registered for the client
-     *  @since 0.9.71+
+     * @param client the LOCAL client destination hash whose pools should rebuild
+     * @return how many pools were nudged; 0 when none are registered for the client
+     * @since 0.9.71+
      */
     public int ensurePoolsFor(Hash client);
 

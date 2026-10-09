@@ -74,11 +74,11 @@ public class SybilRenderer {
     }
 
     /**
-     *  Entry point
+     * Entry point
      *
-     *  @param mode what tab to show
-     *  @param date only for mode = 12
-     *  @return the net db summary
+     * @param mode what tab to show
+     * @param date only for mode = 12
+     * @return the net db summary
      */
     public String getNetDbSummary(Writer out, String nonce, int mode, long date) throws IOException {
         renderRouterInfoHTML(out, nonce, mode, date);
@@ -105,8 +105,8 @@ public class SybilRenderer {
     }
 
     /**
-     *  Reverse points, then forward by text
-     *  @since 0.9.38
+     * Reverse points, then forward by text
+     * @since 0.9.38
      */
     private static class ReasonComparator implements Comparator<String>, Serializable {
           /**
@@ -134,10 +134,10 @@ public class SybilRenderer {
     }
 
     /**
-     *  The whole thing
+     * The whole thing
      *
-     *  @param mode what tab to show
-     *  @param date only for mode = 12
+     * @param mode what tab to show
+     * @param date only for mode = 12
      */
     private void renderRouterInfoHTML(Writer out, String nonce, int mode, long date) throws IOException {
         Hash us = _context.routerHash();
@@ -292,9 +292,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the sybil analysis overview section.
+     * Render the sybil analysis overview section.
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     private void renderOverview(Writer out, StringBuilder buf, String nonce, Analysis analysis) throws IOException {
         PersistSybil ps = analysis.getPersister();
@@ -335,9 +335,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the form to start a new sybil analysis scan.
+     * Render the form to start a new sybil analysis scan.
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     private static void renderRunForm(Writer out, StringBuilder buf, String nonce) throws IOException {
         buf.append("<form class=sybilScan action=/netdb method=POST>\n<input type=hidden name=f value=3>\n" +
@@ -362,9 +362,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the configuration form for background sybil analysis.
+     * Render the configuration form for background sybil analysis.
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     private void renderBackgroundForm(Writer out, StringBuilder buf, String nonce) throws IOException {
         long freq = _context.getProperty(Analysis.PROP_FREQUENCY, Analysis.DEFAULT_FREQUENCY);
@@ -433,9 +433,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the floodfill summary section.
+     * Render the floodfill summary section.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderFFSummary(Writer out, StringBuilder buf, List<RouterInfo> ris, double avgMinDist) throws IOException {
@@ -450,9 +450,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the family group summary section.
+     * Render the family group summary section.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderFamilySummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         Map<String, List<RouterInfo>> fmap = analysis.calculateIPGroupsFamily(ris, points);
@@ -460,9 +460,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the IP group summary for our own IP address.
+     * Render the IP group summary for our own IP address.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIPUsSummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         List<RouterInfo> ri32 = new ArrayList<>(4);
@@ -475,9 +475,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the /32 IP group summary.
+     * Render the /32 IP group summary.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP32Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         Map<Integer, List<RouterInfo>> map = analysis.calculateIPGroups32(ris, points);
@@ -485,9 +485,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the /24 IP group summary.
+     * Render the /24 IP group summary.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP24Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         Map<Integer, List<RouterInfo>> map = analysis.calculateIPGroups24(ris, points);
@@ -495,9 +495,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the /16 IP group summary.
+     * Render the /16 IP group summary.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderIP16Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         Map<Integer, List<RouterInfo>> map = analysis.calculateIPGroups16(ris, points);
@@ -505,9 +505,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the /64 IPv6 group summary.
+     * Render the /64 IPv6 group summary.
      *
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     private void renderIP64Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         Map<Long, List<RouterInfo>> map = analysis.calculateIPGroups64(ris, points);
@@ -515,9 +515,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the /48 IPv6 group summary.
+     * Render the /48 IPv6 group summary.
      *
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     private void renderIP48Summary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         Map<Long, List<RouterInfo>> map = analysis.calculateIPGroups48(ris, points);
@@ -525,9 +525,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the pairwise distance summary.
+     * Render the pairwise distance summary.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderPairSummary(Writer out, StringBuilder buf, Analysis analysis, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         // Pairwise distance analysis
@@ -537,9 +537,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the closest floodfills to our routing key.
+     * Render the closest floodfills to our routing key.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderCloseSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         // Distance to our router analysis
@@ -551,9 +551,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the closest floodfills to tomorrow's routing key.
+     * Render the closest floodfills to tomorrow's routing key.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderCloseTmrwSummary(Writer out, StringBuilder buf, Analysis analysis, Hash us, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         // Distance to our router analysis
@@ -566,9 +566,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the closest floodfills to our router hash.
+     * Render the closest floodfills to our router hash.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderDHTSummary(Writer out, StringBuilder buf, Analysis analysis, Hash us, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         buf.append("<h3 id=dht class=sybils>").append(_t("Closest Floodfills to Our Router Hash (DHT Neighbors if we are Floodfill)")).append("</h3>\n");
@@ -577,9 +577,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the closest floodfills to our published destinations.
+     * Render the closest floodfills to our published destinations.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     private void renderDestSummary(Writer out, StringBuilder buf, Analysis analysis, double avgMinDist, List<RouterInfo> ris, Map<Hash, Points> points) throws IOException {
         // Distance to our published destinations analysis
@@ -623,9 +623,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the threats analysis HTML section.
+     * Render the threats analysis HTML section.
      *
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderThreatsHTML(Writer out, StringBuilder buf, long date, Map<Hash, Points> points) throws IOException {
@@ -681,9 +681,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the floodfill pairwise distance table.
+     * Render the floodfill pairwise distance table.
      *
-     *  @param pairs sorted
+     * @param pairs sorted
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderPairDistance(Writer out, StringBuilder buf, List<Pair> pairs, double avg) throws IOException {
@@ -747,7 +747,7 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the HTML for IP groups matching our own IP address.
+     * Render the HTML for IP groups matching our own IP address.
      */
     private void renderIPGroupsUs(Writer out, StringBuilder buf, List<RouterInfo> ri32,
                                   List<RouterInfo> ri24, List<RouterInfo> ri16,
@@ -796,7 +796,7 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the HTML for /32 IP groups (same IPv4 address).
+     * Render the HTML for /32 IP groups (same IPv4 address).
      */
     private void renderIPGroups32(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=sameIP class=sybils>").append(_t("Routers with the same IPv4")).append("</h3>\n");
@@ -826,7 +826,7 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the HTML for /24 IP groups.
+     * Render the HTML for /24 IP groups.
      */
     private void renderIPGroups24(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same24 class=sybils>").append(_t("Routers in the same IPv4 /24")).append("</h3>\n");
@@ -855,7 +855,7 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the HTML for /16 IP groups.
+     * Render the HTML for /16 IP groups.
      */
     private void renderIPGroups16(Writer out, StringBuilder buf, Map<Integer, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=same16 class=sybils>").append(_t("Routers in the same IPv4 /16 (4 minimum)")).append("</h3>\n");
@@ -948,7 +948,7 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render the HTML for router family groups.
+     * Render the HTML for router family groups.
      */
     private void renderIPGroupsFamily(Writer out, StringBuilder buf, Map<String, List<RouterInfo>> map) throws IOException {
         buf.append("<h3 id=samefamily class=sybils>").append(_t("Routers in the same Family"))
@@ -977,9 +977,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Render routers closer than MIN_CLOSE up to MAX routers
-     *  @param ris sorted, closest first
-     *  @param usName HTML escaped
+     * Render routers closer than MIN_CLOSE up to MAX routers
+     * @param ris sorted, closest first
+     * @param usName HTML escaped
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderRouterInfoHTML(Writer out, StringBuilder buf, Hash us, double avgMinDist,
@@ -1056,12 +1056,12 @@ public class SybilRenderer {
     }
 
     /**
-     *  Be careful to use stripHTML for any displayed routerInfo data
-     *  to prevent vulnerabilities
+     * Be careful to use stripHTML for any displayed routerInfo data
+     * to prevent vulnerabilities
      *
-     *  @param us ROUTING KEY or null
-     *  @param full ignored
-     *  @return distance to us if non-null, else 0
+     * @param us ROUTING KEY or null
+     * @param full ignored
+     * @return distance to us if non-null, else 0
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized double renderRouterInfo(StringBuilder buf, RouterInfo info, Hash us, boolean isUs, boolean full) {
@@ -1262,9 +1262,9 @@ public class SybilRenderer {
     }
 
     /**
-     *  Called from NetDbRenderer
+     * Called from NetDbRenderer
      *
-     *  @since 0.9.28
+     * @since 0.9.28
      */
     public static void renderSybilHTML(Writer out, RouterContext ctx, List<Hash> sybils, String victim) throws IOException {
         if (sybils.isEmpty())
@@ -1347,16 +1347,16 @@ public class SybilRenderer {
     }
 
     /**
-     *  Translate a string with a parameter
-     *  This is a lot more expensive than _t(s), so use sparingly.
+     * Translate a string with a parameter
+     * This is a lot more expensive than _t(s), so use sparingly.
      *
-     *  @param s string to be translated containing {0}
-     *    The {0} will be replaced by the parameter.
-     *    Single quotes must be doubled, i.e. ' -> '' in the string.
-     *  @param o parameter, not translated.
-     *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *    Do not double the single quotes in the parameter.
-     *    Use autoboxing to call with ints, longs, floats, etc.
+     * @param s string to be translated containing {0}
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -> '' in the string.
+     * @param o parameter, not translated.
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
      */
     private String _t(String s, Object o) {
         return Messages.getString(s, o, _context);

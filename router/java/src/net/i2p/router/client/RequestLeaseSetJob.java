@@ -5,7 +5,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Date;
@@ -30,7 +29,6 @@ import net.i2p.util.Log;
  * Sends the request to the client and queues a CheckLeaseRequestStatus job
  * for timeout cleanup. On failure, calls failLeaseRequest() to clean up
  * the pending LeaseRequestState so new requests can proceed.
- *
  */
 class RequestLeaseSetJob extends JobImpl {
     private final Log _log;
@@ -40,10 +38,10 @@ class RequestLeaseSetJob extends JobImpl {
     private static final long DEFAULT_MAX_FUDGE = 5L*1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
     /**
-     *  Property overriding {@link #DEFAULT_SEND_WAIT}: ms to wait for the client to drain
-     *  its I2CP queue before failing the LeaseSet request.
+     * Property overriding {@link #DEFAULT_SEND_WAIT}: ms to wait for the client to drain
+     * its I2CP queue before failing the LeaseSet request.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final String PROP_SEND_WAIT = "router.requestLeaseSetSendWait";
     private static final long TEN_MINUTES_MS = 10L * 60 * 1000;
@@ -56,14 +54,14 @@ class RequestLeaseSetJob extends JobImpl {
     /** Jitter added to timeout to spread thundering-herd retries. */
     private static final long TIMEOUT_JITTER_MS = 2000;
     /**
-     *  Default wait for the client to make room in its I2CP queue before giving up.
+     * Default wait for the client to make room in its I2CP queue before giving up.
      *
-     *  <p>Deliberately far shorter than the request timeout this failure would otherwise
-     *  cost: a client that is draining at all has usually freed a slot within a few
-     *  dispatcher passes, and a client that is wedged should be failed quickly so the
-     *  caller can rebuild rather than left holding a request that cannot succeed.
+     * <p>Deliberately far shorter than the request timeout this failure would otherwise
+     * cost: a client that is draining at all has usually freed a slot within a few
+     * dispatcher passes, and a client that is wedged should be failed quickly so the
+     * caller can rebuild rather than left holding a request that cannot succeed.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long DEFAULT_SEND_WAIT = 1000;
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {

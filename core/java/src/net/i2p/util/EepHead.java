@@ -341,10 +341,10 @@ public class EepHead extends EepGet {
     }
 
     /**
-     *  Should we read the body of the response?
+     * Should we read the body of the response?
      *
-     *  @return false always
-     *  @since 0.9.50
+     * @return false always
+     * @since 0.9.50
      */
     @Override
     protected boolean shouldReadBody() {

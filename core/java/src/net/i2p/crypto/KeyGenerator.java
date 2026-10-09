@@ -6,7 +6,6 @@ package net.i2p.crypto;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import com.southernstorm.noise.crypto.x25519.Curve25519;
@@ -55,9 +54,9 @@ import net.i2p.util.SystemVersion;
  * This class provides methods to generate various types of cryptographic keys
  * used throughout the I2P network, including:
  * <ul>
- *   <li>Asymmetric key pairs (ElGamal, DSA, ECDSA, EdDSA, RSA)</li>
- *   <li>Symmetric session keys (AES)</li>
- *   <li>Key derivation and conversion utilities</li>
+ * <li>Asymmetric key pairs (ElGamal, DSA, ECDSA, EdDSA, RSA)</li>
+ * <li>Symmetric session keys (AES)</li>
+ * <li>Key derivation and conversion utilities</li>
  * </ul>
  *
  * <p>Supports both legacy algorithms (DSA, ElGamal) and modern
@@ -92,7 +91,7 @@ public final class KeyGenerator {
     }
 
     /** Generate a private 256 bit session key
-    *
+     *
      * @return session key
      */
     public SessionKey generateSessionKey() {
@@ -110,27 +109,26 @@ public final class KeyGenerator {
     private static final int PBE_ROUNDS_LEGACY = 1000;
 
     /**
-     *  PBE the passphrase with the salt.
-     *  Warning - SLOW
+     * PBE the passphrase with the salt.
+     * Warning - SLOW
      *
-     *  @param salt the salt
-     *  @param passphrase the passphrase
-     *  @return the session key
-     *  @since 0.7.1
+     * @param salt the salt
+     * @param passphrase the passphrase
+     * @return the session key
+     * @since 0.7.1
      */
     public SessionKey generateSessionKey(byte[] salt, byte[] passphrase) {
         return generateSessionKey(salt, passphrase, PBE_ROUNDS);
     }
 
     /**
-     *  PBE the passphrase with the salt using specified rounds.
-     *  Warning - SLOW
+     * PBE the passphrase with the salt using specified rounds.
+     * Warning - SLOW
      *
-     *  @param salt 16 bytes
-     *  @param passphrase the password
-     *  @param rounds iteration count (1000 for legacy, 1000000 for current)
-     *  @return derived key
-     *  @since 2.13.0
+     * @param salt 16 bytes
+     * @param passphrase the password
+     * @param rounds iteration count (1000 for legacy, 1000000 for current)
+     * @return derived key
      */
     public SessionKey generateSessionKey(byte[] salt, byte[] passphrase, int rounds) {
         byte[] salted = new byte[16 + passphrase.length];
@@ -142,18 +140,16 @@ public final class KeyGenerator {
     }
 
     /**
-     *  Get current rounds for new encryptions.
+     * Get current rounds for new encryptions.
      *
-     *  @return 1000000
-     *  @since 2.13.0
+     * @return 1000000
      */
     public int getPBERT() { return PBE_ROUNDS; }
 
     /**
-     *  Get legacy rounds for migration.
+     * Get legacy rounds for migration.
      *
-     *  @return 1000
-     *  @since 2.13.0
+     * @return 1000
      */
     public int getPBERTLegacy() { return PBE_ROUNDS_LEGACY; }
 
@@ -205,11 +201,11 @@ public final class KeyGenerator {
     }
 
     /**
-     *  ElGamal only.
-     *  Same as generatePKIKeypair() but different return type.
+     * ElGamal only.
+     * Same as generatePKIKeypair() but different return type.
      *
-     *  @return pair of keys
-     *  @since 0.8.7
+     * @return pair of keys
+     * @since 0.8.7
      */
     public SimpleDataStructure[] generatePKIKeys() {
         BigInteger a = new NativeBigInteger(getElGamalExponentSize(), _context.random());
@@ -232,11 +228,11 @@ public final class KeyGenerator {
     }
 
     /**
-     *  Supports EncTypes
+     * Supports EncTypes
      *
-     *  @param type the encryption type
-     *  @return the key pair
-     *  @since 0.9.38
+     * @param type the encryption type
+     * @return the key pair
+     * @since 0.9.38
      */
     public KeyPair generatePKIKeys(EncType type) {
         PublicKey pub;
@@ -318,12 +314,12 @@ public final class KeyGenerator {
     }
 
     /**
-     *  DSA-SHA1 only.
+     * DSA-SHA1 only.
      *
-     *  Same as above but different return type
+     * Same as above but different return type
      *
-     *  @return pair of keys
-     *  @since 0.8.7
+     * @return pair of keys
+     * @since 0.8.7
      */
     public SimpleDataStructure[] generateSigningKeys() {
         SimpleDataStructure[] keys = new SimpleDataStructure[2];
@@ -347,12 +343,12 @@ public final class KeyGenerator {
     }
 
     /**
-     *  Generic signature type, supports DSA, RSA, ECDSA, EdDSA
+     * Generic signature type, supports DSA, RSA, ECDSA, EdDSA
      *
-     *  @param type the signature type
-     *  @return the key pair
-     *  @throws GeneralSecurityException if key generation fails
-     *  @since 0.9.9
+     * @param type the signature type
+     * @return the key pair
+     * @throws GeneralSecurityException if key generation fails
+     * @since 0.9.9
      */
     public SimpleDataStructure[] generateSigningKeys(SigType type) throws GeneralSecurityException {
         if (type == SigType.DSA_SHA1) return generateSigningKeys();
@@ -408,7 +404,7 @@ public final class KeyGenerator {
     }
 
     /** Convert a SigningPrivateKey to a SigningPublicKey.
-     *  As of 0.9.16, supports all key types.
+     * As of 0.9.16, supports all key types.
      *
      * @param priv a SigningPrivateKey object
      * @return a SigningPublicKey object
@@ -460,8 +456,8 @@ public final class KeyGenerator {
     }
 
     /**
-     *  Usage: KeyGenerator [sigtype...]
-     *  @param args command line arguments
+     * Usage: KeyGenerator [sigtype...]
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         try {
@@ -472,7 +468,7 @@ public final class KeyGenerator {
     }
 
     /**
-     *  Usage: KeyGenerator [sigtype...]
+     * Usage: KeyGenerator [sigtype...]
      */
     private static void main2(String[] args) {
         RandomSource.getInstance().nextBoolean();

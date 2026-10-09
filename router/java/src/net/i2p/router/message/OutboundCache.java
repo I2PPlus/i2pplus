@@ -19,11 +19,11 @@ import net.i2p.util.SimpleTimer2;
  *
  * <p>This class maintains several caches to optimize outbound message routing and delivery:
  * <ul>
- *   <li>LeaseSet cache - minimizes overhead by reusing our own LeaseSet.</li>
- *   <li>Lease cache - persists sending to the same lease to reduce out-of-order delivery.</li>
- *   <li>Tunnel caches - caches outbound tunnels per destination to stabilize delivery paths.</li>
- *   <li>Last reply request cache - ensures periodic replies to detect failed tunnels.</li>
- *   <li>Multihomed cache - tracks LeaseSets for multihomed routers.</li>
+ * <li>LeaseSet cache - minimizes overhead by reusing our own LeaseSet.</li>
+ * <li>Lease cache - persists sending to the same lease to reduce out-of-order delivery.</li>
+ * <li>Tunnel caches - caches outbound tunnels per destination to stabilize delivery paths.</li>
+ * <li>Last reply request cache - ensures periodic replies to detect failed tunnels.</li>
+ * <li>Multihomed cache - tracks LeaseSets for multihomed routers.</li>
  * </ul>
  *
  * <p>All caches use ConcurrentHashMap with tuned initial capacity, load factor, and concurrency level
@@ -33,8 +33,6 @@ import net.i2p.util.SimpleTimer2;
  *
  * <p>Cache cleaning occurs periodically with a configurable interval, removing expired entries
  * to balance memory use and cache freshness.
- *
- * @since 0.9 Moved out of OCMOSJ
  */
 public class OutboundCache {
 
@@ -51,11 +49,11 @@ public class OutboundCache {
      */
     final ConcurrentHashMap<HashPair, TunnelInfo> backloggedTunnelCache = new ConcurrentHashMap<>(128, 0.9f, 16);
     /**
-     *  Cache for tunnels set aside because the stream to that destination
-     *  stalled. Held apart from tunnelCache so the pair reselects, and drained
-     *  with the backlogged cache so an entry cannot pin a dead tunnel. Purely
-     *  advisory: the caller still returns a tunnel when every candidate is here.
-     *  @since 0.9.71+
+     * Cache for tunnels set aside because the stream to that destination
+     * stalled. Held apart from tunnelCache so the pair reselects, and drained
+     * with the backlogged cache so an entry cannot pin a dead tunnel. Purely
+     * advisory: the caller still returns a tunnel when every candidate is here.
+     * @since 0.9.71+
      */
     final ConcurrentHashMap<HashPair, TunnelInfo> stalledTunnelCache = new ConcurrentHashMap<>(128, 0.9f, 16);
 
@@ -345,11 +343,11 @@ public class OutboundCache {
      *
      * @param old the outbound tunnel used by the previous connection, or null
      * @param candidates pool picks gathered for this rotation, never null; may
-     *                   be empty when no tunnels are currently available
+     * be empty when no tunnels are currently available
      * @param rnd randomness source for choosing among several distinct tunnels
      * @return a candidate distinct from {@code old} when one exists, otherwise
-     *         {@code old} unchanged, so rotation is best-effort and never
-     *         blocks or drops a connection
+     * {@code old} unchanged, so rotation is best-effort and never
+     * blocks or drops a connection
      * @since 0.9.71+
      */
     static TunnelInfo pickDistinctTunnel(TunnelInfo old, List<TunnelInfo> candidates, Random rnd) {

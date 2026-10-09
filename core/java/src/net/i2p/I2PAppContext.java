@@ -59,7 +59,6 @@ import net.i2p.util.TempDirScanner;
  * so that any referenced components will latch on to that context instead of
  * instantiating a new one.  However, there are situations in which both can be
  * relevant.
- *
  */
 public class I2PAppContext {
     /** The context that components without explicit root are bound */
@@ -217,10 +216,9 @@ public class I2PAppContext {
      * NOT a public API, for use by RouterContext only, NOT for external use.
      *
      * @param doInit should this context be used as the global one (if necessary)?
-     *               Will only apply if there is no global context now.
+     * Will only apply if there is no global context now.
      *
      * @param envProps environment properties, may be null
-     * @since protected since 0.9.33, NOT for external use
      */
     protected I2PAppContext(boolean doInit, Properties envProps) {
         synchronized (I2PAppContext.class) {
@@ -232,50 +230,50 @@ public class I2PAppContext {
             _appManager = isRouterContext() ? null : new ClientAppManagerImpl(this);
 
    /*
-    *  Directories. These are all set at instantiation and will not be changed by
-    *  subsequent property changes.
-    *  All properties, if set, should be absolute paths.
+    * Directories. These are all set at instantiation and will not be changed by
+    * subsequent property changes.
+    * All properties, if set, should be absolute paths.
     *
-    *  Name	Property 	Method		Files
-    *  -----	-------- 	-----		-----
-    *  Base	i2p.dir.base	getBaseDir()	webapps/, docs/, geoip/, licenses/, ...
-    *  Lib 	i2p.dir.lib 	getLibDir()	*.jar, libwrapper*.so
-    *  Temp	i2p.dir.temp	getTempDir()	Temporary files
-    *  Config	i2p.dir.config	getConfigDir()	*.config, hosts.txt, addressbook/, ...
+    * Name	Property 	Method		Files
+    * -----	-------- 	-----		-----
+    * Base	i2p.dir.base	getBaseDir()	webapps/, docs/, geoip/, licenses/, ...
+    * Lib 	i2p.dir.lib 	getLibDir()	*.jar, libwrapper*.so
+    * Temp	i2p.dir.temp	getTempDir()	Temporary files
+    * Config	i2p.dir.config	getConfigDir()	*.config, hosts.txt, addressbook/, ...
     *
-    *  (the following all default to the same as Config)
+    * (the following all default to the same as Config)
     *
-    *  PID	i2p.dir.pid	getPIDDir()	router.ping
-    *  Router	i2p.dir.router	getRouterDir()	netDb/, peerProfiles/, router.*, keyBackup/, ...
-    *  Log	i2p.dir.log	getLogDir()	logs/
-    *  App	i2p.dir.app	getAppDir()	eepsite/, ...
+    * PID	i2p.dir.pid	getPIDDir()	router.ping
+    * Router	i2p.dir.router	getRouterDir()	netDb/, peerProfiles/, router.*, keyBackup/, ...
+    * Log	i2p.dir.log	getLogDir()	logs/
+    * App	i2p.dir.app	getAppDir()	eepsite/, ...
     *
-    *  Note that we can't control where the wrapper puts its files.
+    * Note that we can't control where the wrapper puts its files.
     *
-    *  The app dir is where all data files should be. Apps should always read and write files here,
-    *  using a constructor such as:
+    * The app dir is where all data files should be. Apps should always read and write files here,
+    * using a constructor such as:
     *
-    *       String path = mypath;
-    *       File f = new File(path);
-    *       if (!f.isAbsolute())
-    *           f = new File(_context.geAppDir(), path);
+    * String path = mypath;
+    * File f = new File(path);
+    * if (!f.isAbsolute())
+    * f = new File(_context.geAppDir(), path);
     *
-    *  and never attempt to access files in the CWD using
+    * and never attempt to access files in the CWD using
     *
-    *       File f = new File("foo");
+    * File f = new File("foo");
     *
-    *  An app should assume the CWD is not writable.
+    * An app should assume the CWD is not writable.
     *
-    *  Here in I2PAppContext, all the dirs default to CWD.
-    *  However these will be different in RouterContext, as Router.java will set
-    *  the properties in the RouterContext constructor.
+    * Here in I2PAppContext, all the dirs default to CWD.
+    * However these will be different in RouterContext, as Router.java will set
+    * the properties in the RouterContext constructor.
     *
-    *  Apps should never need to access the base dir, which is the location of the base I2P install.
-    *  However this is provided for the router's use, and for backward compatibility should an app
-    *  need to look there as well.
+    * Apps should never need to access the base dir, which is the location of the base I2P install.
+    * However this is provided for the router's use, and for backward compatibility should an app
+    * need to look there as well.
     *
-    *  All dirs except the base and lib are created if they don't exist, but the creation will fail silently.
-    *  @since 0.7.6
+    * All dirs except the base and lib are created if they don't exist, but the creation will fail silently.
+    * @since 0.7.6
     */
 
             String s = getProperty("i2p.dir.base", System.getProperty("user.dir"));
@@ -359,91 +357,91 @@ public class I2PAppContext {
     }
 
     /**
-     *  This is the installation dir, often referred to as $I2P.
-     *  Applilcations should consider this directory read-only and never
-     *  attempt to write to it.
-     *  It may actually be read-only on a multi-user installation.
-     *  The config files in this directory are templates for user
-     *  installations and should not be accessed by applications.
-     *  The only thing that may be useful in here is the lib/ dir
-     *  containing the .jars.
+     * This is the installation dir, often referred to as $I2P.
+     * Applilcations should consider this directory read-only and never
+     * attempt to write to it.
+     * It may actually be read-only on a multi-user installation.
+     * The config files in this directory are templates for user
+     * installations and should not be accessed by applications.
+     * The only thing that may be useful in here is the lib/ dir
+     * containing the .jars.
      *
      *
-     *  @return dir constant for the life of the context
-     *  @since 0.7.6
+     * @return dir constant for the life of the context
+     * @since 0.7.6
      */
     public File getBaseDir() { return _baseDir; }
 
     /**
-     *  The base dir for config files.
-     *  Applications may use this to access router configuration files if necessary.
-     *  Usually ~/.i2p on Linux and %APPDIR%\I2P on Windows.
-     *  In installations originally installed with 0.7.5 or earlier, and in
-     *  "portable" installations, this will be the same as the base dir.
+     * The base dir for config files.
+     * Applications may use this to access router configuration files if necessary.
+     * Usually ~/.i2p on Linux and %APPDIR%\I2P on Windows.
+     * In installations originally installed with 0.7.5 or earlier, and in
+     * "portable" installations, this will be the same as the base dir.
      *
      *
-     *  @return dir constant for the life of the context
-     *  @since 0.7.6
+     * @return dir constant for the life of the context
+     * @since 0.7.6
      */
     public File getConfigDir() { return _configDir; }
 
     /**
-     *  Where the router keeps its files.
-     *  Applications should not use this.
-     *  The same as the config dir for now.
+     * Where the router keeps its files.
+     * Applications should not use this.
+     * The same as the config dir for now.
      *
      *
-     *  @return dir constant for the life of the context
-     *  @since 0.7.6
+     * @return dir constant for the life of the context
+     * @since 0.7.6
      */
     public File getRouterDir() { return _routerDir; }
 
     /**
-     *  Where router.ping goes.
-     *  Applications should not use this.
-     *  The same as the router dir by default as of 0.8.12
-     *  Was the same as the system temp dir prior to that.
-     *  Which was a problem for multi-user installations.
+     * Where router.ping goes.
+     * Applications should not use this.
+     * The same as the router dir by default as of 0.8.12
+     * Was the same as the system temp dir prior to that.
+     * Which was a problem for multi-user installations.
      *
      *
-     *  @return dir constant for the life of the context
-     *  @since 0.7.6
+     * @return dir constant for the life of the context
+     * @since 0.7.6
      */
     public File getPIDDir() { return _pidDir; }
 
     /**
-     *  Where the router keeps its log directory.
-     *  Applications should not use this.
-     *  The same as the config dir for now.
-     *  (i.e. ~/.i2p, NOT ~/.i2p/logs)
+     * Where the router keeps its log directory.
+     * Applications should not use this.
+     * The same as the config dir for now.
+     * (i.e. ~/.i2p, NOT ~/.i2p/logs)
      *
      *
-     *  @return dir constant for the life of the context
-     *  @since 0.7.6
+     * @return dir constant for the life of the context
+     * @since 0.7.6
      */
     public File getLogDir() { return _logDir; }
 
     /**
-     *  Where applications may store data.
-     *  The same as the config dir for now, but may change in the future.
-     *  Apps should be careful not to overwrite router files.
+     * Where applications may store data.
+     * The same as the config dir for now, but may change in the future.
+     * Apps should be careful not to overwrite router files.
      *
      *
-     *  @return dir constant for the life of the context
-     *  @since 0.7.6
+     * @return dir constant for the life of the context
+     * @since 0.7.6
      */
     public File getAppDir() { return _appDir; }
 
     /**
-     *  Where anybody may store temporary data.
-     *  This is a directory created in the system temp dir on the
-     *  first call in this context, and is deleted on JVM exit.
-     *  Applications should create their own directory inside this directory
-     *  to avoid collisions with other apps.
+     * Where anybody may store temporary data.
+     * This is a directory created in the system temp dir on the
+     * first call in this context, and is deleted on JVM exit.
+     * Applications should create their own directory inside this directory
+     * to avoid collisions with other apps.
      *
      *
-     *  @return dir constant for the life of the context
-     *  @since 0.7.6
+     * @return dir constant for the life of the context
+     * @since 0.7.6
      */
     public final File getTempDir() {
         // fixme don't synchronize every time
@@ -477,12 +475,12 @@ public class I2PAppContext {
     }
 
     /**
-     *  This is the library dir, which is usually $I2P/lib.
-     *  It contains all the jars (i.e. the classpath).
-     *  Most applications will not need this, and must treat this directory as read-only.
+     * This is the library dir, which is usually $I2P/lib.
+     * It contains all the jars (i.e. the classpath).
+     * Most applications will not need this, and must treat this directory as read-only.
      *
-     *  @return dir constant for the life of the context
-     *  @since 0.9.52
+     * @return dir constant for the life of the context
+     * @since 0.9.52
      */
     public File getLibDir() { return _libDir; }
 
@@ -1085,40 +1083,40 @@ public class I2PAppContext {
     }
 
     /**
-     *  Use this instead of context instanceof RouterContext
+     * Use this instead of context instanceof RouterContext
      *
-     *  @return false always in I2PAppContext
-     *  @since 0.7.9
+     * @return false always in I2PAppContext
+     * @since 0.7.9
      */
     public boolean isRouterContext() {
         return false;
     }
 
     /**
-     *  Use this to connect to the router in the same JVM.
+     * Use this to connect to the router in the same JVM.
      *
-     *  @return always null in I2PAppContext, the client manager if in RouterContext
-     *  @since 0.8.3
+     * @return always null in I2PAppContext, the client manager if in RouterContext
+     * @since 0.8.3
      */
     public InternalClientManager internalClientManager() {
         return null;
     }
 
     /**
-     *  Is the wrapper present?
+     * Is the wrapper present?
      *
-     *  @return true if the wrapper is present
-     *  @since 0.8.8
+     * @return true if the wrapper is present
+     * @since 0.8.8
      */
     public boolean hasWrapper() {
         return SystemVersion.hasWrapper();
     }
 
     /**
-     *  Basic mapping from service names to ports
+     * Basic mapping from service names to ports
      *
-     *  @return the port mapper
-     *  @since 0.8.12
+     * @return the port mapper
+     * @since 0.8.12
      */
     public PortMapper portMapper() {
         return _portMapper;
@@ -1128,7 +1126,6 @@ public class I2PAppContext {
      * Use instead of SimpleTimer2.getInstance()
      *
      * @return the SimpleTimer2 instance
-     * @since 0.9 to replace static instance in the class
      */
     public SimpleTimer2 simpleTimer2() {
         if (!_simpleTimer2Initialized)
@@ -1145,30 +1142,30 @@ public class I2PAppContext {
     }
 
     /**
-     *  As of 0.9.30, returns non-null in I2PAppContext, null in RouterContext.
-     *  Prior to that, returned null always.
-     *  Overridden in RouterContext to return the RouterAppManager.
+     * As of 0.9.30, returns non-null in I2PAppContext, null in RouterContext.
+     * Prior to that, returned null always.
+     * Overridden in RouterContext to return the RouterAppManager.
      *
-     *  @return As of 0.9.30, returns non-null in I2PAppContext, null in RouterContext
-     *  @since 0.9.11, in RouterContext since 0.9.4
+     * @return As of 0.9.30, returns non-null in I2PAppContext, null in RouterContext
+     * @since 0.9.11, in RouterContext since 0.9.4
      */
     public ClientAppManager clientAppManager() {
         return _appManager;
     }
 
     /**
-     *  How long this router was down before it started, or 0 if unknown.
+     * How long this router was down before it started, or 0 if unknown.
      *
-     *  This may be used for a determination of whether to regenerate keys, for example.
-     *  We use the timestamp of the previous ping file left behind on crash,
-     *  as set by isOnlyRouterRunning(), if present.
-     *  Otherwise, the last STOPPED entry in the event log.
+     * This may be used for a determination of whether to regenerate keys, for example.
+     * We use the timestamp of the previous ping file left behind on crash,
+     * as set by isOnlyRouterRunning(), if present.
+     * Otherwise, the last STOPPED entry in the event log.
      *
-     *  May take a while to run the first time, if it has to go through the event log.
-     *  Once called, the result is cached.
+     * May take a while to run the first time, if it has to go through the event log.
+     * Once called, the result is cached.
      *
-     *  @return 0 always in app context
-     *  @since 0.9.47
+     * @return 0 always in app context
+     * @since 0.9.47
      */
     public long getEstimatedDowntime() {
         return 0L;

@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -43,8 +42,8 @@ public class SetDateMessage extends I2CPMessageImpl {
 
     /**
      * Router's version String to be sent to the client; may be null.
-     *  @param version the router's version String to be sent to the client; may be null
-     *  @since 0.8.7
+     * @param version the router's version String to be sent to the client; may be null
+     * @since 0.8.7
      */
     public SetDateMessage(String version) {
         this();
@@ -67,10 +66,10 @@ public class SetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Gets the protocol version.
+     * Gets the protocol version.
      *
-     *  @return may be null
-     *  @since 0.8.7
+     * @return may be null
+     * @since 0.8.7
      */
     public String getVersion() {
         return _version;

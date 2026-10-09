@@ -22,11 +22,10 @@ import net.i2p.util.SSLEepGet;
 import net.i2p.util.VersionComparator;
 
 /**
- *  The downloader for router signed updates,
- *  and the base class for all the other Checkers and Runners.
+ * The downloader for router signed updates,
+ * and the base class for all the other Checkers and Runners.
  *
- *  @since 0.9.4 moved from UpdateHandler
- *
+ * @since 0.9.4 moved from UpdateHandler
  */
 class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusListener {
     /** router context */
@@ -68,26 +67,26 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     protected static final long NOPROXY_INACTIVITY_TIMEOUT = (long) 60*1000;
 
     /**
-     *  Uses router version for partial checks
+     * Uses router version for partial checks
      *
-     *  @param ctx router context
-     *  @param mgr update manager
-     *  @param type update type
-     *  @param uris list of update URIs
+     * @param ctx router context
+     * @param mgr update manager
+     * @param type update type
+     * @param uris list of update URIs
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type, List<URI> uris) {
         this(ctx, mgr, type, uris, RouterVersion.VERSION);
     }
 
     /**
-     *  Uses router version for partial checks
+     * Uses router version for partial checks
      *
-     *  @param ctx router context
-     *  @param mgr update manager
-     *  @param type update type
-     *  @param method update method
-     *  @param uris list of update URIs
-     *  @since 0.9.9
+     * @param ctx router context
+     * @param mgr update manager
+     * @param type update type
+     * @param method update method
+     * @param uris list of update URIs
+     * @since 0.9.9
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type,
                         UpdateMethod method, List<URI> uris) {
@@ -95,14 +94,14 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
-     *  Constructor with explicit current version.
+     * Constructor with explicit current version.
      *
-     *  @param ctx router context
-     *  @param mgr update manager
-     *  @param type update type
-     *  @param uris list of update URIs
-     *  @param currentVersion used for partial checks
-     *  @since 0.9.7
+     * @param ctx router context
+     * @param mgr update manager
+     * @param type update type
+     * @param uris list of update URIs
+     * @param currentVersion used for partial checks
+     * @since 0.9.7
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type,
                         List<URI> uris, String currentVersion) {
@@ -110,15 +109,15 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
-     *  Full constructor.
+     * Full constructor.
      *
-     *  @param ctx router context
-     *  @param mgr update manager
-     *  @param type update type
-     *  @param method HTTP, HTTP_CLEARNET, or HTTPS_CLEARNET
-     *  @param uris list of update URIs
-     *  @param currentVersion used for partial checks
-     *  @since 0.9.9
+     * @param ctx router context
+     * @param mgr update manager
+     * @param type update type
+     * @param method HTTP, HTTP_CLEARNET, or HTTPS_CLEARNET
+     * @param uris list of update URIs
+     * @param currentVersion used for partial checks
+     * @since 0.9.9
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type,
                         UpdateMethod method, List<URI> uris, String currentVersion) {
@@ -193,10 +192,10 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
-     *  Loop through the entire list of update URLs.
-     *  For each one, first get the version from the first 56 bytes and see if
-     *  it is newer than what we are running now.
-     *  If it is, get the whole thing.
+     * Loop through the entire list of update URLs.
+     * For each one, first get the version from the first 56 bytes and see if
+     * it is newer than what we are running now.
+     * If it is, get the whole thing.
      */
     protected void update() {
         // Do a PartialEepGet on the selected URL, check for version we expect,
@@ -305,8 +304,8 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     // with a couple of adjustments depending on which mode.
 
     /**
-     *  An attempt failed. We do not abort here - EepGet retries on its own -
-     *  so this only reports the failure to the user.
+     * An attempt failed. We do not abort here - EepGet retries on its own -
+     * so this only reports the failure to the user.
      */
     public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
         if (_log.shouldDebug()) {_log.debug("Attempt failed on " + url, cause);}
@@ -361,25 +360,25 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
-     *  HTTP response headers are not used to determine the update version.
+     * HTTP response headers are not used to determine the update version.
      */
     public void headerReceived(String url, int attemptNum, String key, String val) { /* nop */ }
 
     /**
-     *  A retry is starting. Retries are counted by EepGet, which reports the
-     *  final failure through transferFailed(), so there is nothing to do.
+     * A retry is starting. Retries are counted by EepGet, which reports the
+     * final failure through transferFailed(), so there is nothing to do.
      */
     public void attempting(String url) { /* nop */ }
 
     /**
-     *  Report progress to the user.
+     * Report progress to the user.
      */
     protected void updateStatus(String s) {_mgr.notifyProgress(this, s);}
 
     /**
-     *  Wrap a URL in an anchor tag for display.
-     *  @param url the URL to link to
-     *  @return the HTML
+     * Wrap a URL in an anchor tag for display.
+     * @param url the URL to link to
+     * @return the HTML
      */
     protected static String linkify(String url) {return ConsoleUpdateManager.linkify(url);}
 
@@ -387,12 +386,12 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     protected String _t(String s) {return _mgr._t(s);}
 
     /**
-     *  translate a string with a parameter
+     * translate a string with a parameter
      */
     protected String _t(String s, Object o) {return _mgr._t(s, o);}
 
     /**
-     *  @return the class name, type, ID, method and URI
+     * @return the class name, type, ID, method and URI
      */
     @Override
     public String toString() {return getClass().getName() + ' ' + getType() + ' ' + getID() + ' ' + getMethod() + ' ' + getURI();}

@@ -50,29 +50,29 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     private final boolean fileOnly;
 
     /**
-     *  Create a BSkipList from a BlockFile.
+     * Create a BSkipList from a BlockFile.
      *
-     *  @param spanSize the size of spans
-     *  @param bf the BlockFile
-     *  @param skipPage the page number of this skiplist
-     *  @param key the key
-     *  @param val the value serializer
-     *  @throws IOException if an I/O error occurs
+     * @param spanSize the size of spans
+     * @param bf the BlockFile
+     * @param skipPage the page number of this skiplist
+     * @param key the key
+     * @param val the value serializer
+     * @throws IOException if an I/O error occurs
      */
     public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val) throws IOException {
         this(spanSize, bf, skipPage, key, val, false);
     }
 
     /**
-     *  Create a BSkipList from a BlockFile.
+     * Create a BSkipList from a BlockFile.
      *
-     *  @param spanSize the size of spans
-     *  @param bf the BlockFile
-     *  @param skipPage the page number of this skiplist
-     *  @param key the key
-     *  @param val the value serializer
-     *  @param fileOnly if true, only read from file (no caching)
-     *  @throws IOException if an I/O error occurs
+     * @param spanSize the size of spans
+     * @param bf the BlockFile
+     * @param skipPage the page number of this skiplist
+     * @param key the key
+     * @param val the value serializer
+     * @param fileOnly if true, only read from file (no caching)
+     * @throws IOException if an I/O error occurs
      */
     public BSkipList(int spanSize, BlockFile bf, int skipPage, Serializer<K> key, Serializer<V> val, boolean fileOnly) throws IOException {
         if(spanSize < 1) { throw new RuntimeException("Span size too small"); }
@@ -116,7 +116,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Close this skiplist and flush all data to disk.
+     * Close this skiplist and flush all data to disk.
      */
     public void close() {
         flush();
@@ -126,7 +126,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Flush all data to disk.
+     * Flush all data to disk.
      */
     @Override
     public void flush() {
@@ -149,10 +149,10 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Delete this skiplist and free all its pages.
-     *  Must be open (do not call close() first).
+     * Delete this skiplist and free all its pages.
+     * Must be open (do not call close() first).
      *
-     *  @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     public void delete() throws IOException {
         if (isClosed) {
@@ -180,12 +180,12 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Initialize a new skiplist on disk.
+     * Initialize a new skiplist on disk.
      *
-     *  @param bf the BlockFile
-     *  @param page the page number for the skiplist header
-     *  @param spanSize the span size to use
-     *  @throws IOException if an I/O error occurs
+     * @param bf the BlockFile
+     * @param page the page number for the skiplist header
+     * @param spanSize the span size to use
+     * @throws IOException if an I/O error occurs
      */
     public static void init(BlockFile bf, int page, int spanSize) throws IOException {
         int firstSpan = bf.allocPage();
@@ -204,9 +204,9 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Calculate the maximum number of levels for this skiplist.
+     * Calculate the maximum number of levels for this skiplist.
      *
-     *  @return log2(span count), minimum 4
+     * @return log2(span count), minimum 4
      */
     @Override
     public int maxLevels() {
@@ -222,9 +222,9 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Get an iterator over all entries in this skiplist.
+     * Get an iterator over all entries in this skiplist.
      *
-     *  @return a SkipIterator
+     * @return a SkipIterator
      */
     @Override
     public SkipIterator<K, V> iterator() {
@@ -234,10 +234,10 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Find the entry with the given key.
+     * Find the entry with the given key.
      *
-     *  @param key the key
-     *  @return a SkipIterator pointing to the entry, or end if not found
+     * @param key the key
+     * @return a SkipIterator pointing to the entry, or end if not found
      */
     @Override
     public SkipIterator<K, V> find(K key) {
@@ -250,11 +250,11 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Run an integrity check on the skiplist and all the levels in it.
+     * Run an integrity check on the skiplist and all the levels in it.
      *
-     *  @param fix if true, attempt to fix any corruption found
-     *  @param isMeta if true, this is a metaindex skiplist
-     *  @return true if the levels were modified.
+     * @param fix if true, attempt to fix any corruption found
+     * @param isMeta if true, this is a metaindex skiplist
+     * @return true if the levels were modified.
      */
     public boolean bslck(boolean fix, boolean isMeta) {
         bf.log.info("    size " + this.size);
@@ -270,9 +270,9 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     }
 
     /**
-     *  Get a string representation of this skiplist.
+     * Get a string representation of this skiplist.
      *
-     *  @return a string representation
+     * @return a string representation
      */
     @Override
     public String toString() {

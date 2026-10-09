@@ -6,7 +6,6 @@ package net.i2p.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -31,7 +30,7 @@ public class I2PClientFactory {
     }
 
     /** Create a new instance of the appropriate I2PClient
-    *
+     *
      * @return client implementation
      */
     public static I2PClient createClient() {

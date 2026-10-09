@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -21,7 +20,6 @@ import net.i2p.util.ByteCache;
  * we can't reuse the checksum on output, but we still subclass
  * FastI2NPMessageImpl so we don't verify the checksum on input...
  * because this is a high-usage class.
- *
  */
 public class TunnelDataMessage extends FastI2NPMessageImpl {
     private long _tunnelId;
@@ -67,7 +65,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     public long getTunnelId() {return _tunnelId;}
 
     /**
-     *  (correctly) Invalidates stored checksum
+     * (correctly) Invalidates stored checksum
      */
     public void setTunnelId(long id) {
         _hasChecksum = false;
@@ -81,7 +79,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  (correctly) Invalidates stored checksum
+     * (correctly) Invalidates stored checksum
      */
     public void setTunnelId(TunnelId id) {
         _hasChecksum = false;
@@ -100,8 +98,8 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Tunnel payload; may only be set once.
-     *  @throws IllegalStateException if data previously set, to protect saved checksum
+     * Tunnel payload; may only be set once.
+     * @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {
         if (_data != null) {throw new IllegalStateException();}

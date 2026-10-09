@@ -25,19 +25,19 @@ import net.i2p.util.OrderedProperties;
  *
  * <p>LeaseSet2 provides several enhancements over the original LeaseSet format:</p>
  * <ul>
- *   <li>Support for multiple encryption keys with server preference ordering</li>
- *   <li>Offline signature support for reduced router load</li>
- *   <li>Published and expiration timestamps independent of lease times</li>
- *   <li>Options and statistics support</li>
- *   <li>Blinded and encrypted LeaseSet support</li>
+ * <li>Support for multiple encryption keys with server preference ordering</li>
+ * <li>Offline signature support for reduced router load</li>
+ * <li>Published and expiration timestamps independent of lease times</li>
+ * <li>Options and statistics support</li>
+ * <li>Blinded and encrypted LeaseSet support</li>
  * </ul>
  *
  * <p>Key differences from LeaseSet:</p>
  * <ul>
- *   <li>Uses {@link #getPublished()} for version comparison instead of lease dates</li>
- *   <li>Supports multiple encryption keys via {@link #getEncryptionKeys()}</li>
- *   <li>Includes offline signing capabilities via {@link #setOfflineSignature(long, SigningPublicKey, Signature)}</li>
- *   <li>Has separate published and expires timestamps</li>
+ * <li>Uses {@link #getPublished()} for version comparison instead of lease dates</li>
+ * <li>Supports multiple encryption keys via {@link #getEncryptionKeys()}</li>
+ * <li>Includes offline signing capabilities via {@link #setOfflineSignature(long, SigningPublicKey, Signature)}</li>
+ * <li>Has separate published and expires timestamps</li>
  * </ul>
  *
  * @since 0.9.38
@@ -66,9 +66,9 @@ public class LeaseSet2 extends LeaseSet {
     /** Flag bit for unpublished lease set. */
     private static final int FLAG_UNPUBLISHED = 0x02;
     /**
-     *  Flag bit set if the unencrypted LS, when published, will be blinded/encrypted.
+     * Flag bit set if the unencrypted LS, when published, will be blinded/encrypted.
      *
-     *  @since 0.9.42
+     * @since 0.9.42
      */
     private static final int FLAG_BLINDED = 0x04;
     /** Maximum number of encryption keys. */
@@ -115,16 +115,16 @@ public class LeaseSet2 extends LeaseSet {
     public long getExpires() {return _expires;}
 
     /**
-     *  True if unpublished.
-     *  @return true if unpublished
+     * True if unpublished.
+     * @return true if unpublished
      */
     public boolean isUnpublished() {return (_flags & FLAG_UNPUBLISHED) != 0;}
 
     /**
-      *  Marks this leaseset as unpublished.
-      *
-      *  @throws IllegalStateException if already signed
-      */
+     * Marks this leaseset as unpublished.
+     *
+     * @throws IllegalStateException if already signed
+     */
     public void setUnpublished() {
         if (_signature != null && (_flags & FLAG_UNPUBLISHED) == 0) {
             throw new IllegalStateException();
@@ -141,10 +141,10 @@ public class LeaseSet2 extends LeaseSet {
     public boolean isBlindedWhenPublished() {return (_flags & FLAG_BLINDED) != 0;}
 
     /**
-     *  Mark the unencrypted LS to be blinded/encrypted when published.
+     * Mark the unencrypted LS to be blinded/encrypted when published.
      *
-     *  @throws IllegalStateException if already signed
-     *  @since 0.9.42
+     * @throws IllegalStateException if already signed
+     * @since 0.9.42
      */
     public void setBlindedWhenPublished() {
         if (_signature != null && (_flags & FLAG_BLINDED) == 0) {
@@ -167,10 +167,10 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Option value for the given key.
+     * Option value for the given key.
      *
-     *  @param opt the option key
-     *  @return the option value, or null if not found
+     * @param opt the option key
+     * @return the option value, or null if not found
      */
     public String getOption(String opt) {
         if (_options == null) {return null;}
@@ -178,11 +178,11 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-      *  Leaseset options.
-      *
-      *  @return not a copy, do not modify, or null
-      *  @since 0.9.63
-      */
+     * Leaseset options.
+     *
+     * @return not a copy, do not modify, or null
+     * @since 0.9.63
+     */
     public Properties getOptions() {return _options;}
 
     /**
@@ -204,11 +204,11 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  If more than one key, return the first supported one.
-     *  If none supported, return null.
+     * If more than one key, return the first supported one.
+     * If none supported, return null.
      *
-     *  @return first supported key or null
-     *  @since 0.9.44
+     * @return first supported key or null
+     * @since 0.9.44
      */
     @Override
     public PublicKey getEncryptionKey(Set<EncType> supported) {
@@ -221,9 +221,9 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Add an encryption key.
+     * Add an encryption key.
      *
-     *  Encryption keys should be added in order of server preference, most-preferred first.
+     * Encryption keys should be added in order of server preference, most-preferred first.
      */
     public void addEncryptionKey(PublicKey key) {
         if (_encryptionKey == null) {setEncryptionKey(key);}
@@ -239,13 +239,13 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  This returns all the keys. getEncryptionKey() returns the first one.
+     * This returns all the keys. getEncryptionKey() returns the first one.
      *
-     *  Encryption keys should be in order of server preference, most-preferred first.
-     *  Client behavior should be to select the first key with a supported encryption type.
-     *  Clients may use other selection algorithms based on encryption support, relative performance, and other factors.
+     * Encryption keys should be in order of server preference, most-preferred first.
+     * Client behavior should be to select the first key with a supported encryption type.
+     * Clients may use other selection algorithms based on encryption support, relative performance, and other factors.
      *
-     *  @return not a copy, do not modify, null if none
+     * @return not a copy, do not modify, null if none
      */
     public List<PublicKey> getEncryptionKeys() {
         if (_encryptionKeys != null) {return _encryptionKeys;}
@@ -274,34 +274,34 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-      * Checks if this leaseset uses offline keys.
+     * Checks if this leaseset uses offline keys.
      * @return whether offline
-      */
+     */
     public boolean isOffline() {return (_flags & FLAG_OFFLINE_KEYS) != 0;}
 
     /**
-      *  Transient public key for offline signing.
-      *
-      *  @return transient public key or null if not offline signed
-      */
+     * Transient public key for offline signing.
+     *
+     * @return transient public key or null if not offline signed
+     */
     public SigningPublicKey getTransientSigningKey() {return _transientSigningPublicKey;}
 
     /**
-     *  Absolute time, not time from now.
+     * Absolute time, not time from now.
      *
-     *  @return transient expiration time or 0 if not offline signed
-     *  @since 0.9.48
+     * @return transient expiration time or 0 if not offline signed
+     * @since 0.9.48
      */
     public long getTransientExpiration() {return _transientExpires;}
 
     /**
-     *  Destination must be previously set.
+     * Destination must be previously set.
      *
-     *  @param expires absolute ms
-     *  @param transientSPK the key that will sign the leaseset
-     *  @param offlineSig the signature by the spk in the destination
-     *  @return success, false if verify failed or expired
-     *  @throws IllegalStateException if already signed
+     * @param expires absolute ms
+     * @param transientSPK the key that will sign the leaseset
+     * @param offlineSig the signature by the spk in the destination
+     * @return success, false if verify failed or expired
+     * @throws IllegalStateException if already signed
      */
     public boolean setOfflineSignature(long expires, SigningPublicKey transientSPK, Signature offlineSig) {
         if (_signature != null) {throw new IllegalStateException();}
@@ -313,12 +313,12 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Generate a Signature to pass to setOfflineSignature()
+     * Generate a Signature to pass to setOfflineSignature()
      *
-     *  @param expires absolute ms
-     *  @param transientSPK the key that will sign the leaseset
-     *  @param priv the private signing key for the destination
-     *  @return null on error
+     * @param expires absolute ms
+     * @param transientSPK the key that will sign the leaseset
+     * @param priv the private signing key for the destination
+     * @return null on error
      */
     public static Signature offlineSign(long expires, SigningPublicKey transientSPK, SigningPrivateKey priv) {
         ByteArrayStream baos = new ByteArrayStream(4 + 2 + transientSPK.length());
@@ -333,19 +333,19 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Verify the offline signature.
+     * Verify the offline signature.
      *
-     *  @return true if valid
+     * @return true if valid
      */
     public boolean verifyOfflineSignature() {
         return verifyOfflineSignature(_destination.getSigningPublicKey());
     }
 
     /**
-     *  Verify the offline signature with the given key.
+     * Verify the offline signature with the given key.
      *
-     *  @param spk the key to verify against
-     *  @return true if valid
+     * @param spk the key to verify against
+     * @return true if valid
      */
     protected boolean verifyOfflineSignature(SigningPublicKey spk) {
         if (!isOffline()) {return false;}
@@ -433,9 +433,9 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  This does NOT validate the signature
+     * This does NOT validate the signature
      *
-     *  @throws IllegalStateException if called more than once or Destination already set
+     * @throws IllegalStateException if called more than once or Destination already set
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
@@ -481,7 +481,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Including sig. This does NOT validate the signature
+     * Including sig. This does NOT validate the signature
      */
     @Override
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
@@ -491,7 +491,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Without sig. This does NOT validate the signature
+     * Without sig. This does NOT validate the signature
      */
     protected void writeBytesWithoutSig(OutputStream out) throws DataFormatException, IOException {
         if (_destination == null || _encryptionKey == null) {
@@ -502,7 +502,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Without sig. This does NOT validate the signature
+     * Without sig. This does NOT validate the signature
      */
     protected void writeBody(OutputStream out) throws DataFormatException, IOException {
         if (_options != null && !_options.isEmpty()) {
@@ -522,11 +522,11 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Read the LeaseSet2 header from a stream.
+     * Read the LeaseSet2 header from a stream.
      *
-     *  @param in the input stream
-     *  @throws DataFormatException if the data is invalid
-     *  @throws IOException if there is an error reading
+     * @param in the input stream
+     * @throws DataFormatException if the data is invalid
+     * @throws IOException if there is an error reading
      */
     protected void readHeader(InputStream in) throws DataFormatException, IOException {
         _destination = Destination.create(in);
@@ -537,11 +537,11 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Write the LeaseSet2 header to a stream.
+     * Write the LeaseSet2 header to a stream.
      *
-     *  @param out the output stream
-     *  @throws DataFormatException if the data is invalid
-     *  @throws IOException if there is an error writing
+     * @param out the output stream
+     * @throws DataFormatException if the data is invalid
+     * @throws IOException if there is an error writing
      */
     protected void writeHeader(OutputStream out) throws DataFormatException, IOException {
         _destination.writeBytes(out);
@@ -558,11 +558,11 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Read the offline signing section from a stream.
+     * Read the offline signing section from a stream.
      *
-     *  @param in the input stream
-     *  @throws DataFormatException if the data is invalid
-     *  @throws IOException if there is an error reading
+     * @param in the input stream
+     * @throws DataFormatException if the data is invalid
+     * @throws IOException if there is an error reading
      */
     protected void readOfflineBytes(InputStream in) throws DataFormatException, IOException {
         _transientExpires = DataHelper.readLong(in, 4) * 1000;
@@ -577,11 +577,11 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Write the offline signing section to a stream.
+     * Write the offline signing section to a stream.
      *
-     *  @param out the output stream
-     *  @throws DataFormatException if the data is invalid
-     *  @throws IOException if there is an error writing
+     * @param out the output stream
+     * @throws DataFormatException if the data is invalid
+     * @throws IOException if there is an error writing
      */
     protected void writeOfflineBytes(OutputStream out) throws DataFormatException, IOException {
         if (_transientSigningPublicKey == null || _offlineSignature == null) {
@@ -594,7 +594,7 @@ public class LeaseSet2 extends LeaseSet {
     }
 
     /**
-     *  Number of bytes, NOT including signature
+     * Number of bytes, NOT including signature
      */
     @Override
     public int size() {

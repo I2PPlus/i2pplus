@@ -25,7 +25,6 @@ import net.i2p.util.SystemVersion;
  * As of 0.9.30, package private, run with DaemonThread.
  *
  * @author Ragnarok
- *
  */
 public class Daemon {
     /** Version string. */
@@ -39,9 +38,10 @@ public class Daemon {
                                               "http://notbob.i2p/hosts.txt";
     /** @since 0.9.12 */
     static final String OLD_DEFAULT_SUB = "http://www.i2p2.i2p/hosts.txt";
-    /** Any properties we receive from the subscription, we store to the
-     *  addressbook with this prefix, so it knows it's part of the signature.
-     *  This is also chosen so that it can't be spoofed.
+    /**
+     * Any properties we receive from the subscription, we store to the
+     * addressbook with this prefix, so it knows it's part of the signature.
+     * This is also chosen so that it can't be spoofed.
      */
     private static final String RCVD_PROP_PREFIX = "=";
 
@@ -136,9 +136,9 @@ public class Daemon {
     }
 
     /**
-     *  @param knownNames only non-null if router book is a text file
-     *  @param publishedNS only non-null if we have a published address book
-     *  @since 0.9.33 split out from above
+     * @param knownNames only non-null if router book is a text file
+     * @param publishedNS only non-null if we have a published address book
+     * @since 0.9.33 split out from above
      */
     private static void update(NamingService router, Set<String> knownNames,
                                NamingService publishedNS, AddressBook addressbook,
@@ -767,8 +767,8 @@ public class Daemon {
     }
 
     /**
-     *  Run a self-test: create a context, run one update cycle, and flush logs.
-     *  @since 0.9.26
+     * Run a self-test: create a context, run one update cycle, and flush logs.
+     * @since 0.9.26
      */
     public static void test() {
         Properties ctxProps = new Properties();
@@ -784,7 +784,7 @@ public class Daemon {
     }
 
     /**
-     *  @param args may be null
+     * @param args may be null
      */
     public void run(String[] args) {
         _running = true;
@@ -872,7 +872,7 @@ public class Daemon {
     }
 
     /**
-     *  Stop the daemon.
+     * Stop the daemon.
      */
     public void stop() {
         synchronized (this) {

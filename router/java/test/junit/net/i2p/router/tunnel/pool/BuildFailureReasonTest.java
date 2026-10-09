@@ -19,8 +19,8 @@ import net.i2p.router.tunnel.pool.BuildExecutor.Result;
 public class BuildFailureReasonTest {
 
     /**
-     *  The failure reason stats must be registered so addRateData does
-     *  not silently drop them.  Verify the stat names are correct.
+     * The failure reason stats must be registered so addRateData does
+     * not silently drop them.  Verify the stat names are correct.
      */
     @Test
     public void testFailureReasonStatNamesExist() {
@@ -43,13 +43,13 @@ public class BuildFailureReasonTest {
     }
 
     /**
-     *  Each Result value must map to exactly one failure reason stat.
-     *  If a Result is missing from the classification, its failures are
-     *  invisible.
+     * Each Result value must map to exactly one failure reason stat.
+     * If a Result is missing from the classification, its failures are
+     * invisible.
      *
-     *  <p>The enum carries SUCCESS, REJECT, TIMEOUT, BAD_RESPONSE, DUP_ID,
-     *  NO_TUNNELS, NO_NETDB, SKIPPED and OTHER_FAILURE. SUCCESS and SKIPPED
-     *  are not failures; the rest must all be reported.
+     * <p>The enum carries SUCCESS, REJECT, TIMEOUT, BAD_RESPONSE, DUP_ID,
+     * NO_TUNNELS, NO_NETDB, SKIPPED and OTHER_FAILURE. SUCCESS and SKIPPED
+     * are not failures; the rest must all be reported.
      */
     @Test
     public void testAllResultValuesHaveClassification() {
@@ -65,7 +65,7 @@ public class BuildFailureReasonTest {
     }
 
     /**
-     *  SUCCESS and SKIPPED must not be logged as failures.
+     * SUCCESS and SKIPPED must not be logged as failures.
      */
     @Test
     public void testSuccessNotLoggedAsFailure() {

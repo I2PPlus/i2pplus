@@ -5,20 +5,20 @@ import net.i2p.I2PAppContext;
 import java.io.File;
 
 /**
- *  Prevent systemd from deleting our temp dir or any dirs or files in it.
- *  Scheduled by I2PAppContext when the temp dir is created.
+ * Prevent systemd from deleting our temp dir or any dirs or files in it.
+ * Scheduled by I2PAppContext when the temp dir is created.
  *
- *  To configure/test systemd: Edit file /usr/lib/tmpfiles.d/tmp.conf,
- *  change line
- *  D /tmp 1777 root root -
- *  to
- *  D /tmp 1777 root root 24h
+ * To configure/test systemd: Edit file /usr/lib/tmpfiles.d/tmp.conf,
+ * change line
+ * D /tmp 1777 root root -
+ * to
+ * D /tmp 1777 root root 24h
  *
- *  Ref: https://lwn.net/Articles/975565/
- *  Ref: https://systemd.io/TEMPORARY_DIRECTORIES/
- *  Ref: man systemd-tmpfiles; man tmpfiles.d
+ * Ref: https://lwn.net/Articles/975565/
+ * Ref: https://systemd.io/TEMPORARY_DIRECTORIES/
+ * Ref: man systemd-tmpfiles; man tmpfiles.d
  *
- *  @since 0.9.64
+ * @since 0.9.64
  */
 public class TempDirScanner extends SimpleTimer2.TimedEvent {
     private final I2PAppContext ctx;
@@ -28,7 +28,7 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
     private static final long DELAY = 23 * 60 * 60 * 1000L;
 
     /**
-     *  Schedules itself
+     * Schedules itself
      */
     public TempDirScanner(I2PAppContext context) {
         super(context.simpleTimer2());
@@ -43,9 +43,9 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Recursively timestamp all files and empty dirs
-     *  We can't count on the filesystem updating access time.
-     *  This should not affect any known usage of our temp dir.
+     * Recursively timestamp all files and empty dirs
+     * We can't count on the filesystem updating access time.
+     * This should not affect any known usage of our temp dir.
      */
     @SuppressWarnings("PMD.AvoidInfiniteRecursion")
     private static void scan(File f) {

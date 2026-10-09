@@ -23,11 +23,11 @@ import static org.junit.Assert.*;
 public class RateCoalesceSkipTest {
 
     /** A period short enough that {@code period - SLACK} is negative, so every
-     *  coalesce is due immediately and none should ever be skipped. */
+     * coalesce is due immediately and none should ever be skipped. */
     private static final long ALWAYS_DUE_PERIOD = 1;
 
     /** Just above the 2000ms slack, so the threshold is 100ms and both the skip
-     *  and the coalesce branches are reachable within a test's patience. */
+     * and the coalesce branches are reachable within a test's patience. */
     private static final long NEAR_SLACK_PERIOD = 2100;
 
     @Test

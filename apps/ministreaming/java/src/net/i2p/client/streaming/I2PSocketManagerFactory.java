@@ -36,7 +36,7 @@ import net.i2p.util.Log;
 public class I2PSocketManagerFactory {
 
     /**
-     *  The one and only manager.
+     * The one and only manager.
      */
     public static final String DEFAULT_MANAGER = "net.i2p.client.streaming.impl.I2PSocketManagerFull";
 
@@ -188,7 +188,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @return the newly created socket manager, or null if there were errors
      */
     public static I2PSocketManager createManager(InputStream myPrivateKeyStream) {
@@ -203,7 +203,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
      * @since 0.9.40
@@ -220,7 +220,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @param opts Streaming and I2CP options, may be null
      * @return the newly created socket manager, or null if there were errors
      */
@@ -236,7 +236,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @param opts Streaming and I2CP options, may be null
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
@@ -254,7 +254,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
@@ -273,7 +273,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
@@ -301,28 +301,28 @@ public class I2PSocketManagerFactory {
     }
 
     /**
-     *  Whether a session failure was just an interrupt.
+     * Whether a session failure was just an interrupt.
      *
-     *  <p>Distinguishes "we asked this thread to stop" from a genuine fault, which
-     *  is what decides WARN versus ERROR at the call site.
+     * <p>Distinguishes "we asked this thread to stop" from a genuine fault, which
+     * is what decides WARN versus ERROR at the call site.
      *
-     *  @param ise the session failure, may be null
-     *  @return true if the cause was an {@link InterruptedException}
-     *  @since 0.9.71+
+     * @param ise the session failure, may be null
+     * @return true if the cause was an {@link InterruptedException}
+     * @since 0.9.71+
      */
     static boolean isSessionInterrupt(I2PSessionException ise) {
         return ise != null && ise.getCause() instanceof InterruptedException;
     }
 
     /**
-     *  Renders a session-creation failure with enough identity to act on: which
-     *  thread was doing the work, which stage of session setup was interrupted,
-     *  and the exception type rather than only its message.
+     * Renders a session-creation failure with enough identity to act on: which
+     * thread was doing the work, which stage of session setup was interrupted,
+     * and the exception type rather than only its message.
      *
-     *  @param ise the failure, may be null
-     *  @param threadName name of the thread that was creating the manager
-     *  @return a single-line description naming the thread and the cause
-     *  @since 0.9.71+
+     * @param ise the failure, may be null
+     * @param threadName name of the thread that was creating the manager
+     * @return a single-line description naming the thread and the cause
+     * @since 0.9.71+
      */
     static String describeSessionFailure(I2PSessionException ise, String threadName) {
         StringBuilder sb = new StringBuilder(96);
@@ -356,7 +356,7 @@ public class I2PSocketManagerFactory {
      * with significant delay for tunnel building.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
@@ -383,7 +383,7 @@ public class I2PSocketManagerFactory {
      * with significant delay for tunnel building.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           or null for a transient destination. Caller must close.
+     * or null for a transient destination. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
@@ -420,7 +420,7 @@ public class I2PSocketManagerFactory {
      * Blocks for a long time while the router builds tunnels if connect is true.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     *                           non-null. Caller must close.
+     * non-null. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
@@ -501,10 +501,10 @@ public class I2PSocketManagerFactory {
     }
 
     /**
-     *  Determine the configured signature type from the given options.
-     *  @param opts may be null
-     *  @return the sig type
-     *  @since 0.9.12
+     * Determine the configured signature type from the given options.
+     * @param opts may be null
+     * @return the sig type
+     * @since 0.9.12
      */
     private static SigType getSigType(Properties opts) {
         if (opts != null) {

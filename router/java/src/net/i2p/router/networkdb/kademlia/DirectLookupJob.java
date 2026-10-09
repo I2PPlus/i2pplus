@@ -25,7 +25,7 @@ class DirectLookupJob extends FloodOnlySearchJob {
     private static final int TIMEOUT = 8*1000;
 
     /**
-     *  @param peer for Router Info only
+     * @param peer for Router Info only
      */
     public DirectLookupJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash peer, RouterInfo oldRI, Job onFind, Job onFail) {
         super(ctx, facade, peer, onFind, onFail, TIMEOUT);

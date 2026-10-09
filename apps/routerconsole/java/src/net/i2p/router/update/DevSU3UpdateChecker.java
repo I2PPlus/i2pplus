@@ -22,7 +22,7 @@ import net.i2p.util.VersionComparator;
  * then fetch the first 56 bytes of the URL, extract the version,
  * and compare to current full router version.
  *
- *  @since 0.9.20 from PluginUpdateChecker
+ * @since 0.9.20 from PluginUpdateChecker
  */
 class DevSU3UpdateChecker extends UpdateRunner {
 

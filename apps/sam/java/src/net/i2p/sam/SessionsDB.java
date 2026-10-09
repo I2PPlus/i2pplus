@@ -5,7 +5,6 @@ package net.i2p.sam;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.HashMap;
@@ -13,10 +12,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- *  A database of SAM sessions, mapping nicknames to {@link SessionRecord}s.
- *  Provides synchronized access for concurrent SAM handlers.
+ * A database of SAM sessions, mapping nicknames to {@link SessionRecord}s.
+ * Provides synchronized access for concurrent SAM handlers.
  *
- *  @since 0.9.25 moved from SAMv3Handler
+ * @since 0.9.25 moved from SAMv3Handler
  */
 class SessionsDB {
 

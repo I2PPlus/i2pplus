@@ -6,7 +6,6 @@ package net.i2p.data.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.text.DateFormat;
@@ -71,22 +70,22 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     };
 
     /**
-     *  The current (today's) mod data.
-     *  Warning - not a copy, do not corrupt.
+     * The current (today's) mod data.
+     * Warning - not a copy, do not corrupt.
      *
-     *  @return non-null, 8 bytes
+     * @return non-null, 8 bytes
      */
     public byte[] getModData() {
         return _currentModData;
     }
 
     /**
-     *  Tomorrow's mod data.
-     *  Warning - not a copy, do not corrupt.
-     *  For debugging use only.
+     * Tomorrow's mod data.
+     * Warning - not a copy, do not corrupt.
+     * For debugging use only.
      *
-     *  @return non-null, 8 bytes
-     *  @since 0.9.10
+     * @return non-null, 8 bytes
+     * @since 0.9.10
      */
     public byte[] getNextModData() {
         return _nextModData;
@@ -102,29 +101,29 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     }
 
     /**
-     *  How long until midnight (ms)
+     * How long until midnight (ms)
      *
-     *  @return could be slightly negative
-     *  @since 0.9.10 moved from UpdateRoutingKeyModifierJob
+     * @return could be slightly negative
+     * @since 0.9.10 moved from UpdateRoutingKeyModifierJob
      */
     public long getTimeTillMidnight() {
         return _nextMidnight - _context.clock().now();
     }
 
     /**
-     *  Previous midnight (GMT) for the time given.
-     *  Caller must synch.
-     *  @return the previous midnight
-     *  @since 0.9.10
+     * Previous midnight (GMT) for the time given.
+     * Caller must synch.
+     * @return the previous midnight
+     * @since 0.9.10
      */
     private LocalDate getPreviousMidnight(long now) {
             return Instant.ofEpochMilli(now).atZone(GMT).toLocalDate();
     }
 
     /**
-     *  Generate mod data from the given GMT day.
-     *  Caller must synch.
-     *  @since 0.9.10
+     * Generate mod data from the given GMT day.
+     * Caller must synch.
+     * @since 0.9.10
      */
     private byte[] generateModDataFromCal(LocalDate day) {
         Date today = Date.from(day.atStartOfDay(GMT).toInstant());

@@ -6,7 +6,6 @@ package net.i2p.client.impl;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -112,9 +111,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
-     *  For extension
+     * For extension
      *
-     *  @since 0.9.7
+     * @since 0.9.7
      */
     protected RequestLeaseSetMessageHandler(I2PAppContext context, int messageType) {
         super(context, messageType);
@@ -123,13 +122,13 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
-     *  Do we send a LeaseSet or a LeaseSet2?
-     *  As of 0.9.69, always use LS2 unless the router doesn't support it
+     * Do we send a LeaseSet or a LeaseSet2?
+     * As of 0.9.69, always use LS2 unless the router doesn't support it
      *
-     *  Side effect: sets _ls2Type
+     * Side effect: sets _ls2Type
      *
-     *  @return true if LS2 should be used
-     *  @since 0.9.38
+     * @return true if LS2 should be used
+     * @since 0.9.38
      */
     protected boolean requiresLS2(I2PSessionImpl session) {
         if (!session.supportsLS2()) {
@@ -286,10 +285,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * @param leaseEnd absolute lease end from the router request
      * @param published LS2 published timestamp, or 0 for LS1 / unset
      * @param now current time when the floor is computed; the later of
-     *        {@code published} and {@code now} sets the margin, so delay
-     *        between publishing and signing does not shrink it
+     * {@code published} and {@code now} sets the margin, so delay
+     * between publishing and signing does not shrink it
      * @return leaseEnd if already safely after both instants,
-     *         else max(published, now) + 1s
+     * else max(published, now) + 1s
      * @since 0.9.71+
      */
     static long ensurePositiveLs2Expiry(long leaseEnd, long published, long now) {
@@ -382,8 +381,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * @param isLS2 true for LS2, false for LS1
      * @param session the I2CP session requesting the LeaseSet
      * @return true if the LeaseSet was signed and handed to the session,
-     *         false if it was rejected or signing failed; callers use this
-     *         to advance the monotonic publish floor only on success
+     * false if it was rejected or signing failed; callers use this
+     * to advance the monotonic publish floor only on success
      * @since 0.9.7
      */
     protected synchronized boolean signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session) {
@@ -400,10 +399,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * @param isLS2 true for LS2, false for LS1
      * @param session the I2CP session requesting the LeaseSet
      * @param message the request that produced this set, or null when the
-     *        caller cannot supply it (no transient retry is scheduled then)
+     * caller cannot supply it (no transient retry is scheduled then)
      * @param attempt number of prompt re-runs already performed for this request
      * @return true if the LeaseSet was signed and handed to the session,
-     *         false if it was rejected or signing failed
+     * false if it was rejected or signing failed
      * @since 0.9.71+
      */
     protected synchronized boolean signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session,
@@ -749,7 +748,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      *
      * @param reason the DataFormatException message, or null
      * @return true for expiry and empty-request rejections that a prompt
-     *         re-run of the request can resolve
+     * re-run of the request can resolve
      * @since 0.9.71+
      */
     static boolean isTransientSignFailure(String reason) {
@@ -793,11 +792,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
-     *  Remove the cached lease info for the given destination.
-     *  Called on session destroy to prevent unbounded map growth
-     *  and timely release of private key material.
+     * Remove the cached lease info for the given destination.
+     * Called on session destroy to prevent unbounded map growth
+     * and timely release of private key material.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     public void removeLeaseSet(Destination dest) {
         _existingLeaseSets.remove(dest);
@@ -805,10 +804,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
     /**
      * Non-null [type:]b64[,[type:]b64]...
-     *  @param spkl non-null [type:]b64[,[type:]b64]...
-     *  @param privKeys out parameter
-     *  @param allowedTypes list of allowed encryption types
-     *  @since 0.9.39
+     * @param spkl non-null [type:]b64[,[type:]b64]...
+     * @param privKeys out parameter
+     * @param allowedTypes list of allowed encryption types
+     * @since 0.9.39
      */
     private void parsePrivateKeys(String spkl, List<PrivateKey> privKeys, List<EncType> allowedTypes) {
         String[] spks = DataHelper.split(spkl, ",");
@@ -855,7 +854,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     }
 
     /**
-     *  Multiple encryption keys supported, as of 0.9.39, for LS2
+     * Multiple encryption keys supported, as of 0.9.39, for LS2
      */
     private static class LeaseInfo {
         private final List<PublicKey> _pubKeys;
@@ -864,9 +863,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         private final SigningPrivateKey _signingPrivKey;
 
         /**
-         *  New keys
+         * New keys
          *
-         *  @param types must be available
+         * @param types must be available
          */
         public LeaseInfo(Destination dest, List<EncType> types, boolean isLS2) {
             if (types.size() > 1 && PREFER_NEW_ENC) {
@@ -896,11 +895,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
 
         /**
-         *  Existing keys, LS1 only
+         * Existing keys, LS1 only
          *
-         *  @param privKeys all EncTypes must be available
-         *  @param signingPrivKey the signing private key
-         *  @since 0.9.18
+         * @param privKeys all EncTypes must be available
+         * @param signingPrivKey the signing private key
+         * @since 0.9.18
          */
         public LeaseInfo(List<PrivateKey> privKeys, SigningPrivateKey signingPrivKey) {
             if (privKeys.size() > 1) {
@@ -916,11 +915,11 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
 
         /**
-         *  Existing crypto keys, new signing key, LS1 only
+         * Existing crypto keys, new signing key, LS1 only
          *
-         *  @param privKeys all EncTypes must be available
-         *  @param dest the destination for key generation
-         *  @since 0.9.21
+         * @param privKeys all EncTypes must be available
+         * @param dest the destination for key generation
+         * @since 0.9.21
          */
         public LeaseInfo(List<PrivateKey> privKeys, Destination dest) {
             SimpleDataStructure[] signKeys;
@@ -939,10 +938,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
 
         /**
-         *  Existing keys, LS2 only
+         * Existing keys, LS2 only
          *
-         *  @param privKeys all EncTypes must be available
-         *  @since 0.9.47
+         * @param privKeys all EncTypes must be available
+         * @since 0.9.47
          */
         public LeaseInfo(List<PrivateKey> privKeys) {
             if (privKeys.size() > 1) {
@@ -1000,9 +999,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
         }
 
         /**
-         *  Reverse order by enc type
+         * Reverse order by enc type
          *
-         *  @since 0.9.39
+         * @since 0.9.39
          */
         private static class PrivKeyComparator implements Comparator<PrivateKey>, Serializable {
             private static final long serialVersionUID = 1L;

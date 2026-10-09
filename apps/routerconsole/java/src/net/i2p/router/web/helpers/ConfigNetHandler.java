@@ -122,16 +122,16 @@ public class ConfigNetHandler extends FormHandler {
     public void setLaptop(String moo) { _laptop = true; }
 
     /**
-     *  Set whether IPv4 is firewalled.
-     *  @param moo ignored
-     *  @since 0.9.20
+     * Set whether IPv4 is firewalled.
+     * @param moo ignored
+     * @since 0.9.20
      */
     public void setIPv4Firewalled(String moo) { _ipv4Firewalled = true; }
 
     /**
-     *  Set whether IPv6 is firewalled.
-     *  @param moo ignored
-     *  @since 0.9.28
+     * Set whether IPv6 is firewalled.
+     * @param moo ignored
+     * @since 0.9.28
      */
     public void setIPv6Firewalled(String moo) { _ipv6Firewalled = true; }
 
@@ -188,27 +188,26 @@ public class ConfigNetHandler extends FormHandler {
     }
 
     /**
-     *  Set rates-only mode (skip IP/transport changes).
-     *  @param foo ignored
-     *  @since 0.8.12
+     * Set rates-only mode (skip IP/transport changes).
+     * @param foo ignored
+     * @since 0.8.12
      */
     public void setRatesOnly(String foo) {
         _ratesOnly = true;
     }
 
     /**
-     *  Set whether UDP transport is disabled.
-     *  @param foo the disable UDP mode
-     *  @since 0.8.13
+     * Set whether UDP transport is disabled.
+     * @param foo the disable UDP mode
+     * @since 0.8.13
      */
     public void setDisableUDP(String foo) {
         _udpDisabled = "disabled".equals(foo);
     }
 
     /**
-     *  Set the IPv6 mode configuration.
-     *  @param mode the IPv6 mode
-     *  @since IPv6
+     * Set the IPv6 mode configuration.
+     * @param mode the IPv6 mode
      */
     public void setIpv6(String mode) {
         _ipv6Mode = mode;
@@ -217,7 +216,6 @@ public class ConfigNetHandler extends FormHandler {
     /**
      * The user made changes to the network config and wants to save them, so
      * lets go ahead and do so.
-     *
      */
     private void saveChanges() {
         boolean restartRequired = false;
@@ -508,9 +506,9 @@ public class ConfigNetHandler extends FormHandler {
     }
 
     /**
-     *  Do basic verification of address here to prevent problems later
-     *  @return valid
-     *  @since 0.8.9
+     * Do basic verification of address here to prevent problems later
+     * @return valid
+     * @since 0.8.9
      */
     private boolean verifyAddress(String addr) {
         if (addr == null || addr.length() <= 0)
@@ -528,12 +526,12 @@ public class ConfigNetHandler extends FormHandler {
     }
 
     /**
-     *  A full restart is required to apply a hidden mode change. The new keys
-     *  are not built on shutdown: {@link Router#PROP_REBUILD_KEYS} has been
-     *  saved as true, so the next startup kills the old keys. There is no
-     *  rekey-only path here, and registerWrapperNotifier() is safe to call
-     *  whether or not a wrapper is present - its shutdown task notifies the
-     *  wrapper only when there is one.
+     * A full restart is required to apply a hidden mode change. The new keys
+     * are not built on shutdown: {@link Router#PROP_REBUILD_KEYS} has been
+     * saved as true, so the next startup kills the old keys. There is no
+     * rekey-only path here, and registerWrapperNotifier() is safe to call
+     * whether or not a wrapper is present - its shutdown task notifies the
+     * wrapper only when there is one.
      */
     private void hiddenSwitch() {
         ConfigServiceHandler.registerWrapperNotifier(_context, Router.EXIT_GRACEFUL_RESTART, false);
@@ -546,7 +544,7 @@ public class ConfigNetHandler extends FormHandler {
     static final int DEF_BURST_TIME = 20;
 
     /**
-     *  @return changed
+     * @return changed
      */
     private boolean updateRates() {
         boolean updated = false;

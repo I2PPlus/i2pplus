@@ -18,9 +18,9 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     public static final int MAX_SIZE = 32;
 
     /*
-     *  "Next" pointers
-     *  The highest indexed level is the "highest" level in the list.
-     *  The "bottom" level is the direct pointer to a SkipSpan.
+     * "Next" pointers
+     * The highest indexed level is the "highest" level in the list.
+     * The "bottom" level is the direct pointer to a SkipSpan.
      */
     /** Array of level pointers at each height */
     public SkipLevels<K, V>[] levels;
@@ -30,40 +30,40 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(BlockFile.class);
 
     /**
-     *  Create a new instance of this SkipLevels.
+     * Create a new instance of this SkipLevels.
      *
-     *  @param levels the number of levels to create
-     *  @param ss the SkipSpan to use
-     *  @param sl the SkipList
-     *  @return a new SkipLevels instance
+     * @param levels the number of levels to create
+     * @param ss the SkipSpan to use
+     * @param sl the SkipList
+     * @return a new SkipLevels instance
      */
     public SkipLevels<K, V> newInstance(int levels, SkipSpan<K, V> ss, SkipList<K, V> sl) {
         return new SkipLevels<>(levels, ss);
     }
 
     /**
-     *  Mark this instance as killed.
+     * Mark this instance as killed.
      */
     public void killInstance() { /* no-op */ }
 
     /**
-     *  Flush this level to disk.
+     * Flush this level to disk.
      */
     public void flush() { /* no-op */ }
 
     /**
-     *  Protected constructor for subclasses.
+     * Protected constructor for subclasses.
      */
     protected SkipLevels() {
         // Protected constructor for subclasses
     }
 
     /**
-     *  Create a new SkipLevels with the specified size.
+     * Create a new SkipLevels with the specified size.
      *
-     *  @param size the number of levels
-     *  @param span the bottom SkipSpan
-     *  @throws IllegalArgumentException if size too big or too small
+     * @param size the number of levels
+     * @param span the bottom SkipSpan
+     * @throws IllegalArgumentException if size too big or too small
      */
     @SuppressWarnings("unchecked")
     public SkipLevels(int size, SkipSpan<K, V> span) {
@@ -74,9 +74,9 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     }
 
     /**
-     *  Print this level and all levels below it.
+     * Print this level and all levels below it.
      *
-     *  @return a string representation of this level
+     * @return a string representation of this level
      */
     public String print() {
         StringBuilder buf = new StringBuilder(128);
@@ -95,9 +95,9 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     }
 
     /**
-     *  Print this level and all levels below it, recursively.
+     * Print this level and all levels below it, recursively.
      *
-     *  @return a string representation of all levels
+     * @return a string representation of all levels
      */
     public String printAll() {
         StringBuilder buf = new StringBuilder(128);
@@ -110,9 +110,9 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     }
 
     /**
-     *  Get the end span of this level.
+     * Get the end span of this level.
      *
-     *  @return the last SkipSpan in this chain
+     * @return the last SkipSpan in this chain
      */
     public SkipSpan<K, V> getEnd() {
         for(int i=(levels.length - 1);i>=0;i--) {
@@ -122,12 +122,12 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     }
 
     /**
-     *  Get the span containing or following the given key.
+     * Get the span containing or following the given key.
      *
-     *  @param start the starting level
-     *  @param key the key
-     *  @param search search parameters and results
-     *  @return the SkipSpan containing the key
+     * @param start the starting level
+     * @param key the key
+     * @param search search parameters and results
+     * @return the SkipSpan containing the key
      */
     public SkipSpan<K, V> getSpan(int start, K key, int[] search) {
         for(int i=Math.min(start, levels.length - 1);i>=0;i--) {
@@ -139,18 +139,18 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     }
 
     /**
-     *  Get the key at the bottom of this level.
+     * Get the key at the bottom of this level.
      *
-     *  @return the first key
+     * @return the first key
      */
     public K key() { return bottom.firstKey(); }
 
     /**
-     *  Get the value associated with the given key.
+     * Get the value associated with the given key.
      *
-     *  @param start the starting level
-     *  @param key the key
-     *  @return the value, or null if not found
+     * @param start the starting level
+     * @param key the key
+     * @return the value, or null if not found
      */
     public V get(int start, K key) {
         for(int i=Math.min(start, levels.length - 1);i>=0;i--) {
@@ -162,16 +162,16 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     }
 
     /**
-     *  Remove a key-value pair from the skip list.
+     * Remove a key-value pair from the skip list.
      *
-     *  @param start the starting level
-     *  @param key the key
-     *  @param sl the SkipList
-     *  @return An array of two objects or null.
-     *          rv[0] is the removed object.
-     *          rv[1] is the deleted SkipLevels if the removed object was the last in the SkipLevels,
-     *                and the deleted SkipLevels is taller than this SkipLevels.
-     *          rv is null if no object was removed.
+     * @param start the starting level
+     * @param key the key
+     * @param sl the SkipList
+     * @return An array of two objects or null.
+     * rv[0] is the removed object.
+     * rv[1] is the deleted SkipLevels if the removed object was the last in the SkipLevels,
+     * and the deleted SkipLevels is taller than this SkipLevels.
+     * rv is null if no object was removed.
      */
     @SuppressWarnings("unchecked")
     public Object[] remove(int start, K key, SkipList<K, V> sl) {
@@ -257,15 +257,15 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     }
 
     /**
-     *  Put a key-value pair into the skip list.
+     * Put a key-value pair into the skip list.
      *
-     *  @param start the starting level
-     *  @param key the key
-     *  @param val the value
-     *  @param sl the SkipList
-     *  @return the new level if it caused a split and we made a new level,
-     *          and the new level is taller than our level;
-     *          else null if it went in an existing level or the new level is our height or less.
+     * @param start the starting level
+     * @param key the key
+     * @param val the value
+     * @param sl the SkipList
+     * @return the new level if it caused a split and we made a new level,
+     * and the new level is taller than our level;
+     * else null if it went in an existing level or the new level is our height or less.
      */
     public SkipLevels<K, V> put(int start, K key, V val, SkipList<K, V> sl) {
         boolean modified = false;
@@ -321,20 +321,20 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
     }
 
     /**
-     *  Run an integrity check on this level.
+     * Run an integrity check on this level.
      *
-     *  @param fix if true, attempt to fix corruption
-     *  @return true if corruption was found
+     * @param fix if true, attempt to fix corruption
+     * @return true if corruption was found
      */
     public boolean blvlck(boolean fix) { return false; }
 
     /**
-     *  Run an integrity check on this level with additional parameters.
+     * Run an integrity check on this level with additional parameters.
      *
-     *  @param fix if true, attempt to fix corruption
-     *  @param width the current width
-     *  @param prevLevels previous levels to check
-     *  @return true if corruption was found
+     * @param fix if true, attempt to fix corruption
+     * @param width the current width
+     * @param prevLevels previous levels to check
+     * @return true if corruption was found
      */
     public boolean blvlck(boolean fix, int width, SkipLevels<K, V>[] prevLevels) { return false; }
 }

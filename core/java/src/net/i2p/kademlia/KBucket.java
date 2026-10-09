@@ -6,7 +6,6 @@ package net.i2p.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.SimpleDataStructure;
@@ -66,7 +65,7 @@ public interface KBucket<T extends SimpleDataStructure> {
     public boolean remove(T key);
 
     /**
-     *  Update the last-changed timestamp to now.
+     * Update the last-changed timestamp to now.
      */
     public void setLastChanged();
 

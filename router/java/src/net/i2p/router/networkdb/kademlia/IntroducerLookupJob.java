@@ -95,8 +95,8 @@ class IntroducerLookupJob extends JobImpl {
     /** Prune threshold for the attempts map. */
     private static final int ATTEMPT_MAP_MAX = 256;
     /**
-     *  Introducer slots per address. Mirrors UDPAddress.MAX_INTRODUCERS,
-     *  which is package-private in the transport package.
+     * Introducer slots per address. Mirrors UDPAddress.MAX_INTRODUCERS,
+     * which is package-private in the transport package.
      */
     private static final int MAX_INTRO_SLOTS = 5;
     /** Introducer relay tag option prefix ("itag0".."itag4"); required in every slot. */
@@ -105,11 +105,11 @@ class IntroducerLookupJob extends JobImpl {
     private static final String PROP_INTRO_HASH_PREFIX = "ih";
 
     /**
-     *  Constructor. Sets the staggered initial start time.
+     * Constructor. Sets the staggered initial start time.
      *
-     *  @param ctx the router context
-     *  @param facade the floodfill network database facade
-     *  @since 0.9.71+
+     * @param ctx the router context
+     * @param facade the floodfill network database facade
+     * @since 0.9.71+
      */
     public IntroducerLookupJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
@@ -179,13 +179,13 @@ class IntroducerLookupJob extends JobImpl {
     }
 
     /**
-     *  Record the attempt and issue one non-blocking remote RI lookup with
-     *  the given deadline (never past this cycle's query budget, never above
-     *  the standard adaptive RouterInfo lookup cap).
-     *  Success clears the tracking entry (the RI is then cached locally and
-     *  expires through the normal netdb lifecycle); failure increments the
-     *  consecutive-failure count, which lengthens the retry backoff. Both
-     *  outcomes release a concurrency slot.
+     * Record the attempt and issue one non-blocking remote RI lookup with
+     * the given deadline (never past this cycle's query budget, never above
+     * the standard adaptive RouterInfo lookup cap).
+     * Success clears the tracking entry (the RI is then cached locally and
+     * expires through the normal netdb lifecycle); failure increments the
+     * consecutive-failure count, which lengthens the retry backoff. Both
+     * outcomes release a concurrency slot.
      */
     private void requestLookup(RouterContext ctx, final Hash h, long now, final int timeoutMs) {
         _attempts.compute(h, (k, v) -> v == null ? new long[] {now, 0}
@@ -219,9 +219,9 @@ class IntroducerLookupJob extends JobImpl {
     }
 
     /**
-     *  Bound the attempts map: drop entries whose last attempt predates the
-     *  maximum possible backoff window (they would fail canAttempt() as
-     *  eligible anyway and would be recreated fresh).
+     * Bound the attempts map: drop entries whose last attempt predates the
+     * maximum possible backoff window (they would fail canAttempt() as
+     * eligible anyway and would be recreated fresh).
      */
     private void pruneAttempts(long now) {
         if (_attempts.size() <= ATTEMPT_MAP_MAX)
@@ -237,13 +237,13 @@ class IntroducerLookupJob extends JobImpl {
     }
 
     /**
-     *  Whether the peer publishes the unreachable capability ('U'), i.e. it
-     *  is firewalled / cannot accept unsolicited connections and therefore
-     *  relies on introducers for inbound connectivity.
+     * Whether the peer publishes the unreachable capability ('U'), i.e. it
+     * is firewalled / cannot accept unsolicited connections and therefore
+     * relies on introducers for inbound connectivity.
      *
-     *  @param ri the peer's RouterInfo (non-null)
-     *  @return true if the capabilities string contains 'U'
-     *  @since 0.9.71+
+     * @param ri the peer's RouterInfo (non-null)
+     * @return true if the capabilities string contains 'U'
+     * @since 0.9.71+
      */
     static boolean isUnreachablePeer(RouterInfo ri) {
         String caps = ri.getCapabilities();
@@ -251,15 +251,15 @@ class IntroducerLookupJob extends JobImpl {
     }
 
     /**
-     *  Extract SSU2 introducer router hashes ("ih0".."ih4") from the given
-     *  addresses. An introducer slot exists only if its required relay tag
-     *  option ("itag{i}") is present; SSU1-only slots (ihost/iport/ikey with
-     *  no "ih") carry no hash and yield nothing. Duplicates removed.
-     *  Pure decision — no context access, safe for unit tests.
+     * Extract SSU2 introducer router hashes ("ih0".."ih4") from the given
+     * addresses. An introducer slot exists only if its required relay tag
+     * option ("itag{i}") is present; SSU1-only slots (ihost/iport/ikey with
+     * no "ih") carry no hash and yield nothing. Duplicates removed.
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param addresses the peer's transport addresses, may be null or empty
-     *  @return the introducer hashes, never null
-     *  @since 0.9.71+
+     * @param addresses the peer's transport addresses, may be null or empty
+     * @return the introducer hashes, never null
+     * @since 0.9.71+
      */
     static List<Hash> getIntroducerHashes(Collection<RouterAddress> addresses) {
         List<Hash> rv = new ArrayList<>(0);
@@ -280,12 +280,12 @@ class IntroducerLookupJob extends JobImpl {
     }
 
     /**
-     *  Decode an "ih{i}" option value into a Hash: Base64 of exactly 32
-     *  bytes, else null. Pure decision — safe for unit tests.
+     * Decode an "ih{i}" option value into a Hash: Base64 of exactly 32
+     * bytes, else null. Pure decision — safe for unit tests.
      *
-     *  @param b64 the option value, may be null
-     *  @return the hash, or null if absent/malformed
-     *  @since 0.9.71+
+     * @param b64 the option value, may be null
+     * @return the hash, or null if absent/malformed
+     * @since 0.9.71+
      */
     static Hash parseIntroducerHash(String b64) {
         if (b64 == null)
@@ -297,14 +297,14 @@ class IntroducerLookupJob extends JobImpl {
     }
 
     /**
-     *  Retry backoff for an introducer whose last lookup failed {@code fails}
-     *  consecutive times: 0 (in flight / find pending) → {@link #MIN_RETRY_MS};
-     *  1+ → {@link #FAIL_BACKOFF_MS} doubling per failure, capped at
-     *  {@link #MAX_FAIL_BACKOFF_MS}. Pure decision — safe for unit tests.
+     * Retry backoff for an introducer whose last lookup failed {@code fails}
+     * consecutive times: 0 (in flight / find pending) → {@link #MIN_RETRY_MS};
+     * 1+ → {@link #FAIL_BACKOFF_MS} doubling per failure, capped at
+     * {@link #MAX_FAIL_BACKOFF_MS}. Pure decision — safe for unit tests.
      *
-     *  @param fails consecutive failed lookup attempts
-     *  @return the backoff in milliseconds
-     *  @since 0.9.71+
+     * @param fails consecutive failed lookup attempts
+     * @return the backoff in milliseconds
+     * @since 0.9.71+
      */
     static long backoffMillis(int fails) {
         if (fails <= 0)
@@ -319,14 +319,14 @@ class IntroducerLookupJob extends JobImpl {
     }
 
     /**
-     *  Gate for issuing a lookup now: true when never attempted, or when the
-     *  elapsed time since the last attempt meets the state's backoff.
-     *  Pure decision — safe for unit tests.
+     * Gate for issuing a lookup now: true when never attempted, or when the
+     * elapsed time since the last attempt meets the state's backoff.
+     * Pure decision — safe for unit tests.
      *
-     *  @param now current time in milliseconds
-     *  @param state {last attempt time, consecutive failures}, or null
-     *  @return true if a lookup may be attempted
-     *  @since 0.9.71+
+     * @param now current time in milliseconds
+     * @param state {last attempt time, consecutive failures}, or null
+     * @return true if a lookup may be attempted
+     * @since 0.9.71+
      */
     static boolean canAttempt(long now, long[] state) {
         if (state == null)
@@ -335,16 +335,16 @@ class IntroducerLookupJob extends JobImpl {
     }
 
     /**
-     *  Deadline for one issued lookup: the standard adaptive RouterInfo
-     *  lookup cap (the same deadline peer/transit next-hop lookups get),
-     *  never extended past this cycle's remaining query budget, and zero
-     *  when too little budget remains to fund a useful search.
-     *  Pure decision — safe for unit tests.
+     * Deadline for one issued lookup: the standard adaptive RouterInfo
+     * lookup cap (the same deadline peer/transit next-hop lookups get),
+     * never extended past this cycle's remaining query budget, and zero
+     * when too little budget remains to fund a useful search.
+     * Pure decision — safe for unit tests.
      *
-     *  @param remainingBudgetMs ms left in this cycle's query phase
-     *  @param adaptiveCapMs current adaptive RouterInfo lookup deadline cap
-     *  @return timeout in ms, or 0 when no useful lookup remains
-     *  @since 0.9.71+
+     * @param remainingBudgetMs ms left in this cycle's query phase
+     * @param adaptiveCapMs current adaptive RouterInfo lookup deadline cap
+     * @return timeout in ms, or 0 when no useful lookup remains
+     * @since 0.9.71+
      */
     static int issueTimeout(long remainingBudgetMs, int adaptiveCapMs) {
         if (remainingBudgetMs < MIN_USEFUL_TIMEOUT_MS) {return 0;}

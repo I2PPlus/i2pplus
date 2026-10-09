@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -49,23 +48,23 @@ public class SessionConfig extends DataStructureImpl {
     private Properties _options;
 
     /**
-     *  Seconds since epoch, NOT ms
+     * Seconds since epoch, NOT ms
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     public static final String PROP_OFFLINE_EXPIRATION = "i2cp.leaseSetOfflineExpiration";
 
     /**
-     *  Base 64, optionally preceded by sig type and ':', default DSA-SHA1
+     * Base 64, optionally preceded by sig type and ':', default DSA-SHA1
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     public static final String PROP_TRANSIENT_KEY = "i2cp.leaseSetTransientPublicKey";
 
     /**
-     *  Base 64, optionally preceded by sig type and ':', default DSA-SHA1
+     * Base 64, optionally preceded by sig type and ':', default DSA-SHA1
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     public static final String PROP_OFFLINE_SIGNATURE = "i2cp.leaseSetOfflineSignature";
 
@@ -162,13 +161,13 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     *  Set the offline signing data.
-     *  Does NOT validate the signature.
-     *  Must be called AFTER setOptions(). Will throw ISE otherwise.
-     *  Side effect - modifies options.
+     * Set the offline signing data.
+     * Does NOT validate the signature.
+     * Must be called AFTER setOptions(). Will throw ISE otherwise.
+     * Side effect - modifies options.
      *
-     *  @throws IllegalStateException if options are not set
-     *  @since 0.9.38
+     * @throws IllegalStateException if options are not set
+     * @since 0.9.38
      */
     public void setOfflineSignature(long expires, SigningPublicKey transientSPK, Signature offlineSig) {
         if (_options == null) {
@@ -180,10 +179,10 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     *  Get the offline expiration
+     * Get the offline expiration
      *
-     *  @return Java time (ms) or 0 if not initialized or does not have offline keys
-     *  @since 0.9.38
+     * @return Java time (ms) or 0 if not initialized or does not have offline keys
+     * @since 0.9.38
      */
     public long getOfflineExpiration() {
         if (_options == null) {
@@ -201,10 +200,10 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     *  Gets the transient signing public key for offline signing.
+     * Gets the transient signing public key for offline signing.
      *
-     *  @return null on error or if not initialized or does not have offline keys
-     *  @since 0.9.38
+     * @return null on error or if not initialized or does not have offline keys
+     * @since 0.9.38
      */
     public SigningPublicKey getTransientSigningPublicKey() {
         if (_options == null || _destination == null) {
@@ -236,10 +235,10 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     *  Gets the offline signature from the options.
+     * Gets the offline signature from the options.
      *
-     *  @return null on error or if not initialized or does not have offline keys
-     *  @since 0.9.38
+     * @return null on error or if not initialized or does not have offline keys
+     * @since 0.9.38
      */
     public Signature getOfflineSignature() {
         if (_options == null || _destination == null) {
@@ -262,7 +261,7 @@ public class SessionConfig extends DataStructureImpl {
      * Sign the structure using the supplied private key
      *
      * @param signingKey SigningPrivateKey to sign with.
-     *                   If offline data is set, must be with the transient key.
+     * If offline data is set, must be with the transient key.
      *
      * @throws DataFormatException if the data cannot be signed
      */
@@ -334,9 +333,9 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     *  Misnamed, could be too old or too far in the future.
+     * Misnamed, could be too old or too far in the future.
      *
-     *  @return true if the creation date is out of range
+     * @return true if the creation date is out of range
      */
     public boolean tooOld() {
         long now = Clock.getInstance().now();

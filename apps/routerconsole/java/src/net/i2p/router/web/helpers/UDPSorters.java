@@ -7,9 +7,9 @@ import net.i2p.I2PAppContext;
 import net.i2p.router.transport.udp.PeerState;
 
 /**
- *  Comparators for various columns
+ * Comparators for various columns
  *
- *  @since 0.9.31 moved from udp; 0.9.18 moved from UDPTransport
+ * @since 0.9.31 moved from udp; 0.9.18 moved from UDPTransport
  */
 class UDPSorters {
 
@@ -52,9 +52,9 @@ class UDPSorters {
     /**
      * Select the comparator for a column, reversing it for a descending sort.
      * @param sortFlags  one of the FLAG_ columns in this class; the magnitude
-     *                   picks the comparator and the sign sets the direction
+     * picks the comparator and the sign sets the direction
      * @return comparator ordering PeerState by that column, or descending if
-     *                    sortFlags is negative; FLAG_ALPHA is the fallback
+     * sortFlags is negative; FLAG_ALPHA is the fallback
      */
     static Comparator<PeerState> getComparator(int sortFlags) {
         Comparator<PeerState> rv;
@@ -438,12 +438,12 @@ class UDPSorters {
      * of a column that is currently sorted on.
      * @param buf  buffer receiving the spans and anchors
      * @param urlBase  page path the links point at, without a query string;
-     *                 this appends the "?transport=ssu&amp;sort=N" part
+     * this appends the "?transport=ssu&amp;sort=N" part
      * @param sortFlags  column and direction currently in effect, as passed to
-     *                   {@link #getComparator}
+     * {@link #getComparator}
      * @param descr  localized link title, used for both arrows
      * @param ascending  column this control toggles; FLAG_ALPHA (0) emits a
-     *                   single descending link instead of a toggle
+     * single descending link instead of a toggle
      */
     static void appendSortLinks(StringBuilder buf, String urlBase, int sortFlags, String descr, int ascending) {
         if (ascending == FLAG_ALPHA) { // 0

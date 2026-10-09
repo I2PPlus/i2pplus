@@ -16,9 +16,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *  Unit tests for the request-scoped warm-socket state machine: generation
- *  tagging of attempts, idempotent teardown, wrong-destination discard, and
- *  exactly-once permit release along every exit path.
+ * Unit tests for the request-scoped warm-socket state machine: generation
+ * tagging of attempts, idempotent teardown, wrong-destination discard, and
+ * exactly-once permit release along every exit path.
  */
 public class WarmSlotTest {
 
@@ -277,10 +277,10 @@ public class WarmSlotTest {
     }
 
     /**
-     *  Mock I2PSocket whose close() increments the supplied counter.
+     * Mock I2PSocket whose close() increments the supplied counter.
      *
-     *  @param closes counter of close() calls
-     *  @return the proxy socket
+     * @param closes counter of close() calls
+     * @return the proxy socket
      */
     private static I2PSocket mockSocket(final AtomicInteger closes) {
         return (I2PSocket) Proxy.newProxyInstance(I2PSocket.class.getClassLoader(),

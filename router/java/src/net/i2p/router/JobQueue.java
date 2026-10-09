@@ -50,20 +50,20 @@ public class JobQueue {
     /** List of high priority jobs that should run before others */
     private final BlockingQueue<Job> _highPriorityJobs;
     /** SortedSet of jobs that are scheduled for running in the future, earliest first.
-     *  Typed as the concrete skip list because the pumper reads {@code first()}
-     *  as the minimum start time rather than re-deriving one per pass. */
+     * Typed as the concrete skip list because the pumper reads {@code first()}
+     * as the minimum start time rather than re-deriving one per pass. */
     private final ConcurrentSkipListSet<Job> _timedJobs;
     /** Queue of timed jobs that are ready to run (moved from _timedJobs when ready) */
     private final BlockingQueue<Job> _timedJobsReady;
     /** Membership index over the three ready queues, so duplicate detection is O(1).
-     *  Maintained exclusively through {@link #offerReady}, {@link #removeReady},
-     *  {@link #takeReady}, {@link #addTimed} and {@link #removeTimed} so that no
-     *  queue mutation can leave it stale.
+     * Maintained exclusively through {@link #offerReady}, {@link #removeReady},
+     * {@link #takeReady}, {@link #addTimed} and {@link #removeTimed} so that no
+     * queue mutation can leave it stale.
      *
-     *  <p>Membership is released at <em>dispatch</em>, not at completion:
-     *  {@link JobImpl#requeue} is called from {@code runJob()} on the running job
-     *  itself, so holding the entry until completion would swallow every
-     *  self-requeueing job.
+     * <p>Membership is released at <em>dispatch</em>, not at completion:
+     * {@link JobImpl#requeue} is called from {@code runJob()} on the running job
+     * itself, so holding the entry until completion would swallow every
+     * self-requeueing job.
      */
     private final Set<Job> _readyIndex;
     /**
@@ -114,18 +114,18 @@ public class JobQueue {
     /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
     private static final int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
     /** Resolved once from {@link #PROP_MAX_WAITING_JOBS} at construction.
-     *  shouldDrop() read it per addJob() that could exceed the cap.  A
-     *  non-positive value disables dropping. */
+     * shouldDrop() read it per addJob() that could exceed the cap.  A
+     * non-positive value disables dropping. */
     private final int _maxWaitingJobs;
     /** Minimum lag (ms) before the drop policy activates.
-     *  Must be high enough to avoid drops during normal processing jitter;
-     *  low enough to shed load before queue saturation causes cascading failure.
-     *  500ms means the drop gate is meaningful: with 48+ queued jobs AND
-     *  a half-second of observed lag, the scaler has failed to keep up. */
+     * Must be high enough to avoid drops during normal processing jitter;
+     * low enough to shed load before queue saturation causes cascading failure.
+     * 500ms means the drop gate is meaningful: with 48+ queued jobs AND
+     * a half-second of observed lag, the scaler has failed to keep up. */
     private static final long MIN_LAG_TO_DROP = 500;
 
     /**
-     *  @since 0.9.52+
+     * @since 0.9.52+
      */
     private static final String PROP_MAX_WAITING_JOBS = "router.maxWaitingJobs";
 
@@ -144,7 +144,7 @@ public class JobQueue {
     private final AtomicInteger _droppedJobsCount = new AtomicInteger();
 
     /**
-     *  Does not start the pumper. Caller MUST call startup.
+     * Does not start the pumper. Caller MUST call startup.
      */
     public JobQueue(RouterContext context) {
         _context = context;
@@ -880,12 +880,12 @@ public class JobQueue {
         }
 
         /**
-         *  Pump jobs from the scheduling queue to the runner queue.
+         * Pump jobs from the scheduling queue to the runner queue.
          *
-         *  The iteration and removal of _timedJobs happens outside the lock
-         *  because ConcurrentSkipListSet supports safe concurrent iteration.
-         *  Only the wait/notify signaling needs _jobLock, reducing contention
-         *  with addJob() which must also acquire _jobLock.
+         * The iteration and removal of _timedJobs happens outside the lock
+         * because ConcurrentSkipListSet supports safe concurrent iteration.
+         * Only the wait/notify signaling needs _jobLock, reducing contention
+         * with addJob() which must also acquire _jobLock.
          */
         @Override
         public void run() {

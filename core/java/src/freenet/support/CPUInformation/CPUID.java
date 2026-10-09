@@ -42,24 +42,24 @@ import net.i2p.util.SystemVersion;
  * <h2>Family/Model Computation</h2>
  * <p>The actual (displayed) family and model are computed as follows:</p>
  * <ul>
- *   <li><b>Actual Family</b> = Base Family + Extended Family
- *       (only when Base Family == 0xF for Intel; always for AMD)</li>
- *   <li><b>Actual Model</b> = Base Model + (Extended Model &lt;&lt; 4)
- *       (only when Base Family == 0x6 or 0xF for Intel; always for AMD)</li>
+ * <li><b>Actual Family</b> = Base Family + Extended Family
+ * (only when Base Family == 0xF for Intel; always for AMD)</li>
+ * <li><b>Actual Model</b> = Base Model + (Extended Model &lt;&lt; 4)
+ * (only when Base Family == 0x6 or 0xF for Intel; always for AMD)</li>
  * </ul>
  *
  * <h2>AMD Family/Microarchitecture Mapping</h2>
  * <table border="1">
- *   <caption>AMD Family/Microarchitecture Mapping</caption>
- *   <tr><th>Family (hex)</th><th>Microarchitecture</th><th>Products</th></tr>
- *   <tr><td>15 (0xF)</td><td>K8 / Hammer</td><td>Athlon 64, Opteron</td></tr>
- *   <tr><td>16 (0x10)</td><td>K10</td><td>Phenom, Athlon II</td></tr>
- *   <tr><td>20 (0x14)</td><td>Bobcat</td><td>Ontario, Zacate</td></tr>
- *   <tr><td>21 (0x15)</td><td>Bulldozer family</td><td>FX, Opteron</td></tr>
- *   <tr><td>22 (0x16)</td><td>Jaguar</td><td>Kabini, Temash</td></tr>
- *   <tr><td>23 (0x17)</td><td>Zen / Zen+ / Zen 2</td><td>Ryzen 1000-3000, EPYC 7001-7002</td></tr>
- *   <tr><td>25 (0x19)</td><td>Zen 3 / Zen 4</td><td>Ryzen 5000-8000, EPYC 7003-9004</td></tr>
- *   <tr><td>26 (0x1A)</td><td>Zen 5</td><td>Ryzen 9000, EPYC 9005, Ryzen AI 300</td></tr>
+ * <caption>AMD Family/Microarchitecture Mapping</caption>
+ * <tr><th>Family (hex)</th><th>Microarchitecture</th><th>Products</th></tr>
+ * <tr><td>15 (0xF)</td><td>K8 / Hammer</td><td>Athlon 64, Opteron</td></tr>
+ * <tr><td>16 (0x10)</td><td>K10</td><td>Phenom, Athlon II</td></tr>
+ * <tr><td>20 (0x14)</td><td>Bobcat</td><td>Ontario, Zacate</td></tr>
+ * <tr><td>21 (0x15)</td><td>Bulldozer family</td><td>FX, Opteron</td></tr>
+ * <tr><td>22 (0x16)</td><td>Jaguar</td><td>Kabini, Temash</td></tr>
+ * <tr><td>23 (0x17)</td><td>Zen / Zen+ / Zen 2</td><td>Ryzen 1000-3000, EPYC 7001-7002</td></tr>
+ * <tr><td>25 (0x19)</td><td>Zen 3 / Zen 4</td><td>Ryzen 5000-8000, EPYC 7003-9004</td></tr>
+ * <tr><td>26 (0x1A)</td><td>Zen 5</td><td>Ryzen 9000, EPYC 9005, Ryzen AI 300</td></tr>
  * </table>
  *
  * <h2>AMD Family 19h (Zen 3/4) Model Ranges</h2>
@@ -149,12 +149,12 @@ public class CPUID {
      *
      * <p>For CPUID leaf 1, the EAX register contains:</p>
      * <ul>
-     *   <li>Bits 3:0   - Stepping ID</li>
-     *   <li>Bits 7:4   - Base Model</li>
-     *   <li>Bits 11:8  - Base Family</li>
-     *   <li>Bits 15:12 - Processor Type (Intel only)</li>
-     *   <li>Bits 19:16 - Extended Model</li>
-     *   <li>Bits 27:20 - Extended Family</li>
+     * <li>Bits 3:0   - Stepping ID</li>
+     * <li>Bits 7:4   - Base Model</li>
+     * <li>Bits 11:8  - Base Family</li>
+     * <li>Bits 15:12 - Processor Type (Intel only)</li>
+     * <li>Bits 19:16 - Extended Model</li>
+     * <li>Bits 27:20 - Extended Family</li>
      * </ul>
      */
     protected static class CPUIDResult {
@@ -167,9 +167,9 @@ public class CPUID {
         /** EDX register value */
         final int EDX;
         /**  @param EAX EAX register value
-         *  @param EBX EBX register value
-         *  @param ECX ECX register value
-         *  @param EDX EDX register value */
+         * @param EBX EBX register value
+         * @param ECX ECX register value
+         * @param EDX EDX register value */
         CPUIDResult(int EAX,int EBX,int ECX, int EDX) {
             this.EAX = EAX;
             this.EBX = EBX;
@@ -184,13 +184,13 @@ public class CPUID {
      *
      * <p>Common CPUID functions:</p>
      * <ul>
-     *   <li>0x00 - Highest basic function, vendor ID string</li>
-     *   <li>0x01 - Family/model/stepping, feature flags (SSE, AVX, etc.)</li>
-     *   <li>0x07 - Extended feature flags (AVX2, AVX-512, SHA, etc.)</li>
-     *   <li>0x80000000 - Highest extended function</li>
-     *   <li>0x80000001 - Extended feature flags (LZCNT, SSE4A, etc.)</li>
-     *   <li>0x80000002-4 - CPU brand string (48 bytes ASCII)</li>
-     *   <li>0x80000008 - Virtual/physical address sizes</li>
+     * <li>0x00 - Highest basic function, vendor ID string</li>
+     * <li>0x01 - Family/model/stepping, feature flags (SSE, AVX, etc.)</li>
+     * <li>0x07 - Extended feature flags (AVX2, AVX-512, SHA, etc.)</li>
+     * <li>0x80000000 - Highest extended function</li>
+     * <li>0x80000001 - Extended feature flags (LZCNT, SSE4A, etc.)</li>
+     * <li>0x80000002-4 - CPU brand string (48 bytes ASCII)</li>
+     * <li>0x80000008 - Virtual/physical address sizes</li>
      * </ul>
      *
      * @param iFunction The CPUID function number (EAX value)
@@ -200,16 +200,16 @@ public class CPUID {
     private static native CPUIDResult doCPUID(int iFunction);
 
     /**
-     *  Get the jbigi version, only available since jbigi version 3
-     *  Caller must catch Throwable
-     *  @since 0.9.26
+     * Get the jbigi version, only available since jbigi version 3
+     * Caller must catch Throwable
+     * @since 0.9.26
      */
     private native static int nativeJcpuidVersion();
 
     /**
-     *  Get the jcpuid version
-     *  @return 0 if no jcpuid available, 2 if version not supported
-     *  @since 0.9.26
+     * Get the jcpuid version
+     * @return 0 if no jcpuid available, 2 if version not supported
+     * @since 0.9.26
      */
     private static int fetchJcpuidVersion() {
         if (!_nativeOk) {return 0;}
@@ -242,10 +242,10 @@ public class CPUID {
      *
      * <p>Known vendor strings:</p>
      * <ul>
-     *   <li>{@code "AuthenticAMD"} - AMD</li>
-     *   <li>{@code "GenuineIntel"} - Intel</li>
-     *   <li>{@code "CentaurHauls"} - VIA/Centaur</li>
-     *   <li>{@code "HygonGenuine"} - Hygon (AMD-based Chinese JV)</li>
+     * <li>{@code "AuthenticAMD"} - AMD</li>
+     * <li>{@code "GenuineIntel"} - Intel</li>
+     * <li>{@code "CentaurHauls"} - VIA/Centaur</li>
+     * <li>{@code "HygonGenuine"} - Hygon (AMD-based Chinese JV)</li>
      * </ul>
      *
      * @return 12-character vendor string, or empty string if native library not loaded
@@ -369,7 +369,7 @@ public class CPUID {
     }
 
     /**
-     *  @since 0.9.26
+     * @since 0.9.26
      */
     static int getExtendedEBXFeatureFlags() {
         // Supposed to set ECX to 0 before calling?
@@ -380,8 +380,8 @@ public class CPUID {
     }
 
     /**
-     *  There's almost nothing in here.
-     *  @since 0.9.26
+     * There's almost nothing in here.
+     * @since 0.9.26
      */
     static int getExtendedECXFeatureFlags() {
         // Supposed to set ECX to 0 before calling?
@@ -398,9 +398,9 @@ public class CPUID {
      * string is a 48-byte ASCII string programmed by AMD/Intel into the CPU.
      * Examples:</p>
      * <ul>
-     *   <li>{@code "AMD Ryzen 9 9900X 12-Core Processor"}</li>
-     *   <li>{@code "Intel(R) Core(TM) i9-14900K"}</li>
-     *   <li>{@code "AMD EPYC 9754 128-Core Processor"}</li>
+     * <li>{@code "AMD Ryzen 9 9900X 12-Core Processor"}</li>
+     * <li>{@code "Intel(R) Core(TM) i9-14900K"}</li>
+     * <li>{@code "AMD EPYC 9754 128-Core Processor"}</li>
      * </ul>
      *
      * <p><b>IMPORTANT:</b> This is preferred over model-based identification.
@@ -449,9 +449,9 @@ public class CPUID {
      * <p>Detects the CPU vendor via CPUID leaf 0, then returns the appropriate
      * implementation:</p>
      * <ul>
-     *   <li>{@code "AuthenticAMD"} / {@code "HygonGenuine"} → {@link AMDInfoImpl}</li>
-     *   <li>{@code "GenuineIntel"} → {@link IntelInfoImpl}</li>
-     *   <li>{@code "CentaurHauls"} → {@link VIAInfoImpl}</li>
+     * <li>{@code "AuthenticAMD"} / {@code "HygonGenuine"} → {@link AMDInfoImpl}</li>
+     * <li>{@code "GenuineIntel"} → {@link IntelInfoImpl}</li>
+     * <li>{@code "CentaurHauls"} → {@link VIAInfoImpl}</li>
      * </ul>
      *
      * @return CPUInfo for the detected CPU type
@@ -587,7 +587,6 @@ public class CPUID {
      * If it can find a custom built jcpuid.dll / libjcpuid.so, it'll use that.  Otherwise
      * it'll try to look in the classpath for the correct library (see loadFromResource).
      * If the user specifies -Djcpuid.enable=false it'll skip all of this.</p>
-     *
      */
     private static final void loadNative() {
         try {
@@ -621,7 +620,6 @@ public class CPUID {
      * The file name must be (e.g. on linux) libjcpuid-x86_64-linux.so.
      *
      * @return true if it was loaded successfully, else false
-     *
      */
     private static final boolean loadGeneric() {
         try {
@@ -646,7 +644,6 @@ public class CPUID {
      * Only 64-bit jcpuid libraries are shipped.
      *
      * @return true if it was loaded successfully, else false
-     *
      */
     private static final boolean loadFromResource() {
         String resourceName = getResourceName();

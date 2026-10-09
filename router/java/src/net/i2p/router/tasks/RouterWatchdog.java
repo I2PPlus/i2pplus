@@ -24,18 +24,18 @@ import net.i2p.util.SystemVersion;
  *
  * <strong>Monitoring Checks:</strong>
  * <ul>
- *   <li>Job queue liveliness - detects stuck jobs</li>
- *   <li>Client manager responsiveness - ensures clients are alive</li>
- *   <li>Network error rates - detects connectivity issues</li>
- *   <li>Communication system status - checks network health</li>
+ * <li>Job queue liveliness - detects stuck jobs</li>
+ * <li>Client manager responsiveness - ensures clients are alive</li>
+ * <li>Network error rates - detects connectivity issues</li>
+ * <li>Communication system status - checks network health</li>
  * </ul>
  *
  * <strong>Recovery Actions:</strong>
  * <ul>
- *   <li>Logs detailed system status when problems detected</li>
- *   <li>Generates thread dumps for debugging hung states</li>
- *   <li>May force JVM restart after consecutive failures</li>
- *   <li>Configurable via watchdog.haltOnHang property</li>
+ * <li>Logs detailed system status when problems detected</li>
+ * <li>Generates thread dumps for debugging hung states</li>
+ * <li>May force JVM restart after consecutive failures</li>
+ * <li>Configurable via watchdog.haltOnHang property</li>
  * </ul>
  *
  * The watchdog runs every minute and will attempt recovery
@@ -69,7 +69,7 @@ public class RouterWatchdog implements Runnable {
     /**
      * Shutdown the watchdog gracefully.
      * Sets the running flag to false to stop the monitoring loop.
- *
+     *
      * @since 0.8.8
      */
     public void shutdown() {_isRunning = false;}
@@ -80,7 +80,7 @@ public class RouterWatchdog implements Runnable {
      * a hung job queue.
      *
      * @return true if job queue appears healthy, false if a job has been
-     *         running longer than the maximum allowed time
+     * running longer than the maximum allowed time
      */
     public boolean verifyJobQueueLiveliness() {
         long when = _context.jobQueue().getLastJobBegin();
@@ -173,7 +173,7 @@ public class RouterWatchdog implements Runnable {
 
     /**
      * Calculate sleep time based on how close leases are to expiration.
- *
+     *
      * @return sleep time in milliseconds
      */
     private long getSleepTimeForLeaseExpiry() {

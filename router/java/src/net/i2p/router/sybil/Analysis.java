@@ -65,7 +65,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private final List<String> _familyExemptPoints24 = new ArrayList<>(2);
 
     /**
-     *  The name we register with the ClientAppManager.
+     * The name we register with the ClientAppManager.
      */
     public static final String APP_NAME = "Sybil Scan";
     /** Property to set the scan frequency */
@@ -174,16 +174,16 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Persistence handler for storing and retrieving Sybil analysis data.
+     * Persistence handler for storing and retrieving Sybil analysis data.
      *
-     *  @return the PersistSybil instance used by this analysis
+     * @return the PersistSybil instance used by this analysis
      */
     public PersistSybil getPersister() { return _persister; }
 
     /**
-     *  Load the persisted blocklist and tell the router
+     * Load the persisted blocklist and tell the router
      *
-     *  @since 0.9.50
+     * @since 0.9.50
      */
     private class InitJob extends JobImpl {
         public InitJob() { super(_context); }
@@ -234,9 +234,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Executes the background Sybil analysis, stores results, and removes old data.
+     * Executes the background Sybil analysis, stores results, and removes old data.
      *
-     *  @since 0.9.58
+     * @since 0.9.58
      */
     public void run() {
         long now = _context.clock().now();
@@ -258,9 +258,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     /////// begin ClientApp methods
 
     /**
-     *  Initializes and starts the Sybil analysis service.
-     *  Registers with the ClientAppManager, loads persisted blocklist data,
-     *  and schedules the first analysis run.
+     * Initializes and starts the Sybil analysis service.
+     * Registers with the ClientAppManager, loads persisted blocklist data,
+     * and schedules the first analysis run.
      */
     public synchronized void startup() {
         changeState(STARTING);
@@ -275,9 +275,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Stops the Sybil analysis service and changes state to STOPPED.
+     * Stops the Sybil analysis service and changes state to STOPPED.
      *
-     *  @param args not used, present only to satisfy the Service interface
+     * @param args not used, present only to satisfy the Service interface
      */
     public synchronized void shutdown(String[] args) {
         if (_state == STOPPED)
@@ -291,27 +291,27 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Current state of this application.
+     * Current state of this application.
      *
-     *  @return the current ClientAppState
+     * @return the current ClientAppState
      */
     public ClientAppState getState() {
         return _state;
     }
 
     /**
-     *  Application name.
+     * Application name.
      *
-     *  @return the constant APP_NAME
+     * @return the constant APP_NAME
      */
     public String getName() {
         return APP_NAME;
     }
 
     /**
-     *  Display name for this application.
+     * Display name for this application.
      *
-     *  @return "Sybil Analyzer"
+     * @return "Sybil Analyzer"
      */
     public String getDisplayName() {
         return "Sybil Analyzer";
@@ -326,8 +326,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Schedules the next Sybil analysis run based on configured frequency,
-     *  router uptime, and previous run time.
+     * Schedules the next Sybil analysis run based on configured frequency,
+     * router uptime, and previous run time.
      */
     public synchronized void schedule() {
         long freq = _context.getProperty(PROP_FREQUENCY, DEFAULT_FREQUENCY);
@@ -356,9 +356,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static class RouterInfoRoutingKeyComparator implements Comparator<RouterInfo>, Serializable {
          private final transient Hash _us;
          /**
-          *  Comparator using the routing key.
+          * Comparator using the routing key.
           *
-          *  @param us ROUTING KEY
+          * @param us ROUTING KEY
           */
          public RouterInfoRoutingKeyComparator(Hash us) {
              _us = us;
@@ -416,11 +416,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Calculates the average minimum distance from 200 random routing keys
-     *  to the closest router in the provided list.
+     * Calculates the average minimum distance from 200 random routing keys
+     * to the closest router in the provided list.
      *
-     *  @param ris the list of router infos to analyze
-     *  @return the average minimum distance in logarithmic scale (base 2)
+     * @param ris the list of router infos to analyze
+     * @return the average minimum distance in logarithmic scale (base 2)
      */
     public double getAvgMinDist(List<RouterInfo> ris) {
         double tot = 0;
@@ -506,9 +506,9 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  A dummy list that always returns true on add.
+     * A dummy list that always returns true on add.
      *
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     private static class DummyList extends ArrayList<RouterInfo> {
         public DummyList() { super(0); }
@@ -517,8 +517,8 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Blocklist and Banlist if configured
-     *  @since 0.9.41
+     * Blocklist and Banlist if configured
+     * @since 0.9.41
      */
     private void doBlocking(Map<Hash, Points> points) {
         double threshold = DEFAULT_BLOCK_THRESHOLD;
@@ -879,12 +879,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Categorize routers by their /16 subnet to identify routers in the same /16 network.
+     * Categorize routers by their /16 subnet to identify routers in the same /16 network.
      *
-     *  @param ris the list of router infos to analyze
-     *  @param points map to accumulate sybil points
-     *  @return map of /16 network (as Integer) to list of routers in that network
-     *  @since 0.9.38 split out from renderIPGroups16()
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
+     * @return map of /16 network (as Integer) to list of routers in that network
+     * @since 0.9.38 split out from renderIPGroups16()
      */
     public Map<Integer, List<RouterInfo>> calculateIPGroups16(List<RouterInfo> ris, Map<Hash, Points> points) {
         ObjectCounterUnsafe<Integer> oc = new ObjectCounterUnsafe<>();
@@ -927,12 +927,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Categorize routers by their IPv6 /64 subnet to identify routers in the same /64 network.
+     * Categorize routers by their IPv6 /64 subnet to identify routers in the same /64 network.
      *
-     *  @param ris the list of router infos to analyze
-     *  @param points map to accumulate sybil points
-     *  @return map of IPv6 /64 network (as Long) to list of routers in that network
-     *  @since 0.9.57
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
+     * @return map of IPv6 /64 network (as Long) to list of routers in that network
+     * @since 0.9.57
      */
     public Map<Long, List<RouterInfo>> calculateIPGroups64(List<RouterInfo> ris, Map<Hash, Points> points) {
         ObjectCounterUnsafe<Long> oc = new ObjectCounterUnsafe<>();
@@ -997,12 +997,12 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Categorize routers by their IPv6 /48 subnet to identify routers in the same /48 network.
+     * Categorize routers by their IPv6 /48 subnet to identify routers in the same /48 network.
      *
-     *  @param ris the list of router infos to analyze
-     *  @param points map to accumulate sybil points
-     *  @return map of IPv6 /48 network (as Long) to list of routers in that network
-     *  @since 0.9.57
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
+     * @return map of IPv6 /48 network (as Long) to list of routers in that network
+     * @since 0.9.57
      */
     public Map<Long, List<RouterInfo>> calculateIPGroups48(List<RouterInfo> ris, Map<Hash, Points> points) {
         ObjectCounterUnsafe<Long> oc = new ObjectCounterUnsafe<>();
@@ -1060,13 +1060,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Categorize routers by their router family to identify routers in the same family.
-     *  Routers in verified families receive fewer points.
+     * Categorize routers by their router family to identify routers in the same family.
+     * Routers in verified families receive fewer points.
      *
-     *  @param ris the list of router infos to analyze
-     *  @param points map to accumulate sybil points
-     *  @return map of family name to list of routers in that family
-     *  @since 0.9.38 split out from renderIPGroupsFamily()
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
+     * @return map of family name to list of routers in that family
+     * @since 0.9.38 split out from renderIPGroupsFamily()
      */
     public Map<String, List<RouterInfo>> calculateIPGroupsFamily(List<RouterInfo> ris, Map<Hash, Points> points) {
         Map<String, List<RouterInfo>> rv = new HashMap<>();
@@ -1155,11 +1155,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     private static final long DAY = 24*60*60*1000L;
 
     /**
-     *  Analyzes router profiles and adds Sybil points for banlisted, newly observed,
-     *  or poorly performing routers.
+     * Analyzes router profiles and adds Sybil points for banlisted, newly observed,
+     * or poorly performing routers.
      *
-     *  @param ris the list of router infos to analyze
-     *  @param points map to accumulate sybil points
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
      */
     public void addProfilePoints(List<RouterInfo> ris, Map<Hash, Points> points) {
         Map<Hash, Banlist.Entry> banEntries = _context.banlist().getEntries();
@@ -1213,11 +1213,11 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Analyzes router versions and adds Sybil points for old, unreachable,
-     *  or non-floodfill routers.
+     * Analyzes router versions and adds Sybil points for old, unreachable,
+     * or non-floodfill routers.
      *
-     *  @param ris the list of router infos to analyze
-     *  @param points map to accumulate sybil points
+     * @param ris the list of router infos to analyze
+     * @param points map to accumulate sybil points
      */
     public void addVersionPoints(List<RouterInfo> ris, Map<Hash, Points> points) {
         RouterInfo us = _context.router().getRouterInfo();
@@ -1263,13 +1263,13 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Build the version comparison report.
+     * Build the version comparison report.
      *
-     *  @param us the local router hash
-     *  @param usName HTML escaped
-     *  @param ris will be re-sorted in place
-     *  @param points map of points per hash
-     *  @since 0.9.38 split out from renderRouterInfoHTML()
+     * @param us the local router hash
+     * @param usName HTML escaped
+     * @param ris will be re-sorted in place
+     * @param points map of points per hash
+     * @since 0.9.38 split out from renderRouterInfoHTML()
      */
     public void calculateRouterInfo(Hash us, String usName,
                                      List<RouterInfo> ris, Map<Hash, Points> points) {
@@ -1293,7 +1293,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     /**
      * For debugging
      * http://forums.sun.com/thread.jspa?threadID=597652
- *
+     *
      * @since 0.7.14
      */
     private static double biLog2(BigInteger a) {
@@ -1307,16 +1307,16 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     }
 
     /**
-     *  Translate a string with a parameter
-     *  This is a lot more expensive than _t(s), so use sparingly.
+     * Translate a string with a parameter
+     * This is a lot more expensive than _t(s), so use sparingly.
      *
-     *  @param s string to be translated containing {0}
-     *           The {0} will be replaced by the parameter.
-     *           Single quotes must be doubled, i.e. ' -> '' in the string.
-     *  @param o parameter, not translated.
-     *           To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *           Do not double the single quotes in the parameter.
-     *           Use autoboxing to call with ints, longs, floats, etc.
+     * @param s string to be translated containing {0}
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -> '' in the string.
+     * @param o parameter, not translated.
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
      */
     private String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);

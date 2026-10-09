@@ -58,7 +58,7 @@ public class NewsManager implements ClientApp {
     private static final String BUNDLE_NAME = "net.i2p.router.news.messages";
 
     /**
-     *  @param args ignored
+     * @param args ignored
      */
     public NewsManager(I2PAppContext ctx, ClientAppManager listener, String[] args) {
         _context = ctx;
@@ -69,7 +69,7 @@ public class NewsManager implements ClientApp {
 
     /**
      *
-     *  @return non-null, sorted by updated date, newest first
+     * @return non-null, sorted by updated date, newest first
      */
     public synchronized List<NewsEntry> getEntries() {
         if (!_currentNews.isEmpty()) {return new ArrayList<>(_currentNews);}
@@ -86,20 +86,20 @@ public class NewsManager implements ClientApp {
     }
 
     /**
-     *  Store each entry.
-     *  Old entries are always overwritten, as they may change even without the updated date changing.
-     *  Does NOT update the NewsEntry list.
+     * Store each entry.
+     * Old entries are always overwritten, as they may change even without the updated date changing.
+     * Does NOT update the NewsEntry list.
      *
-     *  @param entries each one should be "entry" at the root
-     *  @return true if any new entry was written (not if changed)
+     * @param entries each one should be "entry" at the root
+     * @return true if any new entry was written (not if changed)
      */
     public synchronized boolean storeEntries(List<Node> entries) {
         return PersistNews.store(_context, entries);
     }
 
     /**
-     *  Add or replace each entry in the list.
-     *  Does NOT store them to disk.
+     * Add or replace each entry in the list.
+     * Does NOT store them to disk.
      */
     public synchronized void addEntries(List<NewsEntry> entries) {
         for (NewsEntry e : entries) {
@@ -124,7 +124,7 @@ public class NewsManager implements ClientApp {
     // ClientApp methods
 
     /**
-     *  ClientApp interface
+     * ClientApp interface
      */
     @Override
     public synchronized void startup() {
@@ -136,8 +136,8 @@ public class NewsManager implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
-     *  @param args ignored
+     * ClientApp interface
+     * @param args ignored
      */
     @Override
     public synchronized void shutdown(String[] args) {changeState(STOPPED);}
@@ -172,10 +172,10 @@ public class NewsManager implements ClientApp {
     }
 
     /**
-     *  The initial (Welcome to I2P) news
+     * The initial (Welcome to I2P) news
      *
-     *  @return entry with first-installed date stamp, or null
-     *  @since 0.9.28
+     * @return entry with first-installed date stamp, or null
+     * @since 0.9.28
      */
     public NewsEntry getInitialNews() {
         List<NewsEntry> list = parseInitialNews();
@@ -210,9 +210,9 @@ public class NewsManager implements ClientApp {
     }
 
     /**
-     *  Used for initialNews.xml and news.xml
+     * Used for initialNews.xml and news.xml
      *
-     *  @param addMissingDiv true for initialNews, false for news.xml
+     * @param addMissingDiv true for initialNews, false for news.xml
      */
     private List<NewsEntry> parseNews(String newsContent, boolean addMissingDiv) {
         List<NewsEntry> rv = new ArrayList<>();

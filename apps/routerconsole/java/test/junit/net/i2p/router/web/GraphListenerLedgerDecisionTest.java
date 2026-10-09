@@ -9,21 +9,21 @@ import net.i2p.stat.Rate;
 import org.junit.Test;
 
 /**
- *  Tests for {@link GraphListener}'s ledger and backfill decision helpers.
+ * Tests for {@link GraphListener}'s ledger and backfill decision helpers.
  *
- *  <p>Two rules carry the whole ledger. The baseline makes drift a delta, because
- *  {@link Rate#getCoalesceCount()} counts from the Rate's construction and a stat
- *  registered at router startup has been coalescing long before the console attaches -
- *  compared raw, it would report the entire pre-attach history as loss on every
- *  listener, forever. And the truncation to whole seconds makes the backfill skip rule
- *  agree with what the archive will actually accept, so a sample that lands in a step
- *  already covered is skipped instead of throwing.
+ * <p>Two rules carry the whole ledger. The baseline makes drift a delta, because
+ * {@link Rate#getCoalesceCount()} counts from the Rate's construction and a stat
+ * registered at router startup has been coalescing long before the console attaches -
+ * compared raw, it would report the entire pre-attach history as loss on every
+ * listener, forever. And the truncation to whole seconds makes the backfill skip rule
+ * agree with what the archive will actually accept, so a sample that lands in a step
+ * already covered is skipped instead of throwing.
  *
- *  <p>{@link Rate} reads the OS clock and needs no router context, so real retained
- *  samples can be produced here; {@code GraphListener} itself needs one, so only its
- *  static, context-free helpers are under test.
+ * <p>{@link Rate} reads the OS clock and needs no router context, so real retained
+ * samples can be produced here; {@code GraphListener} itself needs one, so only its
+ * static, context-free helpers are under test.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class GraphListenerLedgerDecisionTest {
 
@@ -33,11 +33,11 @@ public class GraphListenerLedgerDecisionTest {
     private static final long PERIOD = 60_000L;
 
     /**
-     *  Build a rate that has actually coalesced, so its retained-sample ring holds real
-     *  {@link Rate.CoalescedSample} instances oldest first.
+     * Build a rate that has actually coalesced, so its retained-sample ring holds real
+     * {@link Rate.CoalescedSample} instances oldest first.
      *
-     *  @param coalesces how many successful coalesces to perform
-     *  @return the rate, with {@code coalesces} samples retained
+     * @param coalesces how many successful coalesces to perform
+     * @return the rate, with {@code coalesces} samples retained
      */
     private static Rate coalescedRate(int coalesces) {
         Rate rate = new Rate(ALWAYS_DUE_PERIOD);
@@ -51,11 +51,11 @@ public class GraphListenerLedgerDecisionTest {
     ///////////// toArchiveSecondMs
 
     /**
-     *  RRD stores one value per whole second and rejects a timestamp that is not
-     *  strictly newer than the last one stored, so the skip rule has to be applied at
-     *  second granularity. Millisecond granularity would let a sample 999ms into an
-     *  already-covered step look newer than it is and be attempted, and then be
-     *  rejected by the archive.
+     * RRD stores one value per whole second and rejects a timestamp that is not
+     * strictly newer than the last one stored, so the skip rule has to be applied at
+     * second granularity. Millisecond granularity would let a sample 999ms into an
+     * already-covered step look newer than it is and be attempted, and then be
+     * rejected by the archive.
      */
     @Test
     public void testTruncationToArchiveSecond() {
@@ -84,9 +84,9 @@ public class GraphListenerLedgerDecisionTest {
     }
 
     /**
-     *  The boundary that matters: a retained sample in a step the listener already
-     *  stored is not recoverable work, and one in a later step is. Everything after the
-     *  ring's last remembered step is gone for good.
+     * The boundary that matters: a retained sample in a step the listener already
+     * stored is not recoverable work, and one in a later step is. Everything after the
+     * ring's last remembered step is gone for good.
      */
     @Test
     public void testRecoverableIsNewerThanTheLastStoredStep() {
@@ -104,9 +104,9 @@ public class GraphListenerLedgerDecisionTest {
     }
 
     /**
-     *  A retained sample in the very step the listener last stored is not new work,
-     *  even though its raw millisecond stamp is larger: the archive holds one value per
-     *  step and the newer one is the correct value to keep.
+     * A retained sample in the very step the listener last stored is not new work,
+     * even though its raw millisecond stamp is larger: the archive holds one value per
+     * step and the newer one is the correct value to keep.
      */
     @Test
     public void testSameStepSampleIsNotRecoverable() {
@@ -122,9 +122,9 @@ public class GraphListenerLedgerDecisionTest {
     ///////////// sampleValue
 
     /**
-     *  A period with no events records zero rather than dividing by nothing, which is
-     *  the value the live path has always stored and which a backfilled step has to
-     *  match or the trace gains a spike.
+     * A period with no events records zero rather than dividing by nothing, which is
+     * the value the live path has always stored and which a backfilled step has to
+     * match or the trace gains a spike.
      */
     @Test
     public void testNoEventsRecordsZero() {
@@ -133,9 +133,9 @@ public class GraphListenerLedgerDecisionTest {
     }
 
     /**
-     *  A rate-style stat stores the average over its events; an event-counter stat,
-     *  whose total always equals its event count, stores the count itself, because
-     *  dividing those would give a flat 1.0 line.
+     * A rate-style stat stores the average over its events; an event-counter stat,
+     * whose total always equals its event count, stores the count itself, because
+     * dividing those would give a flat 1.0 line.
      */
     @Test
     public void testAveragesAndCountsAreDistinguished() {
@@ -154,9 +154,9 @@ public class GraphListenerLedgerDecisionTest {
     ///////////// ledger baselines
 
     /**
-     *  The attach-time baseline is what stops a pre-attach history from reading as
-     *  drift. A rate that coalesced 40 times before any listener existed must show a
-     *  delta of zero to the listener that attaches next, not 40 lost steps.
+     * The attach-time baseline is what stops a pre-attach history from reading as
+     * drift. A rate that coalesced 40 times before any listener existed must show a
+     * delta of zero to the listener that attaches next, not 40 lost steps.
      */
     @Test
     public void testBaselineMakesDriftADelta() {
@@ -174,9 +174,9 @@ public class GraphListenerLedgerDecisionTest {
     }
 
     /**
-     *  The recovery window is bounded by the ring, which is why drift beyond it is
-     *  permanent loss rather than something to keep retrying: the eighth sample is the
-     *  oldest a later backfill could ever reach.
+     * The recovery window is bounded by the ring, which is why drift beyond it is
+     * permanent loss rather than something to keep retrying: the eighth sample is the
+     * oldest a later backfill could ever reach.
      */
     @Test
     public void testRetentionIsBounded() {

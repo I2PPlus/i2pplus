@@ -236,10 +236,10 @@ public class LookupService {
      * Create a new lookup service using the specified database file.
      *
      * @param databaseFile
-     *            String representation of the database file.
+     * String representation of the database file.
      * @throws IOException
-     *             if an error occured creating the lookup service from the
-     *             database file.
+     * if an error occured creating the lookup service from the
+     * database file.
      */
     public LookupService(String databaseFile) throws IOException {
         this(new File(databaseFile));
@@ -249,10 +249,10 @@ public class LookupService {
      * Create a new lookup service using the specified database file.
      *
      * @param databaseFile
-     *            the database file.
+     * the database file.
      * @throws IOException
-     *             if an error occured creating the lookup service from the
-     *             database file.
+     * if an error occured creating the lookup service from the
+     * database file.
      */
     public LookupService(File databaseFile) throws IOException {
         this.databaseFile = databaseFile;
@@ -264,14 +264,14 @@ public class LookupService {
      * Create a new lookup service using the specified database file.
      *
      * @param databaseFile
-     *            String representation of the database file.
+     * String representation of the database file.
      * @param options
-     *            database flags to use when opening the database GEOIP_STANDARD
-     *            read database from disk GEOIP_MEMORY_CACHE cache the database
-     *            in RAM and read it from RAM
+     * database flags to use when opening the database GEOIP_STANDARD
+     * read database from disk GEOIP_MEMORY_CACHE cache the database
+     * in RAM and read it from RAM
      * @throws IOException
-     *             if an error occured creating the lookup service from the
-     *             database file.
+     * if an error occured creating the lookup service from the
+     * database file.
      */
     public LookupService(String databaseFile, int options) throws IOException {
         this(new File(databaseFile), options);
@@ -281,14 +281,14 @@ public class LookupService {
      * Create a new lookup service using the specified database file.
      *
      * @param databaseFile
-     *            the database file.
+     * the database file.
      * @param options
-     *            database flags to use when opening the database GEOIP_STANDARD
-     *            read database from disk GEOIP_MEMORY_CACHE cache the database
-     *            in RAM and read it from RAM
+     * database flags to use when opening the database GEOIP_STANDARD
+     * read database from disk GEOIP_MEMORY_CACHE cache the database
+     * in RAM and read it from RAM
      * @throws IOException
-     *             if an error occured creating the lookup service from the
-     *             database file.
+     * if an error occured creating the lookup service from the
+     * database file.
      */
     public LookupService(File databaseFile, int options) throws IOException {
         this.databaseFile = databaseFile;
@@ -301,7 +301,7 @@ public class LookupService {
      * Reads meta-data from the database file.
      *
      * @throws IOException
-     *             if an error occurs reading from the database file.
+     * if an error occurs reading from the database file.
      */
     private synchronized void init() throws IOException {
         byte[] delim = new byte[3];
@@ -428,7 +428,7 @@ public class LookupService {
      * Returns the country the IP address is in.
      *
      * @param ipAddress
-     *            String version of an IPv6 address, i.e. "::127.0.0.1"
+     * String version of an IPv6 address, i.e. "::127.0.0.1"
      * @return the country the IP address is from.
      */
     public Country getCountryV6(String ipAddress) {
@@ -445,7 +445,7 @@ public class LookupService {
      * Returns the country the IP address is in.
      *
      * @param ipAddress
-     *            String version of an IP address, i.e. "127.0.0.1"
+     * String version of an IP address, i.e. "127.0.0.1"
      * @return the country the IP address is from.
      */
     public Country getCountry(String ipAddress) {
@@ -462,7 +462,7 @@ public class LookupService {
      * Returns the country the IP address is in.
      *
      * @param ipAddress
-     *            the IP address.
+     * the IP address.
      * @return the country the IP address is from.
      */
     public synchronized Country getCountry(InetAddress ipAddress) {
@@ -473,7 +473,7 @@ public class LookupService {
      * Returns the country the IP address is in.
      *
      * @param addr
-     *            the IP address as Inet6Address.
+     * the IP address as Inet6Address.
      * @return the country the IP address is from.
      */
     public synchronized Country getCountryV6(InetAddress addr) {
@@ -492,7 +492,7 @@ public class LookupService {
      * Returns the country the IP address is in.
      *
      * @param ipAddress
-     *            the IP address in long format.
+     * the IP address in long format.
      * @return the country the IP address is from.
      */
     public synchronized Country getCountry(long ipAddress) {
@@ -508,12 +508,12 @@ public class LookupService {
     }
 
     /**
-     *  I2P -
-     *  Write all IPv4 address ranges for the given country to out.
+     * I2P -
+     * Write all IPv4 address ranges for the given country to out.
      *
-     *  @param country two-letter case-insensitive
-     *  @param out caller must close
-     *  @since 0.9.48
+     * @param country two-letter case-insensitive
+     * @param out caller must close
+     * @since 0.9.48
      */
     public synchronized void countryToIP(String country, Writer out) throws IOException {
         if (file == null && (dboptions & GEOIP_MEMORY_CACHE) == 0) {
@@ -538,8 +538,8 @@ public class LookupService {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.48
+     * I2P
+     * @since 0.9.48
      */
     private class Walker {
         private final int _country;
@@ -1010,7 +1010,7 @@ public class LookupService {
      * Finds the country index value given an IPv6 address.
      *
      * @param addr
-     *            the ip address to find in long format.
+     * the ip address to find in long format.
      * @return the country index.
      */
     private synchronized int seekCountryV6(InetAddress addr) {
@@ -1058,7 +1058,7 @@ public class LookupService {
      * Finds the country index value given an IP address.
      *
      * @param ipAddress
-     *            the ip address to find in long format.
+     * the ip address to find in long format.
      * @return the country index.
      */
     private synchronized int seekCountry(long ipAddress) {
@@ -1119,7 +1119,7 @@ public class LookupService {
      * Returns the long version of an IP address given an InetAddress object.
      *
      * @param address
-     *            the InetAddress.
+     * the InetAddress.
      * @return the long form of the IP address.
      */
     private static long bytesToLong(byte[] address) {

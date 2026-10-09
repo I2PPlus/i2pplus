@@ -7,7 +7,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
- *  Data about a tunnel we created
+ * Data about a tunnel we created
  */
 public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private final TunnelPool _pool;
@@ -17,32 +17,32 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private volatile boolean _lastResort;
     private volatile boolean _bypassPacing;
     /**
-     *  I2NP message ID of the most recent build request sent for this config.
+     * I2NP message ID of the most recent build request sent for this config.
      *
-     *  <p>This is the join key between the send side ({@code BuildRequestor}
-     *  logs it as {@code [MsgID ...]}, on both the direct and exploratory send
-     *  paths) and the expiry side ({@code
-     *  BuildExecutor.logExpiredBuildWarn} logs it as {@code reqMsgId=...}), so
-     *  a build that expires unanswered can be attributed to a specific send.
-     *  Without it, "established, silent" is indistinguishable between a hop that
-     *  never answered and a reply that was lost, which is why no amount of
-     *  deadline tuning could be shown to help.
+     * <p>This is the join key between the send side ({@code BuildRequestor}
+     * logs it as {@code [MsgID ...]}, on both the direct and exploratory send
+     * paths) and the expiry side ({@code
+     * BuildExecutor.logExpiredBuildWarn} logs it as {@code reqMsgId=...}), so
+     * a build that expires unanswered can be attributed to a specific send.
+     * Without it, "established, silent" is indistinguishable between a hop that
+     * never answered and a reply that was lost, which is why no amount of
+     * deadline tuning could be shown to help.
      *
-     *  <p>0 means not yet sent, or not a {@code PooledTunnelCreatorConfig}.
-     *  Written on the build executor thread and read on the expiry path, hence
-     *  volatile; a stale read costs only a missing correlation ID, never
-     *  correctness.
+     * <p>0 means not yet sent, or not a {@code PooledTunnelCreatorConfig}.
+     * Written on the build executor thread and read on the expiry path, hence
+     * volatile; a stale read costs only a missing correlation ID, never
+     * correctness.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile long _lastRequestMsgId;
     private static final long ACTIVITY_TIMEOUT = 30*1000L;
 
     /**
-     *  Creates a new instance of PooledTunnelCreatorConfig
+     * Creates a new instance of PooledTunnelCreatorConfig
      *
-     *  @param destination may be null
-     *  @param pool non-null
+     * @param destination may be null
+     * @param pool non-null
      */
     public PooledTunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound, Hash destination, TunnelPool pool) {
         super(ctx, length, isInbound, destination);
@@ -113,116 +113,116 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     }
 
     /**
-     *  Whether a first-hop send-failure streak warrants a pre-connect re-warm.
+     * Whether a first-hop send-failure streak warrants a pre-connect re-warm.
      *
-     *  Fires only on the strike immediately below
-     *  {@link #FIRST_HOP_FAILURE_THRESHOLD} — the last point at which the
-     *  tunnel is still alive to benefit.  Earlier strikes have not yet
-     *  committed to blaming the peer, so a round-trip would only add load to a
-     *  path that may merely be congested; the threshold strike itself retires
-     *  the tunnel as soon as the hook returns, so re-warming there would send
-     *  a lookup to a hop the router has already decided to blame.
+     * Fires only on the strike immediately below
+     * {@link #FIRST_HOP_FAILURE_THRESHOLD} — the last point at which the
+     * tunnel is still alive to benefit.  Earlier strikes have not yet
+     * committed to blaming the peer, so a round-trip would only add load to a
+     * path that may merely be congested; the threshold strike itself retires
+     * the tunnel as soon as the hook returns, so re-warming there would send
+     * a lookup to a hop the router has already decided to blame.
      *
-     *  @param streak the current first-hop failure streak
-     *  @return true if the first-hop session should be re-warmed
-     *  @since 0.9.71+
+     * @param streak the current first-hop failure streak
+     * @return true if the first-hop session should be re-warmed
+     * @since 0.9.71+
      */
     static boolean shouldPreConnect(int streak) {
         return streak == FIRST_HOP_FAILURE_THRESHOLD - 1;
     }
 
     /**
-     *  @return non-null
+     * @return non-null
      */
     @Override
     public Properties getOptions() {return _pool.getSettings().getUnknownOptions();}
 
     /**
-     *  @return non-null
+     * @return non-null
      */
     public TunnelPool getTunnelPool() {return _pool;}
 
     /**
-     *  @return true if this tunnel was built as a last-resort fallback
-     *  @since 0.9.69+
+     * @return true if this tunnel was built as a last-resort fallback
+     * @since 0.9.69+
      */
     public boolean isLastResort() {return _lastResort;}
 
     /**
-     *  Mark this tunnel as a last-resort fallback.
-     *  @since 0.9.69+
+     * Mark this tunnel as a last-resort fallback.
+     * @since 0.9.69+
      */
     public void setLastResort() {_lastResort = true;}
 
     /**
-     *  @return true if this build bypasses the per-peer in-flight guard in
-     *  {@link BuildExecutor#buildTunnel(net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)}
-     *  @since 0.9.71+
+     * @return true if this build bypasses the per-peer in-flight guard in
+     * {@link BuildExecutor#buildTunnel(net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)}
+     * @since 0.9.71+
      */
     public boolean isBypassPacing() {return _bypassPacing;}
 
     /**
-     *  Mark this build as emergency recovery: it must be sent even if the
-     *  first-hop peer already has a build in flight.  Set by the pool when
-     *  it has zero usable tunnels and cannot wait for the guard to clear.
-     *  @since 0.9.71+
+     * Mark this build as emergency recovery: it must be sent even if the
+     * first-hop peer already has a build in flight.  Set by the pool when
+     * it has zero usable tunnels and cannot wait for the guard to clear.
+     * @since 0.9.71+
      */
     public void setBypassPacing() {_bypassPacing = true;}
 
     /**
-     *  Record activity on this tunnel (message processed).
-     *  @since 0.9.69+
+     * Record activity on this tunnel (message processed).
+     * @since 0.9.69+
      */
     public void recordActivity() {_lastActivity = System.currentTimeMillis();}
 
     /**
-     *  @return timestamp of last activity, or 0 if never used
-     *  @since 0.9.69+
+     * @return timestamp of last activity, or 0 if never used
+     * @since 0.9.69+
      */
     public long getLastActivity() {return _lastActivity;}
 
     /**
-     *  @return true if this tunnel has been recently active (within ACTIVITY_TIMEOUT)
-     *  @since 0.9.69+
+     * @return true if this tunnel has been recently active (within ACTIVITY_TIMEOUT)
+     * @since 0.9.69+
      */
     public boolean isRecentlyActive() {
         return System.currentTimeMillis() - _lastActivity < ACTIVITY_TIMEOUT;
     }
 
     /**
-     *  The ID of the gateway of the paired tunnel used to send/receive the build request
+     * The ID of the gateway of the paired tunnel used to send/receive the build request
      *
-     *  @param gw for paired inbound, the GW rcv tunnel ID; for paired outbound, the GW send tunnel ID.
-     *  @since 0.9.53
+     * @param gw for paired inbound, the GW rcv tunnel ID; for paired outbound, the GW send tunnel ID.
+     * @since 0.9.53
      */
     public void setPairedGW(TunnelId gw) {_pairedGW = gw;}
 
     /**
-     *  The ID of the gateway of the paired tunnel used to send/receive the build request
+     * The ID of the gateway of the paired tunnel used to send/receive the build request
      *
-     *  @return for paired inbound, the GW rcv tunnel ID; for paired outbound, the GW send tunnel ID.
-     *          null if not previously set
-     *  @since 0.9.53
+     * @return for paired inbound, the GW rcv tunnel ID; for paired outbound, the GW send tunnel ID.
+     * null if not previously set
+     * @since 0.9.53
      */
     public TunnelId getPairedGW() {return _pairedGW;}
 
     /**
-     *  Record the I2NP message ID of a build request just sent for this config.
+     * Record the I2NP message ID of a build request just sent for this config.
      *
-     *  <p>A config may be retried, so this holds the most recent attempt rather
-     *  than the first; the expiry report wants the send that actually went out.
+     * <p>A config may be retried, so this holds the most recent attempt rather
+     * than the first; the expiry report wants the send that actually went out.
      *
-     *  @param msgId the {@code getUniqueId()} of the {@code TunnelBuildMessage}
-     *               handed to the transport or dispatcher
-     *  @since 0.9.71+
+     * @param msgId the {@code getUniqueId()} of the {@code TunnelBuildMessage}
+     * handed to the transport or dispatcher
+     * @since 0.9.71+
      */
     public void setLastRequestMsgId(long msgId) {if (msgId != 0) {_lastRequestMsgId = msgId;}}
 
     /**
-     *  The I2NP message ID of the most recent build request sent for this config.
+     * The I2NP message ID of the most recent build request sent for this config.
      *
-     *  @return the message ID, or 0 if no request has been sent yet
-     *  @since 0.9.71+
+     * @return the message ID, or 0 if no request has been sent yet
+     * @since 0.9.71+
      */
     public long getLastRequestMsgId() {return _lastRequestMsgId;}
 

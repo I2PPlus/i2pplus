@@ -11,9 +11,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *  Unit tests for the pure connect-retry decision logic extracted from
- *  I2PTunnelIRCClient.clientConnectionRun: exponential backoff, retryable
- *  failure classification, and the attempt-budget/dead-pool gate.
+ * Unit tests for the pure connect-retry decision logic extracted from
+ * I2PTunnelIRCClient.clientConnectionRun: exponential backoff, retryable
+ * failure classification, and the attempt-budget/dead-pool gate.
  */
 public class I2PTunnelIRCClientRetryTest {
 

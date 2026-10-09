@@ -5,7 +5,6 @@ package net.i2p.router.transport;
  * with no warranty of any kind { either expressed or implied.
  * It probably won't make your computer catch on fire { or eat
  * your children { but it might.  Use at your own risk.
- *
  */
 
 import java.util.HashMap;
@@ -27,31 +26,29 @@ import net.i2p.util.Log;
  *
  * <strong>Key Features:</strong>
  * <ul>
- *   <li>IPv4 and IPv6 address validation and parsing</li>
- *   <li>Port range validation and assignment</li>
- *   <li>IPv6 configuration options for transports</li>
- *   <li>Firewall and NAT detection utilities</li>
- *   <li>Geographic IP filtering and validation</li>
- *   <li>Transport-specific constants and defaults</li>
+ * <li>IPv4 and IPv6 address validation and parsing</li>
+ * <li>Port range validation and assignment</li>
+ * <li>IPv6 configuration options for transports</li>
+ * <li>Firewall and NAT detection utilities</li>
+ * <li>Geographic IP filtering and validation</li>
+ * <li>Transport-specific constants and defaults</li>
  * </ul>
  *
  * <strong>IPv6 Support:</strong>
  * <ul>
- *   <li>Configuration options for NTCP and SSU transports</li>
- *   <li>Address format validation for IPv6</li>
- *   <li>Port assignment and range checking</li>
- *   <li>Compatibility helpers for mixed IPv4/IPv6 environments</li>
+ * <li>Configuration options for NTCP and SSU transports</li>
+ * <li>Address format validation for IPv6</li>
+ * <li>Port assignment and range checking</li>
+ * <li>Compatibility helpers for mixed IPv4/IPv6 environments</li>
  * </ul>
  *
  * <strong>Network Utilities:</strong>
  * <ul>
- *   <li>Port assignment strategies (random vs. configured)</li>
- *   <li>Firewall detection and bypass methods</li>
- *   <li>Transport protocol constants and defaults</li>
- *   <li>Address type detection and validation</li>
+ * <li>Port assignment strategies (random vs. configured)</li>
+ * <li>Firewall detection and bypass methods</li>
+ * <li>Transport protocol constants and defaults</li>
+ * <li>Address type detection and validation</li>
  * </ul>
- *
- * @since IPv6 support was added
  */
 public abstract class TransportUtil {
 
@@ -101,9 +98,9 @@ public abstract class TransportUtil {
         IPV6_ONLY("only"),
 
         /**
-         *  Force enabled even if we don't have a public IP,
-         *  mainly for Docker with an IPv6 bridge
-         *  @since 0.9.71
+         * Force enabled even if we don't have a public IP,
+         * mainly for Docker with an IPv6 bridge
+         * @since 0.9.71
          */
         IPV6_FORCE_ON("force");
 
@@ -185,11 +182,11 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Addresses without a host (i.e. w/introducers)
-     *  are assumed to be IPv4 unless a '6' cap is present
+     * Addresses without a host (i.e. w/introducers)
+     * are assumed to be IPv4 unless a '6' cap is present
      *
-     *  @param addr non-null
-     *  @return whether i pv6
+     * @param addr non-null
+     * @return whether i pv6
      */
     public static boolean isIPv6(RouterAddress addr) {
         // do this the fast way, without calling getIP() to parse the host string
@@ -201,21 +198,21 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Is the RouterAddress usable for tunnel building?
+     * Is the RouterAddress usable for tunnel building?
      *
-     *  <p>SSU requires protocol v2 plus a valid IP/port or an introduction; SSU2 requires a
-     *  valid IP/port or an introduction; NTCP/NTCP2 require a valid IP/port.
+     * <p>SSU requires protocol v2 plus a valid IP/port or an introduction; SSU2 requires a
+     * valid IP/port or an introduction; NTCP/NTCP2 require a valid IP/port.
      *
-     *  <p>Lives here rather than in {@code TunnelPeerSelector} because both the tunnel
-     *  selectors and {@code ProfileOrganizer} need it, and the latter must not reach into
-     *  {@code tunnel.pool} — that package already depends on {@code peermanager}, so the
-     *  reverse edge would close a cycle.
+     * <p>Lives here rather than in {@code TunnelPeerSelector} because both the tunnel
+     * selectors and {@code ProfileOrganizer} need it, and the latter must not reach into
+     * {@code tunnel.pool} — that package already depends on {@code peermanager}, so the
+     * reverse edge would close a cycle.
      *
-     *  <p>Pure decision: no context access, safe for unit tests.
+     * <p>Pure decision: no context access, safe for unit tests.
      *
-     *  @param ra the router address to check (non-null)
-     *  @return true if the address is usable
-     *  @since 0.9.71+ (moved from TunnelPeerSelector)
+     * @param ra the router address to check (non-null)
+     * @return true if the address is usable
+     * @since 0.9.71+ (moved from TunnelPeerSelector)
      */
     public static boolean isUsableRouterAddress(RouterAddress ra) {
         String style = ra.getTransportStyle();
@@ -238,18 +235,18 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Does this RouterInfo carry at least one address we could still send to?
+     * Does this RouterInfo carry at least one address we could still send to?
      *
-     *  <p>A peer whose addresses have all expired or become unusable cannot be selected for
-     *  a build and cannot be pre-connected to, so admitting it to a selection tier only
-     *  produces a candidate that is guaranteed to fail. Gate promotion on this.
+     * <p>A peer whose addresses have all expired or become unusable cannot be selected for
+     * a build and cannot be pre-connected to, so admitting it to a selection tier only
+     * produces a candidate that is guaranteed to fail. Gate promotion on this.
      *
-     *  <p>Pure decision: takes the RouterInfo rather than consulting the netdb, so callers
-     *  holding an entry do not pay for a second lookup.
+     * <p>Pure decision: takes the RouterInfo rather than consulting the netdb, so callers
+     * holding an entry do not pay for a second lookup.
      *
-     *  @param ri the router info to check (non-null)
-     *  @return true if at least one address is usable
-     *  @since 0.9.71+
+     * @param ri the router info to check (non-null)
+     * @return true if at least one address is usable
+     * @since 0.9.71+
      */
     public static boolean hasUsableTransportAddress(net.i2p.data.router.RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {
@@ -270,10 +267,10 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Address type of the given RouterAddress.
+     * Address type of the given RouterAddress.
      *
-     *  @return null if unknown
-     *  @since 0.9.54
+     * @return null if unknown
+     * @since 0.9.54
      */
     public static AddressType getType(RouterAddress addr) {
         String host = addr.getHost();
@@ -281,10 +278,10 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Address type of the given host string.
+     * Address type of the given host string.
      *
-     *  @return null if unknown
-     *  @since 0.9.54
+     * @return null if unknown
+     * @since 0.9.54
      */
     public static AddressType getType(String host) {
         if (host == null)
@@ -300,10 +297,10 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Address type of the given IP address.
+     * Address type of the given IP address.
      *
-     *  @return null if unknown
-     *  @since 0.9.54
+     * @return null if unknown
+     * @since 0.9.54
      */
     public static AddressType getType(byte[] ip) {
         if (ip == null)
@@ -319,22 +316,20 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Whether the address is publicly routable, optionally allowing IPv6.
+     * Whether the address is publicly routable, optionally allowing IPv6.
      *
-     *  @param addr non-null
-     *  @return whether publicly routable
-     *  @since IPv6 moved from TransportImpl
+     * @param addr non-null
+     * @return whether publicly routable
      */
     public static boolean isPubliclyRoutable(byte[] addr, boolean allowIPv6) {
         return isPubliclyRoutable(addr, true, allowIPv6);
     }
 
     /**
-     *  Ref: RFC 5735
+     * Ref: RFC 5735
      *
-     *  @param addr non-null
-     *  @return whether publicly routable
-     *  @since IPv6
+     * @param addr non-null
+     * @return whether publicly routable
      */
     public static boolean isPubliclyRoutable(byte[] addr, boolean allowIPv4, boolean allowIPv6) {
         if (I2PAppContext.getGlobalContext().getBooleanProperty("i2np.allowLocal"))
@@ -460,8 +455,8 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Logs an error for an invalid port.
-     *  @since 0.9.39 pulled out of UDPEndpoint
+     * Logs an error for an invalid port.
+     * @since 0.9.39 pulled out of UDPEndpoint
      */
     public static void logInvalidPort(Log log, String transportStyle, int port) {
         log.error("Specified " + transportStyle + " port " + port + " is not valid, selecting a new port");
@@ -469,8 +464,7 @@ public abstract class TransportUtil {
     }
 
     /**
-     *  Pick a random port between the configured boundaries
-     *  @since IPv6, moved from UDPEndpoint in 0.9.39 to support NTCP also
+     * Pick a random port between the configured boundaries
      */
     public static int selectRandomPort(RouterContext ctx, String transportStyle) {
         if (transportStyle.equals("SSU"))

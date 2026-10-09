@@ -1,9 +1,9 @@
 package net.i2p.update;
 
 /**
- *  What to update
+ * What to update
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public enum UpdateType {
     /** Dummy: internal use only */

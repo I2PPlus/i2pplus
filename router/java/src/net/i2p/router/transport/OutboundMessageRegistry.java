@@ -5,7 +5,6 @@ package net.i2p.router.transport;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 /**
@@ -31,7 +30,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Tracks outbound messages.
+ * Tracks outbound messages.
  */
 public class OutboundMessageRegistry {
     private final Log _log;
@@ -40,12 +39,12 @@ public class OutboundMessageRegistry {
     /** Map of active MessageSelector to either an OutNetMessage or a List of OutNetMessages causing it (for quick removal). */
     private final Map<MessageSelector, Object> _selectorToMessage;
     /**
-     *  set of active OutNetMessage (for quick removal and selector fetching)
-     *  !! Really? seems only for dup detection in registerPending().
-     *  Changed to concurrent, but it could perhaps be removed completely,
-     *  It would seem difficult to add a dup since every OutNetMessage is different,
-     *  and it's generally instantiated just before ctx.outNetMessagePool().add().
-     *  But in TransportImpl.afterSend() it does requeue a previous ONM if allowRequeue=true.
+     * set of active OutNetMessage (for quick removal and selector fetching)
+     * !! Really? seems only for dup detection in registerPending().
+     * Changed to concurrent, but it could perhaps be removed completely,
+     * It would seem difficult to add a dup since every OutNetMessage is different,
+     * and it's generally instantiated just before ctx.outNetMessagePool().add().
+     * But in TransportImpl.afterSend() it does requeue a previous ONM if allowRequeue=true.
      */
     private final Set<OutNetMessage> _activeMessages;
     private final CleanupTask _cleanupTask;
@@ -64,7 +63,7 @@ public class OutboundMessageRegistry {
     }
 
     /**
-     *  Does something @since 0.8.8
+     * Does something @since 0.8.8
      */
     public void shutdown() {
         synchronized (_selectors) {
@@ -79,7 +78,7 @@ public class OutboundMessageRegistry {
     }
 
     /**
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public void restart() {
         shutdown();
@@ -96,7 +95,7 @@ public class OutboundMessageRegistry {
      *
      * @param message Payload received that may be a reply to something we sent
      * @return non-null List of OutNetMessage describing messages that were waiting for
-     *         the payload
+     * the payload
      */
     @SuppressWarnings("unchecked")
     public List<OutNetMessage> getOriginalMessages(I2NPMessage message) {
@@ -160,13 +159,13 @@ public class OutboundMessageRegistry {
     }
 
     /**
-     *  Registers a new, empty OutNetMessage, with the reply and timeout jobs specified.
-     *  The onTimeout job is called at replySelector.getExpiration() (if no reply is received by then)
+     * Registers a new, empty OutNetMessage, with the reply and timeout jobs specified.
+     * The onTimeout job is called at replySelector.getExpiration() (if no reply is received by then)
      *
-     *  @param replySelector non-null; The same selector may be used for more than one message.
-     *  @param onReply non-null
-     *  @param onTimeout may be null
-     *  @return a dummy OutNetMessage where getMessage() is null. Use it to call unregisterPending() later if desired.
+     * @param replySelector non-null; The same selector may be used for more than one message.
+     * @param onReply non-null
+     * @param onTimeout may be null
+     * @return a dummy OutNetMessage where getMessage() is null. Use it to call unregisterPending() later if desired.
      */
     public OutNetMessage registerPending(MessageSelector replySelector, ReplyJob onReply, Job onTimeout) {
         OutNetMessage msg = new OutNetMessage(_context);
@@ -181,16 +180,16 @@ public class OutboundMessageRegistry {
     }
 
     /**
-     *  Register the message. Each message must have a non-null
-     *  selector at msg.getReplySelector().
-     *  The same selector may be used for more than one message.
+     * Register the message. Each message must have a non-null
+     * selector at msg.getReplySelector().
+     * The same selector may be used for more than one message.
      *
-     *  @param msg msg.getMessage() and msg.getReplySelector() must be non-null
+     * @param msg msg.getMessage() and msg.getReplySelector() must be non-null
      */
     public void registerPending(OutNetMessage msg) { registerPending(msg, false); }
 
     /**
-     *  @param allowEmpty is msg.getMessage() allowed to be null?
+     * @param allowEmpty is msg.getMessage() allowed to be null?
      */
     @SuppressWarnings("unchecked")
     private void registerPending(OutNetMessage msg, boolean allowEmpty) {
@@ -226,7 +225,7 @@ public class OutboundMessageRegistry {
     }
 
     /**
-     *  @param msg may be be null, if non-null should have a non-null selector
+     * @param msg may be be null, if non-null should have a non-null selector
      */
     @SuppressWarnings("unchecked")
     public void unregisterPending(OutNetMessage msg) {

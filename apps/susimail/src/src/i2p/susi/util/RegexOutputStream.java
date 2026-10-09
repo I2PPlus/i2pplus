@@ -31,11 +31,11 @@ public class RegexOutputStream extends FilterOutputStream {
     int idx;
 
     /**
-     *  @param out MUST be buffered because this writes one byte at a time
-     *  @param pattern the only special char recognized is '*' and cannot be at the beginning or end
-     *                 or have two in a row. ASCII-only, no UTF-8.
-     *  @param replace ASCII-only, no UTF-8.
-     *  @param onNoMatch force output of this at the end if no replacement made, or null
+     * @param out MUST be buffered because this writes one byte at a time
+     * @param pattern the only special char recognized is '*' and cannot be at the beginning or end
+     * or have two in a row. ASCII-only, no UTF-8.
+     * @param replace ASCII-only, no UTF-8.
+     * @param onNoMatch force output of this at the end if no replacement made, or null
      */
     public RegexOutputStream(OutputStream out, String pattern, String replace, String onNoMatch) {
         super(out);
@@ -51,8 +51,8 @@ public class RegexOutputStream extends FilterOutputStream {
     }
 
         /**
-     * Write a single byte, with streaming pattern matching.
-     */
+         * Write a single byte, with streaming pattern matching.
+         */
     @Override
     public void write(int val) throws IOException {
         char c = (char) val;
@@ -85,14 +85,14 @@ public class RegexOutputStream extends FilterOutputStream {
 
 
     /**
-     *  put in the pending parse buf
+     * put in the pending parse buf
      */
     private void pushit(char c) {
         buf.append(c);
     }
 
     /**
-     *  flush buf to out, start over
+     * flush buf to out, start over
      */
     private void flushit() throws IOException {
         int len = buf.length();
@@ -104,7 +104,7 @@ public class RegexOutputStream extends FilterOutputStream {
         }
     }
     /**
-     *  Throw out inbuf, output replacement, start over
+     * Throw out inbuf, output replacement, start over
      */
     private void replaceit() throws IOException {
         int len = repl.length();
@@ -119,7 +119,7 @@ public class RegexOutputStream extends FilterOutputStream {
     }
 
     /**
-     *  Start over
+     * Start over
      */
     private void clearit() {
         buf.setLength(0);
@@ -127,8 +127,8 @@ public class RegexOutputStream extends FilterOutputStream {
     }
 
         /**
-     * Flush pending output and close.
-     */
+         * Flush pending output and close.
+         */
     @Override
     public void close() throws IOException {
         flushit();

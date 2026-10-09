@@ -5,7 +5,6 @@ package net.i2p.router.message;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Date;
@@ -21,15 +20,15 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- *  Send a message directly to another router (not through a tunnel).
+ * Send a message directly to another router (not through a tunnel).
  *
- *  Used by HandleGarlicMessageJob to forward decrypted cloves to their
- *  target router or tunnel gateway. Also used by netdb for database
- *  store/lookup replies.
+ * Used by HandleGarlicMessageJob to forward decrypted cloves to their
+ * target router or tunnel gateway. Also used by netdb for database
+ * store/lookup replies.
  *
- *  Safe to run inline via runJob(). If the RouterInfo for the Hash is not
- *  found locally, it will queue a lookup and register itself to be run
- *  again when the lookup succeeds or times out.
+ * Safe to run inline via runJob(). If the RouterInfo for the Hash is not
+ * found locally, it will queue a lookup and register itself to be run
+ * again when the lookup succeeds or times out.
  */
 public class SendMessageDirectJob extends JobImpl {
     private final Log _log;
@@ -48,7 +47,7 @@ public class SendMessageDirectJob extends JobImpl {
     private final long _msgIDBloomXor;
 
     /**
-     *  Send a message directly to a peer.
+     * Send a message directly to a peer.
      *
      * @param toPeer may be ourselves
      */
@@ -57,7 +56,7 @@ public class SendMessageDirectJob extends JobImpl {
     }
 
     /**
-     *  Send a message directly to a peer with an XOR mask.
+     * Send a message directly to a peer with an XOR mask.
      *
      * @param toPeer may be ourselves
      * @param msgIDBloomXor value to xor the messageID with before passing to the InNetMessagePool, may be 0
@@ -67,7 +66,7 @@ public class SendMessageDirectJob extends JobImpl {
     }
 
     /**
-     *  Send a message directly to a peer with reply handling.
+     * Send a message directly to a peer with reply handling.
      *
      * @param toPeer may be ourselves
      * @param onSuccess may be null
@@ -80,7 +79,7 @@ public class SendMessageDirectJob extends JobImpl {
     }
 
     /**
-     *  Send a message directly to a peer with reply handling and XOR mask.
+     * Send a message directly to a peer with reply handling and XOR mask.
      *
      * @param toPeer may be ourselves
      * @param onSuccess may be null
@@ -94,7 +93,7 @@ public class SendMessageDirectJob extends JobImpl {
     }
 
     /**
-     *  Send a message directly to a peer with full options.
+     * Send a message directly to a peer with full options.
      *
      * @param toPeer may be ourselves
      * @param onSend may be null

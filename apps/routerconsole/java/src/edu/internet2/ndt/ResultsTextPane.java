@@ -17,8 +17,8 @@ public class ResultsTextPane extends JTextPane {
      * Method to append String into the current document
      *
      * @param paramTextStr
-     *            String to be inserted into the document
-     **/
+     * String to be inserted into the document
+     * */
     public void append(String paramTextStr) {
         try {
             getStyledDocument().insertString(getStyledDocument().getLength(),paramTextStr, null);
@@ -31,7 +31,6 @@ public class ResultsTextPane extends JTextPane {
      * component is inserted at the current position of the caret.
      *
      * @param paramCompObj the component to insert
-     *
      */
     public void insertComponent(Component paramCompObj) {}
 

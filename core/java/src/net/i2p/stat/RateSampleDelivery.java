@@ -48,12 +48,12 @@ import net.i2p.util.Log;
 class RateSampleDelivery {
 
     /** Pending samples retained before the oldest is evicted. Sized to cover a
-     *  few coalesce cycles of the whole rate table at once; the graph listeners
-     *  are the only consumers in practice. */
+     * few coalesce cycles of the whole rate table at once; the graph listeners
+     * are the only consumers in practice. */
     static final int DEFAULT_CAPACITY = 4096;
 
     /** How long {@link #shutdown()} waits for the consumer before abandoning
-     *  whatever is still queued. */
+     * whatever is still queued. */
     private static final long SHUTDOWN_JOIN_MS = 2000;
 
     /** One coalesced sample, detached from the {@link Rate} that produced it. */
@@ -133,18 +133,18 @@ class RateSampleDelivery {
      * {@link #getOverruns()}.
      *
      * @param listener the listener to notify; a null listener is refused rather
-     *                 than queued, because most rates have no listener and an
-     *                 entry that fails on the consumer thread costs a logged
-     *                 exception per rate per period
+     * than queued, because most rates have no listener and an
+     * entry that fails on the consumer thread costs a logged
+     * exception per rate per period
      * @param totalValue the period's total value
      * @param eventCount the period's event count
      * @param totalEventTime the period's accumulated event time
      * @param period the rate period in ms
      * @param timestampMs the sample's archive step stamp, as stamped by
-     *                    {@link Rate#coalesce()}
+     * {@link Rate#coalesce()}
      * @return true if the sample was queued or superseded an existing entry,
-     *         false if the listener was null, if it was rejected after
-     *         {@link #shutdown()}, or if an eviction could not be completed
+     * false if the listener was null, if it was rejected after
+     * {@link #shutdown()}, or if an eviction could not be completed
      * @since 0.9.71+
      */
     boolean submit(RateSummaryListener listener, double totalValue, long eventCount,

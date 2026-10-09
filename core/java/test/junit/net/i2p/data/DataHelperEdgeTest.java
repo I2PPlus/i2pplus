@@ -7,13 +7,13 @@ import org.junit.Test;
 import java.nio.charset.StandardCharsets;
 
 /**
- *  Boundary and edge-case tests for DataHelper string escaping,
- *  integer serialization, and charset round-trips. These helpers
- *  are used in user-facing output, so escaping mistakes are
- *  cross-site-scripting bugs; serialization mistakes corrupt
- *  wire-format data.
+ * Boundary and edge-case tests for DataHelper string escaping,
+ * integer serialization, and charset round-trips. These helpers
+ * are used in user-facing output, so escaping mistakes are
+ * cross-site-scripting bugs; serialization mistakes corrupt
+ * wire-format data.
  *
- *  @since 0.8.3
+ * @since 0.8.3
  */
 public class DataHelperEdgeTest {
 

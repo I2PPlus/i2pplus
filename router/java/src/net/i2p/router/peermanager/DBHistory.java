@@ -98,26 +98,26 @@ public class DBHistory {
     /** How many times have they sent us data we didn't ask for but that we have seen? */
     public long getUnpromptedDbStoreOld() {return _unpromptedDbStoreOld.get();}
     /**
-     *  How often this peer failed to answer a NetDb request, in 10 minute and
-     *  1 hour periods.
+     * How often this peer failed to answer a NetDb request, in 10 minute and
+     * 1 hour periods.
      *
-     *  <p>Despite the name, the rate covers stores as well as lookups: a resolved
-     *  lookup and a verified store both add 0, a failed lookup and a failed store
-     *  verification both add 1. Read it as "fraction of NetDb requests this peer
-     *  failed to answer". Lookup and store outcomes are also tracked separately
-     *  by {@link #getLastLookupSuccessful()}, {@link #getLastLookupFailed()},
-     *  {@link #getLastStoreSuccessful()} and {@link #getLastStoreFailed()}.
+     * <p>Despite the name, the rate covers stores as well as lookups: a resolved
+     * lookup and a verified store both add 0, a failed lookup and a failed store
+     * verification both add 1. Read it as "fraction of NetDb requests this peer
+     * failed to answer". Lookup and store outcomes are also tracked separately
+     * by {@link #getLastLookupSuccessful()}, {@link #getLastLookupFailed()},
+     * {@link #getLastStoreSuccessful()} and {@link #getLastStoreFailed()}.
      *
-     *  @return the combined lookup and store failure rate
+     * @return the combined lookup and store failure rate
      */
     public RateStat getFailedLookupRate() {return _failedLookupRate;}
     /** Rate at which the peer sends us invalid reply data, to be investigated. */
     public RateStat getInvalidReplyRate() {return _invalidReplyRate;}
 
     /**
-     *  Note that the peer was not only able to respond to the lookup, but sent us the data we wanted!
+     * Note that the peer was not only able to respond to the lookup, but sent us the data we wanted!
      *
-     *  <p>Also feeds the combined failure rate with a success (0).
+     * <p>Also feeds the combined failure rate with a success (0).
      */
     public void lookupSuccessful() {
         _successfulLookups.incrementAndGet();
@@ -127,9 +127,9 @@ public class DBHistory {
     }
 
     /**
-     *  Note that the peer failed to respond to the db lookup in any way
+     * Note that the peer failed to respond to the db lookup in any way
      *
-     *  <p>Also feeds the combined failure rate with a failure (1).
+     * <p>Also feeds the combined failure rate with a failure (1).
      */
     public void lookupFailed() {
         _failedLookups.incrementAndGet();
@@ -139,12 +139,12 @@ public class DBHistory {
     }
 
     /**
-     *  Note that we successfully stored to a floodfill peer and verified the result by asking another floodfill peer
+     * Note that we successfully stored to a floodfill peer and verified the result by asking another floodfill peer
      *
-     *  <p>Also feeds the combined failure rate with a success (0), and the
-     *  network-wide "peer.failedLookupRate" statistic with a success (0).
+     * <p>Also feeds the combined failure rate with a success (0), and the
+     * network-wide "peer.failedLookupRate" statistic with a success (0).
      *
-     *  @since 0.7.8
+     * @since 0.7.8
      */
     public void storeSuccessful() {
         _failedLookupRate.addData(0);
@@ -153,14 +153,14 @@ public class DBHistory {
     }
 
     /**
-     *  Note that floodfill verify failed
+     * Note that floodfill verify failed
      *
-     *  <p>Also feeds the combined failure rate with a failure (1). The
-     *  network-wide "peer.failedLookupRate" statistic is deliberately not fed
-     *  here, so a store failure is counted against this peer but only dilutes
-     *  rather than inflates the network-wide average.
+     * <p>Also feeds the combined failure rate with a failure (1). The
+     * network-wide "peer.failedLookupRate" statistic is deliberately not fed
+     * here, so a store failure is counted against this peer but only dilutes
+     * rather than inflates the network-wide average.
      *
-     *  @since 0.7.8
+     * @since 0.7.8
      */
     public void storeFailed() {
         _failedLookupRate.addData(1);
@@ -174,7 +174,7 @@ public class DBHistory {
      * @param oldPeers number of peers we have seen before
      * @param invalid number of peers that are invalid / out of date / otherwise b0rked
      * @param duplicate number of peers we asked them not to give us (though they're allowed to send us
-     *                  themselves if they don't know anyone else)
+     * themselves if they don't know anyone else)
      */
     public void lookupReply(int newPeers, int oldPeers, int invalid, int duplicate) {
         if (invalid > 0) {_invalidReplyRate.addData(invalid);}
@@ -231,7 +231,7 @@ public class DBHistory {
     }
 
     /** Apply decay to a counter. Keeps the same rate as divide-by-3 hourly
-     *  but spreads it over 15-minute intervals for smoother response. */
+     * but spreads it over 15-minute intervals for smoother response. */
     private void decayCounter(AtomicLong counter, String name) {
         long val = counter.get();
         if (val > 0) {

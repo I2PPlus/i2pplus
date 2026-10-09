@@ -106,8 +106,8 @@ public class BodyResumeBudgetTest {
     }
 
     /** Transient-status refund gives back the stall charge so a 408 does not
-     *  eat the empty/stall budget; the total count stays consumed so
-     *  totalCycleLimit remains an absolute cap over ALL attempts. */
+     * eat the empty/stall budget; the total count stays consumed so
+     * totalCycleLimit remains an absolute cap over ALL attempts. */
     @Test
     public void testRefundLastUndoesConsume() {
         I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
@@ -145,7 +145,7 @@ public class BodyResumeBudgetTest {
     }
 
     /** Repeated consume+refund cycles (a persistently transient upstream)
-     *  still stop at the absolute cap — refunding must not unbound the loop. */
+     * still stop at the absolute cap — refunding must not unbound the loop. */
     @Test
     public void testRepeatedRefundsStillBoundedByAbsoluteCap() {
         I2PTunnelRunner.ResumeBudget b = new I2PTunnelRunner.ResumeBudget();
@@ -161,7 +161,7 @@ public class BodyResumeBudgetTest {
     }
 
     /** Size ramp: a 10MB entity (10 ramp units) allows 4+10=14 consecutive
-     *  no-progress cycles before abandoning. */
+     * no-progress cycles before abandoning. */
     @Test
     public void testScaledStallBudgetForLargeEntity() {
         long size = 10 * MB;
@@ -175,7 +175,7 @@ public class BodyResumeBudgetTest {
     }
 
     /** Size ramp: the absolute cap for a 10MB entity is 32+10=42 total
-     *  cycles even when every cycle makes progress. */
+     * cycles even when every cycle makes progress. */
     @Test
     public void testScaledTotalCapForLargeEntity() {
         long size = 10 * MB;
@@ -226,7 +226,7 @@ public class BodyResumeBudgetTest {
     }
 
     /** An expired deadline stops the sequence even with cycle budget left and
-     *  forward progress being made — the case cycle caps cannot catch. */
+     * forward progress being made — the case cycle caps cannot catch. */
     @Test
     public void testExpiredDeadlineStopsProgressingTransfer() {
         // deadline already in the past at construction time
@@ -261,8 +261,8 @@ public class BodyResumeBudgetTest {
     }
 
     /** The production deadline must be generous enough not to cut short the
-     *  baseline caps, which is what it exists to bound: the ramp, not the
-     *  normal case. */
+     * baseline caps, which is what it exists to bound: the ramp, not the
+     * normal case. */
     @Test
     public void testProductionDeadlineExceedsBaselineBudget() {
         assertTrue("deadline must exceed a connect-timeout-scale baseline",

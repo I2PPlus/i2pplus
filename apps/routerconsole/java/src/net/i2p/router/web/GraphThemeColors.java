@@ -537,7 +537,7 @@ public final class GraphThemeColors {
 
     /**
      * The fill for a plot as something to paint with: a colour, or a vertical gradient.
- *
+     *
      * <p>A gradient needs a length to span, and the area under a series is a vertical wash,
      * so the frame's height is the caller's to supply. Only the CSS default direction - top
      * to bottom, which is what the minigraph's own fill variables use - is painted; a stated
@@ -894,9 +894,9 @@ public final class GraphThemeColors {
      * Parse a dash variable into a dot length and a stated gap.
      *
      * @param fallback the built-in {@code {dot, gap}}, used when the variable is absent or
-     *                 unusable
+     * unusable
      * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
-     *         zero meaning "derive it"; never null
+     * zero meaning "derive it"; never null
      */
     private static float[] dash(File themeDir, String theme, String var, float[] fallback) {
         String v = variables(themeDir, theme).get(var);
@@ -915,7 +915,7 @@ public final class GraphThemeColors {
      * Parse {@code --graph_plotDash} into a dot length and a stated gap.
      *
      * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
-     *         zero meaning "derive it"; never null
+     * zero meaning "derive it"; never null
      */
     private static float[] dash(File themeDir, String theme) {
         return dash(themeDir, theme, VAR_PLOT_DASH,
@@ -1037,7 +1037,7 @@ public final class GraphThemeColors {
      * Colours from already-split terms, dropping a direction keyword where one is allowed.
      *
      * @param gradient true for a {@code linear-gradient()} stop list, where a leading
-     *        direction keyword is allowed and has to be skipped
+     * direction keyword is allowed and has to be skipped
      * @return the colours, or null when any term is unusable or nothing remains
      */
     private static List<Color> parseStops(String[] terms, boolean gradient) {
@@ -1118,7 +1118,7 @@ public final class GraphThemeColors {
      * Read a theme's stylesheet and collect its custom properties.
      *
      * @return the declarations, empty when the file is absent or unreadable, which is the
-     *         normal case in a source checkout where the theme lives under installer/
+     * normal case in a source checkout where the theme lives under installer/
      */
     private static Map<String, String> parse(File css) {
         Map<String, String> out = new HashMap<>();

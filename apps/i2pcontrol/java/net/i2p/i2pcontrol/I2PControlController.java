@@ -1,19 +1,18 @@
 package net.i2p.i2pcontrol;
 /*
- *  Copyright 2010 hottuna (dev@robertfoss.se)
+ * Copyright 2010 hottuna (dev@robertfoss.se)
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 import static net.i2p.app.ClientAppState.*;
@@ -71,7 +70,7 @@ public class I2PControlController implements RouterApp {
     private static final int DEFAULT_PORT = 7650;
 
     /**
-     *  RouterApp (new way)
+     * RouterApp (new way)
      */
     public I2PControlController(RouterContext ctx, ClientAppManager mgr) {
         _appContext = _context = ctx;
@@ -159,11 +158,11 @@ public class I2PControlController implements RouterApp {
 
 
     /**
-     *  Builds the default SSL connector from the current configuration.
-     *  The connector is neither added to a server nor started here; only
-     *  {@link #buildServer()} does that.
-     *  @param server the server the connector is created for, may be null
-     *  @return the new connector
+     * Builds the default SSL connector from the current configuration.
+     * The connector is neither added to a server nor started here; only
+     * {@link #buildServer()} does that.
+     * @param server the server the connector is created for, may be null
+     * @return the new connector
      */
     private Connector buildDefaultListener(Server server) {
         return buildSslListener(server, _conf.getConf("i2pcontrol.listen.address", "127.0.0.1"),

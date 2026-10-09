@@ -182,18 +182,18 @@ class FloodfillVerifyStoreJob extends JobImpl {
     }
 
     /**
-     *  Delay, then confirm the store peer still holds the entry;
-     *  after a longer delay, confirm a different floodfill got the flood.
+     * Delay, then confirm the store peer still holds the entry;
+     * after a longer delay, confirm a different floodfill got the flood.
      *
-     *  @param ctx the router context
-     *  @param key the key
-     *  @param client generally the same as key, unless encrypted LS2; non-null
-     *  @param published getDate() for RI or LS1, getPublished() for LS2
-     *  @param type the database entry type
-     *  @param sentTo who to give the credit or blame to, can be null
-     *  @param toSkip don't query any of these peers, may be null
-     *  @param facade the floodfill network database facade
-     *  @since 0.9.53 added toSkip param
+     * @param ctx the router context
+     * @param key the key
+     * @param client generally the same as key, unless encrypted LS2; non-null
+     * @param published getDate() for RI or LS1, getPublished() for LS2
+     * @param type the database entry type
+     * @param sentTo who to give the credit or blame to, can be null
+     * @param toSkip don't query any of these peers, may be null
+     * @param facade the floodfill network database facade
+     * @since 0.9.53 added toSkip param
      */
     public FloodfillVerifyStoreJob(RouterContext ctx, Hash key, Hash client, long published, int type,
                                    Hash sentTo, Set<Hash> toSkip, FloodfillNetworkDatabaseFacade facade) {
@@ -263,11 +263,11 @@ class FloodfillVerifyStoreJob extends JobImpl {
     public String getName() { return "Verify NetDb Store"; }
 
     /**
-     *  Run the current phase: first ask the peer we stored to, then a
-     *  different floodfill after the flood-check delay has elapsed.
+     * Run the current phase: first ask the peer we stored to, then a
+     * different floodfill after the flood-check delay has elapsed.
      *
-     *  Phase 1 failure (missing/stale at the store peer) resends immediately.
-     *  Phase 2 missing/stale retries the same peer once, then resends.
+     * Phase 1 failure (missing/stale at the store peer) resends immediately.
+     * Phase 2 missing/stale retries the same peer once, then resends.
      */
     public void runJob() {
         if (_phase == PHASE_STORE_CHECK) {
@@ -507,7 +507,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
     }
 
     /**
-     *  Pick a responsive floodfill close to the key, but not the one we sent to
+     * Pick a responsive floodfill close to the key, but not the one we sent to
      */
     private Hash pickTarget() {
         Hash rkey = getContext().routingKeyGenerator().getRoutingKey(_key);
@@ -795,12 +795,12 @@ class FloodfillVerifyStoreJob extends JobImpl {
     }
 
     /**
-     *  the netDb store failed to verify, so resend it to a random floodfill peer
-     *  Fixme - since we now store closest-to-the-key, this is likely to store to the
-     *  very same ff as last time, until the stats get bad enough to switch.
-     *  Therefore, pass the failed ff through as a don't-store-to.
-     *  Let's also add the one we just tried to verify with, as they could be a pair of no-flooders.
-     *  So at least we'll try THREE ffs round-robin if things continue to fail...
+     * the netDb store failed to verify, so resend it to a random floodfill peer
+     * Fixme - since we now store closest-to-the-key, this is likely to store to the
+     * very same ff as last time, until the stats get bad enough to switch.
+     * Therefore, pass the failed ff through as a don't-store-to.
+     * Let's also add the one we just tried to verify with, as they could be a pair of no-flooders.
+     * So at least we'll try THREE ffs round-robin if things continue to fail...
      */
     private void resend() {
         DatabaseEntry ds = _facade.lookupLocally(_key);

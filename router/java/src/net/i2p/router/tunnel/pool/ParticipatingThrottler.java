@@ -36,11 +36,11 @@ public class ParticipatingThrottler {
     private final Log _log;
     private BanLogger _banLogger;
     /**
-     *  True on platforms we treat as slow. Selects a more conservative
-     *  percentage divisor (300 rather than 100) and a lower {@link #_minLimit}
-     *  cap in {@link #baseLimitFor}. Package-visible so the limit arithmetic
-     *  can be pinned for both branches without a RouterContext.
-     *  @since 0.9.71+
+     * True on platforms we treat as slow. Selects a more conservative
+     * percentage divisor (300 rather than 100) and a lower {@link #_minLimit}
+     * cap in {@link #baseLimitFor}. Package-visible so the limit arithmetic
+     * can be pinned for both branches without a RouterContext.
+     * @since 0.9.71+
      */
     static final boolean IS_SLOW = SystemVersion.isSlow();
     private static final boolean DEFAULT_BLOCK_OLD_ROUTERS = true;
@@ -82,19 +82,19 @@ public class ParticipatingThrottler {
     private static volatile RateStat _bwQueueRateStat;
 
     /**
-     *  Minimum interval between two full load-score recomputations, in ms.
+     * Minimum interval between two full load-score recomputations, in ms.
      *
-     *  <p>The score is consulted on every throttled participating request and
-     *  is shared with {@code RequestThrottler}, but its inputs are all coarse:
-     *  job queue lag in whole milliseconds, a 60s-smoothed CPU load, a
-     *  1/5/15-minute load average and a 60s bandwidth rate. None of them move
-     *  meaningfully inside one second, so recomputing per request only buys
-     *  CPU. Staleness is bounded at {@code LOAD_SCORE_CACHE_MS} of wall clock
-     *  plus whatever the underlying inputs are themselves smoothed over, which
-     *  is invisible against a rejection curve that turns over on a per-request
-     *  random draw.
+     * <p>The score is consulted on every throttled participating request and
+     * is shared with {@code RequestThrottler}, but its inputs are all coarse:
+     * job queue lag in whole milliseconds, a 60s-smoothed CPU load, a
+     * 1/5/15-minute load average and a 60s bandwidth rate. None of them move
+     * meaningfully inside one second, so recomputing per request only buys
+     * CPU. Staleness is bounded at {@code LOAD_SCORE_CACHE_MS} of wall clock
+     * plus whatever the underlying inputs are themselves smoothed over, which
+     * is invisible against a rejection curve that turns over on a per-request
+     * random draw.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final long LOAD_SCORE_CACHE_MS = 1000;
     /** Wall-clock ms the cached load score was computed, or 0 if never. */
@@ -105,22 +105,22 @@ public class ParticipatingThrottler {
     private static volatile RouterContext _loadScoreCtx;
 
     /**
-     *  Minimum interval between re-reading the two limit inputs that cannot
-     *  change under us within a request, in ms.
+     * Minimum interval between re-reading the two limit inputs that cannot
+     * change under us within a request, in ms.
      *
-     *  <p>{@code router.maxParticipatingTunnels} is a static configuration
-     *  property and {@code getSystemLoad()} reports a load average; both were
-     *  re-read on every participating request even though neither moves on a
-     *  second timescale. Staleness is bounded at
-     *  {@code LIMIT_INVARIANT_CACHE_MS}: a limit can therefore lag a live
-     *  property change or a load swing by at most that much. The TTL is
-     *  deliberately the same short 1s the load score uses rather than something
-     *  longer - the limit is a policy value that gates participation, and
-     *  {@link #computeLimit} still re-reads every live input (participating
-     *  count, bandwidth usage) on each call, so only the two invariants are
-     *  smoothed.
+     * <p>{@code router.maxParticipatingTunnels} is a static configuration
+     * property and {@code getSystemLoad()} reports a load average; both were
+     * re-read on every participating request even though neither moves on a
+     * second timescale. Staleness is bounded at
+     * {@code LIMIT_INVARIANT_CACHE_MS}: a limit can therefore lag a live
+     * property change or a load swing by at most that much. The TTL is
+     * deliberately the same short 1s the load score uses rather than something
+     * longer - the limit is a policy value that gates participation, and
+     * {@link #computeLimit} still re-reads every live input (participating
+     * count, bandwidth usage) on each call, so only the two invariants are
+     * smoothed.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final long LIMIT_INVARIANT_CACHE_MS = 1000;
     /** Wall-clock ms the cached limit invariants were read, or 0 if never. */
@@ -406,37 +406,37 @@ public class ParticipatingThrottler {
     }
 
     /**
-     *  Whether the two invariant limit inputs are old enough to re-read.
-     *  Never-read ({@code lastQueried == 0}) counts as stale so the first call
-     *  reads them rather than trusting the field initializers. A swapped
-     *  RouterContext (unit tests build their own) invalidates regardless of
-     *  age, as does a wall-clock step backwards, which a plain age comparison
-     *  would keep serving until the clock caught up again.
+     * Whether the two invariant limit inputs are old enough to re-read.
+     * Never-read ({@code lastQueried == 0}) counts as stale so the first call
+     * reads them rather than trusting the field initializers. A swapped
+     * RouterContext (unit tests build their own) invalidates regardless of
+     * age, as does a wall-clock step backwards, which a plain age comparison
+     * would keep serving until the clock caught up again.
      *
-     *  @param lastQueried the wall-clock ms of the previous read, or 0
-     *  @param now the current wall-clock ms
-     *  @param cachedCtx the context the cached values were read against
-     *  @param ctx the context being asked for now
-     *  @return true if the cached values should be refreshed
-     *  @since 0.9.71+
+     * @param lastQueried the wall-clock ms of the previous read, or 0
+     * @param now the current wall-clock ms
+     * @param cachedCtx the context the cached values were read against
+     * @param ctx the context being asked for now
+     * @return true if the cached values should be refreshed
+     * @since 0.9.71+
      */
     static boolean limitInvariantCacheStale(long lastQueried, long now, RouterContext cachedCtx, RouterContext ctx) {
         return lastQueried == 0 || cachedCtx != ctx || now < lastQueried || now - lastQueried >= LIMIT_INVARIANT_CACHE_MS;
     }
 
     /**
-     *  The participation-limit arithmetic, with every input supplied, so it can
-     *  be exercised without a RouterContext. Reads the policy fields
-     *  ({@link #_minLimit}, {@link #_maxLimit}, {@link #_percentLimit},
-     *  {@link #IS_SLOW}) and applies the capacity relaxation, the idle-CPU
-     *  bonus and the participation floor.
+     * The participation-limit arithmetic, with every input supplied, so it can
+     * be exercised without a RouterContext. Reads the policy fields
+     * ({@link #_minLimit}, {@link #_maxLimit}, {@link #_percentLimit},
+     * {@link #IS_SLOW}) and applies the capacity relaxation, the idle-CPU
+     * bonus and the participation floor.
      *
      * @param numTunnels the current count of participating tunnels
      * @param isUnreachable true if the router is unreachable
      * @param isLowShare true if the router has low bandwidth share
      * @param isFast true if the router has high bandwidth share; not consumed by
-     *               the current arithmetic, kept so the signature matches
-     *               {@link #calculateLimit} and {@link #shouldThrottle(Hash, boolean)}
+     * the current arithmetic, kept so the signature matches
+     * {@link #calculateLimit} and {@link #shouldThrottle(Hash, boolean)}
      * @param maxTunnels the configured participating tunnel ceiling
      * @param bwUsage outbound bandwidth usage as a fraction of the limit, 0 when unknown
      * @param sysLoad system load 0-100
@@ -472,13 +472,13 @@ public class ParticipatingThrottler {
     }
 
     /**
-     *  Percentage share of participating tunnels granted to one peer, before
-     *  any relaxation. Unreachable and low-share peers are held to a fifth of
-     *  the nominal share (a tenth on slow platforms) and capped at the min
-     *  limit; everyone else gets the full share and may reach three times the
-     *  min limit, bounded below by half the max limit. The divisors are applied
-     *  in floating point so a low {@code pctLimit} cannot truncate the share
-     *  to zero.
+     * Percentage share of participating tunnels granted to one peer, before
+     * any relaxation. Unreachable and low-share peers are held to a fifth of
+     * the nominal share (a tenth on slow platforms) and capped at the min
+     * limit; everyone else gets the full share and may reach three times the
+     * min limit, bounded below by half the max limit. The divisors are applied
+     * in floating point so a low {@code pctLimit} cannot truncate the share
+     * to zero.
      *
      * @param numTunnels the current count of participating tunnels
      * @param isUnreachable true if the router is unreachable
@@ -561,9 +561,9 @@ public class ParticipatingThrottler {
     private static final int NO_VERSION_BAN_THRESHOLD = 3;
 
     /**
-     *  Rate-limited background resolution for transit peers missing from our
-     *  local netDb, so throttler decisions graduate from count-only to full
-     *  classification without blocking or hammering the netdb.
+     * Rate-limited background resolution for transit peers missing from our
+     * local netDb, so throttler decisions graduate from count-only to full
+     * classification without blocking or hammering the netdb.
      */
     private void scheduleRouterLookup(Hash h) {
         Long last = _recentLookups.get(h);
@@ -679,8 +679,8 @@ public class ParticipatingThrottler {
      * @param bantime ban duration in milliseconds
      * @param ri the RouterInfo, for ban logging
      * @param countRequest true when this request advanced the counter;
-     *                     consult-only checks downgrade DROP to REJECT and
-     *                     never ban on a count they did not contribute to
+     * consult-only checks downgrade DROP to REJECT and
+     * never ban on a count they did not contribute to
      * @return Result indicating ACCEPT, REJECT, or DROP action
      */
     private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare,
@@ -758,19 +758,19 @@ public class ParticipatingThrottler {
     }
 
     /**
-     *  Whether the cached load score is old enough to recompute.
-     *  Never-computed ({@code lastQueried == 0}) counts as stale so the first
-     *  call computes rather than returning the 0.0 initializer. A swapped
-     *  RouterContext (unit tests build their own) invalidates regardless of
-     *  age, as does a wall-clock step backwards, which a plain age comparison
-     *  would keep serving until the clock caught up again.
+     * Whether the cached load score is old enough to recompute.
+     * Never-computed ({@code lastQueried == 0}) counts as stale so the first
+     * call computes rather than returning the 0.0 initializer. A swapped
+     * RouterContext (unit tests build their own) invalidates regardless of
+     * age, as does a wall-clock step backwards, which a plain age comparison
+     * would keep serving until the clock caught up again.
      *
-     *  @param lastQueried the wall-clock ms of the previous computation, or 0
-     *  @param now the current wall-clock ms
-     *  @param cachedCtx the context the cached score was computed against
-     *  @param ctx the context being asked for now
-     *  @return true if the score should be recomputed
-     *  @since 0.9.71+
+     * @param lastQueried the wall-clock ms of the previous computation, or 0
+     * @param now the current wall-clock ms
+     * @param cachedCtx the context the cached score was computed against
+     * @param ctx the context being asked for now
+     * @return true if the score should be recomputed
+     * @since 0.9.71+
      */
     static boolean loadScoreCacheStale(long lastQueried, long now, RouterContext cachedCtx, RouterContext ctx) {
         return lastQueried == 0 || cachedCtx != ctx || now < lastQueried || now - lastQueried >= LOAD_SCORE_CACHE_MS;

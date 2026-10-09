@@ -48,8 +48,8 @@ abstract class FloodSearchJob extends JobImpl {
     protected boolean _success;
 
     /**
-     *  @param onFind may be null
-     *  @param onFailed may be null
+     * @param onFind may be null
+     * @param onFailed may be null
      */
     public FloodSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key, Job onFind, Job onFailed, int timeoutMs, boolean isLease) {
         super(ctx);
@@ -72,11 +72,11 @@ abstract class FloodSearchJob extends JobImpl {
     public long getCreated() { return _created; }
 
     /**
-     *  Add jobs to an existing search
-     *  @param onFind may be null
-     *  @param onFailed may be null
-     *  @param timeoutMs search timeout in ms
-     *  @param isLease whether searching for lease set
+     * Add jobs to an existing search
+     * @param onFind may be null
+     * @param onFailed may be null
+     * @param timeoutMs search timeout in ms
+     * @param isLease whether searching for lease set
      */
     void addDeferred(Job onFind, Job onFailed, long timeoutMs, boolean isLease) {
         boolean success;
@@ -103,14 +103,14 @@ abstract class FloodSearchJob extends JobImpl {
     protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;
     private static final int FLOOD_SEARCH_TIME_FACTOR = 2;
     /**
-     *  Deprecated, unused, see FOSJ override
+     * Deprecated, unused, see FOSJ override
      */
     public void runJob() {
         throw new UnsupportedOperationException("use override");
     }
 
     /**
-     *  Deprecated, unused, see FOSJ override
+     * Deprecated, unused, see FOSJ override
      * @return the name
      */
     public String getName() { return "NetDb Search (phase 1)"; }
@@ -146,14 +146,14 @@ abstract class FloodSearchJob extends JobImpl {
     protected int getLookupsRemaining() { return _lookupsRemaining.get(); }
 
     /**
-     *  Deprecated, unused, see FOSJ override
+     * Deprecated, unused, see FOSJ override
      */
     void failed() {
         throw new UnsupportedOperationException("use override");
     }
 
     /**
-     *  Deprecated, unused, see FOSJ override
+     * Deprecated, unused, see FOSJ override
      */
     void success() {
         synchronized(this) {

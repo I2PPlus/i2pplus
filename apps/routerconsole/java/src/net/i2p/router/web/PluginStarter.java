@@ -44,11 +44,11 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 
 /**
- *  Start/stop/delete plugins that are already installed
- *  Get properties of installed plugins
- *  Get or change settings in plugins.config
+ * Start/stop/delete plugins that are already installed
+ * Get properties of installed plugins
+ * Get or change settings in plugins.config
  *
- *  @since 0.7.12
+ * @since 0.7.12
  */
 public class PluginStarter implements Runnable {
     /**
@@ -84,11 +84,11 @@ public class PluginStarter implements Runnable {
     private static Map<String, Collection<String>> pluginWars = new ConcurrentHashMap<>();
 
     /**
-     *  Plugin name to plugin version of plugins that do not work
-     *  with Jetty 9, but do not have a max-jetty-version=8.9999 set.
-     *  Unmodifiable.
+     * Plugin name to plugin version of plugins that do not work
+     * with Jetty 9, but do not have a max-jetty-version=8.9999 set.
+     * Unmodifiable.
      *
-     *  @since 0.9.30
+     * @since 0.9.30
      */
     public static final Map<String, String> jetty9Blacklist;
 
@@ -100,11 +100,11 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Plugin name to plugin version of plugins that do not work
-     *  with Java 9+
-     *  Unmodifiable.
+     * Plugin name to plugin version of plugins that do not work
+     * with Java 9+
+     * Unmodifiable.
      *
-     *  @since 0.9.30
+     * @since 0.9.30
      */
     public static final Map<String, String> java9Blacklist;
 
@@ -116,26 +116,26 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Creates the runner for the deferred plugin startup thread.
-     *  @param ctx router context supplying the config dir, logging and console server
+     * Creates the runner for the deferred plugin startup thread.
+     * @param ctx router context supplying the config dir, logging and console server
      */
     public PluginStarter(RouterContext ctx) {
         _context = ctx;
     }
 
     /**
-     *  Has the user allowed plugins to be started at all?
-     *  @param ctx context to read router.enablePlugins from
-     *  @return false only if the user has explicitly disabled plugins
-     *  @since 0.9.33
+     * Has the user allowed plugins to be started at all?
+     * @param ctx context to read router.enablePlugins from
+     * @return false only if the user has explicitly disabled plugins
+     * @since 0.9.33
      */
     public static boolean pluginsEnabled(I2PAppContext ctx) {
          return ctx.getBooleanPropertyDefaultTrue("router.enablePlugins");
     }
 
     /**
-     *  startup pass: apply deferred deletions, optionally update plugins,
-     *  then start every plugin marked enabled in plugins.config
+     * startup pass: apply deferred deletions, optionally update plugins,
+     * then start every plugin marked enabled in plugins.config
      */
     @Override
     public void run() {
@@ -153,9 +153,9 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  threaded
-     *  @param ctx router context to check and fetch the plugins with
-     *  @since 0.8.13, public since 0.9.33, was package private
+     * threaded
+     * @param ctx router context to check and fetch the plugins with
+     * @since 0.8.13, public since 0.9.33, was package private
      */
     public static void updateAll(RouterContext ctx) {
         Thread t = new I2PAppThread(new PluginUpdater(ctx), "PlugUpdater", true);
@@ -163,8 +163,8 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  thread
-     *  @since 0.8.13
+     * thread
+     * @since 0.8.13
      */
     private static class PluginUpdater implements Runnable {
         private final RouterContext _ctx;
@@ -186,8 +186,8 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  inline
-     *  @since 0.8.13
+     * inline
+     * @since 0.8.13
      */
     private static void updateAll(RouterContext ctx, boolean delay) {
         List<String> plugins = getPlugins();
@@ -294,10 +294,10 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Start every plugin whose plugins.config entry is "true",
-     *  skipping any that an update already started.
-     *  Failures are logged, never thrown.
-     *  @param ctx router context supplying the config dir, logging and console server
+     * Start every plugin whose plugins.config entry is "true",
+     * skipping any that an update already started.
+     * Failures are logged, never thrown.
+     * @param ctx router context supplying the config dir, logging and console server
      */
     static void startPlugins(RouterContext ctx) {
         Log log = ctx.logManager().getLog(PluginStarter.class);
@@ -322,9 +322,9 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Deferred deletion of plugins that we failed to delete before.
+     * Deferred deletion of plugins that we failed to delete before.
      *
-     *  @since 0.9.13
+     * @since 0.9.13
      */
     private static void deferredDeletePlugins(RouterContext ctx) {
         Log log = ctx.logManager().getLog(PluginStarter.class);
@@ -359,8 +359,8 @@ public class PluginStarter implements Runnable {
 
     @SuppressWarnings("deprecation")
     /**
-     *  Reject a plugin with incompatible requirements: log, disable, and throw.
-     *  @since 0.9.71+
+     * Reject a plugin with incompatible requirements: log, disable, and throw.
+     * @since 0.9.71+
      */
     private static void pluginIncompatible(Log log, RouterContext ctx, String appName,
                                            String detail, String userMessage) throws Exception {
@@ -371,13 +371,13 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Start a plugin: extract a pending update, enforce the min/max I2P, Java and
-     *  Jetty version requirements, register its themes, client apps, console webapps,
-     *  translation jars and summary bar link.
-     *  @param ctx router context supplying the config dir, logging and console server
-     *  @param appName plugin directory name under $I2P/plugins
-     *  @return true on success, or false if the plugin directory is missing
-     *  @throws Exception just about anything, caller would be wise to catch Throwable
+     * Start a plugin: extract a pending update, enforce the min/max I2P, Java and
+     * Jetty version requirements, register its themes, client apps, console webapps,
+     * translation jars and summary bar link.
+     * @param ctx router context supplying the config dir, logging and console server
+     * @param appName plugin directory name under $I2P/plugins
+     * @return true on success, or false if the plugin directory is missing
+     * @throws Exception just about anything, caller would be wise to catch Throwable
      */
     public static boolean startPlugin(RouterContext ctx, String appName) throws Exception {
         Log log = ctx.logManager().getLog(PluginStarter.class);
@@ -595,12 +595,12 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Stop a plugin: shut down its client apps and console webapps, drop its summary
-     *  bar link, and release its thread group, pending timers and ClassLoader cache.
-     *  @param ctx router context supplying the config dir, logging and console server
-     *  @param appName plugin directory name under $I2P/plugins
-     *  @return true on success
-     *  @throws Exception just about anything, caller would be wise to catch Throwable
+     * Stop a plugin: shut down its client apps and console webapps, drop its summary
+     * bar link, and release its thread group, pending timers and ClassLoader cache.
+     * @param ctx router context supplying the config dir, logging and console server
+     * @param appName plugin directory name under $I2P/plugins
+     * @return true on success
+     * @throws Exception just about anything, caller would be wise to catch Throwable
      */
     public static boolean stopPlugin(RouterContext ctx, String appName) throws Exception {
         Server s = RouterConsoleRunner.getConsoleServer(ctx);
@@ -608,14 +608,14 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Stop a plugin using an already-located console server, so this also works
-     *  during shutdown after the server has been unregistered.
-     *  @param ctx router context supplying the config dir, logging and the PortMapper
-     *  @param s the Jetty server holding the console contexts, null if not running
-     *  @param appName plugin directory name under $I2P/plugins
-     *  @return true on success
-     *  @throws Exception just about anything, caller would be wise to catch Throwable
-     *  @since 0.9.41
+     * Stop a plugin using an already-located console server, so this also works
+     * during shutdown after the server has been unregistered.
+     * @param ctx router context supplying the config dir, logging and the PortMapper
+     * @param s the Jetty server holding the console contexts, null if not running
+     * @param appName plugin directory name under $I2P/plugins
+     * @return true on success
+     * @throws Exception just about anything, caller would be wise to catch Throwable
+     * @since 0.9.41
      */
     protected static boolean stopPlugin(RouterContext ctx, Server s, String appName) throws Exception {
         Log log = ctx.logManager().getLog(PluginStarter.class);
@@ -713,14 +713,14 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Uninstall a plugin: run its client apps' uninstall commands, unregister its
-     *  themes (falling back to the default theme if it is the current one), remove
-     *  its directory and drop its plugins.config entries.
-     *  @param ctx router context supplying the config dir and logging
-     *  @param appName plugin directory name under $I2P/plugins
-     *  @return true on success - caller should call stopPlugin() first
-     *  @throws Exception just about anything, caller would be wise to catch Throwable
-     *  @since 0.9.33
+     * Uninstall a plugin: run its client apps' uninstall commands, unregister its
+     * themes (falling back to the default theme if it is the current one), remove
+     * its directory and drop its plugins.config entries.
+     * @param ctx router context supplying the config dir and logging
+     * @param appName plugin directory name under $I2P/plugins
+     * @return true on success - caller should call stopPlugin() first
+     * @throws Exception just about anything, caller would be wise to catch Throwable
+     * @since 0.9.33
      */
     public static boolean deletePlugin(RouterContext ctx, String appName) throws Exception {
         Log log = ctx.logManager().getLog(PluginStarter.class);
@@ -774,10 +774,10 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  plugin.config
-     *  @param ctx context to resolve the config dir holding the plugin
-     *  @param appName plugin directory name under $I2P/plugins
-     *  @return non-null, empty if plugin.config is missing or unreadable
+     * plugin.config
+     * @param ctx context to resolve the config dir holding the plugin
+     * @param appName plugin directory name under $I2P/plugins
+     * @return non-null, empty if plugin.config is missing or unreadable
      */
     public static Properties pluginProperties(I2PAppContext ctx, String appName) {
         File cfgFile = new File(ctx.getConfigDir(), PLUGIN_DIR + '/' + appName + '/' + "plugin.config");
@@ -789,9 +789,9 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  plugins.config
-     *  this auto-adds a property for every dir in the plugin directory
-     *  @return non-null, empty if plugins.config is missing or unreadable
+     * plugins.config
+     * this auto-adds a property for every dir in the plugin directory
+     * @return non-null, empty if plugins.config is missing or unreadable
      */
     public static Properties pluginProperties() {
         File dir = I2PAppContext.getGlobalContext().getConfigDir();
@@ -826,10 +826,10 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Disable in plugins.config
+     * Disable in plugins.config
      *
-     *  @param appName plugin directory name under $I2P/plugins
-     *  @since 0.8.13
+     * @param appName plugin directory name under $I2P/plugins
+     * @since 0.8.13
      */
     public static void disablePlugin(String appName) {
         Properties props = pluginProperties();
@@ -841,9 +841,9 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  all installed plugins whether enabled or not,
-     *  but does NOT include plugins marked as deleted.
-     *  @return non-null, sorted, modifiable
+     * all installed plugins whether enabled or not,
+     * but does NOT include plugins marked as deleted.
+     * @return non-null, sorted, modifiable
      */
     public static List<String> getPlugins() {
         List<String> rv = getAllPlugins();
@@ -858,10 +858,10 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  all installed plugins whether enabled or not,
-     *  DOES include plugins marked as deleted.
-     *  @return non-null, unsorted, modifiable
-     *  @since 0.9.13
+     * all installed plugins whether enabled or not,
+     * DOES include plugins marked as deleted.
+     * @return non-null, unsorted, modifiable
+     * @since 0.9.13
      */
     private static List<String> getAllPlugins() {
         List<String> rv = new ArrayList<>();
@@ -877,10 +877,10 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  The signing keys from all the plugins
-     *  @param ctx context supplying the config dir holding each plugin.config
-     *  @return Map of key to keyname
-     *  Last one wins if a dup (installer should prevent dups)
+     * The signing keys from all the plugins
+     * @param ctx context supplying the config dir holding each plugin.config
+     * @return Map of key to keyname
+     * Last one wins if a dup (installer should prevent dups)
      */
     public static Map<String, String> getPluginKeys(I2PAppContext ctx) {
         Map<String, String> rv = new HashMap<>();
@@ -896,8 +896,8 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  plugins.config
-     *  @param props written to plugins.config, converted to OrderedProperties if needed
+     * plugins.config
+     * @param props written to plugins.config, converted to OrderedProperties if needed
      */
     public static void storePluginProperties(Properties props) {
         if (!(props instanceof OrderedProperties)) {
@@ -912,9 +912,9 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  @param action "start" or "stop" or "uninstall"
-     *  @throws Exception just about anything if an app has a delay less than zero, caller would be wise to catch Throwable
-     *  If no apps have a delay less than zero, it shouldn't throw anything
+     * @param action "start" or "stop" or "uninstall"
+     * @throws Exception just about anything if an app has a delay less than zero, caller would be wise to catch Throwable
+     * If no apps have a delay less than zero, it shouldn't throw anything
      */
     private static void runClientApps(RouterContext ctx, File pluginDir, List<ClientAppConfig> apps, String action) throws Exception {
         Log log = ctx.logManager().getLog(PluginStarter.class);
@@ -1063,8 +1063,8 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Simple override to track whether a plugin's client is delayed and queued
-     *  @since 0.9.6
+     * Simple override to track whether a plugin's client is delayed and queued
+     * @since 0.9.6
      */
     private static class TrackedDelayedClient extends LoadClientAppsJob.DelayedRunClient {
         private final String _pluginName;
@@ -1220,12 +1220,12 @@ public class PluginStarter implements Runnable {
 *****/
 
     /**
-     *  Convert a plugin classpath to URL array, for the plugin's own
-     *  classloader. Perhaps there's an easy way to use
-     *  Thread.setContextClassLoader(), but I don't see how to make it
-     *  magically get used for everything.
+     * Convert a plugin classpath to URL array, for the plugin's own
+     * classloader. Perhaps there's an easy way to use
+     * Thread.setContextClassLoader(), but I don't see how to make it
+     * magically get used for everything.
      *
-     *  @return null if no valid elements
+     * @return null if no valid elements
      */
     private static URL[] classpathToURLArray(String classpath, String clientName, Log log) {
         StringTokenizer tok = new StringTokenizer(classpath, ",");
@@ -1251,9 +1251,9 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  http://jimlife.wordpress.com/2007/12/19/java-adding-new-classpath-at-runtime/
+     * http://jimlife.wordpress.com/2007/12/19/java-adding-new-classpath-at-runtime/
      *
-     *  @throws ClassCastException in Java 9
+     * @throws ClassCastException in Java 9
      */
     private static void addPath(URL u) throws Exception {
         URLClassLoader urlClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
@@ -1264,12 +1264,11 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     *  Like in DataHelper but doesn't convert null to ""
-     *  There's a lot worse things a plugin could do but...
-     *  @param props plugin properties to read from
-     *  @param key plugin.config key to look up
-     *  @return the value with markup replaced by spaces, or null if not set
-     *  @since moved from ConfigClientsHelper in 0.9.33
+     * Like in DataHelper but doesn't convert null to ""
+     * There's a lot worse things a plugin could do but...
+     * @param props plugin properties to read from
+     * @param key plugin.config key to look up
+     * @return the value with markup replaced by spaces, or null if not set
      */
     public static String stripHTML(Properties props, String key) {
         String orig = props.getProperty(key);

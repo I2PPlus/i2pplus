@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -18,13 +17,12 @@ import java.io.InputStream;
 
 /**
  * Handle messages from the server for the client or vice versa
- *
  */
 public class I2CPMessageHandler {
     /**
-     *  This is huge. Mainly to catch a completly bogus response, possibly not an I2CP socket.
+     * This is huge. Mainly to catch a completly bogus response, possibly not an I2CP socket.
      *
-     *  @since 0.9.11
+     * @since 0.9.11
      */
     public static final int MAX_LENGTH = 128 * 1024;
 
@@ -35,7 +33,7 @@ public class I2CPMessageHandler {
      * @return Fully populated I2CPMessage
      * @throws IOException if there is an IO problem reading from the stream
      * @throws I2CPMessageException if there is a problem handling the particular
-     *          message - if it is an unknown type or has improper formatting, etc.
+     * message - if it is an unknown type or has improper formatting, etc.
      */
     public static I2CPMessage readMessage(InputStream in) throws IOException, I2CPMessageException {
         int length;

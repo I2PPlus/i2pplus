@@ -19,22 +19,22 @@ public interface NamingServiceListener {
     public void configurationChanged(NamingService ns);
 
     /**
-     *  Called when a new naming service entry is added.
+     * Called when a new naming service entry is added.
      *
-     *  @param ns the naming service
-     *  @param hostname the hostname
-     *  @param dest the destination
-     *  @param options NamingService-specific, can be null
+     * @param ns the naming service
+     * @param hostname the hostname
+     * @param dest the destination
+     * @param options NamingService-specific, can be null
      */
     public void entryAdded(NamingService ns, String hostname, Destination dest, Properties options);
 
     /**
-     *  Called when a naming service entry changes.
+     * Called when a naming service entry changes.
      *
-     *  @param ns the naming service
-     *  @param hostname the hostname
-     *  @param dest null if unchanged
-     *  @param options NamingService-specific, can be null
+     * @param ns the naming service
+     * @param hostname the hostname
+     * @param dest null if unchanged
+     * @param options NamingService-specific, can be null
      */
     public void entryChanged(NamingService ns, String hostname, Destination dest, Properties options);
 

@@ -16,17 +16,17 @@ import java.nio.charset.StandardCharsets;
 import net.i2p.util.Log;
 
 /**
- *  A class to iterate through a hosts.txt or config file without
- *  reading the whole thing into memory.
- *  Keys are always converted to lower case.
+ * A class to iterate through a hosts.txt or config file without
+ * reading the whole thing into memory.
+ * Keys are always converted to lower case.
  *
- *  Callers should iterate all the way through or call close()
- *  to ensure the underlying stream is closed.
+ * Callers should iterate all the way through or call close()
+ * to ensure the underlying stream is closed.
  *
- *  This is not used for config files.
- *  It is only used for subscriptions.
+ * This is not used for config files.
+ * It is only used for subscriptions.
  *
- *  @since 0.8.7, renamed from ConfigIterator in 0.9.26
+ * @since 0.8.7, renamed from ConfigIterator in 0.9.26
  */
 class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Closeable {
 
@@ -35,14 +35,14 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
     private MapEntry next;
 
     /**
-     *  A dummy iterator in which hasNext() is always false.
+     * A dummy iterator in which hasNext() is always false.
      */
     public HostTxtIterator() {
         // Default constructor
     }
 
     /**
-     *  An iterator over the key/value pairs in the file.
+     * An iterator over the key/value pairs in the file.
      */
     public HostTxtIterator(File file) throws IOException {
             FileInputStream fileStream = new FileInputStream(file);
@@ -111,15 +111,15 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
     }
 
     /**
-     *  The object returned by the iterator.
+     * The object returned by the iterator.
      */
     private static class MapEntry implements Map.Entry<String, HostTxtEntry> {
         private final String key;
         private final HostTxtEntry value;
 
         /**
-         *  @param k the key
-         *  @param v the value
+         * @param k the key
+         * @param v the value
          */
         public MapEntry(String k, HostTxtEntry v) {
             key = k;

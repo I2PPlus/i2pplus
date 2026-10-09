@@ -59,9 +59,9 @@ public class TunnelPoolLeaseAssemblyTest {
     }
 
     /**
-     *  A one-hop tunnel with a distinct identity, expiring far enough ahead that
-     *  {@code computeLeaseEndDate} clamps it to the lease cap — the condition that made every
-     *  lease in the pool share one end time.
+     * A one-hop tunnel with a distinct identity, expiring far enough ahead that
+     * {@code computeLeaseEndDate} clamps it to the lease cap — the condition that made every
+     * lease in the pool share one end time.
      */
     private static TunnelInfo tunnel(int index) {
         return tunnel(index, 1000 + index, index + 1);
@@ -90,11 +90,11 @@ public class TunnelPoolLeaseAssemblyTest {
     // ---- the regression ----
 
     /**
-     *  Tunnels whose leases land on the same end time all have to be kept.
+     * Tunnels whose leases land on the same end time all have to be kept.
      *
-     *  <p>Each tunnel here is set to expire well past the lease cap, so
-     *  {@code computeLeaseEndDate} clamps every one of them to the identical instant — the
-     *  situation that made the old end-time-only comparator collapse the set to a single lease.
+     * <p>Each tunnel here is set to expire well past the lease cap, so
+     * {@code computeLeaseEndDate} clamps every one of them to the identical instant — the
+     * situation that made the old end-time-only comparator collapse the set to a single lease.
      */
     @Test
     public void everyTunnelKeepsItsLeaseWhenTheEndTimesCollide() {
@@ -107,10 +107,10 @@ public class TunnelPoolLeaseAssemblyTest {
     }
 
     /**
-     *  Distinct tunnels must produce distinct leases, not merely a set of the right size.
+     * Distinct tunnels must produce distinct leases, not merely a set of the right size.
      *
-     *  <p>Catches a comparator that invents a different tie-break per call, which would satisfy
-     *  the count while still letting a lease be replaced rather than kept.
+     * <p>Catches a comparator that invents a different tie-break per call, which would satisfy
+     * the count while still letting a lease be replaced rather than kept.
      */
     @Test
     public void theKeptLeasesBelongToTheTunnelsOffered() {
@@ -131,14 +131,14 @@ public class TunnelPoolLeaseAssemblyTest {
     }
 
     /**
-     *  A tunnel already in the offered list must not be offered again.
+     * A tunnel already in the offered list must not be offered again.
      *
-     *  <p>The top-up that fills a short LeaseSet draws traffic-proven UNTESTED tunnels from the
-     *  same pool the first pass read. When a pool has no GOOD tunnel at all,
-     *  {@code isEligibleForLease} already admitted those UNTESTED ones, so the top-up re-added
-     *  every tunnel it was about to contribute. The lease set then collapsed the duplicates by
-     *  identity - correctly - leaving the set exactly as short as it started, which is what the
-     *  top-up exists to prevent.
+     * <p>The top-up that fills a short LeaseSet draws traffic-proven UNTESTED tunnels from the
+     * same pool the first pass read. When a pool has no GOOD tunnel at all,
+     * {@code isEligibleForLease} already admitted those UNTESTED ones, so the top-up re-added
+     * every tunnel it was about to contribute. The lease set then collapsed the duplicates by
+     * identity - correctly - leaving the set exactly as short as it started, which is what the
+     * top-up exists to prevent.
      */
     @Test
     public void aTunnelIsNotOfferedTwice() {
@@ -170,10 +170,10 @@ public class TunnelPoolLeaseAssemblyTest {
     // ---- the comparator's own contract ----
 
     /**
-     *  The comparator may only report equality for leases {@link Lease#equals} calls equal.
+     * The comparator may only report equality for leases {@link Lease#equals} calls equal.
      *
-     *  <p>Without that agreement a sorted set is free to discard elements, which is precisely how
-     *  the leases went missing.
+     * <p>Without that agreement a sorted set is free to discard elements, which is precisely how
+     * the leases went missing.
      */
     @Test
     public void theComparatorAgreesWithEquals() {
@@ -193,12 +193,12 @@ public class TunnelPoolLeaseAssemblyTest {
     }
 
     /**
-     *  End time still leads the ordering, latest first, which is what keeps an unchanged tunnel
-     *  set serialising to an unchanged LeaseSet and stops needless republication.
+     * End time still leads the ordering, latest first, which is what keeps an unchanged tunnel
+     * set serialising to an unchanged LeaseSet and stops needless republication.
      *
-     *  <p>The tie-break must not reorder leases that differ in end time, so the tunnel ids here
-     *  run opposite to the end times: if identity won, the comparison would come out the other
-     *  way and this would fail.
+     * <p>The tie-break must not reorder leases that differ in end time, so the tunnel ids here
+     * run opposite to the end times: if identity won, the comparison would come out the other
+     * way and this would fail.
      */
     @Test
     public void endTimeStillLeadsTheOrdering() {

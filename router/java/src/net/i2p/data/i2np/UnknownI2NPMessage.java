@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -35,9 +34,9 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     private final int _type;
 
     /**
-     *  Message with the given type, unknown to the router.
+     * Message with the given type, unknown to the router.
      *
-     *  @param type 0-255
+     * @param type 0-255
      */
     public UnknownI2NPMessage(I2PAppContext context, int type) {
         super(context);
@@ -45,9 +44,9 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Raw message data; may only be set once.
+     * Raw message data; may only be set once.
      *
-     *  @throws IllegalStateException if data previously set, to protect saved checksum
+     * @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (_data != null) {throw new IllegalStateException();}
@@ -75,21 +74,21 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Note that this returns the "true" type, so that
-     *  the IBGW can correctly make drop decisions.
+     * Note that this returns the "true" type, so that
+     * the IBGW can correctly make drop decisions.
      *
-     *  @return 0-255
+     * @return 0-255
      */
     public int getType() {return _type;}
 
     /**
-     *  Attempt to convert this message to a known message class.
-     *  This does the delayed verification using the saved checksum.
+     * Attempt to convert this message to a known message class.
+     * This does the delayed verification using the saved checksum.
      *
-     *  Used by TunnelGatewayZeroHop.
+     * Used by TunnelGatewayZeroHop.
      *
-     *  @throws I2NPMessageException if the conversion fails
-     *  @since 0.8.12
+     * @throws I2NPMessageException if the conversion fails
+     * @since 0.8.12
      */
     public I2NPMessage convert() throws I2NPMessageException {
         if (_data == null || !_hasChecksum) {

@@ -7,15 +7,15 @@ import net.i2p.router.util.DecayingBloomFilter;
 import org.junit.Test;
 
 /**
- *  Tests for the filter sizing decision.
+ * Tests for the filter sizing decision.
  *
- *  <p>Exercises {@link BloomFilterIVValidator.IVFilterSizer#computeTargetM}
- *  directly, so the policy is tested without a router. The sizing helpers it
- *  relies on are checked against the table in
- *  {@code DecayingBloomFilter.DEFAULT_M}, which is the model this is meant to
- *  reproduce.
+ * <p>Exercises {@link BloomFilterIVValidator.IVFilterSizer#computeTargetM}
+ * directly, so the policy is tested without a router. The sizing helpers it
+ * relies on are checked against the table in
+ * {@code DecayingBloomFilter.DEFAULT_M}, which is the model this is meant to
+ * reproduce.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class IVFilterSizerTest {
 
@@ -26,10 +26,10 @@ public class IVFilterSizerTest {
     // ==================== sizing helpers ====================
 
     /**
-     *  mForEntries must reproduce the shipped table. At n=614400 the table
-     *  records 1.48E-3 for m=23, so mForEntries(614400, 1.48E-3) has to land
-     *  on 24 (the exponent that achieves it) and mForEntries must never
-     *  under-size, which is what would cost good tunnel data.
+     * mForEntries must reproduce the shipped table. At n=614400 the table
+     * records 1.48E-3 for m=23, so mForEntries(614400, 1.48E-3) has to land
+     * on 24 (the exponent that achieves it) and mForEntries must never
+     * under-size, which is what would cost good tunnel data.
      */
     @Test
     public void testSizingMatchesShippedTable() {
@@ -101,8 +101,8 @@ public class IVFilterSizerTest {
     // ==================== the decision ====================
 
     /**
-     *  With no measurement yet the size must hold, because resizing on nothing
-     *  would throw away a window of duplicate detection for no reason.
+     * With no measurement yet the size must hold, because resizing on nothing
+     * would throw away a window of duplicate detection for no reason.
      */
     @Test
     public void testHoldsWithoutMeasurement() {
@@ -110,8 +110,8 @@ public class IVFilterSizerTest {
     }
 
     /**
-     *  Too many entries for the current size must climb, one step at a time so
-     *  a resize is never more than one exponent per cycle.
+     * Too many entries for the current size must climb, one step at a time so
+     * a resize is never more than one exponent per cycle.
      */
     @Test
     public void testClimbsOnHeavyLoad() {
@@ -130,8 +130,8 @@ public class IVFilterSizerTest {
     }
 
     /**
-     *  Memory pressure is the one signal that must give capacity back, and it
-     *  has to win over the load signal.
+     * Memory pressure is the one signal that must give capacity back, and it
+     * has to win over the load signal.
      */
     @Test
     public void testMemoryPressureShrinks() {
@@ -139,9 +139,9 @@ public class IVFilterSizerTest {
     }
 
     /**
-     *  Mild pressure must not shrink by itself. A light load legitimately makes
-     *  the filter oversized, so this uses a right-sized load to isolate the
-     *  pressure signal.
+     * Mild pressure must not shrink by itself. A light load legitimately makes
+     * the filter oversized, so this uses a right-sized load to isolate the
+     * pressure signal.
      */
     @Test
     public void testMildPressureDoesNotShrink() {
@@ -151,8 +151,8 @@ public class IVFilterSizerTest {
     }
 
     /**
-     *  A false positive rate far over target is evidence the filter is genuinely
-     *  too small, so it must climb even when the entry count looks comfortable.
+     * A false positive rate far over target is evidence the filter is genuinely
+     * too small, so it must climb even when the entry count looks comfortable.
      */
     @Test
     public void testHighFalsePositiveRateClimbs() {
@@ -167,8 +167,8 @@ public class IVFilterSizerTest {
     }
 
     /**
-     *  The ceiling is the budget, so a load that would need an enormous filter
-     *  on a small heap must stop at what the heap can hold.
+     * The ceiling is the budget, so a load that would need an enormous filter
+     * on a small heap must stop at what the heap can hold.
      */
     @Test
     public void testCeilingIsTheBudget() {
@@ -179,8 +179,8 @@ public class IVFilterSizerTest {
     }
 
     /**
-     *  A budget too small to move anything must leave the size alone rather
-     *  than clamp it somewhere the operator did not ask for.
+     * A budget too small to move anything must leave the size alone rather
+     * than clamp it somewhere the operator did not ask for.
      */
     @Test
     public void testTinyBudgetHolds() {
@@ -189,9 +189,9 @@ public class IVFilterSizerTest {
     }
 
     /**
-     *  A share-bandwidth reading must never drive a shrink. There is no share
-     *  argument at all, which is the point: capacity is given back on memory
-     *  pressure and on measured load only.
+     * A share-bandwidth reading must never drive a shrink. There is no share
+     * argument at all, which is the point: capacity is given back on memory
+     * pressure and on measured load only.
      */
     @Test
     public void testNeverShrinksOnThroughputReading() {
@@ -202,8 +202,8 @@ public class IVFilterSizerTest {
     }
 
     /**
-     *  Roughly the entry count that m is sized for at the target rate, found by
-     *  walking the sizing helper back down from m.
+     * Roughly the entry count that m is sized for at the target rate, found by
+     * walking the sizing helper back down from m.
      */
     private static int entriesFor(int m) {
         int lo = 1, hi = 1 << 24;

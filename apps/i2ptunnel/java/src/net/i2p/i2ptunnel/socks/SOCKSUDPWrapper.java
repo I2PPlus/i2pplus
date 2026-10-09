@@ -34,10 +34,10 @@ public class SOCKSUDPWrapper implements Source, Sink {
     }
 
     /**
-     *  Sets the sink for outgoing wrapped UDP datagrams.
+     * Sets the sink for outgoing wrapped UDP datagrams.
      *
-     *  @param sink the sink to receive SOCKS-wrapped datagrams
-     *  @since 0.9.53
+     * @param sink the sink to receive SOCKS-wrapped datagrams
+     * @since 0.9.53
      */
     @Override
     public void setSink(Sink sink) {
@@ -45,18 +45,18 @@ public class SOCKSUDPWrapper implements Source, Sink {
     }
 
     /**
-     *  Starts the wrapper. No-op for this implementation.
+     * Starts the wrapper. No-op for this implementation.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     public void start() { /* no-op */ }
 
     /**
-     *  Use the cached header, which should have the host string and port
+     * Use the cached header, which should have the host string and port
      *
-     *  May throw RuntimeException from underlying sink
-     *  @throws RuntimeException
-     *  @since 0.9.53 added fromPort and toPort parameters
+     * May throw RuntimeException from underlying sink
+     * @throws RuntimeException
+     * @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {
         if (this.sink == null)

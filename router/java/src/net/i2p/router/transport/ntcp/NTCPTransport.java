@@ -68,29 +68,29 @@ import net.i2p.util.VersionComparator;
  *
  * <strong>Protocol Features:</strong>
  * <ul>
- *   <li>NTCP 1: Basic encrypted TCP transport</li>
- *   <li>NTCP 2: Enhanced protocol with improved efficiency</li>
- *   <li>Configurable bandwidth limits and throttling</li>
- *   <li>Connection pooling and reuse</li>
- *   <li>IPv4 and IPv6 support</li>
- *   <li>Automatic protocol negotiation</li>
+ * <li>NTCP 1: Basic encrypted TCP transport</li>
+ * <li>NTCP 2: Enhanced protocol with improved efficiency</li>
+ * <li>Configurable bandwidth limits and throttling</li>
+ * <li>Connection pooling and reuse</li>
+ * <li>IPv4 and IPv6 support</li>
+ * <li>Automatic protocol negotiation</li>
  * </ul>
  *
  * <strong>Architecture:</strong>
  * <ul>
- *   <li>Non-blocking I/O with NIO channels</li>
- *   <li>Separate reader and writer threads</li>
- *   <li>Event-driven message processing</li>
- *   <li>Connection state machines for establishment</li>
- *   <li>Peer reputation and cost-based routing</li>
+ * <li>Non-blocking I/O with NIO channels</li>
+ * <li>Separate reader and writer threads</li>
+ * <li>Event-driven message processing</li>
+ * <li>Connection state machines for establishment</li>
+ * <li>Peer reputation and cost-based routing</li>
  * </ul>
  *
  * <strong>Connection Management:</strong>
  * <ul>
- *   <li>Multiple bid tiers (fast, slow, high-cost)</li>
- *   <li>Connection pooling and reuse</li>
- *   <li>Automatic failover and retry logic</li>
- *   <li>Peer blacklisting and banlist support</li>
+ * <li>Multiple bid tiers (fast, slow, high-cost)</li>
+ * <li>Connection pooling and reuse</li>
+ * <li>Automatic failover and retry logic</li>
+ * <li>Peer blacklisting and banlist support</li>
  * </ul>
  *
  * @since 0.9.16
@@ -112,11 +112,11 @@ public class NTCPTransport extends TransportImpl {
     private Writer _writer;
     private int _ssuPort;
     /**
-     *  Bound listening endpoints. All entries MUST be resolved InetSocketAddress
-     *  instances (created via port-only or InetAddress constructors), NOT unresolved
-     *  hostname-based addresses. InetSocketAddress.equals() returns false when
-     *  comparing resolved vs. unresolved, so contains() checks would silently fail
-     *  on unresolved entries.
+     * Bound listening endpoints. All entries MUST be resolved InetSocketAddress
+     * instances (created via port-only or InetAddress constructors), NOT unresolved
+     * hostname-based addresses. InetSocketAddress.equals() returns false when
+     * comparing resolved vs. unresolved, so contains() checks would silently fail
+     * on unresolved entries.
      */
     private final Set<InetSocketAddress> _endpoints;
     private final int _networkID;
@@ -130,33 +130,33 @@ public class NTCPTransport extends TransportImpl {
     private final DecayingBloomFilter _replayFilter;
 
     /**
-     *  Do we have a public IPv6 address?
+     * Do we have a public IPv6 address?
      */
     private boolean _haveIPv6Address;
     private long _lastInboundIPv4;
     private long _lastInboundIPv6;
 
     /**
-     *  Config key for an explicitly configured hostname the NTCP transport advertises.
-     *  The SSU equivalent is i2np.udp.host, not hostname.
-     *  Value sourced from {@link Transport#PROP_I2NP_NTCP_HOSTNAME}.
+     * Config key for an explicitly configured hostname the NTCP transport advertises.
+     * The SSU equivalent is i2np.udp.host, not hostname.
+     * Value sourced from {@link Transport#PROP_I2NP_NTCP_HOSTNAME}.
      */
     public static final String PROP_I2NP_NTCP_HOSTNAME = Transport.PROP_I2NP_NTCP_HOSTNAME;
     /**
-     *  Config key for the port the NTCP transport listens for inbound connections on.
-     *  Value sourced from {@link Transport#PROP_I2NP_NTCP_PORT}.
+     * Config key for the port the NTCP transport listens for inbound connections on.
+     * Value sourced from {@link Transport#PROP_I2NP_NTCP_PORT}.
      */
     public static final String PROP_I2NP_NTCP_PORT = Transport.PROP_I2NP_NTCP_PORT;
     /**
-     *  Config key controlling whether NTCP may auto-update its advertised port
-     *  based on peer feedback.
-     *  Value sourced from {@link Transport#PROP_I2NP_NTCP_AUTO_PORT}.
+     * Config key controlling whether NTCP may auto-update its advertised port
+     * based on peer feedback.
+     * Value sourced from {@link Transport#PROP_I2NP_NTCP_AUTO_PORT}.
      */
     public static final String PROP_I2NP_NTCP_AUTO_PORT = Transport.PROP_I2NP_NTCP_AUTO_PORT;
     /**
-     *  Config key controlling whether NTCP may auto-update its advertised IP
-     *  based on peer feedback.
-     *  Value sourced from {@link Transport#PROP_I2NP_NTCP_AUTO_IP}.
+     * Config key controlling whether NTCP may auto-update its advertised IP
+     * based on peer feedback.
+     * Value sourced from {@link Transport#PROP_I2NP_NTCP_AUTO_IP}.
      */
     public static final String PROP_I2NP_NTCP_AUTO_IP = Transport.PROP_I2NP_NTCP_AUTO_IP;
     private static final int DEFAULT_COST = 10;
@@ -176,19 +176,19 @@ public class NTCPTransport extends TransportImpl {
     )));
 
     /**
-     *  RI sigtypes supported in 0.9.16
+     * RI sigtypes supported in 0.9.16
      */
     public static final String MIN_SIGTYPE_VERSION = "0.9.16";
 
     // NTCP2 stuff
     /**
-     *  Style identifier for the NTCP transport.
-     *  Value sourced from {@link Transport#STYLE_NTCP}.
+     * Style identifier for the NTCP transport.
+     * Value sourced from {@link Transport#STYLE_NTCP}.
      */
     public static final String STYLE = Transport.STYLE_NTCP;
     /**
-     *  Style identifier for the NTCP2 protocol variant.
-     *  Value sourced from {@link Transport#STYLE_NTCP2}.
+     * Style identifier for the NTCP2 protocol variant.
+     * Value sourced from {@link Transport#STYLE_NTCP2}.
      */
     public static final String STYLE2 = Transport.STYLE_NTCP2;
     /** NTCP2 protocol version. */
@@ -216,8 +216,8 @@ public class NTCPTransport extends TransportImpl {
     private final String _b64Ntcp2StaticIV;
 
     /**
-     *  @param ctx the router context
-     *  @param xdh null to disable NTCP2
+     * @param ctx the router context
+     * @param xdh null to disable NTCP2
      */
     public NTCPTransport(RouterContext ctx, X25519KeyFactory xdh) {
         super(ctx);
@@ -341,11 +341,11 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Pick a port if not previously configured.
-     *  Only if UDP is disabled.
+     * Pick a port if not previously configured.
+     * Only if UDP is disabled.
      *
-     *  @return the port or -1
-     *  @since 0.9.39
+     * @return the port or -1
+     * @since 0.9.39
      */
     private int setupPort() {
         if (_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP))
@@ -680,8 +680,8 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  The bid tier selected by the capacity/cost cascade, in order from most to
-     *  least attractive.  Each tier maps to one of the shared cached bids.
+     * The bid tier selected by the capacity/cost cascade, in order from most to
+     * least attractive.  Each tier maps to one of the shared cached bids.
      */
     static enum BidTier {
         /** Have capacity, normal cost. */
@@ -704,28 +704,28 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the message is too large for NTCP2 to carry.
+     * Whether the message is too large for NTCP2 to carry.
      *
-     *  <p>The passed-in dataSize assumes a 16-byte header; NTCP2 uses a 9-byte
-     *  header, so there are 7 bytes to spare over the NTCP2 maximum.
+     * <p>The passed-in dataSize assumes a 16-byte header; NTCP2 uses a 9-byte
+     * header, so there are 7 bytes to spare over the NTCP2 maximum.
      *
-     *  @param dataSize the message data size, assuming the 16-byte header
-     *  @return true if the message cannot fit on NTCP2
-     *  @since 0.9.71+
+     * @param dataSize the message data size, assuming the 16-byte header
+     * @return true if the message cannot fit on NTCP2
+     * @since 0.9.71+
      */
     static boolean isTooLargeForNTCP2(int dataSize) {
         return dataSize > NTCPConnection.NTCP2_MAX_MSG_SIZE + 7;
     }
 
     /**
-     *  Classify the peer's network id relative to ours, for the ban-on-mismatch
-     *  decision in {@link #bid(RouterInfo, int)}.
+     * Classify the peer's network id relative to ours, for the ban-on-mismatch
+     * decision in {@link #bid(RouterInfo, int)}.
      *
-     *  @param nid the peer's announced network id
-     *  @param ourNetworkID our own network id
-     *  @return OK if equal; NO_NETWORK if the peer sent the no-network sentinel (~0);
-     *          WRONG_NETWORK otherwise
-     *  @since 0.9.71+
+     * @param nid the peer's announced network id
+     * @param ourNetworkID our own network id
+     * @return OK if equal; NO_NETWORK if the peer sent the no-network sentinel (~0);
+     * WRONG_NETWORK otherwise
+     * @since 0.9.71+
      */
     static NetworkIdIssue classifyNetworkId(int nid, int ourNetworkID) {
         if (nid == ourNetworkID)
@@ -734,40 +734,40 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the peer's signature type is usable: it must exist and be
-     *  available on this build.
+     * Whether the peer's signature type is usable: it must exist and be
+     * available on this build.
      *
-     *  @param type the peer's signature type
-     *  @return true if we can sign with (or accept) that type
-     *  @since 0.9.71+
+     * @param type the peer's signature type
+     * @return true if we can sign with (or accept) that type
+     * @since 0.9.71+
      */
     static boolean isSigTypeUsable(SigType type) {
         return type != null && type.isAvailable();
     }
 
     /**
-     *  Whether we can connect on signatures: if we ourselves advertise a
-     *  non-DSA signature type, the peer must announce a version at least as new
-     *  as {@link #MIN_SIGTYPE_VERSION}.  A DSA-signing router never has a
-     *  version restriction.
+     * Whether we can connect on signatures: if we ourselves advertise a
+     * non-DSA signature type, the peer must announce a version at least as new
+     * as {@link #MIN_SIGTYPE_VERSION}.  A DSA-signing router never has a
+     * version restriction.
      *
-     *  @param weAreDSA true if our own signature type is DSA_SHA1
-     *  @param theirVersion the peer's announced version
-     *  @return true if the version satisfies the signature-type floor
-     *  @since 0.9.71+
+     * @param weAreDSA true if our own signature type is DSA_SHA1
+     * @param theirVersion the peer's announced version
+     * @return true if the version satisfies the signature-type floor
+     * @since 0.9.71+
      */
     static boolean isConnectableVersion(boolean weAreDSA, String theirVersion) {
         return weAreDSA || VersionComparator.comp(theirVersion, MIN_SIGTYPE_VERSION) >= 0;
     }
 
     /**
-     *  Select the bid tier from the capacity/cost cascade, in the stable order
-     *  SLOW &gt; SLOW_COST &gt; NEAR_CAPACITY &gt; NEAR_CAPACITY_COST.
+     * Select the bid tier from the capacity/cost cascade, in the stable order
+     * SLOW &gt; SLOW_COST &gt; NEAR_CAPACITY &gt; NEAR_CAPACITY_COST.
      *
-     *  @param haveCapacity whether the transport has spare connection capacity
-     *  @param highCost whether the peer's address cost exceeds {@link #DEFAULT_COST}
-     *  @return the tier to quote
-     *  @since 0.9.71+
+     * @param haveCapacity whether the transport has spare connection capacity
+     * @param highCost whether the peer's address cost exceeds {@link #DEFAULT_COST}
+     * @return the tier to quote
+     * @since 0.9.71+
      */
     static BidTier chooseBidTier(boolean haveCapacity, boolean highCost) {
         if (haveCapacity)
@@ -776,11 +776,11 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Map a bid tier to the cached shared bid, so the compare-and-log hot path
-     *  allocates nothing.
+     * Map a bid tier to the cached shared bid, so the compare-and-log hot path
+     * allocates nothing.
      *
-     *  @param tier the tier selected by {@link #chooseBidTier}
-     *  @return the cached bid for that tier
+     * @param tier the tier selected by {@link #chooseBidTier}
+     * @return the cached bid for that tier
      */
     private TransportBid bidFor(BidTier tier) {
         switch (tier) {
@@ -792,12 +792,12 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the exception is the expected channel-setup race: the peer
-     *  started building the tunnel before we called prepareOutbound().
+     * Whether the exception is the expected channel-setup race: the peer
+     * started building the tunnel before we called prepareOutbound().
      *
-     *  @param e the exception thrown during connection setup
-     *  @return true if it is the benign preparation race
-     *  @since 0.9.71+
+     * @param e the exception thrown during connection setup
+     * @return true if it is the benign preparation race
+     * @since 0.9.71+
      */
     static boolean isExpectedRaceCondition(Exception e) {
         String msg = e.getMessage();
@@ -805,16 +805,16 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether a DatabaseStoreMessage stored our own RouterInfo under our own key.
+     * Whether a DatabaseStoreMessage stored our own RouterInfo under our own key.
      *
-     *  <p>Such a store is looped-back control info: the router already has its own
-     *  RouterInfo, so the message must not be handed to the send pipeline as data;
-     *  only the optional flood spike (see {@link #isRouterInfoStoreFlood}) is relevant.
+     * <p>Such a store is looped-back control info: the router already has its own
+     * RouterInfo, so the message must not be handed to the send pipeline as data;
+     * only the optional flood spike (see {@link #isRouterInfoStoreFlood}) is relevant.
      *
-     *  @param m the outbound message
-     *  @param ourHash our own router hash
-     *  @return true if the message is a store of our own RouterInfo
-     *  @since 0.9.71+
+     * @param m the outbound message
+     * @param ourHash our own router hash
+     * @return true if the message is a store of our own RouterInfo
+     * @since 0.9.71+
      */
     static boolean isOwnRouterInfoStore(I2NPMessage m, Hash ourHash) {
         return m.getType() == DatabaseStoreMessage.MESSAGE_TYPE &&
@@ -822,13 +822,13 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether a DatabaseStoreMessage of our own RouterInfo carries a flood reply
-     *  token.  Only meaningful when {@link #isOwnRouterInfoStore} already returned
-     *  true for the same message.
+     * Whether a DatabaseStoreMessage of our own RouterInfo carries a flood reply
+     * token.  Only meaningful when {@link #isOwnRouterInfoStore} already returned
+     * true for the same message.
      *
-     *  @param m the outbound message
-     *  @return true if the store requests a flood
-     *  @since 0.9.71+
+     * @param m the outbound message
+     * @return true if the store requests a flood
+     * @since 0.9.71+
      */
     static boolean isRouterInfoStoreFlood(I2NPMessage m) {
         return m.getType() == DatabaseStoreMessage.MESSAGE_TYPE &&
@@ -836,36 +836,36 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the outbound message should be sent on the connection instead of
-     *  skipped.  A store of our own RouterInfo is skipped unless it carries a
-     *  flood request, or until the NTCP2 version 1 behavior is in use.
+     * Whether the outbound message should be sent on the connection instead of
+     * skipped.  A store of our own RouterInfo is skipped unless it carries a
+     * flood request, or until the NTCP2 version 1 behavior is in use.
      *
-     *  @param shouldSkipInfo whether the message is a store of our own RouterInfo
-     *  @param shouldFlood whether that store requests a flood
-     *  @param version the connection's NTCP version
-     *  @return true if the message should be handed to the send pipeline
-     *  @since 0.9.71+
+     * @param shouldSkipInfo whether the message is a store of our own RouterInfo
+     * @param shouldFlood whether that store requests a flood
+     * @param version the connection's NTCP version
+     * @return true if the message should be handed to the send pipeline
+     * @since 0.9.71+
      */
     static boolean shouldSendInfoNow(boolean shouldSkipInfo, boolean shouldFlood, int version) {
         return !shouldSkipInfo || shouldFlood || version == 1;
     }
 
     /**
-     *  Whether the connection's outbound establishment has already left the
-     *  initial state, in which case prepareOutbound() must not be called again.
+     * Whether the connection's outbound establishment has already left the
+     * initial state, in which case prepareOutbound() must not be called again.
      *
-     *  @param est the connection's establishment state, or null
-     *  @return true if establishment is already in progress
-     *  @since 0.9.71+
+     * @param est the connection's establishment state, or null
+     * @return true if establishment is already in progress
+     * @since 0.9.71+
      */
     static boolean isAlreadyInProgress(EstablishState est) {
         return est instanceof OutboundNTCP2State && !((OutboundNTCP2State) est).isInitialState();
     }
 
     /**
-     *  Get first available address we can use.
-     *  @return address or null
-     *  @since 0.9.6
+     * Get first available address we can use.
+     * @return address or null
+     * @since 0.9.6
      */
     private RouterAddress getTargetAddress(RouterInfo target) {
         List<RouterAddress> addrs = getTargetAddresses(target);
@@ -996,7 +996,7 @@ public class NTCPTransport extends TransportImpl {
     /**
      * The connection removed; usually the con passed in, but possibly a second connection with the same peer.
      * @return usually the con passed in, but possibly a second connection with the same peer...
-     *         only con or null as of 0.9.37
+     * only con or null as of 0.9.37
      */
     NTCPConnection removeCon(NTCPConnection con) {
         NTCPConnection removed = null;
@@ -1097,9 +1097,9 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  A positive number means our clock is ahead of theirs.
+     * A positive number means our clock is ahead of theirs.
      *
-     *  @param skew in seconds
+     * @param skew in seconds
      */
     void setLastBadSkew(long skew) {_lastBadSkew = skew;}
 
@@ -1131,13 +1131,13 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Incoming connection replay detection.
-     *  As there is no timestamp in the first message, we can't detect
-     *  something long-delayed. To be fixed in next version of NTCP.
+     * Incoming connection replay detection.
+     * As there is no timestamp in the first message, we can't detect
+     * something long-delayed. To be fixed in next version of NTCP.
      *
-     *  @param hxhi using first 8 bytes only
-     *  @return valid
-     *  @since 0.9.12
+     * @param hxhi using first 8 bytes only
+     * @return valid
+     * @since 0.9.12
      */
     boolean isHXHIValid(byte[] hxhi) {
         return !_replayFilter.add(hxhi, 0, 8);
@@ -1180,17 +1180,17 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Selects the port to listen on.
-     *  Private helper for {@link #startListening()}.
+     * Selects the port to listen on.
+     * Private helper for {@link #startListening()}.
      *
-     *  <p>An address handed back by SSU configuration wins; otherwise the NTCP
-     *  port is used if SSU (the usual port oracle) is disabled, falling back to
-     *  the SSU-discovered port.
+     * <p>An address handed back by SSU configuration wins; otherwise the NTCP
+     * port is used if SSU (the usual port oracle) is disabled, falling back to
+     * the SSU-discovered port.
      *
-     *  @param addr the transport's current configured address, or null
-     *  @param ssuDisabled whether UDP is disabled
-     *  @return the chosen listen port, possibly {@link #_ssuPort}
-     *  @since 0.9.71+
+     * @param addr the transport's current configured address, or null
+     * @param ssuDisabled whether UDP is disabled
+     * @return the chosen listen port, possibly {@link #_ssuPort}
+     * @since 0.9.71+
      */
     private int chooseListenPort(RouterAddress addr, boolean ssuDisabled) {
         if (addr != null)
@@ -1201,20 +1201,20 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether a saved local address should be skipped for publishing.
-     *  Pure decision helper for {@link #restoreSavedLocalAddresses(int, boolean)}.
+     * Whether a saved local address should be skipped for publishing.
+     * Pure decision helper for {@link #restoreSavedLocalAddresses(int, boolean)}.
      *
-     *  <p>Internet-facing saved addresses are skipped when their family is
-     *  firewalled; IPv6 additionally honors the explicit i2p.ipv6.firewalled
-     *  property when UDP is enabled.
+     * <p>Internet-facing saved addresses are skipped when their family is
+     * firewalled; IPv6 additionally honors the explicit i2p.ipv6.firewalled
+     * property when UDP is enabled.
      *
-     *  @param ipv6 the address family
-     *  @param ipv6Firewalled IPv6 firewall detected
-     *  @param propIPv6Firewalled the i2p.ipv6.firewalled property
-     *  @param ssuDisabled whether UDP is disabled
-     *  @param ipv4Firewalled IPv4 firewall detected
-     *  @return true if the address must not be published
-     *  @since 0.9.71+
+     * @param ipv6 the address family
+     * @param ipv6Firewalled IPv6 firewall detected
+     * @param propIPv6Firewalled the i2p.ipv6.firewalled property
+     * @param ssuDisabled whether UDP is disabled
+     * @param ipv4Firewalled IPv4 firewall detected
+     * @return true if the address must not be published
+     * @since 0.9.71+
      */
     static boolean shouldSkipSavedAddress(boolean ipv6, boolean ipv6Firewalled,
             boolean propIPv6Firewalled, boolean ssuDisabled, boolean ipv4Firewalled) {
@@ -1224,16 +1224,16 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Restores the saved local addresses as the published address set.
-     *  Private helper for {@link #startListening()}.
+     * Restores the saved local addresses as the published address set.
+     * Private helper for {@link #startListening()}.
      *
-     *  <p>Only reached when no address could be bound or configured. Firewalled
-     *  families are dropped from the set; if no publishable address remains, an
-     *  outbound-only NTCP2 address is published instead.
+     * <p>Only reached when no address could be bound or configured. Firewalled
+     * families are dropped from the set; if no publishable address remains, an
+     * outbound-only NTCP2 address is published instead.
      *
-     *  @param port the selected listen port
-     *  @param ssuDisabled whether UDP is disabled
-     *  @since 0.9.71+
+     * @param port the selected listen port
+     * @param ssuDisabled whether UDP is disabled
+     * @since 0.9.71+
      */
     private void restoreSavedLocalAddresses(int port, boolean ssuDisabled) {
         Collection<InetAddress> addrs = getSavedLocalAddresses();
@@ -1267,18 +1267,18 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Fills in an outbound-only NTCP2 address when saved addresses were
-     *  partially or fully skipped. Private helper for
-     *  {@link #restoreSavedLocalAddresses(int, boolean)}.
+     * Fills in an outbound-only NTCP2 address when saved addresses were
+     * partially or fully skipped. Private helper for
+     * {@link #restoreSavedLocalAddresses(int, boolean)}.
      *
-     *  <p>With nothing published an outbound NTCP2 address covering both families
-     *  is published; when only one family was skipped, a single-family outbound
-     *  marker is merged in.
+     * <p>With nothing published an outbound NTCP2 address covering both families
+     * is published; when only one family was skipped, a single-family outbound
+     * marker is merged in.
      *
-     *  @param count number of successfully published saved addresses
-     *  @param skipv6 IPv6 addresses were skipped
-     *  @param skipv4 IPv4 addresses were skipped
-     *  @since 0.9.71+
+     * @param count number of successfully published saved addresses
+     * @param skipv6 IPv6 addresses were skipped
+     * @param skipv4 IPv4 addresses were skipped
+     * @since 0.9.71+
      */
     private void setOutboundForSkipped(int count, boolean skipv6, boolean skipv4) {
         if (count <= 0) {
@@ -1291,8 +1291,8 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Outbound only, both IPv4 and IPv6, NTCP2 with "s" and "v" only
-     *  @since 0.9.36
+     * Outbound only, both IPv4 and IPv6, NTCP2 with "s" and "v" only
+     * @since 0.9.36
      */
     private void setOutboundNTCP2Address() {
         OrderedProperties props = new OrderedProperties();
@@ -1302,8 +1302,8 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Outbound only, either IPv4 or IPv6, NTCP2 with "s" and "v" only.
-     *  @since 0.9.50
+     * Outbound only, either IPv4 or IPv6, NTCP2 with "s" and "v" only.
+     * @since 0.9.50
      */
     private void setOutboundNTCP2Address(boolean ipv6) {
         // following is like addNTCP2Options() but adds 4 or 6 only,
@@ -1327,18 +1327,18 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Only called by externalAddressReceived().
-     *  Calls replaceAddress() or removeAddress().
-     *  To remove all addresses, call replaceAddress(null) directly.
+     * Only called by externalAddressReceived().
+     * Calls replaceAddress() or removeAddress().
+     * To remove all addresses, call replaceAddress(null) directly.
      *
-     *  Doesn't actually restart unless addr is non-null and
-     *  the port is different from the current listen port.
-     *  If addr is null, removes the addresses specified (v4 or v6)
+     * Doesn't actually restart unless addr is non-null and
+     * the port is different from the current listen port.
+     * If addr is null, removes the addresses specified (v4 or v6)
      *
-     *  If we had interface addresses before, we lost them.
+     * If we had interface addresses before, we lost them.
      *
-     *  @param addr may be null to indicate remove the address
-     *  @param ipv6 only used when addr is null, selects address family to remove
+     * @param addr may be null to indicate remove the address
+     * @param ipv6 only used when addr is null, selects address family to remove
      */
     private synchronized void restartListening(RouterAddress addr, boolean ipv6) {
         if (addr != null) {
@@ -1354,8 +1354,8 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Start up. Caller must synchronize.
-     *  @since 0.8.3
+     * Start up. Caller must synchronize.
+     * @since 0.8.3
      */
     private void startIt() {
         _finisher.start();
@@ -1384,14 +1384,14 @@ public class NTCPTransport extends TransportImpl {
     public void adjustWriterThreads() { _writer.adjustThreads(); }
 
     /**
-     *  Only does something if port > 0 and port != current bound port
-     *  (or there's no current port, or the configured interface or hostname changed).
-     *  If we are changing the bound port, this restarts everything, which takes a long time.
+     * Only does something if port > 0 and port != current bound port
+     * (or there's no current port, or the configured interface or hostname changed).
+     * If we are changing the bound port, this restarts everything, which takes a long time.
      *
-     *  call from synchronized method
+     * call from synchronized method
      *
-     *  @param port the requested bind port, does nothing if <= 0
-     *  @return new address ONLY if bound to specific address, otherwise null
+     * @param port the requested bind port, does nothing if <= 0
+     * @return new address ONLY if bound to specific address, otherwise null
      */
     private RouterAddress bindAddress(int port) {
         RouterAddress myAddress = null;
@@ -1469,15 +1469,15 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Resolves the configured bind target to an IP address.
-     *  Private helper for {@link #bindAddress(int)}.
+     * Resolves the configured bind target to an IP address.
+     * Private helper for {@link #bindAddress(int)}.
      *
-     *  <p>An unresolvable configured interface is reported and treated as a
-     *  wildcard bind (the published address keeps the configured host name).
+     * <p>An unresolvable configured interface is reported and treated as a
+     * wildcard bind (the published address keeps the configured host name).
      *
-     *  @param bindTo the configured interface or fixed host, or null for wildcard
-     *  @return the resolved address, or null to bind the wildcard
-     *  @since 0.9.71+
+     * @param bindTo the configured interface or fixed host, or null for wildcard
+     * @return the resolved address, or null to bind the wildcard
+     * @since 0.9.71+
      */
     private InetAddress resolveBindTarget(String bindTo) {
         if (bindTo == null)
@@ -1491,18 +1491,18 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Builds the RouterAddress to publish for a specific-interface bind.
-     *  Private helper for {@link #bindAddress(int)}.
+     * Builds the RouterAddress to publish for a specific-interface bind.
+     * Private helper for {@link #bindAddress(int)}.
      *
-     *  <p>The address identifies the bound host and port with the standard NTCP2
-     *  options, so a host-specific bind is announced even though every inbound
-     *  listener shares the transport's cost model.
+     * <p>The address identifies the bound host and port with the standard NTCP2
+     * options, so a host-specific bind is announced even though every inbound
+     * listener shares the transport's cost model.
      *
-     *  @param bindToAddr the resolved bind address
-     *  @param bindTo the configured host name or interface as published
-     *  @param port the listen port
-     *  @return the published address
-     *  @since 0.9.71+
+     * @param bindToAddr the resolved bind address
+     * @param bindTo the configured host name or interface as published
+     * @param port the listen port
+     * @return the published address
+     * @since 0.9.71+
      */
     private RouterAddress buildBoundAddress(InetAddress bindToAddr, String bindTo, int port) {
         if (_log.shouldWarn()) {_log.warn("[NTCP] Binding only to " + bindToAddr);}
@@ -1515,19 +1515,19 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the transport is already listening on the requested address.
-     *  Pure decision helper for {@link #bindAddress(int)}.
+     * Whether the transport is already listening on the requested address.
+     * Pure decision helper for {@link #bindAddress(int)}.
      *
-     *  <p>An exact match on the bound address short-circuits, as does a hostname
-     *  bind on the same port as an existing wildcard bind - changing from wildcard
-     *  to a specified host would otherwise force a needless restart.
+     * <p>An exact match on the bound address short-circuits, as does a hostname
+     * bind on the same port as an existing wildcard bind - changing from wildcard
+     * to a specified host would otherwise force a needless restart.
      *
-     *  @param endpoints the currently bound server-socket addresses
-     *  @param addr the address about to be bound
-     *  @param bindToAddr the configured bind target, or null for wildcard
-     *  @param port the requested listen port
-     *  @return true if nothing needs to change
-     *  @since 0.9.71+
+     * @param endpoints the currently bound server-socket addresses
+     * @param addr the address about to be bound
+     * @param bindToAddr the configured bind target, or null for wildcard
+     * @param port the requested listen port
+     * @return true if nothing needs to change
+     * @since 0.9.71+
      */
     static boolean isAlreadyListening(Set<InetSocketAddress> endpoints, InetSocketAddress addr,
             InetAddress bindToAddr, int port) {
@@ -1536,26 +1536,25 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether a UDP port change is external-only and needs no NTCP restart.
-     *  Pure decision helper for {@link #bindAddress(int)}.
+     * Whether a UDP port change is external-only and needs no NTCP restart.
+     * Pure decision helper for {@link #bindAddress(int)}.
      *
-     *  <p>When UDP's external port changed to the port being bound but the
-     *  internal port stayed, the NAT mapping moved; NTCP keeps listening on the
-     *  internal port and just republishes.
+     * <p>When UDP's external port changed to the port being bound but the
+     * internal port stayed, the NAT mapping moved; NTCP keeps listening on the
+     * internal port and just republishes.
      *
-     *  @param port the requested NTCP listen port
-     *  @param externalPort the configured UDP external port
-     *  @param internalPort the configured UDP internal port
-     *  @return true when only the published port must change
-     *  @since 0.9.71+
+     * @param port the requested NTCP listen port
+     * @param externalPort the configured UDP external port
+     * @param internalPort the configured UDP internal port
+     * @return true when only the published port must change
+     * @since 0.9.71+
      */
     static boolean isExternalOnlyPortChange(int port, int externalPort, int internalPort) {
         return port == externalPort && internalPort > 0 && externalPort != internalPort;
     }
 
     /**
-     *  @return configured host (as an IP String) or null. Must be one of our local interfaces.
-     *  @since IPv6 moved from bindAddress()
+     * @return configured host (as an IP String) or null. Must be one of our local interfaces.
      */
     private String getFixedHost() {
         boolean isFixed = _context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true")
@@ -1574,8 +1573,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Caller must sync
-     *  @since IPv6 moved from externalAddressReceived()
+     * Caller must sync
      */
     private void stopWaitAndRestart() {
         if (_log.shouldWarn()) {_log.warn("Halting NTCP to change address...");}
@@ -1592,12 +1590,12 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Hook for NTCPConnection
+     * Hook for NTCPConnection
      */
     Reader getReader() {return _reader;}
 
     /**
-     *  Hook for NTCPConnection
+     * Hook for NTCPConnection
      */
     Writer getWriter() {return _writer;}
 
@@ -1623,13 +1621,13 @@ public class NTCPTransport extends TransportImpl {
     private String getPublishStyle() {return STYLE2;}
 
     /**
-     *  Hook for NTCPConnection
+     * Hook for NTCPConnection
      */
     EventPumper getPumper() {return _pumper;}
 
     /**
-     *  @return null if not configured for NTCP2
-     *  @since 0.9.36
+     * @return null if not configured for NTCP2
+     * @since 0.9.36
      */
     X25519KeyFactory getXDHFactory() {return _xdhFactory;}
 
@@ -1681,10 +1679,10 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Generally returns null.
-     *  Caller must synch on this.
-     *  Note this is only called from startListening().
-     *  Only returns non-null if port is configured.
+     * Generally returns null.
+     * Caller must synch on this.
+     * Note this is only called from startListening().
+     * Only returns non-null if port is configured.
      */
     private RouterAddress configureLocalAddress() {
         // this generally returns null -- see javadoc
@@ -1710,8 +1708,6 @@ public class NTCPTransport extends TransportImpl {
      * Unlike in UDP rebuildExternalAddress(), this only runs once, at startup,
      * so we won't pick up IP changes.
      * Only returns non-null if port is configured.
-     *
-     * @since IPv6 moved from CSFI
      */
     private RouterAddress createNTCPAddress() {
         int p = _context.getProperty(PROP_I2NP_NTCP_PORT, -1);
@@ -1891,44 +1887,44 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether an address family has already contributed an address to the
-     *  configured-IP list. Pure decision helper for {@link #getConfiguredIP()}.
+     * Whether an address family has already contributed an address to the
+     * configured-IP list. Pure decision helper for {@link #getConfiguredIP()}.
      *
-     *  <p>Hostnames may resolve to several addresses; at most one IPv4 and one
-     *  IPv6 address are published.
+     * <p>Hostnames may resolve to several addresses; at most one IPv4 and one
+     * IPv6 address are published.
      *
-     *  @param v4 an IPv4 address is already selected
-     *  @param v6 an IPv6 address is already selected
-     *  @param addrLen address length in bytes, 4 for IPv4 or 16 for IPv6
-     *  @return true if that family is already represented
-     *  @since 0.9.71+
+     * @param v4 an IPv4 address is already selected
+     * @param v6 an IPv6 address is already selected
+     * @param addrLen address length in bytes, 4 for IPv4 or 16 for IPv6
+     * @return true if that family is already represented
+     * @since 0.9.71+
      */
     static boolean alreadyHaveFamily(boolean v4, boolean v6, int addrLen) {
         return (v4 && addrLen == 4) || (v6 && addrLen == 16);
     }
 
     /**
-     *  Whether the configured hostname is absent or unusable.
-     *  Pure decision helper for {@link #getConfiguredIP()}.
+     * Whether the configured hostname is absent or unusable.
+     * Pure decision helper for {@link #getConfiguredIP()}.
      *
-     *  <p>Empty, whitespace-only, and the literal "null" (from a cleared config)
-     *  values are all treated as unset.
+     * <p>Empty, whitespace-only, and the literal "null" (from a cleared config)
+     * values are all treated as unset.
      *
-     *  @param name the i2p.ntcp.hostname value, or null
-     *  @return true if no usable configured host exists
-     *  @since 0.9.71+
+     * @param name the i2p.ntcp.hostname value, or null
+     * @return true if no usable configured host exists
+     * @since 0.9.71+
      */
     static boolean isBlankName(String name) {
         return name == null || name.trim().length() <= 0 || "null".equals(name);
     }
 
     /**
-     *  Picks the primary configured IP: the first IPv4, else the first IPv6.
-     *  Pure decision helper for {@link #getConfiguredIP()}.
+     * Picks the primary configured IP: the first IPv4, else the first IPv6.
+     * Pure decision helper for {@link #getConfiguredIP()}.
      *
-     *  @param ipstrings the collected addresses, in resolution order
-     *  @return the primary address; the list must not be empty
-     *  @since 0.9.71+
+     * @param ipstrings the collected addresses, in resolution order
+     * @return the primary address; the list must not be empty
+     * @since 0.9.71+
      */
     static String choosePrimaryIP(List<String> ipstrings) {
         for (String ips : ipstrings) {
@@ -1950,10 +1946,9 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  UDP changed addresses, tell NTCP and (possibly) restart
+     * UDP changed addresses, tell NTCP and (possibly) restart
      *
-     *  @param ip typ. IPv4 or IPv6 non-local; may be null to indicate IPv4 failure or port info only
-     *  @since IPv6 moved from CSFI.notifyReplaceAddress()
+     * @param ip typ. IPv4 or IPv6 non-local; may be null to indicate IPv4 failure or port info only
      */
     @Override
     public void externalAddressReceived(AddressSource source, byte[] ip, int port) {
@@ -1987,18 +1982,18 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Notify a transport of an external address change.
-     *  This may be from a local interface, UPnP, a config change, etc.
-     *  This should not be called if the ip didn't change
-     *  (from that source's point of view), or is a local address.
-     *  May be called multiple times for IPv4 or IPv6.
-     *  The transport should also do its own checking on whether to accept
-     *  notifications from this source.
+     * Notify a transport of an external address change.
+     * This may be from a local interface, UPnP, a config change, etc.
+     * This should not be called if the ip didn't change
+     * (from that source's point of view), or is a local address.
+     * May be called multiple times for IPv4 or IPv6.
+     * The transport should also do its own checking on whether to accept
+     * notifications from this source.
      *
-     *  This can be called after the transport is running.
+     * This can be called after the transport is running.
      *
-     *  @param source defined in Transport.java
-     *  @since 0.9.20
+     * @param source defined in Transport.java
+     * @since 0.9.20
      */
     @Override
     public void externalAddressRemoved(AddressSource source, boolean ipv6) {
@@ -2014,10 +2009,10 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Only called if SSU is disabled AND our address changed.
-     *  Tell the event log, and tell the router.
+     * Only called if SSU is disabled AND our address changed.
+     * Tell the event log, and tell the router.
      *
-     *  @since 0.9.40
+     * @since 0.9.40
      */
     private void addressChanged(Status old) {
         Status status = getReachabilityStatus();
@@ -2035,12 +2030,11 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  UDP changed addresses, tell NTCP and restart.
-     *  Port may be set to indicate requested port even if ip is null.
+     * UDP changed addresses, tell NTCP and restart.
+     * Port may be set to indicate requested port even if ip is null.
      *
-     *  @param ip previously validated; may be null to indicate IPv4 failure or port info only
-     *  @return true if our address changed
-     *  @since IPv6 moved from CSFI.notifyReplaceAddress()
+     * @param ip previously validated; may be null to indicate IPv4 failure or port info only
+     * @return true if our address changed
      */
     private synchronized boolean externalAddressReceived(byte[] ip, boolean isIPv6, int port) {
         // Tracked limitation: only the first address of the requested family
@@ -2193,14 +2187,14 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  If we didn't used to be forwarded, and we have an address,
-     *  and we are configured to use UPnP, update our RouterAddress
+     * If we didn't used to be forwarded, and we have an address,
+     * and we are configured to use UPnP, update our RouterAddress
      *
-     *  Don't do anything now. If it fails, we don't know if it's
-     *  because there is no firewall, or if the firewall rejected the request.
-     *  So we just use the SSU reachability status
-     *  to decide whether to enable inbound NTCP. SSU will have CSFI build a new
-     *  NTCP address when it transitions to OK.
+     * Don't do anything now. If it fails, we don't know if it's
+     * because there is no firewall, or if the firewall rejected the request.
+     * So we just use the SSU reachability status
+     * to decide whether to enable inbound NTCP. SSU will have CSFI build a new
+     * NTCP address when it transitions to OK.
      */
     @Override
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) {
@@ -2213,7 +2207,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  @return current IPv4 port, else NTCP configured port, else -1 (but not UDP port if auto)
+     * @return current IPv4 port, else NTCP configured port, else -1 (but not UDP port if auto)
      */
     @Override
     public int getRequestedPort() {
@@ -2229,22 +2223,22 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Decides the reachability status that does not depend on live inbound
-     *  connections. Pure decision helper for {@link #getReachabilityStatus()}.
+     * Decides the reachability status that does not depend on live inbound
+     * connections. Pure decision helper for {@link #getReachabilityStatus()}.
      *
-     *  <p>Mirrors the ordering of the original cascades exactly: both families
-     *  firewalled yields rejection before the liveness check, and a router with no
-     *  published address reports firewalled only once it has been up long enough
-     *  for the status to be meaningful.
+     * <p>Mirrors the ordering of the original cascades exactly: both families
+     * firewalled yields rejection before the liveness check, and a router with no
+     * published address reports firewalled only once it has been up long enough
+     * for the status to be meaningful.
      *
-     *  @param fwV4 IPv4 firewall reported
-     *  @param fwV6 IPv6 firewall reported
-     *  @param alive whether the transport is currently listening
-     *  @param hasV4 a published non-firewalled IPv4 address is present
-     *  @param hasV6 a published non-firewalled IPv6 address is present
-     *  @param showFirewalled SSU disabled and the router has been up more than 10 minutes
-     *  @return the final status, or null when a live inbound-connection check is required
-     *  @since 0.9.71+
+     * @param fwV4 IPv4 firewall reported
+     * @param fwV6 IPv6 firewall reported
+     * @param alive whether the transport is currently listening
+     * @param hasV4 a published non-firewalled IPv4 address is present
+     * @param hasV6 a published non-firewalled IPv6 address is present
+     * @param showFirewalled SSU disabled and the router has been up more than 10 minutes
+     * @return the final status, or null when a live inbound-connection check is required
+     * @since 0.9.71+
      */
     static Status decideReachabilityHeader(boolean fwV4, boolean fwV6, boolean alive,
             boolean hasV4, boolean hasV6, boolean showFirewalled) {
@@ -2258,25 +2252,25 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Decides the reachability status from recent inbound activity of each
-     *  address family. Pure decision helper for {@link #getReachabilityStatus()}.
+     * Decides the reachability status from recent inbound activity of each
+     * address family. Pure decision helper for {@link #getReachabilityStatus()}.
      *
-     *  <p>When either family has seen an inbound connection recently, the verdict
-     *  is positive for both families unless the other family is explicitly
-     *  firewalled, disabled, or simply absent.
+     * <p>When either family has seen an inbound connection recently, the verdict
+     * is positive for both families unless the other family is explicitly
+     * firewalled, disabled, or simply absent.
      *
-     *  @param v4OK recent IPv4 inbound activity (or later enabled by a live connection)
-     *  @param v6OK recent IPv6 inbound activity (or later enabled by a live connection)
-     *  @param v4Disabled IPv4 address family disabled by configuration
-     *  @param v6Disabled IPv6 address family disabled by configuration
-     *  @param fwV4 IPv4 firewall reported
-     *  @param fwV6 IPv6 firewall reported
-     *  @param hasV4 a published non-firewalled IPv4 address is present
-     *  @param hasV6 a published non-firewalled IPv6 address is present
-     *  @param haveIPv6Address an IPv6 address was ever seen on a local interface or SSU
-     *  @param showFirewalled SSU disabled and the router has been up more than 10 minutes
-     *  @return the final status, or null when the live inbound-connection check is required
-     *  @since 0.9.71+
+     * @param v4OK recent IPv4 inbound activity (or later enabled by a live connection)
+     * @param v6OK recent IPv6 inbound activity (or later enabled by a live connection)
+     * @param v4Disabled IPv4 address family disabled by configuration
+     * @param v6Disabled IPv6 address family disabled by configuration
+     * @param fwV4 IPv4 firewall reported
+     * @param fwV6 IPv6 firewall reported
+     * @param hasV4 a published non-firewalled IPv4 address is present
+     * @param hasV6 a published non-firewalled IPv6 address is present
+     * @param haveIPv6Address an IPv6 address was ever seen on a local interface or SSU
+     * @param showFirewalled SSU disabled and the router has been up more than 10 minutes
+     * @return the final status, or null when the live inbound-connection check is required
+     * @since 0.9.71+
      */
     static Status decideReachabilityFromInboundActivity(boolean v4OK, boolean v6OK,
             boolean v4Disabled, boolean v6Disabled, boolean fwV4, boolean fwV6,
@@ -2305,20 +2299,20 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Decides the reachability status after the live inbound-connection scan.
-     *  Pure decision helper for {@link #getReachabilityStatus()}.
+     * Decides the reachability status after the live inbound-connection scan.
+     * Pure decision helper for {@link #getReachabilityStatus()}.
      *
-     *  <p>Half-OK verdicts fall back to the per-family status of the working
-     *  family; a family that reports OK only because of a live connection and is
-     *  the only working family reports as reachable.
+     * <p>Half-OK verdicts fall back to the per-family status of the working
+     * family; a family that reports OK only because of a live connection and is
+     * the only working family reports as reachable.
      *
-     *  @param v4OK whether v4 may be treated as reachable after the scan
-     *  @param v6OK whether v6 may be treated as reachable after the scan
-     *  @param v4Disabled IPv4 address family disabled by configuration
-     *  @param showFirewalled SSU disabled and the router has been up more than 10 minutes
-     *  @param haveIPv6Address an IPv6 address was ever seen on a local interface or SSU
-     *  @return the final status; never null
-     *  @since 0.9.71+
+     * @param v4OK whether v4 may be treated as reachable after the scan
+     * @param v6OK whether v6 may be treated as reachable after the scan
+     * @param v4Disabled IPv4 address family disabled by configuration
+     * @param showFirewalled SSU disabled and the router has been up more than 10 minutes
+     * @param haveIPv6Address an IPv6 address was ever seen on a local interface or SSU
+     * @return the final status; never null
+     * @since 0.9.71+
      */
     static Status decideReachabilityTail(boolean v4OK, boolean v6OK, boolean v4Disabled,
             boolean showFirewalled, boolean haveIPv6Address) {
@@ -2335,17 +2329,17 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether an address family is disabled by the IPv6 configuration.
-     *  Pure decision helper for {@link #getReachabilityStatus()}.
+     * Whether an address family is disabled by the IPv6 configuration.
+     * Pure decision helper for {@link #getReachabilityStatus()}.
      *
-     *  <p>An IPv6-disabled router publishes no IPv6 addresses and an
-     *  IPv6-only router publishes no IPv4 addresses; anything in between enables
-     *  both families.
+     * <p>An IPv6-disabled router publishes no IPv6 addresses and an
+     * IPv6-only router publishes no IPv4 addresses; anything in between enables
+     * both families.
      *
-     *  @param config the router's IPv6 configuration
-     *  @param isIPv6 the address family to query
-     *  @return true if that family is disabled
-     *  @since 0.9.71+
+     * @param config the router's IPv6 configuration
+     * @param isIPv6 the address family to query
+     * @return true if that family is disabled
+     * @since 0.9.71+
      */
     static boolean isFamilyDisabled(TransportUtil.IPv6Config config, boolean isIPv6) {
         if (config == IPV6_DISABLED)
@@ -2356,99 +2350,99 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether a configured value counts as absent.
+     * Whether a configured value counts as absent.
      *
-     *  @param s the value
-     *  @return true if it is null or the empty string
-     *  @since 0.9.71+
+     * @param s the value
+     * @return true if it is null or the empty string
+     * @since 0.9.71+
      */
     static boolean isBlank(String s) {
         return s == null || s.isEmpty();
     }
 
     /**
-     *  Whether the auto-host setting wants to publish an externally detected IP.
-     *  Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     * Whether the auto-host setting wants to publish an externally detected IP.
+     * Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
      *
-     *  <p>Hostname configuration trumps auto-IP (encoded as "false"), a value of
-     *  "always" ignores reachability, otherwise "true" takes effect only when SSU
-     *  reports the address as usable.
+     * <p>Hostname configuration trumps auto-IP (encoded as "false"), a value of
+     * "always" ignores reachability, otherwise "true" takes effect only when SSU
+     * reports the address as usable.
      *
-     *  @param enabled the normalized i2p.ntcp.autoip preference
-     *  @param ssuOK whether a usable IP was supplied in the notification
-     *  @return true when the auto host should be applied
-     *  @since 0.9.71+
+     * @param enabled the normalized i2p.ntcp.autoip preference
+     * @param ssuOK whether a usable IP was supplied in the notification
+     * @return true when the auto host should be applied
+     * @since 0.9.71+
      */
     static boolean wantsAutoHost(String enabled, boolean ssuOK) {
         return enabled.equals("always") || (Boolean.parseBoolean(enabled) && ssuOK);
     }
 
     /**
-     *  Whether the configured hostname should be published in place of the current
-     *  host.
-     *  Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     * Whether the configured hostname should be published in place of the current
+     * host.
+     * Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
      *
-     *  <p>Only when auto-IP is off, a hostname is configured, and it differs from
-     *  the currently published host does the configuration win.
+     * <p>Only when auto-IP is off, a hostname is configured, and it differs from
+     * the currently published host does the configuration win.
      *
-     *  @param enabled the normalized i2p.ntcp.autoip preference
-     *  @param name the configured hostname, or null
-     *  @param ohost the currently published host, or null
-     *  @return true when the configured host should be applied
-     *  @since 0.9.71+
+     * @param enabled the normalized i2p.ntcp.autoip preference
+     * @param name the configured hostname, or null
+     * @param ohost the currently published host, or null
+     * @return true when the configured host should be applied
+     * @since 0.9.71+
      */
     static boolean wantsConfiguredHost(String enabled, String name, String ohost) {
         return enabled.equals("false") && name != null && !name.isEmpty() && !name.equals(ohost);
     }
 
     /**
-     *  Whether a previously auto-published address should be dropped.
-     *  Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     * Whether a previously auto-published address should be dropped.
+     * Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
      *
-     *  <p>Auto-IP hosts are removed when the notify source stops reporting a usable
-     *  address (e.g. a follow-up SSU peer test determined the router is still
-     *  firewalled).
+     * <p>Auto-IP hosts are removed when the notify source stops reporting a usable
+     * address (e.g. a follow-up SSU peer test determined the router is still
+     * firewalled).
      *
-     *  @param enabled the normalized i2p.ntcp.autoip preference
-     *  @param ssuOK whether a usable IP was supplied in the notification
-     *  @return true when the auto host should be removed
-     *  @since 0.9.71+
+     * @param enabled the normalized i2p.ntcp.autoip preference
+     * @param ssuOK whether a usable IP was supplied in the notification
+     * @return true when the auto host should be removed
+     * @since 0.9.71+
      */
     static boolean wantsRemoveAutoHost(String enabled, boolean ssuOK) {
         return Boolean.parseBoolean(enabled) && !ssuOK;
     }
 
     /**
-     *  Whether the address should carry the full NTCP2 option set.
-     *  Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     * Whether the address should carry the full NTCP2 option set.
+     * Pure decision helper for {@link #externalAddressReceived(byte[], boolean, int)}.
      *
-     *  <p>The full options are added for IPv4 always, and for IPv6 when the
-     *  notification carried a usable host or IPv6 is the only enabled family;
-     *  otherwise the router publishes an outbound-only NTCP2 address instead.
+     * <p>The full options are added for IPv4 always, and for IPv6 when the
+     * notification carried a usable host or IPv6 is the only enabled family;
+     * otherwise the router publishes an outbound-only NTCP2 address instead.
      *
-     *  @param isIPv6 the address family of the notification
-     *  @param props the newly built address options
-     *  @param config the router's IPv6 configuration
-     *  @return true when the full options should be applied
-     *  @since 0.9.71+
+     * @param isIPv6 the address family of the notification
+     * @param props the newly built address options
+     * @param config the router's IPv6 configuration
+     * @return true when the full options should be applied
+     * @since 0.9.71+
      */
     static boolean wantsFullOptions(boolean isIPv6, OrderedProperties props, TransportUtil.IPv6Config config) {
         return !isIPv6 || props.containsKey(RouterAddress.PROP_HOST) || config == IPV6_ONLY;
     }
 
     /**
-     *  Selects the port to publish for the NTCP address.
-     *  Private helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     * Selects the port to publish for the NTCP address.
+     * Private helper for {@link #externalAddressReceived(byte[], boolean, int)}.
      *
-     *  <p>An explicit configured port trumps everything, and the notification port
-     *  is only used when auto-port is enabled. A mismatch between the UDP-detected
-     *  external port and the explicitly configured port is logged - the NAT is
-     *  probably mapping UDP and TCP differently, so NTCP binds the config.
+     * <p>An explicit configured port trumps everything, and the notification port
+     * is only used when auto-port is enabled. A mismatch between the UDP-detected
+     * external port and the explicitly configured port is logged - the NAT is
+     * probably mapping UDP and TCP differently, so NTCP binds the config.
      *
-     *  @param configuredPort the i2p.ntcp.port value, or null
-     *  @param notifiedPort the externally detected port, or 0
-     *  @return the port to publish, or null to keep the current one
-     *  @since 0.9.71+
+     * @param configuredPort the i2p.ntcp.port value, or null
+     * @param notifiedPort the externally detected port, or 0
+     * @return the port to publish, or null to keep the current one
+     * @since 0.9.71+
      */
     private String chooseAutomaticPort(String configuredPort, int notifiedPort) {
         if (configuredPort != null && !configuredPort.isEmpty()) {
@@ -2469,20 +2463,20 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  Handles a notification that carries no host at all.
-     *  Private helper for {@link #externalAddressReceived(byte[], boolean, int)}.
+     * Handles a notification that carries no host at all.
+     * Private helper for {@link #externalAddressReceived(byte[], boolean, int)}.
      *
-     *  <p>When a configured IPv6 address is removed (SSU2 told us to drop it) and
-     *  the IPv4 address still advertises the IPv6 capability, nothing is published;
-     *  if the IPv4 address lacks the capability, an outbound-only IPv6 marker is
-     *  added so peers stop trying IPv6 inbound.
+     * <p>When a configured IPv6 address is removed (SSU2 told us to drop it) and
+     * the IPv4 address still advertises the IPv6 capability, nothing is published;
+     * if the IPv4 address lacks the capability, an outbound-only IPv6 marker is
+     * added so peers stop trying IPv6 inbound.
      *
-     *  @param isIPv6 the family being notified
-     *  @param oldAddr the current address for that family, may be null for IPv6
-     *  @param ip the notification IP, may be null
-     *  @param port the notification port, may be 0
-     *  @return true if the NTCP address changed
-     *  @since 0.9.71+
+     * @param isIPv6 the family being notified
+     * @param oldAddr the current address for that family, may be null for IPv6
+     * @param ip the notification IP, may be null
+     * @param port the notification port, may be 0
+     * @return true if the NTCP address changed
+     * @since 0.9.71+
      */
     private boolean handleIPv6FirewalledTransition(boolean isIPv6, RouterAddress oldAddr, byte[] ip, int port) {
         if (isIPv6 && _haveIPv6Address && oldAddr == null && ip == null && port <= 0) {
@@ -2570,8 +2564,8 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     *  This doesn't (completely) block, caller should check isAlive()
-     *  before calling startListening() or restartListening()
+     * This doesn't (completely) block, caller should check isAlive()
+     * before calling startListening() or restartListening()
      */
     public synchronized void stopListening() {
         if (_log.shouldWarn()) _log.warn("Stopping NTCP transport...");

@@ -5,15 +5,15 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- *  Tests for BloomSHA1 insert and membership semantics.
+ * Tests for BloomSHA1 insert and membership semantics.
  *
- *  Replaces the commented-out main() in BloomSHA1, which constructed a
- *  (24,11) filter and inserted 100 values but asserted nothing. The (24,11)
- *  sizing is not used anywhere in the tree, so these tests use the default
- *  constructor.
+ * Replaces the commented-out main() in BloomSHA1, which constructed a
+ * (24,11) filter and inserted 100 values but asserted nothing. The (24,11)
+ * sizing is not used anywhere in the tree, so these tests use the default
+ * constructor.
  *
- *  A bloom filter may report false positives but never false negatives, so
- *  every test asserts that inserted values are found.
+ * A bloom filter may report false positives but never false negatives, so
+ * every test asserts that inserted values are found.
  */
 public class BloomSHA1Test {
 
@@ -108,9 +108,9 @@ public class BloomSHA1Test {
     }
 
     /**
-     *  The FilterKey round trip: a key computed from the same bytes must
-     *  report a member once inserted, and the key's buffers must be returned
-     *  to the pool via release().
+     * The FilterKey round trip: a key computed from the same bytes must
+     * report a member once inserted, and the key's buffers must be returned
+     * to the pool via release().
      */
     @Test
     public void testFilterKeyRoundTrip() {
@@ -138,9 +138,9 @@ public class BloomSHA1Test {
     }
 
     /**
-     *  A prepared reset must clear every member and the size, and must be
-     *  reusable: a second reset prepared before the first is applied is still
-     *  valid, which is what lets a caller pay the allocation off the lock.
+     * A prepared reset must clear every member and the size, and must be
+     * reusable: a second reset prepared before the first is applied is still
+     * valid, which is what lets a caller pay the allocation off the lock.
      */
     @Test
     public void testPreparedReset() {

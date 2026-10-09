@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -70,7 +70,7 @@ public final class Encoder {
    * @param ecLevel error correction level to use
    * @return {@link QRCode} representing the encoded QR code
    * @throws WriterException if encoding can't succeed, because of for example invalid content
-   *   or configuration
+   * or configuration
    */
   public static QRCode encode(String content, ErrorCorrectionLevel ecLevel) throws WriterException {
     return encode(content, ecLevel, null);
@@ -217,7 +217,7 @@ public final class Encoder {
 
   /**
    * @return the code point of the table used in alphanumeric mode or
-   *  -1 if there is no corresponding code in the table.
+   * -1 if there is no corresponding code in the table.
    */
   static int getAlphanumericCode(int code) {
     if (code < ALPHANUMERIC_TABLE.length) {

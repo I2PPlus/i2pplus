@@ -48,7 +48,7 @@ public class ConfigStatsHelper extends HelperBase {
      * Configure this bean to query a particular router context
      *
      * @param contextId beginning few characters of the routerHash, or null to pick
-     *                  the first one we come across.
+     * the first one we come across.
      */
     @Override
     public void setContextId(String contextId) {
@@ -241,9 +241,9 @@ public class ConfigStatsHelper extends HelperBase {
     public boolean getIsFull() { return _context.getBooleanProperty(StatManager.PROP_STAT_FULL); }
 
     /**
-     *  Translated sort
-     *  Inner class, can't be Serializable
-     *  @since 0.9.4
+     * Translated sort
+     * Inner class, can't be Serializable
+     * @since 0.9.4
      */
     private class AlphaComparator implements Comparator<String> {
         @Override

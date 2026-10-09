@@ -9,18 +9,18 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
- *  A small, fast Set with a maximum size, backed by a fixed-size array.
- *  Much more space-efficient than HashSet.
- *  Unsynchronized, not thread-safe.
- *  Null elements are not permitted.
+ * A small, fast Set with a maximum size, backed by a fixed-size array.
+ * Much more space-efficient than HashSet.
+ * Unsynchronized, not thread-safe.
+ * Null elements are not permitted.
  *
- *  Not appropriate for large Sets that are modified.
- *  add(), remove(), and contains() are O(n).
- *  Warning: addAll() and the Collection constructor are O(n**2).
+ * Not appropriate for large Sets that are modified.
+ * add(), remove(), and contains() are O(n).
+ * Warning: addAll() and the Collection constructor are O(n**2).
  *
  *
- *  @param <E> type of elements in this set
- *  @since 0.9.25, moved to net.i2p.util in 0.9.55
+ * @param <E> type of elements in this set
+ * @since 0.9.25, moved to net.i2p.util in 0.9.55
  */
 public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     /** The maximum capacity for this set */
@@ -42,8 +42,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     private transient int modCount;
 
     /**
-     *  A fixed capacity of MAX_CAPACITY.
-     *  Adds over capacity will throw a SetFullException.
+     * A fixed capacity of MAX_CAPACITY.
+     * Adds over capacity will throw a SetFullException.
      */
     public ArraySet() {
         this(MAX_CAPACITY);
@@ -187,14 +187,14 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  Unconditionally add o to the set.
-     *  This avoids the O(n) time of add(), but it's the caller's
-     *  responsibility to ensure that o is not a duplicate.
-     *  Any duplicate added will appear in the iterator.
+     * Unconditionally add o to the set.
+     * This avoids the O(n) time of add(), but it's the caller's
+     * responsibility to ensure that o is not a duplicate.
+     * Any duplicate added will appear in the iterator.
      *
-     *  @param o non-null, NPE will not be thrown
-     *  @throws SetFullException if throwOnFull was true in constructor
-     *  @since 0.9.55
+     * @param o non-null, NPE will not be thrown
+     * @throws SetFullException if throwOnFull was true in constructor
+     * @since 0.9.55
      */
     public void addUnique(E o) {
         int i;
@@ -304,8 +304,8 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  Modified from CachedIteratorArrayList
-     *  Iterator implementation for ArraySet.
+     * Modified from CachedIteratorArrayList
+     * Iterator implementation for ArraySet.
      */
     private class ASIterator implements Iterator<E>, Serializable {
         /**
@@ -373,7 +373,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     /**
-     *  About 3x faster than HashSet.
+     * About 3x faster than HashSet.
      */
 
 }

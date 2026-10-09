@@ -31,8 +31,8 @@ public class TunnelPoolManagerShareLimitTest {
     }
 
     /**
-     *  Full relief at or below the old cliff. The previous code doubled the
-     *  limit outright below 0.40, and that must not regress.
+     * Full relief at or below the old cliff. The previous code doubled the
+     * limit outright below 0.40, and that must not regress.
      */
     @Test
     public void atOrBelowOldCliffGetsFullRelief() {
@@ -155,10 +155,10 @@ public class TunnelPoolManagerShareLimitTest {
     }
 
     /**
-     *  A lone peer in a tiny pool does read 100%, so it is excluded -- the
-     *  {@code +1} form does not rescue it. Written explicitly because the
-     *  intuitive reading of "smoothing" is the opposite of the actual effect:
-     *  it inflates the share for small pools rather than deflating it.
+     * A lone peer in a tiny pool does read 100%, so it is excluded -- the
+     * {@code +1} form does not rescue it. Written explicitly because the
+     * intuitive reading of "smoothing" is the opposite of the actual effect:
+     * it inflates the share for small pools rather than deflating it.
      */
     @Test
     public void lonePeerInTinyPoolIsExcluded() {
@@ -167,9 +167,9 @@ public class TunnelPoolManagerShareLimitTest {
     }
 
     /**
-     *  Where the {@code +1} form actually diverges from the unsmoothed share:
-     *  it is higher for a peer in a small pool, and identical once the total is
-     *  ten times the count.
+     * Where the {@code +1} form actually diverges from the unsmoothed share:
+     * it is higher for a peer in a small pool, and identical once the total is
+     * ten times the count.
      */
     @Test
     public void smoothedShareIsInflatedOnlyForSmallPools() {
@@ -204,9 +204,9 @@ public class TunnelPoolManagerShareLimitTest {
     }
 
     /**
-     *  The realistic open-port case: 218 client tunnels, one peer holding too
-     *  many. Under the old 10% limit the peer is excluded; under the relaxed
-     *  limit it is admitted, which is the intended effect.
+     * The realistic open-port case: 218 client tunnels, one peer holding too
+     * many. Under the old 10% limit the peer is excluded; under the relaxed
+     * limit it is admitted, which is the intended effect.
      */
     @Test
     public void openPortPeerExcludedAtBaseLimitButAdmittedWhenRelieved() {
@@ -223,9 +223,9 @@ public class TunnelPoolManagerShareLimitTest {
     // ---- incomplete LeaseSet relief window ----
 
     /**
-     *  The signal decays rather than being a live count, so a pool destroyed
-     *  while incomplete cannot leave relaxation stuck on. Exercised through the
-     *  pure window arithmetic, which is what the manager applies.
+     * The signal decays rather than being a live count, so a pool destroyed
+     * while incomplete cannot leave relaxation stuck on. Exercised through the
+     * pure window arithmetic, which is what the manager applies.
      */
     @Test
     public void incompleteLeaseSetReliefDecays() {

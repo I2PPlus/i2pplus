@@ -5,19 +5,19 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- *  Unit tests for {@link EventPumper#classifyConnectException(Exception)}, the
- *  exception taxonomy behind outbound connect setup handling. Classification is by
- *  exception type, not class name: genuine channel-state failures from the socket
- *  layer (already-connected, connect-pending, not-yet-connected) are NETWORK so the
- *  peer is marked unreachable, while local defects - invalid arguments, a
- *  blocking-mode channel, null internals, or any unrelated runtime failure - are
- *  OTHER so an internal bug never blames (and blacks out) a healthy remote peer.
+ * Unit tests for {@link EventPumper#classifyConnectException(Exception)}, the
+ * exception taxonomy behind outbound connect setup handling. Classification is by
+ * exception type, not class name: genuine channel-state failures from the socket
+ * layer (already-connected, connect-pending, not-yet-connected) are NETWORK so the
+ * peer is marked unreachable, while local defects - invalid arguments, a
+ * blocking-mode channel, null internals, or any unrelated runtime failure - are
+ * OTHER so an internal bug never blames (and blacks out) a healthy remote peer.
  *
- *  <p>This pin is important: the pre-refactor string heuristic read
- *  NotYetConnectedException as OTHER (missing a real connect failure) while
- *  blaming the peer for a local IllegalBlockingModeException.
+ * <p>This pin is important: the pre-refactor string heuristic read
+ * NotYetConnectedException as OTHER (missing a real connect failure) while
+ * blaming the peer for a local IllegalBlockingModeException.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class EventPumperConnectErrorTest {
 

@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -35,8 +34,8 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     private final DateAndFlags _daf;
 
     /**
-     *  For reading.
-     *  Deprecated for writing, use 4-arg constructor
+     * For reading.
+     * Deprecated for writing, use 4-arg constructor
      */
     public SendMessageExpiresMessage() {
         super();
@@ -44,10 +43,10 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  For writing
+     * For writing
      *
-     *  @deprecated use 5-arg constructor
-     *  @since 0.9.2
+     * @deprecated use 5-arg constructor
+     * @since 0.9.2
      */
     @Deprecated
     public SendMessageExpiresMessage(DateAndFlags options) {
@@ -56,9 +55,9 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  For writing
+     * For writing
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     public SendMessageExpiresMessage(SessionId sessID, Destination dest, Payload payload, long nonce) {
         super(sessID, dest, payload, nonce);
@@ -66,9 +65,9 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     *  For writing
+     * For writing
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     public SendMessageExpiresMessage(SessionId sessID, Destination dest, Payload payload, long nonce, DateAndFlags options) {
         super(sessID, dest, payload, nonce);

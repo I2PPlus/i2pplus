@@ -10,40 +10,40 @@ import java.io.OutputStream;
  *
  * <p>MetaLease extends the Lease concept to reference other LeaseSets rather than tunnel endpoints:</p>
  * <ul>
- *   <li>Points to another LeaseSet via its hash instead of a gateway router</li>
- *   <li>Enables advanced routing and load balancing strategies</li>
- *   <li>Includes cost and type information for selection algorithms</li>
- *   <li>Fixed length of 40 bytes for consistency with Lease2</li>
+ * <li>Points to another LeaseSet via its hash instead of a gateway router</li>
+ * <li>Enables advanced routing and load balancing strategies</li>
+ * <li>Includes cost and type information for selection algorithms</li>
+ * <li>Fixed length of 40 bytes for consistency with Lease2</li>
  * </ul>
  *
  * <p><strong>Structure:</strong></p>
  * <ul>
- *   <li><strong>LeaseSet Hash:</strong> 32-byte hash of the target LeaseSet (available via {@link #getGateway()})</li>
- *   <li><strong>Cost:</strong> 4-byte cost value for routing decisions</li>
- *   <li><strong>Type:</strong> 4-byte type identifier for the referenced LeaseSet</li>
+ * <li><strong>LeaseSet Hash:</strong> 32-byte hash of the target LeaseSet (available via {@link #getGateway()})</li>
+ * <li><strong>Cost:</strong> 4-byte cost value for routing decisions</li>
+ * <li><strong>Type:</strong> 4-byte type identifier for the referenced LeaseSet</li>
  * </ul>
  *
  * <p><strong>Key Differences from Lease:</strong></p>
  * <ul>
- *   <li><strong>Reference:</strong> Points to LeaseSet hash, not gateway router</li>
- *   <li><strong>TunnelId:</strong> Not supported (throws {@link UnsupportedOperationException})</li>
- *   <li><strong>Metadata:</strong> Includes cost and type for intelligent selection</li>
- *   <li><strong>Usage:</strong> Used within MetaLeaseSet for indirect routing</li>
+ * <li><strong>Reference:</strong> Points to LeaseSet hash, not gateway router</li>
+ * <li><strong>TunnelId:</strong> Not supported (throws {@link UnsupportedOperationException})</li>
+ * <li><strong>Metadata:</strong> Includes cost and type for intelligent selection</li>
+ * <li><strong>Usage:</strong> Used within MetaLeaseSet for indirect routing</li>
  * </ul>
  *
  * <p><strong>Usage Scenarios:</strong></p>
  * <ul>
- *   <li><strong>Load Balancing:</strong> Distribute traffic across multiple LeaseSets</li>
- *   <li><strong>Geographic Routing:</strong> Select LeaseSets based on location or performance</li>
- *   <li><strong>Fallback Strategies:</strong> Provide alternative LeaseSets for redundancy</li>
- *   <li><strong>Service Aggregation:</strong> Combine multiple services under one destination</li>
+ * <li><strong>Load Balancing:</strong> Distribute traffic across multiple LeaseSets</li>
+ * <li><strong>Geographic Routing:</strong> Select LeaseSets based on location or performance</li>
+ * <li><strong>Fallback Strategies:</strong> Provide alternative LeaseSets for redundancy</li>
+ * <li><strong>Service Aggregation:</strong> Combine multiple services under one destination</li>
  * </ul>
  *
  * <p><strong>Selection Criteria:</strong></p>
  * <ul>
- *   <li><strong>Cost:</strong> Lower values indicate preferred routes</li>
- *   <li><strong>Type:</strong> Application-specific categorization</li>
- *   <li><strong>Hash:</strong> Uniquely identifies the target LeaseSet</li>
+ * <li><strong>Cost:</strong> Lower values indicate preferred routes</li>
+ * <li><strong>Type:</strong> Application-specific categorization</li>
+ * <li><strong>Hash:</strong> Uniquely identifies the target LeaseSet</li>
  * </ul>
  *
  * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as proposal evolves</p>
@@ -61,34 +61,34 @@ public class MetaLease extends Lease {
     private int _type;
 
     /**
-     *  Cost value for this lease.
+     * Cost value for this lease.
      *
-     *  @return the cost
+     * @return the cost
      */
     public int getCost() {
         return _cost;
     }
 
     /**
-     *  Set the cost of this lease.
+     * Set the cost of this lease.
      *
-     *  @param cost the cost value
+     * @param cost the cost value
      */
     public void setCost(int cost) {
         _cost = cost;
     }
 
     /**
-     *  Type identifier for this lease.
+     * Type identifier for this lease.
      *
-     *  @return the type
+     * @return the type
      */
     public int getType() {
         return _type;
     }
 
     /**
-     *  Set the type of this lease.
+     * Set the type of this lease.
      *
      * @param type the type
      */

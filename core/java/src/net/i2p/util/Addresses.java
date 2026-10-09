@@ -68,12 +68,12 @@ public abstract class Addresses {
     private static final Pattern RFC5952_PATTERN = Pattern.compile(RFC5952_MATCH);
 
 /**
- *  Do we have any address of this type?
- *  Use getConnectedAddressTypes() to get all types at once for better performance.
+ * Do we have any address of this type?
+ * Use getConnectedAddressTypes() to get all types at once for better performance.
  *
- *  @param type the address type to check
- *  @return true if connected to the specified address type
- *  @since 0.9.54
+ * @param type the address type to check
+ * @return true if connected to the specified address type
+ * @since 0.9.54
  */
     public static boolean isConnected(AddressType type) {
         switch (type) {
@@ -90,11 +90,11 @@ public abstract class Addresses {
     }
 
 /**
- *  Do we have any non-loop, non-wildcard IPv4 address at all?
- *  Use getConnectedAddressTypes() to get all types at once for better performance.
+ * Do we have any non-loop, non-wildcard IPv4 address at all?
+ * Use getConnectedAddressTypes() to get all types at once for better performance.
  *
- *  @return true if connected to IPv4
- *  @since 0.9.4
+ * @return true if connected to IPv4
+ * @since 0.9.4
  */
     public static boolean isConnected() {
         // not as good as using a Java DBus implementation to talk to NetworkManager...
@@ -102,11 +102,11 @@ public abstract class Addresses {
     }
 
 /**
- *  Do we have any non-loop, non-wildcard IPv6 address at all?
- *  Use getConnectedAddressTypes() to get all types at once for better performance.
+ * Do we have any non-loop, non-wildcard IPv6 address at all?
+ * Use getConnectedAddressTypes() to get all types at once for better performance.
  *
- *  @return true if connected to IPv6
- *  @since 0.9.29
+ * @return true if connected to IPv6
+ * @since 0.9.29
  */
     public static boolean isConnectedIPv6() {
         // not as good as using a Java DBus implementation to talk to NetworkManager...
@@ -133,7 +133,7 @@ public abstract class Addresses {
  * All non-IPv6 addresses excluding local, broadcast, and multicast addresses.
  *
  * @return a sorted set of all addresses, excluding
- *         IPv6, local, broadcast, multicast, etc.
+ * IPv6, local, broadcast, multicast, etc.
  */
     public static SortedSet<String> getAddresses() {
         return getAddresses(false, false);
@@ -143,7 +143,7 @@ public abstract class Addresses {
  * All addresses excluding only link-local and multicast addresses.
  *
  * @return a sorted set of all addresses, excluding
- *         only link-local and multicast
+ * only link-local and multicast
  *
  * @since 0.8.3
  */
@@ -152,33 +152,33 @@ public abstract class Addresses {
     }
 
 /**
- *  Warning: When includeLocal is false,
- *  all returned addresses should be routable, but they are not necessarily
- *  appropriate for external use. For example, Teredo and 6to4 addresses
- *  are included with IPv6 results. Additional validation is recommended.
- *  See e.g. TransportUtil.isPubliclyRoutable().
+ * Warning: When includeLocal is false,
+ * all returned addresses should be routable, but they are not necessarily
+ * appropriate for external use. For example, Teredo and 6to4 addresses
+ * are included with IPv6 results. Additional validation is recommended.
+ * See e.g. TransportUtil.isPubliclyRoutable().
  *
- *  @param includeLocal whether to include local addresses and deprecated IPv6 addresses
- *  @param includeIPv6 whether to include IPv6 addresses
- *  @return a sorted set of all addresses including wildcard
- *  @since 0.8.3
+ * @param includeLocal whether to include local addresses and deprecated IPv6 addresses
+ * @param includeIPv6 whether to include IPv6 addresses
+ * @return a sorted set of all addresses including wildcard
+ * @since 0.8.3
  */
     public static SortedSet<String> getAddresses(boolean includeLocal, boolean includeIPv6) {
         return getAddresses(includeLocal, includeLocal, includeIPv6);
     }
 
 /**
- *  Warning: When includeSiteLocal and includeLoopbackAndWildcard are false,
- *  all returned addresses should be routable, but they are not necessarily
- *  appropriate for external use. For example, Teredo and 6to4 addresses
- *  are included with IPv6 results. Additional validation is recommended.
- *  See e.g. TransportUtil.isPubliclyRoutable().
+ * Warning: When includeSiteLocal and includeLoopbackAndWildcard are false,
+ * all returned addresses should be routable, but they are not necessarily
+ * appropriate for external use. For example, Teredo and 6to4 addresses
+ * are included with IPv6 results. Additional validation is recommended.
+ * See e.g. TransportUtil.isPubliclyRoutable().
  *
- *  @param includeSiteLocal whether to include private addresses like 192.168.x.x and deprecated IPv6 addresses
- *  @param includeLoopbackAndWildcard whether to include loopback addresses (127.x.x.x) and wildcard (0.0.0.0)
- *  @param includeIPv6 whether to include IPv6 addresses
- *  @return a sorted set of all addresses
- *  @since 0.9.4
+ * @param includeSiteLocal whether to include private addresses like 192.168.x.x and deprecated IPv6 addresses
+ * @param includeLoopbackAndWildcard whether to include loopback addresses (127.x.x.x) and wildcard (0.0.0.0)
+ * @param includeIPv6 whether to include IPv6 addresses
+ * @return a sorted set of all addresses
+ * @since 0.9.4
  */
     public static SortedSet<String> getAddresses(boolean includeSiteLocal,
                                                  boolean includeLoopbackAndWildcard,
@@ -187,18 +187,18 @@ public abstract class Addresses {
     }
 
 /**
- *  Warning: When includeSiteLocal and includeLoopbackAndWildcard are false,
- *  all returned addresses should be routable, but they are not necessarily
- *  appropriate for external use. For example, Teredo and 6to4 addresses
- *  are included with IPv6 results. Additional validation is recommended.
- *  See e.g. TransportUtil.isPubliclyRoutable().
+ * Warning: When includeSiteLocal and includeLoopbackAndWildcard are false,
+ * all returned addresses should be routable, but they are not necessarily
+ * appropriate for external use. For example, Teredo and 6to4 addresses
+ * are included with IPv6 results. Additional validation is recommended.
+ * See e.g. TransportUtil.isPubliclyRoutable().
  *
- *  @param includeSiteLocal whether to include private addresses like 192.168.x.x and deprecated IPv6 addresses
- *  @param includeLoopbackAndWildcard whether to include loopback addresses (127.x.x.x) and wildcard (0.0.0.0)
- *  @param includeIPv6 whether to include IPv6 addresses
- *  @param includeIPv6Temporary whether to include IPv6 temporary addresses
- *  @return a sorted set of all addresses
- *  @since 0.9.46
+ * @param includeSiteLocal whether to include private addresses like 192.168.x.x and deprecated IPv6 addresses
+ * @param includeLoopbackAndWildcard whether to include loopback addresses (127.x.x.x) and wildcard (0.0.0.0)
+ * @param includeIPv6 whether to include IPv6 addresses
+ * @param includeIPv6Temporary whether to include IPv6 temporary addresses
+ * @return a sorted set of all addresses
+ * @since 0.9.46
  */
     public static SortedSet<String> getAddresses(boolean includeSiteLocal,
                                                  boolean includeLoopbackAndWildcard,
@@ -287,10 +287,10 @@ public abstract class Addresses {
     }
 
 /**
- *  Caller should cache results for better performance.
+ * Caller should cache results for better performance.
  *
- *  @return the IPv6 address with prefix 02xx: or 03xx:, or null
- *  @since 0.9.49
+ * @return the IPv6 address with prefix 02xx: or 03xx:, or null
+ * @since 0.9.49
  */
     public static byte[] getYggdrasilAddress() {
         if (SystemVersion.isAndroid())
@@ -315,11 +315,11 @@ public abstract class Addresses {
     }
 
 /**
- *  Efficiently get all connected address types in one pass.
- *  Caller should cache results for better performance.
+ * Efficiently get all connected address types in one pass.
+ * Caller should cache results for better performance.
  *
- *  @return the set of connected address types, non-null
- *  @since 0.9.54
+ * @return the set of connected address types, non-null
+ * @since 0.9.54
  */
     public static Set<AddressType> getConnectedAddressTypes() {
         Set<AddressType> rv = EnumSet.noneOf(AddressType.class);
@@ -346,9 +346,7 @@ public abstract class Addresses {
     }
 
     /**
-     *  Strip the trailing "%nn" from Inet6Address.getHostAddress()
-     *
-     *  @since IPv6
+     * Strip the trailing "%nn" from Inet6Address.getHostAddress()
      */
     private static String stripScope(String ip) {
         int pct = ip.indexOf('%');
@@ -385,11 +383,11 @@ public abstract class Addresses {
     }
 
 /**
- *  Convenience method to convert an IP address to a String without throwing an exception.
+ * Convenience method to convert an IP address to a String without throwing an exception.
  *
- *  @param addr the IP address as byte array
- *  @return string representation, or "null" for null input, or "Bad IP length x" if length is invalid
- *  @since 0.8.12
+ * @param addr the IP address as byte array
+ * @return string representation, or "null" for null input, or "Bad IP length x" if length is invalid
+ * @since 0.8.12
  */
     public static String toString(byte[] addr) {
         if (addr == null)
@@ -402,12 +400,12 @@ public abstract class Addresses {
     }
 
 /**
- *  Convenience method to convert an IP address and port to a String without throwing an exception.
+ * Convenience method to convert an IP address and port to a String without throwing an exception.
  *
- *  @param addr the IP address as byte array
- *  @param port the port number
- *  @return formatted string as "ipv4:port" or "[ipv6]:port", or error message for invalid input
- *  @since 0.8.12
+ * @param addr the IP address as byte array
+ * @param port the port number
+ * @return formatted string as "ipv4:port" or "[ipv6]:port", or error message for invalid input
+ * @since 0.8.12
  */
     public static String toString(byte[] addr, int port) {
         if (addr == null)
@@ -423,11 +421,11 @@ public abstract class Addresses {
     }
 
 /**
- *  Same as toString() but returns IPv6 in compressed form per RFC 5952.
+ * Same as toString() but returns IPv6 in compressed form per RFC 5952.
  *
- *  @param addr the IP address as byte array
- *  @return canonical string representation, or "null" for null input, or "bad IP length x" if length is invalid
- *  @since 0.9.57
+ * @param addr the IP address as byte array
+ * @return canonical string representation, or "null" for null input, or "bad IP length x" if length is invalid
+ * @since 0.9.57
  */
     public static String toCanonicalString(byte[] addr) {
         if (addr == null)
@@ -443,12 +441,12 @@ public abstract class Addresses {
     }
 
 /**
- *  Same as toString() but returns IPv6 in compressed form per RFC 5952.
+ * Same as toString() but returns IPv6 in compressed form per RFC 5952.
  *
- *  @param addr the IP address as byte array
- *  @param port the port number
- *  @return canonical string representation with port, or error message for invalid input
- *  @since 0.9.57
+ * @param addr the IP address as byte array
+ * @param port the port number
+ * @return canonical string representation with port, or error message for invalid input
+ * @since 0.9.57
  */
     public static String toCanonicalString(byte[] addr, int port) {
         if (addr == null)
@@ -465,11 +463,11 @@ public abstract class Addresses {
     }
 
 /**
- *  Converts IPv6 to compressed form per RFC 5952. IPv4 returned unchanged.
+ * Converts IPv6 to compressed form per RFC 5952. IPv4 returned unchanged.
  *
- *  @param host the hostname
- *  @return canonical string representation, or "null" for null input
- *  @since 0.9.57
+ * @param host the hostname
+ * @return canonical string representation, or "null" for null input
+ * @since 0.9.57
  */
     public static String toCanonicalString(String host) {
         if (host == null)
@@ -480,10 +478,10 @@ public abstract class Addresses {
     }
 
     /**
-     *  Internal
+     * Internal
      *
-     *  @param host non-null
-     *  @since 0.9.57
+     * @param host non-null
+     * @since 0.9.57
      */
     private static String x_toCanonicalString(String host) {
         String rv =  RFC5952_PATTERN.matcher(host).replaceAll("::$2");
@@ -493,13 +491,13 @@ public abstract class Addresses {
     }
 
     /**
-     *  Convenience method to convert and validate a port String
-     *  without throwing an exception.
-     *  Does not trim.
+     * Convenience method to convert and validate a port String
+     * without throwing an exception.
+     * Does not trim.
      *
-     *  @param port the port number
-     *  @return 1-65535 or 0 if invalid
-     *  @since 0.9.3
+     * @param port the port number
+     * @return 1-65535 or 0 if invalid
+     * @since 0.9.3
      */
     public static int getPort(String port) {
         int rv = 0;
@@ -514,9 +512,9 @@ public abstract class Addresses {
     }
 
     /**
-     *  Textual IP to bytes, because InetAddress.getByName() is slow.
+     * Textual IP to bytes, because InetAddress.getByName() is slow.
      *
-     *  @since 0.9.3
+     * @since 0.9.3
      */
     private static final Map<String, byte[]> _IPAddress;
     private static final Map<String, Long> _negativeCache;
@@ -539,20 +537,20 @@ public abstract class Addresses {
     }
 
 /**
- *  Caching version of InetAddress.getByName(host).getAddress(), which is slow.
- *  Caches numeric addresses only. Will resolve but not cache DNS addresses.
+ * Caching version of InetAddress.getByName(host).getAddress(), which is slow.
+ * Caches numeric addresses only. Will resolve but not cache DNS addresses.
  *
- *  DEPRECATED for IPs in RouterAddresses, blocklists, etc.; use getIPOnly() instead.
+ * DEPRECATED for IPs in RouterAddresses, blocklists, etc.; use getIPOnly() instead.
  *
- *  Behavior differences from InetAddress.getByName():
- *  <ul>
- *  <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
- *  <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
- *  </ul>
+ * Behavior differences from InetAddress.getByName():
+ * <ul>
+ * <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
+ * </ul>
  *
- *  @param host DNS or IPv4 or IPv6 address; if null or empty returns null
- *  @return IP address bytes or null
- *  @since 0.9.3
+ * @param host DNS or IPv4 or IPv6 address; if null or empty returns null
+ * @return IP address bytes or null
+ * @since 0.9.3
  */
     public static byte[] getIP(String host) {
         if (host == null || host.isEmpty())
@@ -588,21 +586,21 @@ public abstract class Addresses {
     }
 
 /**
- *  Caching version of InetAddress.getByName(host).getAddress(), which is slow.
- *  Resolves literal IP addresses only without DNS lookups. Returns null for hostnames.
+ * Caching version of InetAddress.getByName(host).getAddress(), which is slow.
+ * Resolves literal IP addresses only without DNS lookups. Returns null for hostnames.
  *
- *  PREFERRED for IPs in RouterAddresses, blocklists, etc. over getIP()
- *  because it avoids getByName() in most cases.
+ * PREFERRED for IPs in RouterAddresses, blocklists, etc. over getIP()
+ * because it avoids getByName() in most cases.
  *
- *  Behavior differences from InetAddress.getByName():
- *  <ul>
- *  <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
- *  <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
- *  </ul>
+ * Behavior differences from InetAddress.getByName():
+ * <ul>
+ * <li>Does not allow numeric IPs of the form d.d.d, d.d, or d (considered mistakes)
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
+ * </ul>
  *
- *  @param host literal IPv4 or IPv6 address; if null returns null
- *  @return IP address bytes or null
- *  @since 0.9.32
+ * @param host literal IPv4 or IPv6 address; if null returns null
+ * @return IP address bytes or null
+ * @since 0.9.32
  */
     public static byte[] getIPOnly(String host) {
         if (host == null || host.isEmpty())
@@ -631,19 +629,19 @@ public abstract class Addresses {
     }
 
 /**
- *  For literal IP addresses, same as getIP(String).
- *  For hostnames, returns the preferred type (IPv4/v6) if available, else the other type.
- *  Will resolve but not cache DNS hostnames.
+ * For literal IP addresses, same as getIP(String).
+ * For hostnames, returns the preferred type (IPv4/v6) if available, else the other type.
+ * Will resolve but not cache DNS hostnames.
  *
- *  Behavior differences from InetAddress.getByName():
- *  <ul>
- *  <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
- *  </ul>
+ * Behavior differences from InetAddress.getByName():
+ * <ul>
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
+ * </ul>
  *
- *  @param host DNS or IPv4 or IPv6 address; if null returns null
- *  @param preferIPv6 whether to prefer IPv6 addresses
- *  @return IP address bytes or null
- *  @since 0.9.28
+ * @param host DNS or IPv4 or IPv6 address; if null returns null
+ * @param preferIPv6 whether to prefer IPv6 addresses
+ * @return IP address bytes or null
+ * @since 0.9.28
  */
     public static byte[] getIP(String host, boolean preferIPv6) {
         if (host == null || host.isEmpty())
@@ -682,21 +680,21 @@ public abstract class Addresses {
     }
 
 /**
- *  For literal IP addresses, same as getIP(String).
- *  For hostnames, may return multiple addresses (both IPv4 and IPv6), even if unreachable.
- *  Will resolve but not cache DNS hostnames.
+ * For literal IP addresses, same as getIP(String).
+ * For hostnames, may return multiple addresses (both IPv4 and IPv6), even if unreachable.
+ * Will resolve but not cache DNS hostnames.
  *
- *  Note: Order and number of results are platform-specific and depend on JVM options
- *  (java.net.preferIPv4Stack, java.net.preferIPv6Addresses) and caching layers.
+ * Note: Order and number of results are platform-specific and depend on JVM options
+ * (java.net.preferIPv4Stack, java.net.preferIPv6Addresses) and caching layers.
  *
- *  Behavior differences from InetAddress.getByName():
- *  <ul>
- *  <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
- *  </ul>
+ * Behavior differences from InetAddress.getByName():
+ * <ul>
+ * <li>Returns null for null or empty host (vs. 127.0.0.1 in InetAddress)
+ * </ul>
  *
- *  @param host DNS or IPv4 or IPv6 address; if null returns null
- *  @return non-empty list of IP addresses, or null if none
- *  @since 0.9.28
+ * @param host DNS or IPv4 or IPv6 address; if null returns null
+ * @return non-empty list of IP addresses, or null if none
+ * @since 0.9.28
  */
     public static List<byte[]> getIPs(String host) {
         if (host == null || host.isEmpty())
@@ -766,12 +764,12 @@ public abstract class Addresses {
     }
 
 /**
- *  Fast IPv4 address parsing that avoids slow InetAddress.getByName() on Windows.
- *  Also avoids split(), Integer.parseInt(), and object churn.
+ * Fast IPv4 address parsing that avoids slow InetAddress.getByName() on Windows.
+ * Also avoids split(), Integer.parseInt(), and object churn.
  *
- *  @param host IPv4 address in w.x.y.z format only
- *  @return 4-byte array or null if invalid
- *  @since 0.9.50
+ * @param host IPv4 address in w.x.y.z format only
+ * @return 4-byte array or null if invalid
+ * @since 0.9.50
  */
     private static byte[] getIPv4(String host) {
         byte[] rv = new byte[4];
@@ -799,12 +797,12 @@ public abstract class Addresses {
     }
 
 /**
- *  Fast IPv6 address parsing that avoids slow InetAddress.getByName() on Windows.
- *  Also avoids split(), Integer.parseInt(), and object churn.
+ * Fast IPv6 address parsing that avoids slow InetAddress.getByName() on Windows.
+ * Also avoids split(), Integer.parseInt(), and object churn.
  *
- *  @param host full IPv6 address in 0:1:2:3:4:5:6:7 format only (no :: compression)
- *  @return 16-byte array or null if invalid
- *  @since 0.9.50
+ * @param host full IPv6 address in 0:1:2:3:4:5:6:7 format only (no :: compression)
+ * @return 16-byte array or null if invalid
+ * @since 0.9.50
  */
     private static byte[] getIPv6(String host) {
         byte[] rv = new byte[16];
@@ -844,7 +842,7 @@ public abstract class Addresses {
     /* ////// IPv6 Cache Utils /////// */
 
     /**
-     *  @since 0.9.28
+     * @since 0.9.28
      */
     private static class Inet6Addr {
         private final Inet6Address addr;
@@ -866,10 +864,10 @@ public abstract class Addresses {
     }
 
     /**
-     *  Only call if INET6_CACHE_ENABLED.
-     *  Caller must sync on _ifCache.
+     * Only call if INET6_CACHE_ENABLED.
+     * Caller must sync on _ifCache.
      *
-     *  @since 0.9.28
+     * @since 0.9.28
      */
     private static void refreshCache() {
         long now = System.currentTimeMillis();
@@ -915,12 +913,12 @@ public abstract class Addresses {
     }
 
 /**
- *  Determines if an IPv6 address is dynamic.
- *  Reliable on Linux. Best guess on Windows, Mac, and BSD (only valid for global scope).
+ * Determines if an IPv6 address is dynamic.
+ * Reliable on Linux. Best guess on Windows, Mac, and BSD (only valid for global scope).
  *
- *  @param addr IPv6 address of a local interface, as returned from getAddresses()
- *  @return true if address is dynamic
- *  @since 0.9.28
+ * @param addr IPv6 address of a local interface, as returned from getAddresses()
+ * @return true if address is dynamic
+ * @since 0.9.28
  */
     public static boolean isDynamic(Inet6Address addr) {
         if (!INET6_CACHE_ENABLED)
@@ -936,12 +934,12 @@ public abstract class Addresses {
     }
 
 /**
- *  Determines if an IPv6 address is deprecated.
- *  Reliable on Linux. Returns false on Windows, Mac, and BSD.
+ * Determines if an IPv6 address is deprecated.
+ * Reliable on Linux. Returns false on Windows, Mac, and BSD.
  *
- *  @param addr IPv6 address of a local interface, as returned from getAddresses()
- *  @return true if address is deprecated
- *  @since 0.9.28
+ * @param addr IPv6 address of a local interface, as returned from getAddresses()
+ * @return true if address is deprecated
+ * @since 0.9.28
  */
     public static boolean isDeprecated(Inet6Address addr) {
         if (!INET6_CACHE_ENABLED)
@@ -957,12 +955,12 @@ public abstract class Addresses {
     }
 
 /**
- *  Determines if an IPv6 address is temporary.
- *  Reliable on Linux. Best guess on Windows, Mac, and BSD (only valid for global scope).
+ * Determines if an IPv6 address is temporary.
+ * Reliable on Linux. Best guess on Windows, Mac, and BSD (only valid for global scope).
  *
- *  @param addr IPv6 address of a local interface, as returned from getAddresses()
- *  @return true if address is temporary
- *  @since 0.9.28
+ * @param addr IPv6 address of a local interface, as returned from getAddresses()
+ * @return true if address is temporary
+ * @since 0.9.28
  */
     public static boolean isTemporary(Inet6Address addr) {
         if (!INET6_CACHE_ENABLED) {
@@ -1025,9 +1023,9 @@ public abstract class Addresses {
     }
 
     /**
-     *  Print out the local addresses
+     * Print out the local addresses
      *
-     *  @param args command line arguments
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         System.out.println("Connected Address Types: " + getConnectedAddressTypes() + '\n');
@@ -1133,10 +1131,10 @@ public abstract class Addresses {
     }
 
 /**
- *  Checks if temporary IPv6 addresses are enabled system-wide.
+ * Checks if temporary IPv6 addresses are enabled system-wide.
  *
- *  @return "true", "false", or "unknown" (for Windows/Mac where detection is not supported)
- *  @since 0.9.50
+ * @return "true", "false", or "unknown" (for Windows/Mac where detection is not supported)
+ * @since 0.9.50
  */
     public static String useIPv6TempAddresses() {
         // Windows: netsh interface ipv6 show privacy

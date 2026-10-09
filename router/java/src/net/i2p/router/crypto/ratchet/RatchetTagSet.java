@@ -18,17 +18,17 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- *  Manages session tags and keys for a single ratchet direction with automatic key generation, supporting both inbound lookahead and on-demand outbound operations
+ * Manages session tags and keys for a single ratchet direction with automatic key generation, supporting both inbound lookahead and on-demand outbound operations
  *
- *  For outbound, uses very little memory. Tags and keys are generated on demand.
- *  See proposal 144.
+ * For outbound, uses very little memory. Tags and keys are generated on demand.
+ * See proposal 144.
  *
- *  For inbound, generates tags in advance, maintaining minSize lookahead.
- *  Keys are generated as required.
+ * For inbound, generates tags in advance, maintaining minSize lookahead.
+ * Keys are generated as required.
  *
- *  Caller must synch on all methods.
+ * Caller must synch on all methods.
  *
- *  @since 0.9.44
+ * @since 0.9.44
  */
 class RatchetTagSet implements TagSetHandle {
     private final SessionTagListener _lsnr;
@@ -85,23 +85,23 @@ class RatchetTagSet implements TagSetHandle {
     // Start empty (no allocations), we only use storage for gaps
     private static final int INITIAL_KEY_CAPACITY = 0;
     /**
-     *  Tags registered in the SKM's _inboundTagSets map.
-     *  Used for O(tags_in_set) removal in RatchetSKM.consumeTag() instead of
-     *  O(total_tags) scan of the entire _inboundTagSets map.
-     *  Only populated for inbound tagsets (where _lsnr != null).
+     * Tags registered in the SKM's _inboundTagSets map.
+     * Used for O(tags_in_set) removal in RatchetSKM.consumeTag() instead of
+     * O(total_tags) scan of the entire _inboundTagSets map.
+     * Only populated for inbound tagsets (where _lsnr != null).
      *
-     *  @since 0.9.70
+     * @since 0.9.70
      */
     private final Set<RatchetSessionTag> _registeredTags = ConcurrentHashMap.newKeySet();
 
     /**
-     *  Outbound NSR Tagset
+     * Outbound NSR Tagset
      *
-     *  @param hkdf the HKDF instance
-     *  @param state the handshake state
-     *  @param rootKey the root key
-     *  @param data the data key
-     *  @param date For outbound: creation time
+     * @param hkdf the HKDF instance
+     * @param state the handshake state
+     * @param rootKey the root key
+     * @param data the data key
+     * @param date For outbound: creation time
      */
     public RatchetTagSet(HKDF hkdf, HandshakeState state, SessionKey rootKey, SessionKey data,
                          long date) {
@@ -109,14 +109,14 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Outbound ES Tagset
+     * Outbound ES Tagset
      *
-     *  @param hkdf the HKDF instance
-     *  @param rootKey the root key
-     *  @param data the data key
-     *  @param date For outbound: creation time
-     *  @param tagsetid the tagset ID
-     *  @param keyid the key ID
+     * @param hkdf the HKDF instance
+     * @param rootKey the root key
+     * @param data the data key
+     * @param date For outbound: creation time
+     * @param tagsetid the tagset ID
+     * @param keyid the key ID
      */
     public RatchetTagSet(HKDF hkdf, SessionKey rootKey, SessionKey data,
                          long date, int tagsetid, int keyid) {
@@ -124,16 +124,16 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Inbound NSR Tagset
+     * Inbound NSR Tagset
      *
-     *  @param hkdf the HKDF instance
-     *  @param lsnr the session tag listener
-     *  @param state the handshake state
-     *  @param rootKey the root key
-     *  @param data the data key
-     *  @param date For inbound: creation time
-     *  @param minSize the minimum tag set size
-     *  @param maxSize the maximum tag set size
+     * @param hkdf the HKDF instance
+     * @param lsnr the session tag listener
+     * @param state the handshake state
+     * @param rootKey the root key
+     * @param data the data key
+     * @param date For inbound: creation time
+     * @param minSize the minimum tag set size
+     * @param maxSize the maximum tag set size
      */
     public RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, HandshakeState state, SessionKey rootKey, SessionKey data,
                          long date, int minSize, int maxSize) {
@@ -141,18 +141,18 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Inbound ES Tagset
+     * Inbound ES Tagset
      *
-     *  @param hkdf the HKDF instance
-     *  @param lsnr the session tag listener
-     *  @param remoteKey the remote public key
-     *  @param rootKey the root key
-     *  @param data the data key
-     *  @param date For inbound: creation time
-     *  @param tagsetid the tagset ID
-     *  @param keyid the key ID
-     *  @param minSize the minimum tag set size
-     *  @param maxSize the maximum tag set size
+     * @param hkdf the HKDF instance
+     * @param lsnr the session tag listener
+     * @param remoteKey the remote public key
+     * @param rootKey the root key
+     * @param data the data key
+     * @param date For inbound: creation time
+     * @param tagsetid the tagset ID
+     * @param keyid the key ID
+     * @param minSize the minimum tag set size
+     * @param maxSize the maximum tag set size
      */
     public RatchetTagSet(HKDF hkdf, SessionTagListener lsnr,
                          PublicKey remoteKey, SessionKey rootKey, SessionKey data,
@@ -161,21 +161,21 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Tag set for a ratchet session with the given keys and sizes.
+     * Tag set for a ratchet session with the given keys and sizes.
      *
-     *  @param hkdf the HKDF instance
-     *  @param lsnr the session tag listener
-     *  @param state the handshake state
-     *  @param remoteKey the remote public key
-     *  @param rootKey the root key
-     *  @param data the data key
-     *  @param date For inbound and outbound: creation time
-     *  @param timeout the timeout duration
-     *  @param tagsetid the tagset ID
-     *  @param keyid the key ID
-     *  @param isInbound whether this is an inbound tagset
-     *  @param minSize the minimum tag set size
-     *  @param maxSize the maximum tag set size
+     * @param hkdf the HKDF instance
+     * @param lsnr the session tag listener
+     * @param state the handshake state
+     * @param remoteKey the remote public key
+     * @param rootKey the root key
+     * @param data the data key
+     * @param date For inbound and outbound: creation time
+     * @param timeout the timeout duration
+     * @param tagsetid the tagset ID
+     * @param keyid the key ID
+     * @param isInbound whether this is an inbound tagset
+     * @param minSize the minimum tag set size
+     * @param maxSize the maximum tag set size
      */
     private RatchetTagSet(HKDF hkdf, SessionTagListener lsnr, HandshakeState state,
                           PublicKey remoteKey, SessionKey rootKey, SessionKey data,
@@ -261,10 +261,10 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  The far-end's public key.
-     *  Valid for NSR and inbound ES tagsets.
+     * The far-end's public key.
+     * Valid for NSR and inbound ES tagsets.
      *
-     *  @return the remote key, or null for outbound ES tagsets
+     * @return the remote key, or null for outbound ES tagsets
      */
     public PublicKey getRemoteKey() {
         if (_state != null) {
@@ -279,82 +279,82 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  The root key for the tag set.
-     *  Used to match the OB and IB ES tagset 0, where both
-     *  will have the same root key.
-     *  Not used for cryptographic operations after setup.
+     * The root key for the tag set.
+     * Used to match the OB and IB ES tagset 0, where both
+     * will have the same root key.
+     * Not used for cryptographic operations after setup.
      *
-     *  @return the associated key
+     * @return the associated key
      */
     public SessionKey getAssociatedKey() {
         return _key;
     }
 
     /**
-     *  For inbound/outbound NSR only, else null.
-     *  MUST be cloned before processing NSR.
+     * For inbound/outbound NSR only, else null.
+     * MUST be cloned before processing NSR.
      *
-     *  @return the handshake state, or null
+     * @return the handshake state, or null
      */
     public HandshakeState getHandshakeState() {
         return _state;
     }
 
     /**
-     *  For inbound and outbound: last used time
-     *  Expiration is getDate() + getTimeout().
+     * For inbound and outbound: last used time
+     * Expiration is getDate() + getTimeout().
      *
-     *  @return the last used time
+     * @return the last used time
      */
     public long getDate() {
         return _date;
     }
 
     /**
-     *  For inbound and outbound: set last used time
+     * For inbound and outbound: set last used time
      *
-     *  @param when the last used time
+     * @param when the last used time
      */
     public void setDate(long when) {
         _date = when;
     }
 
     /**
-     *  For inbound and outbound: creation time, for debugging only
+     * For inbound and outbound: creation time, for debugging only
      *
-     *  @return the creation time
+     * @return the creation time
      */
     public long getCreated() {
         return _created;
     }
 
     /**
-     *  For inbound and outbound: Idle timeout interval.
-     *  Expiration is getDate() + getTimeout().
+     * For inbound and outbound: Idle timeout interval.
+     * Expiration is getDate() + getTimeout().
      *
-     *  @return the timeout duration
-     *  @since 0.9.46
+     * @return the timeout duration
+     * @since 0.9.46
      */
     public long getTimeout() {
         return _timeout;
     }
 
     /**
-     *  For inbound and outbound: Expiration.
-     *  Expiration is getDate() + getTimeout() if acked.
-     *  Before acked, uses _created + _timeout (full lifetime).
+     * For inbound and outbound: Expiration.
+     * Expiration is getDate() + getTimeout() if acked.
+     * Before acked, uses _created + _timeout (full lifetime).
      *
-     *  Previously this used Math.min(_timeout, SESSION_PENDING_DURATION_MS)
-     *  which capped unacked ES tagsets at 3 minutes instead of their designed
-     *  10-minute SESSION_LIFETIME_MAX_MS. With i2cp.disableLoopback=true,
-     *  the NSR round-trip through the full tunnel path could exceed 3 minutes,
-     *  causing tags to expire before the first ES message arrived.
+     * Previously this used Math.min(_timeout, SESSION_PENDING_DURATION_MS)
+     * which capped unacked ES tagsets at 3 minutes instead of their designed
+     * 10-minute SESSION_LIFETIME_MAX_MS. With i2cp.disableLoopback=true,
+     * the NSR round-trip through the full tunnel path could exceed 3 minutes,
+     * causing tags to expire before the first ES message arrived.
      *
-     *  NSR tagsets are unaffected — they have _timeout = SESSION_PENDING_DURATION_MS
-     *  (3 min), so the min() was a no-op for them.
+     * NSR tagsets are unaffected — they have _timeout = SESSION_PENDING_DURATION_MS
+     * (3 min), so the min() was a no-op for them.
      *
-     *  @return the expiration time
-     *  @since 0.9.46
+     * @return the expiration time
+     * @since 0.9.46
      */
     public synchronized long getExpiration() {
         if (_acked)
@@ -363,18 +363,18 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Unused tags generated.
+     * Unused tags generated.
      *
-     *  @return 0 for outbound
+     * @return 0 for outbound
      */
     public synchronized int size() {
         return _sessionTags != null ? _sessionTags.size() : 0;
     }
 
     /**
-     *  Tags remaining.
+     * Tags remaining.
      *
-     *  @return 0 - 65536
+     * @return 0 - 65536
      */
     public synchronized int remaining() {
         int nextKey = _lastTag + 1;
@@ -388,12 +388,12 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Next Forward Key if applicable (outbound ES and we're running low).
-     *  Null if NSR or inbound or remaining is sufficient.
-     *  Once non-null, will be constant for the remaining life of the tagset.
+     * Next Forward Key if applicable (outbound ES and we're running low).
+     * Null if NSR or inbound or remaining is sufficient.
+     * Once non-null, will be constant for the remaining life of the tagset.
      *
-     *  @return key or null
-     *  @since 0.9.46
+     * @return key or null
+     * @since 0.9.46
      */
     public NextSessionKey getNextKey() {
         if (_sessionTags != null || _state != null || remaining() > LOW)
@@ -413,32 +413,32 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Next Forward KeyPair if applicable (we're running low).
-     *  Null if remaining is sufficient.
-     *  Once non-null, will be constant for the remaining life of the tagset.
+     * Next Forward KeyPair if applicable (we're running low).
+     * Null if remaining is sufficient.
+     * Once non-null, will be constant for the remaining life of the tagset.
      *
-     *  @return keys or null
-     *  @since 0.9.46
+     * @return keys or null
+     * @since 0.9.46
      */
     public KeyPair getNextKeys() {
         return _nextKeys;
     }
 
     /**
-     *  Root key for the next DH ratchet.
-     *  Should only be needed for ES, but valid for NSR also.
+     * Root key for the next DH ratchet.
+     * Should only be needed for ES, but valid for NSR also.
      *
-     *  @return key
-     *  @since 0.9.46
+     * @return key
+     * @since 0.9.46
      */
     public SessionKey getNextRootKey() {
         return new SessionKey(_nextRootKey);
     }
 
     /**
-     *  Inbound only.
+     * Inbound only.
      *
-     *  @return associated SessionKey or null if not found.
+     * @return associated SessionKey or null if not found.
      */
     public SessionKeyAndNonce consume(RatchetSessionTag tag) {
         if (_sessionTags == null)
@@ -490,7 +490,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Inbound only.
+     * Inbound only.
      */
     private void addTags(int usedTagNumber) {
         int lookAhead;
@@ -538,7 +538,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Inbound only.
+     * Inbound only.
      */
     private void storeNextTag() {
         RatchetSessionTag tag = consumeNext();
@@ -552,20 +552,20 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Return the set of tags registered in the SKM's _inboundTagSets map.
-     *  Used for O(tags_in_set) removal in RatchetSKM.consumeTag().
+     * Return the set of tags registered in the SKM's _inboundTagSets map.
+     * Used for O(tags_in_set) removal in RatchetSKM.consumeTag().
      *
-     *  @since 0.9.70
+     * @since 0.9.70
      */
     Set<RatchetSessionTag> getRegisteredTags() {
         return _registeredTags;
     }
 
     /**
-     *  Public for outbound only. Used internally for inbound.
-     *  Call before consumeNextKey();
+     * Public for outbound only. Used internally for inbound.
+     * Call before consumeNextKey();
      *
-     *  @return a tag or null if we ran out
+     * @return a tag or null if we ran out
      */
     public RatchetSessionTag consumeNext() {
         if (_lastTag >= MAX)
@@ -577,10 +577,10 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  For outbound, call after consumeNextTag().
-     *  Also called by consume() to catch up for inbound.
+     * For outbound, call after consumeNextTag().
+     * Also called by consume() to catch up for inbound.
      *
-     *  @return a key and nonce, non-null
+     * @return a key and nonce, non-null
      */
     public SessionKeyAndNonce consumeNextKey() {
         // NSR
@@ -598,10 +598,10 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  For inbound, returns true after first consume() call.
-     *  For outbound, returns true after first consumeNextKey() call.
+     * For inbound, returns true after first consume() call.
+     * For outbound, returns true after first consumeNextKey() call.
      *
-     *  @return true if acked
+     * @return true if acked
      */
     public boolean getAcked() { return _acked; }
 
@@ -625,7 +625,7 @@ class RatchetTagSet implements TagSetHandle {
     }
 
     /**
-     *  Debug string for this tag set.
+     * Debug string for this tag set.
      */
     @Override
     public synchronized String toString() {

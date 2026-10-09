@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Set;
@@ -20,11 +19,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * <ul>
  * <li>Logging to wrapper log on unexpected termination in {@link #run()}.
  * <li>Notification of OOM to registered listener (the router),
- *     which will cause logging to the wrapper log and a router restart
+ * which will cause logging to the wrapper log and a router restart
  * <li>Catching and logging "OOM" caused by thread limit in {@link #start()}
- *     with distinct message, and does not call the OOM listener.
+ * with distinct message, and does not call the OOM listener.
  * <li>As of 0.9.21, initialization to NORM_PRIORITY
- *     (not the priority of the creating thread).
+ * (not the priority of the creating thread).
  * </ul>
  */
 public class I2PThread extends Thread {
@@ -81,7 +80,7 @@ public class I2PThread extends Thread {
     }
 
     /**
-     *  @since 0.9.23
+     * @since 0.9.23
      */
     public I2PThread(ThreadGroup group, Runnable r, String name) {
         super(group, r, name);
@@ -89,13 +88,13 @@ public class I2PThread extends Thread {
     }
 
     /**
-     *  Overridden to provide useful info to users on OOM, and to prevent
-     *  shutting down the whole JVM for what is most likely not a heap issue.
-     *  If the calling thread is an I2PThread an OOM would shut down the JVM.
-     *  Telling the user to increase the heap size may make the problem worse.
-     *  We may be able to continue without this thread, particularly in app context.
+     * Overridden to provide useful info to users on OOM, and to prevent
+     * shutting down the whole JVM for what is most likely not a heap issue.
+     * If the calling thread is an I2PThread an OOM would shut down the JVM.
+     * Telling the user to increase the heap size may make the problem worse.
+     * We may be able to continue without this thread, particularly in app context.
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     @Override
     public void start() {

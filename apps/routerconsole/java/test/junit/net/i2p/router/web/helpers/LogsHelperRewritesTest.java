@@ -43,11 +43,11 @@ public class LogsHelperRewritesTest {
     };
 
     /**
-     *  {@code String.repeat} is Java 11 and this module compiles at release 8.
+     * {@code String.repeat} is Java 11 and this module compiles at release 8.
      *
-     *  @param s the string to repeat
-     *  @param n how many copies
-     *  @return s repeated n times
+     * @param s the string to repeat
+     * @param n how many copies
+     * @return s repeated n times
      */
     private static String repeat(String s, int n) {
         StringBuilder sb = new StringBuilder(s.length() * n);

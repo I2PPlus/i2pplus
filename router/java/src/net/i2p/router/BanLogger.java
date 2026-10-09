@@ -340,12 +340,12 @@ public class BanLogger {
     }
 
 /**
-     * Log a ban by IP only (ignores hash).
-     *
-     * @param ip IP address with port (format: "1.2.3.4:5678" or "ipv6:port")
-     * @param reason Reason for the ban
-     * @param durationMs Ban duration in milliseconds, or 0 for permanent
-     */
+ * Log a ban by IP only (ignores hash).
+ *
+ * @param ip IP address with port (format: "1.2.3.4:5678" or "ipv6:port")
+ * @param reason Reason for the ban
+ * @param durationMs Ban duration in milliseconds, or 0 for permanent
+ */
     public void logBan(String ip, String reason, long durationMs) {
         logBan(null, ip, reason, durationMs);
     }

@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import net.i2p.util.Log;
 /**
  * Wrap up an outbound I2NP message, along with the information associated with its
  * delivery and jobs to be fired off if particular events occur.
- *
  */
 public class OutNetMessage implements CDPQEntry {
     private final RouterContext _context;
@@ -54,10 +52,10 @@ public class OutNetMessage implements CDPQEntry {
     private List<String> _timestampOrder;
 
     /**
-     *  Priorities, higher is higher priority.
-     *  Lowest priority.
+     * Priorities, higher is higher priority.
+     * Lowest priority.
      *
-     *  @since 0.9.3
+     * @since 0.9.3
      */
     public static final int PRIORITY_LOWEST = 100;
     /** Medium priority */
@@ -94,22 +92,22 @@ public class OutNetMessage implements CDPQEntry {
     public static final int PRIORITY_HIS_NETDB_STORE = 200;
 
     /**
-     *  Null msg and target, zero expiration (used in OutboundMessageRegistry only)
+     * Null msg and target, zero expiration (used in OutboundMessageRegistry only)
      *
-     *  @param context the router context
-     *  @since 0.9.9
+     * @param context the router context
+     * @since 0.9.9
      */
     public OutNetMessage(RouterContext context) {this(context, null, 0, -1, null);}
 
     /**
-     *  Standard constructor
+     * Standard constructor
      *
-     *  @param context the router context
-     *  @param msg generally non-null
-     *  @param expiration the expiration time
-     *  @param priority the priority
-     *  @param target generally non-null
-     *  @since 0.9.9
+     * @param context the router context
+     * @param msg generally non-null
+     * @param expiration the expiration time
+     * @param priority the priority
+     * @param target generally non-null
+     * @since 0.9.9
      */
     public OutNetMessage(RouterContext context, I2NPMessage msg, long expiration, int priority, RouterInfo target) {
         _context = context;
@@ -175,24 +173,24 @@ public class OutNetMessage implements CDPQEntry {
     public I2NPMessage getMessage() {return _message;}
 
     /**
-     *  For debugging only.
+     * For debugging only.
      *
-     *  @return the simple class name
+     * @return the simple class name
      */
     public String getMessageType() {
         return _message != null ? _message.getClass().getSimpleName() : "null";
     }
 
     /**
-     *  Message type ID.
+     * Message type ID.
      *
-     *  @return the message type ID
+     * @return the message type ID
      */
     public int getMessageTypeId() {return _messageTypeId;}
     /**
-     *  Message ID.
+     * Message ID.
      *
-     *  @return the message ID
+     * @return the message ID
      */
     public long getMessageId() {return _messageId;}
 
@@ -207,11 +205,11 @@ public class OutNetMessage implements CDPQEntry {
     }
 
     /**
-     *  Copies the message data to outbuffer.
-     *  Used only by VM Comm System.
+     * Copies the message data to outbuffer.
+     * Used only by VM Comm System.
      *
-     *  @param outBuffer the buffer to copy to
-     *  @return the length, or -1 if message is null
+     * @param outBuffer the buffer to copy to
+     * @return the length, or -1 if message is null
      */
     public int getMessageData(byte[] outBuffer) {
         if (_message == null) {
@@ -344,9 +342,9 @@ public class OutNetMessage implements CDPQEntry {
     }
 
     /**
-     *  When the sending process began.
+     * When the sending process began.
      *
-     *  @return when the sending process began
+     * @return when the sending process began
      */
     public long getSendBegin() {return _sendBegin;}
 
@@ -354,9 +352,9 @@ public class OutNetMessage implements CDPQEntry {
     public void beginSend() {_sendBegin = _context.clock().now();}
 
     /**
-     *  Creation time.
+     * Creation time.
      *
-     *  @return the creation time
+     * @return the creation time
      */
     public long getCreated() {return _created;}
 
@@ -364,16 +362,16 @@ public class OutNetMessage implements CDPQEntry {
     public void resetCreatedTime() {_created = _context.clock().now();}
 
     /**
-     *  Remaining lifetime.
+     * Remaining lifetime.
      *
-     *  @return the remaining lifetime
+     * @return the remaining lifetime
      */
     public long getLifetime() {return _context.clock().now() - _created;}
 
     /**
-     *  Send time.
+     * Send time.
      *
-     *  @return the send time
+     * @return the send time
      */
     public long getSendTime() {return _context.clock().now() - _sendBegin;}
 
@@ -394,22 +392,22 @@ public class OutNetMessage implements CDPQEntry {
     public long getEnqueueTime() {return _enqueueTime;}
 
     /**
-     *  When the message entered the transport queue (set by transport send()).
-     *  @param now the queue time
+     * When the message entered the transport queue (set by transport send()).
+     * @param now the queue time
      */
     public void setTransportQueued(long now) {_transportQueued = now;}
 
     /**
-     *  When the message was queued.
+     * When the message was queued.
      *
-     *  @return when the message was queued
+     * @return when the message was queued
      */
     public long getTransportQueued() {return _transportQueued;}
 
     /**
-     *  For CDQ
+     * For CDQ
      *
-     *  @since 0.9.3
+     * @since 0.9.3
      */
     public void drop() {
         // This is essentially what TransportImpl.afterSend(this, false) does
@@ -472,8 +470,8 @@ public class OutNetMessage implements CDPQEntry {
     }
 
     /**
-     *  Only useful if log level is INFO or DEBUG;
-     *  locked_initTimestamps() must have been called previously
+     * Only useful if log level is INFO or DEBUG;
+     * locked_initTimestamps() must have been called previously
      */
     private void renderTimestamps(StringBuilder buf) {
         synchronized (this) {

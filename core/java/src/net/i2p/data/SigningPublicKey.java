@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.crypto.Blinding;
@@ -22,71 +21,71 @@ import java.util.Arrays;
  *
  * <p>SigningPublicKey provides signature verification capabilities:</p>
  * <ul>
- *   <li><strong>Default Algorithm:</strong> DSA-SHA1 (128 bytes)</li>
- *   <li><strong>Modern Support:</strong> Variable length and type support since 0.9.8</li>
- *   <li><strong>Key Structure:</strong> Contains only public exponent/coordinates</li>
- *   <li><strong>Verification:</strong> Used to verify signatures and identities</li>
+ * <li><strong>Default Algorithm:</strong> DSA-SHA1 (128 bytes)</li>
+ * <li><strong>Modern Support:</strong> Variable length and type support since 0.9.8</li>
+ * <li><strong>Key Structure:</strong> Contains only public exponent/coordinates</li>
+ * <li><strong>Verification:</strong> Used to verify signatures and identities</li>
  * </ul>
  *
  * <p><strong>Supported Algorithms:</strong></p>
  * <ul>
- *   <li><strong>DSA-SHA1:</strong> Legacy algorithm, 128-byte keys</li>
- *   <li><strong>ECDSA-P256:</strong> Modern algorithm, variable length keys</li>
- *   <li><strong>EdDSA-Ed25519:</strong> Modern algorithm, 32-byte keys</li>
- *   <li><strong>Future Types:</strong> Extensible design for new algorithms</li>
+ * <li><strong>DSA-SHA1:</strong> Legacy algorithm, 128-byte keys</li>
+ * <li><strong>ECDSA-P256:</strong> Modern algorithm, variable length keys</li>
+ * <li><strong>EdDSA-Ed25519:</strong> Modern algorithm, 32-byte keys</li>
+ * <li><strong>Future Types:</strong> Extensible design for new algorithms</li>
  * </ul>
  *
  * <p><strong>Key Format:</strong></p>
  * <ul>
- *   <li><strong>DSA:</strong> 128-byte public parameters (p, q, g, y)</li>
- *   <li><strong>ECDSA:</strong> Variable length elliptic curve coordinates</li>
- *   <li><strong>EdDSA:</strong> 32-byte compressed curve point</li>
- *   <li><strong>Type Encoding:</strong> Algorithm type embedded in data</li>
+ * <li><strong>DSA:</strong> 128-byte public parameters (p, q, g, y)</li>
+ * <li><strong>ECDSA:</strong> Variable length elliptic curve coordinates</li>
+ * <li><strong>EdDSA:</strong> 32-byte compressed curve point</li>
+ * <li><strong>Type Encoding:</strong> Algorithm type embedded in data</li>
  * </ul>
  *
  * <p><strong>Usage:</strong></p>
  * <ul>
- *   <li><strong>Signature Verification:</strong> Verify signatures from {@link SigningPrivateKey}</li>
- *   <li><strong>Identity Verification:</strong> Part of {@link Destination} identity</li>
- *   <li><strong>LeaseSet Verification:</strong> Verify LeaseSet authenticity</li>
- *   <li><strong>Router Identity:</strong> Verify router signatures in NetDb</li>
+ * <li><strong>Signature Verification:</strong> Verify signatures from {@link SigningPrivateKey}</li>
+ * <li><strong>Identity Verification:</strong> Part of {@link Destination} identity</li>
+ * <li><strong>LeaseSet Verification:</strong> Verify LeaseSet authenticity</li>
+ * <li><strong>Router Identity:</strong> Verify router signatures in NetDb</li>
  * </ul>
  *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
- *   <li><strong>LRU Caching:</strong> Frequently used keys cached for efficiency</li>
- *   <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
- *   <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
- *   <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode()</li>
+ * <li><strong>LRU Caching:</strong> Frequently used keys cached for efficiency</li>
+ * <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
+ * <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
+ * <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode()</li>
  * </ul>
  *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
- *   <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (Ed25519, ECDSA-P256)</li>
- *   <li><strong>Key Validation:</strong> Verify key parameters before use</li>
- *   <li><strong>Signature Verification:</strong> Always verify with correct algorithm</li>
- *   <li><strong>Key Distribution:</strong> Safely transmit public keys</li>
+ * <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (Ed25519, ECDSA-P256)</li>
+ * <li><strong>Key Validation:</strong> Verify key parameters before use</li>
+ * <li><strong>Signature Verification:</strong> Always verify with correct algorithm</li>
+ * <li><strong>Key Distribution:</strong> Safely transmit public keys</li>
  * </ul>
  *
  * <p><strong>Blinding Support:</strong></p>
  * <ul>
- *   <li><strong>Key Blinding:</strong> Support for blinded key variants</li>
- *   <li><strong>Privacy:</strong> Enable anonymous service endpoints</li>
- *   <li><strong>BlindData:</strong> Integration with {@link BlindData} for blinding</li>
+ * <li><strong>Key Blinding:</strong> Support for blinded key variants</li>
+ * <li><strong>Privacy:</strong> Enable anonymous service endpoints</li>
+ * <li><strong>BlindData:</strong> Integration with {@link BlindData} for blinding</li>
  * </ul>
  *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
- *   <li><strong>Legacy:</strong> DSA-SHA1 for backward compatibility</li>
- *   <li><strong>Modern:</strong> Ed25519 for better performance and security</li>
- *   <li><strong>Transition:</strong> Mixed algorithm support during migration</li>
+ * <li><strong>Legacy:</strong> DSA-SHA1 for backward compatibility</li>
+ * <li><strong>Modern:</strong> Ed25519 for better performance and security</li>
+ * <li><strong>Transition:</strong> Mixed algorithm support during migration</li>
  * </ul>
  *
  * <p><strong>Thread Safety:</strong></p>
  * <ul>
- *   <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>
- *   <li><strong>Thread-Safe Cache:</strong> Static factory methods are thread-safe</li>
- *   <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
+ * <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>
+ * <li><strong>Thread-Safe Cache:</strong> Static factory methods are thread-safe</li>
+ * <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
  * </ul>
  *
  * @author jrandom
@@ -139,8 +138,8 @@ public class SigningPublicKey extends SimpleDataStructure {
 
     /**
      * If null, type is unknown.
-     *  @param type if null, type is unknown
-     *  @since 0.9.8
+     * @param type if null, type is unknown
+     * @since 0.9.8
      */
     public SigningPublicKey(SigType type) {
         super();
@@ -154,9 +153,9 @@ public class SigningPublicKey extends SimpleDataStructure {
 
     /**
      * If null, type is unknown.
-     *  @param type if null, type is unknown
-     *  @param data the key data
-     *  @since 0.9.8
+     * @param type if null, type is unknown
+     * @param data the key data
+     * @since 0.9.8
      */
     public SigningPublicKey(SigType type, byte[] data) {
         super();
@@ -181,7 +180,7 @@ public class SigningPublicKey extends SimpleDataStructure {
 
     /**
      * If type unknown, the length of the data, or 128 if no data.
-     *  @return if type unknown, the length of the data, or 128 if no data
+     * @return if type unknown, the length of the data, or 128 if no data
      */
     @Override
     public int length() {
@@ -195,24 +194,23 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Gets the signature type of this public key.
+     * Gets the signature type of this public key.
      *
-     *  @return null if unknown
-     *  @since 0.9.8
+     * @return null if unknown
+     * @since 0.9.8
      */
     public SigType getType() {
         return _type;
     }
 
     /**
-     *  Up-convert this from an untyped (type 0) SPK to a typed SPK based on the Key Cert given.
-     *  The type of the returned key will be null if the kcert sigtype is null.
+     * Up-convert this from an untyped (type 0) SPK to a typed SPK based on the Key Cert given.
+     * The type of the returned key will be null if the kcert sigtype is null.
      *
-     *  @param kcert the key certificate
-     *  @return the typed signing public key
-     *  @throws IllegalArgumentException if this is already typed to a different type
-     *  @since 0.9.12 (changed from public to package private in 0.9.66, not for external use)
-     *
+     * @param kcert the key certificate
+     * @return the typed signing public key
+     * @throws IllegalArgumentException if this is already typed to a different type
+     * @since 0.9.12 (changed from public to package private in 0.9.66, not for external use)
      */
     SigningPublicKey toTypedKey(KeyCertificate kcert) {
         if (_data == null) {
@@ -255,14 +253,14 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Get the portion of this (type 0) SPK that is really padding based on the Key Cert type given,
-     *  if any
+     * Get the portion of this (type 0) SPK that is really padding based on the Key Cert type given,
+     * if any
      *
-     *  @param kcert the key certificate
-     *  @return the leading padding, or a shared empty array if there is no
-     *          padding or the type is unknown
-     *  @throws IllegalStateException if this is already typed to a different type
-     *  @since 0.9.12
+     * @param kcert the key certificate
+     * @return the leading padding, or a shared empty array if there is no
+     * padding or the type is unknown
+     * @throws IllegalStateException if this is already typed to a different type
+     * @since 0.9.12
      */
     public byte[] getPadding(KeyCertificate kcert) {
         if (_data == null) {
@@ -286,10 +284,10 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Write the data up to a max of 128 bytes.
-     *  If longer, the rest will be written in the KeyCertificate.
+     * Write the data up to a max of 128 bytes.
+     * If longer, the rest will be written in the KeyCertificate.
      *
-     *  @since 0.9.12 (changed from public to package private in 0.9.66, not for external use)
+     * @since 0.9.12 (changed from public to package private in 0.9.66, not for external use)
      */
     void writeTruncatedBytes(OutputStream out) throws DataFormatException, IOException {
         if (_data == null) throw new DataFormatException("No data to write out");
@@ -301,19 +299,19 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Only for SigType EdDSA_SHA512_Ed25519
+     * Only for SigType EdDSA_SHA512_Ed25519
      *
-     *  @param alpha the secret data
-     *  @return the blinded public key
-     *  @throws UnsupportedOperationException unless supported
-     *  @since 0.9.38
+     * @param alpha the secret data
+     * @return the blinded public key
+     * @throws UnsupportedOperationException unless supported
+     * @since 0.9.38
      */
     public SigningPublicKey blind(SigningPrivateKey alpha) {
         return Blinding.blind(this, alpha);
     }
 
     /**
-     *  @since 0.9.8
+     * @since 0.9.8
      */
     @Override
     public String toString() {
@@ -337,18 +335,18 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Clears the public key cache.
+     * Clears the public key cache.
      *
-     *  @since 0.9.17
+     * @since 0.9.17
      */
     public static void clearCache() {
         _cache.clear();
     }
 
     /**
-     *  Hash code combining the type and data.
+     * Hash code combining the type and data.
      *
-     *  @since 0.9.17
+     * @since 0.9.17
      */
     @Override
     public int hashCode() {
@@ -356,7 +354,7 @@ public class SigningPublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  @since 0.9.17
+     * @since 0.9.17
      */
     @Override
     public boolean equals(Object obj) {

@@ -8,320 +8,320 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  The central resource coordinating updates.
- *  This must be registered with the context.
+ * The central resource coordinating updates.
+ * This must be registered with the context.
  *
- *  The UpdateManager starts and stops all updates,
- *  and controls notification to the user.
+ * The UpdateManager starts and stops all updates,
+ * and controls notification to the user.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public interface UpdateManager {
 
     /**
-     *  The name we register with the ClientAppManager
+     * The name we register with the ClientAppManager
      *
-     *  @since 0.9.12
+     * @since 0.9.12
      */
     public static final String APP_NAME = "update";
 
     /**
-     *  Call once for each type/method pair.
+     * Call once for each type/method pair.
      *
-     *  @param updater the updater
-     *  @param type the update type
-     *  @param method the update method
-     *  @param priority the priority
+     * @param updater the updater
+     * @param type the update type
+     * @param method the update method
+     * @param priority the priority
      */
     public void register(Updater updater, UpdateType type, UpdateMethod method, int priority);
 
     /**
-     *  Register a checker for updates.
+     * Register a checker for updates.
      *
-     *  @param checker the checker
-     *  @param type the update type
-     *  @param method the update method
-     *  @param priority the priority
+     * @param checker the checker
+     * @param type the update type
+     * @param method the update method
+     * @param priority the priority
      */
     public void register(Checker checker, UpdateType type, UpdateMethod method, int priority);
 
     /**
-     *  Unregister an updater.
+     * Unregister an updater.
      *
-     *  @param updater the updater
-     *  @param type the update type
-     *  @param method the update method
+     * @param updater the updater
+     * @param type the update type
+     * @param method the update method
      */
     public void unregister(Updater updater, UpdateType type, UpdateMethod method);
 
     /**
-     *  Unregister a checker.
+     * Unregister a checker.
      *
-     *  @param checker the checker
-     *  @param type the update type
-     *  @param method the update method
+     * @param checker the checker
+     * @param type the update type
+     * @param method the update method
      */
     public void unregister(Checker checker, UpdateType type, UpdateMethod method);
 
     /**
-     *  Register a post-processor for this UpdateType and SU3File file type.
+     * Register a post-processor for this UpdateType and SU3File file type.
      *
-     *  @param upp update post processor
-     *  @param type only ROUTER_SIGNED_SU3 and ROUTER_DEV_SU3 are currently supported
-     *  @param fileType a SU3File TYPE_xxx constant, 1-255, TYPE_ZIP not supported.
-     *  @since 0.9.51
+     * @param upp update post processor
+     * @param type only ROUTER_SIGNED_SU3 and ROUTER_DEV_SU3 are currently supported
+     * @param fileType a SU3File TYPE_xxx constant, 1-255, TYPE_ZIP not supported.
+     * @since 0.9.51
      */
     public void register(UpdatePostProcessor upp, UpdateType type, int fileType);
 
     /**
-     *  Start the update manager.
+     * Start the update manager.
      */
     public void start();
 
     /**
-     *  Shutdown the update manager.
+     * Shutdown the update manager.
      */
     public void shutdown();
 
     /**
-     *  Called by the Checker, either after check() was called, or it found out on its own.
-     *  Use this if there is only one UpdateMethod; otherwise use the Map method below.
+     * Called by the Checker, either after check() was called, or it found out on its own.
+     * Use this if there is only one UpdateMethod; otherwise use the Map method below.
      *
-     *  @param task update task
-     *  @param newsSource who told us
-     *  @param type update type
-     *  @param id plugin name for plugins, ignored otherwise
-     *  @param method How to get the new version
-     *  @param updateSources Where to get the new version
-     *  @param newVersion The new version available
-     *  @param minVersion The minimum installed version to be able to update to newVersion
-     *  @return true if we didn't know already
+     * @param task update task
+     * @param newsSource who told us
+     * @param type update type
+     * @param id plugin name for plugins, ignored otherwise
+     * @param method How to get the new version
+     * @param updateSources Where to get the new version
+     * @param newVersion The new version available
+     * @param minVersion The minimum installed version to be able to update to newVersion
+     * @return true if we didn't know already
      */
     public boolean notifyVersionAvailable(UpdateTask task, URI newsSource, UpdateType type, String id, UpdateMethod method, List<URI> updateSources, String newVersion, String minVersion);
 
     /**
-     *  Called by the Checker, either after check() was called, or it found out on its own.
-     *  Checkers must use this method if there are multiple UpdateMethods discoverd simultaneously.
+     * Called by the Checker, either after check() was called, or it found out on its own.
+     * Checkers must use this method if there are multiple UpdateMethods discoverd simultaneously.
      *
-     *  @param task update task
-     *  @param newsSource who told us
-     *  @param type update type
-     *  @param id plugin name for plugins, ignored otherwise
-     *  @param sourceMap Mapping of methods to sources
-     *  @param newVersion The new version available
-     *  @param minVersion The minimum installed version to be able to update to newVersion
-     *  @return true if we didn't know already
-     *  @since 0.9.6
+     * @param task update task
+     * @param newsSource who told us
+     * @param type update type
+     * @param id plugin name for plugins, ignored otherwise
+     * @param sourceMap Mapping of methods to sources
+     * @param newVersion The new version available
+     * @param minVersion The minimum installed version to be able to update to newVersion
+     * @return true if we didn't know already
+     * @since 0.9.6
      */
     public boolean notifyVersionAvailable(UpdateTask task, URI newsSource, UpdateType type, String id, Map<UpdateMethod, List<URI>> sourceMap, String newVersion, String minVersion);
 
     /**
-     *  A new version is available but cannot be downloaded or installed due to some constraint.
-     *  The manager should notify the user.
-     *  Called by the Checker, either after check() was called, or it found out on its own.
+     * A new version is available but cannot be downloaded or installed due to some constraint.
+     * The manager should notify the user.
+     * Called by the Checker, either after check() was called, or it found out on its own.
      *
-     *  @param task update task
-     *  @param newsSource who told us
-     *  @param type update type
-     *  @param id plugin name for plugins, ignored otherwise
-     *  @param newVersion The new version available
-     *  @param message A translated message to be displayed to the user, non-null
-     *  @since 0.9.9
+     * @param task update task
+     * @param newsSource who told us
+     * @param type update type
+     * @param id plugin name for plugins, ignored otherwise
+     * @param newVersion The new version available
+     * @param message A translated message to be displayed to the user, non-null
+     * @since 0.9.9
      */
     public void notifyVersionConstraint(UpdateTask task, URI newsSource, UpdateType type, String id, String newVersion, String message);
 
     /**
-     *  Called by the Checker after check() was called and all notifyVersionAvailable() callbacks are finished
+     * Called by the Checker after check() was called and all notifyVersionAvailable() callbacks are finished
      *
-     *  @param task update task
-     *  @param newer notifyVersionAvailable was called
-     *  @param success check succeeded (newer or not)
+     * @param task update task
+     * @param newer notifyVersionAvailable was called
+     * @param success check succeeded (newer or not)
      */
     public void notifyCheckComplete(UpdateTask task, boolean newer, boolean success);
 
     /**
-     *  Notify of progress update.
+     * Notify of progress update.
      *
-     *  @param task update task
-     *  @param status status message
+     * @param task update task
+     * @param status status message
      */
     public void notifyProgress(UpdateTask task, String status);
 
     /**
-     *  Notify of progress update with size information.
+     * Notify of progress update with size information.
      *
-     *  @param task update task
-     *  @param status status message
-     *  @param downloaded bytes downloaded
-     *  @param totalSize total size
+     * @param task update task
+     * @param status status message
+     * @param downloaded bytes downloaded
+     * @param totalSize total size
      */
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize);
 
     /**
-     *  Not necessarily the end if there are more URIs to try.
+     * Not necessarily the end if there are more URIs to try.
      *
-     *  @param task update task
-     *  @param reason failure reason
-     *  @param t may be null
+     * @param task update task
+     * @param reason failure reason
+     * @param t may be null
      */
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t);
 
     /**
-     *  The task has finished and failed.
+     * The task has finished and failed.
      *
-     *  @param task update task
-     *  @param reason failure reason
-     *  @param t may be null
+     * @param task update task
+     * @param reason failure reason
+     * @param t may be null
      */
     public void notifyTaskFailed(UpdateTask task, String reason, Throwable t);
 
     /**
-     *  An update has been downloaded but not verified.
-     *  The manager will verify it.
-     *  Caller should delete the file upon return, unless it will share it with others,
-     *  e.g. on a torrent.
+     * An update has been downloaded but not verified.
+     * The manager will verify it.
+     * Caller should delete the file upon return, unless it will share it with others,
+     * e.g. on a torrent.
      *
-     *  @param task update task
-     *  @param actualVersion may be higher (or lower?) than the version requested
-     *  @param file a valid format for the task's UpdateType
-     *  @return true if valid, false if corrupt
+     * @param task update task
+     * @param actualVersion may be higher (or lower?) than the version requested
+     * @param file a valid format for the task's UpdateType
+     * @return true if valid, false if corrupt
      */
     public boolean notifyComplete(UpdateTask task, String actualVersion, File file);
 
     /**
-     *  Is an update available?
-     *  Blocking.
-     *  An available update may still have a constraint or lack sources.
+     * Is an update available?
+     * Blocking.
+     * An available update may still have a constraint or lack sources.
      *
-     *  @param type the UpdateType of this request
-     *  @return new version or null if nothing newer is available
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @return new version or null if nothing newer is available
+     * @since 0.9.21
      */
     public String checkAvailable(UpdateType type);
 
     /**
-     *  Is an update available?
-     *  Blocking.
-     *  An available update may still have a constraint or lack sources.
+     * Is an update available?
+     * Blocking.
+     * An available update may still have a constraint or lack sources.
      *
-     *  @param type the UpdateType of this request
-     *  @param maxWait max time to block
-     *  @return new version or null if nothing newer is available
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @param maxWait max time to block
+     * @return new version or null if nothing newer is available
+     * @since 0.9.21
      */
     public String checkAvailable(UpdateType type, long maxWait);
 
     /**
-     *  Is an update available?
-     *  Blocking.
-     *  An available update may still have a constraint or lack sources.
+     * Is an update available?
+     * Blocking.
+     * An available update may still have a constraint or lack sources.
      *
-     *  @param type the UpdateType of this request
-     *  @param maxWait max time to block
-     *  @param id id of this request
-     *  @return new version or null if nothing newer is available
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @param maxWait max time to block
+     * @param id id of this request
+     * @return new version or null if nothing newer is available
+     * @since 0.9.21
      */
     public String checkAvailable(UpdateType type, String id, long maxWait);
 
     /**
-     *  Is a router update being downloaded?
+     * Is a router update being downloaded?
      *
-     *  @return true iff router update is being downloaded
-     *  @since 0.9.21
+     * @return true iff router update is being downloaded
+     * @since 0.9.21
      */
     public boolean isUpdateInProgress();
 
     /**
-     *  Is a router update being downloaded?
+     * Is a router update being downloaded?
      *
-     *  @param type the UpdateType of this request
-     *  @return true iff router update is being downloaded
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @return true iff router update is being downloaded
+     * @since 0.9.21
      */
     public boolean isUpdateInProgress(UpdateType type);
 
     /**
-     *  Is a router update being downloaded?
+     * Is a router update being downloaded?
      *
-     *  @param type the UpdateType of this request
-     *  @param id of this request
-     *  @return true iff router update is being downloaded
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @param id of this request
+     * @return true iff router update is being downloaded
+     * @since 0.9.21
      */
     public boolean isUpdateInProgress(UpdateType type, String id);
 
     /**
-     *  Non-blocking. Does not check.
-     *  Fails if check or update already in progress.
-     *  If returns true, then call isUpdateInProgress() in a loop
+     * Non-blocking. Does not check.
+     * Fails if check or update already in progress.
+     * If returns true, then call isUpdateInProgress() in a loop
      *
-     *  @param type the UpdateType of this request
-     *  @return true if task started
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @return true if task started
+     * @since 0.9.21
      */
     public boolean update(UpdateType type);
 
     /**
-     *  Non-blocking. Does not check.
-     *  Fails if check or update already in progress.
-     *  If returns true, then call isUpdateInProgress() in a loop
+     * Non-blocking. Does not check.
+     * Fails if check or update already in progress.
+     * If returns true, then call isUpdateInProgress() in a loop
      *
-     *  @param type the UpdateType of this request
-     *  @param id id of this request
-     *  @return true if task started
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @param id id of this request
+     * @return true if task started
+     * @since 0.9.21
      */
     public boolean update(UpdateType type, String id);
 
     /**
-     *  Non-blocking. Does not check.
-     *  Fails if check or update already in progress.
-     *  If returns true, then call isUpdateInProgress() in a loop
+     * Non-blocking. Does not check.
+     * Fails if check or update already in progress.
+     * If returns true, then call isUpdateInProgress() in a loop
      *
-     *  @param type the UpdateType of this request
-     *  @param maxTime not honored by all Updaters
-     *  @return true if task started
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @param maxTime not honored by all Updaters
+     * @return true if task started
+     * @since 0.9.21
      */
     public boolean update(UpdateType type, long maxTime);
 
     /**
-     *  Non-blocking. Does not check.
-     *  Fails if check or update already in progress.
-     *  If returns true, then call isUpdateInProgress() in a loop
+     * Non-blocking. Does not check.
+     * Fails if check or update already in progress.
+     * If returns true, then call isUpdateInProgress() in a loop
      *
-     *  @param type the UpdateType of this request
-     *  @param maxTime not honored by all Updaters
-     *  @param id id of this request
-     *  @return true if task started
-     *  @since 0.9.21
+     * @param type the UpdateType of this request
+     * @param maxTime not honored by all Updaters
+     * @param id id of this request
+     * @return true if task started
+     * @since 0.9.21
      */
     public boolean update(UpdateType type, String id, long maxTime);
 
     /**
-     *  The status on any update current or last finished.
+     * The status on any update current or last finished.
      *
-     *  @return status or ""
-     *  @since 0.9.21
+     * @return status or ""
+     * @since 0.9.21
      */
     public String getStatus();
 
     /**
-     *  Tell the UpdateManager that a version is already installed.
+     * Tell the UpdateManager that a version is already installed.
      *
-     *  @param type update type
-     *  @param id subtype for plugins, or ""
-     *  @param version null to remove from installed
-     *  @since 0.9.45
+     * @param type update type
+     * @param id subtype for plugins, or ""
+     * @param version null to remove from installed
+     * @since 0.9.45
      */
     public void notifyInstalled(UpdateType type, String id, String version);
 
     /**
-     *  For debugging
+     * For debugging
      *
-     *  @param out writer to output to
-     *  @throws IOException if writing fails
+     * @param out writer to output to
+     * @throws IOException if writing fails
      */
     public void renderStatusHTML(Writer out) throws IOException;
 }

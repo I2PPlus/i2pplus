@@ -11,7 +11,7 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.Log;
 
 /**
- *  Start, track, and expire the I2PTunnelDCCClients.
+ * Start, track, and expire the I2PTunnelDCCClients.
  *
  * <pre>
  *
@@ -104,7 +104,7 @@ public class DCCClientManager extends EventReceiver {
     }
 
     /**
-     *  @param localPort bind to port or 0; if nonzero it will be the rv
+     * @param localPort bind to port or 0; if nonzero it will be the rv
      */
     private int newIncoming(String b32, int port, int localPort) {
         b32 = b32.toLowerCase(Locale.US);

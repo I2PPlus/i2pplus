@@ -15,7 +15,6 @@ import net.i2p.util.Log;
  * inbound and outbound participants, outbound endpoints,
  * and inbound gateways (with a small modification per
  * InboundGatewayProcessor).
- *
  */
 class HopProcessor {
     /** Router or client context, supplying the log and the AES engine. */
@@ -55,7 +54,7 @@ class HopProcessor {
      * @param orig IV+data of the message
      * @param offset index into orig where the IV begins
      * @param length how long after the offset does the IV+message go for?
-     *               Should always be 1024 bytes.
+     * Should always be 1024 bytes.
      * @param prev previous hop in the tunnel, or null if we are the gateway
      * @return true if the message was updated and valid, false if it was not.
      */
@@ -101,7 +100,7 @@ class HopProcessor {
     }
 
     /**
-     *  @since 0.8.12
+     * @since 0.8.12
      */
     @Override
     public String toString() {

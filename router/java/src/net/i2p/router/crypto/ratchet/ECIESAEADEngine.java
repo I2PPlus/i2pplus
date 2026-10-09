@@ -109,10 +109,10 @@ public final class ECIESAEADEngine {
     // 1656
     private static final int MIN_NSR_MLKEM1024_SIZE = EncType.MLKEM1024_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
     /**
-     *  Caller MUST call startup() to get threaded generation.
-     *  Will still work without, will just generate inline.
+     * Caller MUST call startup() to get threaded generation.
+     * Will still work without, will just generate inline.
      *
-     *  startup() is called from RatchetSKM constructor so it's deferred until we need it.
+     * startup() is called from RatchetSKM constructor so it's deferred until we need it.
      */
     public ECIESAEADEngine(RouterContext ctx) {
         _context = ctx;
@@ -127,7 +127,7 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     *  May be called multiple times
+     * May be called multiple times
      */
     public synchronized void startup() {
         if (!_isRunning) {
@@ -137,7 +137,7 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     *  Cannot be restarted
+     * Cannot be restarted
      */
     public synchronized void shutdown() {
         _isRunning = false;
@@ -959,7 +959,6 @@ public final class ECIESAEADEngine {
      * @param data 24 bytes minimum, first 8 bytes will be skipped
      * @param keyManager for ack callbacks
      * @return decrypted data or null on failure
-     *
      */
     private CloveSet decryptExistingSession(byte[] tag, byte[] data, SessionKeyAndNonce key,
                                             PrivateKey _targetPrivateKey, RatchetSKM keyManager)
@@ -1067,14 +1066,13 @@ public final class ECIESAEADEngine {
      * @param target public key to which the data should be encrypted.
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
-     *             may be null for anonymous (N-in-IK)
+     * may be null for anonymous (N-in-IK)
      *
      * @param keyManager session key manager, required when priv is non-null
      * @param callback may be null, if non-null an ack will be requested (except NS/NSR),
-     *                 not used when priv is null
+     * not used when priv is null
      *
      * @return encrypted data or null on failure
-     *
      */
     public byte[] encrypt(CloveSet cloves, PublicKey target, Destination to, PrivateKey priv,
                           RatchetSKM keyManager,
@@ -1093,7 +1091,7 @@ public final class ECIESAEADEngine {
      *
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
-     *             may be null for anonymous (N-in-IK)
+     * may be null for anonymous (N-in-IK)
      *
      * @param keyManager session key manager, required when priv is non-null
      * @param callback may be null, not used when priv is null
@@ -1164,7 +1162,7 @@ public final class ECIESAEADEngine {
      *
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
-     *             may be null for anonymous (N-in-IK)
+     * may be null for anonymous (N-in-IK)
      *
      * @param keyManager session key manager, required when priv is non-null
      * @param callback may be null, not used when priv is null
@@ -1510,17 +1508,17 @@ public final class ECIESAEADEngine {
             }
         }
         /**
-         *  Process an options field from the payload.
+         * Process an options field from the payload.
          *
-         *  <p>Intentionally a log-only no-op. This router never emits an
-         *  OPTIONS block (no option bytes are negotiated in
-         *  {@code createPayload()}) and no local state transition, tag,
-         *  session key, or acknowledgement behavior is defined in terms of
-         *  OPTIONS, so ignoring a received block is protocol-correct. The
-         *  length and framing are already validated by the parser.
+         * <p>Intentionally a log-only no-op. This router never emits an
+         * OPTIONS block (no option bytes are negotiated in
+         * {@code createPayload()}) and no local state transition, tag,
+         * session key, or acknowledgement behavior is defined in terms of
+         * OPTIONS, so ignoring a received block is protocol-correct. The
+         * length and framing are already validated by the parser.
          *
-         *  @param options the option bytes
-         *  @param isHandshake true only for message 3 part 2
+         * @param options the option bytes
+         * @param isHandshake true only for message 3 part 2
          */
         public void gotOptions(byte[] options, boolean isHandshake) {
             if (_log.shouldDebug())
@@ -1562,31 +1560,31 @@ public final class ECIESAEADEngine {
             ackRequested = true;
         }
         /**
-         *  Process a termination field from the payload.
+         * Process a termination field from the payload.
          *
-         *  <p>Intentionally a log-only no-op. Ratchet sessions here end by
-         *  ratchet key rotation or by the session expiring in
-         *  {@code RatchetSKM.aggressiveExpire()}, never by a peer-sent
-         *  TERMINATION block, and this router never emits one. The parser
-         *  already rejects any block following a TERMINATION other than
-         *  padding, so the framing is enforced without acting on the reason.
+         * <p>Intentionally a log-only no-op. Ratchet sessions here end by
+         * ratchet key rotation or by the session expiring in
+         * {@code RatchetSKM.aggressiveExpire()}, never by a peer-sent
+         * TERMINATION block, and this router never emits one. The parser
+         * already rejects any block following a TERMINATION other than
+         * padding, so the framing is enforced without acting on the reason.
          *
-         *  @param reason the peer's termination reason code, 0-255
+         * @param reason the peer's termination reason code, 0-255
          */
         public void gotTermination(int reason) {
             if (_log.shouldDebug())
                 _log.debug("Received TERMINATION block, reason: " + reason);
         }
         /**
-         *  Process a PN field from the payload.
+         * Process a PN field from the payload.
          *
-         *  <p>Intentionally a log-only no-op. The message number block is an
-         *  optional advisory hint for out-of-order reassembly; ratchet
-         *  decryption here is authenticated per message and does not dedupe by
-         *  number, and this router never emits a PN block. Accepting and
-         *  ignoring it is therefore protocol-correct.
+         * <p>Intentionally a log-only no-op. The message number block is an
+         * optional advisory hint for out-of-order reassembly; ratchet
+         * decryption here is authenticated per message and does not dedupe by
+         * number, and this router never emits a PN block. Accepting and
+         * ignoring it is therefore protocol-correct.
          *
-         *  @param pn the peer's message number, 0-65535
+         * @param pn the peer's message number, 0-65535
          */
         public void gotPN(int pn) {
             if (_log.shouldDebug())
@@ -1607,11 +1605,11 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     *  Create the payload, adding a DateTime block if expiration is greater than zero.
+     * Create the payload, adding a DateTime block if expiration is greater than zero.
      *
-     *  @param expiration if greater than zero, add a DateTime block
-     *  @param overhead bytes to be added later, to assist in padding calculation
-     *  @since 0.9.46
+     * @param expiration if greater than zero, add a DateTime block
+     * @param overhead bytes to be added later, to assist in padding calculation
+     * @since 0.9.46
      */
     private byte[] createPayload(CloveSet cloves, long expiration, int overhead) {
         return createPayload(cloves, expiration, false, null, null, null, overhead);
@@ -1623,14 +1621,14 @@ public final class ECIESAEADEngine {
     private static final int B3 = 2932;
 
     /**
-     *  Create the payload from the given cloves and optional blocks.
+     * Create the payload from the given cloves and optional blocks.
      *
-     *  @param expiration if greater than zero, add a DateTime block
-     *  @param ackreq to request an ack, must be false for NS/NSR
-     *  @param nextKey1 may be null
-     *  @param nextKey2 may be null
-     *  @param acksToSend may be null
-     *  @param overhead bytes to be added later, to assist in padding calculation
+     * @param expiration if greater than zero, add a DateTime block
+     * @param ackreq to request an ack, must be false for NS/NSR
+     * @param nextKey1 may be null
+     * @param nextKey2 may be null
+     * @param acksToSend may be null
+     * @param overhead bytes to be added later, to assist in padding calculation
      */
     private byte[] createPayload(CloveSet cloves, long expiration,
                                  boolean ackreq, NextSessionKey nextKey1,
@@ -1805,10 +1803,10 @@ public final class ECIESAEADEngine {
     }
 
     /**
-     *  Per-thread pool of payload block objects and the block list,
-     *  to avoid allocation per outbound payload.
+     * Per-thread pool of payload block objects and the block list,
+     * to avoid allocation per outbound payload.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static class BlockPool {
         private final List<Block> blocks = new ArrayList<>(8);

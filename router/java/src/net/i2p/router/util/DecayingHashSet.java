@@ -13,26 +13,26 @@ import net.i2p.util.ConcurrentHashSet;
  * <p>
  * Memory usage analysis shows significant optimization potential:
  * <ul>
- *   <li>32 bytes, peak 10 entries in 1m (320 on fast routers)</li>
- *   <li>4 bytes, peak 150 entries in 10s (1600 on fast routers)</li>
- *   <li>8 bytes, peak 1K entries in 2m (36K on fast routers)</li>
- *   <li>16 bytes, peak 15K entries in 10m (15K on fast routers)</li>
+ * <li>32 bytes, peak 10 entries in 1m (320 on fast routers)</li>
+ * <li>4 bytes, peak 150 entries in 10s (1600 on fast routers)</li>
+ * <li>8 bytes, peak 1K entries in 2m (36K on fast routers)</li>
+ * <li>16 bytes, peak 15K entries in 10m (15K on fast routers)</li>
  * </ul>
  * <p>
  * Performance characteristics:
  * <ul>
- *   <li>Zero false positive rate for ≤8 byte keys (lossy hash for larger keys)</li>
- *   <li>Over 8 bytes entries are reduced to a 64 bit hash, so a false
- *       positive needs a hash collision: about 5.4E-20 per pair, so
- *       n^2/2^65 across n entries</li>
- *   <li>About 1.93x faster than {@link DecayingBloomFilter} for 8 byte (long)
- *       entries and 2.46x faster for 16 byte entries</li>
- *   <li>About 72 bytes of memory per 16 byte entry once loaded (measured: 9.01 MB
- *       for 131,000 entries), covering the map node, the {@code ArrayWrapper}
- *       and its share of the table. At the 128K soft cap that is roughly 9 MB
- *       as a floor, not a ceiling: getInsertedCount() spans both buffers, so a
- *       window deferred past the cap can take this to about twice that</li>
- *   <li>Space-proportional traffic handling</li>
+ * <li>Zero false positive rate for ≤8 byte keys (lossy hash for larger keys)</li>
+ * <li>Over 8 bytes entries are reduced to a 64 bit hash, so a false
+ * positive needs a hash collision: about 5.4E-20 per pair, so
+ * n^2/2^65 across n entries</li>
+ * <li>About 1.93x faster than {@link DecayingBloomFilter} for 8 byte (long)
+ * entries and 2.46x faster for 16 byte entries</li>
+ * <li>About 72 bytes of memory per 16 byte entry once loaded (measured: 9.01 MB
+ * for 131,000 entries), covering the map node, the {@code ArrayWrapper}
+ * and its share of the table. At the 128K soft cap that is roughly 9 MB
+ * as a floor, not a ceiling: getInsertedCount() spans both buffers, so a
+ * window deferred past the cap can take this to about twice that</li>
+ * <li>Space-proportional traffic handling</li>
  * </ul>
  * <p>
  * Uses read/write locks with SimpleTimer2 for thread safety
@@ -45,62 +45,62 @@ public class DecayingHashSet extends DecayingBloomFilter {
     private ConcurrentHashSet<ArrayWrapper> _previous;
 
     /**
-     *  Maximum entries before a forced early decay is attempted. This is a
-     *  soft target, not a hard ceiling: memory is bounded by roughly two
-     *  windows of traffic rather than by this number, because forcing a decay
-     *  sooner than an entry's lifetime would drop live entries.
+     * Maximum entries before a forced early decay is attempted. This is a
+     * soft target, not a hard ceiling: memory is bounded by roughly two
+     * windows of traffic rather than by this number, because forcing a decay
+     * sooner than an entry's lifetime would drop live entries.
      *
-     *  Measured cost at this cap with 16 byte entries: about 9 MB, roughly
-     *  72 bytes per entry including the map node and the wrapper.
+     * Measured cost at this cap with 16 byte entries: about 9 MB, roughly
+     * 72 bytes per entry including the map node and the wrapper.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     static final int DEFAULT_MAX_ENTRIES = 128 * 1024;   // package visible for tests
     /**
-     *  Measured retained cost per entry for 16 byte keys: about 72 bytes,
-     *  covering the map node, the {@code ArrayWrapper} and its share of the
-     *  table. Measured 9.01 MB for 131,000 entries.
-     *  @since 0.9.71+
+     * Measured retained cost per entry for 16 byte keys: about 72 bytes,
+     * covering the map node, the {@code ArrayWrapper} and its share of the
+     * table. Measured 9.01 MB for 131,000 entries.
+     * @since 0.9.71+
      */
     public static final long BYTES_PER_ENTRY = 72;
     /**
-     *  The cap actually in force: {@link #DEFAULT_MAX_ENTRIES} unless a test
-     *  asked for a smaller one so it can cross the threshold cheaply, or the
-     *  router lowered it to hold memory down.
+     * The cap actually in force: {@link #DEFAULT_MAX_ENTRIES} unless a test
+     * asked for a smaller one so it can cross the threshold cheaply, or the
+     * router lowered it to hold memory down.
      *
-     *  <p>A set has no fixed memory cost, so unlike a bloom filter it can only
-     *  be bounded by refusing growth: reaching the cap retires the older buffer
-     *  even if its entries have not expired. That trades duplicate detection
-     *  for a memory ceiling, so it is only the right call where the memory
-     *  ceiling is the harder constraint. Volatile so the setter can change it
-     *  while the router is running.
+     * <p>A set has no fixed memory cost, so unlike a bloom filter it can only
+     * be bounded by refusing growth: reaching the cap retires the older buffer
+     * even if its entries have not expired. That trades duplicate detection
+     * for a memory ceiling, so it is only the right call where the memory
+     * ceiling is the harder constraint. Volatile so the setter can change it
+     * while the router is running.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile int _maxEntries;
     /**
-     *  True once {@link #setMaxEntries(int)} has been used, meaning a caller
-     *  has declared a memory ceiling to be the harder constraint. The default
-     *  cap stays soft: it is only a backstop, and preferring duplicate
-     *  detection over an early retirement is the right default.
-     *  @since 0.9.71+
+     * True once {@link #setMaxEntries(int)} has been used, meaning a caller
+     * has declared a memory ceiling to be the harder constraint. The default
+     * cap stays soft: it is only a backstop, and preferring duplicate
+     * detection over an early retirement is the right default.
+     * @since 0.9.71+
      */
     private volatile boolean _hardCap;
     /**
-     *  Nanotime of the last decay, used to space decays at least one interval
-     *  apart. Volatile so the over-cap path can test it without taking the
-     *  write lock. Monotonic on purpose: a wall clock jump must not be able to
-     *  force an early decay, which would drop entries that are still live.
-     *  @since 0.9.71+
+     * Nanotime of the last decay, used to space decays at least one interval
+     * apart. Volatile so the over-cap path can test it without taking the
+     * write lock. Monotonic on purpose: a wall clock jump must not be able to
+     * force an early decay, which would drop entries that are still live.
+     * @since 0.9.71+
      */
     private volatile long _lastDecayNanos;
     /**
-     *  Nanotime of the last over-cap warning, so that a sustained flood does not
-     *  log once per entry. Same clock as {@link #_lastDecayNanos} on purpose, so
-     *  one policy decision never mixes a monotonic and a wall clock reading.
-     *  Volatile because the warn is reached from the unlocked pre-check in
-     *  forceDecayIfOverCap(); a lost update here only costs an extra log line.
-     *  @since 0.9.71+
+     * Nanotime of the last over-cap warning, so that a sustained flood does not
+     * log once per entry. Same clock as {@link #_lastDecayNanos} on purpose, so
+     * one policy decision never mixes a monotonic and a wall clock reading.
+     * Volatile because the warn is reached from the unlocked pre-check in
+     * forceDecayIfOverCap(); a lost update here only costs an extra log line.
+     * @since 0.9.71+
      */
     private volatile long _lastOverCapWarnNanos;
 
@@ -116,21 +116,21 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  Decaying hash set with a custom name.
+     * Decaying hash set with a custom name.
      *
-     *  @param name just for logging / debugging / stats
-     *  @throws IllegalArgumentException if entryBytes is not 1-32
+     * @param name just for logging / debugging / stats
+     * @throws IllegalArgumentException if entryBytes is not 1-32
      */
     public DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes, String name) {
         this(context, durationMs, entryBytes, name, DEFAULT_MAX_ENTRIES);
     }
 
     /**
-     *  As above, with an explicit cap. Only for tests, which need to cross the
-     *  over-cap path without inserting the full {@link #DEFAULT_MAX_ENTRIES} entries.
+     * As above, with an explicit cap. Only for tests, which need to cross the
+     * over-cap path without inserting the full {@link #DEFAULT_MAX_ENTRIES} entries.
      *
-     *  @param maxEntries hard cap on entries across both buffers
-     *  @since 0.9.71+
+     * @param maxEntries hard cap on entries across both buffers
+     * @since 0.9.71+
      */
     DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes, String name, int maxEntries) {
         super(durationMs, entryBytes, name, context);
@@ -151,8 +151,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  Unsynchronized. Read on the add() path by forceDecayIfOverCap(), as well
-     *  as for logging, so it is a hot call.
+     * Unsynchronized. Read on the add() path by forceDecayIfOverCap(), as well
+     * as for logging, so it is a hot call.
      */
     @Override
     public int getInsertedCount() {
@@ -160,23 +160,23 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  The entry cap currently in force, across both buffers.
+     * The entry cap currently in force, across both buffers.
      *
-     *  @return the cap
-     *  @since 0.9.71+
+     * @return the cap
+     * @since 0.9.71+
      */
     public int getMaxEntries() { return _maxEntries; }
 
     /**
-     *  Change the entry cap while running, for the router's low-memory path.
+     * Change the entry cap while running, for the router's low-memory path.
      *
-     *  <p>Lowering it takes effect at once: the next add() over the new cap
-     *  triggers a decay, which may retire entries that have not yet expired.
-     *  Raising it does not resurrect anything already retired.
+     * <p>Lowering it takes effect at once: the next add() over the new cap
+     * triggers a decay, which may retire entries that have not yet expired.
+     * Raising it does not resurrect anything already retired.
      *
-     *  @param maxEntries the new cap, must be positive
-     *  @throws IllegalArgumentException if maxEntries is not positive
-     *  @since 0.9.71+
+     * @param maxEntries the new cap, must be positive
+     * @throws IllegalArgumentException if maxEntries is not positive
+     * @since 0.9.71+
      */
     public void setMaxEntries(int maxEntries) {
         if (maxEntries <= 0)
@@ -188,12 +188,12 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  Bytes of memory the current contents occupy, at the measured rate of
-     *  about 72 bytes per entry for 16 byte keys. Reported so a caller sizing
-     *  against a memory budget can see the cost it is actually paying.
+     * Bytes of memory the current contents occupy, at the measured rate of
+     * about 72 bytes per entry for 16 byte keys. Reported so a caller sizing
+     * against a memory budget can see the cost it is actually paying.
      *
-     *  @return estimated retained bytes
-     *  @since 0.9.71+
+     * @return estimated retained bytes
+     * @since 0.9.71+
      */
     public long getEstimatedMemoryBytes() { return (long) getInsertedCount() * BYTES_PER_ENTRY; }
 
@@ -232,7 +232,6 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * @return true if the entry added is a duplicate.  the number of low order
      * bits used is determined by the entryBytes parameter used on creation of the
      * filter.
-     *
      */
     @Override
     public boolean add(long entry) {
@@ -244,7 +243,6 @@ public class DecayingHashSet extends DecayingBloomFilter {
      *
      * @return true if the entry is already known.  this does NOT add the
      * entry however.
-     *
      */
     @Override
     public boolean isKnown(long entry) {
@@ -261,19 +259,19 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  Force a decay cycle if the entry count exceeds the soft cap.
+     * Force a decay cycle if the entry count exceeds the soft cap.
      *
-     *  A decay must never run more often than the decay interval: the swap in
-     *  {@link #decay()} drops the older buffer, and doing that before that
-     *  buffer has aged out would forget entries that are still live, turning
-     *  this duplicate/replay filter into a source of false negatives. So when
-     *  the cap is exceeded we decay only if at least one interval has passed
-     *  since the last decay, and otherwise leave it to the scheduled event.
+     * A decay must never run more often than the decay interval: the swap in
+     * {@link #decay()} drops the older buffer, and doing that before that
+     * buffer has aged out would forget entries that are still live, turning
+     * this duplicate/replay filter into a source of false negatives. So when
+     * the cap is exceeded we decay only if at least one interval has passed
+     * since the last decay, and otherwise leave it to the scheduled event.
      *
-     *  Best-effort: races are harmless (an extra decay, or a one-entry
-     *  overshoot). Under sustained overload this holds up to about two
-     *  windows of entries rather than the cap.
-     *  @since 0.9.70+
+     * Best-effort: races are harmless (an extra decay, or a one-entry
+     * overshoot). Under sustained overload this holds up to about two
+     * windows of entries rather than the cap.
+     * @since 0.9.70+
      */
     private void forceDecayIfOverCap() {
         if (getInsertedCount() < _maxEntries)
@@ -326,12 +324,12 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  Add the entry to the current set if new, or check membership only.
+     * Add the entry to the current set if new, or check membership only.
      *
-     *  @param addIfNew if true, add the element to current if it is not already there or in previous;
-     *                  if false, only check
+     * @param addIfNew if true, add the element to current if it is not already there or in previous;
+     * if false, only check
      *
-     *  @return if the element is in either the current or previous set
+     * @return if the element is in either the current or previous set
      */
     private boolean locked_add(ArrayWrapper w, boolean addIfNew) {
         boolean seen = _previous.contains(w);
@@ -381,10 +379,10 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  Retire the older buffer and clear the recycled one. Caller must hold
-     *  the write lock. Does no logging, so the lock is held only for the swap.
+     * Retire the older buffer and clear the recycled one. Caller must hold
+     * the write lock. Does no logging, so the lock is held only for the swap.
      *
-     *  @return what was in the retiring buffer, for logging once unlocked
+     * @return what was in the retiring buffer, for logging once unlocked
      */
     private DecayCounters swapBuffers() {
         int currentCount = _current.size();
@@ -406,9 +404,9 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  What a decay found, carried out of the write lock so the caller can log
-     *  it without extending the exclusive section.
-     *  @since 0.9.71+
+     * What a decay found, carried out of the write lock so the caller can log
+     * it without extending the exclusive section.
+     * @since 0.9.71+
      */
     private static final class DecayCounters {
         private final int count;
@@ -421,10 +419,10 @@ public class DecayingHashSet extends DecayingBloomFilter {
     }
 
     /**
-     *  This saves the data as-is if the length is &lt;= 8 bytes,
-     *  otherwise it stores an 8-byte hash.
-     *  Hash function is from DataHelper, modded to get
-     *  the maximum entropy given the length of the data.
+     * This saves the data as-is if the length is &lt;= 8 bytes,
+     * otherwise it stores an 8-byte hash.
+     * Hash function is from DataHelper, modded to get
+     * the maximum entropy given the length of the data.
      */
     private static class ArrayWrapper {
         private final long _longhashcode;

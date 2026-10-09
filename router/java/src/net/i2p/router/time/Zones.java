@@ -15,8 +15,8 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.transport.GeoIP;
 
 /**
- *  Country to continent mapping for NTP.
- *  @since 0.9.20
+ * Country to continent mapping for NTP.
+ * @since 0.9.20
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
 class Zones {
@@ -49,8 +49,8 @@ class Zones {
     };
 
     /**
-     *  Reads in the file in the constructor,
-     *  so hold onto this.
+     * Reads in the file in the constructor,
+     * so hold onto this.
      */
     public Zones(I2PAppContext ctx) {
         _context = ctx;
@@ -63,28 +63,28 @@ class Zones {
     }
 
     /**
-     *  NTP zone for a country.
+     * NTP zone for a country.
      *
-     *  @param country non-null, two letter code, case-independent
-     *  @return lower-case NTP zone, e.g. "africa", or null
+     * @param country non-null, two letter code, case-independent
+     * @return lower-case NTP zone, e.g. "africa", or null
      */
     public String getZone (String country) {
         return _countryToZone.get(country.toLowerCase(Locale.US));
     }
 
     /**
-     *  Read in and parse the continent file.
-     *  The file need not be sorted.
+     * Read in and parse the continent file.
+     * The file need not be sorted.
      *
-     *  Format:
-     *  #comment (# must be in column 1)
-     *  country code,continent code
+     * Format:
+     * #comment (# must be in column 1)
+     * country code,continent code
      *
-     *  Example:
-     *  US,NA
+     * Example:
+     * US,NA
      *
-     *  Modified from GeoIP.readCountryFile()
-     *  ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/
+     * Modified from GeoIP.readCountryFile()
+     * ref: http://dev.maxmind.com/geoip/legacy/codes/country_continent/
      */
     private void readContinentFile() {
         String geoDir = _context.getProperty(GeoIP.PROP_GEOIP_DIR, GeoIP.GEOIP_DIR_DEFAULT);

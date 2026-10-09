@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -42,8 +41,8 @@ public class GetDateMessage extends I2CPMessageImpl {
 
     /**
      * Client's version String to be sent to the router; may be null.
-     *  @param version the client's version String to be sent to the router; may be null
-     *  @since 0.8.7
+     * @param version the client's version String to be sent to the router; may be null
+     * @since 0.8.7
      */
     public GetDateMessage(String version) {
         super();
@@ -51,17 +50,17 @@ public class GetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Defaults in GetDateMessage options are, in general, NOT honored.
-     *  Defaults are not serialized out-of-JVM, and the router does not recognize defaults in-JVM.
-     *  Client side must promote defaults to the primary map.
+     * Defaults in GetDateMessage options are, in general, NOT honored.
+     * Defaults are not serialized out-of-JVM, and the router does not recognize defaults in-JVM.
+     * Client side must promote defaults to the primary map.
      *
-     *  @param version the client's version String to be sent to the router; may be null;
-     *                 must be non-null if options is non-null and non-empty.
+     * @param version the client's version String to be sent to the router; may be null;
+     * must be non-null if options is non-null and non-empty.
      *
-     *  @param options Client options to be sent to the router; primarily for authentication; may be null;
-     *                 keys and values 255 bytes (not chars) max each
+     * @param options Client options to be sent to the router; primarily for authentication; may be null;
+     * keys and values 255 bytes (not chars) max each
      *
-     *  @since 0.9.11
+     * @since 0.9.11
      */
     public GetDateMessage(String version, Properties options) {
         super();
@@ -71,21 +70,21 @@ public class GetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Gets the protocol version.
+     * Gets the protocol version.
      *
-     *  @return may be null
-     *  @since 0.8.7
+     * @return may be null
+     * @since 0.8.7
      */
     public String getVersion() {
         return _version;
     }
 
     /**
-     *  Retrieve any configuration options for the connection.
-     *  Primarily for authentication.
+     * Retrieve any configuration options for the connection.
+     * Primarily for authentication.
      *
-     *  @return may be null
-     *  @since 0.9.11
+     * @return may be null
+     * @since 0.9.11
      */
     public Properties getOptions() {
         return _options;

@@ -31,8 +31,6 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  * Coordinate all of the connections for a single local destination.
- *
- *
  */
 class ConnectionManager {
     private final I2PAppContext _context;
@@ -73,7 +71,6 @@ class ConnectionManager {
     /**
      * Per-destination cooldown to avoid hammering unreachable peers.
      * Key is destination Hash, value is timestamp of last failed connect.
-     * @since 2.7.0
      */
     private final ConcurrentHashMap<Hash, Long> _destFailures = new ConcurrentHashMap<>(4);
 
@@ -175,24 +172,24 @@ class ConnectionManager {
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
-     *  Sample periods for the stream-close retransmission ratios. The five
-     *  minute period is mandatory, not cosmetic: Tuner.getAdditionalStat5Min()
-     *  reads exactly FIVE_MINUTES from both stats to measure routing
-     *  congestion, and a RateStat without that period makes addRateData()
-     *  silently drop those samples, leaving the tuner with NaN forever.
-     *  @since 0.9.71+
+     * Sample periods for the stream-close retransmission ratios. The five
+     * minute period is mandatory, not cosmetic: Tuner.getAdditionalStat5Min()
+     * reads exactly FIVE_MINUTES from both stats to measure routing
+     * congestion, and a RateStat without that period makes addRateData()
+     * silently drop those samples, leaving the tuner with NaN forever.
+     * @since 0.9.71+
      */
     static final long[] RTX_RATIO_RATES = { RateConstants.ONE_MINUTE, RateConstants.FIVE_MINUTES,
                                             RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR };
 
     /**
-     *  Register the stream-close retransmission ratio stats, including the
-     *  five-minute period the router's congestion tuner samples. Separated
-     *  from the constructor so tests can register against a fresh StatManager
-     *  without building a whole manager.
+     * Register the stream-close retransmission ratio stats, including the
+     * five-minute period the router's congestion tuner samples. Separated
+     * from the constructor so tests can register against a fresh StatManager
+     * without building a whole manager.
      *
-     *  @param sm stat manager to register with, non-null
-     *  @since 0.9.71+
+     * @param sm stat manager to register with, non-null
+     * @since 0.9.71+
      */
     static void registerRtxRatioStats(StatManager sm) {
         sm.createRequiredRateStat("stream.rtxRatio",
@@ -208,243 +205,243 @@ class ConnectionManager {
     private static final Set<Hash> _globalBlacklist = new ConcurrentHashSet<>();
 
     /**
-     *  Temporary bans keyed by destination hash -> bannedUntil epoch ms.
-     *  Autoban hammering dests for 24h (or i2p.streaming.tempBanMinutes).
-     *  Enforced in shouldRejectConnection() before the port/budget counters so a
-     *  banned dest no longer consumes its per-dest budget or per-peer throttlers.
-     *  Expired entries
-     *  are removed by BanExpiry. @since 0.9.71+
+     * Temporary bans keyed by destination hash -> bannedUntil epoch ms.
+     * Autoban hammering dests for 24h (or i2p.streaming.tempBanMinutes).
+     * Enforced in shouldRejectConnection() before the port/budget counters so a
+     * banned dest no longer consumes its per-dest budget or per-peer throttlers.
+     * Expired entries
+     * are removed by BanExpiry. @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, Long> _tempBanUntil = new ConcurrentHashMap<>();
 
     /**
-     *  Trigger reason for an active temp-ban, kept alongside _tempBanUntil so the
-     *  enforcement path can tell a client *why* it was banned (e.g. the per-minute
-     *  limit it tripped). Written on ban, removed on expiry by BanExpiry.
-     *  @since 0.9.71+
+     * Trigger reason for an active temp-ban, kept alongside _tempBanUntil so the
+     * enforcement path can tell a client *why* it was banned (e.g. the per-minute
+     * limit it tripped). Written on ban, removed on expiry by BanExpiry.
+     * @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, String> _tempBanReason = new ConcurrentHashMap<>();
 
     /**
-     *  Rolling refusals per destination, incremented each time the
-     *  MAXIMUM streams gate refuses a SYN from that dest. Empties when a
-     *  dest is banned or when BanExpiry clears the window.
-     *  @since 0.9.71+
+     * Rolling refusals per destination, incremented each time the
+     * MAXIMUM streams gate refuses a SYN from that dest. Empties when a
+     * dest is banned or when BanExpiry clears the window.
+     * @since 0.9.71+
      */
     private final ObjectCounter<Hash> _refusalCounter = new ObjectCounter<>();
 
     /**
-     *  Live concurrent-stream count keyed by remote destination. Each remote dest
-     *  gets its own stream budget (captured from the same effective max as the old
-     *  global gate), so a flood from one dest can no longer starve legitimate
-     *  clients sharing the listener. Slots are only ever taken by
-     *  {@link #reserveStreamSlot(ConcurrentHashMap, Hash, int)} (an atomic
-     *  check-and-reserve, so two SYNs racing the gate cannot both observe "room
-     *  left") and released through {@link #_streamReservations} so a teardown
-     *  cannot double-count. Shrunk toward the live table by {@link BanExpiry}
-     *  only after the same excess is seen twice. @since 0.9.71+
+     * Live concurrent-stream count keyed by remote destination. Each remote dest
+     * gets its own stream budget (captured from the same effective max as the old
+     * global gate), so a flood from one dest can no longer starve legitimate
+     * clients sharing the listener. Slots are only ever taken by
+     * {@link #reserveStreamSlot(ConcurrentHashMap, Hash, int)} (an atomic
+     * check-and-reserve, so two SYNs racing the gate cannot both observe "room
+     * left") and released through {@link #_streamReservations} so a teardown
+     * cannot double-count. Shrunk toward the live table by {@link BanExpiry}
+     * only after the same excess is seen twice. @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, AtomicInteger> _streamsByDest = new ConcurrentHashMap<>();
 
     /**
-     *  Reservation tokens: receive stream ID &rarr; the dest whose budget the
-     *  stream was admitted under. Bound inside
-     *  {@link #assignReceiveStreamId(Connection, Hash)} in the same critical
-     *  section that publishes the ID, and consumed exactly once by
-     *  {@link #releaseReservation(long)} when that ID leaves the manager. The
-     *  token, not the connection's remote peer, is the source of truth on
-     *  teardown, so a connection torn down before its peer was ever learned
-     *  (or one whose dest hash is expensive to recompute) still returns its
-     *  slot to the right budget. @since 0.9.71+
+     * Reservation tokens: receive stream ID &rarr; the dest whose budget the
+     * stream was admitted under. Bound inside
+     * {@link #assignReceiveStreamId(Connection, Hash)} in the same critical
+     * section that publishes the ID, and consumed exactly once by
+     * {@link #releaseReservation(long)} when that ID leaves the manager. The
+     * token, not the connection's remote peer, is the source of truth on
+     * teardown, so a connection torn down before its peer was ever learned
+     * (or one whose dest hash is expensive to recompute) still returns its
+     * slot to the right budget. @since 0.9.71+
      */
     private final ConcurrentHashMap<Long, Hash> _streamReservations = new ConcurrentHashMap<>(32);
 
     /**
-     *  Reconciliation memory: what {@link BanExpiry} last observed for a dest
-     *  whose ledger count exceeded the live connection table. The excess is
-     *  only rebased downward when it repeats on a consecutive sweep, which
-     *  rules out an in-flight reservation (accepted, ID not yet published).
-     *  @since 0.9.71+
+     * Reconciliation memory: what {@link BanExpiry} last observed for a dest
+     * whose ledger count exceeded the live connection table. The excess is
+     * only rebased downward when it repeats on a consecutive sweep, which
+     * rules out an in-flight reservation (accepted, ID not yet published).
+     * @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, Integer> _streamShrinkCandidates = new ConcurrentHashMap<>(16);
 
     /**
-     *  Admission barrier: readers hold it across a whole reserve-to-bind span
-     *  (tryReserveStream through assignReceiveStreamId) so a reservation can
-     *  never straddle disconnectAllHard()'s ledger clear. Without the barrier
-     *  a SYN admitted mid-clear would bind a token against an erased count and
-     *  its teardown would then decrement a DIFFERENT stream's fresh count.
-     *  The write side wraps only the hard-disconnect loop and the clears, so
-     *  the rare teardown pays for quiescing the (microsecond) admission spans.
-     *  @since 0.9.71+
+     * Admission barrier: readers hold it across a whole reserve-to-bind span
+     * (tryReserveStream through assignReceiveStreamId) so a reservation can
+     * never straddle disconnectAllHard()'s ledger clear. Without the barrier
+     * a SYN admitted mid-clear would bind a token against an erased count and
+     * its teardown would then decrement a DIFFERENT stream's fresh count.
+     * The write side wraps only the hard-disconnect loop and the clears, so
+     * the rare teardown pays for quiescing the (microsecond) admission spans.
+     * @since 0.9.71+
      */
     private final ReentrantReadWriteLock _admissionLock = new ReentrantReadWriteLock();
 
     /**
-     *  The sweeper owned by this manager. Held so {@link #shutdown()} can stop
-     *  it: a fired-and-cancelled TimedEvent would otherwise re-arm itself from
-     *  inside timeReached(), outliving the manager it reads. @since 0.9.71+
+     * The sweeper owned by this manager. Held so {@link #shutdown()} can stop
+     * it: a fired-and-cancelled TimedEvent would otherwise re-arm itself from
+     * inside timeReached(), outliving the manager it reads. @since 0.9.71+
      */
     private volatile BanExpiry _banExpiry;
 
     /**
-     *  Per-destination burst state for the sub-second SYN gate: value is a two-element
-     *  array {burstStartMs, count}, updated at most once per validated SYN via
-     *  compare-and-swap (replace). A dest that quiesces naturally falls out of the
-     *  next window; no per-dest entries accumulate beyond one array, so this is bounded
-     *  and cheap on the hot path. Reset per-dest by the SYN-rate sweeper. @since 0.9.71+
+     * Per-destination burst state for the sub-second SYN gate: value is a two-element
+     * array {burstStartMs, count}, updated at most once per validated SYN via
+     * compare-and-swap (replace). A dest that quiesces naturally falls out of the
+     * next window; no per-dest entries accumulate beyond one array, so this is bounded
+     * and cheap on the hot path. Reset per-dest by the SYN-rate sweeper. @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, long[]> _recentSyns = new ConcurrentHashMap<>();
 
     /**
-     *  Each dest's most recent SYN-burst strikes: the start of the burst window
-     *  that crossed the threshold, the time that strike was recorded, and how
-     *  many distinct windows have tripped inside the current strike window.
-     *  Forgiveness ages from the strike time — window start can precede the
-     *  strike by up to a whole burst window, and aging from it would forgive
-     *  a later window's trip early. A trip from a DIFFERENT burst window
-     *  within {@link #STRIKE_WINDOW_MS} of the last strike adds one, and
-     *  reaching {@link #PROP_TEMP_BAN_STRIKES} of them autobans; repeat trips
-     *  inside the window that already struck are ignored, so a single unlucky
-     *  page-load burst never bans no matter how far over threshold it goes.
-     *  After the strike window the entry is swept by BanExpiry.
-     *  @since 0.9.71+
+     * Each dest's most recent SYN-burst strikes: the start of the burst window
+     * that crossed the threshold, the time that strike was recorded, and how
+     * many distinct windows have tripped inside the current strike window.
+     * Forgiveness ages from the strike time — window start can precede the
+     * strike by up to a whole burst window, and aging from it would forgive
+     * a later window's trip early. A trip from a DIFFERENT burst window
+     * within {@link #STRIKE_WINDOW_MS} of the last strike adds one, and
+     * reaching {@link #PROP_TEMP_BAN_STRIKES} of them autobans; repeat trips
+     * inside the window that already struck are ignored, so a single unlucky
+     * page-load burst never bans no matter how far over threshold it goes.
+     * After the strike window the entry is swept by BanExpiry.
+     * @since 0.9.71+
      */
     private final ConcurrentHashMap<Hash, SynStrike> _synBurstStrikes = new ConcurrentHashMap<>();
 
     /**
-     *  Cached sub-second burst config, refreshed by the BanExpiry sweeper rather than
-     *  re-read from the property store on every validated SYN (hot path).
-     *  @since 0.9.71+
+     * Cached sub-second burst config, refreshed by the BanExpiry sweeper rather than
+     * re-read from the property store on every validated SYN (hot path).
+     * @since 0.9.71+
      */
     private volatile long _synRateMs = DEFAULT_TEMP_BAN_RATE_MS;
     private volatile int _synBurst = DEFAULT_TEMP_BAN_SYN_BURST;
     /**
-     *  Cached strikes-to-ban count, refreshed by the BanExpiry sweeper. 0 or 1
-     *  is raised to 2 at the decision point, so no setting can let a single
-     *  burst window ban on its own.
-     *  @since 0.9.71+
+     * Cached strikes-to-ban count, refreshed by the BanExpiry sweeper. 0 or 1
+     * is raised to 2 at the decision point, so no setting can let a single
+     * burst window ban on its own.
+     * @since 0.9.71+
      */
     private volatile int _tempBanStrikes = DEFAULT_TEMP_BAN_STRIKES;
 
     /**
-     *  Cached autoban duration (ms) and refusal threshold, refreshed by the
-     *  BanExpiry sweeper so the hot path (isTempBanned / refusal latch) avoids
-     *  per-SYN property-store reads. Snapshot-at-mark-time still holds: a ban uses
-     *  the duration current when it was placed.
-     *  @since 0.9.71+
+     * Cached autoban duration (ms) and refusal threshold, refreshed by the
+     * BanExpiry sweeper so the hot path (isTempBanned / refusal latch) avoids
+     * per-SYN property-store reads. Snapshot-at-mark-time still holds: a ban uses
+     * the duration current when it was placed.
+     * @since 0.9.71+
      */
     private volatile long _tempBanMs = DEFAULT_TEMP_BAN_MINUTES * 60L * 1000L;
     private volatile long _tempBanRefusals = DEFAULT_TEMP_BAN_REFUSALS;
 
     /**
-     *  Cached autoban switch ({@link #PROP_AUTOBAN}), refreshed by the BanExpiry
-     *  sweeper like the other hot-path config. When false, banPeer() is a no-op,
-     *  the SYN burst gates do not count or strike, and no SYN is dropped for a
-     *  would-ban trip. Bans placed while it was enabled still expire naturally.
-     *  @since 0.9.71+
+     * Cached autoban switch ({@link #PROP_AUTOBAN}), refreshed by the BanExpiry
+     * sweeper like the other hot-path config. When false, banPeer() is a no-op,
+     * the SYN burst gates do not count or strike, and no SYN is dropped for a
+     * would-ban trip. Bans placed while it was enabled still expire naturally.
+     * @since 0.9.71+
      */
     private volatile boolean _autobanEnabled = DEFAULT_AUTOBAN != 0;
 
     /**
-     *  Blacklist property for streaming.
-     *  @since 0.9.3
+     * Blacklist property for streaming.
+     * @since 0.9.3
      */
     public static final String PROP_BLACKLIST = "i2p.streaming.blacklist";
 
     /**
-     *  Autoban property: a dest is temporarily banned until this many minutes after
-     *  it first trips a flood threshold. Default 5 minutes — short enough that
-     *  a legitimate client's retry window (30s connect timeout) overlaps with
-     *  the ban expiry, so retries succeed on the next attempt.  The previous
-     *  24-hour default was far too aggressive: a burst of page-load SYNs from
-     *  a browser (local or remote) could ban a peer for an entire day.
-     *  Tunable via i2p.streaming.tempBanMinutes. 0 disables autoban. @since 0.9.71+
+     * Autoban property: a dest is temporarily banned until this many minutes after
+     * it first trips a flood threshold. Default 5 minutes — short enough that
+     * a legitimate client's retry window (30s connect timeout) overlaps with
+     * the ban expiry, so retries succeed on the next attempt.  The previous
+     * 24-hour default was far too aggressive: a burst of page-load SYNs from
+     * a browser (local or remote) could ban a peer for an entire day.
+     * Tunable via i2p.streaming.tempBanMinutes. 0 disables autoban. @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_MINUTES = "i2p.streaming.tempBanMinutes";
     private static final long DEFAULT_TEMP_BAN_MINUTES = 5;
 
     /**
-     *  Autoban property: whether autoban enforcement is enabled.
-     *  0 disables (no new bans are recorded and the SYN flood gates do not
-     *  strike or drop); nonzero enables. Default on. The BanExpiry sweeper runs
-     *  regardless, so per-dest gate state stays bounded and the cached autoban
-     *  config keeps refreshing while enforcement is off. @since 0.9.71+
+     * Autoban property: whether autoban enforcement is enabled.
+     * 0 disables (no new bans are recorded and the SYN flood gates do not
+     * strike or drop); nonzero enables. Default on. The BanExpiry sweeper runs
+     * regardless, so per-dest gate state stays bounded and the cached autoban
+     * config keeps refreshing while enforcement is off. @since 0.9.71+
      */
     public static final String PROP_AUTOBAN = "i2p.streaming.autoban";
     private static final int DEFAULT_AUTOBAN = -1;
 
     /**
-     *  Autoban property: refusals from a single dest within a one-minute window
-     *  (as counted by _refusalCounter) at which the dest is auto-banned.
-     *  Tunable via i2p.streaming.tempBanRefusals. @since 0.9.71+
+     * Autoban property: refusals from a single dest within a one-minute window
+     * (as counted by _refusalCounter) at which the dest is auto-banned.
+     * Tunable via i2p.streaming.tempBanRefusals. @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_REFUSALS = "i2p.streaming.tempBanRefusals";
     private static final long DEFAULT_TEMP_BAN_REFUSALS = 100;
 
     /**
-     *  Autoban property: a dest sending more than tempBanSynBurst SYNs within a
-     *  tempBanSynRate-ms rolling window is auto-banned. This is the sub-second
-     *  rate gate: a legit client (e.g. a BitTorrent announce on a timer) never bursts
-     *  tens of SYNs within a few hundred ms, but the observed tracker flood does
-     *  (~25 SYNs in 259ms). Catches the burst before it consumes the stream budget.
-     *  @since 0.9.71+
+     * Autoban property: a dest sending more than tempBanSynBurst SYNs within a
+     * tempBanSynRate-ms rolling window is auto-banned. This is the sub-second
+     * rate gate: a legit client (e.g. a BitTorrent announce on a timer) never bursts
+     * tens of SYNs within a few hundred ms, but the observed tracker flood does
+     * (~25 SYNs in 259ms). Catches the burst before it consumes the stream budget.
+     * @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_RATE_MS = "i2p.streaming.tempBanSynRate";
     private static final long DEFAULT_TEMP_BAN_RATE_MS = 1000;
 
     /**
-     *  Autoban property: sub-second burst threshold (SYNs within rate window).
-     *  Default 40 SYNs per 1s = 40 req/s instantaneous.
-     *  A browser page load can fire 15-20 parallel connections, each with SYN
-     *  retransmits; empty-response retry dual-race adds up to 4 SYNs/s per
-     *  dest. The threshold must sit well above legitimate bursts so only a
-     *  serious abuser trips it. First trip is a strike (no ban); a second
-     *  trip within {@link #STRIKE_WINDOW_MS} autobans.
-     *  @since 0.9.71+
+     * Autoban property: sub-second burst threshold (SYNs within rate window).
+     * Default 40 SYNs per 1s = 40 req/s instantaneous.
+     * A browser page load can fire 15-20 parallel connections, each with SYN
+     * retransmits; empty-response retry dual-race adds up to 4 SYNs/s per
+     * dest. The threshold must sit well above legitimate bursts so only a
+     * serious abuser trips it. First trip is a strike (no ban); a second
+     * trip within {@link #STRIKE_WINDOW_MS} autobans.
+     * @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_SYN_BURST = "i2p.streaming.tempBanSynBurst";
     private static final int DEFAULT_TEMP_BAN_SYN_BURST = 40;
 
     /**
-     *  Autoban property: how many DISTINCT burst windows inside
-     *  {@link #STRIKE_WINDOW_MS} a dest must trip before the SYN-burst gate
-     *  autobans it. Default 3.
+     * Autoban property: how many DISTINCT burst windows inside
+     * {@link #STRIKE_WINDOW_MS} a dest must trip before the SYN-burst gate
+     * autobans it. Default 3.
      *
-     *  <p>A single burst window is not abuse: a browser page load, a client with
-     *  a high concurrent-stream ceiling, or a peer resuming after a pause can all
-     *  legitimately cross the sub-second threshold. Two was low enough that a
-     *  merely busy peer could lose five minutes of connectivity, so the default
-     *  demands sustained tripping of the gate. Raise it further on a
-     *  high-legitimate-traffic router, or set {@link #PROP_AUTOBAN} 0 to turn
-     *  off autoban entirely (which also disables the refusal-based ban).
+     * <p>A single burst window is not abuse: a browser page load, a client with
+     * a high concurrent-stream ceiling, or a peer resuming after a pause can all
+     * legitimately cross the sub-second threshold. Two was low enough that a
+     * merely busy peer could lose five minutes of connectivity, so the default
+     * demands sustained tripping of the gate. Raise it further on a
+     * high-legitimate-traffic router, or set {@link #PROP_AUTOBAN} 0 to turn
+     * off autoban entirely (which also disables the refusal-based ban).
      *
-     *  <p>Values below 2 are raised to 2: a single window must never ban alone.
-     *  Tunable via i2p.streaming.tempBanStrikes.
-     *  @since 0.9.71+
+     * <p>Values below 2 are raised to 2: a single window must never ban alone.
+     * Tunable via i2p.streaming.tempBanStrikes.
+     * @since 0.9.71+
      */
     public static final String PROP_TEMP_BAN_STRIKES = "i2p.streaming.tempBanStrikes";
     private static final int DEFAULT_TEMP_BAN_STRIKES = 3;
 
     /**
-     *  Strike window for the multi-strike SYN-burst gate: strikes more than
-     *  this many ms apart are forgiven, so the required count has to be met
-     *  inside one rolling window. A dest that trips once and then quiesces for
-     *  the window is forgiven (single unlucky page-load burst).
-     *  @since 0.9.71+
+     * Strike window for the multi-strike SYN-burst gate: strikes more than
+     * this many ms apart are forgiven, so the required count has to be met
+     * inside one rolling window. A dest that trips once and then quiesces for
+     * the window is forgiven (single unlucky page-load burst).
+     * @since 0.9.71+
      */
     static final long STRIKE_WINDOW_MS = 60 * 1000;
 
     /**
-     *  Ban a dest for the configured duration. Idempotent; an existing longer ban
-     *  is left in place so repeated abuse can't shrink it. No-op when autoban is
-     *  disabled ({@link #PROP_AUTOBAN} 0) or the duration is 0.
-     *  @param h dest hash to ban
-     *  @param why human-readable trigger, e.g. "exceeded max 50 conns/minute"
-     *  @param now current clock time
-     *  @return true if the dest is banned after this call (newly banned,
-     *          extended, or already banned); false if bans are disabled
-     *  @since 0.9.71+
+     * Ban a dest for the configured duration. Idempotent; an existing longer ban
+     * is left in place so repeated abuse can't shrink it. No-op when autoban is
+     * disabled ({@link #PROP_AUTOBAN} 0) or the duration is 0.
+     * @param h dest hash to ban
+     * @param why human-readable trigger, e.g. "exceeded max 50 conns/minute"
+     * @param now current clock time
+     * @return true if the dest is banned after this call (newly banned,
+     * extended, or already banned); false if bans are disabled
+     * @since 0.9.71+
      */
     boolean banPeer(Hash h, String why, long now) {
         long ms = _tempBanMs;
@@ -465,47 +462,47 @@ class ConnectionManager {
     }
 
     /**
-     *  Pure admission decision for the per-dest stream budget: one more stream
-     *  fits while the dest's live count is strictly below the ceiling.
-     *  A non-positive ceiling disables the gate entirely (no cap enforced).
-     *  @param held streams currently reserved by the dest
-     *  @param max the per-dest concurrent stream ceiling
-     *  @return true if a further stream would stay under the ceiling
-     *  @since 0.9.71+
+     * Pure admission decision for the per-dest stream budget: one more stream
+     * fits while the dest's live count is strictly below the ceiling.
+     * A non-positive ceiling disables the gate entirely (no cap enforced).
+     * @param held streams currently reserved by the dest
+     * @param max the per-dest concurrent stream ceiling
+     * @return true if a further stream would stay under the ceiling
+     * @since 0.9.71+
      */
     static boolean canReserveStream(int held, int max) {
         return max <= 0 || held < max;
     }
 
     /**
-     *  Pure decision for the per-destination stream budget: a dest is over budget
-     *  once its live concurrent-stream count reaches the per-dest ceiling.
-     *  A non-positive ceiling disables the gate entirely.
-     *  @param streamCount live streams currently held by the dest
-     *  @param max the per-dest concurrent stream ceiling
-     *  @return true if the dest is at or over its own budget
-     *  @since 0.9.71+
+     * Pure decision for the per-destination stream budget: a dest is over budget
+     * once its live concurrent-stream count reaches the per-dest ceiling.
+     * A non-positive ceiling disables the gate entirely.
+     * @param streamCount live streams currently held by the dest
+     * @param max the per-dest concurrent stream ceiling
+     * @return true if the dest is at or over its own budget
+     * @since 0.9.71+
      */
     static boolean tooManyStreamsForDest(int streamCount, int max) {
         return max > 0 && streamCount >= max;
     }
 
     /**
-     *  Atomically take one stream slot from a dest's budget: the ceiling check
-     *  and the increment happen inside a single per-key {@code compute()}, so
-     *  two SYNs racing the gate can no longer both observe "room left" and
-     *  admit past the ceiling (the check-then-add this replaced).
+     * Atomically take one stream slot from a dest's budget: the ceiling check
+     * and the increment happen inside a single per-key {@code compute()}, so
+     * two SYNs racing the gate can no longer both observe "room left" and
+     * admit past the ceiling (the check-then-add this replaced).
      *
-     *  <p>Refusal leaves the counter untouched, so a rejected SYN never costs
-     *  the dest anything. An unknown dest (null hash) is admitted without
-     *  accounting, matching the old gate's "no hash, no budget" behavior.
+     * <p>Refusal leaves the counter untouched, so a rejected SYN never costs
+     * the dest anything. An unknown dest (null hash) is admitted without
+     * accounting, matching the old gate's "no hash, no budget" behavior.
      *
-     *  @param ledger the per-dest stream ledger, non-null
-     *  @param h remote dest hash, may be null
-     *  @param max the per-dest concurrent stream ceiling; &le; 0 disables the gate
-     *  @return true if the slot was taken (the caller now owns a slot and must
-     *          either bind it to a reservation token or release it)
-     *  @since 0.9.71+
+     * @param ledger the per-dest stream ledger, non-null
+     * @param h remote dest hash, may be null
+     * @param max the per-dest concurrent stream ceiling; &le; 0 disables the gate
+     * @return true if the slot was taken (the caller now owns a slot and must
+     * either bind it to a reservation token or release it)
+     * @since 0.9.71+
      */
     static boolean reserveStreamSlot(ConcurrentHashMap<Hash, AtomicInteger> ledger,
                                      Hash h, int max) {
@@ -526,14 +523,14 @@ class ConnectionManager {
     }
 
     /**
-     *  Return one stream slot to a dest's budget. The count is clamped at zero
-     *  and the entry is dropped once drained, so a mismatched teardown can
-     *  never drive a budget negative (which would hand out free slots) and an
-     *  idle dest leaves no entry behind.
+     * Return one stream slot to a dest's budget. The count is clamped at zero
+     * and the entry is dropped once drained, so a mismatched teardown can
+     * never drive a budget negative (which would hand out free slots) and an
+     * idle dest leaves no entry behind.
      *
-     *  @param ledger the per-dest stream ledger, non-null
-     *  @param h remote dest hash, null-safe
-     *  @since 0.9.71+
+     * @param ledger the per-dest stream ledger, non-null
+     * @param h remote dest hash, null-safe
+     * @since 0.9.71+
      */
     static void releaseStreamSlot(ConcurrentHashMap<Hash, AtomicInteger> ledger, Hash h) {
         if (h == null)
@@ -545,12 +542,12 @@ class ConnectionManager {
     }
 
     /**
-     *  Read the stream count a dest is actually holding in the ledger, or 0 if
-     *  it holds none.
-     *  @param ledger the per-dest stream ledger, non-null
-     *  @param h remote dest hash, non-null
-     *  @return the reserved stream count for the dest, never negative
-     *  @since 0.9.71+
+     * Read the stream count a dest is actually holding in the ledger, or 0 if
+     * it holds none.
+     * @param ledger the per-dest stream ledger, non-null
+     * @param h remote dest hash, non-null
+     * @return the reserved stream count for the dest, never negative
+     * @since 0.9.71+
      */
     static int streamSlotCount(ConcurrentHashMap<Hash, AtomicInteger> ledger, Hash h) {
         if (h == null)
@@ -560,17 +557,17 @@ class ConnectionManager {
     }
 
     /**
-     *  Consume the reservation token bound to a receive stream ID, releasing
-     *  the dest budget slot it owns. A token is removed first and released
-     *  after, so concurrent teardowns of the same ID cannot both return the
-     *  slot; a missing token is a no-op rather than a guess about which dest
-     *  to debit.
+     * Consume the reservation token bound to a receive stream ID, releasing
+     * the dest budget slot it owns. A token is removed first and released
+     * after, so concurrent teardowns of the same ID cannot both return the
+     * slot; a missing token is a no-op rather than a guess about which dest
+     * to debit.
      *
-     *  @param tokens receive stream ID &rarr; dest hash, non-null
-     *  @param ledger the per-dest stream ledger, non-null
-     *  @param receiveStreamId the connection's receive stream ID
-     *  @return the dest hash whose slot was released, or null if no token was bound
-     *  @since 0.9.71+
+     * @param tokens receive stream ID &rarr; dest hash, non-null
+     * @param ledger the per-dest stream ledger, non-null
+     * @param receiveStreamId the connection's receive stream ID
+     * @return the dest hash whose slot was released, or null if no token was bound
+     * @since 0.9.71+
      */
     static Hash consumeReservation(ConcurrentHashMap<Long, Hash> tokens,
                                    ConcurrentHashMap<Hash, AtomicInteger> ledger,
@@ -582,16 +579,16 @@ class ConnectionManager {
     }
 
     /**
-     *  Decrement a connect-attempt waiter count without ever going negative.
+     * Decrement a connect-attempt waiter count without ever going negative.
      *
-     *  <p>Waiters are released from a {@code finally} around the wait loop, so
-     *  an abandoned or failed attempt always drains its own increment exactly
-     *  once and a double release can only stop at zero.
+     * <p>Waiters are released from a {@code finally} around the wait loop, so
+     * an abandoned or failed attempt always drains its own increment exactly
+     * once and a double release can only stop at zero.
      *
-     *  @param waiting the waiter counter, non-null
-     *  @return the value after the release, or the unchanged value if it was
-     *          already zero
-     *  @since 0.9.71+
+     * @param waiting the waiter counter, non-null
+     * @return the value after the release, or the unchanged value if it was
+     * already zero
+     * @since 0.9.71+
      */
     static int releaseWaiting(AtomicInteger waiting) {
         for (;;) {
@@ -604,30 +601,30 @@ class ConnectionManager {
     }
 
     /**
-     *  Pure reconciliation step for one dest: how much of a ledger count that
-     *  exceeds the live connection table should survive this sweep.
+     * Pure reconciliation step for one dest: how much of a ledger count that
+     * exceeds the live connection table should survive this sweep.
      *
-     *  <p>The excess is only dropped when the SAME excess was recorded by the
-     *  previous sweep (the candidate), which means it persisted across a whole
-     *  sweep interval and therefore cannot be an in-flight reservation
-     *  admitted moments before the first sweep. Counts at or below the table
-     *  are never raised: the ledger only ever shrinks toward observed reality,
-     *  so a sweep can free leaked slots but can never hand out new ones.
+     * <p>The excess is only dropped when the SAME excess was recorded by the
+     * previous sweep (the candidate), which means it persisted across a whole
+     * sweep interval and therefore cannot be an in-flight reservation
+     * admitted moments before the first sweep. Counts at or below the table
+     * are never raised: the ledger only ever shrinks toward observed reality,
+     * so a sweep can free leaked slots but can never hand out new ones.
      *
-     *  <p>Even a repeated candidate cannot shrink below the bound-token floor.
-     *  A release followed by a re-reserve can return the count to the same
-     *  value while the observed snapshot still shows the old, smaller table
-     *  (ABA): shrinking to observed there would erase brand-new reservations.
-     *  Tokens are bound one-per-admission, so {@code max(observed, boundTokens)}
-     *  is never below the live floor and a genuine leak (no token behind the
-     *  excess) still shrinks to observed.
+     * <p>Even a repeated candidate cannot shrink below the bound-token floor.
+     * A release followed by a re-reserve can return the count to the same
+     * value while the observed snapshot still shows the old, smaller table
+     * (ABA): shrinking to observed there would erase brand-new reservations.
+     * Tokens are bound one-per-admission, so {@code max(observed, boundTokens)}
+     * is never below the live floor and a genuine leak (no token behind the
+     * excess) still shrinks to observed.
      *
-     *  @param held the count currently in the ledger
-     *  @param observed the count of live connections for the dest
-     *  @param candidate the excess last sweep recorded for this dest, or null
-     *  @param boundTokens reservation tokens bound for this dest right now
-     *  @return the count to keep in the ledger this sweep
-     *  @since 0.9.71+
+     * @param held the count currently in the ledger
+     * @param observed the count of live connections for the dest
+     * @param candidate the excess last sweep recorded for this dest, or null
+     * @param boundTokens reservation tokens bound for this dest right now
+     * @return the count to keep in the ledger this sweep
+     * @since 0.9.71+
      */
     static int reconcileStreamCount(int held, int observed, Integer candidate, int boundTokens) {
         if (observed >= held)
@@ -640,20 +637,20 @@ class ConnectionManager {
     }
 
     /**
-     *  Reconcile the per-dest stream ledger against the live connection table.
-     *  See {@link #reconcileStreamCount(int, int, Integer, int)} for the policy;
-     *  this walks the ledger, records or clears per-dest candidates, and prunes
-     *  candidates for dests that have left the ledger.
+     * Reconcile the per-dest stream ledger against the live connection table.
+     * See {@link #reconcileStreamCount(int, int, Integer, int)} for the policy;
+     * this walks the ledger, records or clears per-dest candidates, and prunes
+     * candidates for dests that have left the ledger.
      *
-     *  <p>A rebase is applied with a compare-and-set on the count we read, so a
-     *  reserve or release landing mid-sweep makes us skip that dest rather than
-     *  overwrite the newer value.
+     * <p>A rebase is applied with a compare-and-set on the count we read, so a
+     * reserve or release landing mid-sweep makes us skip that dest rather than
+     * overwrite the newer value.
      *
-     *  @param ledger the per-dest stream ledger, non-null
-     *  @param observed live connection count per dest, non-null
-     *  @param candidates sweep-over-sweep observation memory, non-null
-     *  @param boundTokens reservation tokens bound per dest, non-null
-     *  @since 0.9.71+
+     * @param ledger the per-dest stream ledger, non-null
+     * @param observed live connection count per dest, non-null
+     * @param candidates sweep-over-sweep observation memory, non-null
+     * @param boundTokens reservation tokens bound per dest, non-null
+     * @since 0.9.71+
      */
     static void reconcileStreamSlots(ConcurrentHashMap<Hash, AtomicInteger> ledger,
                                      Map<Hash, Integer> observed,
@@ -692,53 +689,53 @@ class ConnectionManager {
     }
 
     /**
-     *  Take a stream slot from this dest's budget. See
-     *  {@link #reserveStreamSlot(ConcurrentHashMap, Hash, int)}.
-     *  @param h remote dest hash, non-null on every real path
-     *  @param max the per-dest concurrent stream ceiling
-     *  @return true if the slot was taken
-     *  @since 0.9.71+
+     * Take a stream slot from this dest's budget. See
+     * {@link #reserveStreamSlot(ConcurrentHashMap, Hash, int)}.
+     * @param h remote dest hash, non-null on every real path
+     * @param max the per-dest concurrent stream ceiling
+     * @return true if the slot was taken
+     * @since 0.9.71+
      */
     private boolean tryReserveStream(Hash h, int max) {
         return reserveStreamSlot(_streamsByDest, h, max);
     }
 
     /**
-     *  Return a stream slot taken outside the token protocol (a SYN rejected
-     *  after admission, or a connection built before a token was bound).
-     *  @param h remote dest hash, null-safe
-     *  @since 0.9.71+
+     * Return a stream slot taken outside the token protocol (a SYN rejected
+     * after admission, or a connection built before a token was bound).
+     * @param h remote dest hash, null-safe
+     * @since 0.9.71+
      */
     private void releaseStream(Hash h) {
         releaseStreamSlot(_streamsByDest, h);
     }
 
     /**
-     *  Consume the reservation bound to a receive stream ID, releasing its slot.
-     *  @param receiveStreamId the connection's receive stream ID
-     *  @return the dest hash released, or null if no token was bound
-     *  @since 0.9.71+
+     * Consume the reservation bound to a receive stream ID, releasing its slot.
+     * @param receiveStreamId the connection's receive stream ID
+     * @return the dest hash released, or null if no token was bound
+     * @since 0.9.71+
      */
     private Hash releaseReservation(long receiveStreamId) {
         return consumeReservation(_streamReservations, _streamsByDest, receiveStreamId);
     }
 
     /**
-     *  Release whatever this connection still holds against a dest budget:
-     *  first its reservation token, and only if no token was bound, its remote
-     *  peer (a connection built outside the reservation protocol, so the slot
-     *  must still be drained or the budget leaks forever).
+     * Release whatever this connection still holds against a dest budget:
+     * first its reservation token, and only if no token was bound, its remote
+     * peer (a connection built outside the reservation protocol, so the slot
+     * must still be drained or the budget leaks forever).
      *
-     *  <p>The release is claimed on the connection first: any path may reach
-     *  here for a connection whose slot was already returned (a hard-disconnect
-     *  sweep racing an async teardown, or a teardown after the sweeper
-     *  released it), and the peer fallback would then decrement a DIFFERENT
-     *  stream's count. The claim is re-armed by assignReceiveStreamId() when a
-     *  pooled connection starts a new generation.
+     * <p>The release is claimed on the connection first: any path may reach
+     * here for a connection whose slot was already returned (a hard-disconnect
+     * sweep racing an async teardown, or a teardown after the sweeper
+     * released it), and the peer fallback would then decrement a DIFFERENT
+     * stream's count. The claim is re-armed by assignReceiveStreamId() when a
+     * pooled connection starts a new generation.
      *
-     *  @param con the connection leaving the manager, non-null
-     *  @return the dest hash released, or null if nothing was held
-     *  @since 0.9.71+
+     * @param con the connection leaving the manager, non-null
+     * @return the dest hash released, or null if nothing was held
+     * @since 0.9.71+
      */
     private Hash releaseConnectionReservation(Connection con) {
         if (!con.claimSlotRelease())
@@ -753,34 +750,34 @@ class ConnectionManager {
     }
 
     /**
-     *  The stored trigger description for an active temp-ban, if any.
-     *  @param h dest hash
-     *  @return the recorded reason, or null if none stored
-     *  @since 0.9.71+
+     * The stored trigger description for an active temp-ban, if any.
+     * @param h dest hash
+     * @return the recorded reason, or null if none stored
+     * @since 0.9.71+
      */
     private String tempBanReason(Hash h) {
         return _tempBanReason.get(h);
     }
 
     /**
-     *  Whether a new ban end time should replace an existing one: only when it
-     *  is strictly longer. Prevents a late-arriving shorter ban from shrinking
-     *  an active ban under repeated abuse.
-     *  @param existing current bannedUntil (aged), null if none
-     *  @param candidate proposed new bannedUntil
-     *  @return true if candidate exceeds existing
-     *  @since 0.9.71+
+     * Whether a new ban end time should replace an existing one: only when it
+     * is strictly longer. Prevents a late-arriving shorter ban from shrinking
+     * an active ban under repeated abuse.
+     * @param existing current bannedUntil (aged), null if none
+     * @param candidate proposed new bannedUntil
+     * @return true if candidate exceeds existing
+     * @since 0.9.71+
      */
     static boolean banIsLonger(Long existing, Long candidate) {
         return existing != null && candidate != null && candidate.longValue() > existing.longValue();
     }
 
     /**
-     *  Whether the dest is currently temp-banned.
-     *  @param h dest hash to check
-     *  @param now current clock time
-     *  @return true if temp-banned and not yet expired
-     *  @since 0.9.71+
+     * Whether the dest is currently temp-banned.
+     * @param h dest hash to check
+     * @param now current clock time
+     * @return true if temp-banned and not yet expired
+     * @since 0.9.71+
      */
     boolean isTempBanned(Hash h, long now) {
         if (_tempBanMs <= 0)
@@ -789,38 +786,38 @@ class ConnectionManager {
     }
 
     /**
-     *  Whether a bannedUntil time is still in the future.
-     *  @param bannedUntil epoch ms; null treated as not banned
-     *  @param now current clock time
-     *  @return true if bannedUntil is non-null and greater than now
-     *  @since 0.9.71+
+     * Whether a bannedUntil time is still in the future.
+     * @param bannedUntil epoch ms; null treated as not banned
+     * @param now current clock time
+     * @return true if bannedUntil is non-null and greater than now
+     * @since 0.9.71+
      */
     static boolean banActive(Long bannedUntil, long now) {
         return bannedUntil != null && bannedUntil.longValue() > now;
     }
 
     /**
-     *  Whether a dest has tripped the autoban refusal threshold.
-     *  @param refusals count of refusals seen for the dest in the current window
-     *  @param threshold configured refusals-to-ban threshold
-     *  @return true when refusals exceed threshold
-     *  @since 0.9.71+
+     * Whether a dest has tripped the autoban refusal threshold.
+     * @param refusals count of refusals seen for the dest in the current window
+     * @param threshold configured refusals-to-ban threshold
+     * @return true when refusals exceed threshold
+     * @since 0.9.71+
      */
     static boolean refusalThresholdMet(long refusals, long threshold) {
         return threshold > 0 && refusals > threshold;
     }
 
     /**
-     *  Pure decision for the sub-second SYN-burst gate: whether a dest has sent
-     *  more than {@code burst} SYNs within the last {@code windowMs} ms.
-     *  @param burstStartMs epoch ms of the first SYN in the current burst window
-     *                     (the ''oldest'' still counted), null if none
-     *  @param count number of SYNs attributed to the open window
-     *  @param now current clock time
-     *  @param windowMs rolling window length
-     *  @param burst SYNs-per-window that constitutes an abusive burst
-     *  @return true if the dest tripped the burst gate
-     *  @since 0.9.71+
+     * Pure decision for the sub-second SYN-burst gate: whether a dest has sent
+     * more than {@code burst} SYNs within the last {@code windowMs} ms.
+     * @param burstStartMs epoch ms of the first SYN in the current burst window
+     * (the ''oldest'' still counted), null if none
+     * @param count number of SYNs attributed to the open window
+     * @param now current clock time
+     * @param windowMs rolling window length
+     * @param burst SYNs-per-window that constitutes an abusive burst
+     * @return true if the dest tripped the burst gate
+     * @since 0.9.71+
      */
     static boolean synBurstTripped(Long burstStartMs, int count, long now, long windowMs, int burst) {
         if (windowMs <= 0 || burst <= 0)
@@ -833,24 +830,24 @@ class ConnectionManager {
     }
 
     /**
-     *  Whether a SYN from a dest tripped the sub-second burst gate. Side effects:
-     *  records the SYN in the per-dest rolling window. Allocation-free on the hot
-     *  path: an existing window is bumped in place rather than replaced, and the
-     *  window/burst limits are read from cached volatile fields refreshed by the
-     *  BanExpiry sweeper. Call only for a validated SYN source.
+     * Whether a SYN from a dest tripped the sub-second burst gate. Side effects:
+     * records the SYN in the per-dest rolling window. Allocation-free on the hot
+     * path: an existing window is bumped in place rather than replaced, and the
+     * window/burst limits are read from cached volatile fields refreshed by the
+     * BanExpiry sweeper. Call only for a validated SYN source.
      *
-     *  <p>The autoban policy is a parameter, snapshotted once per SYN by the
-     *  caller, so one SYN can never be counted under one policy and then
-     *  recorded (or not) under a different one that changed mid-evaluation.
+     * <p>The autoban policy is a parameter, snapshotted once per SYN by the
+     * caller, so one SYN can never be counted under one policy and then
+     * recorded (or not) under a different one that changed mid-evaluation.
      *
-     *  @param h dest hash to record against
-     *  @param now current clock time
-     *  @param autoban the autoban policy snapshotted when this SYN was evaluated
-     *  @return the window start of the burst window that tripped (used to key
-     *          the strike to a distinct burst), or -1 if this SYN did not trip
-     *          the gate (below threshold, window just re-armed, gate disabled,
-     *          or autoban enforcement off)
-     *  @since 0.9.71+
+     * @param h dest hash to record against
+     * @param now current clock time
+     * @param autoban the autoban policy snapshotted when this SYN was evaluated
+     * @return the window start of the burst window that tripped (used to key
+     * the strike to a distinct burst), or -1 if this SYN did not trip
+     * the gate (below threshold, window just re-armed, gate disabled,
+     * or autoban enforcement off)
+     * @since 0.9.71+
      */
     private long checkSynBurst(Hash h, long now, boolean autoban) {
         if (!autoban)
@@ -890,9 +887,9 @@ class ConnectionManager {
     }
 
     /**
-     *  Outcome of evaluating one SYN burst-gate trip against the dest's recorded
-     *  strike.
-     *  @since 0.9.71+
+     * Outcome of evaluating one SYN burst-gate trip against the dest's recorded
+     * strike.
+     * @since 0.9.71+
      */
     enum SynBurstAction {
         /** Repeat trip inside the window that already struck, or the gate is disabled. */
@@ -904,19 +901,19 @@ class ConnectionManager {
     }
 
     /**
-     *  A recorded SYN-burst strike, and how many distinct burst windows this dest
-     *  has tripped inside the current strike window. Forgiveness ages from the
-     *  strike TIME, not from the burst window that caused it: a burst window is
-     *  only milliseconds long, so keying forgiveness to the window start (the
-     *  pre-0.9.71+ value) forgave a strike almost immediately and the
-     *  multi-strike autoban never fired.
+     * A recorded SYN-burst strike, and how many distinct burst windows this dest
+     * has tripped inside the current strike window. Forgiveness ages from the
+     * strike TIME, not from the burst window that caused it: a burst window is
+     * only milliseconds long, so keying forgiveness to the window start (the
+     * pre-0.9.71+ value) forgave a strike almost immediately and the
+     * multi-strike autoban never fired.
      *
-     *  <p>{@link #strikeTime} is the time of the MOST RECENT strike, so the
-     *  window is rolling: a dest must produce every one of its strikes inside
-     *  {@link #STRIKE_WINDOW_MS} of the previous one to reach the ban count.
-     *  A dest that trips once and then stays quiet for the window is forgiven.
+     * <p>{@link #strikeTime} is the time of the MOST RECENT strike, so the
+     * window is rolling: a dest must produce every one of its strikes inside
+     * {@link #STRIKE_WINDOW_MS} of the previous one to reach the ban count.
+     * A dest that trips once and then stays quiet for the window is forgiven.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final class SynStrike {
         /** Window start of the most recent burst (identity for same-window IGNORE). */
@@ -927,7 +924,7 @@ class ConnectionManager {
         final int count;
 
         /**
-         *  A single strike, i.e. the first trip from this dest.
+         * A single strike, i.e. the first trip from this dest.
          *
          * @param windowStart window start of the burst that recorded the strike
          * @param strikeTime clock time at which the strike was recorded
@@ -949,17 +946,17 @@ class ConnectionManager {
     }
 
     /**
-     *  Whether {@code last} has aged out of the forgiveness window (or was
-     *  stamped in the future by a clock adjustment, which is treated the same
-     *  way so a skewed clock can never ban).
+     * Whether {@code last} has aged out of the forgiveness window (or was
+     * stamped in the future by a clock adjustment, which is treated the same
+     * way so a skewed clock can never ban).
      *
-     *  <p>Single source of truth: the decision function uses it to choose BAN
-     *  vs RECORD, and the recorder uses it to decide whether a RECORD extends
-     *  the running strike count or restarts it at 1. Sharing it keeps those two
-     *  from drifting, which would otherwise let a dest accumulate strikes across
-     *  unrelated hours of traffic.
+     * <p>Single source of truth: the decision function uses it to choose BAN
+     * vs RECORD, and the recorder uses it to decide whether a RECORD extends
+     * the running strike count or restarts it at 1. Sharing it keeps those two
+     * from drifting, which would otherwise let a dest accumulate strikes across
+     * unrelated hours of traffic.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static boolean strikeForgiven(SynStrike last, long now, long strikeWindowMs) {
         long age = now - last.strikeTime;
@@ -967,25 +964,25 @@ class ConnectionManager {
     }
 
     /**
-     *  Pure decision for the multi-strike SYN-burst gate. Strikes mean DISTINCT
-     *  burst windows: repeat trips inside the window that recorded the most
-     *  recent strike are IGNOREd, so a single unlucky page-load burst can never
-     *  cost a 5-minute outage however far over threshold it goes. Only when a
-     *  dest has tripped {@code requiredStrikes} distinct windows inside
-     *  {@link #STRIKE_WINDOW_MS} of each other is this trip a BAN, i.e. the
-     *  demonstrable pattern of sustained abuse. After the window the count is
-     *  forgiven and a new one RECORDs instead.
+     * Pure decision for the multi-strike SYN-burst gate. Strikes mean DISTINCT
+     * burst windows: repeat trips inside the window that recorded the most
+     * recent strike are IGNOREd, so a single unlucky page-load burst can never
+     * cost a 5-minute outage however far over threshold it goes. Only when a
+     * dest has tripped {@code requiredStrikes} distinct windows inside
+     * {@link #STRIKE_WINDOW_MS} of each other is this trip a BAN, i.e. the
+     * demonstrable pattern of sustained abuse. After the window the count is
+     * forgiven and a new one RECORDs instead.
      *
-     *  <p>Forgiveness ages from the most recent strike time, so the window is
-     *  rolling and the clock starts when the strike was recorded, not when the
-     *  (millisecond-scale) burst window began.
+     * <p>Forgiveness ages from the most recent strike time, so the window is
+     * rolling and the clock starts when the strike was recorded, not when the
+     * (millisecond-scale) burst window began.
      *
      * @param last recorded strike for this dest, or null if this dest has none
      * @param windowStart window start of the burst window that just tripped
      * @param now current clock time
      * @param strikeWindowMs strike forgiveness window (pass {@link #STRIKE_WINDOW_MS})
      * @param requiredStrikes distinct burst windows needed to ban; values below
-     *        2 are raised to 2 so a single window can never ban on its own
+     * 2 are raised to 2 so a single window can never ban on its own
      * @return the action to take for this trip
      * @since 0.9.71+
      */
@@ -1005,12 +1002,12 @@ class ConnectionManager {
     }
 
     /**
-     *  Atomically evaluate and apply a burst-gate trip against {@code h}'s
-     *  recorded strike. The read-modify-write runs under
-     *  {@link ConcurrentHashMap#compute} so concurrent trips from one dest can
-     *  neither both miss a just-recorded first strike (double-counting a single
-     *  burst as two strikes) nor lose it to a racing put (letting a sustained
-     *  flood escape the ban).
+     * Atomically evaluate and apply a burst-gate trip against {@code h}'s
+     * recorded strike. The read-modify-write runs under
+     * {@link ConcurrentHashMap#compute} so concurrent trips from one dest can
+     * neither both miss a just-recorded first strike (double-counting a single
+     * burst as two strikes) nor lose it to a racing put (letting a sustained
+     * flood escape the ban).
      *
      * @param strikes per-dest strike map
      * @param h remote dest hash, non-null
@@ -1040,25 +1037,25 @@ class ConnectionManager {
     }
 
     /**
-     *  Record a SYN-burst strike for {@code h} and decide whether this trip
-     *  autobans (see {@link #synBurstStrikeAction}). First trip in a window (or
-     *  a trip after the strike window): store the strike, return false.
-     *  Repeat trips in an already-struck window: no-op, return false. Second
-     *  distinct window inside the strike window: leave the original strike in
-     *  place (the ban supersedes further strikes), return true.
+     * Record a SYN-burst strike for {@code h} and decide whether this trip
+     * autobans (see {@link #synBurstStrikeAction}). First trip in a window (or
+     * a trip after the strike window): store the strike, return false.
+     * Repeat trips in an already-struck window: no-op, return false. Second
+     * distinct window inside the strike window: leave the original strike in
+     * place (the ban supersedes further strikes), return true.
      *
-     *  <p>Autoban is re-checked live here (the callers already gate
-     *  checkSynBurst() on a per-SYN snapshot): if enforcement is switched off
-     *  between the trip and this record, no strike may be stored, or the map
-     *  would keep evidence recorded under a policy the operator has since
-     *  disabled. Callers' snapshot decides BAN for the trip in flight; this
-     *  check only gates the record.
+     * <p>Autoban is re-checked live here (the callers already gate
+     * checkSynBurst() on a per-SYN snapshot): if enforcement is switched off
+     * between the trip and this record, no strike may be stored, or the map
+     * would keep evidence recorded under a policy the operator has since
+     * disabled. Callers' snapshot decides BAN for the trip in flight; this
+     * check only gates the record.
      *
-     *  @param h remote dest hash, non-null
-     *  @param windowStart window start of the burst window that just tripped
-     *  @param now current clock time
-     *  @return true if this trip should autoban
-     *  @since 0.9.71+
+     * @param h remote dest hash, non-null
+     * @param windowStart window start of the burst window that just tripped
+     * @param now current clock time
+     * @return true if this trip should autoban
+     * @since 0.9.71+
      */
     private boolean noteSynBurstStrike(Hash h, long windowStart, long now) {
         if (!_autobanEnabled)
@@ -1080,29 +1077,29 @@ class ConnectionManager {
     }
 
     /**
-     *  Package-visible flood gate for the retransmit-SYN path in
-     *  {@link ConnectionHandler#receiveNewSyn(Packet)}. A retransmitted SYN carries the
-     *  stream IDs of a connection that already exists in the manager, so it never
-     *  reaches {@link #receiveConnection(Packet)} (and thus never passes the
-     *  {@link #checkSynBurst(Hash, long, boolean)} gate at the top of that method). An
-     *  attacker exploits that by planting a handful of half-open connections and
-     *  then blasting retransmitted SYNs against them; without this gate every hit
-     *  makes {@code ConnectionHandler.resendSynAck} mint and enqueue a fresh
-     *  SYN-ACK, consuming CPU and egress, and the connection never establishes.
+     * Package-visible flood gate for the retransmit-SYN path in
+     * {@link ConnectionHandler#receiveNewSyn(Packet)}. A retransmitted SYN carries the
+     * stream IDs of a connection that already exists in the manager, so it never
+     * reaches {@link #receiveConnection(Packet)} (and thus never passes the
+     * {@link #checkSynBurst(Hash, long, boolean)} gate at the top of that method). An
+     * attacker exploits that by planting a handful of half-open connections and
+     * then blasting retransmitted SYNs against them; without this gate every hit
+     * makes {@code ConnectionHandler.resendSynAck} mint and enqueue a fresh
+     * SYN-ACK, consuming CPU and egress, and the connection never establishes.
      *
-     *  <p>This routes the retransmit through the <em>same</em> per-destination
-     *  sub-second burst window as fresh SYNs, so a dest that crosses the burst
-     *  threshold in {@link #PROP_TEMP_BAN_STRIKES} DISTINCT windows within the
-     *  strike window — the demonstrable pattern of sustained abuse — is autobanned
-     *  and dropped. A single burst only strikes, and with autoban disabled
-     *  ({@link #PROP_AUTOBAN} 0) nothing is recorded or dropped here. Once banned,
-     *  subsequent calls return {@code true} (drop) immediately.
+     * <p>This routes the retransmit through the <em>same</em> per-destination
+     * sub-second burst window as fresh SYNs, so a dest that crosses the burst
+     * threshold in {@link #PROP_TEMP_BAN_STRIKES} DISTINCT windows within the
+     * strike window — the demonstrable pattern of sustained abuse — is autobanned
+     * and dropped. A single burst only strikes, and with autoban disabled
+     * ({@link #PROP_AUTOBAN} 0) nothing is recorded or dropped here. Once banned,
+     * subsequent calls return {@code true} (drop) immediately.
      *
-     *  @param h remote dest hash, non-null
-     *  @param now current clock time
-     *  @return true if this SYN should be dropped (dest already temp-banned, or
-     *          this SYN is a second distinct burst strike and just banned it)
-     *  @since 0.9.71+
+     * @param h remote dest hash, non-null
+     * @param now current clock time
+     * @return true if this SYN should be dropped (dest already temp-banned, or
+     * this SYN is a second distinct burst strike and just banned it)
+     * @since 0.9.71+
      */
     boolean checkInboundSynFlood(Hash h, long now) {
         if (h == null)
@@ -1123,14 +1120,14 @@ class ConnectionManager {
     }
 
     /**
-     *  The concurrent-stream cap to enforce right now. Normally this is the value
-     *  captured into {@link #_defaultOptions} at init (the user-configured
-     *  {@code i2p.streaming.maxConcurrentStreams}); if the router's Tuner has armed an
-     *  override via {@link I2PSocketManagerFull#setMaxStreamsOverride}, the effective
-     *  cap is the <em>lower</em> of the two so a user ceiling is never exceeded a
-     *  Tuner. A volatile read; no config lookup per call.
-     *  @return the cap; &le; 0 means no cap is enforced
-     *  @since 0.9.71+
+     * The concurrent-stream cap to enforce right now. Normally this is the value
+     * captured into {@link #_defaultOptions} at init (the user-configured
+     * {@code i2p.streaming.maxConcurrentStreams}); if the router's Tuner has armed an
+     * override via {@link I2PSocketManagerFull#setMaxStreamsOverride}, the effective
+     * cap is the <em>lower</em> of the two so a user ceiling is never exceeded a
+     * Tuner. A volatile read; no config lookup per call.
+     * @return the cap; &le; 0 means no cap is enforced
+     * @since 0.9.71+
      */
     private int getEffectiveMaxStreams() {
         int override = ConnectionOptions.getMaxConcurrentStreamsOverride();
@@ -1141,20 +1138,20 @@ class ConnectionManager {
     }
 
     /**
-     *  The cap to <em>report</em> in refusal log messages: the Tuner's current
-     *  override when it has armed one, otherwise the user-configured ceiling.
+     * The cap to <em>report</em> in refusal log messages: the Tuner's current
+     * override when it has armed one, otherwise the user-configured ceiling.
      *
-     *  <p>This deliberately differs from {@link #getEffectiveMaxStreams()}, which
-     *  min's the override against the user ceiling and is the real enforcement
-     *  limit at the per-destination stream budget gate
-     *  ({@link #reserveStreamSlot(ConcurrentHashMap, Hash, int)}).
-     *  When the Tuner relaxes a healthy
-     *  host back up toward its own max (e.g. 512) that is higher than a user's
-     *  configured ceiling (e.g. 256), the enforcement limit stays 256 while the
-     *  operator reading the log wants to see the Tuner's current target (512).
+     * <p>This deliberately differs from {@link #getEffectiveMaxStreams()}, which
+     * min's the override against the user ceiling and is the real enforcement
+     * limit at the per-destination stream budget gate
+     * ({@link #reserveStreamSlot(ConcurrentHashMap, Hash, int)}).
+     * When the Tuner relaxes a healthy
+     * host back up toward its own max (e.g. 512) that is higher than a user's
+     * configured ceiling (e.g. 256), the enforcement limit stays 256 while the
+     * operator reading the log wants to see the Tuner's current target (512).
      *
-     *  @return the tuner override when armed, else the configured cap
-     *  @since 0.9.71+
+     * @return the tuner override when armed, else the configured cap
+     * @since 0.9.71+
      */
     private int getLogMaxStreams() {
         int override = ConnectionOptions.getMaxConcurrentStreamsOverride();
@@ -1207,12 +1204,12 @@ class ConnectionManager {
          "</body>\n" +
          "</html>";
     /**
-     *  Manage all conns for this session
+     * Manage all conns for this session
      *
-     *  @param context the I2P app context
-     *  @param session the primary session, packets may come in on subsessions also
-     *  @param defaultOptions the default connection options
-     *  @param connectionFilter the incoming connection filter
+     * @param context the I2P app context
+     * @param session the primary session, packets may come in on subsessions also
+     * @param defaultOptions the default connection options
+     * @param connectionFilter the incoming connection filter
      */
     public ConnectionManager(I2PAppContext context,
                              I2PSession session,
@@ -1314,8 +1311,8 @@ class ConnectionManager {
     }
 
     /**
-     *  Was this conn recently closed?
-     *  @since 0.9.12
+     * Was this conn recently closed?
+     * @since 0.9.12
      */
     public boolean wasRecentlyClosed(long inboundID) {
         synchronized(_recentlyClosed) {
@@ -1392,8 +1389,8 @@ class ConnectionManager {
     }
 
     /**
-     *  Whether incoming connections are accepted.
-     *  @return if we should accept connections
+     * Whether incoming connections are accepted.
+     * @return if we should accept connections
      */
     public boolean getAllowIncomingConnections() {
         return _connectionHandler.getActive();
@@ -1404,8 +1401,8 @@ class ConnectionManager {
      *
      * @param synPacket SYN packet to process
      * @return created Connection with the packet's data already delivered to it,
-     *         or null if the syn's streamId was already taken,
-     *         or if the connection was rejected
+     * or null if the syn's streamId was already taken,
+     * or if the connection was rejected
      */
     public Connection receiveConnection(Packet synPacket) {
         Destination from = synPacket.getOptionalFrom();
@@ -1631,7 +1628,7 @@ class ConnectionManager {
      * @param from the peer destination
      * @param fromHash {@code from.calculateHash()} (already computed by the caller)
      * @param retryAfter seconds for the Retry-After header; {@link #MAX_TIME}
-     *                   means never retry (silent drop)
+     * means never retry (silent drop)
      */
     private void sendRejectResponse(Packet synPacket, Destination from, Hash fromHash, int retryAfter) {
         String resp = _defaultOptions.getLimitAction();
@@ -1730,13 +1727,13 @@ class ConnectionManager {
     }
 
     /**
-     *  Process a ping by checking for throttling, etc., then sending a pong.
+     * Process a ping by checking for throttling, etc., then sending a pong.
      *
-     *  @param con null if unknown
-     *  @param ping Ping packet to process, must have From and Sig fields,
-     *              with signature already verified, only if answerPings() returned true
-     *  @return true if we sent a pong
-     *  @since 0.9.12 from PacketHandler.receivePing()
+     * @param con null if unknown
+     * @param ping Ping packet to process, must have From and Sig fields,
+     * with signature already verified, only if answerPings() returned true
+     * @return true if we sent a pong
+     * @since 0.9.12 from PacketHandler.receivePing()
      */
     public boolean receivePing(Connection con, Packet ping) {
         Destination dest = ping.getOptionalFrom();
@@ -1789,21 +1786,21 @@ class ConnectionManager {
     }
 
     /**
-     *  Pick a new random stream ID for the con and assign it,
-     *  taking care to avoid duplicates, and put it in the connection table.
+     * Pick a new random stream ID for the con and assign it,
+     * taking care to avoid duplicates, and put it in the connection table.
      *
-     *  <p>Binds this stream's budget reservation here, inside the same critical
-     *  section that publishes the ID, so the token becomes the source of truth
-     *  for the slot from the moment the ID is visible to teardown paths. An
-     *  earlier id the con may have held is deliberately NOT re-released: a
-     *  pooled connection hands back its previous slot when it leaves the
-     *  manager, and releasing here as well would double-count.
+     * <p>Binds this stream's budget reservation here, inside the same critical
+     * section that publishes the ID, so the token becomes the source of truth
+     * for the slot from the moment the ID is visible to teardown paths. An
+     * earlier id the con may have held is deliberately NOT re-released: a
+     * pooled connection hands back its previous slot when it leaves the
+     * manager, and releasing here as well would double-count.
      *
-     *  @param con the connection to assign an ID to
-     *  @param destHash the remote dest whose budget admitted this stream; the
-     *         reservation token for the new ID points here
-     *  @since 0.9.12 consolidated from receiveConnection() and connect();
-     *         destHash added 0.9.71+ for reservation binding
+     * @param con the connection to assign an ID to
+     * @param destHash the remote dest whose budget admitted this stream; the
+     * reservation token for the new ID points here
+     * @since 0.9.12 consolidated from receiveConnection() and connect();
+     * destHash added 0.9.71+ for reservation binding
      */
     private void assignReceiveStreamId(Connection con, Hash destHash) {
         // A pooled connection's previous generation already claimed its slot
@@ -1827,10 +1824,10 @@ class ConnectionManager {
     }
 
     /**
-     *  Pick a new random stream ID for a ping and assign it,
-     *  taking care to avoid duplicates, and return it.
+     * Pick a new random stream ID for a ping and assign it,
+     * taking care to avoid duplicates, and return it.
      *
-     *  @since 0.9.12
+     * @since 0.9.12
      */
     private long assignPingId(PingRequest req) {
         long receiveId;
@@ -1847,10 +1844,10 @@ class ConnectionManager {
     }
 
     /**
-     *  Pick a new random stream ID that we are rejecting,
-     *  taking care to avoid duplicates, and return it.
+     * Pick a new random stream ID that we are rejecting,
+     * taking care to avoid duplicates, and return it.
      *
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     private long assignRejectId() {
         long receiveId;
@@ -2132,8 +2129,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
          * @param text description
          * @param secs seconds for the Retry-After header
          * @param silent if true, suppress the per-rejection WARN log. Used for
-         *        repeated rejections of an already-temp-banned dest so a hammering
-         *        peer doesn't spam the log on every SYN.
+         * repeated rejections of an already-temp-banned dest so a hammering
+         * peer doesn't spam the log on every SYN.
          */
         public Reason(String text, int secs, boolean silentFlags) {
             txt = text; seconds = secs; silent = silentFlags;
@@ -2167,7 +2164,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *
      * @param syn the incoming SYN packet
      * @return a Reason with seconds for Retry-After header; MAX_TIME for
-     *         drop, 0 if unknown; or null if not rejected
+     * drop, 0 if unknown; or null if not rejected
      */
     private Reason shouldRejectConnection(Packet syn) {
         // unfortunately we don't have access to the router client manager here,
@@ -2650,56 +2647,56 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  Ping the destination and wait for a pong.
+     * Ping the destination and wait for a pong.
      *
-     *  @param peer the destination
-     *  @param timeoutMs greater than zero
-     *  @return true if pong received
+     * @param peer the destination
+     * @param timeoutMs greater than zero
+     * @return true if pong received
      */
     public boolean ping(Destination peer, long timeoutMs) {
         return ping(peer, 0, 0, timeoutMs, true, null);
     }
 
     /**
-     *  Ping the destination and wait for a pong.
+     * Ping the destination and wait for a pong.
      *
-     *  @param peer the destination
-     *  @param fromPort the source port
-     *  @param toPort the destination port
-     *  @param timeoutMs greater than zero
-     *  @return true if pong received
-     *  @since 0.9.12 added port args
+     * @param peer the destination
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @param timeoutMs greater than zero
+     * @return true if pong received
+     * @since 0.9.12 added port args
      */
     public boolean ping(Destination peer, int fromPort, int toPort, long timeoutMs) {
         return ping(peer, fromPort, toPort, timeoutMs, true, null);
     }
 
     /**
-     *  Ping the destination, optionally waiting for a pong.
+     * Ping the destination, optionally waiting for a pong.
      *
-     *  @param peer the destination
-     *  @param fromPort the source port
-     *  @param toPort the destination port
-     *  @param timeoutMs greater than zero
-     *  @param blocking true to block until pong
-     *  @return true if blocking and pong received
-     *  @since 0.9.12 added port args
+     * @param peer the destination
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @param timeoutMs greater than zero
+     * @param blocking true to block until pong
+     * @return true if blocking and pong received
+     * @since 0.9.12 added port args
      */
     public boolean ping(Destination peer, int fromPort, int toPort, long timeoutMs, boolean blocking) {
         return ping(peer, fromPort, toPort, timeoutMs, blocking, null);
     }
 
     /**
-     *  Ping the destination, optionally waiting for a pong.
+     * Ping the destination, optionally waiting for a pong.
      *
-     *  @param peer the destination
-     *  @param fromPort the source port
-     *  @param toPort the destination port
-     *  @param timeoutMs greater than zero
-     *  @param blocking true to block until pong
-     *  @param notifier may be null
-     *  @return true if blocking and pong received
-     *  @since 0.9.12 added port args
+     * @param peer the destination
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @param timeoutMs greater than zero
+     * @param blocking true to block until pong
+     * @param notifier may be null
+     * @return true if blocking and pong received
+     * @since 0.9.12 added port args
      */
     public boolean ping(Destination peer, int fromPort, int toPort, long timeoutMs,
                         boolean blocking, PingNotifier notifier) {
@@ -2738,16 +2735,16 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  Ping the destination with a payload and wait for the pong.
+     * Ping the destination with a payload and wait for the pong.
      *
-     *  @param peer the destination
-     *  @param fromPort the source port
-     *  @param toPort the destination port
-     *  @param timeoutMs greater than zero
-     *  @param payload non-null, include in packet, up to 32 bytes may be returned in pong
-     *                 not copied, do not modify
-     *  @return the payload received in the pong, zero-length if none, null on failure or timeout
-     *  @since 0.9.18
+     * @param peer the destination
+     * @param fromPort the source port
+     * @param toPort the destination port
+     * @param timeoutMs greater than zero
+     * @param payload non-null, include in packet, up to 32 bytes may be returned in pong
+     * not copied, do not modify
+     * @return the payload received in the pong, zero-length if none, null on failure or timeout
+     * @since 0.9.18
      */
     public byte[] ping(Destination peer, int fromPort, int toPort, long timeoutMs,
                         byte[] payload) {
@@ -2905,13 +2902,13 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  The callback interface for a pong.
-     *  Unused? Not part of the public streaming API.
+     * The callback interface for a pong.
+     * Unused? Not part of the public streaming API.
      */
     public interface PingNotifier {
         /**
-         *  Notify the caller that the ping completed.
-         *  @param ok true if pong received; false if timed out
+         * Notify the caller that the ping completed.
+         * @param ok true if pong received; false if timed out
          */
         public void pingComplete(boolean ok);
     }
@@ -2948,13 +2945,13 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  Live connection count per dest, preferring the reservation token (the
-     *  dest that was actually charged at admission) and falling back to the
-     *  connection's remote peer for anything bound outside the protocol.
-     *  Built per sweep; a dest with no live connection is simply absent.
+     * Live connection count per dest, preferring the reservation token (the
+     * dest that was actually charged at admission) and falling back to the
+     * connection's remote peer for anything bound outside the protocol.
+     * Built per sweep; a dest with no live connection is simply absent.
      *
-     *  @return observed stream count per dest, never null
-     *  @since 0.9.71+
+     * @return observed stream count per dest, never null
+     * @since 0.9.71+
      */
     private Map<Hash, Integer> observedStreamCounts() {
         Map<Hash, Integer> observed = new HashMap<>();
@@ -2971,14 +2968,14 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  Bound reservation tokens per dest: the ABA floor for
-     *  {@link #reconcileStreamCount(int, int, Integer, int)}. A token exists
-     *  for exactly the admissions that own a slot (it is bound after the
-     *  connection is published and released together with the count), so a
-     *  stale shrink candidate can never claim slots that are genuinely held.
+     * Bound reservation tokens per dest: the ABA floor for
+     * {@link #reconcileStreamCount(int, int, Integer, int)}. A token exists
+     * for exactly the admissions that own a slot (it is bound after the
+     * connection is published and released together with the count), so a
+     * stale shrink candidate can never claim slots that are genuinely held.
      *
-     *  @return tokens per dest; empty when nothing is bound, never null
-     *  @since 0.9.71+
+     * @return tokens per dest; empty when nothing is bound, never null
+     * @since 0.9.71+
      */
     private Map<Hash, Integer> tokenStreamCounts() {
         Map<Hash, Integer> counts = new HashMap<>();
@@ -2992,23 +2989,23 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  Periodically drops temp-bans whose time has elapsed and resets the
-     *  per-dest refusal window, so a ban always expires (24h default) and the
-     *  refusal counter doesn't grow unbounded. Mirrors ConnThrottler.Cleaner.
-     *  Also reconciles the per-dest stream budgets against the live
-     *  connection table.
-     *  @since 0.9.71+
+     * Periodically drops temp-bans whose time has elapsed and resets the
+     * per-dest refusal window, so a ban always expires (24h default) and the
+     * refusal counter doesn't grow unbounded. Mirrors ConnThrottler.Cleaner.
+     * Also reconciles the per-dest stream budgets against the live
+     * connection table.
+     * @since 0.9.71+
      */
     private class BanExpiry extends SimpleTimer2.TimedEvent {
         private static final long PERIOD = 60 * 1000;
 
         /**
-         *  Set by stop(); blocks both further sweeps and, critically, the
-         *  self re-arm at the end of timeReached(). TimedEvent.schedule()
-         *  unconditionally clears _cancelAfterRun, so a bare cancel() racing
-         *  a sweep that had already started would be undone by that
-         *  re-arming schedule() — the event would fire again on a shut-down
-         *  manager. Reading the flag makes shutdown sticky either way.
+         * Set by stop(); blocks both further sweeps and, critically, the
+         * self re-arm at the end of timeReached(). TimedEvent.schedule()
+         * unconditionally clears _cancelAfterRun, so a bare cancel() racing
+         * a sweep that had already started would be undone by that
+         * re-arming schedule() — the event would fire again on a shut-down
+         * manager. Reading the flag makes shutdown sticky either way.
          */
         private volatile boolean _stopped;
 
@@ -3018,10 +3015,10 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         /**
-         *  Shut this sweeper down permanently: cancel the pending run and
-         *  prevent timeReached() from re-arming itself. Called from
-         *  ConnectionManager.shutdown(), which owns this instance.
-         *  @since 0.9.71+
+         * Shut this sweeper down permanently: cancel the pending run and
+         * prevent timeReached() from re-arming itself. Called from
+         * ConnectionManager.shutdown(), which owns this instance.
+         * @since 0.9.71+
          */
         void stop() {
             _stopped = true;
@@ -3029,9 +3026,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         /**
-         *  Whether {@link #stop()} has been called.
-         *  @return true once stopped
-         *  @since 0.9.71+
+         * Whether {@link #stop()} has been called.
+         * @return true once stopped
+         * @since 0.9.71+
          */
         boolean isStopped() {
             return _stopped;
@@ -3141,8 +3138,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         /**
-         *  Record the pong and notify the caller.
-         *  @param payload may be null
+         * Record the pong and notify the caller.
+         * @param payload may be null
          */
         public void pong(ByteArray payload) {
             // static, no log
@@ -3161,9 +3158,9 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         public synchronized boolean pongReceived() { return _ponged; }
 
         /**
-         *  Payload received in the pong.
-         *  @return null if no payload or no pong received
-         *  @since 0.9.18
+         * Payload received in the pong.
+         * @return null if no payload or no pong received
+         * @since 0.9.18
          */
         public synchronized ByteArray getPayload() { return _payload; }
     }
@@ -3181,7 +3178,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     }
 
     /**
-     *  @since 0.9.21
+     * @since 0.9.21
      */
     @Override
     public String toString() {

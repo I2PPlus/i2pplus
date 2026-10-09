@@ -5,7 +5,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Collections;
@@ -73,8 +72,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     public synchronized void shutdown() {shutdown("Router shutdown");}
 
     /**
-     *  @param msg message to send to the clients
-     *  @since 0.8.8
+     * @param msg message to send to the clients
+     * @since 0.8.8
      */
     public synchronized void shutdown(String msg) {
         if (_manager != null) {_manager.shutdown(msg);}
@@ -194,8 +193,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param set LeaseSet with requested leases - this object must be updated to contain the
-     *            signed version (as well as any changed/added/removed Leases)
-     *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
+     * signed version (as well as any changed/added/removed Leases)
+     * The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      *
      * @param timeout ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized
@@ -212,8 +211,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param set LeaseSet with requested leases - this object must be updated to contain the
-     *            signed version (as well as any changed/added/removed Leases).
-     *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
+     * signed version (as well as any changed/added/removed Leases).
+     * The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      */
     @Override
     public void requestLeaseSet(Hash dest, LeaseSet set) {
@@ -269,9 +268,9 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     *  @param id the router's ID for this message
-     *  @param messageNonce the client's ID for this message, greater than zero
-     *  @param status see I2CP MessageStatusMessage for success/failure codes
+     * @param id the router's ID for this message
+     * @param messageNonce the client's ID for this message, greater than zero
+     * @param status see I2CP MessageStatusMessage for success/failure codes
      */
     @Override
     public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long messageNonce, int status) {
@@ -318,11 +317,11 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     *  The InternalClientManager interface.
-     *  Connect to the router, receiving a message queue to talk to the router with.
+     * The InternalClientManager interface.
+     * Connect to the router, receiving a message queue to talk to the router with.
      *
-     *  @throws I2PSessionException if the router isn't ready
-     *  @since 0.8.3
+     * @throws I2PSessionException if the router isn't ready
+     * @since 0.8.3
      */
     public I2CPMessageQueue connect() throws I2PSessionException {
         if (_manager != null) {return _manager.internalConnect();}
@@ -330,11 +329,11 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     *  Declare that we're going to publish a meta LS for this destination.
-     *  Must be called before publishing the leaseset.
+     * Declare that we're going to publish a meta LS for this destination.
+     * Must be called before publishing the leaseset.
      *
-     *  @throws I2PSessionException on duplicate dest
-     *  @since 0.9.41
+     * @throws I2PSessionException on duplicate dest
+     * @since 0.9.41
      */
     @Override
     public void registerMetaDest(Destination dest) throws I2PSessionException {
@@ -342,9 +341,9 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     *  Declare that we're no longer going to publish a meta LS for this destination.
+     * Declare that we're no longer going to publish a meta LS for this destination.
      *
-     *  @since 0.9.41
+     * @since 0.9.41
      */
     @Override
     public void unregisterMetaDest(Destination dest) {

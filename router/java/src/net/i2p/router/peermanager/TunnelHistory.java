@@ -13,7 +13,6 @@ import net.i2p.util.Log;
 
 /**
  * Tunnel related history information
- *
  */
 public class TunnelHistory {
     private final RouterContext _context;
@@ -128,7 +127,7 @@ public class TunnelHistory {
      * Count a tunnel rejection at the given severity and record its time.
      *
      * @param severity how much the peer doesnt want to participate in the
-     *                 tunnel (large == more severe)
+     * tunnel (large == more severe)
      */
     public void incrementRejected(int severity) {
         _lifetimeRejected.incrementAndGet();
@@ -186,12 +185,12 @@ public class TunnelHistory {
     /**
      * Coalesce the rate statistics and periodically decay lifetime counters.
      *
-     *  <p>Lifetime counters ({@link #_lifetimeAgreedTo}, {@link #_lifetimeRejected},
-     *  {@link #_lifetimeTimedOut}, {@link #_lifetimeFailed}) are decayed at 75%
-     *  per 15 minutes (matching {@link DBHistory}).  This prevents unbounded
-     *  growth across restarts and ensures stale history does not permanently
-     *  block peers from tiers.  Recency is handled by the RateStats
-     *  (10-minute and 1-hour windows) and by selection gates.
+     * <p>Lifetime counters ({@link #_lifetimeAgreedTo}, {@link #_lifetimeRejected},
+     * {@link #_lifetimeTimedOut}, {@link #_lifetimeFailed}) are decayed at 75%
+     * per 15 minutes (matching {@link DBHistory}).  This prevents unbounded
+     * growth across restarts and ensures stale history does not permanently
+     * block peers from tiers.  Recency is handled by the RateStats
+     * (10-minute and 1-hour windows) and by selection gates.
      */
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats...");}

@@ -5,7 +5,6 @@ package net.i2p.router.tasks;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,10 +22,10 @@ import net.i2p.util.Log;
  * or interrupted. It serves as a failsafe mechanism to handle
  * unexpected JVM termination scenarios such as:
  * <ul>
- *   <li>System.exit() calls outside normal shutdown flow</li>
- *   <li>JVM crashes or fatal errors</li>
- *   <li>Process termination signals (SIGTERM, etc.)</li>
- *   <li>Power loss or system shutdown</li>
+ * <li>System.exit() calls outside normal shutdown flow</li>
+ * <li>JVM crashes or fatal errors</li>
+ * <li>Process termination signals (SIGTERM, etc.)</li>
+ * <li>Power loss or system shutdown</li>
  * </ul>
  *
  * The hook logs the shutdown event and performs a hard shutdown
@@ -36,7 +35,7 @@ import net.i2p.util.Log;
  * Note: During normal router shutdown, this hook should be cancelled
  * to avoid unnecessary emergency shutdown procedures.
  *
- *  @since 0.8.12 moved from Router.java
+ * @since 0.8.12 moved from Router.java
  */
 public class ShutdownHook extends Thread {
     private final RouterContext _context;

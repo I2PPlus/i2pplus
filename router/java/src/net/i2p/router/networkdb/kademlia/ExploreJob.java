@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.HashSet;
@@ -52,9 +51,9 @@ public class ExploreJob extends SearchJob {
     public static final int EXPLORE_BREDTH = SystemVersion.isSlow() ? 1 : 2;
 
     /**
-     *  Tuned exploratory breadth, or -1 when no tuned value has been applied.
-     *  Set via {@link #setExploreBredth(int)} by the Tuner; takes priority over
-     *  the {@code router.exploreBredth} config read in {@link #calculateBredth()}.
+     * Tuned exploratory breadth, or -1 when no tuned value has been applied.
+     * Set via {@link #setExploreBredth(int)} by the Tuner; takes priority over
+     * the {@code router.exploreBredth} config read in {@link #calculateBredth()}.
      */
     private static volatile int _tunedExploreBredth = -1;
 
@@ -96,7 +95,7 @@ public class ExploreJob extends SearchJob {
      * @param facade        Facade handling the Kademlia network database operations
      * @param key           Target key to explore/search for
      * @param isRealExplore True if this is a standard exploration (no floodfills returned),
-     *                      false if a standard lookup (floodfills returned, useful when floodfill count is low)
+     * false if a standard lookup (floodfills returned, useful when floodfill count is low)
      * @param msgIDBloomXor XOR value for message ID Bloom filter (used internally)
      */
     public ExploreJob(RouterContext context, KademliaNetworkDatabaseFacade facade, Hash key, boolean isRealExplore, long msgIDBloomXor) {
@@ -120,7 +119,7 @@ public class ExploreJob extends SearchJob {
      * @param peer          RouterInfo object representing the peer to which the message will be sent
      *
      * @return an encrypted or plain DatabaseLookupMessage wrapped as an I2NPMessage,
-     *         or null on error
+     * or null on error
      */
     @Override
     protected I2NPMessage buildMessage(TunnelId replyTunnelId, Hash replyGateway, long expiration, RouterInfo peer) {

@@ -18,17 +18,17 @@ public class Messages extends Translate {
     }
 
     /**
-     *  translate a string with a parameter
-     *  This is a lot more expensive than getString(s, ctx), so use sparingly.
+     * translate a string with a parameter
+     * This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
-     *  @param s string to be translated containing {0}
-     *    The {0} will be replaced by the parameter.
-     *    Single quotes must be doubled, i.e. ' -&gt; '' in the string.
-     *  @param o parameter, not translated.
-     *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *    Do not double the single quotes in the parameter.
-     *    Use autoboxing to call with ints, longs, floats, etc.
-     *  @return the string
+     * @param s string to be translated containing {0}
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     * @param o parameter, not translated.
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
+     * @return the string
      */
     public static String getString(String s, Object o, I2PAppContext ctx) {
         return Translate.getString(s, o, ctx, BUNDLE_NAME);
@@ -45,14 +45,14 @@ public class Messages extends Translate {
     }
 
     /**
-     *  Return the "display language", e.g. "English" for the language specified
-     *  by langCode, using the current language.
-     *  Uses translation if available, then JVM Locale.getDisplayLanguage() if available, else default param.
+     * Return the "display language", e.g. "English" for the language specified
+     * by langCode, using the current language.
+     * Uses translation if available, then JVM Locale.getDisplayLanguage() if available, else default param.
      *
-     *  @param langCode two-letter lower-case
-     *  @param dflt e.g. "English"
-     *  @return the display language
-     *  @since 0.9.5
+     * @param langCode two-letter lower-case
+     * @param dflt e.g. "English"
+     * @return the display language
+     * @since 0.9.5
      */
     public static String getDisplayLanguage(String langCode, String dflt, I2PAppContext ctx) {
         return Translate.getDisplayLanguage(langCode, dflt, ctx, BUNDLE_NAME);

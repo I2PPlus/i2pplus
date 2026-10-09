@@ -83,10 +83,10 @@ public class FamilyKeyCrypto {
     public static final String OPT_KEY = "family.key";
 
     /**
-     *  For signing and verification.
+     * For signing and verification.
      *
-     *  If the context property netdb.family.name is set, this can be used for signing,
-     *  else only for verification.
+     * If the context property netdb.family.name is set, this can be used for signing,
+     * else only for verification.
      */
     public FamilyKeyCrypto(RouterContext context) throws GeneralSecurityException {
         _context = context;
@@ -157,13 +157,13 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     *  Caller must add family to RI also.
-     *  throws on all errors
+     * Caller must add family to RI also.
+     * throws on all errors
      *
-     *  @param family non-null, must match that we were initialized with or will throw GSE
-     *  @param h non-null
-     *  @return non-null options to be added to the RI
-     *  @throws GeneralSecurityException on null hash, null or changed family, or signing error
+     * @param family non-null, must match that we were initialized with or will throw GSE
+     * @param h non-null
+     * @return non-null options to be added to the RI
+     * @throws GeneralSecurityException on null hash, null or changed family, or signing error
      */
     public Map<String, String> sign(String family, Hash h) throws GeneralSecurityException {
         if (_privkey == null) {
@@ -202,32 +202,32 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     *  Get verified members of our family.
-     *  Will not contain ourselves.
+     * Get verified members of our family.
+     * Will not contain ourselves.
      *
-     *  @return non-null, not a copy, do not modify
-     *  @since 0.9.28
+     * @return non-null, not a copy, do not modify
+     * @since 0.9.28
      */
     public Set<Hash> getOurFamily() {
         return _ourFamily;
     }
 
     /**
-     *  Get our family name.
+     * Get our family name.
      *
-     *  @return name or null
-     *  @since 0.9.28
+     * @return name or null
+     * @since 0.9.28
      */
     public String getOurFamilyName() {
         return _fname;
     }
 
     /**
-     *  Only STORED_KEY is fully trusted.
-     *  RI_KEY is Java with key in the RI.
-     *  NO_KEY is i2pd without a key in the RI.
+     * Only STORED_KEY is fully trusted.
+     * RI_KEY is Java with key in the RI.
+     * NO_KEY is i2pd without a key in the RI.
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     public enum Result {
         /** Router has no family option */
@@ -255,9 +255,9 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     *  Cached name/sig/result.
+     * Cached name/sig/result.
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     private static class Verified {
         /** The family name */
@@ -279,12 +279,12 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     *  Verify the family signature in a RouterInfo.
-     *  This requires a family key in the RI,
-     *  or a certificate file for the family
-     *  in certificates/family.
+     * Verify the family signature in a RouterInfo.
+     * This requires a family key in the RI,
+     * or a certificate file for the family
+     * in certificates/family.
      *
-     *  @return the verification result
+     * @return the verification result
      */
     public Result verify(RouterInfo ri) {
         String name = ri.getOption(OPT_NAME);
@@ -297,12 +297,12 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     *  Verify the family in a RouterInfo matches ours and the signature is good.
-     *  Returns false if we don't have a family and sig, or they don't.
-     *  Returns false for ourselves.
+     * Verify the family in a RouterInfo matches ours and the signature is good.
+     * Returns false if we don't have a family and sig, or they don't.
+     * Returns false for ourselves.
      *
-     *  @return true if family matches with good sig
-     *  @since 0.9.28
+     * @return true if family matches with good sig
+     * @since 0.9.28
      */
     public boolean verifyOurFamily(RouterInfo ri) {
         if (_pubkey == null)
@@ -327,10 +327,10 @@ public class FamilyKeyCrypto {
     }
 
     /**
- * Verify the family in a RouterInfo, name already retrieved
- *
- * @since 0.9.28
- */
+     * Verify the family in a RouterInfo, name already retrieved
+     *
+     * @since 0.9.28
+     */
     private Result verify(RouterInfo ri, String name) {
         Hash h = ri.getHash();
         String ssig = ri.getOption(OPT_SIG);
@@ -454,8 +454,8 @@ public class FamilyKeyCrypto {
     }
 
     /**
-     *  @return success if it exists and we have a password, or it was created successfully.
-     *  @throws GeneralSecurityException on keystore error
+     * @return success if it exists and we have a password, or it was created successfully.
+     * @throws GeneralSecurityException on keystore error
      */
     private void verifyKeyStore(File ks) throws GeneralSecurityException {
         if (ks.exists()) {

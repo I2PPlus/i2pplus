@@ -78,8 +78,6 @@ import org.klomp.snark.dht.DHT;
  * download, configuration, and theme/locale support. Works with standard
  * servlet containers; CSRF protection is via nonces plus an Origin check on
  * POST, and all pages carry a Content Security Policy.
- *
- * @since 0.1.0
  */
 public class I2PSnarkServlet extends BasicServlet {
 
@@ -183,10 +181,10 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Validate nonce against current and recent nonces (backward compatibility).
-     *  @param nonce the nonce to validate
-     *  @return true if valid
-     *  @since 0.9.70+
+     * Validate nonce against current and recent nonces (backward compatibility).
+     * @param nonce the nonce to validate
+     * @return true if valid
+     * @since 0.9.70+
      */
     private synchronized boolean isValidNonce(String nonce) {
         if (nonce == null) {return false;}
@@ -198,12 +196,12 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Validate Origin header for POST requests.
-     *  Allows requests with matching Origin (same-origin), or no Origin header.
-     *  Rejects cross-origin POST requests to prevent CSRF attacks.
+     * Validate Origin header for POST requests.
+     * Allows requests with matching Origin (same-origin), or no Origin header.
+     * Rejects cross-origin POST requests to prevent CSRF attacks.
      *
-     *  @param request the HTTP request
-     *  @return true if allowed
+     * @param request the HTTP request
+     * @return true if allowed
      */
     private boolean allowOrigin(HttpServletRequest request) {
         String origin = request.getHeader("Origin");
@@ -384,14 +382,14 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
 /**
- *  We override this to set the file relative to the storage directory
- *  for the torrent.
+ * We override this to set the file relative to the storage directory
+ * for the torrent.
  *
- *  Deliberately unsynchronized: this runs for every snark request, and the
- *  only shared field it reads (_resourceBase) is volatile.
+ * Deliberately unsynchronized: this runs for every snark request, and the
+ * only shared field it reads (_resourceBase) is volatile.
  *
- *  @param pathInContext should always start with /
- *  @return the resource
+ * @param pathInContext should always start with /
+ * @return the resource
  */
     @Override
     public File getResource(String pathInContext) {
@@ -440,8 +438,8 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Handle what we can here, calling super.doGet() for the rest.
-     *  @since 0.8.3
+     * Handle what we can here, calling super.doGet() for the rest.
+     * @since 0.8.3
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -449,8 +447,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Handle what we can here, calling super.doPost() for the rest.
-     *  @since Jetty 7
+     * Handle what we can here, calling super.doPost() for the rest.
      */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -753,7 +750,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * with the P-R-G redirect (or G-R-G to hide params from the address bar).
      *
      * @return true if a form was submitted and the response is complete;
-     *         false when there is no nonce and normal rendering should proceed
+     * false when there is no nonce and normal rendering should proceed
      * @since 0.9.71+
      */
     private boolean handleFormSubmission(HttpServletRequest req, HttpServletResponse resp,
@@ -1442,16 +1439,16 @@ public class I2PSnarkServlet extends BasicServlet {
         final boolean showSort;
 
 /**
-         * Builds the context from the header's caller inputs, deriving
-         * pathPrefix from contextPath.
-         *
-         * @param req the request the header links are built for
-         * @param contextPath the servlet context path, without a trailing slash
-         * @param currentSort the active sort key, may be null
-         * @param filterParam the active status filter key, may be null
-         * @param filterQuery the applied filters as a query string
-         * @param showSort more than one torrent is listed
-         */
+ * Builds the context from the header's caller inputs, deriving
+ * pathPrefix from contextPath.
+ *
+ * @param req the request the header links are built for
+ * @param contextPath the servlet context path, without a trailing slash
+ * @param currentSort the active sort key, may be null
+ * @param filterParam the active status filter key, may be null
+ * @param filterQuery the applied filters as a query string
+ * @param showSort more than one torrent is listed
+ */
         SortHeaderContext(HttpServletRequest req, String contextPath, String currentSort,
                           String filterParam, String filterQuery, boolean showSort) {
             this.req = req;
@@ -2240,12 +2237,12 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Search torrents for matching terms
+     * Search torrents for matching terms
      *
-     *  @param search non-null
-     *  @param snarks unmodified
-     *  @return null if no valid search, or matching torrents in same order, empty if no match
-     *  @since 0.9.58
+     * @param search non-null
+     * @param snarks unmodified
+     * @return null if no valid search, or matching torrents in same order, empty if no match
+     * @since 0.9.58
      */
     private static List<Snark> search(String search, Collection<Snark> snarks) {
         List<String> searchList = null;
@@ -2314,7 +2311,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Append a single hidden form input.
      *
      * @param esc true to HTML-escape the value (free-text fields such as
-     *            search), false to strip HTML (numeric and enum fields)
+     * search), false to strip HTML (numeric and enum fields)
      */
     private static void appendHiddenInput(StringBuilder buf, String name, String value, boolean esc) {
         buf.append("<input type=hidden name=").append(name).append(" value=\"")
@@ -2323,14 +2320,14 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Normalize a human-readable sort parameter to its legacy numeric form,
-     *  e.g. "pool-desc" to "-13", so readable URLs survive header cycling,
-     *  hidden inputs and query-string rebuilds. Numeric and unrecognized
-     *  values pass through unchanged.
+     * Normalize a human-readable sort parameter to its legacy numeric form,
+     * e.g. "pool-desc" to "-13", so readable URLs survive header cycling,
+     * hidden inputs and query-string rebuilds. Numeric and unrecognized
+     * values pass through unchanged.
      *
-     *  @param sort the raw sort parameter, or null
-     *  @return the normalized sort parameter, or null
-     *  @since 0.9.71+
+     * @param sort the raw sort parameter, or null
+     * @return the normalized sort parameter, or null
+     * @since 0.9.71+
      */
     private static String normalizeSortParam(String sort) {
         if (sort == null) {
@@ -3085,8 +3082,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param snark the torrent whose .torrent file should be removed
      * @return true when no .torrent file remains, so the caller may proceed to
-     *     remove downloaded data; false when the torrent is still present
-     *     (magnet deleted, or the file could not be removed)
+     * remove downloaded data; false when the torrent is still present
+     * (magnet deleted, or the file could not be removed)
      * @since 0.9.71+
      */
     private boolean unlinkTorrentFile(Snark snark) {
@@ -3622,16 +3619,16 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Redirect a POST to a GET (P-R-G), preserving the query string.
-     *  The query string must only contain the numeric params that
-     *  {@link #getQueryString} emits, so the redirect target can never
-     *  be an attacker-supplied URL.
+     * Redirect a POST to a GET (P-R-G), preserving the query string.
+     * The query string must only contain the numeric params that
+     * {@link #getQueryString} emits, so the redirect target can never
+     * be an attacker-supplied URL.
      *
-     *  @param req the request
-     *  @param resp the response
-     *  @param p the query string, may be null or empty
-     *  @throws IOException on write failure
-     *  @since 0.9.5
+     * @param req the request
+     * @param resp the response
+     * @param p the query string, may be null or empty
+     * @throws IOException on write failure
+     * @since 0.9.5
      */
     private void sendRedirect(HttpServletRequest req, HttpServletResponse resp, String p) throws IOException {
         String url = req.getRequestURL().toString();
@@ -4335,7 +4332,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param noThinsp spacing control flag
      * @return StatusResult containing the status HTML and status keyword
      * @since 0.9.68+
-    */
+     */
     private StatusResult buildStatusString(Snark snark, int curPeers, int knownPeers,
                                            long downBps, long upBps, boolean isRunning,
                                            long remaining, long needed, boolean noThinsp) {
@@ -4741,8 +4738,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * &lt;p&gt;Special cases:
      * &lt;ul&gt;
-     *   &lt;li&gt;I2PSnark PeerID starts with "AwMD" (Base64 encoding of \3\3\3)&lt;/li&gt;
-     *   &lt;li&gt;Handshake "v" field is used as a fallback to identify unknown clients&lt;/li&gt;
+     * &lt;li&gt;I2PSnark PeerID starts with "AwMD" (Base64 encoding of \3\3\3)&lt;/li&gt;
+     * &lt;li&gt;Handshake "v" field is used as a fallback to identify unknown clients&lt;/li&gt;
      * &lt;/ul&gt;
      *
      * @param peer The Peer object to analyze.
@@ -4798,24 +4795,24 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Escape a string for embedding in an HTML attribute value that page
-     *  scripts read back into JavaScript strings, e.g. the data-name and
-     *  client attributes on the torrent action buttons. The backslash is
-     *  escaped first so the generated escape sequences are not re-escaped,
-     *  followed by the quote characters, the HTML-significant angle brackets
-     *  and ampersand, and the line-break characters that cannot appear
-     *  literally inside a JavaScript string literal. Output is ASCII-only.
+     * Escape a string for embedding in an HTML attribute value that page
+     * scripts read back into JavaScript strings, e.g. the data-name and
+     * client attributes on the torrent action buttons. The backslash is
+     * escaped first so the generated escape sequences are not re-escaped,
+     * followed by the quote characters, the HTML-significant angle brackets
+     * and ampersand, and the line-break characters that cannot appear
+     * literally inside a JavaScript string literal. Output is ASCII-only.
      *
-     *  Escapes are emitted as JS short escapes for line breaks and two-digit
-     *  hex escapes for everything else; they are deliberately spelled without
-     *  the four-hex-digit unicode form because java's lexer processes such
-     *  sequences before string escapes, even inside this comment.
+     * Escapes are emitted as JS short escapes for line breaks and two-digit
+     * hex escapes for everything else; they are deliberately spelled without
+     * the four-hex-digit unicode form because java's lexer processes such
+     * sequences before string escapes, even inside this comment.
      *
-     *  Not for use in URL or CSS contexts.
+     * Not for use in URL or CSS contexts.
      *
-     *  @param s non-null string to escape
-     *  @return the escaped string, ASCII-only
-     *  @since 0.9.15
+     * @param s non-null string to escape
+     * @return the escaped string, ASCII-only
+     * @since 0.9.15
      */
     static String escapeJSString(String s) {
         return s.replace("\\", "\\\\")
@@ -4835,8 +4832,8 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Sort by completeness (seeds first), then by ID
-     *  @since 0.8.1
+     * Sort by completeness (seeds first), then by ID
+     * @since 0.8.1
      */
     private static class PeerComparator implements Comparator<Peer>, Serializable {
         private static final long serialVersionUID = 1L;
@@ -5190,7 +5187,6 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param s the URL to wrap in an anchor
      * @param max the display text is cut to this many characters and elided
      * @return an anchor tag opening in a new window
-     * @since 0.9
      */
     static String urlify(String s, int max) {
         // browsers seem to work without doing this but let's be strict
@@ -5298,8 +5294,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param out non-null response writer
      * @param buf staging buffer, emptied regardless of outcome
      * @return false if the client disconnected (writer error); callers should
-     *         skip further drains, rendering continues only to keep counters
-     *         and closing markup consistent
+     * skip further drains, rendering continues only to keep counters
+     * and closing markup consistent
      */
     static boolean drainTo(PrintWriter out, StringBuilder buf) {
         out.append(buf);
@@ -5317,20 +5313,20 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * Section map, in output order:
      * <ol>
-     *   <li>POST dispatch - torrent actions (priorities, comments, stop/start/
-     *       recheck, edit) via handleDirectoryPost(); P-R-G means no rendering
-     *       after a POST</li>
-     *   <li>renderHeader() - doctype, head, theme/font CSS, navbar</li>
-     *   <li>form open, appendTorrentInfo(), displayTorrentEdit()</li>
-     *   <li>appendResourceError() when the path does not exist on disk</li>
-     *   <li>no-listing branch - appendMediaSection() player, comments section,
-     *       footer, return</li>
-     *   <li>file listing - wrapFileList() + sort, appendFileTableHead(),
-     *       appendParentDirRow(), renderFileRow() loop, per-counter scripts;
-     *       streamed when out != null and the table reaches
-     *       STREAM_MIN_FILE_ROWS</li>
-     *   <li>renderCommentsSection(), form close, lightbox/refresh scripts,
-     *       footer</li>
+     * <li>POST dispatch - torrent actions (priorities, comments, stop/start/
+     * recheck, edit) via handleDirectoryPost(); P-R-G means no rendering
+     * after a POST</li>
+     * <li>renderHeader() - doctype, head, theme/font CSS, navbar</li>
+     * <li>form open, appendTorrentInfo(), displayTorrentEdit()</li>
+     * <li>appendResourceError() when the path does not exist on disk</li>
+     * <li>no-listing branch - appendMediaSection() player, comments section,
+     * footer, return</li>
+     * <li>file listing - wrapFileList() + sort, appendFileTableHead(),
+     * appendParentDirRow(), renderFileRow() loop, per-counter scripts;
+     * streamed when out != null and the table reaches
+     * STREAM_MIN_FILE_ROWS</li>
+     * <li>renderCommentsSection(), form close, lightbox/refresh scripts,
+     * footer</li>
      * </ol>
      *
      * @param xxxr The Resource unused
@@ -5339,10 +5335,10 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param postParams map of POST parameters or null if not a POST
      * @param sortParam the file sort key from the request, or null
      * @param out the response writer for streamed mode, or null to buffer
-     *            everything into the returned string
+     * everything into the returned string
      * @return buffered mode: the full page; streamed mode: the tail remaining
-     *         after the last drained chunk (possibly empty); null only when
-     *         postParams != null (P-R-G)
+     * after the last drained chunk (possibly empty); null only when
+     * postParams != null (P-R-G)
      * @throws IOException if the response writer or resource lookups fail
      * @since 0.7.14
      */
@@ -5593,7 +5589,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param buf target buffer
      * @param directory decoded directory display name for the page title,
-     *                  escaped here; may be empty
+     * escaped here; may be empty
      * @since 0.9.71+
      */
     private void renderHeader(StringBuilder buf, String directory) {
@@ -6905,10 +6901,10 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Pick an icon; try to catch the common types in an i2p environment.
+     * Pick an icon; try to catch the common types in an i2p environment.
      *
-     *  @return file name not including ".png"
-     *  @since 0.7.14
+     * @return file name not including ".png"
+     * @since 0.7.14
      */
     private String toIcon(File item) {
         if (item.isDirectory()) {return "folder";}
@@ -7095,13 +7091,13 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Icon file (svg) in the .war. Always 16x16.
-     *  Wrapped in a tooltip span.
+     * Icon file (svg) in the .war. Always 16x16.
+     * Wrapped in a tooltip span.
      *
-     *  @param icon name without the ".svg"
-     *  @param altText non-null
-     *  @param titleText non-null (used as data-tooltip)
-     *  @since 0.9.51+
+     * @param icon name without the ".svg"
+     * @param altText non-null
+     * @param titleText non-null (used as data-tooltip)
+     * @since 0.9.51+
      */
     private String toSVGWithDataTooltip(String icon, String altText, String titleText) {
         StringBuilder buf = new StringBuilder(128);
@@ -7308,7 +7304,7 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     private void saveTorrentEdit(Snark snark, Map<String, String[]> postParams) {
         if (!snark.isStopped()) {

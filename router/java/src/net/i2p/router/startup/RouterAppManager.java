@@ -18,10 +18,10 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- *  Notify the router of events, and provide methods for
- *  client apps to find each other.
+ * Notify the router of events, and provide methods for
+ * client apps to find each other.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public class RouterAppManager extends ClientAppManagerImpl {
 
@@ -41,11 +41,11 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  Add and start a client application.
+     * Add and start a client application.
      *
-     *  @param args the args that were used to instantiate the app, non-null, may be zero-length
-     *  @return success
-     *  @throws IllegalArgumentException if already added
+     * @param args the args that were used to instantiate the app, non-null, may be zero-length
+     * @return success
+     * @throws IllegalArgumentException if already added
      */
     public boolean addAndStart(ClientApp app, String[] args) {
         if (_log.shouldInfo())
@@ -64,14 +64,14 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  First known ClientApp with this class name and exact arguments.
-     *  Caller may then retrieve or control the state of the returned client.
-     *  A client will generally be found only if it is running or transitioning;
-     *  after it is stopped it will not be tracked by the manager.
+     * First known ClientApp with this class name and exact arguments.
+     * Caller may then retrieve or control the state of the returned client.
+     * A client will generally be found only if it is running or transitioning;
+     * after it is stopped it will not be tracked by the manager.
      *
-     *  @param args non-null, may be zero-length
-     *  @return client app or null
-     *  @since 0.9.6
+     * @param args non-null, may be zero-length
+     * @return client app or null
+     * @since 0.9.6
      */
     public ClientApp getClientApp(String className, String[] args) {
         for (Map.Entry<ClientApp, String[]> e : _clients.entrySet()) {
@@ -105,13 +105,13 @@ public class RouterAppManager extends ClientAppManagerImpl {
     // ClientAppManager methods
 
     /**
-     *  Must be called on all state transitions except
-     *  from UNINITIALIZED to INITIALIZED.
+     * Must be called on all state transitions except
+     * from UNINITIALIZED to INITIALIZED.
      *
-     *  @param app non-null
-     *  @param state non-null
-     *  @param message may be null
-     *  @param e may be null
+     * @param app non-null
+     * @param state non-null
+     * @param message may be null
+     * @param e may be null
      */
     @Override
     public void notify(ClientApp app, ClientAppState state, String message, Exception e) {
@@ -159,12 +159,12 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  Register with the manager under the given name,
-     *  so that other clients may find it.
-     *  Only required for apps used by other apps.
+     * Register with the manager under the given name,
+     * so that other clients may find it.
+     * Only required for apps used by other apps.
      *
-     *  @param app non-null
-     *  @return true if successful, false if duplicate name
+     * @param app non-null
+     * @return true if successful, false if duplicate name
      */
     @Override
     public boolean register(ClientApp app) {
@@ -180,11 +180,11 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  Unregister with the manager. Name must be the same as that from register().
-     *  Only required for apps used by other apps.
+     * Unregister with the manager. Name must be the same as that from register().
+     * Only required for apps used by other apps.
      *
-     *  @param app non-null
-     *  @since 0.9.41 overridden for logging only
+     * @param app non-null
+     * @since 0.9.41 overridden for logging only
      */
     @Override
     public void unregister(ClientApp app) {
@@ -196,9 +196,9 @@ public class RouterAppManager extends ClientAppManagerImpl {
     /// end ClientAppManager interface
 
     /**
-     *  Shut down all running client applications.
+     * Shut down all running client applications.
      *
-     *  @since 0.9.6
+     * @since 0.9.6
      */
     public synchronized void shutdown() {
         Set<ClientApp> apps = new HashSet<>(_clients.keySet());
@@ -215,8 +215,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  Shutdown task for router applications.
-     *  @since 0.9.6
+     * Shutdown task for router applications.
+     * @since 0.9.6
      */
     public class Shutdown implements Runnable {
         /**
@@ -229,8 +229,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  Render debug HTML of the app manager state.
-     *  @since 0.9.6
+     * Render debug HTML of the app manager state.
+     * @since 0.9.6
      */
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
@@ -247,8 +247,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  Append debug HTML of the tracked clients to the buffer.
-     *  @since 0.9.6
+     * Append debug HTML of the tracked clients to the buffer.
+     * @since 0.9.6
      */
     private void toString1(StringBuilder buf) {
         List<String> list = new ArrayList<>(_clients.size());
@@ -264,8 +264,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
-     *  Append debug HTML of the registered clients to the buffer.
-     *  @since 0.9.6
+     * Append debug HTML of the registered clients to the buffer.
+     * @since 0.9.6
      */
     private void toString2(StringBuilder buf) {
         List<String> list = new ArrayList<>(_registered.size());

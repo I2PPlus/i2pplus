@@ -29,11 +29,11 @@ public class RouterTestHelper {
     }
 
     /**
-     *  A brand-new context with dummy sub-systems and a mocked Router,
-     *  never reusing an existing one. Use when a test needs an isolated
-     *  StatManager so other tests' rate data cannot leak in.
+     * A brand-new context with dummy sub-systems and a mocked Router,
+     * never reusing an existing one. Use when a test needs an isolated
+     * StatManager so other tests' rate data cannot leak in.
      *
-     *  @return the new context, or null if creation failed
+     * @return the new context, or null if creation failed
      */
     public static RouterContext newContext() {
         try {
@@ -65,10 +65,10 @@ public class RouterTestHelper {
     }
 
     /**
-     *  A mocked Router that answers the router-state queries the
-     *  subsystems and tests rely on without a live router instance.
+     * A mocked Router that answers the router-state queries the
+     * subsystems and tests rely on without a live router instance.
      *
-     *  @return the mock
+     * @return the mock
      */
     private static Router mockRouter() {
         Router router = mock(Router.class);

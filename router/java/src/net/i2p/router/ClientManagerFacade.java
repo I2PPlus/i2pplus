@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -43,7 +42,7 @@ public abstract class ClientManagerFacade implements Service {
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param set LeaseSet with requested leases - this object must be updated to contain the
-     *            signed version (as well as any changed/added/removed Leases)
+     * signed version (as well as any changed/added/removed Leases)
      *
      * @param timeout ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized
@@ -87,12 +86,12 @@ public abstract class ClientManagerFacade implements Service {
     public abstract boolean isLocal(Hash destHash);
 
     /**
-     *  Update the delivery status of a message.
+     * Update the delivery status of a message.
      *
-     *  @param fromDest the source destination of the message
-     *  @param id the router's ID for this message
-     *  @param messageNonce the client's ID for this message
-     *  @param status see I2CP MessageStatusMessage for success/failure codes
+     * @param fromDest the source destination of the message
+     * @param id the router's ID for this message
+     * @param messageNonce the client's ID for this message
+     * @param status see I2CP MessageStatusMessage for success/failure codes
      */
     public abstract void messageDeliveryStatusUpdate(Destination fromDest, MessageId id,
                                                      long messageNonce, int status);
@@ -160,20 +159,20 @@ public abstract class ClientManagerFacade implements Service {
     public abstract void shutdown(String msg);
 
     /**
-     *  Declare that we're going to publish a meta LS for this destination.
-     *  Must be called before publishing the leaseset.
+     * Declare that we're going to publish a meta LS for this destination.
+     * Must be called before publishing the leaseset.
      *
-     *  @param dest the destination to register
-     *  @throws I2PSessionException on duplicate dest
-     *  @since 0.9.41
+     * @param dest the destination to register
+     * @throws I2PSessionException on duplicate dest
+     * @since 0.9.41
      */
     public void registerMetaDest(Destination dest) throws I2PSessionException {}
 
     /**
-     *  Declare that we're no longer going to publish a meta LS for this destination.
+     * Declare that we're no longer going to publish a meta LS for this destination.
      *
-     *  @param dest the destination to unregister
-     *  @since 0.9.41
+     * @param dest the destination to unregister
+     * @since 0.9.41
      */
     public void unregisterMetaDest(Destination dest) {}
 

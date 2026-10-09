@@ -12,15 +12,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *  Tests for the entry/lookup semantics of DecayingHashSet.
+ * Tests for the entry/lookup semantics of DecayingHashSet.
  *
- *  Replaces the benchmark scaffolding that was previously commented out in
- *  DecayingHashSet: the old main()/testByLong()/testByBytes() only timed
- *  insertions and printed false positive counts, so nothing asserted that
- *  add()/isKnown() actually worked.
+ * Replaces the benchmark scaffolding that was previously commented out in
+ * DecayingHashSet: the old main()/testByLong()/testByBytes() only timed
+ * insertions and printed false positive counts, so nothing asserted that
+ * add()/isKnown() actually worked.
  *
- *  Note the inverted return value - add() returns true when the entry was
- *  already a duplicate, not when it was newly added.
+ * Note the inverted return value - add() returns true when the entry was
+ * already a duplicate, not when it was newly added.
  */
 public class DecayingHashSetTest {
 
@@ -96,9 +96,9 @@ public class DecayingHashSetTest {
     }
 
     /**
-     *  A read-only probe must not be counted as a duplicate. isKnown() used to
-     *  increment the duplicate counter, which then got logged at decay as a
-     *  false positive count.
+     * A read-only probe must not be counted as a duplicate. isKnown() used to
+     * increment the duplicate counter, which then got logged at decay as a
+     * false positive count.
      */
     @Test
     public void testIsKnownDoesNotCountAsDuplicate() {
@@ -113,9 +113,9 @@ public class DecayingHashSetTest {
     }
 
     /**
-     *  DecayingHashSet hashes entries directly rather than stretching them to
-     *  32 bytes, so unlike DecayingBloomFilter it accepts the whole 1-32 range
-     *  including 17-31, and only refuses sizes outside it.
+     * DecayingHashSet hashes entries directly rather than stretching them to
+     * 32 bytes, so unlike DecayingBloomFilter it accepts the whole 1-32 range
+     * including 17-31, and only refuses sizes outside it.
      */
     @Test
     public void testBadEntrySizeRejected() {
@@ -136,14 +136,14 @@ public class DecayingHashSetTest {
     }
 
     /**
-     *  Exceeding the soft cap must not forget entries that have not expired.
-     *  The forced decay used to run as soon as the cap was crossed, and its
-     *  swap dropped the previous buffer, so a flood of unique values could
-     *  evict entries that were still well inside their lifetime.
+     * Exceeding the soft cap must not forget entries that have not expired.
+     * The forced decay used to run as soon as the cap was crossed, and its
+     * swap dropped the previous buffer, so a flood of unique values could
+     * evict entries that were still well inside their lifetime.
      *
-     *  Uses a small injected cap rather than {@link DecayingHashSet#MAX_ENTRIES},
-     *  so the test crosses the threshold in ~4k inserts instead of 151k. The
-     *  production default is exercised by the same code path.
+     * Uses a small injected cap rather than {@link DecayingHashSet#MAX_ENTRIES},
+     * so the test crosses the threshold in ~4k inserts instead of 151k. The
+     * production default is exercised by the same code path.
      */
     @Test
     public void testCapDoesNotEvictUnexpiredEntries() {
@@ -151,12 +151,12 @@ public class DecayingHashSetTest {
     }
 
     /**
-     *  The byte[] overload is the one {@code BloomFilterIVValidator} uses, and
-     *  it reaches {@code forceDecayIfOverCap()} through a different branch than
-     *  the long overload, so pin the same guarantee for it.
+     * The byte[] overload is the one {@code BloomFilterIVValidator} uses, and
+     * it reaches {@code forceDecayIfOverCap()} through a different branch than
+     * the long overload, so pin the same guarantee for it.
      *
-     *  There is no isKnown(byte[],int,int), so survival is shown the only way a
-     *  retained entry can be observed: re-adding it is then a duplicate.
+     * There is no isKnown(byte[],int,int), so survival is shown the only way a
+     * retained entry can be observed: re-adding it is then a duplicate.
      */
     @Test
     public void testCapDoesNotEvictUnexpiredByteEntries() {

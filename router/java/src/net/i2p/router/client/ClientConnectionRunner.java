@@ -5,7 +5,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.BufferedInputStream;
@@ -83,15 +82,15 @@ class ClientConnectionRunner {
 
     private String _clientVersion;
     /**
-     *  Mapping of MessageId to Payload, storing messages for retrieval.
-     *  Unused for i2cp.fastReceive = "true" (_dontSendMSMOnRecive = true)
+     * Mapping of MessageId to Payload, storing messages for retrieval.
+     * Unused for i2cp.fastReceive = "true" (_dontSendMSMOnRecive = true)
      */
     private final Map<MessageId, Payload> _messages;
     private int _consecutiveLeaseRequestFails;
     private long _lastLeaseFailTime;
     /**
-     *  Set of messageIds created but not yet ACCEPTED.
-     *  Unused for i2cp.messageReliability = "none" (_dontSendMSM = true)
+     * Set of messageIds created but not yet ACCEPTED.
+     * Unused for i2cp.messageReliability = "none" (_dontSendMSM = true)
      */
     private final Set<MessageId> _acceptedPending;
     /** Reads and processes incoming I2CP messages from the client. */
@@ -133,10 +132,10 @@ class ClientConnectionRunner {
     private static final int MAX_SESSIONS = 4;
 
     /**
-     *  Maximum number of unclaimed messages to buffer per client connection.
-     *  Prevents unbounded memory growth if the client is slow to consume.
+     * Maximum number of unclaimed messages to buffer per client connection.
+     * Prevents unbounded memory growth if the client is slow to consume.
      *
-     *  @since 0.9.70
+     * @since 0.9.70
      */
     private static final int MAX_BUFFERED_MESSAGES = 1024;
 
@@ -145,10 +144,10 @@ class ClientConnectionRunner {
     private static final String PROP_THRESH = "crypto.lowTagThreshold";
 
     /**
- * For multisession
- *
- * @since 0.9.21
- */
+     * For multisession
+     *
+     * @since 0.9.21
+     */
     private static class SessionParams {
         final Destination dest;
         final boolean isPrimary;
@@ -212,17 +211,17 @@ class ClientConnectionRunner {
     }
 
     /**
- * Allow override for testing
- *
- * @return the message event listener
- * @since 0.9.8
- */
+     * Allow override for testing
+     *
+     * @return the message event listener
+     * @since 0.9.8
+     */
     protected I2CPMessageReader.I2CPMessageEventListener createListener() {
         return new ClientMessageEventListener(_context, this, true);
     }
 
     /**
-     *  Die a horrible death. Cannot be restarted.
+     * Die a horrible death. Cannot be restarted.
      */
     public synchronized void stopRunning() {
         if (_dead) return;
@@ -269,23 +268,23 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  The address of the client socket.
+     * The address of the client socket.
      *
-     *  @return the client's InetAddress
-     *  @since 0.9.66
+     * @return the client's InetAddress
+     * @since 0.9.66
      */
     public InetAddress getAddress() {
         return _socket.getInetAddress();
     }
 
     /**
-     *  Current client's config,
-     *  will be null if session not found
-     *  IS subsession aware.
+     * Current client's config,
+     * will be null if session not found
+     * IS subsession aware.
      *
-     *  @param h the session hash
-     *  @return the config, or null if session not found
-     *  @since 0.9.21 added hash param
+     * @param h the session hash
+     * @return the config, or null if session not found
+     * @since 0.9.21 added hash param
      */
     public SessionConfig getConfig(Hash h) {
         SessionParams sp  = _sessions.get(h);
@@ -295,14 +294,14 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Current client's config,
-     *  will be null if session not found
-     *  IS subsession aware.
-     *  Returns null if id is null.
+     * Current client's config,
+     * will be null if session not found
+     * IS subsession aware.
+     * Returns null if id is null.
      *
-     *  @param id the session id
-     *  @return the config, or null if not found or id is null
-     *  @since 0.9.21 added id param
+     * @param id the session id
+     * @return the config, or null if not found or id is null
+     * @since 0.9.21 added id param
      */
     public SessionConfig getConfig(SessionId id) {
         if (id == null)
@@ -315,11 +314,11 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Primary client's config,
-     *  will be null if session not set up
+     * Primary client's config,
+     * will be null if session not set up
      *
-     *  @return the primary config, or null if not set up
-     *  @since 0.9.21
+     * @return the primary config, or null if not set up
+     * @since 0.9.21
      */
     public SessionConfig getPrimaryConfig() {
         for (SessionParams sp : _sessions.values()) {
@@ -330,40 +329,40 @@ class ClientConnectionRunner {
     }
 
     /**
- * The client version.
- *
- * @param version the client version string
- * @since 0.9.7
- */
+     * The client version.
+     *
+     * @param version the client version string
+     * @since 0.9.7
+     */
     public void setClientVersion(String version) {
         _clientVersion = version;
     }
 
     /**
-     *  The client version.
+     * The client version.
      *
-     *  @return null if unknown or less than 0.8.7
-     *  @since 0.9.7
+     * @return null if unknown or less than 0.8.7
+     * @since 0.9.7
      */
     public String getClientVersion() {
         return _clientVersion;
     }
 
     /**
-     *  The current client's SessionKeyManager.
-     *  As of 0.9.44, returned implementation varies based on supported encryption types.
+     * The current client's SessionKeyManager.
+     * As of 0.9.44, returned implementation varies based on supported encryption types.
      *
-     *  @return the session key manager
+     * @return the session key manager
      */
     public SessionKeyManager getSessionKeyManager() { return _sessionKeyManager; }
 
     /**
-     *  Currently allocated leaseSet.
-     *  IS subsession aware. Returns primary leaseset only.
+     * Currently allocated leaseSet.
+     * IS subsession aware. Returns primary leaseset only.
      *
-     *  @param h the session hash
-     *  @return leaseSet or null if not yet set or unknown hash
-     *  @since 0.9.21 added hash parameter
+     * @param h the session hash
+     * @return leaseSet or null if not yet set or unknown hash
+     * @since 0.9.21 added hash parameter
      */
     public LeaseSet getLeaseSet(Hash h) {
         SessionParams sp = _sessions.get(h);
@@ -373,12 +372,12 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Equivalent to getConfig().getDestination().calculateHash();
-     *  will be null before session is established
-     *  Not subsession aware. Returns primary session hash.
-     *  Don't use if you can help it.
+     * Equivalent to getConfig().getDestination().calculateHash();
+     * will be null before session is established
+     * Not subsession aware. Returns primary session hash.
+     * Don't use if you can help it.
      *
-     *  @return primary hash or null if not yet set
+     * @return primary hash or null if not yet set
      */
     public Hash getDestHash() {
         SessionConfig cfg = getPrimaryConfig();
@@ -387,11 +386,11 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Return the hash for the given ID
+     * Return the hash for the given ID
      *
-     *  @param id the session id
-     *  @return hash or null if unknown
-     *  @since 0.9.21
+     * @param id the session id
+     * @return hash or null if unknown
+     * @since 0.9.21
      */
     public Hash getDestHash(SessionId id) {
         if (id == null) {return null;}
@@ -402,11 +401,11 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Return the dest for the given ID
+     * Return the dest for the given ID
      *
-     *  @param id the session id
-     *  @return dest or null if unknown
-     *  @since 0.9.21
+     * @param id the session id
+     * @return dest or null if unknown
+     * @since 0.9.21
      */
     public Destination getDestination(SessionId id) {
         if (id == null) {return null;}
@@ -417,11 +416,11 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Subsession aware.
+     * Subsession aware.
      *
-     *  @param h the local target
-     *  @return current client's sessionId or null if not yet set or not a valid hash
-     *  @since 0.9.21
+     * @param h the local target
+     * @return current client's sessionId or null if not yet set or not a valid hash
+     * @since 0.9.21
      */
     SessionId getSessionId(Hash h) {
         SessionParams sp = _sessions.get(h);
@@ -430,10 +429,10 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Subsession aware.
+     * Subsession aware.
      *
-     *  @return all current client's sessionIds, non-null
-     *  @since 0.9.21
+     * @return all current client's sessionIds, non-null
+     * @since 0.9.21
      */
     List<SessionId> getSessionIds() {
         List<SessionId> rv = new ArrayList<>(_sessions.size());
@@ -445,10 +444,10 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Subsession aware.
+     * Subsession aware.
      *
-     *  @return all current client's destinations, non-null
-     *  @since 0.9.21
+     * @return all current client's destinations, non-null
+     * @since 0.9.21
      */
     List<Destination> getDestinations() {
         List<Destination> rv = new ArrayList<>(_sessions.size());
@@ -457,12 +456,12 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  To be called only by ClientManager.
+     * To be called only by ClientManager.
      *
-     *  @param hash for the session
-     *  @param id the session id to set
-     *  @throws IllegalStateException if already set
-     *  @since 0.9.21 added hash param
+     * @param hash for the session
+     * @param id the session id to set
+     * @throws IllegalStateException if already set
+     * @since 0.9.21 added hash param
      */
     void setSessionId(Hash hash, SessionId id) {
         if (hash == null) {throw new IllegalStateException();}
@@ -473,11 +472,11 @@ class ClientConnectionRunner {
      }
 
     /**
-     *  Kill the session. Caller must kill runner if none left.
-     *  If the session is primary and there are subsessions, this removes all subsessions also.
+     * Kill the session. Caller must kill runner if none left.
+     * If the session is primary and there are subsessions, this removes all subsessions also.
      *
-     *  @param id the session id to remove
-     *  @since 0.9.21
+     * @param id the session id to remove
+     * @since 0.9.21
      */
     void removeSession(SessionId id) {
         if (id == null)
@@ -534,12 +533,12 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Data for the current leaseRequest, or null if there is no active leaseSet request.
-     *  Not subsession aware. Returns primary ID only.
+     * Data for the current leaseRequest, or null if there is no active leaseSet request.
+     * Not subsession aware. Returns primary ID only.
      *
-     *  @param h the session hash
-     *  @return the lease request state, or null if none
-     *  @since 0.9.21 added hash param
+     * @param h the session hash
+     * @return the lease request state, or null if none
+     * @since 0.9.21 added hash param
      */
     LeaseRequestState getLeaseRequest(Hash h) {
         SessionParams sp = _sessions.get(h);
@@ -596,27 +595,27 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Already closed?
+     * Already closed?
      *
-     *  @return true if the runner is dead
+     * @return true if the runner is dead
      */
     boolean isDead() { return _dead; }
 
     /**
-     *  Only call if _dontSendMSMOnReceive is false, otherwise will always be null
+     * Only call if _dontSendMSMOnReceive is false, otherwise will always be null
      *
-     *  @param id the message id
-     *  @return the payload, or null
+     * @param id the message id
+     * @return the payload, or null
      */
     Payload getPayload(MessageId id) {
         return _messages.get(id);
     }
 
     /**
-     *  Only call if _dontSendMSMOnReceive is false
+     * Only call if _dontSendMSMOnReceive is false
      *
-     *  @param id the message id
-     *  @param payload the payload to store
+     * @param id the message id
+     * @param payload the payload to store
      */
     void setPayload(MessageId id, Payload payload) {
         if (!_dontSendMSMOnReceive) {
@@ -640,21 +639,21 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Only call if _dontSendMSMOnReceive is false
+     * Only call if _dontSendMSMOnReceive is false
      *
-     *  @param id the message id to remove
+     * @param id the message id to remove
      */
     void removePayload(MessageId id) {
         _messages.remove(id);
     }
 
     /**
-     *  Caller must send a SessionStatusMessage to the client with the returned code.
-     *  Caller must call disconnectClient() on failure.
-     *  Side effect: Sets the session ID.
+     * Caller must send a SessionStatusMessage to the client with the returned code.
+     * Caller must call disconnectClient() on failure.
+     * Side effect: Sets the session ID.
      *
-     *  @param config the session config
-     *  @return SessionStatusMessage return code, 1 for success, != 1 for failure
+     * @param config the session config
+     * @return SessionStatusMessage return code, 1 for success, != 1 for failure
      */
     public int sessionEstablished(SessionConfig config) {
         Destination dest = config.getDestination();
@@ -772,10 +771,10 @@ class ClientConnectionRunner {
      *
      * Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
      *
-     *  @param dest the client
-     *  @param id the router's ID for this message
-     *  @param messageNonce the client's ID for this message, greater than zero
-     *  @param status see I2CP MessageStatusMessage for success/failure codes
+     * @param dest the client
+     * @param id the router's ID for this message
+     * @param messageNonce the client's ID for this message, greater than zero
+     * @param status see I2CP MessageStatusMessage for success/failure codes
      */
     void updateMessageDeliveryStatus(Destination dest, MessageId id, long messageNonce, int status) {
         if (_dead || messageNonce <= 0) {return;}
@@ -829,14 +828,14 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Call after destinationEstablished(),
-     *  when an encrypted leaseset is created, so we know it's local.
-     *  Add to the clients list. Check for a dup hash.
-     *  Caller must call runner.disconnectClient() on failure.
+     * Call after destinationEstablished(),
+     * when an encrypted leaseset is created, so we know it's local.
+     * Add to the clients list. Check for a dup hash.
+     * Caller must call runner.disconnectClient() on failure.
      *
-     *  @param hash the location of the encrypted LS, will change every day
-     *  @return success, false on dup
-     *  @since 0.9.39
+     * @param hash the location of the encrypted LS, will change every day
+     * @return success, false on dup
+     * @since 0.9.39
      */
     public boolean registerEncryptedLS(Hash hash) {
         boolean rv = true;
@@ -853,12 +852,12 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Send a DisconnectMessage and log with level Log.ERROR.
-     *  This is always bad.
-     *  See ClientMessageEventListener.handleCreateSession()
-     *  for why we don't send a SessionStatusMessage when we do this.
+     * Send a DisconnectMessage and log with level Log.ERROR.
+     * This is always bad.
+     * See ClientMessageEventListener.handleCreateSession()
+     * for why we don't send a SessionStatusMessage when we do this.
      *
-     *  @param reason will be truncated to 255 bytes
+     * @param reason will be truncated to 255 bytes
      */
     void disconnectClient(String reason) {disconnectClient(reason, Log.ERROR);}
 
@@ -1043,9 +1042,9 @@ class ClientConnectionRunner {
      *
      * @param h the Destination's hash
      * @param set LeaseSet with requested leases - this object must be updated to contain the
-     *            signed version (as well as any changed/added/removed Leases)
-     *            The LeaseSet contains Leases only, it is unsigned.
-     *            Must be unique for this hash, do not reuse for subsessions.
+     * signed version (as well as any changed/added/removed Leases)
+     * The LeaseSet contains Leases only, it is unsigned.
+     * Must be unique for this hash, do not reuse for subsessions.
      *
      * @param expirationTime ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized, null OK
@@ -1245,11 +1244,11 @@ class ClientConnectionRunner {
     boolean getIsDead() { return _dead; }
 
     /**
-     *  Not thread-safe. Blocking. Only used for external sockets.
-     *  ClientWriterRunner thread is the only caller.
-     *  Others must use doSend().
+     * Not thread-safe. Blocking. Only used for external sockets.
+     * ClientWriterRunner thread is the only caller.
+     * Others must use doSend().
      *
-     *  @param msg the message to write
+     * @param msg the message to write
      */
     synchronized void writeMessage(I2CPMessage msg) {
         try {
@@ -1286,26 +1285,26 @@ class ClientConnectionRunner {
     }
 
     /**
-     *  Send a message, allowing the transport up to timeoutMs to accept it.
+     * Send a message, allowing the transport up to timeoutMs to accept it.
      *
-     *  <p>For messages whose loss costs more than a short wait. The default is
-     *  {@link #doSend}: a socket-backed runner hands the message to a writer thread
-     *  that buffers it regardless, so there is nothing to wait for here. Subclasses
-     *  that write straight into a bounded queue override this.
+     * <p>For messages whose loss costs more than a short wait. The default is
+     * {@link #doSend}: a socket-backed runner hands the message to a writer thread
+     * that buffers it regardless, so there is nothing to wait for here. Subclasses
+     * that write straight into a bounded queue override this.
      *
-     *  @param msg the message to send
-     *  @param timeoutMs how long to wait for the transport to accept the message
-     *  @throws I2CPMessageException if the message could not be sent
-     *  @since 0.9.71+
+     * @param msg the message to send
+     * @param timeoutMs how long to wait for the transport to accept the message
+     * @throws I2CPMessageException if the message could not be sent
+     * @since 0.9.71+
      */
     void doSendWait(I2CPMessage msg, long timeoutMs) throws I2CPMessageException {
         doSend(msg);
     }
 
     /**
-     *  Get the next message id.
+     * Get the next message id.
      *
-     *  @return the next id
+     * @return the next id
      */
     public int getNextMessageId() {
         // Don't % so we don't get negative IDs
@@ -1315,7 +1314,6 @@ class ClientConnectionRunner {
     /**
      * True if the client has already been sent the ACCEPTED state for the given
      * message id, false otherwise.
-     *
      */
     private boolean alreadyAccepted(MessageId id) {
         if (_dead) return false;
@@ -1326,7 +1324,6 @@ class ClientConnectionRunner {
      * If the message hasn't been state=ACCEPTED yet, we shouldn't send an update
      * since the client doesn't know the message id (and we don't know the nonce).
      * So, we just wait REQUEUE_DELAY ms before trying again.
-     *
      */
     private static final long REQUEUE_DELAY = 500;
     private static final int MAX_REQUEUE = 60;  // retries
@@ -1352,11 +1349,11 @@ class ClientConnectionRunner {
         private int _requeueCount;
 
         /**
-         *  Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
+         * Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
          *
-         *  @param id the router's ID for this message
-         *  @param messageNonce the client's ID for this message
-         *  @param status see I2CP MessageStatusMessage for success/failure codes
+         * @param id the router's ID for this message
+         * @param messageNonce the client's ID for this message
+         * @param status see I2CP MessageStatusMessage for success/failure codes
          */
         public MessageDeliveryStatusUpdate(SessionId sid, MessageId id, long messageNonce, int status) {
             super(ClientConnectionRunner.this._context);

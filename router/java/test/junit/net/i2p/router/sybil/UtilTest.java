@@ -7,11 +7,11 @@ import org.junit.Test;
 import java.math.BigInteger;
 
 /**
- *  Tests for Util.biLog2, the log-2 metric used by the Sybil analyzer
- *  and netdb renderer to measure DHT distance. Values are exact for
- *  the fractional bits of the binary representation.
+ * Tests for Util.biLog2, the log-2 metric used by the Sybil analyzer
+ * and netdb renderer to measure DHT distance. Values are exact for
+ * the fractional bits of the binary representation.
  *
- *  @since 0.9.38
+ * @since 0.9.38
  */
 public class UtilTest {
 

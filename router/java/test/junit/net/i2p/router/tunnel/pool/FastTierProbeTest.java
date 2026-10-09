@@ -81,8 +81,8 @@ public class FastTierProbeTest {
     }
 
     /**
-     *  A peer we have successfully reached very recently is skipped: the sweep
-     *  budget is better spent on peers whose state is actually stale.
+     * A peer we have successfully reached very recently is skipped: the sweep
+     * budget is better spent on peers whose state is actually stale.
      */
     @Test
     public void recentlySentToIsSkipped() {
@@ -93,11 +93,11 @@ public class FastTierProbeTest {
     }
 
     /**
-     *  Inbound hearing must NOT count as evidence. It advances on DHT replies,
-     *  explore traffic and transit acknowledgments, so keying on it marked most
-     *  of the tier as recently active and starved the sweep of budget. A peer
-     *  heard from constantly but never successfully sent to is exactly the
-     *  suspect this sweep exists to find.
+     * Inbound hearing must NOT count as evidence. It advances on DHT replies,
+     * explore traffic and transit acknowledgments, so keying on it marked most
+     * of the tier as recently active and starved the sweep of budget. A peer
+     * heard from constantly but never successfully sent to is exactly the
+     * suspect this sweep exists to find.
      */
     @Test
     public void recentlyHeardFromIsStillProbed() {
@@ -133,9 +133,9 @@ public class FastTierProbeTest {
     }
 
     /**
-     *  A peer we hold no profile for is skipped rather than probed: without an
-     *  address there is nothing to connect to, and probing it would spend the
-     *  budget on a peer that cannot be fixed by reachability evidence.
+     * A peer we hold no profile for is skipped rather than probed: without an
+     * address there is nothing to connect to, and probing it would spend the
+     * budget on a peer that cannot be fixed by reachability evidence.
      */
     @Test
     public void unknownPeerIsSkipped() {
@@ -145,8 +145,8 @@ public class FastTierProbeTest {
     }
 
     /**
-     *  The window widens the skip set, so it must stay a documented constant
-     *  rather than drifting upward silently.
+     * The window widens the skip set, so it must stay a documented constant
+     * rather than drifting upward silently.
      */
     @Test
     public void recencyWindowIsTenMinutes() {
@@ -189,9 +189,9 @@ public class FastTierProbeTest {
     }
 
     /**
-     *  The whole point of deriving the interval from the band size: a full pass
-     *  takes roughly the target wall clock whatever the population. Without this
-     *  a 4000 peer tier would take four times as long as a 1000 peer one.
+     * The whole point of deriving the interval from the band size: a full pass
+     * takes roughly the target wall clock whatever the population. Without this
+     * a 4000 peer tier would take four times as long as a 1000 peer one.
      */
     @Test
     public void fullPassTimeIsIndependentOfBandSize() {

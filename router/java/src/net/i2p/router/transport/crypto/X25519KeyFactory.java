@@ -14,16 +14,16 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Try to keep DH pairs at the ready.
- *  It's important to do this in a separate thread, because if we run out,
- *  the pairs are generated in the NTCP Pumper thread,
- *  and it can fall behind.
+ * Try to keep DH pairs at the ready.
+ * It's important to do this in a separate thread, because if we run out,
+ * the pairs are generated in the NTCP Pumper thread,
+ * and it can fall behind.
  *
- *  <p>Pool sizes scale dynamically based on memory headroom, CPU pressure,
- *  and connection demand. The Tuner calls {@link #refreshPoolSize()} every
- *  30 seconds to adapt to changing conditions.</p>
+ * <p>Pool sizes scale dynamically based on memory headroom, CPU pressure,
+ * and connection demand. The Tuner calls {@link #refreshPoolSize()} every
+ * 30 seconds to adapt to changing conditions.</p>
  *
- *  @since 0.9.36 from DHSessionKeyFactory.PrecalcRunner
+ * @since 0.9.36 from DHSessionKeyFactory.PrecalcRunner
  */
 public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
@@ -80,11 +80,11 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
      *
      * <p>Signals used:
      * <ul>
-     *   <li>Free memory headroom — more free memory = larger pool budget</li>
-     *   <li>Memory pressure — high usage = shrink aggressively</li>
-     *   <li>CPU load (job lag) — busy CPU = limit generation rate</li>
-     *   <li>Empty queue events — zero empties = low demand shrinks pool</li>
-     *   <li>Active peers — more connections = more key demand</li>
+     * <li>Free memory headroom — more free memory = larger pool budget</li>
+     * <li>Memory pressure — high usage = shrink aggressively</li>
+     * <li>CPU load (job lag) — busy CPU = limit generation rate</li>
+     * <li>Empty queue events — zero empties = low demand shrinks pool</li>
+     * <li>Active peers — more connections = more key demand</li>
      * </ul>
      *
      * <p>Memory budget: up to 2% of free heap when active, 0.5% when idle.</p>
@@ -244,9 +244,9 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     public int getSize() { return _keys.size(); }
 
     /**
-     *  Note that this stops the singleton precalc thread.
-     *  You don't want to do this if there are multiple routers in the JVM.
-     *  Fix this if you care. See Router.shutdown().
+     * Note that this stops the singleton precalc thread.
+     * You don't want to do this if there are multiple routers in the JVM.
+     * Fix this if you care. See Router.shutdown().
      */
     public void shutdown() {
         _isRunning = false;
@@ -344,9 +344,9 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     *  Adds a precomputed key pair to the pool.
+     * Adds a precomputed key pair to the pool.
      *
-     *  @return true if successful, false if at or above max size
+     * @return true if successful, false if at or above max size
      */
     private final boolean addKeys(KeyPair kp) {
         if (_keys.size() >= _maxSize) { return false; }

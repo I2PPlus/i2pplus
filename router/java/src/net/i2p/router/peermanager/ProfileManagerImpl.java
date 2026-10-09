@@ -5,7 +5,6 @@ package net.i2p.router.peermanager;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.Hash;
@@ -14,8 +13,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- *  Methods to update profiles.
- *  Unless otherwise noted, methods are blocking on the reorganize lock.
+ * Methods to update profiles.
+ * Unless otherwise noted, methods are blocking on the reorganize lock.
  */
 public class ProfileManagerImpl implements ProfileManager {
     private final Log _log;
@@ -119,7 +118,6 @@ public class ProfileManagerImpl implements ProfileManager {
 
     /**
      * Note that the router agreed to participate in a tunnel
-     *
      */
     @Override
     public void tunnelJoined(Hash peer, long responseTimeMs) {
@@ -137,7 +135,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * @param responseTimeMs response time in ms
      * @param severity how much the peer doesnt want to participate in the
-     *                 tunnel (large == more severe)
+     * tunnel (large == more severe)
      */
     @Override
     public void tunnelRejected(Hash peer, long responseTimeMs, int severity) {
@@ -225,7 +223,6 @@ public class ProfileManagerImpl implements ProfileManager {
      * Note that the peer participated in a tunnel that failed.  Its failure may not have
      * been the peer's fault however.
      * Blame the peer with a probability of pct/100.
-     *
      */
     @Override
     public void tunnelFailed(Hash peer, int pct) {
@@ -458,10 +455,10 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
-     *   Blocking.
-     *   Creates a new profile if it didn't exist.
+     * Blocking.
+     * Creates a new profile if it didn't exist.
      *
-     *   @return non-null
+     * @return non-null
      */
     private PeerProfile getProfile(Hash peer) {
         PeerProfile prof = _context.profileOrganizer().getProfile(peer);
@@ -474,11 +471,11 @@ public class ProfileManagerImpl implements ProfileManager {
     }
 
     /**
-     *  Non-blocking.
-     *  Creates a new profile if it didn't exist.
+     * Non-blocking.
+     * Creates a new profile if it didn't exist.
      *
-     *  @return null if the fetch or create would have blocked
-     *  @since 0.8.12
+     * @return null if the fetch or create would have blocked
+     * @since 0.8.12
      */
     private PeerProfile getProfileNonblocking(Hash peer) {
         return _context.profileOrganizer().getOrCreateProfileNonblocking(peer);

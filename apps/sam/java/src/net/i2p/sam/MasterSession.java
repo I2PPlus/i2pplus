@@ -104,7 +104,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * @param nick unique nickname for this subsession
      * @param style protocol style: "STREAM", "DATAGRAM", or "RAW"
      * @param props session properties (PORT required for DATAGRAM/RAW;
-     *              LISTEN_PORT, LISTEN_PROTOCOL optional)
+     * LISTEN_PORT, LISTEN_PROTOCOL optional)
      * @return null on success, or a descriptive error message
      */
     public synchronized String add(String nick, String style, Properties props) {
@@ -259,7 +259,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
     }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     public void stopRawReceiving() { /* no-op */ }
 

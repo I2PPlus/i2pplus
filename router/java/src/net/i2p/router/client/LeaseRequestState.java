@@ -5,7 +5,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.LeaseSet;
@@ -14,7 +13,6 @@ import net.i2p.router.Job;
 /**
  * Bundle up the data points necessary when asynchronously requesting a lease
  * from a client
- *
  */
 class LeaseRequestState {
     /**
@@ -39,15 +37,15 @@ class LeaseRequestState {
     /**
      * Create a new LeaseRequestState.
      *
-     *  @param onGranted job to run on success
-     *  @param onFailed job to run on failure
-     *  @param currentEarliestLeastDate absolute time, the earliest expiration in
-     *         the current LS (NOT the requested one), or 0 if none
+     * @param onGranted job to run on success
+     * @param onFailed job to run on failure
+     * @param currentEarliestLeastDate absolute time, the earliest expiration in
+     * the current LS (NOT the requested one), or 0 if none
      *
-     *  @param expiration absolute time, when the request expires (not when the LS expires)
-     *  @param requested LeaseSet with requested leases - this object must be updated to contain the
-     *         signed version (as well as any changed/added/removed Leases)
-     *         The LeaseSet contains Leases and destination only, it is unsigned.
+     * @param expiration absolute time, when the request expires (not when the LS expires)
+     * @param requested LeaseSet with requested leases - this object must be updated to contain the
+     * signed version (as well as any changed/added/removed Leases)
+     * The LeaseSet contains Leases and destination only, it is unsigned.
      */
     public LeaseRequestState(Job onGranted, Job onFailed, long currentEarliestLeastDate,
                              long expiration, LeaseSet requested) {

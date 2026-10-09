@@ -32,8 +32,8 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
     }
 
     /**
-     *   Build a Raw Datagram Session according to information
-     *   registered with the given nickname
+     * Build a Raw Datagram Session according to information
+     * registered with the given nickname
      *
      * Caller MUST call start().
      *
@@ -61,11 +61,11 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
     }
 
     /**
-     *  Look up the registered session record for the given nickname,
-     *  throwing if it has already disappeared.
+     * Look up the registered session record for the given nickname,
+     * throwing if it has already disappeared.
      *
-     *  @throws InterruptedIOException if the nickname is not registered
-     *  @return the rec
+     * @throws InterruptedIOException if the nickname is not registered
+     * @return the rec
      */
     private static SessionRecord getRec(String nick) throws InterruptedIOException {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
@@ -75,8 +75,8 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
     }
 
     /**
-     *   Build a Raw Session on an existing i2p session
-     *   registered with the given nickname
+     * Build a Raw Session on an existing i2p session
+     * registered with the given nickname
      *
      * Caller MUST call start().
      *

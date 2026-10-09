@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -47,15 +46,15 @@ public class SendMessageMessage extends I2CPMessageImpl {
     protected long _nonce;
 
     /**
-     *  For reading.
-     *  Deprecated for writing, use 4-arg constructor
+     * For reading.
+     * Deprecated for writing, use 4-arg constructor
      */
     public SendMessageMessage() {}
 
     /**
-     *  For writing
+     * For writing
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     public SendMessageMessage(SessionId sessID, Destination dest, Payload payload, long nonce) {
         synchronized (this) {
@@ -67,9 +66,9 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Session ID the message is being sent to.
+     * Session ID the message is being sent to.
      *
-     *  @return the SessionId
+     * @return the SessionId
      */
     public synchronized SessionId getSessionId() {
         return _sessionId;
@@ -86,10 +85,10 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Session ID the message is being sent to.
+     * Session ID the message is being sent to.
      *
-     *  @param id the session ID
-     *  @deprecated use 4-arg constructor
+     * @param id the session ID
+     * @deprecated use 4-arg constructor
      */
     @Deprecated
     public synchronized void setSessionId(SessionId id) {
@@ -97,9 +96,9 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Destination the message is being sent to.
+     * Destination the message is being sent to.
      *
-     *  @return the Destination
+     * @return the Destination
      */
     public synchronized Destination getDestination() {
         return _destination;
@@ -116,19 +115,19 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Message payload being sent.
+     * Message payload being sent.
      *
-     *  @return the Payload
+     * @return the Payload
      */
     public synchronized Payload getPayload() {
         return _payload;
     }
 
     /**
-     *  Message payload being sent.
+     * Message payload being sent.
      *
-     *  @param payload the payload
-     *  @deprecated use 4-arg constructor
+     * @param payload the payload
+     * @deprecated use 4-arg constructor
      */
     @Deprecated
     public synchronized void setPayload(Payload payload) {
@@ -145,10 +144,10 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Message nonce.
+     * Message nonce.
      *
-     *  @param nonce 0 to 0xffffffff
-     *  @deprecated use 4-arg constructor
+     * @param nonce 0 to 0xffffffff
+     * @deprecated use 4-arg constructor
      */
     @Deprecated
     public synchronized void setNonce(long nonce) {
@@ -184,9 +183,9 @@ public class SendMessageMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Serialization is not supported for this message.
+     * Serialization is not supported for this message.
      *
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

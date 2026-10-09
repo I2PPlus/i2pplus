@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 /**
@@ -71,28 +70,28 @@ public class VerifiedDestination extends Destination {
     public static final int CERTIFICATE_LENGTH_SIGNED_WITH_HASH = Signature.SIGNATURE_BYTES + Hash.HASH_LENGTH;
 
     /**
-     *  Signed Certs are signed by a 3rd-party Destination.
-     *  They can be used for a second-level domain, for example, to sign the
-     *  Destination for a third-level domain. Or for a central authority
-     *  to approve a destination.
+     * Signed Certs are signed by a 3rd-party Destination.
+     * They can be used for a second-level domain, for example, to sign the
+     * Destination for a third-level domain. Or for a central authority
+     * to approve a destination.
      *
-     *  We define a Signed Certificate as follows:
-     *     - length: Either 44 or 72 bytes
-     *     - contents:
-     *      1: a 44 byte Signature
-     *      2 (optional): a 32 byte Hash of the signing Destination
-     *        This can be a hint to the verification process to help find
-     *        the identity and keys of the signing Destination.
-     *     Data which is signed: The first 384 bytes of the Destination
-     *     (i.e. the Public Key and Signing Public Key, WITHOUT the Certificate)
+     * We define a Signed Certificate as follows:
+     * - length: Either 44 or 72 bytes
+     * - contents:
+     * 1: a 44 byte Signature
+     * 2 (optional): a 32 byte Hash of the signing Destination
+     * This can be a hint to the verification process to help find
+     * the identity and keys of the signing Destination.
+     * Data which is signed: The first 384 bytes of the Destination
+     * (i.e. the Public Key and Signing Public Key, WITHOUT the Certificate)
      *
-     *  It is not appropriate to enforce a particular delegation scheme here.
-     *  The application will need to apply additional steps to select
-     *  an appropriate signing Destination and verify the signature.
+     * It is not appropriate to enforce a particular delegation scheme here.
+     * The application will need to apply additional steps to select
+     * an appropriate signing Destination and verify the signature.
      *
-     *  See PrivateKeyFile.verifySignature() for sample verification code.
+     * See PrivateKeyFile.verifySignature() for sample verification code.
      *
-     *  @return true if the signed certificate payload length is valid
+     * @return true if the signed certificate payload length is valid
      */
     protected boolean verifySignedCert() {
         return _certificate.getPayload() != null
@@ -101,9 +100,9 @@ public class VerifiedDestination extends Destination {
     }
 
     /**
-     *  Reject all unknown certs
+     * Reject all unknown certs
      *
-     *  @return false always
+     * @return false always
      */
     protected boolean verifyUnknownCert() {
         return false;

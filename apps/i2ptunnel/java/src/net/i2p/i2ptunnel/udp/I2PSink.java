@@ -19,7 +19,7 @@ public class I2PSink implements Sink {
     protected final Destination dest;
     protected final I2PDatagramMaker maker;
     /**
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     protected final int toPort;
 

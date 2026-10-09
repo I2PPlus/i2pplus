@@ -14,9 +14,9 @@ import net.i2p.util.Log;
 /**
  * Receive a packet for a particular connection - placing the data onto the
  * queue, marking packets as acked, updating various fields, etc.
- *<p>
+ * <p>
  * I2PSession -&gt; MessageHandler -&gt; PacketHandler -&gt; ConnectionPacketHandler -&gt; MessageInputStream
- *<p>
+ * <p>
  * One of these is instantiated per-Destination
  * (i.e. per-ConnectionManager, not per-Connection).
  * It doesn't store any state.
@@ -30,9 +30,9 @@ class ConnectionPacketHandler {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
     /** Record every Nth receive-size stat sample. Per-packet RateStat updates
-     *  lock each period's Rate; these size stats are display-only telemetry, so
-     *  sampling the aggregate (scaling the recorded value by the period)
-     *  preserves the graph with a fraction of the monitor traffic. */
+     * lock each period's Rate; these size stats are display-only telemetry, so
+     * sampling the aggregate (scaling the recorded value by the period)
+     * preserves the graph with a fraction of the monitor traffic. */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
     /** Sample counters for the per-packet size stats (one per call site). */
     private int _receiveMsgSizeCnt;
@@ -48,7 +48,7 @@ class ConnectionPacketHandler {
     }
 
     /** Immediate ACK delay in ms, applied as min(this, rtt/8) so it can only
-     *  ever delay an immediate ACK by a fraction of the measured RTT. */
+     * ever delay an immediate ACK by a fraction of the measured RTT. */
     static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
     /** Period for rates. */
@@ -588,20 +588,20 @@ class ConnectionPacketHandler {
     }
 
     /**
-     *  Credit increment for the deterministic congestion-avoidance ratchet.
-     *  Accumulated in 16.16 fixed-point; each whole unit corresponds to one
-     *  packet-in-flight increment on the congestion window.
+     * Credit increment for the deterministic congestion-avoidance ratchet.
+     * Accumulated in 16.16 fixed-point; each whole unit corresponds to one
+     * packet-in-flight increment on the congestion window.
      *
-     *  <p>The expected value equals {@code effAcked / (caFactor * windowSize)},
-     *  which is the probability that the old random gate would have
-     *  incremented.
+     * <p>The expected value equals {@code effAcked / (caFactor * windowSize)},
+     * which is the probability that the old random gate would have
+     * incremented.
      *
-     *  @param accum current accumulator
-     *  @param effAcked effective number of packets ACKed this round
-     *  @param caFactor congestion-avoidance growth divisor
-     *  @param windowSize current congestion window
-     *  @return updated accumulator
-     *  @since 0.9.71+
+     * @param accum current accumulator
+     * @param effAcked effective number of packets ACKed this round
+     * @param caFactor congestion-avoidance growth divisor
+     * @param windowSize current congestion window
+     * @return updated accumulator
+     * @since 0.9.71+
      */
     static long caGrowthCredit(long accum, int effAcked, int caFactor, int windowSize) {
         long denom = (long) Math.max(1, caFactor) * Math.max(1, windowSize);
@@ -609,23 +609,23 @@ class ConnectionPacketHandler {
     }
 
     /**
-     *  Whole-packet increments harvested from the fixed-point accumulator.
+     * Whole-packet increments harvested from the fixed-point accumulator.
      *
-     *  @param accum accumulated credit
-     *  @return number of whole window increments
-     *  @since 0.9.71+
+     * @param accum accumulated credit
+     * @return number of whole window increments
+     * @since 0.9.71+
      */
     static int caWindowIncrements(long accum) {
         return (int) Math.min(Integer.MAX_VALUE, accum >> 20);
     }
 
     /**
-     *  Fractional remainder after harvesting whole increments; carries
-     *  over into the next ACK event.
+     * Fractional remainder after harvesting whole increments; carries
+     * over into the next ACK event.
      *
-     *  @param accum accumulated credit
-     *  @return fractional remainder in [0, 1048575]
-     *  @since 0.9.71+
+     * @param accum accumulated credit
+     * @return fractional remainder in [0, 1048575]
+     * @since 0.9.71+
      */
     static long caWindowRemainder(long accum) {
         return accum & 0xFFFFFL;
@@ -640,7 +640,7 @@ class ConnectionPacketHandler {
      * If this is a SYN packet and the con's SendStreamId is not set.
      *
      * @return true if the packet is ok for this connection, false if we shouldn't
-     *         continue processing.
+     * continue processing.
      */
     private boolean verifyPacket(Packet packet, Connection con) throws I2PException {
         if (packet.isFlagSet(Packet.FLAG_RESET)) {

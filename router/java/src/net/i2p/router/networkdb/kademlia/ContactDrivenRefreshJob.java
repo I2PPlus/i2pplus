@@ -11,17 +11,17 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- *  Lightweight background job that refreshes RouterInfo for peers we recently
- *  interacted with.  When we receive a DatabaseStore (or other direct contact)
- *  from a peer, we enqueue them here.  On each cycle, we process a batch:
- *  if the peer's stored RouterInfo is stale (published &gt; 1h ago) or missing,
- *  we proactively refresh it via DirectLookupJob.
+ * Lightweight background job that refreshes RouterInfo for peers we recently
+ * interacted with.  When we receive a DatabaseStore (or other direct contact)
+ * from a peer, we enqueue them here.  On each cycle, we process a batch:
+ * if the peer's stored RouterInfo is stale (published &gt; 1h ago) or missing,
+ * we proactively refresh it via DirectLookupJob.
  *
- *  This is the contact-driven half of proactive RouterInfo freshness:
- *  peers we actively communicate with are likely to be re-selected as tunnel
- *  hops, so keeping their RI current prevents build-time next-hop lookup failures.
+ * This is the contact-driven half of proactive RouterInfo freshness:
+ * peers we actively communicate with are likely to be re-selected as tunnel
+ * hops, so keeping their RI current prevents build-time next-hop lookup failures.
  *
- *  @since 0.9.70+
+ * @since 0.9.70+
  */
 class ContactDrivenRefreshJob extends JobImpl {
     private final Log _log;
@@ -67,11 +67,11 @@ class ContactDrivenRefreshJob extends JobImpl {
     }
 
     /**
-     *  Called when we hear from or about a peer.
-     *  Safe to call from any thread (e.g., message handler).
-     *  Drops the entry if the pending queue is full to prevent unbounded memory growth.
+     * Called when we hear from or about a peer.
+     * Safe to call from any thread (e.g., message handler).
+     * Drops the entry if the pending queue is full to prevent unbounded memory growth.
      *
-     *  @param peer the peer hash
+     * @param peer the peer hash
      */
     void heardFrom(Hash peer) {
         if (peer == null || peer.equals(getContext().routerHash()))

@@ -12,12 +12,12 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Threaded factory for pre-calculating Elligator2-encoded X25519 key pairs to prevent Diffie-Hellman computation bottlenecks in critical paths
+ * Threaded factory for pre-calculating Elligator2-encoded X25519 key pairs to prevent Diffie-Hellman computation bottlenecks in critical paths
  *
- *  Try to keep DH pairs at the ready. It's important to do this in a separate thread, because
- *  if we run out, the pairs are generated in the NTCP Pumper thread, and it can fall behind.
+ * Try to keep DH pairs at the ready. It's important to do this in a separate thread, because
+ * if we run out, the pairs are generated in the NTCP Pumper thread, and it can fall behind.
  *
- *  @since 0.9.44 from X25519KeyFactory
+ * @since 0.9.44 from X25519KeyFactory
  */
 public class Elg2KeyFactory extends I2PThread implements KeyFactory {
 
@@ -146,9 +146,9 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     *  Note that this stops the singleton precalc thread.
-     *  You don't want to do this if there are multiple routers in the JVM.
-     *  Fix this if you care. See Router.shutdown().
+     * Note that this stops the singleton precalc thread.
+     * You don't want to do this if there are multiple routers in the JVM.
+     * Fix this if you care. See Router.shutdown().
      */
     public void shutdown() {
         _isRunning = false;
@@ -251,9 +251,9 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     }
 
     /**
-     *  Adds a precomputed key pair to the pool.
+     * Adds a precomputed key pair to the pool.
      *
-     *  @return true if successful, false if full
+     * @return true if successful, false if full
      */
     private final boolean addKeys(Elg2KeyPair kp) {return _keys.offer(kp);}
 

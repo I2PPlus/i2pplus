@@ -37,15 +37,13 @@ import org.rrd4j.core.RrdLog;
 import org.rrd4j.core.RrdNioBackendFactory;
 
 /**
- *  A thread started by RouterConsoleRunner that checks the configuration for
- *  stats to be tracked via jrobin, and adds or deletes RRDs as necessary.
+ * A thread started by RouterConsoleRunner that checks the configuration for
+ * stats to be tracked via jrobin, and adds or deletes RRDs as necessary.
  *
- *  This also contains methods to generate xml or graph image output.
- *  The rendering for graphs is in GraphRenderer.
+ * This also contains methods to generate xml or graph image output.
+ * The rendering for graphs is in GraphRenderer.
  *
- *  To control memory, the number of simultaneous renderings is limited.
- *
- *  @since 0.6.1.13
+ * To control memory, the number of simultaneous renderings is limited.
  */
 public class GraphGenerator implements Runnable, ClientApp {
     private final RouterContext _context;
@@ -61,20 +59,20 @@ public class GraphGenerator implements Runnable, ClientApp {
     private volatile boolean _isRunning;
     private ScheduledExecutorService _scheduler;
     /** Health watchdog scheduler, separate from {@link #_scheduler} so a stuck
-     *  sync task cannot stop the thing that is meant to notice it is stuck. */
+     * sync task cannot stop the thing that is meant to notice it is stuck. */
     private volatile ScheduledExecutorService _healthScheduler;
     /** Guards the watchdog against being scheduled twice; see {@link #startHealthWatchdog()}. */
     private boolean _healthStarted;
     /**
-     *  Whether this instance configured the shared RRD backend factory.
+     * Whether this instance configured the shared RRD backend factory.
      *
-     *  <p>{@code RrdBackendFactory.getDefaultFactory()} is a process-wide singleton, so
-     *  closing it from a {@link Shutdown} that never configured it would pull the
-     *  backend out from under every other graph listener still recording. Set at the
-     *  point this instance calls {@code setSyncPoolSize}, which is the only place it
-     *  takes responsibility for the shared configuration.
+     * <p>{@code RrdBackendFactory.getDefaultFactory()} is a process-wide singleton, so
+     * closing it from a {@link Shutdown} that never configured it would pull the
+     * backend out from under every other graph listener still recording. Set at the
+     * point this instance calls {@code setSyncPoolSize}, which is the only place it
+     * takes responsibility for the shared configuration.
      *
-     *  @see #closeBackendFactory()
+     * @see #closeBackendFactory()
      */
     private volatile boolean _ownsBackendFactory;
     /** Throttles the stall report so the watchdog and the sync task cannot double-log it. */
@@ -98,15 +96,15 @@ public class GraphGenerator implements Runnable, ClientApp {
     /** Emit a liveness heartbeat every N sync ticks (~27min at the 90s period). */
     private static final int HEARTBEAT_TICKS = 20;
     /**
-     *  Watchdog period.
+     * Watchdog period.
      *
-     *  <p>Short enough that the next occurrence of a silently dead data path names its
-     *  own cause while somebody is still looking at the log, and long enough that a
-     *  healthy router does no measurable work. Deliberately separate from the 90s sync
-     *  task: a fault severe enough to wedge that task is exactly the fault the watchdog
-     *  exists to report, so sharing a thread would hide the symptom it is looking for.
+     * <p>Short enough that the next occurrence of a silently dead data path names its
+     * own cause while somebody is still looking at the log, and long enough that a
+     * healthy router does no measurable work. Deliberately separate from the 90s sync
+     * task: a fault severe enough to wedge that task is exactly the fault the watchdog
+     * exists to report, so sharing a thread would hide the symptom it is looking for.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final int HEALTH_INTERVAL_MS = 10_000;
     /** Longest gap between coalesces on any tracked rate before "the rates stopped". */
@@ -118,14 +116,14 @@ public class GraphGenerator implements Runnable, ClientApp {
     /** Repeat period for a report whose numbers have not changed. @since 0.9.71+ */
     private static final long REPORT_REPEAT_MS = 120_000L;
     /** Wall-clock time when graph generation started; lets the never-yet-written staleness
-     *  test distinguish an empty startup window from a genuinely stalled writer. */
+     * test distinguish an empty startup window from a genuinely stalled writer. */
     private final long _startedMs = System.currentTimeMillis();
     private int _ticks;
 
     /**
-     *  Installs the rrd4j log bridge and the shutdown hook. Recording starts in run().
+     * Installs the rrd4j log bridge and the shutdown hook. Recording starts in run().
      *
-     *  @param ctx the router context, for properties, stats, the log and the app manager
+     * @param ctx the router context, for properties, stats, the log and the app manager
      */
     public GraphGenerator(RouterContext ctx) {
         _context = ctx;
@@ -158,11 +156,11 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  The generator registered with the app manager, which only exists while it is running.
+     * The generator registered with the app manager, which only exists while it is running.
      *
-     *  @param ctx the context whose app manager holds the registration
-     *  @return null if disabled
-     *  @since 0.9.38
+     * @param ctx the context whose app manager holds the registration
+     * @return null if disabled
+     * @since 0.9.38
      */
     public static GraphGenerator instance(I2PAppContext ctx) {
         ClientApp app = ctx.clientAppManager().getRegisteredApp(NAME);
@@ -266,14 +264,14 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Start the 10s health watchdog, at most once.
+     * Start the 10s health watchdog, at most once.
      *
-     *  <p>Idempotent on purpose: {@code runGenerator()} is the only caller and runs
-     *  once, but a second scheduler would mean two threads applying the heal ladder to
-     *  the same listeners concurrently, which is how a REOPEN ends up racing a REBUILD
-     *  into a half-closed handle. Guarded here rather than trusted to the caller.
+     * <p>Idempotent on purpose: {@code runGenerator()} is the only caller and runs
+     * once, but a second scheduler would mean two threads applying the heal ladder to
+     * the same listeners concurrently, which is how a REOPEN ends up racing a REBUILD
+     * into a half-closed handle. Guarded here rather than trusted to the caller.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private synchronized void startHealthWatchdog() {
         if (_healthStarted) {
@@ -296,13 +294,13 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Stop the health watchdog if one was started.
+     * Stop the health watchdog if one was started.
      *
-     *  <p>Never called from a watchdog task: a scheduler that awaits its own
-     *  termination from inside a task cannot terminate, and the bounded wait would
-     *  become an unbounded stall.
+     * <p>Never called from a watchdog task: a scheduler that awaits its own
+     * termination from inside a task cannot terminate, and the bounded wait would
+     * become an unbounded stall.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private synchronized void stopHealthWatchdog() {
         ScheduledExecutorService health = _healthScheduler;
@@ -324,10 +322,10 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Sync RRD4J stats to disk on a fixed schedule.
-     *  Stops the generator if the router is no longer alive.
-     *  @param specsHolder single-element holder for the active specs string
-     *  @since 0.9.70+
+     * Sync RRD4J stats to disk on a fixed schedule.
+     * Stops the generator if the router is no longer alive.
+     * @param specsHolder single-element holder for the active specs string
+     * @since 0.9.70+
      */
     private void syncSpecsHolder(String[] specsHolder) {
         try {
@@ -356,7 +354,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
 /**
-     * Why a graph listener is not producing RRD writes.
+ * Why a graph listener is not producing RRD writes.
  *
  * <p>The non-OK values are distinct faults with distinct fixes, so the staleness
  * report names them individually: a single "nothing is being written" count
@@ -368,71 +366,71 @@ public class GraphGenerator implements Runnable, ClientApp {
         /** Not stalled: attached, registered, and writing within 2x its rate period. */
         OK,
         /**
-         *  Attached and registered, but no write has ever succeeded. The meaningful age is
-         *  how long the listener instance has existed, since there is no earlier write to
-         *  measure back from.
+         * Attached and registered, but no write has ever succeeded. The meaningful age is
+         * how long the listener instance has existed, since there is no earlier write to
+         * measure back from.
          */
         NEVER_WRITTEN,
         /**
-         *  Attached, registered, and no write, but the rate itself has not coalesced since
-         *  the listener attached, so there was never a sample to write. Nothing is being
-         *  lost and nothing is broken, which is why this is separated from
-         *  {@link #NEVER_WRITTEN}: a rate nobody updates is idle by definition, and
-         *  reporting it as a data-path fault produces an ERROR that repeats forever and
-         *  describes no action an operator can take.
+         * Attached, registered, and no write, but the rate itself has not coalesced since
+         * the listener attached, so there was never a sample to write. Nothing is being
+         * lost and nothing is broken, which is why this is separated from
+         * {@link #NEVER_WRITTEN}: a rate nobody updates is idle by definition, and
+         * reporting it as a data-path fault produces an ERROR that repeats forever and
+         * describes no action an operator can take.
          */
         RATE_IDLE,
         /**
-         *  Attached to an open RRD, but the Rate no longer points at this listener, so it
-         *  can never be notified again. Recording is dead with no write error, no detach
-         *  and no exception: the state a newer listener's registration leaves behind.
+         * Attached to an open RRD, but the Rate no longer points at this listener, so it
+         * can never be notified again. Recording is dead with no write error, no detach
+         * and no exception: the state a newer listener's registration leaves behind.
          */
         UNREGISTERED,
         /**
-         *  Attached, registered, and written to before: writes stopped while every part of
-         *  the data path still looks healthy. The meaningful age is time since the last
-         *  write.
+         * Attached, registered, and written to before: writes stopped while every part of
+         * the data path still looks healthy. The meaningful age is time since the last
+         * write.
          */
         WRITES_STOPPED,
         /**
-         *  The coalesce sweep itself is not running, so no rate is being asked to
-         *  coalesce and every listener starves at once. This outranks every other
-         *  cause: it is the only one that explains a whole table stopping together,
-         *  and it is invisible from inside the stats package because the symptom is
-         *  that the coalesce task is queued behind other work and never executes.
-         *  The fix is never in a listener.
+         * The coalesce sweep itself is not running, so no rate is being asked to
+         * coalesce and every listener starves at once. This outranks every other
+         * cause: it is the only one that explains a whole table stopping together,
+         * and it is invisible from inside the stats package because the symptom is
+         * that the coalesce task is queued behind other work and never executes.
+         * The fix is never in a listener.
          */
         COALESCE_STALLED;
 
         /**
-         *  Whether this cause is a fault that loses recorded data.
+         * Whether this cause is a fault that loses recorded data.
          *
-         *  <p>Everything except {@link #OK} and {@link #RATE_IDLE}: an idle rate records
-         *  nothing because nothing is happening, not because recording is broken.
+         * <p>Everything except {@link #OK} and {@link #RATE_IDLE}: an idle rate records
+         * nothing because nothing is happening, not because recording is broken.
          *
-         *  @return true unless the cause is OK or an idle rate
+         * @return true unless the cause is OK or an idle rate
          */
         boolean isFault() {return this != OK && this != RATE_IDLE;}
     }
 
     /**
-     *  Floor applied to a rate's period when deciding whether its listener is stale.
+     * Floor applied to a rate's period when deciding whether its listener is stale.
      *
-     *  <p>Sub-minute rates can legitimately go minutes between coalesces, and 2x a few
-     *  hundred milliseconds would flag them from their first tick onwards.
+     * <p>Sub-minute rates can legitimately go minutes between coalesces, and 2x a few
+     * hundred milliseconds would flag them from their first tick onwards.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long MIN_STALENESS_PERIOD_MS = 60000L;
 
     /**
-     *  Count and oldest age for one {@link StaleCause}.
+     * Count and oldest age for one {@link StaleCause}.
      *
-     *  <p>Deliberately free of router context and of synchronization: a tally is built
-     *  and read entirely within the single-threaded sync task, and keeping it plain lets
-     *  the report wording be unit tested without a running router.
+     * <p>Deliberately free of router context and of synchronization: a tally is built
+     * and read entirely within the single-threaded sync task, and keeping it plain lets
+     * the report wording be unit tested without a running router.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final class CauseTally {
         private final StaleCause _cause;
@@ -455,25 +453,25 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
 
         /**
-         *  Add one listener to this tally.
+         * Add one listener to this tally.
          *
-         *  @param ageMs age from {@link GraphGenerator#staleAge}
-         *  @param sinceLastWrite true if measured from the last successful write
+         * @param ageMs age from {@link GraphGenerator#staleAge}
+         * @param sinceLastWrite true if measured from the last successful write
          */
         void record(long ageMs, boolean sinceLastWrite) {
             record(ageMs, sinceLastWrite, null);
         }
 
         /**
-         *  Add one listener to this tally, naming it.
+         * Add one listener to this tally, naming it.
          *
-         *  <p>The name is what makes the report actionable: a count of stalled listeners
-         *  with no names leaves the operator to diff every rate on the page against the
-         *  graphs, which is exactly the work the report exists to save.
+         * <p>The name is what makes the report actionable: a count of stalled listeners
+         * with no names leaves the operator to diff every rate on the page against the
+         * graphs, which is exactly the work the report exists to save.
          *
-         *  @param ageMs age from {@link GraphGenerator#staleAge}
-         *  @param sinceLastWrite true if measured from the last successful write
-         *  @param name the listener's stat name, or null when not known
+         * @param ageMs age from {@link GraphGenerator#staleAge}
+         * @param sinceLastWrite true if measured from the last successful write
+         * @param name the listener's stat name, or null when not known
          */
         void record(long ageMs, boolean sinceLastWrite, String name) {
             _count++;
@@ -498,9 +496,9 @@ public class GraphGenerator implements Runnable, ClientApp {
         int count() { return _count; }
 
         /**
-         *  Render the names recorded for this cause, or an empty string when none were.
+         * Render the names recorded for this cause, or an empty string when none were.
          *
-         *  @return the trailing "name[, name]" clause, without a leading separator
+         * @return the trailing "name[, name]" clause, without a leading separator
          */
         String names() {
             if (_names.isEmpty()) {return "";}
@@ -516,9 +514,9 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
 
         /**
-         *  Render this cause for the log line.
+         * Render this cause for the log line.
          *
-         *  @return {@code cause=count} when empty, otherwise {@code cause=count (oldest Ns origin)}
+         * @return {@code cause=count} when empty, otherwise {@code cause=count (oldest Ns origin)}
          */
         String describe() {
             String name = _cause.name().toLowerCase();
@@ -538,28 +536,28 @@ public class GraphGenerator implements Runnable, ClientApp {
     /** Origin wording for an age measured from the last successful write. @since 0.9.71+ */
     private static final String staleAgeSinceLastWrite = "since last write";
     /**
-     *  Origin wording for an age with no earlier write to measure back from.
+     * Origin wording for an age with no earlier write to measure back from.
      *
-     *  <p>The listener's own attach time, not the router's graphing start: only the
-     *  listener knows how long it has had the chance to write.
+     * <p>The listener's own attach time, not the router's graphing start: only the
+     * listener knows how long it has had the chance to write.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final String staleAgeSinceLastWriteAttach = "since the listener attached";
 
     /**
-     *  Decide whether a listener is stalled, and why, assuming the coalesce sweep has
-     *  run recently enough to have fed these rates.
+     * Decide whether a listener is stalled, and why, assuming the coalesce sweep has
+     * run recently enough to have fed these rates.
      *
-     *  @param detached {@link GraphListener#isDetached()} - the RRD is closed
-     *  @param registered {@link GraphListener#isRegistered()} - the Rate still points at the listener
-     *  @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
-     *  @param now current wall-clock ms
-     *  @param startedMs wall-clock ms when graphing began
-     *  @param ratePeriod the rate's period in ms
-     *  @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
-     *  @see #classifyStaleness(boolean, boolean, long, long, long, long, boolean)
-     *  @since 0.9.71+
+     * @param detached {@link GraphListener#isDetached()} - the RRD is closed
+     * @param registered {@link GraphListener#isRegistered()} - the Rate still points at the listener
+     * @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
+     * @param now current wall-clock ms
+     * @param startedMs wall-clock ms when graphing began
+     * @param ratePeriod the rate's period in ms
+     * @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
+     * @see #classifyStaleness(boolean, boolean, long, long, long, long, boolean)
+     * @since 0.9.71+
      */
     static StaleCause classifyStaleness(boolean detached, boolean registered, long lastUpdateSuccess,
                                         long now, long startedMs, long ratePeriod) {
@@ -568,21 +566,21 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Decide whether a listener is stalled, and why.
+     * Decide whether a listener is stalled, and why.
      *
-     *  <p>Pure decision logic, split out of the sync task so the thresholds can be pinned
-     *  by unit tests without a router or an RRD file.
+     * <p>Pure decision logic, split out of the sync task so the thresholds can be pinned
+     * by unit tests without a router or an RRD file.
      *
-     *  @param detached {@link GraphListener#isDetached()} - the RRD is closed
-     *  @param registered {@link GraphListener#isRegistered()} - the Rate still points at the listener
-     *  @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
-     *  @param now current wall-clock ms
-     *  @param startedMs wall-clock ms when graphing began
-     *  @param ratePeriod the rate's period in ms
-     *  @param coalesceStalled true when the coalesce sweep has not run recently enough to
-     *        have fed these rates; see {@link net.i2p.stat.StatManager#getCoalesceSweepAgeMs(long)}
-     *  @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
-     *  @since 0.9.71+
+     * @param detached {@link GraphListener#isDetached()} - the RRD is closed
+     * @param registered {@link GraphListener#isRegistered()} - the Rate still points at the listener
+     * @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
+     * @param now current wall-clock ms
+     * @param startedMs wall-clock ms when graphing began
+     * @param ratePeriod the rate's period in ms
+     * @param coalesceStalled true when the coalesce sweep has not run recently enough to
+     * have fed these rates; see {@link net.i2p.stat.StatManager#getCoalesceSweepAgeMs(long)}
+     * @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
+     * @since 0.9.71+
      */
     static StaleCause classifyStaleness(boolean detached, boolean registered, long lastUpdateSuccess,
                                         long now, long startedMs, long ratePeriod,
@@ -614,43 +612,43 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Age of a listener's data path, measured from whichever origin exists.
+     * Age of a listener's data path, measured from whichever origin exists.
      *
-     *  @param now current wall-clock ms
-     *  @param startedMs wall-clock ms when graphing began
-     *  @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
-     *  @return ms since the last write, or ms since graphing began when nothing was ever written
-     *  @since 0.9.71+
+     * @param now current wall-clock ms
+     * @param startedMs wall-clock ms when graphing began
+     * @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
+     * @return ms since the last write, or ms since graphing began when nothing was ever written
+     * @since 0.9.71+
      */
     static long staleAge(long now, long startedMs, long lastUpdateSuccess) {
         return lastUpdateSuccess > 0 ? now - lastUpdateSuccess : Math.max(0, now - startedMs);
     }
 
     /**
-     *  Wording for a {@link #staleAge} value: which event the age is measured from.
+     * Wording for a {@link #staleAge} value: which event the age is measured from.
      *
-     *  @param sinceLastWrite true if a successful write has ever happened
-     *  @return the origin to quote alongside the age
-     *  @since 0.9.71+
+     * @param sinceLastWrite true if a successful write has ever happened
+     * @return the origin to quote alongside the age
+     * @since 0.9.71+
      */
     static String staleAgeOrigin(boolean sinceLastWrite) {
         return sinceLastWrite ? staleAgeSinceLastWrite : staleAgeSinceLastWriteAttach;
     }
 
     /**
-     *  Split "has never written" into a broken data path and a rate with nothing to say.
+     * Split "has never written" into a broken data path and a rate with nothing to say.
      *
-     *  <p>A listener that has never written looks identical whether its RRD writes are
-     *  failing or its rate has simply never coalesced. Only the first loses data. Coalesce
-     *  count settles it: the rate handed the listener a sample to write, or it did not.
-     *  Without this split, a stat nothing in the router ever updates produces an ERROR
-     *  every reporting interval for the life of the process, naming a fault that has no fix.
+     * <p>A listener that has never written looks identical whether its RRD writes are
+     * failing or its rate has simply never coalesced. Only the first loses data. Coalesce
+     * count settles it: the rate handed the listener a sample to write, or it did not.
+     * Without this split, a stat nothing in the router ever updates produces an ERROR
+     * every reporting interval for the life of the process, naming a fault that has no fix.
      *
-     *  @param cause classification from {@link #classifyStaleness}
-     *  @param coalesceDelta times the rate coalesced since the listener attached
-     *  @return {@link StaleCause#RATE_IDLE} for a never-written listener whose rate has not
-     *                 coalesced, otherwise cause unchanged
-     *  @since 0.9.71+
+     * @param cause classification from {@link #classifyStaleness}
+     * @param coalesceDelta times the rate coalesced since the listener attached
+     * @return {@link StaleCause#RATE_IDLE} for a never-written listener whose rate has not
+     * coalesced, otherwise cause unchanged
+     * @since 0.9.71+
      */
     static StaleCause refineForIdleRate(StaleCause cause, long coalesceDelta) {
         if (cause != StaleCause.NEVER_WRITTEN || coalesceDelta > 0) {return cause;}
@@ -658,17 +656,17 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Compose the write-stall log line.
+     * Compose the write-stall log line.
      *
-     *  <p>Pure: a function of the three tallies, so both the wording and the count
-     *  attribution can be unit tested without a router.
+     * <p>Pure: a function of the three tallies, so both the wording and the count
+     * attribution can be unit tested without a router.
      *
-     *  @param totalListeners number of listeners being tracked
-     *  @param neverWritten tally for {@link StaleCause#NEVER_WRITTEN}
-     *  @param unregistered tally for {@link StaleCause#UNREGISTERED}
-     *  @param writesStopped tally for {@link StaleCause#WRITES_STOPPED}
-     *  @return a single-line message beginning "RRD data stalled:"
-     *  @since 0.9.71+
+     * @param totalListeners number of listeners being tracked
+     * @param neverWritten tally for {@link StaleCause#NEVER_WRITTEN}
+     * @param unregistered tally for {@link StaleCause#UNREGISTERED}
+     * @param writesStopped tally for {@link StaleCause#WRITES_STOPPED}
+     * @return a single-line message beginning "RRD data stalled:"
+     * @since 0.9.71+
      */
     static String formatStaleness(int totalListeners, CauseTally neverWritten,
                                   CauseTally unregistered, CauseTally writesStopped) {
@@ -677,15 +675,15 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Compose the write-stall log line, counting the coalesce fault alongside the
-     *  per-listener causes.
+     * Compose the write-stall log line, counting the coalesce fault alongside the
+     * per-listener causes.
      *
-     *  @param totalListeners number of listeners being tracked
-     *  @param neverWritten tally for {@link StaleCause#NEVER_WRITTEN}
-     *  @param unregistered tally for {@link StaleCause#UNREGISTERED}
-     *  @param writesStopped tally for {@link StaleCause#WRITES_STOPPED}
-     *  @param coalesceStalled tally for {@link StaleCause#COALESCE_STALLED}
-     *  @return a single-line message beginning "RRD data stalled:"
+     * @param totalListeners number of listeners being tracked
+     * @param neverWritten tally for {@link StaleCause#NEVER_WRITTEN}
+     * @param unregistered tally for {@link StaleCause#UNREGISTERED}
+     * @param writesStopped tally for {@link StaleCause#WRITES_STOPPED}
+     * @param coalesceStalled tally for {@link StaleCause#COALESCE_STALLED}
+     * @return a single-line message beginning "RRD data stalled:"
      */
     static String formatStaleness(int totalListeners, CauseTally neverWritten,
                                   CauseTally unregistered, CauseTally writesStopped,
@@ -701,17 +699,17 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Loud failure for a silently stalled data path: logs an ERROR when any attached
-     *  listener is not recording, naming the cause per listener class rather than
-     *  reporting one ambiguous count.
+     * Loud failure for a silently stalled data path: logs an ERROR when any attached
+     * listener is not recording, naming the cause per listener class rather than
+     * reporting one ambiguous count.
      *
-     *  <p>Called from both the 90s sync task and the 10s watchdog, so the report is
-     *  throttled on its own numbers rather than on which task happened to run: an
-     *  unchanged stall is repeated every {@link #REPORT_REPEAT_MS}, a changed one
-     *  immediately, and the first occurrence is never throttled at all.
+     * <p>Called from both the 90s sync task and the 10s watchdog, so the report is
+     * throttled on its own numbers rather than on which task happened to run: an
+     * unchanged stall is repeated every {@link #REPORT_REPEAT_MS}, a changed one
+     * immediately, and the first occurrence is never throttled at all.
      *
-     *  <p>A single INFO follows once the stall clears, so the ERROR has a visible
-     *  ending rather than being indistinguishable from a router still losing data.
+     * <p>A single INFO follows once the stall clears, so the ERROR has a visible
+     * ending rather than being indistinguishable from a router still losing data.
      */
     private void reportWriteStaleness() {
         long now = System.currentTimeMillis();
@@ -800,49 +798,49 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Whether the coalesce sweep has missed enough cycles that no rate can be recording.
+     * Whether the coalesce sweep has missed enough cycles that no rate can be recording.
      *
-     *  <p>Pure threshold test, separated from the manager lookup so it can be pinned by
-     *  unit tests. A sweep is considered stalled once it is older than twice the shortest
-     *  rate period: the coalesce timer runs every 50s and the shortest period is one
-     *  minute, so two missed sweeps is already unambiguous.
+     * <p>Pure threshold test, separated from the manager lookup so it can be pinned by
+     * unit tests. A sweep is considered stalled once it is older than twice the shortest
+     * rate period: the coalesce timer runs every 50s and the shortest period is one
+     * minute, so two missed sweeps is already unambiguous.
      *
-     *  @param sweepAgeMs ms since the last completed sweep, or -1 if none ever has
-     *  @return true when the sweep is stalled
-     *  @since 0.9.71+
+     * @param sweepAgeMs ms since the last completed sweep, or -1 if none ever has
+     * @return true when the sweep is stalled
+     * @since 0.9.71+
      */
     static boolean isCoalesceSweepStalled(long sweepAgeMs) {
         return sweepAgeMs < 0 || sweepAgeMs > 2 * MIN_STALENESS_PERIOD_MS;
     }
 
     /**
-     *  Grace period before a coalesce sweep that has never run counts as a stall.
+     * Grace period before a coalesce sweep that has never run counts as a stall.
      *
-     *  <p>One coalesce interval ({@code Router.COALESCE_TIME}, 50s) plus one shortest
-     *  rate period, rounded up to two staleness periods.
+     * <p>One coalesce interval ({@code Router.COALESCE_TIME}, 50s) plus one shortest
+     * rate period, rounded up to two staleness periods.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long COALESCE_STALL_GRACE_MS = 2 * MIN_STALENESS_PERIOD_MS;
 
     /**
-     *  Whether the shared coalesce sweep should be reported as stalled right now.
+     * Whether the shared coalesce sweep should be reported as stalled right now.
      *
-     *  <p>Separate from {@link #isCoalesceSweepStalled(long)} so the start-up window can
-     *  be pinned by tests. Until a sweep has ever completed its age is reported as -1,
-     *  meaning "none ever", which that function quite correctly calls stalled. At
-     *  start-up, though, that is not a fault - it is a sweep that has not come round yet,
-     *  because the coalesce timer only fires every {@code Router.COALESCE_TIME}. Judging
-     *  it as stalled made every boot log an ERROR naming the coalesce timer as the fault
-     *  within seconds of start-up, and pointed the operator at the one subsystem the
-     *  evidence could not implicate.
+     * <p>Separate from {@link #isCoalesceSweepStalled(long)} so the start-up window can
+     * be pinned by tests. Until a sweep has ever completed its age is reported as -1,
+     * meaning "none ever", which that function quite correctly calls stalled. At
+     * start-up, though, that is not a fault - it is a sweep that has not come round yet,
+     * because the coalesce timer only fires every {@code Router.COALESCE_TIME}. Judging
+     * it as stalled made every boot log an ERROR naming the coalesce timer as the fault
+     * within seconds of start-up, and pointed the operator at the one subsystem the
+     * evidence could not implicate.
      *
-     *  @param everSwept whether any sweep has completed since graphing began
-     *  @param sweepAgeMs ms since the last completed sweep, or -1 if none ever has
-     *  @param startedMs wall-clock ms when graphing began
-     *  @param now current wall-clock ms
-     *  @return true only once a sweep should have come round and has not
-     *  @since 0.9.71+
+     * @param everSwept whether any sweep has completed since graphing began
+     * @param sweepAgeMs ms since the last completed sweep, or -1 if none ever has
+     * @param startedMs wall-clock ms when graphing began
+     * @param now current wall-clock ms
+     * @return true only once a sweep should have come round and has not
+     * @since 0.9.71+
      */
     static boolean isCoalesceStalledNow(boolean everSwept, long sweepAgeMs,
                                         long startedMs, long now) {
@@ -863,17 +861,17 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  How long the coalesce sweep has been absent, for the report.
+     * How long the coalesce sweep has been absent, for the report.
      *
-     *  <p>Always a real, non-negative figure: the caller only reaches this once the
-     *  absence has already exceeded the normal cadence, so any sentinel would be
-     *  meaningless noise in an operator-facing line. A sweep that has never run has no
-     *  age to quote, so the age of the graphing window is reported in its place and
-     *  labelled as such - a lower bound on the absence, and never the {@code -1} the
-     *  accessor uses to mean "none ever".
+     * <p>Always a real, non-negative figure: the caller only reaches this once the
+     * absence has already exceeded the normal cadence, so any sentinel would be
+     * meaningless noise in an operator-facing line. A sweep that has never run has no
+     * age to quote, so the age of the graphing window is reported in its place and
+     * labelled as such - a lower bound on the absence, and never the {@code -1} the
+     * accessor uses to mean "none ever".
      *
-     *  @param now current wall-clock ms
-     *  @return a human-readable duration that always starts with a non-negative number
+     * @param now current wall-clock ms
+     * @return a human-readable duration that always starts with a non-negative number
      */
     private String coalesceSweepAbsence(long now) {
         StatManager sm = _context.statManager();
@@ -882,20 +880,20 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Render how long the coalesce sweep has been absent.
+     * Render how long the coalesce sweep has been absent.
      *
-     *  <p>Pure, so the sentinel handling can be pinned by test. The bug this exists to
-     *  prevent: the accessor reports an unknown age as {@code -1}, and an earlier
-     *  version interpolated that straight into the operator-facing ERROR, producing
-     *  the nonsensical {@code "has not completed for -1s"}. A negative duration is not
-     *  a duration. The unknown case is now reported as the age of the graphing window
-     *  and labelled, which is a real lower bound on the absence.
+     * <p>Pure, so the sentinel handling can be pinned by test. The bug this exists to
+     * prevent: the accessor reports an unknown age as {@code -1}, and an earlier
+     * version interpolated that straight into the operator-facing ERROR, producing
+     * the nonsensical {@code "has not completed for -1s"}. A negative duration is not
+     * a duration. The unknown case is now reported as the age of the graphing window
+     * and labelled, which is a real lower bound on the absence.
      *
-     *  @param sweepAgeMs ms since the last completed sweep, or negative if none ever has
-     *  @param startedMs wall-clock ms when graphing began
-     *  @param now current wall-clock ms
-     *  @return a duration that always begins with a non-negative number of seconds
-     *  @since 0.9.71+
+     * @param sweepAgeMs ms since the last completed sweep, or negative if none ever has
+     * @param startedMs wall-clock ms when graphing began
+     * @param now current wall-clock ms
+     * @return a duration that always begins with a non-negative number of seconds
+     * @since 0.9.71+
      */
     static String formatCoalesceSweepAbsence(long sweepAgeMs, long startedMs, long now) {
         if (sweepAgeMs > 0) {
@@ -905,36 +903,36 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Does a configured rate need a listener rebuilt?
+     * Does a configured rate need a listener rebuilt?
      *
-     *  <p>Three distinct faults, each of which leaves the rate unrecorded for the rest of
-     *  the router's life while every observable state still reads healthy: the RRD was
-     *  closed after repeated write failures ({@code detached}), the map lost its listener
-     *  ({@code mapped} false), or a newer listener took the Rate's single registration so
-     *  this one can never be called again ({@code registered} false).
+     * <p>Three distinct faults, each of which leaves the rate unrecorded for the rest of
+     * the router's life while every observable state still reads healthy: the RRD was
+     * closed after repeated write failures ({@code detached}), the map lost its listener
+     * ({@code mapped} false), or a newer listener took the Rate's single registration so
+     * this one can never be called again ({@code registered} false).
      *
-     *  @param mapped false if the rate has no listener entry at all
-     *  @param detached true if the listener's RRD is closed
-     *  @param registered true if the Rate still points at the listener
-     *  @return true if the rate needs a new listener
-     *  @since 0.9.71+
+     * @param mapped false if the rate has no listener entry at all
+     * @param detached true if the listener's RRD is closed
+     * @param registered true if the Rate still points at the listener
+     * @return true if the rate needs a new listener
+     * @since 0.9.71+
      */
     static boolean needsRevive(boolean mapped, boolean detached, boolean registered) {
         return !mapped || detached || !registered;
     }
 
     /**
-     *  Re-create any listener that has stopped recording, so neither a transient write
-     *  failure nor a lost Rate registration can silently retire a graph for the
-     *  remaining life of the router.
+     * Re-create any listener that has stopped recording, so neither a transient write
+     * failure nor a lost Rate registration can silently retire a graph for the
+     * remaining life of the router.
      *
-     *  <p>A detached listener stays in the rate-to-listener map, so it is never rebuilt
-     *  by adjustDatabases(): that only adds rates missing from the old spec. The same
-     *  holds for a listener that kept its open RRD but lost the registration, and for a
-     *  rate whose mapping lost its listener. This runs on the same tick as the spec
-     *  sync, reusing the existing scheduled task rather than adding a thread.
+     * <p>A detached listener stays in the rate-to-listener map, so it is never rebuilt
+     * by adjustDatabases(): that only adds rates missing from the old spec. The same
+     * holds for a listener that kept its open RRD but lost the registration, and for a
+     * rate whose mapping lost its listener. This runs on the same tick as the spec
+     * sync, reusing the existing scheduled task rather than adding a thread.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private void reviveDetachedListeners() {
         for (Map.Entry<Rate, GraphListener> entry : _listenerByRate.entrySet()) {
@@ -950,19 +948,19 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Replace a listener for a rate, releasing the old one first.
+     * Replace a listener for a rate, releasing the old one first.
      *
-     *  <p>Shared with the health watchdog's REBUILD step so there is exactly one
-     *  definition of what retiring a listener means: the old handle is released before
-     *  the replacement re-opens the same file, and the stale entry leaves the listener
-     *  list so it keeps counting only what actually records.
+     * <p>Shared with the health watchdog's REBUILD step so there is exactly one
+     * definition of what retiring a listener means: the old handle is released before
+     * the replacement re-opens the same file, and the stale entry leaves the listener
+     * list so it keeps counting only what actually records.
      *
-     *  @param rate the series being rebuilt; re-opens its RRD file and names
-     *              the rate in the log line
-     *  @param lsnr the listener being replaced, or null if the map lost it
-     *  @param why short reason for the log line
-     *  @return true if a replacement listener is now recording
-     *  @since 0.9.71+
+     * @param rate the series being rebuilt; re-opens its RRD file and names
+     * the rate in the log line
+     * @param lsnr the listener being replaced, or null if the map lost it
+     * @param why short reason for the log line
+     * @return true if a replacement listener is now recording
+     * @since 0.9.71+
      */
     private boolean rebuildListener(Rate rate, GraphListener lsnr, String why) {
         if (_log.shouldWarn()) {
@@ -980,10 +978,10 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Name a rate for a log line, tolerating a Rate with no stat behind it.
+     * Name a rate for a log line, tolerating a Rate with no stat behind it.
      *
-     *  @param rate the rate to name, which may be null or have no stat behind it
-     *  @return the rate's stat name and period
+     * @param rate the rate to name, which may be null or have no stat behind it
+     * @return the rate's stat name and period
      */
     private static String rateName(Rate rate) {
         if (rate == null) {
@@ -994,24 +992,24 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  What the watchdog may do about one rate's listener.
+     * What the watchdog may do about one rate's listener.
      *
-     *  <p>Ordered by cost, and the order is the whole point: every rung keeps more of
-     *  the existing recording than the one above it.
+     * <p>Ordered by cost, and the order is the whole point: every rung keeps more of
+     * the existing recording than the one above it.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     enum HealAction {
         /** Healthy, or nothing worth doing. */
         NONE,
         /**
-         *  The Rate no longer points at this listener but the listener itself is fine.
+         * The Rate no longer points at this listener but the listener itself is fine.
          *
-         *  <p>Never returned: a lost registration is repaired by REBUILD, which also
-         *  covers a listener that was never attached in the first place. Re-pointing the
-         *  Rate at a listener another instance may have claimed would make two listeners
-         *  fight over one registration, so the constant is kept for the ladder's shape
-         *  and is deliberately not a rung.
+         * <p>Never returned: a lost registration is repaired by REBUILD, which also
+         * covers a listener that was never attached in the first place. Re-pointing the
+         * Rate at a listener another instance may have claimed would make two listeners
+         * fight over one registration, so the constant is kept for the ladder's shape
+         * and is deliberately not a rung.
          */
         REARM,
         /** The handle is closed but the listener, registration and file all survive. */
@@ -1023,23 +1021,23 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Cheapest action that can restore recording for one rate.
+     * Cheapest action that can restore recording for one rate.
      *
-     *  <p>Pure decision logic, ordered cheapest first, so the cost ordering is pinned by
-     *  unit tests rather than by reading the ladder at the call site.
+     * <p>Pure decision logic, ordered cheapest first, so the cost ordering is pinned by
+     * unit tests rather than by reading the ladder at the call site.
      *
-     *  <p>The first row is also the spec-churn guard: a listener that is mapped, attached
-     *  and registered can only ever reach BACKFILL or NONE, never REOPEN or REBUILD, so
-     *  re-reading a changed {@code stat.summaries} string cannot close and reopen a
-     *  healthy RRD.
+     * <p>The first row is also the spec-churn guard: a listener that is mapped, attached
+     * and registered can only ever reach BACKFILL or NONE, never REOPEN or REBUILD, so
+     * re-reading a changed {@code stat.summaries} string cannot close and reopen a
+     * healthy RRD.
      *
-     *  @param mapped false when the rate has no listener entry
-     *  @param detached true when the listener's RRD is closed
-     *  @param registered true when the Rate still points at the listener
-     *  @param writable true when the handle can still take a write (not closed)
-     *  @param backfillable true when the rate still retains unstored samples
-     *  @return the action to take, cheapest first
-     *  @since 0.9.71+
+     * @param mapped false when the rate has no listener entry
+     * @param detached true when the listener's RRD is closed
+     * @param registered true when the Rate still points at the listener
+     * @param writable true when the handle can still take a write (not closed)
+     * @param backfillable true when the rate still retains unstored samples
+     * @return the action to take, cheapest first
+     * @since 0.9.71+
      */
     static HealAction chooseHeal(boolean mapped, boolean detached, boolean registered,
                                  boolean writable, boolean backfillable) {
@@ -1056,26 +1054,26 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  How many retained samples one backfill attempt should ask for.
+     * How many retained samples one backfill attempt should ask for.
      *
-     *  <p>Bounded by the drift, since asking for more steps than are missing wastes a
-     *  list copy every tick, and capped at {@link #MAX_BACKFILL_STEPS} so a listener
-     *  that fell thousands of steps behind does not ask for a list that long - the
-     *  accessor's own clamp would discard the excess anyway, and the excess is exactly
-     *  the part that is permanently gone.
+     * <p>Bounded by the drift, since asking for more steps than are missing wastes a
+     * list copy every tick, and capped at {@link #MAX_BACKFILL_STEPS} so a listener
+     * that fell thousands of steps behind does not ask for a list that long - the
+     * accessor's own clamp would discard the excess anyway, and the excess is exactly
+     * the part that is permanently gone.
      *
-     *  @param drift coalesces minus stored steps
-     *  @return number of retained samples to request, never below one
-     *  @since 0.9.71+
+     * @param drift coalesces minus stored steps
+     * @return number of retained samples to request, never below one
+     * @since 0.9.71+
      */
     static int backfillWindow(long drift) {
         return (int) Math.min(Math.max(drift, 1L), MAX_BACKFILL_STEPS);
     }
 
     /**
-     *  Why coalesces are turning into samples that never reach a listener.
+     * Why coalesces are turning into samples that never reach a listener.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     enum DriftCause {
         /** The counters say the data path is fine; the loss is in the write itself. */
@@ -1088,9 +1086,9 @@ public class GraphGenerator implements Runnable, ClientApp {
         COALESCING_STOPPED;
 
         /**
-         *  Name this mechanism for the operator.
+         * Name this mechanism for the operator.
          *
-         *  @return the wording to put in the report for this mechanism
+         * @return the wording to put in the report for this mechanism
          */
         String describe() {
             switch (this) {
@@ -1107,22 +1105,22 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Name the mechanism behind positive ledger drift.
+     * Name the mechanism behind positive ledger drift.
      *
-     *  <p>These are the three candidates that were indistinguishable from the console
-     *  during the incident this exists for: a coalesce that never happened, a sample
-     *  that queued and never drained, and a sample that arrived and was not written.
-     *  Each has a different fix, so the report has to pick one.
+     * <p>These are the three candidates that were indistinguishable from the console
+     * during the incident this exists for: a coalesce that never happened, a sample
+     * that queued and never drained, and a sample that arrived and was not written.
+     * Each has a different fix, so the report has to pick one.
      *
-     *  <p>Pure, so the mapping from counters to mechanism is unit tested without a
-     *  router, a StatManager or a clock.
+     * <p>Pure, so the mapping from counters to mechanism is unit tested without a
+     * router, a StatManager or a clock.
      *
-     *  @param pending samples waiting for delivery
-     *  @param oldestPendingMs age of the oldest waiting sample
-     *  @param overruns samples evicted at the queue's hard cap
-     *  @param coalesceAdvancing whether any tracked rate coalesced recently
-     *  @return the most specific cause the counters support
-     *  @since 0.9.71+
+     * @param pending samples waiting for delivery
+     * @param oldestPendingMs age of the oldest waiting sample
+     * @param overruns samples evicted at the queue's hard cap
+     * @param coalesceAdvancing whether any tracked rate coalesced recently
+     * @return the most specific cause the counters support
+     * @since 0.9.71+
      */
     static DriftCause classifyDrift(int pending, long oldestPendingMs, long overruns,
                                     boolean coalesceAdvancing) {
@@ -1139,31 +1137,31 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Compose the ledger-drift log line.
+     * Compose the ledger-drift log line.
      *
-     *  <p>Pure and single-line, so the wording and the six StatManager counters can be
-     *  asserted in a unit test. The counters are the point of the line: an operator
-     *  reading "pending climbing with oldest-pending-age climbing" knows the consumer is
-     *  wedged, "pending zero with a flat coalesce count" knows the rate stopped
-     *  coalescing, and a climbing skip count points at the coalesce early return.
+     * <p>Pure and single-line, so the wording and the six StatManager counters can be
+     * asserted in a unit test. The counters are the point of the line: an operator
+     * reading "pending climbing with oldest-pending-age climbing" knows the consumer is
+     * wedged, "pending zero with a flat coalesce count" knows the rate stopped
+     * coalescing, and a climbing skip count points at the coalesce early return.
      *
-     *  @param totalListeners listeners being tracked
-     *  @param drifters number of listeners with positive drift
-     *  @param maxDrift largest positive drift
-     *  @param permanentSteps steps proven beyond the retained-sample ring
-     *  @param healedSteps steps backfilled since the previous report
-     *  @param rebuilt listeners rebuilt this tick
-     *  @param reopened listeners reopened this tick
-     *  @param coalesced coalesce delta across the tracked listeners
-     *  @param mechanism the named cause from {@link #classifyDrift}
-     *  @param overruns StatManager sample overruns
-     *  @param superseded StatManager same-step supersessions
-     *  @param pending StatManager delivery queue depth
-     *  @param oldestPendingMs StatManager age of the oldest queued sample
-     *  @param backlogCollapses StatManager coalesce backlog collapses
-     *  @param coalesceSkips StatManager coalesce skips
-     *  @return a single-line message beginning "RRD ledger drift:"
-     *  @since 0.9.71+
+     * @param totalListeners listeners being tracked
+     * @param drifters number of listeners with positive drift
+     * @param maxDrift largest positive drift
+     * @param permanentSteps steps proven beyond the retained-sample ring
+     * @param healedSteps steps backfilled since the previous report
+     * @param rebuilt listeners rebuilt this tick
+     * @param reopened listeners reopened this tick
+     * @param coalesced coalesce delta across the tracked listeners
+     * @param mechanism the named cause from {@link #classifyDrift}
+     * @param overruns StatManager sample overruns
+     * @param superseded StatManager same-step supersessions
+     * @param pending StatManager delivery queue depth
+     * @param oldestPendingMs StatManager age of the oldest queued sample
+     * @param backlogCollapses StatManager coalesce backlog collapses
+     * @param coalesceSkips StatManager coalesce skips
+     * @return a single-line message beginning "RRD ledger drift:"
+     * @since 0.9.71+
      */
     static String formatLedgerDrift(int totalListeners, int drifters, long maxDrift, long permanentSteps,
                                     long healedSteps, int rebuilt, int reopened, long coalesced,
@@ -1180,12 +1178,12 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  One watchdog tick: report a stalled data path, then apply the heal ladder.
+     * One watchdog tick: report a stalled data path, then apply the heal ladder.
      *
-     *  <p>Holds no lock across I/O and does no RRD work itself beyond the backfill the
-     *  ladder asks for. Wrapped in a Throwable catch because an escaping exception
-     *  silences a fixed-rate scheduled task permanently, which would remove the very
-     *  watchdog that is supposed to notice the data path dying.
+     * <p>Holds no lock across I/O and does no RRD work itself beyond the backfill the
+     * ladder asks for. Wrapped in a Throwable catch because an escaping exception
+     * silences a fixed-rate scheduled task permanently, which would remove the very
+     * watchdog that is supposed to notice the data path dying.
      */
     private void healthCheck() {
         try {
@@ -1202,15 +1200,15 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Walk every listener, heal what can be healed, and report what could not be.
+     * Walk every listener, heal what can be healed, and report what could not be.
      *
-     *  <p>Iterates {@link #_listeners} rather than the rate map so that "mapped" is a
-     *  real question: a listener that is alive but has lost its map entry is exactly the
-     *  REBUILD case the ladder exists for, and iterating the map would never see it.
-     *  The map's own dead entries are handled by {@link #reviveDetachedListeners()}.
+     * <p>Iterates {@link #_listeners} rather than the rate map so that "mapped" is a
+     * real question: a listener that is alive but has lost its map entry is exactly the
+     * REBUILD case the ladder exists for, and iterating the map would never see it.
+     * The map's own dead entries are handled by {@link #reviveDetachedListeners()}.
      *
-     *  <p>The ledger reports at WARN, not ERROR, because it describes drift the ladder
-     *  has usually already repaired, and a single INFO marks its clearing.
+     * <p>The ledger reports at WARN, not ERROR, because it describes drift the ladder
+     * has usually already repaired, and a single INFO marks its clearing.
      */
     private void applyHealLadder() {
         int drifters = 0, rebuilt = 0, reopened = 0;
@@ -1293,19 +1291,19 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Track whether the tracked rates are still coalescing at all.
+     * Track whether the tracked rates are still coalescing at all.
      *
-     *  <p>Tested over a window rather than a single tick: a 60s rate coalesces on one
-     *  tick in six, so comparing against the previous tick alone would report "the rates
-     *  stopped" five times out of six.
+     * <p>Tested over a window rather than a single tick: a 60s rate coalesces on one
+     * tick in six, so comparing against the previous tick alone would report "the rates
+     * stopped" five times out of six.
      *
-     *  <p>Not synchronized, and deliberately so: only the single watchdog thread ever
-     *  calls it, whereas {@link #stop()} holds this instance's monitor across a bounded
-     *  scheduler shutdown wait. Synchronizing here would let a shutdown stall the
-     *  watchdog for the length of that wait.
+     * <p>Not synchronized, and deliberately so: only the single watchdog thread ever
+     * calls it, whereas {@link #stop()} holds this instance's monitor across a bounded
+     * scheduler shutdown wait. Synchronizing here would let a shutdown stall the
+     * watchdog for the length of that wait.
      *
-     *  @param coalesced coalesce delta summed across the tracked listeners
-     *  @return true if some rate coalesced within {@link #COALESCE_STALL_MS}
+     * @param coalesced coalesce delta summed across the tracked listeners
+     * @return true if some rate coalesced within {@link #COALESCE_STALL_MS}
      */
     private boolean noteCoalesceProgress(long coalesced) {
         if (coalesced > _lastCoalesceSum) {
@@ -1318,13 +1316,13 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Decide whether a repeated report is due, and remember the decision.
+     * Decide whether a repeated report is due, and remember the decision.
      *
-     *  <p>Pure enough to unit test and free of router context, so the "first report is
-     *  never throttled, a changed one is never delayed, an unchanged one repeats on a
-     *  timer" rule is pinned by tests rather than by reading the caller.
+     * <p>Pure enough to unit test and free of router context, so the "first report is
+     * never throttled, a changed one is never delayed, an unchanged one repeats on a
+     * timer" rule is pinned by tests rather than by reading the caller.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final class ReportThrottle {
         /** One per reported condition, so each carries its own last report and signature. */
@@ -1334,15 +1332,15 @@ public class GraphGenerator implements Runnable, ClientApp {
         private long _lastSignature;
 
         /**
-         *  Decide whether this report is due, and remember the decision.
+         * Decide whether this report is due, and remember the decision.
          *
-         *  <p>Synchronized because the stall report is reached from the 90s sync task and
-         *  the 10s watchdog, which run on different threads.
+         * <p>Synchronized because the stall report is reached from the 90s sync task and
+         * the 10s watchdog, which run on different threads.
          *
-         *  @param now current wall-clock ms
-         *  @param signature value identifying the state being reported
-         *  @param minIntervalMs shortest gap between two identical reports
-         *  @return true if the caller should log now
+         * @param now current wall-clock ms
+         * @param signature value identifying the state being reported
+         * @param minIntervalMs shortest gap between two identical reports
+         * @return true if the caller should log now
          */
         synchronized boolean allow(long now, long signature, long minIntervalMs) {
             if (signature != _lastSignature || now - _lastMs >= minIntervalMs) {
@@ -1380,11 +1378,11 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Whether graph generation is currently switched off.
+     * Whether graph generation is currently switched off.
      *
-     *  @param ctx the context whose app manager holds the registration
-     *  @return true if no generator is registered, so nothing is being recorded
-     *  @since 0.9.38
+     * @param ctx the context whose app manager holds the registration
+     * @return true if no generator is registered, so nothing is being recorded
+     * @since 0.9.38
      */
     public static boolean isDisabled(I2PAppContext ctx) {
         return ctx.clientAppManager().getRegisteredApp(NAME) == null;
@@ -1451,9 +1449,9 @@ public class GraphGenerator implements Runnable, ClientApp {
     public List<GraphListener> getListeners() { return _listeners; }
 
     /**
-     *  The stats graphed when stat.summaries is unset, as statName.period pairs.
+     * The stats graphed when stat.summaries is unset, as statName.period pairs.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public static final String DEFAULT_DATABASES = "bw.sendRate.60000" +
                                                    ",bw.recvRate.60000" +
@@ -1466,10 +1464,10 @@ public class GraphGenerator implements Runnable, ClientApp {
                                                    ",tunnel.testSuccessTime.60000";
 
     /**
-     *  How many stats are being recorded right now.
+     * How many stats are being recorded right now.
      *
-     *  @return the number of live listeners
-     *  @since 0.9.62+
+     * @return the number of live listeners
+     * @since 0.9.62+
      */
     public int countGraphs() {return _listeners.size();}
 
@@ -1501,9 +1499,9 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Remove a rate from tracking and stop its listener.
+     * Remove a rate from tracking and stop its listener.
      *
-     *  @param r the rate to remove
+     * @param r the rate to remove
      */
     private void removeDb(Rate r) {
         GraphListener lsnr = _listenerByRate.remove(r);
@@ -1514,17 +1512,17 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Start tracking a rate by creating a new GraphListener for it.
+     * Start tracking a rate by creating a new GraphListener for it.
      *
-     *  <p>Single choke point for every listener creation, so it is also where "one live
-     *  listener per rate" is enforced. Both the 90s sync task and the 10s watchdog can
-     *  decide to rebuild the same rate within one interval; without this the second
-     *  rebuild would register a second listener on the rate, orphan the first into the
-     *  listener list, and leave an attached-but-never-called listener accumulating one
-     *  per tick - which is precisely the fault the ladder exists to remove.
+     * <p>Single choke point for every listener creation, so it is also where "one live
+     * listener per rate" is enforced. Both the 90s sync task and the 10s watchdog can
+     * decide to rebuild the same rate within one interval; without this the second
+     * rebuild would register a second listener on the rate, orphan the first into the
+     * listener list, and leave an attached-but-never-called listener accumulating one
+     * per tick - which is precisely the fault the ladder exists to remove.
      *
-     *  @param r the rate to track
-     *  @return true if a new listener was created and is recording
+     * @param r the rate to track
+     * @return true if a new listener was created and is recording
      */
     private boolean addDb(Rate r) {
         if (r == null) {
@@ -1545,25 +1543,25 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Render a single-data graph with the specified options.
-     *  For the two-data bandwidth graph see renderCombinedGraph().
-     *  Synchronized to conserve memory.
+     * Render a single-data graph with the specified options.
+     * For the two-data bandwidth graph see renderCombinedGraph().
+     * Synchronized to conserve memory.
      *
-     *  @param rate the rate to graph
-     *  @param out the output stream to write the graph image to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, draw event markers
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, show the I2P+ credit line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @return success
-     *  @throws IOException if rendering fails
-     *  @since 0.9.70+
+     * @param rate the rate to graph
+     * @param out the output stream to write the graph image to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, draw event markers
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, show the I2P+ credit line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @return success
+     * @throws IOException if rendering fails
+     * @since 0.9.70+
      */
     public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                           boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
@@ -1573,23 +1571,23 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  A single stat's metadata, as JSON.
+     * A single stat's metadata, as JSON.
      *
-     *  @param rate the rate to graph
-     *  @param out the output stream to write the metadata to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, keep the signature line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @return true on success, false if the stat is not currently renderable
-     *  @throws IOException if rendering fails
-     *  @since 0.9.71+
+     * @param rate the rate to graph
+     * @param out the output stream to write the metadata to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, keep the signature line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @return true on success, false if the stat is not currently renderable
+     * @throws IOException if rendering fails
+     * @since 0.9.71+
      */
     public boolean renderGraphMeta(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                           boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
@@ -1600,24 +1598,24 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  As {@link #renderGraph}, but emitting the plot geometry and series as JSON.
+     * As {@link #renderGraph}, but emitting the plot geometry and series as JSON.
      *
-     *  @param rate the rate to graph
-     *  @param out the output stream to write the image or the metadata to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, keep the signature line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @param meta true to write the metadata instead of the image
-     *  @return true on success, false if the stat is not currently renderable
-     *  @throws IOException if rendering fails
-     *  @since 0.9.71+
+     * @param rate the rate to graph
+     * @param out the output stream to write the image or the metadata to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, keep the signature line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @param meta true to write the metadata instead of the image
+     * @return true on success, false if the stat is not currently renderable
+     * @throws IOException if rendering fails
+     * @since 0.9.71+
      */
     public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                           boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
@@ -1657,22 +1655,22 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     *  Render a single-data graph under the semaphore lock.
+     * Render a single-data graph under the semaphore lock.
      *
-     *  @param rate the rate to graph
-     *  @param out the output stream to write to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, draw event markers
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, show the I2P+ credit line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @return success
-     *  @throws IOException if rendering fails
+     * @param rate the rate to graph
+     * @param out the output stream to write to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, draw event markers
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, show the I2P+ credit line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @return success
+     * @throws IOException if rendering fails
      */
     private boolean locked_renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                         boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
@@ -1701,12 +1699,12 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Export rate data as XML.
+     * Export rate data as XML.
      *
-     *  @param rate the rate to export
-     *  @param out the output stream to write the XML to
-     *  @return true if the data was exported successfully
-     *  @throws IOException if export fails
+     * @param rate the rate to export
+     * @param out the output stream to write the XML to
+     * @return true if the data was exported successfully
+     * @throws IOException if export fails
      */
     public boolean getXML(Rate rate, OutputStream out) throws IOException {
         try {
@@ -1717,12 +1715,12 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Export rate data as XML under the semaphore lock.
+     * Export rate data as XML under the semaphore lock.
      *
-     *  @param rate the rate to export
-     *  @param out the output stream to write to
-     *  @return true if the data was exported successfully
-     *  @throws IOException if export fails
+     * @param rate the rate to export
+     * @param out the output stream to write to
+     * @return true if the data was exported successfully
+     * @throws IOException if export fails
      */
     private boolean locked_getXML(Rate rate, OutputStream out) throws IOException {
         GraphListener lsnr = _listenerByRate.get(rate);
@@ -1736,22 +1734,22 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Render the two-data bandwidth graph with the specified options.
-     *  For all other graphs see renderGraph() above.
-     *  Synchronized to conserve memory.
+     * Render the two-data bandwidth graph with the specified options.
+     * For all other graphs see renderGraph() above.
+     * Synchronized to conserve memory.
      *
-     *  @param out the output stream to write the graph image to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, draw event markers
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, show the I2P+ credit line
-     *  @return success
-     *  @throws IOException if rendering fails
+     * @param out the output stream to write the graph image to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, draw event markers
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, show the I2P+ credit line
+     * @return success
+     * @throws IOException if rendering fails
      */
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
                                    boolean hideGrid, boolean hideTitle, boolean showEvents,
@@ -1761,22 +1759,22 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Render the two-data bandwidth graph with the specified options.
+     * Render the two-data bandwidth graph with the specified options.
      *
-     *  @param out the output stream to write to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, draw event markers
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, show the I2P+ credit line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @return success
-     *  @throws IOException if rendering fails
-     *  @since 0.9.70+
+     * @param out the output stream to write to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, draw event markers
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, show the I2P+ credit line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @return success
+     * @throws IOException if rendering fails
+     * @since 0.9.70+
      */
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
                                    boolean hideGrid, boolean hideTitle, boolean showEvents,
@@ -1786,22 +1784,22 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  The two-data bandwidth graph's metadata, as JSON.
+     * The two-data bandwidth graph's metadata, as JSON.
      *
-     *  @param out the output stream to write the metadata to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, keep the signature line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @return true on success
-     *  @throws IOException if rendering fails
-     *  @since 0.9.71+
+     * @param out the output stream to write the metadata to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, keep the signature line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @return true on success
+     * @throws IOException if rendering fails
+     * @since 0.9.71+
      */
     public boolean renderCombinedGraphMeta(OutputStream out, int width, int height, boolean hideLegend,
                                    boolean hideGrid, boolean hideTitle, boolean showEvents,
@@ -1812,23 +1810,23 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  As {@link #renderCombinedGraph}, but emitting the plot geometry and series as JSON.
+     * As {@link #renderCombinedGraph}, but emitting the plot geometry and series as JSON.
      *
-     *  @param out the output stream to write the image or the metadata to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, keep the signature line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @param meta true to write the metadata instead of the image
-     *  @return true on success
-     *  @throws IOException if rendering fails
-     *  @since 0.9.71+
+     * @param out the output stream to write the image or the metadata to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, keep the signature line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @param meta true to write the metadata instead of the image
+     * @return true on success
+     * @throws IOException if rendering fails
+     * @since 0.9.71+
      */
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
                                    boolean hideGrid, boolean hideTitle, boolean showEvents,
@@ -1864,21 +1862,21 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Render the two-data bandwidth graph under the semaphore lock.
+     * Render the two-data bandwidth graph under the semaphore lock.
      *
-     *  @param out the output stream to write to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, draw event markers
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, show the I2P+ credit line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @return success
-     *  @throws IOException if rendering fails
+     * @param out the output stream to write to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, draw event markers
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, show the I2P+ credit line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @return success
+     * @throws IOException if rendering fails
      */
     private boolean locked_renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
                                            boolean hideGrid, boolean hideTitle, boolean showEvents,
@@ -1917,14 +1915,14 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Resolve a stat.summaries string to the Rates it names.
+     * Resolve a stat.summaries string to the Rates it names.
      *
-     *  <p>A token that is not statName.period, names an unknown stat or carries a
-     *  non-numeric period is skipped rather than failing the sync tick.
+     * <p>A token that is not statName.period, names an unknown stat or carries a
+     * non-numeric period is skipped rather than failing the sync tick.
      *
-     *  @param specs statName.period,statName.period,statName.period
-     *  @return list of Rate objects
-     *  @since 0.9.33
+     * @param specs statName.period,statName.period,statName.period
+     * @return list of Rate objects
+     * @since 0.9.33
      */
     public Set<Rate> parseSpecs(String specs) {
         if (specs == null) {return Collections.emptySet();}
@@ -1950,17 +1948,17 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Collect the listeners for the enabled members of a graph group.
+     * Collect the listeners for the enabled members of a graph group.
      *
-     *  <p>Members are returned in the group's legend order, not in listener order, so the
-     *  colours and legend entries stay put as stats are enabled and disabled. Members whose
-     *  RRD has not been created yet are skipped: a stat that has never been sampled has no
-     *  series to draw, and including it would silently stretch the axis to zero.
+     * <p>Members are returned in the group's legend order, not in listener order, so the
+     * colours and legend entries stay put as stats are enabled and disabled. Members whose
+     * RRD has not been created yet are skipped: a stat that has never been sampled has no
+     * series to draw, and including it would silently stretch the axis to zero.
      *
-     *  @param groupId a group id from {@link GraphGroups}
-     *  @param enabledStats stat names enabled by the user, without period suffixes
-     *  @return the members that have data, in legend order; empty when fewer than two
-     *  @since 0.9.71+
+     * @param groupId a group id from {@link GraphGroups}
+     * @param enabledStats stat names enabled by the user, without period suffixes
+     * @return the members that have data, in legend order; empty when fewer than two
+     * @since 0.9.71+
      */
     public List<GraphListener> getGroupListeners(String groupId, Set<String> enabledStats) {
         List<GraphListener> found = new ArrayList<>(GraphGroups.MAX_SERIES);
@@ -1978,24 +1976,24 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Render a combined graph for one group.
+     * Render a combined graph for one group.
      *
-     *  @param out the output stream to write the graph image to
-     *  @param groupId a group id from {@link GraphGroups}
-     *  @param enabledStats stat names enabled by the user, without period suffixes
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, keep the signature line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @return true if a graph was written; false when the group had too few usable members
-     *  @throws IOException if rendering fails
-     *  @since 0.9.71+
+     * @param out the output stream to write the graph image to
+     * @param groupId a group id from {@link GraphGroups}
+     * @param enabledStats stat names enabled by the user, without period suffixes
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, keep the signature line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @return true if a graph was written; false when the group had too few usable members
+     * @throws IOException if rendering fails
+     * @since 0.9.71+
      */
     public boolean renderGroupedGraph(OutputStream out, String groupId, Set<String> enabledStats,
                                       int width, int height, boolean hideLegend, boolean hideGrid,
@@ -2008,24 +2006,24 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  A grouped graph's metadata, as JSON.
+     * A grouped graph's metadata, as JSON.
      *
-     *  @param out the output stream to write the metadata to
-     *  @param groupId a group id from {@link GraphGroups}
-     *  @param enabledStats stat names enabled by the user, without period suffixes
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, keep the signature line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @return true on success
-     *  @throws IOException if rendering fails
-     *  @since 0.9.71+
+     * @param out the output stream to write the metadata to
+     * @param groupId a group id from {@link GraphGroups}
+     * @param enabledStats stat names enabled by the user, without period suffixes
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, keep the signature line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @return true on success
+     * @throws IOException if rendering fails
+     * @since 0.9.71+
      */
     public boolean renderGroupedGraphMeta(OutputStream out, String groupId, Set<String> enabledStats,
                                       int width, int height, boolean hideLegend, boolean hideGrid,
@@ -2038,25 +2036,25 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  As {@link #renderGroupedGraph}, but emitting the plot geometry and series as JSON.
+     * As {@link #renderGroupedGraph}, but emitting the plot geometry and series as JSON.
      *
-     *  @param out the output stream to write the image or the metadata to
-     *  @param groupId a group id from {@link GraphGroups}
-     *  @param enabledStats stat names enabled by the user, without period suffixes
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now to end at
-     *  @param showCredit if true, keep the signature line
-     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     *  @param meta true to write the metadata instead of the image
-     *  @return true on success
-     *  @throws IOException if rendering fails
-     *  @since 0.9.71+
+     * @param out the output stream to write the image or the metadata to
+     * @param groupId a group id from {@link GraphGroups}
+     * @param enabledStats stat names enabled by the user, without period suffixes
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now to end at
+     * @param showCredit if true, keep the signature line
+     * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
+     * @param meta true to write the metadata instead of the image
+     * @return true on success
+     * @throws IOException if rendering fails
+     * @since 0.9.71+
      */
     public boolean renderGroupedGraph(OutputStream out, String groupId, Set<String> enabledStats,
                                       int width, int height, boolean hideLegend, boolean hideGrid,
@@ -2083,8 +2081,8 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Delete the old rrd dir if we are no longer persistent
-     *  @since 0.8.7
+     * Delete the old rrd dir if we are no longer persistent
+     * @since 0.8.7
      */
     private void deleteOldRRDs() {
         File rrdDir = new File(_context.getRouterDir(), GraphListener.RRD_DIR);
@@ -2094,11 +2092,11 @@ GraphListener lsnr = _listenerByRate.get(rate);
     private static final boolean IS_WIN = SystemVersion.isWindows();
 
     /**
-     *  Translate a string for display on graphs.
-     *  Falls back to the original string for CJK on Windows where fonts may lack glyphs.
+     * Translate a string for display on graphs.
+     * Falls back to the original string for CJK on Windows where fonts may lack glyphs.
      *
-     *  @param s the string to translate
-     *  @return the translated string, or the original if translation is unavailable
+     * @param s the string to translate
+     * @return the translated string, or the original if translation is unavailable
      */
     private String _t(String s) {
         // The RRD font doesn't have zh chars, at least on my system
@@ -2108,17 +2106,17 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Make sure any persistent RRDs are closed
-     *  @since 0.8.7
+     * Make sure any persistent RRDs are closed
+     * @since 0.8.7
      */
     private class Shutdown implements Runnable {
         /**
-         *  Close all persistent RRDs and clean up.
+         * Close all persistent RRDs and clean up.
          *
-         *  <p>Ordered: watchdog, sync task, listeners, backend factory. The factory is
-         *  last because closing it while a listener still holds a handle leaves that
-         *  handle half-closed, and it is only closed at all by the instance that
-         *  configured it.
+         * <p>Ordered: watchdog, sync task, listeners, backend factory. The factory is
+         * last because closing it while a listener still holds a handle leaves that
+         * handle half-closed, and it is only closed at all by the instance that
+         * configured it.
          */
         @Override
         public void run() {
@@ -2139,13 +2137,13 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     *  Close the shared RRD backend factory, but only if this instance configured it.
+     * Close the shared RRD backend factory, but only if this instance configured it.
      *
-     *  <p>{@code RrdBackendFactory.getDefaultFactory()} is a singleton, so a second
-     *  {@link GraphGenerator} shutting down after the one that configured it would
-     *  otherwise stop the flush pool out from under every listener still recording.
+     * <p>{@code RrdBackendFactory.getDefaultFactory()} is a singleton, so a second
+     * {@link GraphGenerator} shutting down after the one that configured it would
+     * otherwise stop the flush pool out from under every listener still recording.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private void closeBackendFactory() {
         if (!_ownsBackendFactory) {

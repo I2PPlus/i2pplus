@@ -33,9 +33,9 @@ public class MetaNamingService extends DummyNamingService {
     protected final List<NamingService> _services;
 
     /**
-     *  Adds the services from the i2p.nameservicelist property, in order, as chained services.
+     * Adds the services from the i2p.nameservicelist property, in order, as chained services.
      *
-     *  @param context the application context
+     * @param context the application context
      */
     public MetaNamingService(I2PAppContext context) {
         super(context);
@@ -56,7 +56,7 @@ public class MetaNamingService extends DummyNamingService {
      *
      * @param context context
      * @param services if non-null, services to be added. If null, this will only handle b32 and b64,
-     *                  until addNamingService() is called later.
+     * until addNamingService() is called later.
      *
      * @since 0.8.7
      */
@@ -131,7 +131,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  Stores in the last service
+     * Stores in the last service
      */
     @Override
     public boolean put(String hostname, Destination d, Properties options) {
@@ -143,7 +143,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  Stores in the last service
+     * Stores in the last service
      */
     @Override
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
@@ -154,7 +154,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  Removes from all services
+     * Removes from all services
      */
     @Override
     public boolean remove(String hostname, Properties options) {
@@ -180,10 +180,10 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  All services aggregated
+     * All services aggregated
      *
-     *  @return the base64 entries
-     *  @since 0.9.20
+     * @return the base64 entries
+     * @since 0.9.20
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
@@ -208,10 +208,10 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  All services aggregated.
-     *  Duplicates not removed (for efficiency)
+     * All services aggregated.
+     * Duplicates not removed (for efficiency)
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     @Override
     public void export(Writer out, Properties options) throws IOException {
@@ -221,7 +221,7 @@ public class MetaNamingService extends DummyNamingService {
     }
 
     /**
-     *  All services aggregated
+     * All services aggregated
      */
     @Override
     public int size(Properties options) {

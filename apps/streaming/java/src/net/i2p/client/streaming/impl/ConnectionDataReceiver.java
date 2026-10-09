@@ -14,9 +14,9 @@ import net.i2p.util.Log;
  * do NOT block, but they also do not necessary imply immediate
  * delivery, or even the generation of a new packet.  This class
  * is the only one that builds useful outbound Packet objects.
- *<p>
+ * <p>
  * MessageOutputStream -&gt; ConnectionDataReceiver -&gt; Connection -&gt; PacketQueue -&gt; I2PSession
- *<p>
+ * <p>
  * There's one of these per MessageOutputStream.
  * It stores no state. It sends everything to the Connection unless
  * the Connection is closed,
@@ -33,12 +33,12 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     /** Payload cache. */
     private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
     /** Reusable empty payload -- avoids per-packet ByteArray allocation for ACK-only packets.
-     *  Shared across all instances via _dataLock in MessageOutputStream. */
+     * Shared across all instances via _dataLock in MessageOutputStream. */
     private static final ByteArray EMPTY_PAYLOAD = new ByteArray(new byte[0]);
 
     /**
-     *  Create a data receiver for the given connection.
-     *  @param con non-null
+     * Create a data receiver for the given connection.
+     * @param con non-null
      */
     public ConnectionDataReceiver(I2PAppContext ctx, Connection con) {
         _context = ctx;
@@ -186,7 +186,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * @param off offset into the buffer to start writing from
      * @param size how many bytes of the buffer to write (may be 0)
      * @param forceIncrement even if the buffer is empty, increment the packetId
-     *                       so we get an ACK back
+     * so we get an ACK back
      * @return the packet sent
      */
     public PacketLocal send(byte[] buf, int off, int size, boolean forceIncrement) {
@@ -213,7 +213,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * @param off offset into the buffer to start writing from
      * @param size how many bytes of the buffer to write (may be 0)
      * @param forceIncrement even if the buffer is empty, increment the packetId
-     *                       so we get an ACK back
+     * so we get an ACK back
      * @return the packet to be sent
      */
     private PacketLocal buildPacket(byte[] buf, int off, int size, boolean forceIncrement) {

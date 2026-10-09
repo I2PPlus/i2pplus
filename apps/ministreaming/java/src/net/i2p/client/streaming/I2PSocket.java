@@ -7,10 +7,10 @@ import java.io.OutputStream;
 import net.i2p.data.Destination;
 
 /**
- *  Streaming socket returned by {@link I2PSocketManager#connect(Destination)}.
- *<p>
- *  Note that this is not a standard Java {@link java.net.Socket},
- *  if you need one of those, use {@link I2PSocketManager#connectToSocket(Destination)} instead.
+ * Streaming socket returned by {@link I2PSocketManager#connect(Destination)}.
+ * <p>
+ * Note that this is not a standard Java {@link java.net.Socket},
+ * if you need one of those, use {@link I2PSocketManager#connectToSocket(Destination)} instead.
  */
 public interface I2PSocket extends Closeable {
     /**
@@ -28,13 +28,13 @@ public interface I2PSocket extends Closeable {
     public Destination getPeerDestination();
 
     /**
-     *  Throws an IOException if the socket is closed; never returns null.
-     *<p>
-     *  Note that operations on the returned stream may return an
-     *  {@link IOException} whose <i>cause</i> as returned by
-     *  {@link IOException#getCause()} is an {@link I2PSocketException}.
-     *  If so, the client may retrieve a status code via
-     *  {@link I2PSocketException#getStatus()} to provide specific feedback to the user.
+     * Throws an IOException if the socket is closed; never returns null.
+     * <p>
+     * Note that operations on the returned stream may return an
+     * {@link IOException} whose <i>cause</i> as returned by
+     * {@link IOException#getCause()} is an {@link I2PSocketException}.
+     * If so, the client may retrieve a status code via
+     * {@link I2PSocketException#getStatus()} to provide specific feedback to the user.
      *
      * @return an InputStream to read from the socket, never null
      * @throws IOException on failure, including if the socket is closed
@@ -42,13 +42,13 @@ public interface I2PSocket extends Closeable {
     public InputStream getInputStream() throws IOException;
 
     /**
-     *  Throws an IOException if the socket is closed; never returns null.
-     *<p>
-     *  Note that operations on the returned stream may return an
-     *  {@link IOException} whose <i>cause</i> as returned by
-     *  {@link IOException#getCause()} is an {@link I2PSocketException}.
-     *  If so, the client may retrieve a status code via
-     *  {@link I2PSocketException#getStatus()} to provide specific feedback to the user.
+     * Throws an IOException if the socket is closed; never returns null.
+     * <p>
+     * Note that operations on the returned stream may return an
+     * {@link IOException} whose <i>cause</i> as returned by
+     * {@link IOException#getCause()} is an {@link I2PSocketException}.
+     * If so, the client may retrieve a status code via
+     * {@link I2PSocketException#getStatus()} to provide specific feedback to the user.
      *
      * @return an OutputStream to write into the socket, never null
      * @throws IOException on failure, including if the socket is closed
@@ -92,30 +92,28 @@ public interface I2PSocket extends Closeable {
     public boolean isClosed();
 
     /**
-     *  The remote port.
-     *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
-     *  @since 0.8.9
+     * The remote port.
+     * @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
+     * @since 0.8.9
      */
     public int getPort();
 
     /**
-     *  The local port.
-     *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
-     *  @since 0.8.9
+     * The local port.
+     * @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
+     * @since 0.8.9
      */
     public int getLocalPort();
 
     /**
-     *  How many bytes have been sent over the lifetime of this socket.
-     *  @return bytes sent, or 0 if unknown
-     *  @since 2.6.0
+     * How many bytes have been sent over the lifetime of this socket.
+     * @return bytes sent, or 0 if unknown
      */
     public default long getLifetimeBytesSent() { return 0; }
 
     /**
-     *  How many bytes have been received over the lifetime of this socket.
-     *  @return bytes received, or 0 if unknown
-     *  @since 2.6.0
+     * How many bytes have been received over the lifetime of this socket.
+     * @return bytes received, or 0 if unknown
      */
     public default long getLifetimeBytesReceived() { return 0; }
 

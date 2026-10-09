@@ -394,7 +394,7 @@ public class HostTxtEntry {
     }
 
     /**
-     *  Compares Destination only, not properties
+     * Compares Destination only, not properties
      */
     @Override
     public boolean equals(Object o) {
@@ -468,7 +468,7 @@ public class HostTxtEntry {
     }
 
     /**
-     *  Usage: HostTxtEntry [-i] [-x] [hostname.i2p] [key=val]...
+     * Usage: HostTxtEntry [-i] [-x] [hostname.i2p] [key=val]...
      */
 
 }

@@ -47,10 +47,10 @@ import net.i2p.util.SystemVersion;
 class PersistentMailCache {
 
     /**
-     *  One lock for each user in the whole JVM, to protect against multiple sessions.
-     *  One big lock for the whole cache dir, not one for each file or subdir.
-     *  Never expired.
-     *  Sure, if we did a maildir format we wouldn't need this.
+     * One lock for each user in the whole JVM, to protect against multiple sessions.
+     * One big lock for the whole cache dir, not one for each file or subdir.
+     * Never expired.
+     * Sure, if we did a maildir format we wouldn't need this.
      */
     private static final ConcurrentHashMap<String, Object> _locks = new ConcurrentHashMap<>();
 
@@ -80,12 +80,12 @@ class PersistentMailCache {
     private static final String B64 = Base64.ALPHABET_I2P;
 
     /**
-     *  Use the params to generate a unique directory name.
+     * Use the params to generate a unique directory name.
      *
-     *  Does NOT load the mails in. Caller MUST call getMails().
+     * Does NOT load the mails in. Caller MUST call getMails().
      *
-     *  @param pass ignored
-     *  @param folder e.g. DIR_FOLDER
+     * @param pass ignored
+     * @param folder e.g. DIR_FOLDER
      */
     public PersistentMailCache(I2PAppContext ctx, String host, int port, String user, String pass, String folder) throws IOException {
         _context = ctx;
@@ -163,9 +163,9 @@ class PersistentMailCache {
         private final boolean _isD;
 
         /**
-         *  @param in queue of files to load
-         *  @param out queue to put loaded mails into
-         *  @param isDrafts whether these are drafts
+         * @param in queue of files to load
+         * @param out queue to put loaded mails into
+         * @param isDrafts whether these are drafts
          */
         public Loader(Queue<File> in, Queue<Mail> out, boolean isDrafts) {
             _in = in; _out = out;
@@ -287,8 +287,8 @@ class PersistentMailCache {
     }
 
     /**
-     *   ~/.i2p/susimail/cache/cache-xxxxx/cur/s[b64char]/mail-xxxxx.full.txt.gz
-     *   folder1 is the base.
+     * ~/.i2p/susimail/cache/cache-xxxxx/cur/s[b64char]/mail-xxxxx.full.txt.gz
+     * folder1 is the base.
      */
     private File makeCacheDirs(String host, int port, String user, String folder) throws IOException {
         File f = new SecureDirectory(_context.getConfigDir(), DIR_SUSI);
@@ -370,7 +370,7 @@ class PersistentMailCache {
     }
 
     /**
-     *  @return null on failure
+     * @return null on failure
      */
     private static Buffer read(File f) {
         if (!f.canRead()) {return null;}
@@ -378,10 +378,10 @@ class PersistentMailCache {
     }
 
     /**
-     *  This is for the initial load only.
-     *  Others will use getMail().
+     * This is for the initial load only.
+     * Others will use getMail().
      *
-     *  @return null on failure
+     * @return null on failure
      */
     private static Mail load(File f, boolean isDrafts) {
         String name = f.getName();
@@ -425,8 +425,8 @@ class PersistentMailCache {
     }
 
     /**
-     *  For debugging. Import .eml files from the import/ directory
-     *  @since 0.9.34
+     * For debugging. Import .eml files from the import/ directory
+     * @since 0.9.34
      */
     private void importMail() {
         File importDir = new File(_cacheDir.getParentFile(), DIR_IMPORT);

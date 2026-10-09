@@ -19,7 +19,6 @@ import net.i2p.util.SimpleTimer2;
  * <p>
  * Note this is basic DOS protection and does not prevent spoofed
  * reply identifiers or multiple reply tunnels from malicious requestors.
- *
  */
 class LookupThrottler {
     /** Concurrent hash map */
@@ -64,21 +63,21 @@ class LookupThrottler {
     private final Cleaner _cleaner;
 
     /**
-     *  Throttle for the given floodfill facade.
+     * Throttle for the given floodfill facade.
      *
-     *  @param facade floodfill network database facade
+     * @param facade floodfill network database facade
      */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade) {
         this(facade, DEFAULT_MAX_LOOKUPS, DEFAULT_MAX_NON_FF_LOOKUPS, DEFAULT_CLEAN_TIME);
     }
 
     /**
-     *  Throttle with configurable lookup limits.
+     * Throttle with configurable lookup limits.
      *
-     *  @param facade floodfill network database facade
-     *  @param maxlookups when floodfill
-     *  @param maxnonfflookups when not floodfill
-     *  @param cleanTime milliseconds between throttling table cleanups
+     * @param facade floodfill network database facade
+     * @param maxlookups when floodfill
+     * @param maxnonfflookups when not floodfill
+     * @param cleanTime milliseconds between throttling table cleanups
      */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade, int maxlookups, int maxnonfflookups, long cleanTime) {
         _facade = facade;

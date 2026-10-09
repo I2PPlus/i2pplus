@@ -51,10 +51,10 @@ public class HostLookupMessage extends I2CPMessageImpl {
 
     /**
      * Session id.
-     *  @param id the session id
-     *  @param h the hash to look up
-     *  @param reqID 0 to 2**32 - 1
-     *  @param timeout ms 1 to 2**32 - 1
+     * @param id the session id
+     * @param h the hash to look up
+     * @param reqID 0 to 2**32 - 1
+     * @param timeout ms 1 to 2**32 - 1
      */
     public HostLookupMessage(SessionId id, Hash h, long reqID, long timeout) {
         if (id == null || h == null) throw new IllegalArgumentException();
@@ -69,10 +69,10 @@ public class HostLookupMessage extends I2CPMessageImpl {
 
     /**
      * Session id.
-     *  @param id the session id
-     *  @param host the hostname to look up
-     *  @param reqID 0 to 2**32 - 1
-     *  @param timeout ms 1 to 2**32 - 1
+     * @param id the session id
+     * @param host the hostname to look up
+     * @param reqID 0 to 2**32 - 1
+     * @param timeout ms 1 to 2**32 - 1
      */
     public HostLookupMessage(SessionId id, String host, long reqID, long timeout) {
         if (id == null || host == null) throw new IllegalArgumentException();
@@ -104,45 +104,45 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Gets the request ID.
+     * Gets the request ID.
      *
-     *  @return 0 to 2**32 - 1
+     * @return 0 to 2**32 - 1
      */
     public long getReqID() {
         return _reqID;
     }
 
     /**
-     *  Gets the lookup timeout.
+     * Gets the lookup timeout.
      *
-     *  @return ms 1 to 2**32 - 1
+     * @return ms 1 to 2**32 - 1
      */
     public long getTimeout() {
         return _timeout;
     }
 
     /**
-     *  Gets the lookup type.
+     * Gets the lookup type.
      *
-     *  @return 0 (hash) or 1 (host)
+     * @return 0 (hash) or 1 (host)
      */
     public int getLookupType() {
         return _lookupType;
     }
 
     /**
-     *  Gets the hash for hash-type lookups.
+     * Gets the hash for hash-type lookups.
      *
-     *  @return only valid if lookup type == 0
+     * @return only valid if lookup type == 0
      */
     public Hash getHash() {
         return _hash;
     }
 
     /**
-     *  Gets the hostname for host-type lookups.
+     * Gets the hostname for host-type lookups.
      *
-     *  @return only valid if lookup type == 1
+     * @return only valid if lookup type == 1
      */
     public String getHostname() {
         return _host;

@@ -4,21 +4,21 @@ package net.i2p.util;
  * Contains code adapted from:
  * Jetty SslContextFactory.java
  *
- *  =======================================================================
- *  Copyright (c) 1995-2012 Mort Bay Consulting Pty. Ltd.
- *  ------------------------------------------------------------------------
- *  All rights reserved. This program and the accompanying materials
- *  are made available under the terms of the Eclipse Public License v1.0
- *  and Apache License v2.0 which accompanies this distribution.
+ * =======================================================================
+ * Copyright (c) 1995-2012 Mort Bay Consulting Pty. Ltd.
+ * ------------------------------------------------------------------------
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * and Apache License v2.0 which accompanies this distribution.
  *
- *      The Eclipse Public License is available at
- *      http://www.eclipse.org/legal/epl-v10.html
+ * The Eclipse Public License is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  *
- *      The Apache License v2.0 is available at
- *      http://www.opensource.org/licenses/apache2.0.php
+ * The Apache License v2.0 is available at
+ * http://www.opensource.org/licenses/apache2.0.php
  *
- *  You may elect to redistribute this code under either of these licenses.
- *  ========================================================================
+ * You may elect to redistribute this code under either of these licenses.
+ * ========================================================================
  */
 
 /*
@@ -34,7 +34,7 @@ package net.i2p.util;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -48,7 +48,6 @@ package net.i2p.util;
  * individuals on behalf of the Apache Software Foundation.  For more
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
- *
  */
 import java.io.BufferedReader;
 import java.io.File;
@@ -114,40 +113,40 @@ public class I2PSSLSocketFactory {
     private static final String[] ADDITIONAL_TLDS = {"i2p", "mooo.com", "onion"};
 
     /**
-     *  Unmodifiable.
-     *  Public for RouterConsoleRunner.
+     * Unmodifiable.
+     * Public for RouterConsoleRunner.
      *
-     *  @since 0.9.16
+     * @since 0.9.16
      */
     public static final List<String> EXCLUDE_PROTOCOLS =
             Collections.unmodifiableList(Arrays.asList(new String[] {"SSLv2Hello", "SSLv3", "TLSv1", "TLSv1.1"}));
 
     /**
-     *  Java 7 does not enable 1.1 or 1.2 by default on the client side.
-     *  Java 8 does enable 1.1 and 1.2 by default on the client side.
-     *  1.3 in Java 11, but it requires:
-     *  ChaCha20/Poly1305 in Java 12 (we could add a provider)
-     *  X25519 in Java 13 but may be pulled in to 12 (can't use our unsigned provider)
-     *  Ed25519 in Java 13 (but we can use our provider)
-     *  ref: https://openjdk.java.net/jeps/332
+     * Java 7 does not enable 1.1 or 1.2 by default on the client side.
+     * Java 8 does enable 1.1 and 1.2 by default on the client side.
+     * 1.3 in Java 11, but it requires:
+     * ChaCha20/Poly1305 in Java 12 (we could add a provider)
+     * X25519 in Java 13 but may be pulled in to 12 (can't use our unsigned provider)
+     * Ed25519 in Java 13 (but we can use our provider)
+     * ref: https://openjdk.java.net/jeps/332
      *
-     *  ref: http://docs.oracle.com/javase/7/docs/technotes/guides/security/SunProviders.html
-     *  Unmodifiable.
-     *  Public for RouterConsoleRunner.
+     * ref: http://docs.oracle.com/javase/7/docs/technotes/guides/security/SunProviders.html
+     * Unmodifiable.
+     * Public for RouterConsoleRunner.
      *
-     *  @since 0.9.16
+     * @since 0.9.16
      */
     public static final List<String> INCLUDE_PROTOCOLS =
             Collections.unmodifiableList(Arrays.asList(new String[] {"TLSv1", "TLSv1.1", "TLSv1.2", "TLSv1.3"}));
 
     /**
-     *  We exclude everything that Java 8 disables by default, plus some others.
-     *  ref: http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html
-     *  See also: https://developer.android.com/reference/javax/net/ssl/SSLSocket.html
-     *  Unmodifiable.
-     *  Public for RouterConsoleRunner.
+     * We exclude everything that Java 8 disables by default, plus some others.
+     * ref: http://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html
+     * See also: https://developer.android.com/reference/javax/net/ssl/SSLSocket.html
+     * Unmodifiable.
+     * Public for RouterConsoleRunner.
      *
-     *  @since 0.9.16
+     * @since 0.9.16
      */
     public static final List<String> EXCLUDE_CIPHERS = Collections.unmodifiableList(Arrays.asList(new String[] {
         // following are disabled by default in Java 8
@@ -218,12 +217,12 @@ public class I2PSSLSocketFactory {
     }));
 
     /**
-     *  Nothing for now.
-     *  There's nothing disabled by default we would want to enable.
-     *  Unmodifiable.
-     *  Public for RouterConsoleRunner.
+     * Nothing for now.
+     * There's nothing disabled by default we would want to enable.
+     * Unmodifiable.
+     * Public for RouterConsoleRunner.
      *
-     *  @since 0.9.16
+     * @since 0.9.16
      */
     public static final List<String> INCLUDE_CIPHERS = Collections.emptyList();
 
@@ -253,7 +252,6 @@ public class I2PSSLSocketFactory {
      *
      * Hostname validation is skipped for localhost addresses, but you still
      * must trust the certificate.
-     *
      */
     public Socket createSocket(String host, int port) throws IOException {
         SSLSocket rv = (SSLSocket) _factory.createSocket(host, port);
@@ -283,16 +281,16 @@ public class I2PSSLSocketFactory {
     }
 
     /**
-     *  Validate the hostname.
-     *  Warning - be sure to remove [] from IPv6 addresses in host parameter if you
-     *  got it from URI.getHost().
+     * Validate the hostname.
+     * Warning - be sure to remove [] from IPv6 addresses in host parameter if you
+     * got it from URI.getHost().
      *
-     *  ref: https://developer.android.com/training/articles/security-ssl.html
-     *  ref: http://op-co.de/blog/posts/java_sslsocket_mitm/
-     *  ref: http://kevinlocke.name/bits/2012/10/03/ssl-certificate-verification-in-dispatch-and-asynchttpclient/
+     * ref: https://developer.android.com/training/articles/security-ssl.html
+     * ref: http://op-co.de/blog/posts/java_sslsocket_mitm/
+     * ref: http://kevinlocke.name/bits/2012/10/03/ssl-certificate-verification-in-dispatch-and-asynchttpclient/
      *
-     *  @throws SSLException on hostname verification failure
-     *  @since 0.9.20
+     * @throws SSLException on hostname verification failure
+     * @since 0.9.20
      */
     public static void verifyHostname(I2PAppContext ctx, SSLSocket socket, String host) throws SSLException {
         Log log = ctx.logManager().getLog(I2PSSLSocketFactory.class);
@@ -335,14 +333,14 @@ public class I2PSSLSocketFactory {
     }
 
     /**
-     *  From Apache PublicSuffixMatcherLoader.getDefault()
+     * From Apache PublicSuffixMatcherLoader.getDefault()
      *
-     *  https://publicsuffix.org/list/effective_tld_names.dat
-     *  What does this get us?
-     *  Deciding whether to issue or accept an SSL wildcard certificate for *.public.suffix.
+     * https://publicsuffix.org/list/effective_tld_names.dat
+     * What does this get us?
+     * Deciding whether to issue or accept an SSL wildcard certificate for *.public.suffix.
      *
-     *  @return null on failure
-     *  @since 0.9.20
+     * @return null on failure
+     * @since 0.9.20
      */
     private static PublicSuffixMatcher getDefaultMatcher(I2PAppContext ctx) {
         if (_matcherLoaded)
@@ -394,10 +392,10 @@ public class I2PSSLSocketFactory {
     }
 
     /**
-     *  Merge two PublicSuffixLists
-     *  Have to do this because they are unmodifiable
+     * Merge two PublicSuffixLists
+     * Have to do this because they are unmodifiable
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     private static PublicSuffixList merge(PublicSuffixList a, PublicSuffixList b) {
         List<String> ar = a.getRules();
@@ -414,11 +412,11 @@ public class I2PSSLSocketFactory {
     }
 
     /**
-     *  Read in the country file and add all TLDs to the list.
-     *  It would almost be easier just to add all possible 26*26 two-letter codes.
+     * Read in the country file and add all TLDs to the list.
+     * It would almost be easier just to add all possible 26*26 two-letter codes.
      *
-     *  @param tlds out parameter
-     *  @since 0.9.20 adapted from GeoIP.loadCountryFile()
+     * @param tlds out parameter
+     * @since 0.9.20 adapted from GeoIP.loadCountryFile()
      */
     private static void addCountries(I2PAppContext ctx, List<String> tlds) {
         Log log = ctx.logManager().getLog(I2PSSLSocketFactory.class);
@@ -449,11 +447,11 @@ public class I2PSSLSocketFactory {
     }
 
     /**
-     *  Loads certs from
-     *  the ~/.i2p/certificates/ and $I2P/certificates/ directories,
-     *  or from the absolute path given.
+     * Loads certs from
+     * the ~/.i2p/certificates/ and $I2P/certificates/ directories,
+     * or from the absolute path given.
      *
-     *  @param relativeCertPath e.g. "certificates/i2cp"; as of 0.9.41, may be absolute
+     * @param relativeCertPath e.g. "certificates/i2cp"; as of 0.9.41, may be absolute
      */
     private static SSLSocketFactory initSSLContext(
             I2PAppContext context, boolean loadSystemCerts, String relativeCertPath) throws GeneralSecurityException {

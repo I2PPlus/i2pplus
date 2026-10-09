@@ -43,48 +43,48 @@ public final class CryptixAESEngine extends AESEngine {
     private static final int CACHE_SIZE = 8;
 
     /**
-     *  Upper bound on the per-session {@link SecretKeySpec} memo cache. Plenty
-     *  for the handful of concurrent transport and session keys the router
-     *  works with at any moment. Package-visible for the unit tests.
+     * Upper bound on the per-session {@link SecretKeySpec} memo cache. Plenty
+     * for the handful of concurrent transport and session keys the router
+     * works with at any moment. Package-visible for the unit tests.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int KEY_SPEC_CACHE_SIZE = 64;
 
     /**
-     *  Memoized {@link SecretKeySpec} per {@link SessionKey} for the system-AES
-     *  path.
-     *  <p>
-     *  Why memoize at all: building the spec clones the key material, but
-     *  {@link SecretKeySpec#getEncoded()} returns the spec's *internal* array,
-     *  so a reused instance passes the same byte[] reference to
-     *  {@link Cipher#init} and skips JCE makeSessionKey re-expansion of the
-     *  256-bit key on every JVM-path encrypt/decrypt.
-     *  <p>
-     *  This cache is deliberately NOT the same as
-     *  {@link SessionKey#getPreparedKey()}, which is owned by the legacy Cryptix
-     *  path and lives per SessionKey - keep the two fast paths decoupled.
-     *  {@link SessionKey} equality is value-based, so distinct-but-identical
-     *  keys share one spec (their bytes are equal, so sharing is correct).
-     *  <p>
-     *  DO NOT make this map access-ordered: with accessOrder=true, {@code get()}
-     *  counts as a structural modification, so every lookup would need a lock
-     *  and that would serialize every AES op of at least
-     *  {@link #MIN_SYSTEM_AES_LENGTH} bytes across the whole router. Insertion
-     *  order keeps lookups lock-free and eviction drops the eldest, not the
-     *  coldest.
+     * Memoized {@link SecretKeySpec} per {@link SessionKey} for the system-AES
+     * path.
+     * <p>
+     * Why memoize at all: building the spec clones the key material, but
+     * {@link SecretKeySpec#getEncoded()} returns the spec's *internal* array,
+     * so a reused instance passes the same byte[] reference to
+     * {@link Cipher#init} and skips JCE makeSessionKey re-expansion of the
+     * 256-bit key on every JVM-path encrypt/decrypt.
+     * <p>
+     * This cache is deliberately NOT the same as
+     * {@link SessionKey#getPreparedKey()}, which is owned by the legacy Cryptix
+     * path and lives per SessionKey - keep the two fast paths decoupled.
+     * {@link SessionKey} equality is value-based, so distinct-but-identical
+     * keys share one spec (their bytes are equal, so sharing is correct).
+     * <p>
+     * DO NOT make this map access-ordered: with accessOrder=true, {@code get()}
+     * counts as a structural modification, so every lookup would need a lock
+     * and that would serialize every AES op of at least
+     * {@link #MIN_SYSTEM_AES_LENGTH} bytes across the whole router. Insertion
+     * order keeps lookups lock-free and eviction drops the eldest, not the
+     * coldest.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private final Map<SessionKey, SecretKeySpec> _keySpecs = new LinkedHashMap<>(16, 0.75f, false);
 
     /**
-     *  Lock-free read side of the {@link #_keySpecs} memo. Written only inside
-     *  the {@code synchronized(_keySpecs)} miss path, so it is always a mirror
-     *  of {@link #_keySpecs} (plus, transiently, the entry being evicted).
-     *  Bounded by the same {@link #KEY_SPEC_CACHE_SIZE}.
+     * Lock-free read side of the {@link #_keySpecs} memo. Written only inside
+     * the {@code synchronized(_keySpecs)} miss path, so it is always a mirror
+     * of {@link #_keySpecs} (plus, transiently, the entry being evicted).
+     * Bounded by the same {@link #KEY_SPEC_CACHE_SIZE}.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private final ConcurrentMap<SessionKey, SecretKeySpec> _keySpecReads = new ConcurrentHashMap<>(KEY_SPEC_CACHE_SIZE);
 
@@ -112,10 +112,10 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Encrypt the payload with the session key.
+     * Encrypt the payload with the session key.
      *
-     *  @param iv must be 16 bytes
-     *  @param length must be a multiple of 16
+     * @param iv must be 16 bytes
+     * @param length must be a multiple of 16
      */
     @Override
     public void encrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int length) {
@@ -123,10 +123,10 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Encrypt the payload with the session key.
+     * Encrypt the payload with the session key.
      *
-     *  @param iv must be 16 bytes
-     *  @param length must be a multiple of 16
+     * @param iv must be 16 bytes
+     * @param length must be a multiple of 16
      */
     @Override
     public void encrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int ivOffset, int length) {
@@ -163,10 +163,10 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Decrypt the payload with the session key.
+     * Decrypt the payload with the session key.
      *
-     *  @param iv 16 bytes
-     *  @param length must be a multiple of 16 (will overrun to next mod 16 if not)
+     * @param iv 16 bytes
+     * @param length must be a multiple of 16 (will overrun to next mod 16 if not)
      */
     @Override
     public void decrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int length) {
@@ -174,10 +174,10 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Decrypt the payload with the session key.
+     * Decrypt the payload with the session key.
      *
-     *  @param iv 16 bytes starting at ivOffset
-     *  @param length must be a multiple of 16 (will overrun to next mod 16 if not)
+     * @param iv 16 bytes starting at ivOffset
+     * @param length must be a multiple of 16 (will overrun to next mod 16 if not)
      */
     @Override
     public void decrypt(byte[] payload, int payloadIndex, byte[] out, int outIndex, SessionKey sessionKey, byte[] iv, int ivOffset, int length) {
@@ -281,19 +281,19 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Get (or build and remember) the {@link SecretKeySpec} for a session
-     *  key. Package-visible so the unit tests can verify reuse, longevity
-     *  across sessions and the size bound.
-     *  <p>
-     *  The hit path is lock-free: a {@link ConcurrentHashMap} lookup only. The
-     *  miss path takes {@code synchronized(_keySpecs)} - that is the only place
-     *  the {@link #KEY_SPEC_CACHE_SIZE} bound is enforced, by evicting the
-     *  eldest entry in insertion order.
+     * Get (or build and remember) the {@link SecretKeySpec} for a session
+     * key. Package-visible so the unit tests can verify reuse, longevity
+     * across sessions and the size bound.
+     * <p>
+     * The hit path is lock-free: a {@link ConcurrentHashMap} lookup only. The
+     * miss path takes {@code synchronized(_keySpecs)} - that is the only place
+     * the {@link #KEY_SPEC_CACHE_SIZE} bound is enforced, by evicting the
+     * eldest entry in insertion order.
      *
-     *  @param sessionKey the session key (value-equality, may be a fresh object
-     *                    each call carrying the same bytes as a cached one)
-     *  @return a spec reusing the key's internal byte array; never null
-     *  @since 0.9.71+
+     * @param sessionKey the session key (value-equality, may be a fresh object
+     * each call carrying the same bytes as a cached one)
+     * @return a spec reusing the key's internal byte array; never null
+     * @since 0.9.71+
      */
     SecretKeySpec getKeySpec(SessionKey sessionKey) {
         SecretKeySpec rv = _keySpecReads.get(sessionKey);
@@ -316,10 +316,10 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Obtain a Cipher from the cache, or create a new one if empty.
+     * Obtain a Cipher from the cache, or create a new one if empty.
      *
-     *  @return cached or new
-     *  @since 0.9.49
+     * @return cached or new
+     * @since 0.9.49
      */
     private Cipher acquire() {
         Cipher rv = _ciphers.poll();
@@ -334,18 +334,18 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Return the Cipher to the cache without scrubbing it first.
-     *  <p>
-     *  The pooled Cipher keeps the round keys of the operation that just
-     *  finished. Re-initializing it with a zero key was dropped because
-     *  {@link Cipher#init} at the next acquire overwrites the schedule anyway,
-     *  and the extra key schedule is pure overhead. It protected nothing either:
-     *  the live key bytes are already resident for the life of the
-     *  {@link SessionKey} in the {@link #_keySpecReads} memo and in
-     *  {@link SessionKey#getPreparedKey()} on the legacy Cryptix path.
+     * Return the Cipher to the cache without scrubbing it first.
+     * <p>
+     * The pooled Cipher keeps the round keys of the operation that just
+     * finished. Re-initializing it with a zero key was dropped because
+     * {@link Cipher#init} at the next acquire overwrites the schedule anyway,
+     * and the extra key schedule is pure overhead. It protected nothing either:
+     * the live key bytes are already resident for the life of the
+     * {@link SessionKey} in the {@link #_keySpecReads} memo and in
+     * {@link SessionKey#getPreparedKey()} on the legacy Cryptix path.
      *
-     *  @param cipher the Cipher to return to the cache
-     *  @since 0.9.49
+     * @param cipher the Cipher to return to the cache
+     * @since 0.9.49
      */
     private void release(Cipher cipher) {
         if (CACHE) {
@@ -354,15 +354,15 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Test results 10K timing runs.
-     *  July 2011 eeepc.
-     *  Not worth enabling System version.
-     *  And we can't get rid of Cryptix because AES-256 is unavailable
-     *  in several JVMs.
-     *  Make USE_SYSTEM_AES above non-final to run this.
-     *  You also must comment out the length check in encrypt() and decrypt() above.
+     * Test results 10K timing runs.
+     * July 2011 eeepc.
+     * Not worth enabling System version.
+     * And we can't get rid of Cryptix because AES-256 is unavailable
+     * in several JVMs.
+     * Make USE_SYSTEM_AES above non-final to run this.
+     * You also must comment out the length check in encrypt() and decrypt() above.
      *
-     *<pre>
+     * <pre>
      *  JVM	Cryptix (ms)	System (ms)
      *  Sun	 8662		n/a
      *  OpenJDK	 8616		  8510
@@ -370,16 +370,16 @@ public final class CryptixAESEngine extends AESEngine {
      *  JamVM	50013		761494 (!)
      *  gij	51130		761693 (!)
      *  jrockit	 9780		n/a
-     *</pre>
+     * </pre>
      *
-     *  Speed ups with AES-NI:
-     *  May 2014 AMD Hexcore 100K runs (1024 bytes):
-     *<pre>
+     * Speed ups with AES-NI:
+     * May 2014 AMD Hexcore 100K runs (1024 bytes):
+     * <pre>
      *  JVM		Cryptix (ms)	System (ms)
      *  OpenJDK 6	3314		  5030
      *  OpenJDK 7	3285		  2476
-     *</pre>
+     * </pre>
      *
-     *  Cryptix is faster for data smaller than 704 bytes.
+     * Cryptix is faster for data smaller than 704 bytes.
      */
 }

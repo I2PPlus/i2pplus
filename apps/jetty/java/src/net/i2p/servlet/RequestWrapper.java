@@ -15,21 +15,21 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
 /**
- *  Wraps an HttpServletRequest and adds multipart-aware access to the
- *  parameters and files of a <code>multipart/form-data</code> request,
- *  using the Servlet 3.0 <code>Part</code> API.
+ * Wraps an HttpServletRequest and adds multipart-aware access to the
+ * parameters and files of a <code>multipart/form-data</code> request,
+ * using the Servlet 3.0 <code>Part</code> API.
  *
- *  Only the multipart variants of the accessors are wrapped; everything
- *  else is passed straight through. The Servlet API container already
- *  parses multipart requests, so this class deliberately does not parse
- *  them again.
+ * Only the multipart variants of the accessors are wrapped; everything
+ * else is passed straight through. The Servlet API container already
+ * parses multipart requests, so this class deliberately does not parse
+ * them again.
  *
- *  A part larger than the 64KB MAX_STRING_SIZE limit is not read into a
- *  String, and an IllegalStateException from the container (which signals an
- *  oversized request) is logged and rethrown.
+ * A part larger than the 64KB MAX_STRING_SIZE limit is not read into a
+ * String, and an IllegalStateException from the container (which signals an
+ * oversized request) is logged and rethrown.
  *
- *  @author user
- *  @since 0.9.19 moved from susimail so it may be used by routerconsole too
+ * @author user
+ * @since 0.9.19 moved from susimail so it may be used by routerconsole too
  */
 public class RequestWrapper {
 

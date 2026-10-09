@@ -31,22 +31,22 @@ public class EepPost extends EepGet {
     private static final int PROP_MAX_POST_PAYLOAD_RAM = 32 * 1024;
 
     /**
-     *  Constructor for a POST session. The post body is supplied later by one of
-     *  the post() methods; fetch() is not supported.
+     * Constructor for a POST session. The post body is supplied later by one of
+     * the post() methods; fetch() is not supported.
      *
-     *  @param ctx the app context
-     *  @param proxyHost the proxy hostname, empty for no proxy
-     *  @param proxyPort the proxy port, 0 for no proxy
-     *  @param numRetries number of retries
-     *  @param outputFile file to save the response to
-     *  @param url URL to post to
+     * @param ctx the app context
+     * @param proxyHost the proxy hostname, empty for no proxy
+     * @param proxyPort the proxy port, 0 for no proxy
+     * @param numRetries number of retries
+     * @param outputFile file to save the response to
+     * @param url URL to post to
      */
     public EepPost(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         /*
          * We're using this constructor:
          * public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize,
-         *               long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag,
-         *               String postData) {
+         * long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag,
+         * String postData) {
          */
         super(ctx, true, proxyHost, proxyPort, numRetries, -1, -1, outputFile, null, url, true, null, null);
     }
@@ -125,7 +125,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  In-memory, not for large POSTs
+     * In-memory, not for large POSTs
      */
     public boolean post(
             String contentType, String data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
@@ -135,7 +135,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  In-memory, not for large POSTs
+     * In-memory, not for large POSTs
      */
     public boolean post(
             String contentType, byte[] data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
@@ -145,7 +145,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  For large POSTs
+     * For large POSTs
      */
     public boolean post(String contentType, File data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
         if (!data.isFile() || data.length() == 0) throw new IllegalArgumentException();
@@ -184,7 +184,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost
      */
     private static void sendFields(StringBuilder out, Map<String, Object> fields) {
         boolean first = true;
@@ -199,10 +199,10 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  Multipart
-     *  Adapted from old jrandom EepPost
+     * Multipart
+     * Adapted from old jrandom EepPost
      *
-     *  @param separator non-null
+     * @param separator non-null
      */
     private static void sendFields(OutputStream out, String separator, Map<String, Object> fields) throws IOException {
         for (Map.Entry<String, Object> e : fields.entrySet()) {
@@ -218,7 +218,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost
      */
     private static void sendField(StringBuilder out, String field, String val) {
         // Only the space-to-plus substitution of
@@ -228,10 +228,10 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  Multipart
-     *  Adapted from old jrandom EepPost
+     * Multipart
+     * Adapted from old jrandom EepPost
      *
-     *  @param separator non-null
+     * @param separator non-null
      */
     private static void sendField(OutputStream out, String separator, String field, String val) throws IOException {
         out.write(DataHelper.getUTF8("--" + separator + CRLF));
@@ -241,10 +241,10 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  Multipart
-     *  Adapted from old jrandom EepPost
+     * Multipart
+     * Adapted from old jrandom EepPost
      *
-     *  @param separator non-null
+     * @param separator non-null
      */
     private static void sendFile(OutputStream out, String separator, String field, File file) throws IOException {
         out.write(DataHelper.getUTF8("--" + separator + CRLF));
@@ -258,7 +258,7 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  Adapted from old jrandom EepPost
+     * Adapted from old jrandom EepPost
      * @return the separator
      */
     private String getSeparator() {
@@ -271,7 +271,7 @@ public class EepPost extends EepGet {
      * Command-line entry point for EepPost. See usage() for the full option list.
      *
      * Usage: eeppost [-p 127.0.0.1:4444 | -c] [-n #retries] [-o outputFile]
-     *               [-s key=value] | [-f key=file] url
+     * [-s key=value] | [-f key=file] url
      *
      * At least one -s (string field) or -f (file field) is required. All timeouts
      * are in seconds: -t is the inactivity timeout, -v the header timeout, and
@@ -414,11 +414,11 @@ public class EepPost extends EepGet {
     }
 
     /**
-     *  Usage text for the command-line entry point. Every option accepted by
-     *  main() must appear here, with the defaults main() actually uses.
+     * Usage text for the command-line entry point. Every option accepted by
+     * main() must appear here, with the defaults main() actually uses.
      *
-     *  @return the help text
-     *  @since 0.9.71+
+     * @return the help text
+     * @since 0.9.71+
      */
     static String usage() {
         int inactivity = DEFAULT_INACTIVITY_TIMEOUT / 1000;

@@ -30,11 +30,11 @@ import java.nio.charset.StandardCharsets;
 public abstract class SystemVersion {
 
     /*
-     *  @since 0.9.28
+     * @since 0.9.28
      */
     public static final String DAEMON_USER = "i2psvc";
     /*
-     *  @since 0.9.29
+     * @since 0.9.29
      */
     public static final String GENTOO_USER = "i2p";
 
@@ -60,12 +60,12 @@ public abstract class SystemVersion {
     private static volatile int _cores;
 
     /**
-     *  Minimum interval between two OS queries for the process CPU load.
-     *  Each query is expensive (on JDK 19+ the MXBean reads /proc via
-     *  Files.lines), and the value is only used for coarse throttling/backoff,
-     *  so a 1-second cache is plenty.
+     * Minimum interval between two OS queries for the process CPU load.
+     * Each query is expensive (on JDK 19+ the MXBean reads /proc via
+     * Files.lines), and the value is only used for coarse throttling/backoff,
+     * so a 1-second cache is plenty.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long CPU_LOAD_CACHE_MS = 1000;
 
@@ -76,13 +76,13 @@ public abstract class SystemVersion {
     private static volatile int _cpuLoad;
 
     /**
-     *  Minimum interval between two OS queries for the system load average.
-     *  getSystemLoadAverage() is a native call (JDK reads /proc/loadavg), far
-     *  more expensive than a map lookup, and it sits on the per-build-request
-     *  path of both tunnel throttlers. The load average is itself a 1/5/15
-     *  minute metric, so 1s of staleness is far below its own resolution.
+     * Minimum interval between two OS queries for the system load average.
+     * getSystemLoadAverage() is a native call (JDK reads /proc/loadavg), far
+     * more expensive than a map lookup, and it sits on the per-build-request
+     * path of both tunnel throttlers. The load average is itself a 1/5/15
+     * minute metric, so 1s of staleness is far below its own resolution.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long SYSTEM_LOAD_CACHE_MS = 1000;
 
@@ -93,13 +93,13 @@ public abstract class SystemVersion {
     private static volatile int _sysLoad;
 
     /**
-     *  Cached "router.cpuLoad" RateStat handle, or null if unresolved.
-     *  getCPULoadAvg() previously did two string-keyed statManager() lookups per
-     *  call across a dozen call sites (JobQueue pumper, both throttlers, peer
-     *  tests). The stat is created once at startup and never replaced, so the
-     *  handle is resolved once and reused until the context changes.
+     * Cached "router.cpuLoad" RateStat handle, or null if unresolved.
+     * getCPULoadAvg() previously did two string-keyed statManager() lookups per
+     * call across a dozen call sites (JobQueue pumper, both throttlers, peer
+     * tests). The stat is created once at startup and never replaced, so the
+     * handle is resolved once and reused until the context changes.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static volatile RateStat _cpuLoadStat;
 
@@ -248,7 +248,7 @@ public abstract class SystemVersion {
             return "Android";
         }
         /** Everybody else knows if they're on a Windows machine or a
-         *  Mac, so for now, assume linux here.
+         * Mac, so for now, assume linux here.
          */
         return "Linux";
     }
@@ -387,193 +387,193 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Better than (new VersionComparator()).compare(System.getProperty("java.version"), "1.6") &gt;= 0
-     *  as it handles Android also, where java.version = "0".
+     * Better than (new VersionComparator()).compare(System.getProperty("java.version"), "1.6") &gt;= 0
+     * as it handles Android also, where java.version = "0".
      *
-     *  @return true if Java 1.6 or higher, or Android API 9 or higher
+     * @return true if Java 1.6 or higher, or Android API 9 or higher
      */
     public static boolean isJava6() {
         return _oneDotSix;
     }
 
     /**
-     *  Better than (new VersionComparator()).compare(System.getProperty("java.version"), "1.7") &gt;= 0
-     *  as it handles Android also, where java.version = "0".
+     * Better than (new VersionComparator()).compare(System.getProperty("java.version"), "1.7") &gt;= 0
+     * as it handles Android also, where java.version = "0".
      *
-     *  @return true if Java 1.7 or higher, or Android API 19 or higher
-     *  @since 0.9.14
+     * @return true if Java 1.7 or higher, or Android API 19 or higher
+     * @since 0.9.14
      */
     public static boolean isJava7() {
         return _oneDotSeven;
     }
 
     /**
-     *  True if the JVM is Java 8 or higher, false for Android.
+     * True if the JVM is Java 8 or higher, false for Android.
      *
-     *  @return true if Java 1.8 or higher, false for Android.
-     *  @since 0.9.15
+     * @return true if Java 1.8 or higher, false for Android.
+     * @since 0.9.15
      */
     public static boolean isJava8() {
         return _oneDotEight;
     }
 
     /**
-     *  True if the JVM is Java 9 or higher, false for Android.
+     * True if the JVM is Java 9 or higher, false for Android.
      *
-     *  @return true if Java 9 or higher, false for Android.
-     *  @since 0.9.23
+     * @return true if Java 9 or higher, false for Android.
+     * @since 0.9.23
      */
     public static boolean isJava9() {
         return _oneDotNine;
     }
 
     /**
-     *  True if the JVM is Java 10 or higher, false for Android.
+     * True if the JVM is Java 10 or higher, false for Android.
      *
-     *  @return true if Java 10 or higher, false for Android.
-     *  @since 0.9.33
+     * @return true if Java 10 or higher, false for Android.
+     * @since 0.9.33
      */
     public static boolean isJava10() {
         return _oneDotTen;
     }
 
     /**
-     *  True if the JVM is Java 11 or higher, false for Android.
+     * True if the JVM is Java 11 or higher, false for Android.
      *
-     *  @return true if Java 11 or higher, false for Android.
-     *  @since 0.9.35
+     * @return true if Java 11 or higher, false for Android.
+     * @since 0.9.35
      */
     public static boolean isJava11() {
         return _oneDotEleven;
     }
 
     /**
-     *  True if the JVM is Java 12 or higher, false for Android.
+     * True if the JVM is Java 12 or higher, false for Android.
      *
-     *  @return true if Java 12 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 12 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava12() {
         return _twelve;
     }
 
     /**
-     *  True if the JVM is Java 13 or higher, false for Android.
+     * True if the JVM is Java 13 or higher, false for Android.
      *
-     *  @return true if Java 13 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 13 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava13() {
         return _thirteen;
     }
 
     /**
-     *  True if the JVM is Java 14 or higher, false for Android.
+     * True if the JVM is Java 14 or higher, false for Android.
      *
-     *  @return true if Java 14 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 14 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava14() {
         return _fourteen;
     }
 
     /**
-     *  True if the JVM is Java 15 or higher, false for Android.
+     * True if the JVM is Java 15 or higher, false for Android.
      *
-     *  @return true if Java 15 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 15 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava15() {
         return _fifteen;
     }
 
     /**
-     *  True if the JVM is Java 16 or higher, false for Android.
+     * True if the JVM is Java 16 or higher, false for Android.
      *
-     *  @return true if Java 16 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 16 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava16() {
         return _sixteen;
     }
 
     /**
-     *  True if the JVM is Java 17 or higher, false for Android.
+     * True if the JVM is Java 17 or higher, false for Android.
      *
-     *  @return true if Java 17 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 17 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava17() {
         return _seventeen;
     }
 
     /**
-     *  True if the JVM is Java 18 or higher, false for Android.
+     * True if the JVM is Java 18 or higher, false for Android.
      *
-     *  @return true if Java 18 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 18 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava18() {
         return _eighteen;
     }
 
     /**
-     *  True if the JVM is Java 19 or higher, false for Android.
+     * True if the JVM is Java 19 or higher, false for Android.
      *
-     *  @return true if Java 19 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 19 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava19() {
         return _nineteen;
     }
 
     /**
-     *  True if the JVM is Java 20 or higher, false for Android.
+     * True if the JVM is Java 20 or higher, false for Android.
      *
-     *  @return true if Java 20 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 20 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava20() {
         return _twenty;
     }
 
     /**
-     *  True if the JVM is Java 21 or higher, false for Android.
+     * True if the JVM is Java 21 or higher, false for Android.
      *
-     *  @return true if Java 21 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 21 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava21() {
         return _twentyOne;
     }
 
     /**
-     *  True if the JVM is Java 22 or higher, false for Android.
+     * True if the JVM is Java 22 or higher, false for Android.
      *
-     *  @return true if Java 21 or higher, false for Android.
-     *  @since 0.9.59+
+     * @return true if Java 21 or higher, false for Android.
+     * @since 0.9.59+
      */
     public static boolean isJava22() {
         return _twentyTwo;
     }
 
     /**
-     *  Handles Android also
+     * Handles Android also
      *
-     *  @param minVersion e.g. 11
-     *  @return true if greater than or equal to minVersion
-     *  @since 0.9.41
+     * @param minVersion e.g. 11
+     * @return true if greater than or equal to minVersion
+     * @since 0.9.41
      */
     public static boolean isJava(int minVersion) {
         return isJava("1." + minVersion);
     }
 
     /**
-     *  Handles Android, and minVersions in both forms (e.g. 11 or 1.11)
+     * Handles Android, and minVersions in both forms (e.g. 11 or 1.11)
      *
-     *  @param minVersion either 1.x or x form works
-     *  @return true if greater than or equal to minVersion
-     *  @since 0.9.41
+     * @param minVersion either 1.x or x form works
+     * @return true if greater than or equal to minVersion
+     * @since 0.9.41
      */
     public static boolean isJava(String minVersion) {
         String version = System.getProperty("java.version");
@@ -626,11 +626,11 @@ public abstract class SystemVersion {
     }
 
 /**
-     * Whether running as a Linux service.
-     *
-     * @return whether linux service
-     * @since 0.9.28
-     */
+ * Whether running as a Linux service.
+ *
+ * @return whether linux service
+ * @since 0.9.28
+ */
     public static boolean isLinuxService() {
         return _isLinuxService;
     }
@@ -656,10 +656,10 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Identical to android.os.Build.VERSION.SDK_INT.
-     *  For use outside of Android code.
+     * Identical to android.os.Build.VERSION.SDK_INT.
+     * For use outside of Android code.
      *
-     *  @return The SDK (API) version, e.g. 8 for Froyo, 0 if unknown
+     * @return The SDK (API) version, e.g. 8 for Froyo, 0 if unknown
      */
     public static int getAndroidVersion() {
         return _androidSDK;
@@ -689,13 +689,13 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Total CPUs including parked/offline cores.
-     *  On Linux, reads /sys/devices/system/cpu/present to get the full
-     *  CPU topology regardless of cpufreq governor parking.
-     *  Falls back to Runtime.getRuntime().availableProcessors().
+     * Total CPUs including parked/offline cores.
+     * On Linux, reads /sys/devices/system/cpu/present to get the full
+     * CPU topology regardless of cpufreq governor parking.
+     * Falls back to Runtime.getRuntime().availableProcessors().
      *
-     *  @return never smaller than 1
-     *  @since 0.9.34
+     * @return never smaller than 1
+     * @since 0.9.34
      */
     public static int getCores() {
         int rv = _cores;
@@ -759,26 +759,26 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  The system's time zone, which is probably different from the
-     *  JVM time zone, because Router changes the JVM default to GMT.
-     *  It saves the old default in the context properties where we can get it.
-     *  Use this to format a time in local time zone with DateFormat.setTimeZone().
+     * The system's time zone, which is probably different from the
+     * JVM time zone, because Router changes the JVM default to GMT.
+     * It saves the old default in the context properties where we can get it.
+     * Use this to format a time in local time zone with DateFormat.setTimeZone().
      *
-     *  @return non-null
-     *  @since 0.9.24
+     * @return non-null
+     * @since 0.9.24
      */
     public static TimeZone getSystemTimeZone() {
         return getSystemTimeZone(_ctx);
     }
 
     /**
-     *  The system's time zone, which is probably different from the
-     *  JVM time zone, because Router changes the JVM default to GMT.
-     *  It saves the old default in the context properties where we can get it.
-     *  Use this to format a time in local time zone with DateFormat.setTimeZone().
+     * The system's time zone, which is probably different from the
+     * JVM time zone, because Router changes the JVM default to GMT.
+     * It saves the old default in the context properties where we can get it.
+     * Use this to format a time in local time zone with DateFormat.setTimeZone().
      *
-     *  @return non-null
-     *  @since 0.9.24
+     * @return non-null
+     * @since 0.9.24
      */
     public static TimeZone getSystemTimeZone(I2PAppContext ctx) {
         String systemTimeZone = ctx.getProperty("i2p.systemTimeZone");
@@ -789,7 +789,7 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  @since 0.9.24
+     * @since 0.9.24
      */
     public static void main(String[] args) {
         String jvm = isOpenJDK() ? "(OpenJDK)" : isZeroVM() ? "(Zero JVM)" : isApache() ? "(Apache)" : "";
@@ -856,45 +856,45 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Whether the cached CPU load sample is old enough to refresh.
-     *  Never-queried (lastQueried == 0) counts as stale so the first call
-     *  always queries the MXBean instead of returning the 0 initializer.
+     * Whether the cached CPU load sample is old enough to refresh.
+     * Never-queried (lastQueried == 0) counts as stale so the first call
+     * always queries the MXBean instead of returning the 0 initializer.
      *
-     *  @param lastQueried the wall-clock ms of the previous query, or 0
-     *  @param now the current wall-clock ms
-     *  @return true if the cache should be refreshed
-     *  @since 0.9.71+
+     * @param lastQueried the wall-clock ms of the previous query, or 0
+     * @param now the current wall-clock ms
+     * @return true if the cache should be refreshed
+     * @since 0.9.71+
      */
     static boolean cpuLoadCacheStale(long lastQueried, long now) {
         return lastQueried == 0 || now - lastQueried >= CPU_LOAD_CACHE_MS;
     }
 
     /**
-     *  Whether the cached system load sample is old enough to refresh.
-     *  Never-queried (lastQueried == 0) counts as stale so the first call
-     *  always queries the MXBean instead of returning the 0 initializer.
-     *  A wall-clock step backwards (NTP correction, manual change) also counts
-     *  as stale: a plain age comparison would report the sample as fresh until
-     *  the clock caught up again, pinning a stale value for the length of the
-     *  step.
+     * Whether the cached system load sample is old enough to refresh.
+     * Never-queried (lastQueried == 0) counts as stale so the first call
+     * always queries the MXBean instead of returning the 0 initializer.
+     * A wall-clock step backwards (NTP correction, manual change) also counts
+     * as stale: a plain age comparison would report the sample as fresh until
+     * the clock caught up again, pinning a stale value for the length of the
+     * step.
      *
-     *  @param lastQueried the wall-clock ms of the previous query, or 0
-     *  @param now the current wall-clock ms
-     *  @return true if the cache should be refreshed
-     *  @since 0.9.71+
+     * @param lastQueried the wall-clock ms of the previous query, or 0
+     * @param now the current wall-clock ms
+     * @return true if the cache should be refreshed
+     * @since 0.9.71+
      */
     static boolean sysLoadCacheStale(long lastQueried, long now) {
         return lastQueried == 0 || now < lastQueried || now - lastQueried >= SYSTEM_LOAD_CACHE_MS;
     }
 
     /**
-     *  Resolve and cache the "router.cpuLoad" RateStat handle.
-     *  The stat is registered once during startup and never replaced, so the
-     *  handle stays valid for the life of the context. Re-resolves if the
-     *  context or its StatManager is swapped (as in unit tests).
+     * Resolve and cache the "router.cpuLoad" RateStat handle.
+     * The stat is registered once during startup and never replaced, so the
+     * handle stays valid for the life of the context. Re-resolves if the
+     * context or its StatManager is swapped (as in unit tests).
      *
-     *  @return the cached stat, or null if it is not registered yet
-     *  @since 0.9.71+
+     * @return the cached stat, or null if it is not registered yet
+     * @since 0.9.71+
      */
     private static RateStat getCpuLoadStat() {
         if (_ctx == null) {
@@ -956,10 +956,10 @@ public abstract class SystemVersion {
     /**
      * Retrieve System Load as percentage (100% equals full system load)
      *
-     *  The MXBean query is a native /proc read and is cached for
-     *  {@link #SYSTEM_LOAD_CACHE_MS}, because this sits on the per-request path
-     *  of both tunnel throttlers while the underlying load average moves on a
-     *  multi-minute timescale.
+     * The MXBean query is a native /proc read and is cached for
+     * {@link #SYSTEM_LOAD_CACHE_MS}, because this sits on the per-request path
+     * of both tunnel throttlers while the underlying load average moves on a
+     * multi-minute timescale.
      *
      * @return the system load
      * @since 0.9.57+
@@ -1018,29 +1018,29 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  The canonical tunnel build success ratio: successes over all settled builds,
-     *  0.0 to 1.0, for a stated window.
+     * The canonical tunnel build success ratio: successes over all settled builds,
+     * 0.0 to 1.0, for a stated window.
      *
-     *  <p>This is the single source of truth. Three implementations existed and none of them
-     *  agreed: {@code ProfileOrganizer} read {@code getCurrentEventCount()} - the
-     *  <em>current partial</em> period - while asking for the ten minute rate, so it sampled a
-     *  fraction of one bucket and threw the history away; the copy here read
-     *  {@code getLastEventCount()}, the last <em>completed</em> period; and the Tuner used a
-     *  different set of stats entirely on an hourly window. That value is not cosmetic - it
-     *  gates profile eviction, selects the ghost cooldown, and feeds
-     *  {@code ClientPeerSelector} first-hop selection - so a partial-period reading could
-     *  intermittently drop it under the attack threshold and switch all three to their
-     *  defensive behaviour on noise.
+     * <p>This is the single source of truth. Three implementations existed and none of them
+     * agreed: {@code ProfileOrganizer} read {@code getCurrentEventCount()} - the
+     * <em>current partial</em> period - while asking for the ten minute rate, so it sampled a
+     * fraction of one bucket and threw the history away; the copy here read
+     * {@code getLastEventCount()}, the last <em>completed</em> period; and the Tuner used a
+     * different set of stats entirely on an hourly window. That value is not cosmetic - it
+     * gates profile eviction, selects the ghost cooldown, and feeds
+     * {@code ClientPeerSelector} first-hop selection - so a partial-period reading could
+     * intermittently drop it under the attack threshold and switch all three to their
+     * defensive behaviour on noise.
      *
-     *  <p>Counts events over the last <em>completed</em> window rather than the current
-     *  partial one, so the reading does not depend on where in the period it was sampled.
-     *  Partial-period sampling was what made the old value swing, and swing under the attack
-     *  threshold, which switches off profile eviction and lengthens ghost cooldowns.
+     * <p>Counts events over the last <em>completed</em> window rather than the current
+     * partial one, so the reading does not depend on where in the period it was sampled.
+     * Partial-period sampling was what made the old value swing, and swing under the attack
+     * threshold, which switches off profile eviction and lengthens ghost cooldowns.
      *
-     *  @param sm the stat manager, or null
-     *  @param windowMs the averaging window in milliseconds
-     *  @return the ratio, or NaN if the stats are absent or the window is empty
-     *  @since 0.9.71+
+     * @param sm the stat manager, or null
+     * @param windowMs the averaging window in milliseconds
+     * @return the ratio, or NaN if the stats are absent or the window is empty
+     * @since 0.9.71+
      */
     public static double getTunnelBuildSuccessRatio(StatManager sm, int windowMs) {
         if (sm == null) {
@@ -1066,13 +1066,13 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Successes over all settled builds. Pure arithmetic, so it is testable without stats.
+     * Successes over all settled builds. Pure arithmetic, so it is testable without stats.
      *
-     *  @param success mean successes per period
-     *  @param reject mean rejections per period
-     *  @param expire mean expiries per period
-     *  @return the ratio, or NaN when nothing settled in the window
-     *  @since 0.9.71+
+     * @param success mean successes per period
+     * @param reject mean rejections per period
+     * @param expire mean expiries per period
+     * @return the ratio, or NaN when nothing settled in the window
+     * @since 0.9.71+
      */
     public static double buildSuccessRatio(double success, double reject, double expire) {
         double total = success + reject + expire;
@@ -1083,11 +1083,11 @@ public abstract class SystemVersion {
     }
 
     /**
-     *  Default window for {@link #getTunnelBuildSuccessRatio}. Ten minutes: long enough that a
-     *  single bad minute is not mistaken for sustained failure, short enough to react within
-     *  one LeaseSet refresh cycle.
+     * Default window for {@link #getTunnelBuildSuccessRatio}. Ten minutes: long enough that a
+     * single bad minute is not mistaken for sustained failure, short enough to react within
+     * one LeaseSet refresh cycle.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public static final int BUILD_SUCCESS_WINDOW_MS = 10 * 60 * 1000;
 

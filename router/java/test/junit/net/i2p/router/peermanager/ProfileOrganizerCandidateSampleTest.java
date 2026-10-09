@@ -6,27 +6,27 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  Tests the configurable candidate-sample floor added alongside
- *  {@link ProfileOrganizer#maxCandidateSample(int, int, int)}.
+ * Tests the configurable candidate-sample floor added alongside
+ * {@link ProfileOrganizer#maxCandidateSample(int, int, int)}.
  *
- *  <p>The cap arithmetic itself is covered by
- *  {@link ProfileOrganizerSampleCapTest}; this file covers only what is new
- *  here — the shipped default, the range the clamp enforces, and the fact that
- *  every hop size this router actually uses is floor-bound rather than scaled.
- *  That last one is why the floor is the operative value for gateway
- *  selection rather than a detail the {@code howMany * 20} term overrides.
+ * <p>The cap arithmetic itself is covered by
+ * {@link ProfileOrganizerSampleCapTest}; this file covers only what is new
+ * here — the shipped default, the range the clamp enforces, and the fact that
+ * every hop size this router actually uses is floor-bound rather than scaled.
+ * That last one is why the floor is the operative value for gateway
+ * selection rather than a detail the {@code howMany * 20} term overrides.
  *
- *  @see ProfileOrganizerSampleCapTest
- *  @since 0.9.71+
+ * @see ProfileOrganizerSampleCapTest
+ * @since 0.9.71+
  */
 public class ProfileOrganizerCandidateSampleTest {
 
     private static final int FLOOR = ProfileOrganizer.DEFAULT_MIN_CANDIDATE_SAMPLE;
 
     /**
-     *  Every first-hop and last-hop call passes {@code howMany = 1}, and a
-     *  3-hop client tunnel fills 2 middle hops — so in practice the floor
-     *  governs and the scaled term never engages.
+     * Every first-hop and last-hop call passes {@code howMany = 1}, and a
+     * 3-hop client tunnel fills 2 middle hops — so in practice the floor
+     * governs and the scaled term never engages.
      */
     @Test
     public void typicalClientHopSizesAreAllFloorBound() {
@@ -43,9 +43,9 @@ public class ProfileOrganizerCandidateSampleTest {
     }
 
     /**
-     *  The scaled term only takes over once {@code howMany * 20} exceeds the
-     *  floor, which at 256 is {@code howMany >= 13}.  At the 64 floor it was 4,
-     *  so this documents how much further out the crossover now sits.
+     * The scaled term only takes over once {@code howMany * 20} exceeds the
+     * floor, which at 256 is {@code howMany >= 13}.  At the 64 floor it was 4,
+     * so this documents how much further out the crossover now sits.
      */
     @Test
     public void scaledTermCrossoverMovedToThirteenHops() {
@@ -56,8 +56,8 @@ public class ProfileOrganizerCandidateSampleTest {
     }
 
     /**
-     *  The floor is deliberately capped well below a full tier scan, so a
-     *  misconfigured value cannot turn every selection into an O(tier) walk.
+     * The floor is deliberately capped well below a full tier scan, so a
+     * misconfigured value cannot turn every selection into an O(tier) walk.
      */
     @Test
     public void floorCannotBeConfiguredIntoAFullScan() {

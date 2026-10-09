@@ -360,12 +360,12 @@ public class UDPSender {
     private volatile long _codelTargetRead;
 
     /**
-     *  The CoDel target delay in ms, from {@link #PROP_CODEL_TARGET}, read at
-     *  most once per second. An unparseable value logs once per read and falls
-     *  back to {@link #CODEL_TARGET}, as does an unset property.
+     * The CoDel target delay in ms, from {@link #PROP_CODEL_TARGET}, read at
+     * most once per second. An unparseable value logs once per read and falls
+     * back to {@link #CODEL_TARGET}, as does an unset property.
      *
-     *  @return the CoDel target delay in ms, never null
-     *  @since 0.9.71+
+     * @return the CoDel target delay in ms, never null
+     * @since 0.9.71+
      */
     private int codelTarget() {
         long now = _context.clock().now();

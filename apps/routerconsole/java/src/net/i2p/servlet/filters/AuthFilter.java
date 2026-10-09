@@ -23,8 +23,8 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.Log;
 
 /**
- *  Filter to check for valid session on all console requests.
- *  Redirects to login page if not authenticated.
+ * Filter to check for valid session on all console requests.
+ * Redirects to login page if not authenticated.
  */
 public class AuthFilter implements Filter {
     public AuthFilter() {}

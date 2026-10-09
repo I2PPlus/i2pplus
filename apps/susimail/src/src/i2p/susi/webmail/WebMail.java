@@ -924,16 +924,16 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  Callback from MailCache.loadFromDisk()
-     *  @since 0.9.34
+     * Callback from MailCache.loadFromDisk()
+     * @since 0.9.34
      */
     private static class LoadWaiter implements NewMailListener {
         private final SessionObject _so;
         private final MailCache _mc;
 
         /**
-         *  @param so session state
-         *  @param mc mail cache
+         * @param so session state
+         * @param mc mail cache
          */
         public LoadWaiter(SessionObject so, MailCache mc) {_so = so; _mc = mc;}
 
@@ -957,15 +957,15 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  Callback from POP3MailBox.connectToServer()
-     *  @since 0.9.34
+     * Callback from POP3MailBox.connectToServer()
+     * @since 0.9.34
      */
     private static class ConnectWaiter implements NewMailListener, Runnable {
         private final SessionObject _so;
         private final POP3MailBox _mb;
 
         /**
-         *  @param so session state
+         * @param so session state
          */
         public ConnectWaiter(SessionObject so) {_so = so; _mb = _so.mailbox;}
 
@@ -1083,8 +1083,8 @@ public class WebMail extends HttpServlet {
         Log log = sessionObject.log;
 
         /*
-         *  compose dialog
-         *  NEW_SUBJECT may be empty but will be non-null
+         * compose dialog
+         * NEW_SUBJECT may be empty but will be non-null
          */
         if (isPOST && request.getParameter(NEW_SUBJECT) != null) {
             // We have to make sure to get the state right even if
@@ -1507,7 +1507,7 @@ public class WebMail extends HttpServlet {
      * @param sessionObject
      * @param request
      * @return the next UIDL to see (if PREV/NEXT pushed), or null (if REALLYDELETE pushed), or showUIDL,
-     *         or "delete" (if DELETE pushed). If null, next state should be LIST.
+     * or "delete" (if DELETE pushed). If null, next state should be LIST.
      */
     private static String processMessageButtons(SessionObject sessionObject, String showUIDL, RequestWrapper request) {
         if (buttonPressed(request, PREV)) {
@@ -1609,11 +1609,11 @@ public class WebMail extends HttpServlet {
     }
 
    /**
-     * Process thumbnail link in compose view
-     * Draft attachments are stored in the SessionObject and identified by hashcode only.
-     *
-     * @since 0.9.62
-     */
+    * Process thumbnail link in compose view
+    * Draft attachments are stored in the SessionObject and identified by hashcode only.
+    *
+    * @since 0.9.62
+    */
     private static void processDraftAttachmentLink(SessionObject sessionObject,
                                                    RequestWrapper request, HttpServletResponse response) {
         String str = request.getParameter(DRAFT_ATTACHMENT);
@@ -1903,8 +1903,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  @return folder or null
-     *  @since 0.9.35
+     * @return folder or null
+     * @since 0.9.35
      */
     private static MailCache getCurrentMailCache(SessionObject session, RequestWrapper request) {
         String folderName = (buttonPressed(request, SWITCH_TO) || buttonPressed(request, MOVE_TO)) ?
@@ -1933,8 +1933,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  @return folder or null
-     *  @since 0.9.35
+     * @return folder or null
+     * @since 0.9.35
      */
     private static Folder<String> getCurrentFolder(SessionObject session, RequestWrapper request) {
         MailCache mc = getCurrentMailCache(session, request);
@@ -1942,9 +1942,9 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  Blocking wait, bounded to 5 seconds so a stuck loader cannot hang the
-     *  servlet thread indefinitely
-     *  @since 0.9.35
+     * Blocking wait, bounded to 5 seconds so a stuck loader cannot hang the
+     * servlet thread indefinitely
+     * @since 0.9.35
      */
     private static void waitForLoad(SessionObject sessionObject, MailCache mc) {
         if (!mc.isLoaded()) {
@@ -2583,9 +2583,9 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  Redirect a POST to a GET (P-R-G), replacing the query string
-     *  @param q starting with '?' or null
-     *  @since 0.9.33 adapted from I2PSnarkServlet
+     * Redirect a POST to a GET (P-R-G), replacing the query string
+     * @param q starting with '?' or null
+     * @since 0.9.33 adapted from I2PSnarkServlet
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     private void sendRedirect(HttpServletRequest req, HttpServletResponse resp, String q) throws IOException {
@@ -2877,7 +2877,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  Caller must hold the MailCache write lock.
+     * Caller must hold the MailCache write lock.
      */
     private static boolean saveDraftLocked(Log log, SessionObject sessionObject, MailCache toMC,
                                            String uidl, StringBuilder draft) {
@@ -3104,18 +3104,12 @@ public class WebMail extends HttpServlet {
         }
     }
 
-    /**
-     *
-     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
         processRequest(request, response, false);
     }
 
-    /**
-     *
-     */
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
@@ -3127,9 +3121,9 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  Validate Origin header for POST requests.
-     *  Allows requests with matching Origin (same-origin), or no Origin header.
-     *  Rejects cross-origin POST requests to prevent CSRF attacks.
+     * Validate Origin header for POST requests.
+     * Allows requests with matching Origin (same-origin), or no Origin header.
+     * Rejects cross-origin POST requests to prevent CSRF attacks.
      */
     private boolean allowOrigin(HttpServletRequest request) {
         String origin = request.getHeader("Origin");
@@ -3359,11 +3353,10 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  The sender string
+     * The sender string
      *
-     *  @return non-null
-     *  @since 0.9.63 pulled out of showCompose()
-     *
+     * @return non-null
+     * @since 0.9.63 pulled out of showCompose()
      */
     private static String getDefaultSender(SessionObject sessionObject) {
         String from;
@@ -3828,8 +3821,8 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  @param disableCurrent true for move to folder, false for select folder
-     *  @since 0.9.35
+     * @param disableCurrent true for move to folder, false for select folder
+     * @since 0.9.35
      */
     private static String showFolderSelect(String currentName, boolean disableCurrent) {
         StringBuilder sb = new StringBuilder(256);
@@ -4000,10 +3993,10 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  TODO this is addresses only, we don't save the full line in Mail
+     * TODO this is addresses only, we don't save the full line in Mail
      *
-     *  @param to non-null
-     *  @since 0.9.33
+     * @param to non-null
+     * @since 0.9.33
      */
     private static String buildRecipientLine(String[] to) {
         if (to != null) {
@@ -4020,10 +4013,10 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     *  Simple configure page
+     * Simple configure page
      *
-     *  @param folder may be null
-     *  @since 0.9.13
+     * @param folder may be null
+     * @since 0.9.13
      */
     private static void showConfig(PrintWriter out, Folder<String> folder) {
         int sz;

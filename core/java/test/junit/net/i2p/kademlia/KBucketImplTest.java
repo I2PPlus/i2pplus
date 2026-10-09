@@ -12,11 +12,11 @@ import net.i2p.data.Hash;
 import org.junit.Test;
 
 /**
- *  Tests for KBucketImpl, the per-bucket storage used by the DHT.
- *  Covers add/remove semantics, the three trim strategies, range
- *  validation, and the last-changed timestamp.
+ * Tests for KBucketImpl, the per-bucket storage used by the DHT.
+ * Covers add/remove semantics, the three trim strategies, range
+ * validation, and the last-changed timestamp.
  *
- *  @since 0.9.10
+ * @since 0.9.10
  */
 public class KBucketImplTest {
 

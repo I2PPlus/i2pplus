@@ -43,17 +43,17 @@ public class Messages {
     }
 
     /**
-     *  translate a string with a parameter
-     *  This is a lot more expensive than getString(s, ctx), so use sparingly.
+     * translate a string with a parameter
+     * This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
-     *  @param s string to be translated containing {0}
-     *    The {0} will be replaced by the parameter.
-     *    Single quotes must be doubled, i.e. ' -&gt; '' in the string.
-     *  @param o parameter, not translated.
-     *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *    Do not double the single quotes in the parameter.
-     *    Use autoboxing to call with ints, longs, floats, etc.
-     *  @return the translated string
+     * @param s string to be translated containing {0}
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     * @param o parameter, not translated.
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
+     * @return the translated string
      */
     public String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);

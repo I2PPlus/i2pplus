@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -39,8 +38,8 @@ public class GarlicMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  The raw message data.
-     *  @throws IllegalStateException if data previously set, to protect saved checksum
+     * The raw message data.
+     * @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {
         if (_data != null)

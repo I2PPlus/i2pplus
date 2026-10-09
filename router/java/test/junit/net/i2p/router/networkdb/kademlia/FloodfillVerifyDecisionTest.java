@@ -19,7 +19,7 @@ import org.junit.Test;
 public class FloodfillVerifyDecisionTest {
 
     /**
-     *  A store-peer search reply means the entry is gone — the store failed.
+     * A store-peer search reply means the entry is gone — the store failed.
      */
     @Test
     public void testStoreCheckMissingIsFailure() {
@@ -28,7 +28,7 @@ public class FloodfillVerifyDecisionTest {
     }
 
     /**
-     *  A store-peer entry older than what we published is a store failure.
+     * A store-peer entry older than what we published is a store failure.
      */
     @Test
     public void testStoreCheckStaleIsFailure() {
@@ -37,7 +37,7 @@ public class FloodfillVerifyDecisionTest {
     }
 
     /**
-     *  A fresh entry at the store peer advances to the flood check.
+     * A fresh entry at the store peer advances to the flood check.
      */
     @Test
     public void testStoreCheckFreshIsNotFailure() {
@@ -46,8 +46,8 @@ public class FloodfillVerifyDecisionTest {
     }
 
     /**
-     *  Timeout/setup failure at phase 1 must not blame the store peer;
-     *  the flood check still runs.
+     * Timeout/setup failure at phase 1 must not blame the store peer;
+     * the flood check still runs.
      */
     @Test
     public void testStoreCheckIndeterminateDoesNotFail() {
@@ -55,7 +55,7 @@ public class FloodfillVerifyDecisionTest {
     }
 
     /**
-     *  A different floodfill with a fresh entry is full success.
+     * A different floodfill with a fresh entry is full success.
      */
     @Test
     public void testFloodCheckFresh() {
@@ -63,7 +63,7 @@ public class FloodfillVerifyDecisionTest {
     }
 
     /**
-     *  First missing reply at phase 2 retries the same peer once.
+     * First missing reply at phase 2 retries the same peer once.
      */
     @Test
     public void testFloodCheckMissingRetriesOnce() {
@@ -73,7 +73,7 @@ public class FloodfillVerifyDecisionTest {
     }
 
     /**
-     *  First stale reply at phase 2 also retries — old copy may be mid-flood.
+     * First stale reply at phase 2 also retries — old copy may be mid-flood.
      */
     @Test
     public void testFloodCheckStaleRetriesOnce() {
@@ -83,7 +83,7 @@ public class FloodfillVerifyDecisionTest {
     }
 
     /**
-     *  Fresh never retries; after a spent retry nothing retries.
+     * Fresh never retries; after a spent retry nothing retries.
      */
     @Test
     public void testFloodCheckFreshNeverRetries() {
@@ -92,7 +92,7 @@ public class FloodfillVerifyDecisionTest {
     }
 
     /**
-     *  Phase 2 starts at created + delay, independent of phase-1 latency.
+     * Phase 2 starts at created + delay, independent of phase-1 latency.
      */
     @Test
     public void testPhase2StartsFromCreation() {

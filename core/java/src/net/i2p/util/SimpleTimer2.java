@@ -29,9 +29,9 @@ import net.i2p.I2PAppContext;
 public class SimpleTimer2 {
 
     /**
-     *  If you have a context, use context.simpleTimer2() instead
+     * If you have a context, use context.simpleTimer2() instead
      *
-     *  @return the global SimpleTimer2 instance
+     * @return the global SimpleTimer2 instance
      */
     public static SimpleTimer2 getInstance() {
         return I2PAppContext.getGlobalContext().simpleTimer2();
@@ -40,50 +40,50 @@ public class SimpleTimer2 {
     private static final int THREADS = 2;
 
     /**
-     *  How often the saturation watchdog samples this pool. Long enough to be
-     *  free (four counter reads), short enough that a wedge is reported within
-     *  a couple of minutes instead of never.
+     * How often the saturation watchdog samples this pool. Long enough to be
+     * free (four counter reads), short enough that a wedge is reported within
+     * a couple of minutes instead of never.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int WATCHDOG_INTERVAL_MS = 30 * 1000;
     /**
-     *  Consecutive saturated samples tolerated before a WARN. The pool is
-     *  briefly busy all the time; a pool that is still fully occupied with a
-     *  backlog after this many samples is wedged.
+     * Consecutive saturated samples tolerated before a WARN. The pool is
+     * briefly busy all the time; a pool that is still fully occupied with a
+     * backlog after this many samples is wedged.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int WATCHDOG_SATURATION_SAMPLES = 3;
     /**
-     *  Queue depth that turns full occupancy into a backlog rather than a
-     *  coincidence. With {@link #THREADS} workers, this means at least this
-     *  many events are waiting behind running ones. Not zero: the queue also
-     *  holds delayed events that are not due yet, so depth alone proves nothing.
+     * Queue depth that turns full occupancy into a backlog rather than a
+     * coincidence. With {@link #THREADS} workers, this means at least this
+     * many events are waiting behind running ones. Not zero: the queue also
+     * holds delayed events that are not due yet, so depth alone proves nothing.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int WATCHDOG_MIN_QUEUE = 3;
     /**
-     *  Consecutive samples with no completed task before a WARN. Longer than
-     *  {@link #WATCHDOG_SATURATION_SAMPLES} so the broader, less specific signal
-     *  follows the narrow one rather than pre-empting it: a wedged pool reports
-     *  saturation first, and only reaches "nothing is running at all" if it stays
-     *  wedged twice as long.
+     * Consecutive samples with no completed task before a WARN. Longer than
+     * {@link #WATCHDOG_SATURATION_SAMPLES} so the broader, less specific signal
+     * follows the narrow one rather than pre-empting it: a wedged pool reports
+     * saturation first, and only reaches "nothing is running at all" if it stays
+     * wedged twice as long.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int WATCHDOG_STALL_SAMPLES = 6;
 
     /**
-     *  Consecutive samples that must show progress before a quiet episode is called
-     *  over.
+     * Consecutive samples that must show progress before a quiet episode is called
+     * over.
      *
-     *  <p>Without it a single completing task ends the episode, so a timer that finishes
-     *  something every few minutes reports the same condition on every threshold window
-     *  instead of once.
+     * <p>Without it a single completing task ends the episode, so a timer that finishes
+     * something every few minutes reports the same condition on every threshold window
+     * instead of once.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int WATCHDOG_RECOVERY_SAMPLES = 3;
 
@@ -96,51 +96,50 @@ public class SimpleTimer2 {
     private final SaturationWatchdog _watchdog;
 
     /**
-     *  Schedules requested with a zero or negative delay since the last watchdog
-     *  report. Counted rather than logged per event: an immediate reschedule is
-     *  legitimate occasionally, but a connection whose head-of-line packet is
-     *  already older than one RTO asks for one on <em>every</em> ACK, and a
-     *  population of those will bury a two-thread pool. The count is what tells the
-     *  saturation report the queue is being flooded by immediate reschedules rather
-     *  than by ordinary periodic work.
+     * Schedules requested with a zero or negative delay since the last watchdog
+     * report. Counted rather than logged per event: an immediate reschedule is
+     * legitimate occasionally, but a connection whose head-of-line packet is
+     * already older than one RTO asks for one on <em>every</em> ACK, and a
+     * population of those will bury a two-thread pool. The count is what tells the
+     * saturation report the queue is being flooded by immediate reschedules rather
+     * than by ordinary periodic work.
      *
-     *  <p>Incremented only on the zero-delay path, so the steady-state cost is nil.
+     * <p>Incremented only on the zero-delay path, so the steady-state cost is nil.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private final AtomicLong _immediateReschedules = new AtomicLong();
 
     /**
-     *  To be instantiated by the context.
-     *  Others should use context.simpleTimer2() instead
+     * To be instantiated by the context.
+     * Others should use context.simpleTimer2() instead
      *
-     *  @param context the I2P application context
+     * @param context the I2P application context
      */
     public SimpleTimer2(I2PAppContext context) {
         this(context, "SimpleTimer");
     }
 
     /**
-     *  To be instantiated by the context.
-     *  Others should use context.simpleTimer2() instead, except for
-     *  dedicated timers that need a distinct thread name.
+     * To be instantiated by the context.
+     * Others should use context.simpleTimer2() instead, except for
+     * dedicated timers that need a distinct thread name.
      *
-     *  @param context the I2P application context
-     *  @param name the timer name, used for the timer thread name
-     *  @since 0.9.70+ public
+     * @param context the I2P application context
+     * @param name the timer name, used for the timer thread name
+     * @since 0.9.70+ public
      */
     public SimpleTimer2(I2PAppContext context, String name) {
         this(context, name, true);
     }
 
     /**
-     *  To be instantiated by the context.
-     *  Others should use context.simpleTimer2() instead
+     * To be instantiated by the context.
+     * Others should use context.simpleTimer2() instead
      *
-     *  @param context the I2P application context
-     *  @param name the timer name
-     *  @param prestartAllThreads whether to prestart all threads
-     *  @since 0.9
+     * @param context the I2P application context
+     * @param name the timer name
+     * @param prestartAllThreads whether to prestart all threads
      */
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
         _context = context;
@@ -244,7 +243,7 @@ public class SimpleTimer2 {
      * @param threshold consecutive saturated samples tolerated before reporting
      * @param episodeReported whether this episode has already been reported
      * @return REPORT once per episode, OK when not saturated (ending the
-     *         episode), PENDING otherwise
+     * episode), PENDING otherwise
      * @since 0.9.71+
      */
     static WatchdogDecision evaluateSaturation(int activeCount, int poolSize, int queueSize,
@@ -286,9 +285,9 @@ public class SimpleTimer2 {
      * @param threshold such samples tolerated before reporting
      * @param episodeReported whether this episode has already been reported
      * @param maxObservedGapMs longest quiet period this timer has previously come
-     *                          back from; zero when no baseline has been established
+     * back from; zero when no baseline has been established
      * @return REPORT once per episode, OK on progress or an idle timer (ending
-     *         the episode), PENDING otherwise
+     * the episode), PENDING otherwise
      * @since 0.9.71+
      */
     static WatchdogDecision evaluateStall(long completed, long lastCompleted,
@@ -493,17 +492,17 @@ public class SimpleTimer2 {
         }
 
         /**
-         *  Is a task actually due on this timer right now?
+         * Is a task actually due on this timer right now?
          *
-         *  <p>A pool that has completed nothing may be idle or wedged, and completion
-         *  counts cannot tell them apart - only this can. It is a property of the work
-         *  offered, not of the timer's history, so unlike a calibrated gap threshold it
-         *  cannot be tuned into uselessness by a timer that has always been quiet: a
-         *  streaming retransmission shard that simply has nothing to retransmit has no
-         *  due task and is correctly silent, while a shard with a due task and no
-         *  progress is the thing worth reporting.
+         * <p>A pool that has completed nothing may be idle or wedged, and completion
+         * counts cannot tell them apart - only this can. It is a property of the work
+         * offered, not of the timer's history, so unlike a calibrated gap threshold it
+         * cannot be tuned into uselessness by a timer that has always been quiet: a
+         * streaming retransmission shard that simply has nothing to retransmit has no
+         * due task and is correctly silent, while a shard with a due task and no
+         * progress is the thing worth reporting.
          *
-         *  @return true if the queue holds a task whose delay has already elapsed
+         * @return true if the queue holds a task whose delay has already elapsed
          */
         private boolean isWorkDue() {
             Runnable head = _executor.getQueue().peek();
@@ -618,10 +617,10 @@ public class SimpleTimer2 {
         }
 
 /**
-         * The timer log, looked up per message rather than cached: the router
-         * replaces its LogManager after start-up, and a cached Log would go
-         * quiet from then on. Only log paths pay for this, never a sample.
-         */
+ * The timer log, looked up per message rather than cached: the router
+ * replaces its LogManager after start-up, and a cached Log would go
+ * quiet from then on. Only log paths pay for this, never a sample.
+ */
         private Log log() {
             return _context.logManager().getLog(SimpleTimer2.class);
         }
@@ -661,8 +660,8 @@ public class SimpleTimer2 {
      *
      * @param event the event
      * @param timeoutMs delay to the first run, in ms, and lower bound for the
-     *                  period the event chooses for itself; the value is not
-     *                  enforced after the first run
+     * period the event chooses for itself; the value is not
+     * enforced after the first run
      * @throws IllegalArgumentException if timeoutMs less than 5000
      * @since 0.9.70+
      */
@@ -678,7 +677,7 @@ public class SimpleTimer2 {
      * @param event the event
      * @param delay run the first iteration after delay ms
      * @param timeoutMs lower bound in ms for the period the event picks for
-     *                  itself, enforced only by the check below
+     * itself, enforced only by the check below
      * @throws IllegalArgumentException if timeoutMs less than 5000
      * @since 0.9.70+
      */
@@ -853,7 +852,7 @@ public class SimpleTimer2 {
          *
          * @param timeoutMs timeout in milliseconds
          * @param useEarliestTime if true and already scheduled, use the earlier
-         *                        timeout; if false and already scheduled, use the later
+         * timeout; if false and already scheduled, use the later
          */
         public synchronized void reschedule(long timeoutMs, boolean useEarliestTime) {
             if (timeoutMs <= 0) {
@@ -1064,9 +1063,9 @@ public class SimpleTimer2 {
         }
 
         /**
-         *  @return the simple class name for log messages
+         * @return the simple class name for log messages
          *
-         *  @since 0.9.57
+         * @since 0.9.57
          */
         @Override
         public String toString() {

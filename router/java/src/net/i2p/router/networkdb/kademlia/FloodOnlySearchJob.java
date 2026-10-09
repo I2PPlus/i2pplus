@@ -75,9 +75,9 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Whether a DSRM reply should be processed.
+     * Whether a DSRM reply should be processed.
      *
-     *  @return true if DSRM should be processed
+     * @return true if DSRM should be processed
      */
     public boolean shouldProcessDSRM() { return _shouldProcessDSRM; }
 
@@ -90,10 +90,10 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
     public String getName() { return "Start NetDb Search for Floodfill"; }
 
     /**
-     *  Note that we heard from the peer
+     * Note that we heard from the peer
      *
-     *  @param peer the peer hash
-     *  @return number remaining after decrementing
+     * @param peer the peer hash
+     * @return number remaining after decrementing
      */
     int decrementRemaining(Hash peer) {
         synchronized(_unheardFrom) {
@@ -136,14 +136,14 @@ abstract class FloodOnlySearchJob extends FloodSearchJob {
         if (_log.shouldInfo())
             _log.info("Floodfill search for " + _key + " successful");
         /**
-         *   Sadly, we don't know which of the two replied, unless the first one sent a DSRM
-         *   before the second one sent the answer, which isn't that likely.
-         *   Would be really nice to fix this, but it isn't clear how unless CONCURRENT_SEARCHES == 1.
-         *   Maybe don't unregister the msg from the Registry for a while and see if we get a 2nd reply?
-         *   Or delay the 2nd search for a few seconds?
-         *   We'll have to rely primarily on other searches (ExploreJob which calls SearchJob,
-         *   and FloodfillVerifyStoreJob) to record successful searches for now.
-         *   StoreJob also calls dbStoreSent() which updates the lastHeardFrom timer - this also helps.
+         * Sadly, we don't know which of the two replied, unless the first one sent a DSRM
+         * before the second one sent the answer, which isn't that likely.
+         * Would be really nice to fix this, but it isn't clear how unless CONCURRENT_SEARCHES == 1.
+         * Maybe don't unregister the msg from the Registry for a while and see if we get a 2nd reply?
+         * Or delay the 2nd search for a few seconds?
+         * We'll have to rely primarily on other searches (ExploreJob which calls SearchJob,
+         * and FloodfillVerifyStoreJob) to record successful searches for now.
+         * StoreJob also calls dbStoreSent() which updates the lastHeardFrom timer - this also helps.
          */
         long time = System.currentTimeMillis() - _created;
         synchronized(_unheardFrom) {

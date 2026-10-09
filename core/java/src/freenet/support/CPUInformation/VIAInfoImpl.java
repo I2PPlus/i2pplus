@@ -1,8 +1,8 @@
 package freenet.support.CPUInformation;
 
 /**
- *  Moved out of CPUID.java
- *  @since 0.8.7
+ * Moved out of CPUID.java
+ * @since 0.8.7
  */
 class VIAInfoImpl extends CPUIDCPUInfo implements VIACPUInfo {
 

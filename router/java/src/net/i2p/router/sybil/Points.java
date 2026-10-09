@@ -6,9 +6,9 @@ import java.util.List;
 import net.i2p.data.DataHelper;
 
 /**
- *  A total score and a List of reason Strings
+ * A total score and a List of reason Strings
  *
- *  @since 0.9.38 moved from SybilRenderer
+ * @since 0.9.38 moved from SybilRenderer
  */
 @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
 public class Points implements Comparable<Points> {
@@ -17,18 +17,18 @@ public class Points implements Comparable<Points> {
     private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
 
     /**
-     *  Create a new empty Points instance.
+     * Create a new empty Points instance.
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     private Points() {
         reasons = new ArrayList<>(4);
     }
 
     /**
-     *  Create a new Points instance with an initial value.
+     * Create a new Points instance with an initial value.
      *
-     *  @param reason may not contain '%'
+     * @param reason may not contain '%'
      */
     public Points(double d, String reason) {
         this();
@@ -36,30 +36,30 @@ public class Points implements Comparable<Points> {
     }
 
     /**
-     *  Total points accumulated.
+     * Total points accumulated.
      *
-     *  @return the points
-     *  @since 0.9.38
+     * @return the points
+     * @since 0.9.38
      */
     public double getPoints() {
         return points;
     }
 
     /**
-     *  Reasons accumulated with the points.
+     * Reasons accumulated with the points.
      *
-     *  @return the reasons
-     *  @since 0.9.38
+     * @return the reasons
+     * @since 0.9.38
      */
     public List<String> getReasons() {
         return reasons;
     }
 
     /**
-     *  Add points with a reason.
+     * Add points with a reason.
      *
-     *  @param reason may not contain '%'
-     *  @since 0.9.38
+     * @param reason may not contain '%'
+     * @since 0.9.38
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     public synchronized void addPoints(double d, String reason) {
@@ -88,9 +88,9 @@ public class Points implements Comparable<Points> {
     }
 
     /**
-     *  Return a string representation.
+     * Return a string representation.
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     @Override
     public String toString() {
@@ -100,13 +100,13 @@ public class Points implements Comparable<Points> {
     }
 
     /**
-     *  For persistence.
-     *  Total points and reasons, '%' separated, no newline.
-     *  The separation character is chosen to not conflict with
-     *  decimal point in various locales, or chars in reasons, including HTML links,
-     *  or special chars in Pattern.
+     * For persistence.
+     * Total points and reasons, '%' separated, no newline.
+     * The separation character is chosen to not conflict with
+     * decimal point in various locales, or chars in reasons, including HTML links,
+     * or special chars in Pattern.
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     public void toString(StringBuilder buf) {
         buf.append(points);
@@ -116,9 +116,9 @@ public class Points implements Comparable<Points> {
     }
 
     /**
-     *  For persistence.
-     *  @return null on failure
-     *  @since 0.9.38
+     * For persistence.
+     * @return null on failure
+     * @since 0.9.38
      */
     public static Points fromString(String s) {
         String[] ss = DataHelper.split(s, "%");

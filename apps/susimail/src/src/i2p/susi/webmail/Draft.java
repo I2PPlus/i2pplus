@@ -29,7 +29,7 @@ class Draft extends Mail {
 	public static final String HDR_BCC = "Bcc: ";
 
 	/**
-	 *  @param uidl unique ID for this draft
+	 * @param uidl unique ID for this draft
 	 */
 	public Draft(String uidl) {
 		super(uidl);
@@ -37,7 +37,7 @@ class Draft extends Mail {
 	}
 
 	/**
-	 *  Overridden to process attachment and Bcc headers
+	 * Overridden to process attachment and Bcc headers
 	 */
 	@Override
 	public synchronized void setBody(Buffer rb) {

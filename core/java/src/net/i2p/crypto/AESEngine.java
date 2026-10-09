@@ -22,9 +22,9 @@ import net.i2p.util.SimpleByteCache;
  *
  * <p>This design pattern allows for:</p>
  * <ul>
- *   <li>Consistent API across different AES implementations</li>
- *   <li>Graceful fallback when AES is unavailable</li>
- *   <li>Easy swapping of underlying AES providers</li>
+ * <li>Consistent API across different AES implementations</li>
+ * <li>Graceful fallback when AES is unavailable</li>
+ * <li>Easy swapping of underlying AES providers</li>
  * </ul>
  *
  * @author I2P Project
@@ -51,7 +51,7 @@ public class AESEngine {
     }
 
     /** Encrypt the payload with the session key
-    *
+     *
      * @param payload data to be encrypted
      * @param payloadIndex index into the payload to start encrypting
      * @param out where to store the result
@@ -157,7 +157,7 @@ public class AESEngine {
     }
 
     /** Decrypt the data with the session key
-    *
+     *
      * @param payload data to be decrypted
      * @param payloadIndex index into the payload to start decrypting
      * @param out where to store the cleartext

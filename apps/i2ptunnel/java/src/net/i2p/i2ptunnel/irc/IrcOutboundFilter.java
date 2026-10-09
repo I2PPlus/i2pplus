@@ -10,10 +10,10 @@ import net.i2p.util.Log;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  Thread to do outbound filtering.
- *  Moved from I2PTunnelIRCClient.java
+ * Thread to do outbound filtering.
+ * Moved from I2PTunnelIRCClient.java
  *
- *  @since 0.8.9
+ * @since 0.8.9
  */
 public class IrcOutboundFilter implements Runnable {
 

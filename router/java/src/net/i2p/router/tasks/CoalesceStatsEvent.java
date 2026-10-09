@@ -5,7 +5,6 @@ package net.i2p.router.tasks;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.lang.management.GarbageCollectorMXBean;
@@ -35,19 +34,19 @@ import net.i2p.util.SystemVersion;
  *
  * <strong>Statistics Collected:</strong>
  * <ul>
- *   <li>Network metrics - peer counts, bandwidth usage</li>
- *   <li>System resources - memory usage, CPU load, thread count</li>
- *   <li>Tunnel performance - build success rates, participation</li>
- *   <li>Router health - job queue lag, processing times</li>
- *   <li>Communication system - send/receive rates, error counts</li>
+ * <li>Network metrics - peer counts, bandwidth usage</li>
+ * <li>System resources - memory usage, CPU load, thread count</li>
+ * <li>Tunnel performance - build success rates, participation</li>
+ * <li>Router health - job queue lag, processing times</li>
+ * <li>Communication system - send/receive rates, error counts</li>
  * </ul>
  *
  * <strong>Features:</strong>
  * <ul>
- *   <li>Automatic cache clearing when memory is low</li>
- *   <li>Rate calculation and rolling averages</li>
- *   <li>Performance trend monitoring</li>
- *   <li>Data available via /stats.jsp and /graphs.jsp</li>
+ * <li>Automatic cache clearing when memory is low</li>
+ * <li>Rate calculation and rolling averages</li>
+ * <li>Performance trend monitoring</li>
+ * <li>Data available via /stats.jsp and /graphs.jsp</li>
  * </ul>
  *
  * This data is essential for router performance monitoring,
@@ -138,11 +137,11 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
      *
      * Statistics collected include:
      * <ul>
-     *   <li>Peer counts (known, active, fast, high capacity, etc.)</li>
-     *   <li>Bandwidth usage (send/receive rates)</li>
-     *   <li>Memory usage and CPU load</li>
-     *   <li>Tunnel performance metrics</li>
-     *   <li>Thread counts and system resources</li>
+     * <li>Peer counts (known, active, fast, high capacity, etc.)</li>
+     * <li>Bandwidth usage (send/receive rates)</li>
+     * <li>Memory usage and CPU load</li>
+     * <li>Tunnel performance metrics</li>
+     * <li>Thread counts and system resources</li>
      * </ul>
      */
     @Override
@@ -169,13 +168,13 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Gather this cycle's statistics and coalesce them into the Rates.
+     * Gather this cycle's statistics and coalesce them into the Rates.
      *
-     *  Called every Router.COALESCE_TIME by timeReached(), which guarantees the
-     *  reschedule and contains any exception this throws, so nothing here needs
-     *  its own try/catch.
+     * Called every Router.COALESCE_TIME by timeReached(), which guarantees the
+     * reschedule and contains any exception this throws, so nothing here needs
+     * its own try/catch.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private void collectStats() {
         StatManager sm = _ctx.statManager();
@@ -278,19 +277,19 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
-     *  @return s
-     *  @since 0.8.7
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers.
+     * It does not translate!
+     * @return s
+     * @since 0.8.7
      */
     private static final String _x(String s) {
         return s;
     }
 
     /**
-     *  Cumulative GC pause time (ms) across all collectors since JVM start.
-     *  Returns -1 if GC beans are unavailable.
+     * Cumulative GC pause time (ms) across all collectors since JVM start.
+     * Returns -1 if GC beans are unavailable.
      * @return the cumulative gc pause time
      */
     private static long getCumulativeGcPauseTime() {
@@ -310,8 +309,8 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  GC pause time (ms) elapsed since the previous coalesce cycle.
-     *  Returns -1 on the first call (no baseline) or if GC data is unavailable.
+     * GC pause time (ms) elapsed since the previous coalesce cycle.
+     * Returns -1 on the first call (no baseline) or if GC data is unavailable.
      * @return the gc pause time
      */
     private long getGcPauseTime() {

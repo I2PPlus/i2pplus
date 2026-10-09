@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.crypto.EncType;
@@ -20,70 +19,70 @@ import java.util.Arrays;
  *
  * <p>PublicKey provides the encryption component of I2P's asymmetric cryptography:</p>
  * <ul>
- *   <li><strong>Default Algorithm:</strong> ElGamal 2048-bit (256 bytes)</li>
- *   <li><strong>Modern Support:</strong> Variable length and type support since 0.9.38</li>
- *   <li><strong>Key Structure:</strong> Contains only public exponent</li>
- *   <li><strong>Constants:</strong> Prime numbers defined in crypto specification</li>
+ * <li><strong>Default Algorithm:</strong> ElGamal 2048-bit (256 bytes)</li>
+ * <li><strong>Modern Support:</strong> Variable length and type support since 0.9.38</li>
+ * <li><strong>Key Structure:</strong> Contains only public exponent</li>
+ * <li><strong>Constants:</strong> Prime numbers defined in crypto specification</li>
  * </ul>
  *
  * <p><strong>Supported Algorithms:</strong></p>
  * <ul>
- *   <li><strong>ElGamal 2048:</strong> Legacy algorithm, 256-byte keys</li>
- *   <li><strong>ECIES X25519:</strong> Modern elliptic curve, 32-byte keys</li>
- *   <li><strong>Unknown Types:</strong> Forward-compatible support for future algorithms</li>
+ * <li><strong>ElGamal 2048:</strong> Legacy algorithm, 256-byte keys</li>
+ * <li><strong>ECIES X25519:</strong> Modern elliptic curve, 32-byte keys</li>
+ * <li><strong>Unknown Types:</strong> Forward-compatible support for future algorithms</li>
  * </ul>
  *
  * <p><strong>Key Format:</strong></p>
  * <ul>
- *   <li><strong>ElGamal:</strong> 256-byte public exponent only</li>
- *   <li><strong>Elliptic Curve:</strong> Variable length based on curve parameters</li>
- *   <li><strong>Type Encoding:</strong> Algorithm type stored with key data</li>
- *   <li><strong>Validation:</strong> Length and format checking per algorithm</li>
+ * <li><strong>ElGamal:</strong> 256-byte public exponent only</li>
+ * <li><strong>Elliptic Curve:</strong> Variable length based on curve parameters</li>
+ * <li><strong>Type Encoding:</strong> Algorithm type stored with key data</li>
+ * <li><strong>Validation:</strong> Length and format checking per algorithm</li>
  * </ul>
  *
  * <p><strong>Usage:</strong></p>
  * <ul>
- *   <li><strong>Encryption:</strong> Encrypt messages for corresponding {@link PrivateKey}</li>
- *   <li><strong>Key Exchange:</strong> Participate in ElGamal key exchange</li>
- *   <li><strong>Identity:</strong> Part of {@link Destination} cryptographic identity</li>
- *   <li><strong>Verification:</strong> Public key validation and distribution</li>
+ * <li><strong>Encryption:</strong> Encrypt messages for corresponding {@link PrivateKey}</li>
+ * <li><strong>Key Exchange:</strong> Participate in ElGamal key exchange</li>
+ * <li><strong>Identity:</strong> Part of {@link Destination} cryptographic identity</li>
+ * <li><strong>Verification:</strong> Public key validation and distribution</li>
  * </ul>
  *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
- *   <li><strong>LRU Caching:</strong> Frequently used keys cached for efficiency</li>
- *   <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
- *   <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
- *   <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode()</li>
+ * <li><strong>LRU Caching:</strong> Frequently used keys cached for efficiency</li>
+ * <li><strong>Factory Methods:</strong> Static creation methods for cache access</li>
+ * <li><strong>Efficient Storage:</strong> Optimized byte representation</li>
+ * <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode()</li>
  * </ul>
  *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
- *   <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (X25519)</li>
- *   <li><strong>Key Validation:</strong> Verify key parameters before use</li>
- *   <li><strong>Key Distribution:</strong> Safely transmit public keys</li>
- *   <li><strong>Size Limits:</strong> Currently limited to 256 bytes maximum</li>
+ * <li><strong>Algorithm Choice:</strong> Prefer modern algorithms (X25519)</li>
+ * <li><strong>Key Validation:</strong> Verify key parameters before use</li>
+ * <li><strong>Key Distribution:</strong> Safely transmit public keys</li>
+ * <li><strong>Size Limits:</strong> Currently limited to 256 bytes maximum</li>
  * </ul>
  *
  * <p><strong>Migration Path:</strong></p>
  * <ul>
- *   <li><strong>Legacy:</strong> ElGamal 2048-bit for backward compatibility</li>
- *   <li><strong>Modern:</strong> ECIES X25519 for better performance</li>
- *   <li><strong>Future:</strong> Extensible design for new algorithms</li>
+ * <li><strong>Legacy:</strong> ElGamal 2048-bit for backward compatibility</li>
+ * <li><strong>Modern:</strong> ECIES X25519 for better performance</li>
+ * <li><strong>Future:</strong> Extensible design for new algorithms</li>
  * </ul>
  *
  * <p><strong>Implementation Notes:</strong></p>
  * <ul>
- *   <li><strong>Size Limitation:</strong> Support for keys >256 bytes not yet implemented</li>
- *   <li><strong>Cache Index:</strong> First 4 bytes used for LRU cache lookup</li>
- *   <li><strong>Type Safety:</strong> Algorithm type validation on creation</li>
+ * <li><strong>Size Limitation:</strong> Support for keys >256 bytes not yet implemented</li>
+ * <li><strong>Cache Index:</strong> First 4 bytes used for LRU cache lookup</li>
+ * <li><strong>Type Safety:</strong> Algorithm type validation on creation</li>
  * </ul>
  *
  * <p><strong>Thread Safety:</strong></p>
  * <ul>
- *   <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>
- *   <li><strong>Thread-Safe Cache:</strong> Static factory methods are thread-safe</li>
- *   <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
+ * <li><strong>Immutable Data:</strong> Key data cannot be modified after creation</li>
+ * <li><strong>Thread-Safe Cache:</strong> Static factory methods are thread-safe</li>
+ * <li><strong>Safe Sharing:</strong> Instances can be safely shared between threads</li>
  * </ul>
  *
  * @author jrandom
@@ -135,9 +134,9 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  New public key with the given encryption type.
-     *  @param type if null, type is unknown
-     *  @since 0.9.38
+     * New public key with the given encryption type.
+     * @param type if null, type is unknown
+     * @since 0.9.38
      */
     public PublicKey(EncType type) {
         super();
@@ -154,10 +153,10 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  New public key with the given encryption type and raw key data.
-     *  @param type if null, type is unknown
-     *  @param data must be non-null
-     *  @since 0.9.38
+     * New public key with the given encryption type and raw key data.
+     * @param type if null, type is unknown
+     * @param data must be non-null
+     * @since 0.9.38
      */
     public PublicKey(EncType type, byte[] data) {
         this(type);
@@ -168,11 +167,11 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Unknown type only.
+     * Unknown type only.
      *
-     *  @param typeCode must not match a known type. 1-255
-     *  @param data must be non-null
-     *  @since 0.9.38
+     * @param typeCode must not match a known type. 1-255
+     * @param data must be non-null
+     * @since 0.9.38
      */
     public PublicKey(int typeCode, byte[] data) {
         _type = null;
@@ -211,10 +210,10 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Encryption type of this public key.
+     * Encryption type of this public key.
      *
-     *  @return null if unknown
-     *  @since 0.9.38
+     * @return null if unknown
+     * @since 0.9.38
      */
     public EncType getType() {
         return _type;
@@ -233,13 +232,13 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Up-convert this from an untyped (type 0) PK to a typed PK based on the Key Cert given.
-     *  The type of the returned key will be null if the kcert sigtype is null.
+     * Up-convert this from an untyped (type 0) PK to a typed PK based on the Key Cert given.
+     * The type of the returned key will be null if the kcert sigtype is null.
      *
-     *  @param kcert the key certificate
-     *  @return the typed public key
-     *  @throws IllegalArgumentException if this is already typed to a different type
-     *  @since 0.9.42
+     * @param kcert the key certificate
+     * @return the typed public key
+     * @throws IllegalArgumentException if this is already typed to a different type
+     * @since 0.9.42
      */
     PublicKey toTypedKey(KeyCertificate kcert) {
         if (_data == null) {
@@ -270,14 +269,14 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Padding portion of this (type 0) PK based on the Key Cert type given,
-     *  if any
+     * Padding portion of this (type 0) PK based on the Key Cert type given,
+     * if any
      *
-     *  @param kcert the key certificate
-     *  @return the trailing padding, or a shared empty array if there is no
-     *          padding or the type is unknown
-     *  @throws IllegalStateException if this is already typed to a different type
-     *  @since 0.9.42
+     * @param kcert the key certificate
+     * @return the trailing padding, or a shared empty array if there is no
+     * padding or the type is unknown
+     * @throws IllegalStateException if this is already typed to a different type
+     * @since 0.9.42
      */
     public byte[] getPadding(KeyCertificate kcert) {
         if (_data == null) {
@@ -301,18 +300,18 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Clears the public key cache.
+     * Clears the public key cache.
      *
-     *  @since 0.9.17
+     * @since 0.9.17
      */
     public static void clearCache() {
         _cache.clear();
     }
 
     /**
-     *  String representation showing type and data size.
+     * String representation showing type and data size.
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     @Override
     public String toString() {
@@ -330,9 +329,9 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Hash code combining the type and data.
+     * Hash code combining the type and data.
      *
-     *  @since 0.9.42
+     * @since 0.9.42
      */
     @Override
     public int hashCode() {
@@ -340,9 +339,9 @@ public class PublicKey extends SimpleDataStructure {
     }
 
     /**
-     *  Compares this public key with another object for equality.
+     * Compares this public key with another object for equality.
      *
-     *  @since 0.9.42
+     * @since 0.9.42
      */
     @Override
     public boolean equals(Object obj) {

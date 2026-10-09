@@ -21,7 +21,7 @@ import java.util.Properties;
  * Class for creating and loading I2P repliable datagrams version 2.
  * Ref: Proposal 163
  *
- *<pre>
+ * <pre>
  * +----+----+----+----+----+----+----+----+
  * |                                       |
  * ~            from                       ~
@@ -48,7 +48,7 @@ import java.util.Properties;
  * ~                                       ~
  * |                                       |
  * +----+----+----+----+----+----+----+----+
- *</pre>
+ * </pre>
  *
  * @since 0.9.66
  */

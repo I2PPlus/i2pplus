@@ -26,11 +26,11 @@ import org.cybergarage.util.Debug;
  * <p>Key features:
  *
  * <ul>
- *   <li>Multicast socket management and configuration
- *   <li>SSDP multicast address handling
- *   <li>TTL (Time To Live) configuration
- *   <li>Network interface binding
- *   <li>Packet sending and receiving
+ * <li>Multicast socket management and configuration
+ * <li>SSDP multicast address handling
+ * <li>TTL (Time To Live) configuration
+ * <li>Network interface binding
+ * <li>Packet sending and receiving
  * </ul>
  *
  * <p>This class is used by SSDP components to send multicast discovery messages and receive
@@ -38,7 +38,6 @@ import org.cybergarage.util.Debug;
  * UPnP networks.
  *
  * @author Satoshi Konno
- * @since 1.0
  */
 public class HTTPMUSocket {
     ////////////////////////////////////////////////
@@ -97,7 +96,7 @@ public class HTTPMUSocket {
          * return addr.getHostAddress();
          * }
          * return "";
-         ****/
+         * ***/
         if (_bindAddress == null) return "";
         return _bindAddress.getHostAddress();
     }
@@ -106,7 +105,6 @@ public class HTTPMUSocket {
      * Get the destination port for multicast packet.
      *
      * @return the multicast port
-     * @since 1.8
      */
     public int getMulticastPort() {
         return ssdpMultiGroup.getPort();
@@ -116,7 +114,6 @@ public class HTTPMUSocket {
      * Get the source port for multicast packet.
      *
      * @return the local port
-     * @since 1.8
      */
     public int getLocalPort() {
         return ssdpMultiSock.getLocalPort();
@@ -126,7 +123,6 @@ public class HTTPMUSocket {
      * Get the opened multicast socket.
      *
      * @return the {@link MulticastSocket}
-     * @since 1.8
      */
     public MulticastSocket getSocket() {
         return ssdpMultiSock;
@@ -160,7 +156,7 @@ public class HTTPMUSocket {
      * @param addr {@link String} rappresenting the multicast hostname to join into.
      * @param port int rappresenting the port to be use poth as source and destination
      * @param bindAddr {@link InetAddress} which identify the hostname of the interface to use for
-     *     sending and recieving multicast packet
+     * sending and recieving multicast packet
      * @return true if successful
      */
     public boolean open(String addr, int port, InetAddress bindAddr) {

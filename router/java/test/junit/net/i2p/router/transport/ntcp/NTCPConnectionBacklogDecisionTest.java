@@ -5,15 +5,15 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- *  Unit tests for the send-backlog decision extracted from
- *  {@link NTCPConnection#tooBacklogged}.
+ * Unit tests for the send-backlog decision extracted from
+ * {@link NTCPConnection#tooBacklogged}.
  *
- *  <p>Pins the grace-period edge exactly: the outbound backlog only counts once
- *  the connection has been alive for the full 15-second window, so a freshly
- *  established connection is never immediately flagged as slow regardless of
- *  backlog depth.
+ * <p>Pins the grace-period edge exactly: the outbound backlog only counts once
+ * the connection has been alive for the full 15-second window, so a freshly
+ * established connection is never immediately flagged as slow regardless of
+ * backlog depth.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class NTCPConnectionBacklogDecisionTest {
 

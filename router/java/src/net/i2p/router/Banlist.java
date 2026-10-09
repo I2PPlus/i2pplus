@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -99,9 +98,9 @@ public class Banlist {
     // Country ban duration - uses existing router.blockCountries property (session-based)
 
     /**
-     *  hash of 387 zeros
+     * hash of 387 zeros
      *
-     *  @since 0.9.66
+     * @since 0.9.66
      */
     public static final Hash HASH_ZERORI = new Hash(Base64.decode("MRn86w6tHQgE25D7DIejOBCJ-dImSjdsQaOaBuUypkE="));
 
@@ -110,19 +109,19 @@ public class Banlist {
         /** When it should expire, per the i2p clock. */
         public long expireOn;
         /**
-         *  When this ban was first recorded, per the i2p clock; 0 when unknown.
+         * When this ban was first recorded, per the i2p clock; 0 when unknown.
          *
-         *  <p>Separate from {@link #expireOn} because the ban duration varies by
-         *  class and by transport, so the start time cannot be derived from the
-         *  expiry. Needed to answer "was this peer already banned when the build
-         *  was dispatched, or did the ban land mid-flight" — the two need
-         *  different fixes, and only the duration was previously observable.
+         * <p>Separate from {@link #expireOn} because the ban duration varies by
+         * class and by transport, so the start time cannot be derived from the
+         * expiry. Needed to answer "was this peer already banned when the build
+         * was dispatched, or did the ban land mid-flight" — the two need
+         * different fixes, and only the duration was previously observable.
          *
-         *  <p>On a re-ban that keeps the older, longer expiry this retains the
-         *  <em>original</em> start time: what matters is how long the banlist
-         *  has been holding this peer, not when the latest report arrived.
+         * <p>On a re-ban that keeps the older, longer expiry this retains the
+         * <em>original</em> start time: what matters is how long the banlist
+         * has been holding this peer, not when the latest report arrived.
          *
-         *  @since 0.9.71+
+         * @since 0.9.71+
          */
         public long addedOn;
         /** Why they were banlisted. */
@@ -133,7 +132,7 @@ public class Banlist {
         public Set<String> transports;
 
         /**
-         *  Default constructor.
+         * Default constructor.
          */
         public Entry() {
             // intentionally empty - default constructor
@@ -158,9 +157,9 @@ public class Banlist {
     public static final long BANLIST_DURATION_FOREVER = 181L*24*60*60*1000L; // will get rounded down to 180d on console
 
     /**
-     *  Buggy i2pd fork
+     * Buggy i2pd fork
      *
-     *  @since 0.9.52
+     * @since 0.9.52
      */
     public static final long BANLIST_DURATION_NO_NETWORK = 30*24*60*60*1000L;
     /**
@@ -174,10 +173,10 @@ public class Banlist {
     private static final long BANLIST_CLEANER_START_DELAY = BANLIST_DURATION_PARTIAL;
 
     /**
-     *  Ban count baseline for proportional duration reduction.
-     *  At this count or below, no reduction is applied.
-     *  Above this, remaining durations are scaled by baseline / count,
-     *  minimum scale floor MIN_BAN_SCALE.
+     * Ban count baseline for proportional duration reduction.
+     * At this count or below, no reduction is applied.
+     * Above this, remaining durations are scaled by baseline / count,
+     * minimum scale floor MIN_BAN_SCALE.
      */
     private static final int BAN_COUNT_BASELINE = 3000;
     private static final double MIN_BAN_SCALE = 0.25;
@@ -189,18 +188,18 @@ public class Banlist {
     private static final int BAN_COUNT_HIGH = 8000;
 
     /**
-     *  A ban that expires after this will return true in isBanlistedForever().
-     *  In the transports, "forever" is treated as a hard ban, and both
-     *  inbound and outbound connections will be rejected.
-     *  Not-forever is treated as a soft ban, with outbound rejected
-     *  but inbound will be allowed and will automatically unban.
+     * A ban that expires after this will return true in isBanlistedForever().
+     * In the transports, "forever" is treated as a hard ban, and both
+     * inbound and outbound connections will be rejected.
+     * Not-forever is treated as a soft ban, with outbound rejected
+     * but inbound will be allowed and will automatically unban.
      */
     private static final long BANLIST_FOREVER_THRESHOLD = 24*60*60*1000L;
 
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param context the router context
+     * @param context the router context
      */
     public Banlist(RouterContext context) {
         _context = context;
@@ -216,8 +215,8 @@ public class Banlist {
     }
 
     /**
-     *  Initialize configurable properties.
-     *  Reads from router config, falls back to defaults.
+     * Initialize configurable properties.
+     * Reads from router config, falls back to defaults.
      */
     private void initConfig() {
         _maxOffenses = _context.getProperty(PROP_MAX_OFFENSES, MAX_OFFENSES_DEFAULT);
@@ -236,19 +235,19 @@ public class Banlist {
     }
 
     /**
-     *  Reload configuration from properties.
-     *  Called when settings are changed in the console.
+     * Reload configuration from properties.
+     * Called when settings are changed in the console.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     public void reloadConfig() {
         initConfig();
     }
 
     /**
-     *  Clear all session-based bans.
+     * Clear all session-based bans.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     public void clearSessionBans() {
         _entries.clear();
@@ -258,109 +257,109 @@ public class Banlist {
     }
 
     /**
-     *  Get the current max offenses setting.
+     * Get the current max offenses setting.
      *
-     *  @return the maximum offenses before auto-ban
-     *  @since 0.9.70+
+     * @return the maximum offenses before auto-ban
+     * @since 0.9.70+
      */
     public int getMaxOffenses() { return _maxOffenses; }
 
     /**
-     *  Get the current offense window setting in ms.
+     * Get the current offense window setting in ms.
      *
-     *  @return the offense window in milliseconds
-     *  @since 0.9.70+
+     * @return the offense window in milliseconds
+     * @since 0.9.70+
      */
     public long getOffenseWindow() { return _offenseWindow; }
 
     /**
-     *  Get the current startup grace period in ms.
+     * Get the current startup grace period in ms.
      *
-     *  @return the startup grace period in milliseconds
-     *  @since 0.9.70+
+     * @return the startup grace period in milliseconds
+     * @since 0.9.70+
      */
     public long getStartupGrace() { return _startupGrace; }
 
     /**
-     *  Get the current bad packet ban duration in ms.
+     * Get the current bad packet ban duration in ms.
      *
-     *  @return the bad packet ban duration in milliseconds
-     *  @since 0.9.70+
+     * @return the bad packet ban duration in milliseconds
+     * @since 0.9.70+
      */
     public long getBadPacketDuration() { return _badPacketDuration; }
 
     /**
-     *  Check if bad packet auto-ban is enabled.
+     * Check if bad packet auto-ban is enabled.
      *
-     *  @return true if bad packet auto-ban is enabled
-     *  @since 0.9.70+
+     * @return true if bad packet auto-ban is enabled
+     * @since 0.9.70+
      */
     public boolean isBadPacketBanEnabled() { return _enableBadPacketBan; }
 
     /**
-     *  Check if corrupt connection auto-ban is enabled.
+     * Check if corrupt connection auto-ban is enabled.
      *
-     *  @return true if corrupt connection auto-ban is enabled
-     *  @since 0.9.70+
+     * @return true if corrupt connection auto-ban is enabled
+     * @since 0.9.70+
      */
     public boolean isCorruptConnectionBanEnabled() { return _enableCorruptConnectionBan; }
 
     /**
-     *  Check if port hopping auto-ban is enabled.
+     * Check if port hopping auto-ban is enabled.
      *
-     *  @return true if port hopping auto-ban is enabled
-     *  @since 0.9.70+
+     * @return true if port hopping auto-ban is enabled
+     * @since 0.9.70+
      */
     public boolean isPortHoppingBanEnabled() { return _enablePortHoppingBan; }
 
     /**
-     *  Check if IP blocklist is enabled.
+     * Check if IP blocklist is enabled.
      *
-     *  @return true if IP blocklist is enabled
-     *  @since 0.9.70+
+     * @return true if IP blocklist is enabled
+     * @since 0.9.70+
      */
     public boolean isBlocklistEnabled() { return _enableBlocklist; }
 
     /**
-     *  Check if Tor exit node blocklist is enabled.
+     * Check if Tor exit node blocklist is enabled.
      *
-     *  @return true if Tor exit node blocklist is enabled
-     *  @since 0.9.70+
+     * @return true if Tor exit node blocklist is enabled
+     * @since 0.9.70+
      */
     public boolean isTorBlocklistEnabled() { return _enableTorBlocklist; }
 
     /**
-     *  Check if country-based bans are enabled.
+     * Check if country-based bans are enabled.
      *
-     *  @return true if country-based bans are enabled
-     *  @since 0.9.70+
+     * @return true if country-based bans are enabled
+     * @since 0.9.70+
      */
     public boolean isCountryBanEnabled() { return _enableCountryBan; }
 
     /**
-     *  Check if XG router bans are enabled.
-     *  XG = unlimited bandwidth (X), no transit tunnels (G) - often botnet indicators
+     * Check if XG router bans are enabled.
+     * XG = unlimited bandwidth (X), no transit tunnels (G) - often botnet indicators
      *
-     *  @return true if XG router bans are enabled
-     *  @since 0.9.70+
+     * @return true if XG router bans are enabled
+     * @since 0.9.70+
      */
     public boolean isXgBanEnabled() { return _enableXgBan; }
 
     /**
-     *  Check if LU router bans are enabled.
-     *  LU = low bandwidth tier (L) + unreachable/firewalled (U)
+     * Check if LU router bans are enabled.
+     * LU = low bandwidth tier (L) + unreachable/firewalled (U)
      *
-     *  @return true if LU router bans are enabled
-     *  @since 0.9.70+
+     * @return true if LU router bans are enabled
+     * @since 0.9.70+
      */
     public boolean isLuBanEnabled() { return _enableLuBan; }
 
     /**
-     *  Check if a retroactive NetDb purge sweep is needed.
-     *  True if LU/XG bans or custom capability bans are enabled.
+     * Check if a retroactive NetDb purge sweep is needed.
+     * True if LU/XG bans or custom capability bans are enabled.
      *
-     *  @return true if existing routers should be purged
-     *  @since 0.9.70+
+     * @return true if existing routers should be purged
+     * @since 0.9.70+
      */
     public boolean shouldPurgeExistingRouters() {
         return _enableLuBan || _enableXgBan ||
@@ -368,48 +367,48 @@ public class Banlist {
     }
 
     /**
-     *  Get custom capability ban pattern.
-     *  Format: string of capability letters (e.g., "DG", "UX")
+     * Get custom capability ban pattern.
+     * Format: string of capability letters (e.g., "DG", "UX")
      *
-     *  @return the custom capability ban pattern, or empty string if none
-     *  @since 0.9.70+
+     * @return the custom capability ban pattern, or empty string if none
+     * @since 0.9.70+
      */
     public String getCustomCapabilityBans() { return _customCapabilityBans != null ? _customCapabilityBans : ""; }
 
     /**
-     *  Check if router capabilities match any of the custom ban patterns.
+     * Check if router capabilities match any of the custom ban patterns.
      *
-     *  A pattern may carry an exclusion group after '!': "G!f" matches
-     *  routers with G in their caps unless they are also floodfills.
-     *  Exclusions require at least one required character.
+     * A pattern may carry an exclusion group after '!': "G!f" matches
+     * routers with G in their caps unless they are also floodfills.
+     * Exclusions require at least one required character.
      *
-     *  Comparison is case-sensitive throughout: capability letters are
-     *  case-significant (lowercase 'f' is floodfill, uppercase letters are
-     *  separate meanings), so neither the stored patterns nor the router's
-     *  caps may be case-folded before matching.
+     * Comparison is case-sensitive throughout: capability letters are
+     * case-significant (lowercase 'f' is floodfill, uppercase letters are
+     * separate meanings), so neither the stored patterns nor the router's
+     * caps may be case-folded before matching.
      *
-     *  @param capabilities router capabilities string (e.g., "XfP")
-     *  @return the matched pattern exactly as configured (e.g., "G!f") or null if no match
-     *  @since 0.9.70+
+     * @param capabilities router capabilities string (e.g., "XfP")
+     * @return the matched pattern exactly as configured (e.g., "G!f") or null if no match
+     * @since 0.9.70+
      */
     public String shouldBanlistByCapability(String capabilities) {
         return matchCapabilityPattern(capabilities, _customCapabilityBans);
     }
 
     /**
-     *  Pure decision helper: match a capabilities string against a
-     *  comma/space-separated list of capability ban patterns.
+     * Pure decision helper: match a capabilities string against a
+     * comma/space-separated list of capability ban patterns.
      *
-     *  Each pattern is a set of required characters, optionally followed by
-     *  '!'. A router matches when it carries every required character and
-     *  none of the excluded ones. A pattern with an empty required part can
-     *  never match, so a bare exclusion cannot ban the entire network.
-     *  Case-sensitive: see shouldBanlistByCapability().
+     * Each pattern is a set of required characters, optionally followed by
+     * '!'. A router matches when it carries every required character and
+     * none of the excluded ones. A pattern with an empty required part can
+     * never match, so a bare exclusion cannot ban the entire network.
+     * Case-sensitive: see shouldBanlistByCapability().
      *
-     *  @param capabilities router capabilities string, may be null
-     *  @param patternsStr configured patterns, may be null or empty
-     *  @return the first matching pattern as configured, or null if none match
-     *  @since 0.9.70+
+     * @param capabilities router capabilities string, may be null
+     * @param patternsStr configured patterns, may be null or empty
+     * @return the first matching pattern as configured, or null if none match
+     * @since 0.9.70+
      */
     static String matchCapabilityPattern(String capabilities, String patternsStr) {
         if (patternsStr == null || patternsStr.isEmpty() || capabilities == null || capabilities.isEmpty()) {
@@ -437,7 +436,7 @@ public class Banlist {
 
     private class Cleanup extends JobImpl {
         /**
-         *  @param ctx the router context
+         * @param ctx the router context
          */
         public Cleanup(RouterContext ctx) {
             super(ctx);
@@ -447,7 +446,7 @@ public class Banlist {
         public String getName() {return "Expire Banned Peers";}
 
         /**
-         *  Removes expired ban entries and updates message history.
+         * Removes expired ban entries and updates message history.
          */
         public void runJob() {
             List<Hash> toUnbanlist = new ArrayList<>(4);
@@ -476,10 +475,10 @@ public class Banlist {
     }
 
     /**
-     *  When the ban count exceeds BAN_COUNT_BASELINE, proportionally reduce
-     *  remaining durations of eligible entries (between BAN_REDUCTION_MIN
-     *  and BAN_REDUCTION_MAX) to keep the list manageable under memory pressure.
-     *  Scaling: remaining *= max(MIN_BAN_SCALE, (double) BAN_COUNT_BASELINE / count)
+     * When the ban count exceeds BAN_COUNT_BASELINE, proportionally reduce
+     * remaining durations of eligible entries (between BAN_REDUCTION_MIN
+     * and BAN_REDUCTION_MAX) to keep the list manageable under memory pressure.
+     * Scaling: remaining *= max(MIN_BAN_SCALE, (double) BAN_COUNT_BASELINE / count)
      */
     private void reduceDurations(long now) {
         int count = _entries.size();
@@ -858,100 +857,100 @@ public class Banlist {
     public int getRouterCount() {return _entries.size();}
 
     /**
-     *  Get the banlist entries.
-     *  For BanlistRenderer in router console.
-     *  Note - may contain expired entries.
+     * Get the banlist entries.
+     * For BanlistRenderer in router console.
+     * Note - may contain expired entries.
      *
-     *  @return an unmodifiable map of router hashes to banlist entries
+     * @return an unmodifiable map of router hashes to banlist entries
      */
     public Map<Hash, Entry> getEntries() {return Collections.unmodifiableMap(_entries);}
 
     /**
-     *  Ban a router with default duration.
+     * Ban a router with default duration.
      *
-     *  @param peer the router hash to ban
-     *  @return true if it WAS previously on the list
+     * @param peer the router hash to ban
+     * @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer) {return banlistRouter(peer, null);}
 
     /**
-     *  Ban a router with default duration.
+     * Ban a router with default duration.
      *
-     *  @param peer the router hash to ban
-     *  @param reason the reason
-     *  @return true if it WAS previously on the list
+     * @param peer the router hash to ban
+     * @param reason the reason
+     * @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer, String reason) {return banlistRouter(peer, reason, null);}
 
     /**
-     *  Ban a router with default duration.
+     * Ban a router with default duration.
      *
-     *  @param reasonCode separate code so cause can contain {0} for translation
-     *  @param peer the router hash to ban
-     *  @param reason the reason
-     *  @return true if it WAS previously on the list
+     * @param reasonCode separate code so cause can contain {0} for translation
+     * @param peer the router hash to ban
+     * @param reason the reason
+     * @return true if it WAS previously on the list
      */
     public boolean banlistRouter(String reasonCode, Hash peer, String reason) {
         return banlistRouter(peer, reason, reasonCode, null, false);
     }
 
     /**
-     *  Ban a router on a specific transport.
+     * Ban a router on a specific transport.
      *
-     *  @param peer the router hash to ban
-     *  @param reason the reason
-     *  @param transport the transport
-     *  @return true if it WAS previously on the list
+     * @param peer the router hash to ban
+     * @param reason the reason
+     * @param transport the transport
+     * @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer, String reason, String transport) {
         return banlistRouter(peer, reason, transport, false);
     }
 
     /**
-     *  Permanently ban a router.
+     * Permanently ban a router.
      *
-     *  @param peer the router hash to ban
-     *  @param reason the reason
-     *  @return true if it WAS previously on the list
+     * @param peer the router hash to ban
+     * @param reason the reason
+     * @return true if it WAS previously on the list
      */
     public boolean banlistRouterForever(Hash peer, String reason) {
         return banlistRouter(peer, reason, null, true);
     }
 
     /**
-     *  Permanently ban a router.
+     * Permanently ban a router.
      *
-     *  @param peer the router hash to ban
-     *  @param reason the reason
-     *  @param reasonCode separate code so cause can contain {0} for translation
-     *  @return true if it WAS previously on the list
+     * @param peer the router hash to ban
+     * @param reason the reason
+     * @param reasonCode separate code so cause can contain {0} for translation
+     * @return true if it WAS previously on the list
      */
     public boolean banlistRouterForever(Hash peer, String reason, String reasonCode) {
         return banlistRouter(peer, reason, reasonCode, null, true);
     }
 
     /**
-     *  Ban a router with configurable duration and transport.
+     * Ban a router with configurable duration and transport.
      *
-     *  @param peer the router hash to ban
-     *  @param reason the reason
-     *  @param transport the transport
-     *  @param forever if true, ban permanently
-     *  @return true if it WAS previously on the list
+     * @param peer the router hash to ban
+     * @param reason the reason
+     * @param transport the transport
+     * @param forever if true, ban permanently
+     * @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer, String reason, String transport, boolean forever) {
         return banlistRouter(peer, reason, null, transport, forever);
     }
 
     /**
-     *  Ban a router with automatic duration calculation.
+     * Ban a router with automatic duration calculation.
      *
-     *  @param peer the router hash to ban
-     *  @param reason the reason
-     *  @param reasonCode separate code so cause can contain {0} for translation (may be null)
-     *  @param transport the transport
-     *  @param forever if true, ban permanently
-     *  @return true if it WAS previously on the list
+     * @param peer the router hash to ban
+     * @param reason the reason
+     * @param reasonCode separate code so cause can contain {0} for translation (may be null)
+     * @param transport the transport
+     * @param forever if true, ban permanently
+     * @return true if it WAS previously on the list
      */
     private boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, boolean forever) {
         long expireOn;
@@ -966,16 +965,16 @@ public class Banlist {
     }
 
     /**
-     *  Ban a router with a specified expiration time.
+     * Ban a router with a specified expiration time.
      *
-     *  @param peer the router hash to ban
-     *  @param reason the reason
-     *  @param reasonCode separate code so cause can contain {0} for translation (may be null)
-     *  @param transport the transport
-     *  @param expireOn absolute time when the ban expires, not a duration
-     *  @return true if it WAS previously on the list
-     *  @throws IllegalArgumentException if expireOn is before the earliest valid time
-     *  @since 0.9.18
+     * @param peer the router hash to ban
+     * @param reason the reason
+     * @param reasonCode separate code so cause can contain {0} for translation (may be null)
+     * @param transport the transport
+     * @param expireOn absolute time when the ban expires, not a duration
+     * @return true if it WAS previously on the list
+     * @throws IllegalArgumentException if expireOn is before the earliest valid time
+     * @since 0.9.18
      */
     public boolean banlistRouter(Hash peer, String reason, String reasonCode, String transport, long expireOn) {
         long banDuration =  ((expireOn - _context.clock().now()) / 1000) / 60;
@@ -1047,30 +1046,30 @@ public class Banlist {
     }
 
     /**
-     *  Remove a router from the banlist.
+     * Remove a router from the banlist.
      *
-     *  @param peer the router hash to remove from banlist
+     * @param peer the router hash to remove from banlist
      */
     public void unbanlistRouter(Hash peer) {unbanlistRouter(peer, true);}
     /**
-     *  @param peer the router hash to remove from banlist
-     *  @param realUnbanlist if true, update message history
+     * @param peer the router hash to remove from banlist
+     * @param realUnbanlist if true, update message history
      */
     private void unbanlistRouter(Hash peer, boolean realUnbanlist) {unbanlistRouter(peer, realUnbanlist, null);}
     /**
-     *  Remove a router from the banlist for a specific transport.
+     * Remove a router from the banlist for a specific transport.
      *
-     *  @param peer the router hash to remove from banlist
-     *  @param transport the transport
+     * @param peer the router hash to remove from banlist
+     * @param transport the transport
      */
     public void unbanlistRouter(Hash peer, String transport) {unbanlistRouter(peer, true, transport);}
 
     /**
-     *  Remove a router from the banlist.
+     * Remove a router from the banlist.
      *
-     *  @param peer the router hash to remove from banlist
-     *  @param realUnbanlist if true, update message history
-     *  @param transport the transport
+     * @param peer the router hash to remove from banlist
+     * @param realUnbanlist if true, update message history
+     * @param transport the transport
      */
     private void unbanlistRouter(Hash peer, boolean realUnbanlist, String transport) {
         if (peer == null) return;
@@ -1100,19 +1099,19 @@ public class Banlist {
     }
 
     /**
-     *  Check if a router is banlisted.
+     * Check if a router is banlisted.
      *
-     *  @param peer the router hash to check
-     *  @return true if the router is banlisted on any transport
+     * @param peer the router hash to check
+     * @return true if the router is banlisted on any transport
      */
     public boolean isBanlisted(Hash peer) {return isBanlisted(peer, null);}
 
     /**
-     *  Check if a router is banlisted on a specific transport.
+     * Check if a router is banlisted on a specific transport.
      *
-     *  @param peer the router hash to check
-     *  @param transport the transport
-     *  @return true if the router is banlisted on the specified transport
+     * @param peer the router hash to check
+     * @param transport the transport
+     * @return true if the router is banlisted on the specified transport
      */
     public boolean isBanlisted(Hash peer, String transport) {
         if (peer == null) {return false;}
@@ -1141,10 +1140,10 @@ public class Banlist {
     }
 
     /**
-     *  Check if a router is permanently banlisted.
+     * Check if a router is permanently banlisted.
      *
-     *  @param peer the router hash to check
-     *  @return true if the router is permanently banlisted
+     * @param peer the router hash to check
+     * @return true if the router is permanently banlisted
      */
     public boolean isBanlistedForever(Hash peer) {
         Entry entry = _entries.get(peer);
@@ -1152,11 +1151,11 @@ public class Banlist {
     }
 
     /**
-     *  Check if a router is banlisted with a hostile duration (at least 1 hour).
+     * Check if a router is banlisted with a hostile duration (at least 1 hour).
      *
-     *  @param peer the router hash to check
-     *  @return true if the router is banlisted with hostile duration
-     *  @since 0.9.58+
+     * @param peer the router hash to check
+     * @return true if the router is banlisted with hostile duration
+     * @since 0.9.58+
      */
     public boolean isBanlistedHostile(Hash peer) {
         if (peer != null) {
@@ -1166,23 +1165,23 @@ public class Banlist {
     }
 
     /**
-     *  How long the banlist has been holding a peer, in milliseconds.
+     * How long the banlist has been holding a peer, in milliseconds.
      *
-     *  <p>This is the discriminator between the two reasons a build request
-     *  arrives naming a banlisted peer, which need different fixes:
-     *  <ul>
-     *   <li>old age — the ban predates the build, so peer selection handed out
-     *       a peer the banlist already held, which is a selection bug;</li>
-     *   <li>young age — the ban landed while the build was in flight, so the
-     *       selection was correct and only a selection-time cooldown would stop
-     *       the next request repeating it.</li>
-     *  </ul>
-     *  The ban <em>duration</em> class cannot substitute: a peer permanently
-     *  banned mid-flight and one banned last week both report as permanent.
+     * <p>This is the discriminator between the two reasons a build request
+     * arrives naming a banlisted peer, which need different fixes:
+     * <ul>
+     * <li>old age — the ban predates the build, so peer selection handed out
+     * a peer the banlist already held, which is a selection bug;</li>
+     * <li>young age — the ban landed while the build was in flight, so the
+     * selection was correct and only a selection-time cooldown would stop
+     * the next request repeating it.</li>
+     * </ul>
+     * The ban <em>duration</em> class cannot substitute: a peer permanently
+     * banned mid-flight and one banned last week both report as permanent.
      *
      * @param peer the router hash to check
      * @return age of the standing ban in ms, or -1 if the peer is not
-     *         currently banlisted or the entry predates this field
+     * currently banlisted or the entry predates this field
      * @since 0.9.71+
      */
     public long getBanAge(Hash peer) {
@@ -1203,7 +1202,7 @@ public class Banlist {
      *
      * @param peer the router hash to check
      * @return the recorded cause code or reason, or null when the peer is not
-     *         currently banlisted or no cause was recorded
+     * currently banlisted or no cause was recorded
      * @since 0.9.71+
      */
     public String getBanCause(Hash peer) {
@@ -1215,9 +1214,9 @@ public class Banlist {
     }
 
     /**
-     *  Render banlist status as HTML.
+     * Render banlist status as HTML.
      *
-     *  @deprecated moved to router console
+     * @deprecated moved to router console
      */
     @Deprecated
     public void renderStatusHTML(Writer out) throws IOException {

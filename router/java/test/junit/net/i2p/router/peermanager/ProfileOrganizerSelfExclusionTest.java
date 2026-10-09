@@ -12,25 +12,25 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests that a router is not selectable through the normal selection path.
+ * Tests that a router is not selectable through the normal selection path.
  *
- *  <p>The local RouterInfo sits in our own netdb, so we are a candidate in
- *  every pool. We are nevertheless <em>meant</em> to appear in a client
- *  tunnel, at one end — {@code ClientPeerSelector.finalizeSelection} inserts
- *  us directly and {@code ExploratoryPeerSelector} excludes us outright,
- *  neither through this path. These tests therefore cover only the invariant
- *  that selection must not hand us out as a candidate hop, which is defence in
- *  depth: the tier drawers excluded self individually, but
- *  {@code selectRemainderFromAllPeers} went through
- *  {@link ProfileOrganizer#isSelectable(Hash)} without doing so, and the two
- *  protections could disagree.
+ * <p>The local RouterInfo sits in our own netdb, so we are a candidate in
+ * every pool. We are nevertheless <em>meant</em> to appear in a client
+ * tunnel, at one end — {@code ClientPeerSelector.finalizeSelection} inserts
+ * us directly and {@code ExploratoryPeerSelector} excludes us outright,
+ * neither through this path. These tests therefore cover only the invariant
+ * that selection must not hand us out as a candidate hop, which is defence in
+ * depth: the tier drawers excluded self individually, but
+ * {@code selectRemainderFromAllPeers} went through
+ * {@link ProfileOrganizer#isSelectable(Hash)} without doing so, and the two
+ * protections could disagree.
  *
- *  <p>Deliberately not claimed here: that this fixed an observed build
- *  failure. A router showing up in an expiring-build log line is the expected
- *  gateway, not evidence of self-selection. Whether we were ever drawn at a
- *  mid-hop remains unestablished.
+ * <p>Deliberately not claimed here: that this fixed an observed build
+ * failure. A router showing up in an expiring-build log line is the expected
+ * gateway, not evidence of self-selection. Whether we were ever drawn at a
+ * mid-hop remains unestablished.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class ProfileOrganizerSelfExclusionTest {
 
@@ -60,9 +60,9 @@ public class ProfileOrganizerSelfExclusionTest {
     }
 
     /**
-     *  The core contract: selection never offers us as a candidate. Checked
-     *  before any banlist or netdb work so the guard cannot be reordered behind
-     *  a cheaper test and accidentally dropped.
+     * The core contract: selection never offers us as a candidate. Checked
+     * before any banlist or netdb work so the guard cannot be reordered behind
+     * a cheaper test and accidentally dropped.
      */
     @Test
     public void weAreNotSelectable() {
@@ -79,10 +79,10 @@ public class ProfileOrganizerSelfExclusionTest {
     }
 
     /**
-     *  A null self-hash must not throw. {@code setUs} is called from the
-     *  PeerManager constructor, but the self check runs on the selection hot
-     *  path, so an unset organizer has to degrade to "no self exclusion"
-     *  rather than raise.
+     * A null self-hash must not throw. {@code setUs} is called from the
+     * PeerManager constructor, but the self check runs on the selection hot
+     * path, so an unset organizer has to degrade to "no self exclusion"
+     * rather than raise.
      */
     @Test
     public void nullSelfHashDoesNotThrow() {
@@ -93,8 +93,8 @@ public class ProfileOrganizerSelfExclusionTest {
     }
 
     /**
-     *  Other peers are unaffected — the guard must not degenerate into
-     *  excluding everything.
+     * Other peers are unaffected — the guard must not degenerate into
+     * excluding everything.
      */
     @Test
     public void otherPeersStillPassTheSelfGate() {

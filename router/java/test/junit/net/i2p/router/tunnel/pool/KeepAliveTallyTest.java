@@ -7,31 +7,31 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- *  Accounting for a keepalive cycle.
+ * Accounting for a keepalive cycle.
  *
- *  <p>Added because the top-tier candidate pool was observed shrinking from roughly 395 peers
- *  per cycle to roughly 203, while the pre-existing log line reported only what was
- *  kept alive and never what was dropped on the way. A tally that accounts for every candidate
- *  peer is what turns "the pool is eroding" into "the pool is eroding because of X".
+ * <p>Added because the top-tier candidate pool was observed shrinking from roughly 395 peers
+ * per cycle to roughly 203, while the pre-existing log line reported only what was
+ * kept alive and never what was dropped on the way. A tally that accounts for every candidate
+ * peer is what turns "the pool is eroding" into "the pool is eroding because of X".
  *
- *  <p>The original field names called the candidate count "delivered", which is the error
- *  this class now pins shut: the count is fixed before the cycle sends anything, so it
- *  measures supply. Read as delivery it turned a shrinking surplus above the 200-peer
- *  action budget into an apparent halving of successful keepalives.
+ * <p>The original field names called the candidate count "delivered", which is the error
+ * this class now pins shut: the count is fixed before the cycle sends anything, so it
+ * measures supply. Read as delivery it turned a shrinking surplus above the 200-peer
+ * action budget into an apparent halving of successful keepalives.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class KeepAliveTallyTest {
 
     /**
-     *  Every peer the selector offered for keepalive must land in exactly one bucket. A peer
-     *  that falls through every branch unaccounted would let a real leak hide behind a
-     *  plausible-looking log line.
+     * Every peer the selector offered for keepalive must land in exactly one bucket. A peer
+     * that falls through every branch unaccounted would let a real leak hide behind a
+     * plausible-looking log line.
      *
-     *  <p>The fields are named for what they measure: {@code candidates} is fixed before the
-     *  cycle sends anything, so it is supply, and {@code actedOn()} is delivery. The previous
-     *  single "delivered" field sat on the candidate count and read as a fall in successful
-     *  keepalives when only the pool above budget had shrunk.
+     * <p>The fields are named for what they measure: {@code candidates} is fixed before the
+     * cycle sends anything, so it is supply, and {@code actedOn()} is delivery. The previous
+     * single "delivered" field sat on the candidate count and read as a fall in successful
+     * keepalives when only the pool above budget had shrunk.
      */
     private static TunnelPeerSelector.KeepAliveTally full(int candidates) {
         TunnelPeerSelector.KeepAliveTally t = new TunnelPeerSelector.KeepAliveTally();
@@ -76,9 +76,9 @@ public class KeepAliveTallyTest {
     }
 
     /**
-     *  The erosion case this was built to expose: the pool cannot fill what it asks for.
-     *  The line must name supply and delivery separately, since conflating them is what
-     *  let the collapse of the surplus above budget be read as a fall in keepalives.
+     * The erosion case this was built to expose: the pool cannot fill what it asks for.
+     * The line must name supply and delivery separately, since conflating them is what
+     * let the collapse of the surplus above budget be read as a fall in keepalives.
      */
     @Test
     public void summarySeparatesCandidatesFromActedOn() {
@@ -93,8 +93,8 @@ public class KeepAliveTallyTest {
     }
 
     /**
-     *  Delivery is the figure that answers "did we reach the peers", and it is counted
-     *  after the cycle runs, not before.
+     * Delivery is the figure that answers "did we reach the peers", and it is counted
+     * after the cycle runs, not before.
      */
     @Test
     public void actedOnIsDeliveryNotSupply() {
@@ -128,8 +128,8 @@ public class KeepAliveTallyTest {
     }
 
     /**
-     *  A zero-filled tally still has to say something useful, because the cycle that matters
-     *  most is the one where nothing was selectable.
+     * A zero-filled tally still has to say something useful, because the cycle that matters
+     * most is the one where nothing was selectable.
      */
     @Test
     public void anEmptyCycleStillReports() {

@@ -22,7 +22,7 @@ import net.i2p.util.SimpleTimer2;
  * Well, that's the theory at least... in practice we just
  * send them immediately with no blocking, since the
  * mode=bestEffort doesn't block in the SDK.
- *<p>
+ * <p>
  * MessageOutputStream -&gt; ConnectionDataReceiver -&gt; Connection -&gt; PacketQueue -&gt; I2PSession
  */
 class PacketQueue implements SendMessageStatusListener, Closeable {
@@ -44,9 +44,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private static final long I2CP_EXPIRATION_ADJUST = Math.min(25, Connection.getMinResendDelay() / 4);
 
     /** Record every Nth send-size stat sample. Per-packet RateStat updates lock
-     *  each period's Rate; these size stats are display-only telemetry, so
-     *  sampling the aggregate (scaling the recorded value by the period)
-     *  preserves the graph with a fraction of the monitor traffic. */
+     * each period's Rate; these size stats are display-only telemetry, so
+     * sampling the aggregate (scaling the recorded value by the period)
+     * preserves the graph with a fraction of the monitor traffic. */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
     /** Sample counters for the per-packet size stats (one per call site). */
     private int _sendMsgSizeCnt;

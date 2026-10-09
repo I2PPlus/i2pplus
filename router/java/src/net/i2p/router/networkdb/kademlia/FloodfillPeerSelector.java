@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ import net.i2p.stat.RateStat;
  *
  * Warning - most methods taking a key as an argument require the routing key,
  * not the original key.
- *
  */
 public class FloodfillPeerSelector extends PeerSelector {
 
@@ -55,9 +53,9 @@ public class FloodfillPeerSelector extends PeerSelector {
     private final RateStat[] _testSuccessTimeStatSlot = new RateStat[1];
 
     /**
-     *  Refresh the cached configuration from properties at most once per
-     *  CONFIG_REFRESH_MS, or immediately when the context changes.
-     *  Benign race: duplicate refreshes are idempotent writes.
+     * Refresh the cached configuration from properties at most once per
+     * CONFIG_REFRESH_MS, or immediately when the context changes.
+     * Benign race: duplicate refreshes are idempotent writes.
      */
     private static void refreshConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -74,8 +72,8 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Get the RateStat handle, caching it in the slot for subsequent calls.
-     *  Null is not cached, the stat may register later.
+     * Get the RateStat handle, caching it in the slot for subsequent calls.
+     * Null is not cached, the stat may register later.
      */
     private RateStat getRateStat(RateStat[] slot, String name) {
         RateStat rs = slot[0];
@@ -140,12 +138,12 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  List will not include our own hash.
-     *  List is not sorted and not shuffled.
-     *  Returns new list, may be modified.
+     * List will not include our own hash.
+     * List is not sorted and not shuffled.
+     * Returns new list, may be modified.
      *
-     *  @param kbuckets now unused
-     *  @return all floodfills not banlisted forever.
+     * @param kbuckets now unused
+     * @return all floodfills not banlisted forever.
      */
     List<Hash> selectFloodfillParticipants(KBucketSet<Hash> kbuckets) {
         Set<Hash> ignore = Collections.singleton(_context.routerHash());
@@ -153,13 +151,13 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  List MAY INCLUDE our own hash.
-     *  List is not sorted and not shuffled.
-     *  Returns new list, may be modified.
+     * List MAY INCLUDE our own hash.
+     * List is not sorted and not shuffled.
+     * Returns new list, may be modified.
      *
-     *  @param _kbuckets now unused
-     *  @param toIgnore can be null
-     *  @return all floodfills not banlisted forever and not flagged unreachable.
+     * @param _kbuckets now unused
+     * @param toIgnore can be null
+     * @return all floodfills not banlisted forever and not flagged unreachable.
      */
     List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets) {
         List<Hash> rv = buildFloodfillCandidates(toIgnore);
@@ -170,21 +168,21 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Build the floodfill candidate list with only the cheap per-peer checks:
-     *  the exclusion set, the two banlist tiers, and the unreachable capability
-     *  flag. No profile is touched.
+     * Build the floodfill candidate list with only the cheap per-peer checks:
+     * the exclusion set, the two banlist tiers, and the unreachable capability
+     * flag. No profile is touched.
      *
-     *  <p>{@link #peerSendsBadReplies(Hash)} is deliberately not applied here —
-     *  it takes ProfileOrganizer's read lock and then four synchronized Rate reads
-     *  per peer, which on a healthy router is ~1000 lock acquisitions and ~4000
-     *  Rate reads for a single exploratory lookup, nearly all of them thrown away
-     *  because {@link #selectFloodfillParticipantsIncludingUs} only ever walks a
-     *  bounded prefix of the XOR order. That path applies the predicate lazily
-     *  instead, which yields the identical selection.
+     * <p>{@link #peerSendsBadReplies(Hash)} is deliberately not applied here —
+     * it takes ProfileOrganizer's read lock and then four synchronized Rate reads
+     * per peer, which on a healthy router is ~1000 lock acquisitions and ~4000
+     * Rate reads for a single exploratory lookup, nearly all of them thrown away
+     * because {@link #selectFloodfillParticipantsIncludingUs} only ever walks a
+     * bounded prefix of the XOR order. That path applies the predicate lazily
+     * instead, which yields the identical selection.
      *
-     *  @param toIgnore can be null
-     *  @return the candidates, neither sorted nor shuffled; may be modified
-     *  @since 0.9.71+
+     * @param toIgnore can be null
+     * @return the candidates, neither sorted nor shuffled; may be modified
+     * @since 0.9.71+
      */
     private List<Hash> buildFloodfillCandidates(Set<Hash> toIgnore) {
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
@@ -218,9 +216,9 @@ public class FloodfillPeerSelector extends PeerSelector {
      * Sorted by closest to the key if &gt; maxNumRouters, otherwise not
      * The list is in 3 groups - sorted by routing key within each group.
      * Group 1: No store or lookup failure in a long time, and
-     *          lookup fail rate no more than 1.5 * average
+     * lookup fail rate no more than 1.5 * average
      * Group 2: No store or lookup failure in a little while or
-     *          success newer than failure
+     * success newer than failure
      * Group 3: All others
      */
     List<Hash> selectFloodfillParticipants(Hash key, int maxNumRouters, KBucketSet<Hash> kbuckets) {
@@ -238,25 +236,25 @@ public class FloodfillPeerSelector extends PeerSelector {
     // before we can do this. Old profiles get deleted.
     private static final long HEARD_AGE = 45*60*1000L;
     /**
-     *  Grace period after router startup before enforcing HEARD_AGE.
-     *  After a restart, profiles may not be fully loaded yet and floodfills
-     *  we re-discover get temporary firstHeardAbout=now() — locking them
-     *  out for 45 minutes would hurt the most vulnerable moment.
+     * Grace period after router startup before enforcing HEARD_AGE.
+     * After a restart, profiles may not be fully loaded yet and floodfills
+     * we re-discover get temporary firstHeardAbout=now() — locking them
+     * out for 45 minutes would hurt the most vulnerable moment.
      */
     private static final long STARTUP_GRACE_PERIOD = HEARD_AGE;
     /** Floodfills with RouterInfo published longer ago than this are skipped. */
     private static final long MAX_RI_AGE = 3*60*60*1000L;
 
     /**
-     *  See above for description
-     *  List will not include our own hash
-     *  Returns new list, may be modified.
+     * See above for description
+     * List will not include our own hash
+     * Returns new list, may be modified.
      *
-     *  @param key the ROUTING key (NOT the original key)
-     *  @param howMany the maximum number of peers to return
-     *  @param toIgnore can be null
-     *  @param kbuckets now unused
-     *  @return the selected peers, ordered best first, never null
+     * @param key the ROUTING key (NOT the original key)
+     * @param howMany the maximum number of peers to return
+     * @param toIgnore can be null
+     * @param kbuckets now unused
+     * @return the selected peers, ordered best first, never null
      */
     List<Hash> selectFloodfillParticipants(Hash key, int howMany, Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
         if (toIgnore == null) {toIgnore = Collections.singleton(_context.routerHash());}
@@ -276,13 +274,13 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  See above for description
-     *  List MAY CONTAIN our own hash unless included in toIgnore
-     *  Returns new list, may be modified.
+     * See above for description
+     * List MAY CONTAIN our own hash unless included in toIgnore
+     * Returns new list, may be modified.
      *
-     *  @param key the ROUTING key (NOT the original key)
-     *  @param toIgnore can be null
-     *  @param kbuckets now unused
+     * @param key the ROUTING key (NOT the original key)
+     * @param toIgnore can be null
+     * @param kbuckets now unused
      */
     private List<Hash> selectFloodfillParticipantsIncludingUs(Hash key, int howMany, Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
         List<Hash> sorted = buildFloodfillCandidates(toIgnore);
@@ -370,9 +368,9 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Classification result for floodfill peer selection.
+     * Classification result for floodfill peer selection.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public enum PeerClass {
         /** Fresh database response time and no recent failures. */
@@ -386,32 +384,32 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Byte count matched when fingerprinting a peer for same-subnet
-     *  exclusion: /16 for IPv4, /32 for IPv6, mirroring the historic
-     *  {@code MaskedIPSet(_context, entry, info, 2)} call.
+     * Byte count matched when fingerprinting a peer for same-subnet
+     * exclusion: /16 for IPv4, /32 for IPv6, mirroring the historic
+     * {@code MaskedIPSet(_context, entry, info, 2)} call.
      */
     private static final int SAME_IP_MASK = 2;
 
     /**
-     *  Compact long fingerprint of a masked IP, replacing the per-candidate
-     *  String construction (one StringBuilder plus up to 2*mask heap chars)
-     *  that the historic {@code MaskedIPSet.maskedIP()} did per address on the
-     *  selection hot path. Semantics match MaskedIPSet: the first
-     *  {@code mask} bytes are matched, and an IPv6 address doubles the match
-     *  width (8 bytes for mask=2, i.e. /64).
-     *  <p>
-     *  Bit layout: bit 63 is an IPv6 marker (the analog of MaskedIPSet's ':'
-     *  vs '.' delimiter, so the two families can never collide); the masked
-     *  bytes' nibbles then occupy bits 59 downward. The largest supported
-     *  packed key is 15 nibbles (60 bits) below the marker, i.e. IPv4 mask 4
-     *  or IPv6 mask 3.
+     * Compact long fingerprint of a masked IP, replacing the per-candidate
+     * String construction (one StringBuilder plus up to 2*mask heap chars)
+     * that the historic {@code MaskedIPSet.maskedIP()} did per address on the
+     * selection hot path. Semantics match MaskedIPSet: the first
+     * {@code mask} bytes are matched, and an IPv6 address doubles the match
+     * width (8 bytes for mask=2, i.e. /64).
+     * <p>
+     * Bit layout: bit 63 is an IPv6 marker (the analog of MaskedIPSet's ':'
+     * vs '.' delimiter, so the two families can never collide); the masked
+     * bytes' nibbles then occupy bits 59 downward. The largest supported
+     * packed key is 15 nibbles (60 bits) below the marker, i.e. IPv4 mask 4
+     * or IPv6 mask 3.
      *
-     *  @param ip an IPv4 (4-byte) or IPv6 (16-byte) address
-     *  @param mask 1-4, the number of leading bytes to match
-     *  @return the packed fingerprint; equal keys mean "same masked subnet"
-     *  @throws IllegalArgumentException if the packed key would exceed 60 bits
-     *          (IPv6 with mask 4), which no caller uses
-     *  @since 0.9.71+
+     * @param ip an IPv4 (4-byte) or IPv6 (16-byte) address
+     * @param mask 1-4, the number of leading bytes to match
+     * @return the packed fingerprint; equal keys mean "same masked subnet"
+     * @throws IllegalArgumentException if the packed key would exceed 60 bits
+     * (IPv6 with mask 4), which no caller uses
+     * @since 0.9.71+
      */
     static long maskedIPKey(byte[] ip, int mask) {
         final int totalNibbles = ip.length == 16 ? mask * 4 : mask * 2;
@@ -430,26 +428,26 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Fingerprint a candidate peer into the exclusion accumulators, adding
-     *  compact masked-IP keys, ports, and the claimed family option. One call
-     *  replaces the per-candidate {@code MaskedIPSet} construction (and its
-     *  per-address toString churn) of the historic selection loop.
-     *  <p>
-     *  Returns whether any added key collided with a previously seen peer;
-     *  this is the definition of "same IP" used to push a peer to the BAD
-     *  tier. The three spaces (masked IP, port, family) are kept separate so,
-     *  just like MaskedIPSet's '.' / 'p' / 'x' prefixes, a cross-space
-     *  collision can never occur.
+     * Fingerprint a candidate peer into the exclusion accumulators, adding
+     * compact masked-IP keys, ports, and the claimed family option. One call
+     * replaces the per-candidate {@code MaskedIPSet} construction (and its
+     * per-address toString churn) of the historic selection loop.
+     * <p>
+     * Returns whether any added key collided with a previously seen peer;
+     * this is the definition of "same IP" used to push a peer to the BAD
+     * tier. The three spaces (masked IP, port, family) are kept separate so,
+     * just like MaskedIPSet's '.' / 'p' / 'x' prefixes, a cross-space
+     * collision can never occur.
      *
-     *  @param maskedIPs accumulator of packed masked-IP keys, mutated on add
-     *  @param ports accumulator of router ports, mutated on add
-     *  @param families accumulator of family option values, mutated on add
-     *  @param ctx used to resolve the peer's communicate-address
-     *  @param peer the candidate's hash
-     *  @param pinfo the candidate RouterInfo (validated, never null here)
-     *  @param mask byte count for {@link #maskedIPKey}
-     *  @return true if at least one key was already present
-     *  @since 0.9.71+
+     * @param maskedIPs accumulator of packed masked-IP keys, mutated on add
+     * @param ports accumulator of router ports, mutated on add
+     * @param families accumulator of family option values, mutated on add
+     * @param ctx used to resolve the peer's communicate-address
+     * @param peer the candidate's hash
+     * @param pinfo the candidate RouterInfo (validated, never null here)
+     * @param mask byte count for {@link #maskedIPKey}
+     * @return true if at least one key was already present
+     * @since 0.9.71+
      */
     static boolean addSameIPFingerprint(Set<Long> maskedIPs, Set<Integer> ports, Set<String> families,
                                         RouterContext ctx, Hash peer, RouterInfo pinfo, int mask) {
@@ -476,9 +474,9 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Compute the maximum acceptable failure rate for a floodfill peer,
-     *  based on the network average over the last 10 minutes.
-     *  Returns a value between 0.20 and 0.95.
+     * Compute the maximum acceptable failure rate for a floodfill peer,
+     * based on the network average over the last 10 minutes.
+     * Returns a value between 0.20 and 0.95.
      */
     private double computeMaxFailRate(long uptime) {
         double maxFailRate = 0.95;
@@ -496,10 +494,10 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Classify a single floodfill peer as GOOD, OK, or BAD for selection.
-     *  GOOD: no recent failures, fast response, good profile.
-     *  OK: some recent failures but still usable.
-     *  BAD: unreachable, stale, slow, same IP, strict country, or poor profile.
+     * Classify a single floodfill peer as GOOD, OK, or BAD for selection.
+     * GOOD: no recent failures, fast response, good profile.
+     * OK: some recent failures but still usable.
+     * BAD: unreachable, stale, slow, same IP, strict country, or poor profile.
      */
     private PeerClass classifyFloodfillPeer(Hash entry, RouterInfo info, boolean sameIP,
                                              long now, boolean enforceHeard, double maxFailRate) {
@@ -615,14 +613,14 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Classify a floodfill peer for display purposes. Uses the same logic
-     *  as the internal selection classifier but without same-IP tracking.
+     * Classify a floodfill peer for display purposes. Uses the same logic
+     * as the internal selection classifier but without same-IP tracking.
      *
-     *  @param entry the peer hash
-     *  @param info the peer's RouterInfo, may be null
-     *  @param now current time
-     *  @return GOOD, OK, or BAD
-     *  @since 0.9.71+
+     * @param entry the peer hash
+     * @param info the peer's RouterInfo, may be null
+     * @param now current time
+     * @return GOOD, OK, or BAD
+     * @since 0.9.71+
      */
     public PeerClass classifyFloodfillPeerForDisplay(Hash entry, RouterInfo info, long now) {
         if (info == null) {return PeerClass.BAD;}
@@ -667,17 +665,17 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Ban, log, and disconnect from a floodfill peer, with separate texts for
-     *  the banlist, the ban log, and the disconnect reason.
+     * Ban, log, and disconnect from a floodfill peer, with separate texts for
+     * the banlist, the ban log, and the disconnect reason.
      *
-     *  @param entry the peer hash
-     *  @param info the peer's RouterInfo
-     *  @param banReason the reason recorded in the banlist
-     *  @param logReason the reason recorded in the ban log
-     *  @param disconnectReason the reason passed to forceDisconnect
-     *  @param banDuration the ban length in ms
-     *  @param logDuration the ban log length in ms
-     *  @param now the current time in ms
+     * @param entry the peer hash
+     * @param info the peer's RouterInfo
+     * @param banReason the reason recorded in the banlist
+     * @param logReason the reason recorded in the ban log
+     * @param disconnectReason the reason passed to forceDisconnect
+     * @param banDuration the ban length in ms
+     * @param logDuration the ban log length in ms
+     * @param now the current time in ms
      */
     private void banAndDisconnect(Hash entry, RouterInfo info, String banReason, String logReason,
                                   String disconnectReason, long banDuration, long logDuration, long now) {
@@ -688,7 +686,7 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     *  Log the classification results at debug level.
+     * Log the classification results at debug level.
      */
     private void logSelectionResults(List<Hash> good, List<Hash> ok, List<Hash> bad) {
         if (_log.shouldDebug()) {
@@ -726,9 +724,9 @@ public class FloodfillPeerSelector extends PeerSelector {
         private final Map<Hash, RouterInfo> _infoCache = new HashMap<>(64);
 
         /**
-         *  Warning - may return our router hash - add to toIgnore if necessary
-         *  @param key the ROUTING key (NOT the original key)
-         *  @param toIgnore can be null
+         * Warning - may return our router hash - add to toIgnore if necessary
+         * @param key the ROUTING key (NOT the original key)
+         * @param toIgnore can be null
          */
         public FloodfillSelectionCollector(Hash key, Set<Hash> toIgnore, int wanted) {
             _key = key;
@@ -817,11 +815,11 @@ public class FloodfillPeerSelector extends PeerSelector {
         }
 
         /**
-         *  Look up the RouterInfo for an entry, caching the result.
-         *  Null results are cached too, so unknown peers are not re-looked-up.
+         * Look up the RouterInfo for an entry, caching the result.
+         * Null results are cached too, so unknown peers are not re-looked-up.
          *
-         *  @param entry the router hash
-         *  @return the RouterInfo, or null if not found
+         * @param entry the router hash
+         * @return the RouterInfo, or null if not found
          */
         private RouterInfo cachedInfo(Hash entry) {
             if (_infoCache.containsKey(entry)) {return _infoCache.get(entry);}

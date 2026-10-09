@@ -6,18 +6,18 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- *  Tests for how a UDP send round decides how long to wait.
+ * Tests for how a UDP send round decides how long to wait.
  *
- *  <p>The production symptom was a router sitting at a full extra core with no packets going
- *  out. {@link PacketPusher} is the only thing that calls {@code getNextVolley}, so the spin
- *  had to be in there, and the only loop in it that could run unblocked was the end-of-round
- *  branch taken when the round's smallest reported delay was zero. A peer reports zero when
- *  its retransmit timer has elapsed or it is holding an over-age message, so a single such
- *  peer - a normal, transient state - was enough to pin the round minimum at zero for the
- *  whole pool and keep it re-scanning flat out.
+ * <p>The production symptom was a router sitting at a full extra core with no packets going
+ * out. {@link PacketPusher} is the only thing that calls {@code getNextVolley}, so the spin
+ * had to be in there, and the only loop in it that could run unblocked was the end-of-round
+ * branch taken when the round's smallest reported delay was zero. A peer reports zero when
+ * its retransmit timer has elapsed or it is holding an over-age message, so a single such
+ * peer - a normal, transient state - was enough to pin the round minimum at zero for the
+ * whole pool and keep it re-scanning flat out.
  *
- *  <p>These pin the decision rather than the timing, so they do not depend on a router, a
- *  socket, or catching a burst.
+ * <p>These pin the decision rather than the timing, so they do not depend on a router, a
+ * socket, or catching a burst.
  */
 public class OutboundMessageFragmentsDecisionTest {
 
@@ -37,10 +37,10 @@ public class OutboundMessageFragmentsDecisionTest {
     }
 
     /**
-     *  A peer asking for a prompt retry must not become "no wait at all".
+     * A peer asking for a prompt retry must not become "no wait at all".
      *
-     *  <p>This is the regression. Zero has to land on the floor, not on zero, because the
-     *  round test is {@code nextSendDelay > 0}.
+     * <p>This is the regression. Zero has to land on the floor, not on zero, because the
+     * round test is {@code nextSendDelay > 0}.
      */
     @Test
     public void testZeroBecomesTheFloorNotZero() {
@@ -86,11 +86,11 @@ public class OutboundMessageFragmentsDecisionTest {
     }
 
     /**
-     *  The end-to-end shape of the bug, over a round of realistic peers.
+     * The end-to-end shape of the bug, over a round of realistic peers.
      *
-     *  <p>Two peers are throttled and report real delays; a third reports zero. The round
-     *  must still produce a wait. Before the fix the zero won, the round ended with nothing
-     *  to wait for, and the loop re-scanned all three forever.
+     * <p>Two peers are throttled and report real delays; a third reports zero. The round
+     * must still produce a wait. Before the fix the zero won, the round ended with nothing
+     * to wait for, and the loop re-scanned all three forever.
      */
     @Test
     public void testOneZeroPeerCannotMakeTheRoundSpin() {

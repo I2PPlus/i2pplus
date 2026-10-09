@@ -7,14 +7,14 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- *  Tests for the y-axis floor decision: what a graph's value axis is scaled against.
+ * Tests for the y-axis floor decision: what a graph's value axis is scaled against.
  *
- *  <p>The production symptom this pins down was a {@code router.activePeers} graph whose data
- *  lived between roughly 684 and 1094 rendering against labels of {@code 0} and {@code 1K}. The
- *  trace occupied the top eighth of the plot and read as a flat line, and no amount of curve
- *  smoothing could show a variation the axis had compressed out of view.
+ * <p>The production symptom this pins down was a {@code router.activePeers} graph whose data
+ * lived between roughly 684 and 1094 rendering against labels of {@code 0} and {@code 1K}. The
+ * trace occupied the top eighth of the plot and read as a flat line, and no amount of curve
+ * smoothing could show a variation the axis had compressed out of view.
  *
- *  <p>Everything under test is static and free of router context, RRD files and clocks.
+ * <p>Everything under test is static and free of router context, RRD files and clocks.
  */
 public class GraphRendererAxisFloorDecisionTest {
 
@@ -32,8 +32,8 @@ public class GraphRendererAxisFloorDecisionTest {
     }
 
     /**
-     *  One side missing is not a range either, and one missing side is enough to make any
-     *  padding arithmetic meaningless, so it falls back rather than guessing.
+     * One side missing is not a range either, and one missing side is enough to make any
+     * padding arithmetic meaningless, so it falls back rather than guessing.
      */
     @Test
     public void testOneSidedNaNWindowIsZeroFloored() {
@@ -44,8 +44,8 @@ public class GraphRendererAxisFloorDecisionTest {
     ///////////// degenerate ranges
 
     /**
-     *  A flat series has no range to scale: padding it by a tenth of nothing puts the floor
-     *  exactly on the data, which would draw a single horizontal line pinned to the bottom edge.
+     * A flat series has no range to scale: padding it by a tenth of nothing puts the floor
+     * exactly on the data, which would draw a single horizontal line pinned to the bottom edge.
      */
     @Test
     public void testFlatWindowIsZeroFloored() {
@@ -54,9 +54,9 @@ public class GraphRendererAxisFloorDecisionTest {
     }
 
     /**
-     *  A range that arrives inverted is the same defect seen from the other side. It cannot
-     *  be produced by the single-pass scan, but the helper is fed numbers from outside, so it
-     *  answers 0 instead of a negative padding.
+     * A range that arrives inverted is the same defect seen from the other side. It cannot
+     * be produced by the single-pass scan, but the helper is fed numbers from outside, so it
+     * answers 0 instead of a negative padding.
      */
     @Test
     public void testInvertedRangeIsZeroFloored() {
@@ -66,8 +66,8 @@ public class GraphRendererAxisFloorDecisionTest {
     ///////////// the floor is only moved for data that lives above zero
 
     /**
-     *  Data reaching below zero is measured against zero already, so the historical axis is
-     *  both correct and more readable than one that would crop the negative half.
+     * Data reaching below zero is measured against zero already, so the historical axis is
+     * both correct and more readable than one that would crop the negative half.
      */
     @Test
     public void testNegativeMinimumIsZeroFloored() {
@@ -93,9 +93,9 @@ public class GraphRendererAxisFloorDecisionTest {
     }
 
     /**
-     *  The floor has to sit strictly under the data. If it reached the minimum, the value at
-     *  the bottom of the trace would be exactly on the axis and the padding would have
-     *  bought nothing. Windows starting at zero are the clamp case, not this one.
+     * The floor has to sit strictly under the data. If it reached the minimum, the value at
+     * the bottom of the trace would be exactly on the axis and the padding would have
+     * bought nothing. Windows starting at zero are the clamp case, not this one.
      */
     @Test
     public void testFloorIsAlwaysBelowTheData() {
@@ -111,10 +111,10 @@ public class GraphRendererAxisFloorDecisionTest {
     }
 
     /**
-     *  Padding a window that is narrow relative to how far it sits from zero would land
-     *  below zero, where the axis would have to show negative labels for data that has none.
-     *  The clamp keeps the zero baseline in that case, which is where such a series reads
-     *  correctly anyway.
+     * Padding a window that is narrow relative to how far it sits from zero would land
+     * below zero, where the axis would have to show negative labels for data that has none.
+     * The clamp keeps the zero baseline in that case, which is where such a series reads
+     * correctly anyway.
      */
     @Test
     public void testFloorIsClampedAtZero() {
@@ -125,9 +125,9 @@ public class GraphRendererAxisFloorDecisionTest {
     }
 
     /**
-     *  The clamp switches where the padding exactly consumes the distance to zero, that is at
-     *  a range ten times the minimum. On that boundary the floor is legitimately zero rather
-     *  than a clamped one, and a hair either side of it the two branches differ.
+     * The clamp switches where the padding exactly consumes the distance to zero, that is at
+     * a range ten times the minimum. On that boundary the floor is legitimately zero rather
+     * than a clamped one, and a hair either side of it the two branches differ.
      */
     @Test
     public void testClampBoundary() {
@@ -140,8 +140,8 @@ public class GraphRendererAxisFloorDecisionTest {
     }
 
     /**
-     *  A window living far from zero but narrow still gets a floor, and the headroom stays
-     *  proportional to the range rather than to the magnitude.
+     * A window living far from zero but narrow still gets a floor, and the headroom stays
+     * proportional to the range rather than to the magnitude.
      */
     @Test
     public void testPaddingIsProportionalToTheRange() {
@@ -154,8 +154,8 @@ public class GraphRendererAxisFloorDecisionTest {
     ///////////// the result is always usable as a setMinValue argument
 
     /**
-     *  rrd4j divides by the range it is given, so a NaN or an infinity here would blank the
-     *  graph rather than merely scale it badly.
+     * rrd4j divides by the range it is given, so a NaN or an infinity here would blank the
+     * graph rather than merely scale it badly.
      */
     @Test
     public void testResultIsNeverNaNAndNeverInfinite() {
@@ -177,8 +177,8 @@ public class GraphRendererAxisFloorDecisionTest {
     }
 
     /**
-     *  The range most extreme pair that could overflow the padding arithmetic - both ends of
-     *  the double range - has to land on a number rrd4j can still map values into.
+     * The range most extreme pair that could overflow the padding arithmetic - both ends of
+     * the double range - has to land on a number rrd4j can still map values into.
      */
     @Test
     public void testExtremeRangeDoesNotOverflow() {
@@ -189,9 +189,9 @@ public class GraphRendererAxisFloorDecisionTest {
     }
 
     /**
-     *  Every finite, ascending window that starts above zero gets a floor below its own data,
-     *  which is the property the graph actually depends on: rrd4j only honours a floor that is
-     *  under the data and snaps it down otherwise.
+     * Every finite, ascending window that starts above zero gets a floor below its own data,
+     * which is the property the graph actually depends on: rrd4j only honours a floor that is
+     * under the data and snaps it down otherwise.
      */
     @Test
     public void testFloorStaysUnderEveryAscendingWindow() {

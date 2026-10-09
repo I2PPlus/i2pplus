@@ -29,7 +29,6 @@ import java.nio.charset.StandardCharsets;
  *
  * Callers should ALWAYS provide absolute paths as arguments,
  * and should NEVER assume files are in the current working directory.
- *
  */
 public class FileUtil {
     /**
@@ -37,10 +36,10 @@ public class FileUtil {
      *
      * @param path path to the directory being deleted
      * @param failIfNotEmpty if true, do not delete anything if the directory
-     *                       is not empty (and return false)
+     * is not empty (and return false)
      *
      * @return true if the path no longer exists (aka was removed),
-     *         false if it remains
+     * false if it remains
      */
     public static final boolean rmdir(String path, boolean failIfNotEmpty) {
         return rmdir(new File(path), failIfNotEmpty);
@@ -51,10 +50,10 @@ public class FileUtil {
      *
      * @param target the file or directory being deleted
      * @param failIfNotEmpty if true, do not delete anything if the directory
-     *                       is not empty (and return false)
+     * is not empty (and return false)
      *
      * @return true if the path no longer exists (aka was removed),
-     *         false if it remains
+     * false if it remains
      */
     public static final boolean rmdir(File target, boolean failIfNotEmpty) {
         if (!target.exists()) {
@@ -79,9 +78,9 @@ public class FileUtil {
     }
 
     /**
-     *  As of release 0.7.12, any files inside the zip that have a .jar.pack or .war.pack suffix
-     *  are transparently unpacked to a .jar or .war file using unpack200.
-     *  Logs at WARN level to wrapper.log
+     * As of release 0.7.12, any files inside the zip that have a .jar.pack or .war.pack suffix
+     * are transparently unpacked to a .jar or .war file using unpack200.
+     * Logs at WARN level to wrapper.log
      */
     public static boolean extractZip(File zipfile, File targetDir) {
         return extractZip(zipfile, targetDir, Log.WARN);
@@ -281,7 +280,7 @@ public class FileUtil {
      * Caller must close streams
      *
      * @throws IOException on unpack error or if the library is unavailable.
-     *         Will not throw ClassNotFoundException.
+     * Will not throw ClassNotFoundException.
      * @throws java.lang.reflect.InvocationTargetException on duplicate zip entries in the packed jar
      * @since 0.8.1
      */
@@ -301,16 +300,15 @@ public class FileUtil {
      * the file doesn't exist.
      *
      * Warning - this inefficiently allocates a StringBuilder of size maxNumLines*80,
-     *           so don't make it too big.
+     * so don't make it too big.
      * Warning - converts \r\n to \n
      * Warning - inefficient if startAtBeginning is false, see console LogsHelper for better version
      *
      * @param startAtBeginning if true, read the first maxNumLines, otherwise read
-     *                         the last maxNumLines
+     * the last maxNumLines
      *
      * @param maxNumLines max number of lines (or -1 for unlimited)
      * @return string or null; does not throw IOException.
-     *
      */
     public static String readTextFile(String filename, int maxNumLines, boolean startAtBeginning) {
         File f = new File(filename);
@@ -442,7 +440,6 @@ public class FileUtil {
 
     /**
      * Usage: FileUtil (delete path | copy source dest | rename from to | unzip path.zip)
-     *
      */
     public static void main(String[] args) {
         if ((args == null) || (args.length < 2)) {
@@ -482,5 +479,5 @@ public class FileUtil {
      * else
      * System.out.println("PASS: rmdirTest deleted");
      * }
-     *****/
+     * ****/
 }

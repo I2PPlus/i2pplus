@@ -21,26 +21,26 @@ import net.i2p.util.SystemVersion;
  *
  * <strong>Refill Strategy:</strong>
  * <ul>
- *   <li>Fixed interval token replenishment</li>
- *   <li>Configurable refill rates and amounts</li>
- *   <li>Separate inbound and outbound bandwidth tracking</li>
- *   <li>Participating bandwidth counter (since 0.8.12)</li>
- *   <li>Thread-safe operations with atomic counters</li>
+ * <li>Fixed interval token replenishment</li>
+ * <li>Configurable refill rates and amounts</li>
+ * <li>Separate inbound and outbound bandwidth tracking</li>
+ * <li>Participating bandwidth counter (since 0.8.12)</li>
+ * <li>Thread-safe operations with atomic counters</li>
  * </ul>
  *
  * <strong>Configuration:</strong>
  * <ul>
- *   <li>Configurable inbound bandwidth limits (KBps)</li>
- *   <li>Configurable outbound bandwidth limits (KBps)</li>
- *   <li>Adjustable refill intervals and amounts</li>
- *   <li>System property integration for defaults</li>
+ * <li>Configurable inbound bandwidth limits (KBps)</li>
+ * <li>Configurable outbound bandwidth limits (KBps)</li>
+ * <li>Adjustable refill intervals and amounts</li>
+ * <li>System property integration for defaults</li>
  * </ul>
  *
  * <strong>Thread Safety:</strong>
  * <ul>
- *   <li>Atomic counters for bandwidth tracking</li>
- *   <li>Thread-safe refill operations</li>
- *   <li>Non-blocking queue operations</li>
+ * <li>Atomic counters for bandwidth tracking</li>
+ * <li>Thread-safe refill operations</li>
+ * <li>Non-blocking queue operations</li>
  * </ul>
  *
  * <strong>Note:</strong> This class was originally created to provide a
@@ -91,10 +91,10 @@ public class FIFOBandwidthRefiller implements Runnable {
     /** Default inbound bandwidth. */
     public static final int DEFAULT_INBOUND_BANDWIDTH = 1024;
     /**
-     *  Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT &gt; 32
-     *  without thinking about the implications (default connection limits, for example)
-     *  of moving the default bandwidth class from L to M, or maybe
-     *  adjusting bandwidth class boundaries.
+     * Caution, do not make DEFAULT_OUTBOUND_BANDWIDTH * DEFAULT_SHARE_PCT &gt; 32
+     * without thinking about the implications (default connection limits, for example)
+     * of moving the default bandwidth class from L to M, or maybe
+     * adjusting bandwidth class boundaries.
      */
     public static final int DEFAULT_OUTBOUND_BANDWIDTH = 128;
     /** Default inbound burst bandwidth. */
@@ -114,9 +114,9 @@ public class FIFOBandwidthRefiller implements Runnable {
     /** For now, until there is some tuning and safe throttling, we set the floor at this during burst (KBps) */
     public static final int MIN_OUTBOUND_BANDWIDTH_PEAK = 32;
     /**
-     *  Max for reasonable Bloom filter false positive rate.
-     *  Do not increase without adding a new Bloom filter size!
-     *  See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
+     * Max for reasonable Bloom filter false positive rate.
+     * Do not increase without adding a new Bloom filter size!
+     * See util/DecayingBloomFilter and tunnel/BloomFilterIVValidator.
      */
     public static final int MAX_OUTBOUND_BANDWIDTH = SystemVersion.isSlow() || SystemVersion.getCores() == 1 ? 16384 :
                                                      SystemVersion.getCores() < 3 || SystemVersion.getMaxMemory() < 1024*1024*1024L ? 32768 :
@@ -228,7 +228,7 @@ public class FIFOBandwidthRefiller implements Runnable {
     }
 
     /**
-     *  In Bytes per second
+     * In Bytes per second
      * @return the share bandwidth
      */
     private int getShareBandwidth() {
@@ -390,10 +390,10 @@ public class FIFOBandwidthRefiller implements Runnable {
     int getInboundBurstKBytesPerSecond() { return _inboundBurstKBytesPerSecond; }
 
     /**
-     *  We intend to send traffic for a participating tunnel
-     *  with the given size and adjustment factor.
-     *  Returns true if the message can be sent within the current
-     *  share bandwidth limits, or false if it should be dropped.
+     * We intend to send traffic for a participating tunnel
+     * with the given size and adjustment factor.
+     * Returns true if the message can be sent within the current
+     * share bandwidth limits, or false if it should be dropped.
      *
      * @param size bytes
      * @param factor multiplier of size for the drop calculation, 1 for no adjustment
@@ -405,52 +405,52 @@ public class FIFOBandwidthRefiller implements Runnable {
     }
 
     /**
-     *  We intend to receive traffic for a participating tunnel
-     *  with the given size and adjustment factor.
-     *  Returns true if the message can be accepted within the current
-     *  share bandwidth limits, or false if it should be dropped.
+     * We intend to receive traffic for a participating tunnel
+     * with the given size and adjustment factor.
+     * Returns true if the message can be accepted within the current
+     * share bandwidth limits, or false if it should be dropped.
      *
-     *  @param size bytes
-     *  @param factor multiplier of size for the drop calculation, 1 for no adjustment
-     *  @return true for accepted, false for drop
+     * @param size bytes
+     * @param factor multiplier of size for the drop calculation, 1 for no adjustment
+     * @return true for accepted, false for drop
      */
     boolean incrementParticipatingMessageBytesIn(int size, float factor) {
         return _partBWEIn == null || _partBWEIn.offer(size, factor);
     }
 
     /**
-     *  Out bandwidth. Actual bandwidth, not smoothed, not bucketed.
+     * Out bandwidth. Actual bandwidth, not smoothed, not bucketed.
      *
-     *  @return Bps in recent period (a few seconds)
-     *  @since 0.8.12
+     * @return Bps in recent period (a few seconds)
+     * @since 0.8.12
      */
     int getCurrentParticipatingBandwidth() {
         return (int) (_partBWE.getBandwidthEstimate() * 1000f);
     }
 
     /**
-     *  In bandwidth. Actual bandwidth, not smoothed, not bucketed.
+     * In bandwidth. Actual bandwidth, not smoothed, not bucketed.
      *
-     *  @return Bps in recent period (a few seconds)
+     * @return Bps in recent period (a few seconds)
      */
     int getCurrentParticipatingBandwidthIn() {
         return _partBWEIn != null ? (int) (_partBWEIn.getBandwidthEstimate() * 1000f) : 0;
     }
 
     /**
-     *  Cap on bytes per second available to participating tunnels.
+     * Cap on bytes per second available to participating tunnels.
      *
-     *  @return the cap in Bps, or the outbound default before the queue exists
-     *  @since 0.9.68
+     * @return the cap in Bps, or the outbound default before the queue exists
+     * @since 0.9.68
      */
     int getMaxShareBandwidth() {
         return _partBWE != null ? _partBWE.getMaxBandwidth() : DEFAULT_OUTBOUND_BANDWIDTH;
     }
 
     /**
-     *  Call a few times a minute to update the stats
+     * Call a few times a minute to update the stats
      *
-     *  @since 0.8.12
+     * @since 0.8.12
      */
     private void updateParticipating(long now) {
             _context.statManager().addRateData("tunnel.participating OutBps", getCurrentParticipatingBandwidth());

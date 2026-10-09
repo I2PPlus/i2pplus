@@ -5,7 +5,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.List;
@@ -61,7 +60,6 @@ import net.i2p.util.PasswordManager;
 /**
  * Receive events from the client and handle them accordingly (updating the runner when
  * necessary)
- *
  */
 class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventListener {
     private final Log _log;
@@ -77,11 +75,11 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     private static final String PROP_AUTH_STRICT = "i2cp.strictAuth";
 
     /**
-     *  Create a new event listener for the given client connection.
+     * Create a new event listener for the given client connection.
      *
-     *  @param context the router context
-     *  @param runner the client connection runner
-     *  @param enforceAuth set false for in-JVM, true for socket access
+     * @param context the router context
+     * @param runner the client connection runner
+     * @param enforceAuth set false for in-JVM, true for socket access
      */
     public ClientMessageEventListener(RouterContext context, ClientConnectionRunner runner, boolean enforceAuth) {
         _context = context;
@@ -93,7 +91,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
 
     /**
      * Handle an incoming message and dispatch it to the appropriate handler
-     *
      */
     @Override
     public void messageReceived(I2CPMessageReader reader, I2CPMessage message) {
@@ -167,7 +164,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
 
     /**
      * Handle notification that there was an error
-     *
      */
     @Override
     public void readError(I2CPMessageReader reader, Exception error) {
@@ -185,9 +181,9 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     *  Defaults in GetDateMessage options are NOT honored.
-     *  Defaults are not serialized out-of-JVM, and the router does not recognize defaults in-JVM.
-     *  Client side must promote defaults to the primary map.
+     * Defaults in GetDateMessage options are NOT honored.
+     * Defaults are not serialized out-of-JVM, and the router does not recognize defaults in-JVM.
+     * Client side must promote defaults to the primary map.
      */
     private void handleGetDate(GetDateMessage message) {
         // sent by clients >= 0.8.7
@@ -204,7 +200,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     *  As of 0.8.7, does nothing. Do not allow a client to set the router's clock.
+     * As of 0.8.7, does nothing. Do not allow a client to set the router's clock.
      */
     private void handleSetDate(SetDateMessage message) {
         // intentionally empty - do not allow clients to set the router clock
@@ -368,12 +364,12 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     *  Side effect - sets _authorized.
-     *  Side effect - disconnects session if not authorized.
+     * Side effect - sets _authorized.
+     * Side effect - disconnects session if not authorized.
      *
-     *  @param props contains i2cp.username and i2cp.password, may be null
-     *  @return success
-     *  @since 0.9.11
+     * @param props contains i2cp.username and i2cp.password, may be null
+     * @return success
+     * @since 0.9.11
      */
     private boolean checkAuth(Properties props) {
         if (_authorized) {return true;}
@@ -406,10 +402,10 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     *  Override for testing
+     * Override for testing
      *
-     *  @param config the session config
-     *  @since 0.9.8
+     * @param config the session config
+     * @since 0.9.8
      */
     protected void startCreateSessionJob(SessionConfig config) {
         _context.jobQueue().addJob(new CreateSessionJob(_context, config));
@@ -418,7 +414,6 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      * Handle a SendMessageMessage: give it a message Id, have the ClientManager distribute
      * it, and send the client an ACCEPTED message
-     *
      */
     private void handleSendMessage(SendMessageMessage message) {
         SessionId sid = message.getSessionId();
@@ -601,7 +596,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     *  Handle a CreateLeaseSet message. Override for testing.
+     * Handle a CreateLeaseSet message. Override for testing.
      *
      * @param message the message
      */
@@ -805,7 +800,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     *  Handle a DestLookup message. Override for testing.
+     * Handle a DestLookup message. Override for testing.
      *
      * @param message the message
      */
@@ -816,11 +811,11 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
- * Handle a HostLookup message. Override for testing.
- *
- * @param message the message
- * @since 0.9.11
- */
+     * Handle a HostLookup message. Override for testing.
+     *
+     * @param message the message
+     * @since 0.9.11
+     */
     protected void handleHostLookup(HostLookupMessage message) {
         SessionId sid = message.getSessionId();
         Hash h;

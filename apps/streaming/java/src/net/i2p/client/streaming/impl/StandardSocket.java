@@ -41,8 +41,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Binding is not supported.
-     *  @throws UnsupportedOperationException always
+     * Binding is not supported.
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void bind(SocketAddress bindpoint) {
@@ -64,8 +64,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Connecting is not supported.
-     *  @throws UnsupportedOperationException always
+     * Connecting is not supported.
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void connect(SocketAddress endpoint) {
@@ -73,8 +73,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Connecting is not supported.
-     *  @throws UnsupportedOperationException always
+     * Connecting is not supported.
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void connect(SocketAddress endpoint, int timeout) {
@@ -82,8 +82,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Channel is not supported.
-     *  @return null always, unimplemented
+     * Channel is not supported.
+     * @return null always, unimplemented
      */
     @Override
     public SocketChannel getChannel() {
@@ -91,8 +91,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  No remote address.
-     *  @return null always
+     * No remote address.
+     * @return null always
      */
     @Override
     public InetAddress getInetAddress() {
@@ -125,8 +125,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  No local address.
-     *  @return null always
+     * No local address.
+     * @return null always
      */
     @Override
     public InetAddress getLocalAddress() {
@@ -134,8 +134,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Local port.
-     *  @return the port or 0 if unknown
+     * Local port.
+     * @return the port or 0 if unknown
      */
     @Override
     public int getLocalPort() {
@@ -143,9 +143,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Local socket address.
-     *  @return an I2PSocketAddress, never null
-     *  @since implemented in 0.9.26
+     * Local socket address.
+     * @return an I2PSocketAddress, never null
      */
     @Override
     public SocketAddress getLocalSocketAddress() {
@@ -153,8 +152,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  OOB inline is not supported.
-     *  @return false always
+     * OOB inline is not supported.
+     * @return false always
      */
     @Override
     public boolean getOOBInline() {
@@ -175,8 +174,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Remote port.
-     *  @return the port or 0 if unknown
+     * Remote port.
+     * @return the port or 0 if unknown
      */
     @Override
     public int getPort() {
@@ -196,9 +195,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Remote socket address.
-     *  @return an I2PSocketAddress, never null
-     *  @since implemented in 0.9.26
+     * Remote socket address.
+     * @return an I2PSocketAddress, never null
      */
     @Override
     public SocketAddress getRemoteSocketAddress() {
@@ -206,17 +204,17 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Returns the peer destination of the underlying I2PSocket.
-     *  @return the peer destination, non-null
-     *  @since 0.9.71+
+     * Returns the peer destination of the underlying I2PSocket.
+     * @return the peer destination, non-null
+     * @since 0.9.71+
      */
     public Destination getPeerDestination() {
         return _socket.getPeerDestination();
     }
 
     /**
-     *  Reuse address is not supported.
-     *  @return false always
+     * Reuse address is not supported.
+     * @return false always
      */
     @Override
     public boolean getReuseAddress() {
@@ -263,8 +261,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  TCP_NODELAY is not supported.
-     *  @return false always
+     * TCP_NODELAY is not supported.
+     * @return false always
      */
     @Override
     public boolean getTcpNoDelay() {
@@ -273,8 +271,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Traffic class is not supported.
-     *  @return 0 always
+     * Traffic class is not supported.
+     * @return 0 always
      */
     @Override
     public int getTrafficClass() {
@@ -282,8 +280,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Always bound.
-     *  @return true always
+     * Always bound.
+     * @return true always
      */
     @Override
     public boolean isBound() {
@@ -327,8 +325,8 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Urgent data is not supported.
-     *  @throws UnsupportedOperationException always
+     * Urgent data is not supported.
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void sendUrgentData(int data) {
@@ -362,31 +360,31 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) { /* no-op */ }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setReceiveBufferSize(int size) { /* no-op */ }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setReuseAddress(boolean on) { /* no-op */ }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setSendBufferSize(int size) { /* no-op */ }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setSoLinger(boolean on, int linger) { /* no-op */ }
@@ -408,13 +406,13 @@ public class StandardSocket extends Socket {
     }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setTcpNoDelay(boolean on) { /* no-op */ }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setTrafficClass(int tc) { /* no-op */ }

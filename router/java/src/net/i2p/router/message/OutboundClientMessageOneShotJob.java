@@ -66,7 +66,7 @@ import net.i2p.util.Log;
  * <li>Whether to bundle our leaseset
  * <li>Whether to bundle session tags, and if so, how many
  * <li>Whether to bundle an encrypted DeliveryStatusMessage to be returned
- *     to us as an acknowledgement
+ * to us as an acknowledgement
  * </ul>
  *
  * <p>
@@ -74,9 +74,9 @@ import net.i2p.util.Log;
  * <ul>
  * <li>What outbound client tunnel of ours to use send the message out
  * <li>What inbound client tunnel of his (i.e. lease, chosen from his leaseset)
- *     to use to send the message in
+ * to use to send the message in
  * <li>If a DeliveryStatusMessage is bundled, What inbound client tunnel of ours
- *     do we specify to receive it
+ * do we specify to receive it
  * </ul>
  *
  * <p>
@@ -104,8 +104,6 @@ import net.i2p.util.Log;
  * a bittorrent client that sends both types of traffic on the same tunnels,
  * it is important to tune the settings for efficiency and performance.
  * The per-session and per-message overrides are set via I2CP.
- *
- *
  */
 public class OutboundClientMessageOneShotJob extends JobImpl {
     private final Log _log;
@@ -190,10 +188,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private static final long MIN_TUNNEL_USAGE = 5*1000L;
 
     /**
-     *  How many pool picks to sample when gathering rotation candidates for a
-     *  fresh connection.  With the default client pool of two tunnels a single
-     *  extra pick almost always yields the alternative; a small bound keeps the
-     *  hot path cheap.
+     * How many pool picks to sample when gathering rotation candidates for a
+     * fresh connection.  With the default client pool of two tunnels a single
+     * extra pick almost always yields the alternative; a small bound keeps the
+     * hot path cheap.
      */
     private static final int MAX_ROTATION_CANDIDATES = 6;
 
@@ -439,8 +437,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Resolve a human-readable nickname for a destination, if available.
-     *  @return nickname or null
+     * Resolve a human-readable nickname for a destination, if available.
+     * @return nickname or null
      */
     private String getDestNickname(Hash dest) {
         TunnelPoolSettings inSettings = getContext().tunnelManager().getInboundSettings(dest);
@@ -452,10 +450,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Reply lease set, checking the cache first.
+     * Reply lease set, checking the cache first.
      *
-     *  @param force to force including a reply lease set
-     *  @return lease set or null if we should not send the lease set
+     * @param force to force including a reply lease set
+     * @return lease set or null if we should not send the lease set
      */
     private LeaseSet getReplyLeaseSet(boolean force) {
         LeaseSet newLS = getContext().clientNetDb(_from.calculateHash()).lookupLeaseSetLocally(_from.calculateHash());
@@ -488,9 +486,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Send a message to a lease.
-     *  Note: This is generally run inline by runJob() above.
-     *  It is only run on the job queue after a LS lookup.
+     * Send a message to a lease.
+     * Note: This is generally run inline by runJob() above.
+     * It is only run on the job queue after a LS lookup.
      */
     private class SendJob extends JobImpl {
         public SendJob(RouterContext enclosingContext) {super(enclosingContext);}
@@ -521,17 +519,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Choose a lease from his leaseset to send the message to.
+     * Choose a lease from his leaseset to send the message to.
      *
-     *  Side effects:
-     *  Sets _lease.
-     *  Sets _wantACK if it's new or changed.
-     *  Sets _encryptionKey.
+     * Side effects:
+     * Sets _lease.
+     * Sets _wantACK if it's new or changed.
+     * Sets _encryptionKey.
      *
-     *  Does several checks to see if we can actually send to this leaseset,
-     *  and returns nonzero failure code if unable to.
+     * Does several checks to see if we can actually send to this leaseset,
+     * and returns nonzero failure code if unable to.
      *
-     *  @return 0 on success, or a MessageStatusMessage failure code
+     * @return 0 on success, or a MessageStatusMessage failure code
      */
     private int getNextLease() {
         // set in runJob if found locally
@@ -641,9 +639,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         for (int i = 0; i < leases.size(); i++) {
             Lease l = leases.get(i);
             /*
-             *  Anonymity concerns with this, as the dest could act unreachable just to us, then look at our lease selection.
-             *  Let's just look at whether the gw thinks it is unreachable instead - unfortunately the "U" is rarely seen.
-             *  if (!getContext().commSystem().wasUnreachable(l.getGateway())) {
+             * Anonymity concerns with this, as the dest could act unreachable just to us, then look at our lease selection.
+             * Let's just look at whether the gw thinks it is unreachable instead - unfortunately the "U" is rarely seen.
+             * if (!getContext().commSystem().wasUnreachable(l.getGateway())) {
              */
             RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(l.getGateway());
             if (ri == null || ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0) {
@@ -704,7 +702,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * message is sent out one of our tunnels, destined for the lease (tunnel+router) specified, and the delivery
      * status message is targeting one of our free inbound tunnels as well.  We use a new
      * reply selector to keep an eye out for that delivery status message's token
-     *
      */
     private void send() {
         synchronized(this) {
@@ -868,8 +865,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Note: This is run inline by send(), not on the job queue.
-     *  TODO replace with a method
+     * Note: This is run inline by send(), not on the job queue.
+     * TODO replace with a method
      */
     private class DispatchJob extends JobImpl {
         private final GarlicMessage _msg;
@@ -878,11 +875,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         private final SendTimeoutJob _replyTimeout;
 
         /**
-         *  Create a dispatch job.
+         * Create a dispatch job.
          *
-         *  @param sel may be null
-         *  @param success non-null if sel non-null
-         *  @param timeout non-null if sel non-null
+         * @param sel may be null
+         * @param success non-null if sel non-null
+         * @param timeout non-null if sel non-null
          */
         public DispatchJob(GarlicMessage msg, ReplySelector sel,
                            SendSuccessJob success, SendTimeoutJob timeout) {
@@ -986,9 +983,9 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     private void clearCaches() {_cache.clearCaches(_hashPair, _lease, _inTunnel, _outTunnel);}
 
     /**
-     *  Choose our outbound tunnel to send the message through.
-     *  Sets _wantACK if it's new or changed.
-     *  @return the tunnel or null on failure
+     * Choose our outbound tunnel to send the message through.
+     * Sets _wantACK if it's new or changed.
+     * @return the tunnel or null on failure
      */
     private TunnelInfo selectOutboundTunnel(Destination _to) {
         TunnelInfo tunnel;
@@ -1083,22 +1080,22 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Try to pick a different outbound tunnel than the one the previous
-     *  connection to this destination used.  Only called for the first message
-     *  of a new connection (fresh streaming SYN), so nothing is in flight on
-     *  that connection yet and the swap is transparent.  The chosen tunnel is
-     *  recorded as the cached tunnel with a fresh start time, so all subsequent
-     *  messages of the stream stay on it (no per-packet flapping).
+     * Try to pick a different outbound tunnel than the one the previous
+     * connection to this destination used.  Only called for the first message
+     * of a new connection (fresh streaming SYN), so nothing is in flight on
+     * that connection yet and the swap is transparent.  The chosen tunnel is
+     * recorded as the cached tunnel with a fresh start time, so all subsequent
+     * messages of the stream stay on it (no per-packet flapping).
      *
-     *  <p>Called with {@code _cache.tunnelCache} locked.
+     * <p>Called with {@code _cache.tunnelCache} locked.
      *
-     *  @return the rotated tunnel, or null when there is no cached tunnel or it
-     *          is no longer valid - the caller then falls through to normal
-     *          selection logic.  When rotation is saturated (the pool offered no
-     *          tunnel distinguishable from the previously-used one), the cached
-     *          entry is evicted before returning null, so the fall-through
-     *          re-selects fresh instead of riding the tunnel that stalled the
-     *          previous connection.
+     * @return the rotated tunnel, or null when there is no cached tunnel or it
+     * is no longer valid - the caller then falls through to normal
+     * selection logic.  When rotation is saturated (the pool offered no
+     * tunnel distinguishable from the previously-used one), the cached
+     * entry is evicted before returning null, so the fall-through
+     * re-selects fresh instead of riding the tunnel that stalled the
+     * previous connection.
      */
     private TunnelInfo selectFreshConnectionTunnel() {
         TunnelInfo cached = _cache.tunnelCache.get(_hashPair);
@@ -1141,7 +1138,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
     /**
      * Pick an arbitrary inbound tunnel for any deliveryStatusMessage to come back in
-     *
      */
     private TunnelInfo selectInboundTunnel() {
         // Use tunnel EP closest to his hash, as a simple cache to minimize connections
@@ -1264,17 +1260,17 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Whether the I2CP failure status indicates the outbound tunnel itself
-     *  rejected the message during dispatch, as opposed to a timeout,
-     *  destination problem, or reply-path issue.
-     *  <p>
-     *  Hard dispatch failures are reported to the pool at the normal
-     *  removal bar.  Statuses 14 (expired) and 16 (no tunnels) are local
-     *  queue / pool-empty conditions, not a fault of this specific tunnel.
+     * Whether the I2CP failure status indicates the outbound tunnel itself
+     * rejected the message during dispatch, as opposed to a timeout,
+     * destination problem, or reply-path issue.
+     * <p>
+     * Hard dispatch failures are reported to the pool at the normal
+     * removal bar.  Statuses 14 (expired) and 16 (no tunnels) are local
+     * queue / pool-empty conditions, not a fault of this specific tunnel.
      *
-     *  @param status the I2CP MessageStatusMessage failure code
-     *  @return true only for hard outbound-dispatch failures
-     *  @since 0.9.71+
+     * @param status the I2CP MessageStatusMessage failure code
+     * @return true only for hard outbound-dispatch failures
+     * @since 0.9.71+
      */
     static boolean isTunnelRelatedFailure(int status) {
         switch (status) {
@@ -1289,16 +1285,16 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Whether the failure status means the destination's pools were empty
-     *  or starved when the send needed them: 14 (expired while queued —
-     *  nothing carried it before the deadline) and 16 (no tunnels
-     *  available).  These do not blame the outbound tunnel (see
-     *  {@link #isTunnelRelatedFailure}); they trigger a pool-level ensure
-     *  nudge instead (see dieFatal).
+     * Whether the failure status means the destination's pools were empty
+     * or starved when the send needed them: 14 (expired while queued —
+     * nothing carried it before the deadline) and 16 (no tunnels
+     * available).  These do not blame the outbound tunnel (see
+     * {@link #isTunnelRelatedFailure}); they trigger a pool-level ensure
+     * nudge instead (see dieFatal).
      *
-     *  @param status the I2CP MessageStatusMessage failure code
-     *  @return true for pool-starvation statuses only
-     *  @since 0.9.71+
+     * @param status the I2CP MessageStatusMessage failure code
+     * @return true for pool-starvation statuses only
+     * @since 0.9.71+
      */
     static boolean isPoolStarvationFailure(int status) {
         return status == MessageStatusMessage.STATUS_SEND_FAILURE_EXPIRED ||
@@ -1306,26 +1302,26 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Default cooldown a stall mark stays in effect: how long the router
-     *  prefers another outbound tunnel for a destination that stopped
-     *  delivering. Long enough to ride out a bad path, short enough that a
-     *  briefly-bad tunnel is not withheld from a small pool for long.
+     * Default cooldown a stall mark stays in effect: how long the router
+     * prefers another outbound tunnel for a destination that stopped
+     * delivering. Long enough to ride out a bad path, short enough that a
+     * briefly-bad tunnel is not withheld from a small pool for long.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final long STALL_ROTATION_COOLDOWN_MS = 3 * 60 * 1000L;
 
     /**
-     *  Whether the current (source, destination) pair is inside a stall
-     *  cooldown, and rotation is enabled.
+     * Whether the current (source, destination) pair is inside a stall
+     * cooldown, and rotation is enabled.
      *
-     *  <p>Always a hint. When true the caller prefers another tunnel but must
-     *  still return one — a destination whose every tunnel is inside a
-     *  cooldown has to keep using one of them, or the send fails outright and
-     *  a slow path becomes a dead one.
+     * <p>Always a hint. When true the caller prefers another tunnel but must
+     * still return one — a destination whose every tunnel is inside a
+     * cooldown has to keep using one of them, or the send fails outright and
+     * a slow path becomes a dead one.
      *
-     *  @return true if a different tunnel should be preferred
-     *  @since 0.9.71+
+     * @return true if a different tunnel should be preferred
+     * @since 0.9.71+
      */
     private boolean isStalledForRotation() {
         long cooldown = getContext().getProperty("router.tunnel.stallRotation", STALL_ROTATION_COOLDOWN_MS);
@@ -1335,50 +1331,50 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Which hash a pool-starvation nudge must be addressed to.  The tunnel
-     *  pool maps are keyed by the <b>local client (source)</b> destination
-     *  hash — {@link net.i2p.router.tunnel.pool.TunnelPoolManager} registers
-     *  pools under {@code client.calculateHash()} for local destinations —
-     *  so the nudge always goes to the source hash.  Passing the remote
-     *  destination (the pre-fix behavior) finds no pool for every non-local
-     *  target and the starvation signal silently evaporates.
+     * Which hash a pool-starvation nudge must be addressed to.  The tunnel
+     * pool maps are keyed by the <b>local client (source)</b> destination
+     * hash — {@link net.i2p.router.tunnel.pool.TunnelPoolManager} registers
+     * pools under {@code client.calculateHash()} for local destinations —
+     * so the nudge always goes to the source hash.  Passing the remote
+     * destination (the pre-fix behavior) finds no pool for every non-local
+     * target and the starvation signal silently evaporates.
      *
-     *  @param sourceHash the local sending destination's hash, or null when unknown
-     *  @param destHash the remote destination's hash (unused — kept so the
-     *         source-vs-dest choice is pinned by tests rather than implicit)
-     *  @return the pool-map key to nudge, or null when the source is unknown
-     *  @since 0.9.71+
+     * @param sourceHash the local sending destination's hash, or null when unknown
+     * @param destHash the remote destination's hash (unused — kept so the
+     * source-vs-dest choice is pinned by tests rather than implicit)
+     * @return the pool-map key to nudge, or null when the source is unknown
+     * @since 0.9.71+
      */
     static Hash starvationNudgeKey(Hash sourceHash, Hash destHash) {
         return sourceHash;
     }
 
     /**
-     *  Whether the status is a best-effort send timeout (3) after a
-     *  successful dispatch.  Reported to the pool at a higher removal bar
-     *  so a congested destination or slow reply path cannot cascade-kill
-     *  healthy tunnels, while a tunnel that times out repeatedly still
-     *  rotates out before peers accumulate dozens of unreported failures.
+     * Whether the status is a best-effort send timeout (3) after a
+     * successful dispatch.  Reported to the pool at a higher removal bar
+     * so a congested destination or slow reply path cannot cascade-kill
+     * healthy tunnels, while a tunnel that times out repeatedly still
+     * rotates out before peers accumulate dozens of unreported failures.
      *
-     *  @param status the I2CP MessageStatusMessage failure code
-     *  @return true for soft send timeouts only
-     *  @since 0.9.71+
+     * @param status the I2CP MessageStatusMessage failure code
+     * @return true for soft send timeouts only
+     * @since 0.9.71+
      */
     static boolean isSoftSendFailure(int status) {
         return status == MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE;
     }
 
     /**
-     *  Whether a failed send should be charged to the outbound tunnel.
+     * Whether a failed send should be charged to the outbound tunnel.
      *
-     *  <p>Pure, so the blame rule is testable without a router.
+     * <p>Pure, so the blame rule is testable without a router.
      *
-     *  <p>A destination this router hosts produces its own reply, so a missing
-     *  one is our own fault — a saturated handler pool, an aborted body, a slow
-     *  upstream — and says nothing about the tunnel that delivered the request.
-     *  Charging those failures to the tunnel makes the pool condemn its own
-     *  healthy egress; the resulting starvation guarantees the next request
-     *  fails too, so the service can never recover.
+     * <p>A destination this router hosts produces its own reply, so a missing
+     * one is our own fault — a saturated handler pool, an aborted body, a slow
+     * upstream — and says nothing about the tunnel that delivered the request.
+     * Charging those failures to the tunnel makes the pool condemn its own
+     * healthy egress; the resulting starvation guarantees the next request
+     * fails too, so the service can never recover.
      *
      * @param status        the I2CP MessageStatusMessage failure code
      * @param locallyHosted true if this router hosts the destination
@@ -1391,14 +1387,14 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Whether this router hosts the given destination.
+     * Whether this router hosts the given destination.
      *
-     *  <p>The registry lookup is not pure, so it is kept out of
-     *  {@link #shouldBlameOutboundTunnel(int, boolean)} and pinned by tests at
-     *  the decision level instead.
+     * <p>The registry lookup is not pure, so it is kept out of
+     * {@link #shouldBlameOutboundTunnel(int, boolean)} and pinned by tests at
+     * the decision level instead.
      *
-     *  @param to destination the message was sent to; may be null
-     *  @return true if the destination is a local service
+     * @param to destination the message was sent to; may be null
+     * @return true if the destination is a local service
      * @since 0.9.71+
      */
     private boolean isLocallyHostedDestination(Destination to) {
@@ -1409,10 +1405,10 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     }
 
     /**
-     *  Build the payload clove that will be used for all of the messages,
-     *  placing the clove in the status structure.
+     * Build the payload clove that will be used for all of the messages,
+     * placing the clove in the status structure.
      *
-     *  @return null on failure
+     * @return null on failure
      */
     private PayloadGarlicConfig buildClove() {
         DeliveryInstructions instructions = new DeliveryInstructions();
@@ -1446,7 +1442,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * Keep an eye out for any of the delivery status message tokens that have been
      * sent down the various tunnels to deliver this message
-     *
      */
     private static class ReplySelector implements MessageSelector {
         private final long _pendingToken;
@@ -1476,7 +1471,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * Called after we get a confirmation that the message was delivered safely.
      * This may be run after failure.
-     *
      */
     private class SendSuccessJob extends JobImpl implements ReplyJob {
         private final SessionKey _key;
@@ -1609,7 +1603,6 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * Fired after the basic timeout for sending through the given tunnel has been reached.
      * We'll accept successes later, but won't expect them
-     *
      */
     private class SendTimeoutJob extends JobImpl {
         private final SessionKey _key;

@@ -18,16 +18,16 @@ import net.i2p.router.transport.udp.SSU2Payload.AckBlock;
 class SSU2Bitfield {
 
     /**
-     *  Largest message-number span (in bits) we will build from a received ACK
-     *  block. A peer's own receive bitfield is 512 bits and shifts up by at most
-     *  max_shift (4096) before starting over, so a live peer can legitimately
-     *  describe a span of under 512 + 4096 bits. Anything beyond that is a
-     *  malformed or hostile block: the span is derived from unvalidated
-     *  attacker-controlled bytes, so an unchecked value lets a ~1.5KB packet
-     *  allocate a ~48KB bitfield. The margin here leaves room for
-     *  implementation differences while capping the allocation at 1KB.
+     * Largest message-number span (in bits) we will build from a received ACK
+     * block. A peer's own receive bitfield is 512 bits and shifts up by at most
+     * max_shift (4096) before starting over, so a live peer can legitimately
+     * describe a span of under 512 + 4096 bits. Anything beyond that is a
+     * malformed or hostile block: the span is derived from unvalidated
+     * attacker-controlled bytes, so an unchecked value lets a ~1.5KB packet
+     * allocate a ~48KB bitfield. The margin here leaves room for
+     * implementation differences while capping the allocation at 1KB.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int MAX_ACK_SPAN = 8192;
 
@@ -75,7 +75,7 @@ class SSU2Bitfield {
      * the offset shifts up and the lowest set bits are lost.
      *
      * @throws IndexOutOfBoundsException if bit is smaller then zero
-     *                                   OR if the shift is too big
+     * OR if the shift is too big
      * @return previous value, true if previously set or unknown
      */
     public boolean set(long bit) throws IndexOutOfBoundsException {
@@ -140,8 +140,8 @@ class SSU2Bitfield {
     }
 
     /**
-     *  @param maxRanges may be 0
-     *  @return null if nothing is set
+     * @param maxRanges may be 0
+     * @return null if nothing is set
      */
     public synchronized AckBlock toAckBlock(int maxRanges) {
         long highest = getHighestSet();
@@ -180,18 +180,18 @@ class SSU2Bitfield {
     }
 
     /**
-     *  Compute the number of message numbers (bits) the bitfield for an ACK block
-     *  must cover, without allocating one.
+     * Compute the number of message numbers (bits) the bitfield for an ACK block
+     * must cover, without allocating one.
      *
-     *  Pure and package-visible so the hostile-input case can be tested directly.
+     * Pure and package-visible so the hostile-input case can be tested directly.
      *
-     *  @param thru the highest acked message number
-     *  @param acnt number of contiguous acks below thru, 0-255
-     *  @param ranges non-null, at least rangeCount * 2 bytes
-     *  @param rangeCount number of (nack, ack) range pairs, must be non-zero
-     *  @return the span in bits, always at least 1
-     *  @throws IndexOutOfBoundsException if ranges is too short for rangeCount
-     *  @since 0.9.71+
+     * @param thru the highest acked message number
+     * @param acnt number of contiguous acks below thru, 0-255
+     * @param ranges non-null, at least rangeCount * 2 bytes
+     * @param rangeCount number of (nack, ack) range pairs, must be non-zero
+     * @return the span in bits, always at least 1
+     * @throws IndexOutOfBoundsException if ranges is too short for rangeCount
+     * @since 0.9.71+
      */
     static long calculateAckSpan(int thru, int acnt, byte[] ranges, int rangeCount) {
         // long math: a hostile block can push the implied low message number
@@ -205,9 +205,9 @@ class SSU2Bitfield {
     }
 
     /**
-     *  @param ranges may be null
-     *  @throws IllegalArgumentException if the ranges describe a span larger than
-     *                 {@link #MAX_ACK_SPAN}, or the offset would be negative
+     * @param ranges may be null
+     * @throws IllegalArgumentException if the ranges describe a span larger than
+     * {@link #MAX_ACK_SPAN}, or the offset would be negative
      */
     public static SSU2Bitfield fromACKBlock(long thru, int acnt, byte[] ranges, int rangeCount) {
         int t = (int) thru;
@@ -249,19 +249,18 @@ class SSU2Bitfield {
     }
 
     /**
-     *  Callback for all bits set in this bitfield but not set in bf2.
+     * Callback for all bits set in this bitfield but not set in bf2.
      *
-     *  If this offset is greater than bf2's highest bit set, i.e. this bitfield
-     *  is completely newer, calls back for all bits in this bitfield.
+     * If this offset is greater than bf2's highest bit set, i.e. this bitfield
+     * is completely newer, calls back for all bits in this bitfield.
      *
-     *  If this highest bit set is less than than bf2's offset, i.e. this bitfield
-     *  is completely older, the callback will not be called.
+     * If this highest bit set is less than than bf2's offset, i.e. this bitfield
+     * is completely older, the callback will not be called.
      *
-     *  Synchs on this and then on bf2.
+     * Synchs on this and then on bf2.
      *
-     *  Usage: this is the received acks, bf2 is previously acked,
-     *  callback for each newly acked.
-     *
+     * Usage: this is the received acks, bf2 is previously acked,
+     * callback for each newly acked.
      */
     public synchronized void forEachAndNot(SSU2Bitfield bf2, Callback cb) {
         synchronized(bf2) {
@@ -285,9 +284,9 @@ class SSU2Bitfield {
     }
 
     /**
-     *  Pretty print an ACK block
+     * Pretty print an ACK block
      *
-     *  @param ranges may be null
+     * @param ranges may be null
      */
     public static String toString(long thru, int acnt, byte[] ranges, int rangeCount) {
         StringBuilder sb = new StringBuilder();

@@ -52,10 +52,10 @@ public class TunnelPoolLeaseSurgeTest {
     }
 
     /**
-     *  A pooled config with the given remaining life and test status. Idle by
-     *  default: a freshly constructed config reports itself recently active,
-     *  which would mask every prune decision, so the last-activity stamp is
-     *  aged out unless the test asks otherwise.
+     * A pooled config with the given remaining life and test status. Idle by
+     * default: a freshly constructed config reports itself recently active,
+     * which would mask every prune decision, so the last-activity stamp is
+     * aged out unless the test asks otherwise.
      */
     private static TunnelCreatorConfig config(long remaining, TunnelTestStatus status) {
         return config(remaining, status, true);
@@ -97,11 +97,11 @@ public class TunnelPoolLeaseSurgeTest {
     // ---- the prune gate, not a build target ----
 
     /**
-     *  The surge is deliberately NOT a build target. The required count is capped
-     *  at 2 by the caller and the active target is at least 2, so folding the
-     *  requirement into getEffectiveTarget() as a floor could never move it.
-     *  This pins that: the surge must leave the build target alone, and supply
-     *  arrives via pruning instead.
+     * The surge is deliberately NOT a build target. The required count is capped
+     * at 2 by the caller and the active target is at least 2, so folding the
+     * requirement into getEffectiveTarget() as a floor could never move it.
+     * This pins that: the surge must leave the build target alone, and supply
+     * arrives via pruning instead.
      */
     @Test
     public void surgeNeverMovesTheBuildTarget() {
@@ -142,8 +142,8 @@ public class TunnelPoolLeaseSurgeTest {
     }
 
     /**
-     *  The requirement is monotonic. A later request for less must not relax
-     *  pruning that an earlier, larger mint still needs.
+     * The requirement is monotonic. A later request for less must not relax
+     * pruning that an earlier, larger mint still needs.
      */
     @Test
     public void surgeRequirementOnlyEverRises() {
@@ -179,10 +179,10 @@ public class TunnelPoolLeaseSurgeTest {
     }
 
     /**
-     *  The safety-critical decision. Only tunnels that could never be advertised
-     *  are candidates: a tunnel well inside the lease admission floor is doing
-     *  useful work, and giving up an advertiseable tunnel to chase a fresher one
-     *  would trade LeaseSet lifetime for capacity.
+     * The safety-critical decision. Only tunnels that could never be advertised
+     * are candidates: a tunnel well inside the lease admission floor is doing
+     * useful work, and giving up an advertiseable tunnel to chase a fresher one
+     * would trade LeaseSet lifetime for capacity.
      */
     @Test
     public void viableTunnelsAreNeverPruned() {
@@ -206,8 +206,8 @@ public class TunnelPoolLeaseSurgeTest {
     }
 
     /**
-     *  The pool keeps unviable and advertiseable tunnels together; only the
-     *  unviable ones are offered up. This is the case the surge exists for.
+     * The pool keeps unviable and advertiseable tunnels together; only the
+     * unviable ones are offered up. This is the case the surge exists for.
      */
     @Test
     public void onlyUnviableTunnelsAreOffered() {
@@ -242,9 +242,9 @@ public class TunnelPoolLeaseSurgeTest {
     }
 
     /**
-     *  A tunnel carrying traffic is never sacrificed for a fresher one. This is
-     *  the counterpart to {@link #unviableIdleGoodTunnelIsPrunable}: same
-     *  expiration, same status, but recently active, so it stays.
+     * A tunnel carrying traffic is never sacrificed for a fresher one. This is
+     * the counterpart to {@link #unviableIdleGoodTunnelIsPrunable}: same
+     * expiration, same status, but recently active, so it stays.
      */
     @Test
     public void recentlyActiveTunnelsAreNeverPruned() {

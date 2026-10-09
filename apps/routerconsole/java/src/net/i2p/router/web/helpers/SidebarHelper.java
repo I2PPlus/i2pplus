@@ -78,11 +78,11 @@ public class SidebarHelper extends HelperBase {
     private static volatile int _cachedActiveProfiles;
 
 /**
- *  How long cached sidebar stats stay valid: one sidebar refresh interval.
- *  Never shorter than 1 second so concurrent renders share the cache.
+ * How long cached sidebar stats stay valid: one sidebar refresh interval.
+ * Never shorter than 1 second so concurrent renders share the cache.
  *
- *  @return the refresh interval, in milliseconds
- *  @since 0.9.72+
+ * @return the refresh interval, in milliseconds
+ * @since 0.9.72+
  */
     private long statsCacheMs() {
         int refresh = _context.getProperty(CSSHelper.PROP_REFRESH, 3);
@@ -91,8 +91,8 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  For form validation and session-bound nonce generation
-     *  @since 0.9.69
+     * For form validation and session-bound nonce generation
+     * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
 
@@ -656,10 +656,10 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  Fetch the 1-minute and 10-minute rates for a named tunnel build stat.
+     * Fetch the 1-minute and 10-minute rates for a named tunnel build stat.
      *
-     *  @param name the stat name
-     *  @return two-element array [ONE_MINUTE, TEN_MINUTES], entries null if the stat is missing
+     * @param name the stat name
+     * @return two-element array [ONE_MINUTE, TEN_MINUTES], entries null if the stat is missing
      */
     private Rate[] getTunnelBuildRates(String name) {
         RateStat stat = _context.statManager().getRate(name);
@@ -668,10 +668,10 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  Cache the tunnel build success result for the current sidebar refresh cycle.
+     * Cache the tunnel build success result for the current sidebar refresh cycle.
      *
-     *  @param value the computed percentage
-     *  @return the value
+     * @param value the computed percentage
+     * @return the value
      */
     private int cacheBuildSuccess(int value) {
         _buildSuccessCachedUntil = _context.clock().now() + statsCacheMs();
@@ -770,9 +770,9 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *    Format the current bandwidth rates for display.
+     * Format the current bandwidth rates for display.
      *
-     *    @return "x.xx / y.yy {K|M}"
+     * @return "x.xx / y.yy {K|M}"
      */
     public String getSecondKBps() {
         if (_context == null) {return "0 / 0";}
@@ -784,9 +784,9 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *    Format the 5-minute average bandwidth rates for display.
+     * Format the 5-minute average bandwidth rates for display.
      *
-     *    @return "x.xx / y.yy {K|M}"
+     * @return "x.xx / y.yy {K|M}"
      */
     public String getFiveMinuteKBps() {
         if (_context == null) {return "0 / 0";}
@@ -810,9 +810,9 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *    Format the lifetime average bandwidth rates for display.
+     * Format the lifetime average bandwidth rates for display.
      *
-     *    @return "x.xx / y.yy {K|M}"
+     * @return "x.xx / y.yy {K|M}"
      */
     public String getLifetimeKBps() {
         if (_context == null) {return "0 / 0";}
@@ -829,8 +829,8 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  Output is decimal, not binary
-     *  @return "x.xx / y.yy {K|M}"
+     * Output is decimal, not binary
+     * @return "x.xx / y.yy {K|M}"
      */
     private static String formatPair(double in, double out) {
         boolean mega = in >= 1000*1000 || out >= 1000*1000;
@@ -996,8 +996,8 @@ public class SidebarHelper extends HelperBase {
     }
 
     /**
-     *  Compare translated nicknames - put "shared clients" first in the sort
-     *  Inner class, can't be Serializable
+     * Compare translated nicknames - put "shared clients" first in the sort
+     * Inner class, can't be Serializable
      */
     private class AlphaComparator implements Comparator<Destination> {
         private final String snark = _t("I2PSnark");
@@ -1544,7 +1544,6 @@ public class SidebarHelper extends HelperBase {
     /**
      * The firewall status and reseed status/buttons
      * @return the firewall and reseed status
-     * @since 0.9 moved from SidebarRenderer
      */
     public String getFirewallAndReseedStatus() {
         StringBuilder buf = new StringBuilder(256);

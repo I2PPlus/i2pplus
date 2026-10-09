@@ -26,7 +26,7 @@ class SingleSearchJob extends FloodOnlySearchJob {
     private static final int TIMEOUT = 8*1000;
 
     /**
-     *  @param key for Router Info ONLY
+     * @param key for Router Info ONLY
      */
     public SingleSearchJob(RouterContext ctx, Hash key, Hash to) {
         // warning, null FloodfillNetworkDatabaseFacade ...

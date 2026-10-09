@@ -70,9 +70,9 @@ public class CSSHelperTest {
     }
 
     /**
-     *  Session whose attribute access throws IllegalStateException,
-     *  mimicking a Jetty session invalidated before/while the JSP rendered.
-     *  @since 0.9.71
+     * Session whose attribute access throws IllegalStateException,
+     * mimicking a Jetty session invalidated before/while the JSP rendered.
+     * @since 0.9.71
      */
     private static class InvalidSession implements HttpSession {
         public long getCreationTime() {return 0L;}
@@ -96,8 +96,8 @@ public class CSSHelperTest {
     }
 
     /**
-     *  Minimal valid session backed by a HashMap for queue storage/retrieval.
-     *  @since 0.9.71
+     * Minimal valid session backed by a HashMap for queue storage/retrieval.
+     * @since 0.9.71
      */
     private static class MapSession implements HttpSession {
         private final Map<String, Object> _attrs = new java.util.concurrent.ConcurrentHashMap<>();
@@ -122,9 +122,9 @@ public class CSSHelperTest {
     }
 
     /**
-     *  AN INVALID session is not null; Jetty hands it out and getAttribute
-     *  throws ISE. getNonce must degrade to the static nonce, not throw.
-     *  @since 0.9.71
+     * AN INVALID session is not null; Jetty hands it out and getAttribute
+     * throws ISE. getNonce must degrade to the static nonce, not throw.
+     * @since 0.9.71
      */
     @Test
     public void testGetNonce_invalidSessionFallsBackToStatic() {
@@ -135,8 +135,8 @@ public class CSSHelperTest {
     }
 
     /**
-     *  Null session returns the FAIL marker (unchanged contract).
-     *  @since 0.9.71
+     * Null session returns the FAIL marker (unchanged contract).
+     * @since 0.9.71
      */
     @Test
     public void testGetNonce_nullSession() {
@@ -144,8 +144,8 @@ public class CSSHelperTest {
     }
 
     /**
-     *  Valid session stores the nonce in the session-bound queue, not static.
-     *  @since 0.9.71
+     * Valid session stores the nonce in the session-bound queue, not static.
+     * @since 0.9.71
      */
     @Test
     public void testGetNonce_validSessionUsesQueue() {
@@ -159,9 +159,9 @@ public class CSSHelperTest {
     }
 
     /**
-     *  Validation against an invalid session fails closed (false) so
-     *  FormHandler falls back to the static nonce path.
-     *  @since 0.9.71
+     * Validation against an invalid session fails closed (false) so
+     * FormHandler falls back to the static nonce path.
+     * @since 0.9.71
      */
     @Test
     public void testValidateNonce_invalidSession() {

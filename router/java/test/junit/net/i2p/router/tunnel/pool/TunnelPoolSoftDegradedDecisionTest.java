@@ -165,11 +165,11 @@ public class TunnelPoolSoftDegradedDecisionTest {
     }
 
     /**
-     *  The pre-emptive build window is the gap between these two constants.
-     *  While a tunnel is degraded-for-ensure but not yet removed, the ensure
-     *  gate sees a deficit and builds replacements while the tunnel is still
-     *  selectable. Equalising them collapses that window and turns pre-emptive
-     *  recovery into total collapse.
+     * The pre-emptive build window is the gap between these two constants.
+     * While a tunnel is degraded-for-ensure but not yet removed, the ensure
+     * gate sees a deficit and builds replacements while the tunnel is still
+     * selectable. Equalising them collapses that window and turns pre-emptive
+     * recovery into total collapse.
      */
     @Test
     public void preEmptiveWindowIsNonZero() {

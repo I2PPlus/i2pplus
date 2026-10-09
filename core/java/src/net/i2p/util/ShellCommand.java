@@ -43,8 +43,8 @@ public class ShellCommand {
         private final Result result;
 
         /**
-         *  @param shellCommand either a String or a String[] (since 0.8.3)
-         *  @param result out parameter
+         * @param shellCommand either a String or a String[] (since 0.8.3)
+         * @param result out parameter
          */
         CommandThread(Object shellCommand, Result result) {
             super("ShellCommand Executor");
@@ -95,12 +95,12 @@ public class ShellCommand {
      * produced by the executed command will not be displayed.
      *
      * @param  commandArray The command for the shell to execute,
-     *                      as a String[].
-     *                      See Runtime.exec(String[]) for more info.
+     * as a String[].
+     * See Runtime.exec(String[]) for more info.
      *
      * @return              <code>true</code> if the spawned shell process
-     *                      returns an exit status of 0 (indicating success),
-     *                      else <code>false</code>.
+     * returns an exit status of 0 (indicating success),
+     * else <code>false</code>.
      *
      * @since 0.9.38
      */
@@ -118,18 +118,18 @@ public class ShellCommand {
      * Use a String array for best results, especially on Windows.
      *
      * @param  shellCommand The command for the shell to execute, as a String.
-     *                      You can't quote arguments successfully.
-     *                      See Runtime.exec(String) for more info.
+     * You can't quote arguments successfully.
+     * See Runtime.exec(String) for more info.
      *
      * @param  seconds      The method will return <code>true</code> if this
-     *                      number of seconds elapses without the process
-     *                      returning an exit status. A value of <code>0</code>
-     *                      here disables waiting.
+     * number of seconds elapses without the process
+     * returning an exit status. A value of <code>0</code>
+     * here disables waiting.
      *
      * @return              <code>true</code> if the spawned shell process
-     *                      returns an exit status of 0 (indicating success),
-     *                      OR if the time expires,
-     *                      else <code>false</code>.
+     * returns an exit status of 0 (indicating success),
+     * OR if the time expires,
+     * else <code>false</code>.
      */
     public boolean executeSilentAndWaitTimed(String shellCommand, int seconds) {
         return executeSAWT(shellCommand, seconds);
@@ -142,18 +142,18 @@ public class ShellCommand {
      * executed command will not be displayed.
      *
      * @param  commandArray The command for the shell to execute,
-     *                      as a String[].
-     *                      See Runtime.exec(String[]) for more info.
+     * as a String[].
+     * See Runtime.exec(String[]) for more info.
      *
      * @param  seconds      The method will return <code>true</code> if this
-     *                      number of seconds elapses without the process
-     *                      returning an exit status. A value of <code>0</code>
-     *                      here disables waiting.
+     * number of seconds elapses without the process
+     * returning an exit status. A value of <code>0</code>
+     * here disables waiting.
      *
      * @return              <code>true</code> if the spawned shell process
-     *                      returns an exit status of 0 (indicating success),
-     *                      OR if the time expires,
-     *                      else <code>false</code>.
+     * returns an exit status of 0 (indicating success),
+     * OR if the time expires,
+     * else <code>false</code>.
      *
      * @since 0.8.3
      */
@@ -194,7 +194,7 @@ public class ShellCommand {
     }
 
     /**
-     *  Just does exec, this is NOT a test of ShellCommand.
+     * Just does exec, this is NOT a test of ShellCommand.
      */
     public static void main(String[] args) {
         if (args.length <= 0) {
@@ -210,11 +210,11 @@ public class ShellCommand {
     }
 
     /**
-     *  Executes the command and waits for it to complete.
-     *  The process is destroyed if the wait is interrupted.
+     * Executes the command and waits for it to complete.
+     * The process is destroyed if the wait is interrupted.
      *
-     *  @param shellCommand either a String or a String[] (since 0.8.3) - quick hack
-     *  @return true if the process exited with status 0, else false
+     * @param shellCommand either a String or a String[] (since 0.8.3) - quick hack
+     * @return true if the process exited with status 0, else false
      */
     private boolean execute(Object shellCommand) {
         Process process;

@@ -5,7 +5,6 @@ package net.i2p.sam;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.ByteArrayOutputStream;
@@ -35,7 +34,6 @@ import net.i2p.data.Destination;
 
 /**
  * Class able to handle a SAM version 1 client connections.
- *
  */
 class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramReceiver, SAMStreamReceiver {
 
@@ -1070,12 +1068,12 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     }
 
     /**
-     *  Create a string to be appended to a status.
+     * Create a string to be appended to a status.
      *
-     *  @param msg may be null
-     *  @return non-null, "" if msg is null, MESSAGE=msg or MESSAGE="msg a b c"
-     *           with leading space if msg is non-null
-     *  @since 0.9.20
+     * @param msg may be null
+     * @return non-null, "" if msg is null, MESSAGE=msg or MESSAGE="msg a b c"
+     * with leading space if msg is non-null
+     * @since 0.9.20
      */
     protected static String createMessageString(String msg) {
         String rv;

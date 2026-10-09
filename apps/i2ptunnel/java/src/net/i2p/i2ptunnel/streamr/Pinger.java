@@ -17,10 +17,10 @@ public class Pinger implements Source, Runnable {
     private final int fromPort;
 
     /**
-     *  Creates a pinger for the given I2CP from port.
+     * Creates a pinger for the given I2CP from port.
      *
-     *  @param fromPort the I2CP from port
-     *  @since 0.9.53 added ctx and fromPort params
+     * @param fromPort the I2CP from port
+     * @since 0.9.53 added ctx and fromPort params
      */
     public Pinger(I2PAppContext ctx, int fromPort) {
         this.thread = new I2PAppThread(this);
@@ -29,9 +29,9 @@ public class Pinger implements Source, Runnable {
     }
 
     /**
-     *  Sets the destination sink for ping messages.
-     *  @param sink the sink to receive ping messages
-     *  @since 0.9.53
+     * Sets the destination sink for ping messages.
+     * @param sink the sink to receive ping messages
+     * @since 0.9.53
      */
     @Override
     public void setSink(Sink sink) {
@@ -39,8 +39,8 @@ public class Pinger implements Source, Runnable {
     }
 
     /**
-     *  Starts the pinger thread to send periodic subscribe messages.
-     *  @since 0.9.53
+     * Starts the pinger thread to send periodic subscribe messages.
+     * @since 0.9.53
      */
     public void start() {
         this.running = true;
@@ -48,8 +48,8 @@ public class Pinger implements Source, Runnable {
     }
 
     /**
-     *  Stops the pinger thread and sends an unsubscribe message.
-     *  @since 0.9.53
+     * Stops the pinger thread and sends an unsubscribe message.
+     * @since 0.9.53
      */
     public void stop() {
         this.running = false;
@@ -70,9 +70,9 @@ public class Pinger implements Source, Runnable {
     }
 
     /**
-     *  Main run loop that periodically sends subscribe messages.
-     *  Runs until stop() is called.
-     *  @since 0.9.53
+     * Main run loop that periodically sends subscribe messages.
+     * Runs until stop() is called.
+     * @since 0.9.53
      */
     @Override
     public void run() {

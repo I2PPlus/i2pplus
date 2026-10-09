@@ -9,9 +9,9 @@ import net.i2p.client.streaming.I2PSocketOptions;
 import static org.junit.Assert.*;
 
 /**
- *  Unit tests for the shared request connect deadline (budget, expiry,
- *  clamping, per-leg connect timeouts, and the pool-building grace), plus
- *  the single pool-snapshot outer-retry decision it gates.
+ * Unit tests for the shared request connect deadline (budget, expiry,
+ * clamping, per-leg connect timeouts, and the pool-building grace), plus
+ * the single pool-snapshot outer-retry decision it gates.
  */
 public class ConnectDeadlineTest {
 

@@ -39,7 +39,7 @@ import static org.junit.Assert.*;
 public class RateConcurrentUpdateTest {
 
     /** Threads per test. Enough to make lost updates likely, few enough not to
-     *  starve the timing-sensitive tests sharing this JVM. */
+     * starve the timing-sensitive tests sharing this JVM. */
     private static final int THREADS = 4;
 
     /**
@@ -50,7 +50,7 @@ public class RateConcurrentUpdateTest {
     private static final int PER_THREAD = 5_000;
 
     /** A period of 1ms puts {@code period - SLACK} below zero, so every coalesce
-     *  is due immediately and no test has to sleep for a period to elapse. */
+     * is due immediately and no test has to sleep for a period to elapse. */
     private static final long ALWAYS_DUE = 1;
 
     private static final long TIMEOUT_MS = 10_000;

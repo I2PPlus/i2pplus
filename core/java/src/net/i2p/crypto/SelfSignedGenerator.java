@@ -38,17 +38,17 @@ import net.i2p.util.HexDump;
 import net.i2p.util.RandomSource;
 
 /**
- *  Generate keys and a selfsigned certificate, suitable for
- *  storing in a Keystore with KeyStoreUtil.storePrivateKey().
- *  All done programatically, no keytool, no BC libs, no sun classes.
- *  Ref: RFC 2459, RFC 5280
+ * Generate keys and a selfsigned certificate, suitable for
+ * storing in a Keystore with KeyStoreUtil.storePrivateKey().
+ * All done programatically, no keytool, no BC libs, no sun classes.
+ * Ref: RFC 2459, RFC 5280
  *
- *  This is coded to create a cert that is similar to what comes out of keytool.
+ * This is coded to create a cert that is similar to what comes out of keytool.
  *
- *  NOTE: Recommended use is via KeyStoreUtil.createKeys() and related methods.
- *  This API may not be stable.
+ * NOTE: Recommended use is via KeyStoreUtil.createKeys() and related methods.
+ * This API may not be stable.
  *
- *  @since 0.9.25
+ * @since 0.9.25
  */
 public final class SelfSignedGenerator {
 
@@ -105,20 +105,20 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Create a self-signed certificate with a new keypair.
+     * Create a self-signed certificate with a new keypair.
      *
-     *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *
-     *  @return length 4 array:
-     *  rv[0] is a Java PublicKey
-     *  rv[1] is a Java PrivateKey
-     *  rv[2] is a Java X509Certificate
-     *  rv[3] is a Java X509CRL
+     * @return length 4 array:
+     * rv[0] is a Java PublicKey
+     * rv[1] is a Java PrivateKey
+     * rv[2] is a Java X509Certificate
+     * rv[3] is a Java X509CRL
      */
     public static Object[] generate(
             String cname, String ou, String o, String l, String st, String c, int validDays, SigType type)
@@ -127,25 +127,25 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Create a self-signed certificate with a new keypair.
+     * Create a self-signed certificate with a new keypair.
      *
-     *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     *  @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *
-     *  @return length 4 array:
-     *  rv[0] is a Java PublicKey
-     *  rv[1] is a Java PrivateKey
-     *  rv[2] is a Java X509Certificate
-     *  rv[3] is a Java X509CRL
+     * @return length 4 array:
+     * rv[0] is a Java PublicKey
+     * rv[1] is a Java PrivateKey
+     * rv[2] is a Java X509Certificate
+     * rv[3] is a Java X509CRL
      *
-     *  @since 0.9.34 added altNames param
+     * @since 0.9.34 added altNames param
      */
     public static Object[] generate(
             String cname,
@@ -172,11 +172,11 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Create a self-signed certificate for the existing private key.
+     * Create a self-signed certificate for the existing private key.
      *
-     *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @return self-signed certificate
-     *  @since 0.9.46
+     * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @return self-signed certificate
+     * @since 0.9.46
      */
     public static X509Certificate generate(SigningPrivateKey priv, String cname, int validDays)
             throws GeneralSecurityException {
@@ -189,25 +189,25 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Create a self-signed certificate with the given keypair.
+     * Create a self-signed certificate with the given keypair.
      *
-     *  @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     *  @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *
-     *  @return length 4 array:
-     *  rv[0] is a Java PublicKey
-     *  rv[1] is a Java PrivateKey
-     *  rv[2] is a Java X509Certificate
-     *  rv[3] is a Java X509CRL
+     * @return length 4 array:
+     * rv[0] is a Java PublicKey
+     * rv[1] is a Java PrivateKey
+     * rv[2] is a Java X509Certificate
+     * rv[3] is a Java X509CRL
      *
-     *  @since 0.9.34 added altNames param
+     * @since 0.9.34 added altNames param
      */
     private static Object[] generate(
             PublicKey jpub,
@@ -317,18 +317,18 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Create a renewed certificate from the given cert and keypair.
+     * Create a renewed certificate from the given cert and keypair.
      *
-     *  @param cert the old cert to be replaced
-     *  @param jpriv the private key
+     * @param cert the old cert to be replaced
+     * @param jpriv the private key
      *
-     *  @return length 4 array:
-     *  rv[0] is a Java PublicKey, from cert as passed in
-     *  rv[1] is a Java PrivateKey, jpriv as passed in
-     *  rv[2] is a Java X509Certificate, new one
-     *  rv[3] is a Java X509CRL, new one
+     * @return length 4 array:
+     * rv[0] is a Java PublicKey, from cert as passed in
+     * rv[1] is a Java PrivateKey, jpriv as passed in
+     * rv[2] is a Java X509Certificate, new one
+     * rv[3] is a Java X509CRL, new one
      *
-     *  @since 0.9.34 added altNames param
+     * @since 0.9.34 added altNames param
      */
     public static Object[] renew(X509Certificate cert, PrivateKey jpriv, int validDays)
             throws GeneralSecurityException {
@@ -349,7 +349,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Generate a CRL for the given cert, signed with the given private key
+     * Generate a CRL for the given cert, signed with the given private key
      */
     private static X509CRL generateCRL(
             X509Certificate cert, int validDays, int crlNum, byte[] sigoid, SigningPrivateKey priv)
@@ -393,7 +393,7 @@ public final class SelfSignedGenerator {
          * System.out.println("Whole CRL");
          * System.out.println(HexDump.dump(cb));
          * }
-         ****/
+         * ***/
         ByteArrayInputStream bais = new ByteArrayInputStream(cb);
 
         X509CRL rv;
@@ -410,17 +410,17 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Generate the TBS portion of the certificate.
+     * Generate the TBS portion of the certificate.
      *
-     *  @param cname the common name, non-null
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @param cname the common name, non-null
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     *  @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
-     *  @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      */
     private static byte[] genTBS(
             String cname,
@@ -514,10 +514,10 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Generate the TBS portion of the CRL.
+     * Generate the TBS portion of the CRL.
      *
-     *  @param crlNum 0-255 because lazy
-     *  @return ASN.1 encoded object
+     * @param crlNum 0-255 because lazy
+     * @return ASN.1 encoded object
      */
     private static byte[] genTBSCRL(X509Certificate cert, int validDays, int crlNum, byte[] sigalg)
  {
@@ -601,10 +601,10 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Total bytes needed to hold a value of the given length in ASN.1.
+     * Total bytes needed to hold a value of the given length in ASN.1.
      *
-     *  @param val the length of the value, 65535 max
-     *  @return the length of the TLV
+     * @param val the length of the value, 65535 max
+     * @return the length of the TLV
      */
     private static int spaceFor(int val) {
         int rv;
@@ -615,9 +615,9 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Sequence of two UTCDates
+     * Sequence of two UTCDates
      *
-     *  @return 32 bytes ASN.1 encoded object
+     * @return 32 bytes ASN.1 encoded object
      */
     private static byte[] getValidity(int validDays) {
         byte[] rv = new byte[32];
@@ -634,9 +634,9 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  A single UTCDate
+     * A single UTCDate
      *
-     *  @return 15 bytes ASN.1 encoded object
+     * @return 15 bytes ASN.1 encoded object
      */
     private static byte[] getDate(long now) {
         // UTCDate format (HH 0-23)
@@ -651,22 +651,22 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Add the following extensions:
-     *      1) Subject Key Identifier
-     *      2) Key Usage
-     *      3) Basic Constraints
-     *      4) Subject Alternative Name
-     *      As of 0.9.34, adds 127.0.0.1 and ::1 to the SAN also
-     *      5) Authority Key Identifier
-     *  (not necessarily output in that order)
+     * Add the following extensions:
+     * 1) Subject Key Identifier
+     * 2) Key Usage
+     * 3) Basic Constraints
+     * 4) Subject Alternative Name
+     * As of 0.9.34, adds 127.0.0.1 and ::1 to the SAN also
+     * 5) Authority Key Identifier
+     * (not necessarily output in that order)
      *
-     *  Ref: RFC 5280
+     * Ref: RFC 5280
      *
-     *  @param pubbytes bit string
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @param pubbytes bit string
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     *  @return ASN.1 encoded object
+     * @return ASN.1 encoded object
      */
     private static byte[] getExtensions(byte[] pubbytes, String cname, Set<String> altNames) {
         // RFC 2549 sec. 4.2.1.2
@@ -910,10 +910,10 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Generate the extensions section of the CRL.
+     * Generate the extensions section of the CRL.
      *
-     *  @param crlNum 0-255 because lazy
-     *  @return 16 bytes ASN.1 encoded object
+     * @param crlNum 0-255 because lazy
+     * @return 16 bytes ASN.1 encoded object
      */
     private static byte[] getCRLExtensions(int crlNum) {
         if (crlNum < 0 || crlNum > 255) throw new IllegalArgumentException();
@@ -942,10 +942,10 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  0x30 len 0x06 len encodedbytes... 0x05 0
+     * 0x30 len 0x06 len encodedbytes... 0x05 0
      *
-     *  @return ASN.1 encoded object
-     *  @throws IllegalArgumentException
+     * @return ASN.1 encoded object
+     * @throws IllegalArgumentException
      */
     private static byte[] getEncodedOIDSeq(String oid) {
         byte[] b = getEncodedOID(oid);
@@ -963,10 +963,10 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  0x06 len encodedbytes...
+     * 0x06 len encodedbytes...
      *
-     *  @return ASN.1 encoded object
-     *  @throws IllegalArgumentException
+     * @return ASN.1 encoded object
+     * @throws IllegalArgumentException
      */
     private static byte[] getEncodedOID(String oid) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
@@ -990,7 +990,7 @@ public final class SelfSignedGenerator {
     }
 
     /**
-     *  Note: For CLI testing, use java -jar i2p.jar su3file keygen pubkey.crt keystore.ks commonName
+     * Note: For CLI testing, use java -jar i2p.jar su3file keygen pubkey.crt keystore.ks commonName
      */
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
@@ -1050,7 +1050,7 @@ public final class SelfSignedGenerator {
          * } catch (Exception e) {
          * e.printStackTrace();
          * }
-         ****/
+         * ***/
     }
 
     private static void usage() {
@@ -1083,5 +1083,5 @@ public final class SelfSignedGenerator {
      * CertUtil.saveCRL(crl, cr);
      * System.out.println("CRL saved to " + cr);
      * }
-     ****/
+     * ***/
 }

@@ -1,10 +1,10 @@
 package dummy;
 
 /**
- *  Just more strings for xgettext, that don't appear in the source anywhere.
- *  I'm sure there's easier ways to do this, but this will do for now.
+ * Just more strings for xgettext, that don't appear in the source anywhere.
+ * I'm sure there's easier ways to do this, but this will do for now.
  *
- *  Obviously, do not compile this.
+ * Obviously, do not compile this.
  */
 class Dummy {
     void dummy() {

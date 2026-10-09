@@ -165,8 +165,8 @@ public class ErrorServlet extends HttpServlet {
     }
 
     /**
-     *  Needed if the errored page was a POST
-     *  @since 0.9.35
+     * Needed if the errored page was a POST
+     * @since 0.9.35
      */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -174,14 +174,14 @@ public class ErrorServlet extends HttpServlet {
     }
 
     /**
-     *  Override for specific cases.
-     *  This supports 403, 404, and 500+.
-     *  Output HTML that goes inside the div.
+     * Override for specific cases.
+     * This supports 403, 404, and 500+.
+     * Output HTML that goes inside the div.
      *
-     *  @param errorCode e.g. 404
-     *  @param errorMsg non-null, may be empty, already HTML-escaped
-     *  @param errorURI non-null, may be empty, already HTML-escaped
-     *  @param errorCause may be null
+     * @param errorCode e.g. 404
+     * @param errorMsg non-null, may be empty, already HTML-escaped
+     * @param errorURI non-null, may be empty, already HTML-escaped
+     * @param errorCause may be null
      */
     protected void outputMessage(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
         String themePath = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/";

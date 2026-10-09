@@ -68,12 +68,12 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     protected boolean isKilled;
 
     /**
-     *  Initialize a new span page on disk.
+     * Initialize a new span page on disk.
      *
-     *  @param bf the BlockFile to write to
-     *  @param page the page number to initialize
-     *  @param spanSize the size of the span
-     *  @throws IOException if an I/O error occurs
+     * @param bf the BlockFile to write to
+     * @param page the page number to initialize
+     * @param spanSize the size of the span
+     * @throws IOException if an I/O error occurs
      */
     public static void init(BlockFile bf, int page, int spanSize) throws IOException {
         BlockFile.pageSeek(bf.file, page);
@@ -86,10 +86,10 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Create a new instance of this span type.
+     * Create a new instance of this span type.
      *
-     *  @param sl the SkipList to create the span for
-     *  @return a new SkipSpan instance
+     * @param sl the SkipList to create the span for
+     * @return a new SkipSpan instance
      */
     @Override
     public SkipSpan<K, V> newInstance(SkipList<K, V> sl) {
@@ -101,7 +101,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Mark this span instance as killed and free its resources.
+     * Mark this span instance as killed and free its resources.
      */
     @Override
     public void killInstance() {
@@ -123,9 +123,9 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Free a chain of continuation pages
-     *  @param curPage the first page to be freed, if 0 this does nothing.
-     *  @return number freed
+     * Free a chain of continuation pages
+     * @param curPage the first page to be freed, if 0 this does nothing.
+     * @return number freed
      */
     private int freeContinuationPages(int curPage) throws IOException {
         int rv = 0;
@@ -143,7 +143,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Flush this span to disk.
+     * Flush this span to disk.
      */
     @Override
     public void flush() {
@@ -245,17 +245,17 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Load a BSkipSpan from disk.
+     * Load a BSkipSpan from disk.
      *
-     *  @param <X> the key type
-     *  @param <Y> the value type
-     *  @param bss the BSkipSpan to load into
-     *  @param bf the BlockFile
-     *  @param bsl the BSkipList
-     *  @param spanPage the page number
-     *  @param key the key
-     *  @param val the value serializer
-     *  @throws IOException if an I/O error occurs
+     * @param <X> the key type
+     * @param <Y> the value type
+     * @param bss the BSkipSpan to load into
+     * @param bf the BlockFile
+     * @param bsl the BSkipList
+     * @param spanPage the page number
+     * @param key the key
+     * @param val the value serializer
+     * @throws IOException if an I/O error occurs
      */
     private static <X extends Comparable<? super X>, Y> void load(BSkipSpan<X, Y> bss, BlockFile bf, BSkipList<X, Y> bsl,
                                                        int spanPage, Serializer<X> key, Serializer<Y> val) throws IOException {
@@ -264,18 +264,18 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Load the span headers from disk (first half of load()).
-     *  Only reads the span headers.
+     * Load the span headers from disk (first half of load()).
+     * Only reads the span headers.
      *
-     *  @param <X> the key type
-     *  @param <Y> the value type
-     *  @param bss the BSkipSpan to load into
-     *  @param bf the BlockFile
-     *  @param bsl the BSkipList
-     *  @param spanPage the page number
-     *  @param key the key
-     *  @param val the value serializer
-     *  @throws IOException if an I/O error occurs
+     * @param <X> the key type
+     * @param <Y> the value type
+     * @param bss the BSkipSpan to load into
+     * @param bf the BlockFile
+     * @param bsl the BSkipList
+     * @param spanPage the page number
+     * @param key the key
+     * @param val the value serializer
+     * @throws IOException if an I/O error occurs
      */
     protected static <X extends Comparable<? super X>, Y> void loadInit(BSkipSpan<X, Y> bss, BlockFile bf, BSkipList<X, Y> bsl,
                                                              int spanPage, Serializer<X> key, Serializer<Y> val) throws IOException {
@@ -305,19 +305,19 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Load the span's keys and values into memory (second half of load()).
+     * Load the span's keys and values into memory (second half of load()).
      *
-     *  @throws IOException if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
     protected void loadData() throws IOException {
         loadData(true);
     }
 
     /**
-     *  Load the span's keys and values into memory.
+     * Load the span's keys and values into memory.
      *
-     *  @param flushOnError set to false if you are going to flush anyway
-     *  @throws IOException if an I/O error occurs
+     * @param flushOnError set to false if you are going to flush anyway
+     * @throws IOException if an I/O error occurs
      */
     @SuppressWarnings("unchecked")
     protected void loadData(boolean flushOnError) throws IOException {
@@ -394,14 +394,14 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Attempt to recover from corrupt data in this span.
-     *  All entries starting with firstBadEntry are lost.
-     *  Zero out the overflow page on lastGoodPage,
-     *  and correct the number of entries in the first page.
-     *  We don't attempt to free the lost continuation pages.
+     * Attempt to recover from corrupt data in this span.
+     * All entries starting with firstBadEntry are lost.
+     * Zero out the overflow page on lastGoodPage,
+     * and correct the number of entries in the first page.
+     * We don't attempt to free the lost continuation pages.
      *
-     *  @param firstBadEntry the first entry index that is corrupted
-     *  @param lastGoodPage the last good page number
+     * @param firstBadEntry the first entry index that is corrupted
+     * @param lastGoodPage the last good page number
      */
     protected void lostEntries(int firstBadEntry, int lastGoodPage) {
         try {
@@ -424,10 +424,10 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Create a new BSkipSpan with the given BlockFile and BSkipList.
+     * Create a new BSkipSpan with the given BlockFile and BSkipList.
      *
-     *  @param bf the BlockFile
-     *  @param bsl the BSkipList
+     * @param bf the BlockFile
+     * @param bsl the BSkipList
      */
     protected BSkipSpan(BlockFile bf, BSkipList<K, V> bsl) {
         this.bf = bf;
@@ -435,14 +435,14 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Create a BSkipSpan and load its data from disk.
+     * Create a BSkipSpan and load its data from disk.
      *
-     *  @param bf the BlockFile
-     *  @param bsl the BSkipList
-     *  @param spanPage the page number of this span
-     *  @param key the key
-     *  @param val the value serializer
-     *  @throws IOException if an I/O error occurs
+     * @param bf the BlockFile
+     * @param bsl the BSkipList
+     * @param spanPage the page number of this span
+     * @param key the key
+     * @param val the value serializer
+     * @throws IOException if an I/O error occurs
      */
     public BSkipSpan(BlockFile bf, BSkipList<K, V> bsl, int spanPage, Serializer<K> key, Serializer<V> val) throws IOException {
         this.bf = bf;
@@ -489,9 +489,9 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     }
 
     /**
-     *  Get a string representation of this span.
+     * Get a string representation of this span.
      *
-     *  @return a string representation
+     * @return a string representation
      */
     @Override
     public String toString() {

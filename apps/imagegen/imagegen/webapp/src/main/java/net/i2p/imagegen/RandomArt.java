@@ -69,10 +69,10 @@ public class RandomArt {
     private static final char U_BOX_BR = '\u0020';
 
     /**
-     *  @param dgst_raw the data to be visualized, recommend 64 bytes or less
-     *  @param key_type output in the first line, recommend 6 chars or less
-     *  @param key_size output in the first line
-     *  @param prefix if non-null, prepend to every line
+     * @param dgst_raw the data to be visualized, recommend 64 bytes or less
+     * @param key_type output in the first line, recommend 6 chars or less
+     * @param key_size output in the first line
+     * @param prefix if non-null, prepend to every line
      */
     public static String gnutls_key_fingerprint_randomart(final byte[] dgst_raw,
                     final String key_type,

@@ -80,7 +80,7 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Return the file's absolute path.
      *
-     *  @return the file's absolute path
+     * @return the file's absolute path
      */
     @Override
     public String getName() {
@@ -88,11 +88,11 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     *  Will strip a "www." prefix and retry if lookup fails
+     * Will strip a "www." prefix and retry if lookup fails
      *
-     *  @param hostname case-sensitive; caller should convert to lower case
-     *  @param lookupOptions unused, may be null
-     *  @param storedOptions unused, may be null
+     * @param hostname case-sensitive; caller should convert to lower case
+     * @param lookupOptions unused, may be null
+     * @param storedOptions unused, may be null
      */
     @Override
     public Destination lookup(String hostname, Properties lookupOptions, Properties storedOptions) {
@@ -115,7 +115,7 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Reverse lookup a destination to a hostname.
      *
-     *  @param options unused, may be null
+     * @param options unused, may be null
      */
     @Override
     public String reverseLookup(Destination dest, Properties options) {
@@ -141,11 +141,11 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     *  Better than DataHelper.loadProps(), doesn't load the whole file into memory,
-     *  and stops when it finds a match.
+     * Better than DataHelper.loadProps(), doesn't load the whole file into memory,
+     * and stops when it finds a match.
      *
-     *  @param host case-sensitive; caller should convert to lower case
-     *  @return the key
+     * @param host case-sensitive; caller should convert to lower case
+     * @return the key
      */
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private String getKey(String host) throws IOException {
@@ -161,9 +161,9 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     *  Full-scan parse of the hosts file into _keyCache (hostname -> base64 key).
-     *  Caller must hold the read lock. Sets _cacheStamp on success.
-     *  @since 0.9.71+
+     * Full-scan parse of the hosts file into _keyCache (hostname -> base64 key).
+     * Caller must hold the read lock. Sets _cacheStamp on success.
+     * @since 0.9.71+
      */
     private void loadKeyCacheLocked() throws IOException {
         if (!_file.exists()) {
@@ -188,9 +188,9 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Store a hostname-destination mapping.
      *
-     *  @param hostname case-sensitive; caller should convert to lower case
-     *  @param options if non-null, any prefixed with '=' will be appended
-     *                 in subscription format
+     * @param hostname case-sensitive; caller should convert to lower case
+     * @param options if non-null, any prefixed with '=' will be appended
+     * in subscription format
      */
     @Override
     public boolean put(String hostname, Destination d, Properties options) {
@@ -239,9 +239,9 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Store a hostname-destination mapping if not already present.
      *
-     *  @param hostname case-sensitive; caller should convert to lower case
-     *  @param options if non-null, any prefixed with '=' will be appended
-     *                 in subscription format
+     * @param hostname case-sensitive; caller should convert to lower case
+     * @param options if non-null, any prefixed with '=' will be appended
+     * in subscription format
      */
     @Override
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
@@ -282,13 +282,13 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     *  Write the subscription options part of the line (including the #!).
-     *  Only options starting with '=' (if any) are written (with the '=' stripped).
-     *  Does not write a newline.
+     * Write the subscription options part of the line (including the #!).
+     * Only options starting with '=' (if any) are written (with the '=' stripped).
+     * Does not write a newline.
      *
-     *  @param options non-null
-     *  @param out the writer to write to
-     *  @since 0.9.26, package private since 0.9.30, public since 0.9.31
+     * @param options non-null
+     * @param out the writer to write to
+     * @since 0.9.26, package private since 0.9.30, public since 0.9.31
      */
     public static void writeOptions(Properties options, Writer out) throws IOException {
         boolean started = false;
@@ -312,8 +312,8 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Remove a hostname from the naming service.
      *
-     *  @param hostname case-sensitive; caller should convert to lower case
-     *  @param options unused, may be null
+     * @param hostname case-sensitive; caller should convert to lower case
+     * @param options unused, may be null
      */
     @Override
     public boolean remove(String hostname, Properties options) {
@@ -361,11 +361,11 @@ public class SingleFileNamingService extends NamingService {
      * Return all entries matching the options.
      *
      * @param options null OK, or as follows:
-     *                Key "search": return only those matching substring
-     *                Key "startsWith": return only those starting with
-     *                                  ("[0-9]" allowed)
-     *                Key "skip": number of matching entries to skip
-     *                Key "limit": maximum number of matching entries to return
+     * Key "search": return only those matching substring
+     * Key "startsWith": return only those starting with
+     * ("[0-9]" allowed)
+     * Key "skip": number of matching entries to skip
+     * Key "limit": maximum number of matching entries to return
      * @return the entries
      * @since 0.9.71+
      */
@@ -438,18 +438,18 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     *  Overridden since we store base64 natively.
+     * Overridden since we store base64 natively.
      *
-     *  @param options null OK, or as follows:
-     *                 Key "search": return only those matching substring
-     *                 Key "startsWith": return only those starting with
-     *                                   ("[0-9]" allowed)
+     * @param options null OK, or as follows:
+     * Key "search": return only those matching substring
+     * Key "startsWith": return only those starting with
+     * ("[0-9]" allowed)
      *
-     *  @return all mappings (matching the options if non-null)
-     *          or empty Map if none.
-     *          Returned Map is not sorted.
+     * @return all mappings (matching the options if non-null)
+     * or empty Map if none.
+     * Returned Map is not sorted.
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     @Override
     public Map<String, String> getBase64Entries(Properties options) {
@@ -497,11 +497,11 @@ public class SingleFileNamingService extends NamingService {
     }
 
     /**
-     *  Overridden for efficiency.
-     *  Output is not sorted.
+     * Overridden for efficiency.
+     * Output is not sorted.
      *
-     *  @param options unused, may be null
-     *  @since 0.9.20
+     * @param options unused, may be null
+     * @since 0.9.20
      */
     @Override
     public void export(Writer out, Properties options) throws IOException {
@@ -527,8 +527,8 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Return all known host names.
      *
-     *  @param options unused, may be null
-     *  @return all known host names, unsorted
+     * @param options unused, may be null
+     * @return all known host names, unsorted
      */
     @Override
     public Set<String> getNames(Properties options) {
@@ -557,7 +557,7 @@ public class SingleFileNamingService extends NamingService {
     /**
      * Return the number of entries.
      *
-     *  @param options unused, may be null
+     * @param options unused, may be null
      */
     @Override
     public int size(Properties options) {

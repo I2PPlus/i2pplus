@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -47,10 +46,10 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Does the client support this message?
+     * Does the client support this message?
      *
-     *  @param clientVersion may be null
-     *  @return version != null and version &gt;= 0.9.7
+     * @param clientVersion may be null
+     * @return version != null and version &gt;= 0.9.7
      */
     public static boolean isSupported(String clientVersion) {
         return clientVersion != null && VersionComparator.comp(clientVersion, MIN_VERSION) >= 0;

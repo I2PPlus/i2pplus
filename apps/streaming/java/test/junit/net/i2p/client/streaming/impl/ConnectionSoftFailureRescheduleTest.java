@@ -116,7 +116,7 @@ public class ConnectionSoftFailureRescheduleTest {
     }
 
     /** Degenerate budgets: a budget of zero gives up on any send (>= semantics
-     *  mirror the original {@code numSends >= maxSynSends}). */
+     * mirror the original {@code numSends >= maxSynSends}). */
     @Test
     public void testDegenerateBudget() {
         assertTrue(Connection.synGiveUpBudgetExceeded(1, 0, 0));

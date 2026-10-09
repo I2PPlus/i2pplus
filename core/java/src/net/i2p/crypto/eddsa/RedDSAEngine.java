@@ -9,35 +9,35 @@ import java.security.MessageDigest;
  * Ref: Zcash Protocol Specification, Version 2018.0-beta-33 [Overwinter+Sapling]
  * Sections 4.1.6.1, 4.1.6.2, 5.4.6
  *
- *<p>
+ * <p>
  * The EdDSA sign and verify algorithms do not interact well with
  * the Java Signature API, as one or more update() methods must be
  * called before sign() or verify(). Using the standard API,
  * this implementation must copy and buffer all data passed in
  * via update().
- *</p><p>
+ * </p><p>
  * This implementation offers two ways to avoid this copying,
  * but only if all data to be signed or verified is available
  * in a single byte array.
- *</p><p>
+ * </p><p>
  * Option 1:
- *</p><ol>
- *<li>Call initSign() or initVerify() as usual.
- *</li><li>Call setParameter(ONE_SHOT_MODE)
- *</li><li>Call update(byte[]) or update(byte[], int, int) exactly once
- *</li><li>Call sign() or verify() as usual.
- *</li><li>If doing additional one-shot signs or verifies with this object, you must
- *         call setParameter(ONE_SHOT_MODE) each time
- *</li></ol>
+ * </p><ol>
+ * <li>Call initSign() or initVerify() as usual.
+ * </li><li>Call setParameter(ONE_SHOT_MODE)
+ * </li><li>Call update(byte[]) or update(byte[], int, int) exactly once
+ * </li><li>Call sign() or verify() as usual.
+ * </li><li>If doing additional one-shot signs or verifies with this object, you must
+ * call setParameter(ONE_SHOT_MODE) each time
+ * </li></ol>
  *
- *<p>
+ * <p>
  * Option 2:
- *</p><ol>
- *<li>Call initSign() or initVerify() as usual.
- *</li><li>Call one of the signOneShot() or verifyOneShot() methods.
- *</li><li>If doing additional one-shot signs or verifies with this object,
- *         just call signOneShot() or verifyOneShot() again.
- *</li></ol>
+ * </p><ol>
+ * <li>Call initSign() or initVerify() as usual.
+ * </li><li>Call one of the signOneShot() or verifyOneShot() methods.
+ * </li><li>If doing additional one-shot signs or verifies with this object,
+ * just call signOneShot() or verifyOneShot() again.
+ * </li></ol>
  *
  * @since 0.9.39
  */

@@ -25,7 +25,6 @@ import net.i2p.util.Log;
  * property is retrieved - either getAll(), getNotices() or getErrors().
  *
  * This Handler will only process a single POST. The jsp bean must be declared scope=request.
- *
  */
 public abstract class FormHandler {
     /** Router context */
@@ -90,9 +89,9 @@ public abstract class FormHandler {
     }
 
     /**
-     *  Periodic removal of stale rate-limit entries.
-     *  Runs until interrupted.
-     *  @since 0.9.70+
+     * Periodic removal of stale rate-limit entries.
+     * Runs until interrupted.
+     * @since 0.9.70+
      */
     private static void cleanupRateLimits() {
         while (true) {
@@ -118,9 +117,9 @@ public abstract class FormHandler {
     }
 
     /**
-     *  For nonce validation
-     *  @param session the HTTP session
-     *  @since 0.9.69
+     * For nonce validation
+     * @param session the HTTP session
+     * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
 
@@ -128,7 +127,7 @@ public abstract class FormHandler {
      * Configure this bean to query a particular router context
      *
      * @param contextId beginning few characters of the routerHash, or null to pick
-     *                  the first one we come across.
+     * the first one we come across.
      */
     public void setContextId(String contextId) {
         try {
@@ -158,17 +157,17 @@ public abstract class FormHandler {
     public void setSettings(Map settings) {_settings = new HashMap<>(settings);}
 
     /**
-     *  Only set by formhandler.jsi for multipart/form-data
+     * Only set by formhandler.jsi for multipart/form-data
      *
-     *  @param rw the request wrapper
-     *  @since 0.9.19
+     * @param rw the request wrapper
+     * @since 0.9.19
      */
     public void setRequestWrapper(RequestWrapper rw) {_requestWrapper = rw;}
 
     /**
-     *  Same as HelperBase
-     *  @return true if advanced mode
-     *  @since 0.9.14.1
+     * Same as HelperBase
+     * @return true if advanced mode
+     * @since 0.9.14.1
      */
     public boolean isAdvanced() {return _context.getBooleanProperty(HelperBase.PROP_ADVANCED);}
 
@@ -409,7 +408,6 @@ public abstract class FormHandler {
      * Make sure the nonce was set correctly, otherwise someone could just
      * create a link like /confignet.jsp?hostname=localhost and break the
      * user's node (or worse).
-     *
      */
     private void validate() {
         if (_processed) {return;}
@@ -500,17 +498,17 @@ public abstract class FormHandler {
     public String _t(String s) {return Messages.getString(s, _context);}
 
     /**
-     *  translate a string with a parameter
-     *  This is a lot more expensive than _t(s), so use sparingly.
+     * translate a string with a parameter
+     * This is a lot more expensive than _t(s), so use sparingly.
      *
-     *  @param s string to be translated containing {0}
-     *    The {0} will be replaced by the parameter.
-     *    Single quotes must be doubled, i.e. ' -&gt; '' in the string.
-     *  @param o parameter, not translated.
-     *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *    Do not double the single quotes in the parameter.
-     *    Use autoboxing to call with ints, longs, floats, etc.
-     *  @return the translated string
+     * @param s string to be translated containing {0}
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     * @param o parameter, not translated.
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
+     * @return the translated string
      */
     public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
@@ -526,11 +524,11 @@ public abstract class FormHandler {
     public String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2, _context);}
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
-     *  @param s the string to mark
-     *  @return s
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers.
+     * It does not translate!
+     * @param s the string to mark
+     * @return s
      */
     public static String _x(String s) {return s;}
 

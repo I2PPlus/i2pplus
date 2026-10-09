@@ -53,12 +53,12 @@ public class FileBuffer implements Buffer {
 		return _file;
 	}
 
-	/**
-         * Get an InputStream for the file, skipping to the offset if needed.
-         * Caller must call readComplete().
-         *
+ /**
+  * Get an InputStream for the file, skipping to the offset if needed.
+  * Caller must call readComplete().
+  *
 	 * @return new FileInputStream
-	 *  @throws IOException on I/O error
+	 * @throws IOException on I/O error
 	 */
 	public synchronized InputStream getInputStream() throws IOException {
 		if (_is != null && _offset <= 0)
@@ -69,12 +69,12 @@ public class FileBuffer implements Buffer {
 		return _is;
 	}
 
-	/**
-         * Get an OutputStream for the file.
-         * Caller must call writeComplete().
-         *
+ /**
+  * Get an OutputStream for the file.
+  * Caller must call writeComplete().
+  *
 	 * @return new SecureFileOutputStream
-	 *  @throws IOException on I/O error
+	 * @throws IOException on I/O error
 	 */
 	public synchronized OutputStream getOutputStream() throws IOException {
 		if (_os == null)

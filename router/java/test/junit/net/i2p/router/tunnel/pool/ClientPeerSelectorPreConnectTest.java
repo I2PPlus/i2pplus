@@ -77,10 +77,10 @@ public class ClientPeerSelectorPreConnectTest {
     }
 
     /**
-     *  The regression this change fixes. A generous timeout used to mean
-     *  "pre-connect is unnecessary"; it only means the budget is larger than
-     *  the handshake, not that a session already exists. With adaptive
-     *  timeouts at 17s and 22s this path skipped pre-connect for most builds.
+     * The regression this change fixes. A generous timeout used to mean
+     * "pre-connect is unnecessary"; it only means the budget is larger than
+     * the handshake, not that a session already exists. With adaptive
+     * timeouts at 17s and 22s this path skipped pre-connect for most builds.
      */
     @Test
     public void testTimeoutNoLongerGoverns() {
@@ -127,10 +127,10 @@ public class ClientPeerSelectorPreConnectTest {
     }
 
     /**
-     *  The cooldown is checked before the session state, so a peer we just
-     *  pre-connected is not re-probed even if the handshake has not completed
-     *  yet. Without this ordering a slow handshake would be retried on every
-     *  build and pile handshakes onto the same peer.
+     * The cooldown is checked before the session state, so a peer we just
+     * pre-connected is not re-probed even if the handshake has not completed
+     * yet. Without this ordering a slow handshake would be retried on every
+     * build and pile handshakes onto the same peer.
      */
     @Test
     public void testCooldownBeatsSessionState() {

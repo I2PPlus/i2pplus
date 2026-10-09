@@ -495,7 +495,7 @@ public class ClientAppConfig {
 
     /**
      * Matches on class, args, and name only
- *
+     *
      * @since 0.9.42
      */
     @Override

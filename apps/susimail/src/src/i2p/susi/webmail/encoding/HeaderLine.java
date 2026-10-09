@@ -15,12 +15,11 @@ import net.i2p.util.HexDump;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  Ref:
- *  http://en.wikipedia.org/wiki/MIME#Encoded-Word
- *  http://tools.ietf.org/html/rfc2047
- *  https://jeffreystedfast.blogspot.com/2013/09/time-for-rant-on-mime-parsers.html
- *  https://jeffreystedfast.blogspot.com/2013/08/why-decoding-rfc2047-encoded-headers-is.html
- *
+ * Ref:
+ * http://en.wikipedia.org/wiki/MIME#Encoded-Word
+ * http://tools.ietf.org/html/rfc2047
+ * https://jeffreystedfast.blogspot.com/2013/09/time-for-rant-on-mime-parsers.html
+ * https://jeffreystedfast.blogspot.com/2013/08/why-decoding-rfc2047-encoded-headers-is.html
  */
 public class HeaderLine extends Encoding {
 	/**
@@ -37,10 +36,10 @@ public class HeaderLine extends Encoding {
 	}
 
 	/**
-	 *  This will split multibyte chars across lines,
-	 *  see 4th ref above
+	 * This will split multibyte chars across lines,
+	 * see 4th ref above
 	 *
-	 *  @throws UnsupportedOperationException always
+	 * @throws UnsupportedOperationException always
 	 */
 	public String encode(byte[] in) throws EncodingException {
 		throw new UnsupportedOperationException("use encode(String)");
@@ -71,26 +70,26 @@ public class HeaderLine extends Encoding {
 	}
 
 	/**
-	 *  Encode a single header line ONLY. Do NOT include the \r\n.
-	 *  Returns a string of one or more lines including the trailing \r\n.
-	 *  Field-name will not be encoded, must be less than 62 chars.
+	 * Encode a single header line ONLY. Do NOT include the \r\n.
+	 * Returns a string of one or more lines including the trailing \r\n.
+	 * Field-name will not be encoded, must be less than 62 chars.
 	 *
-	 *  The fieldBody is treated as "unstructured text",
-	 *  which is suitable only for the field names "Subject" and "Comments".
-	 *  We do NOT tokenize into structured fields.
+	 * The fieldBody is treated as "unstructured text",
+	 * which is suitable only for the field names "Subject" and "Comments".
+	 * We do NOT tokenize into structured fields.
 	 *
-	 *  To make things easy, we either encode the whole field body as RFC 2047,
-	 *  or don't encode at all. If it's too long for a single line, we
-	 *  encode it, even if we didn't otherwise have to.
-	 *  We don't do quoted-string.
+	 * To make things easy, we either encode the whole field body as RFC 2047,
+	 * or don't encode at all. If it's too long for a single line, we
+	 * encode it, even if we didn't otherwise have to.
+	 * We don't do quoted-string.
 	 *
-	 *  This will not split multibyte chars, including supplementary chars,
-	 *  across lines.
+	 * This will not split multibyte chars, including supplementary chars,
+	 * across lines.
 	 *
-	 *  TODO this will not work for quoting structured text
-	 *  such as recipient names on the "To" and "Cc" lines.
+	 * TODO this will not work for quoting structured text
+	 * such as recipient names on the "To" and "Cc" lines.
 	 *
-	 *  @param str must start with "field-name: ", must have non-whitespace after that
+	 * @param str must start with "field-name: ", must have non-whitespace after that
 	 */
 	@Override
 	public String encode(String str) throws EncodingException {
@@ -171,8 +170,8 @@ public class HeaderLine extends Encoding {
 	private static final int DECODE_MAX = 256;
 
 	/**
-	 *  Decode all the header lines, up through \r\n\r\n,
-	 *  and puts them in the ReadBuffer, including the \r\n\r\n
+	 * Decode all the header lines, up through \r\n\r\n,
+	 * and puts them in the ReadBuffer, including the \r\n\r\n
 	 */
 	public void decode(InputStream in, Buffer bout) throws IOException {
 		OutputStream out = bout.getOutputStream();

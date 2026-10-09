@@ -40,22 +40,22 @@ public class EdDSAEngine extends Signature {
     private int oneShotLength;
 
     /**
-     *  To efficiently sign or verify data in one shot, pass this to setParameters()
-     *  after initSign() or initVerify() but BEFORE THE FIRST AND ONLY
-     *  update(data) or update(data, off, len). The data reference will be saved
-     *  and then used in sign() or verify() without copying the data.
-     *  Violate these rules and you will get a SignatureException.
+     * To efficiently sign or verify data in one shot, pass this to setParameters()
+     * after initSign() or initVerify() but BEFORE THE FIRST AND ONLY
+     * update(data) or update(data, off, len). The data reference will be saved
+     * and then used in sign() or verify() without copying the data.
+     * Violate these rules and you will get a SignatureException.
      *
-     *  @since 0.9.25
+     * @since 0.9.25
      */
     public static final AlgorithmParameterSpec ONE_SHOT_MODE = new OneShotSpec();
 
     private static final BigIntegerLittleEndianEncoding _ble = new BigIntegerLittleEndianEncoding();
 
     /**
-     *  {@link EdDSABlinding#ORDER} as 32 little-endian bytes, so that the
-     *  RFC 8032 range check on S can be done by subtraction instead of building
-     *  a BigInteger. Verified against BigInteger.compareTo().
+     * {@link EdDSABlinding#ORDER} as 32 little-endian bytes, so that the
+     * RFC 8032 range check on S can be done by subtraction instead of building
+     * a BigInteger. Verified against BigInteger.compareTo().
      */
     private static final byte[] ORDER_LITTLE_ENDIAN = {
         (byte) 0xed, (byte) 0xd3, (byte) 0xf5, (byte) 0x5c,
@@ -69,12 +69,12 @@ public class EdDSAEngine extends Signature {
     };
 
     /**
-     *  Reusable buffer for the S half of a signature, to avoid allocating a
-     *  fresh array for every verification. Only valid within one call, and
-     *  never retained by any callee. Like the digest, baos and oneShotBytes
-     *  state this class already keeps, it assumes the instance is used by one
-     *  thread at a time - callers that care create a fresh engine per
-     *  operation.
+     * Reusable buffer for the S half of a signature, to avoid allocating a
+     * fresh array for every verification. Only valid within one call, and
+     * never retained by any callee. Like the digest, baos and oneShotBytes
+     * state this class already keeps, it assumes the instance is used by one
+     * thread at a time - callers that care create a fresh engine per
+     * operation.
      */
     private byte[] sBuf;
 
@@ -323,21 +323,21 @@ public class EdDSAEngine extends Signature {
     }
 
     /**
-     *  Is the 32 byte little-endian value in {@code s} strictly less than
-     *  {@link EdDSABlinding#ORDER}?
+     * Is the 32 byte little-endian value in {@code s} strictly less than
+     * {@link EdDSABlinding#ORDER}?
      *
-     *  Equivalent to {@code _ble.toBigInteger(s).compareTo(EdDSABlinding.ORDER) < 0}
-     *  without allocating a BigInteger and a reversed copy of the input. This is
-     *  a fixed 32 iteration borrow chain: every byte is read and every byte is
-     *  subtracted, and the only carry is folded into the next iteration with
-     *  arithmetic, so there is no data-dependent branch or memory access. That
-     *  makes it strictly better than BigInteger.compareTo(), which exits early
-     *  on the first differing magnitude word. A short-circuiting byte compare
-     *  would be a timing oracle here; DataHelper.eq()/MessageDigest.isEqual()
-     *  are equality tests and cannot express an ordering, so they don't apply.
+     * Equivalent to {@code _ble.toBigInteger(s).compareTo(EdDSABlinding.ORDER) < 0}
+     * without allocating a BigInteger and a reversed copy of the input. This is
+     * a fixed 32 iteration borrow chain: every byte is read and every byte is
+     * subtracted, and the only carry is folded into the next iteration with
+     * arithmetic, so there is no data-dependent branch or memory access. That
+     * makes it strictly better than BigInteger.compareTo(), which exits early
+     * on the first differing magnitude word. A short-circuiting byte compare
+     * would be a timing oracle here; DataHelper.eq()/MessageDigest.isEqual()
+     * are equality tests and cannot express an ordering, so they don't apply.
      *
-     *  @param s the value to test, 32 bytes, little-endian
-     *  @return true if s is less than the group order
+     * @param s the value to test, 32 bytes, little-endian
+     * @return true if s is less than the group order
      */
     private static boolean isBelowOrder(byte[] s) {
         int borrow = 0;
@@ -354,11 +354,11 @@ public class EdDSAEngine extends Signature {
      * use this method, which will avoid copying the data.
      *
      * Same as:
-     *<pre>
+     * <pre>
      * setParameter(ONE_SHOT_MODE)
      * update(data)
      * sig = sign()
-     *</pre>
+     * </pre>
      *
      * @param data the message to be signed
      * @return the signature
@@ -375,11 +375,11 @@ public class EdDSAEngine extends Signature {
      * use this method, which will avoid copying the data.
      *
      * Same as:
-     *<pre>
+     * <pre>
      * setParameter(ONE_SHOT_MODE)
      * update(data, off, len)
      * sig = sign()
-     *</pre>
+     * </pre>
      *
      * @param data byte array containing the message to be signed
      * @param off the start of the message inside data
@@ -400,11 +400,11 @@ public class EdDSAEngine extends Signature {
      * use this method, which will avoid copying the data.
      *
      * Same as:
-     *<pre>
+     * <pre>
      * setParameter(ONE_SHOT_MODE)
      * update(data)
      * ok = verify(signature)
-     *</pre>
+     * </pre>
      *
      * @param data the message that was signed
      * @param signature of the message
@@ -422,11 +422,11 @@ public class EdDSAEngine extends Signature {
      * use this method, which will avoid copying the data.
      *
      * Same as:
-     *<pre>
+     * <pre>
      * setParameter(ONE_SHOT_MODE)
      * update(data, off, len)
      * ok = verify(signature)
-     *</pre>
+     * </pre>
      *
      * @param data byte array containing the message that was signed
      * @param off the start of the message inside data
@@ -446,11 +446,11 @@ public class EdDSAEngine extends Signature {
      * use this method, which will avoid copying the data.
      *
      * Same as:
-     *<pre>
+     * <pre>
      * setParameter(ONE_SHOT_MODE)
      * update(data)
      * ok = verify(signature, sigoff, siglen)
-     *</pre>
+     * </pre>
      *
      * @param data the message that was signed
      * @param signature byte array containing the signature
@@ -470,11 +470,11 @@ public class EdDSAEngine extends Signature {
      * use this method, which will avoid copying the data.
      *
      * Same as:
-     *<pre>
+     * <pre>
      * setParameter(ONE_SHOT_MODE)
      * update(data, off, len)
      * ok = verify(signature, sigoff, siglen)
-     *</pre>
+     * </pre>
      *
      * @param data byte array containing the message that was signed
      * @param off the start of the message inside data

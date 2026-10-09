@@ -25,8 +25,8 @@ public class I2PSimpleClient implements I2PClient {
     /**
      * This method is not supported.
      *
-     *  @deprecated Don't do this
-     *  @throws UnsupportedOperationException always
+     * @deprecated Don't do this
+     * @throws UnsupportedOperationException always
      */
     @Deprecated
     @Override
@@ -37,9 +37,9 @@ public class I2PSimpleClient implements I2PClient {
     /**
      * This method is not supported.
      *
-     *  @deprecated Don't do this
-     *  @throws UnsupportedOperationException always
-     *  @since 0.9.12
+     * @deprecated Don't do this
+     * @throws UnsupportedOperationException always
+     * @since 0.9.12
      */
     @Deprecated
     @Override
@@ -50,8 +50,8 @@ public class I2PSimpleClient implements I2PClient {
     /**
      * This method is not supported.
      *
-     *  @deprecated Don't do this
-     *  @throws UnsupportedOperationException always
+     * @deprecated Don't do this
+     * @throws UnsupportedOperationException always
      */
     @Deprecated
     @Override

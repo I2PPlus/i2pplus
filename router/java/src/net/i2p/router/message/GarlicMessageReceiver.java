@@ -5,7 +5,6 @@ package net.i2p.router.message;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.crypto.EncType;
@@ -42,11 +41,11 @@ public class GarlicMessageReceiver {
     private final Hash _clientDestination;
 
     /**
-     *  Rate-limited decrypt failure counter.  Individual failures are logged
-     *  at DEBUG; a summary WARN is emitted every {@code FAIL_WARN_INTERVAL}
-     *  failures to keep the log usable during normal LeaseSet rotation.
+     * Rate-limited decrypt failure counter.  Individual failures are logged
+     * at DEBUG; a summary WARN is emitted every {@code FAIL_WARN_INTERVAL}
+     * failures to keep the log usable during normal LeaseSet rotation.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final AtomicInteger _decryptFailCount = new AtomicInteger();
     private static final int FAIL_WARN_INTERVAL = 50;

@@ -51,10 +51,10 @@ abstract class IRCFilter {
 
     /*************************************************************************
      *
-     *  Modify or filter a single inbound line.
+     * Modify or filter a single inbound line.
      *
-     *  @param helper may be null
-     *  @return the original or modified line, or null if it should be dropped.
+     * @param helper may be null
+     * @return the original or modified line, or null if it should be dropped.
      */
     public static String inboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
 
@@ -273,10 +273,10 @@ abstract class IRCFilter {
 
     /*************************************************************************
      *
-     *  Modify or filter a single outbound line.
+     * Modify or filter a single outbound line.
      *
-     *  @param helper may be null
-     *  @return the original or modified line, or null if it should be dropped.
+     * @param helper may be null
+     * @return the original or modified line, or null if it should be dropped.
      */
     public static String outboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
 
@@ -334,13 +334,13 @@ abstract class IRCFilter {
     }
 
     /**
-     *  Rewrite a PING so the server replies to a nonce we remember.
-     *  Rewriting avoids sending our proxy's IP address in the PONG.
+     * Rewrite a PING so the server replies to a nonce we remember.
+     * Rewriting avoids sending our proxy's IP address in the PONG.
      *
-     *  @param field the split line
-     *  @param idx index of the command in field
-     *  @param expectedPong filled with the expected PONG for a 3-field PING
-     *  @return the rewritten line, or null if it should be dropped
+     * @param field the split line
+     * @param idx index of the command in field
+     * @param expectedPong filled with the expected PONG for a 3-field PING
+     * @return the rewritten line, or null if it should be dropped
      */
     private static String filterPing(String[] field, int idx, StringBuffer expectedPong) {
         // Most clients just send a PING and are happy with any old PONG.  Others,
@@ -370,13 +370,13 @@ abstract class IRCFilter {
     }
 
     /**
-     *  Allow PRIVMSG/NOTICE, blocking CTCP (except ACTION, DCC, and XDCC).
+     * Allow PRIVMSG/NOTICE, blocking CTCP (except ACTION, DCC, and XDCC).
      *
-     *  @param s the original line
-     *  @param field the split line
-     *  @param idx index of the command in field
-     *  @param helper may be null
-     *  @return the original or rewritten line, or null if it should be dropped
+     * @param s the original line
+     * @param field the split line
+     * @param idx index of the command in field
+     * @param helper may be null
+     * @return the original or rewritten line, or null if it should be dropped
      */
     private static String filterPrivmsgOrNotice(String s, String[] field, int idx, DCCHelper helper) {
         if (field.length < idx + 2)
@@ -416,12 +416,12 @@ abstract class IRCFilter {
     }
 
     /**
-     *  Sanitize a USER line, replacing hostname and servername.
+     * Sanitize a USER line, replacing hostname and servername.
      *
-     *  @param s the original line
-     *  @param field the split line
-     *  @param idx index of the command in field
-     *  @return the rewritten line
+     * @param s the original line
+     * @param field the split line
+     * @param idx index of the command in field
+     * @return the rewritten line
      */
     private static String filterUser(String s, String[] field, int idx) {
         // USER <username> <hostname> <servername> <realname> (RFC 1459)
@@ -454,19 +454,19 @@ abstract class IRCFilter {
     }
 
     /**
-     *<pre>
+     * <pre>
      *  DCC CHAT chat xxx.b32.i2p i2p-port        -> DCC CHAT chat IP port
      *  DCC SEND file xxx.b32.i2p i2p-port length -> DCC SEND file IP port length
      *  DCC RESUME file i2p-port offset           -> DCC RESUME file port offset
      *  DCC ACCEPT file i2p-port offset           -> DCC ACCEPT file port offset
      *  DCC xxx                                   -> null
-     *</pre>
+     * </pre>
      *
-     *  @param pfx the message through the "DCC " part
-     *  @param msg the message after the "DCC " part
-     *  @param helper may be null
-     *  @return the sanitized message or null to block
-     *  @since 0.8.9
+     * @param pfx the message through the "DCC " part
+     * @param msg the message after the "DCC " part
+     * @param helper may be null
+     * @return the sanitized message or null to block
+     * @since 0.8.9
      */
     private static String filterDCCIn(String pfx, String msg, DCCHelper helper) {
         // strip trailing ctcp (other one is in pfx)
@@ -546,19 +546,19 @@ abstract class IRCFilter {
     }
 
     /**
-     *<pre>
+     * <pre>
      *  DCC CHAT chat IP port        -> DCC CHAT chat xxx.b32.i2p i2p-port
      *  DCC SEND file IP port length -> DCC SEND file xxx.b32.i2p i2p-port length
      *  DCC RESUME file port offset  -> DCC RESUME file i2p-port offset
      *  DCC ACCEPT file port offset  -> DCC ACCEPT file i2p-port offset
      *  DCC xxx                      -> null
-     *</pre>
+     * </pre>
      *
-     *  @param pfx the message through the "DCC " part
-     *  @param msg the message after the "DCC " part
-     *  @param helper may be null
-     *  @return the sanitized message or null to block
-     *  @since 0.8.9
+     * @param pfx the message through the "DCC " part
+     * @param msg the message after the "DCC " part
+     * @param helper may be null
+     * @return the sanitized message or null to block
+     * @since 0.8.9
      */
     private static String filterDCCOut(String pfx, String msg, DCCHelper helper) {
         // strip trailing ctcp (other one is in pfx)

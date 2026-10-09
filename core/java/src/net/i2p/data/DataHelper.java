@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -63,68 +62,68 @@ import java.nio.charset.StandardCharsets;
  *
  * <p>DataHelper provides essential utilities for working with I2P data structures:</p>
  * <ul>
- *   <li><strong>Serialization:</strong> Read/write primitive types to/from streams</li>
- *   <li><strong>Encoding:</strong> Base64 and Base32 encoding/decoding</li>
- *   <li><strong>Validation:</strong> Data format verification and bounds checking</li>
- *   <li><strong>Conversion:</strong> Between different data representations</li>
- *   <li><strong>Utilities:</strong> Common operations on collections and arrays</li>
+ * <li><strong>Serialization:</strong> Read/write primitive types to/from streams</li>
+ * <li><strong>Encoding:</strong> Base64 and Base32 encoding/decoding</li>
+ * <li><strong>Validation:</strong> Data format verification and bounds checking</li>
+ * <li><strong>Conversion:</strong> Between different data representations</li>
+ * <li><strong>Utilities:</strong> Common operations on collections and arrays</li>
  * </ul>
  *
  * <p><strong>Core Operations:</strong></p>
  * <ul>
- *   <li><strong>Primitive I/O:</strong> readLong(), writeLong(), readString(), writeString()</li>
- *   <li><strong>Base64:</strong> encode(), decode() with filesystem-safe variants</li>
- *   <li><strong>Base32:</strong> encodeBase32(), decodeBase32() for addresses</li>
- *   <li><strong>Properties:</strong> readProperties(), writeProperties() for metadata</li>
- *   <li><strong>Collections:</strong> toMap(), toString() for data structures</li>
+ * <li><strong>Primitive I/O:</strong> readLong(), writeLong(), readString(), writeString()</li>
+ * <li><strong>Base64:</strong> encode(), decode() with filesystem-safe variants</li>
+ * <li><strong>Base32:</strong> encodeBase32(), decodeBase32() for addresses</li>
+ * <li><strong>Properties:</strong> readProperties(), writeProperties() for metadata</li>
+ * <li><strong>Collections:</strong> toMap(), toString() for data structures</li>
  * </ul>
  *
  * <p><strong>Encoding Support:</strong></p>
  * <ul>
- *   <li><strong>Base64:</strong> Standard and URL-safe variants with/without padding</li>
- *   <li><strong>Base32:</strong> RFC 3548 compliant for .b32.i2p addresses</li>
- *   <li><strong>Hex:</strong> Hexadecimal encoding for debugging and display</li>
- *   <li><strong>UTF-8:</strong> String encoding with proper byte handling</li>
+ * <li><strong>Base64:</strong> Standard and URL-safe variants with/without padding</li>
+ * <li><strong>Base32:</strong> RFC 3548 compliant for .b32.i2p addresses</li>
+ * <li><strong>Hex:</strong> Hexadecimal encoding for debugging and display</li>
+ * <li><strong>UTF-8:</strong> String encoding with proper byte handling</li>
  * </ul>
  *
  * <p><strong>Data Structure Support:</strong></p>
  * <ul>
- *   <li><strong>Arrays:</strong> Efficient reading/writing of byte arrays</li>
- *   <li><strong>Collections:</strong> Map, List, and Set serialization</li>
- *   <li><strong>Dates:</strong> Timestamp handling with proper timezones</li>
- *   <li><strong>Properties:</strong> Key-value pair serialization</li>
+ * <li><strong>Arrays:</strong> Efficient reading/writing of byte arrays</li>
+ * <li><strong>Collections:</strong> Map, List, and Set serialization</li>
+ * <li><strong>Dates:</strong> Timestamp handling with proper timezones</li>
+ * <li><strong>Properties:</strong> Key-value pair serialization</li>
  * </ul>
  *
  * <p><strong>Validation and Safety:</strong></p>
  * <ul>
- *   <li><strong>Bounds Checking:</strong> Prevent buffer overflows and underflows</li>
- *   <li><strong>Null Handling:</strong> Safe null value processing</li>
- *   <li><strong>Size Limits:</strong> Protection against excessive memory allocation</li>
- *   <li><strong>Format Validation:</strong> Data structure integrity checks</li>
+ * <li><strong>Bounds Checking:</strong> Prevent buffer overflows and underflows</li>
+ * <li><strong>Null Handling:</strong> Safe null value processing</li>
+ * <li><strong>Size Limits:</strong> Protection against excessive memory allocation</li>
+ * <li><strong>Format Validation:</strong> Data structure integrity checks</li>
  * </ul>
  *
  * <p><strong>Performance Features:</strong></p>
  * <ul>
- *   <li><strong>Buffer Reuse:</strong> ByteArrayStream for efficient operations</li>
- *   <li><strong>Caching:</strong> Frequently used constants and computations</li>
- *   <li><strong>Bulk Operations:</strong> Optimized for large data sets</li>
- *   <li><strong>Memory Management:</strong> Careful allocation and cleanup</li>
+ * <li><strong>Buffer Reuse:</strong> ByteArrayStream for efficient operations</li>
+ * <li><strong>Caching:</strong> Frequently used constants and computations</li>
+ * <li><strong>Bulk Operations:</strong> Optimized for large data sets</li>
+ * <li><strong>Memory Management:</strong> Careful allocation and cleanup</li>
  * </ul>
  *
  * <p><strong>Common Use Cases:</strong></p>
  * <ul>
- *   <li><strong>Network Protocol:</strong> I2NP message serialization</li>
- *   <li><strong>Configuration:</strong> Properties file handling</li>
- *   <li><strong>Address Display:</strong> Base32 encoding for .b32.i2p</li>
- *   <li><strong>Data Storage:</strong> File format serialization</li>
- *   <li><strong>Debugging:</strong> Hex dumps and data inspection</li>
+ * <li><strong>Network Protocol:</strong> I2NP message serialization</li>
+ * <li><strong>Configuration:</strong> Properties file handling</li>
+ * <li><strong>Address Display:</strong> Base32 encoding for .b32.i2p</li>
+ * <li><strong>Data Storage:</strong> File format serialization</li>
+ * <li><strong>Debugging:</strong> Hex dumps and data inspection</li>
  * </ul>
  *
  * <p><strong>Thread Safety:</strong></p>
  * <ul>
- *   <li><strong>Static Methods:</strong> All operations are thread-safe</li>
- *   <li><strong>No State:</strong> Class maintains no mutable instance state</li>
- *   <li><strong>Immutable Data:</strong> Input data is not modified</li>
+ * <li><strong>Static Methods:</strong> All operations are thread-safe</li>
+ * <li><strong>No State:</strong> Class maintains no mutable instance state</li>
+ * <li><strong>Immutable Data:</strong> Input data is not modified</li>
  * </ul>
  *
  * @author jrandom
@@ -139,11 +138,11 @@ public class DataHelper {
     private static final boolean SHOULD_SYNC = !(SystemVersion.isAndroid() || SystemVersion.isARM());
 
     /**
-     *  Map of String to itself to cache common
-     *  keys in RouterInfo, RouterAddress, and BlockfileNamingService properties.
-     *  Reduces Object proliferation caused by frequent deserialization.
+     * Map of String to itself to cache common
+     * keys in RouterInfo, RouterAddress, and BlockfileNamingService properties.
+     * Reduces Object proliferation caused by frequent deserialization.
      *
-     *  @since 0.8.12
+     * @since 0.8.12
      */
     private static final Map<String, String> _propertiesKeyCache;
 
@@ -263,42 +262,42 @@ public class DataHelper {
     }
 
     /**
-     *  Ditto, load into an existing properties
+     * Ditto, load into an existing properties
      *
-     *  As of 0.9.18, throws DataFormatException on duplicate key
-     *  Does NOT enforce key ordering.
+     * As of 0.9.18, throws DataFormatException on duplicate key
+     * Does NOT enforce key ordering.
      *
-     *  @param props The Properties to load into.
-     *               As of 0.9.38, if null, a new OrderedProperties will be created.
+     * @param props The Properties to load into.
+     * As of 0.9.38, if null, a new OrderedProperties will be created.
      *
-     *  @param rawStream stream to read the mapping from
-     *  @throws DataFormatException if the format is invalid
-     *  @throws IOException if there is a problem reading the data
-     *  @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
-     *                               and an immutable EmptyProperties if empty.
+     * @param rawStream stream to read the mapping from
+     * @throws DataFormatException if the format is invalid
+     * @throws IOException if there is a problem reading the data
+     * @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
+     * and an immutable EmptyProperties if empty.
      *
-     *  @since 0.8.13
+     * @since 0.8.13
      */
     public static Properties readProperties(InputStream rawStream, Properties props) throws DataFormatException, IOException {
         return readProperties(rawStream, props, false);
     }
 
     /**
-     *  Ditto, load into an existing properties
+     * Ditto, load into an existing properties
      *
-     *  As of 0.9.18, throws DataFormatException on duplicate key
+     * As of 0.9.18, throws DataFormatException on duplicate key
      *
-     *  @param props The Properties to load into.
-     *               As of 0.9.38, if null, a new OrderedProperties will be created.
+     * @param props The Properties to load into.
+     * As of 0.9.38, if null, a new OrderedProperties will be created.
      *
-     *  @param rawStream stream to read the mapping from
-     *  @param enforceOrder if true, throw DataFormatException if keys are not ordered
-     *  @throws DataFormatException if the format is invalid
-     *  @throws IOException if there is a problem reading the data
-     *  @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
-     *                               and an immutable EmptyProperties if empty.
+     * @param rawStream stream to read the mapping from
+     * @param enforceOrder if true, throw DataFormatException if keys are not ordered
+     * @throws DataFormatException if the format is invalid
+     * @throws IOException if there is a problem reading the data
+     * @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
+     * and an immutable EmptyProperties if empty.
      *
-     *  @since 0.9.66
+     * @since 0.9.66
      */
     public static Properties readProperties(InputStream rawStream, Properties props, boolean enforceOrder) throws DataFormatException, IOException {
         int size = (int) readLong(rawStream, 2);
@@ -353,7 +352,7 @@ public class DataHelper {
      * @param rawStream stream to write to
      * @param props properties to write out, may be null
      * @throws DataFormatException if there is not enough valid data to write out,
-     *                             or a length limit is exceeded
+     * or a length limit is exceeded
      *
      * @throws IOException if there is an IO error writing out the data
      */
@@ -409,7 +408,7 @@ public class DataHelper {
      * @param utf8 if true, encode strings as UTF-8
      * @param sort should we sort the properties? (set to false if already sorted, e.g. OrderedProperties)
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
-     *                             (not including the two length bytes) is greater than 65535 bytes.
+     * (not including the two length bytes) is greater than 65535 bytes.
      * @throws IOException if there is an IO error
      *
      * @since 0.8.7
@@ -466,8 +465,7 @@ public class DataHelper {
      * @param props source may be null
      * @return new offset
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
-     *                             (not including the two length bytes) is greater than 65535 bytes.
-     * @since un-deprecated in 0.9.48
+     * (not including the two length bytes) is greater than 65535 bytes.
      */
     public static int toProperties(byte[] target, int offset, Properties props) throws DataFormatException, IOException {
         if (props != null && !props.isEmpty()) {
@@ -646,11 +644,11 @@ public class DataHelper {
     }
 
     /**
-     *  Load properties from a stream.
+     * Load properties from a stream.
      *
-     *  @param props the properties object to load into
-     *  @param inStr the input stream to read from
-     *  @throws IOException if there is an error reading
+     * @param props the properties object to load into
+     * @param inStr the input stream to read from
+     * @throws IOException if there is an error reading
      */
     public static void loadProps(Properties props, InputStream inStr) throws IOException {
         loadProps(props, inStr, false);
@@ -712,7 +710,7 @@ public class DataHelper {
      * @param props properties to store
      * @param file the file to write to
      * @throws IllegalArgumentException if a key contains any of "#=\n" or starts with ';',
-     *                                  or a value contains '#' or '\n'
+     * or a value contains '#' or '\n'
      * @throws IOException if there is an IO error
      */
     public static void storeProps(Properties props, File file) throws IOException {
@@ -779,11 +777,11 @@ public class DataHelper {
     }
 
     /**
-     *  Lower-case hex with leading zeros.
-     *  Use toHexString(byte[]) to not get leading zeros
+     * Lower-case hex with leading zeros.
+     * Use toHexString(byte[]) to not get leading zeros
      *
-     *  @param buf may be null (returns "")
-     *  @return String of length 2*buf.length
+     * @param buf may be null (returns "")
+     * @return String of length 2*buf.length
      */
     public static String toString(byte[] buf) {
         if (buf == null) {
@@ -798,12 +796,12 @@ public class DataHelper {
     private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
 
     /**
-     *  Lower-case hex with leading zeros.
-     *  Use toHexString(byte[]) to not get leading zeros
+     * Lower-case hex with leading zeros.
+     * Use toHexString(byte[]) to not get leading zeros
      *
-     *  @param buf may be null
-     *  @param len number of bytes. If greater than buf.length, additional zeros will be prepended
-     *  @return String of length 2*len
+     * @param buf may be null
+     * @param len number of bytes. If greater than buf.length, additional zeros will be prepended
+     * @return String of length 2*len
      */
     public static String toString(byte[] buf, int len) {
         if (buf == null) {
@@ -826,11 +824,11 @@ public class DataHelper {
     }
 
     /**
-     *  Lower-case hex without leading zeros.
-     *  Use toString(byte[]) to get leading zeros
+     * Lower-case hex without leading zeros.
+     * Use toString(byte[]) to get leading zeros
      *
-     *  @param data may be null (returns "00")
-     *  @return hex string representation
+     * @param data may be null (returns "00")
+     * @return hex string representation
      */
     public static final String toHexString(byte[] data) {
         if ((data == null) || (data.length <= 0)) {
@@ -841,11 +839,11 @@ public class DataHelper {
     }
 
     /**
-     *  Decode a hex string to a byte array.
-     *  Use DataHelper.toString(byte[]) for the reverse operation.
+     * Decode a hex string to a byte array.
+     * Use DataHelper.toString(byte[]) for the reverse operation.
      *
-     *  @param val non-null, may have leading minus sign
-     *  @return minimum-length representation (with possible leading 0 byte)
+     * @param val non-null, may have leading minus sign
+     * @return minimum-length representation (with possible leading 0 byte)
      */
     public static final byte[] fromHexString(String val) {
         BigInteger bv = new BigInteger(val, 16);
@@ -1100,11 +1098,11 @@ public class DataHelper {
     }
 
     /**
-     *  Prefer toDate(byte[], int, long).
+     * Prefer toDate(byte[], int, long).
      *
-     *  @param date may be null (returns zero date)
-     *  @return a newly-allocated byte array of length DATE_LENGTH
-     *  @throws IllegalArgumentException if the time does not fit in DATE_LENGTH bytes
+     * @param date may be null (returns zero date)
+     * @return a newly-allocated byte array of length DATE_LENGTH
+     * @throws IllegalArgumentException if the time does not fit in DATE_LENGTH bytes
      */
     public static byte[] toDate(Date date) throws IllegalArgumentException {
         if (date == null) {
@@ -1154,13 +1152,13 @@ public class DataHelper {
     public static final int DATE_LENGTH = 8;
 
     /** Read in a string from the stream as specified by the I2P data structure spec.
-     *  A string is 1 or more bytes where the first byte is the number of bytes (not characters!)
-     *  in the string and the remaining 0-255 bytes are the non-null terminated UTF-8 encoded character array.
+     * A string is 1 or more bytes where the first byte is the number of bytes (not characters!)
+     * in the string and the remaining 0-255 bytes are the non-null terminated UTF-8 encoded character array.
      *
-     *  @param in stream to read from
-     *  @throws EOFException since 0.8.2, if there aren't enough bytes to read the string
-     *  @throws IOException if there is an IO error reading the string
-     *  @return UTF-8 string
+     * @param in stream to read from
+     * @throws EOFException since 0.8.2, if there aren't enough bytes to read the string
+     * @throws IOException if there is an IO error reading the string
+     * @return UTF-8 string
      */
     public static String readString(InputStream in) throws IOException {
         int size = in.read();
@@ -1186,7 +1184,7 @@ public class DataHelper {
      *
      * @param out stream to write string
      * @param string string to write out: null strings are perfectly valid, but strings of excess length will
-     *               cause a DataFormatException to be thrown
+     * cause a DataFormatException to be thrown
      *
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
@@ -1213,11 +1211,10 @@ public class DataHelper {
      *
      * @param out stream to write string
      * @param string UTF-8 string to write out: null strings are perfectly valid, but strings of excess length will
-     *               cause a DataFormatException to be thrown
+     * cause a DataFormatException to be thrown
      *
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
-     * @since public since 0.9.26
      */
     public static void writeStringUTF8(OutputStream out, String string) throws DataFormatException, IOException {
         if (string == null) {
@@ -1304,16 +1301,16 @@ public class DataHelper {
     }
 
     /**
-     *  Unlike eq(byte[], byte[]), this returns false if either lhs or rhs is null.
-     *  Variable time.
+     * Unlike eq(byte[], byte[]), this returns false if either lhs or rhs is null.
+     * Variable time.
      *
-     *  @param lhs first byte array
-     *  @param offsetLeft starting offset in lhs
-     *  @param rhs second byte array
-     *  @param offsetRight starting offset in rhs
-     *  @param length number of bytes to compare
-     *  @return true if equal
-     *  @throws ArrayIndexOutOfBoundsException if either array isn't long enough
+     * @param lhs first byte array
+     * @param offsetLeft starting offset in lhs
+     * @param rhs second byte array
+     * @param offsetRight starting offset in rhs
+     * @param length number of bytes to compare
+     * @return true if equal
+     * @throws ArrayIndexOutOfBoundsException if either array isn't long enough
      */
     public static final boolean eq(byte[] lhs, int offsetLeft, byte[] rhs, int offsetRight, int length) {
         if ((lhs == null) || (rhs == null)) {
@@ -1328,18 +1325,18 @@ public class DataHelper {
     }
 
     /**
-     *  Unlike eq(), this throws NPE if either lhs or rhs is null.
-     *  Constant time.
+     * Unlike eq(), this throws NPE if either lhs or rhs is null.
+     * Constant time.
      *
-     *  @param lhs first byte array
-     *  @param offsetLeft starting offset in lhs
-     *  @param rhs second byte array
-     *  @param offsetRight starting offset in rhs
-     *  @param length number of bytes to compare
-     *  @return true if equal
-     *  @throws NullPointerException if lhs or rhs is null
-     *  @throws ArrayIndexOutOfBoundsException if either array isn't long enough
-     *  @since 0.9.13
+     * @param lhs first byte array
+     * @param offsetLeft starting offset in lhs
+     * @param rhs second byte array
+     * @param offsetRight starting offset in rhs
+     * @param length number of bytes to compare
+     * @return true if equal
+     * @throws NullPointerException if lhs or rhs is null
+     * @throws ArrayIndexOutOfBoundsException if either array isn't long enough
+     * @since 0.9.13
      */
     public static final boolean eqCT(byte[] lhs, int offsetLeft, byte[] rhs, int offsetRight, int length) {
         int r = 0;
@@ -1350,17 +1347,17 @@ public class DataHelper {
     }
 
     /**
-     *  Copy a range of a byte array into a new array, mirroring
-     *  java.util.Arrays.copyOfRange() but throwing DataFormatException on
-     *  invalid bounds so callers in the data layer can handle it with their
-     *  existing exception flow.
+     * Copy a range of a byte array into a new array, mirroring
+     * java.util.Arrays.copyOfRange() but throwing DataFormatException on
+     * invalid bounds so callers in the data layer can handle it with their
+     * existing exception flow.
      *
-     *  @param src source array, must not be null
-     *  @param from starting index, inclusive
-     *  @param to ending index, exclusive; must be &gt;= from and &lt;= src.length
-     *  @return new byte[to - from] containing src[from..to-1]
-     *  @throws DataFormatException if src is null or the range is invalid
-     *  @since 0.9.70+
+     * @param src source array, must not be null
+     * @param from starting index, inclusive
+     * @param to ending index, exclusive; must be &gt;= from and &lt;= src.length
+     * @return new byte[to - from] containing src[from..to-1]
+     * @throws DataFormatException if src is null or the range is invalid
+     * @since 0.9.70+
      */
     public static byte[] copyOfRange(byte[] src, int from, int to) throws DataFormatException {
         if (src == null) {
@@ -1377,13 +1374,13 @@ public class DataHelper {
     }
 
     /**
-     *  Constant time string comparison.
-     *  Null-safe. Different lengths handled in constant time.
+     * Constant time string comparison.
+     * Null-safe. Different lengths handled in constant time.
      *
-     *  @param lhs first string, may be null
-     *  @param rhs second string, may be null
-     *  @return true if equal
-     *  @since 0.9.70+
+     * @param lhs first string, may be null
+     * @param rhs second string, may be null
+     * @return true if equal
+     * @since 0.9.70+
      */
     public static final boolean eqCT(String lhs, String rhs) {
         if (lhs == null || rhs == null) {
@@ -1402,14 +1399,14 @@ public class DataHelper {
     }
 
     /**
-     *  Big endian compare, treats bytes as unsigned.
-     *  Shorter arg is lesser.
-     *  Args may be null, null is less than non-null.
-     *  Variable time.
+     * Big endian compare, treats bytes as unsigned.
+     * Shorter arg is lesser.
+     * Args may be null, null is less than non-null.
+     * Variable time.
      *
-     *  @param lhs first byte array, may be null
-     *  @param rhs second byte array, may be null
-     *  @return negative, zero, or positive
+     * @param lhs first byte array, may be null
+     * @param rhs second byte array, may be null
+     * @return negative, zero, or positive
      */
     public static final int compareTo(byte[] lhs, byte[] rhs) {
         if ((rhs == null) && (lhs == null)) return 0;
@@ -1543,20 +1540,20 @@ public class DataHelper {
     }
 
     /**
-     *  This is different than InputStream.skip(), in that it
-     *  does repeated reads until the full amount is skipped.
-     *  To fix findbugs issues with skip().
+     * This is different than InputStream.skip(), in that it
+     * does repeated reads until the full amount is skipped.
+     * To fix findbugs issues with skip().
      *
-     *  Guaranteed to skip exactly n bytes or throw an IOE.
+     * Guaranteed to skip exactly n bytes or throw an IOE.
      *
-     *  http://stackoverflow.com/questions/14057720/robust-skipping-of-data-in-a-java-io-inputstream-and-its-subtypes
-     *  http://stackoverflow.com/questions/11511093/java-inputstream-skip-return-value-near-end-of-file
+     * http://stackoverflow.com/questions/14057720/robust-skipping-of-data-in-a-java-io-inputstream-and-its-subtypes
+     * http://stackoverflow.com/questions/11511093/java-inputstream-skip-return-value-near-end-of-file
      *
-     *  @param in the input stream
-     *  @param n the number of bytes to skip
-     *  @throws IOException if an I/O error occurs or EOF is reached before all bytes are skipped
-     *  @throws IllegalArgumentException if n is negative
-     *  @since 0.9.9
+     * @param in the input stream
+     * @param n the number of bytes to skip
+     * @throws IOException if an I/O error occurs or EOF is reached before all bytes are skipped
+     * @throws IllegalArgumentException if n is negative
+     * @since 0.9.9
      */
     public static void skip(InputStream in, long n) throws IOException {
         if (n < 0) {
@@ -1592,37 +1589,37 @@ public class DataHelper {
     }
 
     /**
-     *  This is different than InputStream.read(target), in that it
-     *  does repeated reads until the full data is received.
+     * This is different than InputStream.read(target), in that it
+     * does repeated reads until the full data is received.
      *
-     *  As of 0.9.27, throws EOFException if the full length is not read.
+     * As of 0.9.27, throws EOFException if the full length is not read.
      *
-     *  @param in the input stream
-     *  @param target the target
-     *  @return target.length
-     *  @throws EOFException if the full length is not read (since 0.9.27)
-     *  @throws IOException if an I/O error occurs
+     * @param in the input stream
+     * @param target the target
+     * @return target.length
+     * @throws EOFException if the full length is not read (since 0.9.27)
+     * @throws IOException if an I/O error occurs
      */
     public static int read(InputStream in, byte[] target) throws IOException {
         return read(in, target, 0, target.length);
     }
 
     /**
-     *  WARNING - This is different than InputStream.read(target, offset, length)
-     *  for a nonzero offset, in that it
-     *  returns the new offset (== old offset + length).
-     *  It also does repeated reads until the full data is received.
+     * WARNING - This is different than InputStream.read(target, offset, length)
+     * for a nonzero offset, in that it
+     * returns the new offset (== old offset + length).
+     * It also does repeated reads until the full data is received.
      *
-     *  WARNING - Broken for nonzero offset before 0.9.27.
-     *  As of 0.9.27, throws EOFException if the full length is not read.
+     * WARNING - Broken for nonzero offset before 0.9.27.
+     * As of 0.9.27, throws EOFException if the full length is not read.
      *
-     *  @param in the input stream
-     *  @param target the target
-     *  @param offset starting offset in target
-     *  @param length number of bytes to read
-     *  @return the new offset (== old offset + length)
-     *  @throws EOFException if the full length is not read (since 0.9.27)
-     *  @throws IOException if an I/O error occurs
+     * @param in the input stream
+     * @param target the target
+     * @param offset starting offset in target
+     * @param length number of bytes to read
+     * @return the new offset (== old offset + length)
+     * @throws EOFException if the full length is not read (since 0.9.27)
+     * @throws IOException if an I/O error occurs
      */
     public static int read(InputStream in, byte[] target, int offset, int length) throws IOException {
         int cur = 0;
@@ -1688,7 +1685,7 @@ public class DataHelper {
      * @param in the input stream
      * @param buf the buffer to append to
      * @return true if the line was read, false if eof was reached on an empty line
-     *              (returns true for non-empty last line without a newline)
+     * (returns true for non-empty last line without a newline)
      * @throws IOException if there is an IO error
      */
     public static boolean readLine(InputStream in, StringBuilder buf) throws IOException {
@@ -1705,7 +1702,7 @@ public class DataHelper {
      * @param buf the buffer to append to
      * @param hash null OK
      * @return true if the line was read, false if eof was reached on an empty line
-     *              (returns true for non-empty last line without a newline)
+     * (returns true for non-empty last line without a newline)
      * @throws IOException if there is an IO error
      * @since 0.8.8
      */
@@ -1726,13 +1723,13 @@ public class DataHelper {
     }
 
     /**
-     *  Write data to the output stream while updating the MessageDigest along the way.
+     * Write data to the output stream while updating the MessageDigest along the way.
      *
-     *  @param out the output stream to write to
-     *  @param data the byte array to write
-     *  @param hash the MessageDigest to update (non-null)
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.8.8
+     * @param out the output stream to write to
+     * @param data the byte array to write
+     * @param hash the MessageDigest to update (non-null)
+     * @throws IOException if an I/O error occurs
+     * @since 0.8.8
      */
     public static void write(OutputStream out, byte[] data, MessageDigest hash) throws IOException {
         hash.update(data);
@@ -1740,11 +1737,11 @@ public class DataHelper {
     }
 
     /**
-     *  Format a duration in milliseconds to a human-readable string.
-     *  NOTE: formatDuration2() recommended in most cases for readability
+     * Format a duration in milliseconds to a human-readable string.
+     * NOTE: formatDuration2() recommended in most cases for readability
      *
-     *  @param ms the duration in milliseconds
-     *  @return a compact string like "5s", "30m", "2h", "3d"
+     * @param ms the duration in milliseconds
+     * @return a compact string like "5s", "30m", "2h", "3d"
      */
     public static String formatDuration(long ms) {
         if (ms < 5 * 1000) {
@@ -2058,15 +2055,15 @@ public class DataHelper {
     }
 
     /**
-     *  The default formatting for date, current locale, local time zone.
-     *  Warning - NOT UTC!
-     *  Examples:
-     *  en: Aug 30, 2019
-     *  de: 30.08.2019
+     * The default formatting for date, current locale, local time zone.
+     * Warning - NOT UTC!
+     * Examples:
+     * en: Aug 30, 2019
+     * de: 30.08.2019
      *
-     *  @param now the timestamp in milliseconds since epoch
-     *  @return the formatted date string
-     *  @since 0.9.43
+     * @param now the timestamp in milliseconds since epoch
+     * @return the formatted date string
+     * @since 0.9.43
      */
     public static String formatDate(long now) {
         synchronized (DATE_FORMAT) {
@@ -2081,15 +2078,15 @@ public class DataHelper {
     }
 
     /**
-     *  The default formatting for date/time, current locale, local time zone.
-     *  Warning - NOT UTC!
-     *  Examples:
-     *  en: Aug 30, 2019 12:38 PM
-     *  de: 30.08.2019 12:38
+     * The default formatting for date/time, current locale, local time zone.
+     * Warning - NOT UTC!
+     * Examples:
+     * en: Aug 30, 2019 12:38 PM
+     * de: 30.08.2019 12:38
      *
-     *  @param now the timestamp in milliseconds since epoch
-     *  @return the formatted date/time string
-     *  @since 0.9.43
+     * @param now the timestamp in milliseconds since epoch
+     * @return the formatted date/time string
+     * @since 0.9.43
      */
     public static String formatTime(long now) {
         synchronized (TIME_FORMAT) {
@@ -2144,21 +2141,21 @@ public class DataHelper {
     public static final int MAX_UNCOMPRESSED = 40 * 1024;
 
     /**
-     *  Appx. 30% slower, 2.5% smaller than MEDIUM_COMPRESSION
+     * Appx. 30% slower, 2.5% smaller than MEDIUM_COMPRESSION
      */
     public static final int MAX_COMPRESSION = Deflater.BEST_COMPRESSION;
 
     /**
-     *  Appx. 15% slower, 1.5% smaller than MEDIUM_COMPRESSION
+     * Appx. 15% slower, 1.5% smaller than MEDIUM_COMPRESSION
      *
-     *  @since 0.9.47
+     * @since 0.9.47
      */
     public static final int HIGH_COMPRESSION = 8;
 
     /**
-     *  New default as of 0.9.47
+     * New default as of 0.9.47
      *
-     *  @since 0.9.47
+     * @since 0.9.47
      */
     public static final int MEDIUM_COMPRESSION = 5;
 
@@ -2166,63 +2163,63 @@ public class DataHelper {
     public static final int NO_COMPRESSION = Deflater.NO_COMPRESSION;
 
     /**
-     *  Compress the data and return a new GZIP compressed byte array.
-     *  The compressed data conforms to RFC 1952,
-     *  with a 10-byte gzip header and a 8-byte gzip checksum footer.
+     * Compress the data and return a new GZIP compressed byte array.
+     * The compressed data conforms to RFC 1952,
+     * with a 10-byte gzip header and a 8-byte gzip checksum footer.
      *
-     *  Prior to 0.9.29, this would return a zero-length output
-     *  for a zero-length input. As of 0.9.29, output is valid for
-     *  a zero-length input also.
+     * Prior to 0.9.29, this would return a zero-length output
+     * for a zero-length input. As of 0.9.29, output is valid for
+     * a zero-length input also.
      *
-     *  As of 0.9.47, this uses a level of MEDIUM_COMPRESSION,
-     *  which is a good space/speed tradeoff.
-     *  Prior to that, it used MAX_COMPRESSION.
+     * As of 0.9.47, this uses a level of MEDIUM_COMPRESSION,
+     * which is a good space/speed tradeoff.
+     * Prior to that, it used MAX_COMPRESSION.
      *
-     *  @throws IllegalArgumentException if input size is over 40KB
-     *  @throws IllegalStateException on compression failure, as of 0.9.29
-     *  @return null if orig is null
+     * @throws IllegalArgumentException if input size is over 40KB
+     * @throws IllegalStateException on compression failure, as of 0.9.29
+     * @return null if orig is null
      */
     public static byte[] compress(byte[] orig) {
         return compress(orig, 0, orig.length);
     }
 
     /**
-     *  Compress the data and return a new GZIP compressed byte array.
-     *  The compressed data conforms to RFC 1952,
-     *  with a 10-byte gzip header and a 8-byte gzip checksum footer.
+     * Compress the data and return a new GZIP compressed byte array.
+     * The compressed data conforms to RFC 1952,
+     * with a 10-byte gzip header and a 8-byte gzip checksum footer.
      *
-     *  Prior to 0.9.29, this would return a zero-length output
-     *  for a zero-length input. As of 0.9.29, output is valid for
-     *  a zero-length input also.
+     * Prior to 0.9.29, this would return a zero-length output
+     * for a zero-length input. As of 0.9.29, output is valid for
+     * a zero-length input also.
      *
-     *  As of 0.9.47, this uses a level of MEDIUM_COMPRESSION,
-     *  which is a good space/speed tradeoff.
-     *  Prior to that, it used MAX_COMPRESSION.
+     * As of 0.9.47, this uses a level of MEDIUM_COMPRESSION,
+     * which is a good space/speed tradeoff.
+     * Prior to that, it used MAX_COMPRESSION.
      *
-     *  @param orig the data to compress
-     *  @param offset the offset into the data
-     *  @param size the number of bytes to compress
-     *  @throws IllegalArgumentException if size is over 40KB
-     *  @throws IllegalStateException on compression failure, as of 0.9.29
-     *  @return null if orig is null
+     * @param orig the data to compress
+     * @param offset the offset into the data
+     * @param size the number of bytes to compress
+     * @throws IllegalArgumentException if size is over 40KB
+     * @throws IllegalStateException on compression failure, as of 0.9.29
+     * @return null if orig is null
      */
     public static byte[] compress(byte[] orig, int offset, int size) {
         return compress(orig, offset, size, MEDIUM_COMPRESSION);
     }
 
     /**
-     *  Compress the data and return a new GZIP compressed byte array.
-     *  The compressed data conforms to RFC 1952,
-     *  with a 10-byte gzip header and a 8-byte gzip checksum footer.
+     * Compress the data and return a new GZIP compressed byte array.
+     * The compressed data conforms to RFC 1952,
+     * with a 10-byte gzip header and a 8-byte gzip checksum footer.
      *
-     *  Prior to 0.9.29, this would return a zero-length output
-     *  for a zero-length input. As of 0.9.29, output is valid for
-     *  a zero-length input also.
+     * Prior to 0.9.29, this would return a zero-length output
+     * for a zero-length input. As of 0.9.29, output is valid for
+     * a zero-length input also.
      *
-     *  @throws IllegalArgumentException if size is over 40KB
-     *  @throws IllegalStateException on compression failure, as of 0.9.29
-     *  @param level the compression level, 0 to 9
-     *  @return null if orig is null
+     * @throws IllegalArgumentException if size is over 40KB
+     * @throws IllegalStateException on compression failure, as of 0.9.29
+     * @param level the compression level, 0 to 9
+     * @return null if orig is null
      */
     public static byte[] compress(byte[] orig, int offset, int size, int level) {
         if (orig == null) return orig;
@@ -2257,14 +2254,14 @@ public class DataHelper {
     }
 
     /**
-     *  Fast NO_COMPRESSION.
-     *  135x faster for 23 bytes, 15x faster for 1752 bytes.
+     * Fast NO_COMPRESSION.
+     * 135x faster for 23 bytes, 15x faster for 1752 bytes.
      *
-     *  Ref: RFC 1951, RFC 1952, ResettableGzipOutputStream
+     * Ref: RFC 1951, RFC 1952, ResettableGzipOutputStream
      *
-     *  @param len 32767 max
-     *  @return 23 bytes longer
-     *  @since 0.9.46
+     * @param len 32767 max
+     * @return 23 bytes longer
+     * @since 0.9.46
      */
     private static byte[] zeroCompress(byte[] in, int off, int len) {
         if (len > 32767) {
@@ -2292,13 +2289,13 @@ public class DataHelper {
     }
 
     /**
-     *  The shared output buffer for decompress().
+     * The shared output buffer for decompress().
      *
-     *  A holder class rather than a static field of DataHelper, so the lookup is
-     *  done once and I2PAppContext is still not initialized until the first call.
-     *  The entry size is invariant, so the cache never needs resizing.
+     * A holder class rather than a static field of DataHelper, so the lookup is
+     * done once and I2PAppContext is still not initialized until the first call.
+     * The entry size is invariant, so the cache never needs resizing.
      *
-     *  @since 0.9.72
+     * @since 0.9.72
      */
     private static final class DecompressCacheHolder {
         /** Not a DataHelper static field - see the class comment. */
@@ -2308,24 +2305,24 @@ public class DataHelper {
     }
 
     /**
-     *  Decompress the GZIP compressed data (returning null on error).
+     * Decompress the GZIP compressed data (returning null on error).
      *
-     *  @throws IOException if uncompressed is over 40 KB,
-     *                      or on a decompression error
+     * @throws IOException if uncompressed is over 40 KB,
+     * or on a decompression error
      *
-     *  @return null if orig is null
+     * @return null if orig is null
      */
     public static byte[] decompress(byte[] orig) throws IOException {
         return (orig != null ? decompress(orig, 0, orig.length) : null);
     }
 
     /**
-     *  Decompress the GZIP compressed data (returning null on error).
+     * Decompress the GZIP compressed data (returning null on error).
      *
-     *  @throws IOException if uncompressed is over 40 KB,
-     *                      or on a decompression error
+     * @throws IOException if uncompressed is over 40 KB,
+     * or on a decompression error
      *
-     *  @return null if orig is null
+     * @return null if orig is null
      */
     public static byte[] decompress(byte[] orig, int offset, int length) throws IOException {
         if (orig == null) return orig;
@@ -2364,16 +2361,16 @@ public class DataHelper {
     }
 
     /**
-     *  Fast NO_COMPRESSION.
-     *  ~30x faster for typ. lengths, ~20x faster for 4 KB or more.
+     * Fast NO_COMPRESSION.
+     * ~30x faster for typ. lengths, ~20x faster for 4 KB or more.
      *
-     *  Ref: RFC 1951, RFC 1952, ResettableGzipOutputStream
+     * Ref: RFC 1951, RFC 1952, ResettableGzipOutputStream
      *
-     *  @param in in[off + 10] MUST BE VALIDATED == 1 before calling this.
-     *  @param len 65558 max
-     *  @return 23 bytes shorter
-     *  @throws IOException on all errors
-     *  @since 0.9.47
+     * @param in in[off + 10] MUST BE VALIDATED == 1 before calling this.
+     * @param len 65558 max
+     * @return 23 bytes shorter
+     * @throws IOException on all errors
+     * @since 0.9.47
      */
     private static byte[] zeroDecompress(byte[] in, int off, int len) throws IOException {
         if (len > 65535 + 23) {
@@ -2412,11 +2409,11 @@ public class DataHelper {
     }
 
     /**
-     *  Same as orig.getBytes("UTF-8") but throws an unchecked RuntimeException
-     *  instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
+     * Same as orig.getBytes("UTF-8") but throws an unchecked RuntimeException
+     * instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
      *
-     *  @return null if orig is null
-     *  @throws RuntimeException
+     * @return null if orig is null
+     * @throws RuntimeException
      */
     public static byte[] getUTF8(String orig) {
         if (orig == null) return new byte[0];
@@ -2424,12 +2421,12 @@ public class DataHelper {
     }
 
     /**
-     *  Same as new String(orig, "UTF-8") but throws an unchecked RuntimeException
-     *  instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
-     *  Used by Syndie.
+     * Same as new String(orig, "UTF-8") but throws an unchecked RuntimeException
+     * instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
+     * Used by Syndie.
      *
-     *  @return null if orig is null
-     *  @throws RuntimeException
+     * @return null if orig is null
+     * @throws RuntimeException
      */
     public static String getUTF8(byte[] orig) {
         if (orig == null) {
@@ -2439,11 +2436,11 @@ public class DataHelper {
     }
 
     /**
-     *  Same as new String(orig, "UTF-8") but throws an unchecked RuntimeException
-     *  instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
+     * Same as new String(orig, "UTF-8") but throws an unchecked RuntimeException
+     * instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
      *
-     *  @return null if orig is null
-     *  @throws RuntimeException
+     * @return null if orig is null
+     * @throws RuntimeException
      */
     public static String getUTF8(byte[] orig, int offset, int len) {
         if (orig == null) {
@@ -2453,14 +2450,14 @@ public class DataHelper {
     }
 
     /**
-     *  Roughly the same as orig.getBytes("ISO-8859-1") but much faster and
-     *  will not throw an exception.
+     * Roughly the same as orig.getBytes("ISO-8859-1") but much faster and
+     * will not throw an exception.
      *
-     *  Warning - misnamed, converts to ISO-8859-1.
+     * Warning - misnamed, converts to ISO-8859-1.
      *
-     *  @param orig non-null, truncates to 8-bit chars
-     *  @return a copy of the byte array, or null
-     *  @since 0.9.5
+     * @param orig non-null, truncates to 8-bit chars
+     * @return a copy of the byte array, or null
+     * @since 0.9.5
      */
     public static byte[] getASCII(String orig) {
         byte[] rv = new byte[orig.length()];
@@ -2471,17 +2468,17 @@ public class DataHelper {
     }
 
     /**
-     *  Same as s.split(regex) but caches the compiled pattern for speed.
-     *  This saves about 10 microseconds (Bulldozer) on subsequent invocations.
+     * Same as s.split(regex) but caches the compiled pattern for speed.
+     * This saves about 10 microseconds (Bulldozer) on subsequent invocations.
      *
-     *  Note: For an input "" this returns [""], not a zero-length array.
-     *  This is the same behavior as String.split().
+     * Note: For an input "" this returns [""], not a zero-length array.
+     * This is the same behavior as String.split().
      *
-     *  @param s non-null
-     *  @param regex non-null, don't forget to enclose multiple choices with []
-     *  @return the array of strings
-     *  @throws java.util.regex.PatternSyntaxException unchecked
-     *  @since 0.9.24
+     * @param s non-null
+     * @param regex non-null, don't forget to enclose multiple choices with []
+     * @return the array of strings
+     * @throws java.util.regex.PatternSyntaxException unchecked
+     * @since 0.9.24
      */
     public static String[] split(String s, String regex) {
         return split(s, regex, 0);
@@ -2490,18 +2487,18 @@ public class DataHelper {
     private static final ConcurrentHashMap<String, Pattern> patterns = new ConcurrentHashMap<>(64);
 
     /**
-     *  Same as s.split(regex, limit) but caches the compiled pattern for speed.
-     *  This saves about 10 microseconds (Bulldozer) on subsequent invocations.
+     * Same as s.split(regex, limit) but caches the compiled pattern for speed.
+     * This saves about 10 microseconds (Bulldozer) on subsequent invocations.
      *
-     *  Note: For an input "" this returns [""], not a zero-length array.
-     *  This is the same behavior as String.split().
+     * Note: For an input "" this returns [""], not a zero-length array.
+     * This is the same behavior as String.split().
      *
-     *  @param s non-null
-     *  @param regex non-null, don't forget to enclose multiple choices with []
-     *  @param limit result threshold
-     *  @return the array of strings
-     *  @throws java.util.regex.PatternSyntaxException unchecked
-     *  @since 0.9.24
+     * @param s non-null
+     * @param regex non-null, don't forget to enclose multiple choices with []
+     * @param limit result threshold
+     * @return the array of strings
+     * @throws java.util.regex.PatternSyntaxException unchecked
+     * @since 0.9.24
      */
     public static String[] split(String s, String regex, int limit) {
         Pattern p = patterns.get(regex);
@@ -2533,10 +2530,10 @@ public class DataHelper {
     }
 
     /**
-     *  The shared buffer for copy(), resolved once for the same reason and in the
-     *  same way as {@link DecompressCacheHolder}.
+     * The shared buffer for copy(), resolved once for the same reason and in the
+     * same way as {@link DecompressCacheHolder}.
      *
-     *  @since 0.9.72
+     * @since 0.9.72
      */
     private static final class CopyCacheHolder {
         /** Not a DataHelper static field - see DecompressCacheHolder. */

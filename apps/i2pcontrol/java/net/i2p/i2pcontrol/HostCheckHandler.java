@@ -21,8 +21,6 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
  * Therefore, this protects all the webapps.
  *
  * This class is NOT used for the webapp or the bare ServerSocket implementation.
- *
- * @since 0.12 copied from routerconsole
  */
 public class HostCheckHandler extends HandlerWrapper
 {
@@ -30,7 +28,7 @@ public class HostCheckHandler extends HandlerWrapper
     private final Set<String> _listenHosts;
 
     /**
-     *  MUST call setListenHosts() afterwards.
+     * MUST call setListenHosts() afterwards.
      */
     public HostCheckHandler(I2PAppContext ctx) {
         super();
@@ -39,11 +37,11 @@ public class HostCheckHandler extends HandlerWrapper
     }
 
     /**
-     *  Set the legal hosts.
-     *  Not synched. Call this BEFORE starting.
-     *  If empty, all are allowed.
+     * Set the legal hosts.
+     * Not synched. Call this BEFORE starting.
+     * If empty, all are allowed.
      *
-     *  @param hosts contains hostnames or IPs. But we allow all IPs anyway.
+     * @param hosts contains hostnames or IPs. But we allow all IPs anyway.
      */
     public void setListenHosts(Set<String> hosts) {
         _listenHosts.clear();
@@ -51,7 +49,7 @@ public class HostCheckHandler extends HandlerWrapper
     }
 
     /**
-     *  Block by Host header, pass everything else to the delegate.
+     * Block by Host header, pass everything else to the delegate.
      */
     @Override
     public void handle(String pathInContext,
@@ -78,12 +76,12 @@ public class HostCheckHandler extends HandlerWrapper
     }
 
     /**
-     *  Should we allow a request with this Host header?
+     * Should we allow a request with this Host header?
      *
-     *  ref: https://en.wikipedia.org/wiki/DNS_rebinding
+     * ref: https://en.wikipedia.org/wiki/DNS_rebinding
      *
-     *  @param host the HTTP Host header, null ok
-     *  @return true if OK
+     * @param host the HTTP Host header, null ok
+     * @return true if OK
      */
     private boolean allowHost(String host) {
         if (host == null)
@@ -105,10 +103,10 @@ public class HostCheckHandler extends HandlerWrapper
     }
 
     /**
-     *  Strip [] and port from a host header
+     * Strip [] and port from a host header
      *
-     *  @param host the HTTP Host header non-null
-     *  @return the host
+     * @param host the HTTP Host header non-null
+     * @return the host
      */
     private static String getHost(String host) {
         if (host.startsWith("[")) {

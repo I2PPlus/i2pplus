@@ -53,9 +53,9 @@ class BlindCache {
     private static final int MAX_CACHE_SIZE = 32;
 
     /**
-     *  Caller MUST call startup() to load persistent cache from disk
+     * Caller MUST call startup() to load persistent cache from disk
      *
-     *  @param ctx the router context
+     * @param ctx the router context
      */
     public BlindCache(RouterContext ctx) {
         _context = ctx;
@@ -65,7 +65,7 @@ class BlindCache {
     }
 
     /**
-     *  May be restarted by calling startup() again.
+     * May be restarted by calling startup() again.
      */
     public synchronized void shutdown() {
         if (_changed)
@@ -77,7 +77,7 @@ class BlindCache {
     }
 
     /**
-     *  Enforce maximum cache size
+     * Enforce maximum cache size
      */
     private void enforceMaxSize() {
         while (_cache.size() > MAX_CACHE_SIZE) {
@@ -97,12 +97,12 @@ class BlindCache {
     }
 
     /**
-     *  The hash to lookup for a dest.
-     *  If known to be blinded, returns the current blinded hash.
-     *  If not known to be blinded, returns the standard dest hash.
+     * The hash to lookup for a dest.
+     * If known to be blinded, returns the current blinded hash.
+     * If not known to be blinded, returns the standard dest hash.
      *
-     *  @param dest may or may not be blinded
-     *  @return the unblinded or blinded hash
+     * @param dest may or may not be blinded
+     * @return the unblinded or blinded hash
      */
     public Hash getHash(Destination dest) {
         Hash rv = getBlindedHash(dest);
@@ -112,12 +112,12 @@ class BlindCache {
     }
 
     /**
-     *  The hash to lookup for a dest hash.
-     *  If known to be blinded, returns the current blinded hash.
-     *  If not known to be blinded, returns h.
+     * The hash to lookup for a dest hash.
+     * If known to be blinded, returns the current blinded hash.
+     * If not known to be blinded, returns h.
      *
-     *  @param h may or may not be blinded
-     *  @return the blinded hash or h
+     * @param h may or may not be blinded
+     * @return the blinded hash or h
      */
     public Hash getHash(Hash h) {
         BlindData bd = _hashCache.get(h);
@@ -127,12 +127,12 @@ class BlindCache {
     }
 
     /**
-     *  The hash to lookup for a dest.
-     *  If known to be blinded, returns the current blinded hash.
-     *  If not known to be blinded, returns null.
+     * The hash to lookup for a dest.
+     * If known to be blinded, returns the current blinded hash.
+     * If not known to be blinded, returns null.
      *
-     *  @param dest may or may not be blinded
-     *  @return the blinded hash or null if not blinded
+     * @param dest may or may not be blinded
+     * @return the blinded hash or null if not blinded
      */
     public Hash getBlindedHash(Destination dest) {
         BlindData bd = _cache.get(dest.getSigningPublicKey());
@@ -142,13 +142,13 @@ class BlindCache {
     }
 
     /**
-     *  The hash to lookup for a SPK known to be blinded.
-     *  Default blinded type assumed.
-     *  Secret assumed null.
+     * The hash to lookup for a SPK known to be blinded.
+     * Default blinded type assumed.
+     * Secret assumed null.
      *
-     *  @param spk known to be blinded
-     *  @return the blinded hash
-     *  @throws IllegalArgumentException on various errors
+     * @param spk known to be blinded
+     * @return the blinded hash
+     * @throws IllegalArgumentException on various errors
      */
     public Hash getBlindedHash(SigningPublicKey spk) {
         BlindData bd = _cache.get(spk);
@@ -159,12 +159,12 @@ class BlindCache {
     }
 
     /**
-     *  Mark a destination as known to be blinded
+     * Mark a destination as known to be blinded
      *
-     *  @param dest known to be blinded
-     *  @param blindedType null for default
-     *  @param secret may be null
-     *  @throws IllegalArgumentException on various errors
+     * @param dest known to be blinded
+     * @param blindedType null for default
+     * @param secret may be null
+     * @throws IllegalArgumentException on various errors
      */
     public void setBlinded(Destination dest, SigType blindedType, String secret) {
         SigningPublicKey spk = dest.getSigningPublicKey();
@@ -181,11 +181,11 @@ class BlindCache {
     }
 
     /**
-     *  Add the destination to the cache entry.
-     *  Must previously be in cache.
+     * Add the destination to the cache entry.
+     * Must previously be in cache.
      *
-     *  @param dest known to be blinded
-     *  @throws IllegalArgumentException on various errors
+     * @param dest known to be blinded
+     * @throws IllegalArgumentException on various errors
      */
     public void setBlinded(Destination dest) {
         SigningPublicKey spk = dest.getSigningPublicKey();
@@ -197,9 +197,9 @@ class BlindCache {
     }
 
     /**
-     *  Persists immediately if secret or privkey is non-null
+     * Persists immediately if secret or privkey is non-null
      *
-     *  @param bd the blind data to add
+     * @param bd the blind data to add
      */
     public void addToCache(BlindData bd) {
         storeInCache(bd);
@@ -212,7 +212,7 @@ class BlindCache {
     }
 
     /**
-     *  @since 0.9.41 from addToCache()
+     * @since 0.9.41 from addToCache()
      */
     private void storeInCache(BlindData bd) {
         _cache.put(bd.getUnblindedPubKey(), bd);
@@ -223,10 +223,10 @@ class BlindCache {
     }
 
     /**
-     *  The cached data or null
+     * The cached data or null
      *
-     *  @param dest the destination to look up
-     *  @return the cached BlindData or null
+     * @param dest the destination to look up
+     * @return the cached BlindData or null
      */
     public BlindData getData(Destination dest) {
         BlindData rv = getData(dest.getSigningPublicKey());
@@ -241,10 +241,10 @@ class BlindCache {
     }
 
     /**
-     *  The cached data or null
+     * The cached data or null
      *
-     *  @param spk the unblinded public key
-     *  @return the cached BlindData or null
+     * @param spk the unblinded public key
+     * @return the cached BlindData or null
      */
     public BlindData getData(SigningPublicKey spk) {
         SigType type = spk.getType();
@@ -255,10 +255,10 @@ class BlindCache {
     }
 
     /**
-     *  The cached data or null
+     * The cached data or null
      *
-     *  @param spk the blinded public key
-     *  @return the cached BlindData or null
+     * @param spk the blinded public key
+     * @return the cached BlindData or null
      */
     public BlindData getReverseData(SigningPublicKey spk) {
         SigType type = spk.getType();
@@ -268,8 +268,7 @@ class BlindCache {
     }
 
     /**
-     *  Refresh all the data at midnight
-     *
+     * Refresh all the data at midnight
      */
     public synchronized void rollover() {
         _reverseCache.clear();
@@ -279,9 +278,9 @@ class BlindCache {
     }
 
     /**
-     *  For console ConfigKeyringHelper
-     *  @return list is copied
-     *  @since 0.9.41
+     * For console ConfigKeyringHelper
+     * @return list is copied
+     * @since 0.9.41
      */
     public synchronized List<BlindData> getData() {
         List<BlindData> rv = new ArrayList<>(_cache.size());
@@ -290,12 +289,12 @@ class BlindCache {
     }
 
     /**
-     *  For console ConfigKeyringHelper.
-     *  Persists immediately if removed.
+     * For console ConfigKeyringHelper.
+     * Persists immediately if removed.
      *
-     *  @param spk the unblinded public key
-     *  @return true if removed
-     *  @since 0.9.41
+     * @param spk the unblinded public key
+     * @return true if removed
+     * @since 0.9.41
      */
     public boolean removeBlindData(SigningPublicKey spk) {
         boolean rv = false;
@@ -312,12 +311,12 @@ class BlindCache {
     }
 
     /**
-     *  Load from file.
-     *  Format:
-     *  sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
+     * Load from file.
+     * Format:
+     * sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
      *
-     *  If timestamp is positive, it's a creation date;
-     *  if negative, it's a negative expiration date.
+     * If timestamp is positive, it's a creation date;
+     * if negative, it's a negative expiration date.
      */
     private synchronized void load() {
         File file = new File(_context.getConfigDir(), PERSIST_FILE);
@@ -383,11 +382,11 @@ class BlindCache {
     }
 
     /**
-     *  Format:
-     *  sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
+     * Format:
+     * sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
      *
-     *  If timestamp is positive, it's a creation date;
-     *  if negative, it's a negative expiration date.
+     * If timestamp is positive, it's a creation date;
+     * if negative, it's a negative expiration date.
      */
     private BlindData fromPersistentString(String line) throws DataFormatException {
         String[] ss = DataHelper.split(line, ",", 8);
@@ -448,11 +447,11 @@ class BlindCache {
     }
 
     /**
-     *  Format:
-     *  sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
+     * Format:
+     * sigtype,bsigtype,authtype,timestamp,b64 pubkey,[b64 secret],[b64 auth privkey],[b64 dest]
      *
-     *  If timestamp is positive, it's a creation date;
-     *  if negative, it's a negative expiration date.
+     * If timestamp is positive, it's a creation date;
+     * if negative, it's a negative expiration date.
      */
     private static String toPersistentString(BlindData bd) {
         StringBuilder buf = new StringBuilder(1024);

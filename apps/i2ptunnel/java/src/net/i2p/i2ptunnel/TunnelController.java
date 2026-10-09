@@ -65,7 +65,6 @@ public class TunnelController implements Logging {
 
     /**
      * The tunnel state.
-     *
      */
     public enum TunnelState {
         /** Start on load. */
@@ -130,16 +129,14 @@ public class TunnelController implements Logging {
         public static final String PROP_TUN_GZIP = "i2ptunnel.gzip";
 
     /**
-     *  Configuration property for the minimum startup delay in seconds.
-     *  Only applies to server tunnels.
-     *
+     * Configuration property for the minimum startup delay in seconds.
+     * Only applies to server tunnels.
      */
     public static final String PROP_STARTUP_DELAY_MIN = "startupDelayMin";
 
     /**
-     *  Configuration property for the maximum startup delay in seconds.
-     *  Only applies to server tunnels.
-     *
+     * Configuration property for the maximum startup delay in seconds.
+     * Only applies to server tunnels.
      */
     public static final String PROP_STARTUP_DELAY_MAX = "startupDelayMax";
 
@@ -150,16 +147,14 @@ public class TunnelController implements Logging {
     public static final int DEFAULT_STARTUP_DELAY_MAX = 0;
 
     /**
-     *  Configuration property for the minimum shutdown delay in seconds.
-     *  Only applies to server tunnels.
-     *
+     * Configuration property for the minimum shutdown delay in seconds.
+     * Only applies to server tunnels.
      */
     public static final String PROP_SHUTDOWN_DELAY_MIN = "shutdownDelayMin";
 
     /**
-     *  Configuration property for the maximum shutdown delay in seconds.
-     *  Only applies to server tunnels.
-     *
+     * Configuration property for the maximum shutdown delay in seconds.
+     * Only applies to server tunnels.
      */
     public static final String PROP_SHUTDOWN_DELAY_MAX = "shutdownDelayMax";
 
@@ -269,8 +264,7 @@ public class TunnelController implements Logging {
     public static final String TYPE_STREAMR_SERVER = "streamrserver";
 
     /**
-     *  This is guaranteed to be available.
-     *
+     * This is guaranteed to be available.
      */
     public static final SigType PREFERRED_SIGTYPE;
     static {
@@ -316,8 +310,8 @@ public class TunnelController implements Logging {
      * @param config original key=value mapping non-null
      * @param prefix beginning of key values that are relevant to this tunnel
      * @param createKey for servers, whether we want to create a brand new destination
-     *                  with private keys at the location specified or not (does not
-     *                  overwrite existing ones)
+     * with private keys at the location specified or not (does not
+     * overwrite existing ones)
      */
     public TunnelController(Properties config, String prefix, boolean createKey) {
         _tunnel = new I2PTunnel(this);
@@ -336,9 +330,9 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  The I2PTunnel
+     * The I2PTunnel
      *
-     *   for advanced plugin usage
+     * for advanced plugin usage
      * @return the tunnel
      */
     public I2PTunnel getTunnel() {
@@ -346,8 +340,8 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Create a new private key, if no filename is specified or creation fails.
-     *  @return success
+     * Create a new private key, if no filename is specified or creation fails.
+     * @return success
      */
     private boolean createPrivateKey() {
         I2PClient client = I2PClientFactory.createClient();
@@ -413,7 +407,6 @@ public class TunnelController implements Logging {
      * Does nothing if the file already exists.
      *
      * @return success
-     *
      */
     private boolean createAltPrivateKey() {
         if (PREFERRED_SIGTYPE == SigType.DSA_SHA1)
@@ -497,7 +490,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Starts the tunnel in a background thread.
+     * Starts the tunnel in a background thread.
      * <p>
      * This method spawns a new thread to start the tunnel, allowing
      * the calling thread to return immediately. The tunnel state
@@ -518,7 +511,6 @@ public class TunnelController implements Logging {
 
     /**
      * Start up the tunnel (if it isn't already running)
-     *
      */
     public void startTunnel() {
         synchronized (this) {
@@ -680,7 +672,7 @@ public class TunnelController implements Logging {
     }
 
     /*
-     *  Streamr client is a UDP server, use the listenPort field for targetPort
+     * Streamr client is a UDP server, use the listenPort field for targetPort
      */
     private void startStreamrClient() {
         String targetHost = getTargetHost();
@@ -690,7 +682,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Streamr server is a UDP client, use the targetPort field for listenPort
+     * Streamr server is a UDP client, use the targetPort field for listenPort
      */
     private void startStreamrServer() {
         String listenOn = getListenOnInterface();
@@ -748,10 +740,9 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Get all the sessions we may be using.
+     * Get all the sessions we may be using.
      *
-     *  @return a copy, non-null
-     *
+     * @return a copy, non-null
      */
     private Collection<I2PSession> getAllSessions() {
         // We use _sessions AND the tunnel sessions as
@@ -813,11 +804,11 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  These are the ones stored with a prefix of "option."
-     *  Defaults in config properties are not honored.
+     * These are the ones stored with a prefix of "option."
+     * Defaults in config properties are not honored.
      *
-     *  @return keys with the "option." prefix stripped, non-null
-     *               Much better than getClientOptions()
+     * @return keys with the "option." prefix stripped, non-null
+     * Much better than getClientOptions()
      */
     public Properties getClientOptionProps() {
         Properties opts = new Properties();
@@ -878,9 +869,9 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  May be restarted with restartTunnel() or startTunnel() later.
-     *  This may not release all resources. In particular, the I2PSocketManager remains
-     *  and it may have timer threads that continue running.
+     * May be restarted with restartTunnel() or startTunnel() later.
+     * This may not release all resources. In particular, the I2PSocketManager remains
+     * and it may have timer threads that continue running.
      */
     public void stopTunnel() {
         synchronized (this) {
@@ -904,52 +895,47 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  When combined with a greater startupDelayMax, the tunnel will start
-     *  with a random delay between min and max seconds.
-     *  @return the minimum startup delay in seconds for server tunnels.
-     *
+     * When combined with a greater startupDelayMax, the tunnel will start
+     * with a random delay between min and max seconds.
+     * @return the minimum startup delay in seconds for server tunnels.
      */
     public int getStartupDelayMin() {
         return getDelay(PROP_STARTUP_DELAY_MIN, DEFAULT_STARTUP_DELAY_MIN);
     }
 
     /**
-     *  When combined with a positive startupDelayMin less than this value,
-     *  the tunnel will start with a random delay between min and max seconds.
-     *  @return the maximum startup delay in seconds for server tunnels.
-     *
+     * When combined with a positive startupDelayMin less than this value,
+     * the tunnel will start with a random delay between min and max seconds.
+     * @return the maximum startup delay in seconds for server tunnels.
      */
     public int getStartupDelayMax() {
         return getDelay(PROP_STARTUP_DELAY_MAX, DEFAULT_STARTUP_DELAY_MAX);
     }
 
     /**
-     *  When combined with a greater shutdownDelayMax, the tunnel will stop
-     *  with a random delay between min and max seconds during router shutdown.
-     *  @return the minimum shutdown delay in seconds for server tunnels.
-     *
+     * When combined with a greater shutdownDelayMax, the tunnel will stop
+     * with a random delay between min and max seconds during router shutdown.
+     * @return the minimum shutdown delay in seconds for server tunnels.
      */
     public int getShutdownDelayMin() {
         return getDelay(PROP_SHUTDOWN_DELAY_MIN, DEFAULT_SHUTDOWN_DELAY_MIN);
     }
 
      /**
-      *  When combined with a positive shutdownDelayMin less than this value,
-      *  the tunnel will stop with a random delay between min and max seconds during router shutdown.
-      *  @return the maximum shutdown delay in seconds for server tunnels.
-      *
+      * When combined with a positive shutdownDelayMin less than this value,
+      * the tunnel will stop with a random delay between min and max seconds during router shutdown.
+      * @return the maximum shutdown delay in seconds for server tunnels.
       */
      public int getShutdownDelayMax() {
          return getDelay(PROP_SHUTDOWN_DELAY_MAX, DEFAULT_SHUTDOWN_DELAY_MAX);
      }
 
      /**
-      *  Read a delay option, clamped to non-negative.
+      * Read a delay option, clamped to non-negative.
       *
-      *  @param key the config key
-      *  @param def the default when unset or unparsable
-      *  @return the delay in seconds
-      *
+      * @param key the config key
+      * @param def the default when unset or unparsable
+      * @return the delay in seconds
       */
      private int getDelay(String key, int def) {
          String val = _config.getProperty(key);
@@ -963,9 +949,8 @@ public class TunnelController implements Logging {
      }
 
      /**
-      *  Get the remaining startup delay time for tunnels with delayed startup.
-      *  @return remaining delay in seconds, or 0 if not in delayed startup state or delay has passed
-      *
+      * Get the remaining startup delay time for tunnels with delayed startup.
+      * @return remaining delay in seconds, or 0 if not in delayed startup state or delay has passed
       */
      public int getRemainingStartupDelay() {
          if (_state != TunnelState.DELAYED_START_PENDING) {
@@ -976,19 +961,16 @@ public class TunnelController implements Logging {
      }
 
      /**
-      *  Set the startup delay end time. Called by TunnelControllerGroup when setting up delayed startup.
-      *  @param delayMs the delay in milliseconds
-      *
+      * Set the startup delay end time. Called by TunnelControllerGroup when setting up delayed startup.
+      * @param delayMs the delay in milliseconds
       */
      void setStartupDelayEndTime(long delayMs) {
          _startupDelayEndTime = System.currentTimeMillis() + delayMs;
      }
 
      /**
-      *  May NOT be restarted with restartTunnel() or startTunnel() later.
-      *  This should release all resources.
-      *
-      *
+      * May NOT be restarted with restartTunnel() or startTunnel() later.
+      * This should release all resources.
       */
      public void destroyTunnel() {
         synchronized (this) {
@@ -1009,7 +991,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Stops and restarts the tunnel.
+     * Stops and restarts the tunnel.
      * <p>
      * This method stops the tunnel if running, waits briefly,
      * then starts the tunnel again. The restart is performed
@@ -1043,12 +1025,12 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  As of 0.9.1, updates the options on an existing session
+     * As of 0.9.1, updates the options on an existing session
      *
-     *  @param config  key=value mapping for all tunnels; only the entries whose
-     *                 key starts with prefix are taken
-     *  @param prefix  tunnel's key prefix, stripped from the keys it matched; an
-     *                 empty prefix takes config as-is
+     * @param config  key=value mapping for all tunnels; only the entries whose
+     * key starts with prefix are taken
+     * @param prefix  tunnel's key prefix, stripped from the keys it matched; an
+     * empty prefix takes config as-is
      */
     public void setConfig(Properties config, String prefix) {
         Properties props = filterProperties(config, prefix);
@@ -1260,8 +1242,7 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Is property p different in p1 and p2?
-     *
+     * Is property p different in p1 and p2?
      */
     private static boolean configChanged(Properties p1, Properties p2, String p) {
         String s1 = p1.getProperty(p);
@@ -1271,9 +1252,9 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  The tunnel config, with each key prefixed, or a copy if the prefix is empty.
-     *  @param prefix  prepended to every key; an empty prefix copies the keys as-is
-     *  @return a new Properties, never the live config
+     * The tunnel config, with each key prefixed, or a copy if the prefix is empty.
+     * @param prefix  prepended to every key; an empty prefix copies the keys as-is
+     * @return a new Properties, never the live config
      */
     public Properties getConfig(String prefix) {
         Properties rv = new Properties();
@@ -1290,55 +1271,54 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  The config file as passed into the constructor via the "configFile" property,
-     *  or as set later.
-     *  @return the config file, or null
-     *
+     * The config file as passed into the constructor via the "configFile" property,
+     * or as set later.
+     * @return the config file, or null
      */
     public File getConfigFile() { return _configFile; }
 
     /**
-     *  Set the config file. Only do this if previously null.
+     * Set the config file. Only do this if previously null.
      *
-     *  @param file  where this tunnel's config was loaded from, for saving later
+     * @param file  where this tunnel's config was loaded from, for saving later
      */
     public void setConfigFile(File file) { _configFile = file; }
 
     /**
-     *  The tunnel type.
-     *  @return the tunnel type
+     * The tunnel type.
+     * @return the tunnel type
      */
     public String getType() { return _config.getProperty(PROP_TYPE); }
     /**
-     *  The tunnel name.
-     *  @return the tunnel name
+     * The tunnel name.
+     * @return the tunnel name
      */
     public String getName() { return _config.getProperty(PROP_NAME); }
     /**
-     *  The tunnel description.
-     *  @return the tunnel description
+     * The tunnel description.
+     * @return the tunnel description
      */
     public String getDescription() { return _config.getProperty(PROP_DESCR); }
     /**
-     *  The I2CP host the router is on.
-     *  @return the I2CP host
+     * The I2CP host the router is on.
+     * @return the I2CP host
      */
     public String getI2CPHost() { return _config.getProperty(PROP_I2CP_HOST); }
     /**
-     *  The I2CP port the router is on.
-     *  @return the I2CP port
+     * The I2CP port the router is on.
+     * @return the I2CP port
      */
     public String getI2CPPort() { return _config.getProperty(PROP_I2CP_PORT); }
 
     /**
-     *  Absolute path to filter definition file
+     * Absolute path to filter definition file
      *
      * @return the filter
      */
     public String getFilter() { return _config.getProperty(PROP_FILTER); }
 
     /**
-     *  Whether this tunnel is a client type in the UI and I2P side.
+     * Whether this tunnel is a client type in the UI and I2P side.
      *
      * @return true if this tunnel is a client type
      */
@@ -1347,12 +1327,12 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Whether the given type is a client type in the UI and I2P side.
-     *  Note that a streamr client is a UI and I2P client but a server on the localhost side.
-     *  Note that a streamr server is a UI and I2P server but a client on the localhost side.
+     * Whether the given type is a client type in the UI and I2P side.
+     * Note that a streamr client is a UI and I2P client but a server on the localhost side.
+     * Note that a streamr server is a UI and I2P server but a client on the localhost side.
      *
-     *  @param type  one of the TYPE_ values, or null when unset
-     *  @return false if type == null
+     * @param type  one of the TYPE_ values, or null when unset
+     * @return false if type == null
      */
     public static boolean isClient(String type) {
         return TYPE_STD_CLIENT.equals(type) ||
@@ -1365,10 +1345,10 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  These are the ones with a prefix of "option."
+     * These are the ones with a prefix of "option."
      *
-     *  @return one big string of "key=val key=val ..."
-     *  @deprecated why would you want this? Use getClientOptionProps() instead
+     * @return one big string of "key=val key=val ..."
+     * @deprecated why would you want this? Use getClientOptionProps() instead
      */
     @Deprecated
     public String getClientOptions() {
@@ -1386,52 +1366,52 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  The interface the tunnel listens on.
-     *  @return the listen interface
+     * The interface the tunnel listens on.
+     * @return the listen interface
      */
     public String getListenOnInterface() { return _config.getProperty(PROP_INTFC); }
     /**
-     *  The hostname or IP address of the target.
-     *  @return the target host
+     * The hostname or IP address of the target.
+     * @return the target host
      */
     public String getTargetHost() { return _config.getProperty(PROP_TARGET_HOST); }
     /**
-     *  The port number of the target.
-     *  @return the target port
+     * The port number of the target.
+     * @return the target port
      */
     public String getTargetPort() { return _config.getProperty(PROP_TARGET_PORT); }
     /**
-     *  The hostname sent in the HTTP Host header when spoofing is enabled.
-     *  @return the spoofed host
+     * The hostname sent in the HTTP Host header when spoofing is enabled.
+     * @return the spoofed host
      */
     public String getSpoofedHost() { return _config.getProperty(PROP_SPOOFED_HOST); }
 
     /**
-     *  Probably not absolute. May be null. getPrivateKeyFile() recommended.
+     * Probably not absolute. May be null. getPrivateKeyFile() recommended.
      * @return the priv key file
      */
     public String getPrivKeyFile() { return _config.getProperty(PROP_FILE); }
 
     /**
-     *  The port the tunnel listens on.
-     *  @return the listen port
+     * The port the tunnel listens on.
+     * @return the listen port
      */
     public String getListenPort() { return _config.getProperty(PROP_LISTEN_PORT); }
     /**
-     *  The base64-encoded target destination.
-     *  @return the target destination
+     * The base64-encoded target destination.
+     * @return the target destination
      */
     public String getTargetDestination() { return _config.getProperty(PROP_DEST); }
     /**
-     *  The comma-separated list of proxies for the tunnel.
-     *  @return the proxy list
+     * The comma-separated list of proxies for the tunnel.
+     * @return the proxy list
      */
     public String getProxyList() { return _config.getProperty(PROP_PROXIES); }
 
     /**
-     *  Whether this tunnel shares its tunnels with other client tunnels.
-     *  @return "true" or "false" as a string, never null; server types always
-     *          report "false" and a client with the property unset reports "true"
+     * Whether this tunnel shares its tunnels with other client tunnels.
+     * @return "true" or "false" as a string, never null; server types always
+     * report "false" and a client with the property unset reports "true"
      */
     public String getSharedClient() {
          if (!isClient())
@@ -1440,41 +1420,38 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Whether this tunnel is configured to start when the router starts.
-     *  Defaults to true when unset.
-     *  @return true if this tunnel starts on router startup
+     * Whether this tunnel is configured to start when the router starts.
+     * Defaults to true when unset.
+     * @return true if this tunnel starts on router startup
      */
     public boolean getStartOnLoad() { return Boolean.parseBoolean(_config.getProperty(PROP_START, "true")); }
 
     /**
-     *  Whether a persistent client key is used.
-     *  @return true if persistent client key is enabled
+     * Whether a persistent client key is used.
+     * @return true if persistent client key is enabled
      */
     public boolean getPersistentClientKey() { return Boolean.parseBoolean(_config.getProperty(OPT_PERSISTENT)); }
 
     /**
-     *  Does not necessarily exist.
-     *  @return absolute path or null if unset
-     *
+     * Does not necessarily exist.
+     * @return absolute path or null if unset
      */
     public File getPrivateKeyFile() {
         return filenameToFile(getPrivKeyFile());
     }
 
     /**
-     *  Does not necessarily exist.
-     *  @return absolute path or null if unset
-     *
+     * Does not necessarily exist.
+     * @return absolute path or null if unset
      */
     public File getAlternatePrivateKeyFile() {
         return filenameToFile(_config.getProperty(OPT_ALT_PKF));
     }
 
     /**
-     *  Does not necessarily exist.
-     *  @param f relative or absolute path, may be null
-     *  @return absolute path or null
-     *
+     * Does not necessarily exist.
+     * @param f relative or absolute path, may be null
+     * @return absolute path or null
      */
     static File filenameToFile(String f) {
         if (f == null)
@@ -1489,8 +1466,8 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Returns null if not running.
-     *  @return Base64 or null
+     * Returns null if not running.
+     * @return Base64 or null
      */
     public String getMyDestination() {
         Destination dest = getDestination();
@@ -1500,8 +1477,8 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Returns null if not running.
-     *  @return "{52 chars}.b32.i2p" or null
+     * Returns null if not running.
+     * @return "{52 chars}.b32.i2p" or null
      */
     public String getMyDestHashBase32() {
         Destination dest = getDestination();
@@ -1511,9 +1488,8 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Returns null if not running.
-     *  @return Destination or null
-     *
+     * Returns null if not running.
+     * @return Destination or null
      */
     public Destination getDestination() {
         List<I2PSession> sessions = _tunnel.getSessions();
@@ -1527,9 +1503,8 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Returns false if not running.
-     *  @return true if the primary session has offline keys
-     *
+     * Returns false if not running.
+     * @return true if the primary session has offline keys
      */
     public boolean getIsOfflineKeys() {
         List<I2PSession> sessions = _tunnel.getSessions();
@@ -1539,9 +1514,8 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Returns false if not running.
-     *  @return true if ANY session or subsession has offline keys
-     *
+     * Returns false if not running.
+     * @return true if ANY session or subsession has offline keys
      */
     private boolean getIsOfflineKeysAnySession() {
         List<I2PSession> sessions = _tunnel.getSessions();
@@ -1557,29 +1531,28 @@ public class TunnelController implements Logging {
     }
 
     /**
-     *  Checks if the tunnel is currently running.
+     * Checks if the tunnel is currently running.
      *
      * @return true if the tunnel state is RUNNING
      */
     public synchronized boolean getIsRunning() { return _state == TunnelState.RUNNING; }
 
     /**
-     *  Checks if the tunnel is starting or starting on load.
+     * Checks if the tunnel is starting or starting on load.
      *
      * @return true if the tunnel is in the process of starting
      */
     public boolean getIsStarting() { return _state == TunnelState.START_ON_LOAD || _state == TunnelState.STARTING || _state == TunnelState.DELAYED_START_PENDING; }
 
     /**
-     *  Gets the current tunnel state.
+     * Gets the current tunnel state.
      *
      * @return the current TunnelState
-     *
      */
     public TunnelState getState() { return _state; }
 
     /**
-     *  Checks if the tunnel is in standby mode.
+     * Checks if the tunnel is in standby mode.
      * <p>
      * A tunnel is in standby when it is running but has no open sessions.
      * </p>
@@ -1642,9 +1615,6 @@ public class TunnelController implements Logging {
         return rv;
     }
 
-    /**
-     *
-     */
     @Override
     public String toString() {
         return "[Tunnel Controller: " + getType() + "] " + getName() + " for " + _tunnel + ' ' + _state;
@@ -1653,8 +1623,6 @@ public class TunnelController implements Logging {
     /**
      * Periodically check for an updated offline-signed private key file.
      * Log if about to expire.
-     *
-     *
      */
     private class PKFChecker extends SimpleTimer2.TimedEvent {
         private final List<File> files;
@@ -1662,9 +1630,9 @@ public class TunnelController implements Logging {
         private boolean wasRun;
 
         /**
-         *  Monitors the given key files for changes.
-         *  @param f the primary key file
-         *  @param f2 may be null
+         * Monitors the given key files for changes.
+         * @param f the primary key file
+         * @param f2 may be null
          */
         public PKFChecker(File f, File f2) {
             super(SimpleTimer2.getInstance());

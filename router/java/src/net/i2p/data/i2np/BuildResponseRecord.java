@@ -15,11 +15,11 @@ import net.i2p.data.SessionKey;
  *
  * When decrypted:
  *
- *<pre>
+ * <pre>
  * Bytes 0-31 contain the hash of bytes 32-527
  * Bytes 32-526 contain random data.
  * Byte 527 contains the reply.
- *</pre>
+ * </pre>
  */
 public class BuildResponseRecord {
 

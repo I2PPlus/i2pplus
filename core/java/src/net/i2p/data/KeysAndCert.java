@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -26,47 +25,47 @@ import java.util.Arrays;
  *
  * <p>KeysAndCert provides the fundamental cryptographic identity components:</p>
  * <ul>
- *   <li><strong>Public Key:</strong> Encryption key for encrypted communication</li>
- *   <li><strong>Signing Public Key:</strong> Key for verifying signatures and identity</li>
- *   <li><strong>Certificate:</strong> Optional metadata about the keys and identity</li>
- *   <li><strong>Cached Hash:</strong> Pre-computed SHA-256 hash for efficient identification</li>
+ * <li><strong>Public Key:</strong> Encryption key for encrypted communication</li>
+ * <li><strong>Signing Public Key:</strong> Key for verifying signatures and identity</li>
+ * <li><strong>Certificate:</strong> Optional metadata about the keys and identity</li>
+ * <li><strong>Cached Hash:</strong> Pre-computed SHA-256 hash for efficient identification</li>
  * </ul>
  *
  * <p><strong>Structure:</strong></p>
  * <ul>
- *   <li>Public key (variable length, typically 256 bytes for ElGamal)</li>
- *   <li>Signing public key (variable length, typically 128 bytes for DSA, 32 bytes for Ed25519)</li>
- *   <li>Certificate (type + length + payload)</li>
- *   <li>Optional padding for consistent serialization</li>
+ * <li>Public key (variable length, typically 256 bytes for ElGamal)</li>
+ * <li>Signing public key (variable length, typically 128 bytes for DSA, 32 bytes for Ed25519)</li>
+ * <li>Certificate (type + length + payload)</li>
+ * <li>Optional padding for consistent serialization</li>
  * </ul>
  *
  * <p><strong>Usage:</strong></p>
  * <ul>
- *   <li><strong>Base Class:</strong> Extended by {@link Destination} and {@link net.i2p.data.router.RouterIdentity}</li>
- *   <li><strong>Identity:</strong> Forms the core of I2P cryptographic identities</li>
- *   <li><strong>Verification:</strong> Provides keys for signature verification</li>
- *   <li><strong>Encryption:</strong> Contains encryption key for secure communication</li>
+ * <li><strong>Base Class:</strong> Extended by {@link Destination} and {@link net.i2p.data.router.RouterIdentity}</li>
+ * <li><strong>Identity:</strong> Forms the core of I2P cryptographic identities</li>
+ * <li><strong>Verification:</strong> Provides keys for signature verification</li>
+ * <li><strong>Encryption:</strong> Contains encryption key for secure communication</li>
  * </ul>
  *
  * <p><strong>Key Types:</strong></p>
  * <ul>
- *   <li><strong>Encryption:</strong> ElGamal 2048-bit (legacy) or ECIES X25519 (modern)</li>
- *   <li><strong>Signing:</strong> DSA-SHA1 (legacy), ECDSA-P256, or EdDSA-Ed25519 (modern)</li>
- *   <li><strong>Certificates:</strong> NULL, HIDDEN, SIGNED, MULTIPLE, or KEY types</li>
+ * <li><strong>Encryption:</strong> ElGamal 2048-bit (legacy) or ECIES X25519 (modern)</li>
+ * <li><strong>Signing:</strong> DSA-SHA1 (legacy), ECDSA-P256, or EdDSA-Ed25519 (modern)</li>
+ * <li><strong>Certificates:</strong> NULL, HIDDEN, SIGNED, MULTIPLE, or KEY types</li>
  * </ul>
  *
  * <p><strong>Immutability:</strong></p>
  * <ul>
- *   <li>As of 0.9.9, instances are immutable after keys and certificate are set</li>
- *   <li>Attempts to modify will throw {@link IllegalStateException}</li>
- *   <li>Ensures thread safety and prevents accidental corruption</li>
+ * <li>As of 0.9.9, instances are immutable after keys and certificate are set</li>
+ * <li>Attempts to modify will throw {@link IllegalStateException}</li>
+ * <li>Ensures thread safety and prevents accidental corruption</li>
  * </ul>
  *
  * <p><strong>History:</strong></p>
  * <ul>
- *   <li>Implemented in 0.8.2 and retrofitted over existing Destination and RouterIdentity classes</li>
- *   <li>No functional difference between Destination and RouterIdentity at this level</li>
- *   <li>Provides unified interface for identity management across I2P</li>
+ * <li>Implemented in 0.8.2 and retrofitted over existing Destination and RouterIdentity classes</li>
+ * <li>No functional difference between Destination and RouterIdentity at this level</li>
+ * <li>Provides unified interface for identity management across I2P</li>
  * </ul>
  *
  * @author zzz
@@ -91,9 +90,9 @@ public class KeysAndCert extends DataStructureImpl {
     private byte[] _padding;
 
     /**
-     *  If compressed, the padding size / 32, else 0
+     * If compressed, the padding size / 32, else 0
      *
-     *  @since 0.9.62
+     * @since 0.9.62
      */
     protected int _paddingBlocks;
 
@@ -128,10 +127,10 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Signature type from the certificate.
+     * Signature type from the certificate.
      *
-     *  @return null if not set or unknown
-     *  @since 0.9.17
+     * @return null if not set or unknown
+     * @since 0.9.17
      */
     public SigType getSigType() {
         Certificate cert = _certificate;
@@ -141,10 +140,10 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Encryption type from the certificate.
+     * Encryption type from the certificate.
      *
-     *  @return null if not set or unknown
-     *  @since 0.9.42
+     * @return null if not set or unknown
+     * @since 0.9.42
      */
     public EncType getEncType() {
         Certificate cert = _certificate;
@@ -154,14 +153,14 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Up-convert the certificate to a KeyCertificate, caching the result.
-     *  The cache avoids a new KeyCertificate allocation on every identity-type
-     *  query for identities holding a plain CERTIFICATE_TYPE_KEY Certificate
-     *  (KeyCertificate.toKeyCertificate() already returns itself).
+     * Up-convert the certificate to a KeyCertificate, caching the result.
+     * The cache avoids a new KeyCertificate allocation on every identity-type
+     * query for identities holding a plain CERTIFICATE_TYPE_KEY Certificate
+     * (KeyCertificate.toKeyCertificate() already returns itself).
      *
-     *  @param cert the non-null certificate
-     *  @return the key certificate, or null if the certificate is not of type
-     *          CERTIFICATE_TYPE_KEY or its payload is too short
+     * @param cert the non-null certificate
+     * @return the key certificate, or null if the certificate is not of type
+     * CERTIFICATE_TYPE_KEY or its payload is too short
      */
     private KeyCertificate getKeyCertificate(Certificate cert) {
         if (cert.getCertificateType() != Certificate.CERTIFICATE_TYPE_KEY) return null;
@@ -426,10 +425,10 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Throws IllegalStateException if keys and cert are not initialized,
-     *  as of 0.9.12. Prior to that, returned null.
+     * Throws IllegalStateException if keys and cert are not initialized,
+     * as of 0.9.12. Prior to that, returned null.
      *
-     *  @throws IllegalStateException if keys and cert are not initialized
+     * @throws IllegalStateException if keys and cert are not initialized
      */
     @Override
     public Hash calculateHash() {
@@ -437,11 +436,11 @@ public class KeysAndCert extends DataStructureImpl {
     }
 
     /**
-     *  Throws IllegalStateException if keys and cert are not initialized,
-     *  as of 0.9.12. Prior to that, returned null.
+     * Throws IllegalStateException if keys and cert are not initialized,
+     * as of 0.9.12. Prior to that, returned null.
      *
-     *  @throws IllegalStateException if keys and cert are not initialized
-     *  @return the hash
+     * @throws IllegalStateException if keys and cert are not initialized
+     * @return the hash
      */
     public Hash getHash() {
         if (__calculatedHash != null) return __calculatedHash;

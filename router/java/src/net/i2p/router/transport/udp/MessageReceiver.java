@@ -162,10 +162,10 @@ class MessageReceiver {
     }
 
     /**
-     *  Dynamically adjust thread count. If target is higher than current,
-     *  start new runners. If lower, poison excess runners.
+     * Dynamically adjust thread count. If target is higher than current,
+     * start new runners. If lower, poison excess runners.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     void adjustThreads() {
         if (!_alive) return;
@@ -196,9 +196,9 @@ class MessageReceiver {
     }
 
     /**
-     *  This queues the message for processing.
-     *  Processing will call state.releaseResources(), do not access state after calling this.
-     *  BLOCKING if queue is full.
+     * This queues the message for processing.
+     * Processing will call state.releaseResources(), do not access state after calling this.
+     * BLOCKING if queue is full.
      */
     public void receiveMessage(InboundMessageState state) {
         if (_alive) {
@@ -209,8 +209,8 @@ class MessageReceiver {
     }
 
     /**
-     *  Main processing loop. Pulls completed messages from the queue, parses them
-     *  into I2NPMessages, and delivers them to the transport.
+     * Main processing loop. Pulls completed messages from the queue, parses them
+     * into I2NPMessages, and delivers them to the transport.
      */
     void loop(I2NPMessageHandler handler) {
         InboundMessageState message = null;
@@ -256,11 +256,11 @@ class MessageReceiver {
     }
 
     /**
-     *  Assemble all the fragments into an I2NP message.
-     *  This calls state.releaseResources(), do not access state after calling this.
+     * Assemble all the fragments into an I2NP message.
+     * This calls state.releaseResources(), do not access state after calling this.
      *
-     *  @param buf temp buffer for convenience
-     *  @return null on error
+     * @param buf temp buffer for convenience
+     * @return null on error
      */
     private I2NPMessage readMessage(ByteArray buf, InboundMessageState state, I2NPMessageHandler handler) {
         int sz = state.getCompleteSize();

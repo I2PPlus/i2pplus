@@ -35,8 +35,8 @@ class BuildMessageProcessor {
     private final DecayingBloomFilter _filter;
 
     /**
-     *  Creates a new BuildMessageProcessor.
-     *  @param ctx the router context
+     * Creates a new BuildMessageProcessor.
+     * @param ctx the router context
      */
     public BuildMessageProcessor(RouterContext ctx) {
         this.ctx = ctx;
@@ -46,12 +46,12 @@ class BuildMessageProcessor {
     }
 
     /**
-     *  For N typical part tunnels and rejecting 50%, that's 12N requests per hour.
-     *  This is the equivalent of (12N/600) KBps through the IVValidator filter.
+     * For N typical part tunnels and rejecting 50%, that's 12N requests per hour.
+     * This is the equivalent of (12N/600) KBps through the IVValidator filter.
      *
-     *  Target false positive rate is 1E-5 or lower
+     * Target false positive rate is 1E-5 or lower
      *
-     *  @since 0.9.24
+     * @since 0.9.24
      */
     private DecayingBloomFilter selectFilter() {
         long maxMemory = SystemVersion.getMaxMemory();

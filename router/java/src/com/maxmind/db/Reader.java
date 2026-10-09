@@ -153,13 +153,13 @@ public final class Reader implements Closeable {
     }
 
     /**
-     *  I2P -
-     *  Write all IPv4 address ranges for the given country to out.
+     * I2P -
+     * Write all IPv4 address ranges for the given country to out.
      *
-     *  @param country two-letter uppper-case
-     *  @param out caller must close
-     *  @since 0.9.48
-     *  @throws IOException on error
+     * @param country two-letter uppper-case
+     * @param out caller must close
+     * @since 0.9.48
+     * @throws IOException on error
      */
     public void countryToIP(String country, Writer out) throws IOException {
         Walker walker = new Walker(country, out);
@@ -167,8 +167,8 @@ public final class Reader implements Closeable {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.48
+     * I2P
+     * @since 0.9.48
      */
     private class Walker {
         private final String _country;
@@ -180,9 +180,9 @@ public final class Reader implements Closeable {
         private int _countryRecord = -1;
 
         /**
-         *  Write all IPv4 address ranges for the given country to out.
+         * Write all IPv4 address ranges for the given country to out.
          *
-         *  @param country two-letter uppper-case
+         * @param country two-letter uppper-case
          */
         public Walker(String country, Writer out) throws IOException {
             _country = country;

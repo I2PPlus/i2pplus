@@ -16,18 +16,18 @@ import net.i2p.util.SimpleTimer2;
  * is: <ol>
  * <li>add an I2NPMessage (and a target tunnel/router, if necessary)</li>
  * <li>that message is queued up into a TunnelGateway.Pending and offered to the
- *     assigned QueuePreprocessor.</li>
+ * assigned QueuePreprocessor.</li>
  * <li>that QueuePreprocessor may then take off any of the TunnelGateway.Pending
- *     messages or instruct the TunnelGateway to offer it the messages again in
- *     a short while (in an attempt to coalesce them).
+ * messages or instruct the TunnelGateway to offer it the messages again in
+ * a short while (in an attempt to coalesce them).
  * <li>when the QueueProcessor accepts a TunnelGateway.Pending, it preprocesses
- *     it into fragments, forwarding each preprocessed fragment group through
- *     the Sender.</li>
+ * it into fragments, forwarding each preprocessed fragment group through
+ * the Sender.</li>
  * <li>the Sender then encrypts the preprocessed data and delivers it to the
- *     Receiver.</li>
+ * Receiver.</li>
  * <li>the Receiver now has the encrypted message and may do with it as it
- *     pleases (e.g. wrap it as necessary and enqueue it onto the OutNetMessagePool,
- *     or if debugging, verify that it can be decrypted properly)</li>
+ * pleases (e.g. wrap it as necessary and enqueue it onto the OutNetMessagePool,
+ * or if debugging, verify that it can be decrypted properly)</li>
  * </ol>
  *
  * Unused directly - see PumpedTunnelGateway, ThrottledPumpedTunnelGateway, and TunnelGatewayZeroHop overrides.
@@ -57,11 +57,11 @@ abstract class TunnelGateway {
      *
      * @param context the router context
      * @param preprocessor this pulls Pending messages off a list, builds some
-     *                     full preprocessed messages, and pumps those into the sender
+     * full preprocessed messages, and pumps those into the sender
      * @param sender this takes a preprocessed message, encrypts it, and sends it to
-     *               the receiver
+     * the receiver
      * @param receiver this receives the encrypted message and forwards it off
-     *                 to the first hop
+     * to the first hop
      */
     protected TunnelGateway(RouterContext context, QueuePreprocessor preprocessor, Sender sender, Receiver receiver) {
         _context = context;
@@ -133,11 +133,11 @@ abstract class TunnelGateway {
          * Caller must synchronize on the list!
          *
          * @param pending list of Pending objects for messages either unsent
-         *                or partly sent.  This list should be update with any
-         *                values removed (the preprocessor owns the lock)
-         *                Messages are not removed from the list until actually sent.
-         *                The status of unsent and partially-sent messages is stored in
-         *                the Pending structure.
+         * or partly sent.  This list should be update with any
+         * values removed (the preprocessor owns the lock)
+         * Messages are not removed from the list until actually sent.
+         * The status of unsent and partially-sent messages is stored in
+         * the Pending structure.
          * @param sender the sender
          * @param receiver the receiver to accept encrypted data
          * @return true if we should delay before preprocessing again
@@ -166,9 +166,9 @@ abstract class TunnelGateway {
         public long receiveEncrypted(byte[] encrypted);
 
         /**
-         *  Tunnel the message should be sent through.
+         * Tunnel the message should be sent through.
          *
-         *  @return non-null
+         * @return non-null
          */
         public Hash getSendTo();
     }

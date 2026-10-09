@@ -15,13 +15,12 @@ import net.i2p.router.web.Messages;
 import net.i2p.router.web.NewsHelper;
 
 /**
-  * simple helper to control restarts/shutdowns in the left hand nav
-  *
-  */
+ * simple helper to control restarts/shutdowns in the left hand nav
+ */
 public class ConfigRestartBean {
     public ConfigRestartBean() {}
     /** all these are tagged below so no need to _x them here.
-     *  order is: form value, form class, display text.
+     * order is: form value, form class, display text.
      */
     private static final String[] SET1 = {"shutdownImmediate", "stop now", "Shutdown immediately", "cancelShutdown", "cancel", "Cancel shutdown"};
     private static final String[] SET2 = {"restartImmediate", "reload now", "Restart immediately", "cancelShutdown", "cancel", "Cancel restart"};
@@ -209,8 +208,8 @@ public class ConfigRestartBean {
     }
 
     /**
-     *  Format seconds as "1m 30s" or just "45s".
-     *  @since 0.9.68+
+     * Format seconds as "1m 30s" or just "45s".
+     * @since 0.9.68+
      */
     private static String formatDelay(int seconds) {
         if (seconds <= 0) {

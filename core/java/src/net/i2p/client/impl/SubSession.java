@@ -16,30 +16,30 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- *  An additional session using another session's connection.
+ * An additional session using another session's connection.
  *
- *  A subsession uses the same connection to the router as the primary session,
- *  but has a different Destination. It uses the same tunnels as the primary
- *  but has its own leaseset. It must use the same encryption keys as the primary
- *  so that garlic encryption/decryption works.
+ * A subsession uses the same connection to the router as the primary session,
+ * but has a different Destination. It uses the same tunnels as the primary
+ * but has its own leaseset. It must use the same encryption keys as the primary
+ * so that garlic encryption/decryption works.
  *
- *  The message handler map and message producer are reused from primary.
+ * The message handler map and message producer are reused from primary.
  *
- *  Does NOT reuse the session listener ????
+ * Does NOT reuse the session listener ????
  *
- *  While the I2CP protocol, in theory, allows for fully independent sessions
- *  over the same I2CP connection, this is not currently supported by the router.
+ * While the I2CP protocol, in theory, allows for fully independent sessions
+ * over the same I2CP connection, this is not currently supported by the router.
  *
- *  @since 0.9.21
+ * @since 0.9.21
  */
 class SubSession extends I2PSessionMuxedImpl {
     private final I2PSessionMuxedImpl _primary;
 
     /**
-     *  Must be a I2PSessionMuxedImpl.
-     *  @param primary must be a I2PSessionMuxedImpl
-     *  @param destKeyStream location from which to read keys
-     *  @param options session options
+     * Must be a I2PSessionMuxedImpl.
+     * @param primary must be a I2PSessionMuxedImpl
+     * @param destKeyStream location from which to read keys
+     * @param options session options
      */
     public SubSession(I2PSession primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super((I2PSessionMuxedImpl) primary, destKeyStream, options);
@@ -49,9 +49,9 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Unsupported in a subsession.
+     * Unsupported in a subsession.
      *
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     public I2PSession addSubsession(InputStream destKeyStream, Properties opts) throws I2PSessionException {
@@ -59,16 +59,16 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Unsupported in a subsession.
-     *  Does nothing.
+     * Unsupported in a subsession.
+     * Does nothing.
      */
     @Override
     public void removeSubsession(I2PSession session) { /* nop */ }
 
     /**
-     *  Unsupported in a subsession.
+     * Unsupported in a subsession.
      *
-     *  @return empty list always
+     * @return empty list always
      */
     @Override
     public List<I2PSession> getSubsessions() {
@@ -76,7 +76,7 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Does nothing for now
+     * Does nothing for now
      */
     @Override
     public void updateOptions(Properties options) { /* nop */ }
@@ -102,7 +102,7 @@ class SubSession extends I2PSessionMuxedImpl {
      * if not previously connected.
      *
      * @throws I2PSessionException if there is a configuration error or the router is
-     *                             not reachable
+     * not reachable
      */
     @Override
     public void connect() throws I2PSessionException {
@@ -232,10 +232,10 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Called by the message handler
-     *  on reception of DestReplyMessage
+     * Called by the message handler
+     * on reception of DestReplyMessage
      *
-     *  This will never happen, as the dest reply message does not contain a session ID.
+     * This will never happen, as the dest reply message does not contain a session ID.
      */
     @Override
     void destReceived(Destination d) {
@@ -243,12 +243,12 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Called by the message handler
-     *  on reception of DestReplyMessage
+     * Called by the message handler
+     * on reception of DestReplyMessage
      *
-     *  This will never happen, as the dest reply message does not contain a session ID.
+     * This will never happen, as the dest reply message does not contain a session ID.
      *
-     *  @param h non-null
+     * @param h non-null
      */
     @Override
     void destLookupFailed(Hash h) {
@@ -256,10 +256,10 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Called by the message handler
-     *  on reception of HostReplyMessage
+     * Called by the message handler
+     * on reception of HostReplyMessage
      *
-     *  @param d non-null
+     * @param d non-null
      */
     @Override
     void destReceived(long nonce, Destination d) {
@@ -267,8 +267,8 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Called by the message handler
-     *  on reception of HostReplyMessage
+     * Called by the message handler
+     * on reception of HostReplyMessage
      */
     @Override
     void destLookupFailed(long nonce, int code) {
@@ -285,11 +285,11 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Blocking. Waits a max of 10 seconds by default.  See lookupDest with maxWait parameter to change.
-     *  Implemented in 0.8.3 in I2PSessionImpl; previously was available only in I2PSimpleSession.
-     *  Multiple outstanding lookups are now allowed.
+     * Blocking. Waits a max of 10 seconds by default.  See lookupDest with maxWait parameter to change.
+     * Implemented in 0.8.3 in I2PSessionImpl; previously was available only in I2PSimpleSession.
+     * Multiple outstanding lookups are now allowed.
      *
-     *  @return null on failure
+     * @return null on failure
      */
     @Override
     public Destination lookupDest(Hash h) throws I2PSessionException {
@@ -297,10 +297,10 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Blocking.
+     * Blocking.
      *
-     *  @param maxWait ms
-     *  @return null on failure
+     * @param maxWait ms
+     * @return null on failure
      */
     @Override
     public Destination lookupDest(Hash h, long maxWait) throws I2PSessionException {
@@ -308,20 +308,20 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Ask the router to lookup a Destination by host name.
-     *  Blocking. Waits a max of 10 seconds by default.
+     * Ask the router to lookup a Destination by host name.
+     * Blocking. Waits a max of 10 seconds by default.
      *
-     *  This only makes sense for a b32 hostname, OR outside router context.
-     *  Inside router context, just query the naming service.
-     *  Outside router context, this does NOT query the context naming service.
-     *  Do that first if you expect a local addressbook.
+     * This only makes sense for a b32 hostname, OR outside router context.
+     * Inside router context, just query the naming service.
+     * Outside router context, this does NOT query the context naming service.
+     * Do that first if you expect a local addressbook.
      *
-     *  This will log a warning for non-b32 in router context.
+     * This will log a warning for non-b32 in router context.
      *
-     *  See interface for suggested implementation.
+     * See interface for suggested implementation.
      *
-     *  Requires router side to be 0.9.11 or higher. If the router is older,
-     *  this will return null immediately.
+     * Requires router side to be 0.9.11 or higher. If the router is older,
+     * this will return null immediately.
      */
     @Override
     public Destination lookupDest(String name) throws I2PSessionException {
@@ -329,11 +329,11 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  Ask the router to lookup a Destination by host name.
-     *  Blocking. See above for details.
+     * Ask the router to lookup a Destination by host name.
+     * Blocking. See above for details.
      *
-     *  @param maxWait ms
-     *  @return null on failure
+     * @param maxWait ms
+     * @return null on failure
      */
     @Override
     public Destination lookupDest(String name, long maxWait) throws I2PSessionException {
@@ -341,8 +341,8 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     *  This won't be called, as the reply does not contain a session ID, so
-     *  it won't be routed back to us
+     * This won't be called, as the reply does not contain a session ID, so
+     * it won't be routed back to us
      */
     @Override
     public int[] bandwidthLimits() throws I2PSessionException {

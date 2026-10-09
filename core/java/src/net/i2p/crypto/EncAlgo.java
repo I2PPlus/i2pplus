@@ -11,7 +11,8 @@ public enum EncAlgo {
     /** EC encryption. */
     EC("EC"),
 
-    /** ECIES encryption.
+    /**
+     * ECIES encryption.
      *
      * @since 0.9.38
      */

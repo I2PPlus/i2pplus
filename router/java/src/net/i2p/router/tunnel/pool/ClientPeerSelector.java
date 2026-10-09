@@ -28,7 +28,6 @@ import net.i2p.util.ArraySet;
 /**
  * Pick peers randomly out of the fast pool, and put them into tunnels
  * ordered by XOR distance from a random key.
- *
  */
 class ClientPeerSelector extends TunnelPeerSelector {
 
@@ -40,46 +39,46 @@ class ClientPeerSelector extends TunnelPeerSelector {
     /** First-hop quality attempts before accepting any tier-passing peer. */
     private static final int CONNECTING_PREF_ATTEMPTS = 5;
     /**
-     *  How many first-hop candidates to fetch at once.
+     * How many first-hop candidates to fetch at once.
      *
-     *  <p>The quality loop can only iterate while it has a candidate to reject, so asking the
-     *  tiers for exactly one left it a single attempt per refill and the 16-attempt budget went
-     *  largely unspent. A small batch lets one tier scan serve several attempts. Only the
-     *  accepted peer is kept — see the trim after the loop — so the rest never reach the tunnel.
+     * <p>The quality loop can only iterate while it has a candidate to reject, so asking the
+     * tiers for exactly one left it a single attempt per refill and the 16-attempt budget went
+     * largely unspent. A small batch lets one tier scan serve several attempts. Only the
+     * accepted peer is kept — see the trim after the loop — so the rest never reach the tunnel.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final int FIRST_HOP_CANDIDATES = 4;
     /**
-     *  Build success below which the first hop draws on both the Fast and HighCapacity tiers.
+     * Build success below which the first hop draws on both the Fast and HighCapacity tiers.
      *
-     *  <p>The two tiers hold different peers: Fast is speed-ranked, HighCapacity is
-     *  proven-reliability. Below this the network is not delivering often enough for the
-     *  distinction to earn its cost, and taking from only one of them needlessly halves the
-     *  pool.
+     * <p>The two tiers hold different peers: Fast is speed-ranked, HighCapacity is
+     * proven-reliability. Below this the network is not delivering often enough for the
+     * distinction to earn its cost, and taking from only one of them needlessly halves the
+     * pool.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final double WIDEN_BUILD_SUCCESS = 0.50;
     /**
-     *  Fast-tier size below which the first hop draws on both tiers regardless of build success.
+     * Fast-tier size below which the first hop draws on both tiers regardless of build success.
      *
-     *  <p>A small Fast tier cannot supply {@link #FIRST_HOP_CANDIDATES} candidates however
-     *  healthy the network looks, so the batch is worth completing from the other tier even when
-     *  success is high. The same 300 marks the point where cross-pool diversity engages, so both
-     *  decisions agree on what counts as a large enough Fast tier.
+     * <p>A small Fast tier cannot supply {@link #FIRST_HOP_CANDIDATES} candidates however
+     * healthy the network looks, so the batch is worth completing from the other tier even when
+     * success is high. The same 300 marks the point where cross-pool diversity engages, so both
+     * decisions agree on what counts as a large enough Fast tier.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int WIDEN_FAST_PEERS = 300;
     /**
-     *  Build success below which the first-hop quality loop starts one tier lower, accepting
-     *  peers with only a connecting transport session rather than requiring an established one.
+     * Build success below which the first-hop quality loop starts one tier lower, accepting
+     * peers with only a connecting transport session rather than requiring an established one.
      *
-     *  <p>Distinct from {@link #WIDEN_BUILD_SUCCESS}: this widens the <em>transport</em>
-     *  requirement, which costs build latency, so it waits until success is closer to healthy.
+     * <p>Distinct from {@link #WIDEN_BUILD_SUCCESS}: this widens the <em>transport</em>
+     * requirement, which costs build latency, so it waits until success is closer to healthy.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final double CONNECTING_PREF_BUILD_SUCCESS = 0.60;
     /** How often the accepted-first-hop tier line may be written, per tier. @since 0.9.71+ */
@@ -95,16 +94,16 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /** Default: true. */
     private static final boolean PROP_PRECONNECT_OPTIMIZE_DEFAULT = true;
     /** Cross-pool diversity: when fast tier exceeds this count, exclude peers in ANY
-     *  active tunnel across ALL pools to force each pool to use different fast peers. */
+     * active tunnel across ALL pools to force each pool to use different fast peers. */
     static final int CROSS_POOL_DIVERSITY_THRESHOLD = 300;
     /** Cross-pool diversity is only active when build success is above this threshold.
-     *  Higher than {@link TunnelPeerSelector#ATTACK_THRESHOLD} because cross-pool
-     *  exclusion is far more aggressive (excludes ALL active peers across ALL pools)
-     *  and can starve builds when most fast peers are in active tunnels. */
+     * Higher than {@link TunnelPeerSelector#ATTACK_THRESHOLD} because cross-pool
+     * exclusion is far more aggressive (excludes ALL active peers across ALL pools)
+     * and can starve builds when most fast peers are in active tunnels. */
     static final double CROSS_POOL_BUILD_SUCCESS_MIN = 0.60;
     /** Cross-pool exclusion may not consume more than this fraction of the fast tier.
-     *  When most fast peers are in active tunnels, natural pool-local diversity
-     *  already provides enough variability — explicit exclusion risks starvation. */
+     * When most fast peers are in active tunnels, natural pool-local diversity
+     * already provides enough variability — explicit exclusion risks starvation. */
     static final double CROSS_POOL_EXCLUSION_RATIO = 0.50;
 
 
@@ -132,9 +131,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     private static final String STRATEGY_DIVERSITY = "diversity";
 
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param context the router context
+     * @param context the router context
      */
     public ClientPeerSelector(RouterContext context) {
         super(context);
@@ -146,32 +145,32 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Out: OBGW .. middle .. closest .. us
      *
      * @return ordered list of Hash objects (one per peer) specifying what order
-     *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     *         the local router in the list.  Never null; an empty list means
-     *         no peers could be selected.
+     * they should appear in a tunnel (ENDPOINT FIRST).  This includes
+     * the local router in the list.  Never null; an empty list means
+     * no peers could be selected.
      */
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         return selectPeers(settings, null);
     }
 
     /**
-     *  Select peers for a new tunnel, excluding given peers from first-hop
-     *  selection.  Used by the build executor's dispatch loop to ensure
-     *  concurrent builds in the same batch target diverse first-hop peers —
-     *  stacking multiple build requests on one peer floods it and makes the
-     *  first build answer slower.
+     * Select peers for a new tunnel, excluding given peers from first-hop
+     * selection.  Used by the build executor's dispatch loop to ensure
+     * concurrent builds in the same batch target diverse first-hop peers —
+     * stacking multiple build requests on one peer floods it and makes the
+     * first build answer slower.
      *
-     *  The first hop is the last element of the returned list (endpoint-first
-     *  order).  If the selected first hop is excluded, selection retries up to
-     *  {@code MAX_DIVERSITY_RETRIES} times before returning the last result, so
-     *  a caller always gets a usable set even when the exclusion set covers
-     *  most of the tier.
+     * The first hop is the last element of the returned list (endpoint-first
+     * order).  If the selected first hop is excluded, selection retries up to
+     * {@code MAX_DIVERSITY_RETRIES} times before returning the last result, so
+     * a caller always gets a usable set even when the exclusion set covers
+     * most of the tier.
      *
-     *  @param settings pool settings
-     *  @param excludeFirstHops first-hop peers already targeted by concurrent
-     *         builds in the same dispatch batch, may be null
-     *  @return ordered hops, endpoint first; empty when nothing usable exists
-     *  @since 0.9.71+
+     * @param settings pool settings
+     * @param excludeFirstHops first-hop peers already targeted by concurrent
+     * builds in the same dispatch batch, may be null
+     * @return ordered hops, endpoint first; empty when nothing usable exists
+     * @since 0.9.71+
      */
     public List<Hash> selectPeers(TunnelPoolSettings settings, Set<Hash> excludeFirstHops) {
         if (excludeFirstHops == null || excludeFirstHops.isEmpty()) {
@@ -195,11 +194,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     private static final int MAX_DIVERSITY_RETRIES = 3;
 
     /**
-     *  Select peers for a new tunnel.  Delegates to
-     *  {@link #selectPeers(TunnelPoolSettings, Set)} with a null exclusion set.
+     * Select peers for a new tunnel.  Delegates to
+     * {@link #selectPeers(TunnelPoolSettings, Set)} with a null exclusion set.
      *
-     *  @param settings pool settings
-     *  @return ordered hops, endpoint first; empty when nothing usable exists
+     * @param settings pool settings
+     * @return ordered hops, endpoint first; empty when nothing usable exists
      */
     private List<Hash> selectPeersBase(TunnelPoolSettings settings) {
         int length = getLength(settings);
@@ -310,27 +309,27 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Minimum non-self hops a selection needs to be buildable at all: the peer
-     *  adjacent to us (IBGW for inbound, our first hop for outbound) and the far
-     *  endpoint. Matches the {@code keepAtLeast} floor
-     *  {@link #dropUnreliable} already uses.
+     * Minimum non-self hops a selection needs to be buildable at all: the peer
+     * adjacent to us (IBGW for inbound, our first hop for outbound) and the far
+     * endpoint. Matches the {@code keepAtLeast} floor
+     * {@link #dropUnreliable} already uses.
      *
      * @since 0.9.71+
      */
     static final int MIN_STRUCTURAL_NON_SELF_HOPS = 2;
 
     /**
-     *  Whether a post-finalize selection is too short to build and must be
-     *  discarded for a redraw.
+     * Whether a post-finalize selection is too short to build and must be
+     * discarded for a redraw.
      *
-     *  <p>Pure decision helper for the shortfall guard in {@code selectPeers()},
-     *  extracted for unit testing. A selection is discarded only when it holds
-     *  fewer than {@link #MIN_STRUCTURAL_NON_SELF_HOPS} non-self hops — that is,
-     *  when it cannot form a tunnel regardless of what was requested. Anything
-     *  longer is returned as a short tunnel, which the shortfall ladder already
-     *  produces deliberately; discarding those to force a redraw converts a
-     *  one-hop shortfall into a whole lost build cycle, and at minimum length
-     *  (what a starved pool asks for) there is no slack to absorb it.
+     * <p>Pure decision helper for the shortfall guard in {@code selectPeers()},
+     * extracted for unit testing. A selection is discarded only when it holds
+     * fewer than {@link #MIN_STRUCTURAL_NON_SELF_HOPS} non-self hops — that is,
+     * when it cannot form a tunnel regardless of what was requested. Anything
+     * longer is returned as a short tunnel, which the shortfall ladder already
+     * produces deliberately; discarding those to force a redraw converts a
+     * one-hop shortfall into a whole lost build cycle, and at minimum length
+     * (what a starved pool asks for) there is no slack to absorb it.
      *
      * @param rvSize selection size after {@code finalizeSelection}, including self
      * @param min minimum requested tunnel length, from {@link #minRequestedLength}
@@ -345,17 +344,17 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Draws every hop, drops unsuitable peers (ghost and banlisted), and
-     *  redraws once from a fresh exclusion set when filtering emptied the
-     *  selection.  The retry is what turns "all chosen peers were unusable"
-     *  from a wasted build cycle into a usable tunnel.
+     * Draws every hop, drops unsuitable peers (ghost and banlisted), and
+     * redraws once from a fresh exclusion set when filtering emptied the
+     * selection.  The retry is what turns "all chosen peers were unusable"
+     * from a wasted build cycle into a usable tunnel.
      *
-     *  @param settings pool settings
-     *  @param length tunnel length being built
-     *  @param params shared selection parameters
-     *  @param ex live exclusions, mutated so a retry cannot re-pick rejects
-     *  @return ordered hops, endpoint first; empty when nothing usable exists
-     *  @since 0.9.71+
+     * @param settings pool settings
+     * @param length tunnel length being built
+     * @param params shared selection parameters
+     * @param ex live exclusions, mutated so a retry cannot re-pick rejects
+     * @return ordered hops, endpoint first; empty when nothing usable exists
+     * @since 0.9.71+
      */
     private List<Hash> selectHopsWithRetry(TunnelPoolSettings settings, int length, SelectionParams params,
                                            SelectionExclusions ex) {
@@ -528,19 +527,19 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Whether shared peer cooldowns should be relaxed to a first-hop-only
-     *  filter: with at most one usable tunnel the pool is near-collapsed,
-     *  and excluding checkTunnel-cooled peers from every hop can leave no
-     *  selectable path at all.  The cooled peers stay filtered at first-hop
-     *  selection (where the build actually contacts them); middle and last
-     *  hops may use them.  Single-hop tunnels (no multi-hop quality loop)
-     *  and unknown pools (negative count) never relax.
+     * Whether shared peer cooldowns should be relaxed to a first-hop-only
+     * filter: with at most one usable tunnel the pool is near-collapsed,
+     * and excluding checkTunnel-cooled peers from every hop can leave no
+     * selectable path at all.  The cooled peers stay filtered at first-hop
+     * selection (where the build actually contacts them); middle and last
+     * hops may use them.  Single-hop tunnels (no multi-hop quality loop)
+     * and unknown pools (negative count) never relax.
      *
-     *  @param usableTunnels usable tunnels in this pool, or -1 when the pool
-     *          is unknown
-     *  @param length tunnel length being selected for
-     *  @return true when cooldowns should apply to the first hop only
-     *  @since 0.9.71+
+     * @param usableTunnels usable tunnels in this pool, or -1 when the pool
+     * is unknown
+     * @param length tunnel length being selected for
+     * @return true when cooldowns should apply to the first hop only
+     * @since 0.9.71+
      */
     static boolean shouldRelaxCooldownToFirstHop(int usableTunnels, int length) {
         return length > 1 && usableTunnels >= 0 && usableTunnels <= 1;
@@ -599,11 +598,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Select all hops of a multi-hop tunnel: last hop, middle hops, then first
-     *  hop.  rv ends up [endpoint .. first hop]; the vetted first hop is recorded
-     *  on {@code ex} so a shortfall fill inserts middles before it instead of
-     *  shifting roles.  A missing first hop is logged and left for that fill —
-     *  discarding the whole selection would waste a usable endpoint and middles.
+     * Select all hops of a multi-hop tunnel: last hop, middle hops, then first
+     * hop.  rv ends up [endpoint .. first hop]; the vetted first hop is recorded
+     * on {@code ex} so a shortfall fill inserts middles before it instead of
+     * shifting roles.  A missing first hop is logged and left for that fill —
+     * discarding the whole selection would waste a usable endpoint and middles.
      */
     private List<Hash> selectMultiHop(TunnelPoolSettings settings, int length, SelectionParams params,
                                       SelectionExclusions ex, ArraySet<Hash> matches) {
@@ -664,13 +663,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Select the last hop (hidden-inbound closest hop, hidden-outbound OBEP, or
-     *  normal OBEP).
+     * Select the last hop (hidden-inbound closest hop, hidden-outbound OBEP, or
+     * normal OBEP).
      *
-     *  @param lastHopExclude wrapped exclusions (closest-hop / OBEP role checks)
-     *  @param rawExclude the unwrapped exclusion set, used only for the final
-     *         recovery pass when the wrapper excluded every candidate
-     *  @return false to abort the selection
+     * @param lastHopExclude wrapped exclusions (closest-hop / OBEP role checks)
+     * @param rawExclude the unwrapped exclusion set, used only for the final
+     * recovery pass when the wrapper excluded every candidate
+     * @return false to abort the selection
      */
     private boolean selectLastHop(TunnelPoolSettings settings, int length, SelectionParams params,
                                   SessionKey randomKey, Set<Hash> lastHopExclude, Set<Hash> rawExclude,
@@ -1142,19 +1141,19 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Reduce a first-hop candidate batch to the single peer the quality loop accepted.
+     * Reduce a first-hop candidate batch to the single peer the quality loop accepted.
      *
-     *  <p>When the loop accepted a candidate it is the one to keep, and it is the head of the set
-     *  because every attempt takes {@code iterator().next()}. When nothing was accepted the loop
-     *  has already ejected everything it vetted and rejected, so whatever remains was never
-     *  cleared — kept deliberately rather than discarded, since returning empty costs the cycle
-     *  a build outright.
+     * <p>When the loop accepted a candidate it is the one to keep, and it is the head of the set
+     * because every attempt takes {@code iterator().next()}. When nothing was accepted the loop
+     * has already ejected everything it vetted and rejected, so whatever remains was never
+     * cleared — kept deliberately rather than discarded, since returning empty costs the cycle
+     * a build outright.
      *
-     *  <p>No side effects beyond the set, so unit tests exercise it directly.
+     * <p>No side effects beyond the set, so unit tests exercise it directly.
      *
-     *  @param matches the candidate batch, modified to hold at most the accepted peer
-     *  @param accepted the peer the quality loop accepted, or null if none was
-     *  @since 0.9.71+
+     * @param matches the candidate batch, modified to hold at most the accepted peer
+     * @param accepted the peer the quality loop accepted, or null if none was
+     * @since 0.9.71+
      */
     static void trimToAcceptedFirstHop(ArraySet<Hash> matches, Hash accepted) {
         if (matches.size() <= 1) {
@@ -1172,18 +1171,18 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Whether the first hop should draw candidates from both the Fast and HighCapacity tiers.
+     * Whether the first hop should draw candidates from both the Fast and HighCapacity tiers.
      *
-     *  <p>True when the network is struggling, or when the Fast tier is too small to fill the
-     *  candidate batch on its own. Either way, taking from one tier alone needlessly shrinks the
-     *  pool the quality loop chooses from.
+     * <p>True when the network is struggling, or when the Fast tier is too small to fill the
+     * candidate batch on its own. Either way, taking from one tier alone needlessly shrinks the
+     * pool the quality loop chooses from.
      *
-     *  <p>Pure decision — no context access, safe for unit tests.
+     * <p>Pure decision — no context access, safe for unit tests.
      *
-     *  @param buildSuccess the build success ratio in [0.0, 1.0]
-     *  @param fastPeers the current Fast-tier size
-     *  @return whether to take candidates from both tiers
-     *  @since 0.9.71+
+     * @param buildSuccess the build success ratio in [0.0, 1.0]
+     * @param fastPeers the current Fast-tier size
+     * @return whether to take candidates from both tiers
+     * @since 0.9.71+
      */
     static boolean shouldWidenBothTiers(double buildSuccess, int fastPeers) {
         // NaN means no data yet, which is the startup case: treat it as struggling, matching
@@ -1195,11 +1194,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Add Fast-tier candidates until the batch is full, used when the first hop is widening
-     *  past the HighCapacity tier it started from.
+     * Add Fast-tier candidates until the batch is full, used when the first hop is widening
+     * past the HighCapacity tier it started from.
      *
-     *  <p>Requests only the shortfall so the batch stays at
-     *  {@link #FIRST_HOP_CANDIDATES} in total rather than doubling.
+     * <p>Requests only the shortfall so the batch stays at
+     * {@link #FIRST_HOP_CANDIDATES} in total rather than doubling.
      */
     private void topUpFromFastTier(SelectionParams params, Set<Hash> exclude, ArraySet<Hash> matches) {
         int need = FIRST_HOP_CANDIDATES - matches.size();
@@ -1217,17 +1216,17 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Refill the first-hop candidate after a quality-loop ejection.
-     *  Tries the same tier cascade as selectFirstHop (HighCap → Fast →
-     *  Active → NotFailing) with the ejected peer excluded, so the slot
-     *  isn't wasted.  At most 3 refills per build cycle.
+     * Refill the first-hop candidate after a quality-loop ejection.
+     * Tries the same tier cascade as selectFirstHop (HighCap → Fast →
+     * Active → NotFailing) with the ejected peer excluded, so the slot
+     * isn't wasted.  At most 3 refills per build cycle.
      *
-     *  @param params selection parameters
-     *  @param randomKey random key for Fast tier sub-tiering
-     *  @param ex exclusion set (ejected peer added by caller)
-     *  @param matches singleton set to populate with replacement
-     *  @param inStartup true if still in startup grace period
-     *  @since 0.9.71+
+     * @param params selection parameters
+     * @param randomKey random key for Fast tier sub-tiering
+     * @param ex exclusion set (ejected peer added by caller)
+     * @param matches singleton set to populate with replacement
+     * @param inStartup true if still in startup grace period
+     * @since 0.9.71+
      */
     private void refillFirstHop(SelectionParams params, SessionKey randomKey,
                                 SelectionExclusions ex, ArraySet<Hash> matches,
@@ -1251,18 +1250,18 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Whether the router is still in the startup grace period (first
-     *  {@code STARTUP_GRACE_MS} ms of uptime). The startup grace
-     *  relaxes the number of quality attempts (fewer candidates
-     *  early on) but does not skip hard-fail gates: first-hop-failing
-     *  peers, stale peers, and the established/connecting preference
-     *  are still enforced to avoid selecting unreliable tunnel targets.
-     *  <p>
-     *  Pure decision — no side effects.
+     * Whether the router is still in the startup grace period (first
+     * {@code STARTUP_GRACE_MS} ms of uptime). The startup grace
+     * relaxes the number of quality attempts (fewer candidates
+     * early on) but does not skip hard-fail gates: first-hop-failing
+     * peers, stale peers, and the established/connecting preference
+     * are still enforced to avoid selecting unreliable tunnel targets.
+     * <p>
+     * Pure decision — no side effects.
      *
-     *  @param ctx the router context
-     *  @return whether the router is within the startup grace period
-     *  @since 0.9.71+
+     * @param ctx the router context
+     * @return whether the router is within the startup grace period
+     * @since 0.9.71+
      */
     static boolean isStartupGracePeriod(RouterContext ctx) {
         return ctx.router() != null && ctx.router().getUptime() < STARTUP_GRACE_MS;
@@ -1344,46 +1343,46 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     private static final ConcurrentHashMap<Hash, Long> _lastPreConnect = new ConcurrentHashMap<>();
 
     /**
-     *  First-hop quality tier for the current attempt: 0 = prefer
-     *  established peers, 1 = also accept connecting peers, 2 = accept any
-     *  peer that passed the tier filters.  Escalates with attempts; during
-     *  the startup grace period the tier never changes.  Note the quirk:
-     *  attempts 4-5 downgrade a tier-2 selection to 1 (preserved verbatim).
-     *  <p>
-     *  Pure decision — no side effects.
+     * First-hop quality tier for the current attempt: 0 = prefer
+     * established peers, 1 = also accept connecting peers, 2 = accept any
+     * peer that passed the tier filters.  Escalates with attempts; during
+     * the startup grace period the tier never changes.  Note the quirk:
+     * attempts 4-5 downgrade a tier-2 selection to 1 (preserved verbatim).
+     * <p>
+     * Pure decision — no side effects.
      *
-     *  @param attempts number of quality-check attempts already made
-     *  @param inStartup whether the router is in the startup grace period
-     *  @param currentTier the tier before this attempt
-     *  @return the tier for this attempt
-     *  @since 0.9.71+
+     * @param attempts number of quality-check attempts already made
+     * @param inStartup whether the router is in the startup grace period
+     * @param currentTier the tier before this attempt
+     * @return the tier for this attempt
+     * @since 0.9.71+
      */
     /**
-     *  Log the quality tier that actually produced this build's first hop.
+     * Log the quality tier that actually produced this build's first hop.
      *
-     *  <p>The first-hop quality ladder relaxes its reachability requirement as
-     *  attempts accumulate: tiers 0 and 1 require the peer to be established or
-     *  connecting, tier 2 requires neither.  A gateway taken at tier 2 is
-     *  therefore one we have no transport session with, and cannot receive a
-     *  build request — which is indistinguishable, from the outside, from a
-     *  peer that went silent.  This line is the only way to tell those apart
-     *  after the fact.
+     * <p>The first-hop quality ladder relaxes its reachability requirement as
+     * attempts accumulate: tiers 0 and 1 require the peer to be established or
+     * connecting, tier 2 requires neither.  A gateway taken at tier 2 is
+     * therefore one we have no transport session with, and cannot receive a
+     * build request — which is indistinguishable, from the outside, from a
+     * peer that went silent.  This line is the only way to tell those apart
+     * after the fact.
      *
-     *  <p>Rate limited to one line per {@link #TIER_LOG_INTERVAL_MS} per tier so
-     *  a busy build loop cannot turn the diagnosis into the noise it is meant
-     *  to explain; the counters accumulate regardless and are reported in the
-     *  same line.  The limiter uses {@code compute} rather than
-     *  {@code replace(k, old, new)}: {@code replace} is a no-op returning false
-     *  when the key is absent, so the first log for each tier would never
-     *  happen and the key would never be inserted.
+     * <p>Rate limited to one line per {@link #TIER_LOG_INTERVAL_MS} per tier so
+     * a busy build loop cannot turn the diagnosis into the noise it is meant
+     * to explain; the counters accumulate regardless and are reported in the
+     * same line.  The limiter uses {@code compute} rather than
+     * {@code replace(k, old, new)}: {@code replace} is a no-op returning false
+     * when the key is absent, so the first log for each tier would never
+     * happen and the key would never be inserted.
      *
-     *  @param ctx the router context
-     *  @param firstHop the accepted gateway, or null if none was accepted
-     *  @param tier the tier it was accepted at, or -1
-     *  @param attempt the attempt number it was accepted on, or -1
-     *  @param attempts total quality attempts made
-     *  @param remaining candidates left in the set
-     *  @since 0.9.71+
+     * @param ctx the router context
+     * @param firstHop the accepted gateway, or null if none was accepted
+     * @param tier the tier it was accepted at, or -1
+     * @param attempt the attempt number it was accepted on, or -1
+     * @param attempts total quality attempts made
+     * @param remaining candidates left in the set
+     * @since 0.9.71+
      */
     private void logAcceptedFirstHopTier(RouterContext ctx, Hash firstHop, int tier,
                                          int attempt, int attempts, int remaining,
@@ -1417,18 +1416,18 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Build first-hop quality tier.  Pure so the ladder is testable.
+     * Build first-hop quality tier.  Pure so the ladder is testable.
      *
-     *  <p>Tier 0 and 1 require an established or connecting peer; tier 2
-     *  requires neither.  The ladder reaches tier 2 after
-     *  {@link #CONNECTING_PREF_ATTEMPTS} rejections, which is the point where
-     *  an unreachable gateway stops being filtered out.
+     * <p>Tier 0 and 1 require an established or connecting peer; tier 2
+     * requires neither.  The ladder reaches tier 2 after
+     * {@link #CONNECTING_PREF_ATTEMPTS} rejections, which is the point where
+     * an unreachable gateway stops being filtered out.
      *
-     *  @param attempts 1-based quality attempt count
-     *  @param inStartup whether the router is inside its startup grace period
-     *  @param currentTier the tier to start from
-     *  @return the tier to apply for this attempt
-     *  @since 0.9.71+
+     * @param attempts 1-based quality attempt count
+     * @param inStartup whether the router is inside its startup grace period
+     * @param currentTier the tier to start from
+     * @return the tier to apply for this attempt
+     * @since 0.9.71+
      */
     static int firstHopQualityTier(int attempts, boolean inStartup, int currentTier) {
         if (inStartup) return currentTier;
@@ -1438,15 +1437,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Builds the soft-fallback exclusion set: a copy of the first-hop
-     *  exclusion set without no-signal-excluded peers that have proven track
-     *  records (tunnel acceptance > 50% and at least one successful test),
-     *  giving them a chance when all standard tiers fail.  No side effects.
+     * Builds the soft-fallback exclusion set: a copy of the first-hop
+     * exclusion set without no-signal-excluded peers that have proven track
+     * records (tunnel acceptance > 50% and at least one successful test),
+     * giving them a chance when all standard tiers fail.  No side effects.
      *
-     *  @param exclude the current first-hop exclusion set
-     *  @param ex the selection exclusions with the per-peer reason map
-     *  @return the reduced exclusion set
-     *  @since 0.9.71+
+     * @param exclude the current first-hop exclusion set
+     * @param ex the selection exclusions with the per-peer reason map
+     * @return the reduced exclusion set
+     * @since 0.9.71+
      */
     private Set<Hash> buildSoftFallbackExclude(Set<Hash> exclude, SelectionExclusions ex) {
         Set<Hash> softExclude = new HashSet<>(exclude);
@@ -1466,16 +1465,16 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Whether the selection may use the progressive stress fallbacks and
-     *  the shortened-tunnel allowance: network stress (build success below
-     *  the attack threshold) or HighCap-primary mode, with at least one peer
-     *  already selected.  Pure decision — no side effects.
+     * Whether the selection may use the progressive stress fallbacks and
+     * the shortened-tunnel allowance: network stress (build success below
+     * the attack threshold) or HighCap-primary mode, with at least one peer
+     * already selected.  Pure decision — no side effects.
      *
-     *  @param buildSuccess current tunnel build success rate
-     *  @param useHighCapPrimary whether the selection prefers high-capacity peers
-     *  @param rvSize current number of selected peers
-     *  @return whether stress fallbacks may be attempted
-     *  @since 0.9.71+
+     * @param buildSuccess current tunnel build success rate
+     * @param useHighCapPrimary whether the selection prefers high-capacity peers
+     * @param rvSize current number of selected peers
+     * @return whether stress fallbacks may be attempted
+     * @since 0.9.71+
      */
     static boolean canUseStressFallback(double buildSuccess, boolean useHighCapPrimary, int rvSize) {
         return (buildSuccess < ATTACK_THRESHOLD || useHighCapPrimary) && rvSize > 0;
@@ -1543,22 +1542,22 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Tops {@code rv} up to {@code min} hops from the tier ladder, inserting
-     *  new middle hops before the vetted first hop so rv keeps its
-     *  [endpoint .. first hop] order.
+     * Tops {@code rv} up to {@code min} hops from the tier ladder, inserting
+     * new middle hops before the vetted first hop so rv keeps its
+     * [endpoint .. first hop] order.
      *
-     *  <p>The ladder only ever widens on genuine scarcity: banlisted, ghost,
-     *  first-hop-failing and chronically failing peers are rejected by the tier
-     *  gates before a candidate is ever collected, so a wider tier is more
-     *  peers, not lower quality.  Unsuitable peers are therefore excluded from
-     *  selection rather than discovered afterwards.
+     * <p>The ladder only ever widens on genuine scarcity: banlisted, ghost,
+     * first-hop-failing and chronically failing peers are rejected by the tier
+     * gates before a candidate is ever collected, so a wider tier is more
+     * peers, not lower quality.  Unsuitable peers are therefore excluded from
+     * selection rather than discovered afterwards.
      *
-     *  @param rv the partial selection, endpoint first and non-empty
-     *  @param min the minimum hop count to reach
-     *  @param params selection parameters (tier priority, stress level)
-     *  @param ex live exclusions and the vetted first hop
-     *  @return number of hops added
-     *  @since 0.9.71+
+     * @param rv the partial selection, endpoint first and non-empty
+     * @param min the minimum hop count to reach
+     * @param params selection parameters (tier priority, stress level)
+     * @param ex live exclusions and the vetted first hop
+     * @return number of hops added
+     * @since 0.9.71+
      */
     private int fillRemainingHops(List<Hash> rv, int min, SelectionParams params, SelectionExclusions ex) {
         int added = collectFromTier(rv, min, params, ex);
@@ -1583,11 +1582,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  One cascading tier selection.  The ProfileOrganizer tiers fall through to
-     *  wider tiers internally (Fast -> HighCap -> NotFailing -> all peers), so a
-     *  single call with the right entry tier covers the whole ladder.
+     * One cascading tier selection.  The ProfileOrganizer tiers fall through to
+     * wider tiers internally (Fast -> HighCap -> NotFailing -> all peers), so a
+     * single call with the right entry tier covers the whole ladder.
      *
-     *  @return number of hops added
+     * @return number of hops added
      */
     private int collectFromTier(List<Hash> rv, int min, SelectionParams params, SelectionExclusions ex) {
         int need = min - rv.size();
@@ -1610,11 +1609,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Pulls connected peers, which are not reachable through the profile tier
-     *  cascade at all: a peer with an established transport session but no
-     *  usable profile still builds fast.
+     * Pulls connected peers, which are not reachable through the profile tier
+     * cascade at all: a peer with an established transport session but no
+     * usable profile still builds fast.
      *
-     *  @return number of hops added
+     * @return number of hops added
      */
     private int collectActive(List<Hash> rv, int min, SelectionExclusions ex) {
         int need = min - rv.size();
@@ -1631,8 +1630,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Index at which a missing middle hop must be inserted: just before the
-     *  vetted first hop, or at the end when there is none yet.
+     * Index at which a missing middle hop must be inserted: just before the
+     * vetted first hop, or at the end when there is none yet.
      */
     private static int firstHopIndex(List<Hash> rv, Hash firstHop) {
         if (firstHop == null)
@@ -1642,16 +1641,16 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Adds up to {@code need} peers from {@code picked} that are not already in
-     *  {@code rv}, inserting them at {@code index} so the surrounding order is
-     *  untouched.  Mutates only {@code rv}.
+     * Adds up to {@code need} peers from {@code picked} that are not already in
+     * {@code rv}, inserting them at {@code index} so the surrounding order is
+     * untouched.  Mutates only {@code rv}.
      *
-     *  @param rv the selection to extend
-     *  @param index insert position, clamped to the list bounds
-     *  @param picked candidate peers, order preserved
-     *  @param need maximum number to insert
-     *  @return number of peers inserted
-     *  @since 0.9.71+
+     * @param rv the selection to extend
+     * @param index insert position, clamped to the list bounds
+     * @param picked candidate peers, order preserved
+     * @param need maximum number to insert
+     * @return number of peers inserted
+     * @since 0.9.71+
      */
     static int insertNewPeers(List<Hash> rv, int index, Collection<Hash> picked, int need) {
         if (picked == null || picked.isEmpty() || need <= 0)
@@ -1672,12 +1671,12 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Smallest tunnel the pool will accept: the configured length minus any
-     *  negative variance, never below zero.  Pure decision — no side effects.
+     * Smallest tunnel the pool will accept: the configured length minus any
+     * negative variance, never below zero.  Pure decision — no side effects.
      *
-     *  @param settings pool settings
-     *  @return minimum hop count for this pool
-     *  @since 0.9.71+
+     * @param settings pool settings
+     * @return minimum hop count for this pool
+     * @since 0.9.71+
      */
     static int minRequestedLength(TunnelPoolSettings settings) {
         int min = settings.getLength();
@@ -1687,9 +1686,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Insert self, ghost-filter, strategy post-processing, duplicate re-check,
-     *  and cooldowns.  Quality-sorts the non-self hops for inbound selections
-     *  only (see below).
+     * Insert self, ghost-filter, strategy post-processing, duplicate re-check,
+     * and cooldowns.  Quality-sorts the non-self hops for inbound selections
+     * only (see below).
      */
     List<Hash> finalizeSelection(TunnelPoolSettings settings, List<Hash> rv, boolean isInbound) {
         if (isInbound) {rv.add(0, ctx.routerHash());}
@@ -1920,15 +1919,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Fresh proven responders, freshest first, filtered for basic
-     *  eligibility: not us, not banlisted, not on selection cooldown,
-     *  with a locally cached RouterInfo so a build can reach them, and
-     *  not already active in the destination's pools (a swap must never
-     *  introduce a per-pool duplicate).
+     * Fresh proven responders, freshest first, filtered for basic
+     * eligibility: not us, not banlisted, not on selection cooldown,
+     * with a locally cached RouterInfo so a build can reach them, and
+     * not already active in the destination's pools (a swap must never
+     * introduce a per-pool duplicate).
      *
-     *  @param excludePeers peers to exclude because they are already active
-     *         in this destination's tunnels
-     *  @return eligible proven candidates for hop swaps, never null
+     * @param excludePeers peers to exclude because they are already active
+     * in this destination's tunnels
+     * @return eligible proven candidates for hop swaps, never null
      */
     private List<Hash> provenCandidates(Set<Hash> excludePeers) {
         long now = ctx.clock().now();
@@ -1956,22 +1955,22 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Selected hops whose placement would give a single peer concurrent
-     *  entry and exit visibility across this destination's pools — the
-     *  pairing that enables traffic correlation. Two rules are checked:
+     * Selected hops whose placement would give a single peer concurrent
+     * entry and exit visibility across this destination's pools — the
+     * pairing that enables traffic correlation. Two rules are checked:
      *
-     *  <ul>
-     *    <li>inbound selection: the chosen IBGW already serves as the OBEP
-     *        of one of our active outbound tunnels</li>
-     *    <li>outbound selection: the chosen OBEP already serves as the IBGW
-     *        of one of our active inbound tunnels</li>
-     *  </ul>
+     * <ul>
+     * <li>inbound selection: the chosen IBGW already serves as the OBEP
+     * of one of our active outbound tunnels</li>
+     * <li>outbound selection: the chosen OBEP already serves as the IBGW
+     * of one of our active inbound tunnels</li>
+     * </ul>
      *
-     *  @param nonSelf the selected non-self peers, gateway-first order
-     *  @param isInbound true when selecting for an inbound tunnel
-     *  @param dest the destination hash, or null
-     *  @param now current time from the router clock
-     *  @return conflicting peers, possibly empty
+     * @param nonSelf the selected non-self peers, gateway-first order
+     * @param isInbound true when selecting for an inbound tunnel
+     * @param dest the destination hash, or null
+     * @param now current time from the router clock
+     * @return conflicting peers, possibly empty
      */
     private Set<Hash> positionalConflicts(List<Hash> nonSelf, boolean isInbound,
                                           Hash dest, long now) {
@@ -2009,12 +2008,12 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  The selected hops that fail the reliability gate. Peers without a
-     *  profile are unknown rather than poor — they are never returned.
+     * The selected hops that fail the reliability gate. Peers without a
+     * profile are unknown rather than poor — they are never returned.
      *
-     *  @param hops the selected non-self peers
-     *  @param now current time from the router clock
-     *  @return the subset failing the reliability gate, never null
+     * @param hops the selected non-self peers
+     * @param now current time from the router clock
+     * @return the subset failing the reliability gate, never null
      */
     private Set<Hash> findUnreliable(List<Hash> hops, long now) {
         Set<Hash> rv = new HashSet<>(hops.size());
@@ -2030,15 +2029,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Reliability gate: the acceptance ratio must be at least 0.3, and the
-     *  peer must show a recent tunnel-test success, recent activity, or an
-     *  established connection. Each signal is consulted exactly once.
+     * Reliability gate: the acceptance ratio must be at least 0.3, and the
+     * peer must show a recent tunnel-test success, recent activity, or an
+     * established connection. Each signal is consulted exactly once.
      *
-     *  @param profile the peer profile (may be null)
-     *  @param now current time from the router clock
-     *  @param tenMinutes tunnel-test recency window in ms
-     *  @param thirtyMinutes activity recency window in ms
-     *  @return true if the peer passes the reliability gate
+     * @param profile the peer profile (may be null)
+     * @param now current time from the router clock
+     * @param tenMinutes tunnel-test recency window in ms
+     * @param thirtyMinutes activity recency window in ms
+     * @return true if the peer passes the reliability gate
      */
     boolean isReliable(PeerProfile profile, long now, long tenMinutes, long thirtyMinutes) {
         if (profile == null) {return false;}
@@ -2068,15 +2067,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Build a comparator that orders peers by tunnel-building quality: excluded
-     *  peers last, then by acceptance ratio, activity recency, and tunnel-test latency.
-     *  <p>
-     *  Stage order is significant — each stage short-circuits the ones below it.
+     * Build a comparator that orders peers by tunnel-building quality: excluded
+     * peers last, then by acceptance ratio, activity recency, and tunnel-test latency.
+     * <p>
+     * Stage order is significant — each stage short-circuits the ones below it.
      *
-     *  @param exclude peers to deprioritize, or null
-     *  @param now current time from the router clock
-     *  @param thirtyMinutes activity window in ms
-     *  @since 0.9.70+
+     * @param exclude peers to deprioritize, or null
+     * @param now current time from the router clock
+     * @param thirtyMinutes activity window in ms
+     * @since 0.9.70+
      */
     Comparator<Hash> peerQualityComparator(Set<Hash> exclude, long now, long thirtyMinutes) {
         return (p1, p2) -> compareQuality(p1, p2, exclude,
@@ -2086,20 +2085,20 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Full quality comparison cascade.  Stage order is significant — each
-     *  stage short-circuits the ones below it: excluded last, then proven
-     *  responders (recent successful participation), then acceptance ratio,
-     *  slow tunnel-test latency, activity recency, and latency.
+     * Full quality comparison cascade.  Stage order is significant — each
+     * stage short-circuits the ones below it: excluded last, then proven
+     * responders (recent successful participation), then acceptance ratio,
+     * slow tunnel-test latency, activity recency, and latency.
      *
-     *  @param p1 first peer
-     *  @param p2 second peer
-     *  @param exclude peers to deprioritize, or null
-     *  @param prof1 first peer's profile, or null
-     *  @param prof2 second peer's profile, or null
-     *  @param now current time from the router clock
-     *  @param thirtyMinutes activity window in ms
-     *  @return negative, zero, or positive
-     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     * @param p1 first peer
+     * @param p2 second peer
+     * @param exclude peers to deprioritize, or null
+     * @param prof1 first peer's profile, or null
+     * @param prof2 second peer's profile, or null
+     * @param now current time from the router clock
+     * @param thirtyMinutes activity window in ms
+     * @return negative, zero, or positive
+     * @since 0.9.71+ (extracted from peerQualityComparator)
      */
     static int compareQuality(Hash p1, Hash p2, Set<Hash> exclude, PeerProfile prof1, PeerProfile prof2,
                                long now, long thirtyMinutes) {
@@ -2146,13 +2145,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Excluded peers sort last; two excluded peers compare equal.
+     * Excluded peers sort last; two excluded peers compare equal.
      *
-     *  @param p1 first peer
-     *  @param p2 second peer
-     *  @param exclude peers to deprioritize, or null
-     *  @return negative, zero, or positive
-     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     * @param p1 first peer
+     * @param p2 second peer
+     * @param exclude peers to deprioritize, or null
+     * @return negative, zero, or positive
+     * @since 0.9.71+ (extracted from peerQualityComparator)
      */
     static int compareExcluded(Hash p1, Hash p2, Set<Hash> exclude) {
         if (exclude == null) {return 0;}
@@ -2165,13 +2164,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Acceptance ratio tiers: good (&gt; 0.3) ranks above low (&lt; 0.3), which
-     *  ranks above dead (&lt;= 0).  Missing profiles default to 1.0.
+     * Acceptance ratio tiers: good (&gt; 0.3) ranks above low (&lt; 0.3), which
+     * ranks above dead (&lt;= 0).  Missing profiles default to 1.0.
      *
-     *  @param prof1 first peer's profile, or null
-     *  @param prof2 second peer's profile, or null
-     *  @return negative, zero, or positive
-     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     * @param prof1 first peer's profile, or null
+     * @param prof2 second peer's profile, or null
+     * @return negative, zero, or positive
+     * @since 0.9.71+ (extracted from peerQualityComparator)
      */
     static int compareAcceptance(PeerProfile prof1, PeerProfile prof2) {
         double ar1 = prof1 != null ? prof1.getTunnelAcceptanceRatio() : 1.0;
@@ -2186,13 +2185,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Peers with tunnel test latency over 15s sort last; when both are slow,
-     *  the less slow one sorts first.  0 latency means no data (unknown).
+     * Peers with tunnel test latency over 15s sort last; when both are slow,
+     * the less slow one sorts first.  0 latency means no data (unknown).
      *
-     *  @param lat1 first peer's tunnel test time average
-     *  @param lat2 second peer's tunnel test time average
-     *  @return negative, zero, or positive
-     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     * @param lat1 first peer's tunnel test time average
+     * @param lat2 second peer's tunnel test time average
+     * @return negative, zero, or positive
+     * @since 0.9.71+ (extracted from peerQualityComparator)
      */
     static int compareSlowLatency(float lat1, float lat2) {
         boolean slow1 = lat1 > 15_000;
@@ -2208,14 +2207,14 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Peers active within the activity window sort first.
+     * Peers active within the activity window sort first.
      *
-     *  @param prof1 first peer's profile, or null
-     *  @param prof2 second peer's profile, or null
-     *  @param now current time from the router clock
-     *  @param thirtyMinutes activity window in ms
-     *  @return negative, zero, or positive
-     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     * @param prof1 first peer's profile, or null
+     * @param prof2 second peer's profile, or null
+     * @param now current time from the router clock
+     * @param thirtyMinutes activity window in ms
+     * @return negative, zero, or positive
+     * @since 0.9.71+ (extracted from peerQualityComparator)
      */
     static int compareActivity(PeerProfile prof1, PeerProfile prof2, long now, long thirtyMinutes) {
         boolean active1 = prof1 != null && (prof1.getLastHeardFrom() > 0 && now - prof1.getLastHeardFrom() < thirtyMinutes ||
@@ -2228,15 +2227,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Lower measured tunnel-test latency sorts first; measured beats unknown.
-     *  When both latencies are 0 (unknown), peers that have been tested before
-     *  (have a persisted test timestamp) sort before never-tested peers, so
-     *  proven peers with expired latency data are preferred over new peers.
+     * Lower measured tunnel-test latency sorts first; measured beats unknown.
+     * When both latencies are 0 (unknown), peers that have been tested before
+     * (have a persisted test timestamp) sort before never-tested peers, so
+     * proven peers with expired latency data are preferred over new peers.
      *
-     *  @param lat1 first peer's tunnel test time average
-     *  @param lat2 second peer's tunnel test time average
-     *  @return negative, zero, or positive
-     *  @since 0.9.71+ (extracted from peerQualityComparator)
+     * @param lat1 first peer's tunnel test time average
+     * @param lat2 second peer's tunnel test time average
+     * @return negative, zero, or positive
+     * @since 0.9.71+ (extracted from peerQualityComparator)
      */
     static int compareLatency(float lat1, float lat2) {
         // Prefer lower latency — peers with recent fast tunnel tests
@@ -2253,14 +2252,14 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  When both peers have unknown latency (lat=0), peers with a proven
-     *  test history sort first.  Uses the persisted EWMA update timestamp
-     *  to distinguish tested peers from never-tested peers.
+     * When both peers have unknown latency (lat=0), peers with a proven
+     * test history sort first.  Uses the persisted EWMA update timestamp
+     * to distinguish tested peers from never-tested peers.
      *
-     *  @param prof1 first peer's profile, or null
-     *  @param prof2 second peer's profile, or null
-     *  @return negative, zero, or positive
-     *  @since 0.9.71+
+     * @param prof1 first peer's profile, or null
+     * @param prof2 second peer's profile, or null
+     * @return negative, zero, or positive
+     * @since 0.9.71+
      */
     static int compareTestHistory(PeerProfile prof1, PeerProfile prof2) {
         long t1 = prof1 != null ? prof1.getTunnelTestTimeAvgLastUpdate() : 0;
@@ -2306,15 +2305,15 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  Drop banlisted peers from a selection so builds do not dispatch
-     *  requests that BuildHandler will reject with "Next peer is banned".
-     *  Mirrors {@link #filterGhostPeers}: an all-banned selection returns
-     *  empty so the caller can redraw from usable candidates instead of
-     *  dispatching a build that cannot succeed.
+     * Drop banlisted peers from a selection so builds do not dispatch
+     * requests that BuildHandler will reject with "Next peer is banned".
+     * Mirrors {@link #filterGhostPeers}: an all-banned selection returns
+     * empty so the caller can redraw from usable candidates instead of
+     * dispatching a build that cannot succeed.
      *
-     *  @param peers the list of selected peers (excluding self)
-     *  @return filtered list without banlisted peers; empty when all were banned
-     *  @since 0.9.71+
+     * @param peers the list of selected peers (excluding self)
+     * @return filtered list without banlisted peers; empty when all were banned
+     * @since 0.9.71+
      */
     List<Hash> filterBannedPeers(List<Hash> peers) {
         if (peers == null || peers.isEmpty()) {return peers;}
@@ -2341,42 +2340,42 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  A Set of Hashes that automatically adds to the
-     *  Set in the contains() check.
+     * A Set of Hashes that automatically adds to the
+     * Set in the contains() check.
      *
-     *  So we don't need to generate the exclude set up front.
+     * So we don't need to generate the exclude set up front.
      *
-     *  @since 0.9.58
+     * @since 0.9.58
      */
     private class IBGWExcluder extends ExcluderBase {
 
         /** Local cache of peers that passed the IBGW check.  These are NOT
-         *  added to the exclusion set {@code s} (they are allowed), but
-         *  caching them here avoids re-calling allowAsIBGW on every
-         *  contains() check.  The check is delegated to TunnelPeerSelector's
-         *  endpoint cache (300s TTL, banlist always live) on miss, so
-         *  entries here are valid for the lifetime of this excluder
-         *  instance (one selectSingleHop call).
-         *  @since 0.9.71+ */
+         * added to the exclusion set {@code s} (they are allowed), but
+         * caching them here avoids re-calling allowAsIBGW on every
+         * contains() check.  The check is delegated to TunnelPeerSelector's
+         * endpoint cache (300s TTL, banlist always live) on miss, so
+         * entries here are valid for the lifetime of this excluder
+         * instance (one selectSingleHop call).
+         * @since 0.9.71+ */
         private final Set<Hash> _allowed = new HashSet<>();
 
         /**
-          *  Automatically check if peer is connected
-          *  and add the Hash to the set if not.
-          *
-          *  @param set not copied, contents will be modified by all methods
-          */
+         * Automatically check if peer is connected
+         * and add the Hash to the set if not.
+         *
+         * @param set not copied, contents will be modified by all methods
+         */
         public IBGWExcluder(Set<Hash> set) {super(set);}
 
         /**
-          *  Automatically check if peer is connected
-          *  and add the Hash to the set if not.
-          *  Passing peers are cached in {@code _allowed} so subsequent
-          *  contains() calls for the same Hash skip the global cache lookup.
-          *
-          *  @param o a Hash
-          *  @return true if peer should be excluded
-          */
+         * Automatically check if peer is connected
+         * and add the Hash to the set if not.
+         * Passing peers are cached in {@code _allowed} so subsequent
+         * contains() calls for the same Hash skip the global cache lookup.
+         *
+         * @param o a Hash
+         * @return true if peer should be excluded
+         */
         public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             if (_allowed.contains(o)) {return false;}
@@ -2396,37 +2395,37 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     }
 
     /**
-     *  A Set of Hashes that automatically adds to the
-     *  Set in the contains() check.
+     * A Set of Hashes that automatically adds to the
+     * Set in the contains() check.
      *
-     *  So we don't need to generate the exclude set up front.
+     * So we don't need to generate the exclude set up front.
      *
-     *  @since 0.9.58
+     * @since 0.9.58
      */
     private class OBEPExcluder extends ExcluderBase {
 
         /** Local cache of peers that passed the OBEP check — same lifecycle
-         *  and rationale as {@link IBGWExcluder#_allowed}.
-         *  @since 0.9.71+ */
+         * and rationale as {@link IBGWExcluder#_allowed}.
+         * @since 0.9.71+ */
         private final Set<Hash> _allowed = new HashSet<>();
 
         /**
-          *  Automatically check if peer is connected
-          *  and add the Hash to the set if not.
-          *
-          *  @param set not copied, contents will be modified by all methods
-          */
+         * Automatically check if peer is connected
+         * and add the Hash to the set if not.
+         *
+         * @param set not copied, contents will be modified by all methods
+         */
         public OBEPExcluder(Set<Hash> set) {super(set);}
 
         /**
-          *  Automatically check if peer is connected
-          *  and add the Hash to the set if not.
-          *  Passing peers are cached in {@code _allowed} so subsequent
-          *  contains() calls for the same Hash skip the global cache lookup.
-          *
-          *  @param o a Hash
-          *  @return true if peer should be excluded
-          */
+         * Automatically check if peer is connected
+         * and add the Hash to the set if not.
+         * Passing peers are cached in {@code _allowed} so subsequent
+         * contains() calls for the same Hash skip the global cache lookup.
+         *
+         * @param o a Hash
+         * @return true if peer should be excluded
+         */
         public boolean contains(Object o) {
             if (s.contains(o)) {return true;}
             if (_allowed.contains(o)) {return false;}

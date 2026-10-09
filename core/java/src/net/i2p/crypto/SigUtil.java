@@ -54,10 +54,10 @@ import java.util.Map;
  *
  * <p>Key functionalities include:</p>
  * <ul>
- *   <li>Conversion between I2P and Java key formats</li>
- *   <li>Support for DSA, ECDSA, EdDSA, and RSA algorithms</li>
- *   <li>ASN.1 signature encoding and decoding</li>
- *   <li>Key validation and rectification</li>
+ * <li>Conversion between I2P and Java key formats</li>
+ * <li>Support for DSA, ECDSA, EdDSA, and RSA algorithms</li>
+ * <li>ASN.1 signature encoding and decoding</li>
+ * <li>Key validation and rectification</li>
  * </ul>
  *
  * @author I2P Project
@@ -74,11 +74,11 @@ public final class SigUtil {
     private SigUtil() {}
 
     /**
-     *  Convert an I2P SigningPublicKey to a Java PublicKey, dispatching by algorithm.
+     * Convert an I2P SigningPublicKey to a Java PublicKey, dispatching by algorithm.
      *
-     *  @param pk non-null
-     *  @return Java PublicKey (DSA, EC, EdDSA, or RSA)
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java PublicKey (DSA, EC, EdDSA, or RSA)
+     * @throws GeneralSecurityException if conversion fails
      */
     public static PublicKey toJavaKey(SigningPublicKey pk) throws GeneralSecurityException {
         switch (pk.getType().getBaseAlgorithm()) {
@@ -91,11 +91,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P SigningPrivateKey to a Java PrivateKey, dispatching by algorithm.
+     * Convert an I2P SigningPrivateKey to a Java PrivateKey, dispatching by algorithm.
      *
-     *  @param pk non-null
-     *  @return Java PrivateKey (DSA, EC, EdDSA, or RSA)
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java PrivateKey (DSA, EC, EdDSA, or RSA)
+     * @throws GeneralSecurityException if conversion fails
      */
     public static PrivateKey toJavaKey(SigningPrivateKey pk) throws GeneralSecurityException {
         switch (pk.getType().getBaseAlgorithm()) {
@@ -108,13 +108,13 @@ public final class SigUtil {
     }
 
     /**
-     *  Use if SigType is unknown.
-     *  For efficiency, use fromJavakey(pk, type) if type is known.
+     * Use if SigType is unknown.
+     * For efficiency, use fromJavakey(pk, type) if type is known.
      *
-     *  @param pk JAVA key!
-     *  @return the I2P signing public key
-     *  @throws InvalidKeyException on unknown type
-     *  @since 0.9.18
+     * @param pk JAVA key!
+     * @return the I2P signing public key
+     * @throws InvalidKeyException on unknown type
+     * @since 0.9.18
      */
     public static SigningPublicKey fromJavaKey(PublicKey pk) throws GeneralSecurityException {
         if (pk instanceof DSAPublicKey) {
@@ -160,10 +160,10 @@ public final class SigUtil {
     }
 
     /**
-     *  Use if SigType is known.
+     * Use if SigType is known.
      *
-     *  @param pk JAVA key!
-     *  @return I2P public key
+     * @param pk JAVA key!
+     * @return I2P public key
      */
     public static SigningPublicKey fromJavaKey(PublicKey pk, SigType type) throws GeneralSecurityException {
         switch (type.getBaseAlgorithm()) {
@@ -176,13 +176,13 @@ public final class SigUtil {
     }
 
     /**
-     *  Use if SigType is unknown.
-     *  For efficiency, use fromJavakey(pk, type) if type is known.
+     * Use if SigType is unknown.
+     * For efficiency, use fromJavakey(pk, type) if type is known.
      *
-     *  @param pk JAVA key!
-     *  @return the I2P signing private key
-     *  @throws InvalidKeyException on unknown type
-     *  @since 0.9.18
+     * @param pk JAVA key!
+     * @return the I2P signing private key
+     * @throws InvalidKeyException on unknown type
+     * @since 0.9.18
      */
     public static SigningPrivateKey fromJavaKey(PrivateKey pk) throws GeneralSecurityException {
         if (pk instanceof DSAPrivateKey) {
@@ -234,10 +234,10 @@ public final class SigUtil {
     }
 
     /**
-     *  Use if SigType is known.
+     * Use if SigType is known.
      *
-     *  @param pk JAVA key!
-     *  @return I2P private key
+     * @param pk JAVA key!
+     * @return I2P private key
      */
     public static SigningPrivateKey fromJavaKey(PrivateKey pk, SigType type) throws GeneralSecurityException {
         switch (type.getBaseAlgorithm()) {
@@ -250,11 +250,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P EC public key to a Java ECPublicKey, with caching.
+     * Convert an I2P EC public key to a Java ECPublicKey, with caching.
      *
-     *  @param pk non-null
-     *  @return Java ECPublicKey
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java ECPublicKey
+     * @throws GeneralSecurityException if conversion fails
      */
     public static ECPublicKey toJavaECKey(SigningPublicKey pk) throws GeneralSecurityException {
         synchronized (_ECPubkeyCache) {
@@ -267,11 +267,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P EC private key to a Java ECPrivateKey, with caching.
+     * Convert an I2P EC private key to a Java ECPrivateKey, with caching.
      *
-     *  @param pk non-null
-     *  @return Java ECPrivateKey
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java ECPrivateKey
+     * @throws GeneralSecurityException if conversion fails
      */
     public static ECPrivateKey toJavaECKey(SigningPrivateKey pk) throws GeneralSecurityException {
         synchronized (_ECPrivkeyCache) {
@@ -284,12 +284,12 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P EC public key to a Java ECPublicKey without caching.
-     *  Splits the key data into affine x and y coordinates.
+     * Convert an I2P EC public key to a Java ECPublicKey without caching.
+     * Splits the key data into affine x and y coordinates.
      *
-     *  @param pk non-null
-     *  @return Java ECPublicKey
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java ECPublicKey
+     * @throws GeneralSecurityException if conversion fails
      */
     private static ECPublicKey cvtToJavaECKey(SigningPublicKey pk) throws GeneralSecurityException {
         SigType type = pk.getType();
@@ -302,12 +302,12 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P EC private key to a Java ECPrivateKey without caching.
-     *  Extracts the scalar s from the key data.
+     * Convert an I2P EC private key to a Java ECPrivateKey without caching.
+     * Extracts the scalar s from the key data.
      *
-     *  @param pk non-null
-     *  @return Java ECPrivateKey
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java ECPrivateKey
+     * @throws GeneralSecurityException if conversion fails
      */
     private static ECPrivateKey cvtToJavaECKey(SigningPrivateKey pk) throws GeneralSecurityException {
         SigType type = pk.getType();
@@ -320,12 +320,12 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a Java ECPublicKey to an I2P SigningPublicKey of the given type.
+     * Convert a Java ECPublicKey to an I2P SigningPublicKey of the given type.
      *
-     *  @param pk non-null
-     *  @param type the I2P signature type
-     *  @return I2P public key
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @param type the I2P signature type
+     * @return I2P public key
+     * @throws GeneralSecurityException if conversion fails
      */
     public static SigningPublicKey fromJavaKey(ECPublicKey pk, SigType type) throws GeneralSecurityException {
         ECPoint w = pk.getW();
@@ -337,12 +337,12 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a Java ECPrivateKey to an I2P SigningPrivateKey of the given type.
+     * Convert a Java ECPrivateKey to an I2P SigningPrivateKey of the given type.
      *
-     *  @param pk non-null
-     *  @param type the I2P signature type
-     *  @return I2P private key
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @param type the I2P signature type
+     * @return I2P private key
+     * @throws GeneralSecurityException if conversion fails
      */
     public static SigningPrivateKey fromJavaKey(ECPrivateKey pk, SigType type) throws GeneralSecurityException {
         BigInteger s = pk.getS();
@@ -352,11 +352,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P EdDSA public key to a Java EdDSAPublicKey, with caching.
+     * Convert an I2P EdDSA public key to a Java EdDSAPublicKey, with caching.
      *
-     *  @param pk non-null
-     *  @return Java EdDSAPublicKey
-     *  @since 0.9.15
+     * @param pk non-null
+     * @return Java EdDSAPublicKey
+     * @since 0.9.15
      */
     public static EdDSAPublicKey toJavaEdDSAKey(SigningPublicKey pk) throws GeneralSecurityException {
         synchronized (_EdPubkeyCache) {
@@ -369,11 +369,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P EdDSA private key to a Java EdDSAPrivateKey, with caching.
+     * Convert an I2P EdDSA private key to a Java EdDSAPrivateKey, with caching.
      *
-     *  @param pk non-null
-     *  @return Java EdDSAPrivateKey
-     *  @since 0.9.15
+     * @param pk non-null
+     * @return Java EdDSAPrivateKey
+     * @since 0.9.15
      */
     public static EdDSAPrivateKey toJavaEdDSAKey(SigningPrivateKey pk) throws GeneralSecurityException {
         synchronized (_EdPrivkeyCache) {
@@ -386,11 +386,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P EdDSA public key to a Java EdDSAPublicKey without caching.
+     * Convert an I2P EdDSA public key to a Java EdDSAPublicKey without caching.
      *
-     *  @param pk non-null
-     *  @return Java EdDSAPublicKey
-     *  @since 0.9.15
+     * @param pk non-null
+     * @return Java EdDSAPublicKey
+     * @since 0.9.15
      */
     private static EdDSAPublicKey cvtToJavaEdDSAKey(SigningPublicKey pk) throws GeneralSecurityException {
         try {
@@ -401,11 +401,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P EdDSA or RedDSA private key to a Java EdDSAPrivateKey without caching.
+     * Convert an I2P EdDSA or RedDSA private key to a Java EdDSAPrivateKey without caching.
      *
-     *  @param pk non-null
-     *  @return Java EdDSAPrivateKey
-     *  @since 0.9.15
+     * @param pk non-null
+     * @return Java EdDSAPrivateKey
+     * @since 0.9.15
      */
     private static EdDSAPrivateKey cvtToJavaEdDSAKey(SigningPrivateKey pk) throws GeneralSecurityException {
         try {
@@ -422,25 +422,25 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a Java EdDSAPublicKey to an I2P SigningPublicKey.
+     * Convert a Java EdDSAPublicKey to an I2P SigningPublicKey.
      *
-     *  @param pk non-null
-     *  @param type the I2P signature type
-     *  @return I2P public key
-     *  @since 0.9.15
+     * @param pk non-null
+     * @param type the I2P signature type
+     * @return I2P public key
+     * @since 0.9.15
      */
     public static SigningPublicKey fromJavaKey(EdDSAPublicKey pk, SigType type) {
         return new SigningPublicKey(type, pk.getAbyte());
     }
 
     /**
-     *  Convert a Java EdDSAPrivateKey to an I2P SigningPrivateKey.
-     *  Handles EdDSA (seed-based) and RedDSA (private scalar) key types.
+     * Convert a Java EdDSAPrivateKey to an I2P SigningPrivateKey.
+     * Handles EdDSA (seed-based) and RedDSA (private scalar) key types.
      *
-     *  @param pk non-null
-     *  @param type the I2P signature type
-     *  @return I2P private key
-     *  @since 0.9.15
+     * @param pk non-null
+     * @param type the I2P signature type
+     * @return I2P private key
+     * @since 0.9.15
      */
     public static SigningPrivateKey fromJavaKey(EdDSAPrivateKey pk, SigType type) throws GeneralSecurityException {
         byte[] data;
@@ -451,11 +451,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P DSA public key to a Java DSAPublicKey.
+     * Convert an I2P DSA public key to a Java DSAPublicKey.
      *
-     *  @param pk non-null
-     *  @return Java DSAPublicKey
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java DSAPublicKey
+     * @throws GeneralSecurityException if conversion fails
      */
     public static DSAPublicKey toJavaDSAKey(SigningPublicKey pk) throws GeneralSecurityException {
         KeyFactory kf = KeyFactory.getInstance("DSA");
@@ -465,11 +465,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P DSA private key to a Java DSAPrivateKey.
+     * Convert an I2P DSA private key to a Java DSAPrivateKey.
      *
-     *  @param pk non-null
-     *  @return Java DSAPrivateKey
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java DSAPrivateKey
+     * @throws GeneralSecurityException if conversion fails
      */
     public static DSAPrivateKey toJavaDSAKey(SigningPrivateKey pk) throws GeneralSecurityException {
         KeyFactory kf = KeyFactory.getInstance("DSA");
@@ -484,11 +484,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a Java DSAPublicKey to an I2P DSA public key.
+     * Convert a Java DSAPublicKey to an I2P DSA public key.
      *
-     *  @param pk non-null
-     *  @return I2P DSA public key
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return I2P DSA public key
+     * @throws GeneralSecurityException if conversion fails
      */
     public static SigningPublicKey fromJavaKey(DSAPublicKey pk) throws GeneralSecurityException {
         BigInteger y = pk.getY();
@@ -499,11 +499,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a Java DSAPrivateKey to an I2P DSA private key.
+     * Convert a Java DSAPrivateKey to an I2P DSA private key.
      *
-     *  @param pk non-null
-     *  @return I2P DSA private key
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return I2P DSA private key
+     * @throws GeneralSecurityException if conversion fails
      */
     public static SigningPrivateKey fromJavaKey(DSAPrivateKey pk) throws GeneralSecurityException {
         BigInteger x = pk.getX();
@@ -514,11 +514,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Prefer toJavaKey(SigningPublicKey) for type-generic conversion.
+     * Prefer toJavaKey(SigningPublicKey) for type-generic conversion.
      *
-     *  @param pk non-null
-     *  @return Java RSA public key
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java RSA public key
+     * @throws GeneralSecurityException if conversion fails
      */
     public static RSAPublicKey toJavaRSAKey(SigningPublicKey pk) throws GeneralSecurityException {
         SigType type = pk.getType();
@@ -531,12 +531,12 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P RSA private key to a Java RSAPrivateKey.
-     *  As of 0.9.31, if pk is a RSASigningPrivateCrtKey, returns a RSAPrivateCrtKey.
+     * Convert an I2P RSA private key to a Java RSAPrivateKey.
+     * As of 0.9.31, if pk is a RSASigningPrivateCrtKey, returns a RSAPrivateCrtKey.
      *
-     *  @param pk non-null
-     *  @return Java RSAPrivateKey
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @return Java RSAPrivateKey
+     * @throws GeneralSecurityException if conversion fails
      */
     public static RSAPrivateKey toJavaRSAKey(SigningPrivateKey pk) throws GeneralSecurityException {
         if (pk instanceof RSASigningPrivateCrtKey) return ((RSASigningPrivateCrtKey) pk).toJavaKey();
@@ -549,12 +549,12 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a Java RSAPublicKey to an I2P RSA public key of the given type.
+     * Convert a Java RSAPublicKey to an I2P RSA public key of the given type.
      *
-     *  @param pk non-null
-     *  @param type the I2P signature type
-     *  @return I2P RSA public key
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @param type the I2P signature type
+     * @return I2P RSA public key
+     * @throws GeneralSecurityException if conversion fails
      */
     public static SigningPublicKey fromJavaKey(RSAPublicKey pk, SigType type) throws GeneralSecurityException {
         BigInteger n = pk.getModulus();
@@ -564,13 +564,13 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a Java RSAPrivateKey to an I2P RSA private key of the given type.
-     *  As of 0.9.31, if pk is a RSAPrivateCrtKey, returns a RSASigningPrivateCrtKey.
+     * Convert a Java RSAPrivateKey to an I2P RSA private key of the given type.
+     * As of 0.9.31, if pk is a RSAPrivateCrtKey, returns a RSASigningPrivateCrtKey.
      *
-     *  @param pk non-null
-     *  @param type the I2P signature type
-     *  @return I2P RSA private key
-     *  @throws GeneralSecurityException if conversion fails
+     * @param pk non-null
+     * @param type the I2P signature type
+     * @return I2P RSA private key
+     * @throws GeneralSecurityException if conversion fails
      */
     public static SigningPrivateKey fromJavaKey(RSAPrivateKey pk, SigType type) throws GeneralSecurityException {
         // private key is modulus (pubkey) + exponent
@@ -582,11 +582,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert an I2P Signature to a Java ASN.1 signature byte array.
-     *  RSA and EdDSA signatures are passed through unchanged.
+     * Convert an I2P Signature to a Java ASN.1 signature byte array.
+     * RSA and EdDSA signatures are passed through unchanged.
      *
-     *  @param sig non-null
-     *  @return ASN.1 DER-encoded signature bytes (or raw for RSA/EdDSA)
+     * @param sig non-null
+     * @return ASN.1 DER-encoded signature bytes (or raw for RSA/EdDSA)
      */
     public static byte[] toJavaSig(Signature sig) {
         // RSA and EdDSA sigs are not ASN encoded
@@ -595,13 +595,13 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a Java ASN.1 signature byte array to an I2P Signature.
-     *  RSA and EdDSA signatures are passed through unchanged.
+     * Convert a Java ASN.1 signature byte array to an I2P Signature.
+     * RSA and EdDSA signatures are passed through unchanged.
      *
-     *  @param asn ASN.1 DER-encoded signature bytes (or raw for RSA/EdDSA)
-     *  @param type the I2P signature type
-     *  @return an I2P Signature with the given type
-     *  @throws SignatureException if ASN.1 decoding fails
+     * @param asn ASN.1 DER-encoded signature bytes (or raw for RSA/EdDSA)
+     * @param type the I2P signature type
+     * @return an I2P Signature with the given type
+     * @throws SignatureException if ASN.1 decoding fails
      */
     public static Signature fromJavaSig(byte[] asn, SigType type) throws SignatureException {
         // RSA and EdDSA sigs are not ASN encoded
@@ -610,13 +610,13 @@ public final class SigUtil {
     }
 
     /**
-     *  Import a Java X.509-encoded public key from a file.
+     * Import a Java X.509-encoded public key from a file.
      *
-     *  @param file non-null, containing X.509 encoded key data
-     *  @param type the I2P signature type
-     *  @return Java PublicKey
-     *  @throws GeneralSecurityException if key conversion fails
-     *  @throws IOException if file reading fails
+     * @param file non-null, containing X.509 encoded key data
+     * @param type the I2P signature type
+     * @return Java PublicKey
+     * @throws GeneralSecurityException if key conversion fails
+     * @throws IOException if file reading fails
      */
     public static PublicKey importJavaPublicKey(File file, SigType type) throws GeneralSecurityException, IOException {
         byte[] data = getData(file);
@@ -627,13 +627,13 @@ public final class SigUtil {
     }
 
     /**
-     *  Import a Java PKCS8-encoded private key from a file.
+     * Import a Java PKCS8-encoded private key from a file.
      *
-     *  @param file non-null, containing PKCS8 encoded key data
-     *  @param type the I2P signature type
-     *  @return Java PrivateKey
-     *  @throws GeneralSecurityException if key conversion fails
-     *  @throws IOException if file reading fails
+     * @param file non-null, containing PKCS8 encoded key data
+     * @param type the I2P signature type
+     * @return Java PrivateKey
+     * @throws GeneralSecurityException if key conversion fails
+     * @throws IOException if file reading fails
      */
     public static PrivateKey importJavaPrivateKey(File file, SigType type) throws GeneralSecurityException, IOException {
         byte[] data = getData(file);
@@ -666,11 +666,11 @@ public final class SigUtil {
     }
 
     /**
-     *  Split a byte array into two BigIntegers
+     * Split a byte array into two BigIntegers
      *
-     *  @param b length must be even
-     *  @return array of two BigIntegers
-     *  @since 0.9.9
+     * @param b length must be even
+     * @return array of two BigIntegers
+     * @since 0.9.9
      */
     private static NativeBigInteger[] split(byte[] b) {
         if ((b.length & 0x01) != 0) throw new IllegalArgumentException("length must be even");
@@ -685,14 +685,14 @@ public final class SigUtil {
     }
 
     /**
-     *  Combine two BigIntegers of nominal length = len / 2
+     * Combine two BigIntegers of nominal length = len / 2
      *
-     *  @param x non-negative first value
-     *  @param y non-negative second value
-     *  @param len total output length (must be even)
-     *  @return array of exactly len bytes
-     *  @throws InvalidKeyException if length is odd or either value is too large
-     *  @since 0.9.9, package private since 0.9.31
+     * @param x non-negative first value
+     * @param y non-negative second value
+     * @param len total output length (must be even)
+     * @return array of exactly len bytes
+     * @throws InvalidKeyException if length is odd or either value is too large
+     * @since 0.9.9, package private since 0.9.31
      */
     static byte[] combine(BigInteger x, BigInteger y, int len) throws InvalidKeyException {
         if ((len & 0x01) != 0) throw new InvalidKeyException("length must be even");
@@ -706,12 +706,12 @@ public final class SigUtil {
     }
 
     /**
-     *  Convert a BigInteger to a fixed-length byte array, trimming or zero-padding as needed.
+     * Convert a BigInteger to a fixed-length byte array, trimming or zero-padding as needed.
      *
-     *  @param bi non-negative
-     *  @param len desired output length
-     *  @return array of exactly len bytes
-     *  @throws InvalidKeyException if the value is negative or too large to fit
+     * @param bi non-negative
+     * @param len desired output length
+     * @return array of exactly len bytes
+     * @throws InvalidKeyException if the value is negative or too large to fit
      */
     public static byte[] rectify(BigInteger bi, int len) throws InvalidKeyException {
         byte[] b = bi.toByteArray();
@@ -735,20 +735,20 @@ public final class SigUtil {
     }
 
     /**
-     *  Encode raw signature bytes (r || s) into ASN.1 DER SEQUENCE format.
+     * Encode raw signature bytes (r || s) into ASN.1 DER SEQUENCE format.
      *
-     *  See http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html
+     * See http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html
      *
-     *  Convert to BigInteger and back so we have the minimum length representation, as required.
-     *  r and s are always non-negative.
+     * Convert to BigInteger and back so we have the minimum length representation, as required.
+     * r and s are always non-negative.
      *
-     *  Only supports sigs up to about 252 bytes. See code to fix BER encoding for this before you
-     *  add a SigType with bigger signatures.
+     * Only supports sigs up to about 252 bytes. See code to fix BER encoding for this before you
+     * add a SigType with bigger signatures.
      *
-     *  @param sig raw r||s bytes, length must be even
-     *  @return ASN.1 DER-encoded SEQUENCE { r INTEGER, s INTEGER }
-     *  @throws IllegalArgumentException if length is odd or encoded size exceeds limits
-     *  @since 0.8.7, moved to SigUtil in 0.9.9
+     * @param sig raw r||s bytes, length must be even
+     * @return ASN.1 DER-encoded SEQUENCE { r INTEGER, s INTEGER }
+     * @throws IllegalArgumentException if length is odd or encoded size exceeds limits
+     * @since 0.8.7, moved to SigUtil in 0.9.9
      */
     private static byte[] sigBytesToASN1(byte[] sig) {
         BigInteger[] rs = split(sig);
@@ -756,31 +756,31 @@ public final class SigUtil {
     }
 
     /**
-     *  http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html
-     *<pre>
+     * http://download.oracle.com/javase/1.5.0/docs/guide/security/CryptoSpec.html
+     * <pre>
      *  Signature Format: ASN.1 sequence of two INTEGER values: r and s, in that order:
      *                                SEQUENCE ::= { r INTEGER, s INTEGER }
      *
-     *  http://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One
+     * http://en.wikipedia.org/wiki/Abstract_Syntax_Notation_One
      *  30 -- tag indicating SEQUENCE
      *  xx - length in octets
      *
-     *  02 -- tag indicating INTEGER
+     * 02 -- tag indicating INTEGER
      *  xx - length in octets
      *  xxxxxx - value
-     *</pre>
+     * </pre>
      *
-     *  Encode two BigInteger values (r, s) into ASN.1 DER SEQUENCE format.
-     *  r and s are always non-negative.
+     * Encode two BigInteger values (r, s) into ASN.1 DER SEQUENCE format.
+     * r and s are always non-negative.
      *
-     *  Only supports sigs up to about 65530 bytes. See code to fix BER encoding for this before you
-     *  add a SigType with bigger signatures.
+     * Only supports sigs up to about 65530 bytes. See code to fix BER encoding for this before you
+     * add a SigType with bigger signatures.
      *
-     *  @param r non-negative
-     *  @param s non-negative
-     *  @return ASN.1 DER-encoded SEQUENCE { r INTEGER, s INTEGER }
-     *  @throws IllegalArgumentException if too big
-     *  @since 0.9.25, split out from sigBytesToASN1(byte[])
+     * @param r non-negative
+     * @param s non-negative
+     * @return ASN.1 DER-encoded SEQUENCE { r INTEGER, s INTEGER }
+     * @throws IllegalArgumentException if too big
+     * @since 0.9.25, split out from sigBytesToASN1(byte[])
      */
     public static byte[] sigBytesToASN1(BigInteger r, BigInteger s) {
         int extra = 4;
@@ -819,12 +819,12 @@ public final class SigUtil {
     }
 
     /**
-     *  Output an length or integer value in ASN.1
-     *  Does NOT output the tag e.g. 0x02 / 0x30
+     * Output an length or integer value in ASN.1
+     * Does NOT output the tag e.g. 0x02 / 0x30
      *
-     *  @param val 0-65535
-     *  @return the new index
-     *  @since 0.9.25
+     * @param val 0-65535
+     * @return the new index
+     * @since 0.9.25
      */
     public static int intToASN1(byte[] d, int idx, int val) {
         if (val < 0 || val > 65535) throw new IllegalArgumentException("fixme length " + val);
@@ -841,12 +841,12 @@ public final class SigUtil {
     }
 
     /**
-     *  See above.
-     *  Only supports sigs up to about 65530 bytes. See code to fix BER encoding for bigger than that.
+     * See above.
+     * Only supports sigs up to about 65530 bytes. See code to fix BER encoding for bigger than that.
      *
-     *  @param len must be even, twice the nominal length of each BigInteger
-     *  @return len bytes, call split() on the result to get two BigIntegers
-     *  @since 0.8.7, moved to SigUtil in 0.9.9
+     * @param len must be even, twice the nominal length of each BigInteger
+     * @return len bytes, call split() on the result to get two BigIntegers
+     * @since 0.8.7, moved to SigUtil in 0.9.9
      */
     private static byte[] aSN1ToSigBytes(byte[] asn, int len) throws SignatureException {
         if (asn[0] != 0x30) throw new SignatureException("asn[0] = " + (asn[0] & 0xff));
@@ -895,12 +895,12 @@ public final class SigUtil {
     }
 
     /**
-     *  See above.
-     *  Only supports sigs up to about 65530 bytes. See code to fix BER encoding for bigger than that.
+     * See above.
+     * Only supports sigs up to about 65530 bytes. See code to fix BER encoding for bigger than that.
      *
-     *  @param len nominal length of each BigInteger
-     *  @return two BigIntegers
-     *  @since 0.9.25
+     * @param len nominal length of each BigInteger
+     * @return two BigIntegers
+     * @since 0.9.25
      */
     public static NativeBigInteger[] aSN1ToBigInteger(byte[] asn, int len) throws SignatureException {
         byte[] sig = aSN1ToSigBytes(asn, len * 2);
@@ -908,8 +908,8 @@ public final class SigUtil {
     }
 
     /**
-     *  Clear all cached Java key conversions.
-     *  Should be called when key types or configurations change.
+     * Clear all cached Java key conversions.
+     * Should be called when key types or configurations change.
      */
     public static void clearCaches() {
         synchronized (_ECPubkeyCache) {

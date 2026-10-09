@@ -64,7 +64,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
      * or open the local socket. You MUST call startRunning() for that.
      *
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     *                                  valid config to contact the router
+     * valid config to contact the router
      */
     public I2PTunnelConnectClient(int localPort, Logging l, boolean ownDest,
                                String wwwProxy, EventDispatcher notifyThis,
@@ -122,7 +122,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     }
 
     /**
-     *  Starts the CONNECT proxy and registers with port mapper.
+     * Starts the CONNECT proxy and registers with port mapper.
      */
     @Override
     public void startRunning() {
@@ -132,7 +132,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     }
 
     /**
-     *  Closes the CONNECT proxy and unregisters from port mapper.
+     * Closes the CONNECT proxy and unregisters from port mapper.
      */
     @Override
     public boolean close(boolean forced) {
@@ -388,11 +388,11 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     }
 
     /**
-     *  Write an error message to the output stream and close it.
+     * Write an error message to the output stream and close it.
      *
-     *  @param errMessage the HTML error response to send
-     *  @param out the output stream to write to, may be null
-     *  @throws IOException if an I/O error occurs
+     * @param errMessage the HTML error response to send
+     * @param out the output stream to write to, may be null
+     * @throws IOException if an I/O error occurs
      */
     private static void writeErrorMessage(String errMessage, OutputStream out) throws IOException {
         if (out == null)

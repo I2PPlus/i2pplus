@@ -94,8 +94,8 @@ public class ConfigNetHelper extends HelperBase {
     }
 
     /**
-     *  To reduce confusion caused by NATs, this is the current internal SSU port,
-     *  not the external port.
+     * To reduce confusion caused by NATs, this is the current internal SSU port,
+     * not the external port.
      * @return the internal SSU port
      */
     public String getUdpPort() {
@@ -106,8 +106,8 @@ public class ConfigNetHelper extends HelperBase {
     }
 
     /**
-     *  This should always be the actual internal SSU port, as UDPTransport udpates
-     *  the config when it changes.
+     * This should always be the actual internal SSU port, as UDPTransport udpates
+     * the config when it changes.
      * @return the configured SSU port
      */
     public String getConfiguredUdpPort() {
@@ -131,18 +131,18 @@ public class ConfigNetHelper extends HelperBase {
     }
 
     /**
-     *  Get checked attribute for IPv4 firewalled setting.
-     *  @return the checked attribute
-     *  @since 0.9.20
+     * Get checked attribute for IPv4 firewalled setting.
+     * @return the checked attribute
+     * @since 0.9.20
      */
     public String getIPv4FirewalledChecked() {
         return getChecked(TransportUtil.PROP_IPV4_FIREWALLED);
     }
 
     /**
-     *  Get checked attribute for IPv6 firewalled setting.
-     *  @return the checked attribute
-     *  @since 0.9.28
+     * Get checked attribute for IPv6 firewalled setting.
+     * @return the checked attribute
+     * @since 0.9.28
      */
     public String getIPv6FirewalledChecked() {
         return getChecked(TransportUtil.PROP_IPV6_FIREWALLED);
@@ -238,7 +238,6 @@ public class ConfigNetHelper extends HelperBase {
      * Use SSU setting, then NTCP setting, then default
      * @param mode the IPv6 configuration mode
      * @return the checked attribute for the matching mode
-     * @since IPv6
      */
     public String getIPv6Checked(String mode) {
         String s = _context.getProperty(TransportUtil.SSU_IPV6_CONFIG);
@@ -264,7 +263,6 @@ public class ConfigNetHelper extends HelperBase {
     /**
      * Get the HTML for an address selector input.
      * @return the HTML for the address selector
-     * @since IPv6
      */
     public String getAddressSelector() {
         Set<String> addrs = getAddresses();

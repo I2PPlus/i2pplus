@@ -17,16 +17,16 @@ import net.i2p.data.i2cp.SessionId;
 import org.junit.Test;
 
 /**
- *  Tests for the shared I2CP dispatch pool.
+ * Tests for the shared I2CP dispatch pool.
  *
- *  <p>The production symptom these pin down was a client whose I2CP queue filled and then
- *  never drained again: the router logged "I2CP write to queue failed" for every message it
- *  tried to hand over, LeaseSet requests went unanswered until they timed out, and nothing
- *  said why. The pool could strand a registered reader with no worker at all, and could also
- *  let one backlogged client hold the only worker indefinitely.
+ * <p>The production symptom these pin down was a client whose I2CP queue filled and then
+ * never drained again: the router logged "I2CP write to queue failed" for every message it
+ * tried to hand over, LeaseSet requests went unanswered until they timed out, and nothing
+ * said why. The pool could strand a registered reader with no worker at all, and could also
+ * let one backlogged client hold the only worker indefinitely.
  *
- *  <p>Every test uses its own queue and counts deliveries, so nothing depends on a router,
- *  a real session, or another test's dispatcher state.
+ * <p>Every test uses its own queue and counts deliveries, so nothing depends on a router,
+ * a real session, or another test's dispatcher state.
  */
 public class QueuedI2CPMessageReaderTest {
 
@@ -34,10 +34,10 @@ public class QueuedI2CPMessageReaderTest {
     private static final long TIMEOUT = 10000L;
 
     /**
-     *  A drain must stop at its budget even with a full queue behind it.
+     * A drain must stop at its budget even with a full queue behind it.
      *
-     *  <p>Returning only when the queue is empty is what let one client hold a worker while
-     *  every other client's queue backed up.
+     * <p>Returning only when the queue is empty is what let one client hold a worker while
+     * every other client's queue backed up.
      */
     @Test
     public void testDrainOnceStopsAtBudget() {
@@ -86,10 +86,10 @@ public class QueuedI2CPMessageReaderTest {
     }
 
     /**
-     *  Registering repeatedly must not let two workers serve one reader at once.
+     * Registering repeatedly must not let two workers serve one reader at once.
      *
-     *  <p>I2CP messages for a session are order-dependent, so a duplicate ready-queue entry
-     *  would deliver them concurrently and out of order.
+     * <p>I2CP messages for a session are order-dependent, so a duplicate ready-queue entry
+     * would deliver them concurrently and out of order.
      */
     @Test
     public void testRepeatedStartReadingKeepsMessagesInOrder() {
@@ -111,12 +111,12 @@ public class QueuedI2CPMessageReaderTest {
     }
 
     /**
-     *  The pool must never drop to zero workers while a reader is registered.
+     * The pool must never drop to zero workers while a reader is registered.
      *
-     *  <p>This is the stranding defect. The pool used to exit when it saw no readers and
-     *  clear its thread handle only afterwards, so a reader registering in between was left
-     *  holding a queue nobody drained. Repeating the cycle drives that transition
-     *  repeatedly; under the old logic the tail of these cycles stalled forever.
+     * <p>This is the stranding defect. The pool used to exit when it saw no readers and
+     * clear its thread handle only afterwards, so a reader registering in between was left
+     * holding a queue nobody drained. Repeating the cycle drives that transition
+     * repeatedly; under the old logic the tail of these cycles stalled forever.
      */
     @Test
     public void testReaderIsNeverStrandedWithoutAWorker() {
@@ -136,10 +136,10 @@ public class QueuedI2CPMessageReaderTest {
     }
 
     /**
-     *  A stopped reader stops being served.
+     * A stopped reader stops being served.
      *
-     *  <p>Measured after the reader has demonstrably been served once, so the count being
-     *  compared is not racing a worker that was already in a drain when stopReading ran.
+     * <p>Measured after the reader has demonstrably been served once, so the count being
+     * compared is not racing a worker that was already in a drain when stopReading ran.
      */
     @Test
     public void testStoppedReaderIsNotServed() {
@@ -157,11 +157,11 @@ public class QueuedI2CPMessageReaderTest {
     }
 
     /**
-     *  One backed-up client must not starve another client.
+     * One backed-up client must not starve another client.
      *
-     *  <p>The starvation path: a single worker draining a backlogged reader to exhaustion
-     *  leaves every other client unserved until its queue fills and the router starts
-     *  refusing to send to it at all.
+     * <p>The starvation path: a single worker draining a backlogged reader to exhaustion
+     * leaves every other client unserved until its queue fills and the router starts
+     * refusing to send to it at all.
      */
     @Test
     public void testBackedUpClientDoesNotStarveOthers() {
@@ -186,16 +186,16 @@ public class QueuedI2CPMessageReaderTest {
     }
 
     /**
-     *  A message that arrives after the reader's queue was drained must still be delivered.
+     * A message that arrives after the reader's queue was drained must still be delivered.
      *
-     *  <p>This is the case the requeue policy has to keep working. A worker that drained a
-     *  reader's queue finds nothing left to serve, so the reader leaves the ready queue and
-     *  only comes back when the idle tick sees that a message arrived for it. If that path
-     *  were missing, the message would sit on the queue until it filled for good, which is the
-     *  original failure this pool was written to prevent.
+     * <p>This is the case the requeue policy has to keep working. A worker that drained a
+     * reader's queue finds nothing left to serve, so the reader leaves the ready queue and
+     * only comes back when the idle tick sees that a message arrived for it. If that path
+     * were missing, the message would sit on the queue until it filled for good, which is the
+     * original failure this pool was written to prevent.
      *
-     *  <p>The wait before filling is longer than the poll interval, so the reader has been
-     *  through at least one idle tick with an empty queue before the message appears.
+     * <p>The wait before filling is longer than the poll interval, so the reader has been
+     * through at least one idle tick with an empty queue before the message appears.
      */
     @Test
     public void testMessageArrivingAfterADrainIsStillDelivered() {
@@ -218,12 +218,12 @@ public class QueuedI2CPMessageReaderTest {
     }
 
     /**
-     *  The same late arrival, repeated, to catch a reader that is served once and then
-     *  silently stops being picked up.
+     * The same late arrival, repeated, to catch a reader that is served once and then
+     * silently stops being picked up.
      *
-     *  <p>One cycle can pass by luck: the worker may still be holding the reader from the
-     *  initial registration when the message arrives. Repeating it drives the reader through
-     *  the drain, the idle tick and a fresh arrival many times over.
+     * <p>One cycle can pass by luck: the worker may still be holding the reader from the
+     * initial registration when the message arrives. Repeating it drives the reader through
+     * the drain, the idle tick and a fresh arrival many times over.
      */
     @Test
     public void testRepeatedLateArrivalsKeepBeingDelivered() {
@@ -243,10 +243,10 @@ public class QueuedI2CPMessageReaderTest {
     }
 
     /**
-     *  One idle reader must not hide another that has work.
+     * One idle reader must not hide another that has work.
      *
-     *  <p>The idle tick walks every registered reader, so a reader whose queue stays empty
-     *  cannot crowd out one that has just been given something to do.
+     * <p>The idle tick walks every registered reader, so a reader whose queue stays empty
+     * cannot crowd out one that has just been given something to do.
      */
     @Test
     public void testIdleReaderDoesNotMaskAReaderWithWork() {

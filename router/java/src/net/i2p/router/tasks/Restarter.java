@@ -8,7 +8,7 @@ import net.i2p.util.Log;
 
 /**
  * Router restarter implementation.
- *  @since 0.8.8, moved from Router in 0.8.12
+ * @since 0.8.8, moved from Router in 0.8.12
  */
 public class Restarter implements Runnable {
     private final RouterContext _context;
@@ -26,13 +26,13 @@ public class Restarter implements Runnable {
      *
      * This method gracefully restarts all major router components in sequence:
      * <ul>
-     *   <li>Stops the client manager</li>
-     *   <li>Reinitializes the bandwidth limiter</li>
-     *   <li>Restarts the message registry and communication system</li>
-     *   <li>Restarts the tunnel manager</li>
-     *   <li>Waits for components to stabilize</li>
-     *   <li>Restarts the client manager and message pool</li>
-     *   <li>Rebuilds router info and marks router as alive</li>
+     * <li>Stops the client manager</li>
+     * <li>Reinitializes the bandwidth limiter</li>
+     * <li>Restarts the message registry and communication system</li>
+     * <li>Restarts the tunnel manager</li>
+     * <li>Waits for components to stabilize</li>
+     * <li>Restarts the client manager and message pool</li>
+     * <li>Rebuilds router info and marks router as alive</li>
      * </ul>
      *
      * The restart process is designed to minimize downtime and maintain

@@ -9,14 +9,14 @@ import net.i2p.data.router.RouterInfo;
 import org.junit.Test;
 
 /**
- *  Unit tests for the RouterInfo-aging decisions extracted from
- *  {@link NTCPConnection#gotRI}.
+ * Unit tests for the RouterInfo-aging decisions extracted from
+ * {@link NTCPConnection#gotRI}.
  *
- *  <p>Covers the peer/self discriminations (used to decide whether to store the
- *  received RouterInfo in the network database) and the strictly-newer store
- *  gate that decides whether a second store replaces the first.
+ * <p>Covers the peer/self discriminations (used to decide whether to store the
+ * received RouterInfo in the network database) and the strictly-newer store
+ * gate that decides whether a second store replaces the first.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class NTCPConnectionRouterInfoDecisionTest {
 

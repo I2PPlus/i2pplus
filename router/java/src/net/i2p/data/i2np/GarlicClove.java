@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.InputStream;
@@ -96,9 +95,9 @@ public class GarlicClove extends DataStructureImpl {
     public void setCertificate(Certificate cert) { _certificate = cert; }
 
     /**
-     *  Read the clove from a stream; not supported.
-     *  @deprecated unused, use byte array method to avoid copying
-     *  @throws UnsupportedOperationException always
+     * Read the clove from a stream; not supported.
+     * @deprecated unused, use byte array method to avoid copying
+     * @throws UnsupportedOperationException always
      */
     @Deprecated
     public void readBytes(InputStream in) {
@@ -106,9 +105,9 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  Write the clove to a stream; not supported.
-     *  @deprecated unused, use byte array method to avoid copying
-     *  @throws UnsupportedOperationException always
+     * Write the clove to a stream; not supported.
+     * @deprecated unused, use byte array method to avoid copying
+     * @throws UnsupportedOperationException always
      */
     @Deprecated
     public void writeBytes(OutputStream out) {
@@ -116,8 +115,8 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  Read the clove from a byte array.
-     *  @return length read
+     * Read the clove from a byte array.
+     * @return length read
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {
         int cur = offset;
@@ -140,10 +139,10 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  Short format for ECIES-Ratchet, saves 22 bytes.
-     *  NTCP2-style header, no ID, no separate expiration, no cert.
+     * Short format for ECIES-Ratchet, saves 22 bytes.
+     * NTCP2-style header, no ID, no separate expiration, no cert.
      *
-     *  @since 0.9.44
+     * @since 0.9.44
      */
     public void readBytesRatchet(byte[] source, int offset, int len) throws DataFormatException {
         _instructions = DeliveryInstructions.create(source, offset);
@@ -160,9 +159,9 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  Serialized clove.
+     * Serialized clove.
      *
-     *  @return serialized clove
+     * @return serialized clove
      */
     @Override
     public byte[] toByteArray() {
@@ -182,11 +181,11 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  Short format for ECIES-Ratchet, saves 22 bytes.
-     *  NTCP2-style header, no ID, no separate expiration, no cert.
+     * Short format for ECIES-Ratchet, saves 22 bytes.
+     * NTCP2-style header, no ID, no separate expiration, no cert.
      *
-     *  @return new offset
-     *  @since 0.9.44
+     * @return new offset
+     * @since 0.9.44
      */
     public int writeBytesRatchet(byte[] tgt, int offset) {
         offset += _instructions.writeBytes(tgt, offset);
@@ -195,17 +194,17 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  Size of the ratchet-format clove.
+     * Size of the ratchet-format clove.
      *
-     *  @return the ratchet-clove size
-     *  @since 0.9.44
+     * @return the ratchet-clove size
+     * @since 0.9.44
      */
     public int getSizeRatchet() {
         return _instructions.getSize() + _msg.getMessageSize() - 7;
     }
 
     /**
-     *  Estimated serialized length of this clove.
+     * Estimated serialized length of this clove.
      */
     public int estimateSize() {
         return _instructions.getSize()
@@ -216,7 +215,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  Compare all clove fields for equality.
+     * Compare all clove fields for equality.
      */
     @Override
     public boolean equals(Object obj) {
@@ -231,8 +230,8 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  Hash code covering all clove fields.
-     *  @return whether h code is present
+     * Hash code covering all clove fields.
+     * @return whether h code is present
      */
     @Override
     public int hashCode() {
@@ -244,7 +243,7 @@ public class GarlicClove extends DataStructureImpl {
     }
 
     /**
-     *  String form for debugging, showing the instructions, expiration, and data.
+     * String form for debugging, showing the instructions, expiration, and data.
      */
     @Override
     public String toString() {

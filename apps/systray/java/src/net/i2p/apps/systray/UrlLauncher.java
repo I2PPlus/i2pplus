@@ -55,7 +55,7 @@ public class UrlLauncher implements ClientApp {
     private static final boolean IS_SERVICE = SystemVersion.isService();
 
     /**
-     *  Browsers to try IN-ORDER
+     * Browsers to try IN-ORDER
      */
     private static final String[] BROWSERS = {
             // This debian script tries everything in $BROWSER, then gnome-www-browser and x-www-browser
@@ -84,11 +84,11 @@ public class UrlLauncher implements ClientApp {
     };
 
     /**
-     *  ClientApp constructor used from clients.config
+     * ClientApp constructor used from clients.config
      *
-     *  @param mgr null OK
-     *  @param args URL in args[0] or null args for router console
-     *  @since 0.9.18
+     * @param mgr null OK
+     * @param args URL in args[0] or null args for router console
+     * @since 0.9.18
      */
     public UrlLauncher(I2PAppContext context, ClientAppManager mgr, String[] args) {
         _state = UNINITIALIZED;
@@ -103,9 +103,9 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  Constructor from SysTray
+     * Constructor from SysTray
      *
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     public UrlLauncher() {
         _state = UNINITIALIZED;
@@ -118,10 +118,10 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  Prevent bad user experience by waiting for the server to be there
-     *  before launching the browser.
+     * Prevent bad user experience by waiting for the server to be there
+     * before launching the browser.
      *
-     *  @return success
+     * @return success
      */
     private static boolean waitForServer(String urlString) {
         URI url;
@@ -188,7 +188,6 @@ public class UrlLauncher implements ClientApp {
      *
      * @param url containing full scheme, i.e. http://127.0.0.1:7657
      * @return path to command[0] and target URL[1] to the default browser ready for execution, non-null
-     * @since 2.0.0
      */
     private String getDefaultWindowsBrowser(String url) {
         String defaultBrowser;
@@ -223,7 +222,6 @@ public class UrlLauncher implements ClientApp {
      * @param hkeyquery registry entry to ask for.
      * @param key key to retrieve value from
      * @return either a registry "Default" value or null if one does not exist/is empty
-     * @since 2.0.0
      */
     private String registryQuery(String hkeyquery, String key) {
         try {
@@ -261,7 +259,6 @@ public class UrlLauncher implements ClientApp {
      *
      * @param hkeyquery
      * @return the command required to run the application referenced in hkeyquery, or null
-     * @since 2.0.0
      */
     private String followUserConfiguredBrowserToCommand(String hkeyquery) {
         String progIdValue = registryQuery(hkeyquery,"ProgId");
@@ -275,7 +272,6 @@ public class UrlLauncher implements ClientApp {
      *
      * @param hkeyquery
      * @return the command required to run the application referenced in hkeyquery, or null
-     * @since 2.0.0
      */
     private String followProgIdToCommand(String progid) {
         String hkeyquery = "HKEY_CLASSES_ROOT\\"+progid+"\\shell\\open\\command";
@@ -291,7 +287,6 @@ public class UrlLauncher implements ClientApp {
      *
      * @param hkeyquery registry entry to ask for.
      * @return either a registry "Default" value or null if one does not exist/is empty
-     * @since 2.0.0
      */
     private String getDefaultOutOfRegistry(String hkeyquery) {
         String defaultValue = registryQuery(hkeyquery, "Default");
@@ -319,7 +314,7 @@ public class UrlLauncher implements ClientApp {
      *
      * @param  url The URL to open.
      * @return     <code>true</code> if the operation was successful, otherwise
-     *             <code>false</code>.
+     * <code>false</code>.
      */
     public boolean openUrl(String url) {
         if (IS_SERVICE)
@@ -385,7 +380,7 @@ public class UrlLauncher implements ClientApp {
      * @param  url     The URL to open.
      * @param  browser The browser to use. See above for quoting rules.
      * @return         <code>true</code> if the operation was successful,
-     *                 otherwise <code>false</code>.
+     * otherwise <code>false</code>.
      */
     public boolean openUrl(String url, String browser) {
         if (IS_SERVICE)
@@ -403,18 +398,18 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  Parse args into arguments
-     *  separated by spaces or tabs.
-     *  %1, if present, will be replaced with the url,
-     *  otherwise it will be added as the last argument.
-     *  Arguments may be surrounded by single or double quotes if
-     *  they contain spaces or tabs.
-     *  There is no mechanism to escape quotes or other chars with backslashes.
-     *  Adapted from i2ptunnel SSLHelper.
+     * Parse args into arguments
+     * separated by spaces or tabs.
+     * %1, if present, will be replaced with the url,
+     * otherwise it will be added as the last argument.
+     * Arguments may be surrounded by single or double quotes if
+     * they contain spaces or tabs.
+     * There is no mechanism to escape quotes or other chars with backslashes.
+     * Adapted from i2ptunnel SSLHelper.
      *
-     *  @return param args non-null
-     *  @return non-null
-     *  @since 0.9.38
+     * @return param args non-null
+     * @return non-null
+     * @since 0.9.38
      */
     private static String[] parseArgs(String args, String url) {
         List<String> argList = new ArrayList<>(4);
@@ -484,10 +479,10 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
-     *  As of 0.9.46, stops immediately if JVM is a Windows or Linux Service.
+     * ClientApp interface
+     * As of 0.9.46, stops immediately if JVM is a Windows or Linux Service.
      *
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     @Override
     public void startup() {
@@ -547,14 +542,14 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     private void changeState(ClientAppState state) {
         changeState(state, null);
     }
 
     /**
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;
@@ -563,8 +558,8 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  ClientApp interface
-     *  @since 0.9.18
+     * ClientApp interface
+     * @since 0.9.18
      */
     @Override
     public void shutdown(String[] args) {
@@ -573,8 +568,8 @@ public class UrlLauncher implements ClientApp {
     }
 
     /**
-     *  Obsolete, now uses ClientApp interface
-     *  @param args URL(s) to open
+     * Obsolete, now uses ClientApp interface
+     * @param args URL(s) to open
      */
     public static void main(String[] args) {
         UrlLauncher launcher = new UrlLauncher();

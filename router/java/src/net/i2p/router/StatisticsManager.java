@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.Writer;
@@ -26,7 +25,6 @@ import net.i2p.util.Log;
 
 /**
  * Collects and publishes router performance statistics to the network database. Provides bandwidth, tunnel, and peer metrics for router capability advertising.
- *
  */
 public class StatisticsManager {
     private final Log _log;
@@ -59,9 +57,9 @@ public class StatisticsManager {
     }
 
     /**
-     *  Retrieve a snapshot of the statistics that should be published.
+     * Retrieve a snapshot of the statistics that should be published.
      *
-     *  This includes all standard options (as of 0.9.24, network ID and caps)
+     * This includes all standard options (as of 0.9.24, network ID and caps)
      */
     public Properties publishStatistics() {
         // if hash is null, will be caught in fkc.sign()
@@ -69,12 +67,12 @@ public class StatisticsManager {
     }
 
     /**
-     *  Retrieve a snapshot of the statistics that should be published.
+     * Retrieve a snapshot of the statistics that should be published.
      *
-     *  This includes all standard options (as of 0.9.24, network ID and caps)
+     * This includes all standard options (as of 0.9.24, network ID and caps)
      *
-     *  @param h current router hash, non-null
-     *  @since 0.9.24
+     * @param h current router hash, non-null
+     * @since 0.9.24
      */
     public Properties publishStatistics(Hash h) {
         Properties stats = new Properties();
@@ -147,8 +145,8 @@ public class StatisticsManager {
      * @param stats the properties to add to
      * @param selectedPeriods the periods to include, or null for all
      * @param fudgeQuantity the data being published in this stat is too sensitive to, uh
-     *                      publish, so we're kludge the quantity (allowing the fairly safe
-     *                      publication of the average values
+     * publish, so we're kludge the quantity (allowing the fairly safe
+     * publication of the average values
      */
     private void includeRate(String rateName, Properties stats, long[] selectedPeriods,
                              boolean fudgeQuantity) {
@@ -176,20 +174,20 @@ public class StatisticsManager {
     }
 
     /**
-     *  Simple format, only what stats.i2p needs:
-     *<pre>
+     * Simple format, only what stats.i2p needs:
+     * <pre>
      *  average
-     *</pre>
+     * </pre>
      *
-     *  Previous format:
-     *<pre>
+     * Previous format:
+     * <pre>
      *  avg;extreme avg;pct of lifetime avg;
      *  if lifetime total event time greater than zero:
      *       lastEventSaturation;lastSaturationLimit;extremeEventSaturation;extremeSaturationLimit;
      *  event count;
      *  if number of periods greater than zero:
      *       avg freq;exteremeEventCount;lifetimeEventCount;
-     *</pre>
+     * </pre>
      */
     private String renderRate(Rate rate, boolean fudgeQuantity) {
         if (SIMPLE_STATS)
@@ -225,8 +223,8 @@ public class StatisticsManager {
     private static final String[] tunnelStats = { "Expire", "Reject", "Success" };
 
     /**
-     *  Add tunnel build rates with some mods to hide absolute quantities
-     *  In particular, report counts normalized to 100 (i.e. a percentage)
+     * Add tunnel build rates with some mods to hide absolute quantities
+     * In particular, report counts normalized to 100 (i.e. a percentage)
      */
     private void includeTunnelRates(String tunnelType, Properties stats, long selectedPeriod) {
         long totalEvents = 0;
@@ -252,12 +250,12 @@ public class StatisticsManager {
     }
 
     /**
-     *  Simple format, only what stats.i2p needs:
-     *<pre>
+     * Simple format, only what stats.i2p needs:
+     * <pre>
      *  0;0;0;percent or event count
-     *</pre>
+     * </pre>
      *
-     *  Previous format: see above
+     * Previous format: see above
      */
     private String renderRate(Rate rate, double fudgeQuantity) {
         if (SIMPLE_STATS)

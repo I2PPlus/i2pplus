@@ -54,9 +54,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private final byte[] _rcvHeaderEncryptKey2;
     private final SSU2Bitfield _receivedMessages;
     /**
-     *  PS1 has _ackedMessages which is a map of message ID to sequence number.
-     *  Here we have the reverse, a bitfield of acked packet (sequence) numbers,
-     *  and map of unacked packet (sequence) numbers to the fragments that packet contained.
+     * PS1 has _ackedMessages which is a map of message ID to sequence number.
+     * Here we have the reverse, a bitfield of acked packet (sequence) numbers,
+     * and map of unacked packet (sequence) numbers to the fragments that packet contained.
      */
     private final SSU2Bitfield _ackedMessages;
     private final ConcurrentHashMap<Long, List<PacketBuilder2.Fragment>> _sentMessages;
@@ -64,9 +64,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     private long _sentMessagesLastExpired;
     /**
-     *  Incremental expiry cursor over a snapshot of _sentMessages, so a tick
-     *  examines a bounded number of entries instead of the whole map.  Only
-     *  touched from the PacketPusher thread via finishAndAllocate().
+     * Incremental expiry cursor over a snapshot of _sentMessages, so a tick
+     * examines a bounded number of entries instead of the whole map.  Only
+     * touched from the PacketPusher thread via finishAndAllocate().
      */
     private final ArrayDeque<Map.Entry<Long, List<PacketBuilder2.Fragment>>> _sentMessagesExpiryCursor = new ArrayDeque<>();
     private volatile byte[] _ourIP;
@@ -85,9 +85,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Decision of the connection-migration classifier for MIGRATION_STATE_PENDING.
+     * Decision of the connection-migration classifier for MIGRATION_STATE_PENDING.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     enum MigrationPendingDecision {
         /** packet from the current (pre-migration) remote host, cancel the migration */
@@ -185,9 +185,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  If inbound, caller MUST immediately call setWeRelayToThemAs() (if nonzero) and sendAck0().
+     * If inbound, caller MUST immediately call setWeRelayToThemAs() (if nonzero) and sendAck0().
      *
-     *  @param rtt from the EstablishState, or 0 if not available
+     * @param rtt from the EstablishState, or 0 if not available
      */
     public PeerState2(RouterContext ctx, UDPTransport transport,
                      InetSocketAddress remoteAddress, Hash remotePeer, boolean isInbound, int rtt,
@@ -213,10 +213,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Send immediate ACK 0 of Session Confirmed. Inbound only.
-     *  Bundle relay tag if requested, see InboundEstablishState2.
+     * Send immediate ACK 0 of Session Confirmed. Inbound only.
+     * Bundle relay tag if requested, see InboundEstablishState2.
      *
-     *  @since 0.9.62
+     * @since 0.9.62
      */
     void sendAck0() {
         if (!_isInbound) {return;}
@@ -245,12 +245,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public int getVersion() {return 2;}
 
     /**
-     *  How much payload data can we shove in there?
-     *  This is 5 bytes too low for first or only fragment,
-     *  because the 9 byte I2NP header is included in that fragment.
-     *  Does NOT leave any room for acks with a full-size fragment.
+     * How much payload data can we shove in there?
+     * This is 5 bytes too low for first or only fragment,
+     * because the 9 byte I2NP header is included in that fragment.
+     * Does NOT leave any room for acks with a full-size fragment.
      *
-     *  @return MTU - 68 (IPv4), MTU - 88 (IPv6)
+     * @return MTU - 68 (IPv4), MTU - 88 (IPv6)
      */
     @Override
     int fragmentSize() {
@@ -262,12 +262,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Packet overhead
-     *  This is 5 bytes too high for first or only fragment,
-     *  because the 9 byte I2NP header is included in that fragment.
-     *  Does NOT leave any room for acks with a full-size fragment.
+     * Packet overhead
+     * This is 5 bytes too high for first or only fragment,
+     * because the 9 byte I2NP header is included in that fragment.
+     * Does NOT leave any room for acks with a full-size fragment.
      *
-     *  @return 68 (IPv4), 88 (IPv6)
+     * @return 68 (IPv4), 88 (IPv6)
      */
     @Override
     int fragmentOverhead() {
@@ -278,7 +278,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  All acks have been sent.
+     * All acks have been sent.
      */
     @Override
     void clearWantedACKSendSince() {
@@ -287,7 +287,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Overridden to use our version of ACKTimer
+     * Overridden to use our version of ACKTimer
      */
     @Override
     protected synchronized void messagePartiallyReceived(long now) {
@@ -298,24 +298,24 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Expire complete or timed-out entries from _sentMessages, walking an
-     *  incremental cursor instead of rescanning the whole map and every fragment
-     *  list on every tick.
+     * Expire complete or timed-out entries from _sentMessages, walking an
+     * incremental cursor instead of rescanning the whole map and every fragment
+     * list on every tick.
      *
-     *  <p>The cursor holds a snapshot of the map taken when it runs dry;
-     *  entries acked in the meantime are skipped by the identity check, and
-     *  newly added entries are picked up on the next refill.  An entry is
-     *  removed only when every fragment's message is complete or expired, so it
-     *  never expires early.  One pass covers the whole cursor, so retention
-     *  matches the old full scan's single tick.
+     * <p>The cursor holds a snapshot of the map taken when it runs dry;
+     * entries acked in the meantime are skipped by the identity check, and
+     * newly added entries are picked up on the next refill.  An entry is
+     * removed only when every fragment's message is complete or expired, so it
+     * never expires early.  One pass covers the whole cursor, so retention
+     * matches the old full scan's single tick.
      *
-     *  <p>Only called from {@link #finishAndAllocate} on the PacketPusher
-     *  thread, so the cursor needs no synchronization.  Failure detection is
-     *  unaffected: that is the "ahead &gt; BITFIELD_SIZE" check in
-     *  {@link #finishAndAllocate}, which runs on its own schedule.
+     * <p>Only called from {@link #finishAndAllocate} on the PacketPusher
+     * thread, so the cursor needs no synchronization.  Failure detection is
+     * unaffected: that is the "ahead &gt; BITFIELD_SIZE" check in
+     * {@link #finishAndAllocate}, which runs on its own schedule.
      *
-     *  @param now current time, for the expiry test
-     *  @since 0.9.71+
+     * @param now current time, for the expiry test
+     * @since 0.9.71+
      */
     private void expireSentMessages(long now) {
         ArrayDeque<Map.Entry<Long, List<PacketBuilder2.Fragment>>> cursor = _sentMessagesExpiryCursor;
@@ -352,13 +352,13 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Single-pass combined cleanup + send allocation, overriding the base class
-     *  to incorporate SSU2-specific _sentMessages cleanup and SessionConfirmed
-     *  retransmit logic.
+     * Single-pass combined cleanup + send allocation, overriding the base class
+     * to incorporate SSU2-specific _sentMessages cleanup and SessionConfirmed
+     * retransmit logic.
      *
-     *  @param now current time
-     *  @return messages to send, or null if none ready
-     *  @since 0.9.70+
+     * @param now current time
+     * @return messages to send, or null if none ready
+     * @since 0.9.70+
      */
     @Override
     List<OutboundMessageState> finishAndAllocate(long now) {
@@ -394,11 +394,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Only call for outbound, if we don't have ack 0 yet.
+     * Only call for outbound, if we don't have ack 0 yet.
      *
-     *  @param force ignore timer, always send
-     *  @return success, false if total fail
-     *  @since 0.9.55 split out from above
+     * @param force ignore timer, always send
+     * @return success, false if total fail
+     * @since 0.9.55 split out from above
      */
     private boolean checkRetransmitSessionConfirmed(long now, boolean force) {
         boolean rv = checkRetransmitSessionConfirmed2(now, force);
@@ -416,11 +416,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Only call for outbound, if we don't have ack 0 yet.
+     * Only call for outbound, if we don't have ack 0 yet.
      *
-     *  @param force ignore timer, always send
-     *  @return success, false if total fail
-     *  @since 0.9.65 split out from above
+     * @param force ignore timer, always send
+     * @return success, false if total fail
+     * @since 0.9.65 split out from above
      */
     private boolean checkRetransmitSessionConfirmed2(long now, boolean force) {
         UDPPacket[] packets = null;
@@ -455,7 +455,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * Next outbound packet number,
      * starts at 1 for Alice (0 is Session Confirmed) and 0 for Bob
      * @return the next packet number
-     * @since public since 0.9.57 for SSU2Sender interface only
      */
     public long getNextPacketNumber() throws IOException {
          if (_dead) {
@@ -478,13 +477,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * For PeerStateDestroyed only, after we are dead.
      *
      * @return the send conn i d
-     * @since public since 0.9.57 for SSU2Sender interface only
      */
     public long getSendConnID() {return _sendConnID;}
     /**
      * Caller must sync on returned object when encrypting
      * @return the send cipher
-     * @since public since 0.9.57 for SSU2Sender interface only
      */
     public CipherState getSendCipher() {return _sendCha;}
     /**
@@ -492,7 +489,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * Caller must sync on returned object when encrypting.
      *
      * @return the send header encrypt key1
-     * @since public since 0.9.57 for SSU2Sender interface only
      */
     public byte[] getSendHeaderEncryptKey1() {return _sendHeaderEncryptKey1;}
     /**
@@ -500,7 +496,6 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * Caller must sync on returned object when encrypting.
      *
      * @return the send header encrypt key2
-     * @since public since 0.9.57 for SSU2Sender interface only
      */
     public byte[] getSendHeaderEncryptKey2() {return _sendHeaderEncryptKey2;}
     /**
@@ -511,18 +506,18 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /// end SSU2Sender interface ///
 
     /**
-     *  The connection ID we expect to receive packets with.
-     *  @return the receive connection ID
+     * The connection ID we expect to receive packets with.
+     * @return the receive connection ID
      */
     long getRcvConnID() {return _rcvConnID;}
     /**
-     *  The first header encryption key for received packets.
-     *  @return the receive header key 1
+     * The first header encryption key for received packets.
+     * @return the receive header key 1
      */
     byte[] getRcvHeaderEncryptKey1() {return _rcvHeaderEncryptKey1;}
     /**
-     *  The second header encryption key for received packets.
-     *  @return the receive header key 2
+     * The second header encryption key for received packets.
+     * @return the receive header key 2
      */
     byte[] getRcvHeaderEncryptKey2() {return _rcvHeaderEncryptKey2;}
 
@@ -540,31 +535,30 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     CipherState getRcvCipher() {return _rcvCha;}
 
     /**
-     *  For initialization by IES2/OES2 only.
+     * For initialization by IES2/OES2 only.
      */
     void setOurAddress(byte[] ip, int port) {_ourIP = ip; _ourPort = port;}
 
     /**
-     *  As received in the Address Block in the handshake,
-     *  or subsequently in the data phase.
-     *  Unvalidated.
-     *  Also, if a transient IPv6 address, may be deprecated and not match
-     *  our current non-deprecated IPv6 address.
+     * As received in the Address Block in the handshake,
+     * or subsequently in the data phase.
+     * Unvalidated.
+     * Also, if a transient IPv6 address, may be deprecated and not match
+     * our current non-deprecated IPv6 address.
      */
     byte[] getOurIP() {return _ourIP;}
 
 
     /**
-     *  As received in the Address Block in the handshake,
-     *  or subsequently in the data phase.
-     *  Unvalidated.
+     * As received in the Address Block in the handshake,
+     * or subsequently in the data phase.
+     * Unvalidated.
      */
     int getOurPort() {return _ourPort;}
 
     /**
      * Bitfield of messages received from the peer.
      * @return the received messages
-     * @since public since 0.9.57 for SSU2Sender interface only
      */
     public SSU2Bitfield getReceivedMessages() {
         synchronized(this) {
@@ -577,25 +571,24 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * Bitfield of messages acknowledged to the peer.
      * @return the acked messages
-     * @since public since 0.9.57 for SSU2Sender interface only
      */
     public SSU2Bitfield getAckedMessages() {return _ackedMessages;}
 
     /**
-     *  Receives and decrypts the given packet.
+     * Receives and decrypts the given packet.
      *
-     *  @param packet fully encrypted, header and body decryption will be done here
+     * @param packet fully encrypted, header and body decryption will be done here
      */
     void receivePacket(UDPPacket packet) {
         receivePacket(packet.getRemoteHost(), packet);
     }
 
     /**
-     *  From different than expected source IP/port
+     * From different than expected source IP/port
      *
-     *  @param from source address
-     *  @param packet fully encrypted, header and body decryption will be done here
-     *  @since 0.9.55
+     * @param from source address
+     * @param packet fully encrypted, header and body decryption will be done here
+     * @since 0.9.55
      */
     void receivePacket(RemoteHostId from, UDPPacket packet) {
         DatagramPacket dpacket = packet.getPacket();
@@ -698,24 +691,24 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Connection migration attempt while in MIGRATION_STATE_NONE.
+     * Connection migration attempt while in MIGRATION_STATE_NONE.
      *
-     *  A packet from a host different from the current remote host starts a
-     *  migration only when it passes the pure {@link #shouldInitiateMigration}
-     *  classifier (IP family match, highest-set ordering rule, validated source).
-     *  Path Response processing happens earlier in receivePacket, so a completed
-     *  migration has already reset the state before this runs. Sending is limited
-     *  only while a challenge is actually outstanding; a refused migration must
-     *  not freeze the verified path.
+     * A packet from a host different from the current remote host starts a
+     * migration only when it passes the pure {@link #shouldInitiateMigration}
+     * classifier (IP family match, highest-set ordering rule, validated source).
+     * Path Response processing happens earlier in receivePacket, so a completed
+     * migration has already reset the state before this runs. Sending is limited
+     * only while a challenge is actually outstanding; a refused migration must
+     * not freeze the verified path.
      *
-     *  Must be called with {@code _migrationLock} held.
+     * Must be called with {@code _migrationLock} held.
      *
-     *  @param from source address of the received packet, or null
-     *  @param n packet (sequence) number of the received packet
-     *  @param packet the received packet (source address used for the challenge)
-     *  @param shouldLogDebug if true, debug output is wanted
-     *  @return true if sending must be limited while the connection is migrating
-     *  @since 0.9.71+
+     * @param from source address of the received packet, or null
+     * @param n packet (sequence) number of the received packet
+     * @param packet the received packet (source address used for the challenge)
+     * @param shouldLogDebug if true, debug output is wanted
+     * @return true if sending must be limited while the connection is migrating
+     * @since 0.9.71+
      */
     private boolean handleMigrationNone(RemoteHostId from, long n, UDPPacket packet, boolean shouldLogDebug) {
         boolean limitSending = false;
@@ -751,19 +744,19 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Connection migration attempt while in MIGRATION_STATE_PENDING.
+     * Connection migration attempt while in MIGRATION_STATE_PENDING.
      *
-     *  The packet source is classified by the pure {@link #decidePendingMigration}
-     *  method; this method applies the side effects (cancel/timeout state reset,
-     *  path-challenge retransmission with exponential backoff).
+     * The packet source is classified by the pure {@link #decidePendingMigration}
+     * method; this method applies the side effects (cancel/timeout state reset,
+     * path-challenge retransmission with exponential backoff).
      *
-     *  Must be called with {@code _migrationLock} held.
+     * Must be called with {@code _migrationLock} held.
      *
-     *  @param from source address of the received packet, or null
-     *  @param packet the received packet (source address used for retransmission)
-     *  @param shouldLogDebug if true, debug output is wanted
-     *  @return true if sending must be limited while the connection is migrating
-     *  @since 0.9.71+
+     * @param from source address of the received packet, or null
+     * @param packet the received packet (source address used for retransmission)
+     * @param shouldLogDebug if true, debug output is wanted
+     * @return true if sending must be limited while the connection is migrating
+     * @since 0.9.71+
      */
     private boolean handleMigrationPending(RemoteHostId from, UDPPacket packet, boolean shouldLogDebug) {
         boolean limitSending = false;
@@ -814,39 +807,39 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Decide whether a packet from a new source address may initiate a
-     *  connection migration while the connection is in MIGRATION_STATE_NONE.
+     * Decide whether a packet from a new source address may initiate a
+     * connection migration while the connection is in MIGRATION_STATE_NONE.
      *
-     *  The source IP family must match the current remote host, the packet must
-     *  be the highest sequence received so far (QUIC ordering rule, protects
-     *  against reordered packets driving a migration to an attacker-chosen
-     *  address), and the source must pass both port and address validation.
+     * The source IP family must match the current remote host, the packet must
+     * be the highest sequence received so far (QUIC ordering rule, protects
+     * against reordered packets driving a migration to an attacker-chosen
+     * address), and the source must pass both port and address validation.
      *
-     *  @param ipFamilyMatch true if the source IP family matches the current remote host
-     *  @param isHighestSet true if the packet is the highest sequence received so far
-     *  @param validPort true if the source port is valid
-     *  @param validIP true if the source IP passes transport address validation
-     *  @return a boolean indicating whether to start the migration challenge
-     *  @since 0.9.71+
+     * @param ipFamilyMatch true if the source IP family matches the current remote host
+     * @param isHighestSet true if the packet is the highest sequence received so far
+     * @param validPort true if the source port is valid
+     * @param validIP true if the source IP passes transport address validation
+     * @return a boolean indicating whether to start the migration challenge
+     * @since 0.9.71+
      */
     static boolean shouldInitiateMigration(boolean ipFamilyMatch, boolean isHighestSet, boolean validPort, boolean validIP) {
         return ipFamilyMatch && isHighestSet && validPort && validIP;
     }
 
     /**
-     *  Classify what to do with a packet received while the connection is in
-     *  MIGRATION_STATE_PENDING. Pure decision; side effects are applied by the
-     *  caller. Order of precedence: the current remote host wins (cancel), the
-     *  timeout/send-budget check wins over retransmission.
+     * Classify what to do with a packet received while the connection is in
+     * MIGRATION_STATE_PENDING. Pure decision; side effects are applied by the
+     * caller. Order of precedence: the current remote host wins (cancel), the
+     * timeout/send-budget check wins over retransmission.
      *
-     *  @param now current time ms
-     *  @param fromIsRemote true if the source is the current (pre-migration) remote host
-     *  @param fromIsPending true if the source is the pending migration target
-     *  @param migrationStarted ms at which the migration was started
-     *  @param sendCount number of path challenges already sent
-     *  @param nextSendTime ms at which the next retransmission is due
-     *  @return the pending-migration action to take
-     *  @since 0.9.71+
+     * @param now current time ms
+     * @param fromIsRemote true if the source is the current (pre-migration) remote host
+     * @param fromIsPending true if the source is the pending migration target
+     * @param migrationStarted ms at which the migration was started
+     * @param sendCount number of path challenges already sent
+     * @param nextSendTime ms at which the next retransmission is due
+     * @return the pending-migration action to take
+     * @since 0.9.71+
      */
     static MigrationPendingDecision decidePendingMigration(long now, boolean fromIsRemote, boolean fromIsPending,
                                                            long migrationStarted, long sendCount, long nextSendTime) {
@@ -861,8 +854,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Caller must synch on _migrationState
-     *  @since 0.9.56
+     * Caller must synch on _migrationState
+     * @since 0.9.56
      */
     private void sendPathChallenge(InetAddress toIP, int toPort) {
         if (shouldLogDebug) {
@@ -1324,8 +1317,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /////////////////////////////////////////////////////////
 
     /**
-     *  Caller should sync; UDPTransport must remove and add to peersByRemoteHost map
-     *  @since 0.9.56
+     * Caller should sync; UDPTransport must remove and add to peersByRemoteHost map
+     * @since 0.9.56
      */
     void changeAddress(RemoteHostId id) {
         _remoteHostId = id;
@@ -1333,8 +1326,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Do what MessageReceiver does, but inline and for SSU2.
-     *  Will always be more than one fragment.
+     * Do what MessageReceiver does, but inline and for SSU2.
+     * Will always be more than one fragment.
      */
     private void receiveMessage(InboundMessageState state) {
         int sz = state.getCompleteSize();
@@ -1371,12 +1364,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Record the mapping of packet number to what fragments were in it,
-     *  so we can process acks.
+     * Record the mapping of packet number to what fragments were in it,
+     * so we can process acks.
      *
-     *  @param length including ip/udp header, for logging only
-     *  @since public since 0.9.57 for SSU2Sender interface only
-     *
+     * @param length including ip/udp header, for logging only
      */
     public void fragmentsSent(long pktNum, int length, List<PacketBuilder2.Fragment> fragments) {
         List<PacketBuilder2.Fragment> old = _sentMessages.putIfAbsent(Long.valueOf(pktNum), fragments);
@@ -1391,8 +1382,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  Callback from SSU2Bitfield.forEachAndNot().
-     *  A new ack was received.
+     * Callback from SSU2Bitfield.forEachAndNot().
+     * A new ack was received.
      */
     public void bitSet(long pktNum) {
         if (pktNum == 0 && !_isInbound) {
@@ -1498,19 +1489,19 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     *  A timer to send an ack-only packet.
+     * A timer to send an ack-only packet.
      */
     private class ACKTimer extends SimpleTimer2.TimedEvent {
 
         /**
-         *  Caller must schedule
+         * Caller must schedule
          */
         public ACKTimer() {super(_context.simpleTimer2());}
 
         /**
-         *  Ack soon, based on the current RTT
+         * Ack soon, based on the current RTT
          *
-         *  @since 0.9.56
+         * @since 0.9.56
          */
         public void schedule() {
             long delta = Math.max(10, Math.min(_rtt/6, getAckFrequency()));
@@ -1521,9 +1512,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
 
         /**
-         *  Ack almost immediately
+         * Ack almost immediately
          *
-         *  @since 0.9.56
+         * @since 0.9.56
          */
         public void scheduleImmediate() {
             _wantACKSendSince = _context.clock().now();
@@ -1536,9 +1527,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         }
 
         /**
-         *  Send an ack-only packet, unless acks were already sent
-         *  as indicated by _wantACKSendSince == 0.
-         *  Will not requeue unless the acks don't all fit (unlikely).
+         * Send an ack-only packet, unless acks were already sent
+         * as indicated by _wantACKSendSince == 0.
+         * Will not requeue unless the acks don't all fit (unlikely).
          */
         public void timeReached() {
             synchronized(PeerState2.this) {

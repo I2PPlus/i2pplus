@@ -10,13 +10,13 @@ import net.i2p.stat.RateSummaryListener;
 import org.junit.Test;
 
 /**
- *  Tests for the graph write-stall decision logic: which listeners are judged stalled and
- *  why, which of them get rebuilt, and how the diagnosis is worded in the log.
+ * Tests for the graph write-stall decision logic: which listeners are judged stalled and
+ * why, which of them get rebuilt, and how the diagnosis is worded in the log.
  *
- *  <p>The production symptom this pins down was 25 of 25 listeners reported as "not written
- *  within 2x their rate period" with an age growing 90s per report and nothing else logged.
- *  That single number hid three unrelated faults, so the rules that separate them are the
- *  point of these tests. Everything under test is static and free of router context.
+ * <p>The production symptom this pins down was 25 of 25 listeners reported as "not written
+ * within 2x their rate period" with an age growing 90s per report and nothing else logged.
+ * That single number hid three unrelated faults, so the rules that separate them are the
+ * point of these tests. Everything under test is static and free of router context.
  */
 public class GraphStallDecisionTest {
 
@@ -40,8 +40,8 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  The 2x boundary is exclusive: at exactly twice the period the next sample is still
-     *  merely due, so nothing is reported. One millisecond later it is a genuine stall.
+     * The 2x boundary is exclusive: at exactly twice the period the next sample is still
+     * merely due, so nothing is reported. One millisecond later it is a genuine stall.
      */
     @Test
     public void testTwoPeriodBoundaryIsExclusive() {
@@ -53,8 +53,8 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  Registered and previously written, but writes stopped: the ambiguous case, and the
-     *  one that has to report the real write age rather than the instance age.
+     * Registered and previously written, but writes stopped: the ambiguous case, and the
+     * one that has to report the real write age rather than the instance age.
      */
     @Test
     public void testStoppedWritesAreDistinctFromNeverWritten() {
@@ -63,9 +63,9 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  The lost-registration fault (A2): still attached with an open RRD, so it renders and
-     *  is not detached, but the Rate points elsewhere and it can never be called again.
-     *  Reported with no age threshold at all - the fault exists the moment ownership is lost.
+     * The lost-registration fault (A2): still attached with an open RRD, so it renders and
+     * is not detached, but the Rate points elsewhere and it can never be called again.
+     * Reported with no age threshold at all - the fault exists the moment ownership is lost.
      */
     @Test
     public void testUnregisteredIsReportedImmediatelyDespiteFreshWrite() {
@@ -74,8 +74,8 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  An unregistered listener is reported as unregistered even when it has also never
-     *  written: the registration is the actionable cause, and re-arming fixes both symptoms.
+     * An unregistered listener is reported as unregistered even when it has also never
+     * written: the registration is the actionable cause, and re-arming fixes both symptoms.
      */
     @Test
     public void testUnregisteredOutranksNeverWritten() {
@@ -84,9 +84,9 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  Never written since the listener attached is its own cause, and the age that matters is the
-     *  instance age. Until 2x the period has elapsed since the listener attached there is nothing to
-     *  judge, so a startup window is not mistaken for a stall.
+     * Never written since the listener attached is its own cause, and the age that matters is the
+     * instance age. Until 2x the period has elapsed since the listener attached there is nothing to
+     * judge, so a startup window is not mistaken for a stall.
      */
     @Test
     public void testNeverWrittenUsesInstanceAgeAndStartupGrace() {
@@ -107,8 +107,8 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  Sub-minute periods are floored, so a fast rate that coalesces every 250ms is judged
-     *  against 60s rather than 500ms and is not flagged from its first tick.
+     * Sub-minute periods are floored, so a fast rate that coalesces every 250ms is judged
+     * against 60s rather than 500ms and is not flagged from its first tick.
      */
     @Test
     public void testMinimumPeriodFloor() {
@@ -160,10 +160,10 @@ public class GraphStallDecisionTest {
     ///////////// refineForIdleRate
 
     /**
-     *  A rate that never coalesced since attach had no sample to write, so nothing is lost.
+     * A rate that never coalesced since attach had no sample to write, so nothing is lost.
      *
-     *  <p>This is the split that stops the false alarm: a stat nothing in the router ever
-     *  updates produced a permanent, unfixable ERROR claiming its graphs were stalled.
+     * <p>This is the split that stops the false alarm: a stat nothing in the router ever
+     * updates produced a permanent, unfixable ERROR claiming its graphs were stalled.
      */
     @Test
     public void testIdleRateIsNotAFault() {
@@ -204,8 +204,8 @@ public class GraphStallDecisionTest {
     ///////////// CauseTally names
 
     /**
-     *  A count with no names leaves the operator to match every rate on the page against
-     *  the stalled graphs by hand, which is the work the report exists to save.
+     * A count with no names leaves the operator to match every rate on the page against
+     * the stalled graphs by hand, which is the work the report exists to save.
      */
     @Test
     public void testNamedTallyListsTheOffendingStats() {
@@ -248,8 +248,8 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  The A2 defect in one assertion: a teardown that is not the registered instance must
-     *  not clear the registration, or the live listener is silenced with no error anywhere.
+     * The A2 defect in one assertion: a teardown that is not the registered instance must
+     * not clear the registration, or the live listener is silenced with no error anywhere.
      */
     @Test
     public void testOwnsRegistrationIsIdentityNotEquality() {
@@ -332,9 +332,9 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  A listener that has never written is quoted with its instance age, so the report
-     *  cannot be read as "the last write was 30 minutes ago" for a graph that never wrote
-     *  at all.
+     * A listener that has never written is quoted with its instance age, so the report
+     * cannot be read as "the last write was 30 minutes ago" for a graph that never wrote
+     * at all.
      */
     @Test
     public void testNeverWrittenReportsInstanceAge() {
@@ -379,8 +379,8 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  End to end over the decision path: a mixed listener set must be tallied into the
-     *  three causes and named in the line, which is the whole point of the rewrite.
+     * End to end over the decision path: a mixed listener set must be tallied into the
+     * three causes and named in the line, which is the whole point of the rewrite.
      */
     @Test
     public void testMixedListenerSetProducesNamedCauses() {
@@ -413,8 +413,8 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  The per-listener attribution the sync task performs, mirroring its loop over
-     *  {@link GraphGenerator#classifyStaleness} so the tally wiring is covered too.
+     * The per-listener attribution the sync task performs, mirroring its loop over
+     * {@link GraphGenerator#classifyStaleness} so the tally wiring is covered too.
      */
     private static final class Tallies {
         final CauseTally neverWritten = new CauseTally(StaleCause.NEVER_WRITTEN);

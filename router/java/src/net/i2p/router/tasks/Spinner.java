@@ -10,10 +10,10 @@ package net.i2p.router.tasks;
  *
  * <strong>Purpose:</strong>
  * <ul>
- *   <li>Prevents JVM from exiting before shutdown tasks finish</li>
- *   <li>Provides 5-minute window for complete cleanup</li>
- *   <li>Ensures file operations and network graceful shutdown complete</li>
- *   <li>Allows time for shutdown hooks to execute fully</li>
+ * <li>Prevents JVM from exiting before shutdown tasks finish</li>
+ * <li>Provides 5-minute window for complete cleanup</li>
+ * <li>Ensures file operations and network graceful shutdown complete</li>
+ * <li>Allows time for shutdown hooks to execute fully</li>
  * </ul>
  *
  * As a non-daemon thread, the JVM will not terminate until this
@@ -21,7 +21,7 @@ package net.i2p.router.tasks;
  * especially important for ensuring router.info files are written
  * correctly and network connections are closed gracefully.
  *
- *  @since 0.8.12 moved from Router.java
+ * @since 0.8.12 moved from Router.java
  */
 public class Spinner extends Thread {
 

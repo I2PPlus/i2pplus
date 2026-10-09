@@ -34,9 +34,9 @@ public interface CPUInfo
     public String getCPUModelString() throws UnknownCPUException;
 
 /**
-     * Checks if CPU supports the MMX instruction set.
-     * @return true iff CPU supports the MMX instruction set.
-     */
+ * Checks if CPU supports the MMX instruction set.
+ * @return true iff CPU supports the MMX instruction set.
+ */
     public boolean hasMMX();
 
     /**

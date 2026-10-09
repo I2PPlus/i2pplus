@@ -19,7 +19,6 @@ import net.i2p.util.SimpleByteCache;
  * See FragmentHandler Javadoc for tunnel message fragment format
  *
  * Not instantiated directly except in unit tests; see BatchedPreprocessor
- *
  */
 class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     /** The router context */
@@ -41,9 +40,9 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     protected static final ByteCache _dataCache = ByteCache.getInstance(512, PREPROCESSED_SIZE);
 
     /**
-     *  Binds the router context and initializes the log.
+     * Binds the router context and initializes the log.
      *
-     *  @param ctx the router context
+     * @param ctx the router context
      */
     public TrivialPreprocessor(RouterContext ctx) {
         _context = ctx;
@@ -122,9 +121,9 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     }
 
     /**
-     *  Efficiently fill with nonzero random data
-     *  Don't waste too much entropy or call random() too often.
-     *  @since 0.8.5
+     * Efficiently fill with nonzero random data
+     * Don't waste too much entropy or call random() too often.
+     * @since 0.8.5
      */
     private void fillRandomNonZero(byte[] b, int off, int len) {
         // get about as much as we think we will need, overestimate some
@@ -276,13 +275,13 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     }
 
     /**
-     *  Calculate the size of the instructions for a pending message.
+     * Calculate the size of the instructions for a pending message.
      *
-     *  @return generally 3 or 35 or 39 for first fragment, 7 for subsequent fragments.
+     * @return generally 3 or 35 or 39 for first fragment, 7 for subsequent fragments.
      *
-     *  Does NOT include 4 for the message ID if the message will be fragmented;
-     *  call getInstructionAugmentationSize() for that.
-     *  @param msg the pending gateway message
+     * Does NOT include 4 for the message ID if the message will be fragmented;
+     * call getInstructionAugmentationSize() for that.
+     * @param msg the pending gateway message
      */
     protected static int getInstructionsSize(PendingGatewayMessage msg) {
         if (msg.getFragmentNumber() > 0)
@@ -302,12 +301,12 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     }
 
     /**
-     *  Get the augmentation size for instructions if fragmentation is needed.
+     * Get the augmentation size for instructions if fragmentation is needed.
      *
-     *  @param msg the pending gateway message
-     *  @param offset the current offset
-     *  @param instructionsSize the current instructions size
-     *  @return 0 or 4
+     * @param msg the pending gateway message
+     * @param offset the current offset
+     * @param instructionsSize the current instructions size
+     * @return 0 or 4
      */
     protected static int getInstructionAugmentationSize(PendingGatewayMessage msg, int offset, int instructionsSize) {
         int payloadLength = msg.getData().length - msg.getOffset();

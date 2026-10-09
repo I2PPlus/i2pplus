@@ -10,15 +10,15 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  The accepted-first-hop tier log is rate limited per tier, and the limiter
- *  has to behave correctly for a key it has never seen.
+ * The accepted-first-hop tier log is rate limited per tier, and the limiter
+ * has to behave correctly for a key it has never seen.
  *
- *  <p>This exists because the limiter was first written with
- *  {@code ConcurrentHashMap.replace(key, old, new)}, which is a documented
- *  no-op returning {@code false} when the key is absent.  The interval check
- *  passed, the replace failed, and the line never fired for any tier — so the
- *  instrumentation silently produced nothing while looking correct.  The
- *  deployed build carried that defect and the key metric came back empty.
+ * <p>This exists because the limiter was first written with
+ * {@code ConcurrentHashMap.replace(key, old, new)}, which is a documented
+ * no-op returning {@code false} when the key is absent.  The interval check
+ * passed, the replace failed, and the line never fired for any tier — so the
+ * instrumentation silently produced nothing while looking correct.  The
+ * deployed build carried that defect and the key metric came back empty.
  */
 public class TierLogRateLimiterTest {
 

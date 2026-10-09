@@ -46,7 +46,7 @@ final class Histogram {
     private static final long LOW32 = (long)-1 >>> 32;
 
     /** Build a histogram given a sequence of values.
-     *  To save work, the input should be sorted, but need not be.
+     * To save work, the input should be sorted, but need not be.
      */
     public
     Histogram(int[] valueSequence) {
@@ -93,23 +93,23 @@ final class Histogram {
     }
 
     /** Histogram of int values, reported compactly as a ragged matrix,
-     *  indexed by descending frequency rank.
-     *  <p>
-     *  Format of matrix:
-     *  Each row in the matrix begins with an occurrence count,
-     *  and continues with all int values that occur at that frequency.
+     * indexed by descending frequency rank.
+     * <p>
+     * Format of matrix:
+     * Each row in the matrix begins with an occurrence count,
+     * and continues with all int values that occur at that frequency.
      *  <pre>
      *  int[][] matrix = {
      *    { count1, value11, value12, value13, ...  },
      *    { count2, value21, value22, ... },
      *    ...
      *  }
-     *  </pre>
-     *  The first column of the matrix { count1, count2, ... }
-     *  is sorted in descending order, and contains no duplicates.
-     *  Each row of the matrix (apart from its first element)
-     *  is sorted in ascending order, and contains no duplicates.
-     *  That is, each sequence { valuei1, valuei2, ... } is sorted.
+     * </pre>
+     * The first column of the matrix { count1, count2, ... }
+     * is sorted in descending order, and contains no duplicates.
+     * Each row of the matrix (apart from its first element)
+     * is sorted in ascending order, and contains no duplicates.
+     * That is, each sequence { valuei1, valuei2, ... } is sorted.
      */
     public
     int[][] getMatrix() { return matrix; }
@@ -193,8 +193,8 @@ final class Histogram {
     }
 
     /** Sort rows and columns.
-     *  Merge adjacent rows with the same key element [0].
-     *  Make a fresh copy of all of it.
+     * Merge adjacent rows with the same key element [0].
+     * Make a fresh copy of all of it.
      */
     public int[][] normalizeMatrix(int[][] matrix) {
         long[] rowMap = new long[matrix.length];
@@ -386,19 +386,19 @@ final class Histogram {
     }
 
     /** Simple two-column histogram.  Contains repeated counts.
-     *  Assumes input is sorted.  Does not sort output columns.
-     *  <p>
-     *  Format of result:
+     * Assumes input is sorted.  Does not sort output columns.
+     * <p>
+     * Format of result:
      *  <pre>
      *  long[] hist = {
      *    (count1 << 32) | (value1),
      *    (count2 << 32) | (value2),
      *    ...
      *  }
-     *  </pre>
-     *  In addition, the sequence {valuei...} is guaranteed to be sorted.
-     *  Note that resorting this using Arrays.sort() will reorder the
-     *  entries by increasing count.
+     * </pre>
+     * In addition, the sequence {valuei...} is guaranteed to be sorted.
+     * Note that resorting this using Arrays.sort() will reorder the
+     * entries by increasing count.
      */
     private static
     long[] computeHistogram2Col(int[] sortedValues) {

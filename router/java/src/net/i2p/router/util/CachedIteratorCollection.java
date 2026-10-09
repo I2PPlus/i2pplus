@@ -99,7 +99,6 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
     /**
      * Adds a data object (element) as a Node and sets previous/next pointers accordingly
-     *
      */
     @Override
     public synchronized boolean add(E element) {
@@ -115,8 +114,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     *  Clears the collection, all pointers reset to 'null'
-     *
+     * Clears the collection, all pointers reset to 'null'
      */
     @Override
     public synchronized void clear() {
@@ -131,11 +129,11 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     *  Remove the first element matching by identity (==).
-     *  Used by PeerState.acked() to avoid iterating with early-exit break.
+     * Remove the first element matching by identity (==).
+     * Used by PeerState.acked() to avoid iterating with early-exit break.
      *
-     *  @return true if removed
-     *  @since 0.9.70+
+     * @return true if removed
+     * @since 0.9.70+
      */
     public synchronized boolean remove(Object o) {
         for (Node<E> x = first; x != null; x = x.next) {
@@ -148,7 +146,7 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     *  Unlink a node from the doubly-linked list.
+     * Unlink a node from the doubly-linked list.
      */
     private void unlink(Node<E> x) {
         Node<E> prev = x.prev;
@@ -170,11 +168,11 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     *  Reset the current thread's cached iterator so it is no longer
-     *  considered "in use".  Call this before any early return from an
-     *  iteration loop that may not exhaust the iterator.
+     * Reset the current thread's cached iterator so it is no longer
+     * considered "in use".  Call this before any early return from an
+     * iteration loop that may not exhaust the iterator.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     public void releaseCurrentThreadIterator() {
         ThreadLocal<CachedIterator<E>> tl = _iterator;
@@ -209,13 +207,13 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     *  Static inner CachedIterator class - implements hasNext(), next() &amp; remove()
-     *  <p>
-     *  Static to avoid holding an implicit {@code this$0} reference to the enclosing
-     *  collection, which would prevent GC of the collection (and its owning PeerState)
-     *  when held in another thread's ThreadLocal after {@link CachedIteratorCollection#clear()} is called.
+     * Static inner CachedIterator class - implements hasNext(), next() &amp; remove()
+     * <p>
+     * Static to avoid holding an implicit {@code this$0} reference to the enclosing
+     * collection, which would prevent GC of the collection (and its owning PeerState)
+     * when held in another thread's ThreadLocal after {@link CachedIteratorCollection#clear()} is called.
      *
-     *  @param <E> the type of elements in this iterator
+     * @param <E> the type of elements in this iterator
      */
     @SuppressWarnings("ReferenceEquality")
     public static class CachedIterator<E> implements Iterator<E> {
@@ -254,9 +252,8 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
         }
 
         /**
-         *  If nextCalled is true (i.e. next() has been called at least once),
-         *  remove() will remove the last returned Node
-         *
+         * If nextCalled is true (i.e. next() has been called at least once),
+         * remove() will remove the last returned Node
          */
         @Override
         public void remove() {
@@ -317,7 +314,6 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
 
         /**
          * Returns the next node in the iteration
-         *
          */
         @Override
         public E next() {

@@ -543,7 +543,7 @@ public class PackerImpl  extends TLGlobals implements Pack200.Packer {
         }
 
         /** Write all information in the current package segment
-         *  to the output stream.
+         * to the output stream.
          */
         void flushPackage(OutputStream out, int nextCount) throws IOException {
             int nfiles = pkg.files.size();

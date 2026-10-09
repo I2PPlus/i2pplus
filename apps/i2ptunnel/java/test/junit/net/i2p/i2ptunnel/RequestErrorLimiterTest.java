@@ -8,13 +8,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  Tests the per-client rate limiting of "Request error" warnings in
- *  {@link I2PTunnelHTTPServer}.
+ * Tests the per-client rate limiting of "Request error" warnings in
+ * {@link I2PTunnelHTTPServer}.
  *
- *  A single torrent client that reconnects without sending a request produced
- *  over 1000 read-timeout warnings in one log rotation, burying every other
- *  warning. These tests pin the interval, the map bound, and the fact that a
- *  different client is not suppressed by a noisy neighbour.
+ * A single torrent client that reconnects without sending a request produced
+ * over 1000 read-timeout warnings in one log rotation, burying every other
+ * warning. These tests pin the interval, the map bound, and the fact that a
+ * different client is not suppressed by a noisy neighbour.
  */
 public class RequestErrorLimiterTest {
 
@@ -61,8 +61,8 @@ public class RequestErrorLimiterTest {
     }
 
     /**
-     *  A burst of distinct peers must not grow the tracking map without bound.
-     *  Stale entries are evicted once the cap is reached.
+     * A burst of distinct peers must not grow the tracking map without bound.
+     * Stale entries are evicted once the cap is reached.
      */
     @Test
     public void mapStaysBoundedUnderDistinctPeerBurst() {
@@ -81,9 +81,9 @@ public class RequestErrorLimiterTest {
     }
 
     /**
-     *  A burst of distinct peers arriving inside a single interval leaves
-     *  nothing stale to prune, so pruning alone would not bound the map.
-     *  This was a real defect found by {@link #mapStaysBoundedUnderDistinctPeerBurst}.
+     * A burst of distinct peers arriving inside a single interval leaves
+     * nothing stale to prune, so pruning alone would not bound the map.
+     * This was a real defect found by {@link #mapStaysBoundedUnderDistinctPeerBurst}.
      */
     @Test
     public void burstWithinOneIntervalStaysBounded() {
@@ -97,8 +97,8 @@ public class RequestErrorLimiterTest {
     }
 
     /**
-     *  An unknown client (null base32) is always logged. Suppressing it would
-     *  hide errors we cannot attribute, and there is nothing to rate limit.
+     * An unknown client (null base32) is always logged. Suppressing it would
+     * hide errors we cannot attribute, and there is nothing to rate limit.
      */
     @Test
     public void nullClientAlwaysLogs() {

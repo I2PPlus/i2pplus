@@ -436,8 +436,8 @@ public class EstablishmentDecisionTest {
     }
 
     /**
-     *  An SSU2 address with no introducers, or with a single hash introducer
-     *  whose tag and (optional) expiration are given.
+     * An SSU2 address with no introducers, or with a single hash introducer
+     * whose tag and (optional) expiration are given.
      */
     private static UDPAddress ssu2Addr(String tag, long exp) {
         OrderedProperties opts = new OrderedProperties();

@@ -5,7 +5,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -102,7 +101,6 @@ class ClientListenerRunner implements Runnable {
      * fires those connections off via {@link #runConnection runConnection}.
      * This only returns if the socket cannot be opened or there is a catastrophic
      * failure.
-     *
      */
     protected void runServer() {
         _running = true;
@@ -192,10 +190,10 @@ class ClientListenerRunner implements Runnable {
     protected static final int CONNECT_TIMEOUT = 5*1000;
 
     /**
-     *  Verify the first byte.
+     * Verify the first byte.
      *
-     *  @param socket the socket
-     *  @return true if the first byte is the I2CP protocol byte
+     * @param socket the socket
+     * @return true if the first byte is the I2CP protocol byte
      */
     protected boolean validate(Socket socket) {
         try {

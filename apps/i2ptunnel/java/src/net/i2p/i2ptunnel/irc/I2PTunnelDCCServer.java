@@ -70,7 +70,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
      *
      * @param sktMgr an existing socket manager
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     *                                  valid config to contact the router
+     * valid config to contact the router
      */
     public I2PTunnelDCCServer(I2PSocketManager sktMgr, Logging l,
                               EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -83,8 +83,8 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
-     *  An incoming DCC connection, only accept for a known port.
-     *  Passed through without filtering.
+     * An incoming DCC connection, only accept for a known port.
+     * Passed through without filtering.
      *
      * @param socket the incoming I2P socket connection
      * @since 0.8.9
@@ -135,7 +135,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
-     *  Closes all connections and clears all pending/outgoing/active maps.
+     * Closes all connections and clears all pending/outgoing/active maps.
      *
      * @param forced unused, for interface compatibility
      * @return true if closed successfully
@@ -155,19 +155,19 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
-     *  An outgoing DCC request
+     * An outgoing DCC request
      *
-     *  @param ip local irc client IP
-     *  @param port local irc client port
-     *  @param type ignored
-     *  @return i2p port or -1 on error
+     * @param ip local irc client IP
+     * @param port local irc client port
+     * @param type ignored
+     * @return i2p port or -1 on error
      */
     public int newOutgoing(byte[] ip, int port, String type) {
         return newOutgoing(ip, port, 0);
     }
 
     /**
-     *  @param port local dcc server I2P port or 0 to pick one at random
+     * @param port local dcc server I2P port or 0 to pick one at random
      */
     private int newOutgoing(byte[] ip, int port, int i2pPort) {
         expireOutbound();
@@ -204,10 +204,10 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
-     *  An incoming RESUME request
+     * An incoming RESUME request
      *
-     *  @param port local dcc server I2P port
-     *  @return local IRC client DCC port or -1 on error
+     * @param port local dcc server I2P port
+     * @return local IRC client DCC port or -1 on error
      */
     public int resumeIncoming(int port) {
         Integer iport = Integer.valueOf(port);
@@ -227,10 +227,10 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
     }
 
     /**
-     *  An outgoing ACCEPT response
+     * An outgoing ACCEPT response
      *
-     *  @param port local irc client DCC port
-     *  @return local DCC server i2p port or -1 on error
+     * @param port local irc client DCC port
+     * @return local DCC server i2p port or -1 on error
      */
     public int acceptOutgoing(int port) {
         // do a reverse lookup

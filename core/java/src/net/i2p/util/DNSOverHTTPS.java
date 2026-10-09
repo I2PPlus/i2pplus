@@ -28,20 +28,20 @@ import org.minidns.record.Record.TYPE;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  Simple implemetation of DNS over HTTPS.
- *  Also sets the local clock from the received date header.
+ * Simple implemetation of DNS over HTTPS.
+ * Also sets the local clock from the received date header.
  *
- *  Warning - not thread-safe. Create new instances as necessary.
+ * Warning - not thread-safe. Create new instances as necessary.
  *
- *  As of 0.9.49, this supports the RFC 8484 (DNS) format only.
- *  Does NOT support the JSON format (used prior to 0.9.49)
- *  or RFC 7858 (DNS over TLS).
+ * As of 0.9.49, this supports the RFC 8484 (DNS) format only.
+ * Does NOT support the JSON format (used prior to 0.9.49)
+ * or RFC 7858 (DNS over TLS).
  *
- *  https://developers.google.com/speed/public-dns/docs/dns-over-https
- *  https://developers.cloudflare.com/1.1.1.1/dns-over-https/json-format/
- *  https://github.com/curl/curl/wiki/DNS-over-HTTPS
+ * https://developers.google.com/speed/public-dns/docs/dns-over-https
+ * https://developers.cloudflare.com/1.1.1.1/dns-over-https/json-format/
+ * https://github.com/curl/curl/wiki/DNS-over-HTTPS
  *
- *  @since 0.9.35
+ * @since 0.9.35
  */
 @SuppressWarnings("PMD.CloseResource")
 public class DNSOverHTTPS implements EepGet.StatusListener {
@@ -62,9 +62,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     private static final ObjectCounter<String> fails = new ObjectCounter<>();
 
     /**
-     *  ESR version of Firefox, same as Tor Browser
-     *
-     *  @since public since 0.9.54 for i2ptunnel
+     * ESR version of Firefox, same as Tor Browser
      */
     public static final String UA_CLEARNET = "Mozilla/5.0 (Windows NT 10.0; rv:128.0) Gecko/20100101 Firefox/128.0";
 
@@ -267,10 +265,10 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  V4_ONLY unless we have only IPv6 address, then V6_ONLY
+     * V4_ONLY unless we have only IPv6 address, then V6_ONLY
      *
-     *  @param host the hostname to resolve
-     *  @return null if not found
+     * @param host the hostname to resolve
+     * @return null if not found
      */
     public String lookup(String host) {
         Set<AddressType> addrs = Addresses.getConnectedAddressTypes();
@@ -280,22 +278,22 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  Lookup in cache, then query servers
+     * Lookup in cache, then query servers
      *
-     *  @param host the hostname to resolve
-     *  @param type the query type
-     *  @return null if not found
+     * @param host the hostname to resolve
+     * @param type the query type
+     * @return null if not found
      */
     public String lookup(String host, Type type) {
         return lookup(host, type, null);
     }
 
     /**
-     *  Lookup in cache, then query servers
+     * Lookup in cache, then query servers
      *
-     *  @param url null to query several default servers, or specify single server
-     *  @return null if not found
-     *  @since 0.9.48
+     * @param url null to query several default servers, or specify single server
+     * @return null if not found
+     * @since 0.9.48
      */
     private String lookup(String host, Type type, String url) {
         if (Addresses.isIPAddress(host)) return host;
@@ -340,9 +338,9 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  Lookup in cache
+     * Lookup in cache
      *
-     *  @return null if not found or expired
+     * @return null if not found or expired
      */
     private static String lookup(String host, Map<String, Result> cache) {
         synchronized (cache) {
@@ -356,10 +354,10 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  Query servers
+     * Query servers
      *
-     *  @param url null to query several default servers, or specify single server
-     *  @return null if not found
+     * @param url null to query several default servers, or specify single server
+     * @return null if not found
      */
     private String query(String host, Type type, String url) {
         List<String> toQuery;
@@ -389,7 +387,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  @return null if not found
+     * @return null if not found
      */
     private String query(String host, boolean isv6, List<String> toQuery, long timeout) {
         Question q = new Question(host, isv6 ? TYPE.AAAA : TYPE.A);
@@ -441,7 +439,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  @return null if not found
+     * @return null if not found
      */
     private String fetch(SSLEepGet eepget, String host, boolean isv6, Question q) {
         if (eepget.fetch(TIMEOUT, TIMEOUT, TIMEOUT) && eepget.getStatusCode() == 200 && baos.size() > 0) {
@@ -553,10 +551,10 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  Use the Date header as a backup time source.
-     *  Code from Reseeder.
-     *  We set the stratum to a lower (better) value than in Reseeder,
-     *  as Cloudflare and Google probably have a better idea than our reseeds.
+     * Use the Date header as a backup time source.
+     * Code from Reseeder.
+     * We set the stratum to a lower (better) value than in Reseeder,
+     * as Cloudflare and Google probably have a better idea than our reseeds.
      */
     @Override
     public void headerReceived(String url, int attemptNum, String key, String val) {
@@ -598,7 +596,7 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  @since 0.9.49
+     * @since 0.9.49
      */
     private static void loadURLs() {
         InputStream is = DNSOverHTTPS.class.getResourceAsStream("/net/i2p/util/resources/dohservers.txt");
@@ -749,12 +747,12 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  Decode sdns:// stamps
-     *  e.g. sdns://AgMAAAAAAAAADjE2My40Ny4xMTcuMTc2oMwQYNOcgym2K2-8fQ1t-TCYabmB5-Y5LVzY-kCPTYDmIEROvWe7g_iAezkh6TiskXi4gr1QqtsRIx8ETPXwjffOEGFkbC5hZGZpbHRlci5uZXQKL2Rucy1xdWVyeQ
-     *  Ref: https://dnscrypt.info/stamps-specifications/
+     * Decode sdns:// stamps
+     * e.g. sdns://AgMAAAAAAAAADjE2My40Ny4xMTcuMTc2oMwQYNOcgym2K2-8fQ1t-TCYabmB5-Y5LVzY-kCPTYDmIEROvWe7g_iAezkh6TiskXi4gr1QqtsRIx8ETPXwjffOEGFkbC5hZGZpbHRlci5uZXQKL2Rucy1xdWVyeQ
+     * Ref: https://dnscrypt.info/stamps-specifications/
      *
-     *  @return the URL, or null on error or if not a DoH (type 2) stamp
-     *  @since 0.9.62
+     * @return the URL, or null on error or if not a DoH (type 2) stamp
+     * @since 0.9.62
      */
     private static String decodeStamp(String sdns, boolean log) {
         byte[] d = null;
@@ -824,10 +822,10 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
     }
 
     /**
-     *  Decode sdns:// stamps found in file
+     * Decode sdns:// stamps found in file
      *
-     *  @return the URL, or null on error or if not a DoH (type 2) stamp
-     *  @since 0.9.62
+     * @return the URL, or null on error or if not a DoH (type 2) stamp
+     * @since 0.9.62
      */
     private static void decodeStamps(String file) throws IOException {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {

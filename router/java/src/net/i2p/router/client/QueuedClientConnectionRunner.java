@@ -48,9 +48,9 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
-     *  In super(), doSend queues it to the writer thread and
-     *  the writer thread calls writeMessage() to write to the output stream.
-     *  Since we have no writer thread this shouldn't happen.
+     * In super(), doSend queues it to the writer thread and
+     * the writer thread calls writeMessage() to write to the output stream.
+     * Since we have no writer thread this shouldn't happen.
      */
     @Override
     void writeMessage(I2CPMessage msg) {throw new RuntimeException("huh?");}
@@ -67,17 +67,17 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
-     *  Send the I2CPMessage, giving the client's queue up to timeoutMs to make room.
+     * Send the I2CPMessage, giving the client's queue up to timeoutMs to make room.
      *
-     *  <p>The in-JVM dispatcher drains this queue every few milliseconds, so a full queue
-     *  means the client is briefly behind rather than gone. Refusing the message outright
-     *  costs far more than the wait does: a dropped LeaseSet request spends a whole request
-     *  timing out and then rebuilds the tunnel, for a message that would have been handed
-     *  over milliseconds later.
+     * <p>The in-JVM dispatcher drains this queue every few milliseconds, so a full queue
+     * means the client is briefly behind rather than gone. Refusing the message outright
+     * costs far more than the wait does: a dropped LeaseSet request spends a whole request
+     * timing out and then rebuilds the tunnel, for a message that would have been handed
+     * over milliseconds later.
      *
-     *  @param msg the message to send
-     *  @param timeoutMs how long to wait for space in the client's queue
-     *  @throws I2CPMessageException if the queue is still full after the wait, or on other errors
+     * @param msg the message to send
+     * @param timeoutMs how long to wait for space in the client's queue
+     * @throws I2CPMessageException if the queue is still full after the wait, or on other errors
      */
     @Override
     void doSendWait(I2CPMessage msg, long timeoutMs) throws I2CPMessageException {
@@ -92,11 +92,11 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
-     *  The error for a client that is not draining its I2CP queue.
+     * The error for a client that is not draining its I2CP queue.
      *
-     *  <p>Names the client's side of the queue rather than saying only that a write
-     *  failed, because that is the fact the operator needs: the router's own writer is
-     *  healthy and the client is the side that has stopped reading.
+     * <p>Names the client's side of the queue rather than saying only that a write
+     * failed, because that is the fact the operator needs: the router's own writer is
+     * healthy and the client is the side that has stopped reading.
      */
     private I2CPMessageException queueFull() {
         _context.statManager().addRateData("client.internalQueueFull", 1);
@@ -106,20 +106,20 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     }
 
     /**
- * Does nothing. Client version is the core version.
- *
- * @since 0.9.7
- */
+     * Does nothing. Client version is the core version.
+     *
+     * @since 0.9.7
+     */
     @Override
     public void setClientVersion(String version) {
         // intentionally empty - client version is the core version, not configurable
     }
 
     /**
-     *  The client version.
+     * The client version.
      *
-     *  @return CoreVersion.PUBLISHED_VERSION
-     *  @since 0.9.7
+     * @return CoreVersion.PUBLISHED_VERSION
+     * @since 0.9.7
      */
     @Override
     public String getClientVersion() {return CoreVersion.PUBLISHED_VERSION;}

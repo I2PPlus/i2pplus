@@ -26,8 +26,8 @@ class SingleLookupJob extends JobImpl {
     private final DatabaseSearchReplyMessage _dsrm;
 
     /**
-     *  I2NP spec allows 255, max actually sent (in ../HDLMJ) is 3,
-     *  so just to prevent trouble, we don't want to queue 255 jobs at once
+     * I2NP spec allows 255, max actually sent (in ../HDLMJ) is 3,
+     * so just to prevent trouble, we don't want to queue 255 jobs at once
      */
     public static final int MAX_TO_FOLLOW = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 90 ? 6 : 12;
 

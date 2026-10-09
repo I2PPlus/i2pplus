@@ -91,23 +91,23 @@ public class BuildHandler implements Runnable {
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 5*1000;
     /**
-     *  Extra RI lookup attempts allowed after a next-hop lookup times out.
-     *  A timeout here is a local netdb miss (floodfills slow, RI just evicted),
-     *  not evidence the peer is bad — rejecting threw away builds the next
-     *  attempt would have completed.  One retry keeps the total inside the
-     *  originator's request budget ({@link BuildRequestor#getRequestTimeout},
-     *  gated by {@link #shouldRetryLookup}).
-     *  @since 0.9.71+
+     * Extra RI lookup attempts allowed after a next-hop lookup times out.
+     * A timeout here is a local netdb miss (floodfills slow, RI just evicted),
+     * not evidence the peer is bad — rejecting threw away builds the next
+     * attempt would have completed.  One retry keeps the total inside the
+     * originator's request budget ({@link BuildRequestor#getRequestTimeout},
+     * gated by {@link #shouldRetryLookup}).
+     * @since 0.9.71+
      */
     static final int MAX_NEXT_HOP_LOOKUP_RETRIES = 1;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     /**
-     *  Concurrent next-hop search ceiling. Deliberately NOT cores-scaled:
-     *  a lookup slot is an I/O-bound wait on floodfill replies, not CPU
-     *  work, so hardware size doesn't change how many can be in flight.
-     *  Network load is bounded downstream by per-key search coalescing,
-     *  IterativeSearchJob fan-out caps, and the recently-queried floodfill
-     *  cooldowns. Overridable via i2p.tunnel.build.maxLookupLimit.
+     * Concurrent next-hop search ceiling. Deliberately NOT cores-scaled:
+     * a lookup slot is an I/O-bound wait on floodfill replies, not CPU
+     * work, so hardware size doesn't change how many can be in flight.
+     * Network load is bounded downstream by per-key search coalescing,
+     * IterativeSearchJob fan-out caps, and the recently-queried floodfill
+     * cooldowns. Overridable via i2p.tunnel.build.maxLookupLimit.
      */
     private static final int MAX_LOOKUP_LIMIT = IS_SLOW ? 32 : 64;
     /** i2p.tunnel.build.maxPendingLookups property; see {@link #getMaxPendingLookups}. */
@@ -206,9 +206,9 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Refresh the cached build configuration from properties at most once
-     *  per CONFIG_REFRESH_MS, or immediately when the context changes.
-     *  Benign race: duplicate refreshes are idempotent writes.
+     * Refresh the cached build configuration from properties at most once
+     * per CONFIG_REFRESH_MS, or immediately when the context changes.
+     * Benign race: duplicate refreshes are idempotent writes.
      */
     private static void refreshBuildConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -234,15 +234,15 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Pending next-hop lookups allowed to wait for a free slot while their
-     *  build request is still inside the originator's budget. Sized near the
-     *  useful maximum - a full queue drains inside the staleness window
-     *  (drain rate x window is roughly 200) - so bursts absorb instead of
-     *  dying; entries past the originator's budget are discarded by the
-     *  staleness check either way.
+     * Pending next-hop lookups allowed to wait for a free slot while their
+     * build request is still inside the originator's budget. Sized near the
+     * useful maximum - a full queue drains inside the staleness window
+     * (drain rate x window is roughly 200) - so bursts absorb instead of
+     * dying; entries past the originator's budget are discarded by the
+     * staleness check either way.
      *
-     *  @param ctx router context, for config lookup
-     *  @return the queue depth cap
+     * @param ctx router context, for config lookup
+     * @return the queue depth cap
      */
     private static int getMaxPendingLookups(RouterContext ctx) {
         refreshBuildConfig(ctx);
@@ -250,24 +250,24 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Concurrent next-hop lookup limit for the current request.
+     * Concurrent next-hop lookup limit for the current request.
      *
-     *  Within {@link #STARTUP_LOOKUP_BOOST_MS} of startup the full ceiling
-     *  applies regardless of participating count: the netDb is still filling,
-     *  so cache misses dominate and the proportional formula would clamp
-     *  concurrency to near its floor exactly when inbound builds queue up.
-     *  Afterward, scale with transit population as before, floored at
-     *  minLimit so a drained pool can't zero out lookups.
+     * Within {@link #STARTUP_LOOKUP_BOOST_MS} of startup the full ceiling
+     * applies regardless of participating count: the netDb is still filling,
+     * so cache misses dominate and the proportional formula would clamp
+     * concurrency to near its floor exactly when inbound builds queue up.
+     * Afterward, scale with transit population as before, floored at
+     * minLimit so a drained pool can't zero out lookups.
      *
-     *  Pure decision — safe for unit tests.
+     * Pure decision — safe for unit tests.
      *
-     *  @param numTunnels current participating (transit) tunnel count
-     *  @param minLimit configured floor for the proportional formula
-     *  @param maxLimit configured ceiling
-     *  @param percentLimit percent of participating count usable as slots
-     *  @param uptimeMs router uptime in ms
-     *  @return the concurrent lookup limit, never below minLimit
-     *  @since 0.9.71+
+     * @param numTunnels current participating (transit) tunnel count
+     * @param minLimit configured floor for the proportional formula
+     * @param maxLimit configured ceiling
+     * @param percentLimit percent of participating count usable as slots
+     * @param uptimeMs router uptime in ms
+     * @return the concurrent lookup limit, never below minLimit
+     * @since 0.9.71+
      */
     static int lookupLimit(int numTunnels, int minLimit, int maxLimit, int percentLimit, long uptimeMs) {
         if (uptimeMs < STARTUP_LOOKUP_BOOST_MS) {return maxLimit;}
@@ -275,24 +275,24 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Attach a build request's next hop to the in-flight lookup set.
-     *  Capacity counts DISTINCT keys: requests joining an already-attached
-     *  key consume no extra slot, because the netdb coalesces duplicate
-     *  lookups for one key into a single network round trip. Without this,
-     *  N builds missing the same popular hop would burn N slots to run one
-     *  search and starve unrelated keys.
+     * Attach a build request's next hop to the in-flight lookup set.
+     * Capacity counts DISTINCT keys: requests joining an already-attached
+     * key consume no extra slot, because the netdb coalesces duplicate
+     * lookups for one key into a single network round trip. Without this,
+     * N builds missing the same popular hop would burn N slots to run one
+     * search and starve unrelated keys.
      *
-     *  The limit is soft: racing handler threads may transiently overshoot
-     *  by at most the thread count, which is harmless.
+     * The limit is soft: racing handler threads may transiently overshoot
+     * by at most the thread count, which is harmless.
      *
-     *  Pure decision on its map argument — safe for unit tests.
+     * Pure decision on its map argument — safe for unit tests.
      *
-     *  @param inFlight distinct next-hop keys currently being resolved
-     *  @param key next hop of this request
-     *  @param limit concurrent distinct-key ceiling
-     *  @return true if attached and a lookup should be issued; false when
-     *          the ceiling is reached and the request must queue
-     *  @since 0.9.71+
+     * @param inFlight distinct next-hop keys currently being resolved
+     * @param key next hop of this request
+     * @param limit concurrent distinct-key ceiling
+     * @return true if attached and a lookup should be issued; false when
+     * the ceiling is reached and the request must queue
+     * @since 0.9.71+
      */
     static boolean attachLookupKey(ConcurrentHashMap<Hash, AtomicInteger> inFlight, Hash key, int limit) {
         AtomicInteger counter = inFlight.get(key);
@@ -312,15 +312,15 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Release one build request's attachment to an in-flight lookup key,
-     *  dropping the key entry once its last waiting request completes so
-     *  released slots become visible to new arrivals.
+     * Release one build request's attachment to an in-flight lookup key,
+     * dropping the key entry once its last waiting request completes so
+     * released slots become visible to new arrivals.
      *
-     *  Pure decision on its map argument — safe for unit tests.
+     * Pure decision on its map argument — safe for unit tests.
      *
-     *  @param inFlight distinct next-hop keys currently being resolved
-     *  @param key next hop being released by one request
-     *  @since 0.9.71+
+     * @param inFlight distinct next-hop keys currently being resolved
+     * @param key next hop being released by one request
+     * @since 0.9.71+
      */
     static void releaseLookupKey(ConcurrentHashMap<Hash, AtomicInteger> inFlight, Hash key) {
         AtomicInteger counter = inFlight.get(key);
@@ -330,26 +330,26 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Schedule an independent deadline that releases this request's lookup
-     *  attachment if neither callback has done so by then.
+     * Schedule an independent deadline that releases this request's lookup
+     * attachment if neither callback has done so by then.
      *
-     *  Slot release must never depend solely on the netdb callbacks: any
-     *  silent path between attach and callback registration (a dropped job,
-     *  a search that never schedules, a constructor failure) would leak the
-     *  key forever, pinning the distinct-key set at its ceiling and - since
-     *  the pending queue drains only from release callbacks - freezing the
-     *  queue full until restart. Observed live as exactly that deadlock.
-     *  With this deadline, every attachment is guaranteed to release within
-     *  attempts × lookupTimeout + margin, so leaks self-heal and the queue
-     *  always has a drain trigger.  The attempt count covers the bounded
-     *  retry chain ({@link #MAX_NEXT_HOP_LOOKUP_RETRIES}) so the deadline
-     *  cannot reclaim the slot while a retry attempt is still in flight.
+     * Slot release must never depend solely on the netdb callbacks: any
+     * silent path between attach and callback registration (a dropped job,
+     * a search that never schedules, a constructor failure) would leak the
+     * key forever, pinning the distinct-key set at its ceiling and - since
+     * the pending queue drains only from release callbacks - freezing the
+     * queue full until restart. Observed live as exactly that deadlock.
+     * With this deadline, every attachment is guaranteed to release within
+     * attempts × lookupTimeout + margin, so leaks self-heal and the queue
+     * always has a drain trigger.  The attempt count covers the bounded
+     * retry chain ({@link #MAX_NEXT_HOP_LOOKUP_RETRIES}) so the deadline
+     * cannot reclaim the slot while a retry attempt is still in flight.
      *
-     *  @param state the build request state carrying the per-request
-     *               released flag shared with the callbacks
-     *  @param nextPeer the attached next hop
-     *  @param decremented exactly-once flag shared with HandleReq/TimeoutReq
-     *  @param attempts total lookup attempts covered (initial + retries)
+     * @param state the build request state carrying the per-request
+     * released flag shared with the callbacks
+     * @param nextPeer the attached next hop
+     * @param decremented exactly-once flag shared with HandleReq/TimeoutReq
+     * @param attempts total lookup attempts covered (initial + retries)
      */
     private void scheduleLookupDeadline(BuildMessageState state, Hash nextPeer,
                                         AtomicBoolean decremented, int attempts) {
@@ -377,19 +377,19 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Whether a timed-out next-hop lookup deserves one more attempt.
-     *  Retry only when a full extra lookup still fits inside the originator's
-     *  build-request budget — past that, the originator has given up and
-     *  completing the join is wasted work (same reasoning as
-     *  {@link #pendingLookupMaxAge}).
+     * Whether a timed-out next-hop lookup deserves one more attempt.
+     * Retry only when a full extra lookup still fits inside the originator's
+     * build-request budget — past that, the originator has given up and
+     * completing the join is wasted work (same reasoning as
+     * {@link #pendingLookupMaxAge}).
      *
-     *  @param retriesLeft remaining retries for this request
-     *  @param lookupStartedMs wall-clock time the first lookup started, 0 if unknown
-     *  @param nowMs current wall-clock time
-     *  @param lookupTimeoutMs per-lookup timeout (ms)
-     *  @param requestTimeoutMs originator's build request timeout (ms)
-     *  @return true when another full attempt fits in the remaining budget
-     *  @since 0.9.71+
+     * @param retriesLeft remaining retries for this request
+     * @param lookupStartedMs wall-clock time the first lookup started, 0 if unknown
+     * @param nowMs current wall-clock time
+     * @param lookupTimeoutMs per-lookup timeout (ms)
+     * @param requestTimeoutMs originator's build request timeout (ms)
+     * @return true when another full attempt fits in the remaining budget
+     * @since 0.9.71+
      */
     static boolean shouldRetryLookup(int retriesLeft, long lookupStartedMs, long nowMs,
                                      int lookupTimeoutMs, int requestTimeoutMs) {
@@ -438,8 +438,8 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Upper bound on participating tunnels before the router drops
-     *  incoming build requests, tunable via router.maxParticipatingTunnels.
+     * Upper bound on participating tunnels before the router drops
+     * incoming build requests, tunable via router.maxParticipatingTunnels.
      */
     private static int getMaxParticipatingTunnels(RouterContext ctx) {
         refreshBuildConfig(ctx);
@@ -537,9 +537,9 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Call the same time you start the threads
+     * Call the same time you start the threads
      *
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     void init() {
         if (_context.commSystem().isDummy()) {
@@ -564,15 +564,11 @@ public class BuildHandler implements Runnable {
         }
     }
 
-    /**
-     *  @since 0.9
-     */
     public void restart() {_inboundBuildMessages.clear();}
 
     /**
-     *  Cannot be restarted.
-     *  @param numThreads the number of threads to be shut down
-     *  @since 0.9
+     * Cannot be restarted.
+     * @param numThreads the number of threads to be shut down
      */
     public synchronized void shutdown(int numThreads) {
         _isRunning = false;
@@ -600,14 +596,14 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Age below which a ban is treated as having landed during the build.
+     * Age below which a ban is treated as having landed during the build.
      *
-     *  <p>A tunnel build takes tens of seconds, so a ban recorded seconds ago
-     *  cannot have been visible to the peer selector that dispatched this
-     *  request. Longer than that, the ban predates the request and selection
-     *  handed out a peer the banlist already held.
+     * <p>A tunnel build takes tens of seconds, so a ban recorded seconds ago
+     * cannot have been visible to the peer selector that dispatched this
+     * request. Longer than that, the ban predates the request and selection
+     * handed out a peer the banlist already held.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long BAN_INFLIGHT_THRESHOLD_MS = 60_000L;
 
@@ -624,15 +620,15 @@ public class BuildHandler implements Runnable {
     private volatile int _banDropsSinceWarn;
 
     /**
-     *  Classify why a next-hop peer is banlisted, for the rejection log.
+     * Classify why a next-hop peer is banlisted, for the rejection log.
      *
-     *  <p>Pure and static so the classification is testable without a banlist.
-     *  Keyed on how long the banlist has held the peer
-     *  ({@code Banlist.getBanAge}), not on the ban's duration class: a peer
-     *  permanently banned mid-flight and one banned last week both report as
-     *  "permanent", so the duration class cannot distinguish the case that
-     *  points at peer selection from the case that points at a selection-time
-     *  cooldown.
+     * <p>Pure and static so the classification is testable without a banlist.
+     * Keyed on how long the banlist has held the peer
+     * ({@code Banlist.getBanAge}), not on the ban's duration class: a peer
+     * permanently banned mid-flight and one banned last week both report as
+     * "permanent", so the duration class cannot distinguish the case that
+     * points at peer selection from the case that points at a selection-time
+     * cooldown.
      *
      * @param banAgeMs age of the standing ban, ms; negative when unknown
      * @return a short label for the log line, never null
@@ -645,7 +641,7 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Blocking call to handle a single inbound request
+     * Blocking call to handle a single inbound request
      */
     private void handleInboundRequest() {
         BuildMessageState state = null;
@@ -869,10 +865,10 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Decrypt the request, lookup the RI locally,
-     *  and call handleReq() if found or queue a lookup job.
+     * Decrypt the request, lookup the RI locally,
+     * and call handleReq() if found or queue a lookup job.
      *
-     *  @return handle time or -1 if it wasn't completely handled
+     * @return handle time or -1 if it wasn't completely handled
      */
     private long handleRequest(BuildMessageState state, long now) {
         long timeSinceReceived = now - state.recvTime;
@@ -1216,9 +1212,9 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  A pending lookup request waiting for a concurrent lookup slot.
+     * A pending lookup request waiting for a concurrent lookup slot.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private static class PendingLookup {
         final BuildMessageState state;
@@ -1235,10 +1231,10 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Drain the pending lookup queue, starting lookups for entries
-     *  while we have capacity. Discard stale entries.
+     * Drain the pending lookup queue, starting lookups for entries
+     * while we have capacity. Discard stale entries.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void drainPendingLookups() {
         int numTunnels = _context.tunnelManager().getParticipatingCount();
@@ -1285,12 +1281,12 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Actually process the request and send the reply.
+     * Actually process the request and send the reply.
      *
-     *  Todo: Replies are not subject to RED for bandwidth reasons,
-     *  and the bandwidth is not credited to any tunnel.
-     *  If we did credit the reply to the tunnel, it would
-     *  prevent the classification of the tunnel as 'inactive' on tunnels.jsp.
+     * Todo: Replies are not subject to RED for bandwidth reasons,
+     * and the bandwidth is not credited to any tunnel.
+     * If we did credit the reply to the tunnel, it would
+     * prevent the classification of the tunnel as 'inactive' on tunnels.jsp.
      */
     private void handleReq(RouterInfo nextPeerInfo, BuildMessageState state, BuildRequestRecord req, Hash nextPeer) {
         long ourId = req.readReceiveTunnelId();
@@ -1686,13 +1682,13 @@ public class BuildHandler implements Runnable {
     public int getInboundBuildQueueSize() {return _inboundBuildMessages.size();}
 
     /**
-     *  Handle incoming Tunnel Build Messages, which are generally requests to us,
-     *  but could also be the reply where we are the IBEP.
+     * Handle incoming Tunnel Build Messages, which are generally requests to us,
+     * but could also be the reply where we are the IBEP.
      */
     private class TunnelBuildMessageHandlerJobBuilder implements HandlerJobBuilder {
         /**
-         *  Either from or fromHash may be null, but both should be null only if
-         *  we're to be a IBGW and it came from us as a OBEP.
+         * Either from or fromHash may be null, but both should be null only if
+         * we're to be a IBGW and it came from us as a OBEP.
          */
         @Override
         public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
@@ -1793,7 +1789,7 @@ public class BuildHandler implements Runnable {
         private final AtomicBoolean _handled = new AtomicBoolean(false);
 
         /**
-         *  Either f or h may be null, but both should be null only if we're to be a IBGW and it came from us as a OBEP.
+         * Either f or h may be null, but both should be null only if we're to be a IBGW and it came from us as a OBEP.
          */
         public BuildMessageState(RouterContext ctx, I2NPMessage m, RouterIdentity f, Hash h) {
             _ctx = ctx;
@@ -1910,9 +1906,9 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Remove the participating tunnel if we can't contact the next hop
-     *  Not strictly necessary, as the entry doesn't use that much space,
-     *  but it affects capacity calculations
+     * Remove the participating tunnel if we can't contact the next hop
+     * Not strictly necessary, as the entry doesn't use that much space,
+     * but it affects capacity calculations
      */
     private static class TunnelBuildNextHopFailJob extends JobImpl {
         private final HopConfig _cfg;
@@ -1953,10 +1949,10 @@ public class BuildHandler implements Runnable {
         }
 
         /**
-         *  Record a successful reply to an inbound build request we handled.
-         *  Pairs with {@link #countNextHopOutcome} so the hop-contact failure
-         *  rate is visible without grepping DEBUG.
-         *  @since 0.9.71+
+         * Record a successful reply to an inbound build request we handled.
+         * Pairs with {@link #countNextHopOutcome} so the hop-contact failure
+         * rate is visible without grepping DEBUG.
+         * @since 0.9.71+
          */
         void countReplied() {
             Log log = getContext().logManager().getLog(BuildHandler.class);
@@ -1965,8 +1961,8 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Outcome of one next-hop contact, for the rate-limited WARN summary.
-     *  @since 0.9.71+
+     * Outcome of one next-hop contact, for the rate-limited WARN summary.
+     * @since 0.9.71+
      */
     static final int NEXT_HOP_REPLIED = 0;
     /** Next hop did not answer within the hop-contact window. @since 0.9.71+ */
@@ -1976,10 +1972,10 @@ public class BuildHandler implements Runnable {
     private static final int NEXT_HOP_OUTCOMES = 3;
 
     /**
-     *  How often the next-hop summary may be logged, ms. The individual events
-     *  fire hundreds of times a minute at this rate, so they stay at DEBUG and
-     *  only the rolled-up ratio is worth a WARN.
-     *  @since 0.9.71+
+     * How often the next-hop summary may be logged, ms. The individual events
+     * fire hundreds of times a minute at this rate, so they stay at DEBUG and
+     * only the rolled-up ratio is worth a WARN.
+     * @since 0.9.71+
      */
     static final long NEXT_HOP_SUMMARY_INTERVAL_MS = 5 * 60 * 1000;
 
@@ -1993,22 +1989,22 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Count one next-hop outcome and, at most once per
-     *  {@link #NEXT_HOP_SUMMARY_INTERVAL_MS}, log the ratio at WARN.
+     * Count one next-hop outcome and, at most once per
+     * {@link #NEXT_HOP_SUMMARY_INTERVAL_MS}, log the ratio at WARN.
      *
-     *  <p>This exists because the failure was invisible: 42% of handled inbound
-     *  builds hit the hop-contact timeout, but the only record was one DEBUG
-     *  line per event, so an eepsite silently stopped serving and nothing at
-     *  WARN reflected it.  The rate is the diagnostic signal, not any single
-     *  event — one slow peer is noise, a sustained third of builds unanswered is
-     *  a reachability problem.
+     * <p>This exists because the failure was invisible: 42% of handled inbound
+     * builds hit the hop-contact timeout, but the only record was one DEBUG
+     * line per event, so an eepsite silently stopped serving and nothing at
+     * WARN reflected it.  The rate is the diagnostic signal, not any single
+     * event — one slow peer is noise, a sustained third of builds unanswered is
+     * a reachability problem.
      *
-     *  @param outcome one of {@link #NEXT_HOP_REPLIED}, {@link #NEXT_HOP_TIMEOUT},
-     *  {@link #NEXT_HOP_DROPPED}
-     *  @param log the log to write to, may be null
-     *  @param now current time in ms
-     *  @return true if a summary was logged
-     *  @since 0.9.71+
+     * @param outcome one of {@link #NEXT_HOP_REPLIED}, {@link #NEXT_HOP_TIMEOUT},
+     * {@link #NEXT_HOP_DROPPED}
+     * @param log the log to write to, may be null
+     * @param now current time in ms
+     * @return true if a summary was logged
+     * @since 0.9.71+
      */
     static boolean countNextHopOutcome(int outcome, Log log, long now) {
         if (outcome < 0 || outcome >= NEXT_HOP_OUTCOMES) {return false;}
@@ -2022,9 +2018,9 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Current next-hop outcome counts.
-     *  @return [replied, timedOut, dropped]
-     *  @since 0.9.71+
+     * Current next-hop outcome counts.
+     * @return [replied, timedOut, dropped]
+     * @since 0.9.71+
      */
     static long[] snapshotNextHopOutcomes() {
         return new long[] {
@@ -2035,8 +2031,8 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Reset the counters, for tests.
-     *  @since 0.9.71+
+     * Reset the counters, for tests.
+     * @since 0.9.71+
      */
     static void resetNextHopOutcomes() {
         for (AtomicLong c : _nextHopOutcomes) {c.set(0);}
@@ -2044,14 +2040,14 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Format the next-hop summary line.  Pure so the wording and the division
-     *  are testable without a live router, and so the denominator is explicit:
-     *  the timeout percentage is of handled requests, not of all outcomes.
+     * Format the next-hop summary line.  Pure so the wording and the division
+     * are testable without a live router, and so the denominator is explicit:
+     * the timeout percentage is of handled requests, not of all outcomes.
      *
-     *  @param counts [replied, timedOut, dropped]
-     *  @param windowMs window the counts cover
-     *  @return a single-line WARN summary
-     *  @since 0.9.71+
+     * @param counts [replied, timedOut, dropped]
+     * @param windowMs window the counts cover
+     * @return a single-line WARN summary
+     * @since 0.9.71+
      */
     static String nextHopSummaryText(long[] counts, long windowMs) {
         long replied = counts[0];
@@ -2090,10 +2086,10 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
-     *  @return s
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers.
+     * It does not translate!
+     * @return s
      */
     private static final String _x(String s) {return s;}
 }

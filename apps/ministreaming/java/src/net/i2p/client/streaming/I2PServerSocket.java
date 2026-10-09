@@ -5,11 +5,11 @@ import java.net.SocketTimeoutException;
 import net.i2p.I2PException;
 
 /**
- *  Streaming server socket returned by {@link I2PSocketManager#getServerSocket()}.
- *  Defines how to listen for streaming peer connections.
- *<p>
- *  Note that this is not a standard Java {@link java.net.ServerSocket},
- *  if you need one of those, use {@link I2PSocketManager#getStandardServerSocket()} instead.
+ * Streaming server socket returned by {@link I2PSocketManager#getServerSocket()}.
+ * Defines how to listen for streaming peer connections.
+ * <p>
+ * Note that this is not a standard Java {@link java.net.ServerSocket},
+ * if you need one of those, use {@link I2PSocketManager#getStandardServerSocket()} instead.
  */
 public interface I2PServerSocket {
     /**
@@ -29,8 +29,8 @@ public interface I2PServerSocket {
      * @return a connected I2PSocket, never null
      *
      * @throws I2PException if there is a problem with reading a new socket
-     *          from the data available (e.g. the I2PSession is closed);
-     *          this may be an I2PSessionException which extends I2PException
+     * from the data available (e.g. the I2PSession is closed);
+     * this may be an I2PSessionException which extends I2PException
      *
      * @throws RouterRestartException (extends I2PException) if the router is apparently restarting
      * @throws ConnectException if the I2PServerSocket is closed, or if interrupted.
@@ -39,11 +39,11 @@ public interface I2PServerSocket {
     public I2PSocket accept() throws I2PException, ConnectException, SocketTimeoutException;
 
     /**
-     *  Unimplemented, unlikely to ever be implemented.
+     * Unimplemented, unlikely to ever be implemented.
      *
-     *  @deprecated
-     *  @return null always
-     *  @since 0.8.11
+     * @deprecated
+     * @return null always
+     * @since 0.8.11
      */
     @Deprecated
     public AcceptingChannel getChannel();

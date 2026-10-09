@@ -17,8 +17,7 @@ import net.i2p.util.SystemVersion;
  * Note that this class is not fully Thread safe!
  * The following methods must be synchronized externally, they are not
  * synced here or in super():
- *   addRandomByte(), addRandomBytes(), nextByte(), nextBytes(), seed()
- *
+ * addRandomByte(), addRandomBytes(), nextByte(), nextBytes(), seed()
  */
 @SuppressWarnings("java:S2975")
 public class AsyncFortunaStandalone extends FortunaStandalone implements Runnable {
@@ -115,8 +114,8 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     }
 
     /**
-     *  The refiller thread. Runs until shutdown() is called, refilling
-     *  empty buffers and swapping out full ones.
+     * The refiller thread. Runs until shutdown() is called, refilling
+     * empty buffers and swapping out full ones.
      */
     @Override
     public void run() {

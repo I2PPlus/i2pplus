@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -19,52 +18,52 @@ import java.util.Arrays;
  *
  * <p>Certificate offers flexible metadata attachment to I2P identities:</p>
  * <ul>
- *   <li><strong>Metadata:</strong> Additional information beyond cryptographic keys</li>
- *   <li><strong>DoS Protection:</strong> Help manage denial of service attacks</li>
- *   <li><strong>Network Utilization:</strong> Control resource usage and capabilities</li>
- *   <li><strong>Extensible:</strong> Support for multiple certificate types and formats</li>
- *   <li><strong>Optional:</strong> Structures can have NULL certificates for minimal overhead</li>
+ * <li><strong>Metadata:</strong> Additional information beyond cryptographic keys</li>
+ * <li><strong>DoS Protection:</strong> Help manage denial of service attacks</li>
+ * <li><strong>Network Utilization:</strong> Control resource usage and capabilities</li>
+ * <li><strong>Extensible:</strong> Support for multiple certificate types and formats</li>
+ * <li><strong>Optional:</strong> Structures can have NULL certificates for minimal overhead</li>
  * </ul>
  *
  * <p><strong>Supported Certificate Types:</strong></p>
  * <ul>
- *   <li>{@link #CERTIFICATE_TYPE_NULL} - No certificate (default)</li>
- *   <li>{@link #CERTIFICATE_TYPE_HIDDEN} - Service should not be published</li>
- *   <li>{@link #CERTIFICATE_TYPE_SIGNED} - Signed by certificate authority</li>
- *   <li>{@link #CERTIFICATE_TYPE_MULTIPLE} - Contains multiple certificates</li>
- *   <li>{@link #CERTIFICATE_TYPE_KEY} - Specifies key types (KeyCertificate)</li>
+ * <li>{@link #CERTIFICATE_TYPE_NULL} - No certificate (default)</li>
+ * <li>{@link #CERTIFICATE_TYPE_HIDDEN} - Service should not be published</li>
+ * <li>{@link #CERTIFICATE_TYPE_SIGNED} - Signed by certificate authority</li>
+ * <li>{@link #CERTIFICATE_TYPE_MULTIPLE} - Contains multiple certificates</li>
+ * <li>{@link #CERTIFICATE_TYPE_KEY} - Specifies key types (KeyCertificate)</li>
  * </ul>
  *
  * <p><strong>Common Use Cases:</strong></p>
  * <ul>
- *   <li><strong>Identity Verification:</strong> Prove authenticity of routers/destinations</li>
- *   <li><strong>Capability Advertising:</strong> Announce supported features and protocols</li>
- *   <li><strong>Access Control:</strong> Specify service restrictions or requirements</li>
- *   <li><strong>Resource Management:</strong> Indicate bandwidth or usage limitations</li>
- *   <li><strong>Trust Establishment:</strong> Certificate authority-based trust chains</li>
+ * <li><strong>Identity Verification:</strong> Prove authenticity of routers/destinations</li>
+ * <li><strong>Capability Advertising:</strong> Announce supported features and protocols</li>
+ * <li><strong>Access Control:</strong> Specify service restrictions or requirements</li>
+ * <li><strong>Resource Management:</strong> Indicate bandwidth or usage limitations</li>
+ * <li><strong>Trust Establishment:</strong> Certificate authority-based trust chains</li>
  * </ul>
  *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
- *   <li><strong>Anonymous Network:</strong> CA-based certificates may not be appropriate</li>
- *   <li><strong>Signature Verification:</strong> Always verify certificate signatures</li>
- *   <li><strong>Trust Validation:</strong> Carefully evaluate certificate authorities</li>
- *   <li><strong>Privacy Impact:</strong> Consider anonymity implications of certificates</li>
+ * <li><strong>Anonymous Network:</strong> CA-based certificates may not be appropriate</li>
+ * <li><strong>Signature Verification:</strong> Always verify certificate signatures</li>
+ * <li><strong>Trust Validation:</strong> Carefully evaluate certificate authorities</li>
+ * <li><strong>Privacy Impact:</strong> Consider anonymity implications of certificates</li>
  * </ul>
  *
  * <p><strong>Implementation Notes:</strong></p>
  * <ul>
- *   <li><strong>Multiple Certificates:</strong> Support for multiple certificates is planned</li>
- *   <li><strong>Size Efficiency:</strong> Minimal overhead for NULL certificates</li>
- *   <li><strong>Flexibility:</strong> Payload can contain arbitrary metadata</li>
- *   <li><strong>Backward Compatibility:</strong> Existing formats continue to be supported</li>
+ * <li><strong>Multiple Certificates:</strong> Support for multiple certificates is planned</li>
+ * <li><strong>Size Efficiency:</strong> Minimal overhead for NULL certificates</li>
+ * <li><strong>Flexibility:</strong> Payload can contain arbitrary metadata</li>
+ * <li><strong>Backward Compatibility:</strong> Existing formats continue to be supported</li>
  * </ul>
  *
  * <p><strong>Related Structures:</strong></p>
  * <ul>
- *   <li>{@link Destination} - Uses certificates for service identity</li>
- *   <li>{@link net.i2p.data.router.RouterIdentity} - Router certificates</li>
- *   <li>{@link KeyCertificate} - Specialized certificate for key type specification</li>
+ * <li>{@link Destination} - Uses certificates for service identity</li>
+ * <li>{@link net.i2p.data.router.RouterIdentity} - Router certificates</li>
+ * <li>{@link KeyCertificate} - Specialized certificate for key type specification</li>
  * </ul>
  *
  * @author jrandom
@@ -197,11 +196,11 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  Certificate type to set.
+     * Certificate type to set.
      *
-     *  @param type the certificate type to set
-     *  @throws IllegalArgumentException if type &lt; 0
-     *  @throws IllegalStateException if already set
+     * @param type the certificate type to set
+     * @throws IllegalArgumentException if type &lt; 0
+     * @throws IllegalStateException if already set
      */
     public void setCertificateType(int type) {
         if (type < 0) throw new IllegalArgumentException();
@@ -219,10 +218,10 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  Certificate payload to set.
+     * Certificate payload to set.
      *
-     *  @param payload the payload to set
-     *  @throws IllegalStateException if already set
+     * @param payload the payload to set
+     * @throws IllegalStateException if already set
      */
     public void setPayload(byte[] payload) {
         if (_payload != null) throw new IllegalStateException("already set");
@@ -232,7 +231,7 @@ public class Certificate extends DataStructureImpl {
     /**
      * Reads the certificate from an input stream.
      *
-     *  @throws IllegalStateException if already set
+     * @throws IllegalStateException if already set
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
@@ -263,11 +262,11 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  Writes the certificate to the target array.
+     * Writes the certificate to the target array.
      *
-     *  @param target the output array
-     *  @param offset the starting offset in the target
-     *  @return the written length (NOT the new offset)
+     * @param target the output array
+     * @param offset the starting offset in the target
+     * @return the written length (NOT the new offset)
      */
     public int writeBytes(byte[] target, int offset) {
         int cur = offset;
@@ -286,13 +285,13 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  Reads the certificate from the source array.
+     * Reads the certificate from the source array.
      *
-     *  @param source the source
-     *  @param offset the starting offset in the source
-     *  @return the bytes consumed
-     *  @throws IllegalStateException if already set
-     *  @throws DataFormatException if the data is malformed
+     * @param source the source
+     * @param offset the starting offset in the source
+     * @return the bytes consumed
+     * @throws IllegalStateException if already set
+     * @throws DataFormatException if the data is malformed
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {
         if (_type != 0 || _payload != null) throw new IllegalStateException("already set");
@@ -326,11 +325,11 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  Up-convert this to a KeyCertificate
+     * Up-convert this to a KeyCertificate
      *
-     *  @return the KeyCertificate
-     *  @throws DataFormatException if cert type != CERTIFICATE_TYPE_KEY
-     *  @since 0.9.12
+     * @return the KeyCertificate
+     * @throws DataFormatException if cert type != CERTIFICATE_TYPE_KEY
+     * @since 0.9.12
      */
     public KeyCertificate toKeyCertificate() throws DataFormatException {
         if (_type != CERTIFICATE_TYPE_KEY) throw new DataFormatException("type");
@@ -380,9 +379,9 @@ public class Certificate extends DataStructureImpl {
     }
 
     /**
-     *  An immutable null certificate.
+     * An immutable null certificate.
      *
-     *  @since 0.8.3
+     * @since 0.8.3
      */
     @SuppressWarnings("checkstyle:EqualsHashCode")
     private static final class NullCert extends Certificate {

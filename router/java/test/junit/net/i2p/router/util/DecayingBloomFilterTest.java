@@ -9,19 +9,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *  Tests for the entry/lookup semantics of DecayingBloomFilter.
+ * Tests for the entry/lookup semantics of DecayingBloomFilter.
  *
- *  Replaces the benchmark scaffolding that was previously commented out in
- *  DecayingBloomFilter: the old main()/testByLong()/testByBytes() only timed
- *  insertions and printed false positive rates, so nothing asserted that
- *  add()/isKnown() actually worked.
+ * Replaces the benchmark scaffolding that was previously commented out in
+ * DecayingBloomFilter: the old main()/testByLong()/testByBytes() only timed
+ * insertions and printed false positive rates, so nothing asserted that
+ * add()/isKnown() actually worked.
  *
- *  Two things to keep in mind:
- *  - add() returns true when the entry was already present, not when it was
- *    newly added.
- *  - this is a bloom filter, so a positive isKnown() may be a false positive,
- *    but a negative is authoritative. These tests therefore assert that
- *    inserted entries are never reported absent.
+ * Two things to keep in mind:
+ * - add() returns true when the entry was already present, not when it was
+ * newly added.
+ * - this is a bloom filter, so a positive isKnown() may be a false positive,
+ * but a negative is authoritative. These tests therefore assert that
+ * inserted entries are never reported absent.
  */
 public class DecayingBloomFilterTest {
 
@@ -73,11 +73,11 @@ public class DecayingBloomFilterTest {
     }
 
     /**
-     *  Negative and extreme long values are remembered.
+     * Negative and extreme long values are remembered.
      *
-     *  Long.MIN_VALUE used to throw: the encoder computed 0 - entry, which
-     *  overflows back to Long.MIN_VALUE, and DataHelper.toLong() rejects
-     *  negatives. It is now folded onto Long.MAX_VALUE.
+     * Long.MIN_VALUE used to throw: the encoder computed 0 - entry, which
+     * overflows back to Long.MIN_VALUE, and DataHelper.toLong() rejects
+     * negatives. It is now folded onto Long.MAX_VALUE.
      */
     @Test
     public void testEdgeValues() {
@@ -89,10 +89,10 @@ public class DecayingBloomFilterTest {
     }
 
     /**
-     *  A long and its negation must stay distinct. The sign is carried in the
-     *  top bit of the first byte, which is spare only because toLong() is big
-     *  endian and so the magnitude's high bit is always clear; the magnitudes
-     *  below bracket the bit-55 boundary where that would stop holding.
+     * A long and its negation must stay distinct. The sign is carried in the
+     * top bit of the first byte, which is spare only because toLong() is big
+     * endian and so the magnitude's high bit is always clear; the magnitudes
+     * below bracket the bit-55 boundary where that would stop holding.
      */
     @Test
     public void testSignIsSignificant() {
@@ -111,9 +111,9 @@ public class DecayingBloomFilterTest {
     }
 
     /**
-     *  Every supported entryBytes must accept an entry. The extender count
-     *  used to be computed with ceiling division, so any size that did not
-     *  divide 32 overran the 32 byte hash buffer and threw "Result is too short".
+     * Every supported entryBytes must accept an entry. The extender count
+     * used to be computed with ceiling division, so any size that did not
+     * divide 32 overran the 32 byte hash buffer and threw "Result is too short".
      */
     @Test
     public void testAllEntrySizesWork() {
@@ -144,8 +144,8 @@ public class DecayingBloomFilterTest {
     }
 
     /**
-     *  The accept boundary is part of the contract: 16 and 32 must work, 17
-     *  cannot be stretched to the 32 hashed bytes and must be refused up front.
+     * The accept boundary is part of the contract: 16 and 32 must work, 17
+     * cannot be stretched to the 32 hashed bytes and must be refused up front.
      */
     @Test
     public void testEntrySizeBoundary() {
@@ -160,9 +160,9 @@ public class DecayingBloomFilterTest {
     }
 
     /**
-     *  Sizes that cannot be stretched to the 32 hashed bytes are rejected up
-     *  front: 17-31 would need a partial trailing extender block, and hashing
-     *  them unextended overruns KeySelector's word selectors.
+     * Sizes that cannot be stretched to the 32 hashed bytes are rejected up
+     * front: 17-31 would need a partial trailing extender block, and hashing
+     * them unextended overruns KeySelector's word selectors.
      */
     @Test
     public void testBadEntrySizeRejected() {
@@ -178,9 +178,9 @@ public class DecayingBloomFilterTest {
     }
 
     /**
-     *  A read-only probe must not be counted as a duplicate. isKnown() used to
-     *  increment the duplicate counter, inflating the statistic and the
-     *  "false positives" figure logged at decay.
+     * A read-only probe must not be counted as a duplicate. isKnown() used to
+     * increment the duplicate counter, inflating the statistic and the
+     * "false positives" figure logged at decay.
      */
     @Test
     public void testIsKnownDoesNotCountAsDuplicate() {

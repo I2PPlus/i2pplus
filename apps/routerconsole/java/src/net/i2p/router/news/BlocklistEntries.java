@@ -43,8 +43,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class BlocklistEntries {
     /**
-     *  List of entries to block.
-     *  Each entry is an IPv4/IPv6 address or base64 router hash.
+     * List of entries to block.
+     * Each entry is an IPv4/IPv6 address or base64 router hash.
      */
     public final List<String> entries;
     /**  List of entries to unblock. */
@@ -66,8 +66,8 @@ public class BlocklistEntries {
     public static final long MAX_FUTURE = 2*24*60*60*1000L;
 
     /**
-     *  Creates a new BlocklistEntries with the specified capacity.
-     *  @param capacity the initial capacity for the entries list
+     * Creates a new BlocklistEntries with the specified capacity.
+     * @param capacity the initial capacity for the entries list
      */
     public BlocklistEntries(int capacity) {
         entries = new ArrayList<>(capacity);
@@ -75,17 +75,17 @@ public class BlocklistEntries {
     }
 
     /**
-     *  Check if the blocklist signature has been verified.
-     *  @return true if verified, false otherwise
+     * Check if the blocklist signature has been verified.
+     * @return true if verified, false otherwise
      */
     public synchronized boolean isVerified() {
         return verified;
     }
 
     /**
-     *  Verify the blocklist signature.
-     *  @param ctx the application context
-     *  @return true if signature is valid, false otherwise
+     * Verify the blocklist signature.
+     * @param ctx the application context
+     * @return true if signature is valid, false otherwise
      */
     public synchronized boolean verify(I2PAppContext ctx) {
         if (verified)
@@ -182,12 +182,12 @@ public class BlocklistEntries {
     }
 
     /**
-     *  BlocklistEntries [-p keystorepw] input.txt keystore.ks you@mail.i2p
-     *  File format: One entry per line, # starts a comment, ! starts an unblock entry.
-     *  Single IPv4 or IPv6 address only (no mask allowed), or 44-char base 64 router hash.
-     *  See MAX_ENTRIES above.
+     * BlocklistEntries [-p keystorepw] input.txt keystore.ks you@mail.i2p
+     * File format: One entry per line, # starts a comment, ! starts an unblock entry.
+     * Single IPv4 or IPv6 address only (no mask allowed), or 44-char base 64 router hash.
+     * See MAX_ENTRIES above.
      *
-     *  @param args command line arguments
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         if (args.length < 3) {

@@ -21,9 +21,9 @@ import org.junit.Test;
 public class TempBanDecisionTest {
 
     /**
-     *  Strikes-to-ban used throughout these tests: the production default, so a
-     *  change to it has to be made deliberately here too. Must be at least 2 —
-     *  a single burst window must never ban on its own.
+     * Strikes-to-ban used throughout these tests: the production default, so a
+     * change to it has to be made deliberately here too. Must be at least 2 —
+     * a single burst window must never ban on its own.
      */
     private static final int NEEDED = 3;
 
@@ -168,9 +168,9 @@ public class TempBanDecisionTest {
     }
 
     /**
-     *  Only the required number of distinct windows bans, so a merely busy peer
-     *  cannot lose connectivity. The Nth window is the ban; the ones before it
-     *  each record a strike.
+     * Only the required number of distinct windows bans, so a merely busy peer
+     * cannot lose connectivity. The Nth window is the ban; the ones before it
+     * each record a strike.
      */
     @Test
     public void testOnlyRequiredStrikesBan() {
@@ -194,8 +194,8 @@ public class TempBanDecisionTest {
     }
 
     /**
-     *  The ban boundary is inclusive of the strike window: a window starting
-     *  just inside it still counts toward the required total.
+     * The ban boundary is inclusive of the strike window: a window starting
+     * just inside it still counts toward the required total.
      */
     @Test
     public void testBanJustInsideStrikeWindow() {
@@ -343,9 +343,9 @@ public class TempBanDecisionTest {
     }
 
     /**
-     *  Forgiving a stale strike must also reset the count, so a dest cannot
-     *  accumulate one strike per window forever and ban on a total that spans
-     *  hours of unrelated traffic.
+     * Forgiving a stale strike must also reset the count, so a dest cannot
+     * accumulate one strike per window forever and ban on a total that spans
+     * hours of unrelated traffic.
      */
     @Test
     public void testForgivenessResetsStrikeCount() {

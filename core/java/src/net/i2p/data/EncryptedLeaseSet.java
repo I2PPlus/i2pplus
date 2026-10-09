@@ -30,33 +30,33 @@ import java.util.Set;
  *
  * <p>EncryptedLeaseSet provides privacy and authentication enhancements over standard LeaseSet2:</p>
  * <ul>
- *   <li>LeaseSet content is encrypted using authenticated encryption</li>
- *   <li>Supports per-client and group-based access control</li>
- *   <li>Uses blinded keys for enhanced privacy</li>
- *   <li>Requires authentication data for decryption</li>
- *   <li>Protects tunnel endpoints from unauthorized discovery</li>
+ * <li>LeaseSet content is encrypted using authenticated encryption</li>
+ * <li>Supports per-client and group-based access control</li>
+ * <li>Uses blinded keys for enhanced privacy</li>
+ * <li>Requires authentication data for decryption</li>
+ * <li>Protects tunnel endpoints from unauthorized discovery</li>
  * </ul>
  *
  * <p><strong>Key Features:</strong></p>
  * <ul>
- *   <li><strong>Authentication Types:</strong> Supports DH, PSK, and no authentication</li>
- *   <li><strong>Blinded Keys:</strong> Uses {@link #getSigningKey()} for the blinded key (revocation key in super)</li>
- *   <li><strong>Encryption:</strong> Content encrypted with ChaCha20-Poly1305 AEAD</li>
- *   <li><strong>Access Control:</strong> Fine-grained control over who can decrypt the LeaseSet</li>
+ * <li><strong>Authentication Types:</strong> Supports DH, PSK, and no authentication</li>
+ * <li><strong>Blinded Keys:</strong> Uses {@link #getSigningKey()} for the blinded key (revocation key in super)</li>
+ * <li><strong>Encryption:</strong> Content encrypted with ChaCha20-Poly1305 AEAD</li>
+ * <li><strong>Access Control:</strong> Fine-grained control over who can decrypt the LeaseSet</li>
  * </ul>
  *
  * <p><strong>Usage:</strong></p>
  * <ul>
- *   <li>Services requiring restricted access to tunnel endpoints</li>
- *   <li>Private services with authenticated client access</li>
- *   <li>Situations where tunnel endpoint discovery must be controlled</li>
+ * <li>Services requiring restricted access to tunnel endpoints</li>
+ * <li>Private services with authenticated client access</li>
+ * <li>Situations where tunnel endpoint discovery must be controlled</li>
  * </ul>
  *
  * <p><strong>Authentication Methods:</strong></p>
  * <ul>
- *   <li>{@link BlindData#AUTH_NONE} - No authentication required</li>
- *   <li>{@link BlindData#AUTH_DH} - Diffie-Hellman key exchange authentication</li>
- *   <li>{@link BlindData#AUTH_PSK} - Pre-shared key authentication</li>
+ * <li>{@link BlindData#AUTH_NONE} - No authentication required</li>
+ * <li>{@link BlindData#AUTH_DH} - Diffie-Hellman key exchange authentication</li>
+ * <li>{@link BlindData#AUTH_PSK} - Pre-shared key authentication</li>
  * </ul>
  *
  * <p><strong>Implementation Status:</strong> PRELIMINARY - Subject to change as the proposal evolves</p>
@@ -115,23 +115,23 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     private static final int CLIENT_LEN = ID_LEN + COOKIE_LEN;
 
     /**
-     *  Cached HKDF for layer encryption/decryption. HKDF is stateless (it only
-     *  holds the context, and the context's HMAC256Generator is itself
-     *  thread-safe), so one instance per context is reusable by all client
-     *  threads and saves an allocation per encrypt/decrypt.
+     * Cached HKDF for layer encryption/decryption. HKDF is stateless (it only
+     * holds the context, and the context's HMAC256Generator is itself
+     * thread-safe), so one instance per context is reusable by all client
+     * threads and saves an allocation per encrypt/decrypt.
      */
     private static volatile HKDF _hkdf;
     /** The context {@link #_hkdf} was built for, so a context change forces a rebuild. */
     private static volatile I2PAppContext _hkdfCtx;
 
     /**
-     *  Get the shared HKDF for a context.
-     *  The cached instance is rebuilt if the context differs, so a context swap
-     *  never leaves a HKDF bound to a stale one. A racy double build is
-     *  harmless, as both instances are equivalent.
+     * Get the shared HKDF for a context.
+     * The cached instance is rebuilt if the context differs, so a context swap
+     * never leaves a HKDF bound to a stale one. A racy double build is
+     * harmless, as both instances are equivalent.
      *
-     *  @param ctx the app context
-     *  @return the shared HKDF, never null
+     * @param ctx the app context
+     * @return the shared HKDF, never null
      */
     private static HKDF hkdf(I2PAppContext ctx) {
         if (_hkdfCtx != ctx) {
@@ -155,19 +155,19 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * Leaseset or null if not decrypted.
-     *  @return leaseset or null if not decrypted.
-     *  @since 0.9.39
+     * @return leaseset or null if not decrypted.
+     * @since 0.9.39
      */
     public LeaseSet2 getDecryptedLeaseSet() {
         return _decryptedLS2;
     }
 
     /**
-     *  Must be set before sign or verify.
-     *  Must be called before setDestination() or setSigningKey(), or alpha will be wrong.
+     * Must be set before sign or verify.
+     * Must be called before setDestination() or setSigningKey(), or alpha will be wrong.
      *
-     *  @param secret null or "" for none (default)
-     *  @since 0.9.39
+     * @param secret null or "" for none (default)
+     * @since 0.9.39
      */
     public void setSecret(String secret) {
         if (_signingKey != null && !DataHelper.eq(secret, _secret) && _log.shouldWarn()) {
@@ -177,10 +177,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Must be set before verify for per-client auth.
+     * Must be set before verify for per-client auth.
      *
-     *  @param privKey non-null
-     *  @since 0.9.41
+     * @param privKey non-null
+     * @since 0.9.41
      */
     public void setClientPrivateKey(PrivateKey privKey) {
         _clientPrivateKey = privKey;
@@ -200,7 +200,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * 0-16, or 0 if not decrypted.
-     *  @return 0-16, or 0 if not decrypted.
+     * @return 0-16, or 0 if not decrypted.
      */
     @Override
     public int getLeaseCount() {
@@ -209,7 +209,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * Null if not decrypted.
-     *  @return null if not decrypted.
+     * @return null if not decrypted.
      */
     @Override
     public Lease getLease(int index) {
@@ -218,8 +218,8 @@ public class EncryptedLeaseSet extends LeaseSet2 {
 
     /**
      * Null if not decrypted.
-     *  @return null if not decrypted.
-     *  @since 0.9.39
+     * @return null if not decrypted.
+     * @since 0.9.39
      */
     @Override
     public List<PublicKey> getEncryptionKeys() {
@@ -228,11 +228,11 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  If more than one key, return the first supported one.
-     *  If none supported, return null.
+     * If more than one key, return the first supported one.
+     * If none supported, return null.
      *
-     *  @return first supported key or null
-     *  @since 0.9.44
+     * @return first supported key or null
+     * @since 0.9.44
      */
     @Override
     public PublicKey getEncryptionKey(Set<EncType> supported) {
@@ -283,11 +283,11 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Generate blinded pubkey from the unblinded pubkey in the destination,
-     *  which must have been previously set.
+     * Generate blinded pubkey from the unblinded pubkey in the destination,
+     * which must have been previously set.
      *
-     *  @return the blinded public key
-     *  @since 0.9.39
+     * @return the blinded public key
+     * @since 0.9.39
      */
     private SigningPublicKey blind(SigningPublicKey spk) {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -309,9 +309,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  This does NOT validate the signature
+     * This does NOT validate the signature
      *
-     *  @throws IllegalStateException if called more than once or Destination already set
+     * @throws IllegalStateException if called more than once or Destination already set
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
@@ -330,9 +330,9 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Before encrypt() is called, the inner leaseset.
-     *  After encrypt() is called, the encrypted data.
-     *  Without sig. This does NOT validate the signature
+     * Before encrypt() is called, the inner leaseset.
+     * After encrypt() is called, the encrypted data.
+     * Without sig. This does NOT validate the signature
      */
     @Override
     protected void writeBytesWithoutSig(OutputStream out) throws DataFormatException, IOException {
@@ -351,7 +351,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest
      */
     @Override
     public boolean verifyOfflineSignature() {
@@ -359,7 +359,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest
      */
     @Override
     protected void readHeader(InputStream in) throws DataFormatException, IOException {
@@ -375,7 +375,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest
      */
     @Override
     protected void writeHeader(OutputStream out) throws DataFormatException, IOException {
@@ -389,7 +389,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest
      */
     @Override
     protected void readOfflineBytes(InputStream in) throws DataFormatException, IOException {
@@ -405,7 +405,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Overridden because we have a blinded key, not a dest
+     * Overridden because we have a blinded key, not a dest
      */
     @Override
     protected void writeOfflineBytes(OutputStream out) throws DataFormatException, IOException {
@@ -417,7 +417,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Number of bytes, NOT including signature
+     * Number of bytes, NOT including signature
      */
     @Override
     public int size() {
@@ -429,14 +429,14 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  This must be used instead of getDestination().getHash().
+     * This must be used instead of getDestination().getHash().
      *
-     *  Overridden because we have a blinded key, not a dest.
-     *  This is the hash of the signing public key type and the signing public key.
-     *  Throws IllegalStateException if not initialized.
+     * Overridden because we have a blinded key, not a dest.
+     * This is the hash of the signing public key type and the signing public key.
+     * Throws IllegalStateException if not initialized.
      *
-     *  @throws IllegalStateException
-     *  @return the hash
+     * @throws IllegalStateException
+     * @return the hash
      */
     @Override
     public Hash getHash() {
@@ -452,10 +452,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Throws IllegalStateException if not initialized.
+     * Throws IllegalStateException if not initialized.
      *
-     *  @param skey unused in this implementation
-     *  @throws IllegalStateException
+     * @param skey unused in this implementation
+     * @throws IllegalStateException
      */
     @Override
     public void encrypt(SessionKey skey) {
@@ -463,12 +463,12 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Throws IllegalStateException if not initialized.
-     *  Ref: proposal 123
+     * Throws IllegalStateException if not initialized.
+     * Ref: proposal 123
      *
-     *  @param authType 0, 1, or 3, see BlindData
-     *  @param clientKeys The client's X25519 public or private keys, null if unused
-     *  @throws IllegalStateException
+     * @param authType 0, 1, or 3, see BlindData
+     * @param clientKeys The client's X25519 public or private keys, null if unused
+     * @throws IllegalStateException
      */
     public void encrypt(int authType, List<? extends SimpleDataStructure> clientKeys) {
         if (_encryptedData != null) throw new IllegalStateException("already encrypted");
@@ -624,10 +624,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Throws IllegalStateException if not initialized.
+     * Throws IllegalStateException if not initialized.
      *
-     *  @param csk PrivateKey for DH or PSK, or null if none
-     *  @throws IllegalStateException
+     * @param csk PrivateKey for DH or PSK, or null if none
+     * @throws IllegalStateException
      */
     private void decrypt(PrivateKey csk) throws DataFormatException, IOException {
         try {
@@ -638,10 +638,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Throws IllegalStateException if not initialized.
+     * Throws IllegalStateException if not initialized.
      *
-     *  @param csk PrivateKey for DH or PSK, or null if none
-     *  @throws IllegalStateException
+     * @param csk PrivateKey for DH or PSK, or null if none
+     * @throws IllegalStateException
      */
     private void x_decrypt(PrivateKey csk) throws DataFormatException, IOException {
         if (_encryptedData == null) throw new IllegalStateException("Not encrypted");
@@ -766,11 +766,11 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  The HKDF input (no per-client auth)
+     * The HKDF input (no per-client auth)
      *
-     *  @param ctx the context
-     *  @return 36 bytes
-     *  @since 0.9.39
+     * @param ctx the context
+     * @return 36 bytes
+     * @since 0.9.39
      */
     private byte[] getHKDFInput(I2PAppContext ctx) {
         byte[] subcredential = getSubcredential(ctx);
@@ -781,11 +781,11 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  The HKDF input (with per-client auth)
+     * The HKDF input (with per-client auth)
      *
-     *  @param authcookie 32 bytes
-     *  @return 68 bytes
-     *  @since 0.9.41
+     * @param authcookie 32 bytes
+     * @return 68 bytes
+     * @since 0.9.41
      */
     private byte[] getHKDFInput(I2PAppContext ctx, byte[] authcookie) {
         byte[] subcredential = getSubcredential(ctx);
@@ -797,11 +797,11 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  The subcredential
+     * The subcredential
      *
-     *  @return 32 bytes
-     *  @throws IllegalStateException if we don't have it
-     *  @since 0.9.39
+     * @return 32 bytes
+     * @throws IllegalStateException if we don't have it
+     * @since 0.9.39
      */
     private byte[] getSubcredential(I2PAppContext ctx) {
         if (_unblindedSPK == null) throw new IllegalStateException("No known SigningPrivateKey to decrypt with");
@@ -819,10 +819,10 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     }
 
     /**
-     *  Hash with a personalization string
+     * Hash with a personalization string
      *
-     *  @return 32 bytes
-     *  @since 0.9.39
+     * @return 32 bytes
+     * @since 0.9.39
      */
     private static byte[] hash(I2PAppContext ctx, byte[] p, byte[] d) {
         byte[] data = new byte[p.length + d.length];

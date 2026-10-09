@@ -46,12 +46,12 @@ class PersistNews {
     private static final String XML_START = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 
     /**
-     *  Store each entry.
-     *  Old entries are always overwritten, as they may change even without the updated date changing.
+     * Store each entry.
+     * Old entries are always overwritten, as they may change even without the updated date changing.
      *
-     *  @param ctx the router context
-     *  @param entries each one should be "entry" at the root
-     *  @return true if any new entry was written (not if changed)
+     * @param ctx the router context
+     * @param entries each one should be "entry" at the root
+     * @return true if any new entry was written (not if changed)
      */
     public static boolean store(I2PAppContext ctx, List<Node> entries) {
         Log log = ctx.logManager().getLog(PersistNews.class);
@@ -95,12 +95,12 @@ class PersistNews {
     }
 
     /**
-     *  This does not check for any missing values.
-     *  Any fields in any NewsEntry may be null.
-     *  Content is not sanitized by NewsXMLParser here, do that before storing.
+     * This does not check for any missing values.
+     * Any fields in any NewsEntry may be null.
+     * Content is not sanitized by NewsXMLParser here, do that before storing.
      *
-     *  @param ctx the router context
-     *  @return non-null, sorted by updated date, newest first
+     * @param ctx the router context
+     * @return non-null, sorted by updated date, newest first
      */
     public static List<NewsEntry> load(I2PAppContext ctx) {
         Log log = ctx.logManager().getLog(PersistNews.class);
@@ -145,11 +145,11 @@ class PersistNews {
     }
 
     /**
-     *  This does not check for any missing values.
-     *  Any fields in any NewsEntry may be null.
-     *  Content is not sanitized by NewsXMLParser here, do that before storing.
+     * This does not check for any missing values.
+     * Any fields in any NewsEntry may be null.
+     * Content is not sanitized by NewsXMLParser here, do that before storing.
      *
-     *  @return non-null, throws on errors
+     * @return non-null, throws on errors
      */
     private static NewsEntry extract(Node entry) {
         NewsEntry e = new NewsEntry();
@@ -213,11 +213,11 @@ class PersistNews {
     }
 
     /**
-     *  Unused for now, as we don't have any way to remember it's deleted.
+     * Unused for now, as we don't have any way to remember it's deleted.
      *
-     *  @param ctx the router context
-     *  @param entry the news entry to delete
-     *  @return success
+     * @param ctx the router context
+     * @param entry the news entry to delete
+     * @return success
      */
     public static boolean delete(I2PAppContext ctx, NewsEntry entry) {
         String id = entry.id;
@@ -231,7 +231,7 @@ class PersistNews {
 
     /**
      * Non-null.
-     *  @param id non-null
+     * @param id non-null
      */
     private static String idToName(I2PAppContext ctx, String id) {
         byte[] bid = DataHelper.getUTF8(id);

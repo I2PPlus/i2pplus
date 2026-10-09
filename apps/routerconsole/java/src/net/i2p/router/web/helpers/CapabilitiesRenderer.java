@@ -161,17 +161,17 @@ class CapabilitiesRenderer {
     }
 
 /**
- *  Tier-state rewrite for letters outside the pre-built tables. Not reachable
- *  from the console, which only passes D, E or G with an optional R or U; kept
- *  so an unexpected letter degrades to the original behaviour rather than
- *  being dropped.
+ * Tier-state rewrite for letters outside the pre-built tables. Not reachable
+ * from the console, which only passes D, E or G with an optional R or U; kept
+ * so an unexpected letter degrades to the original behaviour rather than
+ * being dropped.
  *
- *  @param caps the linkified capability string
- *  @param tier the tier letter
- *  @param suffix the reachability letter, or 0 for none
- *  @param suffixAll if true, suffix every capability link
- *  @return the processed capability string
- *  @since 0.9.72+
+ * @param caps the linkified capability string
+ * @param tier the tier letter
+ * @param suffix the reachability letter, or 0 for none
+ * @param suffixAll if true, suffix every capability link
+ * @return the processed capability string
+ * @since 0.9.72+
  */
     private static String applyTierStateUncached(String caps, char tier, char suffix, boolean suffixAll) {
         String rv = caps.replace(String.valueOf(tier), "");

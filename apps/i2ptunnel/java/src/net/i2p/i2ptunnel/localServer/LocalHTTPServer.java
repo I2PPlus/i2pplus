@@ -34,16 +34,16 @@ import net.i2p.util.Translate;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  Very simple web server.
+ * Very simple web server.
  *
- *  Serve local files in the docs/ directory, for CSS and images in
- *  error pages, using the reserved address proxy.i2p
- *  (similar to p.p in privoxy).
- *  This solves the problems with including links to the router console,
- *  as assuming the router console is at 127.0.0.1 leads to broken
- *  links if it isn't.
+ * Serve local files in the docs/ directory, for CSS and images in
+ * error pages, using the reserved address proxy.i2p
+ * (similar to p.p in privoxy).
+ * This solves the problems with including links to the router console,
+ * as assuming the router console is at 127.0.0.1 leads to broken
+ * links if it isn't.
  *
- *  @since 0.7.6, moved from I2PTunnelHTTPClient in 0.9
+ * @since 0.7.6, moved from I2PTunnelHTTPClient in 0.9
  */
 public abstract class LocalHTTPServer {
     /** default constructor */
@@ -94,33 +94,33 @@ public abstract class LocalHTTPServer {
     private final static String logo =
         "<img src=\"http://proxy.i2p/themes/console/default/images/i2plogo.png\" alt=\"I2P+ Router Console\" border=0>";
     /**
-     *  Very simple web server.
+     * Very simple web server.
      *
-     *  Serve local files in the docs/ directory, for CSS and images in
-     *  error pages, using the reserved address proxy.i2p
-     *  (similar to p.p in privoxy).
-     *  This solves the problems with including links to the router console,
-     *  as assuming the router console is at 127.0.0.1 leads to broken
-     *  links if it isn't.
+     * Serve local files in the docs/ directory, for CSS and images in
+     * error pages, using the reserved address proxy.i2p
+     * (similar to p.p in privoxy).
+     * This solves the problems with including links to the router console,
+     * as assuming the router console is at 127.0.0.1 leads to broken
+     * links if it isn't.
      *
-     *  Ignore all request headers (If-Modified-Since, etc.)
+     * Ignore all request headers (If-Modified-Since, etc.)
      *
-     *  There is basic protection here -
-     *  FileUtil.readFile() prevents traversal above the base directory -
-     *  but inproxy/gateway ops would be wise to block proxy.i2p to prevent
-     *  exposing the docs/ directory or perhaps other issues through
-     *  uncaught vulnerabilities.
-     *  Restrict to the /themes/ directory for now.
+     * There is basic protection here -
+     * FileUtil.readFile() prevents traversal above the base directory -
+     * but inproxy/gateway ops would be wise to block proxy.i2p to prevent
+     * exposing the docs/ directory or perhaps other issues through
+     * uncaught vulnerabilities.
+     * Restrict to the /themes/ directory for now.
      *
-     *  @param context the I2P app context
-     *  @param sockMgr only for /b32, otherwise ignored
-     *  @param out the output stream
-     *  @param method the HTTP method
-     *  @param targetRequest decoded path only, non-null
-     *  @param query raw (encoded), may be null
-     *  @param proxyNonce the proxy nonce
-     *  @param allowGzip whether gzip is allowed
-     *  @throws IOException if an I/O error occurs
+     * @param context the I2P app context
+     * @param sockMgr only for /b32, otherwise ignored
+     * @param out the output stream
+     * @param method the HTTP method
+     * @param targetRequest decoded path only, non-null
+     * @param query raw (encoded), may be null
+     * @param proxyNonce the proxy nonce
+     * @param allowGzip whether gzip is allowed
+     * @throws IOException if an I/O error occurs
      */
     public static void serveLocalFile(I2PAppContext context, I2PSocketManager sockMgr,
                                       OutputStream out, String method, String targetRequest,
@@ -441,12 +441,12 @@ public abstract class LocalHTTPServer {
     }
 
     /**
-     *  Parse an encoded query.
-     *  Only supports ONE value per key.
+     * Parse an encoded query.
+     * Only supports ONE value per key.
      *
-     *  @param query an ENCODED query, non-null
-     *  @return map of DECODED keys to DECODED values, non-null. Values may be empty.
-     *  @since 0.9.43 adapted from I2PTunnelHTTPClient.removeHelper()
+     * @param query an ENCODED query, non-null
+     * @return map of DECODED keys to DECODED values, non-null. Values may be empty.
+     * @since 0.9.43 adapted from I2PTunnelHTTPClient.removeHelper()
      */
     private static Map<String, String> decodeQuery(String query) {
         Map<String, String> rv = new HashMap<>(8);

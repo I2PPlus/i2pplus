@@ -28,8 +28,6 @@ import net.i2p.util.SystemVersion;
  * - router.idleTunnelDetectionPeriod: Time before checking for idle (default: 300000ms)
  * - router.idleTunnelMinMessages: Minimum messages to not be considered idle (default: 1)
  * - router.idleTunnelScanInterval: How often to scan (default: 60000ms)
- *
- * @since 2.11.0
  */
 class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     private final RouterContext _context;
@@ -49,7 +47,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
 
     // Configuration
     /** Five minutes: half of a tunnel's typical lifetime, so genuinely dead
-     *  tunnels are still reaped well before expiry */
+     * tunnels are still reaped well before expiry */
     private static final long DEFAULT_DETECTION_PERIOD = 300 * 1000L;
     /** Floor of 1 drops only zero-message tunnels; higher values re-enable low-traffic culling */
     private static final int DEFAULT_MIN_MESSAGES = 1;
@@ -206,15 +204,15 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Whether the transit population is close enough to configured capacity
-     *  that idle culling is worthwhile. Pure decision helper, package visible
-     *  for tests.
+     * Whether the transit population is close enough to configured capacity
+     * that idle culling is worthwhile. Pure decision helper, package visible
+     * for tests.
      *
-     *  @param participating current transit tunnel count
-     *  @param maxParticipating the configured participating-tunnel capacity
-     *  @return true if usage is at or above {@link #CULL_CAPACITY_FRACTION};
-     *          false when capacity is unknown or usage is below it
-     *  @since 0.9.71+
+     * @param participating current transit tunnel count
+     * @param maxParticipating the configured participating-tunnel capacity
+     * @return true if usage is at or above {@link #CULL_CAPACITY_FRACTION};
+     * false when capacity is unknown or usage is below it
+     * @since 0.9.71+
      */
     static boolean nearCapacity(int participating, int maxParticipating) {
         if (maxParticipating <= 0) {return false;}

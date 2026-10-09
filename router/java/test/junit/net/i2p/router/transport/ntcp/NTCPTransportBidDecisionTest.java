@@ -9,14 +9,14 @@ import net.i2p.router.transport.ntcp.NTCPTransport.NetworkIdIssue;
 import org.junit.Test;
 
 /**
- *  Unit tests for the bid-selection decisions extracted from
- *  {@link NTCPTransport#bid}.
+ * Unit tests for the bid-selection decisions extracted from
+ * {@link NTCPTransport#bid}.
  *
- *  <p>Each helper is a pure function pinned without router context: the NTCP2
- *  capacity gate, the cross-network ban decision, the signature-type floor, and
- *  the capacity/cost cascade that maps to the cached shared bids.
+ * <p>Each helper is a pure function pinned without router context: the NTCP2
+ * capacity gate, the cross-network ban decision, the signature-type floor, and
+ * the capacity/cost cascade that maps to the cached shared bids.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class NTCPTransportBidDecisionTest {
 

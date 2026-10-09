@@ -24,18 +24,17 @@ import org.cybergarage.xml.ParserException;
  * <p>Key features:
  *
  * <ul>
- *   <li>SOAP action header management
- *   <li>XML content parsing and generation
- *   <li>SOAP envelope and body handling
- *   <li>UTF-8 encoding support
- *   <li>HTTP protocol integration
+ * <li>SOAP action header management
+ * <li>XML content parsing and generation
+ * <li>SOAP envelope and body handling
+ * <li>UTF-8 encoding support
+ * <li>HTTP protocol integration
  * </ul>
  *
  * <p>This class is used by UPnP control points to send action invocation requests to UPnP devices,
  * enabling remote procedure calls through SOAP messaging over HTTP.
  *
  * @author Satoshi Konno
- * @since 1.0
  */
 public class SOAPRequest extends HTTPRequest {
     private static final String SOAPACTION = HTTP.SOAP_ACTION;
@@ -64,7 +63,7 @@ public class SOAPRequest extends HTTPRequest {
     ////////////////////////////////////////////////
 
     /**
-     *  Set the SOAP action header.
+     * Set the SOAP action header.
      *
      * @param action the SOAP action to set
      */
@@ -73,7 +72,7 @@ public class SOAPRequest extends HTTPRequest {
     }
 
     /**
-     *  Return the SOAP action header value.
+     * Return the SOAP action header value.
      *
      * @return the SOAP action header value
      */
@@ -82,7 +81,7 @@ public class SOAPRequest extends HTTPRequest {
     }
 
     /**
-     *  Check if the SOAP action matches the given value.
+     * Check if the SOAP action matches the given value.
      *
      * @param value value to compare
      * @return true if the SOAP action matches the given value
@@ -101,7 +100,7 @@ public class SOAPRequest extends HTTPRequest {
     ////////////////////////////////////////////////
 
     /**
-     *  Post a SOAP message to the target host and port.
+     * Post a SOAP message to the target host and port.
      *
      * @param host the target host
      * @param port the target port
@@ -157,7 +156,7 @@ public class SOAPRequest extends HTTPRequest {
     ////////////////////////////////////////////////
 
     /**
-     *  Set the SOAP envelope node.
+     * Set the SOAP envelope node.
      *
      * @param node the envelope node to set
      */
@@ -166,7 +165,7 @@ public class SOAPRequest extends HTTPRequest {
     }
 
     /**
-     *  Return the SOAP envelope node.
+     * Return the SOAP envelope node.
      *
      * @return the envelope node
      */
@@ -175,7 +174,7 @@ public class SOAPRequest extends HTTPRequest {
     }
 
     /**
-     *  Return the SOAP body node.
+     * Return the SOAP body node.
      *
      * @return the body node, or null if not available
      */
@@ -191,7 +190,7 @@ public class SOAPRequest extends HTTPRequest {
     ////////////////////////////////////////////////
 
     /**
-     *  Set the XML content from a node.
+     * Set the XML content from a node.
      *
      * @param node the node to set as content
      */

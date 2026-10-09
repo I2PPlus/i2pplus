@@ -6,13 +6,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  Tests the first-hop quality ladder.
+ * Tests the first-hop quality ladder.
  *
- *  The ladder relaxes its reachability requirement as attempts accumulate, and
- *  the relaxation is why a gateway can be selected with no transport session.
- *  That is only explicable after the fact — an unreachable gateway looks
- *  identical to a peer that went silent — so the accepted tier is now logged.
- *  These tests pin the ladder that decides it.
+ * The ladder relaxes its reachability requirement as attempts accumulate, and
+ * the relaxation is why a gateway can be selected with no transport session.
+ * That is only explicable after the fact — an unreachable gateway looks
+ * identical to a peer that went silent — so the accepted tier is now logged.
+ * These tests pin the ladder that decides it.
  */
 public class ClientPeerSelectorFirstHopTierTest {
 
@@ -28,9 +28,9 @@ public class ClientPeerSelectorFirstHopTierTest {
     }
 
     /**
-     *  The reachable-gate window: up to CONNECTING_PREF_ATTEMPTS the ladder
-     *  stays at or below tier 1, which is where {@code isEstablished} and
-     *  {@code isConnecting} are enforced.
+     * The reachable-gate window: up to CONNECTING_PREF_ATTEMPTS the ladder
+     * stays at or below tier 1, which is where {@code isEstablished} and
+     * {@code isConnecting} are enforced.
      */
     @Test
     public void reachableGateHoldsForTheFirstAttempts() {
@@ -44,9 +44,9 @@ public class ClientPeerSelectorFirstHopTierTest {
     }
 
     /**
-     *  The defect: after the connecting-preference window the ladder reaches
-     *  tier 2, where nothing requires the gateway to have a transport session.
-     *  A peer selected there cannot receive a build request.
+     * The defect: after the connecting-preference window the ladder reaches
+     * tier 2, where nothing requires the gateway to have a transport session.
+     * A peer selected there cannot receive a build request.
      */
     @Test
     public void ladderReachesUncheckedTier() {

@@ -5,7 +5,6 @@ package net.i2p.router.dummy;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -24,7 +23,6 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 
 /**
  * Build and maintain tunnels throughout the network.
- *
  */
 public class DummyTunnelManagerFacade implements TunnelManagerFacade {
 
@@ -32,9 +30,9 @@ public class DummyTunnelManagerFacade implements TunnelManagerFacade {
     public DummyTunnelManagerFacade() {}
 
     /**
-     *  Select an inbound tunnel for a destination.
+     * Select an inbound tunnel for a destination.
      *
-     *  @deprecated unused
+     * @deprecated unused
      */
     @Override
     public TunnelInfo selectInboundTunnel() { return null; }

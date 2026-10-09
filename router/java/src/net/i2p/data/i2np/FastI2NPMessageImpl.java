@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 
@@ -14,24 +13,24 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
 /**
- *  Ignore, but save, the SHA-256 checksum in the full 16-byte header when read in.
- *  Use the same checksum when writing out.
+ * Ignore, but save, the SHA-256 checksum in the full 16-byte header when read in.
+ * Use the same checksum when writing out.
  *
- *  This is a savings for NTCP in,
- *  and for NTCP-in to NTCP-out for TunnelDataMessages.
- *  It's also a savings for messages embedded in other messages.
- *  Note that SSU does not use the SHA-256 checksum.
+ * This is a savings for NTCP in,
+ * and for NTCP-in to NTCP-out for TunnelDataMessages.
+ * It's also a savings for messages embedded in other messages.
+ * Note that SSU does not use the SHA-256 checksum.
  *
- *  Subclasses must take care to set _hasChecksum to false to invalidate it
- *  if the message payload changes between reading and writing.
+ * Subclasses must take care to set _hasChecksum to false to invalidate it
+ * if the message payload changes between reading and writing.
  *
- *  It isn't clear where, if anywhere, we actually need to send a checksum.
- *  For point-to-point messages over NTCP where we know the router version
- *  of the peer, we could add a method to skip checksum generation.
- *  For end-to-end I2NP messages embedded in a Garlic, TGM, etc...
- *  we would need a flag day.
+ * It isn't clear where, if anywhere, we actually need to send a checksum.
+ * For point-to-point messages over NTCP where we know the router version
+ * of the peer, we could add a method to skip checksum generation.
+ * For end-to-end I2NP messages embedded in a Garlic, TGM, etc...
+ * we would need a flag day.
  *
- *  @since 0.8.12
+ * @since 0.8.12
  */
 public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     /** One-byte checksum. */
@@ -45,11 +44,11 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     }
 
     /**
-     *  Ignore, but save, the checksum, to be used later if necessary.
+     * Ignore, but save, the checksum, to be used later if necessary.
      *
-     *  @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
-     *                This includes the type byte only if type &lt; 0
-     *  @throws IllegalStateException if called twice, to protect saved checksum
+     * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
+     * This includes the type byte only if type &lt; 0
+     * @throws IllegalStateException if called twice, to protect saved checksum
      */
     @Override
     public int readBytes(byte[] data, int type, int offset, int maxLen) throws I2NPMessageException {
@@ -90,7 +89,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     }
 
     /**
-     *  If available, use the previously-computed or previously-read checksum for speed
+     * If available, use the previously-computed or previously-read checksum for speed
      */
     @Override
     public int toByteArray(byte[] buffer) {
@@ -100,7 +99,7 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     }
 
     /**
-     *  Use a previously-computed checksum for speed
+     * Use a previously-computed checksum for speed
      */
     protected int toByteArrayWithSavedChecksum(byte[] buffer) {
         try {

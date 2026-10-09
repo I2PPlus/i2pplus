@@ -21,10 +21,10 @@ import javax.crypto.SecretKey;
  *
  * <p>Key features:</p>
  * <ul>
- *   <li>HMAC-SHA256 algorithm implementation for message authentication</li>
- *   <li>Thread-safe operation with Mac instance pooling</li>
- *   <li>Optimized for both small and large data processing</li>
- *   <li>Integration with I2P's session key management</li>
+ * <li>HMAC-SHA256 algorithm implementation for message authentication</li>
+ * <li>Thread-safe operation with Mac instance pooling</li>
+ * <li>Optimized for both small and large data processing</li>
+ * <li>Integration with I2P's session key management</li>
  * </ul>
  *
  * <p><strong>Compatibility Note:</strong> As of 0.9.12, this class
@@ -43,7 +43,7 @@ public final class HMAC256Generator extends HMACGenerator {
     /**
      * Create a new HMAC256Generator.
      *
-     *  @param context unused
+     * @param context unused
      */
     public HMAC256Generator(I2PAppContext context) {
         super();
@@ -51,12 +51,12 @@ public final class HMAC256Generator extends HMACGenerator {
     }
 
     /**
-     *  Calculate the HMAC of the data with the given key.
-     *  Outputs 32 bytes to target starting at targetOffset.
+     * Calculate the HMAC of the data with the given key.
+     * Outputs 32 bytes to target starting at targetOffset.
      *
-     *  @throws UnsupportedOperationException if the JVM does not support it
-     *  @throws IllegalArgumentException for bad key or target too small
-     *  @since 0.9.12 overrides HMACGenerator
+     * @throws UnsupportedOperationException if the JVM does not support it
+     * @throws IllegalArgumentException for bad key or target too small
+     * @since 0.9.12 overrides HMACGenerator
      */
     @Override
     public void calculate(SessionKey key, byte[] data, int offset, int length, byte[] target, int targetOffset) {
@@ -64,18 +64,18 @@ public final class HMAC256Generator extends HMACGenerator {
     }
 
     /**
-     *  Calculate the HMAC of the data with the given key.
-     *  Outputs 32 bytes to target starting at targetOffset.
+     * Calculate the HMAC of the data with the given key.
+     * Outputs 32 bytes to target starting at targetOffset.
      *
-     *  @param key first 32 bytes used as the key
-     *  @param data the data to calculate the HMAC over
-     *  @param offset offset into data
-     *  @param length number of bytes to include
-     *  @param target output buffer
-     *  @param targetOffset offset into target
-     *  @throws UnsupportedOperationException if the JVM does not support it
-     *  @throws IllegalArgumentException for bad key or target too small
-     *  @since 0.9.38
+     * @param key first 32 bytes used as the key
+     * @param data the data to calculate the HMAC over
+     * @param offset offset into data
+     * @param length number of bytes to include
+     * @param target output buffer
+     * @param targetOffset offset into target
+     * @throws UnsupportedOperationException if the JVM does not support it
+     * @throws IllegalArgumentException for bad key or target too small
+     * @since 0.9.38
      */
     public void calculate(byte[] key, byte[] data, int offset, int length, byte[] target, int targetOffset) {
         try {
@@ -91,17 +91,17 @@ public final class HMAC256Generator extends HMACGenerator {
     }
 
     /**
-     *  Verify the MAC inline, reducing some unnecessary memory churn.
+     * Verify the MAC inline, reducing some unnecessary memory churn.
      *
-     *  @param key session key to verify the MAC with
-     *  @param curData MAC to verify
-     *  @param curOffset index into curData to MAC
-     *  @param curLength how much data in curData do we want to run the HMAC over
-     *  @param origMAC what do we expect the MAC of curData to equal
-     *  @param origMACOffset index into origMAC
-     *  @param origMACLength how much of the MAC do we want to verify, use 32 for HMAC256
-     *  @return true if the MAC matches
-     *  @since 0.9.12 overrides HMACGenerator
+     * @param key session key to verify the MAC with
+     * @param curData MAC to verify
+     * @param curOffset index into curData to MAC
+     * @param curLength how much data in curData do we want to run the HMAC over
+     * @param origMAC what do we expect the MAC of curData to equal
+     * @param origMACOffset index into origMAC
+     * @param origMACLength how much of the MAC do we want to verify, use 32 for HMAC256
+     * @return true if the MAC matches
+     * @since 0.9.12 overrides HMACGenerator
      */
     @Override
     public boolean verify(SessionKey key, byte[] curData, int curOffset, int curLength, byte[] origMAC, int origMACOffset, int origMACLength) {
@@ -113,10 +113,10 @@ public final class HMAC256Generator extends HMACGenerator {
     }
 
     /**
-     *  Package private for HKDF.
+     * Package private for HKDF.
      *
-     *  @return cached or Mac.getInstance("HmacSHA256")
-     *  @since 0.9.48
+     * @return cached or Mac.getInstance("HmacSHA256")
+     * @since 0.9.48
      */
     Mac acquire() {
         Mac rv = _macs.poll();
@@ -131,20 +131,20 @@ public final class HMAC256Generator extends HMACGenerator {
     }
 
     /**
-     *  Release a Mac back to the pool.
-     *  Mac will be reset, discarding any accumulated message state.
-     *  Per the JCA contract, {@link Mac#reset()} "resets this Mac object to
-     *  the state it was in when previously initialized via a call to
-     *  init(Key)", so it clears the message state without re-running the
-     *  ipad/opad key schedule that {@link Mac#init(java.security.Key)} does.
-     *  That is all a pooled Mac needs, because every caller of acquire() must
-     *  init() before use, and engineInit() overwrites all 64 bytes of both
-     *  k_ipad and k_opad, so the previous key schedule cannot leak into the
-     *  next operation.
-     *  Package private for HKDF.
+     * Release a Mac back to the pool.
+     * Mac will be reset, discarding any accumulated message state.
+     * Per the JCA contract, {@link Mac#reset()} "resets this Mac object to
+     * the state it was in when previously initialized via a call to
+     * init(Key)", so it clears the message state without re-running the
+     * ipad/opad key schedule that {@link Mac#init(java.security.Key)} does.
+     * That is all a pooled Mac needs, because every caller of acquire() must
+     * init() before use, and engineInit() overwrites all 64 bytes of both
+     * k_ipad and k_opad, so the previous key schedule cannot leak into the
+     * next operation.
+     * Package private for HKDF.
      *
-     *  @param mac the Mac to release
-     *  @since 0.9.48
+     * @param mac the Mac to release
+     * @since 0.9.48
      */
     void release(Mac mac) {
         if (CACHE) {

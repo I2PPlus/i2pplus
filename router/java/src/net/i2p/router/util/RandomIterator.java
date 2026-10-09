@@ -28,9 +28,9 @@ import net.i2p.util.SystemVersion;
  * <p>
  * Performance characteristics:
  * <ul>
- *   <li>O(N) time complexity for iteration setup</li>
- *   <li>O(1) average time for next() calls</li>
- *   <li>Memory efficient with minimal object allocation</li>
+ * <li>O(N) time complexity for iteration setup</li>
+ * <li>O(1) average time for next() calls</li>
+ * <li>Memory efficient with minimal object allocation</li>
  * </ul>
  * <p>
  * <strong>Note:</strong> Not recommended for small lists or when iterating
@@ -57,14 +57,14 @@ public class RandomIterator<E> implements Iterator<E> {
     private final int LIST_SIZE;
 
     /**
-    * The random number generator has a great influence
-    * on the running time of this iterator.
-    *
-    * See, for instance,
-    * <a href="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" title="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" target="_blank">http://www.qbrundage.com/michaelb/pubs/e&#8230;</a>
-    * for some implementations, which are faster than java.util.Random.
+     * The random number generator has a great influence
+     * on the running time of this iterator.
+     *
+     * See, for instance,
+     * <a href="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" title="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" target="_blank">http://www.qbrundage.com/michaelb/pubs/e&#8230;</a>
+     * for some implementations, which are faster than java.util.Random.
      * @return the instance
-    */
+     */
     private final Random rand = RandomSource.getInstance();
 
     /** Used to narrow the range to take random indexes from */
@@ -148,10 +148,10 @@ public class RandomIterator<E> implements Iterator<E> {
     }
 
     /**
-     *  Workaround for bug in Android (ICS only?)
-     *  http://code.google.com/p/android/issues/detail?id=31036
+     * Workaround for bug in Android (ICS only?)
+     * http://code.google.com/p/android/issues/detail?id=31036
      *
-     *  @since 0.9.2
+     * @since 0.9.2
      */
     private int nextClearBit(int n) {
         for (int i = n; i <= upper; i++) {
@@ -163,19 +163,19 @@ public class RandomIterator<E> implements Iterator<E> {
     }
 
     /**
-     *  Removal is not supported.
+     * Removal is not supported.
      *
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     public void remove() {
         throw new UnsupportedOperationException();
     }
 
     /**
- * Test case from android ticket above
- *
- * @since 0.9.2
- */
+     * Test case from android ticket above
+     *
+     * @since 0.9.2
+     */
     private static void testAndroid() {
         System.out.println("Checking for Android BitSet bug"); // NOSONAR S106 test CLI output
         BitSet theBitSet = new BitSet(864);

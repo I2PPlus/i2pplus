@@ -11,10 +11,10 @@ class CDef extends Source {
     private final String rpnExpression;
 
     /**
-     *  Create a new CDef.
+     * Create a new CDef.
      *
-     *  @param name the source name
-     *  @param rpnExpression the RPN expression
+     * @param name the source name
+     * @param rpnExpression the RPN expression
      */
     CDef(String name, String rpnExpression) {
         super(name);

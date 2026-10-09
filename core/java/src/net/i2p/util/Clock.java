@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * Protected members are used in the subclass RouterClock,
  * which has access to a router's transports (particularly peer clock skews)
  * to second-guess the sanity of clock adjustments.
- *
  */
 public class Clock implements Timestamper.UpdateListener {
     /** The I2P application context. */
@@ -83,9 +82,9 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
-     *  This is a dummy, see RouterClock and RouterTimestamper for the real thing
+     * This is a dummy, see RouterClock and RouterTimestamper for the real thing
      *
-     *  @return the timestamper
+     * @return the timestamper
      */
     public Timestamper getTimestamper() {
         return new Timestamper();
@@ -206,10 +205,10 @@ public class Clock implements Timestamper.UpdateListener {
     }
 
     /**
-     *  Warning - overridden in RouterClock
+     * Warning - overridden in RouterClock
      *
-     *  @param stratum ignored
-     *  @since 0.7.12
+     * @param stratum ignored
+     * @since 0.7.12
      */
     @Override
     public void setNow(long realTime, int stratum) {
@@ -276,7 +275,7 @@ public class Clock implements Timestamper.UpdateListener {
          * Called when the clock offset changes.
          *
          * @param delta = (new offset - old offset),
-         *        where each offset = (now() - System.currentTimeMillis())
+         * where each offset = (now() - System.currentTimeMillis())
          */
         public void offsetChanged(long delta);
     }

@@ -5,9 +5,9 @@ import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 
 /**
- *  X25519 key pair with pre-calculated Elligator2-encoded public key
+ * X25519 key pair with pre-calculated Elligator2-encoded public key
  *
- *  @since 0.9.44
+ * @since 0.9.44
  */
 public class Elg2KeyPair extends KeyPair {
 

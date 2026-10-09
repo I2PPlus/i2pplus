@@ -80,10 +80,10 @@ public class TrafficProofTest {
     }
 
     /** Real traffic restores the recent-traffic test exemption budget.  It
-     *  used to be refilled only by a passing test, so a tunnel that carried
-     *  data but whose reply path could never answer a test got exactly one
-     *  free pass for its whole lifetime and was then condemned by failures
-     *  it had no way to clear. */
+     * used to be refilled only by a passing test, so a tunnel that carried
+     * data but whose reply path could never answer a test got exactly one
+     * free pass for its whole lifetime and was then condemned by failures
+     * it had no way to clear. */
     @Test
     public void testRealTrafficRefillsExemptionBudget() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -98,8 +98,8 @@ public class TrafficProofTest {
     }
 
     /** recordRealTraffic() owns the budget and the marker; promotion back to
-     *  GOOD stays the sweep's job, so a traffic-carrying tunnel that is still
-     *  marked keeps its status until clearFailingOnTraffic() runs. */
+     * GOOD stays the sweep's job, so a traffic-carrying tunnel that is still
+     * marked keeps its status until clearFailingOnTraffic() runs. */
     @Test
     public void testRecordRealTrafficLeavesStatusAlone() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -115,7 +115,7 @@ public class TrafficProofTest {
     }
 
     /** Promotion back to GOOD also restores the budget: a revived tunnel must
-     *  not inherit the spend that produced the mark. */
+     * not inherit the spend that produced the mark. */
     @Test
     public void testClearTestFailuresRestoresExemptionBudget() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -161,9 +161,9 @@ public class TrafficProofTest {
     }
 
     /** A FAILED tunnel is NOT cleared by a single traffic proof — FAILED
-     *  means 3+ consecutive test failures, which is conclusively dead.  A
-     *  single packet may be a fluke (partial delivery, stale path).  Only
-     *  FAILING (1-2 failures) clears on one proof. */
+     * means 3+ consecutive test failures, which is conclusively dead.  A
+     * single packet may be a fluke (partial delivery, stale path).  Only
+     * FAILING (1-2 failures) clears on one proof. */
     @Test
     public void testFailedNotClearedOnSingleTraffic() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -178,7 +178,7 @@ public class TrafficProofTest {
     }
 
     /** A FAILED tunnel whose traffic marker has aged out stays FAILED —
-     *  stale proof must not keep a dead tunnel selectable. */
+     * stale proof must not keep a dead tunnel selectable. */
     @Test
     public void testFailedNotClearedWithoutFreshTraffic() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -194,7 +194,7 @@ public class TrafficProofTest {
     }
 
     /** Outbound tunnels are cleared on fresh traffic too: the marker is
-     *  stamped by SendSuccessJob on the remote reply, not on dispatch. */
+     * stamped by SendSuccessJob on the remote reply, not on dispatch. */
     @Test
     public void testOutboundClearedOnFreshTraffic() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -241,8 +241,8 @@ public class TrafficProofTest {
     }
 
     /** An inbound UNTESTED tunnel with verified inbound bytes + fresh traffic is
-     *  promoted to GOOD so LeaseSet building can publish it without waiting on a
-     *  TestJob that may never be scheduled. */
+     * promoted to GOOD so LeaseSet building can publish it without waiting on a
+     * TestJob that may never be scheduled. */
     @Test
     public void testInboundUntestedPromotedOnVerifiedTraffic() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);
@@ -258,7 +258,7 @@ public class TrafficProofTest {
     }
 
     /** An inbound UNTESTED tunnel with fresh traffic but no verified bytes is NOT
-     *  promoted — without proof of arrival it must wait for a real test. */
+     * promoted — without proof of arrival it must wait for a real test. */
     @Test
     public void testInboundUntestedNotPromotedWithoutVerifiedBytes() throws Exception {
         Assume.assumeTrue("No RouterContext available", _ctx != null);

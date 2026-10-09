@@ -3,7 +3,6 @@ package net.i2p.data.i2cp;
 /*
  * Released into the public domain
  * with no warranty of any kind, either expressed or implied.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -43,9 +42,9 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Non-null with non-null data.
-     *  @param h non-null with non-null data
-     *  @since 0.8.3
+     * Non-null with non-null data.
+     * @param h non-null with non-null data
+     * @since 0.8.3
      */
     public DestReplyMessage(Hash h) {
         _hash = h;

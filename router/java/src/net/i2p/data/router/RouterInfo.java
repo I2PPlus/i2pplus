@@ -6,7 +6,6 @@ package net.i2p.data.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.ByteArrayOutputStream;
@@ -64,7 +63,7 @@ public class RouterInfo extends DatabaseEntry {
     /** Last published time in ms since epoch. */
     private volatile long _published;
     /**
-     *  Save addresses in the order received so the signature works.
+     * Save addresses in the order received so the signature works.
      */
     private final List<RouterAddress> _addresses;
     /** May be null to save memory, no longer final. */
@@ -100,11 +99,11 @@ public class RouterInfo extends DatabaseEntry {
     private static final int MAX_INTRODUCERS = 5;
 
     /**
-     *  All legit RIs are currently under 2KB.
-     *  May need to be adjusted if we add a huge new enctype or sigtype.
-     *  Enforced in DatabaseStoreMessage, the transports, and reseed.
+     * All legit RIs are currently under 2KB.
+     * May need to be adjusted if we add a huge new enctype or sigtype.
+     * Enforced in DatabaseStoreMessage, the transports, and reseed.
      *
-     *  @since 0.9.62
+     * @since 0.9.62
      */
     public static final int MAX_UNCOMPRESSED_SIZE = 4*1024;
 
@@ -138,9 +137,9 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     *  Used only by Router and PublishLocalRouterInfoJob.
-     *  Copies ONLY the identity and peers.
-     *  Does not copy published, addresses, options, or signature.
+     * Used only by Router and PublishLocalRouterInfoJob.
+     * Copies ONLY the identity and peers.
+     * Does not copy published, addresses, options, or signature.
      */
     public RouterInfo(RouterInfo old) {
         this();
@@ -399,7 +398,6 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * Same as isValid()
-     * @since 0.9
      */
     @Override
     public boolean verifySignature() {
@@ -513,9 +511,9 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     *  For multiple addresses per-transport (IPv4 or IPv6)
-     *  @return non-null
-     *  @since 0.7.11
+     * For multiple addresses per-transport (IPv4 or IPv6)
+     * @return non-null
+     * @since 0.7.11
      */
     public List<RouterAddress> getTargetAddresses(String transportStyle) {
         List<RouterAddress> ret = new ArrayList<>(_addresses.size());
@@ -527,11 +525,11 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     *  For multiple addresses per-transport (IPv4 or IPv6)
-     *  Return addresses matching either of two styles
+     * For multiple addresses per-transport (IPv4 or IPv6)
+     * Return addresses matching either of two styles
      *
-     *  @return non-null
-     *  @since 0.9.35
+     * @return non-null
+     * @since 0.9.35
      */
     public List<RouterAddress> getTargetAddresses(String transportStyle1, String transportStyle2) {
         List<RouterAddress> ret = new ArrayList<>(_addresses.size());
@@ -560,22 +558,21 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     *  This does NOT validate the signature
+     * This does NOT validate the signature
      *
-     *  @throws IllegalStateException if RouterInfo was already read in
+     * @throws IllegalStateException if RouterInfo was already read in
      */
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         readBytes(in, false);
     }
 
     /**
-     *  If verifySig is true,
-     *  this validates the signature while reading in,
-     *  and throws a DataFormatException if the sig is invalid.
-     *  This is faster than reserializing to validate later.
+     * If verifySig is true,
+     * this validates the signature while reading in,
+     * and throws a DataFormatException if the sig is invalid.
+     * This is faster than reserializing to validate later.
      *
-     *  @throws IllegalStateException if RouterInfo was already read in
-     *  @since 0.9
+     * @throws IllegalStateException if RouterInfo was already read in
      */
     public void readBytes(InputStream in, boolean verifySig) throws DataFormatException, IOException {
         if (_signature != null) {throw new IllegalStateException();}
@@ -652,7 +649,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     *  This does NOT validate the signature
+     * This does NOT validate the signature
      */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_signature == null) throw new DataFormatException("Signature is null");

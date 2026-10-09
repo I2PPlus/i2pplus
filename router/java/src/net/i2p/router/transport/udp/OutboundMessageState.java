@@ -13,7 +13,6 @@ import net.i2p.util.Log;
  * Maintain the outbound fragmentation for resending, for a single message.
  *
  * All methods are thread-safe.
- *
  */
 class OutboundMessageState implements CDPQEntry {
     private final I2PAppContext _context;
@@ -67,30 +66,30 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  "injected" message from the establisher.
+     * "injected" message from the establisher.
      *
-     *  Called from UDPTransport.
-     *  @throws IllegalArgumentException if too big or if msg or peer is null
+     * Called from UDPTransport.
+     * @throws IllegalArgumentException if too big or if msg or peer is null
      */
     public OutboundMessageState(I2PAppContext context, I2NPMessage msg, PeerState peer) {
         this(context, null, msg, peer);
     }
 
     /**
-     *  Normal constructor.
+     * Normal constructor.
      *
-     *  Called from OutboundMessageFragments.
-     *  @throws IllegalArgumentException if too big or if msg or peer is null
+     * Called from OutboundMessageFragments.
+     * @throws IllegalArgumentException if too big or if msg or peer is null
      */
     public OutboundMessageState(I2PAppContext context, OutNetMessage m, PeerState peer) {
         this(context, m, m.getMessage(), peer);
     }
 
     /**
-     *  Fragments the given message for transmission.
+     * Fragments the given message for transmission.
      *
-     *  @param m null if msg is "injected"
-     *  @throws IllegalArgumentException if too big or if msg or peer is null
+     * @param m null if msg is "injected"
+     * @throws IllegalArgumentException if too big or if msg or peer is null
      */
     private OutboundMessageState(I2PAppContext context, OutNetMessage m, I2NPMessage msg, PeerState peer) {
         if (msg == null || peer == null)
@@ -136,9 +135,9 @@ class OutboundMessageState implements CDPQEntry {
     public int getVersion() { return _peer.getVersion(); }
 
     /**
-     *  Bit mask for the given fragment index.
+     * Bit mask for the given fragment index.
      *
-     *  @param fragment 0-63
+     * @param fragment 0-63
      */
     private static long mask(int fragment) {
         return 1L << fragment;
@@ -287,11 +286,11 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  The minimum number of bytes we can send, which is the smallest unacked fragment we will send next.
-     *  Includes packet overhead.
+     * The minimum number of bytes we can send, which is the smallest unacked fragment we will send next.
+     * Includes packet overhead.
      *
-     *  @return 0 to total size
-     *  @since 0.9.49
+     * @return 0 to total size
+     * @since 0.9.49
      */
     public synchronized int getMinSendSize() {
         if (isComplete())
@@ -315,16 +314,16 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  How many bytes we can send under the max given.
-     *  Side effect: if applicable, amount to send will be saved for the push() call.
-     *  Note: With multiple fragments, this will allocate only the fragments with the lowest push count.
-     *  Example: If push counts are 1 1 1 0 0, this will only return the size of the last two fragments,
-     *  even if any of the first three need to be retransmitted.
-     *  Includes packet overhead.
+     * How many bytes we can send under the max given.
+     * Side effect: if applicable, amount to send will be saved for the push() call.
+     * Note: With multiple fragments, this will allocate only the fragments with the lowest push count.
+     * Example: If push counts are 1 1 1 0 0, this will only return the size of the last two fragments,
+     * even if any of the first three need to be retransmitted.
+     * Includes packet overhead.
      *
-     *  @param max the maximum number of bytes we can send, including packet overhead
-     *  @return 0 to max bytes
-     *  @since 0.9.49
+     * @param max the maximum number of bytes we can send, including packet overhead
+     * @return 0 to max bytes
+     * @since 0.9.49
      */
     public synchronized int getSendSize(int max) {
         if (isComplete())
@@ -434,15 +433,15 @@ class OutboundMessageState implements CDPQEntry {
     public synchronized int getPushCount() { return _pushCount; }
 
     /**
-     *  Add fragments up to the number of bytes allowed by setAllowedSendBytes()
-     *  Side effects: Clears setAllowedSendBytes. Increments pushCount. Increments maxSends if applicable.
-     *  Note: With multiple fragments, this will send only the fragments with the lowest push count.
-     *  Example: If push counts are 1 1 1 0 0, this will only send the last two fragments,
-     *  even if any of the first three need to be retransmitted.
+     * Add fragments up to the number of bytes allowed by setAllowedSendBytes()
+     * Side effects: Clears setAllowedSendBytes. Increments pushCount. Increments maxSends if applicable.
+     * Note: With multiple fragments, this will send only the fragments with the lowest push count.
+     * Example: If push counts are 1 1 1 0 0, this will only send the last two fragments,
+     * even if any of the first three need to be retransmitted.
      *
-     *  @param toSend out parameter
-     *  @return the number of Fragments added
-     *  @since 0.9.49
+     * @param toSend out parameter
+     * @return the number of Fragments added
+     * @since 0.9.49
      */
     public synchronized int push(List<Fragment> toSend) {
         int rv = 0;
@@ -571,8 +570,8 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  For CDQ
-     *  @since 0.9.3
+     * For CDQ
+     * @since 0.9.3
      */
     @Override
     public void setEnqueueTime(long now) {
@@ -590,8 +589,8 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  For CDQ
-     *  @since 0.9.3
+     * For CDQ
+     * @since 0.9.3
      */
     @Override
     public void drop() {
@@ -599,8 +598,8 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  For CDPQ
-     *  @since 0.9.3
+     * For CDPQ
+     * @since 0.9.3
      */
     @Override
     public void setSeqNum(long num) {
@@ -617,9 +616,9 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     *  For CDPQ
-     *  @return OutNetMessage priority or 1000 for injected
-     *  @since 0.9.3
+     * For CDPQ
+     * @return OutNetMessage priority or 1000 for injected
+     * @since 0.9.3
      */
     public int getPriority() {
         return _message != null ? _message.getPriority() : PacketBuilder2.PRIORITY_HIGH;

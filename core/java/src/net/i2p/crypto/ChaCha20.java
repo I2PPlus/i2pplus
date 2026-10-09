@@ -15,27 +15,27 @@ import net.i2p.data.DataHelper;
 public final class ChaCha20 {
 
     /**
-     *  Number of 32-bit words in a ChaCha20 state block.
+     * Number of 32-bit words in a ChaCha20 state block.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final int STATE_WORDS = 16;
 
     /**
-     *  Per-thread scratch pair: {@code [0]} is the input state block,
-     *  {@code [1]} is the keystream block.
-     *  <p>
-     *  Both arrays are strictly internal - they never escape
-     *  {@link #encrypt(byte[], byte[], int, byte[], int, byte[], int, int)},
-     *  so no caller can retain or observe them, and a thread-confined instance
-     *  is safe. Reentry is impossible: the only callees are
-     *  {@link ChaChaCore} statics and {@link DataHelper#fromLongLE}, all of
-     *  which are leaf code with no callbacks back into this class.
-     *  <p>
-     *  This saves two 128-byte allocations per call; SSU2 protects 2-5 header
-     *  blocks per packet and NTCP2/LS2 do the same per session.
+     * Per-thread scratch pair: {@code [0]} is the input state block,
+     * {@code [1]} is the keystream block.
+     * <p>
+     * Both arrays are strictly internal - they never escape
+     * {@link #encrypt(byte[], byte[], int, byte[], int, byte[], int, int)},
+     * so no caller can retain or observe them, and a thread-confined instance
+     * is safe. Reentry is impossible: the only callees are
+     * {@link ChaChaCore} statics and {@link DataHelper#fromLongLE}, all of
+     * which are leaf code with no callbacks back into this class.
+     * <p>
+     * This saves two 128-byte allocations per call; SSU2 protects 2-5 header
+     * blocks per packet and NTCP2/LS2 do the same per session.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final ThreadLocal<int[][]> _SCRATCH =
             ThreadLocal.withInitial(() -> new int[2][STATE_WORDS]);
@@ -45,13 +45,13 @@ public final class ChaCha20 {
     /**
      * Encrypt from plaintext to ciphertext
      *
-     *  @param key first 32 bytes used as the key
-     *  @param iv first 12 bytes used as the iv
-     *  @param plaintext the plaintext to encrypt
-     *  @param plaintextOffset offset in plaintext
-     *  @param ciphertext the ciphertext output buffer
-     *  @param ciphertextOffset offset in ciphertext
-     *  @param length the length
+     * @param key first 32 bytes used as the key
+     * @param iv first 12 bytes used as the iv
+     * @param plaintext the plaintext to encrypt
+     * @param plaintextOffset offset in plaintext
+     * @param ciphertext the ciphertext output buffer
+     * @param ciphertextOffset offset in ciphertext
+     * @param length the length
      */
     public static void encrypt(byte[] key, byte[] iv, byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) {
         encrypt(key, iv, 0, plaintext, plaintextOffset, ciphertext, ciphertextOffset, length);
@@ -99,13 +99,13 @@ public final class ChaCha20 {
     /**
      * Encrypt from ciphertext to plaintext
      *
-     *  @param key first 32 bytes used as the key
-     *  @param iv first 12 bytes used as the iv
-     *  @param ciphertext the ciphertext to decrypt
-     *  @param ciphertextOffset offset in ciphertext
-     *  @param plaintext the plaintext output buffer
-     *  @param plaintextOffset offset in plaintext
-     *  @param length the length
+     * @param key first 32 bytes used as the key
+     * @param iv first 12 bytes used as the iv
+     * @param ciphertext the ciphertext to decrypt
+     * @param ciphertextOffset offset in ciphertext
+     * @param plaintext the plaintext output buffer
+     * @param plaintextOffset offset in plaintext
+     * @param length the length
      */
     public static void decrypt(byte[] key, byte[] iv, byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) {
         // it's symmetric!
@@ -115,15 +115,15 @@ public final class ChaCha20 {
     /**
      * Encrypt from ciphertext to plaintext
      *
-     *  @param key first 32 bytes used as the key
-     *  @param iv first 12 bytes starting at ivOffset used as the iv
-     *  @param ivOffset offset into iv array
-     *  @param ciphertext the ciphertext to decrypt
-     *  @param ciphertextOffset offset in ciphertext
-     *  @param plaintext the plaintext output buffer
-     *  @param plaintextOffset offset in plaintext
-     *  @param length the length
-     *  @since 0.9.54
+     * @param key first 32 bytes used as the key
+     * @param iv first 12 bytes starting at ivOffset used as the iv
+     * @param ivOffset offset into iv array
+     * @param ciphertext the ciphertext to decrypt
+     * @param ciphertextOffset offset in ciphertext
+     * @param plaintext the plaintext output buffer
+     * @param plaintextOffset offset in plaintext
+     * @param length the length
+     * @since 0.9.54
      */
     public static void decrypt(byte[] key, byte[] iv, int ivOffset, byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) {
         // it's symmetric!

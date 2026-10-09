@@ -186,9 +186,9 @@ class NtpMessage {
      * Code     External Reference Source
      * ----     -------------------------
      * LOCL     uncalibrated local clock used as a primary reference for
-     *          a subnet without external means of synchronization
+     * a subnet without external means of synchronization
      * PPS      atomic clock or other pulse-per-second source
-     *          individually calibrated to national standards
+     * individually calibrated to national standards
      * ACTS     NIST dialup modem service
      * USNO     USNO modem service
      * PTB      PTB (Germany) modem service
@@ -472,7 +472,7 @@ class NtpMessage {
     /**
      * Returns a string representation of a reference identifier according
      * to the rules set out in RFC 2030.
- *
+     *
      * @return non-null, "" if unset
      */
     private static String referenceIdentifierToString(byte[] ref, short stratum, byte version) {

@@ -11,13 +11,13 @@ import net.i2p.data.Hash;
 import org.junit.Test;
 
 /**
- *  Bounding of the RouterInfo refreshes issued on behalf of promotion-held peers.
+ * Bounding of the RouterInfo refreshes issued on behalf of promotion-held peers.
  *
- *  <p>A peer held out of the tiers for want of a usable address cannot be refreshed directly -
- *  that is why it is held - so the only route back is an iterative lookup. Those lookups are
- *  issued from a reorg path, and a scan walks thousands of profiles, so the batch is bounded
- *  twice: a maximum batch, and a minimum interval between batches. Without both, either a
- *  single large scan or a burst of demotions could turn the recovery path into a flood.
+ * <p>A peer held out of the tiers for want of a usable address cannot be refreshed directly -
+ * that is why it is held - so the only route back is an iterative lookup. Those lookups are
+ * issued from a reorg path, and a scan walks thousands of profiles, so the batch is bounded
+ * twice: a maximum batch, and a minimum interval between batches. Without both, either a
+ * single large scan or a burst of demotions could turn the recovery path into a flood.
  *
  * @since 0.9.71+
  */

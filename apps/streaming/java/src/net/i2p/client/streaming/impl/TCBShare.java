@@ -12,15 +12,14 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Share important TCP Control Block parameters across Connections
- *  to the same remote peer.
- *  This is intended for "temporal" sharing at connection open/close time,
- *  not "ensemble" sharing during a connection. Ref. RFC 2140.
+ * Share important TCP Control Block parameters across Connections
+ * to the same remote peer.
+ * This is intended for "temporal" sharing at connection open/close time,
+ * not "ensemble" sharing during a connection. Ref. RFC 2140.
  *
- *  There is a TCB share per ConnectionManager (i.e. per local Destination)
- *  so that there is no information leakage to other Destinations on the
- *  same router.
- *
+ * There is a TCB share per ConnectionManager (i.e. per local Destination)
+ * so that there is no information leakage to other Destinations on the
+ * same router.
  */
 class TCBShare {
     private final I2PAppContext _context;
@@ -86,7 +85,7 @@ class TCBShare {
     }
 
     /**
-     *  Cannot be restarted.
+     * Cannot be restarted.
      */
     public void stop() {
         _cleaner.cancel();

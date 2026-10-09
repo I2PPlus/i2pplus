@@ -65,10 +65,10 @@ public class NewsMetadata {
         }
 
         /**
-         *  For findbugs.
-         *  Warning, not a complete comparison.
-         *  Must be enhanced before using in a Map or Set.
-         *  @since 0.9.21
+         * For findbugs.
+         * Warning, not a complete comparison.
+         * Must be enhanced before using in a Map or Set.
+         * @since 0.9.21
          */
         @Override
         public boolean equals(Object o) {
@@ -109,16 +109,16 @@ public class NewsMetadata {
         /** The torrent source URL */
         public String torrent;
         /**
-         *  Stored as of 0.9.52, but there is no registered handler
+         * Stored as of 0.9.52, but there is no registered handler
          */
         public List<String> clearnet;
         /**
-         *  Stored as of 0.9.52, but there is no registered handler
+         * Stored as of 0.9.52, but there is no registered handler
          */
         public List<String> ssl;
         /**
-         *  In-net URLs
-         *  @since 0.9.52
+         * In-net URLs
+         * @since 0.9.52
          */
         public List<String> i2pnet;
 
@@ -143,10 +143,10 @@ public class NewsMetadata {
         }
 
         /**
-         *  For findbugs.
-         *  Warning, not a complete comparison.
-         *  Must be enhanced before using in a Map or Set.
-         *  @since 0.9.21
+         * For findbugs.
+         * Warning, not a complete comparison.
+         * Must be enhanced before using in a Map or Set.
+         * @since 0.9.21
          */
         @Override
         public boolean equals(Object o) {

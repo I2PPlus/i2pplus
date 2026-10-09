@@ -7,19 +7,19 @@ import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- *  Work around the
- *  "No org.apache.tomcat.InstanceManager set in ServletContext" problem
- *  for eepsites with webapps.
+ * Work around the
+ * "No org.apache.tomcat.InstanceManager set in ServletContext" problem
+ * for eepsites with webapps.
  *
- *  See WebAppStarter and WebAppConfiguration for the console version.
+ * See WebAppStarter and WebAppConfiguration for the console version.
  *
- *  @since 0.9.41
+ * @since 0.9.41
  */
 public class WebAppProviderConfiguration {
 
     /**
-     *  Modified from routerconsole WebAppStarter.
-     *  MUST be called from jetty.xml after the WebAppProvider is created.
+     * Modified from routerconsole WebAppStarter.
+     * MUST be called from jetty.xml after the WebAppProvider is created.
      */
     public static void configure(WebAppProvider wap) {
         String[] classNames = WebAppContext.getDefaultConfigurationClasses();

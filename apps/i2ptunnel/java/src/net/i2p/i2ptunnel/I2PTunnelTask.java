@@ -49,42 +49,42 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     protected void routerDisconnected() {tunnel.routerDisconnected();}
 
     /**
-     *  Note that the tunnel can be reopened after this by calling startRunning().
-     *  This may not release all resources. In particular, the I2PSocketManager remains
-     *  and it may have timer threads that continue running.
+     * Note that the tunnel can be reopened after this by calling startRunning().
+     * This may not release all resources. In particular, the I2PSocketManager remains
+     * and it may have timer threads that continue running.
      *
-     *  To release all resources permanently, call destroy().
+     * To release all resources permanently, call destroy().
      *
-     *  @return success
+     * @return success
      */
     public abstract boolean close(boolean forced);
 
     /**
-     *  Note that the tunnel cannot be reopened after this by calling startRunning(),
-     *  as it may destroy the underlying socket manager, depending on implementation.
-     *  This should release all resources.
+     * Note that the tunnel cannot be reopened after this by calling startRunning(),
+     * as it may destroy the underlying socket manager, depending on implementation.
+     * This should release all resources.
      *
-     *  The implementation here simply calls close(true).
-     *  Extending classes should override to release all resources.
+     * The implementation here simply calls close(true).
+     * Extending classes should override to release all resources.
      *
-     *  @return success
-     *  @since 0.9.17
+     * @return success
+     * @since 0.9.17
      */
     public boolean destroy() {return close(true);}
 
     /**
-     *  Notify the task that I2PTunnel's options have been updated.
-     *  Extending classes should override and call I2PTunnel.getClientOptions(),
-     *  then update the I2PSocketManager.
-     *  Does nothing here.
+     * Notify the task that I2PTunnel's options have been updated.
+     * Extending classes should override and call I2PTunnel.getClientOptions(),
+     * then update the I2PSocketManager.
+     * Does nothing here.
      *
-     *  @since 0.9.1
+     * @since 0.9.1
      */
     public void optionsUpdated(I2PTunnel tunnel) {}
 
     /**
-     *  For tasks that don't call I2PTunnel.addSession() directly
-     *  @since 0.8.13
+     * For tasks that don't call I2PTunnel.addSession() directly
+     * @since 0.8.13
      */
     public void connected(I2PSession session) {getTunnel().addSession(session);}
 
@@ -114,12 +114,12 @@ public abstract class I2PTunnelTask extends EventDispatcherImpl {
     }
 
     /**
-     *  Does nothing here. Extending classes may override.
+     * Does nothing here. Extending classes may override.
      */
     public void errorOccurred(I2PSession session, String message, Throwable error) {}
 
     /**
-     *  Does nothing here. Extending classes may override.
+     * Does nothing here. Extending classes may override.
      */
     public void reportAbuse(I2PSession session, int severity) {}
 

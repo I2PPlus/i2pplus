@@ -29,7 +29,6 @@ import net.i2p.util.Log;
 /**
  * Caches email data for each folder with POP3 mailbox integration.
  * Only DIR_FOLDER has a non-null POP3MailBox.
- *
  */
 class MailCache {
 
@@ -54,7 +53,7 @@ class MailCache {
     private final Folder<String> folder;
     private final String folderName;
     /**
-     *  Serializes draft/sent full-mail writes. @since 0.9.71+
+     * Serializes draft/sent full-mail writes. @since 0.9.71+
      */
     private final Object _writeLock = new Object();
     private NewMailListener _loadInProgress;
@@ -63,8 +62,8 @@ class MailCache {
     private final Log _log;
 
     /** Includes header, headers are generally 1KB to 1.5 KB,
-     *  and bodies will compress well.
-         */
+     * and bodies will compress well.
+     */
     private static final int FETCH_ALL_SIZE = 32*1024;
 
 
@@ -135,9 +134,9 @@ class MailCache {
     }
 
     /**
-     *  Lock held while writing a new full mail, serializing draft/sent
-     *  writes against each other.
-     *  @since 0.9.71+
+     * Lock held while writing a new full mail, serializing draft/sent
+     * writes against each other.
+     * @since 0.9.71+
      */
     public Object getWriteLock() {return _writeLock;}
 
@@ -264,7 +263,7 @@ class MailCache {
         private final NewMailListener _nml;
 
         /**
-         *  @param nml listener to notify after load
+         * @param nml listener to notify after load
          */
         public LoadMailRunner(NewMailListener nml) {
             _nml = nml;
@@ -611,7 +610,7 @@ class MailCache {
     }
 
     /**
-     *  Outgoing to POP3
+     * Outgoing to POP3
      */
     private static class POP3Request implements FetchRequest {
         /**
@@ -626,9 +625,9 @@ class MailCache {
         public final Buffer buf;
 
         /**
-         *  @param m the mail to fetch
-         *  @param hOnly if true, fetch headers only
-         *  @param buffer destination buffer
+         * @param m the mail to fetch
+         * @param hOnly if true, fetch headers only
+         * @param buffer destination buffer
          */
         public POP3Request(Mail m, boolean hOnly, Buffer buffer) {
             mail = m;

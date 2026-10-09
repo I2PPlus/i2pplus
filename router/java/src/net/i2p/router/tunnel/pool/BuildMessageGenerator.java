@@ -22,9 +22,9 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 
 /**
- *  Fill in the encrypted BuildRequestRecords in a TunnelBuildMessage
+ * Fill in the encrypted BuildRequestRecords in a TunnelBuildMessage
  *
- *  @since 0.9.51 moved to tunnel.pool package
+ * @since 0.9.51 moved to tunnel.pool package
  */
 abstract class BuildMessageGenerator {
 

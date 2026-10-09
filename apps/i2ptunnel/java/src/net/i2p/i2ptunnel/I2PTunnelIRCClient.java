@@ -42,17 +42,17 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     private DCCClientManager _DCCClientManager;
 
     /**
-     *  @since 0.8.9
+     * @since 0.8.9
      */
     public static final String PROP_DCC = "i2ptunnel.ircclient.enableDCC";
 
     /**
-     *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
-     *  or open the local socket. You MUST call startRunning() for that.
+     * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
+     * or open the local socket. You MUST call startRunning() for that.
      *
      * @param destinations peers we target, comma- or space-separated. Since 0.9.9, each dest may be appended with :port
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     *                                  valid config to contact the router
+     * valid config to contact the router
      */
     public I2PTunnelIRCClient(
                               int localPort,
@@ -241,11 +241,11 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Maximum number of I2P connect attempts per client connection: the initial
-     *  try plus three exponential-backoff retries. Once the budget is exhausted
-     *  the tunnel gives up and sends the 499 error reply.
+     * Maximum number of I2P connect attempts per client connection: the initial
+     * try plus three exponential-backoff retries. Once the budget is exhausted
+     * the tunnel gives up and sends the 499 error reply.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final int IRC_CONNECT_MAX_ATTEMPTS = 4;
 
@@ -253,16 +253,16 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     static final long IRC_CONNECT_RETRY_BASE_DELAY = 1000;
 
     /**
-     *  Exponential backoff delay (ms) to sleep before the given connect retry.
-     *  The first retry waits {@link #IRC_CONNECT_RETRY_BASE_DELAY} (1s), doubling
-     *  per attempt up to a hard cap of 8s. During a tunnel-pool stall the cap
-     *  lets the pool recover instead of hammering it, and the loop still fails
-     *  fast once {@link #poolState()} reports a provably dead pool.
-     *  Pure decision - no context access, safe for unit tests.
+     * Exponential backoff delay (ms) to sleep before the given connect retry.
+     * The first retry waits {@link #IRC_CONNECT_RETRY_BASE_DELAY} (1s), doubling
+     * per attempt up to a hard cap of 8s. During a tunnel-pool stall the cap
+     * lets the pool recover instead of hammering it, and the loop still fails
+     * fast once {@link #poolState()} reports a provably dead pool.
+     * Pure decision - no context access, safe for unit tests.
      *
-     *  @param attempt the 1-based connect failure count (how many failures so far)
-     *  @return delay in ms: 0 for attempt &lt;= 0, else 1000 &lt;&lt; (attempt-1) bounded to 8000
-     *  @since 0.9.71+
+     * @param attempt the 1-based connect failure count (how many failures so far)
+     * @return delay in ms: 0 for attempt &lt;= 0, else 1000 &lt;&lt; (attempt-1) bounded to 8000
+     * @since 0.9.71+
      */
     static long getConnectRetryDelayMs(int attempt) {
         if (attempt <= 0) {return 0;}
@@ -271,23 +271,23 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Whether a connect attempt should be retried after {@code failures} failed
-     *  attempts. Three independent conditions must all hold:
-     *  <ul>
-     *  <li>the attempt budget is not exhausted ({@code failures < maxAttempts}),</li>
-     *  <li>the client outbound pool is not provably dead ({@code poolState != -1}; a
-     *      {@code -2} "unknown" result from standalone clients does NOT fail fast,
-     *      matching {@code shouldStopEmptyReconnect()}),</li>
-     *  <li>the failure is retryable per {@link #isRetryableConnectFailure(Throwable)}.</li>
-     *  </ul>
-     *  Pure decision - no context access, safe for unit tests.
+     * Whether a connect attempt should be retried after {@code failures} failed
+     * attempts. Three independent conditions must all hold:
+     * <ul>
+     * <li>the attempt budget is not exhausted ({@code failures < maxAttempts}),</li>
+     * <li>the client outbound pool is not provably dead ({@code poolState != -1}; a
+     * {@code -2} "unknown" result from standalone clients does NOT fail fast,
+     * matching {@code shouldStopEmptyReconnect()}),</li>
+     * <li>the failure is retryable per {@link #isRetryableConnectFailure(Throwable)}.</li>
+     * </ul>
+     * Pure decision - no context access, safe for unit tests.
      *
-     *  @param failures the 1-based number of failed attempts so far
-     *  @param maxAttempts the total attempt budget, 1-based
-     *  @param poolState the {@link #poolState()} value from the last failed attempt
-     *  @param last the throwable from the last failed attempt
-     *  @return true if another attempt should be scheduled
-     *  @since 0.9.71+
+     * @param failures the 1-based number of failed attempts so far
+     * @param maxAttempts the total attempt budget, 1-based
+     * @param poolState the {@link #poolState()} value from the last failed attempt
+     * @param last the throwable from the last failed attempt
+     * @return true if another attempt should be scheduled
+     * @since 0.9.71+
      */
     static boolean shouldRetryConnect(int failures, int maxAttempts, int poolState, Throwable last) {
         if (failures >= maxAttempts) {return false;}
@@ -296,23 +296,23 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Whether a connect failure is transient enough to warrant another attempt.
-     *  <ul>
-     *  <li>Not retryable: {@code ConnectException} (an explicit refusal is a hard
-     *      answer from the peer that a new attempt cannot change), an
-     *      {@code InterruptedIOException} (local cancellation - the tunnel is
-     *      closing), or {@code null}.</li>
-     *  <li>Retryable: everything else - {@code NoRouteToHostException} connect
-     *      timeouts, {@code UnknownHostException} for a b32 destination whose
-     *      LeaseSet may become available by the next attempt, {@code I2PException}
-     *      tunnel build failures (incl. {@code TooManyStreamsException}), and
-     *      generic I/O errors.</li>
-     *  </ul>
-     *  Pure decision - no context access, safe for unit tests.
+     * Whether a connect failure is transient enough to warrant another attempt.
+     * <ul>
+     * <li>Not retryable: {@code ConnectException} (an explicit refusal is a hard
+     * answer from the peer that a new attempt cannot change), an
+     * {@code InterruptedIOException} (local cancellation - the tunnel is
+     * closing), or {@code null}.</li>
+     * <li>Retryable: everything else - {@code NoRouteToHostException} connect
+     * timeouts, {@code UnknownHostException} for a b32 destination whose
+     * LeaseSet may become available by the next attempt, {@code I2PException}
+     * tunnel build failures (incl. {@code TooManyStreamsException}), and
+     * generic I/O errors.</li>
+     * </ul>
+     * Pure decision - no context access, safe for unit tests.
      *
-     *  @param t the throwable from the failed connect
-     *  @return true if a retry is worthwhile
-     *  @since 0.9.71+
+     * @param t the throwable from the failed connect
+     * @return true if a retry is worthwhile
+     * @since 0.9.71+
      */
     static boolean isRetryableConnectFailure(Throwable t) {
         if (t == null) {return false;}
@@ -322,26 +322,26 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Instance gate for the clientConnectionRun retry loop: applies the static
-     *  budget, dead-pool and failure-classification rules with the current pool
-     *  state ({@link #poolState()}).
+     * Instance gate for the clientConnectionRun retry loop: applies the static
+     * budget, dead-pool and failure-classification rules with the current pool
+     * state ({@link #poolState()}).
      *
-     *  @param failures the 1-based number of failed attempts so far
-     *  @param t the throwable from the last failed attempt
-     *  @return true if another connect attempt should be scheduled
-     *  @since 0.9.71+
+     * @param failures the 1-based number of failed attempts so far
+     * @param t the throwable from the last failed attempt
+     * @return true if another connect attempt should be scheduled
+     * @since 0.9.71+
      */
     private boolean shouldRetry(int failures, Throwable t) {
         return shouldRetryConnect(failures, IRC_CONNECT_MAX_ATTEMPTS, poolState(), t);
     }
 
     /**
-     *  Sleep through the exponential backoff preceding a retry, failing fast when
-     *  the tunnel is being shut down mid-delay.
+     * Sleep through the exponential backoff preceding a retry, failing fast when
+     * the tunnel is being shut down mid-delay.
      *
-     *  @param failures the 1-based number of failed attempts so far
-     *  @return true if the delay elapsed, false if the thread was interrupted
-     *  @since 0.9.71+
+     * @param failures the 1-based number of failed attempts so far
+     * @return true if the delay elapsed, false if the thread was interrupted
+     * @since 0.9.71+
      */
     private boolean retryDelay(int failures) {
         try {
@@ -354,16 +354,16 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Pick the destination to try for attempt {@code attempt}, rotating
-     *  round-robin through all configured targets from a per-connection
-     *  random start ({@code base}).  Reverses the historical behavior of
-     *  retrying the same randomly-chosen target repeatedly, which wasted the
-     *  whole retry budget on one dead destination while the alternate targets
-     *  went untried.
+     * Pick the destination to try for attempt {@code attempt}, rotating
+     * round-robin through all configured targets from a per-connection
+     * random start ({@code base}).  Reverses the historical behavior of
+     * retrying the same randomly-chosen target repeatedly, which wasted the
+     * whole retry budget on one dead destination while the alternate targets
+     * went untried.
      *
-     *  @param base per-connection random start index, in [0, size)
-     *  @param attempt 0-based attempt number within this connection
-     *  @return the address to try, or null if no targets are configured
+     * @param base per-connection random start index, in [0, size)
+     * @param attempt 0-based attempt number within this connection
+     * @return the address to try, or null if no targets are configured
      */
     private I2PSocketAddress pickDestination(int base, int attempt) {
         synchronized(_addrs) {
@@ -378,17 +378,17 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Destination-list index for connect attempt {@code attempt} when rotating
-     *  round-robin: {@code base + attempt mod size}.  Attempt 0 uses the
-     *  per-connection random start; each later attempt advances one slot, so
-     *  consecutive attempts always hit different targets (for size &gt; 1).
-     *  Pure decision - no context access, safe for unit tests.
+     * Destination-list index for connect attempt {@code attempt} when rotating
+     * round-robin: {@code base + attempt mod size}.  Attempt 0 uses the
+     * per-connection random start; each later attempt advances one slot, so
+     * consecutive attempts always hit different targets (for size &gt; 1).
+     * Pure decision - no context access, safe for unit tests.
      *
-     *  @param attempt 0-based attempt number within this connection
-     *  @param size number of configured destinations
-     *  @param base per-connection random start index, in [0, size)
-     *  @return index into the destination list, in [0, size), or 0 for size &lt;= 1
-     *  @since 0.9.71+
+     * @param attempt 0-based attempt number within this connection
+     * @param size number of configured destinations
+     * @param base per-connection random start index, in [0, size)
+     * @return index into the destination list, in [0, size), or 0 for size &lt;= 1
+     * @since 0.9.71+
      */
     static int destinationIndexForAttempt(int attempt, int size, int base) {
         if (size <= 1)
@@ -397,9 +397,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Update the dests then call super.
+     * Update the dests then call super.
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
@@ -452,7 +452,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     private final byte[] _localAddr;
 
     /**
-     *  @param local Our IP address, from the IRC client's perspective
+     * @param local Our IP address, from the IRC client's perspective
      */
     public DCC(byte[] local) {
         if (local.length == 4)

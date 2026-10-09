@@ -17,38 +17,38 @@ import java.util.Properties;
 import net.i2p.data.DataHelper;
 
 /**
- *  Whether each site in the Sites of Interest listing is still worth showing.
+ * Whether each site in the Sites of Interest listing is still worth showing.
  *
- *  <p>A site can fail in two independent ways, so two sources are consulted.
+ * <p>A site can fail in two independent ways, so two sources are consulted.
  *
- *  <p><b>Addressbook membership.</b> The router resolves names through
- *  {@code BlockfileNamingService}, backed by {@code hostsdb.blockfile} - the live addressbook,
- *  which is much larger than the {@code hosts.txt} shipped at install and accumulates
- *  entries beyond it. A site the naming service cannot resolve cannot be reached by name, so
- *  it is not shown. Membership is therefore asked of {@code NamingService} rather than read
- *  from any file: {@code hosts.txt} is only the seed the database was built from and says
- *  nothing about what is live.
+ * <p><b>Addressbook membership.</b> The router resolves names through
+ * {@code BlockfileNamingService}, backed by {@code hostsdb.blockfile} - the live addressbook,
+ * which is much larger than the {@code hosts.txt} shipped at install and accumulates
+ * entries beyond it. A site the naming service cannot resolve cannot be reached by name, so
+ * it is not shown. Membership is therefore asked of {@code NamingService} rather than read
+ * from any file: {@code hosts.txt} is only the seed the database was built from and says
+ * nothing about what is live.
  *
- *  <p><b>Probe status.</b> The addressbook checker periodically probes the sites it knows and
- *  appends the outcome to {@code addressbook/hosts_check.txt}, one CSV row per probe:
+ * <p><b>Probe status.</b> The addressbook checker periodically probes the sites it knows and
+ * appends the outcome to {@code addressbook/hosts_check.txt}, one CSV row per probe:
  *
- *  <pre>
+ * <pre>
  *  # Format: timestamp,host,reachable,category,responseTime,leaseSetTypes
  *  1791429608769,exil3.i2p,y,forum,34765,[6,4]
- *  </pre>
+ * </pre>
  *
- *  <p>A site in the addressbook whose latest probe failed is hidden and reappears when a later
- *  probe succeeds. A site in the addressbook that has not been probed yet is shown: absence of
- *  a result is not evidence of failure, so a cold cache must not empty the page.
+ * <p>A site in the addressbook whose latest probe failed is hidden and reappears when a later
+ * probe succeeds. A site in the addressbook that has not been probed yet is shown: absence of
+ * a result is not evidence of failure, so a cold cache must not empty the page.
  *
- *  <p>Only the host column and the reachable flag are read. The trailing field contains commas
- *  of its own ({@code [6,4]}); that is harmless because the fields of interest come first and
- *  the split is positional.
+ * <p>Only the host column and the reachable flag are read. The trailing field contains commas
+ * of its own ({@code [6,4]}); that is harmless because the fields of interest come first and
+ * the split is positional.
  *
- *  <p>Probe results are cached for one ping interval, since they cannot change any faster than
- *  the checker refreshes them.
+ * <p>Probe results are cached for one ping interval, since they cannot change any faster than
+ * the checker refreshes them.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class HostCheckStatus {
 
@@ -88,14 +88,14 @@ public class HostCheckStatus {
     private static long _ttl = DEFAULT_INTERVAL_MS;
 
     /**
-     *  The probe results, cached for the current ping interval.
+     * The probe results, cached for the current ping interval.
      *
-     *  <p>Callers rendering a whole list should fetch once and use
-     *  {@link #isDown(String, boolean, Map)} per entry, rather than re-reading per entry.
+     * <p>Callers rendering a whole list should fetch once and use
+     * {@link #isDown(String, boolean, Map)} per entry, rather than re-reading per entry.
      *
-     *  @param routerDir the router's working directory
-     *  @return host to reachable flag; empty if the results file could not be read, which
-     *          judges nothing rather than judging everything
+     * @param routerDir the router's working directory
+     * @return host to reachable flag; empty if the results file could not be read, which
+     * judges nothing rather than judging everything
      */
     public static synchronized Map<String, Boolean> probed(File routerDir) {
         refresh(routerDir);
@@ -103,15 +103,15 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Hostnames the operator has blacklisted, cached on the same cycle as the probe results.
+     * Hostnames the operator has blacklisted, cached on the same cycle as the probe results.
      *
-     *  <p>This is the susidns/addressbook blacklist, one lowercased hostname per line. It is
-     *  not the router's {@code Banlist}, which is a separate peer-hash mechanism with
-     *  expiry: the two answer different questions, and a hostname can be blacklisted here
-     *  without the router ever refusing that peer.
+     * <p>This is the susidns/addressbook blacklist, one lowercased hostname per line. It is
+     * not the router's {@code Banlist}, which is a separate peer-hash mechanism with
+     * expiry: the two answer different questions, and a hostname can be blacklisted here
+     * without the router ever refusing that peer.
      *
-     *  @param routerDir the router's working directory
-     *  @return the blacklisted hostnames, empty if the file could not be read
+     * @param routerDir the router's working directory
+     * @return the blacklisted hostnames, empty if the file could not be read
      */
     public static synchronized Set<String> blacklisted(File routerDir) {
         refresh(routerDir);
@@ -119,14 +119,14 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Reload both files if the cache has expired.
+     * Reload both files if the cache has expired.
      *
-     *  <p>They are refreshed together on purpose: the checker rewrites both, so they have the
-     *  same cadence, and one timestamp for the pair means a page render can never mix a fresh
-     *  blacklist with stale probe results. Freshness is keyed on the timestamp rather than on
-     *  whether the files were found, so a missing file does not make every request re-read.
+     * <p>They are refreshed together on purpose: the checker rewrites both, so they have the
+     * same cadence, and one timestamp for the pair means a page render can never mix a fresh
+     * blacklist with stale probe results. Freshness is keyed on the timestamp rather than on
+     * whether the files were found, so a missing file does not make every request re-read.
      *
-     *  @param routerDir the router's working directory
+     * @param routerDir the router's working directory
      */
     private static void refresh(File routerDir) {
         if (routerDir == null) { return; }
@@ -145,16 +145,16 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Whether a site should be hidden from the listing.
+     * Whether a site should be hidden from the listing.
      *
-     *  <p>A site is hidden when it is not in the addressbook at all, or when its latest probe
-     *  failed. A site in the addressbook with no probe result is shown, because untested is
-     *  not the same as down.
+     * <p>A site is hidden when it is not in the addressbook at all, or when its latest probe
+     * failed. A site in the addressbook with no probe result is shown, because untested is
+     * not the same as down.
      *
-     *  @param host hostname, already lowercased
-     *  @param inAddressbook whether the naming service resolves the host
+     * @param host hostname, already lowercased
+     * @param inAddressbook whether the naming service resolves the host
      * @param probed result of {@link #probed(File)}
-     *  @return true if the link should not be shown
+     * @return true if the link should not be shown
      */
     public static boolean isDown(String host, boolean inAddressbook, Map<String, Boolean> probed) {
         if (host == null) { return false; }
@@ -165,29 +165,29 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Whether a hostname is blacklisted.
+     * Whether a hostname is blacklisted.
      *
-     *  <p>A blacklisted host is never offered as a link, whatever the probe results say. That
-     *  is a stronger rule than "down": the operator has said they do not want it reached, so a
-     *  successful probe does not earn it a place back.
+     * <p>A blacklisted host is never offered as a link, whatever the probe results say. That
+     * is a stronger rule than "down": the operator has said they do not want it reached, so a
+     * successful probe does not earn it a place back.
      *
-     *  @param host lowercase host, as returned by {@link #hostFromUrl(String)}
-     *  @param blacklist result of {@link #blacklisted(File)}
-     *  @return true if the host is blacklisted
+     * @param host lowercase host, as returned by {@link #hostFromUrl(String)}
+     * @param blacklist result of {@link #blacklisted(File)}
+     * @return true if the host is blacklisted
      */
     public static boolean isBlacklisted(String host, Set<String> blacklist) {
         return host != null && blacklist != null && blacklist.contains(host);
     }
 
     /**
-     *  Record one entry of the blacklist, which is a bare hostname per line.
+     * Record one entry of the blacklist, which is a bare hostname per line.
      *
-     *  <p>Comments and blank lines are skipped and the name is lowercased, so the file stays
-     *  usable if it is ever hand-edited. A line carrying anything other than a hostname is
-     *  ignored rather than stored, since a malformed entry must not silently blank a link.
+     * <p>Comments and blank lines are skipped and the name is lowercased, so the file stays
+     * usable if it is ever hand-edited. A line carrying anything other than a hostname is
+     * ignored rather than stored, since a malformed entry must not silently blank a link.
      *
-     *  @param line one line from the blacklist
-     *  @param out receives the hostname
+     * @param line one line from the blacklist
+     * @param out receives the hostname
      */
     public static void parseBlacklistLine(String line, Set<String> out) {
         if (line == null || out == null) { return; }
@@ -200,14 +200,14 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Extract the host from a link's URL.
+     * Extract the host from a link's URL.
      *
-     *  <p>Strips the scheme, any path, any port, and lowercases the result. Returns null when
-     *  there is no host to extract, which is also the signal that the link is not a site the
-     *  addressbook could ever hold.
+     * <p>Strips the scheme, any path, any port, and lowercases the result. Returns null when
+     * there is no host to extract, which is also the signal that the link is not a site the
+     * addressbook could ever hold.
      *
-     *  @param url the configured URL
-     *  @return the lowercase host, or null
+     * @param url the configured URL
+     * @return the lowercase host, or null
      */
     public static String hostFromUrl(String url) {
         if (url == null) { return null; }
@@ -224,32 +224,32 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Whether a host is one the addressbook can hold, i.e. an I2P name.
+     * Whether a host is one the addressbook can hold, i.e. an I2P name.
      *
-     *  <p>Links to clearnet or to the console's own paths are always shown; only .i2p names
-     *  can be judged down.
+     * <p>Links to clearnet or to the console's own paths are always shown; only .i2p names
+     * can be judged down.
      *
-     *  <p>A {@code .b32.i2p} name is deliberately included: it is an I2P name, and the naming
-     *  service resolves it. It is left in scope even though resolving one can reach the
-     *  network, because the listing is not expected to contain them.
+     * <p>A {@code .b32.i2p} name is deliberately included: it is an I2P name, and the naming
+     * service resolves it. It is left in scope even though resolving one can reach the
+     * network, because the listing is not expected to contain them.
      *
-     *  @param host lowercase host, as returned by {@link #hostFromUrl(String)}
-     *  @return true if the host is an I2P name
+     * @param host lowercase host, as returned by {@link #hostFromUrl(String)}
+     * @return true if the host is an I2P name
      */
     public static boolean isI2pHost(String host) {
         return host != null && host.endsWith(".i2p");
     }
 
     /**
-     *  Record one row of the results file.
+     * Record one row of the results file.
      *
-     *  <p>Comments and blank lines are skipped, as is any row whose reachable flag is neither
-     *  {@code y} nor {@code n}, so a half-written row cannot be mistaken for a verdict and hide
-     *  a working site. Hosts are lowercased so lookups need not worry about case. Later rows
-     *  win, which is what lets a recovered site come back.
+     * <p>Comments and blank lines are skipped, as is any row whose reachable flag is neither
+     * {@code y} nor {@code n}, so a half-written row cannot be mistaken for a verdict and hide
+     * a working site. Hosts are lowercased so lookups need not worry about case. Later rows
+     * win, which is what lets a recovered site come back.
      *
-     *  @param line one line from the results file
-     *  @param out receives host to reachable
+     * @param line one line from the results file
+     * @param out receives host to reachable
      */
     public static void parseProbeLine(String line, Map<String, Boolean> out) {
         if (line == null || out == null) { return; }
@@ -268,14 +268,14 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Convert a configured ping interval to milliseconds.
+     * Convert a configured ping interval to milliseconds.
      *
-     *  <p>Follows the checker's own convention: a trailing {@code M} means minutes, anything
-     *  else means hours. The config in use reads {@code pingInterval=1}, which means one hour
-     *  rather than one minute.
+     * <p>Follows the checker's own convention: a trailing {@code M} means minutes, anything
+     * else means hours. The config in use reads {@code pingInterval=1}, which means one hour
+     * rather than one minute.
      *
-     *  @param value the raw config value
-     *  @return the interval in milliseconds, or {@link #DEFAULT_INTERVAL_MS} if unusable
+     * @param value the raw config value
+     * @return the interval in milliseconds, or {@link #DEFAULT_INTERVAL_MS} if unusable
      */
     public static long parseInterval(String value) {
         if (value == null) { return DEFAULT_INTERVAL_MS; }
@@ -293,10 +293,10 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Read the probe results.
+     * Read the probe results.
      *
-     *  @param routerDir the router's working directory
-     *  @return host to reachable, or null if the file could not be read
+     * @param routerDir the router's working directory
+     * @return host to reachable, or null if the file could not be read
      */
     private static Map<String, Boolean> readProbed(File routerDir) {
         File file = new File(new File(routerDir, STATUS_DIR), STATUS_FILE);
@@ -313,10 +313,10 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Read the susidns/addressbook blacklist.
+     * Read the susidns/addressbook blacklist.
      *
-     *  @param routerDir the router's working directory
-     *  @return the blacklisted hostnames, or null if the file could not be read
+     * @param routerDir the router's working directory
+     * @return the blacklisted hostnames, or null if the file could not be read
      */
     private static Set<String> readBlacklist(File routerDir) {
         File file = new File(new File(routerDir, STATUS_DIR), BLACKLIST_FILE);
@@ -333,10 +333,10 @@ public class HostCheckStatus {
     }
 
     /**
-     *  Read the configured ping interval.
+     * Read the configured ping interval.
      *
-     *  @param routerDir the router's working directory
-     *  @return the interval in milliseconds, defaulting if unreadable
+     * @param routerDir the router's working directory
+     * @return the interval in milliseconds, defaulting if unreadable
      */
     private static long readInterval(File routerDir) {
         File file = new File(new File(routerDir, STATUS_DIR), CONFIG_FILE);

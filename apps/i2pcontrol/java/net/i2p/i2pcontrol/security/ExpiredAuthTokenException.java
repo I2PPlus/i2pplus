@@ -10,7 +10,8 @@ public class ExpiredAuthTokenException extends Exception {
     /** Expiry time */
     private String expiryTime;
 
-    /** @param str the exception message
+    /**
+     * @param str the exception message
      * @param expiryTime the time when the token expired */
     public ExpiredAuthTokenException(String str, String expiryTime) {
         super(str);

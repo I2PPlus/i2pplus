@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -54,9 +53,9 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     public static final int STATUS_REFUSED = 4;
 
     /**
-     *  Used internally, not in spec, will be remapped to STATUS_INVALID before being sent.
+     * Used internally, not in spec, will be remapped to STATUS_INVALID before being sent.
      *
-     *  @since 0.9.44
+     * @since 0.9.44
      */
     public static final int STATUS_DUP_DEST = 5;
 

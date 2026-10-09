@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -34,8 +33,8 @@ public class SessionId {
 
     /**
      * 0-65535.
-     *  @param id 0-65535
-     *  @since 0.9.11
+     * @param id 0-65535
+     * @since 0.9.11
      */
     public SessionId(int id) {
         if (id < 0 || id > 65535) {

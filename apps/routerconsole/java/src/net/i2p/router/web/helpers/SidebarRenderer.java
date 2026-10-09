@@ -81,10 +81,10 @@ class SidebarRenderer {
     private String getToggle() {return "<input type=checkbox id=" + toggleId + " class=\"toggleSection script\" checked hidden>";}
 
     /**
-     *  Create the renderer bound to the helper that supplies sidebar data.
+     * Create the renderer bound to the helper that supplies sidebar data.
      *
-     *  @param context the router context to read router state from
-     *  @param helper the helper that supplies sidebar data and settings
+     * @param context the router context to read router state from
+     * @param helper the helper that supplies sidebar data and settings
      */
     public SidebarRenderer(RouterContext context, SidebarHelper helper) {
         _context = context;
@@ -92,18 +92,18 @@ class SidebarRenderer {
     }
 
     /**
-     *  True if the router is a floodfill router.
+     * True if the router is a floodfill router.
      *
-     *  @return whether the router is a floodfill
+     * @return whether the router is a floodfill
      */
     public boolean floodfillEnabled() {return _context.netDb().floodfillEnabled();}
 
     /**
-     *  Note - Ensure all links in here are absolute, as the summary bar may be displayed
-     *  on lower-level directory errors.
+     * Note - Ensure all links in here are absolute, as the summary bar may be displayed
+     * on lower-level directory errors.
      *
-     *  @param out the writer the summary bar markup is written to
-     *  @throws IOException if the writer rejects the summary bar
+     * @param out the writer the summary bar markup is written to
+     * @throws IOException if the writer rejects the summary bar
      */
     public void renderSummaryHTML(Writer out) throws IOException {
         String requestURI = _helper.getRequestURI();
@@ -405,11 +405,11 @@ class SidebarRenderer {
     }
 
     /**
-     *  Get the local eepsite URL from the port mapper.
+     * Get the local eepsite URL from the port mapper.
      *
-     *  @param pm the port mapper to resolve the eepsite port against
-     *  @return null if none
-     *  @since 0.9.43 split out from above, used by HomeHelper, fixed for IPv6
+     * @param pm the port mapper to resolve the eepsite port against
+     * @return null if none
+     * @since 0.9.43 split out from above, used by HomeHelper, fixed for IPv6
      */
     static String getEepsiteURL(PortMapper pm) {
         int port = pm.getPort(PortMapper.SVC_EEPSITE);
@@ -1190,12 +1190,12 @@ class SidebarRenderer {
     }
 
     /**
-     *  Renders the sidebar bandwidth graph HTML. When routerconsole.sidebarGraphLegacy
-     *  is false, emits data-rx/data-tx attributes for the dual-baseline canvas renderer
-     *  (inbound inverted top, outbound normal bottom). Otherwise, serves the RRD4J SVG.
-     *  @return the graph markup: data attributes for the canvas renderer,
-     *              or an RRD4J SVG in legacy mode
-     *  @since 0.9.32
+     * Renders the sidebar bandwidth graph HTML. When routerconsole.sidebarGraphLegacy
+     * is false, emits data-rx/data-tx attributes for the dual-baseline canvas renderer
+     * (inbound inverted top, outbound normal bottom). Otherwise, serves the RRD4J SVG.
+     * @return the graph markup: data attributes for the canvas renderer,
+     * or an RRD4J SVG in legacy mode
+     * @since 0.9.32
      */
     public String renderBandwidthGraphHTML() {
         if (_helper == null) {return "";}
@@ -1592,7 +1592,7 @@ class SidebarRenderer {
      * The newest news headlines, at most three and none older than 60 days.
      *
      * @return the section markup, empty when no helper is bound or the
-     *             current news has already been hidden
+     * current news has already been hidden
      * @since 0.9.1
      */
     public String renderNewsHeadingsHTML() {
@@ -1662,10 +1662,10 @@ class SidebarRenderer {
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /**
-     *  Where the translation is to two words or more,
-     *  prevent splitting across lines
+     * Where the translation is to two words or more,
+     * prevent splitting across lines
      *
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     private static String nbsp(String s) {
         if (s.length() <= 30) {return s.replace(" ", "&nbsp;");} // if it's too long, this makes it worse

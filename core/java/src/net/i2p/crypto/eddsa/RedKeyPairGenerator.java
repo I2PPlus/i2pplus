@@ -7,9 +7,9 @@ import net.i2p.util.RandomSource;
 import java.security.KeyPair;
 
 /**
- *  Default keysize is 256 (Ed25519)
+ * Default keysize is 256 (Ed25519)
  *
- *  @since 0.9.39
+ * @since 0.9.39
  */
 public final class RedKeyPairGenerator extends KeyPairGenerator {
 

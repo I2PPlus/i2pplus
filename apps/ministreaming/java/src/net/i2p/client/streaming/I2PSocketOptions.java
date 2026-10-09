@@ -8,20 +8,20 @@ public interface I2PSocketOptions {
     /** How much data will we accept that hasn't been written out yet. */
     public static final String PROP_BUFFER_SIZE = "i2p.streaming.bufferSize";
     /**
-     *  Base time to wait for the ACK from a SYN, in milliseconds, before any
-     *  adaptive scaling is applied.  Default 30 seconds; a value &lt;= 0 turns
-     *  the connect timeout off, so the handshake is not given up on a timer.
-     *  The effective connect window adds the connect delay on the delayed-SYN
-     *  path, is scaled by the router's connect timeout multiplier, and is capped
-     *  by {@link #PROP_MAX_CONNECT_TIMEOUT}.
+     * Base time to wait for the ACK from a SYN, in milliseconds, before any
+     * adaptive scaling is applied.  Default 30 seconds; a value &lt;= 0 turns
+     * the connect timeout off, so the handshake is not given up on a timer.
+     * The effective connect window adds the connect delay on the delayed-SYN
+     * path, is scaled by the router's connect timeout multiplier, and is capped
+     * by {@link #PROP_MAX_CONNECT_TIMEOUT}.
      */
     public static final String PROP_CONNECT_TIMEOUT = "i2p.streaming.connectTimeout";
     /**
-     *  Absolute cap on the time an outbound connect will wait for a SYN ACK,
-     *  in milliseconds.  When set per-connection, overrides the router-wide
-     *  {@code i2p.streaming.maxConnectTimeout} default; when absent, the global
-     *  value applies.
-     *  @since 0.9.71+
+     * Absolute cap on the time an outbound connect will wait for a SYN ACK,
+     * in milliseconds.  When set per-connection, overrides the router-wide
+     * {@code i2p.streaming.maxConnectTimeout} default; when absent, the global
+     * value applies.
+     * @since 0.9.71+
      */
     public static final String PROP_MAX_CONNECT_TIMEOUT = "i2p.streaming.maxConnectTimeout";
     /** How long to block on read. */
@@ -29,19 +29,19 @@ public interface I2PSocketOptions {
     /** How long to block on write/flush */
     public static final String PROP_WRITE_TIMEOUT = "i2p.streaming.writeTimeout";
     /**
-     *  If set, the profile used to prioritize packets on the network.
-     *  One of the PROFILE_ constants below.
-     *  @since 0.9.66 promoted from ConnectionOptions
+     * If set, the profile used to prioritize packets on the network.
+     * One of the PROFILE_ constants below.
+     * @since 0.9.66 promoted from ConnectionOptions
      */
     public static final String PROP_PROFILE = "i2p.streaming.profile";
     /**
-     *  Profile for bulk transfers (normal downloads/uploads).
-     *  @since 0.9.66 promoted from ConnectionOptions
+     * Profile for bulk transfers (normal downloads/uploads).
+     * @since 0.9.66 promoted from ConnectionOptions
      */
     public static final int PROFILE_BULK = 1;
     /**
-     *  Profile for interactive traffic (latency-sensitive, e.g. SSH).
-     *  @since 0.9.66 promoted from ConnectionOptions
+     * Profile for interactive traffic (latency-sensitive, e.g. SSH).
+     * @since 0.9.66 promoted from ConnectionOptions
      */
     public static final int PROFILE_INTERACTIVE = 2;
     /**
@@ -56,7 +56,7 @@ public interface I2PSocketOptions {
      * Default 30 seconds.
      *
      * @return milliseconds to wait, or a non-positive value for no connect
-     *         timeout, i.e. the handshake is not given up on a timer
+     * timeout, i.e. the handshake is not given up on a timer
      */
     public long getConnectTimeout();
 
@@ -145,33 +145,33 @@ public interface I2PSocketOptions {
     public void setWriteTimeout(long ms);
 
     /**
-     *  The remote port.
-     *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
-     *  @since 0.8.9
+     * The remote port.
+     * @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
+     * @since 0.8.9
      */
     public int getPort();
 
     /**
-     *  The remote port.
-     *  @param port 0 - 65535
-     *  @since 0.8.9
+     * The remote port.
+     * @param port 0 - 65535
+     * @since 0.8.9
      */
     public void setPort(int port);
 
     /**
-     *  The local port.
-     *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
-     *  @since 0.8.9
+     * The local port.
+     * @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
+     * @since 0.8.9
      */
     public int getLocalPort();
 
     /**
-     *  The local port.
-     *  Zero (default) means you will receive traffic on all ports.
-     *  Nonzero means you will get traffic ONLY for that port, use with care,
-     *  as most applications do not specify a remote port.
-     *  @param port 0 - 65535
-     *  @since 0.8.9
+     * The local port.
+     * Zero (default) means you will receive traffic on all ports.
+     * Nonzero means you will get traffic ONLY for that port, use with care,
+     * as most applications do not specify a remote port.
+     * @param port 0 - 65535
+     * @since 0.8.9
      */
     public void setLocalPort(int port);
 }

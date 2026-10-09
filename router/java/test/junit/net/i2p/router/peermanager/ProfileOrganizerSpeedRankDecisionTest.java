@@ -15,19 +15,19 @@ import java.util.Random;
 import org.junit.Test;
 
 /**
- *  Pins the speed-threshold rank: the boundary profile chosen by the bounded
- *  top-K selection must be the same profile the removed full sort chose, at every
- *  qualifying count.
+ * Pins the speed-threshold rank: the boundary profile chosen by the bounded
+ * top-K selection must be the same profile the removed full sort chose, at every
+ * qualifying count.
  *
- *  <p>The rank is a fraction of the <em>qualifying</em> count, so a set of 4000
- *  profiles with 20 qualifiers reads rank 6, not rank 50 — the count that drives
- *  it has nothing to do with how many profiles are under consideration. The
- *  equivalence is asserted against the pre-optimisation code reproduced verbatim
- *  in {@link #originalBoundary}.
+ * <p>The rank is a fraction of the <em>qualifying</em> count, so a set of 4000
+ * profiles with 20 qualifiers reads rank 6, not rank 50 — the count that drives
+ * it has nothing to do with how many profiles are under consideration. The
+ * equivalence is asserted against the pre-optimisation code reproduced verbatim
+ * in {@link #originalBoundary}.
  *
- *  @see ProfileOrganizerSelectionCostTest
- *  @see ProfileOrganizerCapacityThresholdCountTest
- *  @since 0.9.71+
+ * @see ProfileOrganizerSelectionCostTest
+ * @see ProfileOrganizerCapacityThresholdCountTest
+ * @since 0.9.71+
  */
 public class ProfileOrganizerSpeedRankDecisionTest {
 
@@ -39,9 +39,9 @@ public class ProfileOrganizerSpeedRankDecisionTest {
     // ---- speedThresholdCutoff ----
 
     /**
-     *  The 30% fraction and the 50 cap, at the counts that straddle the cap. The
-     *  cap binds from 167 qualifiers, since 167 * 0.3 is the first count whose
-     *  30% reaches 50.
+     * The 30% fraction and the 50 cap, at the counts that straddle the cap. The
+     * cap binds from 167 qualifiers, since 167 * 0.3 is the first count whose
+     * 30% reaches 50.
      */
     @Test
     public void speedCutoffHoldsTheThirtyPercentAndFiftyBoundary() {
@@ -72,8 +72,8 @@ public class ProfileOrganizerSpeedRankDecisionTest {
     // ---- selectSpeedBoundary ----
 
     /**
-     *  A lone qualifier is the boundary no matter how many faster profiles are
-     *  present, because a non-qualifying profile is not in the ranked set at all.
+     * A lone qualifier is the boundary no matter how many faster profiles are
+     * present, because a non-qualifying profile is not in the ranked set at all.
      */
     @Test
     public void singleQualifyingPeerIsTheBoundary() {
@@ -100,10 +100,10 @@ public class ProfileOrganizerSpeedRankDecisionTest {
     }
 
     /**
-     *  The regression itself: a full profile set with few qualifiers. The profile
-     *  count puts the rank at the 50 cap and the selection then finds no 51st
-     *  qualifier and returns nothing, which left the previous threshold in place.
-     *  The qualifying count (20) puts it at rank 6.
+     * The regression itself: a full profile set with few qualifiers. The profile
+     * count puts the rank at the 50 cap and the selection then finds no 51st
+     * qualifier and returns nothing, which left the previous threshold in place.
+     * The qualifying count (20) puts it at rank 6.
      */
     @Test
     public void largeProfileSetWithFewQualifiersStillHasABoundary() {
@@ -145,9 +145,9 @@ public class ProfileOrganizerSpeedRankDecisionTest {
     }
 
     /**
-     *  Sweep: random profile counts, random qualifying fractions, distinct speeds
-     *  so the boundary peer is unique and the comparison is exact rather than on
-     *  the speed value alone.
+     * Sweep: random profile counts, random qualifying fractions, distinct speeds
+     * so the boundary peer is unique and the comparison is exact rather than on
+     * the speed value alone.
      */
     @Test
     public void boundaryAgreesWithFullSortOnRandomizedSets() {
@@ -165,8 +165,8 @@ public class ProfileOrganizerSpeedRankDecisionTest {
     // ---- helpers ----
 
     /**
-     *  The pre-optimisation implementation, verbatim: filter, sort the qualifiers
-     *  by speed descending, read rank min(30% of the qualifying count, 50).
+     * The pre-optimisation implementation, verbatim: filter, sort the qualifiers
+     * by speed descending, read rank min(30% of the qualifying count, 50).
      */
     private static PeerProfile originalBoundary(List<PeerProfile> reordered, double capacityThreshold) {
         List<PeerProfile> candidates = new ArrayList<>();
@@ -199,9 +199,9 @@ public class ProfileOrganizerSpeedRankDecisionTest {
     }
 
     /**
-     *  Speeds are unique across the whole set, so the sorted boundary is a single
-     *  well-defined peer; half of the decoys are active and half inactive, and all
-     *  are faster than every qualifier.
+     * Speeds are unique across the whole set, so the sorted boundary is a single
+     * well-defined peer; half of the decoys are active and half inactive, and all
+     * are faster than every qualifier.
      */
     private static List<PeerProfile> mixedSet(int qualifyingCount, int decoys, Random rnd) {
         List<PeerProfile> all = new ArrayList<>(qualifyingCount + decoys);

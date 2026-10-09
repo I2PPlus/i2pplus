@@ -119,13 +119,13 @@ public class TrustedUpdate {
     }
 
     /**
-     *  Duplicate keys or names rejected,
-     *  except that duplicate empty names are allowed
+     * Duplicate keys or names rejected,
+     * except that duplicate empty names are allowed
      *
-     *  @param key 172 character base64 string
-     *  @param name non-null but "" ok
-     *  @return true if successful
-     *  @since 0.7.12
+     * @param key 172 character base64 string
+     * @param name non-null but "" ok
+     * @return true if successful
+     * @since 0.7.12
      */
     public final boolean addKey(String key, String name) {
         if (_log.shouldDebug()) _log.debug("Adding " + name + ": " + key);
@@ -153,11 +153,11 @@ public class TrustedUpdate {
     }
 
     /**
-     *  Do we know about the following key?
+     * Do we know about the following key?
      *
-     *  @param key the key
-     *  @return true if the key is trusted
-     *  @since 0.7.12
+     * @param key the key
+     * @return true if the key is trusted
+     * @since 0.7.12
      */
     public boolean haveKey(String key) {
         if (key.length() != KEYSIZE_B64_BYTES) return false;
@@ -208,7 +208,7 @@ public class TrustedUpdate {
      * @param newVersion     The version to test.
      *
      * @return <code>true</code> if the given version is newer than the current
-     *         version, otherwise <code>false</code>.
+     * version, otherwise <code>false</code>.
      */
     public static final boolean needsUpdate(String currentVersion, String newVersion) {
         return VersionComparator.comp(currentVersion, newVersion) < 0;
@@ -317,9 +317,9 @@ public class TrustedUpdate {
     }
 
     /**
-     *  True if there's no version mismatch.
-     *  @return true if there's no version mismatch
-     *  @since 0.8.8
+     * True if there's no version mismatch.
+     * @return true if there's no version mismatch
+     * @since 0.8.8
      */
     private static final boolean verifyVersionCLI(String signedFile) {
         TrustedUpdate tu = new TrustedUpdate();
@@ -358,7 +358,7 @@ public class TrustedUpdate {
      * @param signedFile A signed update file.
      *
      * @return The version string read, or an empty string if no version string
-     *         is present.
+     * is present.
      */
     public static String getVersionString(File signedFile) {
         try (FileInputStream fileInputStream = new FileInputStream(signedFile)) {
@@ -386,7 +386,7 @@ public class TrustedUpdate {
      * @param inputStream containing at least 56 bytes
      *
      * @return The version string read, or an empty string if no version string
-     *         is present.
+     * is present.
      *
      * @since 0.7.12
      */
@@ -415,9 +415,9 @@ public class TrustedUpdate {
     }
 
     /**
-     *  Version in the .sud file, valid only after calling migrateVerified().
+     * Version in the .sud file, valid only after calling migrateVerified().
      *
-     *  @return the new version string
+     * @return the new version string
      */
     public String newVersion() {
         return _newVersion;
@@ -431,7 +431,7 @@ public class TrustedUpdate {
      * @param signedFile     The signed update file.
      *
      * @return <code>true</code> if the signed update file's version is newer
-     *         than the current version, otherwise <code>false</code>.
+     * than the current version, otherwise <code>false</code>.
      */
     public boolean isUpdatedVersion(String currentVersion, File signedFile) {
         _newVersion = getVersionString(signedFile);
@@ -455,7 +455,7 @@ public class TrustedUpdate {
      * @param outputFile     The file to write the verified data to.
      *
      * @return <code>null</code> if the signature and version were valid and the
-     *         data was moved, and an error <code>String</code> otherwise.
+     * data was moved, and an error <code>String</code> otherwise.
      */
     public String migrateVerified(String currentVersion, File signedFile, File outputFile) {
         if (!signedFile.exists()) return "File not found: " + signedFile.getAbsolutePath();
@@ -496,7 +496,7 @@ public class TrustedUpdate {
      * @param outputFile     The file to write the verified data to.
      *
      * @return <code>null</code> if the
-     *         data was moved, and an error <code>String</code> otherwise.
+     * data was moved, and an error <code>String</code> otherwise.
      *
      * @since 0.7.12
      */
@@ -527,13 +527,13 @@ try (FileInputStream fileInputStream = new FileInputStream(signedFile);
      * @param inputFile      The file to be signed.
      * @param signedFile     The signed update file to write.
      * @param privateKeyFile The name of the file containing the private key to
-     *                       sign <code>inputFile</code> with.
+     * sign <code>inputFile</code> with.
      *
      * @param version        The version string of the input file. If this is
-     *                       longer than 16 characters it will be truncated.
+     * longer than 16 characters it will be truncated.
      *
      * @return An instance of {@link net.i2p.data.Signature}, or
-     *         <code>null</code> if there was an error.
+     * <code>null</code> if there was an error.
      */
     public Signature sign(String inputFile, String signedFile, String privateKeyFile, String version) {
         SigningPrivateKey signingPrivateKey = new SigningPrivateKey();
@@ -564,13 +564,13 @@ try (FileInputStream fileInputStream = new FileInputStream(signedFile);
      * @param inputFile         The file to be signed.
      * @param signedFile        The signed update file to write.
      * @param signingPrivateKey An instance of <code>SigningPrivateKey</code>
-     *                          to sign <code>inputFile</code> with.
+     * to sign <code>inputFile</code> with.
      *
      * @param version           The version string of the input file. If this is
-     *                          longer than 16 characters it will be truncated.
+     * longer than 16 characters it will be truncated.
      *
      * @return An instance of {@link net.i2p.data.Signature}, or
-     *         <code>null</code> if there was an error.
+     * <code>null</code> if there was an error.
      */
     public Signature sign(String inputFile, String signedFile, SigningPrivateKey signingPrivateKey, String version) {
         byte[] versionHeader = {
@@ -619,7 +619,7 @@ try (FileInputStream fileInputStream = new FileInputStream(signedFile);
      * @param signedFile The signed update file to check.
      *
      * @return <code>true</code> if the file has a valid signature, otherwise
-     *         <code>false</code>.
+     * <code>false</code>.
      */
     public boolean verify(File signedFile) {
         for (SigningPublicKey signingPublicKey : _trustedKeys.keySet()) {
@@ -654,10 +654,10 @@ try (FileInputStream fileInputStream = new FileInputStream(signedFile);
      *
      * @param signedFile    The signed update file to check.
      * @param publicKeyFile A file containing the public key to use for
-     *                      verification.
+     * verification.
      *
      * @return <code>true</code> if the file has a valid signature, otherwise
-     *         <code>false</code>.
+     * <code>false</code>.
      */
     public boolean verify(String signedFile, String publicKeyFile) {
         SigningPublicKey signingPublicKey = new SigningPublicKey();
@@ -680,11 +680,11 @@ try (FileInputStream fileInputStream = new FileInputStream(signedFile);
      *
      * @param signedFile       The signed update file to check.
      * @param signingPublicKey An instance of
-     *                         {@link net.i2p.data.SigningPublicKey} to use for
-     *                         verification.
+     * {@link net.i2p.data.SigningPublicKey} to use for
+     * verification.
      *
      * @return <code>true</code> if the file has a valid signature, otherwise
-     *         <code>false</code>.
+     * <code>false</code>.
      */
     public boolean verify(File signedFile, SigningPublicKey signingPublicKey) {
         try (FileInputStream fileInputStream = new FileInputStream(signedFile)) {

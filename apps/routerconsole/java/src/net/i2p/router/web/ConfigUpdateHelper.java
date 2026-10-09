@@ -23,8 +23,8 @@ public class ConfigUpdateHelper extends HelperBase {
     protected HttpSession _session;
 
     /**
-     *  For nonce validation and session-bound nonce generation
-     *  @since 0.9.69
+     * For nonce validation and session-bound nonce generation
+     * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
 
@@ -89,9 +89,9 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     *  This should almost always be true.
-     *  @return true if settings are at defaults and proxy is registered
-     *  @since 0.8.13
+     * This should almost always be true.
+     * @return true if settings are at defaults and proxy is registered
+     * @since 0.8.13
      */
     private boolean isInternal() {
         String host = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST);
@@ -166,7 +166,7 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     *  Right now the jsp hides the whole select box if _dontInstall is true but this could change
+     * Right now the jsp hides the whole select box if _dontInstall is true but this could change
      * @return the update policy select box
      */
     public String getUpdatePolicySelectBox() {

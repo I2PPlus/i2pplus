@@ -18,10 +18,10 @@ public class Timestamper implements Runnable {
     public void waitForInitialization() { /* nop */ }
 
     /**
-     *  Update the time immediately.
-     *  Dummy
+     * Update the time immediately.
+     * Dummy
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public void timestampNow() { /* nop */ }
 

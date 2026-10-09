@@ -35,9 +35,9 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     *  Store a build record, checking its length.
-     *  @param record must be ShortEncryptedBuildRecord or null
-     *  @throws IllegalArgumentException on bad slot or record length.
+     * Store a build record, checking its length.
+     * @param record must be ShortEncryptedBuildRecord or null
+     * @throws IllegalArgumentException on bad slot or record length.
      */
     @Override
     public void setRecord(int index, EncryptedBuildRecord record) {
@@ -47,7 +47,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     *  Written length of the message body: one record count byte plus the records.
+     * Written length of the message body: one record count byte plus the records.
      */
     @Override
     protected int calculateWrittenLength() {
@@ -55,14 +55,14 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     *  I2NP message type of an outbound tunnel build reply.
-     *  @return the type
+     * I2NP message type of an outbound tunnel build reply.
+     * @return the type
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }
 
     /**
-     *  Read the records from a byte array.
+     * Read the records from a byte array.
      */
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
@@ -84,7 +84,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     *  Write the records to the output array, starting at the given index.
+     * Write the records to the output array, starting at the given index.
      */
     @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
@@ -102,7 +102,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     *  String form for debugging, showing the id and record count.
+     * String form for debugging, showing the id and record count.
      */
     @Override
     public String toString() {

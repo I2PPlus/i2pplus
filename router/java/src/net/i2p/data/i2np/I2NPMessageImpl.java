@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Date;
@@ -40,10 +39,10 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     protected long _expiration;
 
     /**
-     *  Warning, lazily initialized by readBytes(), writeBytes(), toByteArray(),
-     *  getUniqueId(), and setUniqueId(); otherwise will be -1.
-     *  Extending classes should take care when accessing this field;
-     *  to ensure initialization, use getUniqueId() instead.
+     * Warning, lazily initialized by readBytes(), writeBytes(), toByteArray(),
+     * getUniqueId(), and setUniqueId(); otherwise will be -1.
+     * Extending classes should take care when accessing this field;
+     * to ensure initialization, use getUniqueId() instead.
      */
     private final AtomicLong _uniqueId = new AtomicLong(-1);
 
@@ -67,9 +66,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     private static final Map<Integer, Builder> _builders = new ConcurrentHashMap<>(1);
 
     /**
-     *  Register a builder for a message type.
+     * Register a builder for a message type.
      *
-     *  @deprecated unused
+     * @deprecated unused
      */
     @Deprecated
     public static final void registerBuilder(Builder builder, int type) { _builders.put(Integer.valueOf(type), builder); }
@@ -91,10 +90,10 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     *  Read the header, then read the rest into buffer, then call
-     *  readMessage in the implemented message type
+     * Read the header, then read the rest into buffer, then call
+     * readMessage in the implemented message type
      *
-     *<pre>
+     * <pre>
      *  Specifically:
      *  1 byte type (if caller didn't read already, as specified by the type param
      *  4 byte ID
@@ -102,24 +101,24 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *  2 byte size
      *  1 byte checksum
      *  size bytes of payload (read by readMessage() in implementation)
-     *</pre>
+     * </pre>
      *
-     *  @param type the message type or -1 if we should read it here
-     *  @return total length of the message
+     * @param type the message type or -1 if we should read it here
+     * @return total length of the message
      */
     public int readBytes(byte[] data, int type, int offset) throws I2NPMessageException {
         return readBytes(data, type, offset, data.length - offset);
     }
 
     /**
-     *  Limit the max to read from the data buffer, so that
-     *  we can use a large buffer but prevent the reader from reading off the end.
+     * Limit the max to read from the data buffer, so that
+     * we can use a large buffer but prevent the reader from reading off the end.
      *
-     *  @param type the message type or -1 if we should read it here
-     *  @return total length of the message
-     *  @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
-     *                This includes the type byte only if type &lt; 0
-     *  @since 0.8.12
+     * @param type the message type or -1 if we should read it here
+     * @return total length of the message
+     * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
+     * This includes the type byte only if type &lt; 0
+     * @since 0.8.12
      */
     public int readBytes(byte[] data, int type, int offset, int maxLen) throws I2NPMessageException {
         int headerSize = HEADER_LENGTH;
@@ -184,8 +183,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     *  Unique id for this message, lazily initialized when negative.
-     *  @return the unique id
+     * Unique id for this message, lazily initialized when negative.
+     * @return the unique id
      */
     public long getUniqueId() {
         // Lazy initialization of value
@@ -201,7 +200,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     *  The ID is set to a random value when written but it can be overridden here.
+     * The ID is set to a random value when written but it can be overridden here.
      */
     public void setUniqueId(long id) { _uniqueId.set(id); }
 
@@ -213,17 +212,17 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     public long getMessageExpiration() { return _expiration; }
 
     /**
-     *  The expiration is set to one minute from now in the constructor but it can be overridden here.
+     * The expiration is set to one minute from now in the constructor but it can be overridden here.
      */
     public void setMessageExpiration(long exp) { _expiration = exp; }
 
     /**
-     *  Serialized message size, including the 16-byte header.
-     *  <p>
-     *  Kept synchronized: subclasses (DatabaseStoreMessage, TunnelGatewayMessage)
-     *  lazily cache mutable state in calculateWrittenLength() and rely on the
-     *  enclosing monitor for safe publication.
-     *  @return the message size
+     * Serialized message size, including the 16-byte header.
+     * <p>
+     * Kept synchronized: subclasses (DatabaseStoreMessage, TunnelGatewayMessage)
+     * lazily cache mutable state in calculateWrittenLength() and rely on the
+     * enclosing monitor for safe publication.
+     * @return the message size
      */
     public synchronized int getMessageSize() {
         return calculateWrittenLength() + (15 + CHECKSUM_LENGTH); // 16 bytes in the header
@@ -239,7 +238,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     *  The message serialized into a new byte array.
+     * The message serialized into a new byte array.
      */
     public byte[] toByteArray() {
         byte[] data = new byte[getMessageSize()];
@@ -310,11 +309,11 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     protected abstract int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException;
 
     /**
-     *  Write the message with a short 5-byte header.
-     *  The header consists of a one-byte type and a 4-byte expiration in seconds only.
-     *  Used by SSU only!
+     * Write the message with a short 5-byte header.
+     * The header consists of a one-byte type and a 4-byte expiration in seconds only.
+     * Used by SSU only!
      *
-     *  @return the new offset (NOT the length)
+     * @return the new offset (NOT the length)
      */
     public int toRawByteArray(byte[] buffer) {
         try {
@@ -358,7 +357,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     *  Read the message fields from the byte array, ignoring the handler.
+     * Read the message fields from the byte array, ignoring the handler.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {
         // ignore the handler (overridden in subclasses if necessary
@@ -374,10 +373,10 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
 
 
     /**
-     *  Read the message with a short 5-byte header.
-     *  The header consists of a one-byte type and a 4-byte expiration in seconds only.
-     *  Caller MUST call setUniqueId() on the returned value.
-     *  Used by SSU2 only!
+     * Read the message with a short 5-byte header.
+     * The header consists of a one-byte type and a 4-byte expiration in seconds only.
+     * Caller MUST call setUniqueId() on the returned value.
+     * Used by SSU2 only!
      */
     public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte[] buffer, int offset,
                                                int len, I2NPMessageHandler handler) throws I2NPMessageException {
@@ -402,12 +401,12 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     }
 
     /**
-     *  Read the message with a short 9-byte header.
-     *  The header consists of a one-byte type, 4-byte ID, and a 4-byte expiration in seconds only.
-     *  Used by NTCP2 and SSU2 only!
+     * Read the message with a short 9-byte header.
+     * The header consists of a one-byte type, 4-byte ID, and a 4-byte expiration in seconds only.
+     * Used by NTCP2 and SSU2 only!
      *
-     *  @param handler ignored, may be null
-     *  @since 0.9.35
+     * @param handler ignored, may be null
+     * @since 0.9.35
      */
     public static I2NPMessage fromRawByteArrayNTCP2(I2PAppContext ctx, byte[] buffer, int offset,
                                                     int len, I2NPMessageHandler handler) throws I2NPMessageException {

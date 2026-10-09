@@ -6,7 +6,6 @@ package net.i2p.client.impl;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Arrays;
@@ -86,9 +85,9 @@ class I2CPMessageProducer {
     };
 
     /**
-     *  Create a message producer for the given context.
+     * Create a message producer for the given context.
      *
-     *  @param context the router context
+     * @param context the router context
      */
     public I2CPMessageProducer(I2PAppContext context) {
         _context = context;
@@ -110,9 +109,9 @@ class I2CPMessageProducer {
     }
 
     /**
-     *  Update bandwidth limits from session options.
+     * Update bandwidth limits from session options.
      *
-     *  @since 0.8.4
+     * @since 0.8.4
      */
     public void updateBandwidth(I2PSessionImpl session) {
         String max = session.getOptions().getProperty(PROP_MAX_BW);
@@ -190,7 +189,6 @@ class I2CPMessageProducer {
     /**
      * Send a message to the router destroying the session, which could be a subsession.
      * This does NOT close the socket.
-     *
      */
     public void disconnect(I2PSessionImpl session) throws I2PSessionException {
         if (session.isClosed()) return;
@@ -285,37 +283,37 @@ class I2CPMessageProducer {
     }
 
     /**
-     *  Super-simple bandwidth throttler.
-     *  We only calculate on a one-second basis, so large messages
-     *  (compared to the one-second limit) may exceed the limits.
-     *  Tuned for streaming, may not work well for large datagrams.
+     * Super-simple bandwidth throttler.
+     * We only calculate on a one-second basis, so large messages
+     * (compared to the one-second limit) may exceed the limits.
+     * Tuned for streaming, may not work well for large datagrams.
      *
-     *  This does poorly with low rate limits since it doesn't credit
-     *  bandwidth across two periods. So the limit is rounded up,
-     *  and the min limit is set to 2x the typ size, above.
+     * This does poorly with low rate limits since it doesn't credit
+     * bandwidth across two periods. So the limit is rounded up,
+     * and the min limit is set to 2x the typ size, above.
      *
-     *  Blocking so this could be very bad for retransmissions,
-     *  as it could clog StreamingTimer.
-     *  Waits are somewhat "fair" using ReentrantLock.
-     *  While out-of-order transmission is acceptable, fairness
-     *  reduces the chance of starvation. ReentrantLock does not
-     *  guarantee in-order execution due to thread priority issues,
-     *  so out-of-order may still occur. But shouldn't happen within
-     *  the same thread anyway... Also note that small messages may
-     *  go ahead of large ones that are waiting for the next window.
-     *  Also, threads waiting a second time go to the back of the line.
+     * Blocking so this could be very bad for retransmissions,
+     * as it could clog StreamingTimer.
+     * Waits are somewhat "fair" using ReentrantLock.
+     * While out-of-order transmission is acceptable, fairness
+     * reduces the chance of starvation. ReentrantLock does not
+     * guarantee in-order execution due to thread priority issues,
+     * so out-of-order may still occur. But shouldn't happen within
+     * the same thread anyway... Also note that small messages may
+     * go ahead of large ones that are waiting for the next window.
+     * Also, threads waiting a second time go to the back of the line.
      *
-     *  Since this is at the I2CP layer, it includes streaming overhead,
-     *  streaming acks and retransmissions,
-     *  gzip overhead (or "underhead" for compression),
-     *  repliable datagram overhead, etc.
-     *  However, it does not, of course, include the substantial overhead
-     *  imposed by the router for the leaseset, tags, encryption,
-     *  and fixed-size tunnel messages.
+     * Since this is at the I2CP layer, it includes streaming overhead,
+     * streaming acks and retransmissions,
+     * gzip overhead (or "underhead" for compression),
+     * repliable datagram overhead, etc.
+     * However, it does not, of course, include the substantial overhead
+     * imposed by the router for the leaseset, tags, encryption,
+     * and fixed-size tunnel messages.
      *
-     *  @param len the length
-     *  @param expires if $gt; 0, an expiration date
-     *  @return true if we should send the message, false to drop it
+     * @param len the length
+     * @param expires if $gt; 0, an expiration date
+     * @return true if we should send the message, false to drop it
      */
     private boolean updateBps(int len, long expires) {
         if (_maxBytesPerSecond <= 0) return true;

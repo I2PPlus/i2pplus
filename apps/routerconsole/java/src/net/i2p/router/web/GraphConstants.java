@@ -1,9 +1,9 @@
 package net.i2p.router.web;
 
 /**
- *  Basic graph defaults and maximum dimensions
+ * Basic graph defaults and maximum dimensions
  *
- *  @since 0.9.33 pulled out of GraphHelper
+ * @since 0.9.33 pulled out of GraphHelper
  */
 public class GraphConstants {
     private GraphConstants() {}

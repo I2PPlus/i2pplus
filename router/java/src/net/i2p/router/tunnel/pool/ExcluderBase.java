@@ -8,13 +8,13 @@ import java.util.Set;
 import net.i2p.data.Hash;
 
 /**
- *  A Set of Hashes that automatically adds to the
- *  Set in the contains() check.
+ * A Set of Hashes that automatically adds to the
+ * Set in the contains() check.
  *
- *  So we don't need to generate the exclude set up front.
- *  Less object churn and copying.
+ * So we don't need to generate the exclude set up front.
+ * Less object churn and copying.
  *
- *  @since 0.9.58
+ * @since 0.9.58
  */
 abstract class ExcluderBase implements Set<Hash> {
     /**
@@ -23,26 +23,26 @@ abstract class ExcluderBase implements Set<Hash> {
     protected final Set<Hash> s;
 
     /**
-     *  Maps peer hash to the reason it was excluded, for diagnostic logging.
-     *  Populated by subclasses via {@link #recordExclusion}.
-     *  @since 0.9.70+
+     * Maps peer hash to the reason it was excluded, for diagnostic logging.
+     * Populated by subclasses via {@link #recordExclusion}.
+     * @since 0.9.70+
      */
     protected final Map<Hash, String> _reasons = new LinkedHashMap<Hash, String>();
 
     /**
-     *  Automatically check if peer is connected
-     *  and add the Hash to the set if not.
+     * Automatically check if peer is connected
+     * and add the Hash to the set if not.
      *
-     *  @param set not copied, contents will be modified by all methods
+     * @param set not copied, contents will be modified by all methods
      */
     protected ExcluderBase(Set<Hash> set) {s = set;}
 
     /**
-     *  Automatically check if peer is allowed
-     *  and add the Hash to the set if not.
+     * Automatically check if peer is allowed
+     * and add the Hash to the set if not.
      *
-     *  @param o a Hash
-     *  @return true if peer should be excluded
+     * @param o a Hash
+     * @return true if peer should be excluded
      */
     @Override
     public abstract boolean contains(Object o);
@@ -108,24 +108,24 @@ abstract class ExcluderBase implements Set<Hash> {
     public <Hash> Hash[] toArray(Hash[] a) {return s.toArray(a);}
 
     /**
-     *  Record why a peer was excluded, for diagnostic logging.
-     *  Each peer is recorded once; subsequent calls for the same peer
-     *  overwrite the earlier reason.
+     * Record why a peer was excluded, for diagnostic logging.
+     * Each peer is recorded once; subsequent calls for the same peer
+     * overwrite the earlier reason.
      *
-     *  @param h the excluded peer
-     *  @param reason short reason string like "unreachable" or "not-ibgw"
-     *  @since 0.9.70+
+     * @param h the excluded peer
+     * @param reason short reason string like "unreachable" or "not-ibgw"
+     * @since 0.9.70+
      */
     protected void recordExclusion(Hash h, String reason) {
         _reasons.put(h, reason);
     }
 
     /**
-     *  Format exclusion summary grouped by reason (counts only, no peer hashes).
-     *  Uses raw reason strings from {@link #_reasons}.
+     * Format exclusion summary grouped by reason (counts only, no peer hashes).
+     * Uses raw reason strings from {@link #_reasons}.
      *
-     *  @return string like "128 excluded \n* Reason: 50 unreachable, 30 not-ibgw"
-     *  @since 0.9.70+
+     * @return string like "128 excluded \n* Reason: 50 unreachable, 30 not-ibgw"
+     * @since 0.9.70+
      */
     protected String getReasonsSummary() {
         if (_reasons.isEmpty()) {return "";}

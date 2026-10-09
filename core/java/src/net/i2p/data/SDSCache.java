@@ -14,36 +14,36 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
- *  A least recently used cache with a max size, for SimpleDataStructures.
- *  The index to the cache is the first 4 bytes of the data, so
- *  the data must be sufficiently random.
+ * A least recently used cache with a max size, for SimpleDataStructures.
+ * The index to the cache is the first 4 bytes of the data, so
+ * the data must be sufficiently random.
  *
- *  This caches the SDS objects, and also uses SimpleByteCache to cache
- *  the unused byte arrays themselves
+ * This caches the SDS objects, and also uses SimpleByteCache to cache
+ * the unused byte arrays themselves
  *
- *  Following is sample usage:
+ * Following is sample usage:
  *  <pre>
  *
- *  private static final SDSCache&lt; Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
+ * private static final SDSCache&lt; Foo&gt; _cache = new SDSCache(Foo.class, LENGTH, 1024);
  *
- *  public static Foo create(byte[] data) {
+ * public static Foo create(byte[] data) {
  *  return _cache.get(data);
  *  }
  *
- *  public static Foo create(byte[] data, int off) {
+ * public static Foo create(byte[] data, int off) {
  *  return _cache.get(data, off);
  *  }
  *
- *  public static Foo create(InputStream in) throws IOException {
+ * public static Foo create(InputStream in) throws IOException {
  *  return _cache.get(in);
  *  }
  *
- *  </pre>
+ * </pre>
  *
- *  @author zzz
+ * @author zzz
  *
- *  @param <V> type of SimpleDataStructure objects cached
- *  @since 0.8.3
+ * @param <V> type of SimpleDataStructure objects cached
+ * @since 0.8.3
  */
 public class SDSCache<V extends SimpleDataStructure> {
 
@@ -66,11 +66,11 @@ public class SDSCache<V extends SimpleDataStructure> {
     private final Constructor<V> _rvCon;
 
     /**
-     *  Class that we are storing, i.e. an extension of SimpleDataStructure.
-     *  @param rvClass the class that we are storing, i.e. an extension of SimpleDataStructure
-     *  @param len the length of the byte array in the SimpleDataStructure
-     *  @param max maximum size of the cache assuming 128MB of mem.
-     *             The actual max size will be scaled based on available memory.
+     * Class that we are storing, i.e. an extension of SimpleDataStructure.
+     * @param rvClass the class that we are storing, i.e. an extension of SimpleDataStructure
+     * @param len the length of the byte array in the SimpleDataStructure
+     * @param max maximum size of the cache assuming 128MB of mem.
+     * The actual max size will be scaled based on available memory.
      */
     public SDSCache(Class<V> rvClass, int len, int max) {
         int size = (int) (max * FACTOR);
@@ -107,17 +107,17 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /**
-     *  WARNING - If the SDS is found in the cache, the passed-in
-     *  byte array will be returned to the SimpleByteCache for reuse.
-     *  Do NOT save a reference to the passed-in data, or use or modify it,
-     *  after this call.
+     * WARNING - If the SDS is found in the cache, the passed-in
+     * byte array will be returned to the SimpleByteCache for reuse.
+     * Do NOT save a reference to the passed-in data, or use or modify it,
+     * after this call.
      *
-     *  @param data non-null, the byte array for the SimpleDataStructure
-     *  @return the cached value if available, otherwise
-     *          makes a new object and returns it
+     * @param data non-null, the byte array for the SimpleDataStructure
+     * @return the cached value if available, otherwise
+     * makes a new object and returns it
      *
-     *  @throws IllegalArgumentException if data is not the correct number of bytes
-     *  @throws NullPointerException if data is null
+     * @throws IllegalArgumentException if data is not the correct number of bytes
+     * @throws NullPointerException if data is null
      */
     public V get(byte[] data) {
         if (data == null) throw new NullPointerException("Don't pull null data from the cache");
@@ -146,13 +146,13 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /**
-     *  Non-null byte array containing the data, data will be copied to not hold the reference.
-     *  @param b non-null byte array containing the data, data will be copied to not hold the reference
-     *  @param off offset in the array to start reading from
-     *  @return the cached value if available, otherwise
-     *          makes a new object and returns it
-     *  @throws ArrayIndexOutOfBoundsException if not enough bytes
-     *  @throws NullPointerException
+     * Non-null byte array containing the data, data will be copied to not hold the reference.
+     * @param b non-null byte array containing the data, data will be copied to not hold the reference
+     * @param off offset in the array to start reading from
+     * @return the cached value if available, otherwise
+     * makes a new object and returns it
+     * @throws ArrayIndexOutOfBoundsException if not enough bytes
+     * @throws NullPointerException
      */
     public V get(byte[] b, int off) {
         byte[] data = SimpleByteCache.acquire(_datalen);
@@ -161,11 +161,11 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /**
-     *  Stream from which the bytes will be read.
-     *  @param in a stream from which the bytes will be read
-     *  @return the cached value if available, otherwise
-     *          makes a new object and returns it
-     *  @throws IOException if not enough bytes
+     * Stream from which the bytes will be read.
+     * @param in a stream from which the bytes will be read
+     * @return the cached value if available, otherwise
+     * makes a new object and returns it
+     * @throws IOException if not enough bytes
      */
     public V get(InputStream in) throws IOException {
         byte[] data = SimpleByteCache.acquire(_datalen);
@@ -182,22 +182,22 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /**
-     *  An int-keyed, weak-value cache, replacing a
-     *  ConcurrentHashMap&lt;Integer, WeakReference&lt;V&gt;&gt; so the hot lookup
-     *  neither hashes an Integer nor boxes the key - the first 4 bytes of a
-     *  SimpleDataStructure almost always fall outside the Integer cache.
+     * An int-keyed, weak-value cache, replacing a
+     * ConcurrentHashMap&lt;Integer, WeakReference&lt;V&gt;&gt; so the hot lookup
+     * neither hashes an Integer nor boxes the key - the first 4 bytes of a
+     * SimpleDataStructure almost always fall outside the Integer cache.
      *
-     *  <p>Occupancy is marked by the AtomicReferenceArray rather than by the key,
-     *  since every int is a legal key (a hash of ff ff ff ff is -1). Its
-     *  release/acquire ordering also means a reader that sees a reference sees
-     *  its key and everything the writer did before publishing it.
+     * <p>Occupancy is marked by the AtomicReferenceArray rather than by the key,
+     * since every int is a legal key (a hash of ff ff ff ff is -1). Its
+     * release/acquire ordering also means a reader that sees a reference sees
+     * its key and everything the writer did before publishing it.
      *
-     *  <p>As with the map it replaces, a collected value keeps its slot until the
-     *  key is written again, so the table grows with the number of distinct keys
-     *  seen rather than with the number of live entries.
+     * <p>As with the map it replaces, a collected value keeps its slot until the
+     * key is written again, so the table grows with the number of distinct keys
+     * seen rather than with the number of live entries.
      *
-     *  @param <V> type of object cached
-     *  @since 0.9.72
+     * @param <V> type of object cached
+     * @since 0.9.72
      */
     private static final class IntWeakCache<V> {
 
@@ -236,10 +236,10 @@ public class SDSCache<V extends SimpleDataStructure> {
         }
 
         /**
-         *  @param key the 4-byte index
-         *  @return the reference for the key, or null. A slot whose key is
-         *          published but whose reference is not yet reads as empty, so a
-         *          reader racing a put may see a miss; the put holds the lock.
+         * @param key the 4-byte index
+         * @return the reference for the key, or null. A slot whose key is
+         * published but whose reference is not yet reads as empty, so a
+         * reader racing a put may see a miss; the put holds the lock.
          */
         @SuppressWarnings("unchecked")
         WeakReference<V> get(int key) {
@@ -255,11 +255,11 @@ public class SDSCache<V extends SimpleDataStructure> {
         }
 
         /**
-         *  Store a reference, replacing any existing entry for the key.
-         *  Only misses reach here, so this is off the hot path.
+         * Store a reference, replacing any existing entry for the key.
+         * Only misses reach here, so this is off the hot path.
          *
-         *  @param key the 4-byte index
-         *  @param ref the value
+         * @param key the 4-byte index
+         * @param ref the value
          */
         synchronized void put(int key, WeakReference<V> ref) {
             Table t = _table;

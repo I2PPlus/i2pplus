@@ -9,9 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *  Tests for the sizing accessors and the run-time cap setter.
+ * Tests for the sizing accessors and the run-time cap setter.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class DecayingFilterSizingTest {
 
@@ -106,11 +106,11 @@ public class DecayingFilterSizingTest {
     }
 
     /**
-     *  A lowered cap must bound growth immediately. The default cap is only a
-     *  backstop and waits for the scheduled decay, so it cannot bound anything
-     *  within one interval; a cap set through {@link #setMaxEntries} is
-     *  enforced at once because the caller has declared memory to be the harder
-     *  constraint.
+     * A lowered cap must bound growth immediately. The default cap is only a
+     * backstop and waits for the scheduled decay, so it cannot bound anything
+     * within one interval; a cap set through {@link #setMaxEntries} is
+     * enforced at once because the caller has declared memory to be the harder
+     * constraint.
      */
     @Test
     public void testLoweredCapBoundsGrowthImmediately() {
@@ -126,8 +126,8 @@ public class DecayingFilterSizingTest {
     }
 
     /**
-     *  The default cap must stay soft, so a fresh set is allowed to grow past
-     *  it within the first interval rather than retiring live entries.
+     * The default cap must stay soft, so a fresh set is allowed to grow past
+     * it within the first interval rather than retiring live entries.
      */
     @Test
     public void testDefaultCapIsSoft() {

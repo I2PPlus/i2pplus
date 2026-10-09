@@ -25,11 +25,10 @@ import org.eclipse.jetty.util.resource.ResourceCollection;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  Extends DefaultServlet to set locale for the displayed time of directory listings,
- *  to prevent leaking of the locale.
+ * Extends DefaultServlet to set locale for the displayed time of directory listings,
+ * to prevent leaking of the locale.
  *
- *  @since 0.9.31
- *
+ * @since 0.9.31
  */
 public class I2PDefaultServlet extends DefaultServlet {
     // shadows of private fields in super
@@ -247,9 +246,9 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /**
-     *  Compares files in directory listing, directories before files.
+     * Compares files in directory listing, directories before files.
      *
-     *  @since 0.9.51
+     * @since 0.9.51
      */
     private static class FileComparator implements Comparator<String> {
         private final Comparator<Object> _coll;

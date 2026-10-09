@@ -62,9 +62,9 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     public BlindingInfoMessage() {}
 
     /**
-     *  This is the constructor used by I2CP client-side.
-     *  Will create a DEST or KEY message type, depending on whether
-     *  BlindData has the full destination.
+     * This is the constructor used by I2CP client-side.
+     * Will create a DEST or KEY message type, depending on whether
+     * BlindData has the full destination.
      *
      * @param bd the blinded data
      * @param id the session ID
@@ -87,7 +87,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  HASH not supported by router and may not be useful
+     * HASH not supported by router and may not be useful
      *
      * @param h the hash
      * @param id the session ID
@@ -108,7 +108,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  HOST not supported by router and may not be useful
+     * HOST not supported by router and may not be useful
      *
      * @param h hostname
      * @param id the session ID
@@ -129,7 +129,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Creates a BlindingInfoMessage for a destination.
+     * Creates a BlindingInfoMessage for a destination.
      *
      * @param d the destination
      * @param id the session ID
@@ -150,7 +150,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Creates a BlindingInfoMessage for a signing public key.
+     * Creates a BlindingInfoMessage for a signing public key.
      *
      * @param s the signing public key
      * @param id the session ID
@@ -201,90 +201,90 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Gets the timeout for the blinding info.
+     * Gets the timeout for the blinding info.
      *
-     *  @return ms 1 to 2**32 - 1
+     * @return ms 1 to 2**32 - 1
      */
     public long getTimeout() {
         return _expiration;
     }
 
     /**
-     *  Gets the authentication type.
+     * Gets the authentication type.
      *
-     *  @return 0 (none), 1 (DH), 3 (PSK)
+     * @return 0 (none), 1 (DH), 3 (PSK)
      */
     public int getAuthType() {
         return _authType;
     }
 
     /**
-     *  Gets the endpoint type.
+     * Gets the endpoint type.
      *
-     *  @return 0 (hash) or 1 (host) or 2 (dest) or 3 (key)
+     * @return 0 (hash) or 1 (host) or 2 (dest) or 3 (key)
      */
     public int getEndpointType() {
         return _endpointType;
     }
 
     /**
-     *  Gets the hash for hash-type endpoints.
+     * Gets the hash for hash-type endpoints.
      *
-     *  @return only valid if endpoint type == 0 or 2
+     * @return only valid if endpoint type == 0 or 2
      */
     public Hash getHash() {
         return _hash;
     }
 
     /**
-     *  Gets the hostname for host-type endpoints.
+     * Gets the hostname for host-type endpoints.
      *
-     *  @return only valid if endpoint type == 1
+     * @return only valid if endpoint type == 1
      */
     public String getHostname() {
         return _host;
     }
 
     /**
-     *  Gets the destination for dest-type endpoints.
+     * Gets the destination for dest-type endpoints.
      *
-     *  @return only valid if endpoint type == 2
+     * @return only valid if endpoint type == 2
      */
     public String getDestination() {
         return _host;
     }
 
     /**
-     *  Gets the signing public key for key-type endpoints.
+     * Gets the signing public key for key-type endpoints.
      *
-     *  @return only valid if endpoint type == 2 or 3
+     * @return only valid if endpoint type == 2 or 3
      */
     public SigningPublicKey getSigningPublicKey() {
         return _pubkey;
     }
 
     /**
-     *  Gets the private key for key-type endpoints.
+     * Gets the private key for key-type endpoints.
      *
-     *  @return private key or null
+     * @return private key or null
      */
     public PrivateKey getPrivateKey() {
         return _privkey;
     }
 
     /**
-     *  Gets the secret for PSK authentication.
+     * Gets the secret for PSK authentication.
      *
-     *  @return secret or null
+     * @return secret or null
      */
     public String getSecret() {
         return _secret;
     }
 
     /**
-     *  Gets the computed blind data.
+     * Gets the computed blind data.
      *
-     *  @return blind data or null if not enough info
+     * @return blind data or null if not enough info
      */
     public BlindData getBlindData() {
         if (_blindData != null) return _blindData;

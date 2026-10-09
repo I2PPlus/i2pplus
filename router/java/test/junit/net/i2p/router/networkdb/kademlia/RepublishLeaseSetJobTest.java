@@ -165,11 +165,11 @@ public class RepublishLeaseSetJobTest {
     }
 
 /**
-     * A publishing client whose stored LeaseSet is expiring must never flood
-     * the near-expiry copy to the network — it would die before propagation.
-     * Instead the job must request a re-mint from the pool's current tunnels
-     * (whose LS expiry extends beyond the stored copy) and reschedule.
-     */
+ * A publishing client whose stored LeaseSet is expiring must never flood
+ * the near-expiry copy to the network — it would die before propagation.
+ * Instead the job must request a re-mint from the pool's current tunnels
+ * (whose LS expiry extends beyond the stored copy) and reschedule.
+ */
     @Test
     public void testExpiringPublishingClientRemintsInsteadOfFlooding() {
         Hash hash = newHash(5);
@@ -201,13 +201,13 @@ public class RepublishLeaseSetJobTest {
     }
 
 /**
-     *  An expiring LeaseSet whose pool holds too few fresh tunnels must NOT
-     *  re-mint — the re-mint gate only fires when the pool can actually extend
-     *  the lease past the fresh window.  Below target minus one, and still
-     *  outside the emergency re-mint window, the job defers, requests fresh
-     *  tunnel builds, and reschedules; it never floods the dying copy and
-     *  never re-signs the same near-expired leases.
-     */
+ * An expiring LeaseSet whose pool holds too few fresh tunnels must NOT
+ * re-mint — the re-mint gate only fires when the pool can actually extend
+ * the lease past the fresh window.  Below target minus one, and still
+ * outside the emergency re-mint window, the job defers, requests fresh
+ * tunnel builds, and reschedules; it never floods the dying copy and
+ * never re-signs the same near-expired leases.
+ */
     @Test
     public void testExpiringBelowTargetDefersAndRequestsBuilds() {
         Hash hash = newHash(7);
@@ -244,13 +244,13 @@ public class RepublishLeaseSetJobTest {
     }
 
 /**
-     *  A pool stuck below target must not defer forever: after
-     *  MAX_REMINT_DEFERS consecutive deferred cycles (each outside the
-     *  emergency window) it falls back to a thin re-mint that still extends
-     *  the stored copy's expiry, then resets the deferral counter so the next
-     *  cycle requests fresh builds again instead of re-minting thin copies
-     *  indefinitely.
-     */
+ * A pool stuck below target must not defer forever: after
+ * MAX_REMINT_DEFERS consecutive deferred cycles (each outside the
+ * emergency window) it falls back to a thin re-mint that still extends
+ * the stored copy's expiry, then resets the deferral counter so the next
+ * cycle requests fresh builds again instead of re-minting thin copies
+ * indefinitely.
+ */
     @Test
     public void testPersistentDeficitFallsBackAfterMaxDefers() {
         Hash hash = newHash(8);
@@ -299,11 +299,11 @@ public class RepublishLeaseSetJobTest {
     }
 
     /**
-     *  Inside the emergency re-mint window a pool stuck below target must
-     *  re-mint immediately on its single viable lease rather than defer — a
-     *  thin-but-alive public LeaseSet beats letting the copy lapse while the
-     *  deferral waits for capacity.  The required-count gate and the deferral
-     *  counter are both bypassed.
+     * Inside the emergency re-mint window a pool stuck below target must
+     * re-mint immediately on its single viable lease rather than defer — a
+     * thin-but-alive public LeaseSet beats letting the copy lapse while the
+     * deferral waits for capacity.  The required-count gate and the deferral
+     * counter are both bypassed.
      */
     @Test
     public void testEmergencyDeficitRemintsImmediately() {
@@ -337,10 +337,10 @@ public class RepublishLeaseSetJobTest {
     }
 
     /**
-     *  Inside the emergency window a pool holding no viable leases must still
-     *  NOT re-mint — re-signing near-dead leases would not push expiry forward.
-     *  The job keeps deferring and requesting fresh builds so the next cycle
-     *  (or the handleExpiredLeaseSet rebuild) can produce a real copy.
+     * Inside the emergency window a pool holding no viable leases must still
+     * NOT re-mint — re-signing near-dead leases would not push expiry forward.
+     * The job keeps deferring and requesting fresh builds so the next cycle
+     * (or the handleExpiredLeaseSet rebuild) can produce a real copy.
      */
     @Test
     public void testEmergencyNoViableLeasesStillDefers() {

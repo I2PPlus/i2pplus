@@ -19,16 +19,16 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Records live bandwidth samples every second for the minigraph.
- *  Maintains a 1200-entry ring buffer (20 min at 1s resolution) and
- *  flushes to /tmp/i2p-bandwidth.dat every 60 seconds so data survives
- *  page refreshes and router restarts.
+ * Records live bandwidth samples every second for the minigraph.
+ * Maintains a 1200-entry ring buffer (20 min at 1s resolution) and
+ * flushes to /tmp/i2p-bandwidth.dat every 60 seconds so data survives
+ * page refreshes and router restarts.
  *
- *  Started automatically by Router.startup().
- *  Accessed by SidebarRenderer.getDataAttributes() to populate the
- *  canvas minigraph with real data instead of interpolated RRD points.
+ * Started automatically by Router.startup().
+ * Accessed by SidebarRenderer.getDataAttributes() to populate the
+ * canvas minigraph with real data instead of interpolated RRD points.
  *
- *  @since 0.9.70+
+ * @since 0.9.70+
  */
 public class BandwidthHistory extends SimpleTimer2.TimedEvent {
 
@@ -56,8 +56,8 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     private long _nextFlush;
 
     /**
-     *  Create a bandwidth history.
-     *  @param ctx may be null in unit tests
+     * Create a bandwidth history.
+     * @param ctx may be null in unit tests
      */
     public BandwidthHistory(RouterContext ctx) {
         super(ctx != null ? ctx.simpleTimer2() : null);
@@ -76,23 +76,23 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  The singleton instance.
-     *  @return the singleton, or null if not yet created
+     * The singleton instance.
+     * @return the singleton, or null if not yet created
      */
     public static BandwidthHistory getInstance() {
         return instance;
     }
 
     /**
-     *  The ring buffer capacity.
-     *  @return the ring buffer capacity
+     * The ring buffer capacity.
+     * @return the ring buffer capacity
      */
     public int getCapacity() {
         return _capacity;
     }
 
     /**
-     *  Sample bandwidth limiter and record.  Reschedules itself at 1s.
+     * Sample bandwidth limiter and record.  Reschedules itself at 1s.
      */
     @Override
     public void timeReached() {
@@ -112,10 +112,10 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Add a sample to the ring buffer.
+     * Add a sample to the ring buffer.
      *
-     *  @param rx the receive bandwidth in Bps
-     *  @param tx the transmit bandwidth in Bps
+     * @param rx the receive bandwidth in Bps
+     * @param tx the transmit bandwidth in Bps
      */
     public synchronized void record(long rx, long tx) {
         long now = System.currentTimeMillis();
@@ -133,37 +133,37 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  The number of stored samples.
-     *  @return number of stored samples
+     * The number of stored samples.
+     * @return number of stored samples
      */
     public synchronized int getCount() {
         return _count;
     }
 
     /**
-     *  Return the last {@code n} receive values as a comma-separated string.
-     *  Oldest value first, most recent last.  Empty string if no data.
+     * Return the last {@code n} receive values as a comma-separated string.
+     * Oldest value first, most recent last.  Empty string if no data.
      *
-     *  @param n the number of values to return
-     *  @return comma-separated string of the last n values
+     * @param n the number of values to return
+     * @return comma-separated string of the last n values
      */
     public synchronized String getLastRx(int n) {
         return formatLast(n, _rx);
     }
 
     /**
-     *  Return the last {@code n} send values as a comma-separated string.
-     *  Oldest value first, most recent last.  Empty string if no data.
+     * Return the last {@code n} send values as a comma-separated string.
+     * Oldest value first, most recent last.  Empty string if no data.
      *
-     *  @param n the number of values to return
-     *  @return comma-separated string of the last n values
+     * @param n the number of values to return
+     * @return comma-separated string of the last n values
      */
     public synchronized String getLastTx(int n) {
         return formatLast(n, _tx);
     }
 
     /**
-     *  Write the ring buffer to disk.
+     * Write the ring buffer to disk.
      */
     synchronized void save() {
         if (_count == 0) {return;}
@@ -188,7 +188,7 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Load the ring buffer from disk.  Discards data older than MAX_FILE_AGE.
+     * Load the ring buffer from disk.  Discards data older than MAX_FILE_AGE.
      */
     private synchronized void load() {
         if (!_file.exists()) {return;}
@@ -232,8 +232,8 @@ public class BandwidthHistory extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Build a comma-separated string of the last n values from the given array.
-     *  Must be called under synchronized(this).
+     * Build a comma-separated string of the last n values from the given array.
+     * Must be called under synchronized(this).
      */
     private String formatLast(int n, long[] values) {
         if (n <= 0 || _count == 0) {return "";}

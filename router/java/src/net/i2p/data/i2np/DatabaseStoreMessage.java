@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.ByteArrayInputStream;
@@ -216,10 +215,10 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Calculate the message body's length (not including the header and footer)
+     * Calculate the message body's length (not including the header and footer)
      *
-     *  @return the length of the message body
-     *  @throws IllegalStateException if the entry is not set
+     * @return the length of the message body
+     * @throws IllegalStateException if the entry is not set
      */
     protected int calculateWrittenLength() {
         // TODO if _byteCache is non-null, don't check _dbEntry

@@ -34,23 +34,23 @@ import net.i2p.util.VersionComparator;
  *
  * <p><b>Peer Selection Criteria:</b></p>
  * <ul>
- *   <li>High-bandwidth tiers (O, P, X) with reachability capability</li>
- *   <li>Version 0.9.57+ for compatibility</li>
- *   <li>Configurable concurrency based on system resources</li>
+ * <li>High-bandwidth tiers (O, P, X) with reachability capability</li>
+ * <li>Version 0.9.57+ for compatibility</li>
+ * <li>Configurable concurrency based on system resources</li>
  * </ul>
  *
  * <p><b>Performance Impact:</b></p>
  * <ul>
- *   <li>Adaptive delays based on system load and uptime</li>
- *   <li>CPU throttling when load exceeds 80%</li>
- *   <li>Automatic timeout adjustment based on historical test times</li>
+ * <li>Adaptive delays based on system load and uptime</li>
+ * <li>CPU throttling when load exceeds 80%</li>
+ * <li>Automatic timeout adjustment based on historical test times</li>
  * </ul>
  *
  * <p><b>Future Considerations:</b></p>
  * <ul>
- *   <li>Evaluate necessity of peer testing in current network conditions</li>
- *   <li>Consider alternative test methods beyond RI self-messaging</li>
- *   <li>Integration with PeerManager.selectPeers() optimization</li>
+ * <li>Evaluate necessity of peer testing in current network conditions</li>
+ * <li>Consider alternative test methods beyond RI self-messaging</li>
+ * <li>Integration with PeerManager.selectPeers() optimization</li>
  * </ul>
  */
 public class PeerTestJob extends JobImpl {
@@ -137,9 +137,9 @@ public class PeerTestJob extends JobImpl {
      *
      * <p>Three-phase decay based on uptime:</p>
      * <ul>
-     *   <li>0–4 hours (startup): 3s — aggressively profile all fast peers</li>
-     *   <li>4–12 hours (warm-up): 5s — ramp down while keeping data fresh</li>
-     *   <li>12+ hours (steady): 8s — maintenance cadence</li>
+     * <li>0–4 hours (startup): 3s — aggressively profile all fast peers</li>
+     * <li>4–12 hours (warm-up): 5s — ramp down while keeping data fresh</li>
+     * <li>12+ hours (steady): 8s — maintenance cadence</li>
      * </ul>
      *
      * <p>User override via {@link #PROP_PEER_TEST_DELAY} is respected for the steady-state
@@ -182,9 +182,9 @@ public class PeerTestJob extends JobImpl {
      *
      * <p>Three-phase decay:</p>
      * <ul>
-     *   <li>0–4 hours (startup): 4 — profile all fast peers quickly</li>
-     *   <li>4–12 hours (warm-up): 3 — ramp down</li>
-     *   <li>12+ hours (steady): 1 — maintenance cadence</li>
+     * <li>0–4 hours (startup): 4 — profile all fast peers quickly</li>
+     * <li>4–12 hours (warm-up): 3 — ramp down</li>
+     * <li>12+ hours (steady): 1 — maintenance cadence</li>
      * </ul>
      *
      * <p>Concurrency is limited to 1 when CPU load exceeds 95% to prevent system overload.</p>
@@ -208,8 +208,8 @@ public class PeerTestJob extends JobImpl {
      *
      * <p>Schedules the first test run based on router uptime:</p>
      * <ul>
-     *   <li>If uptime &lt; 3 minutes: wait 3 minutes before starting</li>
-     *   <li>Otherwise: start immediately with configured delay</li>
+     * <li>If uptime &lt; 3 minutes: wait 3 minutes before starting</li>
+     * <li>Otherwise: start immediately with configured delay</li>
      * </ul>
      *
      * @param manager the peer manager to use for peer selection
@@ -271,17 +271,17 @@ public class PeerTestJob extends JobImpl {
      *
      * Process flow:
      * <ol>
-     *   <li>Check if testing should continue</li>
-     *   <li>Select peers for testing based on criteria</li>
-     *   <li>Test each selected peer</li>
-     *   <li>Adapt next run delay based on system conditions</li>
+     * <li>Check if testing should continue</li>
+     * <li>Select peers for testing based on criteria</li>
+     * <li>Test each selected peer</li>
+     * <li>Adapt next run delay based on system conditions</li>
      * </ol>
      *
      * <p><b>Adaptive Behavior:</b></p>
      * <ul>
-     *   <li>Double delay if job lag > 300ms (system overload)</li>
-     *   <li>Double delay if CPU load > 80% (resource conservation)</li>
-     *   <li>Normal delay otherwise</li>
+     * <li>Double delay if job lag > 300ms (system overload)</li>
+     * <li>Double delay if CPU load > 80% (resource conservation)</li>
+     * <li>Normal delay otherwise</li>
      * </ul>
      */
     public void runJob() {
@@ -337,16 +337,16 @@ public class PeerTestJob extends JobImpl {
      *
      * <p><b>Selection Criteria:</b></p>
      * <ul>
-     *   <li><b>Primary candidates:</b> Version 0.9.57+, reachable, high bandwidth (O/P/X)</li>
-     *   <li><b>Penalized:</b> Low bandwidth tiers (K/L/M/N) or unreachable - set capacity bonus to -30</li>
-     *   <li><b>Excluded:</b> Missing local RouterInfo or profile</li>
+     * <li><b>Primary candidates:</b> Version 0.9.57+, reachable, high bandwidth (O/P/X)</li>
+     * <li><b>Penalized:</b> Low bandwidth tiers (K/L/M/N) or unreachable - set capacity bonus to -30</li>
+     * <li><b>Excluded:</b> Missing local RouterInfo or profile</li>
      * </ul>
      *
      * <p><b>Performance Impact:</b></p>
      * <ul>
-     *   <li>Uses cached lookups to minimize database queries</li>
-     *   <li>Pre-parses capabilities to avoid repeated string operations</li>
-     *   <li>Logs skipped peers with specific reasons for debugging</li>
+     * <li>Uses cached lookups to minimize database queries</li>
+     * <li>Pre-parses capabilities to avoid repeated string operations</li>
+     * <li>Logs skipped peers with specific reasons for debugging</li>
      * </ul>
      *
      * @return set of RouterInfo structures for testing (excluding self)
@@ -523,17 +523,17 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
-     *  Selection priority for a test candidate: tier first (fast 0, high-cap 1,
-     *  other 2), then staleness of the persisted tunnel-test EWMA so never-tested
-     *  peers go first.
-     *  <p>
-     *  Precomputed by {@link PeerTestJob#tierRank} rather than derived from
-     *  {@code ProfileOrganizer.isFast}/{@code isHighCapacity} inside the
-     *  comparator: those take the reorganize read lock, and calling them per
-     *  comparison meant 4 lock acquisitions per comparison across an
-     *  {@code O(n log n)} sort.
+     * Selection priority for a test candidate: tier first (fast 0, high-cap 1,
+     * other 2), then staleness of the persisted tunnel-test EWMA so never-tested
+     * peers go first.
+     * <p>
+     * Precomputed by {@link PeerTestJob#tierRank} rather than derived from
+     * {@code ProfileOrganizer.isFast}/{@code isHighCapacity} inside the
+     * comparator: those take the reorganize read lock, and calling them per
+     * comparison meant 4 lock acquisitions per comparison across an
+     * {@code O(n log n)} sort.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static int tierRank(ProfileOrganizer organizer, Hash peer) {
         if (organizer.isFast(peer)) return 0;
@@ -550,17 +550,17 @@ public class PeerTestJob extends JobImpl {
      *
      * <p><b>Performance Benefits:</b></p>
      * <ul>
-     *   <li>Single netDb lookup instead of multiple calls</li>
-     *   <li>Pre-parsed capability flags (no repeated string operations)</li>
-     *   <li>Cached short hash for logging (avoids repeated base64 encoding)</li>
-     *   <li>Tier rank resolved once per candidate instead of per sort comparison</li>
+     * <li>Single netDb lookup instead of multiple calls</li>
+     * <li>Pre-parsed capability flags (no repeated string operations)</li>
+     * <li>Cached short hash for logging (avoids repeated base64 encoding)</li>
+     * <li>Tier rank resolved once per candidate instead of per sort comparison</li>
      * </ul>
      */
     private static class PeerData {
         /**
-         *  Precomputed tier priority, 0 (fast) to 2 (other). Assigned before
-         *  sorting; see {@link PeerTestJob#tierRank}.
-         *  @since 0.9.71+
+         * Precomputed tier priority, 0 (fast) to 2 (other). Assigned before
+         * sorting; see {@link PeerTestJob#tierRank}.
+         * @since 0.9.71+
          */
         int tierRank;
         /** The peer's RouterInfo from the network database (null if not found locally) */
@@ -605,16 +605,16 @@ public class PeerTestJob extends JobImpl {
         }
 
         /**
-         *  Order candidates by tier, then by staleness of the persisted
-         *  tunnel-test EWMA (never tested first).
-         *  <p>
-         *  Reads only precomputed fields, so the sort performs no lock
-         *  acquisition at all.
+         * Order candidates by tier, then by staleness of the persisted
+         * tunnel-test EWMA (never tested first).
+         * <p>
+         * Reads only precomputed fields, so the sort performs no lock
+         * acquisition at all.
          *
-         *  @param a first candidate
-         *  @param b second candidate
-         *  @return negative if a sorts first
-         *  @since 0.9.71+
+         * @param a first candidate
+         * @param b second candidate
+         * @return negative if a sorts first
+         * @since 0.9.71+
          */
         static int compareByTierThenStaleness(PeerData a, PeerData b) {
             int tierCmp = a.tierRank - b.tierRank;
@@ -626,7 +626,6 @@ public class PeerTestJob extends JobImpl {
 
     /**
      * Simple selector looking for a dbStore of the peer specified
-     *
      */
     private class ReplySelector implements MessageSelector {
         private final long _expiration;

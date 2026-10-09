@@ -10,15 +10,15 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
 
 /**
- *  I2PSocket implementation wrapping a standard TCP Socket obtained from an
- *  outproxy, which is itself a wrapper around the Orchid stream.
- *  <p>
- *  SOCKS and HTTP tunnels use this so the tunnel framework can treat an
- *  outproxy connection as an I2P connection and handle it uniformly. All
- *  I2PSocket operations are delegated to the underlying Socket, and the
- *  destination is a fixed dummy: there is no I2P destination to report.
+ * I2PSocket implementation wrapping a standard TCP Socket obtained from an
+ * outproxy, which is itself a wrapper around the Orchid stream.
+ * <p>
+ * SOCKS and HTTP tunnels use this so the tunnel framework can treat an
+ * outproxy connection as an I2P connection and handle it uniformly. All
+ * I2PSocket operations are delegated to the underlying Socket, and the
+ * destination is a fixed dummy: there is no I2P destination to report.
  *
- *  @since 0.9.27
+ * @since 0.9.27
  */
 class SocketWrapper implements I2PSocket {
 
@@ -53,7 +53,7 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     *  Gets the input stream from the underlying socket.
+     * Gets the input stream from the underlying socket.
      *
      * @return the socket's input stream
      * @throws IOException if the socket is closed
@@ -64,7 +64,7 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     *  Gets the output stream from the underlying socket.
+     * Gets the output stream from the underlying socket.
      *
      * @return the socket's output stream
      * @throws IOException if the socket is closed
@@ -75,7 +75,7 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     *  @return null always
+     * @return null always
      */
     @Override
     public I2PSocketOptions getOptions() {
@@ -122,8 +122,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     *  The remote port.
-     *  @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
+     * The remote port.
+     * @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      */
     public int getPort() {
         try {
@@ -135,8 +135,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     *  The local port.
-     *  @return 0 always
+     * The local port.
+     * @return 0 always
      */
     public int getLocalPort() {
         return 0;

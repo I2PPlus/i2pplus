@@ -69,9 +69,9 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
     }
 
     /**
-     *  Get the InetAddress for this record.
+     * Get the InetAddress for this record.
      *
-     *  @return the InetAddress, computed lazily and cached
+     * @return the InetAddress, computed lazily and cached
      */
     @SuppressWarnings("unchecked")
     public final IA getInetAddress() {
@@ -86,10 +86,10 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
     }
 
     /**
-     *  Create an InternetAddressRR from an InetAddress.
+     * Create an InternetAddressRR from an InetAddress.
      *
-     *  @param inetAddress the InetAddress to convert
-     *  @return an A or AAAA record as appropriate
+     * @param inetAddress the InetAddress to convert
+     * @return an A or AAAA record as appropriate
      */
     public static InternetAddressRR<? extends InetAddress> from(InetAddress inetAddress) {
         if (inetAddress instanceof Inet4Address) {

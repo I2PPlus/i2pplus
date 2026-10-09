@@ -10,9 +10,9 @@ import java.util.Properties;
 public interface NamingServiceUpdater {
 
     /**
-     *  Should not block.
+     * Should not block.
      *
-     *  @param options Updater-specific, may be null
+     * @param options Updater-specific, may be null
      */
     public void update(Properties options);
 }

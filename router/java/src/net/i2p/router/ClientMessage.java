@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.Destination;
@@ -34,17 +33,17 @@ public class ClientMessage {
     private final int _flags;
 
     /**
-     *  For outbound (locally originated)
+     * For outbound (locally originated)
      *
-     *  @param toDest the destination to send to
-     *  @param payload the message payload
-     *  @param config the session config of the sending client
-     *  @param fromDest the source destination
-     *  @param msgID the router's ID for this message
-     *  @param messageNonce the client's ID for this message
-     *  @param expiration the expiration time
-     *  @param flags the message flags
-     *  @since 0.9.9
+     * @param toDest the destination to send to
+     * @param payload the message payload
+     * @param config the session config of the sending client
+     * @param fromDest the source destination
+     * @param msgID the router's ID for this message
+     * @param messageNonce the client's ID for this message
+     * @param expiration the expiration time
+     * @param flags the message flags
+     * @since 0.9.9
      */
     public ClientMessage(Destination toDest, Payload payload, SessionConfig config, Destination fromDest,
                          MessageId msgID, long messageNonce, long expiration, int flags) {
@@ -60,11 +59,11 @@ public class ClientMessage {
     }
 
     /**
-     *  For inbound (from remote dest)
+     * For inbound (from remote dest)
      *
-     *  @param toDestHash the destination hash
-     *  @param payload the message payload
-     *  @since 0.9.9
+     * @param toDestHash the destination hash
+     * @param payload the message payload
+     * @since 0.9.9
      */
     public ClientMessage(Hash toDestHash, Payload payload) {
         _destination = null;

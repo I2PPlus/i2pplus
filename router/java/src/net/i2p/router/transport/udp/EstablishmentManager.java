@@ -67,7 +67,6 @@ import java.io.Serializable;
  * Coordinate the establishment of new sessions - both inbound and outbound.
  * This has its own thread to add packets to the packet queue when necessary,
  * as well as to drop any failed establishment attempts.
- *
  */
 public class EstablishmentManager {
     private final RouterContext _context;
@@ -82,15 +81,15 @@ public class EstablishmentManager {
     private final Map<RemoteHostId, Token> _inboundTokens;
     private final ObjectCounter<RemoteHostId> _terminationCounter;
     /**
-     *  Cached "udp.inboundTokenLifetime" RateStat handle. Registered in the
-     *  constructor and never replaced, so it is resolved once rather than on
-     *  every getInboundToken() call: that path is reachable from an
-     *  unauthenticated inbound Token Request, so the stat lookup (a name-based
-     *  map get followed by a synchronized read of the Rate) was attacker
-     *  triggerable. Resolved lazily because a test may construct this manager
-     *  before the stat exists.
+     * Cached "udp.inboundTokenLifetime" RateStat handle. Registered in the
+     * constructor and never replaced, so it is resolved once rather than on
+     * every getInboundToken() call: that path is reachable from an
+     * unauthenticated inbound Token Request, so the stat lookup (a name-based
+     * map get followed by a synchronized read of the Rate) was attacker
+     * triggerable. Resolved lazily because a test may construct this manager
+     * before the stat exists.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile RateStat _inboundTokenLifetimeStat;
 
@@ -114,34 +113,34 @@ public class EstablishmentManager {
     private final ConcurrentHashMap<RemoteHostId, LinkedBlockingQueue<OutNetMessage>> _queuedOutbound;
 
     /**
-     *  Map of nonce (Long) to OutboundEstablishState.
-     *  Only for indirect, before we receive the RelayResponse.
-     *  This is so we can lookup state for the RelayResponse.
-     *  After we receive the relay response, _outboundStates is keyed by actual IP.
+     * Map of nonce (Long) to OutboundEstablishState.
+     * Only for indirect, before we receive the RelayResponse.
+     * This is so we can lookup state for the RelayResponse.
+     * After we receive the relay response, _outboundStates is keyed by actual IP.
      */
     private final ConcurrentHashMap<Long, OutboundEstablishState> _liveIntroductions;
 
     /**
-     *  Map of claimed IP/port to OutboundEstablishState.
-     *  Only for indirect, before we receive the RelayResponse.
-     *  This is so we can lookup a pending introduction by IP
-     *  even before we know the "real" IP, so we can match an inbound packet.
-     *  After we receive the relay response, _outboundStates is keyed by actual IP.
+     * Map of claimed IP/port to OutboundEstablishState.
+     * Only for indirect, before we receive the RelayResponse.
+     * This is so we can lookup a pending introduction by IP
+     * even before we know the "real" IP, so we can match an inbound packet.
+     * After we receive the relay response, _outboundStates is keyed by actual IP.
      */
     private final ConcurrentHashMap<RemoteHostId, OutboundEstablishState> _outboundByClaimedAddress;
 
     /**
-     *  Map of router hash to OutboundEstablishState.
-     *  Only for indirect, after we receive the RelayResponse.
-     *  This is so we can lookup a pending connection by Hash
-     *  even after we've got the IP/port, so we can match a subsequent outbound packet.
-     *  Before we receive the relay response, _outboundStates is keyed by hash.
+     * Map of router hash to OutboundEstablishState.
+     * Only for indirect, after we receive the RelayResponse.
+     * This is so we can lookup a pending connection by Hash
+     * even after we've got the IP/port, so we can match a subsequent outbound packet.
+     * Before we receive the relay response, _outboundStates is keyed by hash.
      */
     private final ConcurrentHashMap<Hash, OutboundEstablishState> _outboundByHash;
 
     /**
-     *  Temporary inbound bans after previous IB failure, to prevent excessive DH.
-     *  SSU 2. Value is expiration time.
+     * Temporary inbound bans after previous IB failure, to prevent excessive DH.
+     * SSU 2. Value is expiration time.
      */
     private final Map<RemoteHostId, Long> _inboundBans;
 
@@ -217,10 +216,10 @@ public class EstablishmentManager {
     private static final int MAX_QUEUED_PER_PEER = 32;
 
     /**
-     *  Ban duration for a peer that supplied an invalid or spoofed SSU address,
-     *  an unusable MTU, or a bad introduction key.
+     * Ban duration for a peer that supplied an invalid or spoofed SSU address,
+     * an unusable MTU, or a bad introduction key.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     private static final long BAN_DURATION_INVALID_ADDRESS_MS = 4*60*60*1000L;
 
@@ -248,91 +247,91 @@ public class EstablishmentManager {
     private static final long IB_RETRY_SENT_MAX_TIME = 5 * InboundEstablishState.RETRANSMIT_DELAY;
 
     /**
-     *  Extra establishment budget granted to an outbound attempt once a resend has been
-     *  scheduled and still failed.
+     * Extra establishment budget granted to an outbound attempt once a resend has been
+     * scheduled and still failed.
      *
-     *  <p>Additive rather than an absolute like the inbound {@code IB_RETRY_SENT_MAX_TIME}.
-     *  The inbound figure is 5x its retransmit delay, but the outbound delay is 300ms
-     *  against the inbound 1000ms, so 5x would be 1500ms - already below the base
-     *  deadline and therefore incapable of ever binding. An additive extension expresses
-     *  the same intent at either delay: give a peer that missed our first messages more
-     *  room, without extending the attempts that never got a reply to begin with.
+     * <p>Additive rather than an absolute like the inbound {@code IB_RETRY_SENT_MAX_TIME}.
+     * The inbound figure is 5x its retransmit delay, but the outbound delay is 300ms
+     * against the inbound 1000ms, so 5x would be 1500ms - already below the base
+     * deadline and therefore incapable of ever binding. An additive extension expresses
+     * the same intent at either delay: give a peer that missed our first messages more
+     * room, without extending the attempts that never got a reply to begin with.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final long OB_RETRY_EXTRA_MS = 2 * 1000L;
 
     /**
-     *  Minimum gap between "Corrupt SessionConfirmed" reports.
+     * Minimum gap between "Corrupt SessionConfirmed" reports.
      *
-     *  <p>This one warning was 9.2% of an entire log - roughly 180 lines a minute - and it
-     *  carries no reason, so the volume bought no information. Two causes are folded into
-     *  this one catch: a peer that legitimately failed the handshake and then sent
-     *  SessionConfirmed anyway, which throws IllegalStateException on an already-FAILED
-     *  state and is ordinary race behaviour; and a genuine key or payload rejection. They
-     *  need opposite responses, so the reason is now reported and repeats are counted.
+     * <p>This one warning was 9.2% of an entire log - roughly 180 lines a minute - and it
+     * carries no reason, so the volume bought no information. Two causes are folded into
+     * this one catch: a peer that legitimately failed the handshake and then sent
+     * SessionConfirmed anyway, which throws IllegalStateException on an already-FAILED
+     * state and is ordinary race behaviour; and a genuine key or payload rejection. They
+     * need opposite responses, so the reason is now reported and repeats are counted.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long CORRUPT_CONFIRM_LOG_INTERVAL_MS = 60 * 1000L;
 
     /**
-     *  The inbound establishment base deadline, as the Tuner has it set.
+     * The inbound establishment base deadline, as the Tuner has it set.
      *
-     *  <p>Exposed so the inbound state machine can schedule its next send from the same budget
-     *  the expiry check uses. When those two were derived independently they drifted, and a state
-     *  could become due for a retransmission while still short of its deadline - which the
-     *  establisher then spun through, retransmitting and logging at WARN on every pass.
+     * <p>Exposed so the inbound state machine can schedule its next send from the same budget
+     * the expiry check uses. When those two were derived independently they drifted, and a state
+     * could become due for a retransmission while still short of its deadline - which the
+     * establisher then spun through, retransmitting and logging at WARN on every pass.
      *
-     *  @return the base deadline in milliseconds
-     *  @since 0.9.71+
+     * @return the base deadline in milliseconds
+     * @since 0.9.71+
      */
     static long getMaxIbEstablishTime() { return MAX_IB_ESTABLISH_TIME.get(); }
 
     /**
-     *  The extended budget an inbound attempt gets once it has sent a retry.
+     * The extended budget an inbound attempt gets once it has sent a retry.
      *
-     *  @return the retry budget in milliseconds
-     *  @since 0.9.71+
+     * @return the retry budget in milliseconds
+     * @since 0.9.71+
      */
     static long getIbRetrySentMaxTime() { return IB_RETRY_SENT_MAX_TIME; }
 
     /**
-     *  Minimum gap between inbound establishment give-up reports.  @since 0.9.71+
+     * Minimum gap between inbound establishment give-up reports.  @since 0.9.71+
      */
     static final long INBOUND_GIVEUP_LOG_INTERVAL_MS = 60 * 1000L;
     private static final AtomicLong _lastInboundGiveupLog = new AtomicLong();
     private static final AtomicLong _inboundGiveupSuppressed = new AtomicLong();
 
     /**
-     *  The deadline an inbound attempt was actually given.
+     * The deadline an inbound attempt was actually given.
      *
-     *  <p>This was written as a disjunction - {@code lifetime > base || (retried && lifetime >=
-     *  retryBudget)} - which never extended anything. The first clause expires the attempt at the
-     *  base on its own, so the second could only matter when the retry budget was the smaller of
-     *  the two, and then it made a retried attempt die <em>sooner</em>. Observed live: with a
-     *  4000ms base and a 3750ms retry budget, a retried attempt died at 3751ms.
+     * <p>This was written as a disjunction - {@code lifetime > base || (retried && lifetime >=
+     * retryBudget)} - which never extended anything. The first clause expires the attempt at the
+     * base on its own, so the second could only matter when the retry budget was the smaller of
+     * the two, and then it made a retried attempt die <em>sooner</em>. Observed live: with a
+     * 4000ms base and a 3750ms retry budget, a retried attempt died at 3751ms.
      *
-     *  <p>The predicate now asks this method for the deadline, so the two cannot disagree and the
-     *  retry budget means what {@code IB_RETRY_SENT_MAX_TIME} exists for: five retransmit delays
-     *  of extra patience for an attempt that has already tried again.
+     * <p>The predicate now asks this method for the deadline, so the two cannot disagree and the
+     * retry budget means what {@code IB_RETRY_SENT_MAX_TIME} exists for: five retransmit delays
+     * of extra patience for an attempt that has already tried again.
      *
-     *  @param isRetrySent true if the attempt had already sent a retry
-     *  @param maxEstablishTime the base deadline
-     *  @param retrySentMaxTime the extended budget available after a retry
-     *  @return the effective deadline in milliseconds
-     *  @since 0.9.71+
+     * @param isRetrySent true if the attempt had already sent a retry
+     * @param maxEstablishTime the base deadline
+     * @param retrySentMaxTime the extended budget available after a retry
+     * @return the effective deadline in milliseconds
+     * @since 0.9.71+
      */
     static long inboundEstablishBudget(boolean isRetrySent, long maxEstablishTime, long retrySentMaxTime) {
         return isRetrySent ? Math.max(maxEstablishTime, retrySentMaxTime) : maxEstablishTime;
     }
 
     /**
-     *  Whether to emit an inbound give-up report now, counting any skipped.
+     * Whether to emit an inbound give-up report now, counting any skipped.
      *
-     *  @param now current time
-     *  @return true if the caller should log; false if the event was only counted
-     *  @since 0.9.71+
+     * @param now current time
+     * @return true if the caller should log; false if the event was only counted
+     * @since 0.9.71+
      */
     static boolean shouldLogInboundGiveup(long now) {
         long last = _lastInboundGiveupLog.get();
@@ -345,21 +344,21 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Inbound give-up events rate-limited away since the last report.
+     * Inbound give-up events rate-limited away since the last report.
      *
-     *  @return the number of suppressed give-up events
-     *  @since 0.9.71+
+     * @return the number of suppressed give-up events
+     * @since 0.9.71+
      */
     static long getInboundGiveupSuppressed() { return _inboundGiveupSuppressed.get(); }
     private static final AtomicLong _lastCorruptConfirmLog = new AtomicLong();
     private static final AtomicLong _corruptConfirmSuppressed = new AtomicLong();
 
     /**
-     *  Whether to emit a corrupt-SessionConfirmed report now, counting any skipped.
+     * Whether to emit a corrupt-SessionConfirmed report now, counting any skipped.
      *
-     *  @param now current wall clock
-     *  @return true if this caller should log; false if the event was only counted
-     *  @since 0.9.71+
+     * @param now current wall clock
+     * @return true if this caller should log; false if the event was only counted
+     * @since 0.9.71+
      */
     static boolean shouldLogCorruptConfirm(long now) {
         long last = _lastCorruptConfirmLog.get();
@@ -372,19 +371,19 @@ public class EstablishmentManager {
     }
 
     /**
-     *  How many corrupt-SessionConfirmed events were rate-limited away.
+     * How many corrupt-SessionConfirmed events were rate-limited away.
      *
-     *  @return suppressed event count since the last emitted report
-     *  @since 0.9.71+
+     * @return suppressed event count since the last emitted report
+     * @since 0.9.71+
      */
     static long getCorruptConfirmSuppressed() { return _corruptConfirmSuppressed.get(); }
 
     /**
-     *  The reason a SessionConfirmed was rejected, for the log line.
+     * The reason a SessionConfirmed was rejected, for the log line.
      *
-     *  @param e the exception thrown out of the handshake
-     *  @return a short, single-line description including the exception type
-     *  @since 0.9.71+
+     * @param e the exception thrown out of the handshake
+     * @return a short, single-line description including the exception type
+     * @since 0.9.71+
      */
     static String corruptConfirmReason(Throwable e) {
         if (e == null) {return "unknown";}
@@ -397,16 +396,16 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Completion time above which a handshake counts as slow.
+     * Completion time above which a handshake counts as slow.
      *
-     *  <p>The recorded {@code udp.*EstablishTime} stats only expose a mean, and the mean is
-     *  useless for sizing the deadline: measured live, successful outbound handshakes
-     *  average 196ms, so 4x the mean targets 784ms - below the 2250 that abandoned 117
-     *  handshakes a minute. Latency here is heavily right-skewed, and the abandonments came
-     *  from the tail, not the body. This threshold marks the tail so a tuner has something
-     *  to read. It sits a quarter of the validated floor, so a healthy link records none.
+     * <p>The recorded {@code udp.*EstablishTime} stats only expose a mean, and the mean is
+     * useless for sizing the deadline: measured live, successful outbound handshakes
+     * average 196ms, so 4x the mean targets 784ms - below the 2250 that abandoned 117
+     * handshakes a minute. Latency here is heavily right-skewed, and the abandonments came
+     * from the tail, not the body. This threshold marks the tail so a tuner has something
+     * to read. It sits a quarter of the validated floor, so a healthy link records none.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long SLOW_ESTABLISH_MS = 1000L;
 
@@ -544,44 +543,44 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Is the router with the given hash banlisted under any active ban?
-     *  Null-safe. Shared by the establish, receiveSessionOrTokenRequest, and
-     *  handleInbound confirmed-complete paths.
-     *  Any active ban - temporary, hostile, or permanent - blocks inbound
-     *  SSU2 connections: a banlisted peer is one the local router does not
-     *  talk to at all (inbound or outbound) until the ban expires.
-     *  {@link Banlist#isBanlisted(Hash)} returns true for every non-expired
-     *  entry, so it covers all tiers.
+     * Is the router with the given hash banlisted under any active ban?
+     * Null-safe. Shared by the establish, receiveSessionOrTokenRequest, and
+     * handleInbound confirmed-complete paths.
+     * Any active ban - temporary, hostile, or permanent - blocks inbound
+     * SSU2 connections: a banlisted peer is one the local router does not
+     * talk to at all (inbound or outbound) until the ban expires.
+     * {@link Banlist#isBanlisted(Hash)} returns true for every non-expired
+     * entry, so it covers all tiers.
      *
-     *  @param banlist the router's banlist
-     *  @param h the peer hash, may be null
-     *  @return true if the peer has an active ban of any tier
-     *  @since 0.9.71
+     * @param banlist the router's banlist
+     * @param h the peer hash, may be null
+     * @return true if the peer has an active ban of any tier
+     * @since 0.9.71
      */
     static boolean isBanlisted(Banlist banlist, Hash h) {
         return h != null && banlist.isBanlisted(h);
     }
 
     /**
-     *  Is the given IP address in the router's blocklist?
-     *  Null-safe. Shared by the session/establish and hole-punch paths.
+     * Is the given IP address in the router's blocklist?
+     * Null-safe. Shared by the session/establish and hole-punch paths.
      *
-     *  @param blocklist the router's blocklist
-     *  @param ip the IP address, may be null
-     *  @return true if the IP is blocklisted
-     *  @since 0.9.71
+     * @param blocklist the router's blocklist
+     * @param ip the IP address, may be null
+     * @return true if the IP is blocklisted
+     * @since 0.9.71
      */
     static boolean isBlocklisted(Blocklist blocklist, byte[] ip) {
         return ip != null && blocklist.isBlocklisted(ip);
     }
 
     /**
-     *  Does the exception carry a message worth showing to the user?
-     *  Legacy code stores the string "null" in the message.
+     * Does the exception carry a message worth showing to the user?
+     * Legacy code stores the string "null" in the message.
      *
-     *  @param t may be null
-     *  @return true if a useful message is present
-     *  @since 0.9.71
+     * @param t may be null
+     * @return true if a useful message is present
+     * @since 0.9.71
      */
     static boolean hasUsefulMessage(Throwable t) {
         String msg = t != null ? t.getMessage() : null;
@@ -589,13 +588,13 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Can the given introducer have signed the relay response?
-     *  A peer that was never contacted, terminated the session, or explicitly
-     *  rejected the hole punch cannot be the signer.
+     * Can the given introducer have signed the relay response?
+     * A peer that was never contacted, terminated the session, or explicitly
+     * rejected the hole punch cannot be the signer.
      *
-     *  @param istate the intro state
-     *  @return true if the introducer may be the signer
-     *  @since 0.9.71
+     * @param istate the intro state
+     * @return true if the introducer may be the signer
+     * @since 0.9.71
      */
     static boolean canBeSigner(OutboundEstablishState2.IntroState istate) {
         switch (istate) {
@@ -615,131 +614,131 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Is the peer's network ID one we will not establish to?
-     *  The router communicates only with peers in its own network.
+     * Is the peer's network ID one we will not establish to?
+     * The router communicates only with peers in its own network.
      *
-     *  @param id the peer's network ID
-     *  @param ourNetworkId this router's network ID
-     *  @return true if the network IDs differ
-     *  @since 0.9.71
+     * @param id the peer's network ID
+     * @param ourNetworkId this router's network ID
+     * @return true if the network IDs differ
+     * @since 0.9.71
      */
     static boolean isWrongNetwork(int id, int ourNetworkId) {
         return id != ourNetworkId;
     }
 
     /**
-     *  Is the peer's network ID unset (i.e. the legacy -1)?
-     *  Used to pick the ban reason and duration when {@link #isWrongNetwork}
-     *  rejects the peer: unset networks get a shorter temporary ban, while
-     *  a present-but-different network ID is banned indefinitely.
+     * Is the peer's network ID unset (i.e. the legacy -1)?
+     * Used to pick the ban reason and duration when {@link #isWrongNetwork}
+     * rejects the peer: unset networks get a shorter temporary ban, while
+     * a present-but-different network ID is banned indefinitely.
      *
-     *  @param id the peer's network ID
-     *  @return true if the ID is the "no network specified" sentinel
-     *  @since 0.9.71
+     * @param id the peer's network ID
+     * @return true if the ID is the "no network specified" sentinel
+     * @since 0.9.71
      */
     static boolean isUnspecifiedNetwork(int id) {
         return id == -1;
     }
 
     /**
-     *  Is the claimed address usable for a direct connection?
-     *  A null address or a port outside 1-65535 is useless to us.
+     * Is the claimed address usable for a direct connection?
+     * A null address or a port outside 1-65535 is useless to us.
      *
-     *  @param remAddr the claimed host address, may be null
-     *  @param port the claimed port
-     *  @return true if the address can be used directly
-     *  @since 0.9.71
+     * @param remAddr the claimed host address, may be null
+     * @param port the claimed port
+     * @return true if the address can be used directly
+     * @since 0.9.71
      */
     static boolean isUsableUDPAddress(InetAddress remAddr, int port) {
         return remAddr != null && port > 0 && port <= 65535;
     }
 
     /**
-     *  Is the claimed IP address unusable, either because it isn't a
-     *  routable public address or because it is ours without local
-     *  connections allowed?  The caller supplies the per-transport
-     *  validity and "equals external IP" booleans so this stays a pure
-     *  decision.
+     * Is the claimed IP address unusable, either because it isn't a
+     * routable public address or because it is ours without local
+     * connections allowed?  The caller supplies the per-transport
+     * validity and "equals external IP" booleans so this stays a pure
+     * decision.
      *
-     *  @param isValid the transport's verdict on the address
-     *  @param equalsExternalIP true if the address equals the router's external IP
-     *  @param allowLocal true if local connections are permitted
-     *  @return true if the address must be rejected
-     *  @since 0.9.71
+     * @param isValid the transport's verdict on the address
+     * @param equalsExternalIP true if the address equals the router's external IP
+     * @param allowLocal true if local connections are permitted
+     * @return true if the address must be rejected
+     * @since 0.9.71
      */
     static boolean isInvalidPeerIP(boolean isValid, boolean equalsExternalIP, boolean allowLocal) {
         return !isValid || (equalsExternalIP && !allowLocal);
     }
 
     /**
-     *  Should this establish use the peer's introducers rather than the
-     *  claimed address?  True when the peer offers introducers or when no
-     *  usable direct address was found.
+     * Should this establish use the peer's introducers rather than the
+     * claimed address?  True when the peer offers introducers or when no
+     * usable direct address was found.
      *
-     *  @param hasIntroducers true if the address advertises introducers
-     *  @param noDirectAddress true if no claimed address was usable
-     *  @return true to establish indirectly
-     *  @since 0.9.71
+     * @param hasIntroducers true if the address advertises introducers
+     * @param noDirectAddress true if no claimed address was usable
+     * @return true to establish indirectly
+     * @since 0.9.71
      */
     static boolean needsIndirect(boolean hasIntroducers, boolean noDirectAddress) {
         return hasIntroducers || noDirectAddress;
     }
 
     /**
-     *  Should the message be put on the deferred queue instead of starting a
-     *  new outbound state?  Only when queueing is requested and the active
-     *  outbound establish count is at or above the configured cap.
+     * Should the message be put on the deferred queue instead of starting a
+     * new outbound state?  Only when queueing is requested and the active
+     * outbound establish count is at or above the configured cap.
      *
-     *  @param queueIfMaxExceeded true normally, false when called from locked_admit
-     *  @param activeCount the current number of outbound establish states
-     *  @param maxConcurrent the configured cap
-     *  @return true to queue the message
-     *  @since 0.9.71
+     * @param queueIfMaxExceeded true normally, false when called from locked_admit
+     * @param activeCount the current number of outbound establish states
+     * @param maxConcurrent the configured cap
+     * @return true to queue the message
+     * @since 0.9.71
      */
     static boolean shouldQueueOutbound(boolean queueIfMaxExceeded, int activeCount, int maxConcurrent) {
         return queueIfMaxExceeded && activeCount >= maxConcurrent;
     }
 
     /**
-     *  Should the queued message be rejected outright rather than queued?
-     *  True when the global deferred queue is at capacity and this peer does
-     *  not already have a queue we could append to.
+     * Should the queued message be rejected outright rather than queued?
+     * True when the global deferred queue is at capacity and this peer does
+     * not already have a queue we could append to.
      *
-     *  @param queuedOutboundSize the global deferred queue count
-     *  @param maxQueued the global queue cap
-     *  @param peerAlreadyQueued true if this peer already has a deferred queue
-     *  @return true to reject the message
-     *  @since 0.9.71
+     * @param queuedOutboundSize the global deferred queue count
+     * @param maxQueued the global queue cap
+     * @param peerAlreadyQueued true if this peer already has a deferred queue
+     * @return true to reject the message
+     * @since 0.9.71
      */
     static boolean shouldRejectQueue(boolean peerAlreadyQueued, int queuedOutboundSize, int maxQueued) {
         return queuedOutboundSize >= maxQueued && !peerAlreadyQueued;
     }
 
     /**
-     *  Has this peer's deferred queue hit its per-peer cap?
+     * Has this peer's deferred queue hit its per-peer cap?
      *
-     *  @param queueCount the number of messages now queued for the peer
-     *  @param maxPerPeer the per-peer queue cap
-     *  @return true if the queue is at capacity
-     *  @since 0.9.71
+     * @param queueCount the number of messages now queued for the peer
+     * @param maxPerPeer the per-peer queue cap
+     * @return true if the queue is at capacity
+     * @since 0.9.71
      */
     static boolean queueAtCapacity(int queueCount, int maxPerPeer) {
         return queueCount >= maxPerPeer;
     }
 
     /**
-     *  Advance an introducer's state based on whether we already hold a live
-     *  PeerState for it.  Handles the connected-peer walk in
-     *  {@link #handlePendingIntro}: an INIT/CONNECTING intro that resolves to
-     *  a live peer becomes CONNECTED when the peer speaks a supported version,
-     *  otherwise REJECTED (cross-version relaying is not implemented yet),
-     *  and a CONNECTED intro whose peer has gone away becomes DISCONNECTED.
+     * Advance an introducer's state based on whether we already hold a live
+     * PeerState for it.  Handles the connected-peer walk in
+     * {@link #handlePendingIntro}: an INIT/CONNECTING intro that resolves to
+     * a live peer becomes CONNECTED when the peer speaks a supported version,
+     * otherwise REJECTED (cross-version relaying is not implemented yet),
+     * and a CONNECTED intro whose peer has gone away becomes DISCONNECTED.
      *
-     *  @param istate the current intro state
-     *  @param peerPresent true if a live PeerState was found
-     *  @param peerSupported true if the peer advertises a supported SSU2 version
-     *  @return the advanced intro state (unchanged for states not handled here)
-     *  @since 0.9.71
+     * @param istate the current intro state
+     * @param peerPresent true if a live PeerState was found
+     * @param peerSupported true if the peer advertises a supported SSU2 version
+     * @return the advanced intro state (unchanged for states not handled here)
+     * @since 0.9.71
      */
     static OutboundEstablishState2.IntroState nextIntroStateforPeerCheck(OutboundEstablishState2.IntroState istate,
                                                                          boolean peerPresent, boolean peerSupported) {
@@ -761,15 +760,15 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Advance an introducer's state based on a local RouterInfo lookup.
-     *  Only intros we are allowed to connect to (INIT, LOOKUP_SENT, HAS_RI)
-     *  are advanced, and only to HAS_RI when a local RouterInfo is known;
-     *  every other state is returned unchanged.
+     * Advance an introducer's state based on a local RouterInfo lookup.
+     * Only intros we are allowed to connect to (INIT, LOOKUP_SENT, HAS_RI)
+     * are advanced, and only to HAS_RI when a local RouterInfo is known;
+     * every other state is returned unchanged.
      *
-     *  @param istate the current intro state
-     *  @param riFound true if a RouterInfo was found locally
-     *  @return the advanced intro state (unchanged unless a local RI is found)
-     *  @since 0.9.71
+     * @param istate the current intro state
+     * @param riFound true if a RouterInfo was found locally
+     * @return the advanced intro state (unchanged unless a local RI is found)
+     * @since 0.9.71
      */
     static OutboundEstablishState2.IntroState nextIntroStateforLocalLookup(OutboundEstablishState2.IntroState istate,
                                                                            boolean riFound) {
@@ -784,93 +783,93 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Is a raw IP/port pair usable to try a direct connection to an
-     *  introducer?  Identity with {@link #isUsableUDPAddress(InetAddress, int)}
-     *  except operating on the already-extracted address bytes.
+     * Is a raw IP/port pair usable to try a direct connection to an
+     * introducer?  Identity with {@link #isUsableUDPAddress(InetAddress, int)}
+     * except operating on the already-extracted address bytes.
      *
-     *  @param ip the address bytes, may be null
-     *  @param port the claimed UDP port, valid 1-65535
-     *  @return true if the address can be used
-     *  @since 0.9.71
+     * @param ip the address bytes, may be null
+     * @param port the claimed UDP port, valid 1-65535
+     * @return true if the address can be used
+     * @since 0.9.71
      */
     static boolean isUsableUDPAddress(byte[] ip, int port) {
         return ip != null && port > 0 && port <= 65535;
     }
 
     /**
-     *  Is the outbound establish state in a terminal state that should be
-     *  dropped and processed (completed or failed) rather than retried?
-     *  Guards the scan loop in {@link #handleOutbound}.
+     * Is the outbound establish state in a terminal state that should be
+     * dropped and processed (completed or failed) rather than retried?
+     * Guards the scan loop in {@link #handleOutbound}.
      *
-     *  @param state the outbound state
-     *  @return true for CONFIRMED_COMPLETELY or VALIDATION_FAILED
-     *  @since 0.9.71
+     * @param state the outbound state
+     * @return true for CONFIRMED_COMPLETELY or VALIDATION_FAILED
+     * @since 0.9.71
      */
     static boolean isTerminalOutboundState(OutboundEstablishState.OutboundState state) {
         return state == OB_STATE_CONFIRMED_COMPLETELY || state == OB_STATE_VALIDATION_FAILED;
     }
 
     /**
-     *  Has the outbound state gone unanswered for at least the message timeout?
-     *  A zero/unknown send time never counts as timed out.  Shared by the
-     *  REQUEST_SENT / CONFIRMED_PARTIALLY / PENDING_INTRO dispatch arms in
-     *  {@link #handleOutbound}.
+     * Has the outbound state gone unanswered for at least the message timeout?
+     * A zero/unknown send time never counts as timed out.  Shared by the
+     * REQUEST_SENT / CONFIRMED_PARTIALLY / PENDING_INTRO dispatch arms in
+     * {@link #handleOutbound}.
      *
-     *  @param lastSentTime the time we last sent, 0 if never
-     *  @param timeoutMs the per-message timeout
-     *  @param now current time
-     *  @return true if a message was sent and has been unanswered too long
-     *  @since 0.9.71
+     * @param lastSentTime the time we last sent, 0 if never
+     * @param timeoutMs the per-message timeout
+     * @param now current time
+     * @return true if a message was sent and has been unanswered too long
+     * @since 0.9.71
      */
     static boolean hasObMessageTimedOut(long lastSentTime, long timeoutMs, long now) {
         return lastSentTime > 0 && lastSentTime + timeoutMs <= now;
     }
 
     /**
-     *  Should the outbound establish state be processed as expired, either
-     *  because its lifetime is over or because it has been unanswered for the
-     *  message timeout?
+     * Should the outbound establish state be processed as expired, either
+     * because its lifetime is over or because it has been unanswered for the
+     * message timeout?
      *
-     *  @param expired true if the state's lifetime is exhausted
-     *  @param lastSentTime the time we last sent, 0 if never
-     *  @param timeoutMs the per-message timeout
-     *  @param now current time
-     *  @return true to process the state as expired
-     *  @since 0.9.71
+     * @param expired true if the state's lifetime is exhausted
+     * @param lastSentTime the time we last sent, 0 if never
+     * @param timeoutMs the per-message timeout
+     * @param now current time
+     * @return true to process the state as expired
+     * @since 0.9.71
      */
     static boolean shouldFailObState(boolean expired, long lastSentTime, long timeoutMs, long now) {
         return expired || hasObMessageTimedOut(lastSentTime, timeoutMs, now);
     }
 
     /**
-     *  Is the state due to send now (its next send time has arrived)?
+     * Is the state due to send now (its next send time has arrived)?
      *
-     *  @param nextSendTime the scheduled send time
-     *  @param now current time
-     *  @return true if the send is due
-     *  @since 0.9.71
+     * @param nextSendTime the scheduled send time
+     * @param now current time
+     * @return true if the send is due
+     * @since 0.9.71
      */
     static boolean isSendDue(long nextSendTime, long now) {
         return nextSendTime <= now;
     }
 
     /**
-     *  Whether an outbound establishment attempt has run out of time.
+     * Whether an outbound establishment attempt has run out of time.
      *
-     *  <p>Mirrors {@link #hasInboundEstablishExpired} for the outbound direction, which
-     *  until now had no equivalent: the outbound deadline was a flat
-     *  {@code lifetime >= MAX_OB_ESTABLISH_TIME} with no retry grace, while the inbound
-     *  side got up to {@code IB_RETRY_SENT_MAX_TIME} once a retry was sent. That made the
-     *  direction which retransmits three times faster (300ms against 1000ms) the one
-     *  held to the shorter patience, and it is the direction the SSU2 token exchange -
-     *  one round trip more than SSU1 - runs through.
+     * <p>Mirrors {@link #hasInboundEstablishExpired} for the outbound direction, which
+     * until now had no equivalent: the outbound deadline was a flat
+     * {@code lifetime >= MAX_OB_ESTABLISH_TIME} with no retry grace, while the inbound
+     * side got up to {@code IB_RETRY_SENT_MAX_TIME} once a retry was sent. That made the
+     * direction which retransmits three times faster (300ms against 1000ms) the one
+     * held to the shorter patience, and it is the direction the SSU2 token exchange -
+     * one round trip more than SSU1 - runs through.
      *
-     *  @param lifetime how long the attempt has been alive, in milliseconds
-     *  @param hasRetried true if a resend has already been scheduled
-     *  @param maxEstablishTime the base deadline, normally {@code MAX_OB_ESTABLISH_TIME}
-     *  @param retryExtraMs additional budget granted once a resend has failed
-     *  @return true if the attempt should be abandoned
-     *  @since 0.9.71+
+     * @param lifetime how long the attempt has been alive, in milliseconds
+     * @param hasRetried true if a resend has already been scheduled
+     * @param maxEstablishTime the base deadline, normally {@code MAX_OB_ESTABLISH_TIME}
+     * @param retryExtraMs additional budget granted once a resend has failed
+     * @return true if the attempt should be abandoned
+     * @since 0.9.71+
      */
     static boolean hasOutboundEstablishExpired(long lifetime, boolean hasRetried,
                                                long maxEstablishTime, long retryExtraMs) {
@@ -878,16 +877,16 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Has the inbound establish state lived long enough to be expired, either
-     *  past the overall establish cap or, when we are waiting for a session
-     *  request after sending a retry, past the retry-sent limit?
+     * Has the inbound establish state lived long enough to be expired, either
+     * past the overall establish cap or, when we are waiting for a session
+     * request after sending a retry, past the retry-sent limit?
      *
-     *  @param lifetime how long the state has existed, in milliseconds
-     *  @param isRetrySent true if the state is waiting in IB_STATE_RETRY_SENT
-     *  @param maxEstablishTime the overall inbound establish cap
-     *  @param retrySentMaxTime the extra cap applied only to retry-sent states
-     *  @return true if the inbound state should be expired
-     *  @since 0.9.71
+     * @param lifetime how long the state has existed, in milliseconds
+     * @param isRetrySent true if the state is waiting in IB_STATE_RETRY_SENT
+     * @param maxEstablishTime the overall inbound establish cap
+     * @param retrySentMaxTime the extra cap applied only to retry-sent states
+     * @return true if the inbound state should be expired
+     * @since 0.9.71
      */
     static boolean hasInboundEstablishExpired(long lifetime, boolean isRetrySent,
                                               long maxEstablishTime, long retrySentMaxTime) {
@@ -895,29 +894,29 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Is this a rejection from the introducer (Bob) rather than from Charlie
-     *  or a success? SSU2 relay response codes 1-63 reject at the introducer
-     *  layer; 0 is success and >=64 reject at the destination (Charlie).
-     *  Both the live-introduction map handling and the signer selection in
-     *  {@link #receiveRelayResponse} branch on this.
+     * Is this a rejection from the introducer (Bob) rather than from Charlie
+     * or a success? SSU2 relay response codes 1-63 reject at the introducer
+     * layer; 0 is success and >=64 reject at the destination (Charlie).
+     * Both the live-introduction map handling and the signer selection in
+     * {@link #receiveRelayResponse} branch on this.
      *
-     *  @param code the relay response code
-     *  @return true if the introducer rejected the request
-     *  @since 0.9.71
+     * @param code the relay response code
+     * @return true if the introducer rejected the request
+     * @since 0.9.71
      */
     static boolean isBobRelayReject(int code) {
         return code > 0 && code < 64;
     }
 
     /**
-     *  The intro state to record for a relay response, by response code:
-     *  0 means Charlie accepted, codes 1-63 mean Bob (the introducer)
-     *  rejected, and codes 64+ mean Charlie rejected.
+     * The intro state to record for a relay response, by response code:
+     * 0 means Charlie accepted, codes 1-63 mean Bob (the introducer)
+     * rejected, and codes 64+ mean Charlie rejected.
      *
-     *  @param code the relay response code
-     *  @return the matching intro state; State selection must mirror
-     *          {@link #isBobRelayReject}
-     *  @since 0.9.71
+     * @param code the relay response code
+     * @return the matching intro state; State selection must mirror
+     * {@link #isBobRelayReject}
+     * @since 0.9.71
      */
     static OutboundEstablishState2.IntroState relayResponseIntroState(int code) {
         if (code == 0) {return INTRO_STATE_SUCCESS;}
@@ -926,18 +925,18 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Is the claimed relay address unacceptable, meaning Charlie asked us to
-     *  connect somewhere invalid, too close, on our own network, or a
-     *  blocklisted address? Finding the introducer's own IP in the claim is
-     *  also rejection-worthy (a relay must not send us back to itself).
+     * Is the claimed relay address unacceptable, meaning Charlie asked us to
+     * connect somewhere invalid, too close, on our own network, or a
+     * blocklisted address? Finding the introducer's own IP in the claim is
+     * also rejection-worthy (a relay must not send us back to itself).
      *
-     *  @param validPort whether the port is in range
-     *  @param validIP whether the transport accepts the address
-     *  @param tooClose whether the address is too close to ours
-     *  @param sameAsIntroducer whether the address is Bob's own IP
-     *  @param blocklisted whether the address is in the blocklist
-     *  @return true if any check fails
-     *  @since 0.9.71
+     * @param validPort whether the port is in range
+     * @param validIP whether the transport accepts the address
+     * @param tooClose whether the address is too close to ours
+     * @param sameAsIntroducer whether the address is Bob's own IP
+     * @param blocklisted whether the address is in the blocklist
+     * @return true if any check fails
+     * @since 0.9.71
      */
     static boolean isBadRelayDataAddress(boolean validPort, boolean validIP, boolean tooClose,
                                          boolean sameAsIntroducer, boolean blocklisted) {
@@ -945,16 +944,16 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Does the SSU2 address advertise at least one usable v2 introducer,
-     *  meaning a hash that hasn't expired (expiration 0 means never
-     *  expires)? Used by {@link #createOutboundState} before building a
-     *  state for an indirect peer, since without any current introducer the
-     *  establishment can never succeed.
+     * Does the SSU2 address advertise at least one usable v2 introducer,
+     * meaning a hash that hasn't expired (expiration 0 means never
+     * expires)? Used by {@link #createOutboundState} before building a
+     * state for an indirect peer, since without any current introducer the
+     * establishment can never succeed.
      *
-     *  @param addr the peer's address
-     *  @param now the current time
-     *  @return true if any introducer hash is present and unexpired
-     *  @since 0.9.71
+     * @param addr the peer's address
+     * @param now the current time
+     * @return true if any introducer hash is present and unexpired
+     * @since 0.9.71
      */
     static boolean hasValidV2Introducer(UDPAddress addr, long now) {
         int count = addr.getIntroducerCount();
@@ -967,14 +966,14 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Is either our MTU or the peer's advertised MTU below the minimum
-     *  usable for SSU2? MTUs of 0 are treated as unknown and pass, matching
-     *  the original inline check.
+     * Is either our MTU or the peer's advertised MTU below the minimum
+     * usable for SSU2? MTUs of 0 are treated as unknown and pass, matching
+     * the original inline check.
      *
-     *  @param mtu the peer's advertised MTU
-     *  @param ourMTU our MTU for the same address family
-     *  @return true if either is positive and below {@link PeerState2#MIN_MTU}
-     *  @since 0.9.71
+     * @param mtu the peer's advertised MTU
+     * @param ourMTU our MTU for the same address family
+     * @return true if either is positive and below {@link PeerState2#MIN_MTU}
+     * @since 0.9.71
      */
     static boolean isMtuTooSmall(int mtu, int ourMTU) {
         return (mtu > 0 && mtu < PeerState2.MIN_MTU) ||
@@ -982,21 +981,21 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Send the message to its specified recipient by establishing a connection
-     *  with them and sending it off.  This call does not block, and on failure,
-     *  the message is failed.
+     * Send the message to its specified recipient by establishing a connection
+     * with them and sending it off.  This call does not block, and on failure,
+     * the message is failed.
      *
-     *  Note - if we go back to multiple PacketHandler threads, this may need more locking.
+     * Note - if we go back to multiple PacketHandler threads, this may need more locking.
      *
-     *  @param msg the outbound message to send, queued if we are at the concurrency limit
+     * @param msg the outbound message to send, queued if we are at the concurrency limit
      */
     public void establish(OutNetMessage msg) {establish(msg, true);}
 
     /**
-     *  Establishes a connection to send the message, or queues it if the limit is exceeded.
+     * Establishes a connection to send the message, or queues it if the limit is exceeded.
      *
-     *  @param queueIfMaxExceeded true normally, false if called from locked_admit so we don't loop
-     *  @since 0.9.2
+     * @param queueIfMaxExceeded true normally, false if called from locked_admit so we don't loop
+     * @since 0.9.2
      */
     private void establish(OutNetMessage msg, boolean queueIfMaxExceeded) {
         RouterInfo toRouterInfo = msg.getTarget();
@@ -1150,10 +1149,10 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Queue the message on an inbound establish state that's already in progress,
-     *  or send/fail it immediately if the state is already complete or failed.
+     * Queue the message on an inbound establish state that's already in progress,
+     * or send/fail it immediately if the state is already complete or failed.
      *
-     *  @param inState non-null
+     * @param inState non-null
      */
     private void queueToInboundState(InboundEstablishState inState, OutNetMessage msg) {
         synchronized (inState) {
@@ -1186,10 +1185,10 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Look up an existing outbound establish state for the peer, first by
-     *  address, then by hash (for indirect connections).
+     * Look up an existing outbound establish state for the peer, first by
+     * address, then by hash (for indirect connections).
      *
-     *  @return the state, or null if none
+     * @return the state, or null if none
      */
     private OutboundEstablishState lookupOutboundState(RemoteHostId to, Hash toHash) {
         OutboundEstablishState state = _outboundStates.get(to);
@@ -1202,14 +1201,14 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Create a new outbound establish state for the peer, after verifying that
-     *  its introducers, MTU, and introduction key are usable.  On failure, marks
-     *  the peer unreachable and fails the message, banning the peer if it isn't
-     *  already banned.
+     * Create a new outbound establish state for the peer, after verifying that
+     * its introducers, MTU, and introduction key are usable.  On failure, marks
+     * the peer unreachable and fails the message, banning the peer if it isn't
+     * already banned.
      *
-     *  @param to the key in _outboundStates: the claimed address (direct) or the hash (indirect)
-     *  @param maybeTo the claimed address, or null if indirect
-     *  @return the new state, or null if the message was failed
+     * @param to the key in _outboundStates: the claimed address (direct) or the hash (indirect)
+     * @param maybeTo the claimed address, or null if indirect
+     * @return the new state, or null if the message was failed
      */
     private OutboundEstablishState createOutboundState(OutNetMessage msg, RemoteHostId to,
                                                        RemoteHostId maybeTo, RouterIdentity toIdentity,
@@ -1285,16 +1284,16 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Mark the peer unreachable and fail the message.  If the peer is known
-     *  (has a hash) and not already banned, ban it for the given duration and
-     *  log a warning; otherwise warn that the claimed address is bad.
+     * Mark the peer unreachable and fail the message.  If the peer is known
+     * (has a hash) and not already banned, ban it for the given duration and
+     * log a warning; otherwise warn that the claimed address is bad.
      *
-     *  @param failReason reason given to the failed message
-     *  @param banReason reason used for the ban and the ban log
-     *  @param noHashWarn warning text used when the peer has no hash
-     *  @param ipAddress the claimed IP, may be empty for indirect peers
-     *  @param port the claimed port
-     *  @param banDuration ban duration in ms, e.g. {@link #BAN_DURATION_INVALID_ADDRESS_MS}
+     * @param failReason reason given to the failed message
+     * @param banReason reason used for the ban and the ban log
+     * @param noHashWarn warning text used when the peer has no hash
+     * @param ipAddress the claimed IP, may be empty for indirect peers
+     * @param port the claimed port
+     * @param banDuration ban duration in ms, e.g. {@link #BAN_DURATION_INVALID_ADDRESS_MS}
      */
     private void banAndFail(OutNetMessage msg, Hash toHash, String failReason, String banReason,
                             String noHashWarn, String ipAddress, int port, String truncHash,
@@ -2008,9 +2007,9 @@ public class EstablishmentManager {
     }
 
     /**
-     *  A database store message with our router info
-     *  @return non-null
-     *  @since 0.9.24 split from sendOurInfo(), public since 0.9.55 for UDPTransport
+     * A database store message with our router info
+     * @return non-null
+     * @since 0.9.24 split from sendOurInfo(), public since 0.9.55 for UDPTransport
      */
     public DatabaseStoreMessage getOurInfo() {
         DatabaseStoreMessage m = new DatabaseStoreMessage(_context);
@@ -2023,13 +2022,13 @@ public class EstablishmentManager {
     public static final long MAX_TAG_VALUE = 0xFFFFFFFFL;
 
     /**
-     *  This handles both initial send and retransmission of Session Created,
-     *  and, for SSU2, send of Retry.
-     *  Retry is never retransmitted except in response to a retransmitted Token Request.
+     * This handles both initial send and retransmission of Session Created,
+     * and, for SSU2, send of Retry.
+     * Retry is never retransmitted except in response to a retransmitted Token Request.
      *
-     *  This may be called more than once.
+     * This may be called more than once.
      *
-     *  Caller must synch on state.
+     * Caller must synch on state.
      */
     private void sendCreated(InboundEstablishState state) {
         UDPPacket pkt;
@@ -2075,12 +2074,12 @@ public class EstablishmentManager {
     }
 
     /**
-     *  This handles both initial send and retransmission of SessionRequest,
-     *  and, for SSU2, initial send and retransmission of Token Request.
+     * This handles both initial send and retransmission of SessionRequest,
+     * and, for SSU2, initial send and retransmission of Token Request.
      *
-     *  This may be called more than once.
+     * This may be called more than once.
      *
-     *  Caller must synch on state.
+     * Caller must synch on state.
      */
     private void sendRequest(OutboundEstablishState state) {
         UDPPacket packet;
@@ -2132,13 +2131,13 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Send RelayRequests to multiple introducers.
-     *  This may be called multiple times, it sets the nonce the first time only
-     *  Caller should probably synch on state.
+     * Send RelayRequests to multiple introducers.
+     * This may be called multiple times, it sets the nonce the first time only
+     * Caller should probably synch on state.
      *
-     *  SSU 2
+     * SSU 2
      *
-     *  @param state charlie
+     * @param state charlie
      */
     private void handlePendingIntro(OutboundEstablishState state) {
         long nonce = state.getIntroNonce();
@@ -2267,13 +2266,13 @@ public class EstablishmentManager {
     }
 
     /**
-     *  We are Alice, send a RelayRequest to Bob.
+     * We are Alice, send a RelayRequest to Bob.
      *
-     *  SSU 2 only.
+     * SSU 2 only.
      *
-     *  @param charlie must be SSU2
-     *  @return success
-     *  @since 0.9.55
+     * @param charlie must be SSU2
+     * @return success
+     * @since 0.9.55
      */
     private boolean sendRelayRequest(long tag, PeerState2 bob, OutboundEstablishState charlie) {
         // pick our IP based on what address we're connecting to
@@ -2311,16 +2310,16 @@ public class EstablishmentManager {
     }
 
     /**
-     *  We are Alice, we sent a RelayRequest to Bob and got a RelayResponse back.
-     *  Time and version already checked by caller.
+     * We are Alice, we sent a RelayRequest to Bob and got a RelayResponse back.
+     * Time and version already checked by caller.
      *
-     *  SSU 2 only.
+     * SSU 2 only.
      *
-     *  @param bob the introducer's established session, we are answering its relay
-     *  @param nonce matches the live introduction we sent, keys the pending outbound state
-     *  @param code 0 if Charlie accepted, 1-63 if the introducer rejected, 64+ if Charlie rejected
-     *  @param data including nonce, including token if code == 0
-     *  @since 0.9.55
+     * @param bob the introducer's established session, we are answering its relay
+     * @param nonce matches the live introduction we sent, keys the pending outbound state
+     * @param code 0 if Charlie accepted, 1-63 if the introducer rejected, 64+ if Charlie rejected
+     * @param data including nonce, including token if code == 0
+     * @since 0.9.55
      */
     void receiveRelayResponse(PeerState2 bob, long nonce, int code, byte[] data) {
         // don't remove unless accepted or rejected by charlie
@@ -2459,14 +2458,14 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Called from PacketHandler.
-     *  Accelerate response to RelayResponse if we haven't sent it yet.
+     * Called from PacketHandler.
+     * Accelerate response to RelayResponse if we haven't sent it yet.
      *
-     *  SSU 2 only.
+     * SSU 2 only.
      *
-     *  @param id non-null
-     *  @param packet header already decrypted
-     *  @since 0.9.55
+     * @param id non-null
+     * @param packet header already decrypted
+     * @since 0.9.55
      */
     void receiveHolePunch(RemoteHostId id, UDPPacket packet) {
         DatagramPacket pkt = packet.getPacket();
@@ -2511,15 +2510,15 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Validate the decrypted HolePunch payload: response code, clock skew,
-     *  the nonce echoing the receiving connection ID, the response time, and
-     *  the version.
+     * Validate the decrypted HolePunch payload: response code, clock skew,
+     * the nonce echoing the receiving connection ID, the response time, and
+     * the version.
      *
-     *  @param cb payload callback results
-     *  @param rcvConnID connection ID this packet was sent to
-     *  @param now receive time
-     *  @param id sender
-     *  @return true if all checks pass
+     * @param cb payload callback results
+     * @param rcvConnID connection ID this packet was sent to
+     * @param now receive time
+     * @param id sender
+     * @return true if all checks pass
      */
     private boolean isValidHolePunchResponse(HPCallback cb, long rcvConnID, long now, RemoteHostId id) {
         if (cb._respCode != 0) {
@@ -2552,11 +2551,11 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Find the outbound establish state this HolePunch belongs to.
+     * Find the outbound establish state this HolePunch belongs to.
      *
-     *  @param id sender
-     *  @param nonce the nonce from the validated response
-     *  @return the state, or null if unknown
+     * @param id sender
+     * @param nonce the nonce from the validated response
+     * @return the state, or null if unknown
      */
     private OutboundEstablishState findHolePunchState(RemoteHostId id, long nonce) {
         // Tracked optimization, not a defect: the RemoteHostId map is consulted
@@ -2581,15 +2580,15 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Validate the introducer signature on the HolePunch, by trying each
-     *  introducer in a state that may have signed it.
+     * Validate the introducer signature on the HolePunch, by trying each
+     * introducer in a state that may have signed it.
      *
-     *  @param state outbound establish state
-     *  @param state2 SSU2-specific state, for intro bookkeeping
-     *  @param cb payload callback results
-     *  @return the signed portion of the response data (everything but the
-     *          trailing token), or null if Charlie's RouterInfo is unknown or
-     *          no introducer signature validated
+     * @param state outbound establish state
+     * @param state2 SSU2-specific state, for intro bookkeeping
+     * @param cb payload callback results
+     * @return the signed portion of the response data (everything but the
+     * trailing token), or null if Charlie's RouterInfo is unknown or
+     * no introducer signature validated
      */
     private byte[] verifyIntroducerSignature(OutboundEstablishState state, OutboundEstablishState2 state2, HPCallback cb) {
         Hash charlieHash = state.getRemoteIdentity().getHash();
@@ -2622,12 +2621,12 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Ban the peer and fail the outbound establish state for bad
-     *  introduction data.
+     * Ban the peer and fail the outbound establish state for bad
+     * introduction data.
      *
-     *  @param state the outbound establish state
-     *  @param reason ban reason
-     *  @param banDuration ban duration in ms
+     * @param state the outbound establish state
+     * @param reason ban reason
+     * @param banDuration ban duration in ms
      */
     private void banAndFailState(OutboundEstablishState state, String reason, long banDuration) {
         Hash h = state.getRemoteIdentity().getHash();
@@ -2638,15 +2637,15 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Validate the IP and port Charlie claims in the signed data.
-     *  A port mismatch is tolerated (use the source port, Charlie may be
-     *  behind a symmetric NAT); an invalid source port is not.
+     * Validate the IP and port Charlie claims in the signed data.
+     * A port mismatch is tolerated (use the source port, Charlie may be
+     * behind a symmetric NAT); an invalid source port is not.
      *
-     *  @param state the outbound establish state
-     *  @param id the actual sender of the HolePunch
-     *  @param data the signed portion of the response
-     *  @return the validated port (possibly the sender's source port), or -1
-     *          if the data is invalid
+     * @param state the outbound establish state
+     * @param id the actual sender of the HolePunch
+     * @param data the signed portion of the response
+     * @return the validated port (possibly the sender's source port), or -1
+     * if the data is invalid
      */
     private int validateHolePunchAddress(OutboundEstablishState state, RemoteHostId id, byte[] data) {
         int iplen = SSU2Util.getRelayDataAddrLen(data);
@@ -2688,16 +2687,16 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Update the state with the validated Charlie address, and swap the
-     *  RemoteHostId the state is indexed under if this was a HolePunch
-     *  before the RelayResponse.
+     * Update the state with the validated Charlie address, and swap the
+     * RemoteHostId the state is indexed under if this was a HolePunch
+     * before the RelayResponse.
      *
-     *  @param state the outbound establish state
-     *  @param state2 SSU2-specific state
-     *  @param data the signed portion of the response
-     *  @param port the validated port
-     *  @param now receive time
-     *  @param token the token from the end of the full response
+     * @param state the outbound establish state
+     * @param state2 SSU2-specific state
+     * @param data the signed portion of the response
+     * @param port the validated port
+     * @param now receive time
+     * @param token the token from the end of the full response
      */
     private void updateHolePunchState(OutboundEstablishState state, OutboundEstablishState2 state2, byte[] data, int port, long now, long token) {
         int iplen = SSU2Util.getRelayDataAddrLen(data);
@@ -2737,13 +2736,13 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Are IP and port valid? This is only for checking the relay response.
-     *  Allow IPv6 as of 0.9.50.
-     *  Refuse anybody in the same /16
-     *  @param ip the address from the relay response, IPv4 or IPv6, may be null
-     *  @param port the claimed port, must be a valid 1-65535
-     *  @return true if the address is routable, blocklist-free and not in our own /16
-     *  @since 0.9.3, pkg private since 0.9.45 for PacketBuider
+     * Are IP and port valid? This is only for checking the relay response.
+     * Allow IPv6 as of 0.9.50.
+     * Refuse anybody in the same /16
+     * @param ip the address from the relay response, IPv4 or IPv6, may be null
+     * @param port the claimed port, must be a valid 1-65535
+     * @return true if the address is routable, blocklist-free and not in our own /16
+     * @since 0.9.3, pkg private since 0.9.45 for PacketBuider
      */
     boolean isValid(byte[] ip, int port) {
         return TransportUtil.isValidPort(port) &&
@@ -2754,10 +2753,10 @@ public class EstablishmentManager {
     }
 
     /**
-     *  SSU 2.
-     *  For SSU 2, it contains a full router info, so it may be fragmented.
+     * SSU 2.
+     * For SSU 2, it contains a full router info, so it may be fragmented.
      *
-     *  Caller must synch on state.
+     * Caller must synch on state.
      */
     private void sendConfirmation(OutboundEstablishState state) {
         boolean valid = state.validateSessionCreated();
@@ -3035,7 +3034,7 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Caller should probably synch on outboundState
+     * Caller should probably synch on outboundState
      */
     private void processExpired(OutboundEstablishState outboundState) {
         long nonce = outboundState.getIntroNonce();
@@ -3078,8 +3077,8 @@ public class EstablishmentManager {
 
 
     /**
-     *  Caller should probably synch on inboundState
-     *  @since 0.9.2
+     * Caller should probably synch on inboundState
+     * @since 0.9.2
      */
     private void processExpired(InboundEstablishState inboundState) {
         RemoteHostId id = inboundState.getRemoteHostId();
@@ -3099,12 +3098,12 @@ public class EstablishmentManager {
     //// SSU 2 ////
 
     /**
-     *  Remember a token that can be used later to connect to the peer
+     * Remember a token that can be used later to connect to the peer
      *
-     *  @param peer the peer's address and port, which keys the stored token
-     *  @param token nonzero
-     *  @param expires absolute time
-     *  @since 0.9.54
+     * @param peer the peer's address and port, which keys the stored token
+     * @param token nonzero
+     * @param expires absolute time
+     * @since 0.9.54
      */
     public void addOutboundToken(RemoteHostId peer, long token, long expires) {
         long now = _context.clock().now();
@@ -3119,11 +3118,11 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Token to connect to the peer.
+     * Token to connect to the peer.
      *
-     *  @param peer the peer's address and port, consuming any stored token
-     *  @return 0 if none available
-     *  @since 0.9.54
+     * @param peer the peer's address and port, consuming any stored token
+     * @return 0 if none available
+     * @since 0.9.54
      */
     public long getOutboundToken(RemoteHostId peer) {
         Token tok;
@@ -3134,20 +3133,20 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Check if an outbound SSU handshake is in progress for the given peer.
+     * Check if an outbound SSU handshake is in progress for the given peer.
      *
-     *  @param dest router hash
-     *  @return true if we are currently trying to establish an outbound connection
+     * @param dest router hash
+     * @return true if we are currently trying to establish an outbound connection
      */
     public boolean isConnecting(Hash dest) {
         return _outboundByHash.containsKey(dest);
     }
 
     /**
-     *  Remove our tokens for this length
+     * Remove our tokens for this length
      *
-     *  @param isIPv6 true if the new address is 16 bytes, false if 4
-     *  @since 0.9.54
+     * @param isIPv6 true if the new address is 16 bytes, false if 4
+     * @since 0.9.54
      */
     public void ipChanged(boolean isIPv6) {
         if (_log.shouldWarn()) {
@@ -3174,9 +3173,9 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Remove all tokens
+     * Remove all tokens
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     public void portChanged() {
         synchronized(_outboundTokens) {_outboundTokens.clear();}
@@ -3190,14 +3189,14 @@ public class EstablishmentManager {
      * @since 0.9.54
      */
     /**
-     *  Resolves the "udp.inboundTokenLifetime" RateStat, caching the handle.
+     * Resolves the "udp.inboundTokenLifetime" RateStat, caching the handle.
      *
-     *  The stat is created in this class's constructor and never replaced, so
-     *  after the first successful lookup this is a single volatile read. A
-     *  stat that is not registered yet is not cached, so a later call retries.
+     * The stat is created in this class's constructor and never replaced, so
+     * after the first successful lookup this is a single volatile read. A
+     * stat that is not registered yet is not cached, so a later call retries.
      *
-     *  @return the cached stat, or null if it is not registered yet
-     *  @since 0.9.71+
+     * @return the cached stat, or null if it is not registered yet
+     * @since 0.9.71+
      */
     private RateStat inboundTokenLifetimeStat() {
         RateStat rv = _inboundTokenLifetimeStat;
@@ -3219,12 +3218,12 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Token that can be used later for the peer to connect to us.
+     * Token that can be used later for the peer to connect to us.
      *
-     *  @param peer the peer's address and port, at most one live token per peer
-     *  @param expiration time from now, will be reduced if necessary based on cache eviction time.
-     *  @return non-null
-     *  @since 0.9.55
+     * @param peer the peer's address and port, at most one live token per peer
+     * @param expiration time from now, will be reduced if necessary based on cache eviction time.
+     * @return non-null
+     * @since 0.9.55
      */
     public Token getInboundToken(RemoteHostId peer, long expiration) {
         long token;
@@ -3263,12 +3262,12 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Is the token from this peer valid?
+     * Is the token from this peer valid?
      *
-     *  @param peer the peer's address and port, keying the stored token
-     *  @param token the offered value, a match consumes the stored token; 0 always fails
-     *  @return true if it matched and has not expired
-     *  @since 0.9.54
+     * @param peer the peer's address and port, keying the stored token
+     * @param token the offered value, a match consumes the stored token; 0 always fails
+     * @return true if it matched and has not expired
+     * @since 0.9.54
      */
     public boolean isInboundTokenValid(RemoteHostId peer, long token) {
         if (token == 0) {return false;}
@@ -3296,11 +3295,11 @@ public class EstablishmentManager {
         private final int added;
 
         /**
-         *  Token for the given value and expiration.
+         * Token for the given value and expiration.
          *
-         *  @param tok nonzero value we later match an inbound request against
-         *  @param exp absolute time, not relative to now
-         *  @param now absolute time the token was issued, for expiry reporting
+         * @param tok nonzero value we later match an inbound request against
+         * @param exp absolute time, not relative to now
+         * @param now absolute time the token was issued, for expiry reporting
          */
         public Token(long tok, long exp, long now) {
             token = tok;
@@ -3308,21 +3307,21 @@ public class EstablishmentManager {
             added = (int) (now >> 10);
         }
         /**
-         *  The token value
+         * The token value
          *
-         *  @return the opaque value we match an incoming request against
+         * @return the opaque value we match an incoming request against
          */
         public long getToken() {return token;}
         /**
-         *  The expiration time
+         * The expiration time
          *
-         *  @return the absolute time after which the token is no longer accepted
+         * @return the absolute time after which the token is no longer accepted
          */
         public long getExpiration() {return (expires & 0xFFFFFFFFL) << 10;}
         /**
-         *  When this token was added
+         * When this token was added
          *
-         *  @return the absolute time the token was issued
+         * @return the absolute time the token was issued
          */
         public long getWhenAdded() {return (added & 0xFFFFFFFFL) << 10;}
         /** String representation */
@@ -3333,18 +3332,18 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Not threaded, because we're holding the token cache locks anyway.
+     * Not threaded, because we're holding the token cache locks anyway.
      *
-     *  Format:
+     * Format:
      *
-     *<pre>
+     * <pre>
      *  4 ourIPv4addr ourIPv4port
      *  6 ourIPv6addr ourIPv6port
      *  I addr port token exp
      *  O addr port token exp
-     *</pre>
+     * </pre>
      *
-     *  @since 0.9.55
+     * @since 0.9.55
      */
     private void loadTokens() {
         File f = new File(_context.getConfigDir(), TOKEN_FILE);
@@ -3411,7 +3410,7 @@ public class EstablishmentManager {
     }
 
     /**
-     *  @since 0.9.55
+     * @since 0.9.55
      */
     private void saveTokens() {
         File f = new File(_context.getConfigDir(), TOKEN_FILE);
@@ -3511,9 +3510,9 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Process SSU2 hole punch payload
+     * Process SSU2 hole punch payload
      *
-     *  @since 0.9.55
+     * @since 0.9.55
      */
     private static class HPCallback implements SSU2Payload.PayloadCallback {
         private final RemoteHostId _from;
@@ -3684,7 +3683,6 @@ public class EstablishmentManager {
      * Driving thread, processing up to one step for an inbound peer and up to
      * one step for an outbound peer.  This is prodded whenever any peer's state
      * changes as well.
-     *
      */
     private class Establisher implements Runnable {
         /**

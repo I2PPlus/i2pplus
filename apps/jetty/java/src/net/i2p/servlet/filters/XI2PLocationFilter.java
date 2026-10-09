@@ -24,7 +24,7 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
  * users to switch from a non-I2P host to an I2P host or to redirect them automatically. It
  * automatically enabled on the default I2P site located on port 7658 by default.
  *
- *  @since 0.9.51
+ * @since 0.9.51
  */
 public class XI2PLocationFilter extends HandlerWrapper {
     private static final String PROP_ENABLE_LOCATION_HEADER = "i2p.tunnel.webserverLocationHeader";

@@ -13,17 +13,17 @@ import net.i2p.util.OrderedProperties;
 import org.junit.Test;
 
 /**
- *  The transport-address-validity gate on tier promotion.
+ * The transport-address-validity gate on tier promotion.
  *
- *  <p>{@code ProfileOrganizer.lockedPromoteProfileToTiers} refuses to promote a peer whose
- *  RouterInfo has no usable address, because such a peer cannot be selected for a build or
- *  pre-connected to. Without that gate the router promotes it, the pre-connect probe finds no
- *  address, the peer is demoted, and {@code promoteToFillTiers} promotes the next
- *  equally-stale peer — a treadmill that erodes the candidate pool.
+ * <p>{@code ProfileOrganizer.lockedPromoteProfileToTiers} refuses to promote a peer whose
+ * RouterInfo has no usable address, because such a peer cannot be selected for a build or
+ * pre-connected to. Without that gate the router promotes it, the pre-connect probe finds no
+ * address, the peer is demoted, and {@code promoteToFillTiers} promotes the next
+ * equally-stale peer — a treadmill that erodes the candidate pool.
  *
- *  <p>The decision itself lives in {@link TransportUtil} rather than {@code ProfileOrganizer}
- *  so it is reachable from both {@code peermanager} and {@code tunnel.pool} without closing a
- *  package cycle, and so it can be tested without a {@code RouterContext}.
+ * <p>The decision itself lives in {@link TransportUtil} rather than {@code ProfileOrganizer}
+ * so it is reachable from both {@code peermanager} and {@code tunnel.pool} without closing a
+ * package cycle, and so it can be tested without a {@code RouterContext}.
  *
  * @since 0.9.71+
  */
@@ -115,8 +115,8 @@ public class UsableTransportAddressTest {
     // ---- the RouterInfo-level decision the promotion gate uses ----------------
 
     /**
-     *  The treadmill case: every address expired or unusable, so the peer must be held out
-     *  of the tiers rather than promoted and then demoted by the pre-connect probe.
+     * The treadmill case: every address expired or unusable, so the peer must be held out
+     * of the tiers rather than promoted and then demoted by the pre-connect probe.
      */
     @Test
     public void routerInfoWithNoUsableAddressIsHeld() {
@@ -133,8 +133,8 @@ public class UsableTransportAddressTest {
     }
 
     /**
-     *  An introducer-only peer must not be swept up by this gate: it genuinely is reachable,
-     *  and rejecting it would shrink the pool for the wrong reason.
+     * An introducer-only peer must not be swept up by this gate: it genuinely is reachable,
+     * and rejecting it would shrink the pool for the wrong reason.
      */
     @Test
     public void introducerOnlyRouterInfoIsPromotable() {

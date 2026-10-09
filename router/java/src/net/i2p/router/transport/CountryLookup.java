@@ -5,7 +5,6 @@ package net.i2p.router.transport;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.net.InetAddress;
@@ -32,19 +31,19 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Country-code lookup, caching, and strict-country policy for the router.
+ * Country-code lookup, caching, and strict-country policy for the router.
  *
- *  Extracted from {@link CommSystemFacadeImpl} (2026-09-06) so the country
- *  cluster - a per-peer country cache with periodic cleanup, over-capacity
- *  eviction, strict-country gating, and startup GeoIP queueing - lives apart
- *  from the facade core.  The facade retains thin delegation stubs so the
- *  public static and {@code commSystem()} APIs are unchanged.
+ * Extracted from {@link CommSystemFacadeImpl} (2026-09-06) so the country
+ * cluster - a per-peer country cache with periodic cleanup, over-capacity
+ * eviction, strict-country gating, and startup GeoIP queueing - lives apart
+ * from the facade core.  The facade retains thin delegation stubs so the
+ * public static and {@code commSystem()} APIs are unchanged.
  *
- *  All pure decision logic (cache eviction decisions, memory-independent
- *  helpers) is exposed as package-visible static methods so it can be tested
- *  without a running router; see {@code CountryLookupDecisionTest}.
+ * All pure decision logic (cache eviction decisions, memory-independent
+ * helpers) is exposed as package-visible static methods so it can be tested
+ * without a running router; see {@code CountryLookupDecisionTest}.
  *
- *  @since 0.9.71
+ * @since 0.9.71
  */
 public class CountryLookup {
 
@@ -68,9 +67,9 @@ public class CountryLookup {
     private final ConcurrentHashMap<Hash, Long> countryCacheTimestamps = new ConcurrentHashMap<>(MAX_COUNTRY_CACHE_SIZE);
 
     /**
-     *  @param ctx non-null
-     *  @param geoIP non-null
-     *  @since 0.9.71
+     * @param ctx non-null
+     * @param geoIP non-null
+     * @since 0.9.71
      */
     public CountryLookup(RouterContext ctx, GeoIP geoIP) {
         _context = ctx;
@@ -79,20 +78,20 @@ public class CountryLookup {
     }
 
     /**
-     *  Collect the IPs for all routers in the DB and queue them for lookup.
-     *  The recurring lookup pipeline starts on the first pass only.
+     * Collect the IPs for all routers in the DB and queue them for lookup.
+     * The recurring lookup pipeline starts on the first pass only.
      *
-     *  @since 0.9.71
+     * @since 0.9.71
      */
     public void start() {
         new QueueAll().schedule(START_DELAY);
     }
 
     /**
-     *  Collect the IPs for all routers in the DB, and queue them for lookup,
-     *  then fire off the periodic lookup task for the first time.
+     * Collect the IPs for all routers in the DB, and queue them for lookup,
+     * then fire off the periodic lookup task for the first time.
      *
-     *  As of 0.9.32, works only for literal IPs, ignores host names.
+     * As of 0.9.32, works only for literal IPs, ignores host names.
      */
     private class QueueAll extends SimpleTimer2.TimedEvent {
         private boolean _firstRun = true;
@@ -141,8 +140,8 @@ public class CountryLookup {
     }
 
     /**
-     *  This takes too long to run on the SimpleTimer2 queue
-     *  @since 0.9.10
+     * This takes too long to run on the SimpleTimer2 queue
+     * @since 0.9.10
      */
     private class LookupThread extends I2PThread {
 
@@ -168,17 +167,17 @@ public class CountryLookup {
     }
 
     /**
-     *  Queues a GeoIP lookup for the given IP.
+     * Queues a GeoIP lookup for the given IP.
      *
-     *  @param ip ipv4 or ipv6
+     * @param ip ipv4 or ipv6
      */
     public void queueLookup(byte[] ip) {_geoIP.add(ip);}
 
     /**
-     *  Country code for this router, from the GeoIP lookup.
+     * Country code for this router, from the GeoIP lookup.
      *
-     *  @return two-letter lower-case country code or null
-     *  @since 0.8.11
+     * @return two-letter lower-case country code or null
+     * @since 0.8.11
      */
     public String getOurCountry() {return _context.getProperty(GeoIP.PROP_IP_COUNTRY);}
 
@@ -195,13 +194,13 @@ public class CountryLookup {
     }
 
     /**
-     *  Are they in a strict country.
-     *  Not recommended for our local router hash, as we may not be either in the cache or netdb,
-     *  or may not be publishing an IP.
+     * Are they in a strict country.
+     * Not recommended for our local router hash, as we may not be either in the cache or netdb,
+     * or may not be publishing an IP.
      *
-     *  @param peer non-null
-     *  @return whether in strict country
-     *  @since 0.9.16
+     * @param peer non-null
+     * @return whether in strict country
+     * @since 0.9.16
      */
     public boolean isInStrictCountry(Hash peer) {
         String c = getCountry(peer);
@@ -209,10 +208,10 @@ public class CountryLookup {
     }
 
     /**
-     *  Are they in a strict country
-     *  @param ri non-null
-     *  @return whether in strict country
-     *  @since 0.9.16
+     * Are they in a strict country
+     * @param ri non-null
+     * @return whether in strict country
+     * @since 0.9.16
      */
     public boolean isInStrictCountry(RouterInfo ri) {
         byte[] ip = getIP(ri);
@@ -224,14 +223,14 @@ public class CountryLookup {
     }
 
     /**
-     *  Uses the transport IP first because that lookup is fast, then the IP from the netDb.
-     *  Not recommended for our local router hash, as we may not be either in the cache or netdb,
-     *  or may not be publishing an IP.
+     * Uses the transport IP first because that lookup is fast, then the IP from the netDb.
+     * Not recommended for our local router hash, as we may not be either in the cache or netdb,
+     * or may not be publishing an IP.
      *
-     *  As of 0.9.32, works only for literal IPs, returns null for hostnames.
+     * As of 0.9.32, works only for literal IPs, returns null for hostnames.
      *
-     *  @param peer not ourselves - use getOurCountry() for that
-     *  @return two-letter lower-case country code or xx for non-banned peers, or null otherwise
+     * @param peer not ourselves - use getOurCountry() for that
+     * @return two-letter lower-case country code or xx for non-banned peers, or null otherwise
      */
     public String getCountry(Hash peer) {
         String cachedCountry = countryCache.get(peer);
@@ -327,7 +326,7 @@ public class CountryLookup {
     }
 
     /**
-     *  Clean up stale entries from the country cache
+     * Clean up stale entries from the country cache
      */
     private void cleanupCountryCache() {
         int removed = evictExpired(countryCache, countryCacheTimestamps, System.currentTimeMillis(), COUNTRY_CACHE_EXPIRY);
@@ -337,7 +336,7 @@ public class CountryLookup {
     }
 
     /**
-     *  Full name for a country code, or the code if we don't know the name.
+     * Full name for a country code, or the code if we don't know the name.
      */
     public String getCountryName(String c) {
         if (_geoIP == null) {return c;}
@@ -347,10 +346,10 @@ public class CountryLookup {
     }
 
     /**
-     *  Provides country code mappings.
-     *  @return Unmodifiable map of lower-case country codes to untranslated names.
-     *  Returns empty map if geoIP data is unavailable.
-     *  @since 0.9.53
+     * Provides country code mappings.
+     * @return Unmodifiable map of lower-case country codes to untranslated names.
+     * Returns empty map if geoIP data is unavailable.
+     * @since 0.9.53
      */
     public Map<String, String> getCountries() {
         if (_geoIP == null) return Collections.emptyMap();
@@ -358,13 +357,13 @@ public class CountryLookup {
     }
 
     /**
-     *  Domain name from a reverse DNS hostname.
+     * Domain name from a reverse DNS hostname.
      *
-     *  Multi-part TLDs (co.uk, com.au, ...) are recognized so the registrable
-     *  domain is returned rather than a bare second-level label.
+     * Multi-part TLDs (co.uk, com.au, ...) are recognized so the registrable
+     * domain is returned rather than a bare second-level label.
      *
-     *  @return domain name only from reverse dns hostname lookups
-     *  @since 0.9.58+
+     * @return domain name only from reverse dns hostname lookups
+     * @since 0.9.58+
      */
     public static String getDomain(String hostname) {
         if (hostname == null || hostname.isEmpty()) return "";
@@ -428,12 +427,12 @@ public class CountryLookup {
     }
 
     /**
-     *  Return first IP (v4 or v6) we find, any transport.
-     *  Not validated, may be local, etc.
+     * Return first IP (v4 or v6) we find, any transport.
+     * Not validated, may be local, etc.
      *
-     *  As of 0.9.32, works only for literal IPs, returns null for host names.
+     * As of 0.9.32, works only for literal IPs, returns null for host names.
      *
-     *  @return IP or null
+     * @return IP or null
      */
     static byte[] getIP(RouterInfo ri) {
         if (ri == null) {return null;}
@@ -449,13 +448,13 @@ public class CountryLookup {
     }
 
     /**
-     *  Return first valid IP (v4 or v6) we find, any transport.
-     *  Local and other invalid IPs will not be returned.
+     * Return first valid IP (v4 or v6) we find, any transport.
+     * Local and other invalid IPs will not be returned.
      *
-     *  As of 0.9.32, works only for literal IPs, returns null for host names.
+     * As of 0.9.32, works only for literal IPs, returns null for host names.
      *
-     *  @return IP or null
-     *  @since 0.9.18
+     * @return IP or null
+     * @since 0.9.18
      */
     public static byte[] getValidIP(RouterInfo ri) {
         if (ri == null) {return null;}
@@ -467,12 +466,12 @@ public class CountryLookup {
     }
 
     /**
-     *  IP address compatible with our capabilities (IPv4/IPv6).
-     *  Prefers IPv4 if we support it.
+     * IP address compatible with our capabilities (IPv4/IPv6).
+     * Prefers IPv4 if we support it.
      *
-     *  @param ri RouterInfo to get IP from
-     *  @return IP or null
-     *  @since 0.9.68+
+     * @param ri RouterInfo to get IP from
+     * @return IP or null
+     * @since 0.9.68+
      */
     public static byte[] getCompatibleIP(RouterInfo ri) {
         if (ri == null) {return null;}
@@ -509,8 +508,8 @@ public class CountryLookup {
     }
 
     /**
-     *  First valid IP of the specified type (IPv4 or IPv6).
-     *  @return the first valid i p of type
+     * First valid IP of the specified type (IPv4 or IPv6).
+     * @return the first valid i p of type
      */
     static byte[] getFirstValidIPOfType(RouterInfo ri, boolean wantIPv6) {
         if (ri == null) {return null;}
@@ -525,7 +524,7 @@ public class CountryLookup {
     }
 
     /**
-     *  Check if we support outbound IPv4 connections.
+     * Check if we support outbound IPv4 connections.
      */
     static boolean supportsIPv4(RouterContext ctx) {
         boolean ntcpEnabled = TransportManager.isNTCPEnabled(ctx);
@@ -534,7 +533,7 @@ public class CountryLookup {
     }
 
     /**
-     *  Check if we support outbound IPv6 connections.
+     * Check if we support outbound IPv6 connections.
      */
     static boolean supportsIPv6(RouterContext ctx) {
         TransportUtil.IPv6Config ntcp6 = TransportUtil.getIPv6Config(ctx, "NTCP");
@@ -543,19 +542,19 @@ public class CountryLookup {
     }
 
     /**
-     *  Remove stale and unresolved ("xx") entries from the country cache.
+     * Remove stale and unresolved ("xx") entries from the country cache.
      *
-     *  An entry is expired when its timestamp is strictly older than
-     *  {@code expiryMs}; "xx" (unresolved) entries are always dropped. Called
-     *  both periodically from {@link #getCountry(Hash)} and as the first stage
-     *  of {@link #trimToCapacity} so the hot path never recomputes the loop.
+     * An entry is expired when its timestamp is strictly older than
+     * {@code expiryMs}; "xx" (unresolved) entries are always dropped. Called
+     * both periodically from {@link #getCountry(Hash)} and as the first stage
+     * of {@link #trimToCapacity} so the hot path never recomputes the loop.
      *
-     *  @param cache country cache to drain (entries removed in place)
-     *  @param timestamps parallel timestamp map for the same keys
-     *  @param now cache age reference in millis
-     *  @param expiryMs age threshold in millis (strict {@code >})
-     *  @return number of entries removed
-     *  @since 0.9.71
+     * @param cache country cache to drain (entries removed in place)
+     * @param timestamps parallel timestamp map for the same keys
+     * @param now cache age reference in millis
+     * @param expiryMs age threshold in millis (strict {@code >})
+     * @return number of entries removed
+     * @since 0.9.71
      */
     static int evictExpired(Map<Hash, String> cache, Map<Hash, Long> timestamps, long now, long expiryMs) {
         int removed = 0;
@@ -574,20 +573,20 @@ public class CountryLookup {
     }
 
     /**
-     *  Bring an over-capacity country cache back under its size bound.
+     * Bring an over-capacity country cache back under its size bound.
      *
-     *  First advances the expired-entry pass via {@link #evictExpired}; if
-     *  still at or above {@code maxSize}, drops the oldest quarter by
-     *  timestamp. The redundant removeIf()/stream cascade in the original
-     *  facade is preserved, so hot-path behavior (evict expired first, then
-     *  oldest) is unchanged.
+     * First advances the expired-entry pass via {@link #evictExpired}; if
+     * still at or above {@code maxSize}, drops the oldest quarter by
+     * timestamp. The redundant removeIf()/stream cascade in the original
+     * facade is preserved, so hot-path behavior (evict expired first, then
+     * oldest) is unchanged.
      *
-     *  @param cache country cache to shrink (entries removed in place)
-     *  @param timestamps parallel timestamp map for the same keys
-     *  @param now cache age reference in millis
-     *  @param expiryMs age threshold in millis for the expired-entry pass
-     *  @param maxSize size bound that triggers trimming
-     *  @since 0.9.71
+     * @param cache country cache to shrink (entries removed in place)
+     * @param timestamps parallel timestamp map for the same keys
+     * @param now cache age reference in millis
+     * @param expiryMs age threshold in millis for the expired-entry pass
+     * @param maxSize size bound that triggers trimming
+     * @since 0.9.71
      */
     static void trimToCapacity(Map<Hash, String> cache, Map<Hash, Long> timestamps, long now, long expiryMs, int maxSize) {
         if (cache.size() < maxSize) {return;}
@@ -606,8 +605,8 @@ public class CountryLookup {
     }
 
     /**
-     *  True when the cache stores an unresolved-country marker ("xx").
-     *  @since 0.9.71
+     * True when the cache stores an unresolved-country marker ("xx").
+     * @since 0.9.71
      */
     static boolean isUnknownCountryCode(String code) {return code != null && code.equals("xx");}
 }

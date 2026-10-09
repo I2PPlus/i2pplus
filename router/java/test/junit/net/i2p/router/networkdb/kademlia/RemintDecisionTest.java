@@ -12,19 +12,19 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
 
 /**
- *  Pins the re-mint decision in {@link RepublishLeaseSetJob#shouldRemint}:
- *  the emergency backstop (any viable lease once the stored copy is inside the
- *  emergency window) versus the normal viability gate (extends expiry and
- *  carries the required count).  These are the boundaries that keep a
- *  deficit-ridden pool from letting a public LeaseSet lapse while preventing
- *  re-mint treadmills on near-dead leases.
+ * Pins the re-mint decision in {@link RepublishLeaseSetJob#shouldRemint}:
+ * the emergency backstop (any viable lease once the stored copy is inside the
+ * emergency window) versus the normal viability gate (extends expiry and
+ * carries the required count).  These are the boundaries that keep a
+ * deficit-ridden pool from letting a public LeaseSet lapse while preventing
+ * re-mint treadmills on near-dead leases.
  */
 public class RemintDecisionTest {
     private static final long WINDOW = 2L * 60 * 1000;
 
     /**
-     *  Inside the emergency window a single viable lease against a higher
-     *  required count re-mints immediately — thin beats lapsed.
+     * Inside the emergency window a single viable lease against a higher
+     * required count re-mints immediately — thin beats lapsed.
      */
     @Test
     public void testEmergencyRemintsWithSingleViableLease() {
@@ -32,7 +32,7 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  Exactly at the emergency boundary still re-mints.
+     * Exactly at the emergency boundary still re-mints.
      */
     @Test
     public void testExactEmergencyBoundaryRemints() {
@@ -40,8 +40,8 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  A millisecond past the boundary is outside the emergency window, so
-     *  the normal required-count gate applies and a deficit defers.
+     * A millisecond past the boundary is outside the emergency window, so
+     * the normal required-count gate applies and a deficit defers.
      */
     @Test
     public void testJustOutsideEmergencyBoundaryNeedsNormalGate() {
@@ -49,8 +49,8 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  A healthy pool extending the stored copy re-mints at any remaining
-     *  time.
+     * A healthy pool extending the stored copy re-mints at any remaining
+     * time.
      */
     @Test
     public void testHealthyPoolRemints() {
@@ -58,9 +58,9 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  The emergency backstop does not require the pool copy to extend the
-     *  stored copy — the 10-minute lease cap guarantees every re-mint differs,
-     *  so a rescue copy is accepted and re-flooded regardless.
+     * The emergency backstop does not require the pool copy to extend the
+     * stored copy — the 10-minute lease cap guarantees every re-mint differs,
+     * so a rescue copy is accepted and re-flooded regardless.
      */
     @Test
     public void testEmergencyBypassesExtensionCheck() {
@@ -68,8 +68,8 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  A pool copy with no viable leases never re-mints, even deep inside the
-     *  emergency window — re-signing near-dead leases pads nothing.
+     * A pool copy with no viable leases never re-mints, even deep inside the
+     * emergency window — re-signing near-dead leases pads nothing.
      */
     @Test
     public void testNoViableLeasesNeverRemints() {
@@ -77,8 +77,8 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  Outside the emergency window, a pool copy that neither extends the
-     *  stored copy nor meets the required count defers.
+     * Outside the emergency window, a pool copy that neither extends the
+     * stored copy nor meets the required count defers.
      */
     @Test
     public void testBelowRequiredWithoutExtensionOutsideWindowDeferred() {
@@ -86,9 +86,9 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  Outside the emergency window, meeting the required count without
-     *  extending the stored copy still defers — it would re-sign the same
-     *  near-expired leases.
+     * Outside the emergency window, meeting the required count without
+     * extending the stored copy still defers — it would re-sign the same
+     * near-expired leases.
      */
     @Test
     public void testRequirementMetWithoutExtensionOutsideWindowDeferred() {
@@ -98,9 +98,9 @@ public class RemintDecisionTest {
     // ---- no-op re-mint detection (the loop) ----
 
     /**
-     *  The loop's cause: the emergency window re-mints the same aging leases, so
-     *  the expiry never moves and the next pass re-enters the window. Detecting
-     *  the identical set is what lets the job hold off instead of spinning.
+     * The loop's cause: the emergency window re-mints the same aging leases, so
+     * the expiry never moves and the next pass re-enters the window. Detecting
+     * the identical set is what lets the job hold off instead of spinning.
      */
     @Test
     public void testIdenticalLeaseSetsAreRecognised() {
@@ -138,9 +138,9 @@ public class RemintDecisionTest {
     // ---- backoff ----
 
     /**
-     *  The invariant that matters: holding off must never be the reason a
-     *  LeaseSet lapses unrepublished. Five minutes, the obvious constant, would
-     *  abandon a 63s copy for four minutes.
+     * The invariant that matters: holding off must never be the reason a
+     * LeaseSet lapses unrepublished. Five minutes, the obvious constant, would
+     * abandon a 63s copy for four minutes.
      */
     @Test
     public void testBackoffAlwaysLeavesRoomForAnotherAttempt() {
@@ -187,10 +187,10 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  At or above the floor is ordinary decay, not a fault. This is the
-     *  boundary that the old design-target comparison got wrong: it fired on
-     *  every LeaseSet, because the ~600s target sits far above the 2m floor the
-     *  pool actually enforces.
+     * At or above the floor is ordinary decay, not a fault. This is the
+     * boundary that the old design-target comparison got wrong: it fired on
+     * every LeaseSet, because the ~600s target sits far above the 2m floor the
+     * pool actually enforces.
      */
     @Test
     public void testHealthyExpiryIsNotFlagged() {
@@ -202,9 +202,9 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  Pins the regression directly: the old check treated anything under a
-     *  third of the 600s design target as anomalous, which is true for nearly
-     *  every real LeaseSet and produced a warning on every pass.
+     * Pins the regression directly: the old check treated anything under a
+     * third of the 600s design target as anomalous, which is true for nearly
+     * every real LeaseSet and produced a warning on every pass.
      */
     @Test
     public void testOrdinaryDecayIsNotFlagged() {
@@ -237,9 +237,9 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  Builds a LeaseSet with {@code count} leases. Same {@code seed} yields the
-     *  same tunnel ids, which is what the identity comparison turns on. Ids start
-     *  at 1 because {@code TunnelId} rejects zero.
+     * Builds a LeaseSet with {@code count} leases. Same {@code seed} yields the
+     * same tunnel ids, which is what the identity comparison turns on. Ids start
+     * at 1 because {@code TunnelId} rejects zero.
      */
     private static LeaseSet leaseSet(int count, int seed) {
         LeaseSet ls = new LeaseSet();
@@ -256,18 +256,18 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  Walks a LeaseSet toward expiry and asserts it is always reached while
-     *  still alive.
+     * Walks a LeaseSet toward expiry and asserts it is always reached while
+     * still alive.
      *
-     *  <p>This property outranks the noise reduction: an active service's
-     *  LeaseSet must never lapse. The loop fix holds off re-mints that cannot
-     *  improve anything, so the question is whether that hold-off could ever be
-     *  the reason a copy dies unrepublished. The walk answers it directly — the
-     *  hold-off is always shorter than the remaining life, so the copy cannot
-     *  reach zero between passes.
+     * <p>This property outranks the noise reduction: an active service's
+     * LeaseSet must never lapse. The loop fix holds off re-mints that cannot
+     * improve anything, so the question is whether that hold-off could ever be
+     * the reason a copy dies unrepublished. The walk answers it directly — the
+     * hold-off is always shorter than the remaining life, so the copy cannot
+     * reach zero between passes.
      *
-     *  <p>Mirrors {@code computeNextRepublish}: max(MIN_RESCHEDULE,
-     *  min(republishInterval, remaining - EXPIRY_WINDOW)).
+     * <p>Mirrors {@code computeNextRepublish}: max(MIN_RESCHEDULE,
+     * min(republishInterval, remaining - EXPIRY_WINDOW)).
      */
     @Test
     public void testLeaseSetNeverLapsesUnderRepeatedIneffectiveRemints() {
@@ -304,9 +304,9 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  The same property stated without any scheduling: no hold-off value can
-     *  reach or exceed the life it is protecting. Swept across the whole range
-     *  these LeaseSets occupy rather than sampled at a few points.
+     * The same property stated without any scheduling: no hold-off value can
+     * reach or exceed the life it is protecting. Swept across the whole range
+     * these LeaseSets occupy rather than sampled at a few points.
      */
     @Test
     public void testHoldOffIsAlwaysShorterThanTheLifeItProtects() {
@@ -320,11 +320,11 @@ public class RemintDecisionTest {
     // ---- supply pre-flight ----
 
     /**
-     *  The pre-flight must never be the reason a LeaseSet lapses. It only defers
-     *  while outside the emergency window, so the emergency boundary -- not the
-     *  deferral budget -- is what guarantees a mint still happens. This asserts
-     *  the real termination order: the window is reached first, and the copy is
-     *  still comfortably alive when it is.
+     * The pre-flight must never be the reason a LeaseSet lapses. It only defers
+     * while outside the emergency window, so the emergency boundary -- not the
+     * deferral budget -- is what guarantees a mint still happens. This asserts
+     * the real termination order: the window is reached first, and the copy is
+     * still comfortably alive when it is.
      */
     @Test
     public void supplyPreflightCannotCauseLapse() {
@@ -347,10 +347,10 @@ public class RemintDecisionTest {
     }
 
     /**
-     *  The lease viability window has to be reachable. A tunnel lives 11 minutes
-     *  (660s); requiring ten minutes of remaining life would only be satisfiable
-     *  in roughly the first minute of a tunnel's life, so any gate using it would
-     *  defer permanently on a healthy pool.
+     * The lease viability window has to be reachable. A tunnel lives 11 minutes
+     * (660s); requiring ten minutes of remaining life would only be satisfiable
+     * in roughly the first minute of a tunnel's life, so any gate using it would
+     * defer permanently on a healthy pool.
      */
     @Test
     public void viabilityWindowIsReachable() {

@@ -5,7 +5,6 @@ package net.i2p.router.networkdb;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.Serializable;
@@ -34,26 +33,26 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     private final Log _log;
 
     /**
-     *  Don't store if somebody else stored it recently.
-     *  Must be less than PUBLISH_DELAY * 3 / 16 (see getDelay())
+     * Don't store if somebody else stored it recently.
+     * Must be less than PUBLISH_DELAY * 3 / 16 (see getDelay())
      */
     private static final long MIN_PUBLISH_DELAY = 9L*60*1000;
 
     /**
-     *  Too short and the network puts a big connection load on the
-     *  floodfills since we store directly.
-     *  Too long and the floodfill will drop us - timeout is 60 minutes.
+     * Too short and the network puts a big connection load on the
+     * floodfills since we store directly.
+     * Too long and the floodfill will drop us - timeout is 60 minutes.
      */
     private static final long PUBLISH_DELAY = 43L*60*1000;
 
     /** This needs to be long enough to give us time to start up,
-     *  but less than 20m (when we start accepting tunnels and could be a IBGW)
-     *  Actually no, we need this soon if we are a new router or
-     *  other routers have forgotten about us, else
-     *  we can't build IB exploratory tunnels.
+     * but less than 20m (when we start accepting tunnels and could be a IBGW)
+     * Actually no, we need this soon if we are a new router or
+     * other routers have forgotten about us, else
+     * we can't build IB exploratory tunnels.
      *
-     *  First publish after netdb ready is now done via state machine
-     *  in Router.setNetDbReady(), so we probably don't need this anymore
+     * First publish after netdb ready is now done via state machine
+     * in Router.setNetDbReady(), so we probably don't need this anymore
      */
     private final AtomicInteger _runCount = new AtomicInteger();
 
@@ -164,7 +163,6 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      * Delay until the next RouterInfo publish.
      *
      * @return the delay
-     * @since public since 0.9.65 for use by Router
      */
     public long getDelay() {
         long rv = (PUBLISH_DELAY * 2 / 3) + getContext().random().nextLong(PUBLISH_DELAY / 3);
@@ -174,9 +172,9 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Arbitrary sort so we can attempt to compare costs between two RIs to see if they have changed
+     * Arbitrary sort so we can attempt to compare costs between two RIs to see if they have changed
      *
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
         /**

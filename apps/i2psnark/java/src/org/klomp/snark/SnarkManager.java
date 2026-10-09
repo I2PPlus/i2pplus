@@ -78,20 +78,18 @@ import org.klomp.snark.dht.KRPC;
  * <p>This class is the core controller that manages:
  *
  * <ul>
- *   <li>Multiple torrent instances (Snarks) and their lifecycle
- *   <li>Configuration management and persistence
- *   <li>Peer coordination and bandwidth management
- *   <li>Tracker communication and DHT integration
- *   <li>Web interface and user interaction
- *   <li>Torrent file monitoring and auto-loading
- *   <li>Magnet link handling
- *   <li>Comments and metadata management
+ * <li>Multiple torrent instances (Snarks) and their lifecycle
+ * <li>Configuration management and persistence
+ * <li>Peer coordination and bandwidth management
+ * <li>Tracker communication and DHT integration
+ * <li>Web interface and user interaction
+ * <li>Torrent file monitoring and auto-loading
+ * <li>Magnet link handling
+ * <li>Comments and metadata management
  * </ul>
  *
  * <p>As a ClientApp, it integrates with the I2P router application framework and can be started,
  * stopped, and monitored through the standard I2P interfaces.
- *
- * @since 0.1.0
  */
 public class SnarkManager implements CompleteListener, ClientApp, DisconnectListener {
 
@@ -849,10 +847,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     *  Called by the webapp at Jetty shutdown.
-     *  Stops all torrents. Does not close the tunnel, so the announces have a chance.
-     *  Fix this so an individual webapp stop will close the tunnel.
-     *  Runs inline.
+     * Called by the webapp at Jetty shutdown.
+     * Stops all torrents. Does not close the tunnel, so the announces have a chance.
+     * Fix this so an individual webapp stop will close the tunnel.
+     * Runs inline.
      */
     public void stop() {
         if (_umgr != null && _uhandler != null) {
@@ -987,12 +985,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private String lastAddedMessage;
 
     /**
-     *  Escape a message for HTML display, preserving intentional '&amp;nbsp;' spacers.
-     *  Order matters: '&amp;' first so the later entity-escapes of '&lt;' and '&gt;'
-     *  are not undone, and restore the literal '&nbsp;' entries afterwards.
+     * Escape a message for HTML display, preserving intentional '&amp;nbsp;' spacers.
+     * Order matters: '&amp;' first so the later entity-escapes of '&lt;' and '&gt;'
+     * are not undone, and restore the literal '&nbsp;' entries afterwards.
      *
-     *  @param message the raw message text, not null
-     *  @return the message with HTML metacharacters escaped
+     * @param message the raw message text, not null
+     * @return the message with HTML metacharacters escaped
      */
     public static String escapeMessage(String message) {
         return message.replace("&", "&amp;")
@@ -1129,8 +1127,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Discard every queued UI message.
-     *
-     * @since 0.9
      */
     public void clearMessages() {
         _messages.clear();
@@ -2354,17 +2350,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * All params may be null or need trimming.
      *
      * @param dataDir absolute path for the data directory, or null to leave it alone;
-     *        changing it stops and removes every non-magnet torrent
+     * changing it stops and removes every non-magnet torrent
      * @param filesPublic true to make new data directory files world-readable
      * @param autoStart true to auto-start saved torrents
      * @param refreshDelay seconds between page refreshes, negative to disable,
-     *        or null to leave it alone
+     * or null to leave it alone
      * @param startDelayMin shortest delay before an auto-started torrent in minutes,
-     *        or null to leave it alone
+     * or null to leave it alone
      * @param startDelayMax longest delay before an auto-started torrent in minutes,
-     *        swapped with the minimum if lower, or null to leave it alone
+     * swapped with the minimum if lower, or null to leave it alone
      * @param pageSize torrents listed per page, 5 or more, zero or less for all,
-     *        or null to leave it alone
+     * or null to leave it alone
      * @param i2cpHost I2CP host to connect to, or null to keep the current one
      * @param i2cpPort I2CP port to connect to, or null to keep the current one
      * @param i2cpOpts space-separated "name=value" session options, not null
@@ -2375,7 +2371,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param useDHT true to participate in the DHT
      * @param theme theme name to use when universal theming is off, or null to leave it alone
      * @param lang standalone language as "lang_COUNTRY", ignored in router context,
-     *        or null to leave it alone
+     * or null to leave it alone
      * @param enableRatings true to collect and show peer ratings
      * @param enableComments true to fetch and show peer comments
      * @param commentName author name for our own comments, or null to clear it
@@ -2387,12 +2383,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param enableVaryOutboundHops true to randomize the outbound tunnel hop count
      * @param multiDest true to give each torrent a destination of its own
      * @param multiDestMax destination cap in multi-dest mode, zero for one per torrent,
-     *        or null to leave it alone
+     * or null to leave it alone
      * @param randomizeStartup true to stagger batched torrent starts
      * @param apiTarget API target base path, honored only alongside a non-empty apiKey
      * @param apiKey API key, honored only alongside a non-empty apiTarget
      * @param maxFiles ceiling on the files one torrent may contain, at least 1,
-     *        or null to leave it alone
+     * or null to leave it alone
      * @param preallocateFiles true to preallocate storage for new torrents
      * @param tempDir staging directory for incomplete files, or null to disable staging
      * @param torrentDir directory for .torrent files, or null to reset to the data directory
@@ -3763,7 +3759,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param ih 20 byte info hash
      * @param trackerURL may be null
      * @param updateStatus should we save this magnet to metadata, to persist it across restarts,
-     *     in case we don't get the metadata before shutdown?
+     * in case we don't get the metadata before shutdown?
      * @throws RuntimeException via Snark.fatal()
      * @since 0.8.4
      */
@@ -3779,7 +3775,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param ih 20 byte info hash
      * @param trackerURL may be null
      * @param updateStatus should we save this magnet to metadata, to persist it across restarts,
-     *     in case we don't get the metadata before shutdown?
+     * in case we don't get the metadata before shutdown?
      * @param dataDir must exist, or null to default to snark data directory
      * @throws RuntimeException via Snark.fatal()
      * @since 0.9.17
@@ -3797,7 +3793,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param ih 20 byte info hash
      * @param trackerURL may be null
      * @param updateStatus should we save this magnet to metadata, to persist it across restarts,
-     *     in case we don't get the metadata before shutdown?
+     * in case we don't get the metadata before shutdown?
      * @param autoStart true to start fetching right away
      * @param dataDir must exist, or null to default to snark data directory
      * @param listener to intercept callbacks, should pass through to this
@@ -4363,16 +4359,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.71+
      */
     /**
-     *  Is this one of our own metadata-lookup torrents, as opposed to a user's?
+     * Is this one of our own metadata-lookup torrents, as opposed to a user's?
      *
-     *  <p>Pure decision, separated from {@link #cleanupStaleLookupTorrents()} so it can be
-     *  pinned by test: the sweep deletes torrents, and the only thing standing between a
-     *  user's download and that deletion is this identification.
+     * <p>Pure decision, separated from {@link #cleanupStaleLookupTorrents()} so it can be
+     * pinned by test: the sweep deletes torrents, and the only thing standing between a
+     * user's download and that deletion is this identification.
      *
-     *  @param name display name, or null if it could not be read
-     *  @param basePath storage base path, or null if unknown or not yet resolved
-     *  @return true if this is a lookup torrent
-     *  @since 0.9.71+
+     * @param name display name, or null if it could not be read
+     * @param basePath storage base path, or null if unknown or not yet resolved
+     * @return true if this is a lookup torrent
+     * @since 0.9.71+
      */
     static boolean isLookupTorrent(String name, String basePath) {
         if (name != null
@@ -4383,14 +4379,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     *  Should this lookup torrent be swept now?
+     * Should this lookup torrent be swept now?
      *
-     *  @param name display name, or null if it could not be read
-     *  @param basePath storage base path, or null if unknown
-     *  @param createdAt when the lookup was created, in ms
-     *  @param now current wall-clock ms
-     *  @return true if it is one of ours and older than {@link #LOOKUP_STALE_MS}
-     *  @since 0.9.71+
+     * @param name display name, or null if it could not be read
+     * @param basePath storage base path, or null if unknown
+     * @param createdAt when the lookup was created, in ms
+     * @param now current wall-clock ms
+     * @return true if it is one of ours and older than {@link #LOOKUP_STALE_MS}
+     * @since 0.9.71+
      */
     static boolean isStaleLookup(String name, String basePath, long createdAt, long now) {
         return isLookupTorrent(name, basePath) && (now - createdAt) > LOOKUP_STALE_MS;
@@ -4488,13 +4484,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param metainfo the metainfo for the torrent
      * @param bitfield the current completion status of the torrent, or null
      * @param filename the absolute path to save the metainfo to, generally ending in ".torrent",
-     *     which is also the name of the torrent Must be a filesystem-safe name. If null, will
-     *     generate a name from the metainfo.
+     * which is also the name of the torrent Must be a filesystem-safe name. If null, will
+     * generate a name from the metainfo.
      * @param baseFile may be null, if so look in rootDataDir
      * @param dontAutoStart true to add the torrent without starting it
      * @throws RuntimeException via Snark.fatal()
      * @throws IOException declared for API compatibility; a write failure is reported
-     *     as a queued message and a false return
+     * as a queued message and a false return
      * @return success
      * @since 0.8.4
      */
@@ -4578,11 +4574,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @param fromfile where the file is now, presumably in a temp directory somewhere
      * @param filename the absolute path to save the metainfo to, generally ending in ".torrent",
-     *     which is also the name of the torrent Must be a filesystem-safe name.
+     * which is also the name of the torrent Must be a filesystem-safe name.
      * @param dataDir must exist, or null to default to snark data directory
      * @throws RuntimeException via Snark.fatal()
      * @throws IOException declared for API compatibility; a copy failure is reported
-     *     as a queued message and a false return
+     * as a queued message and a false return
      * @return success
      * @since 0.8.4
      */
@@ -4609,7 +4605,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @param metainfo The metainfo for the torrent
      * @param filename The absolute path to save the metainfo to, generally ending in ".torrent".
-     *     Must be a filesystem-safe name.
+     * Must be a filesystem-safe name.
      * @since 0.8.4
      */
     private static void locked_writeMetaInfo(
@@ -5724,8 +5720,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * A Snark.CompleteListener method.
-     *
-     * @since 0.9
      */
     @Override
     public void fatal(Snark snark, String error) {
@@ -5886,7 +5880,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * staggers pools with long sleeps.
      *
      * @return the newly added torrents; empty if none were added, or null
-     *         if a fatal error aborted the pass
+     * if a fatal error aborted the pass
      */
     private List<Snark> monitorTorrents(File dir) {
         File[] files = dir.listFiles(new FileSuffixFilter(".torrent"));
@@ -6064,9 +6058,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return _config.containsKey(PROP_TRACKERS);
     }
 
-    /**
-     * @since 0.9
-     */
     private void initTrackerMap() {
         String trackers = _config.getProperty(PROP_TRACKERS);
         if ((trackers == null) || (trackers.trim().length() <= 0))
@@ -6150,8 +6141,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Replace the tracker map with the built-in defaults, clearing the config key.
-     *
-     * @since 0.9
      */
     public void setDefaultTrackerMap() {
         setDefaultTrackerMap(true);
@@ -6204,8 +6193,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Write the tracker map to the config and save it.
-     *
-     * @since 0.9
      */
     public void saveTrackerMap() {
         StringBuilder buf = new StringBuilder(2048);
@@ -6483,7 +6470,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @param batch the torrents to start
      * @return false if the I2CP connection could not be established, so the
-     *     caller knows the batch was left for a later pass
+     * caller knows the batch was left for a later pass
      * @since 0.9.71+
      */
     private boolean startBatch(List<Snark> batch) {
@@ -6924,8 +6911,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Compare ignoring case, current locale.
-     *
-     * @since 0.9
      */
     private static class IgnoreCaseComparator implements Comparator<Tracker>, Serializable {
         private static final long serialVersionUID = 1L;

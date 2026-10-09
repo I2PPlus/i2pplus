@@ -30,7 +30,7 @@ class StandardServerSocket extends ServerSocket {
     private final I2PServerSocketFull _socket;
 
     /**
-     *  Doesn't really throw IOE but super() does
+     * Doesn't really throw IOE but super() does
      */
     StandardServerSocket(I2PServerSocketFull socket) throws IOException {
         _socket = socket;
@@ -51,8 +51,8 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  Binding is not supported.
-     *  @throws UnsupportedOperationException always
+     * Binding is not supported.
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void bind(SocketAddress endpoint) {
@@ -60,8 +60,8 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  Binding is not supported.
-     *  @throws UnsupportedOperationException always
+     * Binding is not supported.
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void bind(SocketAddress endpoint, int backlog) {
@@ -74,8 +74,8 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  Channel is not supported.
-     *  @return null always, unimplemented
+     * Channel is not supported.
+     * @return null always, unimplemented
      */
     @Override
     public ServerSocketChannel getChannel() {
@@ -83,8 +83,8 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  No remote address.
-     *  @return null always
+     * No remote address.
+     * @return null always
      */
     @Override
     public InetAddress getInetAddress() {
@@ -92,8 +92,8 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  Local port is not available.
-     *  @return -1 always
+     * Local port is not available.
+     * @return -1 always
      */
     @Override
     public int getLocalPort() {
@@ -101,10 +101,9 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  Port in returned SocketAddress will be zero.
+     * Port in returned SocketAddress will be zero.
      *
-     *  @return an I2PSocketAddress as of 0.9.26; prior to that, returned null
-     *  @since implemented in 0.9.26
+     * @return an I2PSocketAddress as of 0.9.26; prior to that, returned null
      */
     @Override
     public SocketAddress getLocalSocketAddress() {
@@ -124,8 +123,8 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  Reuse address is not supported.
-     *  @return false always
+     * Reuse address is not supported.
+     * @return false always
      */
     @Override
     public boolean getReuseAddress() {
@@ -142,8 +141,8 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  Always bound.
-     *  @return true always
+     * Always bound.
+     * @return true always
      */
     @Override
     public boolean isBound() {
@@ -156,19 +155,19 @@ class StandardServerSocket extends ServerSocket {
     }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) { /* no-op */ }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setReceiveBufferSize(int size) { /* no-op */ }
 
     /**
-     *  Does nothing.
+     * Does nothing.
      */
     @Override
     public void setReuseAddress(boolean on) { /* no-op */ }

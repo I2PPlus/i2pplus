@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -113,7 +113,7 @@ public final class BitArray implements Cloneable {
    *
    * @param from first bit to check
    * @return index of first bit that is set, starting from the given index, or size if none are set
-   *  at or beyond this given index
+   * at or beyond this given index
    * @see #getNextUnset(int)
    */
   public int getNextSet(int from) {
@@ -164,7 +164,7 @@ public final class BitArray implements Cloneable {
    *
    * @param i first bit to set
    * @param newBits the new value of the next 32 bits. Note again that the least-significant bit
-   *        corresponds to bit i, the next-least-significant to i+1, and so on.
+   * corresponds to bit i, the next-least-significant to i+1, and so on.
    */
   public void setBulk(int i, int newBits) {
     bits[i / 32] = newBits;
@@ -318,7 +318,7 @@ public final class BitArray implements Cloneable {
    *
    * @param bitOffset first bit to start writing
    * @param array array to write into. Bytes are written most-significant byte first. This is the opposite
-   *  of the internal representation, which is exposed by {@link #getBitArray()}
+   * of the internal representation, which is exposed by {@link #getBitArray()}
    * @param offset position in array to start writing
    * @param numBytes how many bytes to write
    */
@@ -339,7 +339,7 @@ public final class BitArray implements Cloneable {
    * Returns the underlying array of ints.
    *
    * @return underlying array of ints. The first element holds the first 32 bits, and the least
-   *         significant bit is bit 0.
+   * significant bit is bit 0.
    */
   public int[] getBitArray() {
     return bits;

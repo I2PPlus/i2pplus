@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -32,8 +31,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     private Payload _payload;
 
     /**
-     *  For reading.
-     *  Deprecated for writing, use 3-arg constructor
+     * For reading.
+     * Deprecated for writing, use 3-arg constructor
      */
     public MessagePayloadMessage() {
         _sessionId = -1;
@@ -41,9 +40,9 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  For writing
+     * For writing
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     public MessagePayloadMessage(long sessID, long msgID, Payload payload) {
         synchronized (this) {
@@ -54,7 +53,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @return the session ID
+     * @return the session ID
      */
     public synchronized long getSessionId() {
         return _sessionId;
@@ -71,8 +70,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @param id 0-65535
-     *  @deprecated use 3-arg constructor
+     * @param id 0-65535
+     * @deprecated use 3-arg constructor
      */
     @Deprecated
     public synchronized void setSessionId(long id) {
@@ -80,15 +79,15 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @return the message ID
+     * @return the message ID
      */
     public synchronized long getMessageId() {
         return _messageId;
     }
 
     /**
-     *  @param id the message ID
-     *  @deprecated use 3-arg constructor
+     * @param id the message ID
+     * @deprecated use 3-arg constructor
      */
     @Deprecated
     public synchronized void setMessageId(long id) {
@@ -96,15 +95,15 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @return the payload
+     * @return the payload
      */
     public synchronized Payload getPayload() {
         return _payload;
     }
 
     /**
-     *  @param payload the payload
-     *  @deprecated use 3-arg constructor
+     * @param payload the payload
+     * @deprecated use 3-arg constructor
      */
     @Deprecated
     public synchronized void setPayload(Payload payload) {
@@ -125,7 +124,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

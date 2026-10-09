@@ -22,9 +22,9 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
 public final class SimpleByteCache {
 
     /**
-     *  The caches, keyed by array size. An int-keyed table rather than a
-     *  ConcurrentHashMap&lt;Integer, SimpleByteCache&gt;, so the hot acquire and
-     *  release lookups neither hash an Integer nor box the size.
+     * The caches, keyed by array size. An int-keyed table rather than a
+     * ConcurrentHashMap&lt;Integer, SimpleByteCache&gt;, so the hot acquire and
+     * release lookups neither hash an Integer nor box the size.
      */
     private static final IntCacheMap _caches = new IntCacheMap(8);
 
@@ -91,7 +91,7 @@ public final class SimpleByteCache {
      * collected - nothing zeroes them.
      *
      * @param cacheSize how many objects (NOT memory bytes) to keep before
-     *                  discarding released objects
+     * discarding released objects
      * @param size how large should the objects cached be?
      * @return the instance
      */
@@ -117,7 +117,7 @@ public final class SimpleByteCache {
     }
 
     /**
-     *  Clear everything (memory pressure)
+     * Clear everything (memory pressure)
      */
     public static void clearAll() {
         for (SimpleByteCache bc : _caches.values()) {
@@ -208,23 +208,23 @@ public final class SimpleByteCache {
     }
 
     /**
-     *  Clear everything (memory pressure)
+     * Clear everything (memory pressure)
      */
     private void clear() {
         _available.clear();
     }
 
 /**
-     *  A set of {@link SimpleByteCache}, keyed by array size. Open addressed with
-     *  linear probing: lookups are lock-free and unboxed, and only putIfAbsent and
-     *  the occasional growth take the lock.
-     *
-     *  <p>Values are read through an AtomicReferenceArray, which both marks the
-     *  occupied slots - every int is a legal key, so there is no value to spare
-     *  as an empty-slot sentinel - and publishes each cache's fully built internals.
-     *
-     *  @since 0.9.72
-     */
+ * A set of {@link SimpleByteCache}, keyed by array size. Open addressed with
+ * linear probing: lookups are lock-free and unboxed, and only putIfAbsent and
+ * the occasional growth take the lock.
+ *
+ * <p>Values are read through an AtomicReferenceArray, which both marks the
+ * occupied slots - every int is a legal key, so there is no value to spare
+ * as an empty-slot sentinel - and publishes each cache's fully built internals.
+ *
+ * @since 0.9.72
+ */
     private static final class IntCacheMap {
 
         /** Replaced wholesale on growth, so a reader always sees a complete one. */
@@ -259,8 +259,8 @@ public final class SimpleByteCache {
         }
 
         /**
-         *  @param key the array size
-         *  @return the cache for the key, or null
+         * @param key the array size
+         * @return the cache for the key, or null
          */
         SimpleByteCache get(int key) {
             Table t = _table;
@@ -275,12 +275,12 @@ public final class SimpleByteCache {
         }
 
         /**
-         *  Store a cache unless the key is already present.
+         * Store a cache unless the key is already present.
          *
-         *  @param key the array size
-         *  @param val the cache to store if the key is free
-         *  @return the value now stored for the key - val, or the one that was
-         *          already there
+         * @param key the array size
+         * @param val the cache to store if the key is free
+         * @return the value now stored for the key - val, or the one that was
+         * already there
          */
         synchronized SimpleByteCache putIfAbsent(int key, SimpleByteCache val) {
             Table t = _table;
@@ -319,9 +319,9 @@ public final class SimpleByteCache {
         }
 
         /**
-         *  Snapshot of the caches, for the cleanup task and {@link #clearAll()}.
+         * Snapshot of the caches, for the cleanup task and {@link #clearAll()}.
          *
-         *  @return never null
+         * @return never null
          */
         List<SimpleByteCache> values() {
             Table t = _table;

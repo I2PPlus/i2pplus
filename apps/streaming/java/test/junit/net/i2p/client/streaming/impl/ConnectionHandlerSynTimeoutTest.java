@@ -18,13 +18,13 @@ import org.junit.Test;
  * pages to every client).  The decision is now:
  *
  * <ul>
- *   <li><b>evidence-gated (#4)</b>: the clamp fires only when build success is
- *       low <em>and</em> the recent SYN expire rate is at/above the threshold
- *       ({@link ConnectionHandler#SYN_EXPIRE_THRESHOLD_DEFAULT}); a server that
- *       drains its queue — even slowly — is treated as healthy.</li>
- *   <li><b>RTT-aware floor (#2)</b>: when the clamp does fire, the window is
- *       {@code max(SYN_STRESS_MIN_TIMEOUT, scale * rttMs)}, capped at the
- *       configured timeout, so slow fabrics keep much longer than the flat 10s.</li>
+ * <li><b>evidence-gated (#4)</b>: the clamp fires only when build success is
+ * low <em>and</em> the recent SYN expire rate is at/above the threshold
+ * ({@link ConnectionHandler#SYN_EXPIRE_THRESHOLD_DEFAULT}); a server that
+ * drains its queue — even slowly — is treated as healthy.</li>
+ * <li><b>RTT-aware floor (#2)</b>: when the clamp does fire, the window is
+ * {@code max(SYN_STRESS_MIN_TIMEOUT, scale * rttMs)}, capped at the
+ * configured timeout, so slow fabrics keep much longer than the flat 10s.</li>
  * </ul>
  *
  * @since 0.9.71+
@@ -122,7 +122,7 @@ public class ConnectionHandlerSynTimeoutTest {
     }
 
     /** Tuner scale 0 (never set) means "use the built-in default RTT scale", so the RTT-aware floor
-     *  stays active — a slow fabric still extends its window rather than dropping to the flat minimum. */
+     * stays active — a slow fabric still extends its window rather than dropping to the flat minimum. */
     @Test
     public void testScaleUnalteredFallsBackToDefaultScale() {
         I2PSocketManagerFull.setRttSynTimeoutScale(0);

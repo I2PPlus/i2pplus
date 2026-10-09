@@ -8,7 +8,7 @@ package i2p.susi.util;
 public interface ReadCounter {
 
     /**
-     *  The total number of bytes that have been read or skipped
+     * The total number of bytes that have been read or skipped
      * @return the read
      */
     public long getRead();

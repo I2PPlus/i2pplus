@@ -22,24 +22,23 @@ import net.i2p.util.SystemVersion;
 /**
  * Pick peers randomly out of the not-failing pool, and put them into a tunnel
  * ordered by XOR distance from a random key.
- *
  */
     class ExploratoryPeerSelector extends TunnelPeerSelector {
 
         /**
-         *  Counts selections discarded because every candidate was banlisted.
+         * Counts selections discarded because every candidate was banlisted.
          *
-         *  <p>Exists to keep the discard branch above honest. The change that
-         *  replaced restoring the banned selection with discarding it was
-         *  originally justified by a build-capacity figure that no measurement
-         *  supported, and the branch then recorded 0 occurrences over roughly
-         *  two hours. Rather than re-assert a benefit, this counter makes the
-         *  frequency observable so the branch can be re-evaluated on evidence.
+         * <p>Exists to keep the discard branch above honest. The change that
+         * replaced restoring the banned selection with discarding it was
+         * originally justified by a build-capacity figure that no measurement
+         * supported, and the branch then recorded 0 occurrences over roughly
+         * two hours. Rather than re-assert a benefit, this counter makes the
+         * frequency observable so the branch can be re-evaluated on evidence.
          *
-         *  <p>Must be created before use: {@code StatManager.addRateData} on an
-         *  unregistered name silently drops the sample.
+         * <p>Must be created before use: {@code StatManager.addRateData} on an
+         * unregistered name silently drops the sample.
          *
-         *  @since 0.9.71+
+         * @since 0.9.71+
          */
         static final String EPS_ALL_BANNED_STAT = "tunnel.peerSelection.epsAllBannedDiscarded";
         private static final long[] EPS_STAT_RATES = {
@@ -47,15 +46,15 @@ import net.i2p.util.SystemVersion;
         };
 
         /**
-         *  Record a discarded selection, creating the stat on first use.
+         * Record a discarded selection, creating the stat on first use.
          *
-         *  <p>{@code StatManager.addRateData} silently drops samples for an
-         *  unregistered name, so creation is not optional here. No "already
-         *  created" guard is needed because {@code createRequiredRateStat} is
-         *  itself idempotent.
+         * <p>{@code StatManager.addRateData} silently drops samples for an
+         * unregistered name, so creation is not optional here. No "already
+         * created" guard is needed because {@code createRequiredRateStat} is
+         * itself idempotent.
          *
          * @param ctx router context; null is ignored
-         *  @since 0.9.71+
+         * @since 0.9.71+
          */
         private static void noteAllBannedDiscard(RouterContext ctx) {
             if (ctx == null || ctx.statManager() == null) {return;}
@@ -67,27 +66,27 @@ import net.i2p.util.SystemVersion;
         }
 
     /**
-     *  Cooldown entries for exploratory selections, recorded when checkTunnel
-     *  fails.  Separate from the shared {@link #_peerCooldowns} so exploratory
-     *  builds cannot pollute the set used by client pools.  Only failures are
-     *  recorded — healthy selections never cooldown peers.
-     *  @since 0.9.71+
+     * Cooldown entries for exploratory selections, recorded when checkTunnel
+     * fails.  Separate from the shared {@link #_peerCooldowns} so exploratory
+     * builds cannot pollute the set used by client pools.  Only failures are
+     * recorded — healthy selections never cooldown peers.
+     * @since 0.9.71+
      */
     private final Map<Hash, Long> _exploratoryCooldowns = new ConcurrentHashMap<>();
 
     /**
-     *  Peers from the last selection that were all ghosts, handed to the redraw in
-     *  {@link #selectPeers(TunnelPoolSettings)}.
+     * Peers from the last selection that were all ghosts, handed to the redraw in
+     * {@link #selectPeers(TunnelPoolSettings)}.
      *
-     *  <p>A field rather than a return value because the ghost filter sits deep inside
-     *  {@link #selectPeersInternal} and the retry belongs beside the existing cooldown
-     *  retry, in the one method that already sequences attempts. Per-thread: two selections
-     *  in flight must not exchange the set they were told to avoid.
+     * <p>A field rather than a return value because the ghost filter sits deep inside
+     * {@link #selectPeersInternal} and the retry belongs beside the existing cooldown
+     * retry, in the one method that already sequences attempts. Per-thread: two selections
+     * in flight must not exchange the set they were told to avoid.
      */
     private final ThreadLocal<Set<Hash>> _lastAllGhostSelection = new ThreadLocal<Set<Hash>>();
 
     /**
-     *  ExploratoryPeerSelector.
+     * ExploratoryPeerSelector.
      */
     public ExploratoryPeerSelector(RouterContext context) {
         super(context);
@@ -99,9 +98,9 @@ import net.i2p.util.SystemVersion;
      * Out: OBGW .. middle .. closest .. us
      *
      * @return ordered list of Hash objects (one per peer) specifying what order
-     *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     *         the local router in the list.  Never null; an empty list means
-     *         no peers could be selected.
+     * they should appear in a tunnel (ENDPOINT FIRST).  This includes
+     * the local router in the list.  Never null; an empty list means
+     * no peers could be selected.
      */
     @Override
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
@@ -151,14 +150,14 @@ import net.i2p.util.SystemVersion;
     }
 
     /**
-     *  The actual peer selection, shared between the normal path and the
-     *  cooldown-bypass retry in {@link #selectPeers(TunnelPoolSettings)}.
+     * The actual peer selection, shared between the normal path and the
+     * cooldown-bypass retry in {@link #selectPeers(TunnelPoolSettings)}.
      *
-     *  @param settings the tunnel pool settings
-     *  @param length the desired tunnel length
-     *  @param includeCooldowns whether to exclude peers on selection cooldown
-     *  @return ordered list of Hash objects (ENDPOINT FIRST), or null if no
-     *          peers are available or checkTunnel fails
+     * @param settings the tunnel pool settings
+     * @param length the desired tunnel length
+     * @param includeCooldowns whether to exclude peers on selection cooldown
+     * @return ordered list of Hash objects (ENDPOINT FIRST), or null if no
+     * peers are available or checkTunnel fails
      */
     private List<Hash> selectPeersInternal(TunnelPoolSettings settings, int length,
                                           boolean includeCooldowns) {
@@ -166,19 +165,19 @@ import net.i2p.util.SystemVersion;
     }
 
     /**
-     *  Select peers, additionally excluding a set the caller has decided on.
+     * Select peers, additionally excluding a set the caller has decided on.
      *
-     *  <p>Used for the ghost retry: the client pools exclude peers that turned out to be
-     *  ghosts and redraw, so exploratory has to be able to do the same rather than restore
-     *  a selection the peer measurements just rejected.
+     * <p>Used for the ghost retry: the client pools exclude peers that turned out to be
+     * ghosts and redraw, so exploratory has to be able to do the same rather than restore
+     * a selection the peer measurements just rejected.
      *
-     *  @param settings the tunnel pool settings
-     *  @param length the desired tunnel length
-     *  @param includeCooldowns whether to exclude peers on selection cooldown
-     *  @param alsoExclude peers to exclude on top of the usual set, or null
-     *  @return ordered list of Hash objects (ENDPOINT FIRST), or null if no peers are
-     *          available or checkTunnel fails
-     *  @since 0.9.71+
+     * @param settings the tunnel pool settings
+     * @param length the desired tunnel length
+     * @param includeCooldowns whether to exclude peers on selection cooldown
+     * @param alsoExclude peers to exclude on top of the usual set, or null
+     * @return ordered list of Hash objects (ENDPOINT FIRST), or null if no peers are
+     * available or checkTunnel fails
+     * @since 0.9.71+
      */
     private List<Hash> selectPeersInternal(TunnelPoolSettings settings, int length,
                                           boolean includeCooldowns, Set<Hash> alsoExclude) {
@@ -564,10 +563,10 @@ import net.i2p.util.SystemVersion;
     }
 
     /**
-     *  Should we pick from the high cap pool instead of the larger not failing pool?
-     *  This should return false most of the time, but if the not-failing pool's
-     *  build success rate is much worse, return true so that reliability
-     *  is maintained.
+     * Should we pick from the high cap pool instead of the larger not failing pool?
+     * This should return false most of the time, but if the not-failing pool's
+     * build success rate is much worse, return true so that reliability
+     * is maintained.
      * @return whether pick high cap
      */
     private boolean shouldPickHighCap() {

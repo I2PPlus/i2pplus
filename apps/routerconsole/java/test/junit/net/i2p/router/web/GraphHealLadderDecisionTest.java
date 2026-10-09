@@ -10,16 +10,16 @@ import net.i2p.router.web.GraphGenerator.ReportThrottle;
 import org.junit.Test;
 
 /**
- *  Tests for the graph heal ladder and the watchdog report that drives it.
+ * Tests for the graph heal ladder and the watchdog report that drives it.
  *
- *  <p>The incident these pin down froze 25 of 25 graph listeners at the same instant
- *  with no warning of any kind, and the console could not say which of three
- *  mechanisms did it: the coalesce path stopped, the delivery consumer wedged, or the
- *  early return started swallowing every call. They look identical from the listener
- *  side, so the ladder's cost ordering and the mechanism classifier are both pure
- *  functions that have to be pinned here, away from a router, an RRD file and a clock.
+ * <p>The incident these pin down froze 25 of 25 graph listeners at the same instant
+ * with no warning of any kind, and the console could not say which of three
+ * mechanisms did it: the coalesce path stopped, the delivery consumer wedged, or the
+ * early return started swallowing every call. They look identical from the listener
+ * side, so the ladder's cost ordering and the mechanism classifier are both pure
+ * functions that have to be pinned here, away from a router, an RRD file and a clock.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class GraphHealLadderDecisionTest {
 
@@ -29,9 +29,9 @@ public class GraphHealLadderDecisionTest {
     ///////////// chooseHeal
 
     /**
-     *  A listener that is mapped, attached, registered and writable with nothing
-     *  missing needs no action at all. Every other rung is more expensive and none of
-     *  them is warranted.
+     * A listener that is mapped, attached, registered and writable with nothing
+     * missing needs no action at all. Every other rung is more expensive and none of
+     * them is warranted.
      */
     @Test
     public void testHealthyListenerNeedsNothing() {
@@ -39,9 +39,9 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  The cost ordering, cheapest rung last in the list but tried first: a dead
-     *  listener is rebuilt, a dead handle is merely reopened, and lost steps that the
-     *  rate still remembers are backfilled rather than rebuilt over.
+     * The cost ordering, cheapest rung last in the list but tried first: a dead
+     * listener is rebuilt, a dead handle is merely reopened, and lost steps that the
+     * rate still remembers are backfilled rather than rebuilt over.
      */
     @Test
     public void testCheapestApplicableRungWins() {
@@ -55,9 +55,9 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  A listener the map has lost, one whose RRD is closed, and one the Rate no longer
-     *  points at are all beyond repair in place: only a fresh listener from the same
-     *  file recovers them, and it preserves the recorded history.
+     * A listener the map has lost, one whose RRD is closed, and one the Rate no longer
+     * points at are all beyond repair in place: only a fresh listener from the same
+     * file recovers them, and it preserves the recorded history.
      */
     @Test
     public void testUnusableStatesAllRebuild() {
@@ -71,10 +71,10 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  Spec-churn guard. A changed {@code stat.summaries} string re-reads every rate
-     *  each sync tick, and it must not be able to close and reopen a healthy RRD: a
-     *  mapped, attached, registered listener can only ever be NONE or BACKFILL, however
-     *  often the spec string is re-parsed.
+     * Spec-churn guard. A changed {@code stat.summaries} string re-reads every rate
+     * each sync tick, and it must not be able to close and reopen a healthy RRD: a
+     * mapped, attached, registered listener can only ever be NONE or BACKFILL, however
+     * often the spec string is re-parsed.
      */
     @Test
     public void testSpecChurnCannotRebuildHealthyListener() {
@@ -86,10 +86,10 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  {@link HealAction#REARM} is in the ladder's shape but is deliberately never
-     *  returned: a lost registration is repaired by REBUILD, because re-pointing the
-     *  Rate at a listener another instance may have claimed would start two listeners
-     *  fighting over one registration. Pinning the absence keeps it from creeping in.
+     * {@link HealAction#REARM} is in the ladder's shape but is deliberately never
+     * returned: a lost registration is repaired by REBUILD, because re-pointing the
+     * Rate at a listener another instance may have claimed would start two listeners
+     * fighting over one registration. Pinning the absence keeps it from creeping in.
      */
     @Test
     public void testRearmIsNeverChosen() {
@@ -111,9 +111,9 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  {@link GraphGenerator#needsRevive} stays the coarser test it already was, and
-     *  agrees with the ladder's first rung on every state where a listener exists at
-     *  all: anything it would rebuild is also something the ladder would rebuild.
+     * {@link GraphGenerator#needsRevive} stays the coarser test it already was, and
+     * agrees with the ladder's first rung on every state where a listener exists at
+     * all: anything it would rebuild is also something the ladder would rebuild.
      */
     @Test
     public void testNeedsReviveAgreesWithTheLadderFirstRung() {
@@ -126,8 +126,8 @@ public class GraphHealLadderDecisionTest {
     ///////////// backfillWindow
 
     /**
-     *  The request is bounded by the drift, so a listener one step behind does not
-     *  copy a whole ring of samples every tick to find one of them.
+     * The request is bounded by the drift, so a listener one step behind does not
+     * copy a whole ring of samples every tick to find one of them.
      */
     @Test
     public void testBackfillWindowIsBoundedByDrift() {
@@ -137,9 +137,9 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  A listener thousands of steps behind does not ask for a list thousands long.
-     *  The excess is exactly the part that is permanently gone, so asking for it is
-     *  pure waste.
+     * A listener thousands of steps behind does not ask for a list thousands long.
+     * The excess is exactly the part that is permanently gone, so asking for it is
+     * pure waste.
      */
     @Test
     public void testBackfillWindowIsCapped() {
@@ -158,10 +158,10 @@ public class GraphHealLadderDecisionTest {
     ///////////// classifyDrift
 
     /**
-     *  Samples queuing with the oldest one older than a watchdog tick means the
-     *  consumer stopped draining. This is the one mechanism that the coalesce counters
-     *  look completely normal for, which is why it has to be named from the queue's
-     *  own state rather than inferred.
+     * Samples queuing with the oldest one older than a watchdog tick means the
+     * consumer stopped draining. This is the one mechanism that the coalesce counters
+     * look completely normal for, which is why it has to be named from the queue's
+     * own state rather than inferred.
      */
     @Test
     public void testBackedUpQueueNamesTheConsumer() {
@@ -170,9 +170,9 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  The queue boundary is exclusive at one watchdog period: anything younger than
-     *  that is ordinary in-flight delivery, since the watchdog reads the counters at an
-     *  arbitrary point in the period.
+     * The queue boundary is exclusive at one watchdog period: anything younger than
+     * that is ordinary in-flight delivery, since the watchdog reads the counters at an
+     * arbitrary point in the period.
      */
     @Test
     public void testQueueLagBoundaryIsExclusive() {
@@ -186,8 +186,8 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  An overrun means samples were evicted outright, which is the one delivery
-     *  fault that is unambiguously loss, so it outranks the queue-depth reading.
+     * An overrun means samples were evicted outright, which is the one delivery
+     * fault that is unambiguously loss, so it outranks the queue-depth reading.
      */
     @Test
     public void testOverrunOutranksQueueDepth() {
@@ -196,9 +196,9 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  No rate coalesced at all: the loss cannot be in delivery or in the write path,
-     *  because nothing was produced to deliver. This is the mechanism the stalled-graph
-     *  report could never distinguish from the other two.
+     * No rate coalesced at all: the loss cannot be in delivery or in the write path,
+     * because nothing was produced to deliver. This is the mechanism the stalled-graph
+     * report could never distinguish from the other two.
      */
     @Test
     public void testStalledCoalesceIsNamed() {
@@ -207,9 +207,9 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  Coalesces are happening, the queue is draining, and steps are still missing: the
-     *  write path. Named explicitly rather than left to default, because it is the one
-     *  case where the six counters all look healthy and only the ledger knows.
+     * Coalesces are happening, the queue is draining, and steps are still missing: the
+     * write path. Named explicitly rather than left to default, because it is the one
+     * case where the six counters all look healthy and only the ledger knows.
      */
     @Test
     public void testEverythingHealthyMeansTheWritePath() {
@@ -234,10 +234,10 @@ public class GraphHealLadderDecisionTest {
     ///////////// formatLedgerDrift
 
     /**
-     *  The whole point of the line: all six StatManager counters are present with
-     *  greppable names. Without them the next occurrence is another open question,
-     *  because the console cannot tell a wedged consumer from a rate that stopped
-     *  coalescing from the coalesce early return.
+     * The whole point of the line: all six StatManager counters are present with
+     * greppable names. Without them the next occurrence is another open question,
+     * because the console cannot tell a wedged consumer from a rate that stopped
+     * coalescing from the coalesce early return.
      */
     @Test
     public void testLineCarriesEveryDiagnosticCounter() {
@@ -280,9 +280,9 @@ public class GraphHealLadderDecisionTest {
     ///////////// ReportThrottle
 
     /**
-     *  The first occurrence is never throttled. This is what makes the promise the
-     *  watchdog exists to keep - the next stall is named within one period - true even
-     *  though the same report is produced by both the watchdog and the sync task.
+     * The first occurrence is never throttled. This is what makes the promise the
+     * watchdog exists to keep - the next stall is named within one period - true even
+     * though the same report is produced by both the watchdog and the sync task.
      */
     @Test
     public void testFirstReportIsNeverThrottled() {
@@ -301,9 +301,9 @@ public class GraphHealLadderDecisionTest {
     }
 
     /**
-     *  A changed report is never delayed, which is the case that matters: a growing
-     *  backlog or a rising permanent-loss count has to reach the log while it is
-     *  happening, not up to two minutes after.
+     * A changed report is never delayed, which is the case that matters: a growing
+     * backlog or a rising permanent-loss count has to reach the log while it is
+     * happening, not up to two minutes after.
      */
     @Test
     public void testChangedReportIsNeverDelayed() {

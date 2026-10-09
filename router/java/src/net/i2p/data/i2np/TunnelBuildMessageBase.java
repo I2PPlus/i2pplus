@@ -3,35 +3,35 @@ package net.i2p.data.i2np;
 import net.i2p.I2PAppContext;
 
 /**
- *  Base for TBM, TBRM, VTBM, VTBRM
- *  Retrofitted over them.
- *  There's really no difference between the build and build reply.
+ * Base for TBM, TBRM, VTBM, VTBRM
+ * Retrofitted over them.
+ * There's really no difference between the build and build reply.
  *
- *  TBM and VBTM (but not TBRM and VTBRM?) messages are modified
- *  in-place by doing a single setRecord(), and retransmitted.
- *  Therefore they are NOT good candidates to use FastI2NPMessageImpl;
- *  the checksum would have to be invalidated with every setRecord().
- *  Which we could do in TBM and VTBM but not TBRM and VTBRM,
- *  but keep it simple for now.
+ * TBM and VBTM (but not TBRM and VTBRM?) messages are modified
+ * in-place by doing a single setRecord(), and retransmitted.
+ * Therefore they are NOT good candidates to use FastI2NPMessageImpl;
+ * the checksum would have to be invalidated with every setRecord().
+ * Which we could do in TBM and VTBM but not TBRM and VTBRM,
+ * but keep it simple for now.
  *
- *  @since 0.8.8
+ * @since 0.8.8
  */
 public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     /**
-     *  The encrypted records, one per hop, or null until readMessage().
+     * The encrypted records, one per hop, or null until readMessage().
      */
     protected EncryptedBuildRecord[] _records;
     /**
-     *  Number of records in _records, zero if not yet set.
+     * Number of records in _records, zero if not yet set.
      */
     protected int RECORD_COUNT;
     /**
-     *  Maximum number of records in any tunnel build message (8 hops).
+     * Maximum number of records in any tunnel build message (8 hops).
      */
     public static final int MAX_RECORD_COUNT = 8;
 
     /**
-     *  Create with the default number of records.
+     * Create with the default number of records.
      */
     public TunnelBuildMessageBase(I2PAppContext context) {this(context, MAX_RECORD_COUNT);}
 
@@ -46,16 +46,16 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     }
 
     /**
-     *  Store a build record.
-     *  @param record may be null
-     *  @param index the index
+     * Store a build record.
+     * @param record may be null
+     * @param index the index
      */
     public void setRecord(int index, EncryptedBuildRecord record) {_records[index] = record;}
 
     /**
-     *  Build record at the given index, may be null.
-     *  @param index the index
-     *  @return may be null
+     * Build record at the given index, may be null.
+     * @param index the index
+     * @return may be null
      */
     public EncryptedBuildRecord getRecord(int index) {return _records[index];}
 
@@ -63,17 +63,17 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     public int getRecordCount() {return RECORD_COUNT;}
 
     /**
-     *  Size in bytes of one encrypted record: 16 byte IV + 512 byte payload.
+     * Size in bytes of one encrypted record: 16 byte IV + 512 byte payload.
      */
     public static final int RECORD_SIZE = 512+16;
 
     /**
-     *  Written length of the message body: one record size per record.
+     * Written length of the message body: one record size per record.
      */
     protected int calculateWrittenLength() {return RECORD_SIZE * RECORD_COUNT;}
 
     /**
-     *  Read the records from a byte array.
+     * Read the records from a byte array.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
         if (type != getType()) {throw new I2NPMessageException("Message type is incorrect for this message");}
@@ -90,7 +90,7 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     }
 
     /**
-     *  Write the records to the output array, starting at the given index.
+     * Write the records to the output array, starting at the given index.
      */
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {
         int remaining = out.length - (curIndex + calculateWrittenLength());

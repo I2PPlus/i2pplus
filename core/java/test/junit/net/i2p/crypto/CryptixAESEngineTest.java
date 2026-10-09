@@ -6,7 +6,6 @@ package net.i2p.crypto;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import junit.framework.TestCase;
@@ -113,10 +112,10 @@ public class CryptixAESEngineTest extends TestCase {
     }
 
     /**
-     *  Round trip through the JVM (system-AES) path, which only engages for
-     *  payloads of at least 640 bytes on AES-NI/unlimited-policy JVMs; on
-     *  other JVMs this exercises the Cryptix fallback path, which is fine — the
-     *  test's job is a large-payload round trip.
+     * Round trip through the JVM (system-AES) path, which only engages for
+     * payloads of at least 640 bytes on AES-NI/unlimited-policy JVMs; on
+     * other JVMs this exercises the Cryptix fallback path, which is fine — the
+     * test's job is a large-payload round trip.
      */
     public void testEDLarge() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();

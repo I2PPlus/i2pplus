@@ -10,11 +10,11 @@ import org.json.simple.JsonObject;
  * <p>The protocol expects error objects to be structured like this:
  *
  * <ul>
- *     <li>{@code code} An integer that indicates the error type.
- *     <li>{@code message} A string providing a short description of the
- *         error. The message should be limited to a concise single sentence.
- *     <li>{@code data} Additional information, which may be omitted. Its
- *         contents is entirely defined by the application.
+ * <li>{@code code} An integer that indicates the error type.
+ * <li>{@code message} A string providing a short description of the
+ * error. The message should be limited to a concise single sentence.
+ * <li>{@code data} Additional information, which may be omitted. Its
+ * contents is entirely defined by the application.
  * </ul>
  *
  * <p>Note that the "Error" word in the class name was put there solely to
@@ -27,11 +27,11 @@ import org.json.simple.JsonObject;
  * standard JSON-RPC 2.0 errors:
  *
  * <ul>
- *     <li>{@link #PARSE_ERROR} JSON parse error (-32700)
- *     <li>{@link #INVALID_REQUEST} Invalid JSON-RPC 2.0 Request (-32600)
- *     <li>{@link #METHOD_NOT_FOUND} Method not found (-32601)
- *     <li>{@link #INVALID_PARAMS} Invalid parameters (-32602)
- *     <li>{@link #INTERNAL_ERROR} Internal error (-32603)
+ * <li>{@link #PARSE_ERROR} JSON parse error (-32700)
+ * <li>{@link #INVALID_REQUEST} Invalid JSON-RPC 2.0 Request (-32600)
+ * <li>{@link #METHOD_NOT_FOUND} Method not found (-32601)
+ * <li>{@link #INVALID_PARAMS} Invalid parameters (-32602)
+ * <li>{@link #INTERNAL_ERROR} Internal error (-32603)
  * </ul>
  *
  * <p>Note that the range -32099..-32000 is reserved for additional server
@@ -120,9 +120,9 @@ public class JSONRPC2Error extends Exception {
 	 * Sets the specified data to a JSON-RPC 2.0 error.
 	 *
 	 * @param err  The JSON-RPC 2.0 error to have its data field set. Must
-	 *             not be {@code null}.
+	 * not be {@code null}.
 	 * @param data Optional error data, must <a href="#map">map</a> to a
-	 *             valid JSON type.
+	 * valid JSON type.
 	 *
 	 * @return A new JSON-RPC 2.0 error with the set data.
 	 */
@@ -138,7 +138,7 @@ public class JSONRPC2Error extends Exception {
 	 * message. The optional data is omitted.
 	 *
 	 * @param code    The error code (standard pre-defined or
-	 *                application-specific).
+	 * application-specific).
 	 * @param message The error message.
 	 */
 	public JSONRPC2Error(int code, String message) {
@@ -152,10 +152,10 @@ public class JSONRPC2Error extends Exception {
 	 * message and data.
 	 *
 	 * @param code    The error code (standard pre-defined or
-	 *                application-specific).
+	 * application-specific).
 	 * @param message The error message.
 	 * @param data    Optional error data, must <a href="#map">map</a>
-	 *                to a valid JSON type.
+	 * to a valid JSON type.
 	 */
 	public JSONRPC2Error(int code, String message, Object data) {
 
@@ -191,7 +191,7 @@ public class JSONRPC2Error extends Exception {
 	 * Sets the specified data to a JSON-RPC 2.0 error.
 	 *
 	 * @param data Optional error data, must <a href="#map">map</a> to a
-	 *             valid JSON type.
+	 * valid JSON type.
 	 *
 	 * @return A new JSON-RPC 2.0 error with the set data.
 	 */
@@ -255,14 +255,14 @@ public class JSONRPC2Error extends Exception {
 	}
 
 
-	/**
-         * Overrides {@code Object.equals()}.
-         *
-         * @param object The object to compare to.
-         *
-         * @return {@code true} if both objects are instances if this class and
-	 *         their error codes are identical, {@code false} if not.
-         */
+ /**
+  * Overrides {@code Object.equals()}.
+  *
+  * @param object The object to compare to.
+  *
+  * @return {@code true} if both objects are instances if this class and
+	 * their error codes are identical, {@code false} if not.
+  */
 	@Override
         public boolean equals(Object object) {
 

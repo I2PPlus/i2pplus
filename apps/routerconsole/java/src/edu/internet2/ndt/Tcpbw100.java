@@ -295,7 +295,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     *  bigly
+     * bigly
      *
      * @param args -s to use SSL, then the hostname and an optional client id
      * @return the started applet, already shown in its own window
@@ -611,7 +611,6 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * Set server-&gt;Client fire-wall test results.
      *
      * @param iParamS2CRes integer indicating C-&gt;S test results
-     *
      */
     public void setS2cSFWTestResults(int iParamS2CRes) {this._iS2cSFWResult = iParamS2CRes;}
 
@@ -933,8 +932,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     *  I2P
-     *  Translated status, not HTML escaped.
+     * I2P
+     * Translated status, not HTML escaped.
      *
      * @return the current status line, localized and not HTML escaped
      */
@@ -1843,7 +1842,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     *  Return a SSL or standard socket depending on config
+     * Return a SSL or standard socket depending on config
      */
     private Socket newSocket(InetAddress hostAddress, int ctlPort) throws IOException {
         if (_log.shouldInfo()) {
@@ -2644,7 +2643,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     }
 
     /**
-     *  @since 0.9.46 to replace Java Timer and TimerTask
+     * @since 0.9.46 to replace Java Timer and TimerTask
      */
     private abstract class PeriodicTimer extends SimpleTimer2.TimedEvent {
         /**

@@ -113,20 +113,20 @@ public class ExternalMain implements ClientApp, NotificationService {
     }
 
     /**
-     *  Unless we do this, when we start DesktopGUI we get a Java coffee cup
-     *  in the tray. The icon is set by reflection, so there is no compile or
-     *  runtime dependency on the macOS-only eawt classes; every failure is
-     *  logged and otherwise ignored, since this is cosmetic.
+     * Unless we do this, when we start DesktopGUI we get a Java coffee cup
+     * in the tray. The icon is set by reflection, so there is no compile or
+     * runtime dependency on the macOS-only eawt classes; every failure is
+     * logged and otherwise ignored, since this is cosmetic.
      *
-     *  This is the canonical documentation of the macOS integration:
-     *  {@link Main} has a copy of this method. The dock menu, dock icon
-     *  bounce and application Quit handling are not supported, and no code
-     *  for them exists.
+     * This is the canonical documentation of the macOS integration:
+     * {@link Main} has a copy of this method. The dock menu, dock icon
+     * bounce and application Quit handling are not supported, and no code
+     * for them exists.
      *
-     *  Based on code from https://gist.github.com/bchapuis/1562406 , no apparent license.
-     *  See also https://stackoverflow.com/questions/6006173/how-do-you-change-the-dock-icon-of-a-java-program
+     * Based on code from https://gist.github.com/bchapuis/1562406 , no apparent license.
+     * See also https://stackoverflow.com/questions/6006173/how-do-you-change-the-dock-icon-of-a-java-program
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     @SuppressWarnings("unchecked")
     private void setMacTrayIcon() {
@@ -172,15 +172,15 @@ public class ExternalMain implements ClientApp, NotificationService {
     /////// NotificationService methods
 
     /**
-     *  Send a notification to the user.
+     * Send a notification to the user.
      *
-     *  @param source unsupported
-     *  @param category unsupported
-     *  @param priority unsupported
-     *  @param title for the popup, translated
-     *  @param message translated
-     *  @param path unsupported
-     *  @return 0, or -1 on failure
+     * @param source unsupported
+     * @param category unsupported
+     * @param priority unsupported
+     * @param title for the popup, translated
+     * @param message translated
+     * @param path unsupported
+     * @return 0, or -1 on failure
      */
     @Override
     public int notify(String source, String category, int priority, String title, String message, String path) {
@@ -191,10 +191,10 @@ public class ExternalMain implements ClientApp, NotificationService {
     }
 
     /**
-     *  Cancel a notification if possible.
-     *  Unsupported.
+     * Cancel a notification if possible.
+     * Unsupported.
      *
-     *  @return false always
+     * @return false always
      */
     @Override
     public boolean cancel(int id) {
@@ -202,10 +202,10 @@ public class ExternalMain implements ClientApp, NotificationService {
     }
 
     /**
-     *  Update the text of a notification if possible.
-     *  Unsupported.
+     * Update the text of a notification if possible.
+     * Unsupported.
      *
-     *  @return false always
+     * @return false always
      */
     @Override
     public boolean update(int id, String title, String message, String path) {

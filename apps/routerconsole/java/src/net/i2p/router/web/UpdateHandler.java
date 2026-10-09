@@ -35,8 +35,8 @@ public class UpdateHandler {
     private HttpSession _session;
 
     /**
-     *  For form validation
-     *  @since 0.9.69
+     * For form validation
+     * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
 
@@ -54,8 +54,8 @@ public class UpdateHandler {
     }
 
     /**
-     *  @return null if not found
-     *  @since 0.9.12
+     * @return null if not found
+     * @since 0.9.12
      */
     public static ConsoleUpdateManager updateManager(RouterContext ctx) {
         ClientAppManager cmgr = ctx.clientAppManager();
@@ -67,7 +67,7 @@ public class UpdateHandler {
      * Configure this bean to query a particular router context
      *
      * @param contextId beginning few characters of the routerHash, or null to pick
-     *                  the first one we come across.
+     * the first one we come across.
      */
     public void setContextId(String contextId) {
         try {
@@ -91,8 +91,8 @@ public class UpdateHandler {
     }
 
     /**
-     *  Alias for setUpdateNonce for session-based nonce support
-     *  @since 0.9.69
+     * Alias for setUpdateNonce for session-based nonce support
+     * @since 0.9.69
      */
     public void setConsoleNonce(String nonce) {
         _nonce = nonce;
@@ -100,8 +100,8 @@ public class UpdateHandler {
     }
 
     /**
-     *  these two can be set in either order, so call checkUpdateAction() twice
-     *  storeSession() MUST be called first
+     * these two can be set in either order, so call checkUpdateAction() twice
+     * storeSession() MUST be called first
      */
     private void checkUpdateAction() {
         if (_action == null || _nonce == null) {return;}

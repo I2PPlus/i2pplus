@@ -26,16 +26,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests for the Sybil analyzer's IP-grouping calculations. These
- *  group routers by shared /32, /16 (IPv4) and /64, /48 (IPv6)
- *  prefixes and award points proportional to the number of peers
- *  sharing the prefix.
+ * Tests for the Sybil analyzer's IP-grouping calculations. These
+ * group routers by shared /32, /16 (IPv4) and /64, /48 (IPv6)
+ * prefixes and award points proportional to the number of peers
+ * sharing the prefix.
  *
- *  The Analysis instance is constructed reflectively to avoid
- *  starting the full analysis job; the grouping methods themselves
- *  are pure with respect to the router state.
+ * The Analysis instance is constructed reflectively to avoid
+ * starting the full analysis job; the grouping methods themselves
+ * are pure with respect to the router state.
  *
- *  @since 0.9.38
+ * @since 0.9.38
  */
 public class AnalysisTest {
 

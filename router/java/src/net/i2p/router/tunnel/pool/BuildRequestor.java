@@ -41,12 +41,12 @@ import net.i2p.util.VersionComparator;
  *
  * <p>This class handles:
  * <ul>
- *   <li>Preparation of tunnel hop IDs</li>
- *   <li>Selection of paired or exploratory tunnels for replies</li>
- *   <li>Construction of {@link TunnelBuildMessage}, including legacy and
- *       new-style (Short/Variable) formats</li>
- *   <li>Garlic encryption for inbound builds</li>
- *   <li>Timeout and failure handling</li>
+ * <li>Preparation of tunnel hop IDs</li>
+ * <li>Selection of paired or exploratory tunnels for replies</li>
+ * <li>Construction of {@link TunnelBuildMessage}, including legacy and
+ * new-style (Short/Variable) formats</li>
+ * <li>Garlic encryption for inbound builds</li>
+ * <li>Timeout and failure handling</li>
  * </ul>
  *
  * <p>Paired tunnels are always used (as of 0.9.50+) to improve client
@@ -95,9 +95,9 @@ public abstract class BuildRequestor {
     public static void setFirstHopTimeout(int ms) { _tunedFirstHopTimeout = ms; }
 
     /**
-     *  Refresh the cached build configuration from properties at most once
-     *  per CONFIG_REFRESH_MS, or immediately when the context changes.
-     *  Benign race: duplicate refreshes are idempotent writes.
+     * Refresh the cached build configuration from properties at most once
+     * per CONFIG_REFRESH_MS, or immediately when the context changes.
+     * Benign race: duplicate refreshes are idempotent writes.
      */
     private static void refreshBuildConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -169,20 +169,20 @@ public abstract class BuildRequestor {
     }
 
       /**
-       *  The peer that will receive the tunnel build request (TBM): the
-       *  gateway (peer 0) for inbound tunnels, or the next hop (peer 1) for
-       *  outbound tunnels.  BuildExecutor's per-peer pacing guard must target
-       *  the same peer the dispatch code sends the request to, so both use
-       *  this single derivation.
+       * The peer that will receive the tunnel build request (TBM): the
+       * gateway (peer 0) for inbound tunnels, or the next hop (peer 1) for
+       * outbound tunnels.  BuildExecutor's per-peer pacing guard must target
+       * the same peer the dispatch code sends the request to, so both use
+       * this single derivation.
        *
-       *  <p>Returns null for a config too short to have a hop 1. Exploratory
-       *  pools build length-1 tunnels whose peer array holds only the gateway,
-       *  so asking for hop 1 would throw and abandon the build outright — which
-       *  stops every exploratory pool from populating.
+       * <p>Returns null for a config too short to have a hop 1. Exploratory
+       * pools build length-1 tunnels whose peer array holds only the gateway,
+       * so asking for hop 1 would throw and abandon the build outright — which
+       * stops every exploratory pool from populating.
        *
-       *  @param cfg non-null; may be a short config
-       *  @return the dispatch target peer, or null if the config has no hop 1
-       *  @since 0.9.71+
+       * @param cfg non-null; may be a short config
+       * @return the dispatch target peer, or null if the config has no hop 1
+       * @since 0.9.71+
        */
       public static Hash getBuildRequestPeer(PooledTunnelCreatorConfig cfg) {
           if (cfg.isInbound()) {return cfg.getPeer(0);}
@@ -819,7 +819,7 @@ public abstract class BuildRequestor {
      * @param cfg the tunnel configuration
      * @param exec the build executor to notify on completion
      * @return true if the retry was initiated, false if pre-connect
-     *         failed and the build should be abandoned
+     * failed and the build should be abandoned
      * @since 0.9.71+
      */
     static boolean preConnectFallback(RouterContext ctx, Hash peer,

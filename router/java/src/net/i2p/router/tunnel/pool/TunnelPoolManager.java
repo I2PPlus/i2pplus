@@ -55,9 +55,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final int _defaultMaxPctTunnels;
     private final int _startupMaxPctTunnels;
     /**
-     *  Wall-clock ms at which some pool last published an incomplete LeaseSet,
-     *  or 0 if never. Used as a decaying signal rather than a live counter so a
-     *  pool destroyed while incomplete cannot leave the relief stuck on.
+     * Wall-clock ms at which some pool last published an incomplete LeaseSet,
+     * or 0 if never. Used as a decaying signal rather than a live counter so a
+     * pool destroyed while incomplete cannot leave the relief stuck on.
      */
     private volatile long _lastIncompleteLeaseSet;
     /** Wall-clock ms of the last participation-share log, for rate limiting. */
@@ -207,14 +207,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Pick a tunnel from a destination's inbound pool to carry a test round's
-     *  reply, preferring partners that have demonstrated they work.  Used only
-     *  by the test cycle; the live data path keeps using the uniform-random
-     *  {@link #selectInboundTunnel(Hash)}.
+     * Pick a tunnel from a destination's inbound pool to carry a test round's
+     * reply, preferring partners that have demonstrated they work.  Used only
+     * by the test cycle; the live data path keeps using the uniform-random
+     * {@link #selectInboundTunnel(Hash)}.
      *
      * @param destination if null, an exploratory tunnel is used
      * @return null if none
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public TunnelInfo selectInboundTunnelForTest(Hash destination) {
         if (destination == null) {return selectInboundTunnel();}
@@ -225,13 +225,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Pick a tunnel from a destination's outbound pool to carry a test
-     *  round's outbound leg, preferring partners that have demonstrated they
-     *  work.  Test cycle only.
+     * Pick a tunnel from a destination's outbound pool to carry a test
+     * round's outbound leg, preferring partners that have demonstrated they
+     * work.  Test cycle only.
      *
      * @param destination if null, an exploratory tunnel is used
      * @return null if none
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public TunnelInfo selectOutboundTunnelForTest(Hash destination) {
         if (destination == null) {return selectOutboundTunnel();}
@@ -415,14 +415,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Use to verify a tunnel pool is alive.
-     *  During bootstrap (no GOOD tunnels yet), counts any valid tunnel
-     *  (including UNTESTED) so the sidebar shows ok immediately after
-     *  the first build.  Once the pool has established GOOD tunnels,
-     *  enforces a strict GOOD-only count — UNTESTED tunnels alone
-     *  don't keep the indicator green.
-     *  @return number of outbound client tunnels for the given destination
-     *  @since 0.7.11
+     * Use to verify a tunnel pool is alive.
+     * During bootstrap (no GOOD tunnels yet), counts any valid tunnel
+     * (including UNTESTED) so the sidebar shows ok immediately after
+     * the first build.  Once the pool has established GOOD tunnels,
+     * enforces a strict GOOD-only count — UNTESTED tunnels alone
+     * don't keep the indicator green.
+     * @return number of outbound client tunnels for the given destination
+     * @since 0.7.11
      */
     public int getOutboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientOutboundPools.get(destination);
@@ -435,13 +435,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Use to verify a tunnel pool is alive.
-     *  During bootstrap (no GOOD tunnels yet), counts any valid tunnel
-     *  (including UNTESTED) so the sidebar shows ok immediately after
-     *  the first build.  Once the pool has established GOOD tunnels,
-     *  enforces a strict GOOD-only count.
-     *  @return number of inbound client tunnels for the given destination
-     *  @since 0.9.68+
+     * Use to verify a tunnel pool is alive.
+     * During bootstrap (no GOOD tunnels yet), counts any valid tunnel
+     * (including UNTESTED) so the sidebar shows ok immediately after
+     * the first build.  Once the pool has established GOOD tunnels,
+     * enforces a strict GOOD-only count.
+     * @return number of inbound client tunnels for the given destination
+     * @since 0.9.68+
      */
     public int getInboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientInboundPools.get(destination);
@@ -454,10 +454,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Get USABLE inbound client tunnel count for a specific destination.
-     *  @param destination the client hash
-     *  @return number of GOOD (tested+passed, non-failed, non-expired) tunnels
-     *  @since 0.9.69+
+     * Get USABLE inbound client tunnel count for a specific destination.
+     * @param destination the client hash
+     * @return number of GOOD (tested+passed, non-failed, non-expired) tunnels
+     * @since 0.9.69+
      */
     public int getUsableInboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientInboundPools.get(destination);
@@ -466,10 +466,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Get USABLE outbound client tunnel count for a specific destination.
-     *  @param destination the client hash
-     *  @return number of GOOD (tested+passed, non-failed, non-expired) tunnels
-     *  @since 0.9.69+
+     * Get USABLE outbound client tunnel count for a specific destination.
+     * @param destination the client hash
+     * @return number of GOOD (tested+passed, non-failed, non-expired) tunnels
+     * @since 0.9.69+
      */
     public int getUsableOutboundClientTunnelCount(Hash destination)  {
         TunnelPool pool = _clientOutboundPools.get(destination);
@@ -484,10 +484,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public long getLastParticipatingExpiration() { return _context.tunnelDispatcher().getLastParticipatingExpiration(); }
 
     /**
-     *  Get the share ratio of participating tunnels.
-     *  @return (number of part. tunnels) / (estimated total number of hops in our expl.+client tunnels)
-     *  We just use length setting, not variance, for speed
-     *  @since 0.7.10
+     * Get the share ratio of participating tunnels.
+     * @return (number of part. tunnels) / (estimated total number of hops in our expl.+client tunnels)
+     * We just use length setting, not variance, for speed
+     * @since 0.7.10
      */
     public double getShareRatio() {
         int part = getParticipatingCount();
@@ -504,10 +504,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Check if a tunnel is valid and belongs to the client's pool.
-     *  @param client destination hash
-     *  @param tunnel tunnel to validate
-     *  @return true if the tunnel is valid and belongs to the client's pool
+     * Check if a tunnel is valid and belongs to the client's pool.
+     * @param client destination hash
+     * @param tunnel tunnel to validate
+     * @return true if the tunnel is valid and belongs to the client's pool
      */
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel) {
         if (tunnel.getTunnelFailed()) {return false;}
@@ -532,9 +532,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public void setOutboundSettings(TunnelPoolSettings settings) { _outboundExploratory.setSettings(settings); }
 
     /**
-     *  Get settings for a client's inbound tunnel pool.
-     *  @param client destination hash
-     *  @return settings or null if not found
+     * Get settings for a client's inbound tunnel pool.
+     * @param client destination hash
+     * @return settings or null if not found
      */
     public TunnelPoolSettings getInboundSettings(Hash client) {
         TunnelPool pool = _clientInboundPools.get(client);
@@ -543,9 +543,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Get settings for a client's outbound tunnel pool.
-     *  @param client destination hash
-     *  @return settings or null if not found
+     * Get settings for a client's outbound tunnel pool.
+     * @param client destination hash
+     * @return settings or null if not found
      */
     public TunnelPoolSettings getOutboundSettings(Hash client) {
         TunnelPool pool = _clientOutboundPools.get(client);
@@ -554,16 +554,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Set settings for a client's inbound tunnel pool.
-     *  @param client destination hash
+     * Set settings for a client's inbound tunnel pool.
+     * @param client destination hash
      */
     public void setInboundSettings(Hash client, TunnelPoolSettings settings) {
         setSettings(_clientInboundPools, client, settings);
     }
 
     /**
-     *  Set settings for a client's outbound tunnel pool.
-     *  @param client destination hash
+     * Set settings for a client's outbound tunnel pool.
+     * @param client destination hash
      */
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings) {
         setSettings(_clientOutboundPools, client, settings);
@@ -591,9 +591,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Used only at session startup.
-     *  Do not use to change settings.
-     *  Do not use for aliased destinations; use addAlias().
+     * Used only at session startup.
+     * Do not use to change settings.
+     * Do not use for aliased destinations; use addAlias().
      */
     public void buildTunnels(Destination client, ClientTunnelSettings settings) {
         Hash dest = client.calculateHash();
@@ -634,11 +634,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Add another destination to the same tunnels.
-     *  Must have same encryption key and a different signing key.
-     *  @throws IllegalArgumentException if not
-     *  @return success
-     *  @since 0.9.21
+     * Add another destination to the same tunnels.
+     * Must have same encryption key and a different signing key.
+     * @throws IllegalArgumentException if not
+     * @return success
+     * @since 0.9.21
      */
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient) {
         if (dest.getSigningPublicKey().equals(existingClient.getSigningPublicKey())) {
@@ -682,8 +682,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Remove a destination for the same tunnels as another.
-     *  @since 0.9.21
+     * Remove a destination for the same tunnels as another.
+     * @since 0.9.21
      */
     public void removeAlias(Destination dest) {
         Hash h = dest.calculateHash();
@@ -719,9 +719,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static final int DEFAULT_OUTBOUND_STARTUP_RETRIES = 5;
 
     /**
-     *  Conditionally start the outbound pool after the inbound pool has at least one tunnel.
-     *  Retries every 2s; after max attempts, starts unconditionally.
-     *  This prevents "Destination not reachable (no LeaseSet found)" at startup.
+     * Conditionally start the outbound pool after the inbound pool has at least one tunnel.
+     * Retries every 2s; after max attempts, starts unconditionally.
+     * This prevents "Destination not reachable (no LeaseSet found)" at startup.
      */
     private static class ConditionalOutboundStartup extends SimpleTimer2.TimedEvent {
         private final TunnelPool outbound;
@@ -774,22 +774,22 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Must be called AFTER deregistration by the client manager.
+     * Must be called AFTER deregistration by the client manager.
      *
-     *  @since 0.9.48
+     * @since 0.9.48
      */
     public void removeTunnels(Destination dest) {
         removeTunnels(dest.calculateHash());
     }
 
     /**
-     *  This will be called twice, once by the inbound and once by the outbound pool.
-     *  Synched with buildTunnels() above.
+     * This will be called twice, once by the inbound and once by the outbound pool.
+     * Synched with buildTunnels() above.
      *
-     *  Must be called AFTER deregistration by the client manager.
+     * Must be called AFTER deregistration by the client manager.
      *
-     *  Uses delayed cleanup to allow tunnels to continue operating
-     *  until they naturally expire. Prevents pool collapse when client disconnects.
+     * Uses delayed cleanup to allow tunnels to continue operating
+     * until they naturally expire. Prevents pool collapse when client disconnects.
      * @param destination the destination
      */
     public synchronized void removeTunnels(Hash destination) {
@@ -967,27 +967,27 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Background reachability probe over the peers a client pool would
-     *  provisionally use as a first hop.
+     * Background reachability probe over the peers a client pool would
+     * provisionally use as a first hop.
      *
-     *  <p>Selection samples a bounded slice of the high-capacity tier
-     *  ({@link net.i2p.router.peermanager.ProfileOrganizer#maxCandidateSample}),
-     *  so an unconnectable peer can sit in that tier indefinitely and be drawn
-     *  into builds that fail at the first hop. Nothing else records
-     *  reachability cheaply: send-failure strikes only accumulate on tunnels
-     *  already in use, and a peer that never answers produces no reply to
-     *  blame. This job supplies that missing signal by pre-connecting to a
-     *  bounded slice and letting
-     *  {@code TunnelPeerSelector.PreConnectFailJob} demote whatever fails.
+     * <p>Selection samples a bounded slice of the high-capacity tier
+     * ({@link net.i2p.router.peermanager.ProfileOrganizer#maxCandidateSample}),
+     * so an unconnectable peer can sit in that tier indefinitely and be drawn
+     * into builds that fail at the first hop. Nothing else records
+     * reachability cheaply: send-failure strikes only accumulate on tunnels
+     * already in use, and a peer that never answers produces no reply to
+     * blame. This job supplies that missing signal by pre-connecting to a
+     * bounded slice and letting
+     * {@code TunnelPeerSelector.PreConnectFailJob} demote whatever fails.
      *
-     *  <p>Sweep, pause, sweep: each pass probes at most
-     *  {@link #PROBE_BATCH} peers and then waits {@link #PROBE_INTERVAL}, so the
-     *  whole tier is covered over several passes without a burst of outbound
-     *  traffic. Only peers we are not already talking to are probed — a peer
-     *  with recent successful traffic has fresh evidence already, and probing
-     *  it would spend the budget re-confirming what we know.
+     * <p>Sweep, pause, sweep: each pass probes at most
+     * {@link #PROBE_BATCH} peers and then waits {@link #PROBE_INTERVAL}, so the
+     * whole tier is covered over several passes without a burst of outbound
+     * traffic. Only peers we are not already talking to are probed — a peer
+     * with recent successful traffic has fresh evidence already, and probing
+     * it would spend the budget re-confirming what we know.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static class FastTierProbeJob extends JobImpl {
         private final TunnelPoolManager _mgr;
@@ -998,18 +998,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         /** Wait before the first pass, so startup builds are not competing with it. */
         private static final long STARTUP_DELAY = 5 * 60 * 1000L;
         /**
-         *  A peer we have built through this recently needs no probe.
+         * A peer we have built through this recently needs no probe.
          *
-         *  <p>Deliberately generous, and comfortably wider than one build cycle:
-         *  a peer we are already successfully sending through is confirmed for
-         *  as long as that keeps being true, so the only peers worth spending
-         *  budget on are the idle ones the sweep exists to find. A narrow window
-         *  would re-probe the peers working hardest, which is where the budget
-         *  is least useful.
+         * <p>Deliberately generous, and comfortably wider than one build cycle:
+         * a peer we are already successfully sending through is confirmed for
+         * as long as that keeps being true, so the only peers worth spending
+         * budget on are the idle ones the sweep exists to find. A narrow window
+         * would re-probe the peers working hardest, which is where the budget
+         * is least useful.
          *
-         *  <p>Widening this constant reduces coverage — it widens the skip set,
-         *  not the probe set — so it is only safe because the test below keys on
-         *  our own send successes rather than on incidental inbound traffic.
+         * <p>Widening this constant reduces coverage — it widens the skip set,
+         * not the probe set — so it is only safe because the test below keys on
+         * our own send successes rather than on incidental inbound traffic.
          */
         static final long RECENTLY_ACTIVE_MS = 10 * 60 * 1000L;
 
@@ -1020,13 +1020,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         /** Peers per pass once the fast window has passed. */
         static final int PROBE_BATCH_STEADY = 128;
         /**
-         *  Wall clock wanted for one pass over the whole tier, while young.
+         * Wall clock wanted for one pass over the whole tier, while young.
          *
-         *  <p>A young router has measured nothing, so the tier is unpopulated
-         *  with first-hop latency and nothing can be judged until it is covered.
-         *  Twenty minutes reaches a full sweep quickly without turning the probe
-         *  into a sustained flood: probes carry establishment cost and the
-         *  failures that come with it, and those failures are what demote peers.
+         * <p>A young router has measured nothing, so the tier is unpopulated
+         * with first-hop latency and nothing can be judged until it is covered.
+         * Twenty minutes reaches a full sweep quickly without turning the probe
+         * into a sustained flood: probes carry establishment cost and the
+         * failures that come with it, and those failures are what demote peers.
          */
         static final long FAST_PASS_TARGET_MS = 20 * 60 * 1000L;
         /** Wall clock wanted for one pass once steady. Matches the original cadence. */
@@ -1037,8 +1037,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         static final long MAX_PROBE_INTERVAL_MS = 15 * 60 * 1000L;
 
         /**
-         *  Peers to probe per pass, based on how much of the profile is still
-         *  unmeasured.
+         * Peers to probe per pass, based on how much of the profile is still
+         * unmeasured.
          *
          * @param uptimeMs router uptime in ms
          * @return the batch size for the next pass
@@ -1049,14 +1049,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         /**
-         *  Gap between passes, derived from the tier size so a full sweep takes a
-         *  predictable wall-clock time whatever the population.
+         * Gap between passes, derived from the tier size so a full sweep takes a
+         * predictable wall-clock time whatever the population.
          *
-         *  <p>Computing the interval from {@code targetPass * batch / bandSize}
-         *  rather than fixing it means the same cadence holds at 200 peers or
-         *  2000: a small tier is not over-probed and a large one is not starved.
-         *  Clamped so a very small or very large band cannot produce an absurd
-         *  interval.
+         * <p>Computing the interval from {@code targetPass * batch / bandSize}
+         * rather than fixing it means the same cadence holds at 200 peers or
+         * 2000: a small tier is not over-probed and a large one is not starved.
+         * Clamped so a very small or very large band cannot produce an absurd
+         * interval.
          *
          * @param uptimeMs router uptime in ms
          * @param bandSize how many peers are selectable, non-negative
@@ -1113,16 +1113,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         /**
-         *  Probe one bounded slice of the provisionally-selectable fast tier.
+         * Probe one bounded slice of the provisionally-selectable fast tier.
          *
-         *  <p>Selection asks for {@code howMany} candidates through the same
-         *  {@code selectHighCapacityPeers} entry point, so the population here is
-         *  exactly the one a client pool would draw from — not the whole tier.
-         *  Asking for more than the batch size and then filtering by recent
-         *  activity is what makes the pass fill its budget instead of coming
-         *  back nearly empty once busy peers are excluded.
+         * <p>Selection asks for {@code howMany} candidates through the same
+         * {@code selectHighCapacityPeers} entry point, so the population here is
+         * exactly the one a client pool would draw from — not the whole tier.
+         * Asking for more than the batch size and then filtering by recent
+         * activity is what makes the pass fill its budget instead of coming
+         * back nearly empty once busy peers are excluded.
          *
-         *  @return how many peers were actually probed
+         * @return how many peers were actually probed
          */
         private int probeBatch(int batch) {
             RouterContext ctx = getContext();
@@ -1150,14 +1150,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         /**
-         *  Whether this peer has traffic recent enough that probing adds nothing.
+         * Whether this peer has traffic recent enough that probing adds nothing.
          *
-         *  <p>Only our own successful sends count. Inbound hearing is deliberately
-         *  ignored: {@link PeerProfile#getLastHeardFrom} advances on DHT replies,
-         *  explore traffic and transit acknowledgments, so it marks most of the
-         *  tier as recently active without ever showing the peer works as a first
-         *  hop. Keying on it made a 2 minute window behave like a much longer one
-         *  and left a pass probing 33 peers out of a 128 budget.
+         * <p>Only our own successful sends count. Inbound hearing is deliberately
+         * ignored: {@link PeerProfile#getLastHeardFrom} advances on DHT replies,
+         * explore traffic and transit acknowledgments, so it marks most of the
+         * tier as recently active without ever showing the peer works as a first
+         * hop. Keying on it made a 2 minute window behave like a much longer one
+         * and left a pass probing 33 peers out of a 128 budget.
          *
          * @param ctx the router context
          * @param peer the peer to test
@@ -1173,8 +1173,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Tuned by Tuner — min 2, max 8
-     *  @return number of build handler threads
+     * Tuned by Tuner — min 2, max 8
+     * @return number of build handler threads
      */
     public static int getBuildHandlerThreads() { return _numHandlerThreads; }
     /**
@@ -1186,18 +1186,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Actual number of running BuildHandler threads.
-     *  May differ from {@link #getBuildHandlerThreads()} if threads
-     *  were interrupted or failed to start.
-     *  @return current build handler thread count
-     *  @since 0.9.70+
+     * Actual number of running BuildHandler threads.
+     * May differ from {@link #getBuildHandlerThreads()} if threads
+     * were interrupted or failed to start.
+     * @return current build handler thread count
+     * @since 0.9.70+
      */
     public int getBuildHandlerThreadCount() { return _handlerThreads.size(); }
 
     /**
-     *  Dynamically adjust BuildHandler thread count to match target.
-     *  @param target desired thread count
-     *  @since 0.9.70+
+     * Dynamically adjust BuildHandler thread count to match target.
+     * @param target desired thread count
+     * @since 0.9.70+
      */
     public synchronized void adjustBuildHandlerThreads(int target) {
         if (_isShutdown || _handlerThreads == null)
@@ -1651,7 +1651,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Cannot be restarted
+     * Cannot be restarted
      */
     public synchronized void shutdown() {
         _handler.shutdown(_handlerThreads.size());
@@ -1726,19 +1726,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Poke the build executor to build more tunnels.
+     * Poke the build executor to build more tunnels.
      */
     void tunnelFailed() { _executor.repoll(); }
 
     /**
-     *  Report a data-phase send failure for a specific outbound tunnel.
-     *  Routes to the correct pool (client or exploratory) based on the
-     *  tunnel's destination, so the pool can increment the failure counter
-     *  and trigger replacement builds immediately.
+     * Report a data-phase send failure for a specific outbound tunnel.
+     * Routes to the correct pool (client or exploratory) based on the
+     * tunnel's destination, so the pool can increment the failure counter
+     * and trigger replacement builds immediately.
      *
-     *  @param tunnel the outbound tunnel that carried the failed message
-     *  @param status the I2CP MessageStatusMessage failure code
-     *  @since 0.9.71+
+     * @param tunnel the outbound tunnel that carried the failed message
+     * @param status the I2CP MessageStatusMessage failure code
+     * @since 0.9.71+
      */
     @Override
      public void reportSendFailure(TunnelInfo tunnel, int status) {
@@ -1849,19 +1849,19 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  For reliability reasons, don't allow a peer in more than x% of
-     *  client and exploratory tunnels.
+     * For reliability reasons, don't allow a peer in more than x% of
+     * client and exploratory tunnels.
      *
-     *  This also will prevent a single huge-capacity (or malicious) peer from
-     *  taking all the tunnels in the network (although it would be nice to limit
-     *  the % of total network tunnels to 10% or so, but that appears to be
-     *  too low to set as a default here... much lower than 33% will push client
-     *  tunnels out of the fast tier into high cap or beyond...)
+     * This also will prevent a single huge-capacity (or malicious) peer from
+     * taking all the tunnels in the network (although it would be nice to limit
+     * the % of total network tunnels to 10% or so, but that appears to be
+     * too low to set as a default here... much lower than 33% will push client
+     * tunnels out of the fast tier into high cap or beyond...)
      *
-     *  Possible improvement - restrict based on count per IP, or IP block,
-     *  to slightly increase costs of collusion
+     * Possible improvement - restrict based on count per IP, or IP block,
+     * to slightly increase costs of collusion
      *
-     *  @return Set of peers that should not be allowed in another tunnel
+     * @return Set of peers that should not be allowed in another tunnel
      */
     public Set<Hash> selectPeersInTooManyTunnels() {
         Set<Hash> rv = new HashSet<>();
@@ -1909,20 +1909,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  The relief factor actually applied to the participation share, combining
-     *  the three inputs. Pure, so the precedence between them is testable
-     *  without a router.
+     * The relief factor actually applied to the participation share, combining
+     * the three inputs. Pure, so the precedence between them is testable
+     * without a router.
      *
-     *  <p>Firewalled and incomplete-LeaseSet are both hard signals that the first
-     *  hop pool is too narrow, and either one takes full relief regardless of
-     *  what aggregate build success says. Build success is the weakest signal
-     *  and only applies when neither of the others fires.
+     * <p>Firewalled and incomplete-LeaseSet are both hard signals that the first
+     * hop pool is too narrow, and either one takes full relief regardless of
+     * what aggregate build success says. Build success is the weakest signal
+     * and only applies when neither of the others fires.
      *
-     *  @param firewalled whether the router is firewalled
-     *  @param buildSuccess build success ratio, or 1.0 when unknown
-     *  @param incompleteLeaseSet whether a pool published an incomplete LeaseSet recently
-     *  @return the multiplier to apply
-     *  @since 0.9.71+
+     * @param firewalled whether the router is firewalled
+     * @param buildSuccess build success ratio, or 1.0 when unknown
+     * @param incompleteLeaseSet whether a pool published an incomplete LeaseSet recently
+     * @return the multiplier to apply
+     * @since 0.9.71+
      */
     static double participationRelief(boolean firewalled, double buildSuccess,
                                       boolean incompleteLeaseSet) {
@@ -1932,18 +1932,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Graded relief factor for the per-peer participation share, from tunnel
-     *  build success. Pure: no state, no clock, no logging.
+     * Graded relief factor for the per-peer participation share, from tunnel
+     * build success. Pure: no state, no clock, no logging.
      *
-     *  <p>Returns 1.0 (no relief) at or above {@link #SHARE_RELIEF_TOP} and 2.0
-     *  (the pre-existing full relief) at or below {@link #SHARE_RELIEF_BOTTOM},
-     *  interpolating linearly between. A build success of 1.0 is passed in when
-     *  no data exists yet, which yields no relief and so leaves the startup
-     *  thresholds to govern.
+     * <p>Returns 1.0 (no relief) at or above {@link #SHARE_RELIEF_TOP} and 2.0
+     * (the pre-existing full relief) at or below {@link #SHARE_RELIEF_BOTTOM},
+     * interpolating linearly between. A build success of 1.0 is passed in when
+     * no data exists yet, which yields no relief and so leaves the startup
+     * thresholds to govern.
      *
-     *  @param buildSuccess build success ratio in [0,1], or 1.0 when unknown
-     *  @return the multiplier to apply to the participation share percentage
-     *  @since 0.9.71+
+     * @param buildSuccess build success ratio in [0,1], or 1.0 when unknown
+     * @return the multiplier to apply to the participation share percentage
+     * @since 0.9.71+
      */
     static double buildSuccessRelief(double buildSuccess) {
         if (buildSuccess >= SHARE_RELIEF_TOP) {return 1.0;}
@@ -1953,13 +1953,13 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Apply a relief factor to a participation share percentage, never returning
-     *  less than the un-relieved base.
+     * Apply a relief factor to a participation share percentage, never returning
+     * less than the un-relieved base.
      *
-     *  @param basePct the un-relieved percentage
-     *  @param relief the multiplier from {@link #buildSuccessRelief}
-     *  @return the percentage to compare peer shares against
-     *  @since 0.9.71+
+     * @param basePct the un-relieved percentage
+     * @param relief the multiplier from {@link #buildSuccessRelief}
+     * @return the percentage to compare peer shares against
+     * @since 0.9.71+
      */
     static int participationShareLimit(int basePct, double relief) {
         int scaled = (int) Math.round(basePct * relief);
@@ -1967,46 +1967,46 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Whether a peer's share of tunnel participation exceeds the limit. Pure.
+     * Whether a peer's share of tunnel participation exceeds the limit. Pure.
      *
-     *  <p>The {@code +1} on both numerator and denominator is the historical
-     *  form. It equals the unsmoothed integer share exactly whenever the total
-     *  is at least ten times the count, and inflates it for smaller pools (a
-     *  peer alone in a pool of two reads 66, not 50). It is reproduced here
-     *  rather than tidied because changing it would change which peers are
-     *  excluded. Integer division truncates, so the comparison is against the
-     *  truncated percentage -- callers relying on an exact boundary must
-     *  respect that.
+     * <p>The {@code +1} on both numerator and denominator is the historical
+     * form. It equals the unsmoothed integer share exactly whenever the total
+     * is at least ten times the count, and inflates it for smaller pools (a
+     * peer alone in a pool of two reads 66, not 50). It is reproduced here
+     * rather than tidied because changing it would change which peers are
+     * excluded. Integer division truncates, so the comparison is against the
+     * truncated percentage -- callers relying on an exact boundary must
+     * respect that.
      *
-     *  @param count tunnels this peer participates in
-     *  @param total tunnels across all peers in this class
-     *  @param maxPct the limit returned by {@link #participationShareLimit}
-     *  @return whether the peer should be excluded
-     *  @since 0.9.71+
+     * @param count tunnels this peer participates in
+     * @param total tunnels across all peers in this class
+     * @param maxPct the limit returned by {@link #participationShareLimit}
+     * @return whether the peer should be excluded
+     * @since 0.9.71+
      */
     static boolean exceedsShareLimit(int count, int total, int maxPct) {
         return (count + 1) * 100 / (total + 1) > maxPct;
     }
 
     /**
-     *  Note that some pool published an incomplete LeaseSet, which is a direct
-     *  signal that first-hop supply is too narrow to fill one.
+     * Note that some pool published an incomplete LeaseSet, which is a direct
+     * signal that first-hop supply is too narrow to fill one.
      *
-     *  @param now current time in ms
-     *  @since 0.9.71+
+     * @param now current time in ms
+     * @since 0.9.71+
      */
     void noteIncompleteLeaseSet(long now) {
         _lastIncompleteLeaseSet = now;
     }
 
     /**
-     *  Whether an incomplete-LeaseSet observation is recent enough to still
-     *  justify relaxing the participation share. Decays on its own, so it cannot
-     *  be left stuck on by a pool that was destroyed mid-renewal.
+     * Whether an incomplete-LeaseSet observation is recent enough to still
+     * justify relaxing the participation share. Decays on its own, so it cannot
+     * be left stuck on by a pool that was destroyed mid-renewal.
      *
-     *  @param now current time in ms
-     *  @return whether relief applies
-     *  @since 0.9.71+
+     * @param now current time in ms
+     * @return whether relief applies
+     * @since 0.9.71+
      */
     boolean hasRecentIncompleteLeaseSet(long now) {
         long seen = _lastIncompleteLeaseSet;
@@ -2014,9 +2014,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Rate-limited log of the participation share limit actually in force, so a
-     *  surprising exclusion count can be read against the reason for it instead
-     *  of guessed at.
+     * Rate-limited log of the participation share limit actually in force, so a
+     * surprising exclusion count can be read against the reason for it instead
+     * of guessed at.
      */
     private void logShareLimit(long now, int basePct, int max, double buildSuccess,
                                boolean firewalled, boolean incompleteLeaseSet, int excluded) {
@@ -2056,32 +2056,32 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  For TunnelRenderer in router console
-     *  @return non-null
+     * For TunnelRenderer in router console
+     * @return non-null
      */
     public TunnelPool getInboundExploratoryPool() {
         return _inboundExploratory;
     }
 
     /**
-     *  For TunnelRenderer in router console
-     *  @return non-null
+     * For TunnelRenderer in router console
+     * @return non-null
      */
     public TunnelPool getOutboundExploratoryPool() {
         return _outboundExploratory;
     }
 
     /**
-     *  @return pool or null
-     *  @since 0.9.34
+     * @return pool or null
+     * @since 0.9.34
      */
     public TunnelPool getInboundPool(Hash client) {
         return _clientInboundPools.get(client);
     }
 
     /**
-     *  @return pool or null
-     *  @since 0.9.34
+     * @return pool or null
+     * @since 0.9.34
      */
     public TunnelPool getOutboundPool(Hash client) {
         return _clientOutboundPools.get(client);
@@ -2204,12 +2204,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Fail all outbound tunnels with this peer as first hop,
-     *  and all inbound tunnels with this peer as the last hop,
-     *  baecause we can't contact it any more.
-     *  This is most likely to be triggered by an outbound tunnel.
+     * Fail all outbound tunnels with this peer as first hop,
+     * and all inbound tunnels with this peer as the last hop,
+     * baecause we can't contact it any more.
+     * This is most likely to be triggered by an outbound tunnel.
      *
-     *  @since 0.8.13
+     * @since 0.8.13
      */
     public void fail(Hash peer) {
         failTunnelsWithFirstHop(_outboundExploratory, peer);
@@ -2223,9 +2223,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Fail all (outbound) tunnels with this peer as first hop (not counting us)
+     * Fail all (outbound) tunnels with this peer as first hop (not counting us)
      *
-     *  @since 0.8.13
+     * @since 0.8.13
      */
     private void failTunnelsWithFirstHop(TunnelPool pool, Hash peer) {
         List<TunnelInfo> toFail = new ArrayList<>();
@@ -2244,9 +2244,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     *  Fail all (inbound) tunnels with this peer as last hop (not counting us)
+     * Fail all (inbound) tunnels with this peer as last hop (not counting us)
      *
-     *  @since 0.8.13
+     * @since 0.8.13
      */
     private void failTunnelsWithLastHop(TunnelPool pool, Hash peer) {
         List<TunnelInfo> toFail = new ArrayList<>();

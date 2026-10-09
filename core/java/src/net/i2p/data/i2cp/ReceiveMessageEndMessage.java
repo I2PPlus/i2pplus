@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -59,7 +58,7 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Session ID for this message.
+     * Session ID for this message.
      *
      * @param id 0-65535
      */

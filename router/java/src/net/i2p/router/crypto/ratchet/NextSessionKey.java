@@ -91,7 +91,7 @@ class NextSessionKey extends PublicKey {
     }
 
     /**
-     *  @since 0.9.46
+     * @since 0.9.46
      */
     @Override
     public boolean equals(Object obj) {

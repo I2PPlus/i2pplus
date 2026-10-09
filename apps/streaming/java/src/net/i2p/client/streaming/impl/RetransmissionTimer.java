@@ -14,14 +14,12 @@ import net.i2p.util.SimpleTimer2;
  * cannot hold up an unrelated connection's handshake or keepalive. Each shard
  * keeps {@code SimpleTimer2}'s two worker threads, so a single long-running
  * event blocks only its own workers.
- *
- * @since 0.9
  */
 public class RetransmissionTimer {
 
     /** Number of independent timer shards. Connections are assigned
-     *  round-robin, halving the chance that concurrent connections share a
-     *  timer queue. */
+     * round-robin, halving the chance that concurrent connections share a
+     * timer queue. */
     private static final int SHARDS = 2;
     private final SimpleTimer2[] _shards;
     private final AtomicInteger _counter = new AtomicInteger();
@@ -30,7 +28,6 @@ public class RetransmissionTimer {
      * New timer with dedicated SimpleTimer2 shards.
      * @param ctx the application context
      * @param name used for the timer thread names
-     * @since 0.9
      */
     RetransmissionTimer(I2PAppContext ctx, String name) {
         _shards = new SimpleTimer2[SHARDS];
@@ -45,7 +42,6 @@ public class RetransmissionTimer {
      * gets a stable shard for its lifetime. No caller depends on two calls
      * returning the same instance.
      * @return one of the dedicated SimpleTimer2 instances
-     * @since 0.9
      */
     public SimpleTimer2 getSharedTimer() {
         return _shards[(_counter.getAndIncrement() & 0x7fffffff) % SHARDS];
@@ -63,7 +59,6 @@ public class RetransmissionTimer {
 
     /**
      * Stop all dedicated timers.
-     * @since 0.9
      */
     public void stop() {
         for (SimpleTimer2 t : _shards) {t.stop();}

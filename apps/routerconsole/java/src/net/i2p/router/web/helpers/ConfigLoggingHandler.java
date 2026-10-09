@@ -10,7 +10,6 @@ import net.i2p.util.LogManager;
 /**
  * Handler to deal with form submissions from the logging config form and act
  * upon the values.
- *
  */
 public class ConfigLoggingHandler extends FormHandler {
     /** Handler for logging configuration form submissions. */
@@ -59,18 +58,18 @@ public class ConfigLoggingHandler extends FormHandler {
     }
 
     /**
-     *  Set whether to compress log files.
-     *  @param foo ignored
-     *  @since 0.9.57
+     * Set whether to compress log files.
+     * @param foo ignored
+     * @since 0.9.57
      */
     public void setLogcompress(String foo) {
         _logCompress = true;
     }
 
     /**
-     *  Set a new class name for log level override.
-     *  @param s the class name
-     *  @since 0.8.1
+     * Set a new class name for log level override.
+     * @param s the class name
+     * @since 0.8.1
      */
     public void setNewlogclass(String s) {
         if (s != null && !s.isEmpty())
@@ -78,9 +77,9 @@ public class ConfigLoggingHandler extends FormHandler {
     }
 
     /**
-     *  Set the log level for a new class override.
-     *  @param s the log level
-     *  @since 0.8.1
+     * Set the log level for a new class override.
+     * @param s the log level
+     * @since 0.8.1
      */
     public void setNewloglevel(String s) {
         if (s != null)
@@ -90,7 +89,6 @@ public class ConfigLoggingHandler extends FormHandler {
     /**
      * The user made changes to the config and wants to save them, so
      * lets go ahead and do so.
-     *
      */
     private void saveChanges() {
         boolean shouldSave = false;

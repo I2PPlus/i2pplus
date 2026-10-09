@@ -309,9 +309,9 @@ class UDPAddress {
     public String getHost() { return _host; }
 
     /**
-     *  As of 0.9.32, will NOT resolve hostnames.
+     * As of 0.9.32, will NOT resolve hostnames.
      *
-     *  @return InetAddress or null
+     * @return InetAddress or null
      */
     InetAddress getHostAddress() {
         if (_hostAddress == null)
@@ -323,7 +323,7 @@ class UDPAddress {
     public int getPort() { return _port; }
 
     /**
-     *  @return shouldn't be null but will be if invalid
+     * @return shouldn't be null but will be if invalid
      */
     byte[] getIntroKey() { return _introKey; }
 
@@ -331,9 +331,9 @@ class UDPAddress {
     int getIntroducerCount() { return (_introTags == null ? 0 : _introTags.length); }
 
     /**
-     *  As of 0.9.32, will NOT resolve hostnames.
+     * As of 0.9.32, will NOT resolve hostnames.
      *
-     *  @return null if invalid or for SSU2
+     * @return null if invalid or for SSU2
      */
     InetAddress getIntroducerHost(int i) {
         if (_introAddresses == null)
@@ -346,9 +346,9 @@ class UDPAddress {
     }
 
     /**
-     *  Port number for the given introducer.
+     * Port number for the given introducer.
      *
-     *  @return greater than zero or zero for SSU2
+     * @return greater than zero or zero for SSU2
      */
     int getIntroducerPort(int i) {
         if (_introPorts == null || i < 0 || i >= getIntroducerCount())
@@ -357,9 +357,9 @@ class UDPAddress {
     }
 
     /**
-     *  Introducer key for the given introducer.
+     * Introducer key for the given introducer.
      *
-     *  @return null if no keys or for SSU2
+     * @return null if no keys or for SSU2
      */
     byte[] getIntroducerKey(int i) {
         if (_introKeys == null || i < 0 || i >= getIntroducerCount())
@@ -368,9 +368,9 @@ class UDPAddress {
     }
 
     /**
-     *  Introducer tag for the given introducer.
+     * Introducer tag for the given introducer.
      *
-     *  @return greater than zero
+     * @return greater than zero
      */
     long getIntroducerTag(int i) {
         if (_introTags == null || i < 0 || i >= getIntroducerCount())
@@ -379,10 +379,10 @@ class UDPAddress {
     }
 
     /**
-     *  Expiration for the given introducer.
+     * Expiration for the given introducer.
      *
-     *  @return ms since epoch, zero if unset
-     *  @since 0.9.30
+     * @return ms since epoch, zero if unset
+     * @since 0.9.30
      */
     long getIntroducerExpiration(int i) {
         if (_introExps == null || i < 0 || i >= getIntroducerCount())
@@ -391,9 +391,9 @@ class UDPAddress {
     }
 
     /**
-     *  Introducer hash for the given introducer.
+     * Introducer hash for the given introducer.
      *
-     *  @since 0.9.55
+     * @since 0.9.55
      */
     Hash getIntroducerHash(int i) {
         if (_introHashes == null || i < 0 || i >= getIntroducerCount())
@@ -402,18 +402,18 @@ class UDPAddress {
     }
 
     /**
-     *  @since 0.9.55
+     * @since 0.9.55
      */
     boolean isIPv4() { return _isIPv4; }
 
     /**
-     *  @since 0.9.55
+     * @since 0.9.55
      */
     boolean isIPv6() { return _isIPv6; }
 
     /**
-     *  @return 0 if unset or invalid; recitified via MTU.rectify()
-     *  @since 0.9.2
+     * @return 0 if unset or invalid; recitified via MTU.rectify()
+     * @since 0.9.2
      */
     int getMTU() {
         return _mtu;
@@ -449,9 +449,7 @@ class UDPAddress {
     // cache copied from Addresses.java but caching InetAddress instead of byte[]
 
     /**
-     *  Textual IP to InetAddress, because InetAddress.getByName() is slow.
-     *
-     *  @since IPv6
+     * Textual IP to InetAddress, because InetAddress.getByName() is slow.
      */
     private static final Map<String, InetAddress> _inetAddressCache;
 
@@ -466,16 +464,15 @@ class UDPAddress {
     }
 
     /**
-     *  Caching version of InetAddress.getByName(host), which is slow.
-     *  Caches numeric IPs only.
-     *  As of 0.9.32, will NOT resolve hostnames.
+     * Caching version of InetAddress.getByName(host), which is slow.
+     * Caches numeric IPs only.
+     * As of 0.9.32, will NOT resolve hostnames.
      *
-     *  Unlike InetAddress.getByName(), we do NOT allow numeric IPs
-     *  of the form d.d.d, d.d, or d, as these are almost certainly mistakes.
+     * Unlike InetAddress.getByName(), we do NOT allow numeric IPs
+     * of the form d.d.d, d.d, or d, as these are almost certainly mistakes.
      *
-     *  @param host literal IPv4 or IPv6; if null or hostname, returns null
-     *  @return InetAddress or null
-     *  @since IPv6
+     * @param host literal IPv4 or IPv6; if null or hostname, returns null
+     * @return InetAddress or null
      */
     private static InetAddress getByName(String host) {
         if (host == null)

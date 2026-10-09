@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -17,24 +16,24 @@ import net.i2p.I2PAppContext;
  *
  * <p>What the interface defines:</p>
  * <ul>
- *   <li>{@link #getRoutingKey(Hash)} maps a hash to a routing key. The
- *       transformation, and whether it is a function of changing network-wide
- *       "mod data", is up to the implementation - this interface says nothing
- *       about reversibility, caching, or cost.</li>
- *   <li>{@link #getLastChanged()} reports when that mod data last changed, so
- *       a caller holding a previously derived key can tell whether it is
- *       stale and needs to be regenerated.</li>
- *   <li>{@link #getInstance()} returns the generator of the global context,
- *       which is null unless that context is a router context.</li>
+ * <li>{@link #getRoutingKey(Hash)} maps a hash to a routing key. The
+ * transformation, and whether it is a function of changing network-wide
+ * "mod data", is up to the implementation - this interface says nothing
+ * about reversibility, caching, or cost.</li>
+ * <li>{@link #getLastChanged()} reports when that mod data last changed, so
+ * a caller holding a previously derived key can tell whether it is
+ * stale and needs to be regenerated.</li>
+ * <li>{@link #getInstance()} returns the generator of the global context,
+ * which is null unless that context is a router context.</li>
  * </ul>
  *
  * <p>Availability:</p>
  * <ul>
- *   <li>Not available in a plain I2PAppContext - I2PAppContext.routingKeyGenerator()
- *       returns null there, because only a router holds a network database.</li>
- *   <li>The implementation is {@code net.i2p.data.router.RouterKeyGenerator},
- *       which appends the current GMT date to the hash and hashes the result,
- *       rotating daily at midnight GMT.</li>
+ * <li>Not available in a plain I2PAppContext - I2PAppContext.routingKeyGenerator()
+ * returns null there, because only a router holds a network database.</li>
+ * <li>The implementation is {@code net.i2p.data.router.RouterKeyGenerator},
+ * which appends the current GMT date to the hash and hashes the result,
+ * rotating daily at midnight GMT.</li>
  * </ul>
  *
  * @since 0.9.16 moved from net.i2p.data.RoutingKeyGenerator
@@ -51,22 +50,22 @@ public abstract class RoutingKeyGenerator {
     }
 
     /**
-     *  The version of the current (today's) mod data.
-     *  Use to determine if the routing key should be regenerated.
+     * The version of the current (today's) mod data.
+     * Use to determine if the routing key should be regenerated.
      *
-     *  @return the last changed
+     * @return the last changed
      */
     public abstract long getLastChanged();
 
     /**
      * Routing key for a key.
      *
-     *  The result depends on the mod data of the implementing generator, so
-     *  compare getLastChanged() before reusing a previously derived key.
+     * The result depends on the mod data of the implementing generator, so
+     * compare getLastChanged() before reusing a previously derived key.
      *
-     *  @param origKey non-null
-     *  @return the routing key
-     *  @throws IllegalArgumentException if origKey is null
+     * @param origKey non-null
+     * @return the routing key
+     * @throws IllegalArgumentException if origKey is null
      */
     public abstract Hash getRoutingKey(Hash origKey);
 }

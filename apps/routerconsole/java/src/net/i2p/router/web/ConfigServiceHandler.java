@@ -23,7 +23,6 @@ import net.i2p.i2ptunnel.TunnelControllerGroup;
 /**
  * Handler to deal with form submissions from the service config form and act
  * upon the values.
- *
  */
 public class ConfigServiceHandler extends FormHandler {
 
@@ -36,23 +35,23 @@ public class ConfigServiceHandler extends FormHandler {
     public ConfigServiceHandler() {}
 
     /**
-     *  Register two shutdown hooks, one to rekey and/or tell the wrapper we are stopping,
-     *  and a final one to tell the wrapper we are stopped.
+     * Register two shutdown hooks, one to rekey and/or tell the wrapper we are stopping,
+     * and a final one to tell the wrapper we are stopped.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     private void registerWrapperNotifier(int code, boolean rekey) {
         registerWrapperNotifier(_context, code, rekey);
     }
 
     /**
-     *  Register two shutdown hooks, one to rekey and/or tell the wrapper we are stopping,
-     *  and a final one to tell the wrapper we are stopped.
+     * Register two shutdown hooks, one to rekey and/or tell the wrapper we are stopping,
+     * and a final one to tell the wrapper we are stopped.
      *
-     *  @param ctx the router context
-     *  @param code the exit code
-     *  @param rekey whether to rekey
-     *  @since 0.8.8
+     * @param ctx the router context
+     * @param code the exit code
+     * @param rekey whether to rekey
+     * @since 0.8.8
      */
     public static void registerWrapperNotifier(RouterContext ctx, int code, boolean rekey) {
         Runnable task = new UpdateWrapperOrRekeyTask(rekey, ctx.hasWrapper());
@@ -64,7 +63,7 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     *  Rekey and/or tell the wrapper we are stopping,
+     * Rekey and/or tell the wrapper we are stopping,
      */
     private static class UpdateWrapperOrRekeyTask implements Runnable {
         private final boolean _rekey;
@@ -105,16 +104,16 @@ public class ConfigServiceHandler extends FormHandler {
         }
 
         /**
-         *  Make them all look the same since the hooks are stored in a set
-         *  and we don't want dups
+         * Make them all look the same since the hooks are stored in a set
+         * and we don't want dups
          * @return whether h code is present
          */
         @Override
         public int hashCode() {return HASHCODE;}
 
         /**
-         *  Make them all look the same since the hooks are stored in a set
-         *  and we don't want dups
+         * Make them all look the same since the hooks are stored in a set
+         * and we don't want dups
          */
         @Override
         public boolean equals(Object o) {
@@ -123,9 +122,9 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     *  Tell the wrapper we are stopped.
+     * Tell the wrapper we are stopped.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     private static class FinalWrapperTask implements Runnable {
         private final int _exitCode;
@@ -143,27 +142,27 @@ public class ConfigServiceHandler extends FormHandler {
         }
 
         /**
-         *  Make them all look the same since the hooks are stored in a set
-         *  and we don't want dups
+         * Make them all look the same since the hooks are stored in a set
+         * and we don't want dups
          * @return whether h code is present
          */
         @Override
         public int hashCode() {return HASHCODE;}
 
         /**
-         *  Make them all look the same since the hooks are stored in a set
-         *  and we don't want dups
+         * Make them all look the same since the hooks are stored in a set
+         * and we don't want dups
          */
         @Override
         public boolean equals(Object o) {return (o != null) && (o instanceof FinalWrapperTask);}
     }
 
     /**
-     *  Register a handler for signals,
-     *  so we can handle HUP from the wrapper (wrapper 3.2.0 or higher)
+     * Register a handler for signals,
+     * so we can handle HUP from the wrapper (wrapper 3.2.0 or higher)
      *
-     *  @param ctx the router context
-     *  @since 0.8.13
+     * @param ctx the router context
+     * @since 0.8.13
      */
     synchronized static void registerSignalHandler(RouterContext ctx) {
         if (ctx.hasWrapper() && wrapperListener == null) {
@@ -176,9 +175,9 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     *  Unregister the handler for signals
+     * Unregister the handler for signals
      *
-     *  @since 0.8.13
+     * @since 0.8.13
      */
     public synchronized static void unregisterSignalHandler() {
         if (wrapperListener != null) {
@@ -188,18 +187,18 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     *  Should we show the cancel button?
+     * Should we show the cancel button?
      *
-     *  @return true if graceful shutdown is in progress
-     *  @since 0.9.19
+     * @return true if graceful shutdown is in progress
+     * @since 0.9.19
      */
     public boolean shouldShowCancelGraceful() {return _context.router().gracefulShutdownInProgress();}
 
     /**
-     *  Should we show the systray controls?
+     * Should we show the systray controls?
      *
-     *  @return true if the systray should be shown
-     *  @since 0.9.26
+     * @return true if the systray should be shown
+     * @since 0.9.26
      */
     public boolean shouldShowSystray() {
         try {
@@ -213,18 +212,18 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     *  Is the systray enabled?
+     * Is the systray enabled?
      *
-     *  @return true if the systray is enabled
-     *  @since 0.9.26
+     * @return true if the systray is enabled
+     * @since 0.9.26
      */
     public boolean isSystrayEnabled() {return RouterConsoleRunner.isSystrayEnabled(_context);}
 
     /**
-     *  Get the console URL.
+     * Get the console URL.
      *
-     *  @return the console URL
-     *  @since 0.9.33
+     * @return the console URL
+     * @since 0.9.33
      */
     public String getConsoleURL() {return _context.portMapper().getConsoleURL();}
 
@@ -302,11 +301,11 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     *  Does not necessarily exist.
+     * Does not necessarily exist.
      *
-     *  @param ctx the I2P app context
-     *  @return non-null, doesn't necessarily exist
-     *  @since 0.9.1, public since 0.9.27, moved from LogsHelper in 0.9.33
+     * @param ctx the I2P app context
+     * @return non-null, doesn't necessarily exist
+     * @since 0.9.1, public since 0.9.27, moved from LogsHelper in 0.9.33
      */
     public static File wrapperLogFile(I2PAppContext ctx) {
         File f = null;
@@ -348,11 +347,11 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     *  Run the consolidated service management script (service.ps1).
-     *  The legacy EnableI2P+Service.bat / DisableI2P+Service.bat shims were
-     *  removed; the Enable/Disable actions now live in service.ps1.
+     * Run the consolidated service management script (service.ps1).
+     * The legacy EnableI2P+Service.bat / DisableI2P+Service.bat shims were
+     * removed; the Enable/Disable actions now live in service.ps1.
      *
-     *  @since 0.9.74
+     * @since 0.9.74
      */
     private void execServiceAction(String action) throws IOException {
         String baseDir = _context.getProperty("i2p.dir.base");
@@ -400,9 +399,9 @@ public class ConfigServiceHandler extends FormHandler {
     }
 
     /**
-     *  Enable/disable and start/stop systray
+     * Enable/disable and start/stop systray
      *
-     *  @since 0.9.26
+     * @since 0.9.26
      */
     private void changeSystray(boolean enable) {
         ClientAppManager mgr = _context.clientAppManager();

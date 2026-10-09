@@ -41,11 +41,11 @@ class PacketBuilder2 {
     private final UDPTransport _transport;
 
     /**
-     *  Per-thread pool of payload block objects and the reusable block list.
-     *  Blocks are used only within buildPacket() for serialization and are never
-     *  retained after the packet is built, so each thread can clear and refill
-     *  its own pool across calls without synchronization.
-     *  @since 0.9.71+
+     * Per-thread pool of payload block objects and the reusable block list.
+     * Blocks are used only within buildPacket() for serialization and are never
+     * retained after the packet is built, so each thread can clear and refill
+     * its own pool across calls without synchronization.
+     * @since 0.9.71+
      */
     private static final class BlockPool {
         /** The list passed to writePayload(); cleared and refilled per call */
@@ -99,10 +99,10 @@ class PacketBuilder2 {
     };
 
     /**
-     *  For debugging and stats only - does not go out on the wire.
-     *  These are chosen to be higher than the highest I2NP message type,
-     *  as a data packet is set to the underlying I2NP message type.
-     *  SSU2 packet type constant for debugging/stats.
+     * For debugging and stats only - does not go out on the wire.
+     * These are chosen to be higher than the highest I2NP message type,
+     * as a data packet is set to the underlying I2NP message type.
+     * SSU2 packet type constant for debugging/stats.
      */
     static final int TYPE_FIRST = 62;
     /** SSU2 packet type constant for debugging/stats */
@@ -158,9 +158,9 @@ class PacketBuilder2 {
     private static final int DATETIME_SEND_FREQUENCY = 256;
 
     /**
-     *  Class for passing multiple fragments to buildPacket()
+     * Class for passing multiple fragments to buildPacket()
      *
-     *  @since 0.9.16, moved from the removed SSU1 PacketBuilder
+     * @since 0.9.16, moved from the removed SSU1 PacketBuilder
      */
     public static class Fragment {
         /**
@@ -193,10 +193,10 @@ class PacketBuilder2 {
     }
 
     /**
-     *  No state, all methods are thread-safe.
+     * No state, all methods are thread-safe.
      *
-     *  @param ctx router context for logging, randomness, and router identity
-     *  @param transport may be null for unit testing only
+     * @param ctx router context for logging, randomness, and router identity
+     * @param transport may be null for unit testing only
      */
     public PacketBuilder2(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -206,16 +206,16 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Will a packet to 'peer' that already has 'numFragments' fragments
-     *  totalling 'curDataSize' bytes fit another fragment?
-     *  This includes the 3 byte block overhead, but NOT the 5 byte followon fragment overhead.
+     * Will a packet to 'peer' that already has 'numFragments' fragments
+     * totalling 'curDataSize' bytes fit another fragment?
+     * This includes the 3 byte block overhead, but NOT the 5 byte followon fragment overhead.
      *
-     *  This doesn't leave anything for acks or anything else.
+     * This doesn't leave anything for acks or anything else.
      *
-     *  @param peer supplies the MTU and address family for the overhead
-     *  @param numFragments &gt;= 1
-     *  @param curDataSize bytes of body already committed by those fragments
-     *  @return max additional fragment size
+     * @param peer supplies the MTU and address family for the overhead
+     * @param numFragments &gt;= 1
+     * @param curDataSize bytes of body already committed by those fragments
+     * @return max additional fragment size
      */
     public static int getMaxAdditionalFragmentSize(PeerState peer, int numFragments, int curDataSize) {
         int available = peer.getMTU() - curDataSize;
@@ -230,28 +230,28 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Total bytes a single fragment contributes to a data packet body:
-     *  the fragment payload plus the per-block header, plus the extra
-     *  5-byte overhead carried by follow-on fragments (fragment number and
-     *  message ID).
+     * Total bytes a single fragment contributes to a data packet body:
+     * the fragment payload plus the per-block header, plus the extra
+     * 5-byte overhead carried by follow-on fragments (fragment number and
+     * message ID).
      *
-     *  @param fragmentSize size of the fragment payload from
-     *                      {@link OutboundMessageState#fragmentSize(int)}
-     *  @param fragment {@code 0} for the first fragment, &gt; 0 for follow-ons
-     *  @return total body bytes for this fragment
-     *  @since 0.9.71+
+     * @param fragmentSize size of the fragment payload from
+     * {@link OutboundMessageState#fragmentSize(int)}
+     * @param fragment {@code 0} for the first fragment, &gt; 0 for follow-ons
+     * @return total body bytes for this fragment
+     * @since 0.9.71+
      */
     static int fragmentDataSize(int fragmentSize, int fragment) {
         return fragmentSize + SSU2Payload.BLOCK_HEADER_SIZE + (fragment > 0 ? 5 : 0);
     }
 
     /**
-     *  Size of the IP + UDP headers for a data packet to a peer.
-     *  This excludes the SSU2 short packet header and MAC.
+     * Size of the IP + UDP headers for a data packet to a peer.
+     * This excludes the SSU2 short packet header and MAC.
      *
-     *  @param isIPv6 {@code true} for IPv6 peers
-     *  @return combined IP and UDP header size in bytes
-     *  @since 0.9.71+
+     * @param isIPv6 {@code true} for IPv6 peers
+     * @return combined IP and UDP header size in bytes
+     * @since 0.9.71+
      */
     static int dataPacketHeaderSize(boolean isIPv6) {
         if (isIPv6)
@@ -260,13 +260,13 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Minimum fixed overhead (IP + UDP + short packet header + MAC) of a
-     *  data packet, used to compute how much room remains for acks and body
-     *  blocks at the peer's MTU.
+     * Minimum fixed overhead (IP + UDP + short packet header + MAC) of a
+     * data packet, used to compute how much room remains for acks and body
+     * blocks at the peer's MTU.
      *
-     *  @param isIPv6 {@code true} for IPv6 peers
-     *  @return {@link #MIN_IPV6_DATA_PACKET_OVERHEAD} or {@link #MIN_DATA_PACKET_OVERHEAD}
-     *  @since 0.9.71+
+     * @param isIPv6 {@code true} for IPv6 peers
+     * @return {@link #MIN_IPV6_DATA_PACKET_OVERHEAD} or {@link #MIN_DATA_PACKET_OVERHEAD}
+     * @since 0.9.71+
      */
     static int dataPacketOverhead(boolean isIPv6) {
         if (isIPv6)
@@ -275,12 +275,12 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Sum of the on-wire lengths of the non-fragment blocks to be appended
-     *  to a data packet, used to budget ack space.
+     * Sum of the on-wire lengths of the non-fragment blocks to be appended
+     * to a data packet, used to budget ack space.
      *
-     *  @param otherBlocks may be {@code null} or empty
-     *  @return total block lengths, {@code 0} when null/empty
-     *  @since 0.9.71+
+     * @param otherBlocks may be {@code null} or empty
+     * @return total block lengths, {@code 0} when null/empty
+     * @since 0.9.71+
      */
     static int otherBlocksSize(List<Block> otherBlocks) {
         if (otherBlocks == null)
@@ -293,64 +293,64 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Whether enough ack space remains to fit at least one ack range.
-     *  An ack block needs its own block header plus a 5-byte first range.
+     * Whether enough ack space remains to fit at least one ack range.
+     * An ack block needs its own block header plus a 5-byte first range.
      *
-     *  @param availableForAcks bytes free after the payload fragments
-     *  @return {@code true} when an ack block can be emitted
-     *  @since 0.9.71+
+     * @param availableForAcks bytes free after the payload fragments
+     * @return {@code true} when an ack block can be emitted
+     * @since 0.9.71+
      */
     static boolean hasRoomForAckBlock(int availableForAcks) {
         return availableForAcks >= SSU2Payload.BLOCK_HEADER_SIZE + 5;
     }
 
     /**
-     *  Maximum number of ack ranges that fit in the free space, capped at
-     *  {@link #ABSOLUTE_MAX_ACK_RANGES}. Each additional range costs 2 bytes.
+     * Maximum number of ack ranges that fit in the free space, capped at
+     * {@link #ABSOLUTE_MAX_ACK_RANGES}. Each additional range costs 2 bytes.
      *
-     *  @param availableForAcks bytes free after the payload fragments
-     *  @return range count, &gt;= 0
-     *  @since 0.9.71+
+     * @param availableForAcks bytes free after the payload fragments
+     * @return range count, &gt;= 0
+     * @since 0.9.71+
      */
     static int maxAckRanges(int availableForAcks) {
         return Math.min((availableForAcks - (SSU2Payload.BLOCK_HEADER_SIZE + 5)) / 2, ABSOLUTE_MAX_ACK_RANGES);
     }
 
     /**
-     *  Whether a message is carried as a single I2NP block: the first
-     *  fragment is also the only fragment.
+     * Whether a message is carried as a single I2NP block: the first
+     * fragment is also the only fragment.
      *
-     *  @param fragment fragment number within the message ({@code 0} = first)
-     *  @param count total fragments in the message
-     *  @return {@code true} for a one-fragment message
-     *  @since 0.9.71+
+     * @param fragment fragment number within the message ({@code 0} = first)
+     * @param count total fragments in the message
+     * @return {@code true} for a one-fragment message
+     * @since 0.9.71+
      */
     static boolean isSingleFragment(int fragment, int count) {
         return fragment == 0 && count == 1;
     }
 
     /**
-     *  Whether this packet number falls on the boundary where a DateTime
-     *  block should be emitted ({@code packetNumber % DATETIME_SEND_FREQUENCY
-     *  == DATETIME_SEND_FREQUENCY - 1}). Kept cheap via a power-of-two mask.
+     * Whether this packet number falls on the boundary where a DateTime
+     * block should be emitted ({@code packetNumber % DATETIME_SEND_FREQUENCY
+     * == DATETIME_SEND_FREQUENCY - 1}). Kept cheap via a power-of-two mask.
      *
-     *  @param packetNumber the packet's sequence number
-     *  @return {@code true} to send a DateTime block
-     *  @since 0.9.71+
+     * @param packetNumber the packet's sequence number
+     * @return {@code true} to send a DateTime block
+     * @since 0.9.71+
      */
     static boolean isDateTimeSendPeriod(long packetNumber) {
         return (packetNumber & (DATETIME_SEND_FREQUENCY - 1)) == DATETIME_SEND_FREQUENCY - 1;
     }
 
     /**
-     *  Whether a 7-byte DateTime block still fits in the packet at the
-     *  peer's MTU, counting the short header and MAC that surround the body.
+     * Whether a 7-byte DateTime block still fits in the packet at the
+     * peer's MTU, counting the short header and MAC that surround the body.
      *
-     *  @param ipHeaderSize IP + UDP header size for this peer
-     *  @param sizeWritten bytes written to the body so far
-     *  @param mtu the peer's current MTU
-     *  @return {@code true} when the block fits
-     *  @since 0.9.71+
+     * @param ipHeaderSize IP + UDP header size for this peer
+     * @param sizeWritten bytes written to the body so far
+     * @param mtu the peer's current MTU
+     * @return {@code true} when the block fits
+     * @since 0.9.71+
      */
     static boolean fitsDateTimeBlock(int ipHeaderSize, int sizeWritten, int mtu) {
         return ipHeaderSize + SHORT_HEADER_SIZE + sizeWritten + 7 + MAC_LEN <= mtu;
@@ -376,26 +376,26 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Build a packet from multiple fragments.
+     * Build a packet from multiple fragments.
      *
-     *  @param fragments one or more fragments of a message, in fragment order
-     *  @param peer the destination session
-     *  @return ready to send packet, non-null
-     *  @throws IOException if peer is dead
+     * @param fragments one or more fragments of a message, in fragment order
+     * @param peer the destination session
+     * @return ready to send packet, non-null
+     * @throws IOException if peer is dead
      */
     public UDPPacket buildPacket(List<Fragment> fragments, PeerState2 peer) throws IOException {
         return buildPacket(fragments, null, peer);
     }
 
     /**
-     *  Build a packet from multiple fragments and optional other blocks.
+     * Build a packet from multiple fragments and optional other blocks.
      *
-     *  @param fragments one or more fragments of a message, in fragment order;
-     *                  empty for an ack-only packet
-     *  @param otherBlocks may be null or empty
-     *  @param peer the destination session
-     *  @return ready to send packet, non-null
-     *  @throws IOException if peer is dead
+     * @param fragments one or more fragments of a message, in fragment order;
+     * empty for an ack-only packet
+     * @param otherBlocks may be null or empty
+     * @param peer the destination session
+     * @return ready to send packet, non-null
+     * @throws IOException if peer is dead
      */
     public UDPPacket buildPacket(List<Fragment> fragments, List<Block> otherBlocks, SSU2Sender peer) throws IOException {
         // calculate data size
@@ -586,26 +586,26 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Build the ack packet.
-     *  An ack packet is just a data packet with no data.
-     *  See buildPacket() for format.
+     * Build the ack packet.
+     * An ack packet is just a data packet with no data.
+     * See buildPacket() for format.
      *
-     *  @param peer the destination session
-     *  @return ready to send packet, non-null
-     *  @throws IOException if peer is dead
+     * @param peer the destination session
+     * @return ready to send packet, non-null
+     * @throws IOException if peer is dead
      */
     public UDPPacket buildACK(PeerState2 peer) throws IOException {
         return buildPacket(Collections.<Fragment>emptyList(), peer);
     }
 
     /**
-     *  Build a data packet with a termination block.
-     *  This will also include acks, a new token block, and padding.
+     * Build a data packet with a termination block.
+     * This will also include acks, a new token block, and padding.
      *
-     *  @param reason termination reason code (0-255), also recorded on the peer
-     *  @param peer the session being destroyed
-     *  @return ready to send packet, non-null
-     *  @throws IOException if peer is dead
+     * @param reason termination reason code (0-255), also recorded on the peer
+     * @param peer the session being destroyed
+     * @return ready to send packet, non-null
+     * @throws IOException if peer is dead
      */
     public UDPPacket buildSessionDestroyPacket(int reason, SSU2Sender peer) throws IOException {
             if (_log.shouldDebug()) {
@@ -701,9 +701,9 @@ class PacketBuilder2 {
      * Build a new Retry packet for the given peer, encrypting it
      * as necessary.
      *
-     *  @param state the inbound establish state carrying conn IDs and keys
-     *  @param terminationCode 0 normally, nonzero to send termination block
-     *  @return ready to send packet, non-null
+     * @param state the inbound establish state carrying conn IDs and keys
+     * @param terminationCode 0 normally, nonzero to send termination block
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildRetryPacket(InboundEstablishState2 state, int terminationCode) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
@@ -729,14 +729,14 @@ class PacketBuilder2 {
      * Build a new Retry packet with a termination code, for a rejection
      * direct from the EstablishmentManager. No InboundEstablishState2 required.
      *
-     *  @param to remote address family, supplying the IP and port for the address block
-     *  @param toAddr socket address to send the packet to
-     *  @param destID destination connection ID, or 0 when unknown
-     *  @param srcID our connection ID for the reply
-     *  @param version SSU2 protocol version of the peer
-     *  @param terminationCode must be greater than zero
-     *  @return ready to send packet, non-null
-     *  @since 0.9.57
+     * @param to remote address family, supplying the IP and port for the address block
+     * @param toAddr socket address to send the packet to
+     * @param destID destination connection ID, or 0 when unknown
+     * @param srcID our connection ID for the reply
+     * @param version SSU2 protocol version of the peer
+     * @param terminationCode must be greater than zero
+     * @return ready to send packet, non-null
+     * @since 0.9.57
      */
     public UDPPacket buildRetryPacket(RemoteHostId to, SocketAddress toAddr, long destID, long srcID, int version, int terminationCode) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
@@ -761,9 +761,9 @@ class PacketBuilder2 {
      * the establish state via confirmedPacketsSent(), and the state will
      * transmit them via the new PeerState2.
      *
-     *  @param state the outbound establish state carrying conn IDs, keys, and MTU
-     *  @param ourInfo the RouterInfo to send, gzipped here if it shrinks
-     *  @return ready to send packets, non-null
+     * @param state the outbound establish state carrying conn IDs, keys, and MTU
+     * @param ourInfo the RouterInfo to send, gzipped here if it shrinks
+     * @return ready to send packets, non-null
      */
     public UDPPacket[] buildSessionConfirmedPackets(OutboundEstablishState2 state, RouterInfo ourInfo) {
         boolean gzip = false;
@@ -838,7 +838,6 @@ class PacketBuilder2 {
 
     /**
      * Build all the fragmented SessionConfirmed packets
-     *
      */
     private UDPPacket[] buildSessionConfirmedPackets(OutboundEstablishState2 state, SSU2Payload.RIBlock block) {
         UDPPacket packet0 = buildShortPacketHeader(state.getSendConnID(), 0, SESSION_CONFIRMED_FLAG_BYTE);
@@ -996,14 +995,14 @@ class PacketBuilder2 {
      * or a rejection by Bob.
      * In-session, message 4.
      *
-     *  @param charlieHash fake hash (all zeros) if rejected by bob
-     *  @param code peer test response code from Charlie, or Bob's rejection code
-     *  @param signedData flag + signed data
-     *  @param riBlock to include, may be null
-     *  @param alice the destination session
-     *  @return ready to send packet, non-null
-     *  @throws IOException if peer is dead
-     *  @since 0.9.57
+     * @param charlieHash fake hash (all zeros) if rejected by bob
+     * @param code peer test response code from Charlie, or Bob's rejection code
+     * @param signedData flag + signed data
+     * @param riBlock to include, may be null
+     * @param alice the destination session
+     * @return ready to send packet, non-null
+     * @throws IOException if peer is dead
+     * @since 0.9.57
      */
     public UDPPacket buildPeerTestToAlice(int code, Hash charlieHash, byte[] signedData, Block riBlock, PeerState2 alice) throws IOException {
         Block block = new SSU2Payload.PeerTestBlock(4, code, charlieHash, signedData);
@@ -1055,12 +1054,12 @@ class PacketBuilder2 {
      * Build a packet as Bob to Charlie to help test Alice.
      * In-session, message 2.
      *
-     *  @param aliceHash hash of Alice's transient key, or all zeros if Alice is unknown
-     *  @param signedData flag + signed data
-     *  @param riBlock to include, may be null
-     *  @param charlie the destination session
-     *  @return ready to send packet, non-null
-     *  @throws IOException if peer is dead
+     * @param aliceHash hash of Alice's transient key, or all zeros if Alice is unknown
+     * @param signedData flag + signed data
+     * @param riBlock to include, may be null
+     * @param charlie the destination session
+     * @return ready to send packet, non-null
+     * @throws IOException if peer is dead
      */
     public UDPPacket buildPeerTestToCharlie(Hash aliceHash, byte[] signedData, Block riBlock, PeerState2 charlie) throws IOException {
         Block block = new SSU2Payload.PeerTestBlock(2, 0, aliceHash, signedData);
@@ -1096,13 +1095,13 @@ class PacketBuilder2 {
     }
 
     /**
-     *  From Alice to Bob.
-     *  In-session.
+     * From Alice to Bob.
+     * In-session.
      *
-     *  @param signedData flag + signed data
-     *  @param bob the destination session
-     *  @return non-null
-     *  @throws IOException if peer is dead
+     * @param signedData flag + signed data
+     * @param bob the destination session
+     * @return non-null
+     * @throws IOException if peer is dead
      */
     UDPPacket buildRelayRequest(byte[] signedData, PeerState2 bob) throws IOException {
         Block block = new SSU2Payload.RelayRequestBlock(signedData);
@@ -1113,14 +1112,14 @@ class PacketBuilder2 {
     }
 
     /**
-     *  From Bob to Charlie.
-     *  In-session.
+     * From Bob to Charlie.
+     * In-session.
      *
-     *  @param signedData flag + alice hash + signed data
-     *  @param riBlock to include, may be null
-     *  @param charlie the destination session
-     *  @return non-null
-     *  @throws IOException if peer is dead
+     * @param signedData flag + alice hash + signed data
+     * @param riBlock to include, may be null
+     * @param charlie the destination session
+     * @return non-null
+     * @throws IOException if peer is dead
      */
     UDPPacket buildRelayIntro(byte[] signedData, Block riBlock, PeerState2 charlie) throws IOException {
         Block block = new SSU2Payload.RelayIntroBlock(signedData);
@@ -1139,13 +1138,13 @@ class PacketBuilder2 {
     }
 
     /**
-     *  From Charlie to Bob or Bob to Alice.
-     *  In-session.
+     * From Charlie to Bob or Bob to Alice.
+     * In-session.
      *
-     *  @param signedData flag + response code + signed data + optional token
-     *  @param state Alice or Bob
-     *  @return non-null
-     *  @throws IOException if peer is dead
+     * @param signedData flag + response code + signed data + optional token
+     * @param state Alice or Bob
+     * @return non-null
+     * @throws IOException if peer is dead
      */
     UDPPacket buildRelayResponse(byte[] signedData, PeerState2 state) throws IOException {
         Block block = new SSU2Payload.RelayResponseBlock(signedData);
@@ -1155,15 +1154,15 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Out-of-session, containing a RelayResponse block.
+     * Out-of-session, containing a RelayResponse block.
      *
-     *  @param to the peer's IP address
-     *  @param port the peer's port
-     *  @param introKey static introduction key used to encrypt the packet
-     *  @param sendID our connection ID
-     *  @param rcvID the peer's connection ID
-     *  @param signedData flag + response code + signed data + optional token
-     *  @return ready to send packet, non-null
+     * @param to the peer's IP address
+     * @param port the peer's port
+     * @param introKey static introduction key used to encrypt the packet
+     * @param sendID our connection ID
+     * @param rcvID the peer's connection ID
+     * @param signedData flag + response code + signed data + optional token
+     * @return ready to send packet, non-null
      */
     public UDPPacket buildHolePunch(InetAddress to, int port, SessionKey introKey,
                                     long sendID, long rcvID, byte[] signedData) {
@@ -1184,8 +1183,8 @@ class PacketBuilder2 {
     }
 
     /**
-     *  @param pktNum 0 - 0xFFFFFFFF
-     *  @return a packet with the first 32 bytes filled in
+     * @param pktNum 0 - 0xFFFFFFFF
+     * @return a packet with the first 32 bytes filled in
      */
     private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token, int version) {
         UDPPacket packet = buildShortPacketHeader(destID, pktNum, type);
@@ -1198,8 +1197,8 @@ class PacketBuilder2 {
     }
 
     /**
-     *  @param pktNum 0 - 0xFFFFFFFF
-     *  @return a packet with the first 16 bytes filled in
+     * @param pktNum 0 - 0xFFFFFFFF
+     * @return a packet with the first 16 bytes filled in
      */
     private UDPPacket buildShortPacketHeader(long destID, long pktNum, byte type) {
         UDPPacket packet = UDPPacket.acquire(_context, false);
@@ -1218,7 +1217,7 @@ class PacketBuilder2 {
     }
 
     /**
-     *  @param packet containing only 32 byte header
+     * @param packet containing only 32 byte header
      */
     private void encryptSessionRequest(UDPPacket packet, HandshakeState state,
                                        byte[] hdrKey1, byte[] hdrKey2, boolean needIntro) {
@@ -1271,8 +1270,8 @@ class PacketBuilder2 {
     }
 
     /**
-     *  @param packet containing only 32 byte header
-     *  @param token may be null
+     * @param packet containing only 32 byte header
+     * @param token may be null
      */
     private void encryptSessionCreated(UDPPacket packet, HandshakeState state,
                                        byte[] hdrKey1, byte[] hdrKey2, long relayTag,
@@ -1328,8 +1327,8 @@ class PacketBuilder2 {
     }
 
     /**
-     *  @param packet containing only 32 byte header
-     *  @param terminationCode 0 normally, nonzero to send termination block
+     * @param packet containing only 32 byte header
+     * @param terminationCode 0 normally, nonzero to send termination block
      */
     private void encryptRetry(UDPPacket packet, byte[] chachaKey, long n,
                               byte[] hdrKey1, byte[] hdrKey2, byte[] ip, int port,
@@ -1344,11 +1343,11 @@ class PacketBuilder2 {
     }
 
     /**
-     *  Also used for hole punch with a relay request block.
-     *  Also used for retry with (usually) ptBlock = null
+     * Also used for hole punch with a relay request block.
+     * Also used for retry with (usually) ptBlock = null
      *
-     *  @param packet containing only 32 byte header
-     *  @param ptBlock Peer Test or Relay Request block. Null for retry.
+     * @param packet containing only 32 byte header
+     * @param ptBlock Peer Test or Relay Request block. Null for retry.
      */
     private void encryptPeerTest(UDPPacket packet, byte[] chachaKey, long n,
                                  byte[] hdrKey1, byte[] hdrKey2, byte[] ip, int port,
@@ -1395,7 +1394,7 @@ class PacketBuilder2 {
     }
 
     /**
-     *  @param packet containing only 32 byte header
+     * @param packet containing only 32 byte header
      */
     private void encryptTokenRequest(UDPPacket packet, byte[] chachaKey, long n,
                                      byte[] hdrKey1, byte[] hdrKey2) {
@@ -1434,12 +1433,12 @@ class PacketBuilder2 {
     }
 
     /**
-     *  If numFragments larger than 1, we do NOT encrypt the header here,
-     *  that's caller's responsibility.
+     * If numFragments larger than 1, we do NOT encrypt the header here,
+     * that's caller's responsibility.
      *
-     *  @param packet containing only 16 byte header
-     *  @param addPadding force-add exactly this size a padding block, for jumbo only
-     *  @param token may be null
+     * @param packet containing only 16 byte header
+     * @param addPadding force-add exactly this size a padding block, for jumbo only
+     * @param token may be null
      */
     private void encryptSessionConfirmed(UDPPacket packet, HandshakeState state, int mtu, int numFragments, int addPadding,
                                          boolean isIPv6, byte[] hdrKey1, byte[] hdrKey2,
@@ -1499,9 +1498,9 @@ class PacketBuilder2 {
     }
 
     /**
-     *  @param packet containing 16 byte header and all data with
-     *                length set to the end of the data.
-     *                This will extend the length by 16 for the MAC.
+     * @param packet containing 16 byte header and all data with
+     * length set to the end of the data.
+     * This will extend the length by 16 for the MAC.
      */
     private void encryptDataPacket(UDPPacket packet, CipherState chacha, long n,
                                     byte[] hdrKey1, byte[] hdrKey2) {
@@ -1533,24 +1532,24 @@ class PacketBuilder2 {
     }
 
     /**
-     *  @param len current length of the packet including IP/UDP header
-     *             (unless header subtracted from max)
-     *             If len == 0 ensure 8 byte block minimum
-     *  @param max max length of the packet
-     *  @return null if no room
+     * @param len current length of the packet including IP/UDP header
+     * (unless header subtracted from max)
+     * If len == 0 ensure 8 byte block minimum
+     * @param max max length of the packet
+     * @return null if no room
      */
     private Block getPadding(int len, int max) {
         return getPadding(len, max, PADDING_MAX);
     }
 
     /**
-     *  @param len current length of the packet including IP/UDP header
-     *             (unless header subtracted from max)
-     *             If len == 0 ensure 8 byte block minimum
-     *  @param max max length of the packet
-     *  @param maxPadding max length of the padding (not including block header)
-     *  @return null if no room
-     *  @since 0.9.56
+     * @param len current length of the packet including IP/UDP header
+     * (unless header subtracted from max)
+     * If len == 0 ensure 8 byte block minimum
+     * @param max max length of the packet
+     * @param maxPadding max length of the padding (not including block header)
+     * @return null if no room
+     * @since 0.9.56
      */
     private Block getPadding(int len, int max, int maxPadding) {
         int maxpadlen = Math.min(max - len, maxPadding) - SSU2Payload.BLOCK_HEADER_SIZE;

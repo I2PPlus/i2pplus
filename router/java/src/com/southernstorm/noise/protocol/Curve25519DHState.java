@@ -156,8 +156,8 @@ class Curve25519DHState implements DHState, Cloneable {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.44
+     * I2P
+     * @since 0.9.44
      */
     @Override
     public boolean hasEncodedPublicKey() {
@@ -165,8 +165,8 @@ class Curve25519DHState implements DHState, Cloneable {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.44
+     * I2P
+     * @since 0.9.44
      */
     @Override
     public void getEncodedPublicKey(byte[] key, int offset) {
@@ -195,8 +195,8 @@ class Curve25519DHState implements DHState, Cloneable {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.44
+     * I2P
+     * @since 0.9.44
      */
     @Override
     public Curve25519DHState clone() throws CloneNotSupportedException {

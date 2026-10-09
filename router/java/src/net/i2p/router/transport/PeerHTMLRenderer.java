@@ -11,20 +11,20 @@ import net.i2p.util.LHMCache;
 import net.i2p.util.Translate;
 
 /**
- *  HTML rendering of peers (flag, capability bar, identity block) for the
- *  NetDb, PeerHelper, and tunnel pages.
+ * HTML rendering of peers (flag, capability bar, identity block) for the
+ * NetDb, PeerHelper, and tunnel pages.
  *
- *  Extracted from {@link CommSystemFacadeImpl} (2026-09-06) so the peer-render
- *  cluster, its RouterInfo/capacity caches, and its i18n state live apart from
- *  the facade core. The facade retains thin {@code commSystem()} delegators so
- *  the public API is unchanged; collaborators (country lookup, reverse-DNS)
- *  are injected rather than fetched through {@code commSystem()} round-trips.
+ * Extracted from {@link CommSystemFacadeImpl} (2026-09-06) so the peer-render
+ * cluster, its RouterInfo/capacity caches, and its i18n state live apart from
+ * the facade core. The facade retains thin {@code commSystem()} delegators so
+ * the public API is unchanged; collaborators (country lookup, reverse-DNS)
+ * are injected rather than fetched through {@code commSystem()} round-trips.
  *
- *  Pure memory-independent decisions (bandwidth classification, visible-cap
- *  cleanup) are package-visible statics so they can be tested without a running
- *  router; see {@code PeerHTMLRendererDecisionTest}.
+ * Pure memory-independent decisions (bandwidth classification, visible-cap
+ * cleanup) are package-visible statics so they can be tested without a running
+ * router; see {@code PeerHTMLRendererDecisionTest}.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class PeerHTMLRenderer {
 
@@ -41,10 +41,10 @@ public class PeerHTMLRenderer {
     private final Map<Hash, String> capacityCache = Collections.synchronizedMap(new LHMCache<>(5000));
 
     /**
-     *  @param ctx non-null
-     *  @param countryLookup non-null
-     *  @param rdns non-null
-     *  @since 0.9.71+
+     * @param ctx non-null
+     * @param countryLookup non-null
+     * @param rdns non-null
+     * @since 0.9.71+
      */
     public PeerHTMLRenderer(RouterContext ctx, CountryLookup countryLookup, ReverseDnsLookup rdns) {
         _context = ctx;
@@ -223,15 +223,15 @@ public class PeerHTMLRenderer {
     }
 
     /**
-     *  Localized country display name for a two-letter code. Names needing no
-     *  translation (single words, already localized) are returned verbatim.
+     * Localized country display name for a two-letter code. Names needing no
+     * translation (single words, already localized) are returned verbatim.
      *
-     *  Shared by {@link #renderPeerHTML} and {@link #renderPeerFlag}; extracting
-     *  it removes the duplicated lookup-and-translate branch from both.
+     * Shared by {@link #renderPeerHTML} and {@link #renderPeerFlag}; extracting
+     * it removes the duplicated lookup-and-translate branch from both.
      *
-     *  @param code two-letter country code (never null at call sites)
-     *  @return country name, translated when multi-word
-     *  @since 0.9.71+
+     * @param code two-letter country code (never null at call sites)
+     * @return country name, translated when multi-word
+     * @since 0.9.71+
      */
     private String localizedCountryName(String code) {
         String countryName = _countryLookup.getCountryName(code);
@@ -242,18 +242,18 @@ public class PeerHTMLRenderer {
     }
 
     /**
-     *  Reverse-DNS label: resolves {@code ip} to its canonical host name when
-     *  reverse lookups are enabled and the resolver offers a distinct, known
-     *  name; otherwise returns the raw IP. Non-blocking-the lookup is served
-     *  from the rDNS cache and a background lookup is queued on a miss.
+     * Reverse-DNS label: resolves {@code ip} to its canonical host name when
+     * reverse lookups are enabled and the resolver offers a distinct, known
+     * name; otherwise returns the raw IP. Non-blocking-the lookup is served
+     * from the rDNS cache and a background lookup is queued on a miss.
      *
-     *  Deduplicates the resolver branch formerly duplicated across
-     *  {@link #renderPeerHTML} and {@link #renderPeerFlag}; the flag renderer
-     *  adds the raw-IP suffix itself when the name differs.
+     * Deduplicates the resolver branch formerly duplicated across
+     * {@link #renderPeerHTML} and {@link #renderPeerFlag}; the flag renderer
+     * adds the raw-IP suffix itself when the name differs.
      *
-     *  @param ip literal IP string (never null)
-     *  @return canonical host name or the raw IP
-     *  @since 0.9.71+
+     * @param ip literal IP string (never null)
+     * @return canonical host name or the raw IP
+     * @since 0.9.71+
      */
     private String resolveHostForDisplay(String ip) {
         if (!_rdns.enableReverseLookups()) {return ip;}
@@ -265,18 +265,18 @@ public class PeerHTMLRenderer {
     }
 
     /**
-     *  Highest-priority bandwidth capability char present in the caps string,
-     *  or "?" when none is advertised.
+     * Highest-priority bandwidth capability char present in the caps string,
+     * or "?" when none is advertised.
      *
-     *  Priority follows {@link RouterInfo#BW_CAPABILITY_CHARS} order, so a peer
-     *  advertising both a high and a low class is classified at its high end.
-     *  This is the decision the former {@code getCapacityCached} inline loop
-     *  made; it is exposed so the offline {@code PeerHTMLRendererDecisionTest}
-     *  can pin both the string and the null/empty handling without a router.
+     * Priority follows {@link RouterInfo#BW_CAPABILITY_CHARS} order, so a peer
+     * advertising both a high and a low class is classified at its high end.
+     * This is the decision the former {@code getCapacityCached} inline loop
+     * made; it is exposed so the offline {@code PeerHTMLRendererDecisionTest}
+     * can pin both the string and the null/empty handling without a router.
      *
-     *  @param caps capabilities string (never null in practice; null treated as none)
-     *  @return single bandwidth-class char or "?"
-     *  @since 0.9.71+
+     * @param caps capabilities string (never null in practice; null treated as none)
+     * @return single bandwidth-class char or "?"
+     * @since 0.9.71+
      */
     static String classifyCapacity(String caps) {
         if (caps == null) {return "?";}
@@ -290,7 +290,7 @@ public class PeerHTMLRenderer {
     }
 
     /**
-     *  Translate
+     * Translate
      */
     private final String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}
 }

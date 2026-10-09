@@ -4,7 +4,6 @@ package net.i2p.data;
  * free (adj.): unencumbered; not under the control of others
  * Released into the public domain
  * with no warranty of any kind, either expressed or implied.
- *
  */
 
 import java.io.IOException;
@@ -40,8 +39,8 @@ public class DateAndFlags extends DataStructureImpl {
 
     /**
      * Date in milliseconds since epoch.
-     *  @param date the date in milliseconds since epoch
-     *  @param flags 0 - 65535
+     * @param date the date in milliseconds since epoch
+     * @param flags 0 - 65535
      */
     public DateAndFlags(long date, int flags) {
         if (flags < 0 || flags > 65535) throw new IllegalArgumentException();
@@ -51,8 +50,8 @@ public class DateAndFlags extends DataStructureImpl {
 
     /**
      * Date.
-     *  @param date the date
-     *  @param flags 0 - 65535
+     * @param date the date
+     * @param flags 0 - 65535
      */
     public DateAndFlags(Date date, int flags) {
         if (flags < 0 || flags > 65535) throw new IllegalArgumentException();
@@ -62,16 +61,16 @@ public class DateAndFlags extends DataStructureImpl {
 
     /**
      * 0 - 65535.
-     *  @return 0 - 65535
+     * @return 0 - 65535
      */
     public int getFlags() {
         return _flags;
     }
 
     /**
-     *  Sets the flags value.
+     * Sets the flags value.
      *
-     *  @param flags 0 - 65535
+     * @param flags 0 - 65535
      */
     public void setFlags(int flags) {
         if (flags < 0 || flags > 65535) throw new IllegalArgumentException();
@@ -79,8 +78,8 @@ public class DateAndFlags extends DataStructureImpl {
     }
 
     /**
-     *  The Date object is created here, it is not cached.
-     *  Use getTime() if you only need the long value.
+     * The Date object is created here, it is not cached.
+     * Use getTime() if you only need the long value.
      * @return the date
      */
     public Date getDate() {
@@ -89,25 +88,25 @@ public class DateAndFlags extends DataStructureImpl {
 
     /**
      * Date in milliseconds since epoch.
-     *  @return the date in milliseconds since epoch
+     * @return the date in milliseconds since epoch
      */
     public long getTime() {
         return (_date);
     }
 
     /**
-     *  Set the date from a long timestamp.
+     * Set the date from a long timestamp.
      *
-     *  @param date the date in milliseconds since epoch
+     * @param date the date in milliseconds since epoch
      */
     public void setDate(long date) {
         _date = date;
     }
 
     /**
-     *  Set the date from a Date object.
+     * Set the date from a Date object.
      *
-     *  @param date the date
+     * @param date the date
      */
     public void setDate(Date date) {
         _date = date.getTime();

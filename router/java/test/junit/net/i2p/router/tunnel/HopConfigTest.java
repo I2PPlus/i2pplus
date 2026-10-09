@@ -9,8 +9,8 @@ import net.i2p.data.TunnelId;
 import org.junit.Test;
 
 /**
- *  Tests for HopConfig.
- *  Pure data class - no I2P context needed.
+ * Tests for HopConfig.
+ * Pure data class - no I2P context needed.
  */
 public class HopConfigTest {
 

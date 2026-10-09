@@ -21,13 +21,13 @@ public class LookaheadInputStream extends FilterInputStream {
     private static final InputStream _fakeInputStream = new ByteArrayInputStream(new byte[0]);
 
     /**
-     *  Configure a stream that hides a number of bytes from the reader.
-     *  The last n bytes will never be available from read(),
-     *  they can only be obtained from getFooter().
+     * Configure a stream that hides a number of bytes from the reader.
+     * The last n bytes will never be available from read(),
+     * they can only be obtained from getFooter().
      *
-     *  initialize() MUST be called before doing any read() calls.
+     * initialize() MUST be called before doing any read() calls.
      *
-     *  @param lookaheadSize how many bytes to hide
+     * @param lookaheadSize how many bytes to hide
      */
     public LookaheadInputStream(int lookaheadSize) {
         super(_fakeInputStream);
@@ -44,12 +44,12 @@ public class LookaheadInputStream extends FilterInputStream {
     }
 
     /**
-     *  Start the LookaheadInputStream with the given input stream.
-     *  Resets everything if the LookaheadInputStream was previously used.
-     *  WARNING - blocking until lookaheadSize bytes are read!
+     * Start the LookaheadInputStream with the given input stream.
+     * Resets everything if the LookaheadInputStream was previously used.
+     * WARNING - blocking until lookaheadSize bytes are read!
      *
-     *  @param src the input stream
-     *  @throws IOException if less than lookaheadSize bytes could be read.
+     * @param src the input stream
+     * @throws IOException if less than lookaheadSize bytes could be read.
      */
     public void initialize(InputStream src) throws IOException {
         in = src;
@@ -104,7 +104,7 @@ public class LookaheadInputStream extends FilterInputStream {
     }
 
     /**
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     @Override
     public long skip(long n) throws IOException {

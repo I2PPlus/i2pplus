@@ -11,16 +11,16 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 /**
- *  Unit tests for the NTCP write-buffer pool introduced in
- *  {@link EventPumper#acquireWriteBuf()} / {@link EventPumper#releaseWriteBuf(byte[])}.
+ * Unit tests for the NTCP write-buffer pool introduced in
+ * {@link EventPumper#acquireWriteBuf()} / {@link EventPumper#releaseWriteBuf(byte[])}.
  *
- *  <p>Pins the pooling contract: acquired buffers are exactly the NTCP2 frame size,
- *  releasing and re-acquiring yields the same instance, and only arrays of the exact
- *  size are pooled - the handshake and termination buffers are sized differently and
- *  must never pollute the cache. Also verifies that a fully drained pooled buffer
- *  returns to the pool through {@link EventPumper#writeOneBuffer(NTCPConnection, SocketChannel)}.
+ * <p>Pins the pooling contract: acquired buffers are exactly the NTCP2 frame size,
+ * releasing and re-acquiring yields the same instance, and only arrays of the exact
+ * size are pooled - the handshake and termination buffers are sized differently and
+ * must never pollute the cache. Also verifies that a fully drained pooled buffer
+ * returns to the pool through {@link EventPumper#writeOneBuffer(NTCPConnection, SocketChannel)}.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class EventPumperWritePoolTest {
 
@@ -41,8 +41,8 @@ public class EventPumperWritePoolTest {
     }
 
     /**
-     *  A drained write of a pooled-size array must put the array back in the cache,
-     *  so the next acquire returns the same instance.
+     * A drained write of a pooled-size array must put the array back in the cache,
+     * so the next acquire returns the same instance.
      */
     private void assertDrainedPooledBufferReused(ByteBuffer buf, byte[] underlying) throws Exception {
         NTCPConnection con = mock(NTCPConnection.class);

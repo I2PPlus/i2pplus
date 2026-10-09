@@ -18,21 +18,21 @@ import net.i2p.I2PAppContext;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  Translate.
+ * Translate.
  *
- *  Strings are tagged with _("translateme")
- *  or _("translate {0} me", "foo")
+ * Strings are tagged with _("translateme")
+ * or _("translate {0} me", "foo")
  *
- *  Max two parameters.
- *  String and parameters must be double-quoted (no ngettext, no tagged parameters).
- *  Escape quotes inside quote with \".
- *  Commas and spaces between args are optional.
- *  Entire tag (from '_' to ')') must be on one line.
- *  Multiple tags allowed on one line.
+ * Max two parameters.
+ * String and parameters must be double-quoted (no ngettext, no tagged parameters).
+ * Escape quotes inside quote with \".
+ * Commas and spaces between args are optional.
+ * Entire tag (from '_' to ')') must be on one line.
+ * Multiple tags allowed on one line.
  *
- *  Also will extract strings to a dummy java file for postprocessing by xgettext - see main().
+ * Also will extract strings to a dummy java file for postprocessing by xgettext - see main().
  *
- *  @since 0.9.8
+ * @since 0.9.8
  */
 public class TranslateReader extends FilterReader {
 
@@ -71,8 +71,8 @@ public class TranslateReader extends FilterReader {
 
     /**
      * May be null for tagging only.
-     *  @param bundle may be null for tagging only
-     *  @param in UTF-8
+     * @param bundle may be null for tagging only
+     * @param in UTF-8
      */
     public TranslateReader(I2PAppContext ctx, String bundle, InputStream in) throws IOException {
         this(ctx, bundle, new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
@@ -80,8 +80,8 @@ public class TranslateReader extends FilterReader {
 
     /**
      * May be null for tagging only.
-     *  @param bundle may be null for tagging only
-     *  @since 0.9.34
+     * @param bundle may be null for tagging only
+     * @since 0.9.34
      */
     public TranslateReader(I2PAppContext ctx, String bundle, Reader in) {
         super(in);
@@ -284,16 +284,16 @@ public class TranslateReader extends FilterReader {
     }
 
     /**
-     *  put in the pending parse buf
+     * put in the pending parse buf
      */
     private void pushit(char c) {
         _inBuf.append(c);
     }
 
     /**
-     *  flush _inBuf to _outBuf,
-     *  reset state,
-     *  and return next char or -1
+     * flush _inBuf to _outBuf,
+     * reset state,
+     * and return next char or -1
      */
     private int flushit() {
         _state = S.START;
@@ -305,7 +305,7 @@ public class TranslateReader extends FilterReader {
     }
 
     /**
-     *  return next char from _outBuf or -1
+     * return next char from _outBuf or -1
      */
     private int popit() {
         if (_outBuf.length() > 0) {
@@ -317,8 +317,8 @@ public class TranslateReader extends FilterReader {
     }
 
     /**
-     *  clear _inBuf, translate _args to _outBuf,
-     *  reset state
+     * clear _inBuf, translate _args to _outBuf,
+     * reset state
      */
     private void translate() {
         int argCount = _args.size();
@@ -383,7 +383,7 @@ public class TranslateReader extends FilterReader {
     }
 
     /**
-     *  Do not comment out, used to extract tags as a part of the build process.
+     * Do not comment out, used to extract tags as a part of the build process.
      */
     public static void main(String[] args) {
         try {

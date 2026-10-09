@@ -50,9 +50,9 @@ import javax.security.auth.x500.X500Principal;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  Java X.509 certificate utilities, consolidated from various places.
+ * Java X.509 certificate utilities, consolidated from various places.
  *
- *  @since 0.9.9
+ * @since 0.9.9
  */
 public final class CertUtil {
 
@@ -68,12 +68,12 @@ public final class CertUtil {
     }
 
     /**
-     *  Write a certificate to a file in base64 format.
+     * Write a certificate to a file in base64 format.
      *
-     *  @param cert the certificate to save
-     *  @param file the file to write to
-     *  @return success
-     *  @since 0.8.2, moved from SSLEepGet in 0.9.9
+     * @param cert the certificate to save
+     * @param file the file to write to
+     * @return success
+     * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     public static boolean saveCert(Certificate cert, File file) {
         try (OutputStream os = new FileOutputStream(file)) {
@@ -89,17 +89,17 @@ public final class CertUtil {
     }
 
     /**
-     *  Writes the private key and all certs in base64 format.
-     *  Does NOT close the stream. Throws on all errors.
+     * Writes the private key and all certs in base64 format.
+     * Does NOT close the stream. Throws on all errors.
      *
-     *  @param pk non-null
-     *  @param certs certificate chain, null or empty to export pk only
-     *  @param out the output stream to write to
-     *  @throws InvalidKeyException if the key does not support encoding
-     *  @throws CertificateEncodingException if a cert does not support encoding
-     *  @throws IOException if the write fails
-     *  @throws GeneralSecurityException on any other security error
-     *  @since 0.9.24
+     * @param pk non-null
+     * @param certs certificate chain, null or empty to export pk only
+     * @param out the output stream to write to
+     * @throws InvalidKeyException if the key does not support encoding
+     * @throws CertificateEncodingException if a cert does not support encoding
+     * @throws IOException if the write fails
+     * @throws GeneralSecurityException on any other security error
+     * @since 0.9.24
      */
     public static void exportPrivateKey(PrivateKey pk, Certificate[] certs, OutputStream out) throws IOException, GeneralSecurityException {
         exportPrivateKey(pk, out);
@@ -112,17 +112,17 @@ public final class CertUtil {
     }
 
     /**
-     *  Modified from:
-     *  http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
+     * Modified from:
+     * http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
      *
-     *  Writes a certificate in base64 format.
-     *  Does NOT close the stream. Throws on all errors.
+     * Writes a certificate in base64 format.
+     * Does NOT close the stream. Throws on all errors.
      *
-     *  @param cert the certificate to export
-     *  @param out the output stream to write to
-     *  @throws IOException if the write fails
-     *  @throws CertificateEncodingException if the certificate cannot be encoded
-     *  @since 0.9.24, pulled out of saveCert(), public since 0.9.25
+     * @param cert the certificate to export
+     * @param out the output stream to write to
+     * @throws IOException if the write fails
+     * @throws CertificateEncodingException if the certificate cannot be encoded
+     * @since 0.9.24, pulled out of saveCert(), public since 0.9.25
      */
     public static void exportCert(Certificate cert, OutputStream out) throws IOException, CertificateEncodingException {
         // Get the encoded form which is suitable for exporting
@@ -131,14 +131,14 @@ public final class CertUtil {
     }
 
     /**
-     *  Modified from:
-     *  http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
+     * Modified from:
+     * http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
      *
-     *  Writes a private key in base64 format.
-     *  Does NOT close the stream. Throws on all errors.
+     * Writes a private key in base64 format.
+     * Does NOT close the stream. Throws on all errors.
      *
-     *  @throws InvalidKeyException if the key does not support encoding
-     *  @since 0.9.24
+     * @throws InvalidKeyException if the key does not support encoding
+     * @since 0.9.24
      */
     private static void exportPrivateKey(PrivateKey pk, OutputStream out) throws IOException, InvalidKeyException {
         // Get the encoded form which is suitable for exporting
@@ -150,13 +150,13 @@ public final class CertUtil {
     }
 
     /**
-     *  Modified from:
-     *  http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
+     * Modified from:
+     * http://www.exampledepot.com/egs/java.security.cert/ExportCert.html
      *
-     *  Writes data in base64 format.
-     *  Does NOT close the stream. Throws on all errors.
+     * Writes data in base64 format.
+     * Does NOT close the stream. Throws on all errors.
      *
-     *  @since 0.9.25 consolidated from other methods
+     * @since 0.9.25 consolidated from other methods
      */
     private static void writePEM(byte[] buf, String what, OutputStream out) throws IOException {
         PrintWriter wr = new PrintWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
@@ -173,14 +173,14 @@ public final class CertUtil {
     }
 
     /**
-     *  Get the set of Subject Alternative Names, including
-     *  DNSNames, RFC822Names, IPv4 and v6 addresses as strings.
+     * Get the set of Subject Alternative Names, including
+     * DNSNames, RFC822Names, IPv4 and v6 addresses as strings.
      *
-     *  see X509Certificate.getSubjectAlternativeNames()
+     * see X509Certificate.getSubjectAlternativeNames()
      *
-     *  @param cert the certificate to extract names from
-     *  @return non-null, empty on error or none found
-     *  @since 0.9.34
+     * @param cert the certificate to extract names from
+     * @return non-null, empty on error or none found
+     * @since 0.9.34
      */
     public static Set<String> getSubjectAlternativeNames(X509Certificate cert) {
         Set<String> rv = new HashSet<>(8);
@@ -198,13 +198,13 @@ public final class CertUtil {
     }
 
     /**
-     *  Get a value out of the subject distinguished name.
+     * Get a value out of the subject distinguished name.
      *
-     *  Warning - unsupported in Android (no javax.naming), returns null.
+     * Warning - unsupported in Android (no javax.naming), returns null.
      *
-     *  @param cert the certificate
-     *  @param type e.g. "CN"
-     *  @return the subject value
+     * @param cert the certificate
+     * @param type e.g. "CN"
+     * @return the subject value
      */
     public static String getSubjectValue(X509Certificate cert, String type) {
         X500Principal p = cert.getSubjectX500Principal();
@@ -212,14 +212,14 @@ public final class CertUtil {
     }
 
     /**
-     *  Get a value out of the issuer distinguished name.
+     * Get a value out of the issuer distinguished name.
      *
-     *  Warning - unsupported in Android (no javax.naming), returns null.
+     * Warning - unsupported in Android (no javax.naming), returns null.
      *
-     *  @param cert the certificate
-     *  @param type e.g. "CN"
-     *  @return the issuer value
-     *  @since 0.9.24
+     * @param cert the certificate
+     * @param type e.g. "CN"
+     * @return the issuer value
+     * @since 0.9.24
      */
     public static String getIssuerValue(X509Certificate cert, String type) {
         X500Principal p = cert.getIssuerX500Principal();
@@ -227,13 +227,13 @@ public final class CertUtil {
     }
 
     /**
-     *  Get a value out of a X500Principal.
+     * Get a value out of a X500Principal.
      *
-     *  Warning - unsupported in Android (no javax.naming), returns null.
+     * Warning - unsupported in Android (no javax.naming), returns null.
      *
-     *  @param p the X500Principal
-     *  @param type e.g. "CN"
-     *  @return the value
+     * @param p the X500Principal
+     * @param type e.g. "CN"
+     * @return the value
      */
     private static String getValue(X500Principal p, String type) {
         if (SystemVersion.isAndroid()) {
@@ -273,16 +273,16 @@ public final class CertUtil {
     }
 
     /**
-     *  Get the Java public key from a X.509 certificate file.
-     *  Throws if the certificate is invalid (e.g. expired).
+     * Get the Java public key from a X.509 certificate file.
+     * Throws if the certificate is invalid (e.g. expired).
      *
-     *  This DOES check for revocation.
+     * This DOES check for revocation.
      *
-     *  @param kd the certificate file
-     *  @return non-null, throws on all errors including certificate invalid
-     *  @throws IOException if the file cannot be read
-     *  @throws GeneralSecurityException if the certificate is invalid
-     *  @since 0.9.24 moved from SU3File private method
+     * @param kd the certificate file
+     * @return non-null, throws on all errors including certificate invalid
+     * @throws IOException if the file cannot be read
+     * @throws GeneralSecurityException if the certificate is invalid
+     * @since 0.9.24 moved from SU3File private method
      */
     public static PublicKey loadKey(File kd) throws IOException, GeneralSecurityException {
         X509Certificate cert = loadCert(kd);
@@ -293,20 +293,20 @@ public final class CertUtil {
     }
 
     /**
-     *  Get the certificate from a X.509 certificate file.
-     *  Throws if the certificate is invalid (e.g. expired).
+     * Get the certificate from a X.509 certificate file.
+     * Throws if the certificate is invalid (e.g. expired).
      *
-     *  This does NOT check for revocation.
-     *  This verifies the signature, assuming it is self-signed,
-     *  but will not throw an exception,
-     *  will log a warning only, as of 0.9.54.
-     *  We do NOT fetch additional certs or attempt to validate a cert up the chain.
+     * This does NOT check for revocation.
+     * This verifies the signature, assuming it is self-signed,
+     * but will not throw an exception,
+     * will log a warning only, as of 0.9.54.
+     * We do NOT fetch additional certs or attempt to validate a cert up the chain.
      *
-     *  @param kd the certificate file
-     *  @return non-null, throws on all errors including certificate invalid
-     *  @throws IOException if the file cannot be read
-     *  @throws GeneralSecurityException if the certificate is invalid
-     *  @since 0.9.24 adapted from SU3File private method
+     * @param kd the certificate file
+     * @return non-null, throws on all errors including certificate invalid
+     * @throws IOException if the file cannot be read
+     * @throws GeneralSecurityException if the certificate is invalid
+     * @since 0.9.24 adapted from SU3File private method
      */
     public static X509Certificate loadCert(File kd) throws IOException, GeneralSecurityException {
         try (InputStream fis = new FileInputStream(kd)) {
@@ -328,14 +328,14 @@ public final class CertUtil {
     }
 
     /**
-     *  Get a single Private Key from an input stream.
-     *  Does NOT close the stream.
+     * Get a single Private Key from an input stream.
+     * Does NOT close the stream.
      *
-     *  @param in the input stream to read from
-     *  @return non-null, non-empty, throws on all errors including certificate invalid
-     *  @throws IOException if the read fails
-     *  @throws GeneralSecurityException if the key is invalid
-     *  @since 0.9.25
+     * @param in the input stream to read from
+     * @return non-null, non-empty, throws on all errors including certificate invalid
+     * @throws IOException if the read fails
+     * @throws GeneralSecurityException if the key is invalid
+     * @since 0.9.25
      */
     public static PrivateKey loadPrivateKey(InputStream in) throws IOException, GeneralSecurityException {
         try {
@@ -388,17 +388,17 @@ public final class CertUtil {
     }
 
     /**
-     *  Get one or more certificates from an input stream.
-     *  Throws if any certificate is invalid (e.g. expired).
-     *  Does NOT close the stream.
+     * Get one or more certificates from an input stream.
+     * Throws if any certificate is invalid (e.g. expired).
+     * Does NOT close the stream.
      *
-     *  This does NOT check for revocation.
+     * This does NOT check for revocation.
      *
-     *  @param in the input stream to read from
-     *  @return non-null, non-empty, throws on all errors including certificate invalid
-     *  @throws IOException if the read fails
-     *  @throws GeneralSecurityException if any certificate is invalid
-     *  @since 0.9.25
+     * @param in the input stream to read from
+     * @return non-null, non-empty, throws on all errors including certificate invalid
+     * @throws IOException if the read fails
+     * @throws GeneralSecurityException if any certificate is invalid
+     * @since 0.9.25
      */
     public static List<X509Certificate> loadCerts(InputStream in) throws IOException, GeneralSecurityException {
         try (InputStream s = in) {
@@ -426,12 +426,12 @@ public final class CertUtil {
     }
 
     /**
-     *  Write a CRL to a file in base64 format.
+     * Write a CRL to a file in base64 format.
      *
-     *  @param crl the CRL to save
-     *  @param file the file to write to
-     *  @return success
-     *  @since 0.9.25
+     * @param crl the CRL to save
+     * @param file the file to write to
+     * @return success
+     * @since 0.9.25
      */
     public static boolean saveCRL(X509CRL crl, File file) {
         OutputStream os = null;
@@ -453,14 +453,14 @@ public final class CertUtil {
     }
 
     /**
-     *  Writes a CRL in base64 format.
-     *  Does NOT close the stream. Throws on all errors.
+     * Writes a CRL in base64 format.
+     * Does NOT close the stream. Throws on all errors.
      *
-     *  @param crl the CRL to export
-     *  @param out the output stream to write to
-     *  @throws IOException if the write fails
-     *  @throws CRLException if the crl does not support encoding
-     *  @since 0.9.25
+     * @param crl the CRL to export
+     * @param out the output stream to write to
+     * @throws IOException if the write fails
+     * @throws CRLException if the crl does not support encoding
+     * @since 0.9.25
      */
     public static void exportCRL(X509CRL crl, OutputStream out) throws IOException, CRLException {
         byte[] buf = crl.getEncoded();
@@ -468,27 +468,27 @@ public final class CertUtil {
     }
 
     /**
-     *  Is the certificate revoked?
-     *  This loads the CRLs from disk.
-     *  For efficiency, call loadCRLs() and then pass to isRevoked().
+     * Is the certificate revoked?
+     * This loads the CRLs from disk.
+     * For efficiency, call loadCRLs() and then pass to isRevoked().
      *
-     *  @param cert the certificate to check
-     *  @return true if revoked
-     *  @since 0.9.25
+     * @param cert the certificate to check
+     * @return true if revoked
+     * @since 0.9.25
      */
     public static boolean isRevoked(Certificate cert) {
         return isRevoked(I2PAppContext.getGlobalContext(), cert);
     }
 
     /**
-     *  Is the certificate revoked?
-     *  This loads the CRLs from disk.
-     *  For efficiency, call loadCRLs() and then pass to isRevoked().
+     * Is the certificate revoked?
+     * This loads the CRLs from disk.
+     * For efficiency, call loadCRLs() and then pass to isRevoked().
      *
-     *  @param ctx the context
-     *  @param cert the certificate to check
-     *  @return true if revoked
-     *  @since 0.9.25
+     * @param ctx the context
+     * @param cert the certificate to check
+     * @return true if revoked
+     * @since 0.9.25
      */
     public static boolean isRevoked(I2PAppContext ctx, Certificate cert) {
         CertStore store = loadCRLs(ctx);
@@ -496,12 +496,12 @@ public final class CertUtil {
     }
 
     /**
-     *  Is the certificate revoked?
+     * Is the certificate revoked?
      *
-     *  @param store the cert store containing CRLs
-     *  @param cert the certificate to check
-     *  @return true if revoked
-     *  @since 0.9.25
+     * @param store the cert store containing CRLs
+     * @param cert the certificate to check
+     * @return true if revoked
+     * @since 0.9.25
      */
     public static boolean isRevoked(CertStore store, Certificate cert) {
         try {
@@ -515,21 +515,21 @@ public final class CertUtil {
     }
 
     /**
-     *  Load CRLs from standard locations.
+     * Load CRLs from standard locations.
      *
-     *  @return non-null, possibly empty
-     *  @since 0.9.25
+     * @return non-null, possibly empty
+     * @since 0.9.25
      */
     public static CertStore loadCRLs() {
         return loadCRLs(I2PAppContext.getGlobalContext());
     }
 
     /**
-     *  Load CRLs from standard locations.
+     * Load CRLs from standard locations.
      *
-     *  @param ctx the application context
-     *  @return non-null, possibly empty
-     *  @since 0.9.25
+     * @param ctx the application context
+     * @return non-null, possibly empty
+     * @since 0.9.25
      */
     public static CertStore loadCRLs(I2PAppContext ctx) {
         Set<X509CRL> crls = new HashSet<>(8);
@@ -555,11 +555,11 @@ public final class CertUtil {
     }
 
     /**
-     *  Load CRLs from the directory into the set.
+     * Load CRLs from the directory into the set.
      *
-     *  @param crls the set to add CRLs to
-     *  @param dir the directory to load from
-     *  @since 0.9.25
+     * @param crls the set to add CRLs to
+     * @param dir the directory to load from
+     * @since 0.9.25
      */
     private static void loadCRLs(Set<X509CRL> crls, File dir) {
         if (dir.exists() && dir.isDirectory()) {
@@ -581,10 +581,10 @@ public final class CertUtil {
     }
 
     /**
-     *  Load a CRL.
+     * Load a CRL.
      *
-     *  @return non-null, possibly empty
-     *  @since 0.9.25
+     * @return non-null, possibly empty
+     * @since 0.9.25
      */
     private static X509CRL loadCRL(File file) throws IOException, GeneralSecurityException {
         try (InputStream in = new FileInputStream(file)) {
@@ -593,12 +593,12 @@ public final class CertUtil {
     }
 
     /**
-     *  Load a CRL. Does NOT Close the stream.
+     * Load a CRL. Does NOT Close the stream.
      *
-     *  @param in the input stream to read from
-     *  @return non-null
-     *  @throws GeneralSecurityException if the CRL cannot be loaded
-     *  @since 0.9.25 public since 0.9.26
+     * @param in the input stream to read from
+     * @return non-null
+     * @throws GeneralSecurityException if the CRL cannot be loaded
+     * @since 0.9.25 public since 0.9.26
      */
     public static X509CRL loadCRL(InputStream in) throws GeneralSecurityException {
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
@@ -606,8 +606,8 @@ public final class CertUtil {
     }
 
     /**
-     *  For testing purposes.
-     *  @param args command-line arguments
+     * For testing purposes.
+     * @param args command-line arguments
      */
     public static final void main(String[] args) {
         if (args.length < 2) {
@@ -655,10 +655,10 @@ public final class CertUtil {
     private static final long CHECK = 180 * 24 * 60 * 60 * 1000L;
 
     /**
-     *  For use in the build process.
+     * For use in the build process.
      *
-     *  @return 0 for success, nonzero for failure
-     *  @since 0.9.38
+     * @return 0 for success, nonzero for failure
+     * @since 0.9.38
      */
     private static int checkAll(File dir) {
         int good = 0;

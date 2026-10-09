@@ -46,7 +46,7 @@ public class Main implements RouterApp, NotificationService {
     private static final String PROP_SWING = "desktopgui.swing";
 
     /**
-     *  @since 0.9.26
+     * @since 0.9.26
      */
     public Main(RouterContext ctx, ClientAppManager mgr) {
         _appContext = _context = ctx;
@@ -56,7 +56,7 @@ public class Main implements RouterApp, NotificationService {
     }
 
     /**
-     *  @since 0.9.26
+     * @since 0.9.26
      */
     public Main() {
         _appContext = I2PAppContext.getGlobalContext();
@@ -157,13 +157,13 @@ public class Main implements RouterApp, NotificationService {
     }
 
     /**
-     *  Unless we do this, when we start DesktopGUI we get a Java coffee cup
-     *  in the tray.
+     * Unless we do this, when we start DesktopGUI we get a Java coffee cup
+     * in the tray.
      *
-     *  Same implementation as {@link ExternalMain}, which carries the
-     *  canonical macOS notes.
+     * Same implementation as {@link ExternalMain}, which carries the
+     * canonical macOS notes.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     @SuppressWarnings("unchecked")
     private void setMacTrayIcon() {
@@ -209,15 +209,15 @@ public class Main implements RouterApp, NotificationService {
     /////// NotificationService methods
 
     /**
-     *  Send a notification to the user.
+     * Send a notification to the user.
      *
-     *  @param source unsupported
-     *  @param category unsupported
-     *  @param priority unsupported
-     *  @param title for the popup, translated
-     *  @param message translated
-     *  @param path unsupported
-     *  @return 0, or -1 on failure
+     * @param source unsupported
+     * @param category unsupported
+     * @param priority unsupported
+     * @param title for the popup, translated
+     * @param message translated
+     * @param path unsupported
+     * @return 0, or -1 on failure
      */
     @Override
     public int notify(String source, String category, int priority, String title, String message, String path) {
@@ -228,10 +228,10 @@ public class Main implements RouterApp, NotificationService {
     }
 
     /**
-     *  Cancel a notification if possible.
-     *  Unsupported.
+     * Cancel a notification if possible.
+     * Unsupported.
      *
-     *  @return false always
+     * @return false always
      */
     @Override
     public boolean cancel(int id) {
@@ -239,10 +239,10 @@ public class Main implements RouterApp, NotificationService {
     }
 
     /**
-     *  Update the text of a notification if possible.
-     *  Unsupported.
+     * Update the text of a notification if possible.
+     * Unsupported.
      *
-     *  @return false always
+     * @return false always
      */
     @Override
     public boolean update(int id, String title, String message, String path) {

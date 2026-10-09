@@ -6,21 +6,21 @@ import net.i2p.util.BandwidthEstimator;
 import net.i2p.util.Log;
 
 /**
- *  A Westwood+ bandwidth estimator with
- *  a first stage anti-aliasing low pass filter based on RTT,
- *  and the time-varying Westwood filter based on inter-arrival time.
+ * A Westwood+ bandwidth estimator with
+ * a first stage anti-aliasing low pass filter based on RTT,
+ * and the time-varying Westwood filter based on inter-arrival time.
  *
- *  Ref: TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks
- *  Casetti et al
- *  (Westwood)
+ * Ref: TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks
+ * Casetti et al
+ * (Westwood)
  *
- *  Ref: End-to-End Bandwidth Estimation for Congestion Control in Packet Networks
- *  Grieco and Mascolo
- *  (Westwood+)
+ * Ref: End-to-End Bandwidth Estimation for Congestion Control in Packet Networks
+ * Grieco and Mascolo
+ * (Westwood+)
  *
- *  Adapted from: Linux kernel tcp_westwood.c (GPLv2)
+ * Adapted from: Linux kernel tcp_westwood.c (GPLv2)
  *
- *  @since 0.9.46
+ * @since 0.9.46
  */
 class SimpleBandwidthEstimator implements BandwidthEstimator {
 
@@ -170,7 +170,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     }
 
     /**
-     *  As in kernel tcp_westwood.c
+     * As in kernel tcp_westwood.c
      */
     private float westwood_do_filter(float a, float b) {
         return (((decayFactor - 1) * a) + b) / decayFactor;

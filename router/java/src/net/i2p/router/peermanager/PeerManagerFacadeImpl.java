@@ -5,7 +5,6 @@ package net.i2p.router.peermanager;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -19,7 +18,6 @@ import net.i2p.util.Log;
 
 /**
  * Base implementation that has simple algorithms and periodically saves state
- *
  */
 public class PeerManagerFacadeImpl implements PeerManagerFacade {
     private final Log _log;
@@ -72,7 +70,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     *  @param caps non-null
+     * @param caps non-null
      */
     public void setCapabilities(Hash peer, String caps) {
         if (_manager == null) return;
@@ -98,8 +96,8 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     *  @param capability case-insensitive
-     *  @return non-null unmodifiable set
+     * @param capability case-insensitive
+     * @return non-null unmodifiable set
      */
     public Set<Hash> getPeersByCapability(char capability) {
         if (_manager == null) return Collections.emptySet();
@@ -107,9 +105,9 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     *  @param capability case-insensitive
-     *  @return how many
-     *  @since 0.9.45
+     * @param capability case-insensitive
+     * @return how many
+     * @since 0.9.45
      */
     public int countPeersByCapability(char capability) {
         if (_manager == null) return 0;

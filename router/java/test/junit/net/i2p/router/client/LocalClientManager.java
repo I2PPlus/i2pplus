@@ -6,7 +6,6 @@ package net.i2p.router.client;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import gnu.getopt.Getopt;
@@ -34,8 +33,8 @@ class LocalClientManager extends ClientManager {
     private static int dropX1000 = 0, jitter = 0, latency = 0;
 
     /**
-     *  @param context stub, may be constructed with new RouterContext(null),
-     *                 no initAll() necessary
+     * @param context stub, may be constructed with new RouterContext(null),
+     * no initAll() necessary
      */
     public LocalClientManager(RouterContext context, int port) {
         super(context, port);

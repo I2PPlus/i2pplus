@@ -14,22 +14,22 @@ import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
 /**
- *  Second migration, as of 2.9.0:
- *<p>
- *  Migrate all the jetty*.xml files to change
- *  Ref id= to Ref refid= because dup ids is a fatal error.
- *  Also migrate the old configure.dtd to configure_9_3.dtd.
- *  Reference: https://github.com/jetty/jetty.project/issues/12881
- *</p>
+ * Second migration, as of 2.9.0:
+ * <p>
+ * Migrate all the jetty*.xml files to change
+ * Ref id= to Ref refid= because dup ids is a fatal error.
+ * Also migrate the old configure.dtd to configure_9_3.dtd.
+ * Reference: https://github.com/jetty/jetty.project/issues/12881
+ * </p>
  *
- *  First migration, as of 0.9.30:
- *<p>
- *  Migrate the clients.config and jetty.xml files
- *  from Jetty 5/6 to Jetty 7/8.
- *  Also migrate jetty.xml from Jetty 7/8 to Jetty 9.
+ * First migration, as of 0.9.30:
+ * <p>
+ * Migrate the clients.config and jetty.xml files
+ * from Jetty 5/6 to Jetty 7/8.
+ * Also migrate jetty.xml from Jetty 7/8 to Jetty 9.
  *
- *  For each client for class org.mortbay.jetty.Server:
- *<pre>
+ * For each client for class org.mortbay.jetty.Server:
+ * <pre>
  *  Let $D be the dir that jetty.xml is in (usually ~/.i2p/eepsite)
  *  Saves $D/jetty.xml to $D/jetty6.xml
  *  Copies $I2P/eepsite-jetty7/jetty.xml to $D/jetty.xml, edited for $D
@@ -39,14 +39,12 @@ import net.i2p.util.VersionComparator;
  *  Copies $I2P/eepsite-jetty7/context/cgi-context.xml to $D/jetty.xml, edited for $D
  *  Copies $I2P/eepsite-jetty7/etc/* to $D/etc
  *  Changes main class in clients.config
- *</pre>
- *  Copies clients.config to clients.config.jetty6;
- *  Saves new clients.config.
+ * </pre>
+ * Copies clients.config to clients.config.jetty6;
+ * Saves new clients.config.
  *
- *  Does NOT preserve port number, thread counts, etc. in the migration to 7/8.
- *  DOES preserve everything in the migration to 9.
- *
- *  @since Jetty 6
+ * Does NOT preserve port number, thread counts, etc. in the migration to 7/8.
+ * DOES preserve everything in the migration to 9.
  */
 abstract class MigrateJetty {
     private MigrateJetty() {}
@@ -65,8 +63,8 @@ abstract class MigrateJetty {
     private static final String PROP_JETTY9_MIGRATED_2 = "router.startup.jetty-ids.migrated";
 
     /**
-     *  For each entry in apps, if the main class is an old Jetty class,
-     *  migrate it to the new Jetty class, and update the Jetty config files.
+     * For each entry in apps, if the main class is an old Jetty class,
+     * migrate it to the new Jetty class, and update the Jetty config files.
      */
     public static void migrate(RouterContext ctx, List<ClientAppConfig> apps) {
         Log log = ctx.logManager().getLog(MigrateJetty.class);
@@ -179,9 +177,8 @@ abstract class MigrateJetty {
     }
 
     /**
-     *  Backup a file with given suffix
-     *  @return success
-     *  @since Jetty 9
+     * Backup a file with given suffix
+     * @return success
      */
     private static boolean backupFile(File from, String suffix) {
         if (!from.exists())

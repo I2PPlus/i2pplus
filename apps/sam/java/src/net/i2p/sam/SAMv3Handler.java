@@ -5,7 +5,6 @@ package net.i2p.sam;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 
@@ -27,7 +26,6 @@ import net.i2p.util.PasswordManager;
 
 /**
  * Class able to handle a SAM version 3 client connection.
- *
  */
 
 class SAMv3Handler extends SAMv1Handler
@@ -58,7 +56,7 @@ class SAMv3Handler extends SAMv1Handler
      * @param verMinor SAM minor version to manage
      * @throws SAMException if the version is not supported
      * @throws IOException if an I/O error occurs
-    */
+     */
     public SAMv3Handler(SocketChannel s, int verMajor, int verMinor, SAMBridge parent) throws SAMException, IOException {
         this(s, verMajor, verMinor, new Properties(), parent);
     }
@@ -103,14 +101,14 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     *  @return true if the handler has an active data stream (stolen or forwarding)
+     * @return true if the handler has an active data stream (stolen or forwarding)
      */
     boolean hasActiveStream() {
         return stolenSocket || streamForwardingSocket;
     }
 
     /**
-     *  For SAMv3StreamSession connect and accept
+     * For SAMv3StreamSession connect and accept
      */
     public void stealSocket() {
         stolenSocket = true;
@@ -127,41 +125,41 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     *  For SAMv3StreamSession
-     *  @since 0.9.20
+     * For SAMv3StreamSession
+     * @since 0.9.20
      */
     SAMBridge getBridge() {
         return bridge;
     }
 
     /**
-     *  For SAMv3DatagramServer
-     *  @return may be null
-     *  @since 0.9.24
+     * For SAMv3DatagramServer
+     * @return may be null
+     * @since 0.9.24
      */
     Session getSession() {
         return session;
     }
 
     /**
-     *  For subsessions created by MasterSession
-     *  @since 0.9.25
+     * For subsessions created by MasterSession
+     * @since 0.9.25
      */
     void setSession(SAMv3RawSession sess) {
         rawSession = sess; session = sess;
     }
 
     /**
-     *  For subsessions created by MasterSession
-     *  @since 0.9.25
+     * For subsessions created by MasterSession
+     * @since 0.9.25
      */
     void setSession(SAMv3DatagramSession sess) {
         datagramSession = sess; session = sess;
     }
 
     /**
-     *  For subsessions created by MasterSession
-     *  @since 0.9.25
+     * For subsessions created by MasterSession
+     * @since 0.9.25
      */
     void setSession(SAMv3StreamSession sess) {
         streamSession = sess; session = sess; sessionReady = true;

@@ -47,17 +47,17 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- *  The central resource coordinating updates.
- *  This must be registered with the context.
+ * The central resource coordinating updates.
+ * This must be registered with the context.
  *
- *  The UpdateManager starts and stops all updates,
- *  prevents multiple updates as appropriate,
- *  and controls notification to the user.
+ * The UpdateManager starts and stops all updates,
+ * prevents multiple updates as appropriate,
+ * and controls notification to the user.
  *
- *  Version notes: For news and unsigned updates, use
- *  Long.toString(modtime).
+ * Version notes: For news and unsigned updates, use
+ * Long.toString(modtime).
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
@@ -97,11 +97,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private static final boolean DEFAULT_ENABLE_TORRENT_UPDATES = false;
 
     /**
-     *  Starts the update handlers for the router, plugins, news and the desktop GUI,
-     *  then registers itself with the client app manager.
-     *  @param ctx router context supplying the update policy, timers and logging
-     *  @param listener client app manager to register this with and to notify of state changes
-     *  @param args ignored
+     * Starts the update handlers for the router, plugins, news and the desktop GUI,
+     * then registers itself with the client app manager.
+     * @param ctx router context supplying the update policy, timers and logging
+     * @param listener client app manager to register this with and to notify of state changes
+     * @param args ignored
      */
     public ConsoleUpdateManager(RouterContext ctx, ClientAppManager listener, String[] args) {
         _context = ctx;
@@ -121,8 +121,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Null if not found.
-     *  @return null if not found
+     * Null if not found.
+     * @return null if not found
      */
     public static ConsoleUpdateManager getInstance() {
         ClientAppManager cmgr = I2PAppContext.getGlobalContext().clientAppManager();
@@ -133,14 +133,14 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     // ClientApp methods
 
     /**
-     *  UpdateManager interface
+     * UpdateManager interface
      */
     @Override
     public void start() {startup();}
 
     /**
-     *  ClientApp interface
-     *  @since 0.9.12
+     * ClientApp interface
+     * @since 0.9.12
      */
     @Override
     public synchronized void startup() {
@@ -219,15 +219,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  UpdateManager interface
+     * UpdateManager interface
      */
     @Override
     public void shutdown() {shutdown(null);}
 
     /**
-     *  ClientApp interface
-     *  @param args ignored
-     *  @since 0.9.12
+     * ClientApp interface
+     * @param args ignored
+     * @since 0.9.12
      */
     @Override
     public synchronized void shutdown(String[] args) {
@@ -275,42 +275,42 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  The status on any update current or last finished.
-     *  @return status or ""
+     * The status on any update current or last finished.
+     * @return status or ""
      */
     @Override
     public String getStatus() {return _status;}
 
     /**
-     *  Is an update available?
-     *  Blocking.
-     *  An available update may still have a constraint or lack sources.
-     *  @param type the UpdateType of this request
-     *  @return new version or null if nothing newer is available
-     *  @since 0.9.21
+     * Is an update available?
+     * Blocking.
+     * An available update may still have a constraint or lack sources.
+     * @param type the UpdateType of this request
+     * @return new version or null if nothing newer is available
+     * @since 0.9.21
      */
     @Override
     public String checkAvailable(UpdateType type) {return checkAvailable(type, "", DEFAULT_CHECK_TIME);}
 
     /**
-     *  Is an update available?
-     *  Blocking.
-     *  An available update may still have a constraint or lack sources.
-     *  @param type the UpdateType of this request
-     *  @param maxWait max time to block
-     *  @return new version or null if nothing newer is available
+     * Is an update available?
+     * Blocking.
+     * An available update may still have a constraint or lack sources.
+     * @param type the UpdateType of this request
+     * @param maxWait max time to block
+     * @return new version or null if nothing newer is available
      */
     @Override
     public String checkAvailable(UpdateType type, long maxWait) {return checkAvailable(type, "", maxWait);}
 
     /**
-     *  Is an update available?
-     *  Blocking.
-     *  An available update may still have a constraint or lack sources.
-     *  @param type the UpdateType of this request
-     *  @param id id of this request
-     *  @param maxWait max time to block
-     *  @return new version or null if nothing newer is available
+     * Is an update available?
+     * Blocking.
+     * An available update may still have a constraint or lack sources.
+     * @param type the UpdateType of this request
+     * @param id id of this request
+     * @param maxWait max time to block
+     * @return new version or null if nothing newer is available
      */
     @Override
     public String checkAvailable(UpdateType type, String id, long maxWait) {
@@ -345,17 +345,17 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Fire off a checker task
-     *  Non-blocking.
-     *  @param type the UpdateType of this request
+     * Fire off a checker task
+     * Non-blocking.
+     * @param type the UpdateType of this request
      */
     public void check(UpdateType type) {check(type, "");}
 
     /**
-     *  Fire off a checker task
-     *  Non-blocking.
-     *  @param type the UpdateType of this request
-     *  @param id id of this request
+     * Fire off a checker task
+     * Non-blocking.
+     * @param type the UpdateType of this request
+     * @param id id of this request
      */
     public void check(UpdateType type, String id) {
         if (isCheckInProgress(type, id)) {
@@ -379,21 +379,21 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Is an update available?
-     *  Non-blocking, returns result of last check or notification from an Updater.
-     *  An available update may still have a constraint or lack sources.
-     *  @param type the UpdateType of this request
-     *  @return new version or null if nothing newer is available
+     * Is an update available?
+     * Non-blocking, returns result of last check or notification from an Updater.
+     * An available update may still have a constraint or lack sources.
+     * @param type the UpdateType of this request
+     * @return new version or null if nothing newer is available
      */
     public String getUpdateAvailable(UpdateType type) {return getUpdateAvailable(type, "");}
 
     /**
-     *  Is an update available?
-     *  Non-blocking, returns result of last check or notification from an Updater.
-     *  An available update may still have a constraint or lack sources.
-     *  @param type the UpdateType of this request
-     *  @param id id of this request
-     *  @return new version or null if nothing newer is available
+     * Is an update available?
+     * Non-blocking, returns result of last check or notification from an Updater.
+     * An available update may still have a constraint or lack sources.
+     * @param type the UpdateType of this request
+     * @param id id of this request
+     * @return new version or null if nothing newer is available
      */
     public String getUpdateAvailable(UpdateType type, String id) {
         Version v = _available.get(new UpdateItem(type, id));
@@ -402,19 +402,19 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Is an update downloaded?
-     *  Non-blocking, returns result of last download
-     *  @param type the UpdateType of this request
-     *  @return new version or null if nothing was downloaded
+     * Is an update downloaded?
+     * Non-blocking, returns result of last download
+     * @param type the UpdateType of this request
+     * @return new version or null if nothing was downloaded
      */
     public String getUpdateDownloaded(UpdateType type) {return getUpdateDownloaded(type, "");}
 
     /**
-     *  Is an update downloaded?
-     *  Non-blocking, returns result of last download
-     *  @param type the UpdateType of this request
-     *  @param id id of this request
-     *  @return new version or null if nothing was downloaded
+     * Is an update downloaded?
+     * Non-blocking, returns result of last download
+     * @param type the UpdateType of this request
+     * @param id id of this request
+     * @return new version or null if nothing was downloaded
      */
     public String getUpdateDownloaded(UpdateType type, String id) {
         Version v = _downloaded.get(new UpdateItem(type, id));
@@ -423,8 +423,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  The highest of the installed or downloaded version.
-     *  @return new version or null if nothing was downloaded or installed
+     * The highest of the installed or downloaded version.
+     * @return new version or null if nothing was downloaded or installed
      */
     private String getDownloadedOrInstalledVersion(UpdateType type, String id) {
         UpdateItem ui = new UpdateItem(type, id);
@@ -465,7 +465,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Stop all downloads in progress
+     * Stop all downloads in progress
      */
     public void stopUpdates() {
         for (UpdateTask t : _downloaders.keySet()) {t.shutdown();}
@@ -473,15 +473,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Stop this download
-     *  @param type the UpdateType of this download
+     * Stop this download
+     * @param type the UpdateType of this download
      */
     public void stopUpdate(UpdateType type) {stopUpdate(type, "");}
 
     /**
-     *  Stop this download
-     *  @param type the UpdateType of this download
-     *  @param id id of this download
+     * Stop this download
+     * @param type the UpdateType of this download
+     * @param id id of this download
      */
     public void stopUpdate(UpdateType type, String id) {
         for (Iterator<UpdateTask> iter = _downloaders.keySet().iterator(); iter.hasNext(); ) {
@@ -521,7 +521,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Stop all checks in progress
+     * Stop all checks in progress
      */
     public void stopChecks() {
         synchronized(_activeCheckers) {
@@ -531,15 +531,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Stop this check
-     *  @param type the UpdateType of this check
+     * Stop this check
+     * @param type the UpdateType of this check
      */
     public void stopCheck(UpdateType type) {stopCheck(type, "");}
 
     /**
-     *  Stop this check
-     *  @param type the UpdateType of this check
-     *  @param id id of this check
+     * Stop this check
+     * @param type the UpdateType of this check
+     * @param id id of this check
      */
     public void stopCheck(UpdateType type, String id) {
         for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext(); ) {
@@ -561,11 +561,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     public boolean isExternalRestartPending() {return _externalRestartPending;}
 
     /**
-     *  Install a plugin. Non-blocking.
-     *  If returns true, then call isUpdateInProgress() in a loop
-     *  @param name if null, a new install
-     *  @param uri where to fetch the plugin, a file: URI installs without a network fetch
-     *  @return true if task started
+     * Install a plugin. Non-blocking.
+     * If returns true, then call isUpdateInProgress() in a loop
+     * @param name if null, a new install
+     * @param uri where to fetch the plugin, a file: URI installs without a network fetch
+     * @return true if task started
      */
     public boolean installPlugin(String name, URI uri) {
         // We must have a name and install it in _available or else
@@ -586,38 +586,38 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Non-blocking. Does not check.
-     *  If returns true, then call isUpdateInProgress() in a loop
-     *  Max time 3 hours by default but not honored by all Updaters
-     *  @return true if task started
+     * Non-blocking. Does not check.
+     * If returns true, then call isUpdateInProgress() in a loop
+     * Max time 3 hours by default but not honored by all Updaters
+     * @return true if task started
      */
     @Override
     public boolean update(UpdateType type) {return update(type, "", DEFAULT_MAX_TIME);}
 
     /**
-     *  Non-blocking. Does not check.
-     *  Max time 3 hours by default but not honored by all Updaters
-     *  If returns true, then call isUpdateInProgress() in a loop
-     *  @return true if task started
+     * Non-blocking. Does not check.
+     * Max time 3 hours by default but not honored by all Updaters
+     * If returns true, then call isUpdateInProgress() in a loop
+     * @return true if task started
      */
     @Override
     public boolean update(UpdateType type, String id) {return update(type, id, DEFAULT_MAX_TIME);}
 
     /**
-     *  Non-blocking. Does not check.
-     *  If returns true, then call isUpdateInProgress() in a loop
-     *  @param maxTime not honored by all Updaters
-     *  @return true if task started
+     * Non-blocking. Does not check.
+     * If returns true, then call isUpdateInProgress() in a loop
+     * @param maxTime not honored by all Updaters
+     * @return true if task started
      */
     @Override
     public boolean update(UpdateType type, long maxTime) {return update(type, "", maxTime);}
 
     /**
-     *  Non-blocking. Does not check.
-     *  Fails if check or update already in progress.
-     *  If returns true, then call isUpdateInProgress() in a loop
-     *  @param maxTime not honored by all Updaters
-     *  @return true if task started
+     * Non-blocking. Does not check.
+     * Fails if check or update already in progress.
+     * If returns true, then call isUpdateInProgress() in a loop
+     * @param maxTime not honored by all Updaters
+     * @return true if task started
      */
     @Override
     public boolean update(UpdateType type, String id, long maxTime) {
@@ -629,11 +629,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Non-blocking. Does not check.
-     *  Fails update already in progress. Use this to call from within a checker task.
-     *  If returns true, then call isUpdateInProgress() in a loop
-     *  @param maxTime not honored by all Updaters
-     *  @return true if task started
+     * Non-blocking. Does not check.
+     * Fails update already in progress. Use this to call from within a checker task.
+     * If returns true, then call isUpdateInProgress() in a loop
+     * @param maxTime not honored by all Updaters
+     * @return true if task started
      */
     private boolean update_fromCheck(UpdateType type, String id, long maxTime) {
         if (isUpdateInProgress(type, id)) {
@@ -691,7 +691,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     // start UpdateManager interface
 
     /**
-     *  Call once for each type/method pair.
+     * Call once for each type/method pair.
      */
     @Override
     public void register(Updater updater, UpdateType type, UpdateMethod method, int priority) {
@@ -750,11 +750,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Register a post-processor for this UpdateType and SU3File file type.
+     * Register a post-processor for this UpdateType and SU3File file type.
      *
-     *  @param type only ROUTER_SIGNED_SU3 and ROUTER_DEV_SU3 are currently supported
-     *  @param fileType a SU3File TYPE_xxx constant, 1-255, TYPE_ZIP not supported.
-     *  @since 0.9.51
+     * @param type only ROUTER_SIGNED_SU3 and ROUTER_DEV_SU3 are currently supported
+     * @param fileType a SU3File TYPE_xxx constant, 1-255, TYPE_ZIP not supported.
+     * @since 0.9.51
      */
     @Override
     public void register(UpdatePostProcessor upp, UpdateType type, int fileType) {
@@ -764,15 +764,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Called by the Updater, either after check() was called, or it found out on its own.
-     *  Use this if there is only one UpdateMethod; otherwise use the Map method below.
+     * Called by the Updater, either after check() was called, or it found out on its own.
+     * Use this if there is only one UpdateMethod; otherwise use the Map method below.
      *
-     *  @param newsSource who told us
-     *  @param id plugin name for plugins, ignored otherwise
-     *  @param updateSources Where to get the new version
-     *  @param newVersion The new version available
-     *  @param minVersion The minimum installed version to be able to update to newVersion
-     *  @return true if it's newer
+     * @param newsSource who told us
+     * @param id plugin name for plugins, ignored otherwise
+     * @param updateSources Where to get the new version
+     * @param newVersion The new version available
+     * @param minVersion The minimum installed version to be able to update to newVersion
+     * @return true if it's newer
      */
     @Override
     public boolean notifyVersionAvailable(UpdateTask task, URI newsSource,
@@ -785,16 +785,16 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Called by the Checker, either after check() was called, or it found out on its own.
-     *  Checkers must use this method if there are multiple UpdateMethods discoverd simultaneously.
+     * Called by the Checker, either after check() was called, or it found out on its own.
+     * Checkers must use this method if there are multiple UpdateMethods discoverd simultaneously.
      *
-     *  @param newsSource who told us
-     *  @param id plugin name for plugins, ignored otherwise
-     *  @param sourceMap Mapping of methods to sources
-     *  @param newVersion The new version available
-     *  @param minVersion The minimum installed version to be able to update to newVersion
-     *  @return true if we didn't know already
-     *  @since 0.9.6
+     * @param newsSource who told us
+     * @param id plugin name for plugins, ignored otherwise
+     * @param sourceMap Mapping of methods to sources
+     * @param newVersion The new version available
+     * @param minVersion The minimum installed version to be able to update to newVersion
+     * @return true if we didn't know already
+     * @since 0.9.6
      */
     @Override
     public boolean notifyVersionAvailable(UpdateTask task, URI newsSource,
@@ -926,15 +926,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  A new version is available but cannot be downloaded or installed due to some constraint.
-     *  The manager should notify the user.
-     *  Called by the Checker, either after check() was called, or it found out on its own.
+     * A new version is available but cannot be downloaded or installed due to some constraint.
+     * The manager should notify the user.
+     * Called by the Checker, either after check() was called, or it found out on its own.
      *
-     *  @param newsSource who told us
-     *  @param id plugin name for plugins, ignored otherwise
-     *  @param newVersion The new version available
-     *  @param message A translated message to be displayed to the user, non-null
-     *  @since 0.9.9
+     * @param newsSource who told us
+     * @param id plugin name for plugins, ignored otherwise
+     * @param newVersion The new version available
+     * @param message A translated message to be displayed to the user, non-null
+     * @since 0.9.9
      */
     @Override
     public void notifyVersionConstraint(UpdateTask task, URI newsSource,
@@ -967,7 +967,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Called by the Updater after check() was called and all notifyVersionAvailable() callbacks are finished
+     * Called by the Updater after check() was called and all notifyVersionAvailable() callbacks are finished
      */
     @Override
     public void notifyCheckComplete(UpdateTask task, boolean newer, boolean success) {
@@ -1025,23 +1025,23 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  May be null.
-     *  @param task may be null
+     * May be null.
+     * @param task may be null
      */
     @Override
     public void notifyProgress(UpdateTask task, String status) {updateStatus(status);}
 
     /**
-     *  An expiring status
-     *  @param task may be null
-     *  @param status the message to show, cleared when it expires
+     * An expiring status
+     * @param task may be null
+     * @param status the message to show, cleared when it expires
      */
     public void notifyComplete(UpdateTask task, String status) {finishStatus(status);}
 
     /**
-     *  Not necessarily the end if there are more URIs to try.
-     *  @param task checker or updater
-     *  @param t may be null
+     * Not necessarily the end if there are more URIs to try.
+     * @param task checker or updater
+     * @param t may be null
      */
     @Override
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t) {
@@ -1051,9 +1051,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  The task has finished and failed.
-     *  @param task checker or updater
-     *  @param t may be null
+     * The task has finished and failed.
+     * @param task checker or updater
+     * @param t may be null
      */
     @Override
     public void notifyTaskFailed(UpdateTask task, String reason, Throwable t) {
@@ -1092,17 +1092,17 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  An update has been downloaded but not verified.
-     *  The manager will verify it.
-     *  Caller should delete the file upon return, unless it will share it with others,
-     *  e.g. on a torrent.
-     *  If the return value is false, caller must call notifyTaskFailed() or notifyComplete()
-     *  again.
+     * An update has been downloaded but not verified.
+     * The manager will verify it.
+     * Caller should delete the file upon return, unless it will share it with others,
+     * e.g. on a torrent.
+     * If the return value is false, caller must call notifyTaskFailed() or notifyComplete()
+     * again.
      *
-     *  @param task must be an Updater, not a Checker
-     *  @param actualVersion may be higher (or lower?) than the version requested
-     *  @param file a valid format for the task's UpdateType, or null if it did the installation itself
-     *  @return true if valid, false if corrupt
+     * @param task must be an Updater, not a Checker
+     * @param actualVersion may be higher (or lower?) than the version requested
+     * @param file a valid format for the task's UpdateType, or null if it did the installation itself
+     * @return true if valid, false if corrupt
      */
     @Override
     public boolean notifyComplete(UpdateTask task, String actualVersion, File file) {
@@ -1153,10 +1153,10 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Adds to installed, removes from downloaded and available
-     *  @param id subtype for plugins, or ""
-     *  @param version null to remove from installed
-     *  @since 0.9.45
+     * Adds to installed, removes from downloaded and available
+     * @param id subtype for plugins, or ""
+     * @param version null to remove from installed
+     * @since 0.9.45
      */
     @Override
     public void notifyInstalled(UpdateType type, String id, String version) {
@@ -1178,7 +1178,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     // End UpdateManager interface
 
     /**
-     *  Adds to downloaded, removes from available
+     * Adds to downloaded, removes from available
      */
     private void notifyDownloaded(UpdateType type, String id, String version) {
         UpdateItem ui = new UpdateItem(type, id);
@@ -1220,9 +1220,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  from NewsFetcher
-     *  @return false if the update policy is notify-only or news has suppressed
-     *                installs, or a downloaded router update zip is still pending
+     * from NewsFetcher
+     * @return false if the update policy is notify-only or news has suppressed
+     * installs, or a downloaded router update zip is still pending
      */
     boolean shouldInstall() {
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY);
@@ -1232,11 +1232,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Where to find various resources
-     *  @param type the UpdateType of this request
-     *  @param id id of this request
-     *  @param method the transport to list sources for
-     *  @return non-null may be empty
+     * Where to find various resources
+     * @param type the UpdateType of this request
+     * @param id id of this request
+     * @param method the transport to list sources for
+     * @return non-null may be empty
      */
     public List<URI> getUpdateURLs(UpdateType type, String id, UpdateMethod method) {
         VersionAvailable va = _available.get(new UpdateItem(type, id));
@@ -1300,11 +1300,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Is there a reason we can't download the update?
-     *  @param type the UpdateType of this request
-     *  @param id id of this request
-     *  @return translated contraint or null
-     *  @since 0.9.9
+     * Is there a reason we can't download the update?
+     * @param type the UpdateType of this request
+     * @param id id of this request
+     * @return translated contraint or null
+     * @since 0.9.9
      */
     public String getUpdateConstraint(UpdateType type, String id) {
         VersionAvailable va = _available.get(new UpdateItem(type, id));
@@ -1313,11 +1313,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Process sud, su2, or su3.
-     *  Only for router updates.
+     * Process sud, su2, or su3.
+     * Only for router updates.
      *
-     *  @return success
-     *  @since 0.9.9
+     * @return success
+     * @since 0.9.9
      */
     private boolean handleRouterFile(URI uri, String actualVersion, File f, UpdateType updateType) {
         boolean isSU3 = updateType == ROUTER_SIGNED_SU3 || updateType == ROUTER_DEV_SU3;
@@ -1391,15 +1391,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Only for router updates
+     * Only for router updates
      *
-     *  @param uri download URI, used only for the status text and to tell an
-     *             I2P+ (skank) build from a stock one
-     *  @param lastmod server-supplied last-modified timestamp in ms, as a
-     *                 string; the current time is used when null or unparseable
-     *  @param updFile the downloaded file, verified as a zip and then copied
-     *                 into the router directory
-     *  @return true if the verified file was copied for install at next restart
+     * @param uri download URI, used only for the status text and to tell an
+     * I2P+ (skank) build from a stock one
+     * @param lastmod server-supplied last-modified timestamp in ms, as a
+     * string; the current time is used when null or unparseable
+     * @param updFile the downloaded file, verified as a zip and then copied
+     * into the router directory
+     * @return true if the verified file was copied for install at next restart
      */
     private boolean handleUnsignedFile(URI uri, String lastmod, File updFile) {
         String url = uri.toString();
@@ -1465,27 +1465,27 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  translate a string
-     *  @param s the message key to look up
-     *  @return the translated text, or the key itself if there is no translation
+     * translate a string
+     * @param s the message key to look up
+     * @return the translated text, or the key itself if there is no translation
      */
     public String _t(String s) {return Messages.getString(s, _context);}
 
     /**
-     *  translate a string with a parameter
-     *  @param s the message key to look up
-     *  @param o substituted for {0} in the message
-     *  @return the translated text, or the key itself if there is no translation
+     * translate a string with a parameter
+     * @param s the message key to look up
+     * @param o substituted for {0} in the message
+     * @return the translated text, or the key itself if there is no translation
      */
     public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /**
-     *  translate a string with parameters
-     *  @param s the message key to look up
-     *  @param o substituted for {0} in the message
-     *  @param o2 substituted for {1} in the message
-     *  @return the translated text, or the key itself if there is no translation
-     *  @since 0.9.9
+     * translate a string with parameters
+     * @param s the message key to look up
+     * @param o substituted for {0} in the message
+     * @param o2 substituted for {1} in the message
+     * @return the translated text, or the key itself if there is no translation
+     * @since 0.9.9
      */
     public String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2, _context);}
 
@@ -1511,7 +1511,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Failsafe
+     * Failsafe
      */
     private class TaskCleaner extends SimpleTimer2.TimedEvent {
         /**
@@ -1543,7 +1543,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Equals on updater, type and method only
+     * Equals on updater, type and method only
      */
     private static class RegisteredUpdater implements Comparable<RegisteredUpdater> {
         /**
@@ -1604,7 +1604,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Equals on checker, type and method only
+     * Equals on checker, type and method only
      */
     private static class RegisteredChecker implements Comparable<RegisteredChecker> {
         /**
@@ -1665,7 +1665,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     *  Equals on type and ID only
+     * Equals on type and ID only
      */
     private static class UpdateItem {
         /**
@@ -1780,7 +1780,6 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
         /**
          * Available but can't be downloaded due to constraint.
-         *
          */
         public VersionAvailable(String version, String constraint) {
             super(version);

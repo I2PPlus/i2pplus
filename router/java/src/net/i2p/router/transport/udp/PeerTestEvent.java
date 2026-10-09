@@ -10,9 +10,9 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
     /**
-     *  Initiate a test (we are Alice)
+     * Initiate a test (we are Alice)
      *
-     *  @since 0.9.30 moved out of UDPTransport
+     * @since 0.9.30 moved out of UDPTransport
      */
     class PeerTestEvent extends SimpleTimer2.TimedEvent {
     /** Router context. */
@@ -102,8 +102,8 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     *  Just to consolidate the logging
-     *  @since 0.9.57
+     * Just to consolidate the logging
+     * @since 0.9.57
      */
     @Override
     public void reschedule(long delay) {
@@ -113,8 +113,8 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     *  Run a test with Bob.
-     *  @param isIPv6 true for IPv6
+     * Run a test with Bob.
+     * @param isIPv6 true for IPv6
      */
     private void locked_runTest(boolean isIPv6) {
         _lastTestIPv6 = isIPv6;
@@ -135,16 +135,16 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     *  Run within the next 45 seconds at the latest
-     *  @since 0.9.13
+     * Run within the next 45 seconds at the latest
+     * @since 0.9.13
      */
     public synchronized void forceRunSoon(boolean isIPv6) {
         forceRunSoon(isIPv6, MIN_TEST_FREQUENCY);
     }
 
     /**
-     *  Run within the specified time at the latest
-     *  @since 0.9.39
+     * Run within the specified time at the latest
+     * @since 0.9.39
      */
     public synchronized void forceRunSoon(boolean isIPv6, long delay) {
         if (!isIPv6 && _transport.isIPv4Firewalled())
@@ -156,16 +156,16 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     *  Run within the next 5 seconds at the latest
-     *  @since 0.9.13
+     * Run within the next 5 seconds at the latest
+     * @since 0.9.13
      */
     public synchronized void forceRunImmediately(boolean isIPv6) {
         forceRunSoon(isIPv6, 5*1000L);
     }
 
     /**
-     *  Caller MUST also call schedule(), reschedule(),
-     *  forceRunSoon(), or forceRunImmediately()
+     * Caller MUST also call schedule(), reschedule(),
+     * forceRunSoon(), or forceRunImmediately()
      */
     public synchronized void setIsAlive(boolean isAlive) {
         _alive = isAlive;
@@ -174,8 +174,8 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     *  Set the last-tested timer to now
-     *  @since 0.9.13
+     * Set the last-tested timer to now
+     * @since 0.9.13
      */
     public void setLastTested(boolean isIPv6) {
         // do not synchronize - deadlock with PeerTestManager
@@ -187,8 +187,8 @@ import net.i2p.util.SimpleTimer2;
     }
 
     /**
-     *  Whether we should run a test now.
-     *  @return true if we should test
+     * Whether we should run a test now.
+     * @return true if we should test
      */
     private boolean shouldTest() {
         String override = _context.getProperty(PROP_DISABLE_PEER_TEST);

@@ -14,35 +14,35 @@ import net.i2p.data.Destination;
 import net.i2p.util.Log;
 
 /**
- *  Write a standard pcap file with a "TCP" packet that can be analyzed with
- *  standard tools such as wireshark.
+ * Write a standard pcap file with a "TCP" packet that can be analyzed with
+ * standard tools such as wireshark.
  *
- *  The source and dest "IP" and "port" are fake but are generated from the
- *  hashes of the Destinations and stream ID's, so they will be consistent.
- *  The local "IP" will always be of the form 127.0.x.y
- *  Initial IP for a conn will be 127.0.0.0 for the local and 0.0.0.0 for the remote.
+ * The source and dest "IP" and "port" are fake but are generated from the
+ * hashes of the Destinations and stream ID's, so they will be consistent.
+ * The local "IP" will always be of the form 127.0.x.y
+ * Initial IP for a conn will be 127.0.0.0 for the local and 0.0.0.0 for the remote.
  *
- *  Reference: http://wiki.wireshark.org/Development/LibpcapFileFormat
+ * Reference: http://wiki.wireshark.org/Development/LibpcapFileFormat
  *
- *  The Jpcap library http://netresearch.ics.uci.edu/kfujii/jpcap/doc/
- *  was close to what I want, but it requires you to instantiate a "captor"
- *  before you can write a file, and it requires a native lib to do so,
- *  and even then, it only wants to read the file, not write it.
+ * The Jpcap library http://netresearch.ics.uci.edu/kfujii/jpcap/doc/
+ * was close to what I want, but it requires you to instantiate a "captor"
+ * before you can write a file, and it requires a native lib to do so,
+ * and even then, it only wants to read the file, not write it.
  *
- *  We even calculate a correct TCP header checksum to keep the tools happy.
- *  We don't, however, convert I2P-style sequence numbers, which count packets,
- *  to TCP-style byte counts. We don't track a lowest-acked-thru byte count atm, really.
+ * We even calculate a correct TCP header checksum to keep the tools happy.
+ * We don't, however, convert I2P-style sequence numbers, which count packets,
+ * to TCP-style byte counts. We don't track a lowest-acked-thru byte count atm, really.
  *
- *  We do represent the window size in bytes though, so that's real confusing.
+ * We do represent the window size in bytes though, so that's real confusing.
  *
- *  This is designed to debug the streaming lib, but there are not log calls for every
- *  single packet - pings and pongs, and various odd cases where received packets
- *  are dropped, are not logged.
+ * This is designed to debug the streaming lib, but there are not log calls for every
+ * single packet - pings and pongs, and various odd cases where received packets
+ * are dropped, are not logged.
  *
- *  Yes we could dump it natively and write a wireshark dissector. That sounds hard.
- *  And we wouldn't get the TCP stream analysis built into the tools.
+ * Yes we could dump it natively and write a wireshark dissector. That sounds hard.
+ * And we wouldn't get the TCP stream analysis built into the tools.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public class PcapWriter implements Closeable, Flushable {
 

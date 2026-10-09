@@ -11,21 +11,21 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 /**
- *  Unit tests for {@link EventPumper#writeOneBuffer(NTCPConnection, SocketChannel)},
- *  the single-buffer step of the NTCP write drain. Pins the exact state machine
- *  governing the drain loop: empty head buffers are discarded silently, a zero-byte
- *  write never consumes the head buffer so the drain stays BLOCKED, a partial write
- *  parks the drain in BLOCKED with the buffer retained, and only a fully flushed head
- *  with no remaining data reports DRAIN (data consumed, buffer removed). Because the
- *  pumper must never spin or drop data on re-entry, the removeWriteBuf() side effects
- *  are asserted for every consuming path.
+ * Unit tests for {@link EventPumper#writeOneBuffer(NTCPConnection, SocketChannel)},
+ * the single-buffer step of the NTCP write drain. Pins the exact state machine
+ * governing the drain loop: empty head buffers are discarded silently, a zero-byte
+ * write never consumes the head buffer so the drain stays BLOCKED, a partial write
+ * parks the drain in BLOCKED with the buffer retained, and only a fully flushed head
+ * with no remaining data reports DRAIN (data consumed, buffer removed). Because the
+ * pumper must never spin or drop data on re-entry, the removeWriteBuf() side effects
+ * are asserted for every consuming path.
  *
- *  <p>The mock channel's {@code write} is stubbed to advance the buffer position by the
- *  returned byte count, mirroring SocketChannel semantics - the Drain/BLOCKED decision
- *  is made on the buffer's remaining() after the write, so a naive return-only stub
- *  would misclassify every outcome.
+ * <p>The mock channel's {@code write} is stubbed to advance the buffer position by the
+ * returned byte count, mirroring SocketChannel semantics - the Drain/BLOCKED decision
+ * is made on the buffer's remaining() after the write, so a naive return-only stub
+ * would misclassify every outcome.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class EventPumperWriteTest {
 

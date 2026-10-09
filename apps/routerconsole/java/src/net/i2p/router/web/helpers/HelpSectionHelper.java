@@ -14,7 +14,6 @@ import net.i2p.router.web.PluginStarter;
 /**
  * Render the configuration menu at the top of all the config pages.
  * refactored from confignav.jsp to reduce size and make translation easier
-
  */
 public class HelpSectionHelper extends HelperBase {
 

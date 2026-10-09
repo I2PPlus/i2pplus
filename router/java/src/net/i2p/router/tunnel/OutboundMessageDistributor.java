@@ -36,22 +36,22 @@ class OutboundMessageDistributor {
     private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000L : 15*1000L;
 
     /**
-     *  Create a new outbound message distributor.
+     * Create a new outbound message distributor.
      *
-     *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
-     *                  OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
+     * @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
+     * OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
      */
     public OutboundMessageDistributor(RouterContext ctx, int priority) {
         this(ctx, priority, null);
     }
 
     /**
-     *  Create a new outbound message distributor with bandwidth estimation.
+     * Create a new outbound message distributor with bandwidth estimation.
      *
-     *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
-     *                  OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
-     *  @param bwe null for none
-     *  @since 0.9.68
+     * @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
+     * OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
+     * @param bwe null for none
+     * @since 0.9.68
      */
     public OutboundMessageDistributor(RouterContext ctx, int priority, SyntheticREDQueue bwe) {
         _context = ctx;
@@ -66,16 +66,16 @@ class OutboundMessageDistributor {
     }
 
     /**
-     *  Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
-     *  and must be converted before handling locally.
+     * Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
+     * and must be converted before handling locally.
      */
     public void distribute(I2NPMessage msg, Hash target) {
         distribute(msg, target, null);
     }
 
     /**
-     *  Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
-     *  and must be converted before handling locally.
+     * Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
+     * and must be converted before handling locally.
      */
     public void distribute(I2NPMessage msg, Hash target, TunnelId tunnel) {
         if (shouldDrop(target)) {
@@ -138,8 +138,8 @@ class OutboundMessageDistributor {
     }
 
     /**
-     *  Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
-     *  and must be converted before handling locally.
+     * Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
+     * and must be converted before handling locally.
      */
     private void distribute(I2NPMessage msg, RouterInfo target, TunnelId tunnel) {
         boolean toUs = _context.routerHash().equals(target.getIdentity().calculateHash());

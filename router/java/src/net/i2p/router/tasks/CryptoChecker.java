@@ -16,25 +16,25 @@ import net.i2p.util.SystemVersion;
  *
  * <strong>Checks Performed:</strong>
  * <ul>
- *   <li>Signature algorithm availability (EdDSA, ECDSA, DSA)</li>
- *   <li>Java version compatibility checks</li>
- *   <li>Cryptography policy file detection</li>
- *   <li>Platform-specific crypto limitations</li>
+ * <li>Signature algorithm availability (EdDSA, ECDSA, DSA)</li>
+ * <li>Java version compatibility checks</li>
+ * <li>Cryptography policy file detection</li>
+ * <li>Platform-specific crypto limitations</li>
  * </ul>
  *
  * <strong>Recommendations Provided:</strong>
  * <ul>
- *   <li>Java upgrade suggestions for older versions</li>
- *   <li>Instructions for installing unlimited strength crypto</li>
- *   <li>Platform-specific guidance for crypto issues</li>
- *   <li>Future compatibility warnings</li>
+ * <li>Java upgrade suggestions for older versions</li>
+ * <li>Instructions for installing unlimited strength crypto</li>
+ * <li>Platform-specific guidance for crypto issues</li>
+ * <li>Future compatibility warnings</li>
  * </ul>
  *
  * The checker outputs to both router logs and System.out
  * to ensure visibility during startup. It can be run standalone
  * for crypto testing without starting the full router.
  *
- *  @since 0.9.15
+ * @since 0.9.15
  */
 public class CryptoChecker {
 
@@ -52,8 +52,8 @@ public class CryptoChecker {
      * and System.out for visibility during startup.
      *
      * @param ctx router context for logging; if null, logs only to System.out
-     *             (used when called from main method during startup)
- *
+     * (used when called from main method during startup)
+     *
      * @since 0.9.15
      */
     public static void warnUnavailableCrypto(RouterContext ctx) {

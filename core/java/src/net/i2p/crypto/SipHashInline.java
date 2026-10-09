@@ -1,14 +1,13 @@
 package net.i2p.crypto;
 
 /*
- *  As pulled from https://github.com/nahi/siphash-java-inline
+ * As pulled from https://github.com/nahi/siphash-java-inline
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * *WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 
 /**
@@ -33,18 +32,18 @@ public final class SipHashInline {
     private SipHashInline() {}
 
     /**
-     *  @param k0 the first 8 bytes of the key
-     *  @param k1 the last 8 bytes of the key
-     *  @return whether h24 is present
+     * @param k0 the first 8 bytes of the key
+     * @param k1 the last 8 bytes of the key
+     * @return whether h24 is present
      */
     public static long hash24(long k0, long k1, byte[] data) {
         return hash24(k0, k1, data, 0, data.length);
     }
 
     /**
-     *  @param k0 the first 8 bytes of the key
-     *  @param k1 the last 8 bytes of the key
-     *  @return whether h24 is present
+     * @param k0 the first 8 bytes of the key
+     * @param k1 the last 8 bytes of the key
+     * @return whether h24 is present
      */
     public static long hash24(long k0, long k1, byte[] data, int off, int len) {
         long v0 = 0x736f6d6570736575L ^ k0;
@@ -69,39 +68,39 @@ public final class SipHashInline {
             v3 ^= m;
 
             /* SIPROUND wih hand reordering
-             *   F: v3=ROTL(v3,16);
-             *   G: v3 ^= v2;
-             *   H: v0 += v3;
-             *   I: v3=ROTL(v3,21);
-             *   J: v3 ^= v0;
-             *   K: v2 += v1;
-             *   L: v1=ROTL(v1,17);
-             *   M: v1 ^= v2;
-             *   N: v2=ROTL(v2,32);
+             * F: v3=ROTL(v3,16);
+             * G: v3 ^= v2;
+             * H: v0 += v3;
+             * I: v3=ROTL(v3,21);
+             * J: v3 ^= v0;
+             * K: v2 += v1;
+             * L: v1=ROTL(v1,17);
+             * M: v1 ^= v2;
+             * N: v2=ROTL(v2,32);
              *
              * Each dependency:
-             *   B -> A
-             *   C -> A, B
-             *   D -> C
-             *   F -> E
-             *   G -> E, F
-             *   H -> D, G
-             *   I -> H
-             *   J -> H, I
-             *   K -> C, G
-             *   L -> K
-             *   M -> K, L
-             *   N -> M
+             * B -> A
+             * C -> A, B
+             * D -> C
+             * F -> E
+             * G -> E, F
+             * H -> D, G
+             * I -> H
+             * J -> H, I
+             * K -> C, G
+             * L -> K
+             * M -> K, L
+             * N -> M
              *
              * Dependency graph:
-             *   D -> C -> B -> A
-             *        G -> F -> E
-             *   J -> I -> H -> D, G
-             *   N -> M -> L -> K -> C, G
+             * D -> C -> B -> A
+             * G -> F -> E
+             * J -> I -> H -> D, G
+             * N -> M -> L -> K -> C, G
              *
              * Resulting parallel friendly execution order:
-             *   -> ABCDHIJ
-             *   -> EFGKLMN
+             * -> ABCDHIJ
+             * -> EFGKLMN
              */
 
             v0 += v1;
@@ -235,7 +234,7 @@ public final class SipHashInline {
     }
 
     /**
-     *  Test vectors from https://www.131002.net/siphash/siphash.pdf
+     * Test vectors from https://www.131002.net/siphash/siphash.pdf
      */
 
 }

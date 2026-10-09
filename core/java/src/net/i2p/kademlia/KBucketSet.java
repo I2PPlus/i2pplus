@@ -6,7 +6,6 @@ package net.i2p.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -61,9 +60,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
     private final KBucketTrimmer<T> _trimmer;
 
     /**
-     *  Locked for reading only when traversing all the buckets.
-     *  Locked for writing only when splitting a bucket.
-     *  Adds/removes/gets from individual buckets are not locked.
+     * Locked for reading only when traversing all the buckets.
+     * Locked for writing only when splitting a bucket.
+     * Adds/removes/gets from individual buckets are not locked.
      */
     private final ReentrantReadWriteLock _bucketsLock = new ReentrantReadWriteLock(false);
 
@@ -78,10 +77,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *
      * @param context the router context
      * @param us the local identity (typically a SHA1Hash or Hash)
-     *           The class must have a zero-argument constructor.
+     * The class must have a zero-argument constructor.
      * @param max the Kademlia value "k", the max per bucket, must be &gt; 4
      * @param b the Kademlia value "b", split buckets an extra 2**(b-1) times,
-     *           1 &lt;= b &lt;= 8, use 1 for bittorrent, Kademlia paper recommends 5
+     * 1 &lt;= b &lt;= 8, use 1 for bittorrent, Kademlia paper recommends 5
      * @throws IllegalArgumentException if max &lt;= 4, or b is outside 1..8
      * @throws RuntimeException if the us class has no zero-argument constructor
      */
@@ -200,11 +199,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  Grabs the write lock.
-     *  Caller must NOT have the read lock.
-     *  The bucket should be splittable (range start != range end).
+     * Grabs the write lock.
+     * Caller must NOT have the read lock.
+     * The bucket should be splittable (range start != range end).
      *
-     *  @param r the range start of the bucket to be split
+     * @param r the range start of the bucket to be split
      */
     private void split(int r) {
         if (!getWriteLock()) {
@@ -218,12 +217,12 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  Creates two or more new buckets. The old bucket is replaced and discarded.
+     * Creates two or more new buckets. The old bucket is replaced and discarded.
      *
-     *  Caller must hold write lock
-     *  The bucket should be splittable (range start != range end).
+     * Caller must hold write lock
+     * The bucket should be splittable (range start != range end).
      *
-     *  @param r the range start of the bucket to be split
+     * @param r the range start of the bucket to be split
      */
     private void locked_split(int r) {
         int b = pickBucket(r);
@@ -339,9 +338,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  Return all entries in all buckets.
+     * Return all entries in all buckets.
      *
-     *  @return a copy in a new set
+     * @return a copy in a new set
      */
     public Set<T> getAll() {
         Set<T> all = new HashSet<>(256);
@@ -397,23 +396,23 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  The keys closest to us.
-     *  Returned list will never contain us.
+     * The keys closest to us.
+     * Returned list will never contain us.
      *
-     *  @param max maximum number of keys to return
-     *  @return non-null, closest first
+     * @param max maximum number of keys to return
+     * @return non-null, closest first
      */
     public List<T> getClosest(int max) {
         return getClosest(max, Collections.<T>emptySet());
     }
 
     /**
-     *  The keys closest to us.
-     *  Returned list will never contain us.
+     * The keys closest to us.
+     * Returned list will never contain us.
      *
-     *  @param max maximum number of keys to return
-     *  @param toIgnore entries to exclude
-     *  @return non-null, closest first
+     * @param max maximum number of keys to return
+     * @param toIgnore entries to exclude
+     * @return non-null, closest first
      */
     public List<T> getClosest(int max, Collection<T> toIgnore) {
         List<T> rv = new ArrayList<>(max);
@@ -441,25 +440,25 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  The keys closest to the key.
-     *  Returned list will never contain us.
+     * The keys closest to the key.
+     * Returned list will never contain us.
      *
-     *  @param key the target key
-     *  @param max maximum number of keys to return
-     *  @return non-null, closest first
+     * @param key the target key
+     * @param max maximum number of keys to return
+     * @return non-null, closest first
      */
     public List<T> getClosest(T key, int max) {
         return getClosest(key, max, Collections.<T>emptySet());
     }
 
     /**
-     *  The keys closest to the key.
-     *  Returned list will never contain us.
+     * The keys closest to the key.
+     * Returned list will never contain us.
      *
-     *  @param key the target key
-     *  @param max maximum number of keys to return
-     *  @param toIgnore entries to exclude
-     *  @return non-null, closest first
+     * @param key the target key
+     * @param max maximum number of keys to return
+     * @param toIgnore entries to exclude
+     * @return non-null, closest first
      */
     public List<T> getClosest(T key, int max, Collection<T> toIgnore) {
         if (key.equals(_us)) return getClosest(max, toIgnore);
@@ -499,10 +498,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  The bucket number (NOT the range number) that the xor of the key goes in
-     *  Caller must hold read lock
+     * The bucket number (NOT the range number) that the xor of the key goes in
+     * Caller must hold read lock
      *
-     *  @return 0 to max-1 or -1 for us
+     * @return 0 to max-1 or -1 for us
      */
     private int pickBucket(T key) {
         int range = getRange(key);
@@ -519,13 +518,13 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  Returned list is a copy of the bucket list, closest first,
-     *  with the actual buckets (not a copy).
+     * Returned list is a copy of the bucket list, closest first,
+     * with the actual buckets (not a copy).
      *
-     *  Primarily for testing. You shouldn't ever need to get all the buckets.
-     *  Use getClosest() or getAll() instead to get the keys.
+     * Primarily for testing. You shouldn't ever need to get all the buckets.
+     * Use getClosest() or getAll() instead to get the keys.
      *
-     *  @return non-null
+     * @return non-null
      */
     List<KBucket<T>> getBuckets() {
         getReadLock();
@@ -537,10 +536,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  The bucket that the xor of the key goes in
-     *  Caller must hold read lock
+     * The bucket that the xor of the key goes in
+     * Caller must hold read lock
      *
-     *  @return null if key is us
+     * @return null if key is us
      */
     private KBucket<T> getBucket(T key) {
         int bucket = pickBucket(key);
@@ -551,10 +550,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  The bucket number that contains this range number
-     *  Caller must hold read lock or write lock
+     * The bucket number that contains this range number
+     * Caller must hold read lock or write lock
      *
-     *  @return 0 to max-1 or -1 for us
+     * @return 0 to max-1 or -1 for us
      */
     private int pickBucket(int range) {
         // If B is small, a linear search from back to front
@@ -589,24 +588,24 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  The number of bits minus 1 (range number) for the xor of the key.
-     *  Package private for testing only. Others shouldn't need this.
+     * The number of bits minus 1 (range number) for the xor of the key.
+     * Package private for testing only. Others shouldn't need this.
      *
-     *  @param key the key
-     *  @return 0 to max-1 or -1 for us
+     * @param key the key
+     * @return 0 to max-1 or -1 for us
      */
     int getRange(T key) {
         return _rangeCalc.getRange(key);
     }
 
     /**
-     *  For every bucket that hasn't been updated in this long,
-     *  or isn't close to full,
-     *  generate a random key that would be a member of that bucket.
-     *  The returned keys may be searched for to "refresh" the buckets.
+     * For every bucket that hasn't been updated in this long,
+     * or isn't close to full,
+     * generate a random key that would be a member of that bucket.
+     * The returned keys may be searched for to "refresh" the buckets.
      *
-     *  @param age the maximum age in milliseconds
-     *  @return non-null, closest first
+     * @param age the maximum age in milliseconds
+     * @return non-null, closest first
      */
     public List<T> getExploreKeys(long age) {
         List<T> rv = new ArrayList<>(_buckets.size());
@@ -625,11 +624,11 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  Generate a random key to go within this bucket
-     *  Package private for testing only. Others shouldn't need this.
+     * Generate a random key to go within this bucket
+     * Package private for testing only. Others shouldn't need this.
      *
-     *  @param bucket the bucket
-     *  @return a random key in the bucket's range
+     * @param bucket the bucket
+     * @return a random key in the bucket's range
      */
     T generateRandomKey(KBucket<T> bucket) {
         int begin = bucket.getRangeBegin();
@@ -707,10 +706,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  Make a new SimpleDataStrucure from the data
+     * Make a new SimpleDataStrucure from the data
      *
-     *  @param data size &lt;= SDS length, else throws IAE
-     *              Can be 1 bigger if top byte is zero
+     * @param data size &lt;= SDS length, else throws IAE
+     * Can be 1 bigger if top byte is zero
      */
     @SuppressWarnings("unchecked")
     private T makeKey(byte[] data) {
@@ -789,8 +788,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  For Collections.binarySearch.
-     *  getRangeBegin == getRangeEnd.
+     * For Collections.binarySearch.
+     * getRangeBegin == getRangeEnd.
      */
     private static class DummyBucket<T extends SimpleDataStructure> implements KBucket<T> {
         private final int r;
@@ -849,8 +848,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
     }
 
     /**
-     *  For Collections.binarySearch.
-     *  Returns equal for any overlap.
+     * For Collections.binarySearch.
+     * Returns equal for any overlap.
      */
     private static class BucketComparator<T extends SimpleDataStructure> implements Comparator<KBucket<T>>, Serializable {
         @Override

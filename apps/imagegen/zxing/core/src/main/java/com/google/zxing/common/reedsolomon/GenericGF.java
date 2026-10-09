@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -74,12 +74,12 @@ public final class GenericGF {
    * Create a representation of GF(size) using the given primitive polynomial.
    *
    * @param primitive irreducible polynomial whose coefficients are represented by
-   *  the bits of an int, where the least-significant bit represents the constant
-   *  coefficient
+   * the bits of an int, where the least-significant bit represents the constant
+   * coefficient
    * @param size the size
    * @param b the factor b in the generator polynomial can be 0- or 1-based
-   *  (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
-   *  In most cases it should be 1, but for QR code it is 0.
+   * (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
+   * In most cases it should be 1, but for QR code it is 0.
    */
   public GenericGF(int primitive, int size, int b) {
     this.primitive = primitive;

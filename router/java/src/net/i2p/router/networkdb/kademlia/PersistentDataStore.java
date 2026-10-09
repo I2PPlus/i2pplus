@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.BufferedInputStream;
@@ -162,8 +161,8 @@ public class PersistentDataStore extends TransientDataStore {
     public DatabaseEntry get(Hash key) {return get(key, true);}
 
     /**
-     *  Prepare for having only a partial set in memory and the rest on disk
-     *  @param persist if false, call super only, don't access disk
+     * Prepare for having only a partial set in memory and the rest on disk
+     * @param persist if false, call super only, don't access disk
      */
     @Override
     public DatabaseEntry get(Hash key, boolean persist) {
@@ -222,13 +221,13 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     *  Unconditionally store, bypassing all newer/older checks.
-     *  Persists for RouterInfos only.
+     * Unconditionally store, bypassing all newer/older checks.
+     * Persists for RouterInfos only.
      *
-     *  @param key non-null
-     *  @param data non-null
-     *  @return success
-     *  @since 0.9.64
+     * @param key non-null
+     * @param data non-null
+     * @return success
+     * @since 0.9.64
      */
     @Override
     public boolean forcePut(Hash key, DatabaseEntry data) {
@@ -238,7 +237,7 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /** How many files to write every 10 minutes. Doesn't make sense to limit it,
-     *  they just back up in the queue hogging memory.
+     * they just back up in the queue hogging memory.
      */
     private static final int WRITE_LIMIT = 10000;
     /** Interval between batch disk write cycles. */
@@ -284,7 +283,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /*
-         *  @since 0.9.50 was in separate RemoveJob
+         * @since 0.9.50 was in separate RemoveJob
          */
         private void removeQueued() {
 
@@ -302,8 +301,8 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /**
-         *  Drain up to WRITE_LIMIT pending entries from the write queue.
-         *  Returns the drained entries; caller must write and removeQueued() them.
+         * Drain up to WRITE_LIMIT pending entries from the write queue.
+         * Returns the drained entries; caller must write and removeQueued() them.
          */
         private List<Map.Entry<Hash, DatabaseEntry>> drainPending() {
             List<Map.Entry<Hash, DatabaseEntry>> toWrite = new ArrayList<>();
@@ -323,8 +322,8 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /**
-         *  Write a batch of RouterInfo entries to disk under the _dbDir lock.
-         *  Each entry is individually locked to avoid holding the lock across the entire batch.
+         * Write a batch of RouterInfo entries to disk under the _dbDir lock.
+         * Each entry is individually locked to avoid holding the lock across the entire batch.
          */
         private void writeBatch(List<Map.Entry<Hash, DatabaseEntry>> entries) {
             for (Map.Entry<Hash, DatabaseEntry> entry : entries) {
@@ -338,7 +337,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /**
-         *  Log write statistics and reset the timer.
+         * Log write statistics and reset the timer.
          */
         private void logWriteStats(int written, long startTime) {
             if (written > 0) {
@@ -352,7 +351,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /**
-         *  Sleep until the next write cycle or until flushed.
+         * Sleep until the next write cycle or until flushed.
          */
         private void waitForNextCycle() {
             synchronized (_waitLock) {
@@ -461,10 +460,10 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     *  Should this RouterInfo be persisted to disk?
-     *  Returns true only for reachable, non-degraded peers with sufficient bandwidth.
+     * Should this RouterInfo be persisted to disk?
+     * Returns true only for reachable, non-degraded peers with sufficient bandwidth.
      *
-     *  @return false if the RI should be skipped or deleted
+     * @return false if the RI should be skipped or deleted
      */
     private static boolean shouldStoreRi(RiFlags f) {
         return !f.isBanned && !f.isSlow && !f.isInvalidVersion && !f.isOld
@@ -472,10 +471,10 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     *  Detect IP spoofing and apply ban decisions for non-storeable peers.
-     *  Called only for peers that failed shouldStoreRi() and are not banned.
+     * Detect IP spoofing and apply ban decisions for non-storeable peers.
+     * Called only for peers that failed shouldStoreRi() and are not banned.
      *
-     *  @return true if the on-disk file should be deleted
+     * @return true if the on-disk file should be deleted
      */
     private boolean checkSpoofAndBan(Hash key, RouterInfo ri, RiFlags f) {
         boolean shouldDelete = false;
@@ -545,9 +544,9 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     *  Write a single RouterInfo to disk. Skips if the file is already current.
+     * Write a single RouterInfo to disk. Skips if the file is already current.
      *
-     *  @return true if the write failed (file should be deleted)
+     * @return true if the write failed (file should be deleted)
      */
     private boolean writeRiFile(Hash key, DatabaseEntry data, File dbFile) throws IOException {
         long dataPublishDate = getPublishDate(data);
@@ -656,13 +655,13 @@ public class PersistentDataStore extends TransientDataStore {
     private static long getPublishDate(DatabaseEntry data) {return data.getDate();}
 
     /**
-     *  This was mostly for manual reseeding, i.e. the user manually
-     *  copies RI files to the directory. Nobody does this,
-     *  so this is run way too often.
+     * This was mostly for manual reseeding, i.e. the user manually
+     * copies RI files to the directory. Nobody does this,
+     * so this is run way too often.
      *
-     *  But it's also for migrating and reading the files after a reseed.
-     *  Reseed task calls wakeup() on completion.
-     *  As of 0.9.4, also initiates an automatic reseed if necessary.
+     * But it's also for migrating and reading the files after a reseed.
+     * Reseed task calls wakeup() on completion.
+     * As of 0.9.4, also initiates an automatic reseed if necessary.
      */
     private class ReadJob extends JobImpl {
         /** Last modified time. */
@@ -684,8 +683,8 @@ public class PersistentDataStore extends TransientDataStore {
         public String getName() {return "Read NetDb";}
 
         /**
-         *  Check if the netdb directory or any subdirectory has been modified
-         *  since the last scan, or if we need to check for reseed.
+         * Check if the netdb directory or any subdirectory has been modified
+         * since the last scan, or if we need to check for reseed.
          * @return whether scan
          */
         private boolean shouldScan() {
@@ -705,7 +704,7 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /**
-         *  Decide whether to reseed based on router count and time since last reseed.
+         * Decide whether to reseed based on router count and time since last reseed.
          */
         private void checkReseed(int routerCount) {
             if (!_initialized) {
@@ -774,9 +773,9 @@ public class PersistentDataStore extends TransientDataStore {
         public boolean isNetDbReady() {return _setNetDbReady;}
 
         /**
-         *  Read all RouterInfo files from disk into memory.
-         *  Handles both flat and hierarchical directory layouts.
-         *  Must be called under synchronized(_dbDir).
+         * Read all RouterInfo files from disk into memory.
+         * Handles both flat and hierarchical directory layouts.
+         * Must be called under synchronized(_dbDir).
          */
         private void readFiles() {
             int routerCount = 0;
@@ -792,9 +791,9 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /**
-         *  Read RouterInfo files from the flat (non-subdirectory) layout.
+         * Read RouterInfo files from the flat (non-subdirectory) layout.
          *
-         *  @return total router count
+         * @return total router count
          */
         private int readFlatFiles(File[] routerInfoFiles) {
             int routerCount = 0;
@@ -812,11 +811,11 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         /**
-         *  Read RouterInfo files from the hierarchical (subdirectory) layout.
-         *  Migrates root-level files, shuffles to avoid load bias, and triggers
-         *  intermediate netdbReady events on slow systems.
+         * Read RouterInfo files from the hierarchical (subdirectory) layout.
+         * Migrates root-level files, shuffles to avoid load bias, and triggers
+         * intermediate netdbReady events on slow systems.
          *
-         *  @return total router count
+         * @return total router count
          */
         private int readHierarchicalFiles(File[] routerInfoFiles) {
             int routerCount = 0;
@@ -1152,8 +1151,8 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     *  Migrate from two-level to one-level directory structure
-     *  @since 0.9.5
+     * Migrate from two-level to one-level directory structure
+     * @since 0.9.5
      */
     private static void unmigrate(File dbdir) {
         for (int j = 0; j < B64.length(); j++) {
@@ -1169,8 +1168,8 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     *  Migrate from one-level to two-level directory structure
-     *  @since 0.9.5
+     * Migrate from one-level to two-level directory structure
+     * @since 0.9.5
      */
     private static void migrate(File dbdir, File[] files) {
         for (int i = 0; i < files.length; i++) {
@@ -1201,13 +1200,13 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     *  The persistent RI file for a hash.
-     *  This is available before the netdb subsystem is running, so we can delete our old RI.
+     * The persistent RI file for a hash.
+     * This is available before the netdb subsystem is running, so we can delete our old RI.
      *
-     *  @param ctx the router context
-     *  @param hash the router hash
-     *  @return non-null, should be absolute, does not necessarily exist
-     *  @since 0.9.23
+     * @param ctx the router context
+     * @param hash the router hash
+     * @return non-null, should be absolute, does not necessarily exist
+     * @since 0.9.23
      */
     public static File getRouterInfoFile(RouterContext ctx, Hash hash) {
         String b64 = hash.toBase64();
@@ -1218,7 +1217,7 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     /**
-     *  Package private for installer BundleRouterInfos
+     * Package private for installer BundleRouterInfos
      */
     static Hash getRouterInfoHash(String filename) {
         return getHash(filename, ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);

@@ -16,7 +16,6 @@ import net.i2p.util.SystemVersion;
  * Data for a new connection being established, where we initiated the
  * connection with a remote peer.  In other words, we are Alice and
  * they are Bob.
- *
  */
 class OutboundEstablishState {
     /** The router context */
@@ -135,13 +134,13 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Flat delay between all retransmits (no exponential backoff).
-     *  Handshake packets are tiny (~200B) and infrequent per-peer,
-     *  so the bandwidth cost of flat retransmission is negligible.
-     *  The OB_MESSAGE_TIMEOUT (2.5s) bounds total retransmits per establishment phase.
+     * Flat delay between all retransmits (no exponential backoff).
+     * Handshake packets are tiny (~200B) and infrequent per-peer,
+     * so the bandwidth cost of flat retransmission is negligible.
+     * The OB_MESSAGE_TIMEOUT (2.5s) bounds total retransmits per establishment phase.
      *
-     *  Was 1000ms with exponential doubling (max gap 16s).
-     *  Reduced to 500ms, now 200ms for sub-100ms message delivery.
+     * Was 1000ms with exponential doubling (max gap 16s).
+     * Reduced to 500ms, now 200ms for sub-100ms message delivery.
      */
     protected static final long RETRANSMIT_DELAY = SystemVersion.isSlow() ? 300 : 200;
 
@@ -151,16 +150,16 @@ class OutboundEstablishState {
     private static final long WAIT_FOR_HOLE_PUNCH_DELAY = 500;
 
     /**
-     *  For SSU2
+     * For SSU2
      *
-     *  @param ctx the router context
-     *  @param claimedAddress the claimed address from the netdb
-     *  @param remoteHostId the remote host ID
-     *  @param remotePeer the remote peer identity
-     *  @param needIntroduction whether introduction is needed
-     *  @param introKey the introduction key
-     *  @param addr the UDP address
-     *  @since 0.9.54
+     * @param ctx the router context
+     * @param claimedAddress the claimed address from the netdb
+     * @param remoteHostId the remote host ID
+     * @param remotePeer the remote peer identity
+     * @param needIntroduction whether introduction is needed
+     * @param introKey the introduction key
+     * @param addr the UDP address
+     * @since 0.9.54
      */
     protected OutboundEstablishState(RouterContext ctx, RemoteHostId claimedAddress,
                                    RemoteHostId remoteHostId,
@@ -196,17 +195,17 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Version of the SSU protocol in use.
+     * Version of the SSU protocol in use.
      *
-     *  @return the protocol version
-     *  @since 0.9.54
+     * @return the protocol version
+     * @since 0.9.54
      */
     public int getVersion() { return 1; }
 
     /**
-     *  Current outbound handshake state.
+     * Current outbound handshake state.
      *
-     *  @return the current outbound state
+     * @return the current outbound state
      */
     public synchronized OutboundState getState() { return _currentState; }
 
@@ -222,16 +221,16 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Remote address of the peer.
+     * Remote address of the peer.
      *
-     *  @return the remote address
+     * @return the remote address
      */
     public UDPAddress getRemoteAddress() { return _remoteAddress; }
 
     /**
-     *  Introduction nonce.
+     * Introduction nonce.
      *
-     *  @param nonce the introduction nonce
+     * @param nonce the introduction nonce
      */
     public void setIntroNonce(long nonce) { _introductionNonce = nonce; }
 
@@ -243,33 +242,33 @@ class OutboundEstablishState {
     public long getIntroNonce() { return _introductionNonce; }
 
     /**
-     *  Are we allowed to send extended options to this peer?
+     * Are we allowed to send extended options to this peer?
      *
-     *  @return true if allowed
-     *  @since 0.9.24
+     * @return true if allowed
+     * @since 0.9.24
      */
     public boolean isExtendedOptionsAllowed() { return _allowExtendedOptions; }
 
     /**
-     *  Should we ask this peer to be an introducer for us?
-     *  Ignored unless allowExtendedOptions is true
+     * Should we ask this peer to be an introducer for us?
+     * Ignored unless allowExtendedOptions is true
      *
-     *  @return true if introduction is needed
-     *  @since 0.9.24
+     * @return true if introduction is needed
+     * @since 0.9.24
      */
     public boolean needIntroduction() { return _needIntroduction; }
 
     /**
-     *  Round-trip time estimate.
+     * Round-trip time estimate.
      *
-     *  @return the RTT
+     * @return the RTT
      */
     synchronized int getRTT() { return _rtt; }
 
     /**
-     *  Queue a message to be sent after the session is established.
+     * Queue a message to be sent after the session is established.
      *
-     *  @param msg the message to queue
+     * @param msg the message to queue
      */
     public void addMessage(OutNetMessage msg) {
         if (_queuedMessages.isEmpty()) {
@@ -292,35 +291,35 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Is the first message queued our own DatabaseStoreMessage?
+     * Is the first message queued our own DatabaseStoreMessage?
      *
-     *  @return true if the first queued message is our DSM
-     *  @since 0.9.12
+     * @return true if the first queued message is our DSM
+     * @since 0.9.12
      */
     public boolean isFirstMessageOurDSM() {
         return _isFirstMessageOurDSM;
     }
 
     /**
-     *  Next queued message.
+     * Next queued message.
      *
-     *  @return the next queued message, or null if none
+     * @return the next queued message, or null if none
      */
     public OutNetMessage getNextQueuedMessage() {
         return _queuedMessages.poll();
     }
 
     /**
-     *  Remote router identity.
+     * Remote router identity.
      *
-     *  @return the remote identity
+     * @return the remote identity
      */
     public RouterIdentity getRemoteIdentity() { return _remotePeer; }
 
     /**
-     *  Bob's introduction key, as published in the netdb
+     * Bob's introduction key, as published in the netdb
      *
-     *  @return the intro key
+     * @return the intro key
      */
     public SessionKey getIntroKey() { return _introKey; }
 
@@ -355,7 +354,7 @@ class OutboundEstablishState {
     }
 
     /**
-     *  The SessionCreated validation failed
+     * The SessionCreated validation failed
      */
     public synchronized void fail() {
         _aliceIP = null;
@@ -369,33 +368,33 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Relay tag received from the introducer.
+     * Relay tag received from the introducer.
      *
-     *  @return the received relay tag
+     * @return the received relay tag
      */
     public synchronized long getReceivedRelayTag() { return _receivedRelayTag; }
     /**
-     *  Time the signed-on packet was sent.
+     * Time the signed-on packet was sent.
      *
-     *  @return the sent signed-on time
+     * @return the sent signed-on time
      */
     public synchronized long getSentSignedOnTime() { return _sentSignedOnTime; }
     /**
-     *  Time the signed-on packet was received.
+     * Time the signed-on packet was received.
      *
-     *  @return the received signed-on time
+     * @return the received signed-on time
      */
     public synchronized long getReceivedSignedOnTime() { return _receivedSignedOnTime; }
     /**
-     *  IP address reported by the peer.
+     * IP address reported by the peer.
      *
-     *  @return the received IP
+     * @return the received IP
      */
     public synchronized byte[] getReceivedIP() { return _aliceIP; }
     /**
-     *  Port reported by the peer.
+     * Port reported by the peer.
      *
-     *  @return the received port
+     * @return the received port
      */
     public synchronized int getReceivedPort() { return _alicePort; }
 
@@ -423,10 +422,10 @@ class OutboundEstablishState {
     }
 
     /**
-     *  When we sent the first SessionConfirmed packet.
+     * When we sent the first SessionConfirmed packet.
      *
-     *  @return the time, or 0 if not yet sent
-     *  @since 0.9.2
+     * @return the time, or 0 if not yet sent
+     * @since 0.9.2
      */
     public long getConfirmedSentTime() { return _confirmedSentTime; }
 
@@ -452,10 +451,10 @@ class OutboundEstablishState {
 
 
     /**
-     *  When we sent the first SessionRequest packet.
+     * When we sent the first SessionRequest packet.
      *
-     *  @return the time, or 0 if not yet sent
-     *  @since 0.9.2
+     * @return the time, or 0 if not yet sent
+     * @since 0.9.2
      */
     public long getRequestSentTime() { return _requestSentTime; }
 
@@ -477,10 +476,10 @@ class OutboundEstablishState {
     }
 
     /**
-     *  When we sent the first RelayRequest packet.
+     * When we sent the first RelayRequest packet.
      *
-     *  @return the time, or 0 if not yet sent
-     *  @since 0.9.2
+     * @return the time, or 0 if not yet sent
+     * @since 0.9.2
      */
     public long getIntroSentTime() { return _introSentTime; }
 
@@ -494,12 +493,12 @@ class OutboundEstablishState {
     }
 
     /**
-     *  This changes the remoteHostId from a hash-based one or possibly
-     *  incorrect IP/port to what the introducer told us.
-     *  All params are for the remote end (NOT the introducer) and must have been validated already.
+     * This changes the remoteHostId from a hash-based one or possibly
+     * incorrect IP/port to what the introducer told us.
+     * All params are for the remote end (NOT the introducer) and must have been validated already.
      *
-     *  @param bobIP the remote IP
-     *  @param bobPort the remote port
+     * @param bobIP the remote IP
+     * @param bobPort the remote port
      */
     public synchronized void introduced(byte[] bobIP, int bobPort) {
         if (_currentState != OutboundState.OB_STATE_PENDING_INTRO)
@@ -520,10 +519,10 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Accelerate response to RelayResponse if we haven't sent it yet.
+     * Accelerate response to RelayResponse if we haven't sent it yet.
      *
-     *  @return true if we should send the SessionRequest now
-     *  @since 0.9.15
+     * @return true if we should send the SessionRequest now
+     * @since 0.9.15
      */
     synchronized boolean receiveHolePunch() {
         if (_currentState != OutboundState.OB_STATE_INTRODUCED)
@@ -554,50 +553,50 @@ class OutboundEstablishState {
     public long getLifetime(long now) { return now - _establishBegin; }
 
     /**
-     *  Time the establish began.
+     * Time the establish began.
      *
-     *  @return the establish begin time
+     * @return the establish begin time
      */
     public long getEstablishBeginTime() { return _establishBegin; }
 
     /**
-     *  The next time a message should be sent.
+     * The next time a message should be sent.
      *
-     *  @return 0 at initialization (to force sending session request),
-     *          rcv time after receiving a packet,
-     *          send time + delay after sending a packet (including session request)
+     * @return 0 at initialization (to force sending session request),
+     * rcv time after receiving a packet,
+     * send time + delay after sending a packet (including session request)
      */
     public synchronized long getNextSendTime() { return _nextSend; }
 
     /**
-     *  Whether the state machine has already scheduled a resend.
+     * Whether the state machine has already scheduled a resend.
      *
-     *  <p>Derived rather than counted: the first send stamps {@code _lastSend} with the
-     *  same clock reading as {@code _establishBegin}, so a strictly later stamp means a
-     *  subsequent send. This is what lets the establishment deadline be extended only
-     *  once retransmission has genuinely failed, instead of holding every attempt - the
-     *  overwhelming majority of which are a peer that is simply not there - to the longer
-     *  budget.
+     * <p>Derived rather than counted: the first send stamps {@code _lastSend} with the
+     * same clock reading as {@code _establishBegin}, so a strictly later stamp means a
+     * subsequent send. This is what lets the establishment deadline be extended only
+     * once retransmission has genuinely failed, instead of holding every attempt - the
+     * overwhelming majority of which are a peer that is simply not there - to the longer
+     * budget.
      *
-     *  @return true if anything has been sent since the state was created
-     *  @since 0.9.71+
+     * @return true if anything has been sent since the state was created
+     * @since 0.9.71+
      */
     public synchronized boolean hasRetried() { return _lastSend > _establishBegin; }
 
     /**
-     *  This should be what the state is currently indexed by in the _outboundStates table.
-     *  Beware -
-     *  During introduction, this is a router hash.
-     *  After introduced() is called, this is set to the IP/port the introducer told us.
-     *  @return non-null
+     * This should be what the state is currently indexed by in the _outboundStates table.
+     * Beware -
+     * During introduction, this is a router hash.
+     * After introduced() is called, this is set to the IP/port the introducer told us.
+     * @return non-null
      */
     RemoteHostId getRemoteHostId() { return _remoteHostId; }
 
     /**
-     *  This will never be a hash-based address.
-     *  This is the 'claimed' (unverified) address from the netdb, or null.
-     *  It is not changed after introduction. Use getRemoteHostId() for the verified address.
-     *  @return may be null
+     * This will never be a hash-based address.
+     * This is the 'claimed' (unverified) address from the netdb, or null.
+     * It is not changed after introduction. Use getRemoteHostId() for the verified address.
+     * @return may be null
      */
     RemoteHostId getClaimedAddress() { return _claimedAddress; }
 
@@ -608,7 +607,7 @@ class OutboundEstablishState {
     }
 
     /**
-     *  Call from synchronized method only
+     * Call from synchronized method only
      */
     protected void packetReceived() {
         _nextSend = _context.clock().now();

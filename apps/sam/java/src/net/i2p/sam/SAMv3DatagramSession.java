@@ -32,8 +32,8 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     }
 
     /**
-     *   build a DatagramSession according to informations registered
-     *   with the given nickname
+     * build a DatagramSession according to informations registered
+     * with the given nickname
      *
      * Caller MUST call start().
      *
@@ -61,11 +61,11 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     }
 
     /**
-     *  Look up the registered session record for the given nickname,
-     *  throwing if it has already disappeared.
+     * Look up the registered session record for the given nickname,
+     * throwing if it has already disappeared.
      *
-     *  @throws SAMException if the nickname is not registered
-     *  @return the rec
+     * @throws SAMException if the nickname is not registered
+     * @return the rec
      */
     private static SessionRecord getRec(String nick) throws SAMException {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
@@ -75,8 +75,8 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     }
 
     /**
-     *   Build a Datagram Session on an existing i2p session
-     *   registered with the given nickname
+     * Build a Datagram Session on an existing i2p session
+     * registered with the given nickname
      *
      * Caller MUST call start().
      *

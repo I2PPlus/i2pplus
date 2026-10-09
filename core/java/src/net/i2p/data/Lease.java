@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.util.Clock;
@@ -22,65 +21,65 @@ import java.util.Date;
  *
  * <p>Lease represents the fundamental routing authorization in I2P:</p>
  * <ul>
- *   <li><strong>Authorization:</strong> Proves specific router can receive messages</li>
- *   <li><strong>Time-Bound:</strong> Valid only for specified time period</li>
- *   <li><strong>Destination-Specific:</strong> Authorizes service for particular destination</li>
- *   <li><strong>Tunnel Endpoint:</strong> Identifies specific tunnel on gateway router</li>
+ * <li><strong>Authorization:</strong> Proves specific router can receive messages</li>
+ * <li><strong>Time-Bound:</strong> Valid only for specified time period</li>
+ * <li><strong>Destination-Specific:</strong> Authorizes service for particular destination</li>
+ * <li><strong>Tunnel Endpoint:</strong> Identifies specific tunnel on gateway router</li>
  * </ul>
  *
  * <p><strong>Key Components:</strong></p>
  * <ul>
- *   <li><strong>Gateway:</strong> {@link Hash} identifying the router hosting the tunnel</li>
- *   <li><strong>Tunnel ID:</strong> {@link TunnelId} identifying specific tunnel on gateway</li>
- *   <li><strong>End Time:</strong> {@code long} timestamp when lease expires</li>
+ * <li><strong>Gateway:</strong> {@link Hash} identifying the router hosting the tunnel</li>
+ * <li><strong>Tunnel ID:</strong> {@link TunnelId} identifying specific tunnel on gateway</li>
+ * <li><strong>End Time:</strong> {@code long} timestamp when lease expires</li>
  * </ul>
  *
  * <p><strong>Authorization Model:</strong></p>
  * <ul>
- *   <li><strong>Proof of Authority:</strong> Destination authorizes specific router</li>
- *   <li><strong>Time Limitation:</strong> Authorization expires after set duration</li>
- *   <li><strong>Tunnel Specificity:</strong> Authorizes particular tunnel, not all tunnels</li>
- *   <li><strong>Renewable:</strong> Leases can be refreshed before expiration</li>
+ * <li><strong>Proof of Authority:</strong> Destination authorizes specific router</li>
+ * <li><strong>Time Limitation:</strong> Authorization expires after set duration</li>
+ * <li><strong>Tunnel Specificity:</strong> Authorizes particular tunnel, not all tunnels</li>
+ * <li><strong>Renewable:</strong> Leases can be refreshed before expiration</li>
  * </ul>
  *
  * <p><strong>Usage in LeaseSet:</strong></p>
  * <ul>
- *   <li><strong>Multiple Leases:</strong> Destinations typically have several concurrent leases</li>
- *   <li><strong>Load Balancing:</strong> Multiple leases distribute message load</li>
- *   <li><strong>Redundancy:</strong> Backup tunnels if primary becomes unavailable</li>
- *   <li><strong>Mobility:</strong> Leases updated as destination moves between routers</li>
+ * <li><strong>Multiple Leases:</strong> Destinations typically have several concurrent leases</li>
+ * <li><strong>Load Balancing:</strong> Multiple leases distribute message load</li>
+ * <li><strong>Redundancy:</strong> Backup tunnels if primary becomes unavailable</li>
+ * <li><strong>Mobility:</strong> Leases updated as destination moves between routers</li>
  * </ul>
  *
  * <p><strong>Network Operations:</strong></p>
  * <ul>
- *   <li><strong>Message Routing:</strong> Routers use leases to forward messages</li>
- *   <li><strong>Tunnel Selection:</strong> Senders choose from available leases</li>
- *   <li><strong>Expiration Handling:</strong> Leases removed when they expire</li>
- *   <li><strong>LeaseSet Publication:</strong> Leases published to network database</li>
+ * <li><strong>Message Routing:</strong> Routers use leases to forward messages</li>
+ * <li><strong>Tunnel Selection:</strong> Senders choose from available leases</li>
+ * <li><strong>Expiration Handling:</strong> Leases removed when they expire</li>
+ * <li><strong>LeaseSet Publication:</strong> Leases published to network database</li>
  * </ul>
  *
  * <p><strong>Security Considerations:</strong></p>
  * <ul>
- *   <li><strong>Verification:</strong> Verify lease authenticity via LeaseSet signature</li>
- *   <li><strong>Expiration:</strong> Ensure leases are still valid before use</li>
- *   <li><strong>Gateway Trust:</strong> Verify gateway router is trusted</li>
- *   <li><strong>Tunnel Security:</strong> Ensure tunnel endpoint is secure</li>
+ * <li><strong>Verification:</strong> Verify lease authenticity via LeaseSet signature</li>
+ * <li><strong>Expiration:</strong> Ensure leases are still valid before use</li>
+ * <li><strong>Gateway Trust:</strong> Verify gateway router is trusted</li>
+ * <li><strong>Tunnel Security:</strong> Ensure tunnel endpoint is secure</li>
  * </ul>
  *
  * <p><strong>Performance Aspects:</strong></p>
  * <ul>
- *   <li><strong>Efficient Lookup:</strong> Hash-based gateway identification</li>
- *   <li><strong>Quick Expiration:</strong> Timestamp comparison for validity checks</li>
- *   <li><strong>Compact Storage:</strong> Minimal data structure for network transmission</li>
- *   <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode() methods</li>
+ * <li><strong>Efficient Lookup:</strong> Hash-based gateway identification</li>
+ * <li><strong>Quick Expiration:</strong> Timestamp comparison for validity checks</li>
+ * <li><strong>Compact Storage:</strong> Minimal data structure for network transmission</li>
+ * <li><strong>Fast Comparison:</strong> Optimized equals() and hashCode() methods</li>
  * </ul>
  *
  * <p><strong>Related Structures:</strong></p>
  * <ul>
- *   <li>{@link LeaseSet} - Container for multiple leases</li>
- *   <li>{@link Lease2} - Enhanced version with 4-byte timestamps</li>
- *   <li>{@link MetaLease} - References other LeaseSets instead of tunnels</li>
- *   <li>{@link TunnelId} - Tunnel identifier on gateway router</li>
+ * <li>{@link LeaseSet} - Container for multiple leases</li>
+ * <li>{@link Lease2} - Enhanced version with 4-byte timestamps</li>
+ * <li>{@link MetaLease} - References other LeaseSets instead of tunnels</li>
+ * <li>{@link TunnelId} - Tunnel identifier on gateway router</li>
  * </ul>
  *
  * @author jrandom
@@ -129,18 +128,18 @@ public class Lease extends DataStructureImpl {
     }
 
     /**
-     *  Convenience wrapper, prefer getEndTime() for new code.
+     * Convenience wrapper, prefer getEndTime() for new code.
      *
-     *  @return end date
+     * @return end date
      */
     public Date getEndDate() {
         return Date.from(Instant.ofEpochMilli(_end));
     }
 
     /**
-     *  Convenience wrapper, prefer the long overload for new code.
+     * Convenience wrapper, prefer the long overload for new code.
      *
-     *  @param date end date
+     * @param date end date
      */
     public void setEndDate(Date date) {
         _end = date.getTime();

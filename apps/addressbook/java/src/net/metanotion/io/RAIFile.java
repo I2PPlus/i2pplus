@@ -33,11 +33,11 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
     }
 
     /**
-     *  Opens the file, deriving the open mode from the flags.
-     *  @param file the file to open
-     *  @param read must be true
-     *  @param write true to open the file for writing
-     *  @throws FileNotFoundException if the file cannot be opened
+     * Opens the file, deriving the open mode from the flags.
+     * @param file the file to open
+     * @param read must be true
+     * @param write true to open the file for writing
+     * @throws FileNotFoundException if the file cannot be opened
      */
     public RAIFile(File file, boolean read, boolean write) throws FileNotFoundException {
         this.f = file;
@@ -50,17 +50,17 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
     }
 
 /**
-     *  Is the file writable? (I2P)
-     *  Only valid if the File constructor was used, not the RAF constructor
-     *  @since 0.8.8
-     */
+ * Is the file writable? (I2P)
+ * Only valid if the File constructor was used, not the RAF constructor
+ * @since 0.8.8
+ */
     public boolean canWrite() {
         return this.w;
     }
 
 /**
-     *  @since 0.8.8
-     */
+ * @since 0.8.8
+ */
     @Override
     public String toString() {
         if (this.f != null)
@@ -118,8 +118,8 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
     public int readUnsignedShort() throws IOException { return delegate.readUnsignedShort(); }
 
     /**
-     *  Reads an unsigned 32-bit integer from the file. (I2P)
-     *  @throws IOException if the read value is negative
+     * Reads an unsigned 32-bit integer from the file. (I2P)
+     * @throws IOException if the read value is negative
      */
     public int readUnsignedInt()  throws IOException {
         int rv = readInt();

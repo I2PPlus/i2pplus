@@ -92,7 +92,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
 
     /**
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     *                                  valid config to contact the router
+     * valid config to contact the router
      */
 
     public I2PTunnelIRCServer(InetAddress host, int port, File privkey, String privkeyname, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -230,7 +230,6 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
      * Or do we want the full hash if the ircd is going to use this for
      * nickserv auto-login? Or even Base32 if it will be used in a
      * case-insensitive manner?
-     *
      */
     private String cloakDest(Destination d) {
         String hf;
@@ -247,13 +246,13 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     }
 
     /**
-     *  Keep reading until we see USER or SERVER.
-     *  This modifies the socket readTimeout, caller must save and restore.
+     * Keep reading until we see USER or SERVER.
+     * This modifies the socket readTimeout, caller must save and restore.
      *
-     *  @throws SocketTimeoutException if timeout is reached before newline
-     *  @throws EOFException if EOF is reached before newline
-     *  @throws RegistrationException if line too long
-     *  @throws IOException on other errors in the underlying stream
+     * @throws SocketTimeoutException if timeout is reached before newline
+     * @throws EOFException if EOF is reached before newline
+     * @throws RegistrationException if line too long
+     * @throws IOException on other errors in the underlying stream
      */
     private static String filterRegistration(I2PSocket socket, String newHostname) throws IOException {
         StringBuilder buf = new StringBuilder(128);
@@ -308,18 +307,18 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     }
 
     /**
-     *  Read a line terminated by newline, with a total read timeout.
+     * Read a line terminated by newline, with a total read timeout.
      *
-     *  Warning - strips \n but not \r
-     *  Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
-     *  Warning - not UTF-8
+     * Warning - strips \n but not \r
+     * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
+     * Warning - not UTF-8
      *
-     *  @param timeout throws SocketTimeoutException immediately if zero or negative
-     *  @throws SocketTimeoutException if timeout is reached before newline
-     *  @throws EOFException if EOF is reached before newline
-     *  @throws RegistrationException if line too long
-     *  @throws IOException on other errors in the underlying stream
-     *  @since 0.9.19 modified from DataHelper and I2PTunnelHTTPServer
+     * @param timeout throws SocketTimeoutException immediately if zero or negative
+     * @throws SocketTimeoutException if timeout is reached before newline
+     * @throws EOFException if EOF is reached before newline
+     * @throws RegistrationException if line too long
+     * @throws IOException on other errors in the underlying stream
+     * @since 0.9.19 modified from DataHelper and I2PTunnelHTTPServer
      */
     private static String readLine(I2PSocket socket, long timeout) throws IOException {
         StringBuilder buf = new StringBuilder(128);
@@ -354,7 +353,7 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     }
 
     /**
-     *  @since 0.9.19
+     * @since 0.9.19
      */
     private static class RegistrationException extends IOException {
         public RegistrationException(String s) {

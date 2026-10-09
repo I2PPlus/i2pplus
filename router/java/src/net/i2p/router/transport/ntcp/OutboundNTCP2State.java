@@ -27,12 +27,12 @@ import net.i2p.util.Log;
 
 /**
  *
- *  NTCP 2 only. We are Alice.
+ * NTCP 2 only. We are Alice.
  *
- *  Also contains static constants and methods used by InboundEstablishState for NTCP2.
- *  Does not extend EstablishBase.
+ * Also contains static constants and methods used by InboundEstablishState for NTCP2.
+ * Does not extend EstablishBase.
  *
- *  @since 0.9.35
+ * @since 0.9.35
  */
 class OutboundNTCP2State implements EstablishState {
 
@@ -212,9 +212,9 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  Don't synchronize this, deadlocks all over.
+     * Don't synchronize this, deadlocks all over.
      *
-     *  @return is the handshake complete and valid?
+     * @return is the handshake complete and valid?
      */
     public boolean isComplete() {
         synchronized (_stateLock) {
@@ -223,16 +223,16 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  NTCP version.
-     *  @return 2-5
+     * NTCP version.
+     * @return 2-5
      */
     public int getVersion() { return _version; }
 
     /**
-     *  Check if the connection is in initial state and ready for prepareOutbound()
+     * Check if the connection is in initial state and ready for prepareOutbound()
      *
-     *  @return whether initial state
-     *  @since 0.9.59
+     * @return whether initial state
+     * @since 0.9.59
      */
     public boolean isInitialState() {
         return _state == State.OB_INIT;
@@ -249,13 +249,13 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  We are Alice.
-     *  We are establishing an outbound connection, so prepare ourselves by
-     *  writing the first message in the handshake.
-     *  Encrypt X and write X, the options block, and the padding.
-     *  Save last half of encrypted X as IV for message 2 AES.
+     * We are Alice.
+     * We are establishing an outbound connection, so prepare ourselves by
+     * writing the first message in the handshake.
+     * Encrypt X and write X, the options block, and the padding.
+     * Save last half of encrypted X as IV for message 2 AES.
      *
-     *  @throws IllegalStateException
+     * @throws IllegalStateException
      */
     public synchronized void prepareOutbound() {
         if (!(_state == State.OB_INIT)) {
@@ -344,15 +344,15 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  We are Alice, so receive these bytes as part of an outbound connection.
-     *  This method receives message 2, and sends message 3.
+     * We are Alice, so receive these bytes as part of an outbound connection.
+     * This method receives message 2, and sends message 3.
      *
-     *  IV (CBC from msg 1) must be in _bobIV
+     * IV (CBC from msg 1) must be in _bobIV
      *
-     *  All data must be copied out of the buffer as Reader.processRead()
-     *  will return it to the pool.
+     * All data must be copied out of the buffer as Reader.processRead()
+     * will return it to the pool.
      *
-     *  Caller must synch
+     * Caller must synch
      */
     private void receiveOutbound(ByteBuffer src) {
         // Read in message #2 except for the padding
@@ -449,10 +449,10 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  We are Alice.
-     *  Write the 3rd message.
+     * We are Alice.
+     * Write the 3rd message.
      *
-     *  Caller must synch
+     * Caller must synch
      */
     private void prepareOutbound3() {
         // create msg 3 part 2 payload
@@ -543,9 +543,9 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  KDF for SipHash
+     * KDF for SipHash
      *
-     *  @return rv[0] is sip_ab, rv[1] is sip_ba
+     * @return rv[0] is sip_ab, rv[1] is sip_ba
      */
     static byte[][] generateSipHashKeys(RouterContext ctx, HandshakeState state) {
         // TODO use noise HMAC or HKDF method instead?
@@ -569,9 +569,9 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  Release resources on timeout.
-     *  @param e may be null
-     *  @since 0.9.16
+     * Release resources on timeout.
+     * @param e may be null
+     * @since 0.9.16
      */
     public synchronized void close(String reason, Exception e) {fail(reason, e);}
     /**
@@ -614,9 +614,9 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
-     *  Only call once.
+     * Only call once.
      *
-     *  Caller must synch
+     * Caller must synch
      */
     private void releaseBufs(boolean isVerified) {
         Arrays.fill(_tmp, (byte) 0);

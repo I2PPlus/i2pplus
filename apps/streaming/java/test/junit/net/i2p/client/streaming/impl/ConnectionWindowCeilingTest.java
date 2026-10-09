@@ -28,8 +28,8 @@ public class ConnectionWindowCeilingTest {
     private static final int ABS = Connection.ABSOLUTE_MAX_WINDOW;
 
     /** No estimate yet (NaN / zero / negative bwe, or non-positive RTT):
-     *  the ceiling falls back to the global floor so an uncalibrated stream
-     *  ramps exactly as before. */
+     * the ceiling falls back to the global floor so an uncalibrated stream
+     * ramps exactly as before. */
     @Test
     public void testNoEstimateFallsBackToGlobal() {
         assertEquals(GLOBAL, Connection.computeWindowCeiling(GLOBAL, Float.NaN, 400, FLOOR, ABS));
@@ -39,10 +39,10 @@ public class ConnectionWindowCeilingTest {
     }
 
     /** The regression: a tiny-but-valid (or absent) estimate must NOT pin the
-     *  ceiling at the initial-window floor when the Tuner global is higher.
-     *  The old {@code min(global, max(floor, bdp))} form absorbed streams at
-     *  128 messages — measured goodput could never grow past the pinned
-     *  window, so the pinned ceiling became a stable fixed point. */
+     * ceiling at the initial-window floor when the Tuner global is higher.
+     * The old {@code min(global, max(floor, bdp))} form absorbed streams at
+     * 128 messages — measured goodput could never grow past the pinned
+     * window, so the pinned ceiling became a stable fixed point. */
     @Test
     public void testNoAbsorbingPinBelowGlobal() {
         // the live failure: global 768 (one Tuner shrink), near-zero BDP
@@ -54,7 +54,7 @@ public class ConnectionWindowCeilingTest {
     }
 
     /** A proven pipe lifts the ceiling ABOVE the global, up to the absolute
-     *  cap — "as high as the connection supports". */
+     * cap — "as high as the connection supports". */
     @Test
     public void testBdpLiftsAboveGlobal() {
         // 1.0 pkt/ms x 900ms x 1.25 = 1125 > global 768
@@ -67,8 +67,8 @@ public class ConnectionWindowCeilingTest {
     }
 
     /** The BDP term scales with 125% headroom; an estimate below the global
-     *  floor is irrelevant (the floor wins), which is what keeps discovery
-     *  independent of a self-referential measurement. */
+     * floor is irrelevant (the floor wins), which is what keeps discovery
+     * independent of a self-referential measurement. */
     @Test
     public void testBdpScalesWithHeadroom() {
         // 1.0 x 1000 x 1.25 = 1250, above global 512
@@ -81,7 +81,7 @@ public class ConnectionWindowCeilingTest {
     }
 
     /** When the initial window exceeds the global, the ceiling still never
-     *  starts below a connection's starting cwnd. */
+     * starts below a connection's starting cwnd. */
     @Test
     public void testFloorBindsBelowGlobalFloor() {
         // 0.01 x 400 x 1.25 = 5 < floor 128 > global 64
@@ -106,7 +106,7 @@ public class ConnectionWindowCeilingTest {
     }
 
     /** The invariants: never above the absolute cap, never below the
-     *  global/floor base, for a sweep of inputs. */
+     * global/floor base, for a sweep of inputs. */
     @Test
     public void testBoundedSweep() {
         float[] bwes = {Float.NaN, 0.0f, 0.01f, 0.05f, 1.0f, 7.5f, 500.0f};

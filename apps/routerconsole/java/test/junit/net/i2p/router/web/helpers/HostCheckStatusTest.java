@@ -13,13 +13,13 @@ import java.util.Set;
 import org.junit.Test;
 
 /**
- *  The decisions behind hiding dead sites from the Sites of Interest listing.
+ * The decisions behind hiding dead sites from the Sites of Interest listing.
  *
- *  <p>Two sources decide: whether the naming service resolves the host, and what the last probe
- *  said. Each method here settles one of those, and each is pinned directly, because getting any
- *  of them wrong silently removes a link from the console - a failure no other test would catch.
+ * <p>Two sources decide: whether the naming service resolves the host, and what the last probe
+ * said. Each method here settles one of those, and each is pinned directly, because getting any
+ * of them wrong silently removes a link from the console - a failure no other test would catch.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class HostCheckStatusTest {
 
@@ -51,8 +51,8 @@ public class HostCheckStatusTest {
     }
 
     /**
-     *  The trailing field holds commas of its own. The split is positional, so the fields we
-     *  read must still land in the right place.
+     * The trailing field holds commas of its own. The split is positional, so the fields we
+     * read must still land in the right place.
      */
     @Test
     public void commasInTheLeaseSetFieldDoNotShiftTheColumns() {
@@ -160,8 +160,8 @@ public class HostCheckStatusTest {
     }
 
     /**
-     *  A recovered site reappears as soon as a later probe succeeds, which is the whole point of
-     *  hiding on failure rather than deleting the link.
+     * A recovered site reappears as soon as a later probe succeeds, which is the whole point of
+     * hiding on failure rather than deleting the link.
      */
     @Test
     public void aSiteThatComesBackIsShownAgain() {
@@ -237,8 +237,8 @@ public class HostCheckStatusTest {
     // ---- parseInterval ------------------------------------------------------
 
     /**
-     *  The live config reads "pingInterval=1", which means one hour. Reading it as one minute
-     *  would expire the cache 60x too often and re-read the file on most requests.
+     * The live config reads "pingInterval=1", which means one hour. Reading it as one minute
+     * would expire the cache 60x too often and re-read the file on most requests.
      */
     @Test
     public void bareNumberIsHours() {
@@ -297,7 +297,7 @@ public class HostCheckStatusTest {
     }
 
     /**
-     *  Being blacklisted outranks being up: a successful probe must not earn a link back.
+     * Being blacklisted outranks being up: a successful probe must not earn a link back.
      */
     @Test
     public void blacklistOutranksASuccessfulProbe() {
@@ -329,8 +329,8 @@ public class HostCheckStatusTest {
     }
 
     /**
-     *  A line carrying more than a hostname is ignored rather than stored, so a malformed
-     *  entry cannot blank a link that is not actually blacklisted.
+     * A line carrying more than a hostname is ignored rather than stored, so a malformed
+     * entry cannot blank a link that is not actually blacklisted.
      */
     @Test
     public void blacklistRejectsNonHostnameLines() {

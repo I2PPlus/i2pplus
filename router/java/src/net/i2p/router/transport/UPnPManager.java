@@ -34,36 +34,36 @@ import org.freenetproject.ForwardPortStatus;
  *
  * <strong>Core Features:</strong>
  * <ul>
- *   <li>Automatic UPnP device discovery</li>
- *   <li>Port forwarding request and management</li>
- *   <li>External IP address detection</li>
- *   <li>Gateway device mapping and configuration</li>
- *   <li>Lease renewal and monitoring</li>
- *   <li>Service advertisement for I2P</li>
+ * <li>Automatic UPnP device discovery</li>
+ * <li>Port forwarding request and management</li>
+ * <li>External IP address detection</li>
+ * <li>Gateway device mapping and configuration</li>
+ * <li>Lease renewal and monitoring</li>
+ * <li>Service advertisement for I2P</li>
  * </ul>
  *
  * <strong>UPnP Protocol Support:</strong>
  * <ul>
- *   <li>SSDP (Simple Service Discovery Protocol)</li>
- *   <li>HTTP interface for device configuration</li>
- *   <li>SOAP-based control messages</li>
- *   <li>Event-driven architecture with callbacks</li>
+ * <li>SSDP (Simple Service Discovery Protocol)</li>
+ * <li>HTTP interface for device configuration</li>
+ * <li>SOAP-based control messages</li>
+ * <li>Event-driven architecture with callbacks</li>
  * </ul>
  *
  * <strong>Integration:</strong>
  * <ul>
- *   <li>Bridges I2P RouterAddress to FreeNet structures</li>
- *   <li>Works with TransportManager for address updates</li>
- *   <li>Provides callbacks for transport events</li>
- *   <li>Handles multiple router discovery protocols</li>
+ * <li>Bridges I2P RouterAddress to FreeNet structures</li>
+ * <li>Works with TransportManager for address updates</li>
+ * <li>Provides callbacks for transport events</li>
+ * <li>Handles multiple router discovery protocols</li>
  * </ul>
  *
  * <strong>Configuration:</strong>
  * <ul>
- *   <li>Configurable HTTP and SSDP ports</li>
- *   <li>Automatic device selection and fallback</li>
- *   <li>Error handling and retry logic</li>
- *   <li>Logging and monitoring capabilities</li>
+ * <li>Configurable HTTP and SSDP ports</li>
+ * <li>Automatic device selection and fallback</li>
+ * <li>Error handling and retry logic</li>
+ * <li>Logging and monitoring capabilities</li>
  * </ul>
  *
  * @author zzz
@@ -85,9 +85,9 @@ class UPnPManager {
     private final TransportManager _manager;
     private final SimpleTimer2.TimedEvent _rescanner;
     /**
-     *  This is the TCP HTTP Event listener
-     *  We move these so we don't conflict with other users of the same upnp library
-     *  UPnP also binds to port 1900 UDP for multicast reception - this cannot be changed.
+     * This is the TCP HTTP Event listener
+     * We move these so we don't conflict with other users of the same upnp library
+     * UPnP also binds to port 1900 UDP for multicast reception - this cannot be changed.
      */
     private static final String PROP_HTTP_PORT = "i2np.upnp.HTTPPort";
     private static final int DEFAULT_HTTP_PORT = 7652;
@@ -136,8 +136,8 @@ class UPnPManager {
     }
 
     /**
-     *  Blocking, may take a while.
-     *  May be called even if already running.
+     * Blocking, may take a while.
+     * May be called even if already running.
      */
     public synchronized void start() {
         _shouldBeRunning = true;
@@ -191,7 +191,7 @@ class UPnPManager {
     }
 
     /**
-     *  Blocking, may take a while, up to 20 seconds
+     * Blocking, may take a while, up to 20 seconds
      */
     public synchronized void stop() {
         if (_log.shouldDebug())
@@ -207,15 +207,15 @@ class UPnPManager {
     }
 
     /**
-     *  Call when IP or network connectivity might have changed.
-     *  Starts UPnP if previous start failed, else starts a search.
-     *  Must have called start() first, and not called stop().
+     * Call when IP or network connectivity might have changed.
+     * Starts UPnP if previous start failed, else starts a search.
+     * Must have called start() first, and not called stop().
      *
-     *  Should be fast. This only starts the search, the responses
-     *  will come in over the MX time (3 seconds).
+     * Should be fast. This only starts the search, the responses
+     * will come in over the MX time (3 seconds).
      *
-     *  @return true if a rescan was actually fired off
-     *  @since 0.9.18
+     * @return true if a rescan was actually fired off
+     * @since 0.9.18
      */
     public synchronized boolean rescan() {
         if (!_shouldBeRunning)
@@ -286,9 +286,9 @@ class UPnPManager {
         }
 
         /**
-         *  Pushes out.
-         *  We do it this way because we may have two scans running concurrently,
-         *  we only want to call afterScan() once.
+         * Pushes out.
+         * We do it this way because we may have two scans running concurrently,
+         * we only want to call afterScan() once.
          */
         void reschedule() {
             // false == use latest time
@@ -338,8 +338,8 @@ class UPnPManager {
     }
 
     /**
-     *  This is the callback from UPnP.
-     *  It calls the TransportManager callbacks.
+     * This is the callback from UPnP.
+     * It calls the TransportManager callbacks.
      */
     private class UPnPCallback implements ForwardPortCallback {
 
@@ -425,8 +425,8 @@ class UPnPManager {
     }
 
     /**
-     *  Warning - blocking, very slow, queries the active router,
-     *  will take many seconds if it has vanished.
+     * Warning - blocking, very slow, queries the active router,
+     * will take many seconds if it has vanished.
      */
     public String renderStatusHTML() {
         if (!_isRunning)
@@ -437,7 +437,7 @@ class UPnPManager {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     *  Translate
+     * Translate
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);

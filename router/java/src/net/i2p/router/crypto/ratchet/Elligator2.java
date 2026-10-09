@@ -13,13 +13,13 @@ import net.i2p.data.PublicKey;
 import net.i2p.util.NativeBigInteger;
 
 /**
- *  Elligator2 encoding and decoding for X25519 public keys to provide cryptographically indistinguishable representations
+ * Elligator2 encoding and decoding for X25519 public keys to provide cryptographically indistinguishable representations
  *
- *  Ported from the Jan. 13, 2016 C version at https://github.com/Kleshni/Elligator-2
- *  Note: That code was completely rewritten May 8, 2017 and is now much more complex.
- *  No apparent license.
+ * Ported from the Jan. 13, 2016 C version at https://github.com/Kleshni/Elligator-2
+ * Note: That code was completely rewritten May 8, 2017 and is now much more complex.
+ * No apparent license.
  *
- *  @since 0.9.44
+ * @since 0.9.44
  */
 class Elligator2 {
 
@@ -184,7 +184,7 @@ class Elligator2 {
      * It's also able to return null if the representative is invalid (there are only 10 invalid representatives).
      *
      * @param representative the encoded data, little endian, 32 bytes
-     *                       WILL BE MODIFIED by masking byte 31
+     * WILL BE MODIFIED by masking byte 31
      *
      * @return x or null on failure
      */
@@ -200,7 +200,7 @@ class Elligator2 {
      *
      * @param alternative out parameter, or null if you don't care
      * @param representative the encoded data, little endian, 32 bytes;
-     *                       WILL BE MODIFIED by masking byte 31
+     * WILL BE MODIFIED by masking byte 31
      *
      * @return x or null on failure
      */

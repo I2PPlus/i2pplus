@@ -35,8 +35,8 @@ public class TuningHelper extends HelperBase {
 
     // human-readable labels for raw param names
     /** Param name to human label. Package-private so the conformance test can
-     *  verify the two maps stay in step; see {@code TuningHelperParamConformanceTest},
-     *  which lives in the test tree and so is not on the javadoc classpath. */
+     * verify the two maps stay in step; see {@code TuningHelperParamConformanceTest},
+     * which lives in the test tree and so is not on the javadoc classpath. */
     static final Map<String, String> DISPLAY_NAMES = new HashMap<>();
     static {
         DISPLAY_NAMES.put("ACK_FREQUENCY", _x("Acknowledgement Frequency"));
@@ -187,7 +187,7 @@ public class TuningHelper extends HelperBase {
 
     // brief purpose descriptions (<=120 chars)
     /** Param name to console description. Package-visible for the same reason as
-     *  {@link #DISPLAY_NAMES}. */
+     * {@link #DISPLAY_NAMES}. */
     static final Map<String, String> PARAM_DESCRIPTIONS = new HashMap<>();
     static {
         PARAM_DESCRIPTIONS.put("ACK_FREQUENCY", _x("Data packets between each ACK."));
@@ -623,7 +623,7 @@ public class TuningHelper extends HelperBase {
     }
 
     /**
-     *  Get the SSU transport tuner instance.
+     * Get the SSU transport tuner instance.
      *
      * @return the UDPTransport's Tuner, or null
      */

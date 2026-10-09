@@ -6,7 +6,6 @@ package net.i2p.router.crypto;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import junit.framework.TestCase;
@@ -295,5 +294,5 @@ public class ElGamalTest extends TestCase {
      * ykgen.getNextYK();
      * }
      * }
-     ****/
+     * ***/
 }

@@ -33,27 +33,27 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Write profiles to disk at shutdown, read at startup.
- *  The files are gzip compressed, we previously stored them
- *  with a ".dat" extension instead of ".txt.gz", so it wasn't apparent.
- *  Now migrated to a ".txt.gz" extension.
+ * Write profiles to disk at shutdown, read at startup.
+ * The files are gzip compressed, we previously stored them
+ * with a ".dat" extension instead of ".txt.gz", so it wasn't apparent.
+ * Now migrated to a ".txt.gz" extension.
  */
 class ProfilePersistenceHelper {
     private final Log _log;
     private final RouterContext _context;
 
     /**
-     *  Age beyond which a peer that is also absent from the network database is
-     *  treated as gone, making its profile file deletable at any store size.
+     * Age beyond which a peer that is also absent from the network database is
+     * treated as gone, making its profile file deletable at any store size.
      *
-     *  <p>Seven days. The previous logic used a 24-hour activity threshold and
-     *  separately deleted K/L/M/Unknown bandwidth peers regardless of age, so a peer
-     *  merely quiet overnight could lose its learned history. Those peers are no
-     *  longer written at all; this threshold now governs only what is left on disk
-     *  from before that. A peer that has been out of the network for a week will not
-     *  be selected by a RouterInfo that has since expired anyway.
+     * <p>Seven days. The previous logic used a 24-hour activity threshold and
+     * separately deleted K/L/M/Unknown bandwidth peers regardless of age, so a peer
+     * merely quiet overnight could lose its learned history. Those peers are no
+     * longer written at all; this threshold now governs only what is left on disk
+     * from before that. A peer that has been out of the network for a week will not
+     * be selected by a RouterInfo that has since expired anyway.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final long STALE_PROFILE_AGE_MS = 7 * 24 * 60 * 60 * 1000L;
 
@@ -395,10 +395,10 @@ class ProfilePersistenceHelper {
     }
 
     /**
- * Migrate from one-level to two-level directory structure
- *
- * @since 0.9.4
- */
+     * Migrate from one-level to two-level directory structure
+     *
+     * @since 0.9.4
+     */
     private void migrate(File[] files) { // NOSONAR S3012: called from selectFiles()
         for (int i = 0; i < files.length; i++) {
             File from = files[i];
@@ -410,10 +410,10 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  Delete profile files with timestamps older than 'age' ago
+     * Delete profile files with timestamps older than 'age' ago
      *
-     *  @return number deleted
-     *  @since 0.9.28
+     * @return number deleted
+     * @since 0.9.28
      */
     public int deleteOldProfiles(long age) {
         long cutoff = System.currentTimeMillis() - age;
@@ -434,9 +434,9 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  Read and parse a single stored profile.
+     * Read and parse a single stored profile.
      *
-     *  @param cutoff delete and return null if older than this (absolute time)
+     * @param cutoff delete and return null if older than this (absolute time)
      */
     @SuppressWarnings("deprecation")
     public PeerProfile readProfile(File file, long cutoff) {
@@ -567,10 +567,10 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  First heard about wasn't always set correctly before,
-     *  set it to the minimum of all recorded timestamps.
+     * First heard about wasn't always set correctly before,
+     * set it to the minimum of all recorded timestamps.
      *
-     *  @since 0.9.24
+     * @since 0.9.24
      */
     private void fixupFirstHeardAbout(PeerProfile p) {
         long min = Long.MAX_VALUE;
@@ -650,23 +650,23 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  Peers whose profile was loaded while the netdb held no RouterInfo, collected
-     *  during {@link #readProfiles()}.
+     * Peers whose profile was loaded while the netdb held no RouterInfo, collected
+     * during {@link #readProfiles()}.
      *
-     *  <p>These profiles are kept on disk but inert until the RouterInfo is fetched
-     *  again, so the caller needs the list to go and request it. Empty when no
-     *  collection has been supplied.
+     * <p>These profiles are kept on disk but inert until the RouterInfo is fetched
+     * again, so the caller needs the list to go and request it. Empty when no
+     * collection has been supplied.
      *
-     *  @since 0.9.72
+     * @since 0.9.72
      */
     private Set<Hash> _missingRouterInfo;
 
     /**
-     *  Supply the set to collect peers-without-RouterInfo into.
+     * Supply the set to collect peers-without-RouterInfo into.
      *
-     *  @param missingRouterInfo the set to fill during {@link #readProfiles()},
-     *                           or null to collect nothing
-     *  @since 0.9.72
+     * @param missingRouterInfo the set to fill during {@link #readProfiles()},
+     * or null to collect nothing
+     * @since 0.9.72
      */
     void setMissingRouterInfoSink(Set<Hash> missingRouterInfo) { _missingRouterInfo = missingRouterInfo; }
 
@@ -693,25 +693,25 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  Is a profile file genuinely stale, and therefore deletable whatever the
-     *  store size?
+     * Is a profile file genuinely stale, and therefore deletable whatever the
+     * store size?
      *
-     *  <p>Both conditions are required. Absence from the network database alone
-     *  means the RouterInfo expired, which happens routinely while a peer is
-     *  offline for an hour; inactivity alone means the peer has not been heard
-     *  from recently, which is equally routine. Only the conjunction identifies a
-     *  profile whose peer has been gone long enough that its learned history is
-     *  worth nothing.
+     * <p>Both conditions are required. Absence from the network database alone
+     * means the RouterInfo expired, which happens routinely while a peer is
+     * offline for an hour; inactivity alone means the peer has not been heard
+     * from recently, which is equally routine. Only the conjunction identifies a
+     * profile whose peer has been gone long enough that its learned history is
+     * worth nothing.
      *
-     *  <p>Pure decision, safe for unit tests.
+     * <p>Pure decision, safe for unit tests.
      *
-     *  @param absentFromNetDb true if no usable RouterInfo is held for the peer
-     *  @param lastActivity newest of last-sent-successfully, last-heard-from and
-     *                      last-heard-about, or 0 if the profile records none
-     *  @param now current time in ms
-     *  @param staleAge age beyond which an absent peer is treated as gone, in ms
-     *  @return true if the file may be deleted regardless of store size
-     *  @since 0.9.71+
+     * @param absentFromNetDb true if no usable RouterInfo is held for the peer
+     * @param lastActivity newest of last-sent-successfully, last-heard-from and
+     * last-heard-about, or 0 if the profile records none
+     * @param now current time in ms
+     * @param staleAge age beyond which an absent peer is treated as gone, in ms
+     * @return true if the file may be deleted regardless of store size
+     * @since 0.9.71+
      */
     static boolean isGenuinelyStale(boolean absentFromNetDb, long lastActivity,
                                     long now, long staleAge) {
@@ -723,22 +723,22 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  How many surplus (non-stale) profiles to delete to bring the store back
-     *  to the retention floor.
+     * How many surplus (non-stale) profiles to delete to bring the store back
+     * to the retention floor.
      *
-     *  <p>Stale profiles are deleted independently of this, so this counts only
-     *  the additional trimming that the store being over its floor justifies. It
-     *  is zero below the floor, which is what makes "never delete below the floor
-     *  unless genuinely stale" hold regardless of how many profiles are active.
+     * <p>Stale profiles are deleted independently of this, so this counts only
+     * the additional trimming that the store being over its floor justifies. It
+     * is zero below the floor, which is what makes "never delete below the floor
+     * unless genuinely stale" hold regardless of how many profiles are active.
      *
-     *  <p>Pure decision, safe for unit tests.
+     * <p>Pure decision, safe for unit tests.
      *
-     *  @param storedFiles profile files currently on disk
-     *  @param retentionFloor file count to keep, exclusive of stale profiles
-     *  @param surplusAvailable surplus profiles not already counted as stale
-     *  @return number of surplus files to delete, never negative and never more
-     *                 than {@code surplusAvailable}
-     *  @since 0.9.71+
+     * @param storedFiles profile files currently on disk
+     * @param retentionFloor file count to keep, exclusive of stale profiles
+     * @param surplusAvailable surplus profiles not already counted as stale
+     * @return number of surplus files to delete, never negative and never more
+     * than {@code surplusAvailable}
+     * @since 0.9.71+
      */
     static int surplusToDelete(int storedFiles, int retentionFloor, int surplusAvailable) {
         if (surplusAvailable <= 0) {return 0;}
@@ -748,33 +748,33 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  Delete profile files that are no longer worth keeping.
+     * Delete profile files that are no longer worth keeping.
      *
-     *  <p>Two rules, in this order:
-     *  <ol>
-     *  <li>a profile that is {@linkplain #isGenuinelyStale genuinely stale} is
-     *      deleted at any store size, oldest first;
-     *  <li>a profile that is merely surplus is deleted only while the store is
-     *      above {@code retentionFloor}, least-recently-active first.
-     *  </ol>
-     *  Staleness therefore decides <em>whether</em> a file may go and the store size
-     *  decides only <em>how many</em>.
+     * <p>Two rules, in this order:
+     * <ol>
+     * <li>a profile that is {@linkplain #isGenuinelyStale genuinely stale} is
+     * deleted at any store size, oldest first;
+     * <li>a profile that is merely surplus is deleted only while the store is
+     * above {@code retentionFloor}, least-recently-active first.
+     * </ol>
+     * Staleness therefore decides <em>whether</em> a file may go and the store size
+     * decides only <em>how many</em>.
      *
-     *  <p>Low-bandwidth peers are excluded where it belongs, on the write path in
-     *  {@code PeerManager.storeProfile()}, so no K/L/M/Unknown profile is created in
-     *  the first place. This method used to remove them instead, ahead of any age
-     *  check, which deleted the file of a peer heard from minutes earlier and only
-     *  by accident got the right answer: files already on disk from before that
-     *  check existed still age out here, through the stale bucket or the surplus
-     *  trim.
+     * <p>Low-bandwidth peers are excluded where it belongs, on the write path in
+     * {@code PeerManager.storeProfile()}, so no K/L/M/Unknown profile is created in
+     * the first place. This method used to remove them instead, ahead of any age
+     * check, which deleted the file of a peer heard from minutes earlier and only
+     * by accident got the right answer: files already on disk from before that
+     * check existed still age out here, through the stale bucket or the surplus
+     * trim.
      *
-     *  <p>Ordering uses the profile's own recorded activity rather than the file's
-     *  modification time, because profiles are rewritten whenever they are stored
-     *  and so carry a fresh mtime even for a peer long gone.
+     * <p>Ordering uses the profile's own recorded activity rather than the file's
+     * modification time, because profiles are rewritten whenever they are stored
+     * and so carry a fresh mtime even for a peer long gone.
      *
-     *  @param keepPeers peers whose files must be preserved, may be null
-     *  @param retentionFloor file count to keep before trimming surplus
-     *  @since 0.9.71+
+     * @param keepPeers peers whose files must be preserved, may be null
+     * @param retentionFloor file count to keep before trimming surplus
+     * @since 0.9.71+
      */
     public void purgeExcessProfiles(Set<Hash> keepPeers, int retentionFloor) {
         List<File> files = selectFiles();
@@ -842,12 +842,12 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  Newest of three timestamps, treating absent (0) as oldest.
+     * Newest of three timestamps, treating absent (0) as oldest.
      *
-     *  @param a first timestamp, 0 if unknown
-     *  @param b second timestamp, 0 if unknown
-     *  @param c third timestamp, 0 if unknown
-     *  @return the largest non-zero value, or 0 if all are 0
+     * @param a first timestamp, 0 if unknown
+     * @param b second timestamp, 0 if unknown
+     * @param c third timestamp, 0 if unknown
+     * @return the largest non-zero value, or 0 if all are 0
      */
     private static long newestOf(long a, long b, long c) {
         long newest = Math.max(a, Math.max(b, c));
@@ -855,9 +855,9 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     *  A profile file considered for deletion, with the age that decides its order.
+     * A profile file considered for deletion, with the age that decides its order.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final class FileMetadata {
 

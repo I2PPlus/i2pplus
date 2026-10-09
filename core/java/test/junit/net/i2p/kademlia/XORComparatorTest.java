@@ -11,11 +11,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *  Tests for XORComparator, the XOR-distance ordering used by the DHT.
- *  Covers exact distance computation, ordering invariants, and the
- *  tie-break on identical hashes.
+ * Tests for XORComparator, the XOR-distance ordering used by the DHT.
+ * Covers exact distance computation, ordering invariants, and the
+ * tie-break on identical hashes.
  *
- *  @since 0.9.10
+ * @since 0.9.10
  */
 public class XORComparatorTest {
 

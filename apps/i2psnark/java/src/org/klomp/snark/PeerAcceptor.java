@@ -203,10 +203,10 @@ class PeerAcceptor {
     public static class ProtocolException extends IOException {
         private static final long serialVersionUID = 1L;
         /**
-     * Create an acceptor exception.
-     *
-     * @param s the detail message
-     */
+         * Create an acceptor exception.
+         *
+         * @param s the detail message
+         */
         public ProtocolException(String s) {
             super(s);
         }

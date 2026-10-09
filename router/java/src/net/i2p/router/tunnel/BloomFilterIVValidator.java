@@ -14,15 +14,14 @@ import net.i2p.util.SystemVersion;
 /**
  * Manage the IV validation for all of the router's tunnels by way of a big
  * decaying bloom filter.
- *
  */
 public class BloomFilterIVValidator implements IVValidator {
     private final RouterContext _context;
     private final Log _log;
     private volatile DecayingBloomFilter _filter;
     /**
-     *  Manages the filter's size. Kept behind a field so the router can hold
-     *  the filter for the low-memory case and still retune it later.
+     * Manages the filter's size. Kept behind a field so the router can hold
+     * the filter for the low-memory case and still retune it later.
      */
     private volatile IVFilterSizer _sizer;
 
@@ -30,33 +29,32 @@ public class BloomFilterIVValidator implements IVValidator {
      * After 2*halflife, an entry is completely forgotten from the bloom filter.
      * To avoid the issue of overlap within different tunnels, this is set
      * higher than it needs to be.
-     *
      */
     private static final int HALFLIFE_MS = 10*60*1000;
     /**
-     *  Property the Tuner drives the filter exponent through. The starting
-     *  value is a property rather than a constant so an operator can pin it
-     *  before the first tuning cycle.
+     * Property the Tuner drives the filter exponent through. The starting
+     * value is a property rather than a constant so an operator can pin it
+     * before the first tuning cycle.
      */
     public static final String PROP_FILTER_M = "i2p.tunnel.ivFilterM";
     /**
-     *  Default exponent when nothing is configured: 2^23 bits per buffer, a
-     *  2 MB pair, which holds roughly 600k entries at a 1.5E-3 false positive
-     *  rate. That covers a 1 MBps share with a wide margin.
+     * Default exponent when nothing is configured: 2^23 bits per buffer, a
+     * 2 MB pair, which holds roughly 600k entries at a 1.5E-3 false positive
+     * rate. That covers a 1 MBps share with a wide margin.
      */
     public static final int DEFAULT_FILTER_M = 23;
     /** Floor for the exponent: 2^20 is a 0.5 MB pair. */
     public static final int MIN_FILTER_M = 20;
     /**
-     *  Fraction of max heap the filter may claim. The rest is left for
-     *  transport buffers, the netdb, and the collector.
+     * Fraction of max heap the filter may claim. The rest is left for
+     * transport buffers, the netdb, and the collector.
      */
     static final double FILTER_HEAP_FRACTION = 0.10d;
     /** Hard floor on the filter's byte budget, so a tiny heap still gets one. */
     static final long MIN_FILTER_BUDGET = 1L << 20;
     /**
-     *  Share bandwidth at or above which the fixed-memory filter is always worth
-     *  using. Below it the set is only kept when memory is genuinely tight.
+     * Share bandwidth at or above which the fixed-memory filter is always worth
+     * using. Below it the set is only kept when memory is genuinely tight.
      */
     private static final int MIN_SHARE_KBPS_TO_USE_BLOOM = 64;
     private static final long MIN_MEM_TO_USE_BLOOM = 64*1024*1024L;
@@ -66,18 +64,18 @@ public class BloomFilterIVValidator implements IVValidator {
     private static final String PROP_DISABLE = "router.disableDecayingBloomFilter";
 
     /**
-     *  Construct the validator, choosing a starting filter size from the
-     *  configured share and the heap, then leaving the size to be retuned from
-     *  measured load.
+     * Construct the validator, choosing a starting filter size from the
+     * configured share and the heap, then leaving the size to be retuned from
+     * measured load.
      *
-     *  <p>The initial choice deliberately favours the fixed-memory filter over
-     *  the set: a pair of 2^23 bit arrays is 2 MB whatever the traffic, whereas
-     *  the set costs about 72 bytes per entry and is unbounded until its cap.
-     *  So the set is used only when both the share is small and the heap is
-     *  small, and it is replaced by a filter as soon as the budget allows.
+     * <p>The initial choice deliberately favours the fixed-memory filter over
+     * the set: a pair of 2^23 bit arrays is 2 MB whatever the traffic, whereas
+     * the set costs about 72 bytes per entry and is unbounded until its cap.
+     * So the set is used only when both the share is small and the heap is
+     * small, and it is replaced by a filter as soon as the budget allows.
      *
-     *  @param ctx the router context
-     *  @param KBps share bandwidth
+     * @param ctx the router context
+     * @param KBps share bandwidth
      */
     public BloomFilterIVValidator(RouterContext ctx, int KBps) {
         _context = ctx;
@@ -113,10 +111,10 @@ public class BloomFilterIVValidator implements IVValidator {
     }
 
     /**
-     *  Memory this filter may claim, as a fraction of the heap, with a floor so
-     *  a small heap still gets a usable filter.
+     * Memory this filter may claim, as a fraction of the heap, with a floor so
+     * a small heap still gets a usable filter.
      *
-     *  @return the budget in bytes, never below the 1 MB floor
+     * @return the budget in bytes, never below the 1 MB floor
      */
     public static long filterBudgetBytes() {
         long budget = (long) (SystemVersion.getMaxMemory() * FILTER_HEAP_FRACTION);
@@ -124,10 +122,10 @@ public class BloomFilterIVValidator implements IVValidator {
     }
 
     /**
-     *  The filter's size exponent, or 0 when the set is in use.
+     * The filter's size exponent, or 0 when the set is in use.
      *
-     *  @return the exponent, or 0 for the set or when disabled
-     *  @since 0.9.71+
+     * @return the exponent, or 0 for the set or when disabled
+     * @since 0.9.71+
      */
     public int getFilterM() {
         DecayingBloomFilter f = _filter;
@@ -135,11 +133,11 @@ public class BloomFilterIVValidator implements IVValidator {
     }
 
     /**
-     *  Entries seen in the most recently completed decay window, which is what
-     *  the size has to be chosen against. Zero until the first decay.
+     * Entries seen in the most recently completed decay window, which is what
+     * the size has to be chosen against. Zero until the first decay.
      *
-     *  @return entries in the last window
-     *  @since 0.9.71+
+     * @return entries in the last window
+     * @since 0.9.71+
      */
     public int getLastWindowCount() {
         DecayingBloomFilter f = _filter;
@@ -147,10 +145,10 @@ public class BloomFilterIVValidator implements IVValidator {
     }
 
     /**
-     *  The live false positive rate, or 0 for the set, which is exact.
+     * The live false positive rate, or 0 for the set, which is exact.
      *
-     *  @return the current false positive rate
-     *  @since 0.9.71+
+     * @return the current false positive rate
+     * @since 0.9.71+
      */
     public double getMeasuredFalsePositiveRate() {
         DecayingBloomFilter f = _filter;
@@ -158,15 +156,15 @@ public class BloomFilterIVValidator implements IVValidator {
     }
 
     /**
-     *  Replace the filter with one of a different size, or with the set. A
-     *  resize discards the buffered IVs, so for a short window a repeated IV
-     *  could go unnoticed; the caller is expected to only do this on a decay
-     *  boundary and at most one step at a time.
+     * Replace the filter with one of a different size, or with the set. A
+     * resize discards the buffered IVs, so for a short window a repeated IV
+     * could go unnoticed; the caller is expected to only do this on a decay
+     * boundary and at most one step at a time.
      *
-     *  @param m the new exponent, 0 to switch to the memory-proportional set
-     *  @param KBps the configured share in KBps, not consulted here; the set's
-     *              cap comes from the heap budget
-     *  @since 0.9.71+
+     * @param m the new exponent, 0 to switch to the memory-proportional set
+     * @param KBps the configured share in KBps, not consulted here; the set's
+     * cap comes from the heap budget
+     * @since 0.9.71+
      */
     public void reconfigure(int m, int KBps) {
         DecayingBloomFilter old = _filter;
@@ -198,21 +196,21 @@ public class BloomFilterIVValidator implements IVValidator {
     }
 
     /**
-     *  The retuning policy for this validator, or null when the filter is off.
+     * The retuning policy for this validator, or null when the filter is off.
      *
-     *  @return the sizer, or null
-     *  @since 0.9.71+
+     * @return the sizer, or null
+     * @since 0.9.71+
      */
     public IVFilterSizer getSizer() { return _sizer; }
 
     /**
-     *  Chooses the filter exponent from measured load and the heap budget.
+     * Chooses the filter exponent from measured load and the heap budget.
      *
-     *  <p>Deliberately never shrinks on a low throughput or share-bandwidth
-     *  reading. Both are guesses about load rather than evidence that the
-     *  filter is too big, and cutting capacity on them is how a router ends up
-     *  limiting bandwidth it could have carried. The only reasons to shrink are
-     *  memory pressure and a false positive rate that is genuinely too high.
+     * <p>Deliberately never shrinks on a low throughput or share-bandwidth
+     * reading. Both are guesses about load rather than evidence that the
+     * filter is too big, and cutting capacity on them is how a router ends up
+     * limiting bandwidth it could have carried. The only reasons to shrink are
+     * memory pressure and a false positive rate that is genuinely too high.
      */
     public static class IVFilterSizer {
         /** False positive rate to size for, well inside what callers tolerate. */
@@ -222,13 +220,13 @@ public class BloomFilterIVValidator implements IVValidator {
         private int _KBps;
 
         /**
-         *  Bind the sizer to the validator whose filter it will resize, keeping
-         *  the share bandwidth to hand back on a resize.
+         * Bind the sizer to the validator whose filter it will resize, keeping
+         * the share bandwidth to hand back on a resize.
          *
-         *  @param validator the validator this policy retunes
-         *  @param ctx router context, held for the sizer but not read by it
-         *  @param KBps configured share bandwidth in KBps, retained for
-         *              reconfigure()
+         * @param validator the validator this policy retunes
+         * @param ctx router context, held for the sizer but not read by it
+         * @param KBps configured share bandwidth in KBps, retained for
+         * reconfigure()
          */
         public IVFilterSizer(BloomFilterIVValidator validator, RouterContext ctx, int KBps) {
             _validator = validator;
@@ -237,36 +235,36 @@ public class BloomFilterIVValidator implements IVValidator {
         }
 
         /**
-         *  The validator the sizing decisions are applied through.
+         * The validator the sizing decisions are applied through.
          *
-         *  @return the validator this policy retunes
+         * @return the validator this policy retunes
          */
         public BloomFilterIVValidator getValidator() { return _validator; }
         /**
-         *  Share bandwidth retained for the next resize.
+         * Share bandwidth retained for the next resize.
          *
-         *  @return configured share bandwidth in KBps
+         * @return configured share bandwidth in KBps
          */
         public int getKBps() { return _KBps; }
         /**
-         *  Replace the share bandwidth that the next resize is handed.
+         * Replace the share bandwidth that the next resize is handed.
          *
-         *  @param KBps configured share bandwidth in KBps
+         * @param KBps configured share bandwidth in KBps
          */
         public void setKBps(int KBps) { _KBps = KBps; }
 
         /**
-         *  Decide the exponent for one cycle.
+         * Decide the exponent for one cycle.
          *
-         *  <p>Static and free of router state so it can be tested directly.
+         * <p>Static and free of router state so it can be tested directly.
          *
-         *  @param currentM the exponent in force, 0 when the set is in use
-         *  @param windowEntries entries seen in the last completed decay window
-         *  @param fpr the live false positive rate of the current filter
-         *  @param budgetBytes memory the filter may claim
-         *  @param heapPressure 0.0 (idle) to 1.0 (heap full)
-         *  @return the exponent to use
-         *  @since 0.9.71+
+         * @param currentM the exponent in force, 0 when the set is in use
+         * @param windowEntries entries seen in the last completed decay window
+         * @param fpr the live false positive rate of the current filter
+         * @param budgetBytes memory the filter may claim
+         * @param heapPressure 0.0 (idle) to 1.0 (heap full)
+         * @return the exponent to use
+         * @since 0.9.71+
          */
         public static int computeTargetM(int currentM, int windowEntries, double fpr,
                                   long budgetBytes, double heapPressure) {

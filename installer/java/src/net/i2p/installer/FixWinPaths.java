@@ -29,9 +29,9 @@ import java.io.OutputStreamWriter;
  */
 public class FixWinPaths{
     /**
-     *  Rewrite the forward slashes in the given wrapper.config to backslashes.
-     *  Does nothing unless os.name starts with "Win".
-     *  @param args exactly one element, the path of the wrapper.config to fix
+     * Rewrite the forward slashes in the given wrapper.config to backslashes.
+     * Does nothing unless os.name starts with "Win".
+     * @param args exactly one element, the path of the wrapper.config to fix
      */
     public static void main(String[] args) {
         if (args.length != 1) {
@@ -45,17 +45,17 @@ public class FixWinPaths{
 
     }
     /**
-     *  Rewrite wrapper.config in place, via a sibling .tmp file. Exits 1 if the
-     *  rewritten file cannot be put in place, and returns silently if the name
-     *  is not a wrapper.config.
+     * Rewrite wrapper.config in place, via a sibling .tmp file. Exits 1 if the
+     * rewritten file cannot be put in place, and returns silently if the name
+     * is not a wrapper.config.
      *
-     *  <p>Windows refuses a rename onto an existing file, so the original has
-     *  to be removed before the temp file can take its name. That ordering
-     *  makes a failed delete or rename destructive, so both are reported as
-     *  failures rather than being allowed to look like success, and the temp
-     *  file is verified before the original is touched.
+     * <p>Windows refuses a rename onto an existing file, so the original has
+     * to be removed before the temp file can take its name. That ordering
+     * makes a failed delete or rename destructive, so both are reported as
+     * failures rather than being allowed to look like success, and the temp
+     * file is verified before the original is touched.
      *
-     *  @param file path of the wrapper.config to rewrite
+     * @param file path of the wrapper.config to rewrite
      */
     private static void replace(String file) {
         // the installer only ever passes the wrapper.config, so anything else
@@ -119,11 +119,11 @@ public class FixWinPaths{
     }
 
     /**
-     *  Put a fully written temp file in place of the original.
+     * Put a fully written temp file in place of the original.
      *
-     *  <p>Refuses to remove the original unless the temp file is present and
-     *  non-empty, so a truncated or missing temp file cannot leave the install
-     *  with no wrapper.config at all.
+     * <p>Refuses to remove the original unless the temp file is present and
+     * non-empty, so a truncated or missing temp file cannot leave the install
+     * with no wrapper.config at all.
      *
      * @param wConf path of the original file
      * @param wConfTemp path of the rewritten sibling

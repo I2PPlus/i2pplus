@@ -7,18 +7,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  Tests the per-flush stat accumulator behind the tunnel hot paths.
+ * Tests the per-flush stat accumulator behind the tunnel hot paths.
  *
- *  <p>The point of {@link RateStatMeanBatch} is that collapsing N samples of a
- *  mean-valued stat into one sample of their mean leaves the number a reader
- *  computes ({@code total / eventCount}) unchanged. These pin that arithmetic
- *  and the guards around it, because the alternative — dropping the batching —
- *  puts a stat lookup and a monitor acquisition per rate period back on the
- *  per-fragment path.
+ * <p>The point of {@link RateStatMeanBatch} is that collapsing N samples of a
+ * mean-valued stat into one sample of their mean leaves the number a reader
+ * computes ({@code total / eventCount}) unchanged. These pin that arithmetic
+ * and the guards around it, because the alternative — dropping the batching —
+ * puts a stat lookup and a monitor acquisition per rate period back on the
+ * per-fragment path.
  *
- *  <p>No RouterContext is needed: the arithmetic is reached through the pure
- *  accessors, and a flush with nothing pending returns before it would touch
- *  one.
+ * <p>No RouterContext is needed: the arithmetic is reached through the pure
+ * accessors, and a flush with nothing pending returns before it would touch
+ * one.
  */
 public class RateStatMeanBatchTest {
 
@@ -39,9 +39,9 @@ public class RateStatMeanBatchTest {
     }
 
     /**
-     *  The case that matters for a level stat: a burst of differing samples
-     *  collapses to their mean, which is what {@code total / eventCount} said
-     *  when each sample was reported on its own.
+     * The case that matters for a level stat: a burst of differing samples
+     * collapses to their mean, which is what {@code total / eventCount} said
+     * when each sample was reported on its own.
      */
     @Test
     public void differingSamplesCollapseToTheirMean() {
@@ -95,9 +95,9 @@ public class RateStatMeanBatchTest {
     }
 
     /**
-     *  A flush with nothing pending must emit nothing. A zero-valued sample
-     *  still raises the rate's event count, which would drag its average down
-     *  for a gateway that pumped but enqueued nothing.
+     * A flush with nothing pending must emit nothing. A zero-valued sample
+     * still raises the rate's event count, which would drag its average down
+     * for a gateway that pumped but enqueued nothing.
      */
     @Test
     public void flushWithNothingPendingEmitsNothing() {
@@ -127,8 +127,8 @@ public class RateStatMeanBatchTest {
     }
 
     /**
-     *  A zero level is a real sample and must not be dropped: an idle gateway
-     *  that drained to zero still had that depth observed.
+     * A zero level is a real sample and must not be dropped: an idle gateway
+     * that drained to zero still had that depth observed.
      */
     @Test
     public void zeroIsASampleNotAnAbsence() {

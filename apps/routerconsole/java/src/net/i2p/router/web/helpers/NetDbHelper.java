@@ -384,8 +384,8 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     *  Now we're a FormHandler
-     *  @since 0.9.38
+     * Now we're a FormHandler
+     * @since 0.9.38
      */
     protected void processForm() {
         _postOK = "Start Scan".equals(_action) || "Review".equals(_action);
@@ -427,9 +427,9 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     *   storeWriter() must be called previously
+     * storeWriter() must be called previously
      *
-     *   @return the netdb summary HTML
+     * @return the netdb summary HTML
      */
     public String getFloodfillNetDbSummary() {return getNetDbSummary();}
 
@@ -470,12 +470,12 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     *  Render a single named element for the contentonly fragment mode of the
-     *  netdb page. Only the remote and local leasesets listings are currently
-     *  fragmentable.
+     * Render a single named element for the contentonly fragment mode of the
+     * netdb page. Only the remote and local leasesets listings are currently
+     * fragmentable.
      *
-     *  @param id the element id to render
-     *  @since 0.9.70+
+     * @param id the element id to render
+     * @since 0.9.70+
      */
     public void renderFragment(String id) {
         NetDbRenderer renderer = new NetDbRenderer(_context);
@@ -516,9 +516,9 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     *  Render the NetDb navigation bar.
+     * Render the NetDb navigation bar.
      *
-     *  @since 0.9.1
+     * @since 0.9.1
      */
     private String renderNavBar() {
         StringBuilder buf = new StringBuilder(1024);
@@ -559,9 +559,9 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     *  Render the NetDb search/lookup form.
+     * Render the NetDb search/lookup form.
      *
-     *  @since 0.9.28
+     * @since 0.9.28
      */
     private void renderLookupForm() throws IOException {
         StringBuilder buf = new StringBuilder(16*1024);

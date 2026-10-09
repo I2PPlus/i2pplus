@@ -34,37 +34,37 @@ public class MaskedIPSet extends HashSet<String> {
     }
 
     /**
-     *  Masked IP set with a given initial capacity.
+     * Masked IP set with a given initial capacity.
      *
-     *  @param initialCapacity the initial capacity
+     * @param initialCapacity the initial capacity
      */
     public MaskedIPSet(int initialCapacity) {
         super(initialCapacity);
     }
 
     /**
-      * The Set of IPs for this peer, with a given mask.
-      * Includes the comm system's record of the IP, and all netDb addresses.
-      *
-      * As of 0.9.24, returned set will include netdb family as well.
-      *
-      * This gets the peer from the netdb without validation,
-      * for efficiency and to avoid deadlocks.
-      * Peers are presumed to be validated elsewhere.
-      *
-      * @param peer non-null
-      * @param mask is 1-4 (number of bytes to match)
-      */
+     * The Set of IPs for this peer, with a given mask.
+     * Includes the comm system's record of the IP, and all netDb addresses.
+     *
+     * As of 0.9.24, returned set will include netdb family as well.
+     *
+     * This gets the peer from the netdb without validation,
+     * for efficiency and to avoid deadlocks.
+     * Peers are presumed to be validated elsewhere.
+     *
+     * @param peer non-null
+     * @param mask is 1-4 (number of bytes to match)
+     */
     public MaskedIPSet(RouterContext ctx, Hash peer, int mask) {
         this(ctx, peer, lookupRILocally(ctx, peer), mask);
     }
 
     /**
-      * This gets the peer from the netdb without validation,
-      * for efficiency and to avoid deadlocks.
-      *
-      * @since 0.9.38
-      */
+     * This gets the peer from the netdb without validation,
+     * for efficiency and to avoid deadlocks.
+     *
+     * @since 0.9.38
+     */
     private static RouterInfo lookupRILocally(RouterContext ctx, Hash peer) {
         DatabaseEntry ds = ctx.netDb().lookupLocallyWithoutValidation(peer);
         if (ds != null && ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
@@ -73,27 +73,27 @@ public class MaskedIPSet extends HashSet<String> {
     }
 
     /**
-      * The Set of IPs for this peer, with a given mask.
-      * Includes the comm system's record of the IP, and all netDb addresses.
-      *
-      * As of 0.9.24, returned set will include netdb family as well.
-      *
-      * @param pinfo may be null
-      * @param mask is 1-4 (number of bytes to match)
-      */
+     * The Set of IPs for this peer, with a given mask.
+     * Includes the comm system's record of the IP, and all netDb addresses.
+     *
+     * As of 0.9.24, returned set will include netdb family as well.
+     *
+     * @param pinfo may be null
+     * @param mask is 1-4 (number of bytes to match)
+     */
     public MaskedIPSet(RouterContext ctx, RouterInfo pinfo, int mask) {
         this(ctx, pinfo != null ? pinfo.getHash() : null, pinfo, mask);
     }
 
     /**
-      * The Set of IPs for this peer, with a given mask.
-      * Includes the comm system's record of the IP, and all netDb addresses.
-      *
-      * As of 0.9.24, returned set will include netdb family as well.
-      *
-      * @param pinfo may be null
-      * @param mask is 1-4 (number of bytes to match)
-      */
+     * The Set of IPs for this peer, with a given mask.
+     * Includes the comm system's record of the IP, and all netDb addresses.
+     *
+     * As of 0.9.24, returned set will include netdb family as well.
+     *
+     * @param pinfo may be null
+     * @param mask is 1-4 (number of bytes to match)
+     */
     public MaskedIPSet(RouterContext ctx, Hash peer, RouterInfo pinfo, int mask) {
         super(4);
         if (pinfo == null)

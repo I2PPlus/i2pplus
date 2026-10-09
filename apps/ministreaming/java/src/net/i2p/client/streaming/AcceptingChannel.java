@@ -5,14 +5,14 @@ import java.nio.channels.SelectableChannel;
 import net.i2p.I2PException;
 
 /**
- *  As this does not (yet) extend ServerSocketChannel it cannot be returned by StandardServerSocket.getChannel(),
- *  until we implement an I2P SocketAddress class.
+ * As this does not (yet) extend ServerSocketChannel it cannot be returned by StandardServerSocket.getChannel(),
+ * until we implement an I2P SocketAddress class.
  *
- *  Warning, this interface and implementation is preliminary and subject to change without notice.
+ * Warning, this interface and implementation is preliminary and subject to change without notice.
  *
- *  Unimplemented, unlikely to ever be implemented.
+ * Unimplemented, unlikely to ever be implemented.
  *
- *  @since 0.8.11
+ * @since 0.8.11
  */
 public abstract class AcceptingChannel extends SelectableChannel {
 

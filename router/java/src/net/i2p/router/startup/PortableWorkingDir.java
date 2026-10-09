@@ -110,18 +110,18 @@ public class PortableWorkingDir {
     }
 
     /**
-     *  Redirect stdout and stderr to a wrapper.log file if there is no wrapper,
-     *  unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
+     * Redirect stdout and stderr to a wrapper.log file if there is no wrapper,
+     * unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
      *
-     *  If there is no -Dwrapper.log=/path/to/wrapper.log on the java command line
-     *  to specify a log file, check for existence of wrapper.log in CWD,
-     *  for backward compatibility in old installations (don't move it).
-     *  Otherwise, use (system temp dir)/wrapper.log.
-     *  Create if it doesn't exist, and append to it if it does.
-     *  Put the location in the environment as an absolute path, so logs.jsp can find it.
+     * If there is no -Dwrapper.log=/path/to/wrapper.log on the java command line
+     * to specify a log file, check for existence of wrapper.log in CWD,
+     * for backward compatibility in old installations (don't move it).
+     * Otherwise, use (system temp dir)/wrapper.log.
+     * Create if it doesn't exist, and append to it if it does.
+     * Put the location in the environment as an absolute path, so logs.jsp can find it.
      *
-     *  @param dir if null, use Java temp dir; System property wrapper.logfile overrides
-     *  @since 0.8.13
+     * @param dir if null, use Java temp dir; System property wrapper.logfile overrides
+     * @since 0.8.13
      */
     private static void setupSystemOut(String dir) {
         if (SystemVersion.hasWrapper())

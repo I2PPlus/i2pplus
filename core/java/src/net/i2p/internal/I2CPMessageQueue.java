@@ -22,64 +22,64 @@ import java.io.Closeable;
 public abstract class I2CPMessageQueue implements Closeable {
 
     /**
-     *  Send a message, nonblocking.
+     * Send a message, nonblocking.
      *
-     *  @return success (false if no space available)
+     * @return success (false if no space available)
      */
     public abstract boolean offer(I2CPMessage msg);
 
     /**
-     *  Send a message, blocking.
+     * Send a message, blocking.
      *
-     *  @param timeout how long to wait for space (ms)
-     *  @return success (false if no space available or if timed out)
-     *  @since 0.9.3
+     * @param timeout how long to wait for space (ms)
+     * @return success (false if no space available or if timed out)
+     * @since 0.9.3
      */
     public abstract boolean offer(I2CPMessage msg, long timeout) throws InterruptedException;
 
 /**
-     *  Receive a message, non-blocking.
-     *  Unused for now.
-     *
-     *  @return message or null if none available
-     */
+ * Receive a message, non-blocking.
+ * Unused for now.
+ *
+ * @return message or null if none available
+ */
     public abstract I2CPMessage poll();
 
     /**
-     *  How many messages are waiting to be received, for diagnostics.
+     * How many messages are waiting to be received, for diagnostics.
      *
-     *  <p>A queue that stays non-empty means the client is not draining it, which is the
-     *  reason {@link #offer(I2CPMessage)} fails and the only explanation for a client that
-     *  has stopped answering.
+     * <p>A queue that stays non-empty means the client is not draining it, which is the
+     * reason {@link #offer(I2CPMessage)} fails and the only explanation for a client that
+     * has stopped answering.
      *
-     *  @return messages waiting to be received
-     *  @since 0.9.71+
+     * @return messages waiting to be received
+     * @since 0.9.71+
      */
     public abstract int pending();
 
     /**
-     *  How many more messages this queue will accept, for diagnostics.
+     * How many more messages this queue will accept, for diagnostics.
      *
-     *  @return remaining capacity; {@link Integer#MAX_VALUE} when unbounded
-     *  @since 0.9.71+
+     * @return remaining capacity; {@link Integer#MAX_VALUE} when unbounded
+     * @since 0.9.71+
      */
     public abstract int remainingCapacity();
 
     /**
-     *  Send a message, blocking until space is available.
-     *  Unused for now.
+     * Send a message, blocking until space is available.
+     * Unused for now.
      */
     public abstract void put(I2CPMessage msg) throws InterruptedException;
 
     /**
-     *  Receive a message, blocking until one is available.
+     * Receive a message, blocking until one is available.
      *
-     *  @return message
+     * @return message
      */
     public abstract I2CPMessage take() throws InterruptedException;
 
     /**
-     *  == offer(new PoisonI2CPMessage());
+     * == offer(new PoisonI2CPMessage());
      */
     @Override
     public void close() {

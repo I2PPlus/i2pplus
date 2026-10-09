@@ -152,16 +152,16 @@ public class CompressedRequestorTest {
     }
 
     /**
-     *  Wait for async requestor completion after run() returns.
-     *  Keepalive finishes before run() returns (waiter 2, no browser close).
-     *  Non-keepalive may still be transferring; wait until finishTransfer
-     *  has closed the browser (waiter 1 + closeCount) or the keepalive path
-     *  has published waiter 2.
+     * Wait for async requestor completion after run() returns.
+     * Keepalive finishes before run() returns (waiter 2, no browser close).
+     * Non-keepalive may still be transferring; wait until finishTransfer
+     * has closed the browser (waiter 1 + closeCount) or the keepalive path
+     * has published waiter 2.
      *
-     *  @param browser browser stub under test
-     *  @param waiter requestor completion flag (1 = non-keepalive, 2 = keepalive)
-     *  @param timeoutMs max wait in milliseconds
-     *  @throws InterruptedException if interrupted while waiting
+     * @param browser browser stub under test
+     * @param waiter requestor completion flag (1 = non-keepalive, 2 = keepalive)
+     * @param timeoutMs max wait in milliseconds
+     * @throws InterruptedException if interrupted while waiting
      */
     private static void awaitNonKeepaliveDone(BrowserSocket browser, AtomicInteger waiter, long timeoutMs)
             throws InterruptedException {

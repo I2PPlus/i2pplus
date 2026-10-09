@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  This sends random data to all UDP peers at a specified rate.
- *  It is for testing only!
+ * This sends random data to all UDP peers at a specified rate.
+ * It is for testing only!
  */
 class UDPFlooder implements Runnable {
     private RouterContext _context;

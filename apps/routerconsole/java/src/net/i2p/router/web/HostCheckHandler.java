@@ -33,7 +33,7 @@ public class HostCheckHandler extends GzipHandler
     private static final String PROP_GZIP = "routerconsole.enableCompression";
 
     /**
-     *  MUST call setListenHosts() afterwards.
+     * MUST call setListenHosts() afterwards.
      */
     public HostCheckHandler(I2PAppContext ctx) {
         super();
@@ -61,11 +61,11 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Set the legal hosts.
-     *  Not synched. Call this BEFORE starting.
-     *  If empty, all are allowed.
+     * Set the legal hosts.
+     * Not synched. Call this BEFORE starting.
+     * If empty, all are allowed.
      *
-     *  @param hosts contains hostnames or IPs. But we allow all IPs anyway.
+     * @param hosts contains hostnames or IPs. But we allow all IPs anyway.
      */
     public void setListenHosts(Set<String> hosts) {
         _listenHosts.clear();
@@ -73,9 +73,9 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Block by Host header,
-     *  redirect HTTP to HTTPS,
-     *  pass everything else to the delegate.
+     * Block by Host header,
+     * redirect HTTP to HTTPS,
+     * pass everything else to the delegate.
      */
     @Override
     public void handle(String pathInContext,
@@ -137,12 +137,12 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Should we allow a request with this Host header?
+     * Should we allow a request with this Host header?
      *
-     *  ref: https://en.wikipedia.org/wiki/DNS_rebinding
+     * ref: https://en.wikipedia.org/wiki/DNS_rebinding
      *
-     *  @param host the HTTP Host header, null ok
-     *  @return true if OK
+     * @param host the HTTP Host header, null ok
+     * @return true if OK
      */
     private boolean allowHost(String host) {
         if (host == null)
@@ -168,10 +168,10 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Strip [] and port from a host header
+     * Strip [] and port from a host header
      *
-     *  @param host the HTTP Host header non-null
-     *  @return the host
+     * @param host the HTTP Host header non-null
+     * @return the host
      */
     private static String getHost(String host) {
         if (host.startsWith("[")) {
@@ -188,12 +188,12 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Validate Origin header for POST requests.
-     *  Allows requests with matching Origin (same-origin), or no Origin header.
-     *  Rejects cross-origin POST requests to prevent CSRF attacks.
+     * Validate Origin header for POST requests.
+     * Allows requests with matching Origin (same-origin), or no Origin header.
+     * Rejects cross-origin POST requests to prevent CSRF attacks.
      *
-     *  @param request the HTTP request
-     *  @return true if allowed
+     * @param request the HTTP request
+     * @return true if allowed
      */
     private boolean allowOrigin(HttpServletRequest request) {
         String origin = request.getHeader("Origin");
@@ -267,7 +267,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Extract host from "host:port" or "[ipv6]:port"
+     * Extract host from "host:port" or "[ipv6]:port"
      */
     private static String extractHost(String hostPort) {
         if (hostPort.startsWith("[")) {
@@ -284,7 +284,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Extract port from "host:port" or "[ipv6]:port", default to defaultPort if not found
+     * Extract port from "host:port" or "[ipv6]:port", default to defaultPort if not found
      */
     private static int extractPort(String hostPort, int defaultPort) {
         if (hostPort.startsWith("[")) {
@@ -305,7 +305,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Normalize IPv6 address to canonical form
+     * Normalize IPv6 address to canonical form
      */
     private static String normalizeIP(String host) {
         if (host == null) return null;
@@ -318,7 +318,7 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Check if host is localhost/loopback
+     * Check if host is localhost/loopback
      * @return whether localhost
      */
     private static boolean isLocalhost(String host) {
@@ -336,9 +336,9 @@ public class HostCheckHandler extends GzipHandler
     }
 
     /**
-     *  Redirect to HTTPS
+     * Redirect to HTTPS
      *
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     private static void sendRedirect(int httpsPort, HttpServletRequest httpRequest,

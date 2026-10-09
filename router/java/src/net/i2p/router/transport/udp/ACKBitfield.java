@@ -36,18 +36,18 @@ interface ACKBitfield {
     public boolean receivedComplete();
 
     /**
-     *  Number of fragments acked in this bitfield.
-     *  Faster than looping through received()
+     * Number of fragments acked in this bitfield.
+     * Faster than looping through received()
      *
-     *  @return number of fragments acked
-     *  @since 0.9.16
+     * @return number of fragments acked
+     * @since 0.9.16
      */
     public int ackCount();
 
     /**
-     *  Highest fragment number acked in this bitfield.
-     *  @return highest fragment number acked, or -1 if none
-     *  @since 0.9.16
+     * Highest fragment number acked in this bitfield.
+     * @return highest fragment number acked, or -1 if none
+     * @since 0.9.16
      */
     public int highestReceived();
 }

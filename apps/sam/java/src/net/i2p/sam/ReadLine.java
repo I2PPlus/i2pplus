@@ -20,18 +20,18 @@ class ReadLine {
     private static final int MAX_LINE_LENGTH = 8*1024;
 
     /**
-     *  Read a line terminated by newline, with a total read timeout.
+     * Read a line terminated by newline, with a total read timeout.
      *
-     *  Warning - strips \n but not \r
-     *  Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
+     * Warning - strips \n but not \r
+     * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      *
-     *  @param socket the socket
-     *  @param buf output
-     *  @param timeout forever if if zero or negative
-     *  @throws SocketTimeoutException if timeout is reached before newline
-     *  @throws EOFException if EOF is reached before newline
-     *  @throws LineTooLongException if too long
-     *  @throws IOException on other errors in the underlying stream
+     * @param socket the socket
+     * @param buf output
+     * @param timeout forever if if zero or negative
+     * @throws SocketTimeoutException if timeout is reached before newline
+     * @throws EOFException if EOF is reached before newline
+     * @throws LineTooLongException if too long
+     * @throws IOException on other errors in the underlying stream
      */
     public static void readLine(Socket socket, StringBuilder buf, int timeout) throws IOException {
         final int origTimeout = timeout;

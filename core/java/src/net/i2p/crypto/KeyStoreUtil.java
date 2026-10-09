@@ -40,9 +40,9 @@ import net.i2p.util.ShellCommand;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Keystore utilities, consolidated from various places.
+ * Keystore utilities, consolidated from various places.
  *
- *  @since 0.9.9
+ * @since 0.9.9
  */
 @SuppressWarnings("PMD.CloseResource")
 public final class KeyStoreUtil {
@@ -65,12 +65,12 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  SHA1 hashes
+     * SHA1 hashes
      *
-     *  No reports of some of these in a Java keystore but just to be safe...
-     *  CNNIC ones are in Ubuntu keystore.
+     * No reports of some of these in a Java keystore but just to be safe...
+     * CNNIC ones are in Ubuntu keystore.
      *
-     *  In comments below are the serial numer, CN, and OU
+     * In comments below are the serial numer, CN, and OU
      */
     private static final String[] BLACKLIST_SHA1 = new String[] {
         // CNNIC https://googleonlinesecurity.blogspot.com/2015/03/maintaining-digital-certificate-security.html
@@ -147,16 +147,16 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Create a new KeyStore object, and load it from ksFile if it is
-     *  non-null and it exists.
-     *  If ksFile is non-null and it does not exist, create a new empty
-     *  keystore file.
+     * Create a new KeyStore object, and load it from ksFile if it is
+     * non-null and it exists.
+     * If ksFile is non-null and it does not exist, create a new empty
+     * keystore file.
      *
-     *  @param ksFile may be null
-     *  @param password may be null
-     *  @return success
-     *  @throws GeneralSecurityException if keystore operations fail
-     *  @throws IOException if file operations fail
+     * @param ksFile may be null
+     * @param password may be null
+     * @return success
+     * @throws GeneralSecurityException if keystore operations fail
+     * @throws IOException if file operations fail
      */
     public static KeyStore createKeyStore(File ksFile, String password) throws GeneralSecurityException, IOException {
         boolean exists = ksFile != null && ksFile.exists();
@@ -178,12 +178,12 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Loads certs from location of javax.net.ssl.keyStore property,
-     *  else from $JAVA_HOME/lib/security/jssecacerts,
-     *  else from $JAVA_HOME/lib/security/cacerts.
+     * Loads certs from location of javax.net.ssl.keyStore property,
+     * else from $JAVA_HOME/lib/security/jssecacerts,
+     * else from $JAVA_HOME/lib/security/cacerts.
      *
-     *  @return null on catastrophic failure, returns empty KeyStore if can't load system file
-     *  @since 0.8.2, moved from SSLEepGet.initSSLContext() in 0.9.9
+     * @return null on catastrophic failure, returns empty KeyStore if can't load system file
+     * @since 0.8.2, moved from SSLEepGet.initSSLContext() in 0.9.9
      */
     public static KeyStore loadSystemKeyStore() {
         KeyStore ks;
@@ -226,11 +226,11 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Load all X509 Certs from a key store File into a KeyStore
-     *  Note that each call reinitializes the KeyStore
+     * Load all X509 Certs from a key store File into a KeyStore
+     * Note that each call reinitializes the KeyStore
      *
-     *  @return success
-     *  @since 0.8.2, moved from SSLEepGet in 0.9.9
+     * @return success
+     * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     private static boolean loadCerts(File file, KeyStore ks) {
         if (!file.exists()) return false;
@@ -256,11 +256,11 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Count all X509 Certs in a key store
+     * Count all X509 Certs in a key store
      *
-     *  @param ks the key store
-     *  @return number successfully added
-     *  @since 0.8.2, moved from SSLEepGet in 0.9.9
+     * @param ks the key store
+     * @return number successfully added
+     * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     public static int countCerts(KeyStore ks) {
         int count = 0;
@@ -276,18 +276,18 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Validate expiration for all private key certs in a key store.
-     *  Use this for keystores containing selfsigned certs where the
-     *  user will be expected to renew an expiring cert.
-     *  Use this for Jetty keystores, where we aren't doing the loading ourselves.
+     * Validate expiration for all private key certs in a key store.
+     * Use this for keystores containing selfsigned certs where the
+     * user will be expected to renew an expiring cert.
+     * Use this for Jetty keystores, where we aren't doing the loading ourselves.
      *
-     *  If a cert isn't valid, it will probably cause bigger problems later when it's used.
+     * If a cert isn't valid, it will probably cause bigger problems later when it's used.
      *
-     *  @param f keystore file
-     *  @param ksPW keystore password
-     *  @param expiresWithin ms if cert expires within this long, we will log a warning, e.g. 180*24*60*60*1000L
-     *  @return true if all are good, false if we logged something
-     *  @since 0.9.34
+     * @param f keystore file
+     * @param ksPW keystore password
+     * @param expiresWithin ms if cert expires within this long, we will log a warning, e.g. 180*24*60*60*1000L
+     * @return true if all are good, false if we logged something
+     * @since 0.9.34
      */
     public static boolean logCertExpiration(File f, String ksPW, long expiresWithin) {
         String location = f.getAbsolutePath();
@@ -305,19 +305,19 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Validate expiration for all private key certs in a key store.
-     *  Use this for keystores containing selfsigned certs where the
-     *  user will be expected to renew an expiring cert.
-     *  Use this for keystores we are feeding to an SSLContext and ServerSocketFactory.
+     * Validate expiration for all private key certs in a key store.
+     * Use this for keystores containing selfsigned certs where the
+     * user will be expected to renew an expiring cert.
+     * Use this for keystores we are feeding to an SSLContext and ServerSocketFactory.
      *
-     *  We added support for self-signed certs in 0.8.3 2011-01, with a 10-year expiration.
-     *  We still don't generate them by default. We don't expect anybody's
-     *  certs to expire until 2021.
+     * We added support for self-signed certs in 0.8.3 2011-01, with a 10-year expiration.
+     * We still don't generate them by default. We don't expect anybody's
+     * certs to expire until 2021.
      *
-     *  @param location the path or other identifying info, for logging only
-     *  @param expiresWithin ms if cert expires within this long, we will log a warning, e.g. 180*24*60*60*1000L
-     *  @return true if all are good, false if we logged something
-     *  @since 0.9.34
+     * @param location the path or other identifying info, for logging only
+     * @param expiresWithin ms if cert expires within this long, we will log a warning, e.g. 180*24*60*60*1000L
+     * @return true if all are good, false if we logged something
+     * @since 0.9.34
      */
     public static boolean logCertExpiration(KeyStore ks, String location, long expiresWithin) {
         boolean rv = true;
@@ -389,10 +389,10 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Remove all blacklisted X509 Certs in a key store.
+     * Remove all blacklisted X509 Certs in a key store.
      *
-     *  @return number successfully removed
-     *  @since 0.9.24
+     * @return number successfully removed
+     * @since 0.9.24
      */
     private static synchronized int removeBlacklistedCerts(KeyStore ks) {
         if (SystemVersion.isAndroid()) return 0;
@@ -445,15 +445,15 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Load all X509 Certs from a directory and add them to the
-     *  trusted set of certificates in the key store
+     * Load all X509 Certs from a directory and add them to the
+     * trusted set of certificates in the key store
      *
-     *  This DOES check for revocation.
+     * This DOES check for revocation.
      *
-     *  @param dir the directory containing certificate files
-     *  @param ks the key store to add certificates to
-     *  @return number successfully added
-     *  @since 0.8.2, moved from SSLEepGet in 0.9.9
+     * @param dir the directory containing certificate files
+     * @param ks the key store to add certificates to
+     * @return number successfully added
+     * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     public static int addCerts(File dir, KeyStore ks) {
         info("Looking for X509 Certificates in " + dir.getAbsolutePath());
@@ -490,27 +490,27 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Load an X509 Cert from a file and add it to the
-     *  trusted set of certificates in the key store
+     * Load an X509 Cert from a file and add it to the
+     * trusted set of certificates in the key store
      *
-     *  This does NOT check for revocation.
+     * This does NOT check for revocation.
      *
-     *  @return success
-     *  @since 0.8.2, moved from SSLEepGet in 0.9.9
+     * @return success
+     * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     public static boolean addCert(File file, String alias, KeyStore ks) {
         return addCert(file, alias, ks, null);
     }
 
     /**
-     *  Load an X509 Cert from a file and add it to the
-     *  trusted set of certificates in the key store
+     * Load an X509 Cert from a file and add it to the
+     * trusted set of certificates in the key store
      *
-     *  This DOES check for revocation, IF cs is non-null.
+     * This DOES check for revocation, IF cs is non-null.
      *
-     *  @param cs may be null; if non-null, check for revocation
-     *  @return success
-     *  @since 0.9.25
+     * @param cs may be null; if non-null, check for revocation
+     * @return success
+     * @since 0.9.25
      */
     public static boolean addCert(File file, String alias, KeyStore ks, CertStore cs) {
         try {
@@ -543,7 +543,7 @@ public final class KeyStoreUtil {
 
     /**
      * 48 char b32 string (30 bytes of entropy).
-     *  @return 48 char b32 string (30 bytes of entropy)
+     * @return 48 char b32 string (30 bytes of entropy)
      */
     public static String randomString() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -554,22 +554,22 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *  Use default keystore password, valid days, algorithm, and key size.
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * Use default keystore password, valid days, algorithm, and key size.
      *
-     *  As of 0.9.35, default algorithm and size depends on cname. If it appears to be
-     *  a CA, it will use EC/256. Otherwise, it will use RSA/2048.
+     * As of 0.9.35, default algorithm and size depends on cname. If it appears to be
+     * a CA, it will use EC/256. Otherwise, it will use RSA/2048.
      *
-     *  Warning, may take a long time.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param alias the name of the key
-     *  @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param ou e.g. console
-     *  @param keyPW the key password, must be at least 6 characters
+     * @param ks path to the keystore
+     * @param alias the name of the key
+     * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param ou e.g. console
+     * @param keyPW the key password, must be at least 6 characters
      *
-     *  @return success
-     *  @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
+     * @return success
+     * @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
      */
     public static boolean createKeys(File ks, String alias, String cname, String ou, String keyPW) {
         final boolean isCA =
@@ -581,25 +581,25 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
-     *  Use default keystore password, valid days, algorithm, and key size.
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * Use default keystore password, valid days, algorithm, and key size.
      *
-     *  As of 0.9.35, default algorithm and size depends on cname. If it appears to be
-     *  a CA, it will use EC/256. Otherwise, it will use RSA/2048.
+     * As of 0.9.35, default algorithm and size depends on cname. If it appears to be
+     * a CA, it will use EC/256. Otherwise, it will use RSA/2048.
      *
-     *  Warning, may take a long time.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param alias the name of the key
-     *  @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @param ks path to the keystore
+     * @param alias the name of the key
+     * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     *  @param ou e.g. console
-     *  @param keyPW the key password, must be at least 6 characters
+     * @param ou e.g. console
+     * @param keyPW the key password, must be at least 6 characters
      *
-     *  @return success
-     *  @since 0.9.34 added altNames param
+     * @return success
+     * @since 0.9.34 added altNames param
      */
     public static boolean createKeys(
             File ks, String alias, String cname, Set<String> altNames, String ou, String keyPW) {
@@ -612,25 +612,25 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
      *
-     *  For new code, the createKeysAndCRL() with the SigType argument is recommended over this one,
-     *  as it throws exceptions, and returns the certificate and CRL.
+     * For new code, the createKeysAndCRL() with the SigType argument is recommended over this one,
+     * as it throws exceptions, and returns the certificate and CRL.
      *
-     *  Warning, may take a long time.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password
-     *  @param alias the name of the key
-     *  @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param ou e.g. console
-     *  @param validDays e.g. 3652 (10 years)
-     *  @param keyAlg e.g. DSA , RSA, EC
-     *  @param keySize e.g. 1024
-     *  @param keyPW the key password, must be at least 6 characters
+     * @param ks path to the keystore
+     * @param ksPW the keystore password
+     * @param alias the name of the key
+     * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param ou e.g. console
+     * @param validDays e.g. 3652 (10 years)
+     * @param keyAlg e.g. DSA , RSA, EC
+     * @param keySize e.g. 1024
+     * @param keyPW the key password, must be at least 6 characters
      *
-     *  @return success
-     *  @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
+     * @return success
+     * @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
      */
     public static boolean createKeys(
             File ks,
@@ -646,28 +646,28 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
      *
-     *  For new code, the createKeysAndCRL() with the SigType argument is recommended over this one,
-     *  as it throws exceptions, and returns the certificate and CRL.
+     * For new code, the createKeysAndCRL() with the SigType argument is recommended over this one,
+     * as it throws exceptions, and returns the certificate and CRL.
      *
-     *  Warning, may take a long time.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password
-     *  @param alias the name of the key
-     *  @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @param ks path to the keystore
+     * @param ksPW the keystore password
+     * @param alias the name of the key
+     * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     *  @param ou e.g. console
-     *  @param validDays e.g. 3652 (10 years)
-     *  @param keyAlg e.g. DSA , RSA, EC
-     *  @param keySize e.g. 1024
-     *  @param keyPW the key password, must be at least 6 characters
+     * @param ou e.g. console
+     * @param validDays e.g. 3652 (10 years)
+     * @param keyAlg e.g. DSA , RSA, EC
+     * @param keySize e.g. 1024
+     * @param keyPW the key password, must be at least 6 characters
      *
-     *  @return success
-     *  @since 0.9.34 added altNames param
+     * @return success
+     * @since 0.9.34 added altNames param
      */
     public static boolean createKeys(
             File ks,
@@ -699,37 +699,37 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  New way - Native Java, does not call out to keytool.
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * New way - Native Java, does not call out to keytool.
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
      *
-     *  This returns the public key, private key, certificate, and CRL in an array.
-     *  All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
-     *  The private key and selfsigned cert are stored in the keystore.
-     *  The public key may be derived from the private key with KeyGenerator.getSigningPublicKey().
-     *  The public key certificate may be stored separately with
-     *  CertUtil.saveCert() if desired.
-     *  The CRL is not stored by this method, store it with
-     *  CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
+     * This returns the public key, private key, certificate, and CRL in an array.
+     * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
+     * The private key and selfsigned cert are stored in the keystore.
+     * The public key may be derived from the private key with KeyGenerator.getSigningPublicKey().
+     * The public key certificate may be stored separately with
+     * CertUtil.saveCert() if desired.
+     * The CRL is not stored by this method, store it with
+     * CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
      *
-     *  Throws on all errors.
-     *  Warning, may take a long time.
+     * Throws on all errors.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password
-     *  @param alias the name of the key
-     *  @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param ou e.g. console
-     *  @param validDays e.g. 3652 (10 years)
-     *  @param keyAlg e.g. DSA , RSA, EC
-     *  @param keySize e.g. 1024
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @return all you need:
-     *      rv[0] is a Java PublicKey
-     *      rv[1] is a Java PrivateKey
-     *      rv[2] is a Java X509Certificate
-     *      rv[3] is a Java X509CRL
+     * @param ks path to the keystore
+     * @param ksPW the keystore password
+     * @param alias the name of the key
+     * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param ou e.g. console
+     * @param validDays e.g. 3652 (10 years)
+     * @param keyAlg e.g. DSA , RSA, EC
+     * @param keySize e.g. 1024
+     * @param keyPW the key password, must be at least 6 characters
+     * @return all you need:
+     * rv[0] is a Java PublicKey
+     * rv[1] is a Java PrivateKey
+     * rv[2] is a Java X509Certificate
+     * rv[3] is a Java X509CRL
      *
-     *  @since 0.9.25
+     * @since 0.9.25
      */
     public static Object[] createKeysAndCRL(
             File ks,
@@ -746,40 +746,40 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  New way - Native Java, does not call out to keytool.
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * New way - Native Java, does not call out to keytool.
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
      *
-     *  This returns the public key, private key, certificate, and CRL in an array.
-     *  All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
-     *  The private key and selfsigned cert are stored in the keystore.
-     *  The public key may be derived from the private key with KeyGenerator.getSigningPublicKey().
-     *  The public key certificate may be stored separately with
-     *  CertUtil.saveCert() if desired.
-     *  The CRL is not stored by this method, store it with
-     *  CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
+     * This returns the public key, private key, certificate, and CRL in an array.
+     * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
+     * The private key and selfsigned cert are stored in the keystore.
+     * The public key may be derived from the private key with KeyGenerator.getSigningPublicKey().
+     * The public key certificate may be stored separately with
+     * CertUtil.saveCert() if desired.
+     * The CRL is not stored by this method, store it with
+     * CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
      *
-     *  Throws on all errors.
-     *  Warning, may take a long time.
+     * Throws on all errors.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password
-     *  @param alias the name of the key
-     *  @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @param ks path to the keystore
+     * @param ksPW the keystore password
+     * @param alias the name of the key
+     * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     *  @param ou e.g. console
-     *  @param validDays e.g. 3652 (10 years)
-     *  @param keyAlg e.g. DSA , RSA, EC
-     *  @param keySize e.g. 1024
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @return all you need:
-     *      rv[0] is a Java PublicKey
-     *      rv[1] is a Java PrivateKey
-     *      rv[2] is a Java X509Certificate
-     *      rv[3] is a Java X509CRL
+     * @param ou e.g. console
+     * @param validDays e.g. 3652 (10 years)
+     * @param keyAlg e.g. DSA , RSA, EC
+     * @param keySize e.g. 1024
+     * @param keyPW the key password, must be at least 6 characters
+     * @return all you need:
+     * rv[0] is a Java PublicKey
+     * rv[1] is a Java PrivateKey
+     * rv[2] is a Java X509Certificate
+     * rv[3] is a Java X509CRL
      *
-     *  @since 0.9.34 added altNames param
+     * @since 0.9.34 added altNames param
      */
     public static Object[] createKeysAndCRL(
             File ks,
@@ -806,35 +806,35 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  New way - Native Java, does not call out to keytool.
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * New way - Native Java, does not call out to keytool.
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
      *
-     *  This returns the public key, private key, certificate, and CRL in an array.
-     *  All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
-     *  The private key and selfsigned cert are stored in the keystore.
-     *  The public key may be derived from the private key with KeyGenerator.getSigningPublicKey().
-     *  The public key certificate may be stored separately with
-     *  CertUtil.saveCert() if desired.
-     *  The CRL is not stored by this method, store it with
-     *  CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
+     * This returns the public key, private key, certificate, and CRL in an array.
+     * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
+     * The private key and selfsigned cert are stored in the keystore.
+     * The public key may be derived from the private key with KeyGenerator.getSigningPublicKey().
+     * The public key certificate may be stored separately with
+     * CertUtil.saveCert() if desired.
+     * The CRL is not stored by this method, store it with
+     * CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
      *
-     *  Throws on all errors.
-     *  Warning, may take a long time.
+     * Throws on all errors.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password
-     *  @param alias the name of the key
-     *  @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param ou e.g. console
-     *  @param validDays e.g. 3652 (10 years)
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @return all you need:
-     *      rv[0] is a Java PublicKey
-     *      rv[1] is a Java PrivateKey
-     *      rv[2] is a Java X509Certificate
-     *      rv[3] is a Java X509CRL
+     * @param ks path to the keystore
+     * @param ksPW the keystore password
+     * @param alias the name of the key
+     * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param ou e.g. console
+     * @param validDays e.g. 3652 (10 years)
+     * @param keyPW the key password, must be at least 6 characters
+     * @return all you need:
+     * rv[0] is a Java PublicKey
+     * rv[1] is a Java PrivateKey
+     * rv[2] is a Java X509Certificate
+     * rv[3] is a Java X509CRL
      *
-     *  @since 0.9.25
+     * @since 0.9.25
      */
     public static Object[] createKeysAndCRL(
             File ks, String ksPW, String alias, String cname, String ou, int validDays, SigType type, String keyPW)
@@ -843,38 +843,38 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  New way - Native Java, does not call out to keytool.
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * New way - Native Java, does not call out to keytool.
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
      *
-     *  This returns the public key, private key, certificate, and CRL in an array.
-     *  All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
-     *  The private key and selfsigned cert are stored in the keystore.
-     *  The public key may be derived from the private key with KeyGenerator.getSigningPublicKey().
-     *  The public key certificate may be stored separately with
-     *  CertUtil.saveCert() if desired.
-     *  The CRL is not stored by this method, store it with
-     *  CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
+     * This returns the public key, private key, certificate, and CRL in an array.
+     * All of these are Java classes. Keys may be converted to I2P classes with SigUtil.
+     * The private key and selfsigned cert are stored in the keystore.
+     * The public key may be derived from the private key with KeyGenerator.getSigningPublicKey().
+     * The public key certificate may be stored separately with
+     * CertUtil.saveCert() if desired.
+     * The CRL is not stored by this method, store it with
+     * CertUtil.saveCRL() or CertUtil.exportCRL() if desired.
      *
-     *  Throws on all errors.
-     *  Warning, may take a long time.
+     * Throws on all errors.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password
-     *  @param alias the name of the key
-     *  @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @param ks path to the keystore
+     * @param ksPW the keystore password
+     * @param alias the name of the key
+     * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     *  @param ou e.g. console
-     *  @param validDays e.g. 3652 (10 years)
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @return all you need:
-     *      rv[0] is a Java PublicKey
-     *      rv[1] is a Java PrivateKey
-     *      rv[2] is a Java X509Certificate
-     *      rv[3] is a Java X509CRL
+     * @param ou e.g. console
+     * @param validDays e.g. 3652 (10 years)
+     * @param keyPW the key password, must be at least 6 characters
+     * @return all you need:
+     * rv[0] is a Java PublicKey
+     * rv[1] is a Java PrivateKey
+     * rv[2] is a Java X509Certificate
+     * rv[3] is a Java X509CRL
      *
-     *  @since 0.9.34 added altNames param
+     * @since 0.9.34 added altNames param
      */
     public static Object[] createKeysAndCRL(
             File ks,
@@ -902,23 +902,23 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  OLD way - keytool
-     *  Create a keypair and store it in the keystore at ks, creating it if necessary.
+     * OLD way - keytool
+     * Create a keypair and store it in the keystore at ks, creating it if necessary.
      *
-     *  Warning, may take a long time.
+     * Warning, may take a long time.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password
-     *  @param alias the name of the key
-     *  @param cname e.g. randomstuff.console.i2p.net
-     *  @param ou e.g. console
-     *  @param validDays e.g. 3652 (10 years)
-     *  @param keyAlg e.g. DSA , RSA, EC
-     *  @param keySize e.g. 1024
-     *  @param keyPW the key password, must be at least 6 characters
+     * @param ks path to the keystore
+     * @param ksPW the keystore password
+     * @param alias the name of the key
+     * @param cname e.g. randomstuff.console.i2p.net
+     * @param ou e.g. console
+     * @param validDays e.g. 3652 (10 years)
+     * @param keyAlg e.g. DSA , RSA, EC
+     * @param keySize e.g. 1024
+     * @param keyPW the key password, must be at least 6 characters
      *
-     *  @return success
-     *  @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
+     * @return success
+     * @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
      */
     private static boolean createKeysCLI(
             File ks,
@@ -1039,13 +1039,13 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Get a private key out of a keystore
+     * Get a private key out of a keystore
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password, may be null
-     *  @param alias the name of the key
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @return the key or null if not found
+     * @param ks path to the keystore
+     * @param ksPW the keystore password, may be null
+     * @param alias the name of the key
+     * @param keyPW the key password, must be at least 6 characters
+     * @return the key or null if not found
      */
     public static PrivateKey getPrivateKey(File ks, String ksPW, String alias, String keyPW)
             throws GeneralSecurityException, IOException {
@@ -1062,14 +1062,14 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Export the private key and certificate chain (if any) out of a keystore.
-     *  Does NOT close the output stream. Throws on all errors.
+     * Export the private key and certificate chain (if any) out of a keystore.
+     * Does NOT close the output stream. Throws on all errors.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password, may be null
-     *  @param alias the name of the key
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @since 0.9.25
+     * @param ks path to the keystore
+     * @param ksPW the keystore password, may be null
+     * @param alias the name of the key
+     * @param keyPW the key password, must be at least 6 characters
+     * @since 0.9.25
      */
     public static void exportPrivateKey(File ks, String ksPW, String alias, String keyPW, OutputStream out)
             throws GeneralSecurityException, IOException {
@@ -1089,16 +1089,16 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Renew the the private key certificate in a keystore.
-     *  Closes the input and output streams. Throws on all errors.
+     * Renew the the private key certificate in a keystore.
+     * Closes the input and output streams. Throws on all errors.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password, may be null
-     *  @param alias the name of the key, or null to get the first one in keystore
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @param validDays new cert to expire this many days from now
-     *  @return the new certificate
-     *  @since 0.9.34
+     * @param ks path to the keystore
+     * @param ksPW the keystore password, may be null
+     * @param alias the name of the key, or null to get the first one in keystore
+     * @param keyPW the key password, must be at least 6 characters
+     * @param validDays new cert to expire this many days from now
+     * @return the new certificate
+     * @since 0.9.34
      */
     public static X509Certificate renewPrivateKeyCertificate(
             File ks, String ksPW, String alias, String keyPW, int validDays)
@@ -1137,19 +1137,19 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Import the private key and certificate chain to a keystore.
-     *  Keystore will be created if it does not exist.
-     *  Private key MUST be first in the stream.
-     *  Closes the stream. Throws on all errors.
+     * Import the private key and certificate chain to a keystore.
+     * Keystore will be created if it does not exist.
+     * Private key MUST be first in the stream.
+     * Closes the stream. Throws on all errors.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password, may be null
-     *  @param alias the name of the key. If null, will be taken from the Subject CN
-     *               of the first certificate in the chain.
+     * @param ks path to the keystore
+     * @param ksPW the keystore password, may be null
+     * @param alias the name of the key. If null, will be taken from the Subject CN
+     * of the first certificate in the chain.
      *
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @return the alias as specified or extracted
-     *  @since 0.9.25
+     * @param keyPW the key password, must be at least 6 characters
+     * @return the alias as specified or extracted
+     * @since 0.9.25
      */
     public static String importPrivateKey(File ks, String ksPW, String alias, String keyPW, InputStream in)
             throws GeneralSecurityException, IOException {
@@ -1180,16 +1180,16 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Import the private key and certificate chain to a keystore.
-     *  Keystore will be created if it does not exist.
-     *  Private key MUST be first in the stream.
-     *  Closes the stream. Throws on all errors.
+     * Import the private key and certificate chain to a keystore.
+     * Keystore will be created if it does not exist.
+     * Private key MUST be first in the stream.
+     * Closes the stream. Throws on all errors.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password, may be null
-     *  @param alias the name of the key, non-null.
-     *  @param keyPW the key password, must be at least 6 characters
-     *  @since 0.9.25
+     * @param ks path to the keystore
+     * @param ksPW the keystore password, may be null
+     * @param alias the name of the key, non-null.
+     * @param keyPW the key password, must be at least 6 characters
+     * @since 0.9.25
      */
     public static void storePrivateKey(
             File ks, String ksPW, String alias, String keyPW, PrivateKey pk, List<X509Certificate> certs)
@@ -1208,12 +1208,12 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Get a cert out of a keystore
+     * Get a cert out of a keystore
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password, may be null
-     *  @param alias the name of the key
-     *  @return the certificate or null if not found
+     * @param ks path to the keystore
+     * @param ksPW the keystore password, may be null
+     * @param alias the name of the key
+     * @return the certificate or null if not found
      */
     public static Certificate getCert(File ks, String ksPW, String alias) throws GeneralSecurityException, IOException {
         try (InputStream fis = new FileInputStream(ks)) {
@@ -1225,15 +1225,15 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *  Pull the cert back OUT of the keystore and save it in Base64-encoded X.509 format
-     *  so the clients can get to it.
+     * Pull the cert back OUT of the keystore and save it in Base64-encoded X.509 format
+     * so the clients can get to it.
      *
-     *  @param ks path to the keystore
-     *  @param ksPW the keystore password, may be null
-     *  @param alias the name of the key
-     *  @param certFile output
-     *  @return success
-     *  @since 0.8.3 moved from SSLClientListenerRunner in 0.9.9
+     * @param ks path to the keystore
+     * @param ksPW the keystore password, may be null
+     * @param alias the name of the key
+     * @param certFile output
+     * @return success
+     * @since 0.8.3 moved from SSLClientListenerRunner in 0.9.9
      */
     public static boolean exportCert(File ks, String ksPW, String alias, File certFile) {
         try {
@@ -1270,12 +1270,12 @@ public final class KeyStoreUtil {
     }
 
     /**
-     *   Usage: KeyStoreUtil system (loads from system keystore)
-     *          KeyStoreUtil foo.ks (loads from system keystore, and from foo.ks keystore if exists, else creates empty)
-     *          KeyStoreUtil import file.ks file.key alias keypw (imports private key from file to keystore)
-     *          KeyStoreUtil export file.ks alias keypw (exports private key from keystore)
-     *          KeyStoreUtil keygen file.ks alias keypw (create keypair in keystore)
-     *          KeyStoreUtil keygen2 file.ks alias keypw (create keypair using I2PProvider)
+     * Usage: KeyStoreUtil system (loads from system keystore)
+     * KeyStoreUtil foo.ks (loads from system keystore, and from foo.ks keystore if exists, else creates empty)
+     * KeyStoreUtil import file.ks file.key alias keypw (imports private key from file to keystore)
+     * KeyStoreUtil export file.ks alias keypw (exports private key from keystore)
+     * KeyStoreUtil keygen file.ks alias keypw (create keypair in keystore)
+     * KeyStoreUtil keygen2 file.ks alias keypw (create keypair using I2PProvider)
      */
     public static void main(String[] args) {
         if (args.length <= 0) {

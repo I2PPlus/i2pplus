@@ -21,8 +21,8 @@ public class ConfigPeerHelper extends HelperBase {
 
 
     /**
-     *  Get the blocklist summary HTML.
-     *  @return the blocklist summary HTML
+     * Get the blocklist summary HTML.
+     * @return the blocklist summary HTML
      */
     public String getBlocklistSummary() {
         StringBuilder buf = new StringBuilder(128*1024);
@@ -114,18 +114,16 @@ public class ConfigPeerHelper extends HelperBase {
     }
 
     /**
-     *  Determine whether the given peer hash is banned.
+     * Determine whether the given peer hash is banned.
      *
-     *  @param h the peer hash to check
-     *  @return true if banned, false otherwise
-     *  @since 0.9.50
+     * @param h the peer hash to check
+     * @return true if banned, false otherwise
+     * @since 0.9.50
      */
     public boolean isBanned(Hash h) {return _context.banlist().isBanlisted(h);}
 
     /**
-     *  Convert a (non-negative) two's complement IP to exactly 16 bytes
-     *
-     *  @since IPv6, moved from Blocklist in 0.9.48
+     * Convert a (non-negative) two's complement IP to exactly 16 bytes
      */
     private static byte[] toIPBytes(BigInteger bi) {
         byte[] ba = bi.toByteArray();

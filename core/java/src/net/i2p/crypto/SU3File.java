@@ -71,8 +71,8 @@ public class SU3File {
     private static final int VERSION_OFFSET = 40; // Signature.SIGNATURE_BYTES; avoid early ctx init
 
     /**
-     *  The file type is advisory and is application-dependent.
-     *  The following values are defined but any value 0-255 is allowed.
+     * The file type is advisory and is application-dependent.
+     * The following values are defined but any value 0-255 is allowed.
      */
     public static final int TYPE_ZIP = 0;
 
@@ -118,9 +118,9 @@ public class SU3File {
     public static final int CONTENT_BLOCKLIST = 5;
 
     /**
-     *  The ContentType is the trust domain for the content.
-     *  The signer and signature will be checked with the
-     *  trusted certificates for that type.
+     * The ContentType is the trust domain for the content.
+     * The signer and signature will be checked with the
+     * trusted certificates for that type.
      */
     private enum ContentType {
         UNKNOWN(CONTENT_UNKNOWN, "unknown"),
@@ -197,26 +197,26 @@ public class SU3File {
     }
 
     /**
-     *  Should the signature be verified? Default true
+     * Should the signature be verified? Default true
      *
-     *  @since 0.9.15
+     * @since 0.9.15
      */
     public void setVerifySignature(boolean shouldVerify) {
         _verifySignature = shouldVerify;
     }
 
     /**
-     *  Use this X.509 cert file for verification instead of $I2P/certificates/content_type/foo_at_mail.i2p
+     * Use this X.509 cert file for verification instead of $I2P/certificates/content_type/foo_at_mail.i2p
      *
-     *  @since 0.9.15
+     * @since 0.9.15
      */
     private void setPublicKeyCertificate(File certFile) {
         _certFile = certFile;
     }
 
     /**
-     *  This does not check the signature, but it will fail if the signer is unknown,
-     *  unless setVerifySignature(false) has been called.
+     * This does not check the signature, but it will fail if the signer is unknown,
+     * unless setVerifySignature(false) has been called.
      * @return the version string
      */
     public String getVersionString() throws IOException {
@@ -225,8 +225,8 @@ public class SU3File {
     }
 
     /**
-     *  This does not check the signature, but it will fail if the signer is unknown,
-     *  unless setVerifySignature(false) has been called.
+     * This does not check the signature, but it will fail if the signer is unknown,
+     * unless setVerifySignature(false) has been called.
      * @return the signer string
      */
     public String getSignerString() throws IOException {
@@ -235,11 +235,11 @@ public class SU3File {
     }
 
     /**
-     *  This does not check the signature, but it will fail if the signer is unknown,
-     *  unless setVerifySignature(false) has been called.
+     * This does not check the signature, but it will fail if the signer is unknown,
+     * unless setVerifySignature(false) has been called.
      *
-     *  @return null if unknown
-     *  @since 0.9.9
+     * @return null if unknown
+     * @since 0.9.9
      */
     public SigType getSigType() throws IOException {
         verifyHeader();
@@ -247,15 +247,15 @@ public class SU3File {
     }
 
     /**
-     *  The ContentType is the trust domain for the content.
-     *  The signer and signature will be checked with the
-     *  trusted certificates for that type.
+     * The ContentType is the trust domain for the content.
+     * The signer and signature will be checked with the
+     * trusted certificates for that type.
      *
-     *  This does not check the signature, but it will fail if the signer is unknown,
-     *  unless setVerifySignature(false) has been called.
+     * This does not check the signature, but it will fail if the signer is unknown,
+     * unless setVerifySignature(false) has been called.
      *
-     *  @return -1 if unknown
-     *  @since 0.9.9
+     * @return -1 if unknown
+     * @since 0.9.9
      */
     public int getContentType() throws IOException {
         verifyHeader();
@@ -263,14 +263,14 @@ public class SU3File {
     }
 
     /**
-     *  The file type is advisory and is application-dependent.
-     *  The following values are defined but any value 0-255 is allowed.
+     * The file type is advisory and is application-dependent.
+     * The following values are defined but any value 0-255 is allowed.
      *
-     *  This does not check the signature, but it will fail if the signer is unknown,
-     *  unless setVerifySignature(false) has been called.
+     * This does not check the signature, but it will fail if the signer is unknown,
+     * unless setVerifySignature(false) has been called.
      *
-     *  @return 0-255 or -1 if unknown
-     *  @since 0.9.15
+     * @return 0-255 or -1 if unknown
+     * @since 0.9.15
      */
     public int getFileType() throws IOException {
         verifyHeader();
@@ -278,10 +278,10 @@ public class SU3File {
     }
 
     /**
-     *  This does not check the signature, but it will fail if the signer is unknown,
-     *  unless setVerifySignature(false) has been called.
+     * This does not check the signature, but it will fail if the signer is unknown,
+     * unless setVerifySignature(false) has been called.
      *
-     *  Throws IOE if verify vails.
+     * Throws IOE if verify vails.
      */
     public void verifyHeader() throws IOException {
         if (_headerVerified) return;
@@ -295,7 +295,7 @@ public class SU3File {
     }
 
     /**
-     *  Throws if verify vails.
+     * Throws if verify vails.
      */
     private void verifyHeader(InputStream in) throws IOException, DataFormatException {
         byte[] magic = new byte[MAGIC_BYTES.length];
@@ -392,24 +392,24 @@ public class SU3File {
     }
 
     /**
-     *  One-pass verify.
-     *  Throws IOE on all format errors.
+     * One-pass verify.
+     * Throws IOE on all format errors.
      *
-     *  @return true if signature is good
-     *  @since 0.9.9
+     * @return true if signature is good
+     * @since 0.9.9
      */
     public boolean verify() throws IOException {
         return verifyAndMigrate(null);
     }
 
     /**
-     *  One-pass verify and extract the content.
-     *  Recommend extracting to a temp location as the sig is not checked until
-     *  after extraction. This will delete the file if the sig does not verify.
-     *  Throws IOE on all format errors.
+     * One-pass verify and extract the content.
+     * Recommend extracting to a temp location as the sig is not checked until
+     * after extraction. This will delete the file if the sig does not verify.
+     * Throws IOE on all format errors.
      *
-     *  @param migrateTo the output file, probably in zip format. Null for verify only.
-     *  @return true if signature is good
+     * @param migrateTo the output file, probably in zip format. Null for verify only.
+     * @return true if signature is good
      */
     public boolean verifyAndMigrate(File migrateTo) throws IOException {
         FileOutputStream out = null;
@@ -483,15 +483,15 @@ public class SU3File {
     }
 
     /**
-     *  One-pass wrap and sign the content.
-     *  Writes to the file specified in the constructor.
-     *  Throws on all errors.
+     * One-pass wrap and sign the content.
+     * Writes to the file specified in the constructor.
+     * Throws on all errors.
      *
-     *  @param content the input file, probably in zip format
-     *  @param fileType 0-255, 0 for zip
-     *  @param contentType 0-255
-     *  @param version 1-255 bytes when converted to UTF-8
-     *  @param signer ID of the public key, 1-255 bytes when converted to UTF-8
+     * @param content the input file, probably in zip format
+     * @param fileType 0-255, 0 for zip
+     * @param contentType 0-255
+     * @param version 1-255 bytes when converted to UTF-8
+     * @param signer ID of the public key, 1-255 bytes when converted to UTF-8
      */
     public void write(
             File content,
@@ -725,9 +725,9 @@ public class SU3File {
 
     /**
      * Number or name.
-     *  @param ctype number or name
-     *  @return null if not found
-     *  @since 0.9.9
+     * @param ctype number or name
+     * @return null if not found
+     * @since 0.9.9
      */
     private static ContentType parseContentType(String ctype) {
         try {
@@ -783,10 +783,10 @@ public class SU3File {
     }
 
     /**
-     *  Zip, xml, and xml.gz only
+     * Zip, xml, and xml.gz only
      *
-     *  @return success
-     *  @since 0.9.9
+     * @return success
+     * @since 0.9.9
      */
     private static final boolean bulkSignCLI(
             String stype,
@@ -853,8 +853,8 @@ public class SU3File {
 
     /**
      * Success.
-     *  @return success
-     *  @since 0.9.9
+     * @return success
+     * @since 0.9.9
      */
     private static final boolean signCLI(
             String stype,
@@ -910,8 +910,8 @@ public class SU3File {
 
     /**
      * Success.
-     *  @return success
-     *  @since 0.9.9
+     * @return success
+     * @since 0.9.9
      */
     private static final boolean signCLI(
             SigType type,
@@ -987,9 +987,9 @@ public class SU3File {
 
     /**
      * If null, will use a name derived from signedFile.
-     *  @param outFile if null, will use a name derived from signedFile
-     *  @return success
-     *  @since 0.9.9
+     * @param outFile if null, will use a name derived from signedFile
+     * @return success
+     * @since 0.9.9
      */
     private static final boolean extractCLI(String signedFile, String outFile, boolean verifySig, String pkFile) {
         InputStream in = null;
@@ -1051,9 +1051,9 @@ public class SU3File {
 
     /**
      * May be null; non-null to save.
-     *  @param crlFile may be null; non-null to save
-     *  @return success
-     *  @since 0.9.9
+     * @param crlFile may be null; non-null to save
+     * @return success
+     * @since 0.9.9
      */
     private static final boolean genKeysCLI(
             String stype, String publicKeyFile, String privateKeyFile, String crlFile, String alias, String kspass) {
@@ -1067,11 +1067,11 @@ public class SU3File {
     }
 
     /**
-     *  Writes Java-encoded keys (X.509 for public and PKCS#8 for private)
+     * Writes Java-encoded keys (X.509 for public and PKCS#8 for private)
      *
-     *  @param crlFile may be null; non-null to save
-     *  @return success
-     *  @since 0.9.9
+     * @param crlFile may be null; non-null to save
+     * @return success
+     * @since 0.9.9
      */
     private static final boolean genKeysCLI(
             SigType type, String publicKeyFile, String privateKeyFile, String crlFile, String alias, String kspass) {
@@ -1131,10 +1131,10 @@ public class SU3File {
     }
 
     /**
-     *  For the -k CLI option
+     * For the -k CLI option
      *
-     *  @return non-null, throws IOE on all errors
-     *  @since 0.9.15
+     * @return non-null, throws IOE on all errors
+     * @since 0.9.15
      */
     private static PublicKey loadKey(File kd) throws IOException {
         try {

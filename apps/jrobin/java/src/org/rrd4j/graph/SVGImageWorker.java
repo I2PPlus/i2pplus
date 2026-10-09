@@ -10,7 +10,6 @@ import org.jfree.svg.SVGGraphics2D;
  * reduction; SVG element grouping is handled by postProcessSvg consolidation in SVGGraphics2D.
  *
  * @author zzz
- * @since 2024-05-04
  */
 public class SVGImageWorker extends ImageWorker {
     private SVGGraphics2D g2d;
@@ -23,17 +22,21 @@ public class SVGImageWorker extends ImageWorker {
     private boolean glow;
     private boolean smoothing;
 
-    /*** Image width in pixels.
-  @param width image width in pixels
-     *  @param height image height in pixels */
+   /**
+    * Image width in pixels.
+    * @param width image width in pixels
+    * @param height image height in pixels
+    */
     public SVGImageWorker(int width, int height) {
         this(width, height, false, false, null);
     }
 
-    /*** Image width in pixels.
-  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param glow whether to enable glow effect */
+    /**
+     * Image width in pixels.
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param glow whether to enable glow effect
+     */
     public SVGImageWorker(int width, int height, boolean glow) {
         this(width, height, glow, false, null);
     }

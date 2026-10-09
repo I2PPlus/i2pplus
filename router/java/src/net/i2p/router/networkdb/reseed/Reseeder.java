@@ -64,13 +64,13 @@ public class Reseeder {
     private static final String NETID_PARAM = "?netid=";
 
     /**
-     *  NOTE - URLs that are in both the standard and SSL groups must use the same hostname,
-     *         so the reseed process will not download from both.
-     *         Ports are supported as of 0.9.14.
+     * NOTE - URLs that are in both the standard and SSL groups must use the same hostname,
+     * so the reseed process will not download from both.
+     * Ports are supported as of 0.9.14.
      *
-     *  NOTE - Each seedURL must be a directory, it must end with a '/',
-     *         it can't end with 'index.html', for example. Both because of how individual file
-     *         URLs are constructed, and because SSLEepGet doesn't follow redirects.
+     * NOTE - Each seedURL must be a directory, it must end with a '/',
+     * it can't end with 'index.html', for example. Both because of how individual file
+     * URLs are constructed, and because SSLEepGet doesn't follow redirects.
      */
     public static final String DEFAULT_SEED_URL = ""; // Disable due to misconfiguation (ticket #1466)
 
@@ -154,10 +154,10 @@ public class Reseeder {
     private static final Pattern URL_SPLIT_PATTERN = Pattern.compile("[ ,]+");
 
     /**
-     *  Holds context and checker references for reseed operations.
+     * Holds context and checker references for reseed operations.
      *
-     *  @param ctx the router context
-     *  @param rc  status and error reporting
+     * @param ctx the router context
+     * @param rc  status and error reporting
      */
     Reseeder(RouterContext ctx, ReseedChecker rc) {
         _context = ctx;
@@ -166,9 +166,9 @@ public class Reseeder {
     }
 
     /**
-     *  Start a reseed using the default reseed URLs.
-     *  Supports su3 and directories.
-     *  Threaded, nonblocking.
+     * Start a reseed using the default reseed URLs.
+     * Supports su3 and directories.
+     * Threaded, nonblocking.
      */
     void requestReseed() {
         ReseedRunner reseedRunner = new ReseedRunner();
@@ -178,11 +178,11 @@ public class Reseeder {
     }
 
     /**
-     *  Start a reseed from a single zip or su3 URL only.
-     *  Threaded, nonblocking.
+     * Start a reseed from a single zip or su3 URL only.
+     * Threaded, nonblocking.
      *
-     *  @throws IllegalArgumentException if it doesn't end with zip or su3
-     *  @since 0.9.19
+     * @throws IllegalArgumentException if it doesn't end with zip or su3
+     * @since 0.9.19
      */
     void requestReseed(URI url) throws IllegalArgumentException {
         ReseedRunner reseedRunner = new ReseedRunner(url);
@@ -192,13 +192,13 @@ public class Reseeder {
     }
 
     /**
-     *  Start a reseed from a zip or su3 input stream.
-     *  Blocking, inline. Should be fast.
-     *  This will close the stream.
+     * Start a reseed from a zip or su3 input stream.
+     * Blocking, inline. Should be fast.
+     * This will close the stream.
      *
-     *  @return number of valid routerinfos imported
-     *  @throws IOException on most errors
-     *  @since 0.9.19
+     * @return number of valid routerinfos imported
+     * @throws IOException on most errors
+     * @since 0.9.19
      */
     int requestReseed(InputStream in) throws IOException {
         _checker.setError("");
@@ -240,13 +240,13 @@ public class Reseeder {
     }
 
     /**
-     *  Whether the current JVM supports Server Name Indication (SNI).
-     *  True for Java 7+ and Android 2.3+ (API 9).
-     *  Not guaranteed on all platforms, e.g. FreeBSD:
-     *  https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=201446
+     * Whether the current JVM supports Server Name Indication (SNI).
+     * True for Java 7+ and Android 2.3+ (API 9).
+     * Not guaranteed on all platforms, e.g. FreeBSD:
+     * https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=201446
      *
-     *  @return true if SNI is supported
-     *  @since 0.9.20
+     * @return true if SNI is supported
+     * @since 0.9.20
      */
     private static boolean isSNISupported() {return SystemVersion.isJava7() || SystemVersion.isAndroid();}
 
@@ -268,16 +268,16 @@ public class Reseeder {
         private final URI _url;
 
         /**
-         *  Start a reseed from the default URL list
+         * Start a reseed from the default URL list
          */
         public ReseedRunner() {this(null);}
 
         /**
-         *  Start a reseed from this URL only, or null for trying one or more from the default list.
+         * Start a reseed from this URL only, or null for trying one or more from the default list.
          *
-         *  @param url if non-null, must be a zip or su3 URL, NOT a directory
-         *  @throws IllegalArgumentException if it doesn't end with zip or su3
-         *  @since 0.9.19
+         * @param url if non-null, must be a zip or su3 URL, NOT a directory
+         * @throws IllegalArgumentException if it doesn't end with zip or su3
+         * @since 0.9.19
          */
         public ReseedRunner(URI url) throws IllegalArgumentException {
             validateUrl(url);
@@ -436,9 +436,9 @@ public class Reseeder {
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {}
 
         /**
-         *  Use the Date header as a backup time source.
-         *  May be called multiple times; the first call has lower stratum
-         *  than subsequent refinements.
+         * Use the Date header as a backup time source.
+         * May be called multiple times; the first call has lower stratum
+         * than subsequent refinements.
          */
         public void headerReceived(String url, int attemptNum, String key, String val) {
             /*
@@ -649,40 +649,40 @@ public class Reseeder {
         }
 
         /**
-         *  Fetch an su3 file containing routerInfo files.
-         *  Updates status on the checker.
+         * Fetch an su3 file containing routerInfo files.
+         * Updates status on the checker.
          *
-         *  @param seedURL the URL of the SU3 file
-         *  @param echoStatus if true, print debug dots per routerinfo
-         *  @return count of routerinfos successfully fetched
-         *  @since 0.9.14
+         * @param seedURL the URL of the SU3 file
+         * @param echoStatus if true, print debug dots per routerinfo
+         * @return count of routerinfos successfully fetched
+         * @since 0.9.14
          */
         public int reseedSU3(URI seedURL, boolean echoStatus) {
             return reseedSU3OrZip(seedURL, true, echoStatus);
         }
 
         /**
-         *  Fetch a zip file containing routerInfo files.
-         *  Updates status on the checker.
+         * Fetch a zip file containing routerInfo files.
+         * Updates status on the checker.
          *
-         *  @param seedURL the URL of the zip file
-         *  @param echoStatus if true, print debug dots per routerinfo
-         *  @return count of routerinfos successfully fetched
-         *  @since 0.9.19
+         * @param seedURL the URL of the zip file
+         * @param echoStatus if true, print debug dots per routerinfo
+         * @return count of routerinfos successfully fetched
+         * @since 0.9.19
          */
         public int reseedZip(URI seedURL, boolean echoStatus) {
             return reseedSU3OrZip(seedURL, false, echoStatus);
         }
 
         /**
-         *  Fetch an su3 or zip file containing routerInfo files.
-         *  Updates status on the checker.
+         * Fetch an su3 or zip file containing routerInfo files.
+         * Updates status on the checker.
          *
-         *  @param seedURL the URL of the SU3 or zip file
-         *  @param isSU3 true for SU3, false for zip
-         *  @param echoStatus if true, print debug dots per routerinfo
-         *  @return count of routerinfos successfully fetched
-         *  @since 0.9.19
+         * @param seedURL the URL of the SU3 or zip file
+         * @param isSU3 true for SU3, false for zip
+         * @param echoStatus if true, print debug dots per routerinfo
+         * @return count of routerinfos successfully fetched
+         * @since 0.9.19
          */
         private int reseedSU3OrZip(URI seedURL, boolean isSU3, boolean echoStatus) {
             int fetched = 0;
@@ -731,10 +731,10 @@ public class Reseeder {
 
 
         /**
-         *  Verify and extract router infos from a downloaded SU3 bundle.
+         * Verify and extract router infos from a downloaded SU3 bundle.
          *
-         *  @return 2 ints: number successful and number of errors
-         *  @since 0.9.19 pulled from reseedSU3
+         * @return 2 ints: number successful and number of errors
+         * @since 0.9.19 pulled from reseedSU3
          */
         public int[] extractSU3(File contentRaw) throws IOException {
             int fetched = 0;
@@ -780,10 +780,10 @@ public class Reseeder {
         }
 
         /**
-         *  Extract and validate router info files from a zip bundle.
+         * Extract and validate router info files from a zip bundle.
          *
-         *  @return 2 ints: number successful and number of errors
-         *  @since 0.9.19 pulled from reseedSU3
+         * @return 2 ints: number successful and number of errors
+         * @since 0.9.19 pulled from reseedSU3
          */
         public int[] extractZip(File zip) throws IOException {
             int fetched = 0;
@@ -846,11 +846,11 @@ public class Reseeder {
         }
 
         /**
-         *  Fetch a URL to a temporary file.
+         * Fetch a URL to a temporary file.
          *
-         *  @param url the URL to fetch
-         *  @return temp file with content, or null on error
-         *  @since 0.9.14
+         * @param url the URL to fetch
+         * @return temp file with content, or null on error
+         * @since 0.9.14
          */
         private File fetchURL(URI url) {
             File out = new File(_context.getTempDir(), "reseed-" + _context.random().nextInt() + ".tmp");
@@ -902,11 +902,11 @@ public class Reseeder {
         }
 
         /**
-         *  Resolve the SSL proxy type from configuration.
+         * Resolve the SSL proxy type from configuration.
          *
-         *  @return non-null proxy type
-         *  @throws IllegalArgumentException if unknown, default is HTTP
-         *  @since 0.9.33
+         * @return non-null proxy type
+         * @throws IllegalArgumentException if unknown, default is HTTP
+         * @since 0.9.33
          */
         private SSLEepGet.ProxyType getProxyType() throws IllegalArgumentException {
             String sptype = _context.getProperty(PROP_SPROXY_TYPE, "HTTP").toUpperCase(Locale.US);
@@ -914,12 +914,12 @@ public class Reseeder {
         }
 
         /**
-         *  Display string for what we're fetching.
-         *  Untranslated, for logs only.
+         * Display string for what we're fetching.
+         * Untranslated, for logs only.
          *
-         *  @param url if null, returns ""
-         *  @return non-null
-         *  @since 0.9.33
+         * @param url if null, returns ""
+         * @return non-null
+         * @since 0.9.33
          */
         private String getDisplayString(URI url) {
             if (url == null) {return "";}
@@ -927,12 +927,12 @@ public class Reseeder {
         }
 
         /**
-         *  Display string for what we're fetching.
-         *  Untranslated, for logs only.
+         * Display string for what we're fetching.
+         * Untranslated, for logs only.
          *
-         *  @param url if null, returns ""
-         *  @return non-null
-         *  @since 0.9.33
+         * @param url if null, returns ""
+         * @return non-null
+         * @since 0.9.33
          */
         private String getDisplayString(String url) {
             if (url == null) {return "";}

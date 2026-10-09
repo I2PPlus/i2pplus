@@ -6,11 +6,11 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 
 /**
- *  A SocketAddress (Destination + port) so we can have SocketChannels.
- *  Ports are not widely used in I2P, in most cases the port will be zero.
- *  See InetSocketAddress for javadocs.
+ * A SocketAddress (Destination + port) so we can have SocketChannels.
+ * Ports are not widely used in I2P, in most cases the port will be zero.
+ * See InetSocketAddress for javadocs.
  *
- *  @since 0.9.1
+ * @since 0.9.1
  */
 public class I2PSocketAddress extends SocketAddress {
     /** Serial version unique identifier */
@@ -23,13 +23,13 @@ public class I2PSocketAddress extends SocketAddress {
     private final String _host;
 
     /**
-     *  Convenience constructor that parses host:port.
+     * Convenience constructor that parses host:port.
      *
-     *  Does a naming service lookup to resolve the dest.
-     *  May take several seconds for b32.
-     *  @param host hostname or b64 dest or b32, may have :port appended
-     *  @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535 or invalid port
-     *  @since 0.9.9
+     * Does a naming service lookup to resolve the dest.
+     * May take several seconds for b32.
+     * @param host hostname or b64 dest or b32, may have :port appended
+     * @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535 or invalid port
+     * @since 0.9.9
      */
     public I2PSocketAddress(String host) {
         int port = 0;
@@ -52,8 +52,8 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
-     *  Does not do a reverse lookup. Host will be null.
-     *  @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
+     * Does not do a reverse lookup. Host will be null.
+     * @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public I2PSocketAddress(Destination dest, int port) {
         if (dest == null)
@@ -66,9 +66,9 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
-     *  Does a naming service lookup to resolve the dest.
-     *  May take several seconds for b32.
-     *  @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
+     * Does a naming service lookup to resolve the dest.
+     * May take several seconds for b32.
+     * @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public I2PSocketAddress(String host, int port) {
         if (port < 0 || port > 65535)
@@ -79,8 +79,8 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
-     *  Creates an unresolved address for the given host and port.
-     *  @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
+     * Creates an unresolved address for the given host and port.
+     * @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public static I2PSocketAddress createUnresolved(String host, int port) {
         return new I2PSocketAddress(port, host);
@@ -116,8 +116,8 @@ public class I2PSocketAddress extends SocketAddress {
     }
 
     /**
-     *  Host name of this address, as given in the constructor.
-     *  @return the host only if given in the constructor. Does not do a reverse lookup.
+     * Host name of this address, as given in the constructor.
+     * @return the host only if given in the constructor. Does not do a reverse lookup.
      */
     public String getHostName() {
         return _host;

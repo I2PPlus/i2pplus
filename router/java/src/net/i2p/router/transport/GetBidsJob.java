@@ -5,7 +5,6 @@ package net.i2p.router.transport;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.Hash;
@@ -25,7 +24,6 @@ import net.i2p.util.Log;
  * Retrieve a set of bids for a particular outbound message, and if any are found
  * that meet the message's requirements, register the message as in process and
  * pass it on to the transport for processing
- *
  */
 class GetBidsJob {
     private static volatile BanLogger _banLogger;
@@ -125,10 +123,10 @@ class GetBidsJob {
     }
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
-     *  @return s
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers.
+     * It does not translate!
+     * @return s
      */
     private static final String _x(String s) {
         return s;

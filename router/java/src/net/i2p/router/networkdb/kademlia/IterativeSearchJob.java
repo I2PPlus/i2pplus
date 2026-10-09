@@ -127,43 +127,43 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static volatile long _maxSearchTime = MAX_SEARCH_TIME_DEFAULT;
 
     /**
-     *  Skip policy for candidate floodfill peers: a peer is skipped only when
-     *  at least one other candidate remains, so a starved search always makes
-     *  progress. Cooldown, overload, and IP-closeness are soft signals.
+     * Skip policy for candidate floodfill peers: a peer is skipped only when
+     * at least one other candidate remains, so a starved search always makes
+     * progress. Cooldown, overload, and IP-closeness are soft signals.
      *
-     *  @param recentlyQueried true if the peer was queried within the cooldown period
-     *  @param overloaded true if the peer already has MAX_CONCURRENT_PER_FLOODFILL active queries
-     *  @param ipClose true if the peer shares IPs with an already-queried peer
-     *  @param remainingCandidates number of candidate peers left after this one is removed
-     *  @return true if the peer should be skipped
+     * @param recentlyQueried true if the peer was queried within the cooldown period
+     * @param overloaded true if the peer already has MAX_CONCURRENT_PER_FLOODFILL active queries
+     * @param ipClose true if the peer shares IPs with an already-queried peer
+     * @param remainingCandidates number of candidate peers left after this one is removed
+     * @return true if the peer should be skipped
      */
     static boolean shouldSkipPeer(boolean recentlyQueried, boolean overloaded, boolean ipClose, int remainingCandidates) {
         return (recentlyQueried || overloaded || ipClose) && remainingCandidates > 1;
     }
 
     /**
-     *  Upper bound on the keys one peer can contribute: the comm system's
-     *  address plus at most {@link #MAX_RI_ADDRESSES} netDb addresses. RouterInfo
-     *  rejects a longer parsed or assigned address list, so this is a hard cap.
+     * Upper bound on the keys one peer can contribute: the comm system's
+     * address plus at most {@link #MAX_RI_ADDRESSES} netDb addresses. RouterInfo
+     * rejects a longer parsed or assigned address list, so this is a hard cap.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final int MAX_RI_ADDRESSES = 16;
     /**
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final int MAX_FINGERPRINT_ENTRIES = 1 + MAX_RI_ADDRESSES;
 
     /**
-     *  Look up a peer's RouterInfo in the router's main NetDb without running
-     *  {@link net.i2p.router.NetworkDatabase#lookupRouterInfoLocally}'s full
-     *  validation. The main NetDb is used rather than this job's facade, which
-     *  may be a client NetDb.
+     * Look up a peer's RouterInfo in the router's main NetDb without running
+     * {@link net.i2p.router.NetworkDatabase#lookupRouterInfoLocally}'s full
+     * validation. The main NetDb is used rather than this job's facade, which
+     * may be a client NetDb.
      *
-     *  @param ctx the router context
-     *  @param peer the peer hash
-     *  @return the RouterInfo, or null if not held as a RouterInfo
-     *  @since 0.9.71+
+     * @param ctx the router context
+     * @param peer the peer hash
+     * @return the RouterInfo, or null if not held as a RouterInfo
+     * @since 0.9.71+
      */
     private static RouterInfo lookupRIUnvalidated(RouterContext ctx, Hash peer) {
         DatabaseEntry ds = ctx.netDb().lookupLocallyWithoutValidation(peer);
@@ -173,18 +173,18 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Collect one candidate's fingerprint keys into the reusable scratch
-     *  buffers, without claiming them.
+     * Collect one candidate's fingerprint keys into the reusable scratch
+     * buffers, without claiming them.
      *
-     *  <p>Masked IPs are packed into a {@code long} via
-     *  {@link FloodfillPeerSelector#maskedIPKey(byte[], int)} (whose IPv4/IPv6
-     *  marker bit keeps the address families apart), ports into an {@code int},
-     *  and the family option kept as the String it is.
+     * <p>Masked IPs are packed into a {@code long} via
+     * {@link FloodfillPeerSelector#maskedIPKey(byte[], int)} (whose IPv4/IPv6
+     * marker bit keeps the address families apart), ports into an {@code int},
+     * and the family option kept as the String it is.
      *
-     *  @param ctx the router context
-     *  @param peer the candidate
-     *  @param mask byte count to match
-     *  @since 0.9.71+
+     * @param ctx the router context
+     * @param peer the candidate
+     * @param mask byte count to match
+     * @since 0.9.71+
      */
     private void collectFingerprint(RouterContext ctx, Hash peer, int mask) {
         int ipCount = 0;
@@ -213,14 +213,14 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Is any key of the candidate collected by {@link #collectFingerprint}
-     *  already claimed by a peer this search has queried?
+     * Is any key of the candidate collected by {@link #collectFingerprint}
+     * already claimed by a peer this search has queried?
      *
-     *  <p>Test-only: the caller may still reject the candidate on other
-     *  grounds and must then claim nothing.
+     * <p>Test-only: the caller may still reject the candidate on other
+     * grounds and must then claim nothing.
      *
-     *  @return true if any key was already claimed
-     *  @since 0.9.71+
+     * @return true if any key was already claimed
+     * @since 0.9.71+
      */
     private boolean fingerprintClaimed() {
         for (int i = 0; i < _fingerprintIPCount; i++) {
@@ -233,10 +233,10 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Claim every key collected by {@link #collectFingerprint}, so later
-     *  candidates of the same entity are skipped.
+     * Claim every key collected by {@link #collectFingerprint}, so later
+     * candidates of the same entity are skipped.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private void claimFingerprint() {
         for (int i = 0; i < _fingerprintIPCount; i++) {
@@ -274,11 +274,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static volatile long _lateReplyGracePeriod = LATE_REPLY_GRACE_PERIOD_DEFAULT;
 
 /**
-     * Reload grace period from properties (for dynamic tuning).
-     * Console may call this.
-     * @param ctx router context for property lookup
-     * @return current grace period in ms
-     */
+ * Reload grace period from properties (for dynamic tuning).
+ * Console may call this.
+ * @param ctx router context for property lookup
+ * @return current grace period in ms
+ */
     public static long reloadGracePeriod(RouterContext ctx) {
         long period = ctx.getProperty(PROP_LATE_REPLY_GRACE, LATE_REPLY_GRACE_PERIOD_DEFAULT);
         _lateReplyGracePeriod = period;
@@ -290,9 +290,9 @@ public class IterativeSearchJob extends FloodSearchJob {
     /** Static cache of recently completed searches: peer hash -> expiration timestamp */
     private static final ConcurrentHashMap<Hash, Long> _recentlyCompleted = new ConcurrentHashMap<>(COMPLETED_CACHE_SIZE);
     /**
-     *  The time before we give up and start a new search - much shorter than the message's expire time
-     *  Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
-     *  on to another peer quickly.
+     * The time before we give up and start a new search - much shorter than the message's expire time
+     * Longer than the typ. response time of 1.0 - 1.5 sec, but short enough that we move
+     * on to another peer quickly.
      */
     private final long _singleSearchTime;
 
@@ -306,9 +306,9 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static final long SINGLE_SEARCH_MSG_TIME = 15L*1000;
 
     /**
-     *  Use instead of CONCURRENT_SEARCHES in super() which is final.
-     *  For now, we don't do concurrent, but we keep SINGLE_SEARCH_TIME very short,
-     *  so we have effective concurrency in that we fail a search quickly.
+     * Use instead of CONCURRENT_SEARCHES in super() which is final.
+     * For now, we don't do concurrent, but we keep SINGLE_SEARCH_TIME very short,
+     * so we have effective concurrency in that we fail a search quickly.
      */
     private int _maxConcurrent;
     /**
@@ -334,49 +334,49 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static void setMaxConcurrentDefault(int val) { _maxConcurrentDefault = Math.max(1, Math.min(64, val)); }
 
     /**
-     *  Adaptive deadline cap (ms) for LeaseSet lookups only.
-     *  RouterInfo lookups continue to use {@link #getMaxSearchTime()}.
-     *  Tuned live by the Tuner toward ~4x the observed netDb.successTime,
-     *  floored so healthy-but-slow searches aren't abandoned. Defaults to
-     *  the max search time so behavior is unchanged until the Tuner adjusts it.
-     *  @since 0.9.70+
+     * Adaptive deadline cap (ms) for LeaseSet lookups only.
+     * RouterInfo lookups continue to use {@link #getMaxSearchTime()}.
+     * Tuned live by the Tuner toward ~4x the observed netDb.successTime,
+     * floored so healthy-but-slow searches aren't abandoned. Defaults to
+     * the max search time so behavior is unchanged until the Tuner adjusts it.
+     * @since 0.9.70+
      */
     private static volatile int _maxLeaseSetLookupTime = (int) MAX_SEARCH_TIME_DEFAULT;
 
     /**
-     *  Adaptive deadline cap (ms) for RouterInfo lookups.
-     *  Used for transit next-hop lookups, where a message is held until the
-     *  lookup completes or times out; a long hold during a spike tanks transit
-     *  throughput. Defaults to a shorter cap than the max search time so a missing
-     *  or unreachable RouterInfo fails fast and the source can reroute. Tuned
-     *  live by the Tuner toward ~4x the observed netDb.successTime.
-     *  @since 0.9.70+
+     * Adaptive deadline cap (ms) for RouterInfo lookups.
+     * Used for transit next-hop lookups, where a message is held until the
+     * lookup completes or times out; a long hold during a spike tanks transit
+     * throughput. Defaults to a shorter cap than the max search time so a missing
+     * or unreachable RouterInfo fails fast and the source can reroute. Tuned
+     * live by the Tuner toward ~4x the observed netDb.successTime.
+     * @since 0.9.70+
      */
     private static volatile int _maxRouterInfoLookupTime = 5*1000;
 
     /**
-     *  @return the current RouterInfo lookup deadline cap in ms
-     *  @since 0.9.70+
+     * @return the current RouterInfo lookup deadline cap in ms
+     * @since 0.9.70+
      */
     public static int getMaxRouterInfoLookupTime() { return _maxRouterInfoLookupTime; }
 
     /**
-     *  @param val RouterInfo lookup deadline cap in ms, clamped to [5000, max search time]
-     *  @since 0.9.70+
+     * @param val RouterInfo lookup deadline cap in ms, clamped to [5000, max search time]
+     * @since 0.9.70+
      */
     public static void setMaxRouterInfoLookupTime(int val) {
         _maxRouterInfoLookupTime = Math.max(5000, Math.min((int) getMaxSearchTime(), val));
     }
 
     /**
-     *  @return the current LeaseSet lookup deadline cap in ms
-     *  @since 0.9.70+
+     * @return the current LeaseSet lookup deadline cap in ms
+     * @since 0.9.70+
      */
     public static int getMaxLeaseSetLookupTime() { return _maxLeaseSetLookupTime; }
 
     /**
-     *  @param val LeaseSet lookup deadline cap in ms, clamped to [3000, max search time]
-     *  @since 0.9.70+
+     * @param val LeaseSet lookup deadline cap in ms, clamped to [3000, max search time]
+     * @since 0.9.70+
      */
     public static void setMaxLeaseSetLookupTime(int val) {
         _maxLeaseSetLookupTime = Math.max(3000, Math.min((int) getMaxSearchTime(), val));
@@ -391,7 +391,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static final boolean DEFAULT_ENCRYPT_RI = NativeBigInteger.isNative();
 
     /**
-     *  Lookup using exploratory tunnels
+     * Lookup using exploratory tunnels
      */
     public IterativeSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key,
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease) {
@@ -439,11 +439,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Lookup using the client's tunnels.
-     *  Do not use for RI lookups down client tunnels,
-     *  as the response will be dropped in InboundMessageDistributor.
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @since 0.9.10
+     * Lookup using the client's tunnels.
+     * Do not use for RI lookups down client tunnels,
+     * as the response will be dropped in InboundMessageDistributor.
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @since 0.9.10
      */
     public IterativeSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key,
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
@@ -486,9 +486,9 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Execute the iterative search, selecting floodfill peers from the
-     *  k-buckets and sending DatabaseLookupMessages to each. Continues
-     *  until a reply is received or the search time expires.
+     * Execute the iterative search, selecting floodfill peers from the
+     * k-buckets and sending DatabaseLookupMessages to each. Continues
+     * until a reply is received or the search time expires.
      */
     @Override
     public void runJob() {
@@ -595,7 +595,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Send lookups to one or more peers, up to the configured concurrent and total limits
+     * Send lookups to one or more peers, up to the configured concurrent and total limits
      */
     private void retry() {
         long now = getContext().clock().now();
@@ -664,11 +664,11 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Send a DLM to the peer
+     * Send a DLM to the peer
      *
-     *  @param peer who to send to
-     *  @param previouslyTried how many did we send to before this one?
-     *  @since 0.9.53 added previouslyTried param
+     * @param peer who to send to
+     * @param previouslyTried how many did we send to before this one?
+     * @since 0.9.53 added previouslyTried param
      */
     private void sendQuery(Hash peer, int previouslyTried) {
         final RouterContext ctx = getContext();
@@ -957,17 +957,17 @@ public class IterativeSearchJob extends FloodSearchJob {
     public String getName() {return "Start Iterative Search";}
 
     /**
-     *  Note that a peer replied (DSRM processed); subsequent total failure
-     *  counts as definitive toward the negative cache, not a pure timeout.
-     *  @since 0.9.71+
+     * Note that a peer replied (DSRM processed); subsequent total failure
+     * counts as definitive toward the negative cache, not a pure timeout.
+     * @since 0.9.71+
      */
     void markSawReply() { _sawReply = true; }
 
     /**
-     *  Note that the peer did not respond with a DSM (either a DSRM, timeout, or failure).
-     *  This is not necessarily a total failure of the search.
-     *  @param peer the peer that failed
-     *  @param timedOut if true, will blame the peer's profile
+     * Note that the peer did not respond with a DSM (either a DSRM, timeout, or failure).
+     * This is not necessarily a total failure of the search.
+     * @param peer the peer that failed
+     * @param timedOut if true, will blame the peer's profile
      */
     void failed(Hash peer, boolean timedOut) {
         boolean isNewFail;
@@ -997,8 +997,8 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  A new (floodfill) peer was discovered that may have the answer.
-     *  @param peer may not actually be new
+     * A new (floodfill) peer was discovered that may have the answer.
+     * @param peer may not actually be new
      */
     void newPeerToTry(Hash peer) {
         // Don't ask ourselves or the target
@@ -1024,17 +1024,17 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Hash of the dest this query is from
-     *  @return null for router
-     *  @since 0.9.13
+     * Hash of the dest this query is from
+     * @return null for router
+     * @since 0.9.13
      */
     public Hash getFromHash() {return _fromLocalDest;}
 
     /**
-     *  Did we send a request to this peer?
-     *  @param peer the peer
-     *  @return true if a query was sent to this peer
-     *  @since 0.9.13
+     * Did we send a request to this peer?
+     * @param peer the peer
+     * @return true if a query was sent to this peer
+     * @since 0.9.13
      */
     public boolean wasQueried(Hash peer) {
         synchronized (this) {return _unheardFrom.contains(peer) || _failedPeers.contains(peer);}
@@ -1062,9 +1062,9 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  When did we send the query to the peer?
-     *  @param peer the peer to check
-     *  @return context time, or -1 if never sent
+     * When did we send the query to the peer?
+     * @param peer the peer to check
+     * @return context time, or -1 if never sent
      */
     long timeSent(Hash peer) {
         Long rv = _sentTime.get(peer);
@@ -1072,10 +1072,10 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Cancels the search and delivers failure to all registered waiters.
-     *  Cancellation is terminal for callers - negative-cache skip, banlist
-     *  skip, exhausted search window - so this fires the onFailed jobs.
-     *  @since 0.9.65+
+     * Cancels the search and delivers failure to all registered waiters.
+     * Cancellation is terminal for callers - negative-cache skip, banlist
+     * skip, exhausted search window - so this fires the onFailed jobs.
+     * @since 0.9.65+
      */
     void cancelJob() {
         synchronized (this) {
@@ -1089,9 +1089,9 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Decrement active floodfill query counters for all peers queried
-     *  by this search.  Called when the search completes, fails, or cancels.
-     *  @since 0.9.70+
+     * Decrement active floodfill query counters for all peers queried
+     * by this search.  Called when the search completes, fails, or cancels.
+     * @since 0.9.70+
      */
     private void releaseFloodfillQueries() {
         Set<Hash> toRelease;
@@ -1107,14 +1107,14 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Dropped by the job queue
-     *  @since 0.9.31
+     * Dropped by the job queue
+     * @since 0.9.31
      */
     @Override
     public void dropped() {failed();}
 
     /**
-     *  Total failure
+     * Total failure
      */
     @Override
     void failed() {
@@ -1166,9 +1166,9 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     *  Called when the search completes successfully.
-     *  Credits the responding peer in the profile manager,
-     *  records timing stats, and queues any follow-up jobs.
+     * Called when the search completes successfully.
+     * Credits the responding peer in the profile manager,
+     * records timing stats, and queues any follow-up jobs.
      */
     @Override
     void success() {

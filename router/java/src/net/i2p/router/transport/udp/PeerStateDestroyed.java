@@ -64,10 +64,10 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     private static final long TERMINATION_RETX_TIME = 7*1000L;
 
     /**
-     *  This must be called after the first termination or termination ack
-     *  was sent from PeerState2, so the next packet number is correct.
+     * This must be called after the first termination or termination ack
+     * was sent from PeerState2, so the next packet number is correct.
      *
-     *  @param peer that just sent (or received and sent) a termination
+     * @param peer that just sent (or received and sent) a termination
      */
     public PeerStateDestroyed(RouterContext ctx, UDPTransport transport, PeerState2 peer) {
         _context = ctx;
@@ -96,8 +96,8 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     *  Direct from IES2, there was never a PS2.
-     *  Caller must send termination after creating.
+     * Direct from IES2, there was never a PS2.
+     * Caller must send termination after creating.
      */
     public PeerStateDestroyed(RouterContext ctx, UDPTransport transport, RemoteHostId id,
                               long sendID, long rcvID, CipherState sendCha, CipherState rcvCha,
@@ -129,7 +129,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     *  Call at transport shutdown or cache eviction
+     * Call at transport shutdown or cache eviction
      */
     public void kill() {
         _ackTimer.cancel();
@@ -221,7 +221,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /**
      * No-op, we don't care what was acked.
      *
-     *  @return null always, we don't care what was acked
+     * @return null always, we don't care what was acked
      */
     public SSU2Bitfield getAckedMessages() { return null; }
     /**
@@ -252,16 +252,16 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     *  @param packet fully encrypted, header and body decryption will be done here
+     * @param packet fully encrypted, header and body decryption will be done here
      */
     void receivePacket(UDPPacket packet) {
         receivePacket(packet.getRemoteHost(), packet);
     }
 
     /**
-     *  @param from source address
-     *  @param packet fully encrypted, header and body decryption will be done here
-     *  @since 0.9.55
+     * @param from source address
+     * @param packet fully encrypted, header and body decryption will be done here
+     * @since 0.9.55
      */
     void receivePacket(RemoteHostId from, UDPPacket packet) {
         if (!from.equals(_remoteHostId) && _log.shouldWarn())
@@ -493,13 +493,13 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /////////////////////////////////////////////////////////
 
     /**
-     *  A timer to send an ack+destroy packet.
+     * A timer to send an ack+destroy packet.
      */
     private class ACKTimer extends SimpleTimer2.TimedEvent {
         private long _delay = TERMINATION_RETX_TIME;
 
         /**
-         *  Caller must schedule
+         * Caller must schedule
          */
         public ACKTimer() {
             super(_context.simpleTimer2());
@@ -541,12 +541,12 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
-     *  A timer to remove us from the transport list.
+     * A timer to remove us from the transport list.
      */
     private class KillTimer extends SimpleTimer2.TimedEvent {
 
         /**
-         *  Caller must schedule
+         * Caller must schedule
          */
         public KillTimer() {
             super(_context.simpleTimer2());

@@ -32,17 +32,15 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  * <p>This class handles:
  *
  * <ul>
- *   <li>Peer identification and handshaking
- *   <li>BitTorrent protocol communication
- *   <li>Upload/download statistics tracking
- *   <li>Connection state management
- *   <li>Bandwidth monitoring and limiting
+ * <li>Peer identification and handshaking
+ * <li>BitTorrent protocol communication
+ * <li>Upload/download statistics tracking
+ * <li>Connection state management
+ * <li>Bandwidth monitoring and limiting
  * </ul>
  *
  * <p>Peers can be either incoming (they connected to us) or outgoing (we connected to them)
  * connections.
- *
- * @since 0.1.0
  */
 public class Peer implements Comparable<Peer>, BandwidthListener {
     /** Logger for this peer instance. */
@@ -154,10 +152,10 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     }
 
     /**
-     *  Returns whether this is an incoming connection (initiated by the remote peer).
+     * Returns whether this is an incoming connection (initiated by the remote peer).
      *
-     *  @return true if incoming, false if outgoing
-     *  @since 0.9.30
+     * @return true if incoming, false if outgoing
+     * @since 0.9.30
      */
     public boolean isIncoming() {
         return _isIncoming;

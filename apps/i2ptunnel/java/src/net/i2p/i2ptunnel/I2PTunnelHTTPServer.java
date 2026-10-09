@@ -94,38 +94,38 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private static final int DNS_TIMEOUT_MS = 5000;
 
     /**
-     *  Minimum interval between per-client "Request error" warnings. A single
-     *  torrent client reconnecting without sending a request produced 1000+
-     *  read timeouts in one rotation, which buried every other warning.
-     *  @since 0.9.71+
+     * Minimum interval between per-client "Request error" warnings. A single
+     * torrent client reconnecting without sending a request produced 1000+
+     * read timeouts in one rotation, which buried every other warning.
+     * @since 0.9.71+
      */
     static final long REQUEST_ERROR_LOG_INTERVAL_MS = 5 * 60 * 1000;
 
     /**
-     *  Cap on distinct clients tracked for warning rate limiting, so a
-     *  flood from many distinct peers cannot grow this map without bound.
-     *  @since 0.9.71+
+     * Cap on distinct clients tracked for warning rate limiting, so a
+     * flood from many distinct peers cannot grow this map without bound.
+     * @since 0.9.71+
      */
     static final int MAX_TRACKED_ERROR_CLIENTS = 1024;
 
     /**
-     *  Last time each client was logged for a request error, for rate limiting.
-     *  Keyed on the base32 destination; bounded by {@link #MAX_TRACKED_ERROR_CLIENTS}.
-     *  @since 0.9.71+
+     * Last time each client was logged for a request error, for rate limiting.
+     * Keyed on the base32 destination; bounded by {@link #MAX_TRACKED_ERROR_CLIENTS}.
+     * @since 0.9.71+
      */
     private static final Map<String, Long> _lastErrorLogTime = new ConcurrentHashMap<>(64);
 
     /**
-     *  Decide whether a request-error warning should be emitted for a client.
-     *  First occurrence for a client is always logged; subsequent ones only
-     *  after {@link #REQUEST_ERROR_LOG_INTERVAL_MS}. Evicts the oldest entries
-     *  once the tracking map is full, so a burst of distinct peers cannot
-     *  grow it without bound.
+     * Decide whether a request-error warning should be emitted for a client.
+     * First occurrence for a client is always logged; subsequent ones only
+     * after {@link #REQUEST_ERROR_LOG_INTERVAL_MS}. Evicts the oldest entries
+     * once the tracking map is full, so a burst of distinct peers cannot
+     * grow it without bound.
      *
-     *  @param peerB32 client base32, may be null
-     *  @param now current time in ms
-     *  @return true if the caller should log at WARN
-     *  @since 0.9.71+
+     * @param peerB32 client base32, may be null
+     * @param now current time in ms
+     * @return true if the caller should log at WARN
+     * @since 0.9.71+
      */
     static boolean shouldLogRequestError(String peerB32, long now) {
         if (peerB32 == null) {return true;}
@@ -139,15 +139,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Free space in the tracking map, guaranteeing it never exceeds
-     *  {@link #MAX_TRACKED_ERROR_CLIENTS}. First drops clients whose last
-     *  warning is older than the log interval; if that is not enough (a burst
-     *  of distinct peers inside one interval leaves nothing stale), the single
-     *  oldest entry is evicted so the bound always holds. This runs only on the
-     *  overflow path, never on the normal per-request check.
+     * Free space in the tracking map, guaranteeing it never exceeds
+     * {@link #MAX_TRACKED_ERROR_CLIENTS}. First drops clients whose last
+     * warning is older than the log interval; if that is not enough (a burst
+     * of distinct peers inside one interval leaves nothing stale), the single
+     * oldest entry is evicted so the bound always holds. This runs only on the
+     * overflow path, never on the normal per-request check.
      *
-     *  @param now current time in ms
-     *  @since 0.9.71+
+     * @param now current time in ms
+     * @since 0.9.71+
      */
     private static void evictOldestErrorClients(long now) {
         _lastErrorLogTime.entrySet().removeIf(e -> (now - e.getValue()) >= REQUEST_ERROR_LOG_INTERVAL_MS);
@@ -164,15 +164,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Test seam: clear the request-error rate limiting state.
-     *  @since 0.9.71+
+     * Test seam: clear the request-error rate limiting state.
+     * @since 0.9.71+
      */
     static void resetRequestErrorLimiter() { _lastErrorLogTime.clear(); }
 
     /**
-     *  Test seam: number of clients currently tracked.
-     *  @return tracked client count
-     *  @since 0.9.71+
+     * Test seam: number of clients currently tracked.
+     * @return tracked client count
+     * @since 0.9.71+
      */
     static int trackedErrorClients() { return _lastErrorLogTime.size(); }
 
@@ -184,65 +184,65 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     });
 
     /** Per-tunnel I/O pools for Server→Client data transfer, keyed by this
-     *  server instance so a saturated dest cannot consume every IO thread.
-     *  Sized as shares of {@link TunnelControllerGroup#getIOTransferThreads()}.
-     *  Separate from the runner pool so pinned runner threads are never
-     *  consumed by slow downloads.
-     *  @since 0.9.71+ */
+     * server instance so a saturated dest cannot consume every IO thread.
+     * Sized as shares of {@link TunnelControllerGroup#getIOTransferThreads()}.
+     * Separate from the runner pool so pinned runner threads are never
+     * consumed by slow downloads.
+     * @since 0.9.71+ */
     private static final ConcurrentHashMap<Object, ThreadPoolExecutor> _ioPools =
         new ConcurrentHashMap<>(4);
     private static final Object _ioExecutorLock = new Object();
     /** Default I/O transfer threads (global budget); Tuner adjusts via TunnelControllerGroup.
-     *  Sized for concurrent body transfers across many server tunnels (e.g. 16
-     *  eepsites x floor 8 = 128 threads when fully loaded). */
+     * Sized for concurrent body transfers across many server tunnels (e.g. 16
+     * eepsites x floor 8 = 128 threads when fully loaded). */
     static volatile int ioTransferThreads =
         Math.max(32, Math.min(128, Runtime.getRuntime().availableProcessors() * 4));
     /** Absolute floor for a live server tunnel's I/O pool. Sized so several
-     *  concurrent downloads can start without queueing past the browser's
-     *  body-stall window. @since 0.9.71+ */
+     * concurrent downloads can start without queueing past the browser's
+     * body-stall window. @since 0.9.71+ */
     static final int IO_POOL_FLOOR = 8;
     /** Maximum global I/O budget (Tuner max must match). @since 0.9.71+ */
     static final int IO_THREADS_MAX = 256;
     /** Idle timeout for Server→Client transfers (ms). If no read/write progress
-     *  occurs for this long, the transfer is considered stalled and cancelled.
-     *  Measured between progress events, not as a total transfer deadline —
-     *  multi-minute I2P downloads are expected and must not be killed. */
+     * occurs for this long, the transfer is considered stalled and cancelled.
+     * Measured between progress events, not as a total transfer deadline —
+     * multi-minute I2P downloads are expected and must not be killed. */
     /**
-     *  Floor for the configured stall window, ms. A window below this is
-     *  shorter than any pause in a bulk transfer over a congested path and
-     *  aborts healthy downloads; bodies that have moved megabytes scale up
-     *  further via {@link #computeStallWindowMs}.
-     *  @since 0.9.71+
+     * Floor for the configured stall window, ms. A window below this is
+     * shorter than any pause in a bulk transfer over a congested path and
+     * aborts healthy downloads; bodies that have moved megabytes scale up
+     * further via {@link #computeStallWindowMs}.
+     * @since 0.9.71+
      */
     static final long STALL_WINDOW_FLOOR_MS = 60_000L;
     static volatile long ioStallTimeoutMs = STALL_WINDOW_FLOOR_MS;
     /** Monotonically increasing counter of stall events detected by runOnIO
-     *  or the Sender. Used by the Tuner as the observed signal for stall
-     *  timeout adjustment. */
+     * or the Sender. Used by the Tuner as the observed signal for stall
+     * timeout adjustment. */
     static final AtomicLong _stallEventCount = new AtomicLong();
 
     /**
-     *  Bodies aborted because the I/O pool was saturated. A response aborted
-     *  here reaches the client as a truncated body, which is otherwise
-     *  indistinguishable from a socket close or a read timeout, so the counter
-     *  is what lets the cause be told apart in the log and on the console.
-     *  @since 0.9.71+
+     * Bodies aborted because the I/O pool was saturated. A response aborted
+     * here reaches the client as a truncated body, which is otherwise
+     * indistinguishable from a socket close or a read timeout, so the counter
+     * is what lets the cause be told apart in the log and on the console.
+     * @since 0.9.71+
      */
     private static final AtomicLong _bodyAbortCount = new AtomicLong();
 
     /**
-     *  @return bodies aborted due to I/O pool saturation since router start
-     *  @since 0.9.71+
+     * @return bodies aborted due to I/O pool saturation since router start
+     * @since 0.9.71+
      */
     public static long getBodyAbortCount() { return _bodyAbortCount.get(); }
 
     /**
-     *  Get (creating on first use) this tunnel's private I/O pool for data
-     *  transfer. The pool is a share of the global ioTransferThreads budget so
-     *  one tunnel's bulk downloads cannot starve another's.
+     * Get (creating on first use) this tunnel's private I/O pool for data
+     * transfer. The pool is a share of the global ioTransferThreads budget so
+     * one tunnel's bulk downloads cannot starve another's.
      *
-     *  @return non-null, this tunnel's I/O executor
-     *  @since 0.9.71+
+     * @return non-null, this tunnel's I/O executor
+     * @since 0.9.71+
      */
     ThreadPoolExecutor getIOExecutor() {
         synchronized (_ioExecutorLock) {
@@ -257,27 +257,27 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Maximum queued body tasks for an I/O pool with {@code threads} workers.
-     *  The queue is bounded so a saturated pool cannot park an unbounded number
-     *  of sockets with their browser and I2P streams open; overflow runs the
-     *  body on the handler thread instead (see {@link #handOffBody}), which
-     *  preserves a response whose headers were already sent. Package-visible
-     *  for tests.
+     * Maximum queued body tasks for an I/O pool with {@code threads} workers.
+     * The queue is bounded so a saturated pool cannot park an unbounded number
+     * of sockets with their browser and I2P streams open; overflow runs the
+     * body on the handler thread instead (see {@link #handOffBody}), which
+     * preserves a response whose headers were already sent. Package-visible
+     * for tests.
      *
-     *  @param threads pool worker count (already floored)
-     *  @return queue capacity, at least 32
-     *  @since 0.9.71+
+     * @param threads pool worker count (already floored)
+     * @return queue capacity, at least 32
+     * @since 0.9.71+
      */
     static int ioQueueCap(int threads) {
         return Math.max(32, threads * 4);
     }
 
     /**
-     *  Create a fixed-size I/O transfer pool. Package-visible for tests.
+     * Create a fixed-size I/O transfer pool. Package-visible for tests.
      *
-     *  @param threads fixed core/max worker count
-     *  @return non-null executor with a bounded queue ({@link #ioQueueCap(int)})
-     *  @since 0.9.71+
+     * @param threads fixed core/max worker count
+     * @return non-null executor with a bounded queue ({@link #ioQueueCap(int)})
+     * @since 0.9.71+
      */
     static ThreadPoolExecutor createIOExecutor(int threads) {
         int n = Math.max(IO_POOL_FLOOR, threads);
@@ -295,9 +295,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Rebalance every live I/O pool from the global ioTransferThreads budget.
-     *  Must run under {@link #_ioExecutorLock}.
-     *  @since 0.9.71+
+     * Rebalance every live I/O pool from the global ioTransferThreads budget.
+     * Must run under {@link #_ioExecutorLock}.
+     * @since 0.9.71+
      */
     private static void rebalanceIOPools() {
         int n = _ioPools.size();
@@ -321,10 +321,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Resize an I/O pool, preserving core == max.
-     *  @param ex the pool; ignored if null or shut down
-     *  @param newThreads the new fixed size
-     *  @since 0.9.71+
+     * Resize an I/O pool, preserving core == max.
+     * @param ex the pool; ignored if null or shut down
+     * @param newThreads the new fixed size
+     * @since 0.9.71+
      */
     private static void resizeIOExecutor(ThreadPoolExecutor ex, int newThreads) {
         if (ex == null || ex.isShutdown()) {return;}
@@ -338,8 +338,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Deregister this tunnel's I/O pool on stop so its budget share is freed.
-     *  @since 0.9.71+
+     * Deregister this tunnel's I/O pool on stop so its budget share is freed.
+     * @since 0.9.71+
      */
     private void ioPoolStopped() {
         synchronized (_ioExecutorLock) {
@@ -350,8 +350,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Trigger a full I/O-pool rebalance after a global budget change (Tuner).
-     *  @since 0.9.71+
+     * Trigger a full I/O-pool rebalance after a global budget change (Tuner).
+     * @since 0.9.71+
      */
     static void rebalanceAllIOPools() {
         synchronized (_ioExecutorLock) {
@@ -360,13 +360,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Get the saturation pressure summed across all live I/O pools:
-     *  running workers plus queued transfers. Used by the Tuner as the
-     *  reactive growth signal (queued bodies count as pressure so a backlog
-     *  grows the budget on the next cycle, not only when workers are full).
+     * Get the saturation pressure summed across all live I/O pools:
+     * running workers plus queued transfers. Used by the Tuner as the
+     * reactive growth signal (queued bodies count as pressure so a backlog
+     * grows the budget on the next cycle, not only when workers are full).
      *
-     *  @return active + queued transfers across pools, or 0 if none created
-     *  @since 0.9.71+
+     * @return active + queued transfers across pools, or 0 if none created
+     * @since 0.9.71+
      */
     public static int getIOTransferActiveCount() {
         synchronized (_ioExecutorLock) {
@@ -379,10 +379,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Set the I/O transfer pool size (called by Tuner via reflection).
+     * Set the I/O transfer pool size (called by Tuner via reflection).
      *
-     *  @param val new pool size (clamped to [{@link #IO_POOL_FLOOR}, {@link #IO_THREADS_MAX}])
-     *  @since 0.9.71+
+     * @param val new pool size (clamped to [{@link #IO_POOL_FLOOR}, {@link #IO_THREADS_MAX}])
+     * @since 0.9.71+
      */
     public static void setIOTransferThreads(int val) {
         ioTransferThreads = Math.max(IO_POOL_FLOOR, Math.min(IO_THREADS_MAX, val));
@@ -390,61 +390,61 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Get the current I/O transfer pool size.
+     * Get the current I/O transfer pool size.
      *
-     *  @return current pool size
-     *  @since 0.9.71+
+     * @return current pool size
+     * @since 0.9.71+
      */
     public static int getIOTransferThreads() { return ioTransferThreads; }
 
     /**
-     *  Set the I/O stall timeout in ms (called by Tuner via reflection).
+     * Set the I/O stall timeout in ms (called by Tuner via reflection).
      *
-     *  <p>The floor matches the Tuner's own floor: a window below
-     *  {@link #STALL_WINDOW_FLOOR_MS} is shorter than any pause in a bulk
-     *  transfer, so it aborts healthy downloads rather than freeing threads.
-     *  Bulk bodies get a larger window still via
-     *  {@link #computeStallWindowMs}.
+     * <p>The floor matches the Tuner's own floor: a window below
+     * {@link #STALL_WINDOW_FLOOR_MS} is shorter than any pause in a bulk
+     * transfer, so it aborts healthy downloads rather than freeing threads.
+     * Bulk bodies get a larger window still via
+     * {@link #computeStallWindowMs}.
      *
-     *  @param val new timeout in ms (clamped to [STALL_WINDOW_FLOOR_MS, 300000])
-     *  @since 0.9.71+
+     * @param val new timeout in ms (clamped to [STALL_WINDOW_FLOOR_MS, 300000])
+     * @since 0.9.71+
      */
     public static void setIOStallTimeoutMs(long val) {
         ioStallTimeoutMs = Math.max(STALL_WINDOW_FLOOR_MS, Math.min(300_000L, val));
     }
 
     /**
-     *  Get the current I/O stall timeout in ms.
+     * Get the current I/O stall timeout in ms.
      *
-     *  @return current stall timeout
-     *  @since 0.9.71+
+     * @return current stall timeout
+     * @since 0.9.71+
      */
     public static long getIOStallTimeoutMs() { return ioStallTimeoutMs; }
 
     /**
-     *  Get the total number of stall events detected by Sender since router start.
-     *  Each stall event means a Server→Client transfer was interrupted because
-     *  no data arrived for {@link #ioStallTimeoutMs}. Used by the Tuner as a
-     *  real-time signal for stall timeout adjustment.
+     * Get the total number of stall events detected by Sender since router start.
+     * Each stall event means a Server→Client transfer was interrupted because
+     * no data arrived for {@link #ioStallTimeoutMs}. Used by the Tuner as a
+     * real-time signal for stall timeout adjustment.
      *
-     *  @return monotonically increasing stall event count
-     *  @since 0.9.71+
+     * @return monotonically increasing stall event count
+     * @since 0.9.71+
      */
     public static long getStallEventCount() { return _stallEventCount.get(); }
     /**
-     *  Submit a Server→Client Sender to the I/O pool and return without
-     *  waiting for the transfer to finish, so the handler thread is free
-     *  for the next request. Falls back to an inline run when the pool is
-     *  null or shut down. When the pool is <b>saturated</b> the body is
-     *  aborted instead: it must never run on the handler thread, because
-     *  pinning that thread for a multi-minute transfer exhausts the runner
-     *  pool and stalls every other request to this service.
+     * Submit a Server→Client Sender to the I/O pool and return without
+     * waiting for the transfer to finish, so the handler thread is free
+     * for the next request. Falls back to an inline run when the pool is
+     * null or shut down. When the pool is <b>saturated</b> the body is
+     * aborted instead: it must never run on the handler thread, because
+     * pinning that thread for a multi-minute transfer exhausts the runner
+     * pool and stalls every other request to this service.
      *
      * @param pool I/O executor; may be null (headless/unit path)
      * @param s the Sender to run
      * @param desc descriptive name for error messages
      * @return true if the body was submitted asynchronously, false if it ran
-     *         inline or was aborted
+     * inline or was aborted
      * @since 0.9.71+
      */
     static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc)
@@ -453,15 +453,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  As {@link #handOffBody(ThreadPoolExecutor, Sender, String)} with a
-     *  completion callback invoked after the Sender finishes (success,
-     *  failure, or abort), on the pool worker when submitted and on the
-     *  caller otherwise. The callback always runs, so a caller can rely on
-     *  it for connection teardown no matter which path was taken.
+     * As {@link #handOffBody(ThreadPoolExecutor, Sender, String)} with a
+     * completion callback invoked after the Sender finishes (success,
+     * failure, or abort), on the pool worker when submitted and on the
+     * caller otherwise. The callback always runs, so a caller can rely on
+     * it for connection teardown no matter which path was taken.
      *
      * @param onCompletion may be null; must not throw
      * @return true if the body was submitted asynchronously, false if it ran
-     *         inline or was aborted
+     * inline or was aborted
      * @since 0.9.71+
      */
 
@@ -512,18 +512,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Decide whether an async body handoff has stalled. Pure decision helper
-     *  for the body watchdog: true when the Sender's last-read stamp is at
-     *  least the stall window old. A task that has not started yet (stamp 0)
-     *  never stalls — queueing behind a healthy long transfer is normal — and
-     *  a disabled window (&lt;= 0) never stalls.
+     * Decide whether an async body handoff has stalled. Pure decision helper
+     * for the body watchdog: true when the Sender's last-read stamp is at
+     * least the stall window old. A task that has not started yet (stamp 0)
+     * never stalls — queueing behind a healthy long transfer is normal — and
+     * a disabled window (&lt;= 0) never stalls.
      *
-     *  @param lastReadNanos Sender#getLastReadNanos(); 0 or negative if the
-     *                       worker has not started the copy yet
-     *  @param nowNanos current System.nanoTime()
-     *  @param stallNs stall window in nanoseconds; &lt;= 0 disables
-     *  @return true if the watchdog should close the streams and finish
-     *  @since 0.9.71+
+     * @param lastReadNanos Sender#getLastReadNanos(); 0 or negative if the
+     * worker has not started the copy yet
+     * @param nowNanos current System.nanoTime()
+     * @param stallNs stall window in nanoseconds; &lt;= 0 disables
+     * @return true if the watchdog should close the streams and finish
+     * @since 0.9.71+
      */
     static boolean isBodyWatchdogStalled(long lastReadNanos, long nowNanos, long stallNs) {
         if (stallNs <= 0 || lastReadNanos <= 0)
@@ -532,16 +532,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Stall window for a body that has already moved {@code bytesTransferred}.
+     * Stall window for a body that has already moved {@code bytesTransferred}.
      *
-     *  <p>The configured window is right for a small response but wrong for a
-     *  bulk one: over a congested path a 45MB transfer routinely pauses for
-     *  many seconds between copy steps, and a single fixed window either kills
-     *  the transfer or, if sized for the bulk case, pins a worker for minutes
-     *  behind a dead peer. The response {@code Content-Length} is not available
-     *  here (it is never parsed, and gzip and chunked bodies have no useful
-     *  declared length anyway), so the window scales with progress instead: a
-     *  body that has already moved megabytes has demonstrably earned patience.
+     * <p>The configured window is right for a small response but wrong for a
+     * bulk one: over a congested path a 45MB transfer routinely pauses for
+     * many seconds between copy steps, and a single fixed window either kills
+     * the transfer or, if sized for the bulk case, pins a worker for minutes
+     * behind a dead peer. The response {@code Content-Length} is not available
+     * here (it is never parsed, and gzip and chunked bodies have no useful
+     * declared length anyway), so the window scales with progress instead: a
+     * body that has already moved megabytes has demonstrably earned patience.
      *
      * @param baseMs configured window, {@link #ioStallTimeoutMs}
      * @param bytesTransferred bytes already moved by the body
@@ -566,10 +566,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** @since 0.9.71+ */
     private static final long BULK_STALL_32M = 32L * 1024L * 1024L;
     /**
-     *  Hard ceiling on a progress-scaled window, ms. Above the top progress
-     *  tier (8x) so a raised base window still cannot push a body past ten
-     *  minutes without a stall.
-     *  @since 0.9.71+
+     * Hard ceiling on a progress-scaled window, ms. Above the top progress
+     * tier (8x) so a raised base window still cannot push a body past ten
+     * minutes without a stall.
+     * @since 0.9.71+
      */
     static final long MAX_STALL_WINDOW_MS = 600_000L;
 
@@ -580,34 +580,34 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** @since 0.9.71+ */
     static final String STALL_SIDE_DESTINATION = "destination (I2P egress congested)";
     /**
-     *  Below this many bytes a body has moved too little for a "moved nothing,
-     *  and only a read is blocked" claim, so equally stale stamps are reported
-     *  as destination anyway. @since 0.9.71+
+     * Below this many bytes a body has moved too little for a "moved nothing,
+     * and only a read is blocked" claim, so equally stale stamps are reported
+     * as destination anyway. @since 0.9.71+
      */
     private static final long STALL_SIDE_INDETERMINATE_MAX_BYTES = 1024L;
 
     /**
-     *  Which side of a stalled body transfer stopped making progress.
+     * Which side of a stalled body transfer stopped making progress.
      *
-     *  <p>Read and write stamps are updated either side of the same copy step,
-     *  so a body blocked mid-write ages both equally: the read that fed the
-     *  blocked write is stamped, then the write never completes to stamp
-     *  itself. The two therefore look identical to a body blocked mid-read,
-     *  and only the progress counter separates them -- a body that has moved
-     *  meaningful bytes and then gone quiet is sitting in a blocked write,
-     *  because a blocked read would have had nothing to hand the previous
-     *  write.
+     * <p>Read and write stamps are updated either side of the same copy step,
+     * so a body blocked mid-write ages both equally: the read that fed the
+     * blocked write is stamped, then the write never completes to stamp
+     * itself. The two therefore look identical to a body blocked mid-read,
+     * and only the progress counter separates them -- a body that has moved
+     * meaningful bytes and then gone quiet is sitting in a blocked write,
+     * because a blocked read would have had nothing to hand the previous
+     * write.
      *
-     *  <p>Reporting the ambiguous case as the source is actively misleading: a
-     *  45MB download that stalled after 3.2MB was logged as "local backend
-     *  silent" while the same backend served the whole file in 4ms on a fresh
-     *  connection, sending every diagnosis to the wrong layer.
+     * <p>Reporting the ambiguous case as the source is actively misleading: a
+     * 45MB download that stalled after 3.2MB was logged as "local backend
+     * silent" while the same backend served the whole file in 4ms on a fresh
+     * connection, sending every diagnosis to the wrong layer.
      *
      * @param readAgeMs age of the last-read stamp
      * @param writeAgeMs age of the last-write stamp
      * @param bytesTransferred bytes already moved by the body
      * @return one of {@link #STALL_SIDE_SOURCE}, {@link #STALL_SIDE_DESTINATION},
-     *         or {@link #STALL_SIDE_INDETERMINATE}
+     * or {@link #STALL_SIDE_INDETERMINATE}
      * @since 0.9.71+
      */
     static String classifyStalledSide(long readAgeMs, long writeAgeMs, long bytesTransferred) {
@@ -624,12 +624,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Close a stream, ignoring failures. Used by stall/teardown paths where
-     *  the close is best-effort (the stream may already be dead) and the goal
-     *  is only to unblock a thread parked in read or write.
+     * Close a stream, ignoring failures. Used by stall/teardown paths where
+     * the close is best-effort (the stream may already be dead) and the goal
+     * is only to unblock a thread parked in read or write.
      *
-     *  @param c stream to close; ignored if null
-     *  @since 0.9.71+
+     * @param c stream to close; ignored if null
+     * @since 0.9.71+
      */
     private static void closeQuietly(Closeable c) {
         if (c == null) {return;}
@@ -648,29 +648,29 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** Config key to enable keepalive (legacy short form; see PROP_KEEPALIVE). */
     public static final String OPT_KEEPALIVE = "keepalive.i2p";
     /** Config key to enable HTTP persistent connections; live via optionsUpdated.
-     *  Falls back to the legacy {@link #OPT_KEEPALIVE} short key when unset.
-     *  Key: tunnel.N.option.i2ptunnel.server.keepalive
-     *  @since 0.9.71+
+     * Falls back to the legacy {@link #OPT_KEEPALIVE} short key when unset.
+     * Key: tunnel.N.option.i2ptunnel.server.keepalive
+     * @since 0.9.71+
      */
     public static final String PROP_KEEPALIVE = "i2ptunnel.server.keepalive";
     /** Config key for the idle keepalive wait before closing a persistent
-     *  connection, in ms. Replaces the hard-coded 130s wait so a browser that
-     *  goes away does not pin a handler thread for over two minutes.
-     *  Key: tunnel.N.option.i2ptunnel.server.keepAliveTimeout
-     *  @since 0.9.71+
+     * connection, in ms. Replaces the hard-coded 130s wait so a browser that
+     * goes away does not pin a handler thread for over two minutes.
+     * Key: tunnel.N.option.i2ptunnel.server.keepAliveTimeout
+     * @since 0.9.71+
      */
     public static final String PROP_KEEPALIVE_TIMEOUT = "i2ptunnel.server.keepAliveTimeout";
     /** Config key for the first-request header read timeout, in ms.
-     *  Key: tunnel.N.option.i2ptunnel.server.headerTimeout
-     *  @since 0.9.71+
+     * Key: tunnel.N.option.i2ptunnel.server.headerTimeout
+     * @since 0.9.71+
      */
     public static final String PROP_HEADER_TIMEOUT = "i2ptunnel.server.headerTimeout";
     /** Default idle keepalive wait (ms); short enough to free the handler
-     *  thread, long enough for a browser to reuse the connection. */
+     * thread, long enough for a browser to reuse the connection. */
     public static final long DEFAULT_KEEPALIVE_TIMEOUT_MS = 10 * 1000L;
     /** Default first-request header timeout (ms).  30s matches the pre-config
-     *  hard-coded value and gives slow eepsites time to start responding before
-     *  the 408 kill fires (which aborts Range-resume downloads mid-body). */
+     * hard-coded value and gives slow eepsites time to start responding before
+     * the 408 kill fires (which aborts Range-resume downloads mid-body). */
     public static final long DEFAULT_HEADER_TIMEOUT_MS = 30 * 1000L;
     /** Bounds for {@link #PROP_KEEPALIVE_TIMEOUT} (ms). */
     public static final long MIN_KEEPALIVE_TIMEOUT_MS = 1000L;
@@ -771,28 +771,28 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /** Live first-request header timeout (ms); updated by optionsUpdated.
-     *  Was a hard-coded 30s constant.
-     *  @since 0.9.71+ */
+     * Was a hard-coded 30s constant.
+     * @since 0.9.71+ */
     private volatile long _headerTimeoutMs = DEFAULT_HEADER_TIMEOUT_MS;
     /** Live idle keepalive wait (ms); updated by optionsUpdated.
-     *  Was a hard-coded 130s wait.
-     *  @since 0.9.71+ */
+     * Was a hard-coded 130s wait.
+     * @since 0.9.71+ */
     private volatile long _keepAliveTimeoutMs = DEFAULT_KEEPALIVE_TIMEOUT_MS;
     /** Whether HTTP persistent connections are accepted; updated by optionsUpdated.
-     *  @since 0.9.71+ */
+     * @since 0.9.71+ */
     private volatile boolean _keepAlive = DEFAULT_KEEPALIVE;
     /** Grace period for remaining header lines after the first line, on top of
-     *  the initial header timeout (slowloris bound). */
+     * the initial header timeout (slowloris bound). */
     private static final long HEADER_FINISH_TIMEOUT = DEFAULT_HEADER_TIMEOUT_MS;
     /** min time before socket error is escalated to ERROR level */
     private static final long START_INTERVAL = (60 * 1000) * 3;
     private static final int MAX_LINE_LENGTH = 8*1024;
     /** ridiculously long, just to prevent OOM DOS
-     *  @since 0.7.13
+     * @since 0.7.13
      */
     private static final int MAX_HEADERS = 60;
     /** Includes request, just to prevent OOM DOS
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     private static final int MAX_TOTAL_HEADER_SIZE = 32*1024;
     // Does not apply to header reads.
@@ -912,10 +912,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</html>";
 
     /**
-     *  HTTP 408 Request Timeout error response.
-     *  Includes a meta refresh to retry after 5 seconds.
+     * HTTP 408 Request Timeout error response.
+     * Includes a meta refresh to retry after 5 seconds.
      *
-     *  @since 0.9.33 made protected for I2PTunnelHTTPClientBase, was private
+     * @since 0.9.33 made protected for I2PTunnelHTTPClientBase, was private
      */
     protected final static String ERR_REQUEST_TIMEOUT =
          "HTTP/1.1 408 Request timeout\r\n" +
@@ -943,15 +943,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "</html>";
 
     /**
-     *  Create an HTTP tunnel server with a private key string.
+     * Create an HTTP tunnel server with a private key string.
      *
-     *  @param host the local address to bind to
-     *  @param port the local port
-     *  @param privData the private key data as a Base64 string
-     *  @param spoofHost the hostname to spoof in the Host header, or null
-     *  @param l the logging instance
-     *  @param notifyThis the event dispatcher for notifications
-     *  @param tunnel the parent tunnel configuration
+     * @param host the local address to bind to
+     * @param port the local port
+     * @param privData the private key data as a Base64 string
+     * @param spoofHost the hostname to spoof in the Host header, or null
+     * @param l the logging instance
+     * @param notifyThis the event dispatcher for notifications
+     * @param tunnel the parent tunnel configuration
      */
     public I2PTunnelHTTPServer(InetAddress host, int port, String privData, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privData, l, notifyThis, tunnel);
@@ -959,16 +959,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Create an HTTP tunnel server from a private key file.
+     * Create an HTTP tunnel server from a private key file.
      *
-     *  @param host the local address to bind to
-     *  @param port the local port
-     *  @param privkey the private key file
-     *  @param privkeyname the name for the private key
-     *  @param spoofHost the hostname to spoof in the Host header, or null
-     *  @param l the logging instance
-     *  @param notifyThis the event dispatcher for notifications
-     *  @param tunnel the parent tunnel configuration
+     * @param host the local address to bind to
+     * @param port the local port
+     * @param privkey the private key file
+     * @param privkeyname the name for the private key
+     * @param spoofHost the hostname to spoof in the Host header, or null
+     * @param l the logging instance
+     * @param notifyThis the event dispatcher for notifications
+     * @param tunnel the parent tunnel configuration
      */
     public I2PTunnelHTTPServer(InetAddress host, int port, File privkey, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privkey, privkeyname, l, notifyThis, tunnel);
@@ -976,16 +976,16 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Create an HTTP tunnel server from a private key stream.
+     * Create an HTTP tunnel server from a private key stream.
      *
-     *  @param host the local address to bind to
-     *  @param port the local port
-     *  @param privData the input stream containing the private key data
-     *  @param privkeyname the name for the private key
-     *  @param spoofHost the hostname to spoof in the Host header, or null
-     *  @param l the logging instance
-     *  @param notifyThis the event dispatcher for notifications
-     *  @param tunnel the parent tunnel configuration
+     * @param host the local address to bind to
+     * @param port the local port
+     * @param privData the input stream containing the private key data
+     * @param privkeyname the name for the private key
+     * @param spoofHost the hostname to spoof in the Host header, or null
+     * @param l the logging instance
+     * @param notifyThis the event dispatcher for notifications
+     * @param tunnel the parent tunnel configuration
      */
     public I2PTunnelHTTPServer(InetAddress host, int port, InputStream privData, String privkeyname, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(host, port, privData, privkeyname, l, notifyThis, tunnel);
@@ -993,10 +993,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Common initialization for all constructors.
-     *  Sets the spoofed host, creates stats, and initializes the blocklist manager.
+     * Common initialization for all constructors.
+     * Sets the spoofed host, creates stats, and initializes the blocklist manager.
      *
-     *  @param spoofHost the hostname to spoof in the Host header, or null for no spoofing
+     * @param spoofHost the hostname to spoof in the Host header, or null for no spoofing
      */
     private void setupI2PTunnelHTTPServer(String spoofHost) {
         _spoofHost = (spoofHost != null && !spoofHost.trim().isEmpty()) ? spoofHost.trim() : null;
@@ -1019,10 +1019,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Initialize or update the POST/PUT throttler from tunnel options.
-     *  Creates a new ConnThrottler if limits are configured, or updates existing.
+     * Initialize or update the POST/PUT throttler from tunnel options.
+     * Creates a new ConnThrottler if limits are configured, or updates existing.
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     private void setupPostThrottle() {
         int pp = getIntOption(OPT_POST_MAX, 0);
@@ -1042,13 +1042,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Parse the keepalive enable flag from tunnel options.
-     *  Prefers {@link #PROP_KEEPALIVE}; falls back to the legacy
-     *  {@link #OPT_KEEPALIVE} short key; defaults to true when unset.
+     * Parse the keepalive enable flag from tunnel options.
+     * Prefers {@link #PROP_KEEPALIVE}; falls back to the legacy
+     * {@link #OPT_KEEPALIVE} short key; defaults to true when unset.
      *
-     *  @param opts the client options; may be null
-     *  @return true if persistent connections are enabled
-     *  @since 0.9.71+
+     * @param opts the client options; may be null
+     * @return true if persistent connections are enabled
+     * @since 0.9.71+
      */
     static boolean parseKeepAlive(Properties opts) {
         if (opts == null) {return DEFAULT_KEEPALIVE;}
@@ -1059,13 +1059,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Parse and clamp the idle keepalive timeout (ms) from tunnel options.
-     *  Unparseable values fall back to the default; out-of-range values clamp.
+     * Parse and clamp the idle keepalive timeout (ms) from tunnel options.
+     * Unparseable values fall back to the default; out-of-range values clamp.
      *
-     *  @param opts the client options; may be null
-     *  @return timeout in ms within [{@link #MIN_KEEPALIVE_TIMEOUT_MS},
-     *          {@link #MAX_KEEPALIVE_TIMEOUT_MS}]
-     *  @since 0.9.71+
+     * @param opts the client options; may be null
+     * @return timeout in ms within [{@link #MIN_KEEPALIVE_TIMEOUT_MS},
+     * {@link #MAX_KEEPALIVE_TIMEOUT_MS}]
+     * @since 0.9.71+
      */
     static long parseKeepAliveTimeout(Properties opts) {
         return parseTimeoutMs(opts, PROP_KEEPALIVE_TIMEOUT, DEFAULT_KEEPALIVE_TIMEOUT_MS,
@@ -1073,12 +1073,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Parse and clamp the first-request header timeout (ms) from tunnel options.
+     * Parse and clamp the first-request header timeout (ms) from tunnel options.
      *
-     *  @param opts the client options; may be null
-     *  @return timeout in ms within [{@link #MIN_HEADER_TIMEOUT_MS},
-     *          {@link #MAX_HEADER_TIMEOUT_MS}]
-     *  @since 0.9.71+
+     * @param opts the client options; may be null
+     * @return timeout in ms within [{@link #MIN_HEADER_TIMEOUT_MS},
+     * {@link #MAX_HEADER_TIMEOUT_MS}]
+     * @since 0.9.71+
      */
     static long parseHeaderTimeout(Properties opts) {
         return parseTimeoutMs(opts, PROP_HEADER_TIMEOUT, DEFAULT_HEADER_TIMEOUT_MS,
@@ -1086,15 +1086,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Shared timeout parser: default on missing/unparseable, clamp to [min, max].
+     * Shared timeout parser: default on missing/unparseable, clamp to [min, max].
      *
-     *  @param opts the options; may be null
-     *  @param key the property key
-     *  @param dflt default when unset or not a number
-     *  @param min inclusive lower bound
-     *  @param max inclusive upper bound
-     *  @return the parsed and clamped timeout in ms
-     *  @since 0.9.71+
+     * @param opts the options; may be null
+     * @param key the property key
+     * @param dflt default when unset or not a number
+     * @param min inclusive lower bound
+     * @param max inclusive upper bound
+     * @return the parsed and clamped timeout in ms
+     * @since 0.9.71+
      */
     private static long parseTimeoutMs(Properties opts, String key, long dflt, long min, long max) {
         if (opts == null) {return dflt;}
@@ -1109,43 +1109,43 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /** @return whether HTTP persistent connections are currently enabled
-     *  @since 0.9.71+ */
+     * @since 0.9.71+ */
     public boolean isKeepAlive() {return _keepAlive;}
 
     /** Enable/disable HTTP persistent connections without a tunnel restart.
-     *  @param on true to accept persistent connections
-     *  @since 0.9.71+ */
+     * @param on true to accept persistent connections
+     * @since 0.9.71+ */
     public void setKeepAlive(boolean on) {_keepAlive = on;}
 
     /** @return idle keepalive wait in ms
-     *  @since 0.9.71+ */
+     * @since 0.9.71+ */
     public long getKeepAliveTimeout() {return _keepAliveTimeoutMs;}
 
     /** Set the idle keepalive wait, clamped to the configured bounds.
-     *  @param ms timeout in ms
-     *  @since 0.9.71+ */
+     * @param ms timeout in ms
+     * @since 0.9.71+ */
     public void setKeepAliveTimeout(long ms) {
         _keepAliveTimeoutMs = Math.max(MIN_KEEPALIVE_TIMEOUT_MS, Math.min(MAX_KEEPALIVE_TIMEOUT_MS, ms));
     }
 
     /** @return first-request header timeout in ms
-     *  @since 0.9.71+ */
+     * @since 0.9.71+ */
     public long getHeaderTimeout() {return _headerTimeoutMs;}
 
     /** Set the first-request header timeout, clamped to the configured bounds.
-     *  @param ms timeout in ms
-     *  @since 0.9.71+ */
+     * @param ms timeout in ms
+     * @since 0.9.71+ */
     public void setHeaderTimeout(long ms) {
         _headerTimeoutMs = Math.max(MIN_HEADER_TIMEOUT_MS, Math.min(MAX_HEADER_TIMEOUT_MS, ms));
     }
 
     /**
-     *  Get an integer option from the tunnel client options.
+     * Get an integer option from the tunnel client options.
      *
-     *  @param opt the option key
-     *  @param dflt the default value if not set or invalid
-     *  @return the option value, or dflt
-     *  @since 0.9.9
+     * @param opt the option key
+     * @param dflt the default value if not set or invalid
+     * @return the option value, or dflt
+     * @since 0.9.9
      */
     private int getIntOption(String opt, int dflt) {
         Properties opts = getTunnel().getClientOptions();
@@ -1158,11 +1158,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Close the tunnel and stop the POST throttler.
+     * Close the tunnel and stop the POST throttler.
      *
-     *  @param forced true to force close
-     *  @return true if closed successfully
-     *  @since 0.9.9
+     * @param forced true to force close
+     * @return true if closed successfully
+     * @since 0.9.9
      */
     @Override
     public boolean close(boolean forced) {
@@ -1175,11 +1175,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Called when tunnel options are updated.
-     *  Re-initializes the POST throttler and updates the spoofed host.
+     * Called when tunnel options are updated.
+     * Re-initializes the POST throttler and updates the spoofed host.
      *
      * @param tunnel tunnel that was updated; ignored unless it is the tunnel we serve
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
@@ -1196,14 +1196,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Short human-readable identifier for this HTTP server tunnel, e.g.
-     *  "[skank / 8charB32]", matching the outbound tunnel log format
-     *  "[nickname / b32prefix]" so related warnings can be correlated across
-     *  the router and the i2ptunnel logs.  A trailing ".i2p" on the configured
-     *  nickname is stripped to match that format.
+     * Short human-readable identifier for this HTTP server tunnel, e.g.
+     * "[skank / 8charB32]", matching the outbound tunnel log format
+     * "[nickname / b32prefix]" so related warnings can be correlated across
+     * the router and the i2ptunnel logs.  A trailing ".i2p" on the configured
+     * nickname is stripped to match that format.
      *
-     *  @param localDest this tunnel's own destination, may be null
-     *  @return the "[nickname / prefix]" label, never null
+     * @param localDest this tunnel's own destination, may be null
+     * @return the "[nickname / prefix]" label, never null
      */
     private String getTunnelLogId(Destination localDest) {
         String nickname = getTunnel().getClientOptions().getProperty("inbound.nickname");
@@ -1220,11 +1220,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Called by the thread pool of I2PSocket handlers.
-     *  Handles a single client connection through the HTTP proxy lifecycle:
-     *  read headers, validate, apply spoofing, compress, and forward.
+     * Called by the thread pool of I2PSocket handlers.
+     * Handles a single client connection through the HTTP proxy lifecycle:
+     * read headers, validate, apply spoofing, compress, and forward.
      *
-     *  @param socket the incoming I2P socket from the client
+     * @param socket the incoming I2P socket from the client
      */
     @Override
     protected void blockingHandle(I2PSocket socket) {
@@ -1417,19 +1417,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Read the request headers with the default timeouts.
-     *  Delegates to {@link #readRequestHeaders(I2PSocket, StringBuilder, int,
-     *  String, I2PAppContext, Log, String, long, long)}.
+     * Read the request headers with the default timeouts.
+     * Delegates to {@link #readRequestHeaders(I2PSocket, StringBuilder, int,
+     * String, I2PAppContext, Log, String, long, long)}.
      *
-     *  @param socket the client socket
-     *  @param command buffer for the request line
-     *  @param requestCount the number of requests already handled on this connection (0 = first)
-     *  @param peerB32 the client's base32 for logging
-     *  @param ctx the I2P app context
-     *  @param log the logging instance
-     *  @param tunnelId "[nickname / b32prefix]" label for this server tunnel
-     *  @return the parsed headers, or null if the request failed and the client was notified
-     *  @throws IOException on other I/O errors, propagated to the caller
+     * @param socket the client socket
+     * @param command buffer for the request line
+     * @param requestCount the number of requests already handled on this connection (0 = first)
+     * @param peerB32 the client's base32 for logging
+     * @param ctx the I2P app context
+     * @param log the logging instance
+     * @param tunnelId "[nickname / b32prefix]" label for this server tunnel
+     * @return the parsed headers, or null if the request failed and the client was notified
+     * @throws IOException on other I/O errors, propagated to the caller
      */
     static Map<String, List<String>> readRequestHeaders(I2PSocket socket, StringBuilder command, int requestCount,
                                                         String peerB32, I2PAppContext ctx, Log log, String tunnelId) throws IOException {
@@ -1438,22 +1438,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Read the request headers, handling the specific errors that can occur
-     *  by sending the appropriate error response to the client.
-     *  The 5 error handlers share this shape: send error, log, close, return null.
+     * Read the request headers, handling the specific errors that can occur
+     * by sending the appropriate error response to the client.
+     * The 5 error handlers share this shape: send error, log, close, return null.
      *
-     *  @param socket the client socket
-     *  @param command buffer for the request line
-     *  @param requestCount the number of requests already handled on this connection (0 = first)
-     *  @param peerB32 the client's base32 for logging
-     *  @param ctx the I2P app context
-     *  @param log the logging instance
-     *  @param tunnelId "[nickname / b32prefix]" label for this server tunnel
-     *  @param headerTimeout first-request header timeout (ms)
-     *  @param keepAliveTimeout idle keepalive wait for subsequent requests (ms)
-     *  @return the parsed headers, or null if the request failed and the client was notified
-     *  @throws IOException on other I/O errors, propagated to the caller
-     *  @since 0.9.71+ timeout parameters added for live tuning
+     * @param socket the client socket
+     * @param command buffer for the request line
+     * @param requestCount the number of requests already handled on this connection (0 = first)
+     * @param peerB32 the client's base32 for logging
+     * @param ctx the I2P app context
+     * @param log the logging instance
+     * @param tunnelId "[nickname / b32prefix]" label for this server tunnel
+     * @param headerTimeout first-request header timeout (ms)
+     * @param keepAliveTimeout idle keepalive wait for subsequent requests (ms)
+     * @return the parsed headers, or null if the request failed and the client was notified
+     * @throws IOException on other I/O errors, propagated to the caller
+     * @since 0.9.71+ timeout parameters added for live tuning
      */
     static Map<String, List<String>> readRequestHeaders(I2PSocket socket, StringBuilder command, int requestCount,
                                                         String peerB32, I2PAppContext ctx, Log log, String tunnelId,
@@ -1546,10 +1546,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     static final int CONN_CLOSE = 3;
 
     /**
-     *  Classify the request's Connection header value.
+     * Classify the request's Connection header value.
      *
-     *  @param headers request headers
-     *  @return CONN_NONE, CONN_KEEPALIVE, CONN_UPGRADE, or CONN_CLOSE
+     * @param headers request headers
+     * @return CONN_NONE, CONN_KEEPALIVE, CONN_UPGRADE, or CONN_CLOSE
      */
     static int getConnectionType(Map<String, List<String>> headers) {
         String conn = getEntryOrNull(headers, "Connection");
@@ -1561,30 +1561,30 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Whether the request can keep the connection alive: GET or HEAD with HTTP/1.1.
+     * Whether the request can keep the connection alive: GET or HEAD with HTTP/1.1.
      *
-     *  @param cmd the trimmed request line
-     *  @return true if keepalive may continue
+     * @param cmd the trimmed request line
+     * @return true if keepalive may continue
      */
     static boolean isKeepAliveRequest(String cmd) {
         return (cmd.startsWith("GET ") || cmd.startsWith("HEAD ")) && cmd.endsWith(" HTTP/1.1");
     }
 
     /**
-     *  Whether the Accept-Encoding value includes x-i2p-gzip.
+     * Whether the Accept-Encoding value includes x-i2p-gzip.
      *
-     *  @param enc an Accept-Encoding header value, or null
-     *  @return true if it includes x-i2p-gzip
+     * @param enc an Accept-Encoding header value, or null
+     * @return true if it includes x-i2p-gzip
      */
     static boolean hasGzipEncoding(String enc) {
         return enc != null && enc.indexOf("x-i2p-gzip") >= 0;
     }
 
     /**
-     *  Whether the tunnel allows gzip responses, from the tunnel options.
+     * Whether the tunnel allows gzip responses, from the tunnel options.
      *
-     *  @param opts the client options
-     *  @return true unless PROP_TUN_GZIP is set to false
+     * @param opts the client options
+     * @return true unless PROP_TUN_GZIP is set to false
      */
     static boolean isGzipAllowed(Properties opts) {
         String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
@@ -1592,14 +1592,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Handle port 443 (SSL passthrough).
-     *  If no target is configured for port 443, reset the socket.
-     *  Otherwise, set a long timeout and forward directly to the server
-     *  via I2PTunnelRunner.
+     * Handle port 443 (SSL passthrough).
+     * If no target is configured for port 443, reset the socket.
+     * Otherwise, set a long timeout and forward directly to the server
+     * via I2PTunnelRunner.
      *
-     *  @param socket the incoming I2P socket
-     *  @return true if the socket was handled (port 443), false otherwise
-     *  @throws IOException if socket operations fail
+     * @param socket the incoming I2P socket
+     * @return true if the socket was handled (port 443), false otherwise
+     * @throws IOException if socket operations fail
      */
     private boolean handlePort443(I2PSocket socket) throws IOException {
         if (socket.getLocalPort() != 443)
@@ -1643,12 +1643,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Refuse an inbound connection when the gate cap is exceeded: send a 503
-     *  (SSL port 443 resets instead) and close. The base implementation then logs
-     *  the rate-limited warning.
+     * Refuse an inbound connection when the gate cap is exceeded: send a 503
+     * (SSL port 443 resets instead) and close. The base implementation then logs
+     * the rate-limited warning.
      *
-     *  @param socket the accepted but undelivered I2PSocket to reject
-     *  @since 0.9.71+
+     * @param socket the accepted but undelivered I2PSocket to reject
+     * @since 0.9.71+
      */
     @Override
     protected void rejectConnection(I2PSocket socket) {
@@ -1656,12 +1656,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Refuse an inbound connection (queue-full or connection-cap): send a 503
-     *  (SSL port 443 resets instead) and close, then log the accurate reason.
+     * Refuse an inbound connection (queue-full or connection-cap): send a 503
+     * (SSL port 443 resets instead) and close, then log the accurate reason.
      *
-     *  @param socket the accepted but undelivered I2PSocket to reject
-     *  @param queueFull true if the handler queue gate rejected, false for the connection cap
-     *  @since 0.9.71+
+     * @param socket the accepted but undelivered I2PSocket to reject
+     * @param queueFull true if the handler queue gate rejected, false for the connection cap
+     * @since 0.9.71+
      */
     @Override
     protected void rejectConnection(I2PSocket socket, boolean queueFull) {
@@ -1670,17 +1670,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Validate the request hostname against local/loopback/private addresses.
-     *  If the hostname resolves to a private or loopback address, the peer is
-     *  blocklisted and the socket is closed. If DNS resolves to 0.0.0.0 (blocked DNS),
-     *  a 403 is sent.
-     *  DNS is resolved asynchronously with a bounded timeout to avoid
-     *  blocking the shared client thread pool on slow or unreachable DNS servers.
+     * Validate the request hostname against local/loopback/private addresses.
+     * If the hostname resolves to a private or loopback address, the peer is
+     * blocklisted and the socket is closed. If DNS resolves to 0.0.0.0 (blocked DNS),
+     * a 403 is sent.
+     * DNS is resolved asynchronously with a bounded timeout to avoid
+     * blocking the shared client thread pool on slow or unreachable DNS servers.
      *
-     *  @param headers the request headers map (to extract Host header)
-     *  @param socket the incoming I2P socket
-     *  @param peerB32 the peer's base32 address for logging/blocklisting
-     *  @throws IOException if blocklist writing fails
+     * @param headers the request headers map (to extract Host header)
+     * @param socket the incoming I2P socket
+     * @param peerB32 the peer's base32 address for logging/blocklisting
+     * @throws IOException if blocklist writing fails
      */
     private void validateRequestHost(Map<String, List<String>> headers, I2PSocket socket, String peerB32) throws IOException {
         String tunnelId = getTunnelLogId(socket.getThisDestination());
@@ -1787,13 +1787,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Reject requests that contain forwarded-for headers (inproxy detection).
+     * Reject requests that contain forwarded-for headers (inproxy detection).
      *
-     *  @param headers the request headers
-     *  @param socket the incoming I2P socket
-     *  @param peerB32 the peer's base32 address for logging
-     *  @param opts the tunnel client options
-     *  @return true if the request was rejected and the socket closed
+     * @param headers the request headers
+     * @param socket the incoming I2P socket
+     * @param peerB32 the peer's base32 address for logging
+     * @param opts the tunnel client options
+     * @return true if the request was rejected and the socket closed
      */
     boolean isInproxyRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
         if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_INPROXY)))
@@ -1828,13 +1828,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Reject requests with absolute Referer URIs.
+     * Reject requests with absolute Referer URIs.
      *
-     *  @param headers the request headers
-     *  @param socket the incoming I2P socket
-     *  @param peerB32 the peer's base32 address for logging
-     *  @param opts the tunnel client options
-     *  @return true if the request was rejected and the socket closed
+     * @param headers the request headers
+     * @param socket the incoming I2P socket
+     * @param peerB32 the peer's base32 address for logging
+     * @param opts the tunnel client options
+     * @return true if the request was rejected and the socket closed
      */
     boolean isRefererRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
         if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_REFERER)))
@@ -1858,13 +1858,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Reject requests with blacklisted User-Agent strings.
+     * Reject requests with blacklisted User-Agent strings.
      *
-     *  @param headers the request headers
-     *  @param socket the incoming I2P socket
-     *  @param peerB32 the peer's base32 address for logging
-     *  @param opts the tunnel client options
-     *  @return true if the request was rejected and the socket closed
+     * @param headers the request headers
+     * @param socket the incoming I2P socket
+     * @param peerB32 the peer's base32 address for logging
+     * @param opts the tunnel client options
+     * @return true if the request was rejected and the socket closed
      */
     boolean isUserAgentRejection(Map<String, List<String>> headers, I2PSocket socket, String peerB32, Properties opts) {
         if (!Boolean.parseBoolean(opts.getProperty(OPT_REJECT_USER_AGENTS)))
@@ -1911,13 +1911,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Check POST/PUT throttling for this peer.
+     * Check POST/PUT throttling for this peer.
      *
-     *  @param command the request command string (first line)
-     *  @param peerHash the peer's hash for throttling lookup
-     *  @param socket the incoming I2P socket
-     *  @param peerB32 the peer's base32 address for logging
-     *  @return true if the request was throttled and the socket closed
+     * @param command the request command string (first line)
+     * @param peerHash the peer's hash for throttling lookup
+     * @param socket the incoming I2P socket
+     * @param peerB32 the peer's base32 address for logging
+     * @return true if the request was throttled and the socket closed
      */
     boolean isPostThrottled(StringBuilder command, Hash peerHash, I2PSocket socket, String peerB32) {
         ConnThrottler postThrottler;
@@ -1944,14 +1944,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Record timing stats for the first request in a keepalive cycle.
+     * Record timing stats for the first request in a keepalive cycle.
      *
-     *  @param afterAccept clock time right after accept
-     *  @param afterHeaders clock time after reading headers
-     *  @param afterSocket clock time after creating the server socket
-     *  @param afterHandle clock time after dispatching the request
-     *  @param requestCount the request number (only logs for 0)
-     *  @param peerB32 the peer's base32 address for logging
+     * @param afterAccept clock time right after accept
+     * @param afterHeaders clock time after reading headers
+     * @param afterSocket clock time after creating the server socket
+     * @param afterHandle clock time after dispatching the request
+     * @param requestCount the request number (only logs for 0)
+     * @param peerB32 the peer's base32 address for logging
      */
     private void recordInitialTiming(long afterAccept, long afterHeaders, long afterSocket,
                                      long afterHandle, int requestCount, String peerB32) {
@@ -1969,13 +1969,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Apply port-specific spoofed host header.
-     *  If no port-specific spoof is configured for the socket's port,
-     *  falls back to the default _spoofHost.
+     * Apply port-specific spoofed host header.
+     * If no port-specific spoof is configured for the socket's port,
+     * falls back to the default _spoofHost.
      *
-     *  @param socket the incoming I2P socket
-     *  @param headers the request header map to modify
-     *  @param opts the tunnel client options
+     * @param socket the incoming I2P socket
+     * @param headers the request header map to modify
+     * @param opts the tunnel client options
      */
     private void applySpoofedHost(I2PSocket socket, Map<String, List<String>> headers, Properties opts) {
         String spoofHost;
@@ -1989,11 +1989,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Check whether the keepalive waiter indicates we should stay alive.
-     *  @param waiter the AtomicInteger set by CompressedRequestor
-     *  @param afterAccept clock time right after accept (for debug logging)
-     *  @param requestCount the request number (for debug logging)
-     *  @return true if the waiter returned keepalive-eligible (value 2)
+     * Check whether the keepalive waiter indicates we should stay alive.
+     * @param waiter the AtomicInteger set by CompressedRequestor
+     * @param afterAccept clock time right after accept (for debug logging)
+     * @param requestCount the request number (for debug logging)
+     * @return true if the waiter returned keepalive-eligible (value 2)
      */
     private boolean shouldKeepalive(AtomicInteger waiter, long afterAccept, int requestCount) {
         if (_log.shouldDebug()) {
@@ -2012,13 +2012,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Send an error response to the client. For port 443 (SSL),
-     *  resets the socket instead since we can't send plaintext error messages.
+     * Send an error response to the client. For port 443 (SSL),
+     * resets the socket instead since we can't send plaintext error messages.
      *
-     *  @param socket the client socket
-     *  @param resp the HTTP error response string
-     *  @throws IOException if writing the response fails
-     *  @since 0.9.62
+     * @param socket the client socket
+     * @param resp the HTTP error response string
+     * @throws IOException if writing the response fails
+     * @since 0.9.62
      */
     private static void sendError(I2PSocket socket, String resp) throws IOException {
         if (socket.getLocalPort() == 443) {socket.reset();}
@@ -2026,9 +2026,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Send a 503 and close the socket, ignoring any failures.
+     * Send a 503 and close the socket, ignoring any failures.
      *
-     *  @param socket the socket to respond on
+     * @param socket the socket to respond on
      */
     private static void sendErrorAndClose(I2PSocket socket) {
         try {
@@ -2043,9 +2043,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private static class CompressedRequestor implements Runnable {
         /**
-         *  Far-side label for transfer logs, e.g. {@code [skank / aanoquc2]}.
-         *  Null when the caller did not supply one.
-         *  @since 0.9.71+
+         * Far-side label for transfer logs, e.g. {@code [skank / aanoquc2]}.
+         * Null when the caller did not supply one.
+         * @since 0.9.71+
          */
         private final String _tunnelId;
         private final Socket _webserver;
@@ -2063,9 +2063,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private static final int BUF_SIZE = 16*1024;
 
         /**
-         *  @param shouldCompress if false, don't compress, just filter server headers
-         *  @param waiter to notify when done, if non-null; will set value to 1: not keepalive-able response, or 2: keepalive
-         *  @param ioPool resolves the owning tunnel's I/O transfer pool (never returns null in production)
+         * @param shouldCompress if false, don't compress, just filter server headers
+         * @param waiter to notify when done, if non-null; will set value to 1: not keepalive-able response, or 2: keepalive
+         * @param ioPool resolves the owning tunnel's I/O transfer pool (never returns null in production)
          */
           public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                      I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
@@ -2076,9 +2076,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
           }
 
           /**
-           *  @param tunnelId far-side label for transfer logs, e.g.
-           *                  {@code [skank / aanoquc2]}; may be null
-           *  @since 0.9.71+
+           * @param tunnelId far-side label for transfer logs, e.g.
+           * {@code [skank / aanoquc2]}; may be null
+           * @since 0.9.71+
            */
           public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
                                      I2PAppContext ctx, Log log, boolean shouldCompress, boolean upgrade,
@@ -2103,22 +2103,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Run a Sender on the dedicated I/O pool with idle-based stall detection.
-         *  The handler thread polls {@link Future#get} in short slices and cancels
-         *  only after {@link I2PTunnelHTTPServer#ioStallTimeoutMs} with no read
-         *  progress. A total-timeout Future.get would kill any transfer longer
-         *  than the stall window (a multi-minute I2P download at hundreds of
-         *  KB/s), which is expected latency — not a stall. On true idle the
-         *  Sender thread is interrupted (breaking any blocking {@code read()}),
-         *  and an IOException propagates to the finally-block cleanup.
+         * Run a Sender on the dedicated I/O pool with idle-based stall detection.
+         * The handler thread polls {@link Future#get} in short slices and cancels
+         * only after {@link I2PTunnelHTTPServer#ioStallTimeoutMs} with no read
+         * progress. A total-timeout Future.get would kill any transfer longer
+         * than the stall window (a multi-minute I2P download at hundreds of
+         * KB/s), which is expected latency — not a stall. On true idle the
+         * Sender thread is interrupted (breaking any blocking {@code read()}),
+         * and an IOException propagates to the finally-block cleanup.
          *
-         *  Used for keepalive responses (must wait before the next request)
-         *  and as a fallback when async handoff is not taken.
+         * Used for keepalive responses (must wait before the next request)
+         * and as a fallback when async handoff is not taken.
          *
-         *  @param s the Sender to run
-         *  @param desc descriptive name for error messages
-         *  @throws IOException if the transfer goes idle for the stall timeout,
-         *                      fails, or the pool rejects the task
+         * @param s the Sender to run
+         * @param desc descriptive name for error messages
+         * @throws IOException if the transfer goes idle for the stall timeout,
+         * fails, or the pool rejects the task
          */
         private void runOnIO(Sender s, String desc) throws IOException {
             ThreadPoolExecutor ioPool = _ioPool != null ? _ioPool.get() : null;
@@ -2314,20 +2314,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Attach a {@link BodyWatchdog} to a detached async body. The poll
-         *  interval is fixed at {@link BodyWatchdog#POLL_MS} (the SimpleTimer2
-         *  5s minimum); the stall window itself is {@link #ioStallTimeoutMs}.
-         *  The watchdog cancels itself on the next tick after finishTransfer
-         *  sets the finished flag, so it never outlives the connection.
+         * Attach a {@link BodyWatchdog} to a detached async body. The poll
+         * interval is fixed at {@link BodyWatchdog#POLL_MS} (the SimpleTimer2
+         * 5s minimum); the stall window itself is {@link #ioStallTimeoutMs}.
+         * The watchdog cancels itself on the next tick after finishTransfer
+         * sets the finished flag, so it never outlives the connection.
          *
-         *  @param body detached Server-to-Client Sender
-         *  @param finished request-wide finish-once flag
-         *  @param finish idempotent finish shared with the handoff
-         *  @param browserin browser-side request stream; may be null
-         *  @param browserout browser-side response stream; may be null
-         *  @param serverin I2P-side response body stream; may be null
-         *  @param serverout I2P-side request stream; may be null
-         *  @since 0.9.71+
+         * @param body detached Server-to-Client Sender
+         * @param finished request-wide finish-once flag
+         * @param finish idempotent finish shared with the handoff
+         * @param browserin browser-side request stream; may be null
+         * @param browserout browser-side response stream; may be null
+         * @param serverin I2P-side response body stream; may be null
+         * @param serverout I2P-side request stream; may be null
+         * @since 0.9.71+
          */
         private void scheduleBodyWatchdog(Sender body, AtomicBoolean finished,
                                           Runnable finish, InputStream browserin,
@@ -2348,20 +2348,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Tear down a completed (or failed) request exactly once. Invoked from
-         *  the handler finally when the body ran on this thread, or from the
-         *  I/O pool worker after an async body handoff.
+         * Tear down a completed (or failed) request exactly once. Invoked from
+         * the handler finally when the body ran on this thread, or from the
+         * I/O pool worker after an async body handoff.
          *
-         *  @param finished CAS flag; first caller performs cleanup
-         *  @param body Server→Client Sender (may be null)
-         *  @param reqSender Client→Server Sender (may be null)
-         *  @param serverout local webserver output (may be null)
-         *  @param browserout browser-side output (may be null)
-         *  @param compressedout gzip wrapper (may be null)
-         *  @param browserin local webserver input (may be null)
-         *  @param serverin I2P-side response body (may be null)
-         *  @param req request URL for logging (may be null)
-         *  @since 0.9.71+
+         * @param finished CAS flag; first caller performs cleanup
+         * @param body Server→Client Sender (may be null)
+         * @param reqSender Client→Server Sender (may be null)
+         * @param serverout local webserver output (may be null)
+         * @param browserout browser-side output (may be null)
+         * @param compressedout gzip wrapper (may be null)
+         * @param browserin local webserver input (may be null)
+         * @param serverin I2P-side response body (may be null)
+         * @param req request URL for logging (may be null)
+         * @since 0.9.71+
          */
         private void finishTransfer(AtomicBoolean finished, Sender body, Sender reqSender,
                                     OutputStream serverout, OutputStream browserout,
@@ -2402,8 +2402,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Extract the request URL from headers for logging.
-         *  @return a human-readable request description, never null
+         * Extract the request URL from headers for logging.
+         * @return a human-readable request description, never null
          */
         private static String extractRequestUrl(String headers) {
             if (headers == null || headers.isEmpty())
@@ -2438,14 +2438,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Read the server response headers, filter them for security,
-         *  and re-format them for the client.
+         * Read the server response headers, filter them for security,
+         * and re-format them for the client.
          *
-         *  @param serverin stream from the webserver
-         *  @param timeout timeout for the header read
-         *  @param ctx the I2P app context
-         *  @return the formatted, filtered headers
-         *  @throws IOException on error
+         * @param serverin stream from the webserver
+         * @param timeout timeout for the header read
+         * @param ctx the I2P app context
+         * @return the formatted, filtered headers
+         * @throws IOException on error
          */
         static String readAndRewriteServerResponse(InputStream serverin, int timeout, I2PAppContext ctx) throws IOException {
             StringBuilder command = new StringBuilder(512);
@@ -2467,11 +2467,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  On failure, propagate a reset to the other end of the connection,
-         *  simplified from I2PTunnelRunner.
+         * On failure, propagate a reset to the other end of the connection,
+         * simplified from I2PTunnelRunner.
          *
-         *  @param ioex the failure
-         *  @param req the request URL for logging
+         * @param ioex the failure
+         * @param req the request URL for logging
          */
         private void propagateFailure(IOException ioex, String req) {
             _keepalive = false;
@@ -2506,17 +2506,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Watchdog for an async (detached) body handoff. After {@link #handOffBody}
-     *  queues the Server-to-Client Sender and the handler thread returns,
-     *  nothing supervises the pool worker: a browser that stops reading pins it
-     *  in a blocked write indefinitely (socket soTimeout bounds reads only).
-     *  This periodic event polls the Sender's last-read stamp and, once no
-     *  progress is made for {@link #ioStallTimeoutMs}, closes the streams to
-     *  unblock the worker and runs the idempotent finish so the connection is
-     *  torn down exactly once. Polling is every 5s, the SimpleTimer2 minimum;
-     *  detection therefore lands within one poll of the stall window.
+     * Watchdog for an async (detached) body handoff. After {@link #handOffBody}
+     * queues the Server-to-Client Sender and the handler thread returns,
+     * nothing supervises the pool worker: a browser that stops reading pins it
+     * in a blocked write indefinitely (socket soTimeout bounds reads only).
+     * This periodic event polls the Sender's last-read stamp and, once no
+     * progress is made for {@link #ioStallTimeoutMs}, closes the streams to
+     * unblock the worker and runs the idempotent finish so the connection is
+     * torn down exactly once. Polling is every 5s, the SimpleTimer2 minimum;
+     * detection therefore lands within one poll of the stall window.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final class BodyWatchdog extends SimpleTimer2.TimedEvent {
         /** SimpleTimer2 rejects periods below 5s. */
@@ -2532,14 +2532,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final Log _log;
 
         /**
-         *  @param body the detached Server-to-Client Sender being supervised
-         *  @param finished request-wide finish-once flag
-         *  @param finish idempotent finish to run once a stall is confirmed
-         *  @param browserin browser-side request stream; may be null
-         *  @param browserout browser-side response stream; may be null
-         *  @param serverin I2P-side response body stream; may be null
-         *  @param serverout I2P-side request stream; may be null
-         *  @param log may be null
+         * @param body the detached Server-to-Client Sender being supervised
+         * @param finished request-wide finish-once flag
+         * @param finish idempotent finish to run once a stall is confirmed
+         * @param browserin browser-side request stream; may be null
+         * @param browserout browser-side response stream; may be null
+         * @param serverin I2P-side response body stream; may be null
+         * @param serverout I2P-side request stream; may be null
+         * @param log may be null
          */
         BodyWatchdog(Sender body, AtomicBoolean finished, Runnable finish,
                      InputStream browserin, OutputStream browserout,
@@ -2599,20 +2599,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final InputStream _in;
         private final String _name;
         /**
-         *  Identity of the far side, e.g. {@code [skank / aanoquc2]}. The
-         *  request direction used to log a bare "from Client -> Server" with no
-         *  indication of which eepsite or client a transfer belonged to, which
-         *  made slow small transfers impossible to attribute.
+         * Identity of the far side, e.g. {@code [skank / aanoquc2]}. The
+         * request direction used to log a bare "from Client -> Server" with no
+         * indication of which eepsite or client a transfer belonged to, which
+         * made slow small transfers impossible to attribute.
          *
-         *  @since 0.9.71+
+         * @since 0.9.71+
          */
         private volatile String _targetLabel;
         /**
-         *  Parsed request line for the transfer, set once known. The request
-         *  direction builds the Sender before the request line is read, so this
-         *  is applied after the fact and rendered only when present.
+         * Parsed request line for the transfer, set once known. The request
+         * direction builds the Sender before the request line is read, so this
+         * is applied after the fact and rendered only when present.
          *
-         *  @since 0.9.71+
+         * @since 0.9.71+
          */
         private volatile String _requestLabel;
         // shadows _log in super()
@@ -2623,42 +2623,42 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         /** NanoTime of the last successful read from _in. Used for stall detection. */
         private volatile long _lastReadNanos;
         /**
-         *  NanoTime of the last completed write to _out. Tracked separately from
-         *  the read stamp because the two stall for entirely different reasons:
-         *  a stale read stamp means the local source is not delivering, while a
-         *  fresh read with a stale write stamp means the destination is not
-         *  accepting, i.e. I2P egress congestion. Both used to look identical,
-         *  because the read stamp was only advanced after the write returned, so a
-         *  write blocked on congestion was reported as a stalled source and
-         *  pointed every diagnosis at the wrong layer.
+         * NanoTime of the last completed write to _out. Tracked separately from
+         * the read stamp because the two stall for entirely different reasons:
+         * a stale read stamp means the local source is not delivering, while a
+         * fresh read with a stale write stamp means the destination is not
+         * accepting, i.e. I2P egress congestion. Both used to look identical,
+         * because the read stamp was only advanced after the write returned, so a
+         * write blocked on congestion was reported as a stalled source and
+         * pointed every diagnosis at the wrong layer.
          *
-         *  @since 0.9.71+
+         * @since 0.9.71+
          */
         private volatile long _lastWriteNanos;
 
         /**
-         *  Create a Sender to copy data from input to output streams.
-         *  Caller MUST close streams after Sender completes.
+         * Create a Sender to copy data from input to output streams.
+         * Caller MUST close streams after Sender completes.
          *
-         *  @param out the output stream to write to
-         *  @param in the input stream to read from
-         *  @param name descriptive name for logging
-         *  @param log the logging instance
+         * @param out the output stream to write to
+         * @param in the input stream to read from
+         * @param name descriptive name for logging
+         * @param log the logging instance
          */
         public Sender(OutputStream out, InputStream in, String name, Log log) {
             this(out, in, name, null, log);
         }
 
         /**
-         *  Create a Sender with an explicit far-side label.
+         * Create a Sender with an explicit far-side label.
          *
-         *  @param out the output stream to write to
-         *  @param in the input stream to read from
-         *  @param name descriptive name for logging
-         *  @param targetLabel far-side identity, e.g. {@code [skank / aanoquc2]};
-         *                     may be null or empty
-         *  @param log the logging instance
-         *  @since 0.9.71+
+         * @param out the output stream to write to
+         * @param in the input stream to read from
+         * @param name descriptive name for logging
+         * @param targetLabel far-side identity, e.g. {@code [skank / aanoquc2]};
+         * may be null or empty
+         * @param log the logging instance
+         * @since 0.9.71+
          */
         public Sender(OutputStream out, InputStream in, String name, String targetLabel, Log log) {
             _out = out;
@@ -2669,22 +2669,22 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Set the far-side label. The request direction constructs the Sender
-         *  before the request line is parsed, so the label is applied once it is
-         *  known rather than at construction.
+         * Set the far-side label. The request direction constructs the Sender
+         * before the request line is parsed, so the label is applied once it is
+         * known rather than at construction.
          *
-         *  @param label far-side identity, or null/empty to leave unset
-         *  @since 0.9.71+
+         * @param label far-side identity, or null/empty to leave unset
+         * @since 0.9.71+
          */
         void setTargetLabel(String label) {
             _targetLabel = (label != null && !label.isEmpty()) ? label : null;
         }
 
         /**
-         *  Set the parsed request line once it is known.
+         * Set the parsed request line once it is known.
          *
-         *  @param request request line or path; null/empty/"Unknown request" leaves it unset
-         *  @since 0.9.71+
+         * @param request request line or path; null/empty/"Unknown request" leaves it unset
+         * @since 0.9.71+
          */
         void setRequestLabel(String request) {
             _requestLabel = (request != null && !request.isEmpty()
@@ -2692,14 +2692,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Describe the far side for a log line: label plus optional request
-         *  target, e.g. {@code [skank / aanoquc2] GET /installers/i2pinstall.exe}.
-         *  Pure and static so the formatting is testable without streams.
+         * Describe the far side for a log line: label plus optional request
+         * target, e.g. {@code [skank / aanoquc2] GET /installers/i2pinstall.exe}.
+         * Pure and static so the formatting is testable without streams.
          *
-         *  @param label far-side identity; may be null
-         *  @param request parsed request line or path; may be null
-         *  @return the suffix to append to a transfer name, "" if neither is known
-         *  @since 0.9.71+
+         * @param label far-side identity; may be null
+         * @param request parsed request line or path; may be null
+         * @return the suffix to append to a transfer name, "" if neither is known
+         * @since 0.9.71+
          */
         static String describeTarget(String label, String request) {
             boolean hasLabel = label != null && !label.isEmpty();
@@ -2715,10 +2715,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Format a transfer rate as {@code 10.5K/s} / {@code 1.2M/s}, in bytes
-         *  per second using 1000-based units. Suffixes are B/s below 1 KB/s, K/s
-         *  below 1 MB/s, and M/s above, so a rate never reads as a bare number
-         *  with an ambiguous "kbps" that is easy to mistake for bits per second.
+         * Format a transfer rate as {@code 10.5K/s} / {@code 1.2M/s}, in bytes
+         * per second using 1000-based units. Suffixes are B/s below 1 KB/s, K/s
+         * below 1 MB/s, and M/s above, so a rate never reads as a bare number
+         * with an ambiguous "kbps" that is easy to mistake for bits per second.
          *
          * @param bytes bytes transferred
          * @param secs elapsed seconds
@@ -2741,17 +2741,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
         /**
-         *  Copy data from the input stream to the output stream, flushing
-         *  after each write to push data through any intermediate buffers
-         *  (e.g. GZIP or MessageOutputStream). Without explicit flushes,
-         *  data can accumulate in GZIP's deflater buffer or the streaming
-         *  layer's MessageOutputStream buffer, causing sawtooth throughput
-         *  patterns and intermittent stalls on the receiving end.
-         *  <p>
-         *  Tracks bytes transferred and detects stalls: if no data is read
-         *  for {@link I2PTunnelHTTPServer#ioStallTimeoutMs}, the loop breaks
-         *  and the partial transfer is logged. This prevents a dead peer from
-         *  holding a handler or I/O thread indefinitely.
+         * Copy data from the input stream to the output stream, flushing
+         * after each write to push data through any intermediate buffers
+         * (e.g. GZIP or MessageOutputStream). Without explicit flushes,
+         * data can accumulate in GZIP's deflater buffer or the streaming
+         * layer's MessageOutputStream buffer, causing sawtooth throughput
+         * patterns and intermittent stalls on the receiving end.
+         * <p>
+         * Tracks bytes transferred and detects stalls: if no data is read
+         * for {@link I2PTunnelHTTPServer#ioStallTimeoutMs}, the loop breaks
+         * and the partial transfer is logged. This prevents a dead peer from
+         * holding a handler or I/O thread indefinitely.
          */
         @Override
         public void run() {
@@ -2815,61 +2815,61 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Get any IOException that occurred during the copy.
+         * Get any IOException that occurred during the copy.
          *
-         *  @return the failure exception, or null if successful
-         *  @since 0.9.33
+         * @return the failure exception, or null if successful
+         * @since 0.9.33
          */
         public synchronized IOException getFailure() {
             return _failure;
         }
 
         /**
-         *  Total bytes successfully transferred (read from input, written to output).
+         * Total bytes successfully transferred (read from input, written to output).
          *
-         *  @return bytes transferred, updated live during the transfer
-         *  @since 0.9.71+
+         * @return bytes transferred, updated live during the transfer
+         * @since 0.9.71+
          */
         public long getBytesTransferred() { return _bytesTransferred; }
 
         /**
-         *  @return the transfer description ("Server -&gt; Client ..."); never null
-         *  @since 0.9.71+
+         * @return the transfer description ("Server -&gt; Client ..."); never null
+         * @since 0.9.71+
          */
         public String getName() { return _name; }
 
         /**
-         *  NanoTime of the last successful read. Used by callers to detect stalls
-         *  without interrupting the Sender thread.
+         * NanoTime of the last successful read. Used by callers to detect stalls
+         * without interrupting the Sender thread.
          *
-         *  @return System.nanoTime() of the last successful read
-         *  @since 0.9.71+
+         * @return System.nanoTime() of the last successful read
+         * @since 0.9.71+
          */
         public long getLastReadNanos() { return _lastReadNanos; }
 
         /**
-         *  NanoTime of the last completed write. Compared against
-         *  {@link #getLastReadNanos()} to tell a silent local source from a
-         *  congested I2P destination.
+         * NanoTime of the last completed write. Compared against
+         * {@link #getLastReadNanos()} to tell a silent local source from a
+         * congested I2P destination.
          *
-         *  @return System.nanoTime() of the last completed write
-         *  @since 0.9.71+
+         * @return System.nanoTime() of the last completed write
+         * @since 0.9.71+
          */
         public long getLastWriteNanos() { return _lastWriteNanos; }
 
         /**
-         *  Abort this transfer without ever running it, closing both ends so the
-         *  connection is torn down promptly.
+         * Abort this transfer without ever running it, closing both ends so the
+         * connection is torn down promptly.
          *
-         *  <p>Used when the body cannot be handed to the I/O pool. Running the
-         *  body on the caller's handler thread instead would pin that thread for
-         *  the whole transfer, which is how one saturated body starves the
-         *  runner pool and takes the entire service offline; a client that gets
-         *  a fast close retries, while one that gets a pinned thread waits
-         *  indefinitely.
+         * <p>Used when the body cannot be handed to the I/O pool. Running the
+         * body on the caller's handler thread instead would pin that thread for
+         * the whole transfer, which is how one saturated body starves the
+         * runner pool and takes the entire service offline; a client that gets
+         * a fast close retries, while one that gets a pinned thread waits
+         * indefinitely.
          *
-         *  @param cause recorded as the transfer failure, propagated to the caller
-         *  @since 0.9.71+
+         * @param cause recorded as the transfer failure, propagated to the caller
+         * @since 0.9.71+
          */
         public void abort(IOException cause) {
             synchronized (this) {
@@ -2884,7 +2884,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Minimum response size in bytes before gzip compression is applied.
+     * Minimum response size in bytes before gzip compression is applied.
      */
     private static final int MIN_TO_COMPRESS = 1024;
 
@@ -2893,23 +2893,23 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         private final String _requestHeaders;
 
         /**
-          *  Create a compressed response output stream.
-          *
-          *  @param o the underlying output stream
-          *  @param keepalive if true, don't close the stream on finish
-          *  @param requestHeaders the HTTP request headers for Accept-Encoding check
-          */
+         * Create a compressed response output stream.
+         *
+         * @param o the underlying output stream
+         * @param keepalive if true, don't close the stream on finish
+         * @param requestHeaders the HTTP request headers for Accept-Encoding check
+         */
         public CompressedResponseOutputStream(OutputStream o, boolean keepalive, String requestHeaders) {
             super(o, false, keepalive, false, null);
             _requestHeaders = requestHeaders;
         }
 
         /**
-         *  Finish gzipping but don't close the output stream if keepalive is true.
-         *  Overridden to peek at response code. Always returns line.
+         * Finish gzipping but don't close the output stream if keepalive is true.
+         * Overridden to peek at response code. Always returns line.
          *
-         *  @throws IOException if finishing the gzip stream fails
-         *  @since 0.9.62
+         * @throws IOException if finishing the gzip stream fails
+         * @since 0.9.62
          */
         public void finish() throws IOException {
             if (getKeepAliveOut()) {
@@ -2928,12 +2928,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                           "application/zip"));
 
         /**
-         *  Determine if the response should be gzip-compressed.
-         *  Skips small responses, images, audio, video, and already-compressed formats.
-         *  Compression is inline on the server side, decompression on the client side,
-         *  so we avoid re-compressing formats that are already compressed.
+         * Determine if the response should be gzip-compressed.
+         * Skips small responses, images, audio, video, and already-compressed formats.
+         * Compression is inline on the server side, decompression on the client side,
+         * so we avoid re-compressing formats that are already compressed.
          *
-         *  @return true if the response should be compressed
+         * @return true if the response should be compressed
          */
     @Override
     protected boolean shouldCompress() {
@@ -2949,9 +2949,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
         /**
-         *  Write the Content-Encoding header if compression is enabled.
+         * Write the Content-Encoding header if compression is enabled.
          *
-         *  @throws IOException if writing the header fails
+         * @throws IOException if writing the header fails
          */
         @Override
         protected void finishHeaders() throws IOException {
@@ -2962,9 +2962,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         /**
-         *  Wrap the output stream with gzip compression if compression is enabled.
+         * Wrap the output stream with gzip compression if compression is enabled.
          *
-         *  @throws IOException if creating the gzip stream fails
+         * @throws IOException if creating the gzip stream fails
          */
         @Override
         protected void beginProcessing() throws IOException {
@@ -3024,43 +3024,41 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  From I2P to server: socket non-null, in null.
-     *  From server to I2P: socket null, in non-null.
+     * From I2P to server: socket non-null, in null.
+     * From server to I2P: socket null, in non-null.
      *
-     *  Note: This does not handle RFC 2616 header line splitting,
-     *  which is obsoleted in RFC 7230.
+     * Note: This does not handle RFC 2616 header line splitting,
+     * which is obsoleted in RFC 7230.
      *
-     *  @param socket if null, use in as InputStream
-     *  @param in if null, use socket.getInputStream() as InputStream
-     *  @param command out parameter, first line
-     *  @param skipHeaders MUST be lower case
-     *  @return the parsed header multimap
-     *  @throws SocketTimeoutException if timeout is reached before newline
-     *  @throws EOFException if EOF is reached before newline
-     *  @throws LineTooLongException if one header too long, or too many headers, or total size too big
-     *  @throws RequestTooLongException if too long
-     *  @throws BadRequestException on bad headers
-     *  @throws IOException on other errors in the underlying stream
-     *  @since public since 0.9.57 for SOCKS
-      */
+     * @param socket if null, use in as InputStream
+     * @param in if null, use socket.getInputStream() as InputStream
+     * @param command out parameter, first line
+     * @param skipHeaders MUST be lower case
+     * @return the parsed header multimap
+     * @throws SocketTimeoutException if timeout is reached before newline
+     * @throws EOFException if EOF is reached before newline
+     * @throws LineTooLongException if one header too long, or too many headers, or total size too big
+     * @throws RequestTooLongException if too long
+     * @throws BadRequestException on bad headers
+     * @throws IOException on other errors in the underlying stream
+     */
     public static Map<String, List<String>> readHeaders(I2PSocket socket, InputStream in, StringBuilder command,
                                                         Set<String> skipHeaders, I2PAppContext ctx, long initialTimeout) throws IOException {
         return readHeadersInternal(socket, in, command, skipHeaders, ctx, initialTimeout);
     }
 
     /**
-     *  Read headers from the input stream, using an array of skip headers.
+     * Read headers from the input stream, using an array of skip headers.
      *
-     *  @param socket if non-null, read from socket; otherwise read from in
-     *  @param in if non-null and socket is null, read from this stream
-     *  @param command output buffer for the first request line
-     *  @param skipHeaders array of lower-case header names to filter out
-     *  @param ctx I2P app context for clock and timeout
-     *  @param initialTimeout timeout for the first line read
-     *  @return the parsed header multimap
-     *  @throws IOException on I/O errors
-     *  @since public since 0.9.57 for SOCKS
-       */
+     * @param socket if non-null, read from socket; otherwise read from in
+     * @param in if non-null and socket is null, read from this stream
+     * @param command output buffer for the first request line
+     * @param skipHeaders array of lower-case header names to filter out
+     * @param ctx I2P app context for clock and timeout
+     * @param initialTimeout timeout for the first line read
+     * @return the parsed header multimap
+     * @throws IOException on I/O errors
+     */
     public static Map<String, List<String>> readHeaders(I2PSocket socket, InputStream in, StringBuilder command,
                                                         String[] skipHeaders, I2PAppContext ctx, long initialTimeout) throws IOException {
         return readHeadersInternal(socket, in, command, new HashSet<>(Arrays.asList(skipHeaders)), ctx, initialTimeout);
@@ -3163,19 +3161,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Read a line terminated by newline, with a total read timeout.
+     * Read a line terminated by newline, with a total read timeout.
      *
-     *  Warning - strips \n but not \r
-     *  Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
-     *  Warning - not UTF-8
+     * Warning - strips \n but not \r
+     * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
+     * Warning - not UTF-8
      *
-     *  @param buf output
-     *  @param timeout throws SocketTimeoutException immediately if zero or negative
-     *  @throws SocketTimeoutException if timeout is reached before newline
-     *  @throws EOFException if EOF is reached before newline
-     *  @throws LineTooLongException if too long
-     *  @throws IOException on other errors in the underlying stream
-     *  @since 0.9.19 modified from DataHelper
+     * @param buf output
+     * @param timeout throws SocketTimeoutException immediately if zero or negative
+     * @throws SocketTimeoutException if timeout is reached before newline
+     * @throws EOFException if EOF is reached before newline
+     * @throws LineTooLongException if too long
+     * @throws IOException on other errors in the underlying stream
+     * @since 0.9.19 modified from DataHelper
      */
     private static void readLine(I2PSocket socket, StringBuilder buf, long timeout) throws IOException {
         if (timeout <= 0) {throw new SocketTimeoutException();}
@@ -3204,14 +3202,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Check the request command against the HTTP blocklist.
-     *  If matched, logs the blocked destination, closes the socket,
-     *  and throws BadRequestException.
+     * Check the request command against the HTTP blocklist.
+     * If matched, logs the blocked destination, closes the socket,
+     * and throws BadRequestException.
      *
-     *  @param socket the incoming I2P socket to close if blocked
-     *  @param command the request command string to check
-     *  @throws BadRequestException if the request matches a blocklist entry
-     *  @throws IOException if closing the socket fails
+     * @param socket the incoming I2P socket to close if blocked
+     * @param command the request command string to check
+     * @throws BadRequestException if the request matches a blocklist entry
+     * @throws IOException if closing the socket fails
      */
     private void processBlocklist(I2PSocket socket, StringBuilder command) throws IOException {
         if (_blocklistManager == null) {return;}
@@ -3226,10 +3224,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     }
 
     /**
-     *  Thrown when a header line exceeds MAX_LINE_LENGTH,
-     *  when there are too many headers, or when total header size exceeds MAX_TOTAL_HEADER_SIZE.
+     * Thrown when a header line exceeds MAX_LINE_LENGTH,
+     * when there are too many headers, or when total header size exceeds MAX_TOTAL_HEADER_SIZE.
      *
-     *  @since 0.9.19
+     * @since 0.9.19
      */
     private static class LineTooLongException extends IOException {
         /**

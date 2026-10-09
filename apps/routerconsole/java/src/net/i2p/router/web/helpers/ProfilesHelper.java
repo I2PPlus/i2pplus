@@ -54,10 +54,10 @@ public class ProfilesHelper extends HelperBase {
     }
 
     /**
-     *  Render and return the profile summary page.
+     * Render and return the profile summary page.
      *
-     *  @return empty string, writes directly to _out
-     *  @since 0.9.1
+     * @return empty string, writes directly to _out
+     * @since 0.9.1
      */
     public String getSummary() {
         try {renderNavBar();}
@@ -86,13 +86,13 @@ public class ProfilesHelper extends HelperBase {
     }
 
     /**
-     *  Render only the named element for the contentonly fragment mode.
-     *  Renders nothing for ids the current tab does not own; unknown ids
-     *  produce an empty response.
+     * Render only the named element for the contentonly fragment mode.
+     * Renders nothing for ids the current tab does not own; unknown ids
+     * produce an empty response.
      *
-     *  @param id the element id
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param id the element id
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     public void renderFragment(String id) throws IOException {
         if (_full == 4) {
@@ -119,9 +119,9 @@ public class ProfilesHelper extends HelperBase {
     }
 
     /**
-     *  Render the profiles navigation bar.
+     * Render the profiles navigation bar.
      *
-     *  @since 0.9.1
+     * @since 0.9.1
      */
     private void renderNavBar() throws IOException {
         StringBuilder buf = new StringBuilder(1024);

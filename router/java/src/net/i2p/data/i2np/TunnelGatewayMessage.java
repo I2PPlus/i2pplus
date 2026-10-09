@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -16,7 +15,6 @@ import net.i2p.util.Log;
 /**
  * Defines the message sent between one tunnel's endpoint and another's gateway.
  * format: { tunnelId, sizeof(i2npMessage.toByteArray()), i2npMessage.toByteArray() }
- *
  */
 public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     private TunnelId _tunnelId;
@@ -38,8 +36,8 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     public TunnelId getTunnelId() {return _tunnelId;}
 
     /**
-     *  Tunnel ID for this message; may only be set once.
-     *  @throws IllegalStateException if id previously set, to protect saved checksum
+     * Tunnel ID for this message; may only be set once.
+     * @throws IllegalStateException if id previously set, to protect saved checksum
      */
     public void setTunnelId(TunnelId id) {
         if (_tunnelId != null) {throw new IllegalStateException();}
@@ -60,8 +58,8 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     public I2NPMessage getMessage() {return _msg;}
 
     /**
-     *  Embedded message; may only be set once.
-     *  @throws IllegalStateException if msg previously set, to protect saved checksum
+     * Embedded message; may only be set once.
+     * @throws IllegalStateException if msg previously set, to protect saved checksum
      */
     public void setMessage(I2NPMessage msg) {
         if (_msg != null) {throw new IllegalStateException();}
@@ -118,10 +116,10 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Note that for efficiency at the IBGW, this does not fully deserialize the included
-     *  I2NP Message. It just puts it in an UnknownI2NPMessage.
+     * Note that for efficiency at the IBGW, this does not fully deserialize the included
+     * I2NP Message. It just puts it in an UnknownI2NPMessage.
      *
-     *  @param handler unused, may be null
+     * @param handler unused, may be null
      */
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException {

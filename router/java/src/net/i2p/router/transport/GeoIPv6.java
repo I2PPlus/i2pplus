@@ -34,13 +34,11 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
 /**
- *  Generate compressed geoipv6.dat.gz file, and
- *  lookup entries in it.
+ * Generate compressed geoipv6.dat.gz file, and
+ * lookup entries in it.
  *
- *  Public only for command line use,
- *  not a public API, not for external use.
- *
- *  @since IPv6
+ * Public only for command line use,
+ * not a public API, not for external use.
  */
 public class GeoIPv6 {
 
@@ -62,8 +60,8 @@ public class GeoIPv6 {
      * @param search a sorted array of IPs to search
      * @param codeCache the country code cache
      * @return an array of country codes, same order as the search param,
-     *         or a zero-length array on total failure.
-     *         Individual array elements will be null for lookup failure of that item.
+     * or a zero-length array on total failure.
+     * Individual array elements will be null for lookup failure of that item.
      */
     public static String[] readGeoIPFile(I2PAppContext context, Long[] search, Map<String, String> codeCache) {
         Log log = context.logManager().getLog(GeoIPv6.class);
@@ -83,8 +81,8 @@ public class GeoIPv6 {
      *
      * @param search a sorted array of IPs to search
      * @return an array of country codes, same order as the search param,
-     *         or a zero-length array on total failure.
-     *         Individual array elements will be null for lookup failure of that item.
+     * or a zero-length array on total failure.
+     * Individual array elements will be null for lookup failure of that item.
      */
     private static String[] readGeoIPFile(I2PAppContext context, File geoFile, Long[] search, Map<String, String> codeCache, Log log) {
         String[] rv = new String[search.length];
@@ -137,21 +135,21 @@ public class GeoIPv6 {
     * merge them, and write out a gzipped binary IPv6 geoip file.
     *
     * Acceptable input formats (IPv6 only):
-    *<pre>
+    * <pre>
     * #comment (# must be in column 1)
     * "text IP", "text IP", "bigint IP", "bigint IP", "country code", "country name"
-    *</pre>
+    * </pre>
     * Quotes and spaces optional. Sorting not required.
     * Country code case-insensitive.
     * Fields 1, 2, and 5 are used; fields 3, 4, and 6 are ignored.
     * This is identical to the format of the MaxMind GeoLite IPv6 file.
     *
     * Example:
-    *<pre>
+    * <pre>
     * "2001:200::", "2001:200:ffff:ffff:ffff:ffff:ffff:ffff", "42540528726795050063891204319802818560", "42540528806023212578155541913346768895", "JP", "Japan"
-    *</pre>
+    * </pre>
     *
-    *<pre>
+    * <pre>
     * Output format:
     * Bytes 0-9: Magic number "I2PGeoIPv6"
     * Bytes 10-11: version (0x0001)
@@ -164,7 +162,7 @@ public class GeoIPv6 {
     *       8 byte to (/64)
     *       2 byte country code LOWER case (ASCII)
     * Data must be sorted (SIGNED twos complement), no overlap
-    *</pre>
+    * </pre>
     *
     * SLOW. For preprocessing only!
     *
@@ -265,7 +263,7 @@ public class GeoIPv6 {
     }
 
     /**
-     *  Used to temporarily hold, sort, and merge entries before compressing
+     * Used to temporarily hold, sort, and merge entries before compressing
      */
     private static class V6Entry implements Comparable<V6Entry> {
         public final long from;
@@ -338,12 +336,12 @@ public class GeoIPv6 {
     }
 
     /**
-     *  Merge and compress CSV files to I2P compressed format
+     * Merge and compress CSV files to I2P compressed format
      *
-     *  GeoIPv6 infile1.csv[.gz] [infile2.csv[.gz]...] outfile.dat.gz
+     * GeoIPv6 infile1.csv[.gz] [infile2.csv[.gz]...] outfile.dat.gz
      *
-     *  Used to create the file for distribution, do not comment out
-     *  @param args command line arguments
+     * Used to create the file for distribution, do not comment out
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         if (args.length < 2) {

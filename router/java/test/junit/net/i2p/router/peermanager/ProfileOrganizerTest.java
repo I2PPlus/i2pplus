@@ -26,12 +26,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests for ProfileOrganizer profile registration and peer selection.
- *  Peer profiles are seeded through the dummy netdb so that the
- *  profiling-exclusion check passes, then registered via addProfile()
- *  and selected through the not-failing selection path.
+ * Tests for ProfileOrganizer profile registration and peer selection.
+ * Peer profiles are seeded through the dummy netdb so that the
+ * profiling-exclusion check passes, then registered via addProfile()
+ * and selected through the not-failing selection path.
  *
- *  @since 0.9.10
+ * @since 0.9.10
  */
 public class ProfileOrganizerTest {
 

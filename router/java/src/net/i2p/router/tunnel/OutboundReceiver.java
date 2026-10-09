@@ -125,8 +125,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     }
 
     /**
-     *  Immediately fail the tunnel if the lookup fails.
-     *  This should be very rare, we should always have the RI locally.
+     * Immediately fail the tunnel if the lookup fails.
+     * This should be very rare, we should always have the RI locally.
      */
     private class LookupFailedJob extends JobImpl {
         /**
@@ -155,9 +155,9 @@ class OutboundReceiver implements TunnelGateway.Receiver {
     }
 
     /**
-     *  Immediately fail the tunnel if the send fails
+     * Immediately fail the tunnel if the send fails
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     private class SendFailedJob extends JobImpl {
         /**

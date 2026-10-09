@@ -22,28 +22,28 @@ import net.i2p.util.EepGet;
 import net.i2p.util.SocketTimeout;
 
 /**
- *  Fetch a URL using a socket from the supplied I2PSocketManager.
- *  Hostname must resolve to an i2p destination - no routing to an outproxy.
- *  Does not support response gzip decompression (unlike I2PTunnelHTTPProxy) (yet),
- *  but of course there is still gzip at the I2CP layer.
+ * Fetch a URL using a socket from the supplied I2PSocketManager.
+ * Hostname must resolve to an i2p destination - no routing to an outproxy.
+ * Does not support response gzip decompression (unlike I2PTunnelHTTPProxy) (yet),
+ * but of course there is still gzip at the I2CP layer.
  *
- *  This is designed for Java apps such as bittorrent clients that wish to
- *  do HTTP fetches and use other protocols on a single set of tunnels.
- *  This may provide anonymity benefits over using the shared clients HTTP proxy,
- *  preventing inadvertent outproxy usage, reduce resource usage by eliminating
- *  a second set of tunnels, and eliminate the requirement to
- *  to separately configure the proxy host and port.
+ * This is designed for Java apps such as bittorrent clients that wish to
+ * do HTTP fetches and use other protocols on a single set of tunnels.
+ * This may provide anonymity benefits over using the shared clients HTTP proxy,
+ * preventing inadvertent outproxy usage, reduce resource usage by eliminating
+ * a second set of tunnels, and eliminate the requirement to
+ * to separately configure the proxy host and port.
  *
- *  For additional documentation see the superclass.
+ * For additional documentation see the superclass.
  *
- *  Supports http://example.i2p/blah
- *  Supports http://B32KEY.b32.i2p/blah
- *  Supports http://i2p/B64KEY/blah for compatibility with the eepproxy
- *  Supports http://B64KEY/blah
- *  Warning - does not support /eepproxy/blah, address helpers, http://B64KEY.i2p/blah,
- *  or other odd things that may be found in the HTTP proxy.
+ * Supports http://example.i2p/blah
+ * Supports http://B32KEY.b32.i2p/blah
+ * Supports http://i2p/B64KEY/blah for compatibility with the eepproxy
+ * Supports http://B64KEY/blah
+ * Warning - does not support /eepproxy/blah, address helpers, http://B64KEY.i2p/blah,
+ * or other odd things that may be found in the HTTP proxy.
  *
- *  @author zzz
+ * @author zzz
  */
 public class I2PSocketEepGet extends EepGet {
     private final I2PSocketManager _socketManager;
@@ -86,7 +86,7 @@ public class I2PSocketEepGet extends EepGet {
     }
 
     /**
-     *  We have to override this to close _socket, since we can't use _proxy in super as the I2PSocket.
+     * We have to override this to close _socket, since we can't use _proxy in super as the I2PSocket.
      */
     @Override
     public boolean fetch(long fetchHeaderTimeout, long totalTimeout, long inactivityTimeout) {
@@ -101,8 +101,8 @@ public class I2PSocketEepGet extends EepGet {
     }
 
     /**
-     *  Overridden to disable inline gunzipping
-     *  @since 0.8.10
+     * Overridden to disable inline gunzipping
+     * @since 0.8.10
      */
     @Override
     protected void readHeaders() throws IOException {
@@ -114,10 +114,10 @@ public class I2PSocketEepGet extends EepGet {
     }
 
     /**
-     *  Look up the address, get a socket from the I2PSocketManager supplied in the constructor,
-     *  and send the request.
+     * Look up the address, get a socket from the I2PSocketManager supplied in the constructor,
+     * and send the request.
      *
-     *  @param timeout connect and inactivity timeout, used to detect hung connections
+     * @param timeout connect and inactivity timeout, used to detect hung connections
      */
     @Override
     protected void sendRequest(SocketTimeout timeout) throws IOException {

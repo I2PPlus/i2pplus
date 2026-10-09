@@ -66,9 +66,9 @@ public class HopConfig {
     /**
      * The receive tunnel ID, from 1 to 0xffffffff.
      *
-     *  @param id 1 to 0xffffffff
-     *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
-     *  @since 0.9.48
+     * @param id 1 to 0xffffffff
+     * @throws IllegalArgumentException if less than or equal to zero or greater than max value
+     * @since 0.9.48
      */
     public void setReceiveTunnelId(long id) { _receiveTunnel = new TunnelId(id); }
 
@@ -76,9 +76,9 @@ public class HopConfig {
     public Hash getReceiveFrom() { return _receiveFrom; }
 
     /**
-     *  Do not set for gateway
+     * Do not set for gateway
      *
-     *  @param from the previous peer hash
+     * @param from the previous peer hash
      */
     public void setReceiveFrom(Hash from) { _receiveFrom = from; }
 
@@ -102,8 +102,8 @@ public class HopConfig {
      * The tunnel ID to send messages through.
      * Do not set for endpoint
      *
-     *  @param id the tunnel ID
-     *  @since 0.9.48
+     * @param id the tunnel ID
+     * @since 0.9.48
      */
     public void setSendTunnelId(TunnelId id) { _sendTunnel = id; }
 
@@ -111,9 +111,9 @@ public class HopConfig {
      * The send tunnel ID, from 1 to 0xffffffff.
      * Do not set for endpoint
      *
-     *  @param id 1 to 0xffffffff
-     *  @throws IllegalArgumentException if less than or equal to zero or greater than max value
-     *  @since 0.9.48
+     * @param id 1 to 0xffffffff
+     * @throws IllegalArgumentException if less than or equal to zero or greater than max value
+     * @since 0.9.48
      */
     public void setSendTunnelId(long id) { _sendTunnel = new TunnelId(id); }
 
@@ -121,9 +121,9 @@ public class HopConfig {
     public Hash getSendTo() { return _sendTo; }
 
     /**
-     *  Do not set for endpoint
+     * Do not set for endpoint
      *
-     *  @param to the next peer hash
+     * @param to the next peer hash
      */
     public void setSendTo(Hash to) { _sendTo = to; }
 
@@ -150,8 +150,8 @@ public class HopConfig {
     /**
      * The bandwidth allocated for this hop.
      *
-     *  @return Bps
-     *  @since 0.9.66
+     * @return Bps
+     * @since 0.9.66
      */
     public int getAllocatedBW() {
         return _allocatedBW;
@@ -159,30 +159,30 @@ public class HopConfig {
     /**
      * The bandwidth allocated for this hop.
      *
-     *  @param bw Bps
-     *  @since 0.9.66
+     * @param bw Bps
+     * @since 0.9.66
      */
     public void setAllocatedBW(int bw) {
         _allocatedBW = bw;
     }
 
     /**
-     *  Take note of a message being pumped through this tunnel.
-     *  "processed" is for incoming and "sent" is for outgoing (could be dropped in between)
+     * Take note of a message being pumped through this tunnel.
+     * "processed" is for incoming and "sent" is for outgoing (could be dropped in between)
      */
     public void incrementProcessedMessages() { _messagesProcessed.incrementAndGet(); }
 
     /**
-     *  Processed messages count.
+     * Processed messages count.
      *
-     *  @return the processed messages count
+     * @return the processed messages count
      */
     public int getProcessedMessagesCount() { return _messagesProcessed.get(); }
 
     /**
-     *  This returns the number of processed messages since
-     *  the last time getAndResetRecentMessagesCount() was called.
-     *  As of 0.9.23, does NOT reset the count, see getAndResetRecentMessagesCount().
+     * This returns the number of processed messages since
+     * the last time getAndResetRecentMessagesCount() was called.
+     * As of 0.9.23, does NOT reset the count, see getAndResetRecentMessagesCount().
      * @return the recent messages count
      */
     public int getRecentMessagesCount() {
@@ -190,15 +190,15 @@ public class HopConfig {
     }
 
     /**
-     *  This returns the number of processed messages since the last time this was called,
-     *  and resets the count. It should only be called by code that updates the router stats.
-     *  See TunnelDispatcher.updateParticipatingStats().
+     * This returns the number of processed messages since the last time this was called,
+     * and resets the count. It should only be called by code that updates the router stats.
+     * See TunnelDispatcher.updateParticipatingStats().
      *
-     *  The counter is sampled once so the returned delta and the stored baseline
-     *  refer to the same read; a concurrent increment lands in the next window.
+     * The counter is sampled once so the returned delta and the stored baseline
+     * refer to the same read; a concurrent increment lands in the next window.
      *
-     *  @return the number of messages processed since the previous call
-     *  @since 0.9.23
+     * @return the number of messages processed since the previous call
+     * @since 0.9.23
      */
     int getAndResetRecentMessagesCount() {
         int cur = _messagesProcessed.get();

@@ -5,7 +5,6 @@ package net.i2p.router.startup;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.BufferedInputStream;
@@ -35,8 +34,8 @@ import net.i2p.router.networkdb.kademlia.PersistentDataStore;
 import net.i2p.util.Log;
 
 /**
- *  Run once or twice at startup by StartupJob,
- *  and then runs BootCommSystemJob
+ * Run once or twice at startup by StartupJob,
+ * and then runs BootCommSystemJob
  */
 class LoadRouterInfoJob extends JobImpl {
     private final Log _log;
@@ -57,9 +56,9 @@ class LoadRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Name of this job.
+     * Name of this job.
      *
-     *  @return the name
+     * @return the name
      */
     @Override
     public String getName() { return "Load Local RouterInfo"; }
@@ -85,9 +84,9 @@ class LoadRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Loads router.info and either router.keys.dat or router.keys.
+     * Loads router.info and either router.keys.dat or router.keys.
      *
-     *  See CreateRouterInfoJob for file formats
+     * See CreateRouterInfoJob for file formats
      */
     private void loadRouterInfo() {
         RouterInfo info = null;
@@ -297,12 +296,12 @@ class LoadRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Read key data from the specified files.
+     * Read key data from the specified files.
      *
-     *  @param rkf1 in router.keys format, tried second
-     *  @param rkf2 in eepPriv.dat format, tried first
-     *  @return non-null, throws IOE if neither exisits
-     *  @since 0.9.16
+     * @param rkf1 in router.keys format, tried second
+     * @param rkf2 in eepPriv.dat format, tried first
+     * @return non-null, throws IOE if neither exisits
+     * @since 0.9.16
      */
     public static KeyData readKeyData(File rkf1, File rkf2) throws DataFormatException, IOException {
         RouterIdentity ri;

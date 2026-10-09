@@ -159,13 +159,13 @@ public class ConfigUIHelper extends HelperBase {
     }
 
     /**
-     *  Each language has the ISO code, the flag, the name, and the optional country name.
-     *  Alphabetical by the English language name please (not by the ISO code).
-     *  See http://en.wikipedia.org/wiki/ISO_639-1 .
-     *  Any language-specific flag added to the icon set must be
-     *  added to the top-level build.xml for the updater.
-     *  As of 0.9.12, ISO 639-2 three-letter codes are supported also.
-     *  Note: To avoid truncation, ensure language name is no longer than 17 chars.
+     * Each language has the ISO code, the flag, the name, and the optional country name.
+     * Alphabetical by the English language name please (not by the ISO code).
+     * See http://en.wikipedia.org/wiki/ISO_639-1 .
+     * Any language-specific flag added to the icon set must be
+     * added to the top-level build.xml for the updater.
+     * As of 0.9.12, ISO 639-2 three-letter codes are supported also.
+     * Note: To avoid truncation, ensure language name is no longer than 17 chars.
      */
     private static final String[][] langs = {
         /*

@@ -16,8 +16,8 @@ public class FileSuffixFilter implements FileFilter {
     private final String end;
 
     /**
-     *  A filter that accepts regular files that
-     *  end with suffix, case-insensitive.
+     * A filter that accepts regular files that
+     * end with suffix, case-insensitive.
      */
     public FileSuffixFilter(String suffix) {
         begin = null;
@@ -25,9 +25,9 @@ public class FileSuffixFilter implements FileFilter {
     }
 
     /**
-     *  A filter that accepts regular files that
-     *  start with prefix and
-     *  end with suffix, case-insensitive.
+     * A filter that accepts regular files that
+     * start with prefix and
+     * end with suffix, case-insensitive.
      */
     public FileSuffixFilter(String prefix, String suffix) {
         begin = prefix.toLowerCase(Locale.US);

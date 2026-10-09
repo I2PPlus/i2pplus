@@ -7,14 +7,14 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 
 /**
- *  Cached snapshot of the network database sorted by RouterInfoComparator.
+ * Cached snapshot of the network database sorted by RouterInfoComparator.
  *
- *  The /netdb page auto-refreshes every 10 seconds (netdb.js
- *  REFRESH_INTERVAL_SHORT), so a snapshot up to this age is never
- *  visible to a client; caching it avoids re-sorting the full
- *  network database on every render.
+ * The /netdb page auto-refreshes every 10 seconds (netdb.js
+ * REFRESH_INTERVAL_SHORT), so a snapshot up to this age is never
+ * visible to a client; caching it avoids re-sorting the full
+ * network database on every render.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 class NetDbRouterCache {
     private static final long NETDB_REFRESH_PERIOD = 10 * 1000L;
@@ -28,8 +28,8 @@ class NetDbRouterCache {
     }
 
     /**
-     *  Snapshot of the network database sorted by RouterInfoComparator,
-     *  cached for the /netdb auto-refresh period.
+     * Snapshot of the network database sorted by RouterInfoComparator,
+     * cached for the /netdb auto-refresh period.
      */
     public List<RouterInfo> getSortedRouters() {
         long now = _context.clock().now();

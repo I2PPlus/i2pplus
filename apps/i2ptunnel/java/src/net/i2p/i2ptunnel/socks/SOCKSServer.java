@@ -118,8 +118,8 @@ abstract class SOCKSServer {
     }
 
     /**
-     *  @return null if disabled or not installed
-     *  @since 0.9.27
+     * @return null if disabled or not installed
+     * @since 0.9.27
      */
     protected Outproxy getOutproxyPlugin() {
         if (shouldUseOutproxyPlugin()) {
@@ -136,11 +136,11 @@ abstract class SOCKSServer {
     private static final String[] _skipHeaders = new String[0];
 
     /**
-     *  Act as a SOCKS 5 client to connect to an outproxy
-     *  Caller must send success or error to local socks client.
+     * Act as a SOCKS 5 client to connect to an outproxy
+     * Caller must send success or error to local socks client.
      *
-     *  @return open socket or throws error
-     *  @since 0.8.2
+     * @return open socket or throws error
+     * @since 0.8.2
      */
     protected I2PSocket outproxyConnect(I2PSOCKSTunnel tun, String proxy) throws IOException, I2PException {
         Properties overrides = new Properties();
@@ -196,18 +196,18 @@ abstract class SOCKSServer {
     }
 
     /**
-     *  Act as a https client to connect to a CONNECT outproxy.
+     * Act as a https client to connect to a CONNECT outproxy.
      *
-     *  Caller must send success or error to local socks client.
-     *  Caller must close destSock and pout.
+     * Caller must send success or error to local socks client.
+     * Caller must close destSock and pout.
      *
-     *  @param destSock socket to the proxy
-     *  @param pout output stream to the proxy
-     *  @param connHostName hostname or IP for the proxy to connect to
-     *  @param connPort port for the proxy to connect to
-     *  @param configUser username unsupported
-     *  @param configPW password unsupported
-     *  @since 0.9.57
+     * @param destSock socket to the proxy
+     * @param pout output stream to the proxy
+     * @param connHostName hostname or IP for the proxy to connect to
+     * @param connPort port for the proxy to connect to
+     * @param configUser username unsupported
+     * @param configPW password unsupported
+     * @since 0.9.57
      */
     public void httpsConnect(I2PSocket destSock, OutputStream pout, String connHostName,
                              int connPort, String configUser, String configPW) throws IOException {

@@ -17,11 +17,11 @@ import org.cybergarage.xml.Node;
  * <p>Key features:
  *
  * <ul>
- *   <li>XML node wrapping for value ranges
- *   <li>Element name constant for XML parsing
- *   <li>Service description integration
- *   <li>State variable constraint management
- *   <li>UPnP specification compliance
+ * <li>XML node wrapping for value ranges
+ * <li>Element name constant for XML parsing
+ * <li>Service description integration
+ * <li>State variable constraint management
+ * <li>UPnP specification compliance
  * </ul>
  *
  * <p>This class is used by UPnP services to manage allowed value range constraints for state
@@ -29,7 +29,6 @@ import org.cybergarage.xml.Node;
  * restricted ranges.
  *
  * @author Satoshi Konno
- * @since 1.0
  */
 public class AllowedValueRange {
     ////////////////////////////////////////////////
@@ -47,8 +46,8 @@ public class AllowedValueRange {
     private Node allowedValueRangeNode;
 
     /**
-     *  Get the underlying XML node.
-     *  @return the underlying XML node
+     * Get the underlying XML node.
+     * @return the underlying XML node
      */
     public Node getAllowedValueRangeNode() {
         return allowedValueRangeNode;

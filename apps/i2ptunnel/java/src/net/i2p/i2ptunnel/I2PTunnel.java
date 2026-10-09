@@ -82,8 +82,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     public long readTimeout = -1;
 
     /**
-     *  Absolute path to filter definition file
-     *  @since 0.9.40
+     * Absolute path to filter definition file
+     * @since 0.9.40
      */
     public String filterDefinition;
 
@@ -120,49 +120,49 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Standard constructor for embedded, uses args "-nocli -die" to return immediately
+     * Standard constructor for embedded, uses args "-nocli -die" to return immediately
      */
     public I2PTunnel() {
         this(nocli_args);
     }
 
     /**
-     *  New standard constructor in router, with back ref to tc
+     * New standard constructor in router, with back ref to tc
      *
-     *  @param tc may be null
-     *  @throws IllegalArgumentException on error
-     *  @since 0.9.48
+     * @param tc may be null
+     * @throws IllegalArgumentException on error
+     * @since 0.9.48
      */
     public I2PTunnel(TunnelController tc) {
         this(nocli_args, null, tc);
     }
 
     /**
-     *  See usage() for options
+     * See usage() for options
      *
-     *  @param args command-line arguments
-     *  @throws IllegalArgumentException on error
+     * @param args command-line arguments
+     * @throws IllegalArgumentException on error
      */
     public I2PTunnel(String[] args) {
         this(args, null);
     }
 
     /**
-     *  See usage() for options
+     * See usage() for options
      *
-     *  @param args command-line arguments
-     *  @param lsnr may be null
-     *  @throws IllegalArgumentException on error
+     * @param args command-line arguments
+     * @param lsnr may be null
+     * @throws IllegalArgumentException on error
      */
     public I2PTunnel(String[] args, ConnectionEventListener lsnr) {
         this(args, lsnr, null);
     }
 
     /**
-     *  @param lsnr may be null
-     *  @param tc may be null
-     *  @throws IllegalArgumentException
-     *  @since 0.9.48
+     * @param lsnr may be null
+     * @param tc may be null
+     * @throws IllegalArgumentException
+     * @since 0.9.48
      */
     private I2PTunnel(String[] args, ConnectionEventListener lsnr, TunnelController tc) {
         super();
@@ -338,25 +338,23 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Snapshot of the running tasks.
+     * Snapshot of the running tasks.
      *
-     *  @return an unmodifiable snapshot, non-null; changes to the tunnel's task
-     *          list are not reflected in an already-returned list
-     *  @since public since 0.9.53 for advanced plugin usage, was package private
+     * @return an unmodifiable snapshot, non-null; changes to the tunnel's task
+     * list are not reflected in an already-returned list
      */
     public List<I2PTunnelTask> getTasks() {
         return Collections.unmodifiableList(new ArrayList<>(tasks));
     }
 
     /**
-     *  Snapshot of the primary sessions in use by this tunnel's tasks.
-     *  Subsessions are not tracked here; a task's own getSocketManager()
-     *  remains the way to reach them.
+     * Snapshot of the primary sessions in use by this tunnel's tasks.
+     * Subsessions are not tracked here; a task's own getSocketManager()
+     * remains the way to reach them.
      *
-     *  @return an unmodifiable snapshot, non-null; changes to the tunnel's session
-     *          set are not reflected in an already-returned list. The iteration
-     *          order follows the underlying set and is not specified.
-     *  @since public since 0.9.53 for advanced plugin usage, was package private
+     * @return an unmodifiable snapshot, non-null; changes to the tunnel's session
+     * set are not reflected in an already-returned list. The iteration
+     * order follows the underlying set and is not specified.
      */
     public List<I2PSession> getSessions() {
         if (_sessions.isEmpty()) {return Collections.emptyList();}
@@ -366,7 +364,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Add a session to the tunnel
      *
-     *  @param session null ok
+     * @param session null ok
      */
     void addSession(I2PSession session) {
         if (session == null) return;
@@ -377,7 +375,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Remove a session from the tunnel
      *
-     *  @param session null ok
+     * @param session null ok
      */
     void removeSession(I2PSession session) {
         if (session == null) return;
@@ -386,16 +384,16 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Generic options used for clients and servers.
-     *  NOT a copy, Do NOT modify for per-connection options, make a copy.
-     *  @return non-null, NOT a copy, do NOT modify for per-connection options
+     * Generic options used for clients and servers.
+     * NOT a copy, Do NOT modify for per-connection options, make a copy.
+     * @return non-null, NOT a copy, do NOT modify for per-connection options
      */
     public Properties getClientOptions() { return _clientOptions; }
 
     /**
-     *  TunnelController that constructed this, or null.
-     *  @return controller or null
-     *  @since 0.9.48
+     * TunnelController that constructed this, or null.
+     * @return controller or null
+     * @since 0.9.48
      */
     TunnelController getController() { return _controller; }
 
@@ -421,7 +419,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Parses and executes a tunnel management command.
+     * Parses and executes a tunnel management command.
      * <p>
      * This method is the command dispatcher for tunnel management operations.
      * It parses the command string into command name and arguments, then
@@ -430,12 +428,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * <p>
      * <b>Supported Commands:</b>
      * <ul>
-     *   <li>help - Display available commands</li>
-     *   <li>client/server - Create tunnel instances</li>
-     *   <li>list - List active tunnels</li>
-     *   <li>close - Close tunnels</li>
-     *   <li>config - Configure I2CP connection</li>
-     *   <li>genkeys - Generate destination keys</li>
+     * <li>help - Display available commands</li>
+     * <li>client/server - Create tunnel instances</li>
+     * <li>list - List active tunnels</li>
+     * <li>close - Close tunnels</li>
+     * <li>config - Configure I2CP connection</li>
+     * <li>genkeys - Generate destination keys</li>
      * </ul>
      *
      * @param cmd the command string to execute, format: "commandName arg1 arg2 ..."
@@ -482,12 +480,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Log a failed client tunnel configuration and propagate the error.
+     * Log a failed client tunnel configuration and propagate the error.
      *
-     *  @param msg the error message
-     *  @param taskId the event name for the failed tunnel type
-     *  @param l logger to receive events and output
-     *  @param iae the configuration error
+     * @param msg the error message
+     * @param taskId the event name for the failed tunnel type
+     * @param l logger to receive events and output
+     * @param iae the configuration error
      */
     private void clientRunError(String msg, String taskId, Logging l, IllegalArgumentException iae) {
         _log.error(getPrefix() + msg, iae);
@@ -501,12 +499,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Resolve a server host argument.
+     * Resolve a server host argument.
      *
-     *  @param hostArg the hostname argument
-     *  @param l logger to receive events and output
-     *  @return the resolved address
-     *  @throws IllegalArgumentException if the host cannot be resolved
+     * @param hostArg the hostname argument
+     * @param l logger to receive events and output
+     * @return the resolved address
+     * @throws IllegalArgumentException if the host cannot be resolved
      */
     private InetAddress parseServerHost(String hostArg, Logging l) {
         try {
@@ -520,12 +518,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Parse a server port argument.
+     * Parse a server port argument.
      *
-     *  @param portArg the port argument
-     *  @param l logger to receive events and output
-     *  @return the parsed port
-     *  @throws IllegalArgumentException if the port is not a valid positive integer
+     * @param portArg the port argument
+     * @param l logger to receive events and output
+     * @return the parsed port
+     * @throws IllegalArgumentException if the port is not a valid positive integer
      */
     private int parseServerPort(String portArg, Logging l) {
         int portNum;
@@ -543,12 +541,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Resolve a private key file argument relative to the config dir.
+     * Resolve a private key file argument relative to the config dir.
      *
-     *  @param fileArg the key file argument
-     *  @param l logger to receive events and output
-     *  @return the readable key file
-     *  @throws IllegalArgumentException if the file does not exist or is not readable
+     * @param fileArg the key file argument
+     * @param l logger to receive events and output
+     * @return the readable key file
+     * @throws IllegalArgumentException if the file does not exist or is not readable
      */
     private File getPrivKeyFile(String fileArg, Logging l) {
         File privKeyFile = new File(fileArg);
@@ -1765,7 +1763,6 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 
     /**
      * Helper task to remove closed / completed tasks.
-     *
      */
     private void purgetasks() {
         List<I2PTunnelTask> removed = new ArrayList<>();
@@ -1861,11 +1858,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  @param i2cpHost may be null
-     *  @param i2cpPort may be null
-     *  @param user may be null
-     *  @param pw may be null
-     *  @since 0.9.11
+     * @param i2cpHost may be null
+     * @param i2cpPort may be null
+     * @param user may be null
+     * @param pw may be null
+     * @since 0.9.11
      */
     private static Destination destFromName(String name, String i2cpHost,
                                             String i2cpPort, boolean isSSL,
@@ -1951,7 +1948,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Registers a listener for connection events.
+     * Registers a listener for connection events.
      * <p>
      * The listener will be notified of router disconnection events.
      * </p>
@@ -1964,7 +1961,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     *  Unregisters a connection event listener.
+     * Unregisters a connection event listener.
      *
      * @param lsnr the listener to remove; ignored if null
      */
@@ -1976,14 +1973,14 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private String getPrefix() { return "[" + _tunnelId + "]: "; }
 
     /**
-     *  Gets the application context.
+     * Gets the application context.
      *
      * @return the I2P application context
      */
     public I2PAppContext getContext() { return _context; }
 
     /**
-     *  Called when the router disconnects unexpectedly.
+     * Called when the router disconnects unexpectedly.
      * <p>
      * This method notifies all registered ConnectionEventListeners
      * that the router connection has been lost.

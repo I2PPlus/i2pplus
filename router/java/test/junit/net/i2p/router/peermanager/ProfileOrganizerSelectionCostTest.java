@@ -20,31 +20,31 @@ import net.i2p.router.util.MaskedIPSet;
 import org.junit.Test;
 
 /**
- *  Tests the pure decision logic extracted from the selection hot path so the
- *  CPU work removed there cannot be silently reintroduced by a behaviour change
- *  nobody notices.
+ * Tests the pure decision logic extracted from the selection hot path so the
+ * CPU work removed there cannot be silently reintroduced by a behaviour change
+ * nobody notices.
  *
- *  <p>Covers, in the order the fixes were made:
- *  <ul>
- *    <li>{@link ProfileOrganizer#isModeratelyLossy} — the lossiness band that
- *        now receives hoisted thresholds instead of two config reads per candidate</li>
- *    <li>{@link ProfileOrganizer#maskedIPKey} — the subnet fingerprint, whose
- *        key-space separation (IP vs port vs family) is what the subnet gate
- *        depends on</li>
- *    <li>{@link ProfileOrganizer#isExcessiveLifetimeFailure} — the profile-taking
- *        overload that replaced a read-lock re-entry per candidate</li>
- *    <li>{@link ProfileOrganizer#isExcludedBuildTier} / {@code isHighBandwidthTierName}
- *        / {@code qualifiesHighBandwidthTier} / {@code isLowBandwidthTierName} —
- *        the tier predicates fed by unvalidated netDb lookups</li>
- *    <li>{@link ProfileOrganizer#sampleFirstHopRttLimit} — the RTT sample bound</li>
- *    <li>{@link ProfileOrganizer#selectNthFastest} and
- *        {@link ProfileOrganizer#speedThresholdCutoff} — the bounded top-K
- *        selection that replaced a full sort</li>
- *  </ul>
+ * <p>Covers, in the order the fixes were made:
+ * <ul>
+ * <li>{@link ProfileOrganizer#isModeratelyLossy} — the lossiness band that
+ * now receives hoisted thresholds instead of two config reads per candidate</li>
+ * <li>{@link ProfileOrganizer#maskedIPKey} — the subnet fingerprint, whose
+ * key-space separation (IP vs port vs family) is what the subnet gate
+ * depends on</li>
+ * <li>{@link ProfileOrganizer#isExcessiveLifetimeFailure} — the profile-taking
+ * overload that replaced a read-lock re-entry per candidate</li>
+ * <li>{@link ProfileOrganizer#isExcludedBuildTier} / {@code isHighBandwidthTierName}
+ * / {@code qualifiesHighBandwidthTier} / {@code isLowBandwidthTierName} —
+ * the tier predicates fed by unvalidated netDb lookups</li>
+ * <li>{@link ProfileOrganizer#sampleFirstHopRttLimit} — the RTT sample bound</li>
+ * <li>{@link ProfileOrganizer#selectNthFastest} and
+ * {@link ProfileOrganizer#speedThresholdCutoff} — the bounded top-K
+ * selection that replaced a full sort</li>
+ * </ul>
  *
- *  @see ProfileOrganizerCandidateSampleTest
- *  @see ProfileOrganizerRestoreTest
- *  @since 0.9.71+
+ * @see ProfileOrganizerCandidateSampleTest
+ * @see ProfileOrganizerRestoreTest
+ * @since 0.9.71+
  */
 public class ProfileOrganizerSelectionCostTest {
 
@@ -85,9 +85,9 @@ public class ProfileOrganizerSelectionCostTest {
     }
 
     /**
-     *  The band is open at the top: at the demotion threshold the peer is
-     *  handled by the demotion path, not the selection penalty, so counting it
-     *  here would double-count it.
+     * The band is open at the top: at the demotion threshold the peer is
+     * handled by the demotion path, not the selection penalty, so counting it
+     * here would double-count it.
      */
     @Test
     public void demoteThresholdIsExclusive() {
@@ -112,9 +112,9 @@ public class ProfileOrganizerSelectionCostTest {
     }
 
     /**
-     *  Nibbles render as '0' + nibble over the "0123456789:;&lt;=&gt;?"
-     *  alphabet, so 0x0f is "?" and 0x0a is ":". Pinning values outside 0-9 is
-     *  what makes this a test of the alphabet rather than of hex encoding.
+     * Nibbles render as '0' + nibble over the "0123456789:;&lt;=&gt;?"
+     * alphabet, so 0x0f is "?" and 0x0a is ":". Pinning values outside 0-9 is
+     * what makes this a test of the alphabet rather than of hex encoding.
      */
     @Test
     public void nibblesUseTheFakeHexAlphabet() {
@@ -124,8 +124,8 @@ public class ProfileOrganizerSelectionCostTest {
     }
 
     /**
-     *  IPv6 doubles the matched byte count and switches the delimiter, so an
-     *  IPv4 and an IPv6 address sharing a prefix can never collide.
+     * IPv6 doubles the matched byte count and switches the delimiter, so an
+     * IPv4 and an IPv6 address sharing a prefix can never collide.
      */
     @Test
     public void ipv6KeyDoublesMaskAndChangesDelimiter() {
@@ -148,8 +148,8 @@ public class ProfileOrganizerSelectionCostTest {
     }
 
     /**
-     *  A wider mask must yield a strictly longer key, which is what makes
-     *  mask 4 reject a peer that mask 2 accepted (and not the reverse).
+     * A wider mask must yield a strictly longer key, which is what makes
+     * mask 4 reject a peer that mask 2 accepted (and not the reverse).
      */
     @Test
     public void widerMaskYieldsLongerKey() {
@@ -238,11 +238,11 @@ public class ProfileOrganizerSelectionCostTest {
     }
 
     /**
-     *  A tier with anything appended is not the tier letter, so it is not
-     *  excluded. This pins the direct-comparison behaviour that replaced the
-     *  per-candidate stripHTML: stripHTML substitutes spaces for
-     *  {@code < > " '} and so could never have produced "L" from anything but
-     *  the one-character string "L" either.
+     * A tier with anything appended is not the tier letter, so it is not
+     * excluded. This pins the direct-comparison behaviour that replaced the
+     * per-candidate stripHTML: stripHTML substitutes spaces for
+     * {@code < > " '} and so could never have produced "L" from anything but
+     * the one-character string "L" either.
      */
     @Test
     public void excludedBuildTierIgnoresNonExactStrings() {
@@ -387,9 +387,9 @@ public class ProfileOrganizerSelectionCostTest {
     }
 
     /**
-     *  The fastest profile is returned for k=1 out of many. The fastest is
-     *  deliberately the <em>last</em> element added, so an implementation that
-     *  only ever looked at a prefix would fail.
+     * The fastest profile is returned for k=1 out of many. The fastest is
+     * deliberately the <em>last</em> element added, so an implementation that
+     * only ever looked at a prefix would fail.
      */
     @Test
     public void selectsFastestForKOne() {
@@ -407,10 +407,10 @@ public class ProfileOrganizerSelectionCostTest {
     }
 
     /**
-     *  The bounded selection must agree with a full sort at the rank it is asked
-     *  for — this is the property the removed O(n log n) sort guaranteed, and the
-     *  only thing that matters about which of several equal-speed peers it picks
-     *  is that the speed value matches.
+     * The bounded selection must agree with a full sort at the rank it is asked
+     * for — this is the property the removed O(n log n) sort guaranteed, and the
+     * only thing that matters about which of several equal-speed peers it picks
+     * is that the speed value matches.
      */
     @Test
     public void boundedSelectionAgreesWithFullSort() {
@@ -471,10 +471,10 @@ public class ProfileOrganizerSelectionCostTest {
     }
 
     /**
-     *  Key equality is the whole contract of the subnet gate: two peers share a
-     *  key exactly when they share a masked prefix. This exercises that through
-     *  a set — the accumulator type the selection API actually receives — and
-     *  so also pins that the key is usable as a {@code Set<String>} element.
+     * Key equality is the whole contract of the subnet gate: two peers share a
+     * key exactly when they share a masked prefix. This exercises that through
+     * a set — the accumulator type the selection API actually receives — and
+     * so also pins that the key is usable as a {@code Set<String>} element.
      */
     @Test
     public void maskedIpKeyRoundTripThroughASet() {

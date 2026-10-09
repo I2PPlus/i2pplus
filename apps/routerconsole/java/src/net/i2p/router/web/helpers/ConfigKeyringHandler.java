@@ -201,7 +201,7 @@ public class ConfigKeyringHandler extends FormHandler {
     }
 
     /**
-     *  Set the peer destination from form.
+     * Set the peer destination from form.
      *
      * @param peer the peer
      */
@@ -211,9 +211,9 @@ public class ConfigKeyringHandler extends FormHandler {
     }
 
     /**
-     *  Set the encryption key from form.
+     * Set the encryption key from form.
      *
-     *  @param key the encryption key
+     * @param key the encryption key
      */
     public void setKey(String key) {
         if (key != null)
@@ -221,10 +221,10 @@ public class ConfigKeyringHandler extends FormHandler {
     }
 
     /**
-     *  Set the blinded lookup password from form.
+     * Set the blinded lookup password from form.
      *
-     *  @param pw the blinded lookup password
-     *  @since 0.9.41
+     * @param pw the blinded lookup password
+     * @since 0.9.41
      */
     public void setNofilter_blindedPassword(String pw) {
         if (pw != null) {
@@ -235,10 +235,10 @@ public class ConfigKeyringHandler extends FormHandler {
     }
 
     /**
-     *  Set the encryption type mode from form.
+     * Set the encryption type mode from form.
      *
-     *  @param m the encryption mode string
-     *  @since 0.9.41
+     * @param m the encryption mode string
+     * @since 0.9.41
      */
     public void setEncryptMode(String m) {
         try {
@@ -247,10 +247,10 @@ public class ConfigKeyringHandler extends FormHandler {
     }
 
     /**
-     *  Set the list of destinations to revoke from keyring.
+     * Set the list of destinations to revoke from keyring.
      *
-     *  @param revokes the list of destinations to revoke
-     *  @since 0.9.41
+     * @param revokes the list of destinations to revoke
+     * @since 0.9.41
      */
     public void setRevokeClient(String[] revokes) {
         _revokes = revokes;

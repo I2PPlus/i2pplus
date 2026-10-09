@@ -70,10 +70,10 @@ class PackageReader extends BandStructure {
     }
 
     /** A buffered input stream which is careful not to
-     *  read its underlying stream ahead of a given mark,
-     *  called the 'readLimit'.  This property declares
-     *  the maximum number of characters that future reads
-     *  can consume from the underlying stream.
+     * read its underlying stream ahead of a given mark,
+     * called the 'readLimit'.  This property declares
+     * the maximum number of characters that future reads
+     * can consume from the underlying stream.
      */
     static
     class LimitedBuffer extends BufferedInputStream {

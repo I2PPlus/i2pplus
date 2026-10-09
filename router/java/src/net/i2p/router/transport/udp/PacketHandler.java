@@ -186,7 +186,6 @@ class PacketHandler {
      *
      * @param packet the packet
      * @throws InterruptedException if interrupted while waiting
-     * @since IPv6 moved from UDPReceiver
      */
     public void queueReceived(UDPPacket packet) throws InterruptedException {
         if (_log.shouldDebug()) {_log.debug("Adding packet to queue: " + packet);}
@@ -195,8 +194,6 @@ class PacketHandler {
 
     /**
      * Blocking for a while
-     *
-     * @since IPv6 moved from UDPReceiver
      */
     private void stopQueue() {
         _inboundQueue.clear();
@@ -221,7 +218,6 @@ class PacketHandler {
      * shut down.
      *
      * @return the next packet, or null if shut down
-     * @since IPv6 moved from UDPReceiver
      */
     public UDPPacket receiveNext() {
         UDPPacket rv = null;
@@ -274,12 +270,12 @@ class PacketHandler {
          * Find the state and call the correct receivePacket() variant.
          *
          * Classify the packet by source IP/port, into 4 groups:
-         *<ol>
-         *<li>Established session
-         *<li>Pending inbound establishment
-         *<li>Pending outbound establishment
-         *<li>No established or pending session found
-         *</ol>
+         * <ol>
+         * <li>Established session
+         * <li>Pending inbound establishment
+         * <li>Pending outbound establishment
+         * <li>No established or pending session found
+         * </ol>
          */
         private void handlePacket(UDPPacket packet) {
             RemoteHostId rem = packet.getRemoteHost();
@@ -317,20 +313,20 @@ class PacketHandler {
     }
 
     /**
-     *  Decrypt the header and hand off to the state for processing.
-     *  Packet is trial-decrypted, so fallback
-     *  processing is possible if this returns false.
+     * Decrypt the header and hand off to the state for processing.
+     * Packet is trial-decrypted, so fallback
+     * processing is possible if this returns false.
      *
-     *  Possible messages here are Session Request, Token Request, Session Confirmed, or Peer Test.
-     *  Data messages out-of-order from Session Confirmed, or following a
-     *  Session Confirmed that was lost, or in-order but before the Session Confirmed was processed,
-     *  will handed to the state to be queued for deferred handling.
+     * Possible messages here are Session Request, Token Request, Session Confirmed, or Peer Test.
+     * Data messages out-of-order from Session Confirmed, or following a
+     * Session Confirmed that was lost, or in-order but before the Session Confirmed was processed,
+     * will handed to the state to be queued for deferred handling.
      *
-     *  Min packet data size: 56 (token request) if state is null; 40 (data) if state is non-null
+     * Min packet data size: 56 (token request) if state is null; 40 (data) if state is non-null
      *
-     *  @param state must be version 2, but will be null for session request unless retransmitted
-     *  @return true if the header was validated as a SSU2 packet, cannot fallback to SSU 1
-     *  @since 0.9.54
+     * @param state must be version 2, but will be null for session request unless retransmitted
+     * @return true if the header was validated as a SSU2 packet, cannot fallback to SSU 1
+     * @since 0.9.54
      */
     private boolean receiveSSU2Packet(RemoteHostId from, UDPPacket packet, InboundEstablishState2 state) {
         byte[] k1 = _transport.getSSU2StaticIntroKey();
@@ -494,18 +490,18 @@ class PacketHandler {
     }
 
     /**
-     *  Decrypt the header and hand off to the state for processing.
-     *  Packet is trial-decrypted, so fallback
-     *  processing is possible if this returns false.
-     *  But that's probably not necessary.
+     * Decrypt the header and hand off to the state for processing.
+     * Packet is trial-decrypted, so fallback
+     * processing is possible if this returns false.
+     * But that's probably not necessary.
      *
-     *  Possible messages here are Session Created or Retry
+     * Possible messages here are Session Created or Retry
      *
-     *  Min packet data size: 56 (retry)
+     * Min packet data size: 56 (retry)
      *
-     *  @param state must be version 2, non-null
-     *  @return true if the header was validated as a SSU2 packet, cannot fallback to SSU 1
-     *  @since 0.9.54
+     * @param state must be version 2, non-null
+     * @return true if the header was validated as a SSU2 packet, cannot fallback to SSU 1
+     * @since 0.9.54
      */
     private boolean receiveSSU2Packet(UDPPacket packet, OutboundEstablishState2 state) {
         // decrypt header

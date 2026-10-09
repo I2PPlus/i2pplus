@@ -9,8 +9,8 @@ import net.i2p.util.EventDispatcher;
 public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runnable {
 
     /**
-     *  As of 0.9.20 this is fast, and does NOT connect the manager to the router,
-     *  or open the local socket. You MUST call startRunning() for that.
+     * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
+     * or open the local socket. You MUST call startRunning() for that.
      *
      * @param localPort the local port to bind to
      * @param l logging instance
@@ -19,7 +19,7 @@ public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runn
      * @param notifyThis the event dispatcher for notifications
      * @param clientId the client ID
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     *                                  valid config to contact the router
+     * valid config to contact the router
      */
     public I2PTunnelHTTPBidirProxy(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);

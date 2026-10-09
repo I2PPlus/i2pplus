@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.BufferedInputStream;
@@ -34,7 +33,6 @@ import net.i2p.util.SecureFileOutputStream;
 
 /**
  * Manages all router cryptographic key pairs including persistent storage of router keys and in-memory management of LeaseSet keys for secure communications.
- *
  */
 public class KeyManager {
     private final Log _log;
@@ -64,9 +62,9 @@ public class KeyManager {
     }
 
     /**
-     *  Configure the router's keys.
+     * Configure the router's keys.
      *
-     *  @since 0.9.4 replace individual setters
+     * @since 0.9.4 replace individual setters
      */
     public void setKeys(PublicKey key1, PrivateKey key2, SigningPublicKey key3, SigningPrivateKey key4) {
         synchronized(this) {
@@ -107,9 +105,9 @@ public class KeyManager {
     public synchronized SigningPublicKey getSigningPublicKey() { return _signingPublicKey; }
 
     /**
-     *  Client with a single key
+     * Client with a single key
      *
-     *  @param leaseRevocationPrivateKey unused, may be null
+     * @param leaseRevocationPrivateKey unused, may be null
      */
     public void registerKeys(Destination dest, SigningPrivateKey leaseRevocationPrivateKey, PrivateKey endpointDecryptionKey) {
         if (_log.shouldInfo())
@@ -119,10 +117,10 @@ public class KeyManager {
     }
 
     /**
-     *  Client with multiple keys
+     * Client with multiple keys
      *
-     *  @param leaseRevocationPrivateKey unused, may be null
-     *  @since 0.9.44
+     * @param leaseRevocationPrivateKey unused, may be null
+     * @since 0.9.44
      */
     public void registerKeys(Destination dest, SigningPrivateKey leaseRevocationPrivateKey, List<PrivateKey> endpointDecryptionKeys) {
         if (_log.shouldInfo())
@@ -168,12 +166,12 @@ public class KeyManager {
     }
 
     /**
-     *  Read/Write the 4 files in keyBackup/
-     *  As of 0.9.4 this is run on-demand only, there's no need to
-     *  periodically sync.
-     *  Actually, there's little need for this at all.
-     *  If router.keys is corrupt, we should just make a new router identity,
-     *  there's no real reason to try so hard to recover our old keys.
+     * Read/Write the 4 files in keyBackup/
+     * As of 0.9.4 this is run on-demand only, there's no need to
+     * periodically sync.
+     * Actually, there's little need for this at all.
+     * If router.keys is corrupt, we should just make a new router identity,
+     * there's no real reason to try so hard to recover our old keys.
      */
     private class SynchronizeKeysJob extends JobImpl {
         public SynchronizeKeysJob() {
@@ -230,9 +228,9 @@ public class KeyManager {
         }
 
         /**
-         *  Synchronize the signing private key with the file on disk.
+         * Synchronize the signing private key with the file on disk.
          *
-         *  @param type the SigType to expect on read-in, ignored on write
+         * @param type the SigType to expect on read-in, ignored on write
          */
         private void syncSigningKey(File keyDir, SigType type) {
             DataStructure ds;
@@ -248,9 +246,9 @@ public class KeyManager {
         }
 
         /**
-         *  Synchronize the signing public key with the file on disk.
+         * Synchronize the signing public key with the file on disk.
          *
-         *  @param type the SigType to expect on read-in, ignored on write
+         * @param type the SigType to expect on read-in, ignored on write
          */
         private void syncVerificationKey(File keyDir, SigType type) {
             DataStructure ds;
@@ -266,12 +264,12 @@ public class KeyManager {
         }
 
         /**
-         *  Synchronize the given structure with the file on disk.
+         * Synchronize the given structure with the file on disk.
          *
-         *  @param keyFile the file holding the serialized structure
-         *  @param structure non-null, filled-in if exists is true, or without data if exists is false
-         *  @param exists write to file if true, read from file if false
-         *  @return structure or null on read error
+         * @param keyFile the file holding the serialized structure
+         * @param structure non-null, filled-in if exists is true, or without data if exists is false
+         * @param exists write to file if true, read from file if false
+         * @return structure or null on read error
          */
         private DataStructure syncKey(File keyFile, DataStructure structure, boolean exists) {
             try {

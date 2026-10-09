@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests for FIFOBandwidthLimiter.
+ * Tests for FIFOBandwidthLimiter.
  */
 public class FIFOBandwidthLimiterTest {
 

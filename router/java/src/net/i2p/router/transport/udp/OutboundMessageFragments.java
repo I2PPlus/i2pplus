@@ -24,7 +24,6 @@ import net.i2p.util.SystemVersion;
  * this instance also receives notification of message ACKs from the
  * {@link InboundMessageFragments}, signaling that we can stop sending a
  * message.
- *
  */
 class OutboundMessageFragments {
     private final RouterContext _context;
@@ -32,8 +31,8 @@ class OutboundMessageFragments {
     private final UDPTransport _transport;
 
     /**
-     *  List of peers currently sending outbound messages.
-     *  Thread-safe for iteration and modification with reduced array copying.
+     * List of peers currently sending outbound messages.
+     * Thread-safe for iteration and modification with reduced array copying.
      */
     private final CopyOnWriteArrayList<PeerState> _activePeers = new CopyOnWriteArrayList<>();
     private int _peerIndex = 0;
@@ -42,15 +41,15 @@ class OutboundMessageFragments {
     private volatile boolean _alive;
     private final PacketBuilder2 _builder2;
     /**
-     *  Maximum number of times to send a packet before failing it.
+     * Maximum number of times to send a packet before failing it.
      */
     static final int MAX_VOLLEYS = 10;
     private static final int MAX_WAIT = SystemVersion.isSlow() ? 1000 : 500;
     /**
-     *  Floor on any wait taken here.
+     * Floor on any wait taken here.
      *
-     *  <p>A round that allocated nothing has to cost a bounded wait. It used to cost none:
-     *  see {@link #foldSendDelay}.
+     * <p>A round that allocated nothing has to cost a bounded wait. It used to cost none:
+     * see {@link #foldSendDelay}.
      */
     static final int MIN_WAIT_MS = 10;
     /** Counter for periodic aggregate stat emission */
@@ -61,13 +60,13 @@ class OutboundMessageFragments {
     private int _memoryStatCounter;
 
     /**
-     *  Reusable consumed-fragment marker for {@link #preparePackets}. Reused
-     *  across volleys (cleared per call) instead of allocating a fresh BitSet
-     *  every volley; {@link BitSet#set} grows it as needed, so growth is
-     *  amortized to the largest volley ever seen.
-     *  <p>
-     *  Only reachable from {@link #getNextVolley()} on the single
-     *  PacketPusher thread, so no synchronization is needed.
+     * Reusable consumed-fragment marker for {@link #preparePackets}. Reused
+     * across volleys (cleared per call) instead of allocating a fresh BitSet
+     * every volley; {@link BitSet#set} grows it as needed, so growth is
+     * amortized to the largest volley ever seen.
+     * <p>
+     * Only reachable from {@link #getNextVolley()} on the single
+     * PacketPusher thread, so no synchronization is needed.
      */
     private BitSet _consumed = new BitSet();
 
@@ -124,7 +123,7 @@ class OutboundMessageFragments {
     }
 
     /**
-     *  Remove a peer from the active outbound list and drop its pending messages.
+     * Remove a peer from the active outbound list and drop its pending messages.
      */
     void dropPeer(PeerState peer) {
         if (_log.shouldDebug()) {_log.debug("Dropping peer " + peer.getRemotePeer());}
@@ -134,7 +133,6 @@ class OutboundMessageFragments {
 
     /**
      * Add a new message to the active pool
-     *
      */
     public void add(OutNetMessage msg) {
         RouterInfo target = msg.getTarget();
@@ -151,10 +149,10 @@ class OutboundMessageFragments {
     }
 
     /**
-     *  Short circuit the OutNetMessage, letting us send the establish
-     *  complete message reliably.
-     *  If you have multiple messages, use the list variant,
-     *  so the messages may be bundled efficiently.
+     * Short circuit the OutNetMessage, letting us send the establish
+     * complete message reliably.
+     * If you have multiple messages, use the list variant,
+     * so the messages may be bundled efficiently.
      */
     public void add(OutboundMessageState state, PeerState peer) {
         if (peer == null) {throw new RuntimeException("NULL peer for " + state);}
@@ -163,9 +161,9 @@ class OutboundMessageFragments {
     }
 
     /**
-     *  Short circuit the OutNetMessage, letting us send multiple messages
-     *  reliably and efficiently.
-     *  @since 0.9.24
+     * Short circuit the OutNetMessage, letting us send multiple messages
+     * reliably and efficiently.
+     * @since 0.9.24
      */
     public void add(List<OutboundMessageState> states, PeerState peer) {
         if (peer == null) {throw new RuntimeException("NULL peer");}
@@ -224,12 +222,12 @@ class OutboundMessageFragments {
     }
 
 /**
-     * Should the "udp.memory.activePeers" gauge be sampled on this add()?
-     * True once every {@link #MEMORY_STAT_INTERVAL} messages.
-     *
-     * @return true if the gauge should be updated now
-     * @since 0.9.71+
-     */
+ * Should the "udp.memory.activePeers" gauge be sampled on this add()?
+ * True once every {@link #MEMORY_STAT_INTERVAL} messages.
+ *
+ * @return true if the gauge should be updated now
+ * @since 0.9.71+
+ */
     private boolean shouldEmitMemoryStat() {
         return (++_memoryStatCounter % MEMORY_STAT_INTERVAL) == 0;
     }
@@ -248,9 +246,9 @@ class OutboundMessageFragments {
      * the retry into a spin - the bug {@link #foldSendDelay} documents.
      *
      * @return the packets to send, or null when there is nothing to send. Null does not
-     *         mean shutdown: a round can allocate states whose fragments are all already
-     *         acked, leaving {@link #preparePackets} with nothing to push, and that case
-     *         is transient. Callers must treat null as "retry later" and must not spin.
+     * mean shutdown: a round can allocate states whose fragments are all already
+     * acked, leaving {@link #preparePackets} with nothing to push, and that case
+     * is transient. Callers must treat null as "retry later" and must not spin.
      */
     public List<UDPPacket> getNextVolley() {
         PeerState peer = null;
@@ -370,15 +368,15 @@ class OutboundMessageFragments {
     }
 
 /**
- *  Build the packets for one volley.
+ * Build the packets for one volley.
  *
- *  @param states the states a peer offered, never null here
- *  @param peer the peer they belong to
- *  @return the packets to send, or null when there is nothing to send: null states
- *         or peer, or every offered state pushed no fragment because all of its
- *         fragments are already acked. The last case is transient, which is why
- *         {@link #getNextVolley} can return null without being shut down.
-     */
+ * @param states the states a peer offered, never null here
+ * @param peer the peer they belong to
+ * @return the packets to send, or null when there is nothing to send: null states
+ * or peer, or every offered state pushed no fragment because all of its
+ * fragments are already acked. The last case is transient, which is why
+ * {@link #getNextVolley} can return null without being shut down.
+ */
     private List<UDPPacket> preparePackets(List<OutboundMessageState> states, PeerState peer) {
         if (states == null || peer == null) {
             return null;
@@ -499,22 +497,22 @@ class OutboundMessageFragments {
     }
 
 /**
- *  Fold one peer's reported delay into the smallest delay seen so far this round.
+ * Fold one peer's reported delay into the smallest delay seen so far this round.
  *
- *  <p>A peer reports {@code 0} to mean it wants a prompt retry: its retransmit timer has
- *  elapsed, or it is holding a message past its lifetime and should be failed out. That is a
- *  reason to retry soon, not a reason not to wait.
+ * <p>A peer reports {@code 0} to mean it wants a prompt retry: its retransmit timer has
+ * elapsed, or it is holding a message past its lifetime and should be failed out. That is a
+ * reason to retry soon, not a reason not to wait.
  *
- *  <p>Folding {@code 0} in literally is what made this loop burn a core. The round minimum
- *  started at {@link Integer#MAX_VALUE} and was only ever lowered, so a single peer reporting
- *  {@code 0} pinned it there for everyone. The end-of-round test is {@code nextSendDelay > 0},
- *  which then failed and took the branch that re-scanned the same peers with no blocking at
- *  all, once per iteration, for as long as that peer stayed in that state.
+ * <p>Folding {@code 0} in literally is what made this loop burn a core. The round minimum
+ * started at {@link Integer#MAX_VALUE} and was only ever lowered, so a single peer reporting
+ * {@code 0} pinned it there for everyone. The end-of-round test is {@code nextSendDelay > 0},
+ * which then failed and took the branch that re-scanned the same peers with no blocking at
+ * all, once per iteration, for as long as that peer stayed in that state.
  *
- *  @param runningMin smallest delay seen so far this round
- *  @param reportedDelay what this peer reported
- *  @return the updated minimum, never below {@link #MIN_WAIT_MS} and never zero
- *  @since 0.9.71+
+ * @param runningMin smallest delay seen so far this round
+ * @param reportedDelay what this peer reported
+ * @return the updated minimum, never below {@link #MIN_WAIT_MS} and never zero
+ * @since 0.9.71+
  */
     static int foldSendDelay(int runningMin, int reportedDelay) {
         if (reportedDelay <= 0) {return Math.min(runningMin, MIN_WAIT_MS);}
@@ -522,16 +520,16 @@ class OutboundMessageFragments {
     }
 
     /**
-     *  How long to block after a full round allocated nothing.
+     * How long to block after a full round allocated nothing.
      *
-     *  <p>Always at least {@link #MIN_WAIT_MS}, so a round that produced nothing cannot turn
-     *  into a spin, and never more than {@link #MAX_WAIT}, so one peer reporting a long delay
-     *  cannot stall the pool.
+     * <p>Always at least {@link #MIN_WAIT_MS}, so a round that produced nothing cannot turn
+     * into a spin, and never more than {@link #MAX_WAIT}, so one peer reporting a long delay
+     * cannot stall the pool.
      *
-     *  @param roundMin result of folding every peer's delay this round
-     *  @return milliseconds to block
-     *  @since 0.9.71+
- */
+     * @param roundMin result of folding every peer's delay this round
+     * @return milliseconds to block
+     * @since 0.9.71+
+     */
     static int roundWaitMs(int roundMin) {
         return Math.min(Math.max(roundMin, MIN_WAIT_MS), MAX_WAIT);
     }

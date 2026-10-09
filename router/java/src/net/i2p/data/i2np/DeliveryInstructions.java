@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.InputStream;
@@ -71,16 +70,16 @@ public class DeliveryInstructions extends DataStructureImpl {
     private final static int FLAG_DELAY = 16;
 
     /**
-     *  Immutable local instructions, no options
+     * Immutable local instructions, no options
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     public static final DeliveryInstructions LOCAL = new LocalInstructions();
 
     /**
-     *  Returns immutable local instructions, or new
+     * Returns immutable local instructions, or new
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     public static DeliveryInstructions create(byte[] data, int offset) {
         if (data[offset] == 0)
@@ -108,9 +107,9 @@ public class DeliveryInstructions extends DataStructureImpl {
     public int getDeliveryMode() { return _deliveryMode; }
 
     /**
-     *  Delivery mode of the message.
+     * Delivery mode of the message.
      *
-     *  @param mode 0-3
+     * @param mode 0-3
      */
     public void setDeliveryMode(int mode) { _deliveryMode = mode; }
 
@@ -159,8 +158,8 @@ public class DeliveryInstructions extends DataStructureImpl {
     public void setDelaySeconds(long seconds) { _delaySeconds = seconds; }
 
     /**
-     *  Not supported, use readBytes(byte[], int)
-     *  @throws UnsupportedOperationException always
+     * Not supported, use readBytes(byte[], int)
+     * @throws UnsupportedOperationException always
      */
     public void readBytes(InputStream in) {
         throw new UnsupportedOperationException();
@@ -310,8 +309,8 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     *  Not supported, use writeBytes(byte[], int)
-     *  @throws UnsupportedOperationException always
+     * Not supported, use writeBytes(byte[], int)
+     * @throws UnsupportedOperationException always
      */
     public void writeBytes(OutputStream out) {
         throw new UnsupportedOperationException();
@@ -397,10 +396,10 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     *  An immutable local delivery instructions with no options
-     *  for efficiency.
+     * An immutable local delivery instructions with no options
+     * for efficiency.
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     private static final class LocalInstructions extends DeliveryInstructions {
         //private static final byte flag = DELIVERY_MODE_LOCAL << 5;  // 0

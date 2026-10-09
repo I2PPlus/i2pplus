@@ -6,17 +6,17 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- *  Truth table for the established-peer idle predicate.
+ * Truth table for the established-peer idle predicate.
  *
- *  <p>The rule this pins is that idleness is decided by elapsed time in both
- *  directions alone. It previously also required the peer to have accumulated
- *  more than two consecutive send failures, which a half-open session never does:
- *  the counter is incremented from {@code UDPTransport.failed()} only after a
- *  message exhausts its retransmits, so a peer that still ACKs some traffic — or
- *  one we have stopped writing to entirely — was never reaped and kept answering
- *  {@code isEstablished()} true indefinitely.
+ * <p>The rule this pins is that idleness is decided by elapsed time in both
+ * directions alone. It previously also required the peer to have accumulated
+ * more than two consecutive send failures, which a half-open session never does:
+ * the counter is incremented from {@code UDPTransport.failed()} only after a
+ * message exhausts its retransmits, so a peer that still ACKs some traffic — or
+ * one we have stopped writing to entirely — was never reaped and kept answering
+ * {@code isEstablished()} true indefinitely.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class IdleEstablishedDecisionTest {
 
@@ -25,8 +25,8 @@ public class IdleEstablishedDecisionTest {
     private static final long NOW = 1000000000L;
 
     /**
-     *  The case that motivated the change: idle far past the threshold in both
-     *  directions must be reaped on time alone.
+     * The case that motivated the change: idle far past the threshold in both
+     * directions must be reaped on time alone.
      */
     @Test
     public void idleBothWaysIsReaped() {
@@ -34,8 +34,8 @@ public class IdleEstablishedDecisionTest {
     }
 
     /**
-     *  A peer that is still answering is never a candidate, however long ago we
-     *  last wrote to it. This is the asymmetry that must not erode into "both idle".
+     * A peer that is still answering is never a candidate, however long ago we
+     * last wrote to it. This is the asymmetry that must not erode into "both idle".
      */
     @Test
     public void freshReceiveKeepsTheSession() {
@@ -55,8 +55,8 @@ public class IdleEstablishedDecisionTest {
     }
 
     /**
-     *  The threshold is strict, matching the &gt; comparison it replaced, so a peer
-     *  sitting exactly on the boundary is kept for one more pass.
+     * The threshold is strict, matching the &gt; comparison it replaced, so a peer
+     * sitting exactly on the boundary is kept for one more pass.
      */
     @Test
     public void theThresholdIsStrict() {
@@ -67,9 +67,9 @@ public class IdleEstablishedDecisionTest {
     }
 
     /**
-     *  A zero timestamp means never sent or never received, which is silence we
-     *  cannot distinguish from a young session. Treating it as idle would reap
-     *  freshly established peers.
+     * A zero timestamp means never sent or never received, which is silence we
+     * cannot distinguish from a young session. Treating it as idle would reap
+     * freshly established peers.
      */
     @Test
     public void neverSpokenIsNotIdle() {
@@ -85,8 +85,8 @@ public class IdleEstablishedDecisionTest {
     }
 
     /**
-     *  Idle in one direction only is the normal state of a healthy one-way-heavy
-     *  peer, and must not reap it.
+     * Idle in one direction only is the normal state of a healthy one-way-heavy
+     * peer, and must not reap it.
      */
     @Test
     public void oneWayIdleIsNotBothWayIdle() {

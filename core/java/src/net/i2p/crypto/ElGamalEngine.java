@@ -27,10 +27,10 @@ import java.math.BigInteger;
  *
  * <p>The encryption process:</p>
  * <ol>
- *   <li>Generate random nonce byte</li>
- *   <li>Calculate SHA-256 hash of plaintext</li>
- *   <li>Prepend nonce + hash + plaintext</li>
- *   <li>Apply ElGamal encryption</li>
+ * <li>Generate random nonce byte</li>
+ * <li>Calculate SHA-256 hash of plaintext</li>
+ * <li>Prepend nonce + hash + plaintext</li>
+ * <li>Apply ElGamal encryption</li>
  * </ol>
  *
  * @author crypto, jrandom
@@ -65,9 +65,9 @@ public final class ElGamalEngine {
     }
 
     /**
-     *  Note that this stops the precalc thread and it cannot be restarted.
+     * Note that this stops the precalc thread and it cannot be restarted.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public void shutdown() {
         _ykgen.shutdown();
@@ -75,9 +75,9 @@ public final class ElGamalEngine {
     }
 
     /**
-     *  This is now a noop. Cannot be restarted.
+     * This is now a noop. Cannot be restarted.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public void restart() { /* noop, cannot be restarted */ }
 
@@ -88,17 +88,17 @@ public final class ElGamalEngine {
     /** Encrypt the data to the public key.
      *
      * @return encrypted data, will be exactly 514 bytes long
-     *         Contains the two-part encrypted data starting at bytes 0 and 257.
-     *         If the encrypted parts are smaller than 257 bytes, they will be
-     *         padded with leading zeros.
-     *         The parts appear to always be 256 bytes or less, in other words,
-     *         bytes 0 and 257 are always zero.
+     * Contains the two-part encrypted data starting at bytes 0 and 257.
+     * If the encrypted parts are smaller than 257 bytes, they will be
+     * padded with leading zeros.
+     * The parts appear to always be 256 bytes or less, in other words,
+     * bytes 0 and 257 are always zero.
      *
      * @param data data to encrypt, must be 222 bytes or less
      * @param publicKey public key encrypt to
-     *         As the encrypted data may contain a substantial number of zeros if the
-     *         cleartext is smaller than 222 bytes, it is recommended that the caller pad
-     *         the cleartext to 222 bytes with random data.
+     * As the encrypted data may contain a substantial number of zeros if the
+     * cleartext is smaller than 222 bytes, it is recommended that the caller pad
+     * the cleartext to 222 bytes with random data.
      */
     public byte[] encrypt(byte[] data, PublicKey publicKey) {
         if ((data == null) || (data.length > ELG_CLEARTEXT_LENGTH)) throw new IllegalArgumentException("Data to encrypt must be <= 222 bytes");
@@ -159,9 +159,9 @@ public final class ElGamalEngine {
     /** Decrypt the data
      *
      * @param encrypted encrypted data, must be exactly 514 bytes
-     *         Contains the two-part encrypted data starting at bytes 0 and 257.
-     *         If the encrypted parts are smaller than 257 bytes, they must be
-     *         padded with leading zeros.
+     * Contains the two-part encrypted data starting at bytes 0 and 257.
+     * If the encrypted parts are smaller than 257 bytes, they must be
+     * padded with leading zeros.
      *
      * @param privateKey private key to decrypt with
      * @return unencrypted data or null on failure

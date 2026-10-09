@@ -68,8 +68,8 @@ public class NewsXMLParser {
     }));
 
     /**
-     *  The action taken when encountering a non-whitelisted
-     *  XHTML element or blacklisted attribute in the feed content.
+     * The action taken when encountering a non-whitelisted
+     * XHTML element or blacklisted attribute in the feed content.
      */
     public enum XHTMLMode {
         /** abort the parsing on any non-whitelisted element or blacklisted attribute */
@@ -92,36 +92,36 @@ public class NewsXMLParser {
     }
 
     /**
-     *  Sets the action taken when encountering a non-whitelisted
-     *  XHTML element in the feed content.
-     *  Must be set before parse().
-     *  Default REMOVE_ELEMENT.
+     * Sets the action taken when encountering a non-whitelisted
+     * XHTML element in the feed content.
+     * Must be set before parse().
+     * Default REMOVE_ELEMENT.
      *
-     *  @param mode the XHTML mode to set
+     * @param mode the XHTML mode to set
      */
     public void setXHTMLMode(XHTMLMode mode) {
         _mode = mode;
     }
 
     /**
-     *  Process the XML file.
+     * Process the XML file.
      *
-     *  @param file XML content only. Any su3 or gunzip handling must have
-     *              already happened.
-     *  @return the root node
-     *  @throws IOException on any parse error
+     * @param file XML content only. Any su3 or gunzip handling must have
+     * already happened.
+     * @return the root node
+     * @throws IOException on any parse error
      */
     public Node parse(File file) throws IOException {
         return parse(new BufferedInputStream(new FileInputStream(file)));
     }
 
     /**
-     *  Process the XML input stream.
+     * Process the XML input stream.
      *
-     *  @param in XML content only. Any su3 or gunzip handling must have
-     *            already happened.
-     *  @return the root node
-     *  @throws IOException on any parse error
+     * @param in XML content only. Any su3 or gunzip handling must have
+     * already happened.
+     * @return the root node
+     * @throws IOException on any parse error
      */
     public Node parse(InputStream in) throws IOException {
         _entries = null;
@@ -137,42 +137,42 @@ public class NewsXMLParser {
     }
 
     /**
-     *  The news entries.
-     *  Must call parse() first.
+     * The news entries.
+     * Must call parse() first.
      *
-     *  @return sorted, newest first, null if parse failed
+     * @return sorted, newest first, null if parse failed
      */
     public List<NewsEntry> getEntries() {
         return _entries;
     }
 
     /**
-     *  The news metatdata.
-     *  Must call parse() first.
+     * The news metatdata.
+     * Must call parse() first.
      *
-     *  @return null if parse failed
+     * @return null if parse failed
      */
     public NewsMetadata getMetadata() {
         return _metadata;
     }
 
     /**
-     *  The news CRL entries.
-     *  Must call parse() first.
+     * The news CRL entries.
+     * Must call parse() first.
      *
-     *  @return unsorted, null if none
-     *  @since 0.9.26
+     * @return unsorted, null if none
+     * @since 0.9.26
      */
     public List<CRLEntry> getCRLEntries() {
         return _crlEntries;
     }
 
     /**
-     *  The blocklist entries.
-     *  Must call parse() first.
+     * The blocklist entries.
+     * Must call parse() first.
      *
-     *  @return null if none
-     *  @since 0.9.28
+     * @return null if none
+     * @since 0.9.28
      */
     public BlocklistEntries getBlocklistEntries() {
         return _blocklistEntries;
@@ -316,8 +316,8 @@ public class NewsXMLParser {
     }
 
     /**
-     *  This does not check for any missing values.
-     *  Any field in any NewsEntry may be null.
+     * This does not check for any missing values.
+     * Any field in any NewsEntry may be null.
      */
     private List<NewsEntry> extractNewsEntries(Node feed) throws I2PParserException {
         List<NewsEntry> rv = new ArrayList<>();
@@ -416,11 +416,11 @@ public class NewsXMLParser {
     }
 
     /**
-     *  This does not check for any missing values.
-     *  Any field in any CRLEntry may be null.
+     * This does not check for any missing values.
+     * Any field in any CRLEntry may be null.
      *
-     *  @return null if none
-     *  @since 0.9.26
+     * @return null if none
+     * @since 0.9.26
      */
     private static List<CRLEntry> extractCRLEntries(Node feed) {
         Node rev = feed.getNode("i2p:revocations");
@@ -450,12 +450,12 @@ public class NewsXMLParser {
     }
 
     /**
-     *  This does not check for any missing values.
-     *  Any field in a BlocklistEntry may be null.
-     *  Signature is verified here.
+     * This does not check for any missing values.
+     * Any field in a BlocklistEntry may be null.
+     * Signature is verified here.
      *
-     *  @return null if none
-     *  @since 0.9.28
+     * @return null if none
+     * @since 0.9.28
      */
     private BlocklistEntries extractBlocklistEntries(Node feed) {
         Node bl = feed.getNode("i2p:blocklist");
@@ -500,11 +500,11 @@ public class NewsXMLParser {
     }
 
     /**
-     *  Helper to get all Nodes matching the name
+     * Helper to get all Nodes matching the name
      *
-     *  @param node the parent node to search
-     *  @param name the name
-     *  @return non-null
+     * @param node the parent node to search
+     * @param name the name
+     * @return non-null
      */
     public static List<Node> getNodes(Node node, String name) {
         List<Node> rv = new ArrayList<>();
@@ -518,8 +518,8 @@ public class NewsXMLParser {
     }
 
     /**
-     *  @throws I2PParserException if any node not in whitelist (depends on mode)
-     *  @return true if node was removed from parent (only for REMOVE_ELEMENT mode)
+     * @throws I2PParserException if any node not in whitelist (depends on mode)
+     * @return true if node was removed from parent (only for REMOVE_ELEMENT mode)
      */
     private boolean validate(Node node) throws I2PParserException {
         String name = node.getName();
@@ -576,7 +576,7 @@ public class NewsXMLParser {
     }
 
     /**
-     *  Extend IOE since cybergarage ParserException extends Exception
+     * Extend IOE since cybergarage ParserException extends Exception
      */
     private static class I2PParserException extends IOException {
         public I2PParserException(String s) {

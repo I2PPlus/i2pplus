@@ -8,7 +8,6 @@ import net.i2p.util.SystemVersion;
 /**
  * Honor the 'batchFrequency' tunnel pool setting or the 'router.batchFrequency'
  * router config setting, and track fragmentation.
- *
  */
 class BatchedRouterPreprocessor extends BatchedPreprocessor {
     private final TunnelCreatorConfig _config;
@@ -82,19 +81,19 @@ class BatchedRouterPreprocessor extends BatchedPreprocessor {
     }
 
     /**
-     *  how long should we wait before flushing
+     * how long should we wait before flushing
      * @return the send delay
      */
     @Override
     protected long getSendDelay() { return _sendDelay; }
 
     /*
-     *  Extend the batching time for exploratory OBGWs, they have a lot of small
-     *  tunnel test messages, and build messages that don't fit perfectly.
-     *  And these are not as delay-sensitive.
+     * Extend the batching time for exploratory OBGWs, they have a lot of small
+     * tunnel test messages, and build messages that don't fit perfectly.
+     * And these are not as delay-sensitive.
      *
-     *  We won't pick up config changes after the preprocessor is created,
-     *  but a preprocessor lifetime is only 10 minutes, so just wait...
+     * We won't pick up config changes after the preprocessor is created,
+     * but a preprocessor lifetime is only 10 minutes, so just wait...
      */
     private long initialSendDelay() {
         if (_config != null) {

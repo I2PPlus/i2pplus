@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.util.RandomSource;
@@ -16,11 +15,11 @@ import net.i2p.util.SipHash;
 import java.util.Arrays;
 
 /**
- *  32 bytes, usually of random data.
+ * 32 bytes, usually of random data.
  *
- *  Not recommended for external use, subject to change.
+ * Not recommended for external use, subject to change.
  *
- *  As of 0.9.44, does NOT extend SimpleDataStructure, to save space
+ * As of 0.9.44, does NOT extend SimpleDataStructure, to save space
  */
 public class SessionTag {
     /** Tag length in bytes (32). */
@@ -29,7 +28,7 @@ public class SessionTag {
     private final byte[] _data;
 
     /**
-     *  Instantiate the data array and fill it with random data.
+     * Instantiate the data array and fill it with random data.
      */
     public SessionTag() {
         _data = SimpleByteCache.acquire(BYTE_LENGTH);
@@ -38,9 +37,9 @@ public class SessionTag {
     }
 
     /**
-     *  Instantiate the data array and fill it with random data.
+     * Instantiate the data array and fill it with random data.
      *
-     *  @param create ignored as of 0.9.44, assumed true
+     * @param create ignored as of 0.9.44, assumed true
      */
     public SessionTag(boolean create) {
         this();
@@ -48,7 +47,7 @@ public class SessionTag {
 
     /**
      * As of 0.9.44, non-null.
-     *  @param val as of 0.9.44, non-null
+     * @param val as of 0.9.44, non-null
      */
     public SessionTag(byte[] val) {
         if (val.length != BYTE_LENGTH) {
@@ -59,8 +58,8 @@ public class SessionTag {
     }
 
     /**
-     *  Session tag data.
-     *  @return a copy of the internal data to prevent callers from mutating the tag
+     * Session tag data.
+     * @return a copy of the internal data to prevent callers from mutating the tag
      */
     public byte[] getData() {
         return _data.clone();

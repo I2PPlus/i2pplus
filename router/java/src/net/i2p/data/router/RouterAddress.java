@@ -6,7 +6,6 @@ package net.i2p.data.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -65,12 +64,11 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  Creates an address with a copy of the given options, so the caller
-     *  may reuse or modify them after construction.
+     * Creates an address with a copy of the given options, so the caller
+     * may reuse or modify them after construction.
      *
-     *  @param options may be null
-     *  @param cost 0-255
-     *  @since IPv6
+     * @param options may be null
+     * @param cost 0-255
      */
     public RouterAddress(String style, OrderedProperties options, int cost) {
         _transportStyle = style;
@@ -139,15 +137,15 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  Caching version of InetAddress.getByName(getOption("host")).getAddress(), which is slow.
-     *  Caches numeric host names, and negative caches also.
+     * Caching version of InetAddress.getByName(getOption("host")).getAddress(), which is slow.
+     * Caches numeric host names, and negative caches also.
      *
-     *  As of 0.9.32, this works for literal IP addresses only, and does NOT resolve host names.
-     *  If a host name is specified in the options, this will return null.
-     *  Use getHost() if you need the host name.
+     * As of 0.9.32, this works for literal IP addresses only, and does NOT resolve host names.
+     * If a host name is specified in the options, this will return null.
+     * Use getHost() if you need the host name.
      *
-     *  @return IP or null
-     *  @since 0.9.3
+     * @return IP or null
+     * @since 0.9.3
      */
     public synchronized byte[] getIP() {
         if (_ip == NOT_LOOKED_UP) {
@@ -164,22 +162,21 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  Convenience, same as getOption("host").
-     *  Does no parsing, so faster than getIP().
+     * Convenience, same as getOption("host").
+     * Does no parsing, so faster than getIP().
      *
-     *  @return host string or null
-     *  @since IPv6
+     * @return host string or null
      */
     public String getHost() {
         return _options.getProperty(PROP_HOST);
     }
 
     /**
-     *  Caching version of Integer.parseInt(getOption("port"))
-     *  Caches valid ports 1-65535 only.
+     * Caching version of Integer.parseInt(getOption("port"))
+     * Caches valid ports 1-65535 only.
      *
-     *  @return 1-65535 or 0 if invalid
-     *  @since 0.9.3
+     * @return 1-65535 or 0 if invalid
+     * @since 0.9.3
      */
     public int getPort() {
         if (_port != 0)
@@ -196,9 +193,9 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  Restores the expiration field, which is accepted but must be all zeros:
-     *  it is ignored on readin and a non-zero value fails the signature check.
-     *  @throws IllegalStateException if was already read in
+     * Restores the expiration field, which is accepted but must be all zeros:
+     * it is ignored on readin and a non-zero value fails the signature check.
+     * @throws IllegalStateException if was already read in
      */
     @Override
     public void readBytes(InputStream in) throws DataFormatException, IOException {
@@ -223,8 +220,8 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  As of 0.9.3, expiration MUST be all zeros as it is ignored on
-     *  readin and the signature will fail.
+     * As of 0.9.3, expiration MUST be all zeros as it is ignored on
+     * readin and the signature will fail.
      */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_transportStyle == null)
@@ -256,9 +253,8 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  Everything, including Transport, host, port, options, and cost
-     *  @param addr may be null
-     *  @since IPv6
+     * Everything, including Transport, host, port, options, and cost
+     * @param addr may be null
      */
     public boolean deepEquals(RouterAddress addr) {
         return
@@ -280,9 +276,9 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     *  This is used on peers.jsp so sort options so it looks better.
-     *  We don't just use OrderedProperties for _options because DataHelper.writeProperties()
-     *  sorts also.
+     * This is used on peers.jsp so sort options so it looks better.
+     * We don't just use OrderedProperties for _options because DataHelper.writeProperties()
+     * sorts also.
      */
     @Override
     public String toString() {

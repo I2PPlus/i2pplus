@@ -173,9 +173,10 @@ public class HTTPResponseOutputStreamTest {
         }
     }
 
-    /** A transient status on the Range attempt latches the fallback flag and
-     *  resets header-written state without disturbing delivered progress —
-     *  the preconditions for the non-Range re-request. */
+    /**
+     * A transient status on the Range attempt latches the fallback flag and
+     * resets header-written state without disturbing delivered progress —
+     * the preconditions for the non-Range re-request. */
     @Test
     public void testTransientStatusLatchesResumeFailure() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -201,9 +202,10 @@ public class HTTPResponseOutputStreamTest {
         assertFalse(out.isTransientResumeFailure());
     }
 
-    /** Full recovery after a transient failure: the loop re-prepares and
-     *  re-requests without Range; the fresh 200's already-delivered prefix is
-     *  dropped so the browser sees one contiguous body and one status line. */
+    /**
+     * Full recovery after a transient failure: the loop re-prepares and
+     * re-requests without Range; the fresh 200's already-delivered prefix is
+     * dropped so the browser sees one contiguous body and one status line. */
     @Test
     public void testNonRangeFallback200SkipsDeliveredPrefix() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

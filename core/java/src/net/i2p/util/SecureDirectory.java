@@ -38,7 +38,7 @@ public class SecureDirectory extends File {
      *
      * @param pathname the path
      * @param groupPerms true to create the directory group-accessible (770)
-     *        instead of owner-only (700)
+     * instead of owner-only (700)
      * @since 0.9.71+
      */
     public SecureDirectory(String pathname, boolean groupPerms) {
@@ -87,8 +87,8 @@ public class SecureDirectory extends File {
     }
 
     /**
-     *  Sets directory mode on creation: 700 by default, or 770 when the
-     *  directory was requested group-accessible.
+     * Sets directory mode on creation: 700 by default, or 770 when the
+     * directory was requested group-accessible.
      */
     @Override
     public boolean mkdir() {
@@ -98,9 +98,9 @@ public class SecureDirectory extends File {
     }
 
     /**
-     *  Sets directory mode on creation: 700 by default, or 770 when the
-     *  directory was requested group-accessible.
-     *  Does NOT change the mode of other created directories.
+     * Sets directory mode on creation: 700 by default, or 770 when the
+     * directory was requested group-accessible.
+     * Does NOT change the mode of other created directories.
      */
     @Override
     public boolean mkdirs() {
@@ -110,19 +110,19 @@ public class SecureDirectory extends File {
     }
 
     /**
-     *  Tries to set the permissions to 700 (or 770 when this directory was
-     *  requested group-accessible), ignores errors.
+     * Tries to set the permissions to 700 (or 770 when this directory was
+     * requested group-accessible), ignores errors.
      *
-     *  <p>Uses the {@link java.nio.file.attribute.PosixFilePermission} API rather
-     *  than {@link File#setReadable}: the {@code File} setters take an
-     *  {@code ownerOnly} flag, so there is no way to grant the <i>group</i>
-     *  without also granting <i>others</i> — {@code setReadable(true, false)}
-     *  yields 777, not 770. {@code SecureFileOutputStream.setGroupPerms()} sets
-     *  file permissions the same way for the same reason.
+     * <p>Uses the {@link java.nio.file.attribute.PosixFilePermission} API rather
+     * than {@link File#setReadable}: the {@code File} setters take an
+     * {@code ownerOnly} flag, so there is no way to grant the <i>group</i>
+     * without also granting <i>others</i> — {@code setReadable(true, false)}
+     * yields 777, not 770. {@code SecureFileOutputStream.setGroupPerms()} sets
+     * file permissions the same way for the same reason.
      *
-     *  <p>The execute bit matters as much as read here: a group can read a file
-     *  inside a directory it cannot traverse, so a group-traversable parent is
-     *  what actually makes group-readable log files reachable.
+     * <p>The execute bit matters as much as read here: a group can read a file
+     * inside a directory it cannot traverse, so a group-traversable parent is
+     * what actually makes group-readable log files reachable.
      */
     protected void setPerms() {
         if (!SecureFileOutputStream.canSetPerms() || !isNotWindows) return;

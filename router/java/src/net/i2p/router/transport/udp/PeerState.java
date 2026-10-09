@@ -30,7 +30,6 @@ import java.util.Collection;
  * This is instantiated only after a connection is fully established.
  *
  * Public only for UI peers page. Not a public API, not for external use.
- *
  */
 public class PeerState {
     /** The router context. */
@@ -49,8 +48,8 @@ public class PeerState {
     protected final long _keyEstablishedTime;
 
     /**
-     *  How far off is the remote peer from our clock, in milliseconds?
-     *  A positive number means our clock is ahead of theirs.
+     * How far off is the remote peer from our clock, in milliseconds?
+     * A positive number means our clock is ahead of theirs.
      */
     private long _clockSkew;
     private final Object _clockSkewLock = new Object();
@@ -138,13 +137,13 @@ public class PeerState {
     /** Last 5% loss-ratio bucket reported to the profile, -1 = nothing reported yet. Lock: _outboundLock. */
     private int _lastReportedLossBucket = -1;
     /**
-     *  Minimum transmitted packets before a loss ratio is reported, from
-     *  {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS}. Read once per peer
-     *  rather than per volley: reportLossRatio() is called under _outboundLock,
-     *  and a property lookup there falls through to System.getProperty every
-     *  time. A peer reads it once at construction, which is off the hot path.
+     * Minimum transmitted packets before a loss ratio is reported, from
+     * {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS}. Read once per peer
+     * rather than per volley: reportLossRatio() is called under _outboundLock,
+     * and a property lookup there falls through to System.getProperty every
+     * time. A peer reads it once at construction, which is off the hot path.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private final int _lossyMinPackets;
     private long _nextSequenceNumber;
@@ -159,14 +158,14 @@ public class PeerState {
     protected final ConcurrentMap<Long, InboundMessageState> _inboundMessages;
 
     /**
-     *  Mostly messages that have been transmitted and are awaiting acknowledgement,
-     *  although there could be some that have not been sent yet.
+     * Mostly messages that have been transmitted and are awaiting acknowledgement,
+     * although there could be some that have not been sent yet.
      */
     private final CachedIteratorCollection<OutboundMessageState> _outboundMessages;
 
     /**
-     *  Priority queue of messages that have not yet been sent.
-     *  They are taken from here and put in _outboundMessages.
+     * Priority queue of messages that have not yet been sent.
+     * They are taken from here and put in _outboundMessages.
      */
     private final PriBlockingQueue<OutboundMessageState> _outboundQueue;
 
@@ -288,10 +287,10 @@ public class PeerState {
      *
      * @param peers collection of active peer states
      * @return array: [avgSendWindow, avgRTO, avgConcurrentMsgs, avgEffectiveRTO],
-     *         or null if no peers. Index 1 is the raw per-peer estimate (the
-     *         historical series, unchanged for existing readers); index 3 is
-     *         the clamped [MIN_RTO, MAX_RTO] value each peer actually uses to
-     *         schedule retransmits, so the two can be compared.
+     * or null if no peers. Index 1 is the raw per-peer estimate (the
+     * historical series, unchanged for existing readers); index 3 is
+     * the clamped [MIN_RTO, MAX_RTO] value each peer actually uses to
+     * schedule retransmits, so the two can be compared.
      * @since 0.9.70+; index 3 added 0.9.71+
      */
     public static long[] getAggregateStats(Collection<PeerState> peers) {
@@ -426,8 +425,8 @@ public class PeerState {
     public static final int LARGE_MTU = 1484;
 
     /**
-     *  Max of IPv4 and IPv6 max MTUs
-     *  @since 0.9.28
+     * Max of IPv4 and IPv6 max MTUs
+     * @since 0.9.28
      */
     public static final int MAX_MTU = Math.max(LARGE_MTU, MAX_IPV6_MTU);
 
@@ -655,16 +654,16 @@ public class PeerState {
     private final List<OutboundMessageState> _failedBuffer = new ArrayList<>(4);
 
     /**
-     *  Cached count from the most recent finishAndAllocate() pass.
-     *  Used by getNextVolley() to determine if a peer has messages.
+     * Cached count from the most recent finishAndAllocate() pass.
+     * Used by getNextVolley() to determine if a peer has messages.
      */
     private volatile int _cachedOutboundCount;
 
     /**
-     *  Cached oldest message lifetime from the most recent finishAndAllocate() pass.
-     *  Updated during the finishAndAllocate() iteration across _outboundMessages.
+     * Cached oldest message lifetime from the most recent finishAndAllocate() pass.
+     * Updated during the finishAndAllocate() iteration across _outboundMessages.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private volatile long _cachedOldestLifetime;
 
@@ -672,30 +671,30 @@ public class PeerState {
     private static final long RETRANSMIT_FAILSAFE_MS = 250;
 
     /**
-     *  Result of classifying one outbound message during a finishAndAllocate()
-     *  scan over _outboundMessages.
-     *  @since 0.9.71+
+     * Result of classifying one outbound message during a finishAndAllocate()
+     * scan over _outboundMessages.
+     * @since 0.9.71+
      */
     enum Outcome { COMPLETE, EXPIRED, OVER_SENT, SENDABLE }
 
     /**
-     *  Fast-retransmit recovery stage for a single message, by NACK count.
-     *  @since 0.9.71+
+     * Fast-retransmit recovery stage for a single message, by NACK count.
+     * @since 0.9.71+
      */
     enum FastRtxMode { NONE, START, CONTINUE }
 
     /**
-     *  Per-message outcome in a finishAndAllocate() scan, computed once per
-     *  message so the scan loop stays a thin dispatcher. Precedence:
-     *  COMPLETE &gt; EXPIRED &gt; OVER_SENT &gt; SENDABLE - an expired message is
-     *  reported as EXPIRED even when it also exceeded the volley cap, keeping
-     *  the expire/aggressive stats distinct.
+     * Per-message outcome in a finishAndAllocate() scan, computed once per
+     * message so the scan loop stays a thin dispatcher. Precedence:
+     * COMPLETE &gt; EXPIRED &gt; OVER_SENT &gt; SENDABLE - an expired message is
+     * reported as EXPIRED even when it also exceeded the volley cap, keeping
+     * the expire/aggressive stats distinct.
      *
-     *  @param complete the message finished (all fragments acked)
-     *  @param expired the message's expiry passed
-     *  @param overSent the message exceeded {@link OutboundMessageFragments#MAX_VOLLEYS}
-     *  @return the dominated outcome
-     *  @since 0.9.71+
+     * @param complete the message finished (all fragments acked)
+     * @param expired the message's expiry passed
+     * @param overSent the message exceeded {@link OutboundMessageFragments#MAX_VOLLEYS}
+     * @return the dominated outcome
+     * @since 0.9.71+
      */
     static Outcome classifyOutcome(boolean complete, boolean expired, boolean overSent) {
         if (complete) {return Outcome.COMPLETE;}
@@ -705,66 +704,66 @@ public class PeerState {
     }
 
     /**
-     *  Decide the next retransmit-timer fire time after a volley. A new timer is
-     *  armed on first arming or while fast retransmit is active; otherwise the
-     *  existing timer is left alone. Pure so the RTO policy is unit-testable.
+     * Decide the next retransmit-timer fire time after a volley. A new timer is
+     * armed on first arming or while fast retransmit is active; otherwise the
+     * existing timer is left alone. Pure so the RTO policy is unit-testable.
      *
-     *  @param firstArming true if no retransmit timer is currently armed
-     *  @param fastRetransmit whether fast retransmit is active
-     *  @param now current clock
-     *  @param rto the current smoothed retransmit timeout
-     *  @return the fire time to arm, or -1L to leave the timer unchanged
-     *  @since 0.9.71+
+     * @param firstArming true if no retransmit timer is currently armed
+     * @param fastRetransmit whether fast retransmit is active
+     * @param now current clock
+     * @param rto the current smoothed retransmit timeout
+     * @return the fire time to arm, or -1L to leave the timer unchanged
+     * @since 0.9.71+
      */
     static long retransmitFireTime(boolean firstArming, boolean fastRetransmit, long now, long rto) {
         return (firstArming || fastRetransmit) ? now + rto : -1L;
     }
 
     /**
-     *  Whether to skip a message during a retransmit-mode scan. During fast
-     *  retransmit, messages that have not yet accumulated {@link #FAST_RTX_ACKS}
-     *  NACKs are spared — they were not implicated in the loss and resending
-     *  them would merely amplify congestion (RFC 5681 sec. 4.2). Pure so the
-     *  scan loop gate is unit-testable.
+     * Whether to skip a message during a retransmit-mode scan. During fast
+     * retransmit, messages that have not yet accumulated {@link #FAST_RTX_ACKS}
+     * NACKs are spared — they were not implicated in the loss and resending
+     * them would merely amplify congestion (RFC 5681 sec. 4.2). Pure so the
+     * scan loop gate is unit-testable.
      *
-     *  @param fastRetransmit whether fast retransmit is currently active
-     *  @param nacks the message's current NACK count
-     *  @return true to leave the message alone during this pass
-     *  @since 0.9.71+
+     * @param fastRetransmit whether fast retransmit is currently active
+     * @param nacks the message's current NACK count
+     * @return true to leave the message alone during this pass
+     * @since 0.9.71+
      */
     static boolean shouldSkipFastRetransmit(boolean fastRetransmit, int nacks) {
         return fastRetransmit && nacks < FAST_RTX_ACKS;
     }
 
     /**
-     *  Whether a retransmit-mode scan has accumulated enough messages to stop.
-     *  Caps each pass at half of the pre-cleanup active set unless fast
-     *  retransmit is active (which deliberately floods the tail to trigger
-     *  duplicate ACKs, RFC 5681 sec. 4.2). Pure so the scan cap is
-     *  unit-testable.
+     * Whether a retransmit-mode scan has accumulated enough messages to stop.
+     * Caps each pass at half of the pre-cleanup active set unless fast
+     * retransmit is active (which deliberately floods the tail to trigger
+     * duplicate ACKs, RFC 5681 sec. 4.2). Pure so the scan cap is
+     * unit-testable.
      *
-     *  @param rvSize how many messages the current pass has selected
-     *  @param sizeBefore the active-message count before this pass
-     *  @param fastRetransmit whether fast retransmit is currently active
-     *  @return true when the pass should stop selecting
-     *  @since 0.9.71+
+     * @param rvSize how many messages the current pass has selected
+     * @param sizeBefore the active-message count before this pass
+     * @param fastRetransmit whether fast retransmit is currently active
+     * @return true when the pass should stop selecting
+     * @since 0.9.71+
      */
     static boolean reachedRetransmitCap(int rvSize, int sizeBefore, boolean fastRetransmit) {
         return rvSize >= sizeBefore / 2 && !fastRetransmit;
     }
 
     /**
-     *  Whether a failed outbound message counts as a total-first-message
-     *  failure. Only the first outbound message (sequence number 0) of an
-     *  outbound connection can destroy the peer; failures of messages sent to
-     *  an inbound peer are never total. Pure so the destroy decision is
-     *  unit-testable.
+     * Whether a failed outbound message counts as a total-first-message
+     * failure. Only the first outbound message (sequence number 0) of an
+     * outbound connection can destroy the peer; failures of messages sent to
+     * an inbound peer are never total. Pure so the destroy decision is
+     * unit-testable.
      *
-     *  @param msg the failed message wrapper, may be null
-     *  @param isInbound whether this PeerState is the inbound side
-     *  @param seqNum the message's sequence number
-     *  @return true if this failure should destroy the peer
-     *  @since 0.9.71+
+     * @param msg the failed message wrapper, may be null
+     * @param isInbound whether this PeerState is the inbound side
+     * @param seqNum the message's sequence number
+     * @return true if this failure should destroy the peer
+     * @since 0.9.71+
      */
     static boolean isTotalFail(OutNetMessage msg, boolean isInbound, long seqNum) {
         return msg != null && !isInbound && seqNum == 0;
@@ -940,16 +939,16 @@ public class PeerState {
     }
 
     /**
-     *  Refund {@code refund} bytes into the send-window remaining budget,
-     *  capped at the window size (never let the remaining budget exceed the
-     *  congestion window, per RFC 5681). Pure so the refund bookkeeping is
-     *  unit-testable.
+     * Refund {@code refund} bytes into the send-window remaining budget,
+     * capped at the window size (never let the remaining budget exceed the
+     * congestion window, per RFC 5681). Pure so the refund bookkeeping is
+     * unit-testable.
      *
-     *  @param remaining the current {@code _sendWindowBytesRemaining}
-     *  @param refund the byte count to add back (failed sends, freed blocks)
-     *  @param windowBytes the current {@code _sendWindowBytes}
-     *  @return the capped new remaining budget
-     *  @since 0.9.71+
+     * @param remaining the current {@code _sendWindowBytesRemaining}
+     * @param refund the byte count to add back (failed sends, freed blocks)
+     * @param windowBytes the current {@code _sendWindowBytes}
+     * @return the capped new remaining budget
+     * @since 0.9.71+
      */
     static int cappedRefund(int remaining, int refund, int windowBytes) {
         int after = remaining + refund;
@@ -958,22 +957,22 @@ public class PeerState {
     }
 
     /**
-     *  Process failed outbound messages and their side effects, completely
-     *  outside _outboundLock. Window bytes for unacked fragments are refunded
-     *  under _sendWindowBytesRemainingLock (capped at the full window); a total
-     *  failure of the first outbound message destroys the peer with
-     *  REASON_FRAME_TIMEOUT and drops it.
+     * Process failed outbound messages and their side effects, completely
+     * outside _outboundLock. Window bytes for unacked fragments are refunded
+     * under _sendWindowBytesRemainingLock (capped at the full window); a total
+     * failure of the first outbound message destroys the peer with
+     * REASON_FRAME_TIMEOUT and drops it.
      *
-     *  Logging is suppressed for banlisted peers.
+     * Logging is suppressed for banlisted peers.
      *
-     *  @param failed the collected failed states, never empty
-     *  @param failedSize total unacked size bytes to refund
-     *  @param failedCount total unacked fragments to refund overhead for
-     *  @param totalFail true if the first (seq 0) outbound message failed
-     *  @param shouldLogInfo whether info logs are enabled
-     *  @param shouldLogWarn whether warn logs are enabled
-     *  @return true if the peer was dropped (the caller must return null)
-     *  @since 0.9.71+
+     * @param failed the collected failed states, never empty
+     * @param failedSize total unacked size bytes to refund
+     * @param failedCount total unacked fragments to refund overhead for
+     * @param totalFail true if the first (seq 0) outbound message failed
+     * @param shouldLogInfo whether info logs are enabled
+     * @param shouldLogWarn whether warn logs are enabled
+     * @return true if the peer was dropped (the caller must return null)
+     * @since 0.9.71+
      */
     private boolean handleFailed(List<OutboundMessageState> failed, int failedSize, int failedCount, boolean totalFail,
                                  boolean shouldLogInfo, boolean shouldLogWarn) {
@@ -1030,9 +1029,9 @@ public class PeerState {
     boolean hasOutbound() { return _cachedOutboundCount > 0; }
 
     /**
-     *  For SSU2
+     * For SSU2
      *
-     *  @since 0.9.54
+     * @since 0.9.54
      */
     protected PeerState(RouterContext ctx, UDPTransport transport,
                         InetSocketAddress addr, Hash remotePeer, boolean isInbound, int rtt) {
@@ -1168,9 +1167,9 @@ public class PeerState {
     public byte[] getRemoteIP() {return _remoteIP;}
 
     /**
-     *  Cached remote IP address.
+     * Cached remote IP address.
      *
-     *  @return may be null if IP is invalid
+     * @return may be null if IP is invalid
      */
     public InetAddress getRemoteIPAddress() {
         if (_remoteIPAddress == null) {
@@ -1218,10 +1217,10 @@ public class PeerState {
     public int getReceiveMTU() {return _mtuReceive;}
 
     /**
-     *  Update the moving-average clock skew based on the current difference.
-     *  The raw skew will be adjusted for RTT/2 here.
-     *  A positive number means our clock is ahead of theirs.
-     *  @param skew milliseconds, NOT adjusted for RTT.
+     * Update the moving-average clock skew based on the current difference.
+     * The raw skew will be adjusted for RTT/2 here.
+     * A positive number means our clock is ahead of theirs.
+     * @param skew milliseconds, NOT adjusted for RTT.
      */
     void adjustClockSkew(long skew) {
         // the real one-way delay is much less than RTT / 2, due to ack delays,
@@ -1240,37 +1239,37 @@ public class PeerState {
     }
 
     /**
-     *  Last send time.
-     *  When did we last send them a packet?
-     *  Updated for data, relay, and peer test, but not acks, pings, or termination
+     * Last send time.
+     * When did we last send them a packet?
+     * Updated for data, relay, and peer test, but not acks, pings, or termination
      *
-     *  @param when the time to set
+     * @param when the time to set
      */
     void setLastSendTime(long when) {_lastSendTime = when;}
 
     /**
-     *  Last receive time.
-     *  When did we last receive a packet from them?
-     *  Updated for data, relay, and peer test, but not acks, pings, or termination
+     * Last receive time.
+     * When did we last receive a packet from them?
+     * Updated for data, relay, and peer test, but not acks, pings, or termination
      *
-     *  @param when the time to set
+     * @param when the time to set
      */
     void setLastReceiveTime(long when) {_lastReceiveTime = when;}
 
     /**
-     *  Last ping time.
-     *  Note ping sent. Does not update last send time.
+     * Last ping time.
+     * Note ping sent. Does not update last send time.
      *
-     *  @param when the time to set
-     *  @since 0.9.3
+     * @param when the time to set
+     * @since 0.9.3
      */
     void setLastPingTime(long when) {_lastPingTime = when;}
 
     /**
-     *  Latest of last sent, last ACK, last ping.
+     * Latest of last sent, last ACK, last ping.
      *
-     *  @return the latest time
-     *  @since 0.9.3
+     * @return the latest time
+     * @since 0.9.3
      */
     long getLastSendOrPingTime() {
         return Math.max(Math.max(_lastSendTime, _lastACKSend), _lastPingTime);
@@ -1427,10 +1426,10 @@ public class PeerState {
     void setIntroducerTime() {_lastIntroducerTime = _context.clock().now();}
 
     /**
-     *  We received the message specified completely.
+     * We received the message specified completely.
      *
-     *  @param messageId the message ID
-     *  @param bytes if less than or equal to zero, message is a duplicate.
+     * @param messageId the message ID
+     * @param bytes if less than or equal to zero, message is a duplicate.
      */
     void messageFullyReceived(Long messageId, int bytes) {
         long now = _context.clock().now();
@@ -1451,17 +1450,17 @@ public class PeerState {
     }
 
     /**
-     *  We received a partial message, or we want to send some acks.
+     * We received a partial message, or we want to send some acks.
      */
     void messagePartiallyReceived() {
         messagePartiallyReceived(_context.clock().now());
     }
 
     /**
-     *  We received a partial message, or we want to send some acks.
+     * We received a partial message, or we want to send some acks.
      *
-     *  @param now the current time
-     *  @since 0.9.52
+     * @param now the current time
+     * @since 0.9.52
      */
     protected void messagePartiallyReceived(long now) {
         throw new UnsupportedOperationException();
@@ -1483,7 +1482,6 @@ public class PeerState {
      * Expire partially received inbound messages, returning how many are still pending.
      * This should probably be fired periodically, in case a peer goes silent and we don't
      * try to send them any messages (and don't receive any messages from them either)
-     *
      */
     int expireInboundMessages() {
         int rv = 0;
@@ -1549,25 +1547,25 @@ public class PeerState {
     }
 
     /**
-     *  Compute the RTO to apply after a congestion signal.
+     * Compute the RTO to apply after a congestion signal.
      *
-     *  Congestion must not inflate RTO. RFC 6298 §5.5 doubling applies to
-     *  retransmit-timer expiry, not every retransmit volley (which includes
-     *  fast retransmit). Doubling here under sustained loss drove avgRTO to
-     *  33s while RTT stayed ~96ms — a death spiral that stalled each
-     *  retransmit for half a minute and collapsed CWIN. With a known RTT,
-     *  cap RTO at 4× the RFC 2988 estimate so historical inflation cannot
-     *  outlive fresh latency samples; without an RTT sample, leave the
-     *  current value unchanged (the RTT path in recalculateTimeouts()
-     *  remains the sole authority for growth).
+     * Congestion must not inflate RTO. RFC 6298 §5.5 doubling applies to
+     * retransmit-timer expiry, not every retransmit volley (which includes
+     * fast retransmit). Doubling here under sustained loss drove avgRTO to
+     * 33s while RTT stayed ~96ms — a death spiral that stalled each
+     * retransmit for half a minute and collapsed CWIN. With a known RTT,
+     * cap RTO at 4× the RFC 2988 estimate so historical inflation cannot
+     * outlive fresh latency samples; without an RTT sample, leave the
+     * current value unchanged (the RTT path in recalculateTimeouts()
+     * remains the sole authority for growth).
      *
-     *  @param currentRTO current RTO in ms
-     *  @param rtt smoothed RTT in ms, or &lt;= 0 if unknown
-     *  @param rttDeviation RTT deviation in ms
-     *  @param minRTO floor in ms
-     *  @param maxRTO ceiling in ms
-     *  @return the RTO to store, clamped to [minRTO, maxRTO]
-     *  @since 0.9.71+
+     * @param currentRTO current RTO in ms
+     * @param rtt smoothed RTT in ms, or &lt;= 0 if unknown
+     * @param rttDeviation RTT deviation in ms
+     * @param minRTO floor in ms
+     * @param maxRTO ceiling in ms
+     * @return the RTO to store, clamped to [minRTO, maxRTO]
+     * @since 0.9.71+
      */
     static int nextCongestionRTO(int currentRTO, int rtt, int rttDeviation, int minRTO, int maxRTO) {
         int clamped = Math.min(maxRTO, Math.max(minRTO, currentRTO));
@@ -1579,18 +1577,18 @@ public class PeerState {
     }
 
     /**
-     *  Whether enough time has elapsed since the last congestion response to
-     *  allow another one. Pure so the cooldown policy is unit-testable.
+     * Whether enough time has elapsed since the last congestion response to
+     * allow another one. Pure so the cooldown policy is unit-testable.
      *
-     *  The cooldown is {@code max(rto, CONGESTION_COOLDOWN_MIN_MS)} so a low
-     *  RTO cannot shrink the gap to ~1s and collapse the window every second
-     *  under sustained loss.
+     * The cooldown is {@code max(rto, CONGESTION_COOLDOWN_MIN_MS)} so a low
+     * RTO cannot shrink the gap to ~1s and collapse the window every second
+     * under sustained loss.
      *
-     *  @param last congestion timestamp in ms, or 0 if never
-     *  @param now current time in ms
-     *  @param rto current RTO in ms
-     *  @return true if a new congestion response may proceed
-     *  @since 0.9.71+
+     * @param last congestion timestamp in ms, or 0 if never
+     * @param now current time in ms
+     * @param rto current RTO in ms
+     * @return true if a new congestion response may proceed
+     * @since 0.9.71+
      */
     static boolean congestionCooldownElapsed(long last, long now, int rto) {
         long cooldown = Math.max((long) rto, CONGESTION_COOLDOWN_MIN_MS);
@@ -1598,35 +1596,35 @@ public class PeerState {
     }
 
     /**
-     *  Whether send-window growth must be held because the path is unverified
-     *  (SSU2 connection migration). Pure so the freeze gate is unit-testable.
+     * Whether send-window growth must be held because the path is unverified
+     * (SSU2 connection migration). Pure so the freeze gate is unit-testable.
      *
-     *  @param now current time in ms
-     *  @param pathUnverifiedUntil freeze expiry in ms, or 0 if not frozen
-     *  @return true if window growth must not proceed
-     *  @since 0.9.71+
+     * @param now current time in ms
+     * @param pathUnverifiedUntil freeze expiry in ms, or 0 if not frozen
+     * @return true if window growth must not proceed
+     * @since 0.9.71+
      */
     static boolean pathUnverifiedBlocksGrowth(long now, long pathUnverifiedUntil) {
         return pathUnverifiedUntil > 0 && now < pathUnverifiedUntil;
     }
 
     /**
-     *  Compute the next concurrent-messages limit after an ACK, pure so the
-     *  AIMD tuning policy is unit-testable. Latency-based: additive increase
-     *  while RTT is healthy (backlog-aware, ramping faster far from the cap),
-     *  a soft *3/4 multiplicative decrease when RTT is well above target, a
-     *  modest bump when the RTT hysteresis zone still has queued messages, and
-     *  a hold otherwise. Retransmits ({@code numSends >= 2}) get a gentle /8
-     *  decrease to avoid grinding to the floor.
+     * Compute the next concurrent-messages limit after an ACK, pure so the
+     * AIMD tuning policy is unit-testable. Latency-based: additive increase
+     * while RTT is healthy (backlog-aware, ramping faster far from the cap),
+     * a soft *3/4 multiplicative decrease when RTT is well above target, a
+     * modest bump when the RTT hysteresis zone still has queued messages, and
+     * a hold otherwise. Retransmits ({@code numSends >= 2}) get a gentle /8
+     * decrease to avoid grinding to the floor.
      *
-     *  @param numSends how many times the message was sent before the ACK
-     *  @param rtt the current smoothed RTT estimate (ms), or &lt;= 0 if unknown
-     *  @param current the current {@code _concurrentMessagesAllowed}
-     *  @param queued how many messages are currently in {@code _outboundQueue}
-     *  @param randomInt a uniform draw in [0, {@link #INIT_CONCURRENT_MSGS}); only
-     *                   consumed when {@code rtt <= 0}, pass 0 otherwise
-     *  @return the new concurrent-message limit
-     *  @since 0.9.71+
+     * @param numSends how many times the message was sent before the ACK
+     * @param rtt the current smoothed RTT estimate (ms), or &lt;= 0 if unknown
+     * @param current the current {@code _concurrentMessagesAllowed}
+     * @param queued how many messages are currently in {@code _outboundQueue}
+     * @param randomInt a uniform draw in [0, {@link #INIT_CONCURRENT_MSGS}); only
+     * consumed when {@code rtt <= 0}, pass 0 otherwise
+     * @return the new concurrent-message limit
+     * @since 0.9.71+
      */
     static int nextConcurrentLimit(int numSends, int rtt, int current, int queued, int randomInt) {
         if (numSends >= 2) {
@@ -1672,18 +1670,18 @@ public class PeerState {
     }
 
     /**
-     *  Whether an ACK should grow the send window. Classic slow-start /
-     *  congestion-avoidance split (RFC 5681): grow unconditionally while at or
-     *  below the slow-start threshold, otherwise grow probabilistically with
-     *  probability {@code bytesACKed / (2 * sendWindow)}. Pure so the growth
-     *  gate is unit-testable.
+     * Whether an ACK should grow the send window. Classic slow-start /
+     * congestion-avoidance split (RFC 5681): grow unconditionally while at or
+     * below the slow-start threshold, otherwise grow probabilistically with
+     * probability {@code bytesACKed / (2 * sendWindow)}. Pure so the growth
+     * gate is unit-testable.
      *
-     *  @param sendWindow the current {@code _sendWindowBytes}
-     *  @param slowStartThreshold the current {@code _slowStartThreshold}
-     *  @param bytesACKed the byte count newly ACKed
-     *  @param randomFloat a uniform draw in [0, 1)
-     *  @return true if the window should grow by {@code bytesACKed}
-     *  @since 0.9.71+
+     * @param sendWindow the current {@code _sendWindowBytes}
+     * @param slowStartThreshold the current {@code _slowStartThreshold}
+     * @param bytesACKed the byte count newly ACKed
+     * @param randomFloat a uniform draw in [0, 1)
+     * @return true if the window should grow by {@code bytesACKed}
+     * @since 0.9.71+
      */
     static boolean shouldGrowSendWindow(int sendWindow, int slowStartThreshold, int bytesACKed, float randomFloat) {
         if (sendWindow <= slowStartThreshold) {return true;}
@@ -1694,8 +1692,8 @@ public class PeerState {
     }
 
     /**
-     *  We sent a message which was ACKed containing the given # of bytes.
-     *  Caller should synch on this
+     * We sent a message which was ACKed containing the given # of bytes.
+     * Caller should synch on this
      */
     private void locked_messageACKed(int bytesACKed, int maxPktSz, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
         _consecutiveFailedSends = 0;
@@ -1751,7 +1749,7 @@ public class PeerState {
     }
 
     /**
-     *  We sent a message which was ACKed containing the given # of bytes.
+     * We sent a message which was ACKed containing the given # of bytes.
      */
     private void messageACKed(int bytesACKed, int maxPktSz, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
         synchronized(_sendWindowBytesRemainingLock) {
@@ -1768,10 +1766,10 @@ public class PeerState {
     private static final float RTT_DAMPENING = 0.125f;
 
     /**
-     *  Adjust the tcp-esque timeouts.
-     *  Caller should synch on this
+     * Adjust the tcp-esque timeouts.
+     * Caller should synch on this
      *
-     *  @param lifetime network RTT — time from first send to ACK (excludes queue time)
+     * @param lifetime network RTT — time from first send to ACK (excludes queue time)
      */
     private void recalculateTimeouts(long lifetime) {
         if (_rtt <= 0) {
@@ -1788,15 +1786,15 @@ public class PeerState {
     }
 
     /**
-     *  Whether a near-lossless transmission history warrants probing a larger MTU.
-     *  Requires a successful send on a link with an observed retransmit ratio under
-     *  10%. Pure so the MTU tuning policy is unit-testable.
+     * Whether a near-lossless transmission history warrants probing a larger MTU.
+     * Requires a successful send on a link with an observed retransmit ratio under
+     * 10%. Pure so the MTU tuning policy is unit-testable.
      *
-     *  @param success whether the triggering send completed without retransmit
-     *  @param packetsTransmitted the value of {@code _packetsTransmitted}
-     *  @param packetsRetransmitted the value of {@code _packetsRetransmitted}
-     *  @return true if the MTU should be considered for an increase
-     *  @since 0.9.71+
+     * @param success whether the triggering send completed without retransmit
+     * @param packetsTransmitted the value of {@code _packetsTransmitted}
+     * @param packetsRetransmitted the value of {@code _packetsRetransmitted}
+     * @return true if the MTU should be considered for an increase
+     * @since 0.9.71+
      */
     static boolean wantLargerMTU(boolean success, int packetsTransmitted, int packetsRetransmitted) {
         // heuristic to allow fairly lossy links to use large MTUs
@@ -1804,20 +1802,20 @@ public class PeerState {
     }
 
     /**
-     *  Whether a larger MTU is eligible after a clean transmission. Requires the
-     *  probe packet to have credibly hit the current MTU ceiling, and, after any
-     *  prior decrease, a probabilistic gate (increasingly likely to allow the
-     *  probe the longer the link has stayed healthy). Pure so the eligibility
-     *  policy is unit-testable without the router RNG.
+     * Whether a larger MTU is eligible after a clean transmission. Requires the
+     * probe packet to have credibly hit the current MTU ceiling, and, after any
+     * prior decrease, a probabilistic gate (increasingly likely to allow the
+     * probe the longer the link has stayed healthy). Pure so the eligibility
+     * policy is unit-testable without the router RNG.
      *
-     *  @param mtu the value of {@code _mtu}
-     *  @param largeMTU the value of {@code _largeMTU}
-     *  @param maxPktSz the size of the ACKed maximum-size packet
-     *  @param mtuDecreases the value of {@code _mtuDecreases}
-     *  @param randomInt the uniform draw in [0, mtuDecreases), consumed only when
-     *                   {@code mtuDecreases > 1}; pass 0 otherwise
-     *  @return true if the MTU may be increased
-     *  @since 0.9.71+
+     * @param mtu the value of {@code _mtu}
+     * @param largeMTU the value of {@code _largeMTU}
+     * @param maxPktSz the size of the ACKed maximum-size packet
+     * @param mtuDecreases the value of {@code _mtuDecreases}
+     * @param randomInt the uniform draw in [0, mtuDecreases), consumed only when
+     * {@code mtuDecreases > 1}; pass 0 otherwise
+     * @return true if the MTU may be increased
+     * @since 0.9.71+
      */
     static boolean mtuIncreaseEligible(int mtu, int largeMTU, int maxPktSz, int mtuDecreases, int randomInt) {
         // we only increase if the size was close to the limit
@@ -1826,28 +1824,28 @@ public class PeerState {
     }
 
     /**
-     *  Whether the MTU should be reduced after a lossy transmission. Requires a
-     *  packet that credibly hit the current ceiling. Pure so the eligibility
-     *  policy is unit-testable.
+     * Whether the MTU should be reduced after a lossy transmission. Requires a
+     * packet that credibly hit the current ceiling. Pure so the eligibility
+     * policy is unit-testable.
      *
-     *  @param mtu the value of {@code _mtu}
-     *  @param minMTU the value of {@code _minMTU}
-     *  @param maxPktSz the size of the retransmitted maximum-size packet
-     *  @return true if the MTU may be decreased
-     *  @since 0.9.71+
+     * @param mtu the value of {@code _mtu}
+     * @param minMTU the value of {@code _minMTU}
+     * @param maxPktSz the size of the retransmitted maximum-size packet
+     * @return true if the MTU may be decreased
+     * @since 0.9.71+
      */
     static boolean mtuDecreaseEligible(int mtu, int minMTU, int maxPktSz) {
         return mtu > minMTU && maxPktSz > mtu - (MTU_STEP * 4);
     }
 
     /**
-     *  Adjust upward if a large packet was successfully sent without retransmission.
-     *  Adjust downward if a packet was retransmitted.
+     * Adjust upward if a large packet was successfully sent without retransmission.
+     * Adjust downward if a packet was retransmitted.
      *
-     *  Caller should synch on this
+     * Caller should synch on this
      *
-     *  @param maxPktSz the largest packet that was sent
-     *  @param success was it sent successfully?
+     * @param maxPktSz the largest packet that was sent
+     * @param success was it sent successfully?
      */
     private void adjustMTU(int maxPktSz, boolean success) {
         if (_packetsTransmitted > 0) {
@@ -1919,19 +1917,19 @@ public class PeerState {
     }
 
         /**
-     * Report the current retransmit ratio to the profile when it crosses a 5% bucket
-     * boundary since the last report. Bucketing keeps profile writes to at most one
-     * per bucket change per connection.
-     *
-     * No report until the connection has transmitted at least
-     * {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS} packets, so the ratio is only
-     * ever based on a meaningful sample. The bucket is not advanced in that case, so
-     * the first bucket change after the minimum is reached still fires.
-     *
-     * Caller must hold _outboundLock.
-     *
-     * @since 0.9.71+
-     */
+         * Report the current retransmit ratio to the profile when it crosses a 5% bucket
+         * boundary since the last report. Bucketing keeps profile writes to at most one
+         * per bucket change per connection.
+         *
+         * No report until the connection has transmitted at least
+         * {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS} packets, so the ratio is only
+         * ever based on a meaningful sample. The bucket is not advanced in that case, so
+         * the first bucket change after the minimum is reached still fires.
+         *
+         * Caller must hold _outboundLock.
+         *
+         * @since 0.9.71+
+         */
     private void reportLossRatio() {
         if (_packetsTransmitted < _lossyMinPackets) return;
         int bucket = (int) ((_packetsRetransmitted * 20L) / _packetsTransmitted);
@@ -2032,9 +2030,9 @@ public class PeerState {
                                                   UDPPacket.MAC_SIZE + UDPPacket.IV_SIZE;
 
     /**
-     *  Record a received packet.
+     * Record a received packet.
      *
-     *  @param size not including IP header, UDP header, MAC or IV
+     * @param size not including IP header, UDP header, MAC or IV
      */
     void packetReceived(int size) {
         synchronized(_inboundLock) {
@@ -2053,12 +2051,12 @@ public class PeerState {
     }
 
     /**
-     *  Hold send-window growth while the path is unverified (SSU2 connection
-     *  migration, {@code limitSending}). Freezes growth only for a short window;
-     *  does not collapse CWIN or adjust RTO — migration is a path change, not
-     *  congestion, and a full collapse thrashes multi-homed peers.
-     *  Growth resumes via {@link #pathVerified()} or when the freeze expires.
-     *  @since 0.9.71+
+     * Hold send-window growth while the path is unverified (SSU2 connection
+     * migration, {@code limitSending}). Freezes growth only for a short window;
+     * does not collapse CWIN or adjust RTO — migration is a path change, not
+     * congestion, and a full collapse thrashes multi-homed peers.
+     * Growth resumes via {@link #pathVerified()} or when the freeze expires.
+     * @since 0.9.71+
      */
     void pathUnverified() {
         long now = _context.clock().now();
@@ -2067,16 +2065,16 @@ public class PeerState {
     }
 
     /**
-     *  Clear the path-unverified growth freeze (migration completed, failed,
-     *  or cancelled — the current path is again the verified one).
-     *  @since 0.9.71+
+     * Clear the path-unverified growth freeze (migration completed, failed,
+     * or cancelled — the current path is again the verified one).
+     * @since 0.9.71+
      */
     void pathVerified() {
         _pathUnverifiedUntil = 0;
     }
 
     /**
-     *  Same as setLastReceivedTime(now)
+     * Same as setLastReceivedTime(now)
      */
     void dataReceived() {_lastReceiveTime = _context.clock().now();}
 
@@ -2088,17 +2086,16 @@ public class PeerState {
     public long getLastACKSend() {return _lastACKSend;}
 
     /**
-     *  All acks have been sent - SSU 1 only, see override
+     * All acks have been sent - SSU 1 only, see override
      *
-     *  @since 0.9.52
+     * @since 0.9.52
      */
     void clearWantedACKSendSince() {throw new UnsupportedOperationException();}
 
     /**
-     *  Remote host ID.
+     * Remote host ID.
      *
-     *  @return non-null
-     *  @since public since 0.9.57 for SSU2Sender interface only
+     * @return non-null
      */
     public RemoteHostId getRemoteHostId() {return _remoteHostId;}
 
@@ -2171,12 +2168,12 @@ public class PeerState {
     public boolean getMayDisconnect() {return _mayDisconnect;}
 
     /**
-     *  Uses cached oldest lifetime from the most recent finishAndAllocate() pass.
+     * Uses cached oldest lifetime from the most recent finishAndAllocate() pass.
      *
-     *  @param now what time it is now
-     *  @return how long to wait before sending, or Integer.MAX_VALUE if we have nothing to send.
-     *          If ready now, will return 0.
-     *  @since 0.9.48
+     * @param now what time it is now
+     * @return how long to wait before sending, or Integer.MAX_VALUE if we have nothing to send.
+     * If ready now, will return 0.
+     * @since 0.9.48
      */
     int getNextDelay(long now) {
         synchronized (_sendWindowBytesRemainingLock) {
@@ -2197,25 +2194,25 @@ public class PeerState {
     }
 
     /**
-     *  Whether the peer is dead or its outbound queue is backlogged.
+     * Whether the peer is dead or its outbound queue is backlogged.
      *
-     *  @return whether backlogged
-     *  @since 0.9.3
+     * @return whether backlogged
+     * @since 0.9.3
      */
     public boolean isBacklogged() {return _dead || _outboundQueue.isBacklogged();}
 
     /**
-     *  Always leave room for this many explicit acks.
-     *  Only for data packets. Does not affect ack-only packets.
-     *  This directly affects data packet overhead, adjust with care.
+     * Always leave room for this many explicit acks.
+     * Only for data packets. Does not affect ack-only packets.
+     * This directly affects data packet overhead, adjust with care.
      */
     private static final int MIN_EXPLICIT_ACKS = 3;
     /** This is room for three explicit acks or two partial acks or one of each = 13. */
     private static final int MIN_ACK_SIZE = 1 + (4 * MIN_EXPLICIT_ACKS);
 
     /**
-     *  How much payload data can we shove in there?
-     *  @return MTU - 87, i.e. 533 or 1397 (IPv4), MTU - 107 (IPv6)
+     * How much payload data can we shove in there?
+     * @return MTU - 87, i.e. 533 or 1397 (IPv4), MTU - 107 (IPv6)
      */
     int fragmentSize() {
         // 46 + 20 + 8 + 13 = 74 + 13 = 87 (IPv4)
@@ -2224,9 +2221,9 @@ public class PeerState {
     }
 
     /**
-     *  Packet overhead plus room for acks
-     *  @return 87 (IPv4), 107 (IPv6)
-     *  @since 0.9.49
+     * Packet overhead plus room for acks
+     * @return 87 (IPv4), 107 (IPv6)
+     * @since 0.9.49
      */
     int fragmentOverhead() {
         // 46 + 20 + 8 + 13 = 74 + 13 = 87 (IPv4)
@@ -2235,7 +2232,7 @@ public class PeerState {
     }
 
     /**
-     *  Locks this
+     * Locks this
      */
     private boolean locked_shouldSend(OutboundMessageState state, long now) {
         if (allocateSendingBytes(state, now)) {
@@ -2254,16 +2251,16 @@ public class PeerState {
     }
 
     /**
-     *  Compute the bytes newly confirmed by one incoming ACK for a single
-     *  message: the full previously-unacked size when the message just became
-     *  complete, otherwise only the delta newly covered by this ACK. Pure so
-     *  the partial-ACK byte accounting is unit-testable.
+     * Compute the bytes newly confirmed by one incoming ACK for a single
+     * message: the full previously-unacked size when the message just became
+     * complete, otherwise only the delta newly covered by this ACK. Pure so
+     * the partial-ACK byte accounting is unit-testable.
      *
-     *  @param unackedBefore the message's unacked byte count before this ACK
-     *  @param complete whether this ACK completed the message
-     *  @param unackedAfter the message's unacked byte count after this ACK
-     *  @return the byte count to credit toward the send window
-     *  @since 0.9.71+
+     * @param unackedBefore the message's unacked byte count before this ACK
+     * @param complete whether this ACK completed the message
+     * @param unackedAfter the message's unacked byte count after this ACK
+     * @return the byte count to credit toward the send window
+     * @since 0.9.71+
      */
     static int newlyAckedBytes(int unackedBefore, boolean complete, int unackedAfter) {
         if (complete) {return unackedBefore;}
@@ -2271,11 +2268,11 @@ public class PeerState {
     }
 
     /**
-     *  An ACK of a fragment was received.
+     * An ACK of a fragment was received.
      *
-     *  SSU 2 only.
+     * SSU 2 only.
      *
-     *  @return true if this fragment of the message was acked for the first time
+     * @return true if this fragment of the message was acked for the first time
      */
     protected boolean acked(PacketBuilder2.Fragment f) {
         if (_dead) {return false;}
@@ -2350,16 +2347,16 @@ public class PeerState {
     }
 
     /**
-     *  Fast-retransmit progression as a function of the NACK count for a single
-     *  message. Threshold {@link #FAST_RTX_ACKS}: the first exactly-threshold
-     *  NACK starts fast retransmit (recovery begins, SST/cwnd set per RFC 5681
-     *  sec. 3.2 #2/#3); subsequent NACKs continue it (cwnd inflate per #4).
-     *  Below threshold there is no action. Pure so the recovery cascade is
-     *  unit-testable without router state.
+     * Fast-retransmit progression as a function of the NACK count for a single
+     * message. Threshold {@link #FAST_RTX_ACKS}: the first exactly-threshold
+     * NACK starts fast retransmit (recovery begins, SST/cwnd set per RFC 5681
+     * sec. 3.2 #2/#3); subsequent NACKs continue it (cwnd inflate per #4).
+     * Below threshold there is no action. Pure so the recovery cascade is
+     * unit-testable without router state.
      *
-     *  @param nacks the incremented NACK count for the message
-     *  @return NONE, START, or CONTINUE
-     *  @since 0.9.71+
+     * @param nacks the incremented NACK count for the message
+     * @return NONE, START, or CONTINUE
+     * @since 0.9.71+
      */
     static FastRtxMode fastRtxMode(int nacks) {
         if (nacks == FAST_RTX_ACKS) {return FastRtxMode.START;}
@@ -2368,12 +2365,12 @@ public class PeerState {
     }
 
     /**
-     *  Enter or leave fast retransmit mode, and adjust SST and window variables accordingly.
-     *  See RFC 5681 sec. 2.4
+     * Enter or leave fast retransmit mode, and adjust SST and window variables accordingly.
+     * See RFC 5681 sec. 2.4
      *
-     *  @param highest the highest sequence number that was acked
-     *  @return true if we have something to fast-retransmit
-     *  @since 0.9.49
+     * @param highest the highest sequence number that was acked
+     * @return true if we have something to fast-retransmit
+     * @since 0.9.49
      */
     boolean highestSeqNumAcked(long highest) {
         boolean rv = false;
@@ -2437,10 +2434,10 @@ public class PeerState {
     }
 
     /**
-     *  Leave fast retransmit mode if we were in it, and adjust SST and window variables accordingly.
-     *  See RFC 5681 sec. 2.4
+     * Leave fast retransmit mode if we were in it, and adjust SST and window variables accordingly.
+     * See RFC 5681 sec. 2.4
      *
-     *  @since 0.9.49
+     * @since 0.9.49
      */
     private void exitFastRetransmit() {
         if (_fastRetransmit.compareAndSet(true, false)) {
@@ -2456,10 +2453,10 @@ public class PeerState {
     }
 
     /**
-     *  SSU 2 only
+     * SSU 2 only
      *
-     *  @return whether request immediate ack
-     *  @since 0.9.56
+     * @return whether request immediate ack
+     * @since 0.9.56
      */
     protected boolean shouldRequestImmediateAck() {
         synchronized(_sendWindowBytesRemainingLock) {
@@ -2501,8 +2498,8 @@ public class PeerState {
     }
 
     /**
-     *  Convenience for OutboundMessageState so it can fail itself
-     *  @since 0.9.3
+     * Convenience for OutboundMessageState so it can fail itself
+     * @since 0.9.3
      */
     UDPTransport getTransport() {return _transport;}
 

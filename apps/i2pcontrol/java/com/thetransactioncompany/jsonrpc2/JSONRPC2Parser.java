@@ -23,14 +23,14 @@ import org.json.simple.Jsoner;
  *                      "\"id\":\"0001\","+
  *                      "\"jsonrpc\":\"2.0\"}";
  *
- *  JSONRPC2Request req = null;
+ * JSONRPC2Request req = null;
  *
  * JSONRPC2Parser parser = new JSONRPC2Parser();
  *
- *  try {
+ * try {
  *          req = parser.parseJSONRPC2Request(jsonString);
  *
- *  } catch (JSONRPC2ParseException e) {
+ * } catch (JSONRPC2ParseException e) {
  *          // handle exception
  *  }
  *
@@ -97,7 +97,7 @@ public class JSONRPC2Parser {
 	 * other constructors if you want to specify different behaviour.
 	 *
 	 * @param preserveOrder If {@code true} the member order of JSON objects
-	 *                      in parameters and results will be preserved.
+	 * in parameters and results will be preserved.
 	 */
 	public JSONRPC2Parser(final boolean preserveOrder) {
 
@@ -112,10 +112,10 @@ public class JSONRPC2Parser {
 	 * constructors if you want to specify different behaviour.
 	 *
 	 * @param preserveOrder If {@code true} the member order of JSON objects
-	 *                      in parameters and results will be preserved.
+	 * in parameters and results will be preserved.
 	 * @param ignoreVersion If {@code true} the {@code "jsonrpc":"2.0"}
-	 *                      version attribute in the JSON-RPC 2.0 message
-	 *                      will not be checked.
+	 * version attribute in the JSON-RPC 2.0 message
+	 * will not be checked.
 	 */
 	public JSONRPC2Parser(final boolean preserveOrder,
 		              final boolean ignoreVersion) {
@@ -131,15 +131,15 @@ public class JSONRPC2Parser {
 	 * JSON-RPC message parsing properties.
 	 *
 	 * @param preserveOrder         If {@code true} the member order of JSON
-	 *                              objects in parameters and results will
-	 *                              be preserved.
+	 * objects in parameters and results will
+	 * be preserved.
 	 * @param ignoreVersion         If {@code true} the
-	 *                              {@code "jsonrpc":"2.0"} version
-	 *                              attribute in the JSON-RPC 2.0 message
-	 *                              will not be checked.
+	 * {@code "jsonrpc":"2.0"} version
+	 * attribute in the JSON-RPC 2.0 message
+	 * will not be checked.
 	 * @param parseNonStdAttributes If {@code true} non-standard attributes
-	 *                              found in the JSON-RPC 2.0 messages will
-	 *                              be parsed too.
+	 * found in the JSON-RPC 2.0 messages will
+	 * be parsed too.
 	 */
 	public JSONRPC2Parser(final boolean preserveOrder,
 		              final boolean ignoreVersion,
@@ -157,12 +157,12 @@ public class JSONRPC2Parser {
 	 * preserved if {@link #preserveOrder} is set to {@code true}.
 	 *
 	 * @param jsonString The JSON string to parse. Must not be
-	 *                   {@code null}.
+	 * {@code null}.
 	 *
 	 * @return The parsed JSON object.
 	 *
 	 * @throws JSONRPC2ParseException With detailed message if parsing
-	 *                                failed.
+	 * failed.
 	 */
 	@SuppressWarnings("unchecked")
 	private Map<String,Object> parseJSONObject(final String jsonString)
@@ -206,7 +206,7 @@ public class JSONRPC2Parser {
 	 * @param jsonString The original JSON string.
 	 *
 	 * @throws JSONRPC2ParseException If the parameter is not a string that
-	 *                                equals "2.0".
+	 * equals "2.0".
 	 */
 	private static void ensureVersion2(final Object version, final String jsonString)
 		throws JSONRPC2ParseException {
@@ -233,14 +233,14 @@ public class JSONRPC2Parser {
 	 * and would provide you with more detailed parse error reporting.
 	 *
 	 * @param jsonString A JSON string representing a JSON-RPC 2.0 request,
-	 *                   notification or response, UTF-8 encoded. Must not
-	 *                   be {@code null}.
+	 * notification or response, UTF-8 encoded. Must not
+	 * be {@code null}.
 	 *
 	 * @return An instance of {@link JSONRPC2Request},
-	 *         {@link JSONRPC2Notification} or {@link JSONRPC2Response}.
+	 * {@link JSONRPC2Notification} or {@link JSONRPC2Response}.
 	 *
 	 * @throws JSONRPC2ParseException With detailed message if the parsing
-	 *                                failed.
+	 * failed.
 	 */
 	public JSONRPC2Message parseJSONRPC2Message(final String jsonString)
 		throws JSONRPC2ParseException {
@@ -287,12 +287,12 @@ public class JSONRPC2Parser {
 	 * Parses a JSON-RPC 2.0 request string.
 	 *
 	 * @param jsonString The JSON-RPC 2.0 request string, UTF-8 encoded.
-	 *                   Must not be {@code null}.
+	 * Must not be {@code null}.
 	 *
 	 * @return The corresponding JSON-RPC 2.0 request object.
 	 *
 	 * @throws JSONRPC2ParseException With detailed message if parsing
-	 *                                failed.
+	 * failed.
 	 */
 	@SuppressWarnings("unchecked")
 	public JSONRPC2Request parseJSONRPC2Request(final String jsonString)
@@ -371,12 +371,12 @@ public class JSONRPC2Parser {
 	 * Parses a JSON-RPC 2.0 notification string.
 	 *
 	 * @param jsonString The JSON-RPC 2.0 notification string, UTF-8
-	 *                   encoded. Must not be {@code null}.
+	 * encoded. Must not be {@code null}.
 	 *
 	 * @return The corresponding JSON-RPC 2.0 notification object.
 	 *
 	 * @throws JSONRPC2ParseException With detailed message if parsing
-	 *                                failed.
+	 * failed.
 	 */
 	@SuppressWarnings("unchecked")
 	public JSONRPC2Notification parseJSONRPC2Notification(final String jsonString)
@@ -439,12 +439,12 @@ public class JSONRPC2Parser {
 	 * Parses a JSON-RPC 2.0 response string.
 	 *
 	 * @param jsonString The JSON-RPC 2.0 response string, UTF-8 encoded.
-	 *                   Must not be {@code null}.
+	 * Must not be {@code null}.
 	 *
 	 * @return The corresponding JSON-RPC 2.0 response object.
 	 *
 	 * @throws JSONRPC2ParseException With detailed message if parsing
-	 *                                failed.
+	 * failed.
 	 */
 	@SuppressWarnings("unchecked")
 	public JSONRPC2Response parseJSONRPC2Response(final String jsonString)
@@ -557,7 +557,7 @@ public class JSONRPC2Parser {
 	 * JSON-RPC 2.0 messages.
 	 *
 	 * @param preserveOrder {@code true} to preserve the order of JSON
-	 *                      object members, else {@code false}.
+	 * object members, else {@code false}.
 	 */
 	public void preserveOrder(final boolean preserveOrder) {
 
@@ -587,8 +587,8 @@ public class JSONRPC2Parser {
 	 * versions.
 	 *
 	 * @param ignore {@code true} to skip checks of the
-	 *               {@code "jsonrpc":"2.0"} version attribute in parsed
-	 *               JSON-RPC 2.0 messages, else {@code false}.
+	 * {@code "jsonrpc":"2.0"} version attribute in parsed
+	 * JSON-RPC 2.0 messages, else {@code false}.
 	 */
 	public void ignoreVersion(final boolean ignore) {
 
@@ -602,8 +602,8 @@ public class JSONRPC2Parser {
 	 * {@code false}.
 	 *
 	 * @return {@code true} if the {@code "jsonrpc":"2.0"} version
-	 *         attribute in parsed JSON-RPC 2.0 messages is ignored, else
-	 *         {@code false}.
+	 * attribute in parsed JSON-RPC 2.0 messages is ignored, else
+	 * {@code false}.
 	 */
 	public boolean ignoresVersion() {
 
@@ -616,7 +616,7 @@ public class JSONRPC2Parser {
 	 * 2.0 messages.
 	 *
 	 * @param enable {@code true} to parse non-standard attributes, else
-	 *               {@code false}.
+	 * {@code false}.
 	 */
 	public void parseNonStdAttributes(final boolean enable) {
 
@@ -629,7 +629,7 @@ public class JSONRPC2Parser {
 	 * messages are parsed.
 	 *
 	 * @return {@code true} if non-standard attributes are parsed, else
-	 *         {@code false}.
+	 * {@code false}.
 	 */
 	public boolean parsesNonStdAttributes() {
 

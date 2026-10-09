@@ -25,7 +25,7 @@ public class SecureFileOutputStream extends FileOutputStream {
     private static final boolean oneDotSix = SystemVersion.isJava6();
 
     /**
-     *  Tries to set output file to mode 600
+     * Tries to set output file to mode 600
      */
     public SecureFileOutputStream(String file) throws FileNotFoundException {
         super(file);
@@ -33,7 +33,7 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     *  Tries to set output file to mode 600 whether append = true or false
+     * Tries to set output file to mode 600 whether append = true or false
      */
     public SecureFileOutputStream(String file, boolean append) throws FileNotFoundException {
         super(file, append);
@@ -41,7 +41,7 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     *  Tries to set output file to mode 600
+     * Tries to set output file to mode 600
      */
     public SecureFileOutputStream(File file) throws FileNotFoundException {
         super(file);
@@ -49,8 +49,8 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     *  Tries to set output file to mode 600 only if append = false
-     *  (otherwise it is presumed to be 600 already)
+     * Tries to set output file to mode 600 only if append = false
+     * (otherwise it is presumed to be 600 already)
      */
     public SecureFileOutputStream(File file, boolean append) throws FileNotFoundException {
         super(file, append);
@@ -66,8 +66,8 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     *  Tries to set the permissions to 600,
-     *  ignores errors
+     * Tries to set the permissions to 600,
+     * ignores errors
      */
     public static void setPerms(File f) {
         if (!canSetPerms()) return;
@@ -83,11 +83,11 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     *  Tries to set the permissions to 660 (owner+group rw),
-     *  ignores errors, including on filesystems without POSIX
-     *  permission support (e.g. Windows). Uses the PosixFilePermission API.
+     * Tries to set the permissions to 660 (owner+group rw),
+     * ignores errors, including on filesystems without POSIX
+     * permission support (e.g. Windows). Uses the PosixFilePermission API.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     public static void setGroupPerms(File f) {
         try {

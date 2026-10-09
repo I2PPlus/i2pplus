@@ -84,10 +84,10 @@ public class TunnelPeerSelectorWindowStatTest {
     }
 
     /**
-     *  A context whose statManager() throws, for the "must not propagate" cases.
-     *  The log manager is resolved into a local first: calling a mock inside a
-     *  {@code when(...)} argument leaves that mock's stubbing unfinished and
-     *  Mockito then fails the next test.
+     * A context whose statManager() throws, for the "must not propagate" cases.
+     * The log manager is resolved into a local first: calling a mock inside a
+     * {@code when(...)} argument leaves that mock's stubbing unfinished and
+     * Mockito then fails the next test.
      */
     private RouterContext contextWithoutStatManager() {
         LogManager logs = _ctx.logManager();

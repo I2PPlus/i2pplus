@@ -37,8 +37,8 @@ public class CSSHelper extends HelperBase {
      */
     public static final String PROP_THEME_NAME = "routerconsole.theme";
     /**
-     *  Prefix for the per-theme properties mapping a theme name to its directory
-     *  @since 0.9.33 moved from ConfigUIHelper
+     * Prefix for the per-theme properties mapping a theme name to its directory
+     * @since 0.9.33 moved from ConfigUIHelper
      */
     public static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
     /**
@@ -72,10 +72,10 @@ public class CSSHelper extends HelperBase {
      */
     public static final String PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
     /** Whether apps open inside a console IFrame instead of replacing the console
-     *  @since 0.9.32 */
+     * @since 0.9.32 */
     public static final String PROP_EMBED_APPS = "routerconsole.embedApps";
     /** Whether the console uses the Sora display font instead of Open Sans
-     *  @since 0.9.59+ */
+     * @since 0.9.59+ */
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     /**
      * DEFAULT_ENABLE_SORA_FONT.
@@ -87,36 +87,36 @@ public class CSSHelper extends HelperBase {
     private static long lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
     /** Whether the sidebar is unified with the main content column
-     *  @since 0.9.67+ */
+     * @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     /**
      * DEFAULT_UNIFIED_SIDEBAR.
      */
     public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
     /** Whether a sidebar shorter than the viewport sticks to the top while scrolling
-     *  @since 0.9.68+ */
+     * @since 0.9.68+ */
     public static final String PROP_STICKY_SIDEBAR = "routerconsole.stickySidebar";
     /**
      * DEFAULT_STICKY_SIDEBAR.
      */
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
     /** true = legacy RRD4J minigraph renderer; false = dual-baseline canvas
-     *  @since 0.9.70+ */
+     * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_LEGACY = "routerconsole.sidebarGraphLegacy";
     /** Default true for legacy RRD4J; set false for dual-baseline canvas
-     *  @since 0.9.70+ */
+     * @since 0.9.70+ */
     public static final boolean DEFAULT_SIDEBAR_GRAPH_LEGACY = true;
     /** Sidebar graph time period in minutes (2–30, default 20)
-     *  @since 0.9.70+ */
+     * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_MINUTES = "routerconsole.sidebarGraphMinutes";
     /** true = split display (inbound top, outbound bottom); false = overlay
-     *  @since 0.9.70+ */
+     * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_SPLIT = "routerconsole.sidebarGraphSplit";
     /** Sidebar graph render direction: "ltr" or "rtl"
-     *  @since 0.9.70+ */
+     * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_DIRECTION = "routerconsole.sidebarGraphDirection";
     /** true = continuous scrolling graph; false = full-buffer redraw (default)
-     *  @since 0.9.70+ */
+     * @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_CONTINUOUS = "routerconsole.sidebarGraphContinuous";
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
@@ -124,10 +124,10 @@ public class CSSHelper extends HelperBase {
     private static final int NONCE_QUEUE_SIZE = 50;
 
     /**
-     *  Session-bound nonce generation - replaces static consoleNonce, updateNonce, reseedNonce, systemNonce
-     *  @param session returns an invalid nonce if null
-     *  @return a new nonce for each call
-     *  @since 0.9.69
+     * Session-bound nonce generation - replaces static consoleNonce, updateNonce, reseedNonce, systemNonce
+     * @param session returns an invalid nonce if null
+     * @return a new nonce for each call
+     * @since 0.9.69
      */
     @SuppressWarnings("unchecked")
     public static String getNonce(HttpSession session) {
@@ -166,23 +166,23 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     *  Session-bound nonce validation - replaces static nonce validation
-     *  @param nonce returns false if null
-     *  @param session returns false if null
-     *  @return true if valid
-     *  @since 0.9.69
+     * Session-bound nonce validation - replaces static nonce validation
+     * @param nonce returns false if null
+     * @param session returns false if null
+     * @return true if valid
+     * @since 0.9.69
      */
     public static boolean validateNonce(HttpSession session, String nonce) {
         return validateNonce(session, nonce, false);
     }
 
     /**
-     *  Session-bound nonce validation with preserve option
-     *  @param nonce returns false if null
-     *  @param session returns false if null
-     *  @param preserve if true, do not delete the nonce. Use for early checks in jsps.
-     *  @return true if valid
-     *  @since 0.9.69
+     * Session-bound nonce validation with preserve option
+     * @param nonce returns false if null
+     * @param session returns false if null
+     * @param preserve if true, do not delete the nonce. Use for early checks in jsps.
+     * @return true if valid
+     * @since 0.9.69
      */
     @SuppressWarnings("unchecked")
     public static boolean validateNonce(HttpSession session, String nonce, boolean preserve) {
@@ -253,10 +253,10 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     *  Get recent nonce for backward compatibility.
-     *  @param index 0 for most recent, 1 for second most recent
-     *  @return nonce or null if not available
-     *  @since 0.9.70+
+     * Get recent nonce for backward compatibility.
+     * @param index 0 for most recent, 1 for second most recent
+     * @return nonce or null if not available
+     * @since 0.9.70+
      */
     public static String getRecentNonce(int index) {
         if (index >= 0 && index < 2) {
@@ -266,9 +266,9 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     *  Theme directory prefix, forced to classic for pre-Trident/6 IE
-     *  @param userAgent the request User-Agent header, null for a normal browser
-     *  @return the theme path to prepend to console CSS and image references
+     * Theme directory prefix, forced to classic for pre-Trident/6 IE
+     * @param userAgent the request User-Agent header, null for a normal browser
+     * @return the theme path to prepend to console CSS and image references
      */
     public String getTheme(String userAgent) {
         String url = BASE_THEME_PATH;
@@ -300,8 +300,8 @@ public class CSSHelper extends HelperBase {
     public boolean useSoraDisplayFont() {return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);}
 
     /**
-     *  Save config for alternative display font if enabled
-     *  @since 0.9.59+
+     * Save config for alternative display font if enabled
+     * @since 0.9.59+
      */
     public void setSoraDisplayFont() {
         // Protected with nonce in css.jsi
@@ -411,9 +411,9 @@ public class CSSHelper extends HelperBase {
     public String getLang() {return Messages.getLanguage(_context);}
 
     /**
-     *  Show / hide news on home page
-     *  @param val if non-null, "1" to show, else hide
-     *  @since 0.8.12
+     * Show / hide news on home page
+     * @param val if non-null, "1" to show, else hide
+     * @since 0.8.12
      */
     public void setNews(String val) {
         // Protected with nonce in css.jsi
@@ -429,8 +429,8 @@ public class CSSHelper extends HelperBase {
     public boolean shouldSendXFrame() {return !_context.getBooleanProperty(PROP_XFRAME);}
 
     /**
-     *  change refresh and save it, "0" also disables the refresh entirely
-     *  @param r the new refresh period in seconds
+     * change refresh and save it, "0" also disables the refresh entirely
+     * @param r the new refresh period in seconds
      */
     public void setRefresh(String r) {
         try {
@@ -441,8 +441,8 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     *  The summary page refresh period, floored at 5s under heavy CPU load
-     *  @return refresh time in seconds, as a string, or "3600" when refresh is disabled
+     * The summary page refresh period, floored at 5s under heavy CPU load
+     * @return refresh time in seconds, as a string, or "3600" when refresh is disabled
      */
     public String getRefresh() {
         String r = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
@@ -472,9 +472,9 @@ public class CSSHelper extends HelperBase {
     public boolean getDisableRefresh() {return _context.getBooleanProperty(PROP_DISABLE_REFRESH);}
 
     /**
-     *  translate the title and display consistently
-     *  @param s the raw page title
-     *  @return a complete title element, prefixed by routerconsole.pageTitlePrefix if set
+     * translate the title and display consistently
+     * @param s the raw page title
+     * @return a complete title element, prefixed by routerconsole.pageTitlePrefix if set
      */
     public String title(String s) {
         StringBuilder buf = new StringBuilder(128);
@@ -495,10 +495,10 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     *  Should we allow a refreshing IFrame?
-     *  @param ua the request User-Agent header, null to allow the IFrame
-     *  @return false if the mobile console is forced or the browser is too small
-     *  @since 0.8.5
+     * Should we allow a refreshing IFrame?
+     * @param ua the request User-Agent header, null to allow the IFrame
+     * @return false if the mobile console is forced or the browser is too small
+     * @since 0.8.5
      */
     public boolean allowIFrame(String ua) {
         boolean forceMobileConsole = _context.getBooleanProperty(PROP_FORCE_MOBILE_CONSOLE);

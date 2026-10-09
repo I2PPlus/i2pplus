@@ -13,7 +13,6 @@ import java.util.zip.DeflaterOutputStream;
  * is that this implementation allows its state to be reset to initial
  * values, and hence reused, while the standard GZIPOutputStream writes the
  * GZIP header to the stream on instantiation, rather than on first write.
- *
  */
 public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     /** Has the header been written out yet? */
@@ -101,9 +100,9 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     }
 
     /**
-     *  Calls super.close(). May not be reused after this.
+     * Calls super.close(). May not be reused after this.
      *
-     *  @since 0.9.40
+     * @since 0.9.40
      */
     public void destroy() throws IOException {
         def.end();

@@ -190,9 +190,9 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     }
 
     /**
-     *  Overridden because SSL handshake may need more time,
-     *  and available() in super doesn't work.
-     *  The handshake doesn't start until a read().
+     * Overridden because SSL handshake may need more time,
+     * and available() in super doesn't work.
+     * The handshake doesn't start until a read().
      */
     @Override
     protected boolean validate(Socket socket) {

@@ -51,15 +51,15 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     private final int[] lps;
 
     /**
-     *  Create a BSkipLevels and load it from disk.
-     *  Non-recursive initializer initializeLevels() MUST be called on the first
-     *  BSkipLevel in the skiplist after the constructor, unless it's a new empty
-     *  level and init() was previously called.
+     * Create a BSkipLevels and load it from disk.
+     * Non-recursive initializer initializeLevels() MUST be called on the first
+     * BSkipLevel in the skiplist after the constructor, unless it's a new empty
+     * level and init() was previously called.
      *
-     *  @param bf the BlockFile
-     *  @param levelPage the page number of this level
-     *  @param bsl the BSkipList
-     *  @throws IOException if an I/O error occurs
+     * @param bf the BlockFile
+     * @param levelPage the page number of this level
+     * @param bsl the BSkipList
+     * @throws IOException if an I/O error occurs
      */
     @SuppressWarnings("unchecked")
     public BSkipLevels(BlockFile bf, int levelPage, BSkipList<K, V> bsl) throws IOException {
@@ -98,13 +98,13 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Non-recursive initializer.
-     *  MUST be called on the first BSkipLevel in the skiplist
-     *  after the constructor, unless it's a new empty
-     *  level and init() was previously called.
-     *  Only call on the first skiplevel in the list!
+     * Non-recursive initializer.
+     * MUST be called on the first BSkipLevel in the skiplist
+     * after the constructor, unless it's a new empty
+     * level and init() was previously called.
+     * Only call on the first skiplevel in the list!
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     public void initializeLevels() {
         List<BSkipLevels<K, V>> toInit = new ArrayList<>(32);
@@ -122,11 +122,11 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Non-recursive initializer.
-     *  MUST be called after constructor.
+     * Non-recursive initializer.
+     * MUST be called after constructor.
      *
-     *  @param nextInit out parameter, next levels to initialize
-     *  @since 0.9.20
+     * @param nextInit out parameter, next levels to initialize
+     * @since 0.9.20
      */
     private void initializeLevels(List<BSkipLevels<K, V>> nextInit) {
         boolean fail = false;
@@ -179,13 +179,13 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Initialize a new BSkipLevels page on disk.
+     * Initialize a new BSkipLevels page on disk.
      *
-     *  @param bf the BlockFile
-     *  @param page the page number
-     *  @param spanPage the span page number
-     *  @param maxHeight the maximum height
-     *  @throws IOException if an I/O error occurs
+     * @param bf the BlockFile
+     * @param page the page number
+     * @param spanPage the span page number
+     * @param maxHeight the maximum height
+     * @throws IOException if an I/O error occurs
      */
     public static void init(BlockFile bf, int page, int spanPage, int maxHeight) throws IOException {
         BlockFile.pageSeek(bf.file, page);
@@ -196,7 +196,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Flush this level to disk.
+     * Flush this level to disk.
      */
     @Override
     public void flush() {
@@ -222,7 +222,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Mark this level as killed and free its resources.
+     * Mark this level as killed and free its resources.
      */
     @Override
     public void killInstance() {
@@ -238,12 +238,12 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Create a new instance of this level type.
+     * Create a new instance of this level type.
      *
-     *  @param levels the number of levels
-     *  @param ss the SkipSpan
-     *  @param sl the SkipList
-     *  @return a new BSkipLevels instance
+     * @param levels the number of levels
+     * @param ss the SkipSpan
+     * @param sl the SkipList
+     * @return a new BSkipLevels instance
      */
     @Override
     public SkipLevels<K, V> newInstance(int levels, SkipSpan<K, V> ss, SkipList<K, V> sl) {
@@ -260,10 +260,10 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Run an integrity check on this level.
+     * Run an integrity check on this level.
      *
-     *  @param fix if true, attempt to fix corruption
-     *  @return true if the levels were modified
+     * @param fix if true, attempt to fix corruption
+     * @return true if the levels were modified
      */
     @Override
     public boolean blvlck(boolean fix) {
@@ -273,14 +273,14 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Fix the levels.
-     *  Only call from the first level.
-     *  Primarily to fix nulls in levels caused by previous SkipLevels bug.
-     *  This should handle dups and loops and out-of-order levels too,
-     *  but those may cause problems before this in the constructor.
-     *  This is fast enough to call every time the skiplist is opened.
-     *  @return true if the levels were modified.
-     *  @since 0.8.8
+     * Fix the levels.
+     * Only call from the first level.
+     * Primarily to fix nulls in levels caused by previous SkipLevels bug.
+     * This should handle dups and loops and out-of-order levels too,
+     * but those may cause problems before this in the constructor.
+     * This is fast enough to call every time the skiplist is opened.
+     * @return true if the levels were modified.
+     * @since 0.8.8
      */
     private boolean blvlfix() {
         TreeSet<SkipLevels<K, V>> lvls = new TreeSet<>(new LevelComparator<>());
@@ -335,11 +335,11 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Breadth-first, sortof
-     *  We assume everything is findable from the root level
-     *  @param l non-null
-     *  @param lvlSet out parameter, the result
-     *  @since 0.8.8
+     * Breadth-first, sortof
+     * We assume everything is findable from the root level
+     * @param l non-null
+     * @param lvlSet out parameter, the result
+     * @since 0.8.8
      */
     private void getAllLevels(SkipLevels<K, V> l, Set<SkipLevels<K, V>> lvlSet) {
         if (bf.log.shouldDebug())
@@ -364,19 +364,19 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Comparator for sorting levels in blvlfix().
-     *  Sorts in REVERSE order.
+     * Comparator for sorting levels in blvlfix().
+     * Sorts in REVERSE order.
      *
-     *  @param <K> the key type
-     *  @param <V> the value type
+     * @param <K> the key type
+     * @param <V> the value type
      */
     private static class LevelComparator<K extends Comparable<? super K>, V> implements Comparator<SkipLevels<K, V>>, Serializable {
         /**
-         *  Compare two SkipLevels.
+         * Compare two SkipLevels.
          *
-         *  @param l the first level
-         *  @param r the second level
-         *  @return a negative integer, zero, or a positive integer
+         * @param l the first level
+         * @param r the second level
+         * @return a negative integer, zero, or a positive integer
          */
         public int compare(SkipLevels<K, V> l, SkipLevels<K, V> r) {
             K lk = l.key();
@@ -393,12 +393,12 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Run an integrity check on this level with additional parameters.
+     * Run an integrity check on this level with additional parameters.
      *
-     *  @param fix if true, attempt to fix corruption
-     *  @param width the current width
-     *  @param prevLevels previous levels to check
-     *  @return true if corruption was found
+     * @param fix if true, attempt to fix corruption
+     * @param width the current width
+     * @param prevLevels previous levels to check
+     * @return true if corruption was found
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -451,9 +451,9 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     }
 
     /**
-     *  Get a string representation of this level.
+     * Get a string representation of this level.
      *
-     *  @return a string representation
+     * @return a string representation
      */
     @Override
     public String toString() {

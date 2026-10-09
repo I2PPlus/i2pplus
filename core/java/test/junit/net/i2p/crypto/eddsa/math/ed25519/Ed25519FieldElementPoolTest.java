@@ -11,11 +11,11 @@ import java.math.BigInteger;
 import java.util.Random;
 
 /**
- *  Verifies that a mutable accumulator approach for Ed25519FieldElement
- *  arithmetic produces identical results to the current per-operation
- *  allocation approach. This test validates the correctness of reusing
- *  the internal t[] array across operations instead of allocating a new
- *  int[10] + wrapper for every add/subtract/multiply.
+ * Verifies that a mutable accumulator approach for Ed25519FieldElement
+ * arithmetic produces identical results to the current per-operation
+ * allocation approach. This test validates the correctness of reusing
+ * the internal t[] array across operations instead of allocating a new
+ * int[10] + wrapper for every add/subtract/multiply.
  */
 public class Ed25519FieldElementPoolTest {
 
@@ -24,8 +24,8 @@ public class Ed25519FieldElementPoolTest {
     private static final Random RAND = new Random(42);
 
     /**
-     *  Mutable accumulator that reuses its internal array.
-     *  Mirrors the proposed fix for Ed25519FieldElement allocation churn.
+     * Mutable accumulator that reuses its internal array.
+     * Mirrors the proposed fix for Ed25519FieldElement allocation churn.
      */
     private static class Accumulator {
         final int[] t = new int[10];

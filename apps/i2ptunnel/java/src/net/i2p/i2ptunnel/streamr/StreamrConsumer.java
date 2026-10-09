@@ -10,7 +10,6 @@ import net.i2p.util.EventDispatcher;
 /**
  * Streamr consumer that acts as an I2P client and UDP server,
  * receiving data from I2P destinations and forwarding it to a configured UDP host/port
- *
  */
 public class StreamrConsumer extends I2PTunnelUDPClientBase {
 
@@ -40,8 +39,8 @@ public class StreamrConsumer extends I2PTunnelUDPClientBase {
     }
 
     /**
-     *  Starts the consumer and begins receiving data.
-     *  @since 0.9.53
+     * Starts the consumer and begins receiving data.
+     * @since 0.9.53
      */
     @Override
     public final void startRunning() {
@@ -51,10 +50,10 @@ public class StreamrConsumer extends I2PTunnelUDPClientBase {
     }
 
     /**
-     *  Stops the consumer and releases resources.
-     *  @param forced if true, forces immediate close
-     *  @return true if closed successfully
-     *  @since 0.9.53
+     * Stops the consumer and releases resources.
+     * @param forced if true, forces immediate close
+     * @return true if closed successfully
+     * @since 0.9.53
      */
     @Override
     public boolean close(boolean forced) {

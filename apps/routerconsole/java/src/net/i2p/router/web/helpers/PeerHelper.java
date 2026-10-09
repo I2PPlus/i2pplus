@@ -94,10 +94,10 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Warning - blocking, very slow, queries the active UPnP router,
-     *  will take many seconds if it has vanished.
+     * Warning - blocking, very slow, queries the active UPnP router,
+     * will take many seconds if it has vanished.
      *
-     *  @since 0.9.31 moved from TransportManager
+     * @since 0.9.31 moved from TransportManager
      */
     private void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         if (_context.commSystem().isDummy()) {
@@ -268,9 +268,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Render the peer connectivity summary section.
+     * Render the peer connectivity summary section.
      *
-     *  @since 0.9.56
+     * @since 0.9.56
      */
     private void renderSummary(Writer out) throws IOException {
         Set<AddressType> connected = Addresses.getConnectedAddressTypes();
@@ -444,12 +444,12 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Render a single named element for the contentonly fragment mode.
-     *  Renders nothing for ids the current transport view does not own.
+     * Render a single named element for the contentonly fragment mode.
+     * Renders nothing for ids the current transport view does not own.
      *
-     *  @param id the element id
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param id the element id
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     public void renderFragment(String id) throws IOException {
         if (_context.commSystem().isDummy() || _transport == null) {return;}
@@ -469,15 +469,15 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Render a named NTCP element in fragment mode: the count heading,
-     *  the tbody with data-key rows, or the totals tfoot.
+     * Render a named NTCP element in fragment mode: the count heading,
+     * the tbody with data-key rows, or the totals tfoot.
      *
-     *  @param nt the NTCP transport
-     *  @param out the writer to render to
-     *  @param id the element id
-     *  @param sortFlags the sort flags
-     *  @throws IOException if writing fails
-     *  @since 0.9.70+
+     * @param nt the NTCP transport
+     * @param out the writer to render to
+     * @param id the element id
+     * @param sortFlags the sort flags
+     * @throws IOException if writing fails
+     * @since 0.9.70+
      */
     private void renderNTCPFragment(NTCPTransport nt, Writer out, String id, int sortFlags) throws IOException {
         boolean IPv6Enabled = _context.getBooleanProperty("i2np.ntcp.ipv6") ||
@@ -526,16 +526,16 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Render a named SSU element in fragment mode: the count heading,
-     *  the tbody with data-key rows, or the totals tfoot.
+     * Render a named SSU element in fragment mode: the count heading,
+     * the tbody with data-key rows, or the totals tfoot.
      *
-     *  @param ut the SSU transport
-     *  @param out the writer to render to
-     *  @param id the element id
-     *  @param sortFlags the sort flags
-     *  @param debugmode render the advanced view
-     *  @throws IOException if writing fails
-     *  @since 0.9.70+
+     * @param ut the SSU transport
+     * @param out the writer to render to
+     * @param id the element id
+     * @param sortFlags the sort flags
+     * @param debugmode render the advanced view
+     * @throws IOException if writing fails
+     * @since 0.9.70+
      */
     private void renderSSUFragment(UDPTransport ut, Writer out, String id, int sortFlags, boolean debugmode) throws IOException {
         TreeSet<PeerState> peers = new TreeSet<>(getComparator(sortFlags));
@@ -579,13 +579,13 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Whether an NTCP connection is recent enough to render.
+     * Whether an NTCP connection is recent enough to render.
      *
-     *  @param con the connection
-     *  @param peerCount total established connections
-     *  @param now the current time
-     *  @return true when the connection is rendered
-     *  @since 0.9.70+
+     * @param con the connection
+     * @param peerCount total established connections
+     * @param now the current time
+     * @return true when the connection is rendered
+     * @since 0.9.70+
      */
     private static boolean includeNTCP(NTCPConnection con, int peerCount, long now) {
         if (peerCount >= 300 && (con.getTimeSinceReceive(now) > 60*1000 || con.getTimeSinceSend(now) > 60*1000)) {return false;}
@@ -594,13 +594,13 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Whether an SSU peer is recent enough to render.
+     * Whether an SSU peer is recent enough to render.
      *
-     *  @param peer the peer
-     *  @param peerCount total peers
-     *  @param now the current time
-     *  @return true when the peer is rendered
-     *  @since 0.9.70+
+     * @param peer the peer
+     * @param peerCount total peers
+     * @param now the current time
+     * @return true when the peer is rendered
+     * @since 0.9.70+
      */
     private static boolean includeSSU(PeerState peer, int peerCount, long now) {
         if (peerCount >= 300 && now-peer.getLastReceiveTime() > 60*1000) {return false;}
@@ -609,9 +609,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Render the peer page navigation bar.
+     * Render the peer page navigation bar.
      *
-     *  @since 0.9.38
+     * @since 0.9.38
      */
     private void renderNavBar(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
@@ -638,9 +638,9 @@ public class PeerHelper extends HelperBase {
     /// begin NTCP
 
     /**
-     *  Render the NTCP transport peer listing.
+     * Render the NTCP transport peer listing.
      *
-     *  @since 0.9.31 moved from NTCPTransport
+     * @since 0.9.31 moved from NTCPTransport
      */
     private void render(NTCPTransport nt, Writer out, int sortFlags) throws IOException {
         boolean IPv6Enabled = _context.getBooleanProperty("i2np.ntcp.ipv6") ||
@@ -685,9 +685,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Append the NTCP peer table header, including the IPv6 column when enabled.
+     * Append the NTCP peer table header, including the IPv6 column when enabled.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void renderNTCPHeader(StringBuilder buf, boolean ipv6Enabled, int activePeers,
                                   int maxConnections, boolean hasPeers) {
@@ -749,12 +749,12 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Append the NTCP connections heading fragment containing the count.
+     * Append the NTCP connections heading fragment containing the count.
      *
-     *  @param buf the buffer to append to
-     *  @param activePeers the established connection count
-     *  @param maxConnections the configured connection limit
-     *  @since 0.9.70+
+     * @param buf the buffer to append to
+     * @param activePeers the established connection count
+     * @param maxConnections the configured connection limit
+     * @since 0.9.70+
      */
     private void renderNTCPCount(StringBuilder buf, int activePeers, int maxConnections) {
         buf.append("<h3 id=ntcpcon title=\"")
@@ -769,9 +769,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Append one NTCP peer row and accumulate its stats into totals.
+     * Append one NTCP peer row and accumulate its stats into totals.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void renderNTCPRow(StringBuilder buf, NTCPConnection con, long now, boolean ipv6Enabled,
                                int peerCount, NTCPTotals totals) {
@@ -872,9 +872,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Append the NTCP peer table footer with the accumulated totals.
+     * Append the NTCP peer table footer with the accumulated totals.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void renderNTCPFooter(StringBuilder buf, boolean ipv6Enabled, int activePeers,
                                   int peerCount, NTCPTotals totals) {
@@ -902,9 +902,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Totals accumulated while rendering NTCP peer rows.
+     * Totals accumulated while rendering NTCP peer rows.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private static final class NTCPTotals {
         float bpsSend;
@@ -952,9 +952,9 @@ public class PeerHelper extends HelperBase {
     /// begin SSU
 
     /**
-     *  Render the SSU/UDP transport peer listing.
+     * Render the SSU/UDP transport peer listing.
      *
-     *  @since 0.9.31 moved from UDPTransport
+     * @since 0.9.31 moved from UDPTransport
      */
     private void render(UDPTransport ut, Writer out, String urlBase, int sortFlags, boolean debugmode) throws IOException {
         TreeSet<PeerState> peers = new TreeSet<>(getComparator(sortFlags));
@@ -983,9 +983,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Append the SSU peer table header, including the sort links in debug mode.
+     * Append the SSU peer table header, including the sort links in debug mode.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void renderSSUHeader(StringBuilder buf, String urlBase, int sortFlags, boolean debugmode,
                                  int activePeers, int maxConnections, boolean hasPeers) {
@@ -1120,13 +1120,13 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Append the UDP connections heading fragment containing the count.
+     * Append the UDP connections heading fragment containing the count.
      *
-     *  @param buf the buffer to append to
-     *  @param activePeers the established connection count
-     *  @param maxConnections the configured connection limit
-     *  @param debugmode render the advanced view link
-     *  @since 0.9.70+
+     * @param buf the buffer to append to
+     * @param activePeers the established connection count
+     * @param maxConnections the configured connection limit
+     * @param debugmode render the advanced view link
+     * @since 0.9.70+
      */
     private void renderSSUCount(StringBuilder buf, int activePeers, int maxConnections, boolean debugmode) {
         buf.append("<h3 id=udpcon title=\"")
@@ -1146,9 +1146,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Append one SSU peer row and accumulate its stats into totals.
+     * Append one SSU peer row and accumulate its stats into totals.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void renderSSURow(StringBuilder buf, PeerState peer, long now, boolean debugmode, SSUTotals totals) {
         Hash h = peer.getRemotePeer();
@@ -1316,9 +1316,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Append the SSU peer table footer with the accumulated totals.
+     * Append the SSU peer table footer with the accumulated totals.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private void renderSSUFooter(StringBuilder buf, boolean debugmode, UDPTransport ut, SSUTotals totals) {
         String bwin = formatKBps(totals.bpsIn).replace(".00", "");
@@ -1364,9 +1364,9 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     *  Totals accumulated while rendering SSU peer rows.
+     * Totals accumulated while rendering SSU peer rows.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     private static final class SSUTotals {
         int bpsIn;

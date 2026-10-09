@@ -8,16 +8,16 @@ import net.i2p.router.transport.TransportUtil;
 import org.junit.Test;
 
 /**
- *  Unit tests for the reachability-status decisions extracted from
- *  {@link NTCPTransport#getReachabilityStatus()}.
+ * Unit tests for the reachability-status decisions extracted from
+ * {@link NTCPTransport#getReachabilityStatus()}.
  *
- *  <p>Covers the three-stage cascade that replaces the original 150+ line method:
- *  the header decides the hopeless cases up front, the inbound-activity stage
- *  decides whenever either family recently worked, and the tail handles the
- *  live-connection scan outcome. The null contract (\"null means run the live
- *  connection check\") and the \"never null tail\" contract are pinned explicitly.
+ * <p>Covers the three-stage cascade that replaces the original 150+ line method:
+ * the header decides the hopeless cases up front, the inbound-activity stage
+ * decides whenever either family recently worked, and the tail handles the
+ * live-connection scan outcome. The null contract (\"null means run the live
+ * connection check\") and the \"never null tail\" contract are pinned explicitly.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class NTCPTransportReachabilityDecisionTest {
 

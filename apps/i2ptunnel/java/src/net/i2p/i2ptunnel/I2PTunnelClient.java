@@ -56,7 +56,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      *
      * @param destinations peers we target, comma- or space-separated. Since 0.9.9, each dest may be appended with :port
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     *                                  valid config to contact the router
+     * valid config to contact the router
      */
     public I2PTunnelClient(int localPort, String destinations, Logging l,
                            boolean ownDest, EventDispatcher notifyThis,
@@ -117,34 +117,34 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Set the read idle timeout for newly-created connections (in
-     *  milliseconds).  After this time expires without data being reached from
-     *  the I2P network, the connection itself will be closed.
+     * Set the read idle timeout for newly-created connections (in
+     * milliseconds).  After this time expires without data being reached from
+     * the I2P network, the connection itself will be closed.
      *
-     *  Less than or equal to 0 means forever.
-     *  Default -1 (forever) as of 0.9.36 for standard tunnels,
-     *  but extending classes may override.
-     *  Prior to that, default was 5 minutes, but did not work
-     *  due to streaming bugs.
+     * Less than or equal to 0 means forever.
+     * Default -1 (forever) as of 0.9.36 for standard tunnels,
+     * but extending classes may override.
+     * Prior to that, default was 5 minutes, but did not work
+     * due to streaming bugs.
      *
-     *  Applies only to future connections;
-     *  calling this does not affect existing connections.
+     * Applies only to future connections;
+     * calling this does not affect existing connections.
      *
-     *  @param ms in ms
+     * @param ms in ms
      */
     public void setReadTimeout(long ms) { readTimeout = ms; }
 
     /**
-     *  Get the read idle timeout for newly-created connections (in
-     *  milliseconds).
+     * Get the read idle timeout for newly-created connections (in
+     * milliseconds).
      *
-     *  Less than or equal to 0 means forever.
-     *  Default -1 (forever) as of 0.9.36 for standard tunnels,
-     *  but extending classes may override.
-     *  Prior to that, default was 5 minutes, but did not work
-     *  due to streaming bugs.
+     * Less than or equal to 0 means forever.
+     * Default -1 (forever) as of 0.9.36 for standard tunnels,
+     * but extending classes may override.
+     * Prior to that, default was 5 minutes, but did not work
+     * due to streaming bugs.
      *
-     *  @return in ms
+     * @return in ms
      */
     public long getReadTimeout() { return readTimeout; }
 
@@ -210,9 +210,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Update the dests then call super.
+     * Update the dests then call super.
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {

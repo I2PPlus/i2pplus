@@ -61,9 +61,9 @@ public class VMCommSystem extends CommSystemFacade {
     }
 
     /**
-     *  Factory for making X25519 key pairs.
-     *  @return the x d h factory
-     *  @since 0.9.49 so some tests don't NPE
+     * Factory for making X25519 key pairs.
+     * @return the x d h factory
+     * @since 0.9.49 so some tests don't NPE
      */
     @Override
     public X25519KeyFactory getXDHFactory() { return _xdhThread; }
@@ -158,7 +158,6 @@ public class VMCommSystem extends CommSystemFacade {
      * We send messages between comms as bytes so that we strip any router-local
      * info.  For example, a router tags the # attempts to send through a
      * leaseSet, what type of tunnel a tunnelId is bound to, etc.
-     *
      */
     public void receive(byte[] message, Hash fromPeer) {
         _context.jobQueue().addJob(new ReceiveJob(fromPeer, message, _context));

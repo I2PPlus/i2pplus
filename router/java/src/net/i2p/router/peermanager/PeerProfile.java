@@ -28,7 +28,6 @@ import net.i2p.util.SystemVersion;
  * in memory. Beyond that size, we can simply eject the peers (e.g. keeping the best 100,000).
  *
  * TODO most of the methods should be synchronized.
- *
  */
 
 public class PeerProfile {
@@ -127,9 +126,9 @@ public class PeerProfile {
     private static final long MIN_AGE_FOR_COALESCE = 4 * RateConstants.ONE_HOUR;
 
     /**
-     *  Countries with more than about a 2% share of the netdb.
-     *  Only routers in these countries will use a same-country metric.
-     *  Yes this is an arbitrary cutoff.
+     * Countries with more than about a 2% share of the netdb.
+     * Only routers in these countries will use a same-country metric.
+     * Yes this is an arbitrary cutoff.
      */
     private static final Set<String> _bigCountries = new HashSet<>();
 
@@ -139,18 +138,18 @@ public class PeerProfile {
     }
 
     /**
-     *  Caller should call setLastHeardAbout() and setFirstHeardAbout()
+     * Caller should call setLastHeardAbout() and setFirstHeardAbout()
      *
-     *  @param context the router context
-     *  @param peer non-null
+     * @param context the router context
+     * @param peer non-null
      */
     public PeerProfile(RouterContext context, Hash peer) {this(context, peer, false);}
 
     /**
-     *  Caller should call setLastHeardAbout() and setFirstHeardAbout()
+     * Caller should call setLastHeardAbout() and setFirstHeardAbout()
      *
-     *  @param peer non-null
-     *  @param expand whether to eagerly expand (default false; auto-expanded on first use)
+     * @param peer non-null
+     * @param expand whether to eagerly expand (default false; auto-expanded on first use)
      */
     private PeerProfile(RouterContext context, Hash peer, boolean expand) {
         if (peer == null) {throw new NullPointerException();}
@@ -165,9 +164,9 @@ public class PeerProfile {
     }
 
     /**
-     *  What peer is being profiled
+     * What peer is being profiled
      *
-     *  @return the peer, non-null
+     * @return the peer, non-null
      */
     public Hash getPeer() {return _peer;}
 
@@ -355,10 +354,10 @@ public class PeerProfile {
     }
 
     /**
-     *  For now, just a one-byte comparison
+     * For now, just a one-byte comparison
      *
-     *  @return -127 to +128, lower is closer
-     *  @since 0.8.11
+     * @return -127 to +128, lower is closer
+     * @since 0.8.11
      */
     int getXORDistance() {return _distance;}
 
@@ -369,7 +368,7 @@ public class PeerProfile {
      * of already-connected peers.
      *
      * @param period must be one of the periods in the RateStat constructors below
-     *        (5*60*1000 or 60*60*1000)
+     * (5*60*1000 or 60*60*1000)
      * @param now current time
      * @return true if active
      * @since 0.9.58
@@ -380,9 +379,9 @@ public class PeerProfile {
     }
 
     /**
-     *  When did we first hear about this peer?
+     * When did we first hear about this peer?
      *
-     *  @return greater than zero, set to now in constructor
+     * @return greater than zero, set to now in constructor
      */
     public synchronized long getFirstHeardAbout() {return _firstHeardAbout;}
 
@@ -397,9 +396,9 @@ public class PeerProfile {
     }
 
     /**
-     *  When did we last hear about this peer?
+     * When did we last hear about this peer?
      *
-     *  @return 0 if unset
+     * @return 0 if unset
      */
     public synchronized long getLastHeardAbout() {return _lastHeardAbout;}
 
@@ -435,65 +434,65 @@ public class PeerProfile {
     private volatile long _firstHopRttTime;
 
     /**
-     *  How long a recorded first-hop RTT stays usable.
+     * How long a recorded first-hop RTT stays usable.
      *
-     *  <p>Four hours rather than the {@link RateConstants#ONE_HOUR} Active tier
-     *  period that {@link #getLastSendSuccessful()} uses. Link latency is a
-     *  slow-changing property of a path, and it is now refreshed continuously by
-     *  {@code ProfileOrganizer.sampleFirstHopRtts()} on every reorganize, so this
-     *  window no longer decides how current a measurement is -- it only decides
-     *  how long a value outlives the session that produced it. An hour threw away
-     *  measurements of peers we simply had not talked to lately, which is what
-     *  left the profiles page 97% blank.
+     * <p>Four hours rather than the {@link RateConstants#ONE_HOUR} Active tier
+     * period that {@link #getLastSendSuccessful()} uses. Link latency is a
+     * slow-changing property of a path, and it is now refreshed continuously by
+     * {@code ProfileOrganizer.sampleFirstHopRtts()} on every reorganize, so this
+     * window no longer decides how current a measurement is -- it only decides
+     * how long a value outlives the session that produced it. An hour threw away
+     * measurements of peers we simply had not talked to lately, which is what
+     * left the profiles page 97% blank.
      *
-     *  <p>The cost is that a peer whose session has gone away keeps its latency
-     *  standing for up to four hours, and the low-latency bar is absolute, so a
-     *  stale value is trusted as though current. If peer counts or the fast-tier
-     *  mix look wrong after this, this constant is the first thing to lower.
+     * <p>The cost is that a peer whose session has gone away keeps its latency
+     * standing for up to four hours, and the low-latency bar is absolute, so a
+     * stale value is trusted as though current. If peer counts or the fast-tier
+     * mix look wrong after this, this constant is the first thing to lower.
      *
      * @since 0.9.71+
      */
     static final long FIRST_HOP_RTT_VALIDITY_MS = 4 * 60 * 60 * 1000L;
 
     /**
-     *  Absolute ceiling for the low-latency flag, in ms. Fixed, not derived from
-     *  the network, so a rising average cannot promote genuinely slow peers.
+     * Absolute ceiling for the low-latency flag, in ms. Fixed, not derived from
+     * the network, so a rising average cannot promote genuinely slow peers.
      * @since 0.9.71+
      */
     static final long LOW_LATENCY_CEILING_MS = 1000L;
 
     /**
-     *  Absolute floor for the low-latency flag, in ms. This is the binding
-     *  criterion: a peer counts as low latency only if its direct-link RTT is at
-     *  or below this value.
+     * Absolute floor for the low-latency flag, in ms. This is the binding
+     * criterion: a peer counts as low latency only if its direct-link RTT is at
+     * or below this value.
      *
-     *  <p>This replaced a {@code 0.5 * mean} relative test. The relative form was
-     *  unsound for two reasons. First, the population it divided came from a
-     *  decaying, self-selecting sample: an RTT is valid for one hour and
-     *  refreshes only when we happen to send to that peer, so on a ~950 peer fast
-     *  tier only ~37% carried a usable value and the mean tracked whoever we most
-     *  recently happened to contact. A mean drawn from that set shrinks as it
-     *  shrinks, so halving it ratchets the bar tighter over time. Second, the
-     *  arithmetic did not discriminate. Measured against a live fast tier the
-     *  mean was 86ms, so the bar sat at 43ms — below the population's own median
-     *  of 60ms, which demoted two thirds of every measured peer rather than a
-     *  tail.
+     * <p>This replaced a {@code 0.5 * mean} relative test. The relative form was
+     * unsound for two reasons. First, the population it divided came from a
+     * decaying, self-selecting sample: an RTT is valid for one hour and
+     * refreshes only when we happen to send to that peer, so on a ~950 peer fast
+     * tier only ~37% carried a usable value and the mean tracked whoever we most
+     * recently happened to contact. A mean drawn from that set shrinks as it
+     * shrinks, so halving it ratchets the bar tighter over time. Second, the
+     * arithmetic did not discriminate. Measured against a live fast tier the
+     * mean was 86ms, so the bar sat at 43ms — below the population's own median
+     * of 60ms, which demoted two thirds of every measured peer rather than a
+     * tail.
      *
-     *  <p>A fixed 100ms admits 69% and evicts 31% on that same population, which
-     *  is the discrimination the flag was meant to provide. It also does not
-     *  move as the sample decays, which was the defect that made the relative
-     *  form unsafe to leave in place.
+     * <p>A fixed 100ms admits 69% and evicts 31% on that same population, which
+     * is the discrimination the flag was meant to provide. It also does not
+     * move as the sample decays, which was the defect that made the relative
+     * form unsafe to leave in place.
      *
      * @since 0.9.71+
      */
     static final long LOW_LATENCY_FLOOR_MS = 100L;
 
     /**
-     *  Record the transport's measured round trip time to this peer.
+     * Record the transport's measured round trip time to this peer.
      *
-     *  <p>This is the direct link cost, which is what first-hop selection needs.
-     *  A value of 0 means the session has not measured yet and is stored as
-     *  unknown rather than as zero latency.
+     * <p>This is the direct link cost, which is what first-hop selection needs.
+     * A value of 0 means the session has not measured yet and is stored as
+     * unknown rather than as zero latency.
      *
      * @param rtt   measured round trip time in ms, 0 if unmeasured
      * @param when  timestamp of the measurement
@@ -506,12 +505,12 @@ public class PeerProfile {
     }
 
     /**
-     *  The direct-link RTT to this peer, or -1 when it is unknown or stale.
+     * The direct-link RTT to this peer, or -1 when it is unknown or stale.
      *
-     *  <p>Stale means older than the Active tier window. That window is the one
-     *  already applied to {@link #getLastSendSuccessful()}, so a first-hop RTT
-     *  is treated with the same freshness rules as the rest of the profile's
-     *  active-tier evidence rather than inventing a second decay scheme.
+     * <p>Stale means older than the Active tier window. That window is the one
+     * already applied to {@link #getLastSendSuccessful()}, so a first-hop RTT
+     * is treated with the same freshness rules as the rest of the profile's
+     * active-tier evidence rather than inventing a second decay scheme.
      *
      * @param now current time in ms
      * @return the RTT in ms, or -1 if never measured or older than the window
@@ -526,25 +525,25 @@ public class PeerProfile {
     }
 
     /**
-     *  When the direct-link RTT was last refreshed.
+     * When the direct-link RTT was last refreshed.
      * @return timestamp in ms, or 0 if never measured
      * @since 0.9.71+
      */
     public long getFirstHopRttTime() {return _firstHopRttTime;}
 
     /**
-     *  Whether this peer counts as low latency, judged on its direct link.
+     * Whether this peer counts as low latency, judged on its direct link.
      *
-     *  <p>Two drivers, both required, because either alone is misleading:
-     *  <ul>
-     *   <li>an absolute ceiling, so a peer is never low latency merely because
-     *       the whole network has slowed and every average rose with it;</li>
-     *   <li>the population boundary, so on a fast network a peer at the
-     *       absolute ceiling is still not low if it sits at the typical value.</li>
-     *  </ul>
+     * <p>Two drivers, both required, because either alone is misleading:
+     * <ul>
+     * <li>an absolute ceiling, so a peer is never low latency merely because
+     * the whole network has slowed and every average rose with it;</li>
+     * <li>the population boundary, so on a fast network a peer at the
+     * absolute ceiling is still not low if it sits at the typical value.</li>
+     * </ul>
      *
-     *  <p>Only the direct link is consulted. Latency to this peer has nothing to
-     *  do with how long a build or test involving other peers took.
+     * <p>Only the direct link is consulted. Latency to this peer has nothing to
+     * do with how long a build or test involving other peers took.
      *
      * @param now        current time in ms
      * @param ceilingMs  absolute low-latency ceiling in ms
@@ -847,13 +846,13 @@ public class PeerProfile {
      */
     public float getIntegrationValue() {return _integrationValue;}
     /**
-     *  EWMA average of the tunnel test response time.
+     * EWMA average of the tunnel test response time.
      *
-     *  <p>Returns 0 if the data is older than 1 hour, treating the peer as
-     *  untested. This ensures stale peers are re-tested rather than selected
-     *  for tunnel builds based on outdated latency data.</p>
+     * <p>Returns 0 if the data is older than 1 hour, treating the peer as
+     * untested. This ensures stale peers are re-tested rather than selected
+     * for tunnel builds based on outdated latency data.</p>
      *
-     *  @return EWMA average in ms, or 0 if stale (&gt;1 hour since last update)
+     * @return EWMA average in ms, or 0 if stale (&gt;1 hour since last update)
      */
     public float getTunnelTestTimeAverage() {
         if (_tunnelTestResponseTimeAvg <= 0 || _tunnelTestTimeAvgLastUpdate <= 0) return 0;
@@ -994,7 +993,7 @@ public class PeerProfile {
      * Record data pushed through this peer.
      *
      * @param size the number of bytes pushed; long because the running total is
-     *        a long and a per-period sum can exceed Integer.MAX_VALUE
+     * a long and a per-period sum can exceed Integer.MAX_VALUE
      */
     void dataPushed(long size) {_peakThroughputCurrentTotal.addAndGet(size);}
 
@@ -1046,7 +1045,7 @@ public class PeerProfile {
      * The tunnel pushed that much data in a 1 minute period.
      *
      * @param size the number of bytes in that minute, normalized; comparisons
-     *        against the float ring widen, so the stored KBps average is unaffected
+     * against the float ring widen, so the stored KBps average is unaffected
      */
     void dataPushed1m(long size) {
         _lastThroughputUpdate = _context.clock().now();
@@ -1085,9 +1084,9 @@ public class PeerProfile {
      * This is the speed value
      *
      * @return the average of the three fastest one-minute data transfers, on a per-tunnel basis,
-     *         through this peer. Ever. Peaks are never decayed; only a higher
-     *         measurement can raise them, and a lower one is ignored. Freshness
-     *         is judged by the selection gates, not by eroding these values.
+     * through this peer. Ever. Peaks are never decayed; only a higher
+     * measurement can raise them, and a lower one is ignored. Freshness
+     * is judged by the selection gates, not by eroding these values.
      */
     public float getPeakTunnel1mThroughputKBps() {
         float rv = 0;
@@ -1144,7 +1143,6 @@ public class PeerProfile {
      * stats on them again, call this to set up the info we dropped during shrinkProfile.
      * This will not however overwrite any existing data, so it can be safely called
      * repeatedly
-     *
      */
     public synchronized void expandProfile() {
         // Don't expand profiles that have never accepted or rejected one of our
@@ -1177,9 +1175,9 @@ public class PeerProfile {
     }
 
     /**
-     *  Shrink the profile by dropping the RateStat objects.
-     *  They will be re-created lazily by expandProfile()
-     *  when the profile is used again.
+     * Shrink the profile by dropping the RateStat objects.
+     * They will be re-created lazily by expandProfile()
+     * when the profile is used again.
      */
     public synchronized void shrinkProfile() {
         if (_tunnelCreateResponseTime != null) {
@@ -1191,7 +1189,7 @@ public class PeerProfile {
     }
 
     /**
-     *  Shrink the DB-specific part of the profile.
+     * Shrink the DB-specific part of the profile.
      */
     public synchronized void shrinkDBProfile() {
         if (_dbResponseTime != null) {
@@ -1207,14 +1205,14 @@ public class PeerProfile {
     }
 
     /**
-     *  Coalesce throughput peaks: insert new measurement into the sorted
-     *  peak arrays.  Existing peaks are never modified — they represent
-     *  demonstrated capability, not recency.  Freshness is handled by
-     *  selection gates (isLowLatency, getIsActive, hasValidRouterInfo)
-     *  rather than by eroding the data.
+     * Coalesce throughput peaks: insert new measurement into the sorted
+     * peak arrays.  Existing peaks are never modified — they represent
+     * demonstrated capability, not recency.  Freshness is handled by
+     * selection gates (isLowLatency, getIsActive, hasValidRouterInfo)
+     * rather than by eroding the data.
      *
-     *  At most one measurement per minute is folded in, so the running total is
-     *  drained on a one-minute cadence.
+     * At most one measurement per minute is folded in, so the running total is
+     * drained on a one-minute cadence.
      */
     private void coalesceThroughput() {
         long now = System.currentTimeMillis();
@@ -1248,7 +1246,7 @@ public class PeerProfile {
     }
 
     /**
-     *  Coalesce all stats and update values
+     * Coalesce all stats and update values
      */
     public synchronized void coalesceStats() {
         coalesceOnly();
@@ -1313,8 +1311,8 @@ public class PeerProfile {
      * PeerProfile:     3 RateStats (was 5; 2 dead removed), 3-5 Rates each - ~15 rates total
      * DBHistory:       2 RateStats, 2 rates each -            4 rates total
      * TunnelHistory:   2 RateStats, 2 rates each -            4 rates total
-     *                ---                                    ---------
-     *                 7                                      23 rates total
+     * ---                                    ---------
+     * 7                                      23 rates total
      *
      * shrinkProfile() / shrinkDBProfile() drop the PeerProfile
      * and DBProfile RateStats; TunnelHistory RateStats are final

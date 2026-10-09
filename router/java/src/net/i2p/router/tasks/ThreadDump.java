@@ -15,9 +15,9 @@ import net.i2p.util.SystemVersion;
  *
  * <strong>Platform Requirements:</strong>
  * <ul>
- *   <li>Requires Java Service Wrapper to be installed and running</li>
- *   <li>Only works on non-Windows platforms (Linux, macOS, Unix)</li>
- *   <li>Does not function on Windows due to wrapper limitations</li>
+ * <li>Requires Java Service Wrapper to be installed and running</li>
+ * <li>Only works on non-Windows platforms (Linux, macOS, Unix)</li>
+ * <li>Does not function on Windows due to wrapper limitations</li>
  * </ul>
  *
  * The dump operation is asynchronous - this method signals the wrapper
@@ -27,7 +27,7 @@ import net.i2p.util.SystemVersion;
  * This utility is typically called by the watchdog when router appears
  * to be unresponsive, but can also be invoked manually for debugging.
  *
- *  @since 0.9.3 moved from RouterWatchdog
+ * @since 0.9.3 moved from RouterWatchdog
  */
 abstract class ThreadDump {
 
@@ -47,13 +47,13 @@ abstract class ThreadDump {
      *
      * @param context the I2P application context for accessing directories
      * @param secondsToWait maximum seconds to wait for the signal to complete;
-     *                     if &lt;= 0, don't wait for completion
- *
+     * if &lt;= 0, don't wait for completion
+     *
      * @return true if successful, false in the following cases:
-     *         - Windows platform or no wrapper available
-     *         - secondsToWait &gt; 0 and operation timed out
-     *         - signal failed for other reasons
- *
+     * - Windows platform or no wrapper available
+     * - secondsToWait &gt; 0 and operation timed out
+     * - signal failed for other reasons
+     *
      * @since 0.9.3 moved from RouterWatchdog
      */
     public static boolean dump(I2PAppContext context, int secondsToWait) {

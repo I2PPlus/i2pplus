@@ -66,14 +66,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private static final String MIN_RELAY_VERSION = "0.9.57"; // SSU2 fixes (2.1.0)
 
     /**
-     *  Start a new handshake with the given incoming packet,
-     *  which must be a Session Request or Token Request.
+     * Start a new handshake with the given incoming packet,
+     * which must be a Session Request or Token Request.
      *
-     *  Caller must then check getState() and build a
-     *  Retry or Session Created in response.
+     * Caller must then check getState() and build a
+     * Retry or Session Created in response.
      *
-     *  @param packet with all header encryption removed,
-     *                either a SessionRequest OR a TokenRequest.
+     * @param packet with all header encryption removed,
+     * either a SessionRequest OR a TokenRequest.
      */
     public InboundEstablishState2(RouterContext ctx, UDPTransport transport,
                                   UDPPacket packet) throws GeneralSecurityException {
@@ -280,11 +280,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *   For most errors here we throw a RIException with a reason code,
-     *   which is caught in processPayload() to create a PeerStateDestroyed
-     *   and send a termination with that reason.
+     * For most errors here we throw a RIException with a reason code,
+     * which is caught in processPayload() to create a PeerStateDestroyed
+     * and send a termination with that reason.
      *
-     *   Plain DataFormatExceptions indicate you may not respond in-session.
+     * Plain DataFormatExceptions indicate you may not respond in-session.
      */
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         if (isHandshake) {throw new DataFormatException("RouterInfo in Session Request");}
@@ -370,11 +370,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private static final long RI_SKEW_PAST_WINDOW = 60*60*1000L;
 
     /**
-     *  Result of {@link #selectSessionAddress(List, boolean, byte[])}: the chosen
-     *  RouterInfo address and, when the peer advertises a different IP than the
-     *  sender's source address, an explanatory mismatch message.
+     * Result of {@link #selectSessionAddress(List, boolean, byte[])}: the chosen
+     * RouterInfo address and, when the peer advertises a different IP than the
+     * sender's source address, an explanatory mismatch message.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final class AddressSelection {
         /** the selected address, or null when no address qualified */
@@ -389,25 +389,25 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  Choose the RouterInfo address this session negotiates with, given the
-     *  sender's IP family, so the caller can determine the MTU and keys. The
-     *  rules mirror the SSU2 handshake:
-     *  <ul>
-     *  <li>with several addresses, a pure SSU 1 address (no "s" option) is skipped</li>
-     *  <li>an address is skipped when its host is not compatible with the sender's
-     *      IP family, unless the capacity bit marks it usable</li>
-     *  <li>an address is skipped when it advertises the sender's own IP (yggdrasil
-     *      addresses and a matching IPv6 source prefix cannot be ourselves)</li>
-     *  <li>an address that advertises a different IP than the sender's source
-     *      address is selected but flagged, so the caller can ban it after the
-     *      signature is verified</li>
-     *  </ul>
+     * Choose the RouterInfo address this session negotiates with, given the
+     * sender's IP family, so the caller can determine the MTU and keys. The
+     * rules mirror the SSU2 handshake:
+     * <ul>
+     * <li>with several addresses, a pure SSU 1 address (no "s" option) is skipped</li>
+     * <li>an address is skipped when its host is not compatible with the sender's
+     * IP family, unless the capacity bit marks it usable</li>
+     * <li>an address is skipped when it advertises the sender's own IP (yggdrasil
+     * addresses and a matching IPv6 source prefix cannot be ourselves)</li>
+     * <li>an address that advertises a different IP than the sender's source
+     * address is selected but flagged, so the caller can ban it after the
+     * signature is verified</li>
+     * </ul>
      *
-     *  @param addrs the addresses from the peer's RouterInfo, in preference order
-     *  @param isIPv6 true if the sender connected over IPv6
-     *  @param aliceIP the sender's source IP bytes (4 for IPv4, 16 for IPv6)
-     *  @return the selection; <code>ra</code> is null when no address qualified
-     *  @since 0.9.71+
+     * @param addrs the addresses from the peer's RouterInfo, in preference order
+     * @param isIPv6 true if the sender connected over IPv6
+     * @param aliceIP the sender's source IP bytes (4 for IPv4, 16 for IPv6)
+     * @return the selection; <code>ra</code> is null when no address qualified
+     * @since 0.9.71+
      */
     static AddressSelection selectSessionAddress(List<RouterAddress> addrs, boolean isIPv6, byte[] aliceIP) {
         for (RouterAddress addr : addrs) {
@@ -439,17 +439,17 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  Resolve the session MTU from the peer's "mtu" option. Pure decision logic:
-     *  a missing or unparsable value falls back to the per-style/family default,
-     *  the 1.9.0 workaround maps 1276 to MIN_MTU for SSU 1, and any other value
-     *  is clamped into the legal range for the negotiated style and IP family. A
-     *  declared MTU below MIN_MTU (other than the workaround) is rejected.
+     * Resolve the session MTU from the peer's "mtu" option. Pure decision logic:
+     * a missing or unparsable value falls back to the per-style/family default,
+     * the 1.9.0 workaround maps 1276 to MIN_MTU for SSU 1, and any other value
+     * is clamped into the legal range for the negotiated style and IP family. A
+     * declared MTU below MIN_MTU (other than the workaround) is rejected.
      *
-     *  @param ra the negotiated SSU2/SSU address
-     *  @param isIPv6 true for an IPv6 session
-     *  @return the effective MTU
-     *  @throws RIException with REASON_OPTIONS if a declared MTU is below MIN_MTU
-     *  @since 0.9.71+
+     * @param ra the negotiated SSU2/SSU address
+     * @param isIPv6 true for an IPv6 session
+     * @return the effective MTU
+     * @throws RIException with REASON_OPTIONS if a declared MTU is below MIN_MTU
+     * @since 0.9.71+
      */
     static int parseMTU(RouterAddress ra, boolean isIPv6) throws RIException {
         String smtu = ra.getOption(UDPAddress.PROP_MTU);
@@ -470,15 +470,15 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  Classify a RouterInfo store failure - generally an expired or
-     *  future-dated RouterInfo that the netDb rejected - into a termination
-     *  reason.
+     * Classify a RouterInfo store failure - generally an expired or
+     * future-dated RouterInfo that the netDb rejected - into a termination
+     * reason.
      *
-     *  @param now current clock time
-     *  @param published the RI's publication date
-     *  @return REASON_SKEW when the publication date is outside the accepted skew
-     *          window, otherwise REASON_MSG3
-     *  @since 0.9.71+
+     * @param now current clock time
+     * @param published the RI's publication date
+     * @return REASON_SKEW when the publication date is outside the accepted skew
+     * window, otherwise REASON_MSG3
+     * @since 0.9.71+
      */
     static int storeFailureReason(long now, long published) {
         if (published > now + RI_SKEW_FUTURE_WINDOW || published < now - RI_SKEW_PAST_WINDOW) {return REASON_SKEW;}
@@ -486,18 +486,18 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  Decode and verify the SSU2 IKey/S options of the negotiated RouterInfo
-     *  address and verify that the peer's S key matches the X25519 public key
-     *  already derived from the handshake. Throws before any session state is
-     *  modified, so a malformed or dishonest RouterInfo cannot corrupt the
-     *  established keys.
+     * Decode and verify the SSU2 IKey/S options of the negotiated RouterInfo
+     * address and verify that the peer's S key matches the X25519 public key
+     * already derived from the handshake. Throws before any session state is
+     * modified, so a malformed or dishonest RouterInfo cannot corrupt the
+     * established keys.
      *
-     *  @param ra the negotiated address; must carry the "i" and "s" options
-     *  @param publicKey the X25519 public key from {@code _handshakeState}
-     *  @return the verified IKey, to install as the send header key
-     *  @throws DataFormatException with a type-specific message on any bad key or
-     *          an S/public-key mismatch
-     *  @since 0.9.71+
+     * @param ra the negotiated address; must carry the "i" and "s" options
+     * @param publicKey the X25519 public key from {@code _handshakeState}
+     * @return the verified IKey, to install as the send header key
+     * @throws DataFormatException with a type-specific message on any bad key or
+     * an S/public-key mismatch
+     * @since 0.9.71+
      */
     static byte[] parseSessionKeys(RouterAddress ra, byte[] publicKey) throws DataFormatException {
         String siv = ra.getOption("i");
@@ -524,25 +524,25 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     static final int INTRO_OPPORTUNISTIC = 3;
 
     /**
-     *  Decide whether a deferred relay-tag request survives once the peer's
-     *  RouterInfo is known. Pure decision logic so the branch table is testable:
-     *  <ul>
-     *  <li>we cannot relay while our sent port is a temporary one or the transport
-     *      does not support introduction on the peer's IP family</li>
-     *  <li>we do not relay to routers running older than {@link #MIN_RELAY_VERSION}</li>
-     *  <li>when the peer already advertises itself reachable we only relay on a
-     *      1-in-4 draw - the peer is likely starting up and simply unaware of its
-     *      reachability</li>
-     *  </ul>
+     * Decide whether a deferred relay-tag request survives once the peer's
+     * RouterInfo is known. Pure decision logic so the branch table is testable:
+     * <ul>
+     * <li>we cannot relay while our sent port is a temporary one or the transport
+     * does not support introduction on the peer's IP family</li>
+     * <li>we do not relay to routers running older than {@link #MIN_RELAY_VERSION}</li>
+     * <li>when the peer already advertises itself reachable we only relay on a
+     * 1-in-4 draw - the peer is likely starting up and simply unaware of its
+     * reachability</li>
+     * </ul>
      *
-     *  @param version the peer's RouterInfo version string
-     *  @param caps the peer's RouterInfo capabilities, or null
-     *  @param sentPortOk true if our sent port is a real, stable port (at least 1024)
-     *  @param canIntroduce true if the transport can introduce on the peer's IP family
-     *  @param randomKeep the pre-rolled 1-in-4 opportunistic keep draw
-     *  @return {@link #INTRO_KEEP}, {@link #INTRO_BLOCKED}, {@link #INTRO_VERSION}
-     *          or {@link #INTRO_OPPORTUNISTIC}
-     *  @since 0.9.71+
+     * @param version the peer's RouterInfo version string
+     * @param caps the peer's RouterInfo capabilities, or null
+     * @param sentPortOk true if our sent port is a real, stable port (at least 1024)
+     * @param canIntroduce true if the transport can introduce on the peer's IP family
+     * @param randomKeep the pre-rolled 1-in-4 opportunistic keep draw
+     * @return {@link #INTRO_KEEP}, {@link #INTRO_BLOCKED}, {@link #INTRO_VERSION}
+     * or {@link #INTRO_OPPORTUNISTIC}
+     * @since 0.9.71+
      */
     static int decideIntroduction(String version, String caps, boolean sentPortOk, boolean canIntroduce, boolean randomKeep) {
         if (!sentPortOk || !canIntroduce) {return INTRO_BLOCKED;}
@@ -804,8 +804,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     // SSU 1 overrides
 
     /**
-     *  Overridden to destroy the handshake state
-     *  @since 0.9.56
+     * Overridden to destroy the handshake state
+     * @since 0.9.56
      */
     @Override
     public synchronized void fail() {
@@ -840,7 +840,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     public long getToken() {return _token;}
     /**
-     *  @return may be null
+     * @return may be null
      */
     public EstablishmentManager.Token getNextToken() {
         if (_aliceIP.length == 4 && _transport.isSymNatted()) {return null;}
@@ -934,7 +934,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  All exceptions thrown from here will be fatal. fail() will be called before throwing.
+     * All exceptions thrown from here will be fatal. fail() will be called before throwing.
      */
     public synchronized void receiveSessionOrTokenRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
         try {
@@ -1067,7 +1067,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * Exceptions thrown from here are fatal.
      *
      * @return the new PeerState2 if are done, may also be retrieved from getPeerState(),
-     *         or null if more fragments to go
+     * or null if more fragments to go
      */
     public synchronized PeerState2 receiveSessionConfirmed(UDPPacket packet) {
         try {
@@ -1097,7 +1097,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  @since 0.9.56
+     * @since 0.9.56
      */
     private PeerState2 locked_receiveSessionConfirmed(UDPPacket packet) throws GeneralSecurityException {
         if (_currentState != InboundState.IB_STATE_CREATED_SENT &&
@@ -1216,9 +1216,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  Creates the PeerState and stores in _pstate.
-     *  Called from gotRI() so that we can pass any I2NP messages
-     *  or fragments immediately to the PeerState.
+     * Creates the PeerState and stores in _pstate.
+     * Called from gotRI() so that we can pass any I2NP messages
+     * or fragments immediately to the PeerState.
      */
     private void createPeerState() {
         // split()
@@ -1271,10 +1271,10 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  Creates a PeerStateDestroyed after msg 3 failure,
-     *  so we can send a termination and deal with subsequent in-session messages.
+     * Creates a PeerStateDestroyed after msg 3 failure,
+     * so we can send a termination and deal with subsequent in-session messages.
      *
-     *  @since 0.9.57
+     * @since 0.9.57
      */
     private PeerStateDestroyed createPeerStateDestroyed(int reason) {
         byte[] ckd = _handshakeState.getChainingKey();
@@ -1439,8 +1439,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     *  For throwing out of gotRI()
-     *  @since 0.9.57
+     * For throwing out of gotRI()
+     * @since 0.9.57
      */
     static class RIException extends DataFormatException {
         private final int rsn;

@@ -38,7 +38,6 @@ import net.i2p.util.KeyRing;
 /**
  * Extended application context that provides centralized resource coordination for router instances.
  * Manages subsystem access, configuration, and resource isolation to enable multiple router instances within the same JVM without conflicts.
- *
  */
 public class RouterContext extends I2PAppContext {
     private final Router _router;
@@ -79,31 +78,31 @@ public class RouterContext extends I2PAppContext {
     private static final List<RouterContext> _contexts = new CopyOnWriteArrayList<>();
 
     /**
-     *  Caller MUST call initAll() after instantiation.
+     * Caller MUST call initAll() after instantiation.
      *
-     *  @param router may be null for unit tests if you are careful
+     * @param router may be null for unit tests if you are careful
      */
     public RouterContext(Router router) { this(router, null); }
 
     /**
-     *  Caller MUST call initAll() after instantiation.
+     * Caller MUST call initAll() after instantiation.
      *
-     *  @param router may be null for unit tests if you are careful
+     * @param router may be null for unit tests if you are careful
      */
     public RouterContext(Router router, Properties envProps) {
         this(router, envProps, true);
     }
 
     /**
-     *  Caller MUST call initAll() after instantiation.
-     *  NOT a public API, for use by Router only, NOT for external use.
+     * Caller MUST call initAll() after instantiation.
+     * NOT a public API, for use by Router only, NOT for external use.
      *
-     *  @param router may be null for unit tests if you are careful
-     *  @param doInit should this context be used as the global one (if necessary)?
-     *                Will only apply if there is no global context now.
-     *                If false, caller should call setGlobalContext() afterwards.
+     * @param router may be null for unit tests if you are careful
+     * @param doInit should this context be used as the global one (if necessary)?
+     * Will only apply if there is no global context now.
+     * If false, caller should call setGlobalContext() afterwards.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     RouterContext(Router router, Properties envProps, boolean doInit) {
         super(doInit, filterProps(envProps));
@@ -149,7 +148,6 @@ public class RouterContext extends I2PAppContext {
      * have each I2PAppContext creating their own SNTP queries all the time)
      *
      * Set more PRNG buffers, as the default is now small for the I2PAppContext.
-     *
      */
 
     private static final Properties filterProps(Properties envProps) {
@@ -167,7 +165,6 @@ public class RouterContext extends I2PAppContext {
      * Only for use by the router. Others use Router.saveConfig()
      *
      * @param propName The name of the property.
-     * @since 0.9
      */
     void removeProperty(String propName) {
         _overrideProps.remove(propName);
@@ -183,16 +180,16 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     *  The following properties may be used to replace various parts
-     *  of the context with dummy implementations for testing, by setting
-     *  the property to "true":
-     *<pre>
+     * The following properties may be used to replace various parts
+     * of the context with dummy implementations for testing, by setting
+     * the property to "true":
+     * <pre>
      *  i2p.dummyClientFacade
      *  i2p.dummyNetDb
      *  i2p.dummyPeerManager
      *  i2p.dummyTunnelManager
      *  i2p.vmCommSystem (transport)
-     *</pre>
+     * </pre>
      */
     public synchronized void initAll() {
         if (_initialized)
@@ -285,10 +282,10 @@ public class RouterContext extends I2PAppContext {
     public Router router() { return _router; }
 
     /**
-     *  Convenience method for getting the router hash.
-     *  Equivalent to context.router().getRouterInfo().getIdentity().getHash()
+     * Convenience method for getting the router hash.
+     * Equivalent to context.router().getRouterInfo().getIdentity().getHash()
      *
-     *  @return may be null if called very early
+     * @return may be null if called very early
      */
     public Hash routerHash() {
         if (_router == null) {return null;}
@@ -606,10 +603,10 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     *  Use this instead of context instanceof RouterContext
+     * Use this instead of context instanceof RouterContext
      *
-     *  @return true
-     *  @since 0.7.9
+     * @return true
+     * @since 0.7.9
      */
     @Override
     public boolean isRouterContext() {
@@ -617,10 +614,10 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     *  Use this to connect to the router in the same JVM.
+     * Use this to connect to the router in the same JVM.
      *
-     *  @return the client manager
-     *  @since 0.8.3
+     * @return the client manager
+     * @since 0.8.3
      */
     @Override
     public InternalClientManager internalClientManager() {
@@ -628,10 +625,10 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     *  The RouterAppManager.
+     * The RouterAppManager.
      *
-     *  @return the manager
-     *  @since 0.9.4
+     * @return the manager
+     * @since 0.9.4
      */
     @Override
     public ClientAppManager clientAppManager() {
@@ -639,22 +636,22 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     *  The RouterAppManager.
-     *  For convenience, same as clientAppManager(), no cast required
+     * The RouterAppManager.
+     * For convenience, same as clientAppManager(), no cast required
      *
-     *  @return the manager
-     *  @since 0.9.11
+     * @return the manager
+     * @since 0.9.11
      */
     public RouterAppManager routerAppManager() {
         return _appManager;
     }
 
     /**
-     *  As of 0.9.15, this returns a dummy SessionKeyManager in I2PAppContext.
-     *  Overridden in RouterContext to return the full TransientSessionKeyManager
-     *  or MuxedSKM, depending on configured router encryption type.
+     * As of 0.9.15, this returns a dummy SessionKeyManager in I2PAppContext.
+     * Overridden in RouterContext to return the full TransientSessionKeyManager
+     * or MuxedSKM, depending on configured router encryption type.
      *
-     *  @since 0.9.15
+     * @since 0.9.15
      */
     @Override
     protected void initializeSessionKeyManager() {
@@ -734,18 +731,18 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     *  How long this router was down before it started, or 0 if unknown.
+     * How long this router was down before it started, or 0 if unknown.
      *
-     *  This may be used for a determination of whether to regenerate keys, for example.
-     *  We use the timestamp of the previous ping file left behind on crash,
-     *  as set by isOnlyRouterRunning(), if present.
-     *  Otherwise, the last STOPPED entry in the event log.
+     * This may be used for a determination of whether to regenerate keys, for example.
+     * We use the timestamp of the previous ping file left behind on crash,
+     * as set by isOnlyRouterRunning(), if present.
+     * Otherwise, the last STOPPED entry in the event log.
      *
-     *  May take a while to run the first time, if it has to go through the event log.
-     *  Once called, the result is cached.
+     * May take a while to run the first time, if it has to go through the event log.
+     * Once called, the result is cached.
      *
-     *  @return downtime in ms or 0 if unknown
-     *  @since 0.9.47
+     * @return downtime in ms or 0 if unknown
+     * @since 0.9.47
      */
     public long getEstimatedDowntime() {
         if (_router == null)

@@ -14,11 +14,9 @@ import org.klomp.snark.bencode.BDecoder;
 import org.klomp.snark.bencode.BEValue;
 
 /**
- *  Tests for MetaInfo, the torrent-metadata parser: field extraction,
- *  piece-length computation, piece-hash verification, and a full
- *  bencode round-trip preserving the info hash.
- *
- *  @since 0.1.0
+ * Tests for MetaInfo, the torrent-metadata parser: field extraction,
+ * piece-length computation, piece-hash verification, and a full
+ * bencode round-trip preserving the info hash.
  */
 public class MetaInfoTest {
 

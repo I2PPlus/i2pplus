@@ -6,12 +6,10 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 /**
  * Keep track of a log entry, unformatted.
- *
  */
 class LogRecord {
     private final long _date;
@@ -101,10 +99,10 @@ class LogRecord {
     private static final int MATCH_LEN = 40;
 
     /**
-     *  Matches source class, first part of message string, and throwable class only.
-     *  Used only by LogWriter to eliminate dups.
+     * Matches source class, first part of message string, and throwable class only.
+     * Used only by LogWriter to eliminate dups.
      *
-     *  @since 0.9.3
+     * @since 0.9.3
      */
     @Override
     public boolean equals(Object o) {

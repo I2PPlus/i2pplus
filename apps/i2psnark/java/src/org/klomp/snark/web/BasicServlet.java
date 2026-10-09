@@ -62,12 +62,10 @@ import org.klomp.snark.URIUtil;
  *
  * <pre>
  *
- *  resourceBase  Set to replace the context resource base
+ * resourceBase  Set to replace the context resource base
  *  warBase      Path allowed for resource in war
  *
  * </pre>
- *
- * @since Jetty 7
  */
 class BasicServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;

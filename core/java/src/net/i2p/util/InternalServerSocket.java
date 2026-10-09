@@ -15,14 +15,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- *  A simple in-JVM ServerSocket using Piped Streams.
- *  We use port numbers just like regular sockets.
- *  Can only be connected by InternalSocket.
+ * A simple in-JVM ServerSocket using Piped Streams.
+ * We use port numbers just like regular sockets.
+ * Can only be connected by InternalSocket.
  *
- *  Warning - this uses Piped Streams, which don't like multiple writers from threads
- *  that may vanish. If you do use multiple writers,
- *  you may get intermittent 'write end dead' or 'pipe broken' IOExceptions on the reader side.
- *  See http://techtavern.wordpress.com/2008/07/16/whats-this-ioexception-write-end-dead/
+ * Warning - this uses Piped Streams, which don't like multiple writers from threads
+ * that may vanish. If you do use multiple writers,
+ * you may get intermittent 'write end dead' or 'pipe broken' IOExceptions on the reader side.
+ * See http://techtavern.wordpress.com/2008/07/16/whats-this-ioexception-write-end-dead/
  *
  * @since 0.7.9
  */
@@ -37,7 +37,7 @@ public class InternalServerSocket extends ServerSocket {
     // private static Log _log = I2PAppContext.getGlobalContext().logManager().getLog(InternalServerSocket.class);
 
     /**
-     *  @param port &gt; 0
+     * @param port &gt; 0
      */
     public InternalServerSocket(int port) throws IOException {
         if (port <= 0) throw new IOException("Bad port: " + port);
@@ -84,9 +84,9 @@ public class InternalServerSocket extends ServerSocket {
     }
 
     /**
-     *  This is how the client connects.
+     * This is how the client connects.
      *
-     *  @param port &gt; 0
+     * @param port &gt; 0
      */
     static void internalConnect(int port, InternalSocket clientSock) throws IOException {
         InternalServerSocket iss = _sockets.get(Integer.valueOf(port));
@@ -154,9 +154,9 @@ public class InternalServerSocket extends ServerSocket {
     }
 
     /**
-     *  For debugging only
+     * For debugging only
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public static void renderStatusHTML(Writer out) throws IOException {
         out.write("<h2 id=debug_sockets>Internal Server Sockets</h2>\n<table id=sockets>\n");

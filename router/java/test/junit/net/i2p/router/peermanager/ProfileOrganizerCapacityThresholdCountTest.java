@@ -8,18 +8,18 @@ import java.util.Random;
 import org.junit.Test;
 
 /**
- *  Pins how many capacities count as strictly above the mean, the count that
- *  decides whether the capacity threshold becomes the mean itself or a lower
- *  order statistic.
+ * Pins how many capacities count as strictly above the mean, the count that
+ * decides whether the capacity threshold becomes the mean itself or a lower
+ * order statistic.
  *
- *  <p>The comparison is strict, and that matters whenever capacities cluster:
- *  the mean is then a repeated value, and any index derived from
- *  {@code Arrays.binarySearch} lands inside the run of entries that merely
- *  equal it, overcounting them as "exceeding". These are the values that
- *  overcounting would change.
+ * <p>The comparison is strict, and that matters whenever capacities cluster:
+ * the mean is then a repeated value, and any index derived from
+ * {@code Arrays.binarySearch} lands inside the run of entries that merely
+ * equal it, overcounting them as "exceeding". These are the values that
+ * overcounting would change.
  *
- *  @see ProfileOrganizerSpeedRankDecisionTest
- *  @since 0.9.71+
+ * @see ProfileOrganizerSpeedRankDecisionTest
+ * @since 0.9.71+
  */
 public class ProfileOrganizerCapacityThresholdCountTest {
 
@@ -66,9 +66,9 @@ public class ProfileOrganizerCapacityThresholdCountTest {
     }
 
     /**
-     *  Sweep against the strict-greater count, over arrays drawn from a
-     *  four-value alphabet so the mean repeats constantly and the comparison is
-     *  not quietly the trivial "no duplicates" case.
+     * Sweep against the strict-greater count, over arrays drawn from a
+     * four-value alphabet so the mean repeats constantly and the comparison is
+     * not quietly the trivial "no duplicates" case.
      */
     @Test
     public void matchesStrictGreaterCountOnDuplicateHeavyArrays() {

@@ -183,7 +183,7 @@ public class TunerMaxSlowStartWindowTest {
     // ----- exponential climb convergence -----
 
     /** From the factory default a clean path reaches MAX in ~7 cycles instead
-     *  of 48 linear ones — four cycles are already far past four linear steps. */
+     * of 48 linear ones — four cycles are already far past four linear steps. */
     @Test
     public void cleanClimbReachesMaxInSevenCycles() {
         int v = DEFAULT;

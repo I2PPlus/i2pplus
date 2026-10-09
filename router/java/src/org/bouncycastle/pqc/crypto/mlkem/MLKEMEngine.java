@@ -228,8 +228,8 @@ class MLKEMEngine
     }
 
     /** @param d seed
-     *  @param z seed
-     *  @return key pair as byte array */
+     * @param z seed
+     * @return key pair as byte array */
     public byte[][] generateKemKeyPairInternal(byte[] d, byte[] z)
     {
         byte[][] indCpaKeyPair = indCpa.generateKeyPair(d);
@@ -256,8 +256,8 @@ class MLKEMEngine
     }
 
     /** @param publicKeyInput the public key
-     *  @param randBytes random bytes
-     *  @return ciphertext and shared secret */
+     * @param randBytes random bytes
+     * @return ciphertext and shared secret */
     public byte[][] kemEncryptInternal(byte[] publicKeyInput, byte[] randBytes)
     {
         byte[] outputCipherText;
@@ -287,8 +287,8 @@ class MLKEMEngine
     }
 
     /** @param secretKey the secret key
-     *  @param cipherText the ciphertext
-     *  @return shared secret */
+     * @param cipherText the ciphertext
+     * @return shared secret */
     public byte[] kemDecryptInternal(byte[] secretKey, byte[] cipherText)
     {
         byte[] buf = new byte[2 * KyberSymBytes],
@@ -320,8 +320,8 @@ class MLKEMEngine
     }
 
     /** @param publicKeyInput the public key
-     *  @param randBytes random bytes
-     *  @return ciphertext and shared secret */
+     * @param randBytes random bytes
+     * @return ciphertext and shared secret */
     public byte[][] kemEncrypt(byte[] publicKeyInput, byte[] randBytes)
     {
         //TODO: do input validation elsewhere?
@@ -343,8 +343,8 @@ class MLKEMEngine
         return kemEncryptInternal(publicKeyInput, randBytes);
     }
     /** @param secretKey the secret key
-     *  @param cipherText the ciphertext
-     *  @return shared secret */
+     * @param cipherText the ciphertext
+     * @return shared secret */
     public byte[] kemDecrypt(byte[] secretKey, byte[] cipherText)
     {
         //TODO: do input validation

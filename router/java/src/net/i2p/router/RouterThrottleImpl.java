@@ -14,7 +14,6 @@ import net.i2p.util.Translate;
 /**
  * Simple throttle that basically stops accepting messages or nontrivial
  * requests if the jobQueue lag is too large.
- *
  */
 public class RouterThrottleImpl implements RouterThrottle {
     /** Router context, used for the job queue, tunnel counts, bandwidth limits and rates. */
@@ -88,10 +87,10 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
-     *  Reset status from starting up to not-starting up,
-     *  in case we don't get a tunnel request soon after the 20 minutes is up.
+     * Reset status from starting up to not-starting up,
+     * in case we don't get a tunnel request soon after the 20 minutes is up.
      *
-     *  @since 0.8.12
+     * @since 0.8.12
      */
     private class ResetStatus extends SimpleTimer2.TimedEvent {
         public void timeReached() {
@@ -116,11 +115,11 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     /**
-     *  If we should send a reject, return a nonzero reject code.
-     *  Anything that causes us to drop a request instead of rejecting it
-     *  must go in BuildHandler.handleInboundRequest(), not here.
+     * If we should send a reject, return a nonzero reject code.
+     * Anything that causes us to drop a request instead of rejecting it
+     * must go in BuildHandler.handleInboundRequest(), not here.
      *
-     *  @return 0 for accept or nonzero reject code
+     * @return 0 for accept or nonzero reject code
      */
     public int acceptTunnelRequest() {
         if (_context.router().gracefulShutdownInProgress()) {
@@ -326,8 +325,6 @@ public class RouterThrottleImpl implements RouterThrottle {
      *
      * 600 KB in 10 minutes equals ~4 KBps - increased from 200 for better
      * bandwidth allocation per transit tunnel.
-     *
-     * @since public since 0.9.66, was package private
      */
     public static final int DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE = 600; // ~4KBps
 
@@ -359,7 +356,6 @@ public class RouterThrottleImpl implements RouterThrottle {
      * With bytesAllocated already accounted for across the numTunnels existing
      * tunnels we have agreed to, can we handle another tunnel with our existing
      * bandwidth?
-     *
      */
     private boolean allowTunnel(double bytesAllocated, int numTunnels) {
         int maxKBpsIn = _context.bandwidthLimiter().getInboundKBytesPerSecond();
@@ -709,11 +705,11 @@ public class RouterThrottleImpl implements RouterThrottle {
     public void setTunnelStatus(String msg) {_tunnelStatus = msg;}
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers.
-     *  It does not translate!
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers.
+     * It does not translate!
      *
-     *  @return s
+     * @return s
      */
     private static final String _x(String s) {return s;}
 

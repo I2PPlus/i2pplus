@@ -327,25 +327,25 @@ class BandStructure {
     }
 
     /** The packed file is divided up into a number of segments.
-     *  Most segments are typed as ValueBand, strongly-typed sequences
-     *  of integer values, all interpreted in a single way.
-     *  A few segments are ByteBands, which hetergeneous sequences
-     *  of bytes.
+     * Most segments are typed as ValueBand, strongly-typed sequences
+     * of integer values, all interpreted in a single way.
+     * A few segments are ByteBands, which hetergeneous sequences
+     * of bytes.
      *
-     *  The two phases for writing a packed file are COLLECT and WRITE.
-     *  1. When writing a packed file, each band collects
-     *  data in an ad-hoc order.
-     *  2. At the end, each band is assigned a coding scheme,
-     *  and then all the bands are written in their global order.
+     * The two phases for writing a packed file are COLLECT and WRITE.
+     * 1. When writing a packed file, each band collects
+     * data in an ad-hoc order.
+     * 2. At the end, each band is assigned a coding scheme,
+     * and then all the bands are written in their global order.
      *
-     *  The three phases for reading a packed file are EXPECT, READ,
-     *  and DISBURSE.
-     *  1. For each band, the expected number of integers  is determined.
-     *  2. The data is actually read from the file into the band.
-     *  3. The band pays out its values as requested, in an ad hoc order.
+     * The three phases for reading a packed file are EXPECT, READ,
+     * and DISBURSE.
+     * 1. For each band, the expected number of integers  is determined.
+     * 2. The data is actually read from the file into the band.
+     * 3. The band pays out its values as requested, in an ad hoc order.
      *
-     *  When the last phase of a band is done, it is marked so (DONE).
-     *  Clearly, these phases must be properly ordered WRT each other.
+     * When the last phase of a band is done, it is marked so (DONE).
+     * Clearly, these phases must be properly ordered WRT each other.
      */
     abstract class Band {
         private int    phase = NO_PHASE;

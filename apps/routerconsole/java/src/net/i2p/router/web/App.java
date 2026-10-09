@@ -1,8 +1,8 @@
 package net.i2p.router.web;
 
 /**
- *  Application information for the router console.
- *  @since 0.9.33 moved from HomeHelper
+ * Application information for the router console.
+ * @since 0.9.33 moved from HomeHelper
  */
 public class App {
     /** Application name */

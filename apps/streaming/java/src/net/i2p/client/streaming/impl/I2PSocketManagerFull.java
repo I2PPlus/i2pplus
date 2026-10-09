@@ -68,8 +68,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     private final AtomicBoolean _isDestroyed = new AtomicBoolean();
 
     /**
-     *  Does not support EC
-     *  @since 0.9.21
+     * Does not support EC
+     * @since 0.9.21
      */
     private static final Set<Hash> _ecUnsupported = new HashSet<>(16);
     private static final String[] EC_UNSUPPORTED_HASHES = {
@@ -105,8 +105,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     };
 
     /**
-     *  Does not support Ed
-     *  @since 0.9.23
+     * Does not support Ed
+     * @since 0.9.23
      */
     private static final Set<Hash> _edUnsupported = new HashSet<>(16);
     private static final String[] ED_UNSUPPORTED_HASHES = {
@@ -264,23 +264,23 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  The I2P session for this socket manager.
-     *  @return the session, non-null
+     * The I2P session for this socket manager.
+     * @return the session, non-null
      */
     public I2PSession getSession() {
         return _session;
     }
 
     /**
-     *  For a server, you must call connect() on the returned object.
-     *  Connecting the primary session does NOT connect any subsessions.
-     *  If the primary session is not connected, connecting a subsession will connect the primary session first.
+     * For a server, you must call connect() on the returned object.
+     * Connecting the primary session does NOT connect any subsessions.
+     * If the primary session is not connected, connecting a subsession will connect the primary session first.
      *
-     *  @return a new subsession, non-null
-     *  @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
-     *                          and different signing keys
-     *  @param opts subsession options if any, may be null
-     *  @since 0.9.21
+     * @return a new subsession, non-null
+     * @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
+     * and different signing keys
+     * @param opts subsession options if any, may be null
+     * @since 0.9.21
      */
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException {
         if (privateKeyStream == null) {
@@ -329,10 +329,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  Sig type from the options, or the default if unset or unsupported.
-     *  @param opts may be null
-     *  @return the sig type
-     *  @since 0.9.21 copied from I2PSocketManagerFactory
+     * Sig type from the options, or the default if unset or unsupported.
+     * @param opts may be null
+     * @return the sig type
+     * @since 0.9.21 copied from I2PSocketManagerFactory
      */
     private SigType getSigType(Properties opts) throws I2PSessionException {
         if (opts != null) {
@@ -350,9 +350,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  Remove the subsession
+     * Remove the subsession
      *
-     *  @since 0.9.21
+     * @since 0.9.21
      */
     public void removeSubsession(I2PSession session) {
         _session.removeSubsession(session);
@@ -368,9 +368,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  Subsession list, not including the primary session.
-     *  @return a list of subsessions, non-null, does not include the primary session
-     *  @since 0.9.21
+     * Subsession list, not including the primary session.
+     * @return a list of subsessions, non-null, does not include the primary session
+     * @since 0.9.21
      */
     public List<I2PSession> getSubsessions() {
         return _session.getSubsessions();
@@ -532,12 +532,12 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      public long getAcceptTimeout() { return _acceptTimeout; }
 
      /**
-      *  Update the options on a running socket manager.
-      *  Parameters in the I2PSocketOptions interface may be changed directly
-      *  with the setters; no need to use this method for those.
-      *  This does NOT update the underlying I2CP or tunnel options; use getSession().updateOptions() for that.
+      * Update the options on a running socket manager.
+      * Parameters in the I2PSocketOptions interface may be changed directly
+      * with the setters; no need to use this method for those.
+      * This does NOT update the underlying I2CP or tunnel options; use getSession().updateOptions() for that.
       *
-      *  @param options as created from a call to buildOptions(properties), non-null
+      * @param options as created from a call to buildOptions(properties), non-null
       */
      public void setDefaultOptions(I2PSocketOptions options) {
          if (!(options instanceof ConnectionOptions))
@@ -549,14 +549,14 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      }
 
      /**
-      *  Update the options on a running subsession.
-      *  Parameters in the I2PSocketOptions interface may be changed directly
-      *  with the setters; no need to use this method for those.
-      *  This does NOT update the underlying I2CP or tunnel options.
+      * Update the options on a running subsession.
+      * Parameters in the I2PSocketOptions interface may be changed directly
+      * with the setters; no need to use this method for those.
+      * This does NOT update the underlying I2CP or tunnel options.
       *
-      *  @param session the subsession to update
-      *  @param options as created from a call to buildOptions(properties), non-null
-      *  @since 0.9.71+
+      * @param session the subsession to update
+      * @param options as created from a call to buildOptions(properties), non-null
+      * @since 0.9.71+
       */
      public void setDefaultOptions(I2PSession session, I2PSocketOptions options) {
          if (!(options instanceof ConnectionOptions))
@@ -568,24 +568,24 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      }
 
      /**
-      *  Returns the current default options.
-      *  This does NOT update the underlying I2CP or tunnel options;
-      *  use getSession().updateOptions() for that.
-      *  @return the default options
+      * Returns the current default options.
+      * This does NOT update the underlying I2CP or tunnel options;
+      * use getSession().updateOptions() for that.
+      * @return the default options
       */
      public I2PSocketOptions getDefaultOptions() {
          return _defaultOptions;
      }
 
      /**
-      *  Returns non-null socket.
-      *  This method does not throw exceptions, but methods on the returned socket
-      *  may throw exceptions if the socket or socket manager is closed.
+      * Returns non-null socket.
+      * This method does not throw exceptions, but methods on the returned socket
+      * may throw exceptions if the socket or socket manager is closed.
       *
-      *  This only listens on the primary session. There is no way to get
-      *  incoming connections on a subsession.
+      * This only listens on the primary session. There is no way to get
+      * incoming connections on a subsession.
       *
-      *  @return non-null
+      * @return non-null
       */
      public I2PServerSocket getServerSocket() {
          _connectionManager.setAllowIncomingConnections(true);
@@ -752,19 +752,19 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  Like connect() but returns a real Socket, and throws only IOE,
-     *  for easier porting of apps.
-     *  @since 0.8.4
+     * Like connect() but returns a real Socket, and throws only IOE,
+     * for easier porting of apps.
+     * @since 0.8.4
      */
     public Socket connectToSocket(Destination peer) throws IOException {
         return connectToSocket(peer, _defaultOptions);
     }
 
     /**
-     *  Like connect() but returns a real Socket, and throws only IOE,
-     *  for easier porting of apps.
-     *  @param timeout ms if &gt; 0, forces blocking (disables connectDelay)
-     *  @since 0.8.4
+     * Like connect() but returns a real Socket, and throws only IOE,
+     * for easier porting of apps.
+     * @param timeout ms if &gt; 0, forces blocking (disables connectDelay)
+     * @since 0.8.4
      */
     public Socket connectToSocket(Destination peer, int timeout) throws IOException {
         ConnectionOptions opts = new ConnectionOptions(_defaultOptions);
@@ -775,10 +775,10 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     }
 
     /**
-     *  Like connect() but returns a real Socket, and throws only IOE,
-     *  for easier porting of apps.
-     *  @param options may be null
-     *  @since 0.8.4
+     * Like connect() but returns a real Socket, and throws only IOE,
+     * for easier porting of apps.
+     * @param options may be null
+     * @since 0.8.4
      */
     private Socket connectToSocket(Destination peer, I2PSocketOptions options) throws IOException {
         try {
@@ -862,7 +862,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public String getName() { return _name; }
 
     /**
-     *  For logging / diagnostics only
+     * For logging / diagnostics only
      */
     public void setName(String name) { _name = name; }
 
@@ -1035,7 +1035,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * Tuner. The resize drains each dispatcher's shard queues before rebuilding,
      * so per-connection ordering and the never-drop guarantee are preserved.
      * @param val the new worker count, clamped to {@code [1, 8]}; 0 only updates
-     *            the default for future managers
+     * the default for future managers
      * @since 0.9.71+
      */
     public static void resizeReceiveWorkers(int val) {

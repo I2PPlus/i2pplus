@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -16,7 +15,7 @@ import java.util.Locale;
 /**
  * Wrapper class for whatever logging system I2P uses.  This class should be
  * instantiated and kept as a variable for each class it is used by, e.g.
- *  <code>private final Log _log = context.logManager().getLog(MyClassName.class);</code>
+ * <code>private final Log _log = context.logManager().getLog(MyClassName.class);</code>
  *
  * If there is anything in here that doesn't make sense, turn off your computer and go fly a kite.
  *
@@ -107,8 +106,8 @@ public class Log {
     }
 
     /**
-     *  Warning - not recommended.
-     *  Use I2PAppContext.getGlobalContext().logManager().getLog(cls)
+     * Warning - not recommended.
+     * Use I2PAppContext.getGlobalContext().logManager().getLog(cls)
      */
     public Log(Class<?> cls) {
         this(I2PAppContext.getGlobalContext().logManager(), cls, null);
@@ -116,8 +115,8 @@ public class Log {
     }
 
     /**
-     *  Warning - not recommended.
-     *  Use I2PAppContext.getGlobalContext().logManager().getLog(name)
+     * Warning - not recommended.
+     * Use I2PAppContext.getGlobalContext().logManager().getLog(name)
      */
     public Log(String name) {
         this(I2PAppContext.getGlobalContext().logManager(), null, name);
@@ -167,38 +166,38 @@ public class Log {
     }
 
     /**
-     *  Always log this message with the given priority, ignoring current minimum priority level.
-     *  This allows an INFO message about changing port numbers, for example, to always be logged.
+     * Always log this message with the given priority, ignoring current minimum priority level.
+     * This allows an INFO message about changing port numbers, for example, to always be logged.
      *
-     *  @since 0.8.2
+     * @since 0.8.2
      */
     public void logAlways(int priority, String msg) {
         _manager.addRecord(new LogRecord(_class, _name, Thread.currentThread().getName(), priority, msg, null));
     }
 
     /**
-     *  The repeat suppressor backing the {@code *Throttled} methods.
+     * The repeat suppressor backing the {@code *Throttled} methods.
      *
-     *  <p>Lazily created: most logging classes never throttle anything, and this class is
-     *  instantiated for every class that logs.
+     * <p>Lazily created: most logging classes never throttle anything, and this class is
+     * instantiated for every class that logs.
      */
     private volatile LogSuppressor _suppressor;
 
     /**
-     *  Log a message at the given priority, collapsing repeats of the same condition.
+     * Log a message at the given priority, collapsing repeats of the same condition.
      *
-     *  <p>The first occurrence of {@code key} is always written. After that, an
-     *  occurrence is written once {@link LogSuppressor#DEFAULT_BURST} repeats have
-     *  accumulated or {@link LogSuppressor#DEFAULT_WINDOW_MS} have passed, and the line
-     *  then states how many were collapsed. Use this instead of a plain call when the
-     *  same condition can repeat thousands of times a minute: the volume hides other
-     *  messages and drives log rotation for no diagnostic gain.
+     * <p>The first occurrence of {@code key} is always written. After that, an
+     * occurrence is written once {@link LogSuppressor#DEFAULT_BURST} repeats have
+     * accumulated or {@link LogSuppressor#DEFAULT_WINDOW_MS} have passed, and the line
+     * then states how many were collapsed. Use this instead of a plain call when the
+     * same condition can repeat thousands of times a minute: the volume hides other
+     * messages and drives log rotation for no diagnostic gain.
      *
-     *  @param priority the priority level
-     *  @param key stable identifier for the condition; must not vary per occurrence
+     * @param priority the priority level
+     * @param key stable identifier for the condition; must not vary per occurrence
      * @param msg the message
-     *  @return true if the message was written, false if it was suppressed
-     *  @since 0.9.71+
+     * @return true if the message was written, false if it was suppressed
+     * @since 0.9.71+
      */
     public boolean throttled(int priority, String key, String msg) {
         if (priority < _minPriority) {
@@ -221,23 +220,23 @@ public class Log {
     }
 
     /**
-     *  Collapse repeats of a warning. See {@link #throttled}.
+     * Collapse repeats of a warning. See {@link #throttled}.
      *
-     *  @param key stable identifier for the condition
-     *  @param msg the message
-     *  @return true if the message was written
-     *  @since 0.9.71+
+     * @param key stable identifier for the condition
+     * @param msg the message
+     * @return true if the message was written
+     * @since 0.9.71+
      */
     public boolean warnThrottled(String key, String msg) {
         return throttled(WARN, key, msg);
     }
 
     /**
-     *  Collapse repeats of an error. See {@link #throttled}.
+     * Collapse repeats of an error. See {@link #throttled}.
      *
-     *  @param key stable identifier for the condition
-     *  @param msg the message
-     *  @return true if the message was written
+     * @param key stable identifier for the condition
+     * @param msg the message
+     * @return true if the message was written
      * @since 0.9.71+
      */
     public boolean errorThrottled(String key, String msg) {
@@ -245,11 +244,11 @@ public class Log {
     }
 
     /**
-     *  Collapse repeats of an info message. See {@link #throttled}.
+     * Collapse repeats of an info message. See {@link #throttled}.
      *
-     *  @param key stable identifier for the condition
-     *  @param msg the message
-     *  @return true if the message was written
+     * @param key stable identifier for the condition
+     * @param msg the message
+     * @return true if the message was written
      * @since 0.9.71+
      */
     public boolean infoThrottled(String key, String msg) {
@@ -257,11 +256,11 @@ public class Log {
     }
 
     /**
-     *  Collapse repeats of a debug message. See {@link #throttled}.
+     * Collapse repeats of a debug message. See {@link #throttled}.
      *
-     *  @param key stable identifier for the condition
-     *  @param msg the message
-     *  @return true if the message was written
+     * @param key stable identifier for the condition
+     * @param msg the message
+     * @return true if the message was written
      * @since 0.9.71+
      */
     public boolean debugThrottled(String key, String msg) {

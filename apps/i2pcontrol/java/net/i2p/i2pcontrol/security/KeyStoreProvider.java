@@ -88,7 +88,7 @@ public class KeyStoreProvider {
     }
 
     /**
-     *  @return null on failure
+     * @return null on failure
      */
     public static X509Certificate readCert(KeyStore ks, String certAlias) {
         try {
@@ -111,15 +111,15 @@ public class KeyStoreProvider {
     }
 
     /**
-     *  Load the keystore, creating it first if it does not exist yet.
+     * Load the keystore, creating it first if it does not exist yet.
      *
-     *  A keystore file that exists but cannot be read - wrong password,
-     *  truncated or corrupt contents - is never replaced, since that would
-     *  destroy any credentials it holds. That case, and any failure to create
-     *  a missing file, is logged at WARN and reported as null. Nothing is
-     *  cached in the failure case, so a later call retries the load.
+     * A keystore file that exists but cannot be read - wrong password,
+     * truncated or corrupt contents - is never replaced, since that would
+     * destroy any credentials it holds. That case, and any failure to create
+     * a missing file, is logged at WARN and reported as null. Nothing is
+     * cached in the failure case, so a later call retries the load.
      *
-     *  @return the keystore, or null if it could not be read or created
+     * @return the keystore, or null if it could not be read or created
      */
     public synchronized KeyStore getDefaultKeyStore() {
         if (_keystore != null)
@@ -142,12 +142,12 @@ public class KeyStoreProvider {
     }
 
     /**
-     *  @param ks the empty keystore to load into
-     *  @param keyStoreFile the file to read, which must exist
-     *  @return ks, loaded from keyStoreFile
-     *  @throws IOException if the file cannot be read
-     *  @throws GeneralSecurityException if the file is not a valid keystore
-     *          for the default type
+     * @param ks the empty keystore to load into
+     * @param keyStoreFile the file to read, which must exist
+     * @return ks, loaded from keyStoreFile
+     * @throws IOException if the file cannot be read
+     * @throws GeneralSecurityException if the file is not a valid keystore
+     * for the default type
      */
     private static KeyStore load(KeyStore ks, File keyStoreFile) throws IOException, GeneralSecurityException {
         try (InputStream is = new FileInputStream(keyStoreFile)) {

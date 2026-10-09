@@ -5,7 +5,6 @@ package net.i2p.router.web.helpers;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.BufferedReader;
@@ -62,9 +61,9 @@ class BanlistRenderer {
     private static final int KEY_LEN = 16;
 
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param context the router context
+     * @param context the router context
      */
     public BanlistRenderer(RouterContext context) {
         _context = context;
@@ -277,23 +276,23 @@ class BanlistRenderer {
     }
 
     /**
-     *  Render the compact banlist HTML table.
+     * Render the compact banlist HTML table.
      *
-     *  @param out the writer to render to
-     *  @throws IOException if writing fails
-     *  @since 0.9.59+
+     * @param out the writer to render to
+     * @throws IOException if writing fails
+     * @since 0.9.59+
      */
     public void renderBanlistCompact(Writer out) throws IOException {
         renderBanlist(out, false);
     }
 
     /**
-     *  Count active bans of floodfill-capable peers, matching the banFF
-     *  classification used by {@link #renderBanlist(Writer, boolean)}:
-     *  caps from the session log or netdb, or a "floodfill" cause.
+     * Count active bans of floodfill-capable peers, matching the banFF
+     * classification used by {@link #renderBanlist(Writer, boolean)}:
+     * caps from the session log or netdb, or a "floodfill" cause.
      *
-     *  @return how many active bans are floodfills
-     *  @since 0.9.71+
+     * @return how many active bans are floodfills
+     * @since 0.9.71+
      */
     public int countBannedFloodfills() {
         Object[] sessionBans = readSessionBans();
@@ -322,25 +321,25 @@ class BanlistRenderer {
     }
 
     /**
-     *  Render only the {@code <tbody id=sessionBanlist>} for the contentonly
-     *  fragment mode, with a data-key per row for the worker-side row diff.
-     *  The full page keeps the wrapper div, thead, and tfoot.
+     * Render only the {@code <tbody id=sessionBanlist>} for the contentonly
+     * fragment mode, with a data-key per row for the worker-side row diff.
+     * The full page keeps the wrapper div, thead, and tfoot.
      *
-     *  @param out the writer to render to
-     *  @throws IOException if writing fails
-     *  @since 0.9.70+
+     * @param out the writer to render to
+     * @throws IOException if writing fails
+     * @since 0.9.70+
      */
     public void renderBanlistFragment(Writer out) throws IOException {
         renderBanlist(out, true);
     }
 
     /**
-     *  Render the compact banlist table; both renderBanlistCompact() and
-     *  renderBanlistFragment() delegate here.
+     * Render the compact banlist table; both renderBanlistCompact() and
+     * renderBanlistFragment() delegate here.
      *
-     *  @param out the writer to render to
-     *  @param fragmentKeys when true, emit only the tbody with data-key rows
-     *  @throws IOException if writing fails
+     * @param out the writer to render to
+     * @param fragmentKeys when true, emit only the tbody with data-key rows
+     * @throws IOException if writing fails
      */
     private void renderBanlist(Writer out, boolean fragmentKeys) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
@@ -625,16 +624,16 @@ class BanlistRenderer {
     }
 
     /**
-     *  translate a string with a parameter
-     *  This is a lot more expensive than _t(s), so use sparingly.
+     * translate a string with a parameter
+     * This is a lot more expensive than _t(s), so use sparingly.
      *
-     *  @param s string to be translated containing {0}
-     *    The {0} will be replaced by the parameter.
-     *    Single quotes must be doubled, i.e. ' -> '' in the string.
-     *  @param o parameter, not translated.
-     *    To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *    Do not double the single quotes in the parameter.
-     *    Use autoboxing to call with ints, longs, floats, etc.
+     * @param s string to be translated containing {0}
+     * The {0} will be replaced by the parameter.
+     * Single quotes must be doubled, i.e. ' -> '' in the string.
+     * @param o parameter, not translated.
+     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     * Do not double the single quotes in the parameter.
+     * Use autoboxing to call with ints, longs, floats, etc.
      */
     private String _t(String s, Object o) {
         return Messages.getString(s, o, _context);

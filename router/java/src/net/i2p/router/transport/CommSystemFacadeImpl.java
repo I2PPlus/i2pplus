@@ -5,7 +5,6 @@ package net.i2p.router.transport;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -46,39 +45,39 @@ import net.i2p.util.Translate;
  *
  * <strong>Core Responsibilities:</strong>
  * <ul>
- *   <li>Message routing and delivery across all transports</li>
- *   <li>Peer connection management and statistics</li>
- *   <li>Network address discovery and configuration</li>
- *   <li>Bandwidth allocation and monitoring</li>
- *   <li>Transport lifecycle management (start/stop/restart)</li>
- *   <li>Network reachability testing and reporting</li>
- *   <li>Geographic IP filtering and country blocking</li>
- *   <li>Communication system status and health monitoring</li>
+ * <li>Message routing and delivery across all transports</li>
+ * <li>Peer connection management and statistics</li>
+ * <li>Network address discovery and configuration</li>
+ * <li>Bandwidth allocation and monitoring</li>
+ * <li>Transport lifecycle management (start/stop/restart)</li>
+ * <li>Network reachability testing and reporting</li>
+ * <li>Geographic IP filtering and country blocking</li>
+ * <li>Communication system status and health monitoring</li>
  * </ul>
  *
  * <strong>Transport Integration:</strong>
  * <ul>
- *   <li>Manages NTCP, UDP, and SSU transports</li>
- *   <li>Handles transport selection and failover</li>
- *   <li>Coordinates address updates across protocols</li>
- *   <li>Provides unified API for router components</li>
+ * <li>Manages NTCP, UDP, and SSU transports</li>
+ * <li>Handles transport selection and failover</li>
+ * <li>Coordinates address updates across protocols</li>
+ * <li>Provides unified API for router components</li>
  * </ul>
  *
  * <strong>Configuration Features:</strong>
  * <ul>
- *   <li>Transport enable/disable controls</li>
- *   <li>Country-based blocking and filtering</li>
- *   <li>Proxy configuration and detection</li>
- *   <li>Network monitoring and testing options</li>
- *   <li>IPv4 and IPv6 addressing support</li>
+ * <li>Transport enable/disable controls</li>
+ * <li>Country-based blocking and filtering</li>
+ * <li>Proxy configuration and detection</li>
+ * <li>Network monitoring and testing options</li>
+ * <li>IPv4 and IPv6 addressing support</li>
  * </ul>
  *
  * <strong>Security Features:</strong>
  * <ul>
- *   <li>Geographic IP filtering</li>
- *   <li>Country-based access controls</li>
- *   <li>Peer reputation and banlist management</li>
- *   <li>Transport-specific security policies</li>
+ * <li>Geographic IP filtering</li>
+ * <li>Country-based access controls</li>
+ * <li>Peer reputation and banlist management</li>
+ * <li>Transport-specific security policies</li>
  * </ul>
  */
 public class CommSystemFacadeImpl extends CommSystemFacade {
@@ -100,8 +99,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * system will not establish any outbound connections or accept
      * inbound connections. This is useful for testing scenarios
      * or when running in debug mode.
-     *
-     * @since IPv6 support was added
      */
     private static final String PROP_DISABLED = "i2np.disable";
 
@@ -280,11 +277,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * <strong>Startup Process:</strong>
      * <ul>
-     *   <li>Initialize geographic IP filtering</li>
-     *   <li>Start network monitoring</li>
-     *   <li>Register and start all configured transports</li>
-     *   <li>Begin peer discovery and connection attempts</li>
-     *   <li>Setup address change notifications</li>
+     * <li>Initialize geographic IP filtering</li>
+     * <li>Start network monitoring</li>
+     * <li>Register and start all configured transports</li>
+     * <li>Begin peer discovery and connection attempts</li>
+     * <li>Setup address change notifications</li>
      * </ul>
      *
      * @throws IllegalStateException if already running
@@ -309,11 +306,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * <strong>Shutdown Process:</strong>
      * <ul>
-     *   <li>Stop network monitoring</li>
-     *   <li>Stop all transport protocols</li>
-     *   <li>Close all active connections</li>
-     *   <li>Cleanup system resources and caches</li>
-     *   <li>Save final state and statistics</li>
+     * <li>Stop network monitoring</li>
+     * <li>Stop all transport protocols</li>
+     * <li>Close all active connections</li>
+     * <li>Cleanup system resources and caches</li>
+     * <li>Save final state and statistics</li>
      * </ul>
      *
      * @throws IllegalStateException if not running
@@ -334,11 +331,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * <strong>Restart Process:</strong>
      * <ul>
-     *   <li>Stop all transport protocols gracefully</li>
-     *   <li>Reinitialize system components</li>
-     *   <li>Restart transports with preserved state</li>
-     *   <li>Resume network operations and monitoring</li>
-     *   <li>Reconfigure address management</li>
+     * <li>Stop all transport protocols gracefully</li>
+     * <li>Reinitialize system components</li>
+     * <li>Restart transports with preserved state</li>
+     * <li>Resume network operations and monitoring</li>
+     * <li>Reconfigure address management</li>
      * </ul>
      *
      * @throws IllegalStateException if not running
@@ -362,8 +359,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public synchronized boolean isRunning() { return _wasStarted; }
 
     /**
-     *  How many peers are we currently connected to, that we have
-     *  sent a message to or received a message from in the last minute.
+     * How many peers are we currently connected to, that we have
+     * sent a message to or received a message from in the last minute.
      */
     @Override
     public int countActivePeers() { return _manager.countActivePeers(); }
@@ -428,12 +425,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      * <strong>Message Processing:</strong>
      * <ul>
-     *   <li>Transport selection based on destination</li>
-     *   <li>Message validation and filtering</li>
-     *   <li>Queueing and throttling</li>
-     *   <li>Delivery status tracking</li>
-     *   <li>Failure handling and retry logic</li>
-     *   <li>Callback execution for send completion</li>
+     * <li>Transport selection based on destination</li>
+     * <li>Message validation and filtering</li>
+     * <li>Queueing and throttling</li>
+     * <li>Delivery status tracking</li>
+     * <li>Failure handling and retry logic</li>
+     * <li>Callback execution for send completion</li>
      * </ul>
      *
      * @param msg the outbound message to be processed and delivered
@@ -467,10 +464,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Established peers.
+     * Established peers.
      *
-     *  @return a new list, may be modified
-     *  @since 0.9.34
+     * @return a new list, may be modified
+     * @since 0.9.34
      */
     public List<Hash> getEstablished() {
         return _manager.getEstablished();
@@ -568,10 +565,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  As of 0.9.31, only outputs UPnP status
+     * As of 0.9.31, only outputs UPnP status
      *
-     *  Warning - blocking, very slow, queries the active UPnP router,
-     *  will take many seconds if it has vanished.
+     * Warning - blocking, very slow, queries the active UPnP router,
+     * will take many seconds if it has vanished.
      */
     @Override
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
@@ -579,10 +576,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Transports in use.
+     * Transports in use.
      *
-     *  @return SortedMap of style to Transport (a copy)
-     *  @since 0.9.31
+     * @return SortedMap of style to Transport (a copy)
+     * @since 0.9.31
      */
     public SortedMap<String, Transport> getTransports() {
         return _manager.getTransports();
@@ -598,15 +595,15 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
       *
       * <strong>Address Creation:</strong>
       * <ul>
-      *   <li>Iterates through all registered transports</li>
-      *   <li>Gets current addresses from each transport</li>
-      *   <li>Validates address format and consistency</li>
-      *   <li>Handles IPv4 and IPv6 address generation</li>
-      *   <li>Applies geographic and network filtering</li>
+      * <li>Iterates through all registered transports</li>
+      * <li>Gets current addresses from each transport</li>
+      * <li>Validates address format and consistency</li>
+      * <li>Handles IPv4 and IPv6 address generation</li>
+      * <li>Applies geographic and network filtering</li>
       * </ul>
       *
       * @return list of RouterAddress objects for all active transports,
-      *         may be empty if no addresses available
+      * may be empty if no addresses available
       */
      @Override
      public List<RouterAddress> createAddresses() {
@@ -616,9 +613,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Arbitrary sort for consistency.
-     *  Note that the console UI has its own sorter.
-     *  @since 0.9.50
+     * Arbitrary sort for consistency.
+     * Note that the console UI has its own sorter.
+     * @since 0.9.50
      */
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
         /**
@@ -663,10 +660,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Tell other transports our address changed
+     * Tell other transports our address changed
      *
-     *  @param address may be null; or address's host/IP may be null
-     *  @since 0.9.20
+     * @param address may be null; or address's host/IP may be null
+     * @since 0.9.20
      */
     @Override
     public void notifyRemoveAddress(RouterAddress address) {
@@ -675,9 +672,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Tell other transports our address changed
+     * Tell other transports our address changed
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     @Override
     public void notifyRemoveAddress(boolean ipv6) {
@@ -685,9 +682,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Exempt this router hash from any incoming throttles or rejections
+     * Exempt this router hash from any incoming throttles or rejections
      *
-     *  @since 0.9.58
+     * @since 0.9.58
      */
     @Override
     public void exemptIncoming(Hash peer) {
@@ -713,11 +710,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Is this IP exempt from any incoming throttles or rejections
+     * Is this IP exempt from any incoming throttles or rejections
      *
-     *  @param ip canonical string
-     *  @return whether exempt incoming
-     *  @since 0.9.58
+     * @param ip canonical string
+     * @return whether exempt incoming
+     * @since 0.9.58
      */
     @Override
     public boolean isExemptIncoming(String ip) {
@@ -727,10 +724,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Remove this IP from the exemptions
+     * Remove this IP from the exemptions
      *
-     *  @param ip canonical string
-     *  @since 0.9.58
+     * @param ip canonical string
+     * @since 0.9.58
      */
     public void removeExemption(String ip) {
         synchronized(_exemptIncoming) {
@@ -739,16 +736,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Pluggable transports. Not for NTCP or SSU.
+     * Pluggable transports. Not for NTCP or SSU.
      *
-     *  Do not call from transport constructor. Transport must be ready to be started.
+     * Do not call from transport constructor. Transport must be ready to be started.
      *
-     *  Following transport methods will be called:
-     *  setListener()
-     *  externalAddressReceived() (zero or more times, one for each known address)
-     *  startListening();
+     * Following transport methods will be called:
+     * setListener()
+     * externalAddressReceived() (zero or more times, one for each known address)
+     * startListening();
      *
-     *  @since 0.9.16
+     * @since 0.9.16
      */
     @Override
     public void registerTransport(Transport t) {
@@ -756,13 +753,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Pluggable transports. Not for NTCP or SSU.
+     * Pluggable transports. Not for NTCP or SSU.
      *
-     *  Following transport methods will be called:
-     *  setListener(null)
-     *  stopListening();
+     * Following transport methods will be called:
+     * setListener(null)
+     * stopListening();
      *
-     *  @since 0.9.16
+     * @since 0.9.16
      */
     @Override
     public void unregisterTransport(Transport t) {
@@ -788,17 +785,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
 
     /**
-     *  Router must call after netdb is initialized
-     *  @since 0.9.41
+     * Router must call after netdb is initialized
+     * @since 0.9.41
      */
     @Override
     public void initGeoIP() {startGeoIP();}
 
     /**
-     *  Router must call after netdb is initialized.
-     *  Starts the recurring country-lookup pipeline; the reverse-DNS cache
-     *  file is loaded once the GeoIP queue has had a chance to settle.
-     *  @since 0.9.41
+     * Router must call after netdb is initialized.
+     * Starts the recurring country-lookup pipeline; the reverse-DNS cache
+     * file is loaded once the GeoIP queue has had a chance to settle.
+     * @since 0.9.41
      */
     private void startGeoIP() {
         _countryLookup.start();
@@ -806,102 +803,102 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     *  Country code for this router, from the GeoIP lookup.
-     *  @return two-letter lower-case country code or null
-     *  @since 0.8.11
+     * Country code for this router, from the GeoIP lookup.
+     * @return two-letter lower-case country code or null
+     * @since 0.8.11
      */
     @Override
     public String getOurCountry() {return _countryLookup.getOurCountry();}
 
     /**
-     *  Are we in a strict country
-     *  @return whether in strict country
-     *  @since 0.8.13
+     * Are we in a strict country
+     * @return whether in strict country
+     * @since 0.8.13
      */
     @Override
     public boolean isInStrictCountry() {return _countryLookup.isInStrictCountry();}
 
     /**
-     *  Are they in a strict country
-     *  @param peer peer Hash
-     *  @return whether in strict country
-     *  @since 0.9.16
+     * Are they in a strict country
+     * @param peer peer Hash
+     * @return whether in strict country
+     * @since 0.9.16
      */
     @Override
     public boolean isInStrictCountry(Hash peer) {return _countryLookup.isInStrictCountry(peer);}
 
     /**
-     *  Are they in a strict country
-     *  @param ri RouterInfo
-     *  @return whether in strict country
-     *  @since 0.9.16
+     * Are they in a strict country
+     * @param ri RouterInfo
+     * @return whether in strict country
+     * @since 0.9.16
      */
     @Override
     public boolean isInStrictCountry(RouterInfo ri) {return _countryLookup.isInStrictCountry(ri);}
 
     /**
-     *  Uses the transport IP first because that lookup is fast, then the IP from the netDb.
-     *  Not recommended for our local router hash, as we may not be either in the cache or netdb,
-     *  or may not be publishing an IP.
+     * Uses the transport IP first because that lookup is fast, then the IP from the netDb.
+     * Not recommended for our local router hash, as we may not be either in the cache or netdb,
+     * or may not be publishing an IP.
      *
-     *  As of 0.9.32, works only for literal IPs, returns null for hostnames.
+     * As of 0.9.32, works only for literal IPs, returns null for hostnames.
      *
-     *  @param peer not ourselves - use getOurCountry() for that
-     *  @return two-letter lower-case country code or xx for non-banned peers, or null otherwise
+     * @param peer not ourselves - use getOurCountry() for that
+     * @return two-letter lower-case country code or xx for non-banned peers, or null otherwise
      */
     @Override
     public String getCountry(Hash peer) {return _countryLookup.getCountry(peer);}
 
     /**
-     *  The two-letter country code for an IP address string.
-     *  @param ip IP address string
-     *  @return two-letter country code or null if unknown
+     * The two-letter country code for an IP address string.
+     * @param ip IP address string
+     * @return two-letter country code or null if unknown
      */
     @Override
     public String getCountry(String ip) {return _countryLookup.getCountry(ip);}
 
     /**
-     *  Full name for a country code.
-     *  @param c country code
-     *  @return full name or the code if unknown
+     * Full name for a country code.
+     * @param c country code
+     * @return full name or the code if unknown
      */
     @Override
     public String getCountryName(String c) {return _countryLookup.getCountryName(c);}
 
     /**
-     *  Provides country code mappings.
-     *  @return Unmodifiable map of lower-case country codes to untranslated names
-     *  @since 0.9.53
+     * Provides country code mappings.
+     * @return Unmodifiable map of lower-case country codes to untranslated names
+     * @since 0.9.53
      */
     @Override
     public Map<String, String> getCountries() {return _countryLookup.getCountries();}
 
     /**
-     *  Queue all current destination for lookup.
-     *  For internal use only.
-     *  @param ip full 128 bit ip address
+     * Queue all current destination for lookup.
+     * For internal use only.
+     * @param ip full 128 bit ip address
      */
     public void queueLookup(byte[] ip) {_countryLookup.queueLookup(ip);}
 
     /**
-     *  Domain name from a reverse DNS hostname
-     *  @return domain name only from reverse dns hostname lookups
-     *  @since 0.9.58+
+     * Domain name from a reverse DNS hostname
+     * @return domain name only from reverse dns hostname lookups
+     * @since 0.9.58+
      */
     public static String getDomain(String hostname) {return CountryLookup.getDomain(hostname);}
 
     /**
-     *  Return first valid IP (v4 or v6) we find, any transport.
-     *  @return IP or null
-     *  @since 0.9.18
+     * Return first valid IP (v4 or v6) we find, any transport.
+     * @return IP or null
+     * @since 0.9.18
      */
     public static byte[] getValidIP(RouterInfo ri) {return CountryLookup.getValidIP(ri);}
 
     /**
-     *  IP address compatible with our capabilities (IPv4/IPv6).
-     *  @param ri RouterInfo to get IP from
-     *  @return IP or null
-     *  @since 0.9.68+
+     * IP address compatible with our capabilities (IPv4/IPv6).
+     * @param ri RouterInfo to get IP from
+     * @return IP or null
+     * @since 0.9.68+
      */
     public static byte[] getCompatibleIP(RouterInfo ri) {return CountryLookup.getCompatibleIP(ri);}
 

@@ -160,9 +160,9 @@ public class GeoIP {
     }
 
     /**
-     *  GeoIP lookup service for IP to country mapping.
+     * GeoIP lookup service for IP to country mapping.
      *
-     *  @param context RouterContext in production, I2PAppContext for testing only
+     * @param context RouterContext in production, I2PAppContext for testing only
      */
     public GeoIP(I2PAppContext context) {
         _context = context;
@@ -227,9 +227,9 @@ public class GeoIP {
         }
 
         /**
-         *  Loads the GeoIP IPv4 database and reports its timestamp.
+         * Loads the GeoIP IPv4 database and reports its timestamp.
          *
-         *  @return timestamp of the geoip ipv4 file used, or 0 on failure
+         * @return timestamp of the geoip ipv4 file used, or 0 on failure
          */
         public long runit() {
             if (_lock.getAndSet(true))
@@ -442,11 +442,11 @@ public class GeoIP {
     }
 
     /**
-     *  Write all IP ranges for country to blocklist-country.txt.
-     *  Inline, blocking.
+     * Write all IP ranges for country to blocklist-country.txt.
+     * Inline, blocking.
      *
-     *  @param country lower-case two-letter country code
-     *  @since 0.9.48
+     * @param country lower-case two-letter country code
+     * @since 0.9.48
      */
     private void countryToIP(String country) {
         while (_lock.getAndSet(true)) {
@@ -866,8 +866,8 @@ public class GeoIP {
     );
 
     /** China carrier network labels and region designators to drop (China169 backbone,
-     *  IP Network, Province, Municipality, Autonomous Region); leftover spaces are
-     *  collapsed by the DOUBLE_SPACE step below */
+     * IP Network, Province, Municipality, Autonomous Region); leftover spaces are
+     * collapsed by the DOUBLE_SPACE step below */
     private static final Pattern CHINA_VERBOSE = Pattern.compile(
         "(?:China169|Backbone|IP Networks?|Province|Municipality|Autonomous Region)",
         Pattern.CASE_INSENSITIVE
@@ -1441,9 +1441,9 @@ public class GeoIP {
     }
 
      /**
-     * Open a GeoIP2 database
-     * @since 0.9.38
-     */
+      * Open a GeoIP2 database
+      * @since 0.9.38
+      */
     private DatabaseReader openGeoIP2(File geoFile) throws IOException {
         DatabaseReader.Builder b = new DatabaseReader.Builder(geoFile);
         b.withCache(new CHMCache(256));
@@ -1516,7 +1516,6 @@ public class GeoIP {
     * wget http://ip-to-country.webhosting.info/downloads/ip-to-country.csv.zip
     * unzip ip-to-country.csv.zip
     * cut -d, -f3,5 < ip-to-country.csv|sed 's/"//g' | sort | uniq > countries.txt
-    *
     */
     private void readCountryFile() {
         String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
@@ -1573,8 +1572,7 @@ public class GeoIP {
     *
     * @param search a sorted array of IPs to search
     * @return an array of country codes, same order as the search param,
-    *         or a zero-length array on failure
-    *
+    * or a zero-length array on failure
     */
     private String[] readGeoIPFile(Long[] search) {
         String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);
@@ -1616,18 +1614,18 @@ public class GeoIP {
     }
 
     /**
-     *  Tell the update manager.
+     * Tell the update manager.
      *
-     *  @since 0.9.45
+     * @since 0.9.45
      */
     private void notifyVersion(String subtype, long version) {
         notifyVersion(_context, subtype, version);
     }
 
     /**
-     *  Tell the update manager.
+     * Tell the update manager.
      *
-     *  @since 0.9.45
+     * @since 0.9.45
      */
     static void notifyVersion(I2PAppContext ctx, String subtype, long version) {
         if (version <= 0) {return;}
@@ -1641,11 +1639,11 @@ public class GeoIP {
     }
 
     /**
-     *  Put our country code in the config, where others (such as Timestamper) can get it,
-     *  and it will be there next time at startup.
+     * Put our country code in the config, where others (such as Timestamper) can get it,
+     * and it will be there next time at startup.
      *
-     *  Does nothing in I2PAppContext
-     *  @param ts the timestamp of the geoip file that was read, greater than zero
+     * Does nothing in I2PAppContext
+     * @param ts the timestamp of the geoip file that was read, greater than zero
      */
     private void updateOurCountry(long ts) {
         if (! (_context instanceof RouterContext)) {return;}

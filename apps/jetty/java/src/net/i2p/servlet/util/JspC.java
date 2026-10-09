@@ -13,24 +13,24 @@ import java.util.jar.Manifest;
 import net.i2p.util.VersionComparator;
 
 /**
- *  Build-time wrapper that calls org.apache.jasper.JspC reflectively and
- *  then exits, so the build does not depend on the Jasper API at compile time.
+ * Build-time wrapper that calls org.apache.jasper.JspC reflectively and
+ * then exits, so the build does not depend on the Jasper API at compile time.
  *
- *  The build forks a JVM to run this. Running JspC in-process does not
- *  terminate on Tomcat 8.5.33 or 9.0.11 and later, where the JSP compilation
- *  is threaded and the thread pool workers are not daemon threads.
- *  See https://tomcat.apache.org/tomcat-8.5-doc/changelog.html
+ * The build forks a JVM to run this. Running JspC in-process does not
+ * terminate on Tomcat 8.5.33 or 9.0.11 and later, where the JSP compilation
+ * is threaded and the thread pool workers are not daemon threads.
+ * See https://tomcat.apache.org/tomcat-8.5-doc/changelog.html
  *
- *  If the system property build.reproducible is "true", the arguments are
- *  rewritten to compile the jsps in a fixed order, and to force a single
- *  compiler thread where the jasper in use supports -threadCount, so that
- *  the generated web.xml is reproducible.
+ * If the system property build.reproducible is "true", the arguments are
+ * rewritten to compile the jsps in a fixed order, and to force a single
+ * compiler thread where the jasper in use supports -threadCount, so that
+ * the generated web.xml is reproducible.
  *
- *  Warning - used in build process only, not included in runtime jars, not for external use.
- *  Only for use in build scripts, obviously not a public API.
- *  See apps/routerconsole/java/build.xml for more information.
+ * Warning - used in build process only, not included in runtime jars, not for external use.
+ * Only for use in build scripts, obviously not a public API.
+ * See apps/routerconsole/java/build.xml for more information.
  *
- *  @since 0.9.37
+ * @since 0.9.37
  */
 public class JspC {
     // First Tomcat version to support multiple threads and -threadCount arg
@@ -45,7 +45,7 @@ public class JspC {
     private static final String JASPER_JAR = System.getProperty("jasper.jar");
 
     /**
-     *  @throws IllegalArgumentException
+     * @throws IllegalArgumentException
      */
     public static void main(String[] args) {
        if (REPRODUCIBLE)
@@ -63,10 +63,10 @@ public class JspC {
     }
 
     /**
-     *  Only call this if we want reproducible builds.
+     * Only call this if we want reproducible builds.
      *
-     *  Convert "-webapp dir/" arguments in the args to
-     *  a sorted list of files, for reproducible builds.
+     * Convert "-webapp dir/" arguments in the args to
+     * a sorted list of files, for reproducible builds.
      */
     private static String[] fixupArgs(String[] args) {
         List<String> largs = new ArrayList<>(32);
@@ -142,7 +142,7 @@ public class JspC {
     }
 
     /**
-     *  Recursively collect the *.jsp files under dir, sorted.
+     * Recursively collect the *.jsp files under dir, sorted.
      */
     private static void collectJspFiles(File dir, List<File> files) {
         File[] listed = dir.listFiles();

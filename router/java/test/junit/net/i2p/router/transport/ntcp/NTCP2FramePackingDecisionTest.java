@@ -9,17 +9,17 @@ import net.i2p.data.i2np.I2NPMessage;
 import org.junit.Test;
 
 /**
- *  Unit tests for the NTCP2 frame-sizing decisions extracted from
- *  {@link NTCPConnection#prepareNextWriteNTCP2} and
- *  {@link NTCPConnection.NTCP2ReadState#receive(ByteBuffer, long)}.
+ * Unit tests for the NTCP2 frame-sizing decisions extracted from
+ * {@link NTCPConnection#prepareNextWriteNTCP2} and
+ * {@link NTCPConnection.NTCP2ReadState#receive(ByteBuffer, long)}.
  *
- *  <p>Each decision is a pure boolean/int function, so the whole frame-packing and
- *  read-side allocation behavior is pin-able without a running connection: message
- *  contribution arithmetic, the preferred-payload cap, the pair of scheduled-block
- *  gates against the 16 KB buffer, frame-length sanity, the zero-copy shortcut, and
- *  split-frame scratch allocation.
+ * <p>Each decision is a pure boolean/int function, so the whole frame-packing and
+ * read-side allocation behavior is pin-able without a running connection: message
+ * contribution arithmetic, the preferred-payload cap, the pair of scheduled-block
+ * gates against the 16 KB buffer, frame-length sanity, the zero-copy shortcut, and
+ * split-frame scratch allocation.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class NTCP2FramePackingDecisionTest {
 

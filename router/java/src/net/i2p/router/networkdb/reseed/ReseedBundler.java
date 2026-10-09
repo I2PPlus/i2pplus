@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.reseed;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.BufferedOutputStream;
@@ -28,17 +27,16 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.VersionComparator;
 
 /**
- *  Copy a random selection of 'count' router infos from configDir/netDb
- *  to 'toDir'. Skip your own router info, and old, hidden, unreachable, and
- *  introduced routers, and those from bad countries.
+ * Copy a random selection of 'count' router infos from configDir/netDb
+ * to 'toDir'. Skip your own router info, and old, hidden, unreachable, and
+ * introduced routers, and those from bad countries.
  *
- *  Much easier than the one in installer/tools since we have a running router.
+ * Much easier than the one in installer/tools since we have a running router.
  *
- *  Caller must delete file when done.
+ * Caller must delete file when done.
  *
- *  @since 0.9.19 modified from BundleRouterInfos in installer/tools,
- *                moved from routerconsole to net.i2p.router.networkdb.reseed in 0.9.34
- *
+ * @since 0.9.19 modified from BundleRouterInfos in installer/tools,
+ * moved from routerconsole to net.i2p.router.networkdb.reseed in 0.9.34
  */
 public class ReseedBundler {
 
@@ -57,12 +55,12 @@ public class ReseedBundler {
 
 
     /**
-     *  Create a zip file with
-     *  a random selection of 'count' router infos from configDir/netDb
-     *  to 'toDir'. Skip your own router info, and old, hidden, unreachable, and
-     *  introduced routers, and those from bad countries.
+     * Create a zip file with
+     * a random selection of 'count' router infos from configDir/netDb
+     * to 'toDir'. Skip your own router info, and old, hidden, unreachable, and
+     * introduced routers, and those from bad countries.
      *
-     *  The file will be in the temp directory. Caller must move or delete.
+     * The file will be in the temp directory. Caller must move or delete.
      */
     @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
     public File createZip(int count) throws IOException {
@@ -163,7 +161,7 @@ public class ReseedBundler {
     }
 
     /**
-     *  Copied/modded from PersistentDataStore
+     * Copied/modded from PersistentDataStore
      * @return the router info name
      */
     private static String getRouterInfoName(Hash hash) {

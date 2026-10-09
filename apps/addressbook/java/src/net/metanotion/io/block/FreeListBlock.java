@@ -83,7 +83,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
-     *  Write the length only
+     * Write the length only
      */
     private void writeLen() throws IOException {
         BlockFile.pageSeek(file, page);
@@ -99,7 +99,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
-     *  Set and write the next page only
+     * Set and write the next page only
      */
     public void setNextPage(int nxt) throws IOException {
         nextPage = nxt;
@@ -109,7 +109,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
-     *  Write the length and new page only
+     * Write the length and new page only
      */
     private void writeFreePage() throws IOException {
         BlockFile.pageSeek(file, page);
@@ -135,8 +135,8 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
-     *  Adds free page and writes new len to disk
-     *  @throws IllegalStateException if full
+     * Adds free page and writes new len to disk
+     * @throws IllegalStateException if full
      */
     public void addPage(int freePage) throws IOException {
         if (len >= MAX_SIZE)
@@ -152,8 +152,8 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
-     *  Takes next page and writes new len to disk
-     *  @throws IllegalStateException if empty
+     * Takes next page and writes new len to disk
+     * @throws IllegalStateException if empty
      */
     public int takePage() throws IOException {
         if (len <= 0)

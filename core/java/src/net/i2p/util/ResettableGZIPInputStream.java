@@ -16,7 +16,6 @@ import java.util.zip.InflaterInputStream;
  * The main difference is that this implementation allows its state to be
  * reset to initial values, and hence reused, while the standard
  * GZIPInputStream reads the GZIP header from the stream on instantiation.
- *
  */
 public class ResettableGZIPInputStream extends InflaterInputStream {
     private static final int FOOTER_SIZE = 8; // CRC32 + ISIZE
@@ -59,7 +58,6 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      * Blocking call to initialize this stream with the data from the given
      * compressed stream.
-     *
      */
     public final void initialize(InputStream compressedStream) throws IOException {
         len = 0;
@@ -118,10 +116,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
-     *  @return the total read
-     *  @since 0.8.9
+     * @return the total read
+     * @since 0.8.9
      */
     public long getTotalRead() {
         try {
@@ -132,10 +130,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
-     *  @return the total expanded
-     *  @since 0.8.9
+     * @return the total expanded
+     * @since 0.8.9
      */
     public long getTotalExpanded() {
         try {
@@ -147,10 +145,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
-     *  @return the remaining
-     *  @since 0.8.9
+     * @return the remaining
+     * @since 0.8.9
      */
     public long getRemaining() {
         try {
@@ -162,10 +160,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
-     *  @return the finished
-     *  @since 0.8.9
+     * @return the finished
+     * @since 0.8.9
      */
     public boolean getFinished() {
         try {
@@ -177,9 +175,9 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *  Calls super.close(). May not be reused after this.
+     * Calls super.close(). May not be reused after this.
      *
-     *  @since 0.9.40
+     * @since 0.9.40
      */
     public void destroy() throws IOException {
         close();
@@ -187,10 +185,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *  Does NOT call super.close(), as it cannot be reused if we do that.
-     *  Broken before 0.9.20.
+     * Does NOT call super.close(), as it cannot be reused if we do that.
+     * Broken before 0.9.20.
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     @Override
     public void close() throws IOException {
@@ -203,9 +201,9 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *  Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
+     * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
-     *  @since 0.8.9
+     * @since 0.8.9
      */
     @Override
     public String toString() {
@@ -298,46 +296,46 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     }
 
     /**
-     *  Essentially a SequenceInputStream(in, new ByteArrayInputStream(new byte[1])),
-     *  except that this is resettable.
+     * Essentially a SequenceInputStream(in, new ByteArrayInputStream(new byte[1])),
+     * except that this is resettable.
      *
-     *  Unsupported:
-     *  - available() doesn't include the extra byte
-     *  - skip() doesn't skip the extra byte
+     * Unsupported:
+     * - available() doesn't include the extra byte
+     * - skip() doesn't skip the extra byte
      *
-     *  Why? otherwise the inflater finished() is wrong when the compressed payload
-     *  (in between the 10 byte header and the 8 byte footer) is a multiple of 512 bytes,
-     *  which caused read(buf, off, len) above to fail.
-     *  Happened every time with 1042 byte compressed router infos, for example.
+     * Why? otherwise the inflater finished() is wrong when the compressed payload
+     * (in between the 10 byte header and the 8 byte footer) is a multiple of 512 bytes,
+     * which caused read(buf, off, len) above to fail.
+     * Happened every time with 1042 byte compressed router infos, for example.
      *
-     *  Details:
+     * Details:
      *
-     *  Warning with Inflater nowrap = true:
+     * Warning with Inflater nowrap = true:
      *
-     *     "Note: When using the 'nowrap' option it is also necessary to provide an extra "dummy" byte as input.
-     *      This is required by the ZLIB native library in order to support certain optimizations."
+     * "Note: When using the 'nowrap' option it is also necessary to provide an extra "dummy" byte as input.
+     * This is required by the ZLIB native library in order to support certain optimizations."
      *
-     *     http://docs.oracle.com/javase/1.5.0/docs/api/java/util/zip/Inflater.html
+     * http://docs.oracle.com/javase/1.5.0/docs/api/java/util/zip/Inflater.html
      *
-     *  This is for sure:
+     * This is for sure:
      *
-     *     "This is not nearly specific enough to be useful.  Where in the compressed byte array is the
-     *      extra 'dummy' byte" expected?  What is it to contain? When calling setInput() is the 'len'
-     *      argument incremented to include the dummy byte or not?"
+     * "This is not nearly specific enough to be useful.  Where in the compressed byte array is the
+     * extra 'dummy' byte" expected?  What is it to contain? When calling setInput() is the 'len'
+     * argument incremented to include the dummy byte or not?"
      *
-     *     http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4795299
+     * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4795299
      *
-     *  This is useless:
+     * This is useless:
      *
-     *     http://www.java-forums.org/new-java/38604-decompress-un-gzip-byte.html
+     * http://www.java-forums.org/new-java/38604-decompress-un-gzip-byte.html
      *
-     *  This seems to be the definitive answer:
+     * This seems to be the definitive answer:
      *
-     *     "The fix simply involves copying the byte array and tacking a single null byte on to the end."
+     * "The fix simply involves copying the byte array and tacking a single null byte on to the end."
      *
-     *     http://code.google.com/p/google-apps-sso-sample/issues/detail?id=8
+     * http://code.google.com/p/google-apps-sso-sample/issues/detail?id=8
      *
-     *  @since 0.8.12
+     * @since 0.8.12
      */
     private static class ExtraByteInputStream extends FilterInputStream {
         private static final byte DUMMY = 0;

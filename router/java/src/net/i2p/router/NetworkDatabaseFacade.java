@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -24,7 +23,6 @@ import net.i2p.router.networkdb.reseed.ReseedChecker;
 
 /**
  * Abstract interface for I2P network database operations. Provides router info and lease set lookup, storage, and search functionality for peer discovery and routing.
- *
  */
 public abstract class NetworkDatabaseFacade implements Service {
 
@@ -40,38 +38,38 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract Set<Hash> findNearestRouters(Hash key, int maxNumRouters, Set<Hash> peersToIgnore);
 
     /**
-     *  Lookup a database entry locally.
+     * Lookup a database entry locally.
      *
-     *  @param key the key
-     *  @return RouterInfo, LeaseSet, or null
-     *  @since 0.8.3
+     * @param key the key
+     * @return RouterInfo, LeaseSet, or null
+     * @since 0.8.3
      */
     public abstract DatabaseEntry lookupLocally(Hash key);
 
     /**
-     *  Not for use without validation
+     * Not for use without validation
      *
-     *  @param key the key
-     *  @return RouterInfo, LeaseSet, or null, NOT validated
-     *  @since 0.9.38
+     * @param key the key
+     * @return RouterInfo, LeaseSet, or null, NOT validated
+     * @since 0.9.38
      */
     public abstract DatabaseEntry lookupLocallyWithoutValidation(Hash key);
 
     /**
-     *  Lookup a LeaseSet in the network database.
+     * Lookup a LeaseSet in the network database.
      *
-     *  @param key the key
-     *  @param onFindJob job to run on success
-     *  @param onFailedLookupJob job to run on failure
-     *  @param timeoutMs timeout in milliseconds
+     * @param key the key
+     * @param onFindJob job to run on success
+     * @param onFailedLookupJob job to run on failure
+     * @param timeoutMs timeout in milliseconds
      */
     public abstract void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs);
 
     /**
-     *  Lookup using the client's tunnels
+     * Lookup using the client's tunnels
      *
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @since 0.9.10
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @since 0.9.10
      */
     public abstract void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, Hash fromLocalDest);
 
@@ -100,40 +98,40 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract RouterInfo lookupRouterInfoLocally(Hash key);
 
     /**
-     *  Unconditionally lookup using the client's tunnels.
-     *  No success or failed jobs, no local lookup, no checks.
-     *  Use this to refresh a leaseset before expiration.
+     * Unconditionally lookup using the client's tunnels.
+     * No success or failed jobs, no local lookup, no checks.
+     * Use this to refresh a leaseset before expiration.
      *
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @since 0.9.25
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @since 0.9.25
      */
     public abstract void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest);
 
     /**
-     *  Unconditionally lookup using the client's tunnels.
+     * Unconditionally lookup using the client's tunnels.
      *
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @param onFindJob may be null
-     *  @param onFailedLookupJob may be null
-     *  @since 0.9.47
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @param onFindJob may be null
+     * @param onFailedLookupJob may be null
+     * @since 0.9.47
      */
     public abstract void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
                                        long timeoutMs, Hash fromLocalDest);
 
     /**
-     *  Lookup using the client's tunnels
-     *  Succeeds even if LS validation fails due to unsupported sig type
+     * Lookup using the client's tunnels
+     * Succeeds even if LS validation fails due to unsupported sig type
      *
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @since 0.9.16
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @since 0.9.16
      */
     public abstract void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest);
 
     /**
-     *  Lookup locally in netDB and in badDest cache
-     *  Succeeds even if LS validation failed due to unsupported sig type
+     * Lookup locally in netDB and in badDest cache
+     * Succeeds even if LS validation failed due to unsupported sig type
      *
-     *  @since 0.9.16
+     * @since 0.9.16
      */
     public abstract Destination lookupDestinationLocally(Hash key);
 
@@ -176,13 +174,13 @@ public abstract class NetworkDatabaseFacade implements Service {
     public abstract RouterInfo store(Hash key, RouterInfo routerInfo) throws IllegalArgumentException;
 
     /**
-     *  Store a DatabaseEntry in the network database.
+     * Store a DatabaseEntry in the network database.
      *
-     *  @param key the key
-     *  @param entry the entry to store
-     *  @return the old entry if it already existed at that key
-     *  @throws IllegalArgumentException if the data is not valid
-     *  @since 0.9.16
+     * @param key the key
+     * @param entry the entry to store
+     * @return the old entry if it already existed at that key
+     * @throws IllegalArgumentException if the data is not valid
+     * @since 0.9.16
      */
     public DatabaseEntry store(Hash key, DatabaseEntry entry) throws IllegalArgumentException {
         if (!entry.isLeaseSet()) {
@@ -193,81 +191,81 @@ public abstract class NetworkDatabaseFacade implements Service {
     }
 
     /**
-     *  Publish a RouterInfo to the network database.
+     * Publish a RouterInfo to the network database.
      *
-     *  @param localRouterInfo the RouterInfo to publish
-     *  @throws IllegalArgumentException if the local router is not valid
+     * @param localRouterInfo the RouterInfo to publish
+     * @throws IllegalArgumentException if the local router is not valid
      */
     public abstract void publish(RouterInfo localRouterInfo) throws IllegalArgumentException;
 
     /**
-     *  Publish a LeaseSet to the network database.
+     * Publish a LeaseSet to the network database.
      *
-     *  @param localLeaseSet the LeaseSet to publish
+     * @param localLeaseSet the LeaseSet to publish
      */
     public abstract void publish(LeaseSet localLeaseSet);
 
     /**
-     *  Unpublish a LeaseSet from the network database.
+     * Unpublish a LeaseSet from the network database.
      *
-     *  @param localLeaseSet the LeaseSet to unpublish
+     * @param localLeaseSet the LeaseSet to unpublish
      */
     public abstract void unpublish(LeaseSet localLeaseSet);
 
     /**
-     *  Mark a database entry as failed.
+     * Mark a database entry as failed.
      *
-     *  @param dbEntry the key of the entry to fail
+     * @param dbEntry the key of the entry to fail
      */
     public abstract void fail(Hash dbEntry);
 
     /**
-     *  The last time we successfully published our RI.
+     * The last time we successfully published our RI.
      *
-     *  @return the timestamp, or 0
-     *  @since 0.9.9
+     * @return the timestamp, or 0
+     * @since 0.9.9
      */
     public long getLastRouterInfoPublishTime() {return 0;}
 
     /**
-     *  All known router hashes.
+     * All known router hashes.
      *
-     *  @return set of router hashes
+     * @return set of router hashes
      */
     public abstract Set<Hash> getAllRouters();
 
     /**
-     *  Number of known routers.
+     * Number of known routers.
      *
-     *  @return the count
+     * @return the count
      */
     public int getKnownRouters() {return 0;}
 
     /**
-     *  Number of known LeaseSets.
+     * Number of known LeaseSets.
      *
-     *  @return the count
+     * @return the count
      */
     public int getKnownLeaseSets() {return 0;}
 
     /**
-     *  Is the network database initialized?
+     * Is the network database initialized?
      *
-     *  @return true if initialized
+     * @return true if initialized
      */
     public boolean isInitialized() {return true;}
 
     /**
-     *  Rescan the network database.
+     * Rescan the network database.
      */
     public void rescan() {}
 
     /** Debug only - all user info moved to NetDbRenderer in router console */
     public void renderStatusHTML(Writer out) throws IOException {}
     /**
-     *  All known LeaseSets for display.
+     * All known LeaseSets for display.
      *
-     *  @return set of LeaseSets, or empty
+     * @return set of LeaseSets, or empty
      */
     public Set<LeaseSet> getLeases() {return Collections.emptySet();}
     /** Public for NetDbRenderer in routerconsole */
@@ -304,39 +302,38 @@ public abstract class NetworkDatabaseFacade implements Service {
     public ReseedChecker reseedChecker() {return null;}
 
     /**
-     *  For convenience, so users don't have to cast to FNDF, and unit tests using
-     *  Dummy NDF will work.
+     * For convenience, so users don't have to cast to FNDF, and unit tests using
+     * Dummy NDF will work.
      *
-     *  @return false; FNDF overrides to return actual setting
-     *  @since IPv6
+     * @return false; FNDF overrides to return actual setting
      */
     public boolean floodfillEnabled() {return false;}
 
     /**
-     *  Is it permanently negative cached?
+     * Is it permanently negative cached?
      *
-     *  @param key only for Destinations; for RouterIdentities, see Banlist
-     *  @return whether negative cached forever
-     *  @since 0.9.16
+     * @param key only for Destinations; for RouterIdentities, see Banlist
+     * @return whether negative cached forever
+     * @since 0.9.16
      */
     public boolean isNegativeCachedForever(Hash key) {return false;}
 
     /**
-     *  Look up the cached BlindData for the given key.
+     * Look up the cached BlindData for the given key.
      *
-     *  @param spk unblinded key
-     *  @return BlindData or null
-     *  @since 0.9.40
+     * @param spk unblinded key
+     * @return BlindData or null
+     * @since 0.9.40
      */
     public BlindData getBlindData(SigningPublicKey spk) {
         return null;
     }
 
     /**
-     *  Cache the given BlindData for later lookup.
+     * Cache the given BlindData for later lookup.
      *
-     *  @param bd new BlindData to put in the cache
-     *  @since 0.9.40
+     * @param bd new BlindData to put in the cache
+     * @since 0.9.40
      */
     public void setBlindData(BlindData bd) {}
 
@@ -351,27 +348,27 @@ public abstract class NetworkDatabaseFacade implements Service {
     }
 
     /**
-     *  For console ConfigKeyringHelper
+     * For console ConfigKeyringHelper
      *
-     *  @return true if removed
-     *  @since 0.9.41
+     * @return true if removed
+     * @since 0.9.41
      */
     public boolean removeBlindData(SigningPublicKey spk) {
         return false;
     }
 
     /**
-     *  Notify the netDB that the routing key changed at midnight UTC
+     * Notify the netDB that the routing key changed at midnight UTC
      *
-     *  @since 0.9.50
+     * @since 0.9.50
      */
     public void routingKeyChanged() {}
 
     /**
-     *  Trigger a retroactive purge sweep of the NetDb.
-     *  Bans and removes all routers matching enabled LU/XG/custom-cap bans.
+     * Trigger a retroactive purge sweep of the NetDb.
+     * Bans and removes all routers matching enabled LU/XG/custom-cap bans.
      *
-     *  @since 0.9.70
+     * @since 0.9.70
      */
     public void purgeMatchingRouters() {}
 }

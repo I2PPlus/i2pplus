@@ -60,12 +60,12 @@ public class SOCKSHeader {
     }
 
     /**
-     *  Make a dummy header from a dest,
-     *  for those cases where we want to receive unsolicited datagrams.
-     *  Unused for now.
+     * Make a dummy header from a dest,
+     * for those cases where we want to receive unsolicited datagrams.
+     * Unused for now.
      *
-     *  @param port I2CP port 0-65535
-     *  @since 0.9.53 add port param
+     * @param port I2CP port 0-65535
+     * @since 0.9.53 add port param
      */
     public SOCKSHeader(Destination dest, int port) {
         this.header = new byte[beg.length + 60 + 2];
@@ -76,9 +76,9 @@ public class SOCKSHeader {
     }
 
     /**
-     *  As of 0.9.53, returns IP address as a string for address types 1 and 4.
+     * As of 0.9.53, returns IP address as a string for address types 1 and 4.
      *
-     *  @return hostname or null for unknown address type
+     * @return hostname or null for unknown address type
      */
     public String getHost() {
         int addressType = this.header[3];
@@ -94,8 +94,8 @@ public class SOCKSHeader {
     }
 
     /**
-     *  @return 0 - 65535
-     *  @since 0.9.53
+     * @return 0 - 65535
+     * @since 0.9.53
      */
     public int getPort() {
         int namelen;
@@ -112,7 +112,7 @@ public class SOCKSHeader {
     }
 
     /**
-     *  @return destination or null
+     * @return destination or null
      */
     public Destination getDestination() {
         String name = getHost();

@@ -6,7 +6,6 @@ package net.i2p.client.impl;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -106,9 +105,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     *  Fire up a periodic task to check for unclaimed messages
+     * Fire up a periodic task to check for unclaimed messages
      *
-     *  @since 0.9.14
+     * @since 0.9.14
      */
     @Override
     protected void startVerifyUsage() {
@@ -117,10 +116,10 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     *  Check for expired message states, without wastefully setting a timer for each
-     *  message.
+     * Check for expired message states, without wastefully setting a timer for each
+     * message.
      *
-     *  @since 0.9.14
+     * @since 0.9.14
      */
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
 
@@ -483,20 +482,20 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     *  Only call this with nonzero status, i.e. for outbound messages
-     *  whose MessageState may be queued on _sendingStates.
+     * Only call this with nonzero status, i.e. for outbound messages
+     * whose MessageState may be queued on _sendingStates.
      *
-     *  Even when using sendBestEffort(), this is a waste, because the
-     *  MessageState is removed from _sendingStates immediately and
-     *  so the lookup here fails.
+     * Even when using sendBestEffort(), this is a waste, because the
+     * MessageState is removed from _sendingStates immediately and
+     * so the lookup here fails.
      *
-     *  This is now pretty much avoided since streaming now sets
-     *  i2cp.messageReliability = none, which forces sendNoEffort() instead of sendBestEffort(),
-     *  so the router won't send us any MSM's for outbound traffic.
+     * This is now pretty much avoided since streaming now sets
+     * i2cp.messageReliability = none, which forces sendNoEffort() instead of sendBestEffort(),
+     * so the router won't send us any MSM's for outbound traffic.
      *
-     *  @param msgId the message ID
-     *  @param nonce the nonce identifying the send
-     *  @param status != 0
+     * @param msgId the message ID
+     * @param nonce the nonce identifying the send
+     * @param status != 0
      */
     @Override
     public void receiveStatus(int msgId, long nonce, int status) {
@@ -702,9 +701,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     *  Notify all tunnel status listeners of a tunnel failure.
+     * Notify all tunnel status listeners of a tunnel failure.
      *
-     *  @since 0.9.69
+     * @since 0.9.69
      */
     protected void notifyTunnelFailed(String poolName, boolean isInbound) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {
@@ -718,9 +717,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     *  Notify all tunnel status listeners of a tunnel removal.
+     * Notify all tunnel status listeners of a tunnel removal.
      *
-     *  @since 0.9.69+
+     * @since 0.9.69+
      */
     protected void notifyTunnelRemoved(TunnelRemovalEvent event) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {
@@ -734,9 +733,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     *  Notify all tunnel status listeners of pool shutdown.
+     * Notify all tunnel status listeners of pool shutdown.
      *
-     *  @since 0.9.69+
+     * @since 0.9.69+
      */
     protected void notifyPoolShuttingDown(String poolName, boolean isInbound) {
         for (TunnelStatusListener lsnr : _tunnelStatusListeners) {

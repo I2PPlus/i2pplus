@@ -5,7 +5,6 @@ package net.i2p.router.startup;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.BufferedOutputStream;
@@ -40,10 +39,9 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- *  Warning - misnamed. This creates a new RouterIdentity, i.e.
- *  new router keys and hash. It then builds a new RouterInfo
- *  and saves all the keys. This is generally run only once, on a new install.
- *
+ * Warning - misnamed. This creates a new RouterIdentity, i.e.
+ * new router keys and hash. It then builds a new RouterInfo
+ * and saves all the keys. This is generally run only once, on a new install.
  */
 public class CreateRouterInfoJob extends JobImpl {
     private final Log _log;
@@ -58,7 +56,7 @@ public class CreateRouterInfoJob extends JobImpl {
     /** Property for router signature type */
     static final String PROP_ROUTER_SIGTYPE = "router.sigType";
     /** Property for router encryption type
-     *  @since 0.9.48 */
+     * @since 0.9.48 */
     static final String PROP_ROUTER_ENCTYPE = "router.encType";
     private static final SigType DEFAULT_SIGTYPE = SigType.EdDSA_SHA512_Ed25519;
     private static final EncType DEFAULT_ENCTYPE = EncType.ECIES_X25519;
@@ -90,26 +88,26 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Writes 6 files: router.info (standard RI format),
-     *  router.keys.dat, and 4 individual key files under keyBackup/
+     * Writes 6 files: router.info (standard RI format),
+     * router.keys.dat, and 4 individual key files under keyBackup/
      *
-     *  router.keys.dat file format: This is the
-     *  same "eepPriv.dat" format used by the client code,
-     *  as documented in PrivateKeyFile.
+     * router.keys.dat file format: This is the
+     * same "eepPriv.dat" format used by the client code,
+     * as documented in PrivateKeyFile.
      *
-     *  Old router.keys file format: Note that this is NOT the
-     *  same "eepPriv.dat" format used by the client code.
+     * Old router.keys file format: Note that this is NOT the
+     * same "eepPriv.dat" format used by the client code.
      *  <pre>
      *  - Private key (256 bytes)
      *  - Signing Private key (20 bytes)
      *  - Public key (256 bytes)
      *  - Signing Public key (128 bytes)
      *  Total 660 bytes
-     *  </pre>
+     * </pre>
      *
-     *  Caller must hold Router.routerInfoFileLock.
+     * Caller must hold Router.routerInfoFileLock.
      *
-     *  @return the created RouterInfo, or null on failure
+     * @return the created RouterInfo, or null on failure
      */
     RouterInfo createRouterInfo() {
         RouterContext ctx = getContext();
@@ -201,11 +199,11 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  The configured SigType to expect on read-in.
+     * The configured SigType to expect on read-in.
      *
-     *  @param ctx the router context
-     *  @return the configured signature type
-     *  @since 0.9.16
+     * @param ctx the router context
+     * @return the configured signature type
+     * @since 0.9.16
      */
     public static SigType getSigTypeConfig(RouterContext ctx) {
         SigType cstype = DEFAULT_SIGTYPE;
@@ -222,11 +220,11 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  The configured EncType to expect on read-in.
+     * The configured EncType to expect on read-in.
      *
-     *  @param ctx the router context
-     *  @return the configured encryption type
-     *  @since 0.9.48
+     * @param ctx the router context
+     * @return the configured encryption type
+     * @since 0.9.48
      */
     public static EncType getEncTypeConfig(RouterContext ctx) {
         EncType cstype = DEFAULT_ENCTYPE;
@@ -254,14 +252,14 @@ public class CreateRouterInfoJob extends JobImpl {
     }
 
     /**
-     *  Only called at startup via LoadRouterInfoJob and RebuildRouterInfoJob.
-     *  Not called by periodic RepublishLocalRouterInfoJob.
-     *  We don't want to change the cert on the fly as it changes the router hash.
-     *  RouterInfo.isHidden() checks the capability, but RouterIdentity.isHidden() checks the cert.
-     *  There's no reason to ever add a hidden cert?
+     * Only called at startup via LoadRouterInfoJob and RebuildRouterInfoJob.
+     * Not called by periodic RepublishLocalRouterInfoJob.
+     * We don't want to change the cert on the fly as it changes the router hash.
+     * RouterInfo.isHidden() checks the capability, but RouterIdentity.isHidden() checks the cert.
+     * There's no reason to ever add a hidden cert?
      *
-     *  @return the certificate for a new RouterInfo - probably a null cert.
-     *  @since 0.9.16 moved from Router
+     * @return the certificate for a new RouterInfo - probably a null cert.
+     * @since 0.9.16 moved from Router
      */
     private static Certificate createCertificate(RouterContext ctx, SigningPublicKey spk, PublicKey pk) {
         if (spk.getType() != SigType.DSA_SHA1 || pk.getType() != EncType.ELGAMAL_2048)

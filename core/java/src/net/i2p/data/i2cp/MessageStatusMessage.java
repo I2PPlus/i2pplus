@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -35,7 +34,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     private int _status;
 
     /**
-     *  For incoming messages. All the rest are for outgoing.
+     * For incoming messages. All the rest are for outgoing.
      */
     public static final int STATUS_AVAILABLE = 0;
 
@@ -48,187 +47,187 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     public static final int STATUS_SEND_BEST_EFFORT_SUCCESS = 2;
 
     /**
-     *  A probable failure, but we don't know for sure.
+     * A probable failure, but we don't know for sure.
      */
     public static final int STATUS_SEND_BEST_EFFORT_FAILURE = 3;
 
     /**
-     *  Generic success.
-     *  May not really be guaranteed, as the best-effort
-     *  success code is unused.
+     * Generic success.
+     * May not really be guaranteed, as the best-effort
+     * success code is unused.
      */
     public static final int STATUS_SEND_GUARANTEED_SUCCESS = 4;
 
     /**
-     *  Generic failure, specific cause unknown.
-     *  May not really be a guaranteed failure, as the best-effort
-     *  failure code is unused.
+     * Generic failure, specific cause unknown.
+     * May not really be a guaranteed failure, as the best-effort
+     * failure code is unused.
      */
     public static final int STATUS_SEND_GUARANTEED_FAILURE = 5;
 
     /**
-     *  The far-end destination is local and we are pretty darn sure
-     *  the delivery succeeded.
+     * The far-end destination is local and we are pretty darn sure
+     * the delivery succeeded.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_SUCCESS_LOCAL = 6;
 
     /**
-     *  The far-end destination is local but delivery failed for some reason.
-     *  This is a guaranteed failure.
+     * The far-end destination is local but delivery failed for some reason.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_LOCAL = 7;
 
     /**
-     *  The router is not ready, has shut down, or has major problems.
-     *  This is a guaranteed failure.
+     * The router is not ready, has shut down, or has major problems.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_ROUTER = 8;
 
     /**
-     *  The PC apparently has no network connectivity at all.
-     *  This is a guaranteed failure.
+     * The PC apparently has no network connectivity at all.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_NETWORK = 9;
 
     /**
-     *  The session is invalid or closed.
-     *  This is a guaranteed failure.
+     * The session is invalid or closed.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_BAD_SESSION = 10;
 
     /**
-     *  The message payload is invalid or zero-length or too big.
-     *  This is a guaranteed failure.
+     * The message payload is invalid or zero-length or too big.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_BAD_MESSAGE = 11;
 
     /**
-     *  Something is invalid in the message options, or the expiration
-     *  is too far in the future.
-     *  This is a guaranteed failure.
+     * Something is invalid in the message options, or the expiration
+     * is too far in the future.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_BAD_OPTIONS = 12;
 
     /**
-     *  Some queue or buffer in the router is full and the message was dropped.
-     *  This is a guaranteed failure.
+     * Some queue or buffer in the router is full and the message was dropped.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_OVERFLOW = 13;
 
     /**
-     *  Message expired before it could be sent.
-     *  This is a guaranteed failure.
+     * Message expired before it could be sent.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_EXPIRED = 14;
 
     /**
-     *  Local leaseset problems. The client has not yet signed
-     *  a leaseset, or the local keys are invalid, or it has expired,
-     *  or it does not have any tunnels in it.
-     *  This is a guaranteed failure.
+     * Local leaseset problems. The client has not yet signed
+     * a leaseset, or the local keys are invalid, or it has expired,
+     * or it does not have any tunnels in it.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_LOCAL_LEASESET = 15;
 
     /**
-     *  Local problems - no outbound tunnel to send through,
-     *  or no inbound tunnel if a reply is required.
-     *  This is a guaranteed failure.
+     * Local problems - no outbound tunnel to send through,
+     * or no inbound tunnel if a reply is required.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_NO_TUNNELS = 16;
 
     /**
-     *  The certs or options in the destination or leaseset indicate that
-     *  it uses an encryption format that we don't support, so we can't talk to it.
-     *  This is a guaranteed failure.
+     * The certs or options in the destination or leaseset indicate that
+     * it uses an encryption format that we don't support, so we can't talk to it.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION = 17;
 
     /**
-     *  Something strange is wrong with the far-end destination.
-     *  Bad format, unsupported options, certificates, etc.
-     *  This is a guaranteed failure.
+     * Something strange is wrong with the far-end destination.
+     * Bad format, unsupported options, certificates, etc.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_DESTINATION = 18;
 
     /**
-     *  We got the far-end leaseset but something strange is wrong with it.
-     *  Unsupported options or certificates, no tunnels, etc.
-     *  This is a guaranteed failure.
+     * We got the far-end leaseset but something strange is wrong with it.
+     * Unsupported options or certificates, no tunnels, etc.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_BAD_LEASESET = 19;
 
     /**
-     *  We got the far-end leaseset but it's expired and can't get a new one.
-     *  This is a guaranteed failure.
+     * We got the far-end leaseset but it's expired and can't get a new one.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_EXPIRED_LEASESET = 20;
 
     /**
-     *  Could not find the far-end destination's lease set.
-     *  This is a common failure, equivalent to a DNS lookup fail.
-     *  This is a guaranteed failure.
+     * Could not find the far-end destination's lease set.
+     * This is a common failure, equivalent to a DNS lookup fail.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.5
+     * @since 0.9.5
      */
     public static final int STATUS_SEND_FAILURE_NO_LEASESET = 21;
 
     /**
-     *  The far-end destination's lease set was a meta lease set,
-     *  and cannot be sent to. The client should request the meta
-     *  lease set's contents with a HostLookupMessage, and select
-     *  one of the hashes contained within to lookup and send to.
-     *  This is a guaranteed failure.
+     * The far-end destination's lease set was a meta lease set,
+     * and cannot be sent to. The client should request the meta
+     * lease set's contents with a HostLookupMessage, and select
+     * one of the hashes contained within to lookup and send to.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.41
+     * @since 0.9.41
      */
     public static final int STATUS_SEND_FAILURE_META_LEASESET = 22;
 
     /**
-     *  Message was attempted to be sent to the same Destination.
-     *  This is a guaranteed failure.
+     * Message was attempted to be sent to the same Destination.
+     * This is a guaranteed failure.
      *
-     *  @since 0.9.62
+     * @since 0.9.62
      */
     public static final int STATUS_SEND_FAILURE_LOOPBACK = 23;
 
     /**
      * NOTE: Add any new status codes to handlers in:
-     *     net.i2p.client.impl.MessageState
-     *     net.i2p.client.impl.MessageStatusMessageHandler
-     *     net.i2p.client.streaming.I2PSocketException
-     *     net.i2p.client.streaming.impl.PacketQueue
-     *     net.i2p.i2ptunnel.I2PTunnelHTTPClientBase
-     *     and update http://i2p-projekt.i2p/spec/i2cp
+     * net.i2p.client.impl.MessageState
+     * net.i2p.client.impl.MessageStatusMessageHandler
+     * net.i2p.client.streaming.I2PSocketException
+     * net.i2p.client.streaming.impl.PacketQueue
+     * net.i2p.i2ptunnel.I2PTunnelHTTPClientBase
+     * and update http://i2p-projekt.i2p/spec/i2cp
      */
     public MessageStatusMessage() {
         _sessionId = -1;
@@ -311,7 +310,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  This is the router's ID for the message
+     * This is the router's ID for the message
      */
     public void setMessageId(long id) {
         _messageId = id;
@@ -341,7 +340,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  This is the client's ID for the message
+     * This is the client's ID for the message
      */
     public void setNonce(long nonce) {
         _nonce = nonce;

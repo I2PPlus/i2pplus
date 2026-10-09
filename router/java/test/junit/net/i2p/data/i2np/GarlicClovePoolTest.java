@@ -8,17 +8,17 @@ import net.i2p.data.Certificate;
 import org.junit.Test;
 
 /**
- *  Verifies that a pool/reuse pattern for GarlicClove produces identical
- *  results to allocating a new GarlicClove for each clove. This validates
- *  the fix for per-clove object allocation in the hot garlic message loop.
+ * Verifies that a pool/reuse pattern for GarlicClove produces identical
+ * results to allocating a new GarlicClove for each clove. This validates
+ * the fix for per-clove object allocation in the hot garlic message loop.
  */
 public class GarlicClovePoolTest {
 
     private static final I2PAppContext CTX = I2PAppContext.getGlobalContext();
 
     /**
-     *  Pool that reuses GarlicClove instances via reset/set pattern.
-     *  Mirrors the proposed fix for GarlicClove allocation churn.
+     * Pool that reuses GarlicClove instances via reset/set pattern.
+     * Mirrors the proposed fix for GarlicClove allocation churn.
      */
     private static class GarlicClovePool {
         private final GarlicClove[] pool;

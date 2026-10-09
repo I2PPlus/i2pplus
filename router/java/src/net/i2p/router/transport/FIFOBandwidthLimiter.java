@@ -22,28 +22,28 @@ import net.i2p.util.Log;
  *
  * <strong>Core Features:</strong>
  * <ul>
- *   <li>FIFO request queuing for fair bandwidth allocation</li>
- *   <li>Token bucket rate limiting</li>
- *   <li>Separate inbound and outbound management</li>
- *   <li>Configurable bandwidth limits and refill rates</li>
- *   <li>Thread-safe operations with atomic counters</li>
- *   <li>Request satisfaction and partial fulfillment handling</li>
+ * <li>FIFO request queuing for fair bandwidth allocation</li>
+ * <li>Token bucket rate limiting</li>
+ * <li>Separate inbound and outbound management</li>
+ * <li>Configurable bandwidth limits and refill rates</li>
+ * <li>Thread-safe operations with atomic counters</li>
+ * <li>Request satisfaction and partial fulfillment handling</li>
  * </ul>
  *
  * <strong>Concurrency Strategy:</strong>
  * <ul>
- *   <li>Java 5: Used synchronized ArrayList with head/tail access</li>
- *   <li>Java 6+: Uses LinkedBlockingDeque for lock-free operations</li>
- *   <li>Request polling from queue head for efficiency</li>
- *   <li>Partial request satisfaction with push-back mechanism</li>
+ * <li>Java 5: Used synchronized ArrayList with head/tail access</li>
+ * <li>Java 6+: Uses LinkedBlockingDeque for lock-free operations</li>
+ * <li>Request polling from queue head for efficiency</li>
+ * <li>Partial request satisfaction with push-back mechanism</li>
  * </ul>
  *
  * <strong>Algorithm:</strong>
  * <ul>
- *   <li>Token refill at fixed intervals</li>
- *   <li>Request processing when tokens available</li>
- *   <li>Burst prevention through token depletion</li>
- *   <li>Priority-based request handling</li>
+ * <li>Token refill at fixed intervals</li>
+ * <li>Request processing when tokens available</li>
+ * <li>Burst prevention through token depletion</li>
+ * <li>Priority-based request handling</li>
  * </ul>
  */
 public class FIFOBandwidthLimiter {
@@ -130,30 +130,30 @@ public class FIFOBandwidthLimiter {
      */
     public long getTotalAllocatedOutboundBytes() { return _totalAllocatedOutboundBytes.get(); }
     /**
-     *  Smoothed one-second send rate.
+     * Smoothed one-second send rate.
      *
-     *  @return smoothed one second rate
+     * @return smoothed one second rate
      */
     public float getSendBps() { return _sendBps; }
 
     /**
-     *  Smoothed one-second receive rate.
+     * Smoothed one-second receive rate.
      *
-     *  @return smoothed one second rate
+     * @return smoothed one second rate
      */
     public float getReceiveBps() { return _recvBps; }
 
     /**
-     *  Smoothed 15-second send rate.
+     * Smoothed 15-second send rate.
      *
-     *  @return smoothed 15 second rate
+     * @return smoothed 15 second rate
      */
     public float getSendBps15s() { return _sendBps15s; }
 
     /**
-     *  Smoothed 15-second receive rate.
+     * Smoothed 15-second receive rate.
      *
-     *  @return smoothed 15 second rate
+     * @return smoothed 15 second rate
      */
     public float getReceiveBps15s() { return _recvBps15s; }
 
@@ -231,30 +231,30 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  Check if we should accept an inbound participating message.
+     * Check if we should accept an inbound participating message.
      *
-     *  @param size bytes
-     *  @param factor multiplier of size for the drop calculation, 1 for no adjustment
-     *  @return true for accepted, false for drop
+     * @param size bytes
+     * @param factor multiplier of size for the drop calculation, 1 for no adjustment
+     * @return true for accepted, false for drop
      */
     public boolean receivedParticipatingMessage(int size, float factor) {
         return _refiller.incrementParticipatingMessageBytesIn(size, factor);
     }
 
     /**
-     *  Out bandwidth. Actual bandwidth, not smoothed, not bucketed.
+     * Out bandwidth. Actual bandwidth, not smoothed, not bucketed.
      *
-     *  @return Bps in recent period (a few seconds)
-     *  @since 0.8.12
+     * @return Bps in recent period (a few seconds)
+     * @since 0.8.12
      */
     public int getCurrentParticipatingBandwidth() {
         return _refiller.getCurrentParticipatingBandwidth();
     }
 
     /**
-     *  In bandwidth. Actual bandwidth, not smoothed, not bucketed.
+     * In bandwidth. Actual bandwidth, not smoothed, not bucketed.
      *
-     *  @return Bps in recent period (a few seconds)
+     * @return Bps in recent period (a few seconds)
      */
     public int getCurrentParticipatingBandwidthIn() {
         return _refiller.getCurrentParticipatingBandwidthIn();
@@ -295,7 +295,7 @@ public class FIFOBandwidthLimiter {
      * allocators or concurrent reuse of the same candidate.
      *
      * @param candidate the request from a previous allocation for this
-     *        consumer, or null for a new request
+     * consumer, or null for a new request
      * @param bytesIn the number of bytes requested
      * @param purpose the purpose of the request, for logging
      * @return the request to use; never null
@@ -385,7 +385,7 @@ public class FIFOBandwidthLimiter {
      * shortcut still applies, it is returned as-is.
      *
      * @param candidate the request from a previous allocation for this
-     *        consumer, or null for a new request
+     * consumer, or null for a new request
      * @param bytesOut the number of bytes requested
      * @param priority 0 for now
      * @param purpose the purpose of the request, for logging
@@ -879,13 +879,13 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  Lockless total satisfaction,
-     *  at some minor risk of exceeding the limits
-     *  and driving the available counter below zero
+     * Lockless total satisfaction,
+     * at some minor risk of exceeding the limits
+     * and driving the available counter below zero
      *
-     *  @param requested number of bytes
-     *  @return satisfaction
-     *  @since 0.7.13
+     * @param requested number of bytes
+     * @return satisfaction
+     * @since 0.7.13
      */
     private boolean shortcutSatisfyInboundRequest(int requested) {
         boolean rv = _inboundUnlimited ||
@@ -899,13 +899,13 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  Lockless total satisfaction,
-     *  at some minor risk of exceeding the limits
-     *  and driving the available counter below zero
+     * Lockless total satisfaction,
+     * at some minor risk of exceeding the limits
+     * and driving the available counter below zero
      *
-     *  @param requested number of bytes
-     *  @return satisfaction
-     *  @since 0.7.13
+     * @param requested number of bytes
+     * @return satisfaction
+     * @since 0.7.13
      */
     private boolean shortcutSatisfyOutboundRequest(int requested) {
         boolean rv = _outboundUnlimited ||
@@ -938,9 +938,9 @@ public class FIFOBandwidthLimiter {
         private int _priority;
 
         /**
-         *  Allocation request for the given byte count.
+         * Allocation request for the given byte count.
          *
-         *  @param priority 0 for now
+         * @param priority 0 for now
          */
         public SimpleRequest(int bytes, int priority) {
             satisfiedBuffer = new ArrayList<>(1);
@@ -948,13 +948,13 @@ public class FIFOBandwidthLimiter {
         }
 
         /**
-         *  Reinitialize this request for a new allocation by the same consumer.
-         *  Only called when the request is complete (fully allocated) and no
-         *  longer in the pending queue; aborted requests are never reset.
+         * Reinitialize this request for a new allocation by the same consumer.
+         * Only called when the request is complete (fully allocated) and no
+         * longer in the pending queue; aborted requests are never reset.
          *
-         *  @param bytes the byte count
-         *  @param priority 0 for now
-         *  @since 0.9.71+
+         * @param bytes the byte count
+         * @param priority 0 for now
+         * @since 0.9.71+
          */
         public void reset(int bytes, int priority) {
             _total = bytes;
@@ -1003,7 +1003,7 @@ public class FIFOBandwidthLimiter {
         public synchronized CompleteListener getCompleteListener() { return _lsnr; }
 
         /**
-         *  Only used by NTCP.
+         * Only used by NTCP.
          */
         public void setCompleteListener(CompleteListener lsnr) {
             boolean complete = false;
@@ -1021,9 +1021,9 @@ public class FIFOBandwidthLimiter {
         private synchronized boolean isComplete() { return _allocated >= _total; }
 
         /**
-         *  Only used by SSU.
-         *  May return without allocating.
-         *  Check getPendingRequested() &gt; 0 in a loop.
+         * Only used by SSU.
+         * May return without allocating.
+         * Check getPendingRequested() &gt; 0 in a loop.
          */
         public void waitForNextAllocation() {
             boolean complete = false;
@@ -1044,15 +1044,15 @@ public class FIFOBandwidthLimiter {
         }
 
         /**
-         *  Only returns nonzero if there's no listener and waitForNextAllocation()
-         *  has been called (i.e. SSU)
-         *  Now unused.
+         * Only returns nonzero if there's no listener and waitForNextAllocation()
+         * has been called (i.e. SSU)
+         * Now unused.
          */
         synchronized int getAllocationsSinceWait() { return _waited ? _allocationsSinceWait : 0; }
 
         /**
-         *  Increments allocationsSinceWait only if there is a listener.
-         *  Does not notify; caller must call notifyAllocation()
+         * Increments allocationsSinceWait only if there is a listener.
+         * Does not notify; caller must call notifyAllocation()
          */
         synchronized void allocateBytes(int bytes) {
             _allocated += bytes;
@@ -1106,7 +1106,7 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     *  A bandwidth request, either inbound or outbound.
+     * A bandwidth request, either inbound or outbound.
      */
     public interface Request extends PQEntry {
         /** When the request was made. */
@@ -1116,9 +1116,9 @@ public class FIFOBandwidthLimiter {
         /** How many bytes were requested and haven't yet been allocated. */
         public int getPendingRequested();
         /**
-         *  Block until we are allocated some more bytes.
-         *  May return without allocating.
-         *  Check getPendingRequested() &gt; 0 in a loop.
+         * Block until we are allocated some more bytes.
+         * May return without allocating.
+         * Check getPendingRequested() &gt; 0 in a loop.
          */
         public void waitForNextAllocation();
         /** We no longer want the data requested (the connection closed). */

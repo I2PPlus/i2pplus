@@ -93,8 +93,8 @@ final class ECConstants {
         private static final int H = 1;
 
         /**
-         *  P and N in decimal, no spaces;
-         *  Seed, B, Gx, Gy in hex, spaces allowed
+         * P and N in decimal, no spaces;
+         * Seed, B, Gx, Gy in hex, spaces allowed
          */
         public ECParms(String pss, String nss, String sss, String bss, String gxss, String gyss) {
             ps = pss; ns = nss; ss = sss; bs = bss; gxs = gxss; gys = gyss;
@@ -296,9 +296,9 @@ final class ECConstants {
     );
 
     /**
-     *  Generate a spec from a curve name
+     * Generate a spec from a curve name
      *
-     *  @return null if fail
+     * @return null if fail
      */
     private static ECParameterSpec genSpec(String name) {
         // convert the ECGenParameterSpecs to ECParameterSpecs for several reasons:
@@ -332,11 +332,11 @@ final class ECConstants {
     }
 
     /**
-     *  Tries curve name1, then name2, then creates new from parms.
+     * Tries curve name1, then name2, then creates new from parms.
      *
-     *  @param name2 null to skip
-     *  @param parms null to skip
-     *  @return null if all fail
+     * @param name2 null to skip
+     * @param parms null to skip
+     * @return null if all fail
      */
     private static ECParameterSpec genSpec(String name1, String name2, ECParms parms) {
         ECParameterSpec rv = genSpec(name1);
@@ -366,13 +366,13 @@ final class ECConstants {
 
 
     /**
-     *  There is no ECParameterSpec.equals().
-     *  Needed to load family keys on Android via SigUtil.fromJavaKey().
+     * There is no ECParameterSpec.equals().
+     * Needed to load family keys on Android via SigUtil.fromJavaKey().
      *
-     *  @param s1 first spec
-     *  @param s2 second spec
-     *  @return true if equal
-     *  @since 0.9.55
+     * @param s1 first spec
+     * @param s2 second spec
+     * @return true if equal
+     * @since 0.9.55
      */
     public static boolean equals(ECParameterSpec s1, ECParameterSpec s2) {
         if (s1 == s2)

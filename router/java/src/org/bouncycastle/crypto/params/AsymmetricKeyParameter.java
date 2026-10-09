@@ -15,7 +15,7 @@ public class AsymmetricKeyParameter
     /**
      * Create a new asymmetric key parameter.
      *
-     *  @param privateKey true for private key, false for public key
+     * @param privateKey true for private key, false for public key
      */
     public AsymmetricKeyParameter(
         boolean privateKey)

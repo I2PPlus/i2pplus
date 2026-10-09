@@ -21,24 +21,24 @@ import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.EventDispatcher;
 
 /**
-     * Base client class that sets up an I2P Datagram client destination.
-     * The UDP side is not implemented here, as there are at least
-     * two possibilities:
-     *
-     * 1) UDP side is a "server"
-     *    Example: Streamr Consumer
-     *    - Configure a destination host and port
-     *    - External application sends no data
-     *    - Extending class must have a constructor with host and port arguments
-     *
-     * 2) UDP side is a client/server
-     *    Example: SOCKS UDP (DNS requests?)
-     *    - configure an inbound port and a destination host and port
-     *    - External application sends and receives data
-     *    - Extending class must have a constructor with host and 2 port arguments
-     *
-     * So the implementing class must create a UDPSource and/or UDPSink,
-     * and must call setSink().
+ * Base client class that sets up an I2P Datagram client destination.
+ * The UDP side is not implemented here, as there are at least
+ * two possibilities:
+ *
+ * 1) UDP side is a "server"
+ * Example: Streamr Consumer
+ * - Configure a destination host and port
+ * - External application sends no data
+ * - Extending class must have a constructor with host and port arguments
+ *
+ * 2) UDP side is a client/server
+ * Example: SOCKS UDP (DNS requests?)
+ * - configure an inbound port and a destination host and port
+ * - External application sends and receives data
+ * - Extending class must have a constructor with host and 2 port arguments
+ *
+ * So the implementing class must create a UDPSource and/or UDPSink,
+ * and must call setSink().
  */
  public abstract class I2PTunnelUDPClientBase extends I2PTunnelTask implements Source, Sink {
 
@@ -68,7 +68,7 @@ import net.i2p.util.EventDispatcher;
      * @param notifyThis event dispatcher for notifications
      * @param tunnel the tunnel
      * @throws IllegalArgumentException if the I2CP configuration is so broken
-     *                                  that we can't create a socketManager
+     * that we can't create a socketManager
      */
     public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis,
                                   I2PTunnel tunnel) throws IllegalArgumentException {
@@ -127,10 +127,10 @@ import net.i2p.util.EventDispatcher;
     }
 
     /**
-     *  Starts the tunnel and begins processing datagrams.
-     *  Classes should override to start UDP side as well.
+     * Starts the tunnel and begins processing datagrams.
+     * Classes should override to start UDP side as well.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     public void startRunning() {
         synchronized (startLock) {
@@ -146,11 +146,11 @@ import net.i2p.util.EventDispatcher;
     }
 
     /**
-     *  Closes the tunnel and destroys the session.
+     * Closes the tunnel and destroys the session.
      *
-     *  @param forced if true, force immediate close without graceful shutdown
-     *  @return true if closed successfully
-     *  @since 0.9.53
+     * @param forced if true, force immediate close without graceful shutdown
+     * @return true if closed successfully
+     * @since 0.9.53
      */
     @Override
     public boolean close(boolean forced) {
@@ -166,11 +166,11 @@ import net.i2p.util.EventDispatcher;
     }
 
     /**
-     *  Sets the receiver of the UDP datagrams from I2P.
-     *  Subclass must call this after constructor and before start().
+     * Sets the receiver of the UDP datagrams from I2P.
+     * Subclass must call this after constructor and before start().
      *
-     *  @param s the sink to receive incoming datagrams
-     *  @since 0.9.53
+     * @param s the sink to receive incoming datagrams
+     * @since 0.9.53
      */
     @Override
     public void setSink(Sink s) {
@@ -178,9 +178,9 @@ import net.i2p.util.EventDispatcher;
     }
 
     /**
-     *  Starts the I2P source to begin receiving datagrams.
+     * Starts the I2P source to begin receiving datagrams.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     @Override
     public void start() {

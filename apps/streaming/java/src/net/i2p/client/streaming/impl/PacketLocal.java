@@ -192,7 +192,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * the value.
      *
      * @return the RTT sample in ms, or -1 if the packet was never sent or
-     *         never ACKed
+     * never ACKed
      * @since 0.9.71+
      */
     public synchronized int getRttTime() {
@@ -226,22 +226,22 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public int getNumSends() { return _numSends.get(); }
 
     /**
-     *  Record a resend that was triggered by a router soft failure.  Soft
-     *  failures (NO_TUNNELS / EXPIRED / LOCAL) mean the packet was never put
-     *  on the tunnel fabric, so the attempt should not consume the hard
-     *  retransmit budget (see Connection.hardResendBudgetExceeded()).
+     * Record a resend that was triggered by a router soft failure.  Soft
+     * failures (NO_TUNNELS / EXPIRED / LOCAL) mean the packet was never put
+     * on the tunnel fabric, so the attempt should not consume the hard
+     * retransmit budget (see Connection.hardResendBudgetExceeded()).
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public void incrementSoftResends() {
         _numSoftResends.incrementAndGet();
     }
 
     /**
-     *  Number of send attempts that were router soft failures.
+     * Number of send attempts that were router soft failures.
      *
-     *  @return the number of soft-failure-triggered resends
-     *  @since 0.9.71+
+     * @return the number of soft-failure-triggered resends
+     * @since 0.9.71+
      */
     public int getNumSoftResends() { return _numSoftResends.get(); }
 
@@ -258,13 +258,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public Connection getConnection() { return _connection; }
 
     /**
-     *  Count a NACK for this packet, and on the
-     *  {@link Connection#FAST_RETRANSMIT_THRESHOLD}th one ask for a fast
-     *  retransmit, provided the retransmit timer has demonstrably not already
-     *  fired: the packet must have been sent at least max(4s, RTT) ago, and
-     *  only the first such NACK storm triggers it.
-     *  The retransmit is a no-op unless this is the lowest unacked packet
-     *  (see Connection.ResendPacketEvent).
+     * Count a NACK for this packet, and on the
+     * {@link Connection#FAST_RETRANSMIT_THRESHOLD}th one ask for a fast
+     * retransmit, provided the retransmit timer has demonstrably not already
+     * fired: the packet must have been sent at least max(4s, RTT) ago, and
+     * only the first such NACK storm triggers it.
+     * The retransmit is a no-op unless this is the lowest unacked packet
+     * (see Connection.ResendPacketEvent).
      */
     public void incrementNACKs() {
         final int cnt = _nackCount.incrementAndGet();
@@ -323,7 +323,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @param offset starting point in the buffer
      * @return Count of bytes written
      * @throws IllegalStateException if the offline signature has expired, or
-     *         if signing the packet failed
+     * if signing the packet failed
      * @since 0.9.20 moved from Packet
      */
     public int writeSignedPacket(byte[] buffer, int offset) throws IllegalStateException {
@@ -520,14 +520,14 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * {@code getAdaptiveSynTimeout} evidence-gated pattern).
      *
      * @param packetAcked whether the specific packet was acknowledged
-     *                    ({@code WriteStatus.writeSuccessful()})
+     * ({@code WriteStatus.writeSuccessful()})
      * @param highestAckedThrough current connection-wide forward-ACK progress
-     *                            ({@code Connection.getHighestAckedThrough()})
+     * ({@code Connection.getHighestAckedThrough()})
      * @param ackProgressAtStart  forward-ACK progress captured at wait start
      * @return {@code true} if this is unambiguously ACK starvation and the send
-     *         should fail fast; {@code false} if the connection made progress
-     *         (or the packet was acked) and the send should be left to the
-     *         normal timeout path
+     * should fail fast; {@code false} if the connection made progress
+     * (or the packet was acked) and the send should be left to the
+     * normal timeout path
      * @since 0.9.71+
      */
     static boolean isAckStarvation(boolean packetAcked, long highestAckedThrough, long ackProgressAtStart) {
@@ -584,7 +584,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * guard on {@code getAckTime()}.
      *
      * @return {@code true} if the packet was ACKed or cancelled, so its payload
-     *         was released; {@code false} if it may still be transmitted
+     * was released; {@code false} if it may still be transmitted
      * @since 0.9.71+
      */
     public synchronized boolean writeReleased() { return _ackOn > 0 || _cancelledOn > 0; }

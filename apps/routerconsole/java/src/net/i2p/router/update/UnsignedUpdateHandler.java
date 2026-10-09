@@ -35,8 +35,8 @@ class UnsignedUpdateHandler implements Checker, Updater {
     }
 
     /**
-     *  @return null if none
-     *  @since 0.9.4
+     * @return null if none
+     * @since 0.9.4
      */
     public List<URI> getUpdateSources() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL);
@@ -51,7 +51,7 @@ class UnsignedUpdateHandler implements Checker, Updater {
     }
 
     /**
-     *  @param currentVersion ignored, we use time stored in a property
+     * @param currentVersion ignored, we use time stored in a property
      */
     @Override
     public UpdateTask check(UpdateType type, UpdateMethod method,
@@ -76,12 +76,12 @@ class UnsignedUpdateHandler implements Checker, Updater {
     }
 
     /**
-     *  Start a download and return a handle to the download task.
-     *  Should not block.
+     * Start a download and return a handle to the download task.
+     * Should not block.
      *
-     *  @param id plugin name or ignored
-     *  @param maxTime how long you have
-     *  @return active task or null if unable to download
+     * @param id plugin name or ignored
+     * @param maxTime how long you have
+     * @return active task or null if unable to download
      */
     @Override
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,

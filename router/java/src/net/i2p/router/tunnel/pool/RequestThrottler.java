@@ -306,43 +306,43 @@ public class RequestThrottler {
     static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /**
-     *  Probability of enforcing the LU prev-hop ban at a given load score:
-     *  zero when idle, linear up to full enforcement at 50% load and beyond,
-     *  so unloaded routers carry LU traffic while loaded ones shed it.
+     * Probability of enforcing the LU prev-hop ban at a given load score:
+     * zero when idle, linear up to full enforcement at 50% load and beyond,
+     * so unloaded routers carry LU traffic while loaded ones shed it.
      *
-     *  @param loadScore the 0.0-1.0 load score from
-     *         {@link ParticipatingThrottler#calculateLoadScore}
-     *  @return the enforcement probability, clamped to 0.0-1.0
-     *  @since 0.9.71+
+     * @param loadScore the 0.0-1.0 load score from
+     * {@link ParticipatingThrottler#calculateLoadScore}
+     * @return the enforcement probability, clamped to 0.0-1.0
+     * @since 0.9.71+
      */
     static float luEnforcementProbability(float loadScore) {
         return Math.max(0.0f, Math.min(1.0f, loadScore * 2.0f));
     }
 
     /**
-     *  Effective single-second burst threshold for a peer: the configured
-     *  floor, raised so peers whose limit permits heavy traffic are not
-     *  banned for bursts that limit allows (one tenth of the 90-second
-     *  request limit as a per-second ceiling).
+     * Effective single-second burst threshold for a peer: the configured
+     * floor, raised so peers whose limit permits heavy traffic are not
+     * banned for bursts that limit allows (one tenth of the 90-second
+     * request limit as a per-second ceiling).
      *
-     *  @param configuredThreshold the i2p.tunnel.requestThrottle.burst1sThreshold value
-     *  @param limit the peer's request limit for the current window
-     *  @return the burst threshold in requests per second
-     *  @since 0.9.71+
+     * @param configuredThreshold the i2p.tunnel.requestThrottle.burst1sThreshold value
+     * @param limit the peer's request limit for the current window
+     * @return the burst threshold in requests per second
+     * @since 0.9.71+
      */
     static int burstThreshold(int configuredThreshold, int limit) {
         return Math.max(configuredThreshold, limit / 10);
     }
 
     /**
-     *  Ban length for a repeated burst offense: zero for the first
-     *  {@link #BURST_BAN_OFFENSES} - 1 offenses (throttle-only), then five
-     *  minutes growing by five minutes per further offense, capped at
-     *  thirty minutes.
+     * Ban length for a repeated burst offense: zero for the first
+     * {@link #BURST_BAN_OFFENSES} - 1 offenses (throttle-only), then five
+     * minutes growing by five minutes per further offense, capped at
+     * thirty minutes.
      *
-     *  @param offenses the consecutive offense count, 1-based
-     *  @return the ban duration in ms, 0 when only throttling applies
-     *  @since 0.9.71+
+     * @param offenses the consecutive offense count, 1-based
+     * @return the ban duration in ms, 0 when only throttling applies
+     * @since 0.9.71+
      */
     static long burstBanDurationMs(int offenses) {
         if (offenses < BURST_BAN_OFFENSES) {return 0;}

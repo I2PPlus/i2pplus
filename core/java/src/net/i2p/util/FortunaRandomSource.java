@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import gnu.crypto.prng.AsyncFortunaStandalone;
@@ -23,7 +22,6 @@ import java.util.Properties;
  * Wrapper around GNU-Crypto's Fortuna PRNG.  This seeds from /dev/urandom and
  * ./prngseed.rnd on startup (if they exist), writing a new seed to ./prngseed.rnd
  * on an explicit call to saveSeed().
- *
  */
 public class FortunaRandomSource extends RandomSource implements EntropyHarvester {
     /** The Fortuna PRNG instance. */
@@ -70,9 +68,9 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     *  Note - methods may hang or NPE or throw IllegalStateExceptions after this
+     * Note - methods may hang or NPE or throw IllegalStateExceptions after this
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public void shutdown() {
         synchronized (_fortuna) {
@@ -120,8 +118,8 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     }
 
     /**
-     *  @return all possible int values, positive and negative
-     *  @since 0.9.54
+     * @return all possible int values, positive and negative
+     * @since 0.9.54
      */
     @Override
     public int signedNextInt() {

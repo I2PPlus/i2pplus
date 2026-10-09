@@ -174,8 +174,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  Overridden to change the "Updating I2P" text in super
-     *  @since 0.9.35
+     * Overridden to change the "Updating I2P" text in super
+     * @since 0.9.35
      */
     @Override
     public void bytesTransferred(
@@ -218,8 +218,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  @return if SU3
-     *  @since 0.9.15
+     * @return if SU3
+     * @since 0.9.15
      */
     private static boolean isSU3File(File f) throws IOException {
         FileInputStream fis = null;
@@ -238,8 +238,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  @return success
-     *  @since 0.9.15
+     * @return success
+     * @since 0.9.15
      */
     private void processSUD(File f, File appDir, String url) {
         TrustedUpdate up = new TrustedUpdate(_context);
@@ -351,8 +351,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  Process a SU3 plugin file
-     *  @since 0.9.15
+     * Process a SU3 plugin file
+     * @since 0.9.15
      */
     private void processSU3(File f, File appDir, String url) {
         SU3File su3 = new SU3File(_context, f);
@@ -396,8 +396,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  @return null on error
-     *  @since 0.9.15
+     * @return null on error
+     * @since 0.9.15
      */
     private Properties getPluginConfig(File f, File to, String url) {
         File tempDir = new File(_context.getTempDir(), "tmp" + _context.random().nextInt() + "-unzip");
@@ -428,8 +428,8 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     *  @param pubkey null OK for su3
-     *  @since 0.9.15
+     * @param pubkey null OK for su3
+     * @since 0.9.15
      */
     private void processFinal(
             File to, File appDir, String url, Properties props, String sudVersion, String pubkey, String signer) {

@@ -10,35 +10,35 @@ import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
 /**
- *  Dispatch inbound stream packets to a small pool of single-threaded shard
- *  workers, so a slow or hostile connection no longer stalls the session
- *  notifier thread for every other connection on the same destination.
- *  <p>
- *  Ordering: {@link #shardFor} maps a connection's inbound stream id to
- *  exactly one worker, and each worker drains its queue FIFO, so all packets
- *  of a given connection are handled by one thread in arrival order.  Only
- *  packets for different connections run in parallel.
- *  <p>
- *  Back-pressure: the per-shard queue is bounded.  When it is full the
- *  producer ({@code PacketHandler} on the session notifier thread) waits
- *  briefly for space instead of dropping or reordering; this reproduces the
- *  blocking behaviour of the old fully synchronous path, but only for the
- *  saturated connection's shard.
- *  <p>
- *  Live resize: the router's Tuner can change the worker count at runtime via
- *  {@link #resizeAll} (applies the Tuner's global default to every live
- *  manager).  A resize is guarded by the dispatcher's write lock so no dispatch
- *  is in flight while the shard array is rebuilt; each old shard is drained to
- *  idle before its worker is retired, so every connection stays on exactly one
- *  thread with no reordering and no dropped packets.
- *  <p>
- *  SYN / unknown-stream establishment is intentionally not offloaded; it
- *  continues on the notifier thread and the {@link ConnectionHandler}.
- *  Shutdown replaces the synchronous path once more: {@link #shutdown()}
- *  stops the workers and frees any queued-but-unprocessed packets without
- *  leaving the notifier thread blocked.
+ * Dispatch inbound stream packets to a small pool of single-threaded shard
+ * workers, so a slow or hostile connection no longer stalls the session
+ * notifier thread for every other connection on the same destination.
+ * <p>
+ * Ordering: {@link #shardFor} maps a connection's inbound stream id to
+ * exactly one worker, and each worker drains its queue FIFO, so all packets
+ * of a given connection are handled by one thread in arrival order.  Only
+ * packets for different connections run in parallel.
+ * <p>
+ * Back-pressure: the per-shard queue is bounded.  When it is full the
+ * producer ({@code PacketHandler} on the session notifier thread) waits
+ * briefly for space instead of dropping or reordering; this reproduces the
+ * blocking behaviour of the old fully synchronous path, but only for the
+ * saturated connection's shard.
+ * <p>
+ * Live resize: the router's Tuner can change the worker count at runtime via
+ * {@link #resizeAll} (applies the Tuner's global default to every live
+ * manager).  A resize is guarded by the dispatcher's write lock so no dispatch
+ * is in flight while the shard array is rebuilt; each old shard is drained to
+ * idle before its worker is retired, so every connection stays on exactly one
+ * thread with no reordering and no dropped packets.
+ * <p>
+ * SYN / unknown-stream establishment is intentionally not offloaded; it
+ * continues on the notifier thread and the {@link ConnectionHandler}.
+ * Shutdown replaces the synchronous path once more: {@link #shutdown()}
+ * stops the workers and frees any queued-but-unprocessed packets without
+ * leaving the notifier thread blocked.
  *
- *  @since 0.9.71
+ * @since 0.9.71
  */
 class PacketDispatcher {
 
@@ -46,15 +46,15 @@ class PacketDispatcher {
     private static final Set<PacketDispatcher> _live = ConcurrentHashMap.newKeySet();
 
     /**
-     *  Process one dispatched (connection, packet) pair.  Implemented by
-     *  {@link PacketHandler#receiveKnownConnection}; the implementation must
-     *  consume the packet's payload exactly once.
+     * Process one dispatched (connection, packet) pair.  Implemented by
+     * {@link PacketHandler#receiveKnownConnection}; the implementation must
+     * consume the packet's payload exactly once.
      */
     interface PacketProcessor {
         /**
-         *  Process the packet.
-         *  @param con the connection the packet belongs to, may be null in tests
-         *  @param packet the packet to process
+         * Process the packet.
+         * @param con the connection the packet belongs to, may be null in tests
+         * @param packet the packet to process
          */
         void process(Connection con, Packet packet);
     }
@@ -71,11 +71,11 @@ class PacketDispatcher {
     }
 
     /**
-     *  Guards the shard array.  Dispatch holds the read lock (one reader in
-     *  practice — a single notifier thread), so it is uncontended on the hot
-     *  path; resize and shutdown hold the write lock, excluding every dispatch
-     *  while the array is rebuilt, an old worker retired, or the dispatcher
-     *  stopped.
+     * Guards the shard array.  Dispatch holds the read lock (one reader in
+     * practice — a single notifier thread), so it is uncontended on the hot
+     * path; resize and shutdown hold the write lock, excluding every dispatch
+     * while the array is rebuilt, an old worker retired, or the dispatcher
+     * stopped.
      */
     private final ReentrantReadWriteLock _lock = new ReentrantReadWriteLock();
 
@@ -87,24 +87,24 @@ class PacketDispatcher {
     private volatile boolean _running = true;
 
     /**
-     *  Create and start the shard workers.  Package-visible for unit tests.
+     * Create and start the shard workers.  Package-visible for unit tests.
      *
-     *  @param workerCount number of shards, at least 1 (higher values clamped)
-     *  @param queueCapacity queue size per shard, at least 1 (higher clamped)
-     *  @param processor not null
+     * @param workerCount number of shards, at least 1 (higher values clamped)
+     * @param queueCapacity queue size per shard, at least 1 (higher clamped)
+     * @param processor not null
      */
     PacketDispatcher(int workerCount, int queueCapacity, PacketProcessor processor) {
         this(workerCount, queueCapacity, processor, null);
     }
 
     /**
-     *  Create and start the shard workers.
+     * Create and start the shard workers.
      *
-     *  @param workerCount number of shards, at least 1 (higher values clamped)
-     *  @param queueCapacity queue size per shard, at least 1 (higher clamped)
-     *  @param processor not null
-     *  @param context used to record the receive-backlog / queue-depth rates,
-     *                 may be null in tests (stats disabled)
+     * @param workerCount number of shards, at least 1 (higher values clamped)
+     * @param queueCapacity queue size per shard, at least 1 (higher clamped)
+     * @param processor not null
+     * @param context used to record the receive-backlog / queue-depth rates,
+     * may be null in tests (stats disabled)
      */
     PacketDispatcher(int workerCount, int queueCapacity, PacketProcessor processor, I2PAppContext context) {
         _context = context;
@@ -128,23 +128,23 @@ class PacketDispatcher {
     }
 
     /**
-     *  Route (con, packet) to the shard owning the connection and return
-     *  promptly; wait for space only while that shard's queue is full.  Records
-     *  the target shard's queue depth and any producer-blind back-pressure.
+     * Route (con, packet) to the shard owning the connection and return
+     * promptly; wait for space only while that shard's queue is full.  Records
+     * the target shard's queue depth and any producer-blind back-pressure.
      *
-     *  <p>The 1ms back-pressure wait runs OUTSIDE the read lock: a saturated
-     *  shard must not pin the lock, or {@link #shutdown()} / {@link #resize(int)}
-     *  (which need the write lock to flip {@code _running} / rebuild the shard
-     *  array) would deadlock exactly when a worker is stuck behind a full
-     *  queue. The shard is therefore re-resolved each iteration, so an entry
-     *  offered across a resize lands on the shard's <em>current</em> worker —
-     *  a resize drains each old shard to idle before swapping, so ordering is
-     *  still preserved.
+     * <p>The 1ms back-pressure wait runs OUTSIDE the read lock: a saturated
+     * shard must not pin the lock, or {@link #shutdown()} / {@link #resize(int)}
+     * (which need the write lock to flip {@code _running} / rebuild the shard
+     * array) would deadlock exactly when a worker is stuck behind a full
+     * queue. The shard is therefore re-resolved each iteration, so an entry
+     * offered across a resize lands on the shard's <em>current</em> worker —
+     * a resize drains each old shard to idle before swapping, so ordering is
+     * still preserved.
      *
-     *  @param sendStreamId the connection's inbound stream id (shard key)
-     *  @param con the resolved connection, passed through to the processor
-     *  @param packet the packet to process
-     *  @throws InterruptedException if interrupted while waiting for queue space
+     * @param sendStreamId the connection's inbound stream id (shard key)
+     * @param con the resolved connection, passed through to the processor
+     * @param packet the packet to process
+     * @throws InterruptedException if interrupted while waiting for queue space
      */
     void dispatch(long sendStreamId, Connection con, Packet packet) throws InterruptedException {
         Entry e = new Entry(con, packet);
@@ -174,12 +174,12 @@ class PacketDispatcher {
     }
 
     /**
-     *  Rebuild the shard array at a new size.  Takes the write lock, so no
-     *  dispatch is in flight; each old shard is drained to idle (queue empty,
-     *  no entry mid-process) before its worker is retired and the new workers
-     *  take over.  A no-op when the size is unchanged.
+     * Rebuild the shard array at a new size.  Takes the write lock, so no
+     * dispatch is in flight; each old shard is drained to idle (queue empty,
+     * no entry mid-process) before its worker is retired and the new workers
+     * take over.  A no-op when the size is unchanged.
      *
-     *  @param n the new worker count, at least 1 (lower values clamped)
+     * @param n the new worker count, at least 1 (lower values clamped)
      */
     void resize(int n) {
         final int target = Math.max(1, n);
@@ -201,19 +201,19 @@ class PacketDispatcher {
     }
 
     /**
-     *  Resize every live dispatcher to the Tuner's current default, so existing
-     *  managers (not just ones created afterwards) follow the tunable value.
+     * Resize every live dispatcher to the Tuner's current default, so existing
+     * managers (not just ones created afterwards) follow the tunable value.
      *
-     *  @param n the new worker count, at least 1 (lower values clamped)
-     *  @since 0.9.71+
+     * @param n the new worker count, at least 1 (lower values clamped)
+     * @since 0.9.71+
      */
     static void resizeAll(int n) {
         for (PacketDispatcher d : _live) {d.resize(n);}
     }
 
     /**
-     *  Stop the workers and free queued-but-unprocessed packets.  Idempotent;
-     *  after shutdown, {@link #dispatch} becomes a no-op.
+     * Stop the workers and free queued-but-unprocessed packets.  Idempotent;
+     * after shutdown, {@link #dispatch} becomes a no-op.
      */
     void shutdown() {
         _lock.writeLock().lock();
@@ -227,8 +227,8 @@ class PacketDispatcher {
     }
 
     /**
-     *  Current worker count (shard array length).  Package-visible for tests.
-     *  @return the current worker count, &gt;= 1
+     * Current worker count (shard array length).  Package-visible for tests.
+     * @return the current worker count, &gt;= 1
      */
     int getWorkerCount() { return _workers.length; }
 
@@ -243,17 +243,17 @@ class PacketDispatcher {
     }
 
     /**
-     *  Deterministic, in-range shard index for a connection's inbound stream id.
-     *  <p>
-     *  The id is masked to 31 bits so the result is always non-negative even if
-     *  the id space wraps; inbound stream ids are unique per live connection
-     *  within a manager, giving a stable per-connection (and thus
-     *  order-preserving) mapping.
+     * Deterministic, in-range shard index for a connection's inbound stream id.
+     * <p>
+     * The id is masked to 31 bits so the result is always non-negative even if
+     * the id space wraps; inbound stream ids are unique per live connection
+     * within a manager, giving a stable per-connection (and thus
+     * order-preserving) mapping.
      *
-     *  @param sendStreamId inbound stream id, &gt; 0 for known connections
-     *  @param nThreads number of shards, &gt;= 1
-     *  @return 0..nThreads-1
-     *  @since 0.9.71
+     * @param sendStreamId inbound stream id, &gt; 0 for known connections
+     * @param nThreads number of shards, &gt;= 1
+     * @return 0..nThreads-1
+     * @since 0.9.71
      */
     static int shardFor(long sendStreamId, int nThreads) {
         if (nThreads <= 1) {return 0;}

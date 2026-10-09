@@ -38,7 +38,6 @@ import net.i2p.router.web.Messages;
 
 /**
  * Helper class to refactor HTML rendering from out of the ProfileOrganizer
- *
  */
 class ProfileOrganizerRenderer {
     private static final Pattern WHOIS_PAREN = Pattern.compile("\\([^)]+\\)");
@@ -69,11 +68,11 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render the peer profile status table.
+     * Render the peer profile status table.
      *
-     *  @param out the writer to render to
-     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
-     *  @throws IOException if an I/O error occurs
+     * @param out the writer to render to
+     * @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
+     * @throws IOException if an I/O error occurs
      */
     public void renderStatusHTML(Writer out, int mode) throws IOException {
         ProfileSelection sel = loadProfiles(mode);
@@ -90,14 +89,14 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render a single named element for the contentonly fragment mode.
-     *  Renders nothing for ids the given mode does not own.
+     * Render a single named element for the contentonly fragment mode.
+     * Renders nothing for ids the given mode does not own.
      *
-     *  @param out the writer to render to
-     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
-     *  @param id the element id
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param out the writer to render to
+     * @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
+     * @param id the element id
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     public void renderFragment(Writer out, int mode, String id) throws IOException {
         if (mode == 3) {
@@ -116,11 +115,11 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  The sorted peer set, hidden-stale count, hide window, and pre-computed
-     *  tier snapshots from loadProfiles().  The tier sets are local copies
-     *  taken under the organizer read lock once, so renderers and comparators
-     *  can use {@code contains()} without acquiring any locks.
-     *  @since 0.9.70+
+     * The sorted peer set, hidden-stale count, hide window, and pre-computed
+     * tier snapshots from loadProfiles().  The tier sets are local copies
+     * taken under the organizer read lock once, so renderers and comparators
+     * can use {@code contains()} without acquiring any locks.
+     * @since 0.9.70+
      */
     private static class ProfileSelection {
         final Set<PeerProfile> order;
@@ -145,16 +144,16 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Load, filter, and sort the profiles for the given mode. Modes 1 and 2
-     *  drop peers that do not match the tier; mode 3 keeps all peers in binary
-     *  hash order. Modes 0-2 hide inactive peers not heard from within a cutoff
-     *  that scales with the candidate count (4h above 500, 2h above 1000, 1h
-     *  above 2000, 30m above 3000, 15m above 4000, 10m above 5000) to keep the
-     *  displayed table manageable; mode 3 has no cutoff.
+     * Load, filter, and sort the profiles for the given mode. Modes 1 and 2
+     * drop peers that do not match the tier; mode 3 keeps all peers in binary
+     * hash order. Modes 0-2 hide inactive peers not heard from within a cutoff
+     * that scales with the candidate count (4h above 500, 2h above 1000, 1h
+     * above 2000, 30m above 3000, 15m above 4000, 10m above 5000) to keep the
+     * displayed table manageable; mode 3 has no cutoff.
      *
-     *  @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
-     *  @return the sorted set, the hidden-stale profile count, and the hide window (zero for mode 3)
-     *  @since 0.9.70+
+     * @param mode 0 = all; 1 = fast; 2 = high capacity (non-fast); 3 = floodfill
+     * @return the sorted set, the hidden-stale profile count, and the hide window (zero for mode 3)
+     * @since 0.9.70+
      */
     private ProfileSelection loadProfiles(int mode) {
         long now = _context.clock().now();
@@ -230,13 +229,13 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Exclude ourself and profiles never heard from. With
-     *  {@code requireTunnelHistory}, also exclude profiles that have never
-     *  participated in a tunnel build (neither agreed to nor rejected a build
-     *  request).
+     * Exclude ourself and profiles never heard from. With
+     * {@code requireTunnelHistory}, also exclude profiles that have never
+     * participated in a tunnel build (neither agreed to nor rejected a build
+     * request).
      *
-     *  @param requireTunnelHistory true for modes 0-2, false for mode 3
-     *  @since 0.9.71+
+     * @param requireTunnelHistory true for modes 0-2, false for mode 3
+     * @since 0.9.71+
      */
     private static boolean isValid(PeerProfile prof, Hash peer, Hash us, boolean requireTunnelHistory) {
         if (!requireTunnelHistory) {
@@ -246,15 +245,15 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render the profile table body. In fragment mode only the bare
-     *  {@code <tbody id=pbody>} is emitted, with a data-key per row for the
-     *  worker-side row diff; the full page emits the wrapper table and thead
-     *  and stays byte-for-byte identical to previous versions.
+     * Render the profile table body. In fragment mode only the bare
+     * {@code <tbody id=pbody>} is emitted, with a data-key per row for the
+     * worker-side row diff; the full page emits the wrapper table and thead
+     * and stays byte-for-byte identical to previous versions.
      *
-     *  @param out the writer to render to
-     *  @param order the selected profiles
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param out the writer to render to
+     * @param order the selected profiles
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     private void renderPbody(Writer out, ProfileSelection sel) throws IOException {
         Set<PeerProfile> order = sel.order;
@@ -590,15 +589,15 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render the profile summary rings above the profile table: total profile
-     *  count, share displayed for the current mode, the display cutoff window,
-     *  tier counts, activity, and DB health.
+     * Render the profile summary rings above the profile table: total profile
+     * count, share displayed for the current mode, the display cutoff window,
+     * tier counts, activity, and DB health.
      *
-     *  @param out the writer to render to
-     *  @param mode the page mode (0=all profiles, 1=fast tier, 2=high capacity tier)
-     *  @param sel the selected profiles
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param out the writer to render to
+     * @param mode the page mode (0=all profiles, 1=fast tier, 2=high capacity tier)
+     * @param sel the selected profiles
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     private void renderProfileRings(Writer out, int mode, ProfileSelection sel) throws IOException {
         Set<PeerProfile> order = sel.order;
@@ -747,16 +746,16 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render a tier count ring: share of known profiles in the tier and the
-     *  peer count in the center.
+     * Render a tier count ring: share of known profiles in the tier and the
+     * peer count in the center.
      *
-     *  @param buf the buffer to append to
-     *  @param count peers in the tier
-     *  @param known total profiles known to this selection
-     *  @param label ring label
-     *  @param singular singular tooltip template ({0} placeholder)
-     *  @param plural plural tooltip template ({0} placeholder)
-     *  @since 0.9.70+
+     * @param buf the buffer to append to
+     * @param count peers in the tier
+     * @param known total profiles known to this selection
+     * @param label ring label
+     * @param singular singular tooltip template ({0} placeholder)
+     * @param plural plural tooltip template ({0} placeholder)
+     * @since 0.9.70+
      */
     private void renderTierCountRing(StringBuilder buf, int count, int known, String label,
                                      String singular, String plural) {
@@ -767,12 +766,12 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render the definitions block shown on the full "all" page when the
-     *  advanced setting is off. Never part of a fragment response.
+     * Render the definitions block shown on the full "all" page when the
+     * advanced setting is off. Never part of a fragment response.
      *
-     *  @param out the writer to render to
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param out the writer to render to
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     private void renderDefinitions(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(4096);
@@ -853,13 +852,13 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Aggregates over the floodfill-capable peer set; every field is meant to
-     *  describe the observed floodfill peers, fed to the health rings above the
-     *  table. All counts are gathered in one pass over {@code order}, and a row
-     *  is only counted as "shown" when it would actually be emitted by
-     *  {@link #renderFloodfill} (has DB history, floodfill-capable, reachable,
-     *  unbanlisted, heard from).
-     *  @since 0.9.71+
+     * Aggregates over the floodfill-capable peer set; every field is meant to
+     * describe the observed floodfill peers, fed to the health rings above the
+     * table. All counts are gathered in one pass over {@code order}, and a row
+     * is only counted as "shown" when it would actually be emitted by
+     * {@link #renderFloodfill} (has DB history, floodfill-capable, reachable,
+     * unbanlisted, heard from).
+     * @since 0.9.71+
      */
     private static class FloodfillStats {
         /** floodfill-capable peers known to the peer manager (matches sidebar) */
@@ -885,15 +884,15 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render the floodfill health rings above the floodfill table: peer count,
-     *  reachability, banned floodfills, mean 1h failure, mean response time,
-     *  recent activity, lookup reliability and store health — all aggregated
-     *  over the observed floodfill peers.
+     * Render the floodfill health rings above the floodfill table: peer count,
+     * reachability, banned floodfills, mean 1h failure, mean response time,
+     * recent activity, lookup reliability and store health — all aggregated
+     * over the observed floodfill peers.
      *
-     *  @param out the writer to render to
-     *  @param order the selected profiles
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.71+
+     * @param out the writer to render to
+     * @param order the selected profiles
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.71+
      */
     private void renderFloodfillRings(Writer out, Set<PeerProfile> order) throws IOException {
         FloodfillStats stats = floodfillStats(order);
@@ -990,10 +989,10 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Compute {@link FloodfillStats} in a single pass over the ordered profiles.
-     *  @param order the selected profiles
-     *  @return aggregated statistics, never null
-     *  @since 0.9.71+
+     * Compute {@link FloodfillStats} in a single pass over the ordered profiles.
+     * @param order the selected profiles
+     * @return aggregated statistics, never null
+     * @since 0.9.71+
      */
     private FloodfillStats floodfillStats(Set<PeerProfile> order) {
         FloodfillStats stats = new FloodfillStats();
@@ -1032,12 +1031,12 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Render the floodfill table, sorted by 1h fail rate ascending.
+     * Render the floodfill table, sorted by 1h fail rate ascending.
      *
-     *  @param out the writer to render to
-     *  @param order the selected profiles
-     *  @throws IOException if an I/O error occurs
-     *  @since 0.9.70+
+     * @param out the writer to render to
+     * @param order the selected profiles
+     * @throws IOException if an I/O error occurs
+     * @since 0.9.70+
      */
     private void renderFloodfill(Writer out, Set<PeerProfile> order) throws IOException {
         StringBuilder buf = new StringBuilder(32*1024);
@@ -1172,11 +1171,11 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Sorts profiles by tier (fast > high-cap > standard) using pre-computed
-     *  tier sets, then by binary hash order within each tier.  No locks are
-     *  acquired during comparison — the tier snapshot is taken once in
-     *  loadProfiles() and passed to this comparator.
-     *  @since 0.9.70+
+     * Sorts profiles by tier (fast > high-cap > standard) using pre-computed
+     * tier sets, then by binary hash order within each tier.  No locks are
+     * acquired during comparison — the tier snapshot is taken once in
+     * loadProfiles() and passed to this comparator.
+     * @since 0.9.70+
      */
     private static class ProfileComparator extends ProfComparator {
         private final Set<Hash> _fastSet;
@@ -1207,9 +1206,9 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Used for floodfill-only page
-     *  As of 0.9.29, sorts in true binary order, not base64 string
-     *  @since 0.9.8
+     * Used for floodfill-only page
+     * As of 0.9.29, sorts in true binary order, not base64 string
+     * @since 0.9.8
      */
     private static class ProfComparator implements Comparator<PeerProfile>, Serializable {
         @Override
@@ -1219,9 +1218,9 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  A peer profile bundled with its 1h lookup fail rate, computed once so
-     *  the sort key and the rendered value cannot diverge.
-     *  @since 0.9.70+
+     * A peer profile bundled with its 1h lookup fail rate, computed once so
+     * the sort key and the rendered value cannot diverge.
+     * @since 0.9.70+
      */
     private static class FloodfillRow {
         final PeerProfile prof;
@@ -1233,10 +1232,10 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  Sorts floodfill rows by 1h fail rate ascending (best first) so the
-     *  initial render needs no client-side re-sort. Ties keep the binary
-     *  hash order of the source set.
-     *  @since 0.9.70+
+     * Sorts floodfill rows by 1h fail rate ascending (best first) so the
+     * initial render needs no client-side re-sort. Ties keep the binary
+     * hash order of the source set.
+     * @since 0.9.70+
      */
     private static class FloodfillRowComparator implements Comparator<FloodfillRow>, Serializable {
         @Override
@@ -1246,7 +1245,7 @@ class ProfileOrganizerRenderer {
     }
 
     /**
-     *  1h lookup fail rate as an integer percent, the same value the render emits.
+     * 1h lookup fail rate as an integer percent, the same value the render emits.
      */
     private static int failRatePct(PeerProfile prof, RateAverages ra) {
         DBHistory dbh = prof.getDBHistory();

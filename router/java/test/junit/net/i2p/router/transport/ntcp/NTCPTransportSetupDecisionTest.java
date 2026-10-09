@@ -11,16 +11,16 @@ import net.i2p.data.i2np.I2NPMessage;
 import org.junit.Test;
 
 /**
- *  Unit tests for the connection-setup decisions extracted from
- *  {@link NTCPTransport#prepareConnectionForSending} and
- *  {@link NTCPTransport#logConnectionSetupError}.
+ * Unit tests for the connection-setup decisions extracted from
+ * {@link NTCPTransport#prepareConnectionForSending} and
+ * {@link NTCPTransport#logConnectionSetupError}.
  *
- *  <p>Covers the RouterInfo-store skip/flood gates, the version-NTCP2 early-send
- *  rule, the establishment-in-progress guard, and the benign-race classification
- *  that keeps expected IllegalStateExceptions out of the warning log. All are
- *  pure boolean functions; the message and state objects are mocked.
+ * <p>Covers the RouterInfo-store skip/flood gates, the version-NTCP2 early-send
+ * rule, the establishment-in-progress guard, and the benign-race classification
+ * that keeps expected IllegalStateExceptions out of the warning log. All are
+ * pure boolean functions; the message and state objects are mocked.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class NTCPTransportSetupDecisionTest {
 

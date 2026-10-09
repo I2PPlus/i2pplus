@@ -6,7 +6,6 @@ package net.i2p.i2ptunnel.irc;
  * no warranty of any kind, either expressed or implied.  It probably
  * won't make your computer catch on fire, or eat your children, but
  * it might.  Use at your own risk.
- *
  */
 
 import java.util.Set;
@@ -30,7 +29,7 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void attachEventDispatcher(EventDispatcher ev) {
@@ -38,7 +37,7 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void detachEventDispatcher(EventDispatcher ev) {
@@ -49,8 +48,8 @@ public abstract class EventReceiver implements EventDispatcher {
     public abstract void notifyEvent(String eventName, Object args);
 
     /**
-     *  @throws UnsupportedOperationException always
-     *  @return the event value
+     * @throws UnsupportedOperationException always
+     * @return the event value
      */
     @Override
     public Object getEventValue(String name) {
@@ -58,8 +57,8 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     *  @throws UnsupportedOperationException always
-     *  @return the events
+     * @throws UnsupportedOperationException always
+     * @return the events
      */
     @Override
     public Set<String> getEvents() {
@@ -67,7 +66,7 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     public void ignoreEvents() {
@@ -78,7 +77,7 @@ public abstract class EventReceiver implements EventDispatcher {
     public void unIgnoreEvents() {}
 
     /**
-     *  @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always
      */
     @Override
     public Object waitEventValue(String name) {

@@ -23,7 +23,7 @@ import net.i2p.util.Log;
 /**
  * SSU2 Payload generation and parsing utilities.
  *
- *  @since 0.9.54
+ * @since 0.9.54
  */
 class SSU2Payload {
 
@@ -73,9 +73,9 @@ class SSU2Payload {
     public static final int BLOCK_TERMINATION = 6;
 
     /**
-     *  For all callbacks, recommend throwing exceptions only from the handshake.
-     *  Exceptions will get thrown out of processPayload() and prevent
-     *  processing of succeeding blocks.
+     * For all callbacks, recommend throwing exceptions only from the handshake.
+     * Exceptions will get thrown out of processPayload() and prevent
+     * processing of succeeding blocks.
      */
     public interface PayloadCallback {
         /**
@@ -215,14 +215,14 @@ class SSU2Payload {
     }
 
     /**
-     *  Incoming payload. Calls the callback for each received block.
+     * Incoming payload. Calls the callback for each received block.
      *
-     *  @param isHandshake true for Token Req, Retry, Sess Req, Sess Created; false for Sess Confirmed
-     *  @param from for path challenge/response only, may be null
-     *  @return number of blocks processed
-     *  @throws IOException on major errors
-     *  @throws DataFormatException on parsing of individual blocks
-     *  @throws I2NPMessageException on parsing of I2NP block
+     * @param isHandshake true for Token Req, Retry, Sess Req, Sess Created; false for Sess Confirmed
+     * @param from for path challenge/response only, may be null
+     * @return number of blocks processed
+     * @throws IOException on major errors
+     * @throws DataFormatException on parsing of individual blocks
+     * @throws I2NPMessageException on parsing of I2NP block
      */
     public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
                                      byte[] payload, int off, int length, boolean isHandshake, RemoteHostId from)
@@ -269,18 +269,18 @@ class SSU2Payload {
     }
 
     /**
-     *  Order-rule guard for the incoming-block scan.
-     *  Padding must terminate the block list; only padding may follow a
-     *  termination block; a handshake must start with a DATETIME block.
-     *  Each violation is a protocol error, thrown as an IOException.
+     * Order-rule guard for the incoming-block scan.
+     * Padding must terminate the block list; only padding may follow a
+     * termination block; a handshake must start with a DATETIME block.
+     * Each violation is a protocol error, thrown as an IOException.
      *
-     *  @param type the current block type byte
-     *  @param gotPadding true if a BLOCK_PADDING preceded this block
-     *  @param gotTermination true if a BLOCK_TERMINATION preceded this block
-     *  @param isHandshake true if this is a handshake frame, where the first block must be DATETIME
-     *  @param blocks the number of blocks processed before this one
-     *  @throws IOException on any ordering violation
-     *  @since 0.9.71+
+     * @param type the current block type byte
+     * @param gotPadding true if a BLOCK_PADDING preceded this block
+     * @param gotTermination true if a BLOCK_TERMINATION preceded this block
+     * @param isHandshake true if this is a handshake frame, where the first block must be DATETIME
+     * @param blocks the number of blocks processed before this one
+     * @throws IOException on any ordering violation
+     * @since 0.9.71+
      */
     static void checkBlockOrder(int type, boolean gotPadding, boolean gotTermination,
                                 boolean isHandshake, int blocks) throws IOException {
@@ -293,12 +293,12 @@ class SSU2Payload {
     }
 
     /**
-     *  Guard that a handshake frame carries at least one block.
+     * Guard that a handshake frame carries at least one block.
      *
-     *  @param isHandshake true if this is a handshake frame
-     *  @param blocks the total number of blocks processed in the frame
-     *  @throws IOException if the frame is a handshake with no blocks
-     *  @since 0.9.71+
+     * @param isHandshake true if this is a handshake frame
+     * @param blocks the total number of blocks processed in the frame
+     * @throws IOException if the frame is a handshake with no blocks
+     * @since 0.9.71+
      */
     static void checkHandshakeNotEmpty(boolean isHandshake, int blocks) throws IOException {
         if (isHandshake && blocks == 0)
@@ -306,18 +306,18 @@ class SSU2Payload {
     }
 
     /**
-     *  Guard that a block's declared length fits inside the frame.
-     *  Offsets in the error message are byte positions relative to the frame.
+     * Guard that a block's declared length fits inside the frame.
+     * Offsets in the error message are byte positions relative to the frame.
      *
-     *  @param payload the whole frame
-     *  @param off start of the payload in the array
-     *  @param length frame size in bytes
-     *  @param dataOff offset of the block's 2-byte length field
-     *  @param len the declared block length
-     *  @param blocks the zero-based index of this block for the error message
-     *  @param type the block type byte for the error message
-     *  @throws IOException if the block runs past the end of the frame
-     *  @since 0.9.71+
+     * @param payload the whole frame
+     * @param off start of the payload in the array
+     * @param length frame size in bytes
+     * @param dataOff offset of the block's 2-byte length field
+     * @param len the declared block length
+     * @param blocks the zero-based index of this block for the error message
+     * @param type the block type byte for the error message
+     * @throws IOException if the block runs past the end of the frame
+     * @since 0.9.71+
      */
     static void checkFrameOverflow(byte[] payload, int off, int length, int dataOff, int len,
                                    int blocks, int type) throws IOException {
@@ -328,14 +328,14 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a DATETIME block of exactly 4 bytes.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be 4
-     *  @throws IOException on bad length
-     *  @throws DataFormatException if the callback rejects the timestamp
-     *  @since 0.9.71+
+     * Parse a DATETIME block of exactly 4 bytes.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be 4
+     * @throws IOException on bad length
+     * @throws DataFormatException if the callback rejects the timestamp
+     * @since 0.9.71+
      */
     static void parseDateTime(PayloadCallback cb, byte[] payload, int i, int len) throws IOException, DataFormatException {
         if (len != 4)
@@ -345,14 +345,14 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse an OPTIONS block, copying the option bytes for the callback.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length
-     *  @param isHandshake passed through to the callback
-     *  @throws DataFormatException if the callback rejects the options
-     *  @since 0.9.71+
+     * Parse an OPTIONS block, copying the option bytes for the callback.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length
+     * @param isHandshake passed through to the callback
+     * @throws DataFormatException if the callback rejects the options
+     * @since 0.9.71+
      */
     static void parseOptions(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake) throws DataFormatException {
         byte[] options = new byte[len];
@@ -361,18 +361,18 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a ROUTERINFO block: one- or two-byte header, then either a single
-     *  (possibly compressed) RouterInfo or a fragment piece.
+     * Parse a ROUTERINFO block: one- or two-byte header, then either a single
+     * (possibly compressed) RouterInfo or a fragment piece.
      *
-     *  @param ctx context for decompression and logging
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &gt; 1
-     *  @param isHandshake passed through to the callback
-     *  @throws IOException on framing errors
-     *  @throws DataFormatException if the RouterInfo is too large or fails verification
-     *  @since 0.9.71+
+     * @param ctx context for decompression and logging
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &gt; 1
+     * @param isHandshake passed through to the callback
+     * @throws IOException on framing errors
+     * @throws DataFormatException if the RouterInfo is too large or fails verification
+     * @since 0.9.71+
      */
     static void parseRouterInfo(I2PAppContext ctx, PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                                 throws IOException, DataFormatException {
@@ -408,15 +408,15 @@ class SSU2Payload {
     }
 
     /**
-     *  Read a complete RouterInfo from the stream, falling back to an
-     *  alternate signature verification when the strict parse fails.
+     * Read a complete RouterInfo from the stream, falling back to an
+     * alternate signature verification when the strict parse fails.
      *
-     *  @param ctx context for logging
-     *  @param bais the RI bytes, positioned at the start
-     *  @return the parsed RouterInfo (possibly a partially filled-in one, signalled by {@link RouterInfo#setPublished(long)} of -1)
-     *  @throws IOException on any I/O while reading the stream
-     *  @throws DataFormatException on a genuinely malformed RI that fails the alternate verification
-     *  @since 0.9.71+
+     * @param ctx context for logging
+     * @param bais the RI bytes, positioned at the start
+     * @return the parsed RouterInfo (possibly a partially filled-in one, signalled by {@link RouterInfo#setPublished(long)} of -1)
+     * @throws IOException on any I/O while reading the stream
+     * @throws DataFormatException on a genuinely malformed RI that fails the alternate verification
+     * @since 0.9.71+
      */
     static RouterInfo parseRouterInfoSingle(I2PAppContext ctx, ByteArrayInputStream bais) throws IOException, DataFormatException {
         RouterInfo alice = new RouterInfo();
@@ -428,17 +428,17 @@ class SSU2Payload {
     }
 
     /**
-     *  Alternate verification of a RouterInfo whose strict parse failed: if the
-     *  signed prefix is valid, return a partially filled-in RI (published = -1)
-     *  so the session layer can still act on the identity.
+     * Alternate verification of a RouterInfo whose strict parse failed: if the
+     * signed prefix is valid, return a partially filled-in RI (published = -1)
+     * so the session layer can still act on the identity.
      *
-     *  @param ctx context for logging
-     *  @param bais the RI bytes; position is reset for re-reading identity and signature
-     *  @param dfe the original parse failure
-     *  @return a partially filled-in RouterInfo when the signature verifies
-     *  @throws IOException on any I/O while re-reading the stream
-     *  @throws DataFormatException the original parse failure when verification fails
-     *  @since 0.9.71+
+     * @param ctx context for logging
+     * @param bais the RI bytes; position is reset for re-reading identity and signature
+     * @param dfe the original parse failure
+     * @return a partially filled-in RouterInfo when the signature verifies
+     * @throws IOException on any I/O while re-reading the stream
+     * @throws DataFormatException the original parse failure when verification fails
+     * @since 0.9.71+
      */
     static RouterInfo recoverRouterInfo(I2PAppContext ctx, ByteArrayInputStream bais, DataFormatException dfe)
                                         throws IOException, DataFormatException {
@@ -466,16 +466,16 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse an I2NP block (data blocks only, never in handshakes).
-     *  @param ctx context for I2NP parsing
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 9
-     *  @param isHandshake if true the block is illegal
-     *  @throws IOException if the block appears in a handshake or is too short
-     *  @throws I2NPMessageException if the embedded I2NP message is malformed
-     *  @since 0.9.71+
+     * Parse an I2NP block (data blocks only, never in handshakes).
+     * @param ctx context for I2NP parsing
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 9
+     * @param isHandshake if true the block is illegal
+     * @throws IOException if the block appears in a handshake or is too short
+     * @throws I2NPMessageException if the embedded I2NP message is malformed
+     * @since 0.9.71+
      */
     static void parseI2NP(I2PAppContext ctx, PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                           throws IOException, I2NPMessageException {
@@ -488,17 +488,17 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse the first fragment of a fragmented message (data blocks only).
-     *  The 1-byte flag and 4-byte message ID precede the fragment data; the
-     *  callback receives the raw payload slice.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &gt; 9
-     *  @param isHandshake if true the block is illegal
-     *  @throws IOException if the block appears in a handshake or is too short
-     *  @throws DataFormatException if the callback rejects the fragment
-     *  @since 0.9.71+
+     * Parse the first fragment of a fragmented message (data blocks only).
+     * The 1-byte flag and 4-byte message ID precede the fragment data; the
+     * callback receives the raw payload slice.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &gt; 9
+     * @param isHandshake if true the block is illegal
+     * @throws IOException if the block appears in a handshake or is too short
+     * @throws DataFormatException if the callback rejects the fragment
+     * @since 0.9.71+
      */
     static void parseFirstFragment(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                                    throws IOException, DataFormatException {
@@ -511,17 +511,17 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a follow-on fragment block (data blocks only).
-     *  The low bit of the flag byte marks the last fragment; the remaining bits
-     *  carry the fragment number.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &gt; 5
-     *  @param isHandshake if true the block is illegal
-     *  @throws IOException if the block appears in a handshake, is too short, or has fragment number 0
-     *  @throws DataFormatException if the callback rejects the fragment
-     *  @since 0.9.71+
+     * Parse a follow-on fragment block (data blocks only).
+     * The low bit of the flag byte marks the last fragment; the remaining bits
+     * carry the fragment number.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &gt; 5
+     * @param isHandshake if true the block is illegal
+     * @throws IOException if the block appears in a handshake, is too short, or has fragment number 0
+     * @throws DataFormatException if the callback rejects the fragment
+     * @since 0.9.71+
      */
     static void parseFollowonFragment(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                                       throws IOException, DataFormatException {
@@ -538,16 +538,16 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse an ACK block (data blocks only).
-     *  Odd block length: 4-byte ack ID, 1-byte fragment count, then the ACK
-     *  range bitmap (possibly zero length).
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 5 and odd
-     *  @param isHandshake if true the block is illegal
-     *  @throws IOException if the block appears in a handshake or has a bad length
-     *  @since 0.9.71+
+     * Parse an ACK block (data blocks only).
+     * Odd block length: 4-byte ack ID, 1-byte fragment count, then the ACK
+     * range bitmap (possibly zero length).
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 5 and odd
+     * @param isHandshake if true the block is illegal
+     * @throws IOException if the block appears in a handshake or has a bad length
+     * @since 0.9.71+
      */
     static void parseACK(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake) throws IOException {
         if (isHandshake)
@@ -568,13 +568,13 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse an ADDRESS block of 4 bytes IPv4 or 16 bytes IPv6.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be 6 or 18
-     *  @throws IOException on bad length
-     *  @since 0.9.71+
+     * Parse an ADDRESS block of 4 bytes IPv4 or 16 bytes IPv6.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be 6 or 18
+     * @throws IOException on bad length
+     * @since 0.9.71+
      */
     static void parseAddress(PayloadCallback cb, byte[] payload, int i, int len) throws IOException {
         if (len != 6 && len != 18)
@@ -586,13 +586,13 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a RELAYTAG block of at least 4 bytes.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 4
-     *  @throws IOException on bad length
-     *  @since 0.9.71+
+     * Parse a RELAYTAG block of at least 4 bytes.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 4
+     * @throws IOException on bad length
+     * @since 0.9.71+
      */
     static void parseRelayTag(PayloadCallback cb, byte[] payload, int i, int len) throws IOException {
         if (len < 4)
@@ -602,15 +602,15 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a RELAYREQ block (data blocks only): 1 flag byte then the relay
-     *  request (IPv4 address + DSA signature).
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 61
-     *  @param isHandshake if true the block is illegal
-     *  @throws IOException if the block appears in a handshake or is too short
-     *  @since 0.9.71+
+     * Parse a RELAYREQ block (data blocks only): 1 flag byte then the relay
+     * request (IPv4 address + DSA signature).
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 61
+     * @param isHandshake if true the block is illegal
+     * @throws IOException if the block appears in a handshake or is too short
+     * @since 0.9.71+
      */
     static void parseRelayRequest(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                                   throws IOException {
@@ -624,15 +624,15 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a RELAYRESP block (data blocks only): 1 flag byte, 1 response
-     *  code byte, and the remaining response data.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 52
-     *  @param isHandshake if true the block is illegal
-     *  @throws IOException if the block appears in a handshake or is too short
-     *  @since 0.9.71+
+     * Parse a RELAYRESP block (data blocks only): 1 flag byte, 1 response
+     * code byte, and the remaining response data.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 52
+     * @param isHandshake if true the block is illegal
+     * @throws IOException if the block appears in a handshake or is too short
+     * @since 0.9.71+
      */
     static void parseRelayResponse(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                                    throws IOException {
@@ -647,15 +647,15 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a RELAYINTRO block (data blocks only): 1 flag byte, the 32-byte
-     *  introducer hash, then the intro data.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 93
-     *  @param isHandshake if true the block is illegal
-     *  @throws IOException if the block appears in a handshake or is too short
-     *  @since 0.9.71+
+     * Parse a RELAYINTRO block (data blocks only): 1 flag byte, the 32-byte
+     * introducer hash, then the intro data.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 93
+     * @param isHandshake if true the block is illegal
+     * @throws IOException if the block appears in a handshake or is too short
+     * @since 0.9.71+
      */
     static void parseRelayIntro(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                                 throws IOException {
@@ -670,16 +670,16 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a PEERTEST block (data blocks only): message number, response
-     *  code, an optional 32-byte hash for questions 2/4, and the data payload.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 19
-     *  @param isHandshake if true the block is illegal
-     *  @throws IOException if the block appears in a handshake or is too short
-     *  @throws DataFormatException if the message number is out of the 1-7 range
-     *  @since 0.9.71+
+     * Parse a PEERTEST block (data blocks only): message number, response
+     * code, an optional 32-byte hash for questions 2/4, and the data payload.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 19
+     * @param isHandshake if true the block is illegal
+     * @throws IOException if the block appears in a handshake or is too short
+     * @throws DataFormatException if the message number is out of the 1-7 range
+     * @since 0.9.71+
      */
     static void parsePeerTest(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake)
                               throws IOException, DataFormatException {
@@ -708,13 +708,13 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a NEWTOKEN block of at least 12 bytes: 4-byte expiry, 8-byte token.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 12
-     *  @throws IOException on bad length
-     *  @since 0.9.71+
+     * Parse a NEWTOKEN block of at least 12 bytes: 4-byte expiry, 8-byte token.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 12
+     * @throws IOException on bad length
+     * @since 0.9.71+
      */
     static void parseNewToken(PayloadCallback cb, byte[] payload, int i, int len) throws IOException {
         if (len < 12)
@@ -725,14 +725,14 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a TERMINATION block of at least 9 bytes: 8-byte receive time, 1
-     *  byte reason code. The caller must flag the frame as terminated.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length, must be &ge; 9
-     *  @throws IOException on bad length
-     *  @since 0.9.71+
+     * Parse a TERMINATION block of at least 9 bytes: 8-byte receive time, 1
+     * byte reason code. The caller must flag the frame as terminated.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length, must be &ge; 9
+     * @throws IOException on bad length
+     * @since 0.9.71+
      */
     static void parseTermination(PayloadCallback cb, byte[] payload, int i, int len) throws IOException {
         if (len < 9)
@@ -743,16 +743,16 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a PATHCHALLENGE block (data blocks only), passing the challenge
-     *  array up with the originating address.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length
-     *  @param isHandshake if true the block is illegal
-     *  @param from the originating address, may be null
-     *  @throws IOException if the block appears in a handshake
-     *  @since 0.9.71+
+     * Parse a PATHCHALLENGE block (data blocks only), passing the challenge
+     * array up with the originating address.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length
+     * @param isHandshake if true the block is illegal
+     * @param from the originating address, may be null
+     * @throws IOException if the block appears in a handshake
+     * @since 0.9.71+
      */
     static void parsePathChallenge(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake, RemoteHostId from)
                                    throws IOException {
@@ -764,16 +764,16 @@ class SSU2Payload {
     }
 
     /**
-     *  Parse a PATHRESP block (data blocks only), passing the response array
-     *  up with the originating address.
-     *  @param cb callback
-     *  @param payload the whole frame
-     *  @param i offset of the block data
-     *  @param len declared block length
-     *  @param isHandshake if true the block is illegal
-     *  @param from the originating address, may be null
-     *  @throws IOException if the block appears in a handshake
-     *  @since 0.9.71+
+     * Parse a PATHRESP block (data blocks only), passing the response array
+     * up with the originating address.
+     * @param cb callback
+     * @param payload the whole frame
+     * @param i offset of the block data
+     * @param len declared block length
+     * @param isHandshake if true the block is illegal
+     * @param from the originating address, may be null
+     * @throws IOException if the block appears in a handshake
+     * @since 0.9.71+
      */
     static void parsePathResponse(PayloadCallback cb, byte[] payload, int i, int len, boolean isHandshake, RemoteHostId from)
                                   throws IOException {
@@ -785,12 +785,12 @@ class SSU2Payload {
     }
 
     /**
-     *  Unknown block type: warn once per occurrence and skip the block.
-     *  @param ctx context for logging
-     *  @param cb callback, included in the message for context
-     *  @param type the unknown block type byte
-     *  @param len the declared block length
-     *  @since 0.9.71+
+     * Unknown block type: warn once per occurrence and skip the block.
+     * @param ctx context for logging
+     * @param cb callback, included in the message for context
+     * @param type the unknown block type byte
+     * @param len the declared block length
+     * @since 0.9.71+
      */
     static void parseUnknown(I2PAppContext ctx, PayloadCallback cb, int type, int len) {
         Log log = ctx.logManager().getLog(SSU2Payload.class);
@@ -799,8 +799,8 @@ class SSU2Payload {
     }
 
     /**
-     *  @param payload writes to it starting at off
-     *  @return the new offset
+     * @param payload writes to it starting at off
+     * @return the new offset
      */
     public static int writePayload(byte[] payload, int off, List<Block> blocks) {
         for (Block block : blocks) {
@@ -810,8 +810,8 @@ class SSU2Payload {
     }
 
     /**
-     *  Base class for blocks to be transmitted.
-     *  Not used for receive; we use callbacks instead.
+     * Base class for blocks to be transmitted.
+     * Not used for receive; we use callbacks instead.
      */
     public abstract static class Block {
         private final int type;
@@ -1001,7 +1001,7 @@ class SSU2Payload {
     }
 
     /**
-     *  Same format as I2NPBlock
+     * Same format as I2NPBlock
      */
     public static class FirstFragBlock extends Block {
         private OutboundMessageState m;
@@ -1045,7 +1045,7 @@ class SSU2Payload {
     }
 
     /**
-     *  Follow-on fragment block for SSU2 payload.
+     * Follow-on fragment block for SSU2 payload.
      */
     public static class FollowFragBlock extends Block {
         private OutboundMessageState m;
@@ -1544,7 +1544,7 @@ class SSU2Payload {
         private final byte[] d;
 
         /**
-         *  @param hash may be null
+         * @param hash may be null
          */
         public PeerTestBlock(int msgNum, int code, Hash hash, byte[] data) {
             super(BLOCK_PEERTEST);
@@ -1618,8 +1618,8 @@ class SSU2Payload {
     }
 
     /**
-     *  Path challenge block for SSU2 payload.
-     *  @since 0.9.55
+     * Path challenge block for SSU2 payload.
+     * @since 0.9.55
      */
     public static class PathChallengeBlock extends Block {
         private final byte[] d;
@@ -1651,8 +1651,8 @@ class SSU2Payload {
     }
 
     /**
-     *  Path response block for SSU2 payload.
-     *  @since 0.9.55
+     * Path response block for SSU2 payload.
+     * @since 0.9.55
      */
     public static class PathResponseBlock extends Block {
         private final byte[] d;

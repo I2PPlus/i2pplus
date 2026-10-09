@@ -56,7 +56,7 @@ class CapacityCalculator {
     private static double _cachedEcap = PENALTY_CAP_E;
 
     /**
-     *  Get the D-cap penalty, cached to avoid repeated Double.parseDouble.
+     * Get the D-cap penalty, cached to avoid repeated Double.parseDouble.
      * @return the cached dcap
      */
     private static double getCachedDcap(RouterContext ctx) {
@@ -71,7 +71,7 @@ class CapacityCalculator {
     }
 
     /**
-     *  Get the E-cap penalty, cached to avoid repeated Double.parseDouble.
+     * Get the E-cap penalty, cached to avoid repeated Double.parseDouble.
      * @return the cached ecap
      */
     private static double getCachedEcap(RouterContext ctx) {
@@ -214,7 +214,6 @@ class CapacityCalculator {
 
     /**
      * If we haven't heard from them in an hour, they aren't too useful.
-     *
      */
     private static boolean tooOld(PeerProfile profile, long now) {
         return !profile.getIsActive(60*60*1000L, now);
@@ -236,7 +235,7 @@ class CapacityCalculator {
      * Let A = accects, R = rejects, F = fails
      *
      * @return estimated and adjusted accepts per hour, for the given period
-     *         which is, more or less, max(0, 5 + (A * (A / (A + 2R))) - (4 * F))
+     * which is, more or less, max(0, 5 + (A * (A / (A + 2R))) - (4 * F))
      */
     private static double estimateCapacity(RateStat acceptStat, RateStat rejectStat, RateStat failedStat, int period) {
         Rate curAccepted = acceptStat.getRate(period);

@@ -6,7 +6,6 @@ package net.i2p.router.crypto;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import junit.framework.TestCase;
@@ -27,7 +26,6 @@ import java.util.Set;
 /**
  *
  * Session key management unit tests.
- *
  */
 public class SessionEncryptionTest extends TestCase {
     private I2PAppContext _context;
@@ -71,12 +69,12 @@ public class SessionEncryptionTest extends TestCase {
     }
 
     /**
-     *  Run     tagsIncluded    useTag  rekey
-     *  1       yes (2)         no      no
-     *  2       no              yes     no
-     *  3       yes (2)         yes     no
-     *  4       no              yes     no
-     *  5       no              yes     no
+     * Run     tagsIncluded    useTag  rekey
+     * 1       yes (2)         no      no
+     * 2       no              yes     no
+     * 3       yes (2)         yes     no
+     * 4       no              yes     no
+     * 5       no              yes     no
      */
     public void testSessions() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
@@ -161,12 +159,12 @@ public class SessionEncryptionTest extends TestCase {
     }
 
     /**
-     *  Run tagsIncluded    useTag  rekey
-     *  1   yes (2)         no      no
-     *  2   no              yes     no
-     *  3   yes (2)         yes     yes
-     *  4   no              yes     no
-     *  5   no              yes     no
+     * Run tagsIncluded    useTag  rekey
+     * 1   yes (2)         no      no
+     * 2   no              yes     no
+     * 3   yes (2)         yes     yes
+     * 4   no              yes     no
+     * 5   no              yes     no
      */
     public void testRekeying() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();
@@ -252,7 +250,7 @@ public class SessionEncryptionTest extends TestCase {
     }
 
     /**
-     *  20 tags every 10 messages, rekey every 50
+     * 20 tags every 10 messages, rekey every 50
      */
     public void testLongSession() throws Exception {
         Object[] keys = KeyGenerator.getInstance().generatePKIKeypair();

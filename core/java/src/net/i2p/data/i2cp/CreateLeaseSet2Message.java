@@ -37,8 +37,8 @@ import net.i2p.util.ByteArrayStream;
  */
 public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     /**
-     *  NOTE: Preliminary format was type 40 in 0.9.38.
-     *  Format changed as of 0.9.39, changed type to 41.
+     * NOTE: Preliminary format was type 40 in 0.9.38.
+     * Format changed as of 0.9.39, changed type to 41.
      */
     public final static int MESSAGE_TYPE = 41;
     private List<PrivateKey> _privateKeys; // only used if more than one key, otherwise null
@@ -48,9 +48,9 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     public CreateLeaseSet2Message() {super();}
 
     /**
-     *  This returns all the keys. getPrivateKey() returns the first one.
+     * This returns all the keys. getPrivateKey() returns the first one.
      *
-     *  @return not a copy, do not modify, null if none
+     * @return not a copy, do not modify, null if none
      */
     public List<PrivateKey> getPrivateKeys() {
         if (_privateKeys != null) {return _privateKeys;}
@@ -60,7 +60,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     }
 
     /**
-     *  Add a private key.
+     * Add a private key.
      */
     public void addPrivateKey(PrivateKey key) {
         PrivateKey pk = getPrivateKey();

@@ -48,10 +48,10 @@ public final class Blinding {
     };
 
     /**
-     *  Cached HKDF for {@link #generateAlpha}, which is called once per blinded
-     *  destination. HKDF is stateless (it only holds the context, and the
-     *  context's HMAC256Generator is itself thread-safe), so one instance per
-     *  context is reusable and saves an allocation per call.
+     * Cached HKDF for {@link #generateAlpha}, which is called once per blinded
+     * destination. HKDF is stateless (it only holds the context, and the
+     * context's HMAC256Generator is itself thread-safe), so one instance per
+     * context is reusable and saves an allocation per call.
      */
     private static volatile HKDF _hkdf;
     /** The context {@link #_hkdf} was built for, so a context change forces a rebuild. */
@@ -60,13 +60,13 @@ public final class Blinding {
     private Blinding() {}
 
     /**
-     *  Get the shared HKDF for a context.
-     *  The cached instance is rebuilt if the context differs, so a non-global
-     *  context never ends up using a HKDF bound to a different one. A racy
-     *  double build is harmless, as both instances are equivalent.
+     * Get the shared HKDF for a context.
+     * The cached instance is rebuilt if the context differs, so a non-global
+     * context never ends up using a HKDF bound to a different one. A racy
+     * double build is harmless, as both instances are equivalent.
      *
-     *  @param ctx the app context
-     *  @return the shared HKDF, never null
+     * @param ctx the app context
+     * @return the shared HKDF, never null
      */
     private static HKDF hkdf(I2PAppContext ctx) {
         if (_hkdfCtx != ctx) {
@@ -81,12 +81,12 @@ public final class Blinding {
     }
 
     /**
-     *  Only for SigTypes EdDSA_SHA512_Ed25519 and RedDSA_SHA512_Ed25519.
+     * Only for SigTypes EdDSA_SHA512_Ed25519 and RedDSA_SHA512_Ed25519.
      *
-     *  @param key must be SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519
-     *  @param alpha must be SigType RedDSA_SHA512_Ed25519
-     *  @return SigType RedDSA_SHA512_Ed25519
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param key must be SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519
+     * @param alpha must be SigType RedDSA_SHA512_Ed25519
+     * @return SigType RedDSA_SHA512_Ed25519
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      */
     public static SigningPublicKey blind(SigningPublicKey key, SigningPrivateKey alpha) {
         SigType type = key.getType();
@@ -102,12 +102,12 @@ public final class Blinding {
     }
 
     /**
-     *  Only for SigTypes EdDSA_SHA512_Ed25519 and RedDSA_SHA512_Ed25519.
+     * Only for SigTypes EdDSA_SHA512_Ed25519 and RedDSA_SHA512_Ed25519.
      *
-     *  @param key must be SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519
-     *  @param alpha must be SigType RedDSA_SHA512_Ed25519
-     *  @return SigType RedDSA_SHA512_Ed25519
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param key must be SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519
+     * @param alpha must be SigType RedDSA_SHA512_Ed25519
+     * @return SigType RedDSA_SHA512_Ed25519
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      */
     public static SigningPrivateKey blind(SigningPrivateKey key, SigningPrivateKey alpha) {
         SigType type = key.getType();
@@ -123,12 +123,12 @@ public final class Blinding {
     }
 
     /**
-     *  Only for SigType EdDSA_SHA512_Ed25519.
+     * Only for SigType EdDSA_SHA512_Ed25519.
      *
-     *  @param key must be SigType RedDSA_SHA512_Ed25519
-     *  @param alpha must be SigType RedDSA_SHA512_Ed25519
-     *  @return SigType EdDSA_SHA512_Ed25519
-     *  @throws IllegalArgumentException on bad inputs or unsupported SigTypes
+     * @param key must be SigType RedDSA_SHA512_Ed25519
+     * @param alpha must be SigType RedDSA_SHA512_Ed25519
+     * @return SigType EdDSA_SHA512_Ed25519
+     * @throws IllegalArgumentException on bad inputs or unsupported SigTypes
      */
     public static SigningPrivateKey unblind(SigningPrivateKey key, SigningPrivateKey alpha) {
         if (key.getType() != TYPER || alpha.getType() != TYPER) throw new IllegalArgumentException("Unsupported blinding from " + key.getType() + " / " + alpha.getType());
@@ -143,8 +143,8 @@ public final class Blinding {
     }
 
     /**
-     *  Generate alpha for current time.
-     *  Only for SigType EdDSA_SHA512_Ed25519.
+     * Generate alpha for current time.
+     * Only for SigType EdDSA_SHA512_Ed25519.
      *
      * @param ctx the application context
      * @param destspk must be SigType EdDSA_SHA512_Ed25519
@@ -159,8 +159,8 @@ public final class Blinding {
     }
 
     /**
-     *  Generate alpha for the given time.
-     *  Only for SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519.
+     * Generate alpha for the given time.
+     * Only for SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519.
      *
      * @param ctx the application context
      * @param destspk must be SigType EdDSA_SHA512_Ed25519 or RedDSA_SHA512_Ed25519
@@ -201,7 +201,7 @@ public final class Blinding {
     }
 
     /**
-     *  What's the default blinded type for a given unblinded type?
+     * What's the default blinded type for a given unblinded type?
      *
      * @param unblindedType the unblinded signature type
      * @return non-null
@@ -213,8 +213,8 @@ public final class Blinding {
     }
 
     /**
-     *  Decode a new-format b32 address.
-     *  See proposal 149.
+     * Decode a new-format b32 address.
+     * See proposal 149.
      *
      * @param ctx the application context
      * @param address ending with ".b32.i2p"
@@ -232,9 +232,9 @@ public final class Blinding {
     }
 
     /**
-     *  Decode a new-format b32 address.
-     *  See proposal 149.
-     *  NOTE: Not for external use, use decode(String)
+     * Decode a new-format b32 address.
+     * See proposal 149.
+     * NOTE: Not for external use, use decode(String)
      *
      * @param ctx the application context
      * @param b 35+ bytes
@@ -275,8 +275,8 @@ public final class Blinding {
     }
 
     /**
-     *  Encode a public key as a new-format b32 address.
-     *  See proposal 149.
+     * Encode a public key as a new-format b32 address.
+     * See proposal 149.
      *
      * @param key the signing public key to encode
      * @return (56 chars).b32.i2p
@@ -288,8 +288,8 @@ public final class Blinding {
     }
 
     /**
-     *  Encode a public key as a new-format b32 address.
-     *  See proposal 149.
+     * Encode a public key as a new-format b32 address.
+     * See proposal 149.
      *
      * @param key the signing public key to encode
      * @param requireSecret whether a secret is required

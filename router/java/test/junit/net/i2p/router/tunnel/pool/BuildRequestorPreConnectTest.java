@@ -123,10 +123,10 @@ public class BuildRequestorPreConnectTest {
     }
 
     /**
-     *  The other half of the contract: when the unvalidated lookup hits, the
-     *  validating one must not run at all. That ordering is the whole point of
-     *  trying the fast path first, so it is pinned here rather than left
-     *  implied by the fallback test above.
+     * The other half of the contract: when the unvalidated lookup hits, the
+     * validating one must not run at all. That ordering is the whole point of
+     * trying the fast path first, so it is pinned here rather than left
+     * implied by the fallback test above.
      */
     @Test
     public void testPreConnectFallback_unvalidatedLookupHit_skipsValidatingLookup() {

@@ -19,8 +19,6 @@ import java.util.Properties;
 
 /**
  * A Dummy naming service that can only handle base64 and b32 destinations.
- *
- * @since public since 0.9.31
  */
 public class DummyNamingService extends NamingService {
 
@@ -34,9 +32,9 @@ public class DummyNamingService extends NamingService {
     public static final int DEST_SIZE = 516; // Std. Base64 length (no certificate)
 
     /**
-     *  The LRU cache, with no expiration time.
-     *  Classes should take care to call removeCache() for any entries that
-     *  are invalidated.
+     * The LRU cache, with no expiration time.
+     * Classes should take care to call removeCache() for any entries that
+     * are invalidated.
      */
     private static final Map<String, Destination> _cache = new LHMCache<>(CACHE_MAX_SIZE);
 
@@ -52,11 +50,11 @@ public class DummyNamingService extends NamingService {
     }
 
     /**
-     *  @param hostname mixed case as it could be a key
-     *  @param lookupOptions input parameter, NamingService-specific, can be null
-     *  @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
-     *  @return dest or null
-     *  @since 0.8.7
+     * @param hostname mixed case as it could be a key
+     * @param lookupOptions input parameter, NamingService-specific, can be null
+     * @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
+     * @return dest or null
+     * @since 0.8.7
      */
     @Override
     public Destination lookup(String hostname, Properties lookupOptions, Properties storedOptions) {
@@ -98,10 +96,10 @@ public class DummyNamingService extends NamingService {
     }
 
     /**
-     *  Provide basic static caching for all services
+     * Provide basic static caching for all services
      *
-     *  @param s case-sensitive, could be a hostname or a full b64 string
-     *  @param d the destination to cache
+     * @param s case-sensitive, could be a hostname or a full b64 string
+     * @param d the destination to cache
      */
     protected static void putCache(String s, Destination d) {
         if (d == null) return;
@@ -111,10 +109,10 @@ public class DummyNamingService extends NamingService {
     }
 
     /**
-     *  Look up a cached destination.
+     * Look up a cached destination.
      *
-     *  @param s case-sensitive, could be a hostname or a full b64 string
-     *  @return cached dest or null
+     * @param s case-sensitive, could be a hostname or a full b64 string
+     * @return cached dest or null
      */
     protected static Destination getCache(String s) {
         synchronized (_cache) {
@@ -123,10 +121,10 @@ public class DummyNamingService extends NamingService {
     }
 
     /**
-     *  Remove a cached destination.
+     * Remove a cached destination.
      *
-     *  @param s case-sensitive, could be a hostname or a full b64 string
-     *  @since 0.8.7
+     * @param s case-sensitive, could be a hostname or a full b64 string
+     * @since 0.8.7
      */
     protected static void removeCache(String s) {
         synchronized (_cache) {

@@ -5,7 +5,6 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Set;
@@ -16,7 +15,6 @@ import net.i2p.router.peermanager.PeerTestJob;
  * Manage peer references and keep them up to date so that when asked for peers,
  * it can provide appropriate peers according to the criteria provided.  This
  * includes periodically queueing up outbound messages to the peers to test them.
- *
  */
 public interface PeerManagerFacade extends Service {
     /**
@@ -34,10 +32,10 @@ public interface PeerManagerFacade extends Service {
      */
     public int countPeersByCapability(char capability);
 /**
-     * The capabilities for a peer.
-     *
-     * @param peer the peer
-     */
+ * The capabilities for a peer.
+ *
+ * @param peer the peer
+ */
     public void setCapabilities(Hash peer, String caps);
     /**
      * Remove all capabilities from a peer.

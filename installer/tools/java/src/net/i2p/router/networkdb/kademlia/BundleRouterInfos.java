@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import gnu.getopt.Getopt;
@@ -32,35 +31,35 @@ import net.i2p.router.transport.StrictCountries;
 import net.i2p.util.FileUtil;
 
 /**
- *  Copy a random selection of 'count' router infos from configDir/netDb
- *  to 'toDir', for bundling into an i2pseeds file.
+ * Copy a random selection of 'count' router infos from configDir/netDb
+ * to 'toDir', for bundling into an i2pseeds file.
  *
- *  A router info is skipped if it is our own, if the file name is not a valid
- *  hash or the file cannot be parsed or its signature does not verify, if it
- *  was published more than seven days ago, if it is unreachable (lacking the
- *  'R' capability), unreachable-only ('U' capability), or slow ('K'
- *  capability), if it has no addresses (hidden), if it has an SSU introduction
- *  point, if it has no IPv4 address, if it shares an IP address with a router
- *  info already copied, or if it is in a country on the strict list.
+ * A router info is skipped if it is our own, if the file name is not a valid
+ * hash or the file cannot be parsed or its signature does not verify, if it
+ * was published more than seven days ago, if it is unreachable (lacking the
+ * 'R' capability), unreachable-only ('U' capability), or slow ('K'
+ * capability), if it has no addresses (hidden), if it has an SSU introduction
+ * point, if it has no IPv4 address, if it shares an IP address with a router
+ * info already copied, or if it is in a country on the strict list.
  *
- *  Used at build time by the prepRouterInfos target; see build.properties for
- *  the config dir and count. If no router info qualifies, the tool exits 1.
+ * Used at build time by the prepRouterInfos target; see build.properties for
+ * the config dir and count. If no router info qualifies, the tool exits 1.
  *
- *  @since 0.9.15
+ * @since 0.9.15
  */
 public class BundleRouterInfos {
 
     /**
-     *  Copy a random selection of router infos, for bundling into an i2pseeds
-     *  file. See the class documentation for the criteria.
+     * Copy a random selection of router infos, for bundling into an i2pseeds
+     * file. See the class documentation for the criteria.
      *
-     *  Usage: BundleRouterInfos -i configDir -o toDir -c count
-     *  <p>
-     *  Defaults: configDir is <code>$HOME/.i2p</code>, toDir is <code>netDb</code>,
-     *  and count is 200.
+     * Usage: BundleRouterInfos -i configDir -o toDir -c count
+     * <p>
+     * Defaults: configDir is <code>$HOME/.i2p</code>, toDir is <code>netDb</code>,
+     * and count is 200.
      *
-     *  @param args command line arguments
-     *  @since 0.9.15
+     * @param args command line arguments
+     * @since 0.9.15
      */
     public static void main(String[] args) {
         Getopt g = new Getopt("BundleRouterInfos", args, "i:o:c:");

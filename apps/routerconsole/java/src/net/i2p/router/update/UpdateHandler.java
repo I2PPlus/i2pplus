@@ -35,12 +35,12 @@ class UpdateHandler implements Updater {
     }
 
     /**
-     *  Start a download and return a handle to the download task.
-     *  Should not block.
+     * Start a download and return a handle to the download task.
+     * Should not block.
      *
-     *  @param id plugin name or ignored
-     *  @param maxTime how long you have
-     *  @return active task or null if unable to download
+     * @param id plugin name or ignored
+     * @param maxTime how long you have
+     * @return active task or null if unable to download
      */
     @Override
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,

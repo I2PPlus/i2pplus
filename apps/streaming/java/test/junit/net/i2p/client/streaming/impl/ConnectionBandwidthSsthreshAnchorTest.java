@@ -88,8 +88,8 @@ public class ConnectionBandwidthSsthreshAnchorTest {
     }
 
     /** Degenerate inputs behave safely: an unknown/zero min-RTT floors to the
-     *  healthy 1s anchor (never a degenerate small anchor), and a zero factor
-     *  still respects the floor. */
+     * healthy 1s anchor (never a degenerate small anchor), and a zero factor
+     * still respects the floor. */
     @Test
     public void testNegativeOrZeroInputsStillFloor() {
         assertEquals(16, Connection.bandwidthSsthreshAnchor(-1f, 500, 2, 16));

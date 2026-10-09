@@ -6,14 +6,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  Tests the tunnel-lifetime / lease-end relationship.
+ * Tests the tunnel-lifetime / lease-end relationship.
  *
- *  The published lease end is
- *  {@code min(tunnel expiry, now + leaseMaxDuration) - LEASE_SAFETY_MARGIN},
- *  so the tunnel must sit exactly one grace period above the lease cap for the
- *  advertised value to land on the I2P standard 10m. Shortening the tunnel to
- *  10m drags the advertised lease down to 9m, which is the mistake this test
- *  exists to catch.
+ * The published lease end is
+ * {@code min(tunnel expiry, now + leaseMaxDuration) - LEASE_SAFETY_MARGIN},
+ * so the tunnel must sit exactly one grace period above the lease cap for the
+ * advertised value to land on the I2P standard 10m. Shortening the tunnel to
+ * 10m drags the advertised lease down to 9m, which is the mistake this test
+ * exists to catch.
  */
 public class TunnelPoolLeaseLifetimeTest {
 
@@ -29,10 +29,10 @@ public class TunnelPoolLeaseLifetimeTest {
     }
 
     /**
-     *  With the shipped defaults the lease cap binds, not the tunnel, and peers
-     *  are advertised exactly the standard 10m. The safety margin is subtracted
-     *  before the cap, so a binding cap overwrites it — the advertised value
-     *  lands on 10m, not 9m59s.
+     * With the shipped defaults the lease cap binds, not the tunnel, and peers
+     * are advertised exactly the standard 10m. The safety margin is subtracted
+     * before the cap, so a binding cap overwrites it — the advertised value
+     * lands on 10m, not 9m59s.
      */
     @Test
     public void advertisedLeaseIsTheStandardTenMinutes() {
@@ -51,9 +51,9 @@ public class TunnelPoolLeaseLifetimeTest {
     }
 
     /**
-     *  A tunnel living exactly the standard lifetime would advertise only 9m,
-     *  because the margin is subtracted from whichever bound is smaller. This
-     *  is the regression the cap exists to prevent.
+     * A tunnel living exactly the standard lifetime would advertise only 9m,
+     * because the margin is subtracted from whichever bound is smaller. This
+     * is the regression the cap exists to prevent.
      */
     @Test
     public void aTenMinuteTunnelWouldUnderAdvertise() {
@@ -71,9 +71,9 @@ public class TunnelPoolLeaseLifetimeTest {
     }
 
     /**
-     *  The 60s floor: a nearly-dead tunnel still yields a usable lease. This is
-     *  the branch a thin pool hits, and the reason leases were seen living
-     *  ~89s — the pool had nothing fresher to offer.
+     * The 60s floor: a nearly-dead tunnel still yields a usable lease. This is
+     * the branch a thin pool hits, and the reason leases were seen living
+     * ~89s — the pool had nothing fresher to offer.
      */
     @Test
     public void nearlyDeadTunnelIsFlooredAtSixtySeconds() {
@@ -98,8 +98,8 @@ public class TunnelPoolLeaseLifetimeTest {
     }
 
     /**
-     *  The invariant that matters: whatever the tunnel lifetime, the advertised
-     *  lease never exceeds the standard 10m.
+     * The invariant that matters: whatever the tunnel lifetime, the advertised
+     * lease never exceeds the standard 10m.
      */
     @Test
     public void advertisedLeaseNeverExceedsTheStandard() {

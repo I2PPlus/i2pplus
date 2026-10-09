@@ -14,9 +14,9 @@ public class Country {
      * Creates a new Country.
      *
      * @param code
-     *            the country code.
+     * the country code.
      * @param name
-     *            the country name.
+     * the country name.
      */
     public Country(String code, String name) {
         this.code = code;

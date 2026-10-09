@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- *  Tests for TransportBid.
- *  Pure data class - no I2P context needed.
+ * Tests for TransportBid.
+ * Pure data class - no I2P context needed.
  */
 public class TransportBidTest {
 

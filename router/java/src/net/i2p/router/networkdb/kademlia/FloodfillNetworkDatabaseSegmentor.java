@@ -74,10 +74,9 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
 
     /**
      * If we are floodfill, turn it off and tell everybody for the _mainDbid
-    *
+     *
      * @since 0.9.61
-    *
-    */
+     */
     @Override
     public synchronized void shutdown() {
         if (_log.shouldLog(Log.DEBUG))
@@ -89,7 +88,6 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * Start up the _mainDbid
      *
      * @since 0.9.61
-     *
      */
     public synchronized void startup() {
             if (_log.shouldLog(Log.DEBUG)) {

@@ -8,18 +8,18 @@ import java.util.Set;
 import java.util.SortedSet;
 
 /**
- *  Efficient implementation of a SortedSet stored in a fixed-size array.
- *  Much more space-efficient than TreeSet.
- *  Doesn't do copying like CopyOnWriteArraySet.
- *  Unmodifiable, thread-safe.
- *  Null elements are not permitted.
+ * Efficient implementation of a SortedSet stored in a fixed-size array.
+ * Much more space-efficient than TreeSet.
+ * Doesn't do copying like CopyOnWriteArraySet.
+ * Unmodifiable, thread-safe.
+ * Null elements are not permitted.
  *
- *  The Collection constructors are not recommended for large sets
- *  as duplicate check is O(n**2).
+ * The Collection constructors are not recommended for large sets
+ * as duplicate check is O(n**2).
  *
  *
- *  @param <E> type of elements in this set
- *  @since 0.9.55
+ * @param <E> type of elements in this set
+ * @since 0.9.55
  */
 public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E> {
 
@@ -73,19 +73,19 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  Warning: O(n**2)
+     * Warning: O(n**2)
      *
-     *  @param c collection to copy and sort
+     * @param c collection to copy and sort
      */
     public UnmodifiableSortedSet(Collection<? extends E> c) {
         this(c, null);
     }
 
     /**
-     *  Warning: O(n**2)
+     * Warning: O(n**2)
      *
-     *  @param c collection to copy and sort
-     *  @param comparator comparator for ordering
+     * @param c collection to copy and sort
+     * @param comparator comparator for ordering
      */
     @SuppressWarnings("unchecked")
     public UnmodifiableSortedSet(Collection<? extends E> c, Comparator<? super E> comparator) {
@@ -126,7 +126,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException
      */
     @Override
     public SortedSet<E> headSet(E toElement) {
@@ -134,7 +134,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException
      */
     @Override
     public SortedSet<E> subSet(E fromElement, E toElement) {
@@ -142,7 +142,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException
      */
     @Override
     public SortedSet<E> tailSet(E fromElement) {
@@ -150,7 +150,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException
      */
     @Override
     public boolean add(E o) {
@@ -160,7 +160,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException
      */
     @Override
     public void addUnique(E o) {
@@ -170,7 +170,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException
      */
     @Override
     public void clear() {
@@ -178,7 +178,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException
      */
     @Override
     public boolean remove(Object o) {
@@ -186,7 +186,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     *  Overridden to do binary search
+     * Overridden to do binary search
      */
     @Override
     @SuppressWarnings("unchecked")

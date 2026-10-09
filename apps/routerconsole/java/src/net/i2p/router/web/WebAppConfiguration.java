@@ -17,30 +17,30 @@ import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- *  Adds to the webapp classpath as specified in webapps.config.
- *  This allows us to reference classes that are not in the classpath
- *  specified in wrapper.config, since old installations have
- *  individual jars and not lib/*.jar specified in wrapper.config.
+ * Adds to the webapp classpath as specified in webapps.config.
+ * This allows us to reference classes that are not in the classpath
+ * specified in wrapper.config, since old installations have
+ * individual jars and not lib/*.jar specified in wrapper.config.
  *
- *  A sample line in webapps.config is:
- *     webapps.appname.classpath=foo.jar,$I2P/lib/bar.jar
- *  Unless $I2P is specified the path will be relative to $I2P/lib for
- *  webapps in the installation and appDir/plugins/appname/lib for plugins.
+ * A sample line in webapps.config is:
+ * webapps.appname.classpath=foo.jar,$I2P/lib/bar.jar
+ * Unless $I2P is specified the path will be relative to $I2P/lib for
+ * webapps in the installation and appDir/plugins/appname/lib for plugins.
  *
- *  webapps.config is used because setting Class-Path in MANIFEST.MF does not
- *  work for jetty wars, and because WebAppContext.addClassPath() is not
- *  usable here. Jars that are already on the system class path are skipped
- *  to avoid duplicate statics; /susimail is the exception.
+ * webapps.config is used because setting Class-Path in MANIFEST.MF does not
+ * work for jetty wars, and because WebAppContext.addClassPath() is not
+ * usable here. Jars that are already on the system class path are skipped
+ * to avoid duplicate statics; /susimail is the exception.
  *
- *  @since 0.7.12
+ * @since 0.7.12
  */
 public class WebAppConfiguration implements Configuration {
 
     private static final String CLASSPATH = ".classpath";
 
     /**
-     *  This was the interface in Jetty 5, in Jetty 6 was configureClassLoader(),
-     *  now it's configure()
+     * This was the interface in Jetty 5, in Jetty 6 was configureClassLoader(),
+     * now it's configure()
      */
     private void configureClassPath(WebAppContext wac) throws Exception {
         String ctxPath = wac.getContextPath();
@@ -125,7 +125,6 @@ public class WebAppConfiguration implements Configuration {
      * not that there's really any hostnames in here,
      * but keep findbugs happy.
      * @return the system class path
-     * @since 0.9
      */
     private static Set<URI> getSystemClassPath(I2PAppContext ctx) {
         Set<URI> rv = new HashSet<>(32);
@@ -156,9 +155,8 @@ public class WebAppConfiguration implements Configuration {
     }
 
     /**
-     *  Jetty 7 Configuration hook. Nothing to undo - this configuration
-     *  only adjusts the class path, which Jetty owns.
-     *  @since Jetty 7
+     * Jetty 7 Configuration hook. Nothing to undo - this configuration
+     * only adjusts the class path, which Jetty owns.
      */
     public void deconfigure(WebAppContext context) {
         // no state to release
@@ -179,27 +177,24 @@ public class WebAppConfiguration implements Configuration {
     }
 
     /**
-     *  Jetty 7 Configuration hook. Nothing to destroy - this configuration
-     *  holds no resources.
-     *  @since Jetty 7
+     * Jetty 7 Configuration hook. Nothing to destroy - this configuration
+     * holds no resources.
      */
     @Override
     public void destroy(WebAppContext context) {
         // no state to release
     }
     /**
-     *  Jetty 7 Configuration hook. Runs before {@link #configure} with no
-     *  class path work to do, so this is an intentional no-op.
-     *  @since Jetty 7
+     * Jetty 7 Configuration hook. Runs before {@link #configure} with no
+     * class path work to do, so this is an intentional no-op.
      */
     @Override
     public void preConfigure(WebAppContext context) {
         // no pre-configuration required
     }
     /**
-     *  Jetty 7 Configuration hook. Runs after {@link #configure} with no
-     *  follow-up work, so this is an intentional no-op.
-     *  @since Jetty 7
+     * Jetty 7 Configuration hook. Runs after {@link #configure} with no
+     * follow-up work, so this is an intentional no-op.
      */
     @Override
     public void postConfigure(WebAppContext context) {

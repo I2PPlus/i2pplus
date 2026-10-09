@@ -456,8 +456,8 @@ class SymmetricState implements Destroyable, Cloneable {
     }
 
     /**
-     *  I2P for getting chaining key for siphash calculation
-     *  @return a copy
+     * I2P for getting chaining key for siphash calculation
+     * @return a copy
      */
     public byte[] getChainingKey() {
         byte[] rv = new byte[ck.length];
@@ -466,8 +466,8 @@ class SymmetricState implements Destroyable, Cloneable {
     }
 
     /**
-     *  I2P
-     *  @since 0.9.44
+     * I2P
+     * @since 0.9.44
      */
     @Override
     public SymmetricState clone() throws CloneNotSupportedException {
@@ -475,7 +475,7 @@ class SymmetricState implements Destroyable, Cloneable {
     }
 
     /**
-     *  I2P debug
+     * I2P debug
      */
     @Override
     public String toString() {

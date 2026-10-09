@@ -17,9 +17,9 @@ import net.i2p.i2ptunnel.Logging;
 import net.i2p.util.EventDispatcher;
 
 /**
- *  A standard client, using an existing socket manager.
- *  Targets a single destination and port.
- *  Naming resolution is delayed until connect time.
+ * A standard client, using an existing socket manager.
+ * Targets a single destination and port.
+ * Naming resolution is delayed until connect time.
  *
  * @since 0.8.9
  */
@@ -44,7 +44,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
      * @param dest the target, presumably b32
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     *                                  valid config to contact the router
+     * valid config to contact the router
      */
     public I2PTunnelDCCClient(String dest, int localPort, int remotePort, Logging l,
                            I2PSocketManager sktMgr, EventDispatcher notifyThis,
@@ -58,7 +58,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Accept one connection only.
+     * Accept one connection only.
      */
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
@@ -97,7 +97,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Returns the expiration time for this DCC connection.
+     * Returns the expiration time for this DCC connection.
      *
      * @return the expiration time in milliseconds since epoch
      * @since 0.8.9
@@ -107,7 +107,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Returns the destination base32 address for this DCC connection.
+     * Returns the destination base32 address for this DCC connection.
      *
      * @return the destination Base32 address
      * @since 0.8.9
@@ -117,7 +117,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Returns the remote port for this DCC connection.
+     * Returns the remote port for this DCC connection.
      *
      * @return the remote port number
      * @since 0.8.9
@@ -127,8 +127,8 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Stop listening for new sockets.
-     *  We can't call super.close() as it kills all sockets in the sockMgr
+     * Stop listening for new sockets.
+     * We can't call super.close() as it kills all sockets in the sockMgr
      */
     public void stop() {
         open = false;
@@ -138,14 +138,14 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     }
 
     /**
-     *  Just so we can do the callbacks
+     * Just so we can do the callbacks
      *
      * @since 0.8.9
      */
     private class Runner extends I2PTunnelRunner {
 
         /**
-         *  Does NOT start itself. Caller must call run() directly.
+         * Does NOT start itself. Caller must call run() directly.
          *
          * @param s the local socket
          * @param i2ps the I2P socket

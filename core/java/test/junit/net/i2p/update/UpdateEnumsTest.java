@@ -5,13 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- *  Tests for the UpdateType and UpdateMethod enums: name/valueOf
- *  round-trip serialization and the documented constant set.
- *  These enums are persisted in config and exchanged between
- *  Checker/Updater implementations, so a missing or reordered
- *  constant would silently break update configuration.
+ * Tests for the UpdateType and UpdateMethod enums: name/valueOf
+ * round-trip serialization and the documented constant set.
+ * These enums are persisted in config and exchanged between
+ * Checker/Updater implementations, so a missing or reordered
+ * constant would silently break update configuration.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public class UpdateEnumsTest {
 

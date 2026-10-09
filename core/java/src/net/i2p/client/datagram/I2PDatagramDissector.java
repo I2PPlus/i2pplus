@@ -6,7 +6,6 @@ package net.i2p.client.datagram;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.crypto.DSAEngine;
@@ -184,7 +183,7 @@ public final class I2PDatagramDissector {
          * }
          *
          * return retDest;
-         ****/
+         * ***/
         // dests are no longer modifiable
         return rxDest;
     }

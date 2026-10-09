@@ -7,19 +7,19 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- *  When a stored peer profile may be deleted.
+ * When a stored peer profile may be deleted.
  *
- *  <p>The policy under test: staleness decides <em>whether</em> a profile file may
- *  be deleted, and the store size decides only <em>how many</em>. Below the
- *  retention floor nothing is deleted unless the peer is genuinely stale.
+ * <p>The policy under test: staleness decides <em>whether</em> a profile file may
+ * be deleted, and the store size decides only <em>how many</em>. Below the
+ * retention floor nothing is deleted unless the peer is genuinely stale.
  *
- *  <p>This pins two defects that were live together. The purge deleted K/L/M and
- *  Unknown bandwidth peers outright, ahead of any age check, so a peer heard from
- *  minutes earlier was destroyed at any store size; and the surplus trim keyed on
- *  overage alone, so with the cap reached by churn every non-active profile became
- *  a deletion candidate regardless of age.
+ * <p>This pins two defects that were live together. The purge deleted K/L/M and
+ * Unknown bandwidth peers outright, ahead of any age check, so a peer heard from
+ * minutes earlier was destroyed at any store size; and the surplus trim keyed on
+ * overage alone, so with the cap reached by churn every non-active profile became
+ * a deletion candidate regardless of age.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class ProfileRetentionDecisionTest {
 
@@ -34,8 +34,8 @@ public class ProfileRetentionDecisionTest {
     // ---- genuinely stale: necessary for deletion at any size ----------------
 
     /**
-     *  Absent from the network database and untouched for the stale age. This is
-     *  the only condition under which a profile goes below the floor.
+     * Absent from the network database and untouched for the stale age. This is
+     * the only condition under which a profile goes below the floor.
      */
     @Test
     public void absentAndIdlePastTheStaleAgeIsGenuinelyStale() {
@@ -44,8 +44,8 @@ public class ProfileRetentionDecisionTest {
     }
 
     /**
-     *  Absence alone is not staleness. A RouterInfo expires routinely while a peer
-     *  is offline for an hour, and such a profile is exactly the one worth keeping.
+     * Absence alone is not staleness. A RouterInfo expires routinely while a peer
+     * is offline for an hour, and such a profile is exactly the one worth keeping.
      */
     @Test
     public void absenceAloneIsNotStale() {
@@ -54,8 +54,8 @@ public class ProfileRetentionDecisionTest {
     }
 
     /**
-     *  Long silence alone is not staleness either: a peer absent from the network
-     *  database is still expected to be heard from as it comes back.
+     * Long silence alone is not staleness either: a peer absent from the network
+     * database is still expected to be heard from as it comes back.
      */
     @Test
     public void longSilenceAloneIsNotStale() {
@@ -100,8 +100,8 @@ public class ProfileRetentionDecisionTest {
     }
 
     /**
-     *  The combined rule at the size that was actually observed: 3104 files, well
-     *  under the floor. Only genuinely stale files may go, and surplus survives.
+     * The combined rule at the size that was actually observed: 3104 files, well
+     * under the floor. Only genuinely stale files may go, and surplus survives.
      */
     @Test
     public void underTheFloorOnlyStaleFilesAreDeleted() {
@@ -113,8 +113,8 @@ public class ProfileRetentionDecisionTest {
     }
 
     /**
-     *  Stale files still go when the store is over the floor, and the overage is
-     *  then computed against what remains, so trimming is not double-counted.
+     * Stale files still go when the store is over the floor, and the overage is
+     * then computed against what remains, so trimming is not double-counted.
      */
     @Test
     public void staleDeletionsReduceTheOverage() {
@@ -133,9 +133,9 @@ public class ProfileRetentionDecisionTest {
     // ---- the constants themselves ------------------------------------------
 
     /**
-     *  The floor and the memory ceiling are separate concerns. If this fails, a
-     *  future edit has merged them and would silently shorten disk retention
-     *  whenever the memory ceiling moves.
+     * The floor and the memory ceiling are separate concerns. If this fails, a
+     * future edit has merged them and would silently shorten disk retention
+     * whenever the memory ceiling moves.
      */
     @Test
     public void diskRetentionIsIndependentOfTheMemoryCeiling() {
@@ -146,8 +146,8 @@ public class ProfileRetentionDecisionTest {
     }
 
     /**
-     *  A week, not a day. The previous logic used 24 hours and deleted low-bandwidth
-     *  peers at any age, so a peer merely quiet overnight lost its learned history.
+     * A week, not a day. The previous logic used 24 hours and deleted low-bandwidth
+     * peers at any age, so a peer merely quiet overnight lost its learned history.
      */
     @Test
     public void staleAgeIsAWeekNotADay() {
@@ -157,9 +157,9 @@ public class ProfileRetentionDecisionTest {
     // ---- profile creation: low bandwidth peers are never profiled ----------
 
     /**
-     *  The exclusion that matters most is at creation, not at persistence: a peer
-     *  advertising a tier it will not usefully host a tunnel on gets no profile, so
-     *  it costs no RAM and nothing is written for it.
+     * The exclusion that matters most is at creation, not at persistence: a peer
+     * advertising a tier it will not usefully host a tunnel on gets no profile, so
+     * it costs no RAM and nothing is written for it.
      */
     @Test
     public void lowBandwidthPeersAreNotProfiled() {
@@ -192,15 +192,15 @@ public class ProfileRetentionDecisionTest {
     // ---- where the low-bandwidth exclusion actually lives ------------------
 
     /**
-     *  Low-bandwidth peers must never be persisted, which is a property of the write
-     *  path rather than of this purge. Nothing in the retention rules reproduces the
-     *  old "delete K/L/M immediately" behaviour: that check ran before the age test,
-     *  so a peer heard from minutes earlier lost its file at any store size.
+     * Low-bandwidth peers must never be persisted, which is a property of the write
+     * path rather than of this purge. Nothing in the retention rules reproduces the
+     * old "delete K/L/M immediately" behaviour: that check ran before the age test,
+     * so a peer heard from minutes earlier lost its file at any store size.
      *
-     *  <p>This test cannot reach {@code PeerManager.storeProfile()} without a router,
-     *  so it pins the boundary instead: the purge exposes no tier-based shortcut, and
-     *  a low-bandwidth peer that is active and present in the network database is
-     *  retained like any other.
+     * <p>This test cannot reach {@code PeerManager.storeProfile()} without a router,
+     * so it pins the boundary instead: the purge exposes no tier-based shortcut, and
+     * a low-bandwidth peer that is active and present in the network database is
+     * retained like any other.
      */
     @Test
     public void anActiveLowBandwidthLookedUpPeerIsNotDeletedHere() {
@@ -215,10 +215,10 @@ public class ProfileRetentionDecisionTest {
     // ---- recovering profiles we chose to keep -------------------------------
 
     /**
-     *  Keeping a profile whose peer has no RouterInfo only pays off if the RouterInfo is
-     *  fetched again, so the load records those peers and a timer requests them. These
-     *  pin the accounting the drain depends on: the batch size, the interval that sets
-     *  the rate, and the ceiling that stops the recovery list becoming a backlog.
+     * Keeping a profile whose peer has no RouterInfo only pays off if the RouterInfo is
+     * fetched again, so the load records those peers and a timer requests them. These
+     * pin the accounting the drain depends on: the batch size, the interval that sets
+     * the rate, and the ceiling that stops the recovery list becoming a backlog.
      */
     @Test
     public void missingRouterInfoRateIsSixtyFourPerMinute() {
@@ -228,9 +228,9 @@ public class ProfileRetentionDecisionTest {
     }
 
     /**
-     *  The recovery list is bounded. A router returning from long downtime can hold
-     *  thousands of profiles whose RouterInfo has expired, and working through every one
-     *  would spend lookups on peers the netdb has stopped advertising.
+     * The recovery list is bounded. A router returning from long downtime can hold
+     * thousands of profiles whose RouterInfo has expired, and working through every one
+     * would spend lookups on peers the netdb has stopped advertising.
      */
     @Test
     public void theRecoveryListIsCapped() {
@@ -242,9 +242,9 @@ public class ProfileRetentionDecisionTest {
     }
 
     /**
-     *  Startup catch-up has its own budget. The held-peer refresher is sized for a
-     *  trickle of promotion candidates, and sharing its cap would make both paths
-     *  contend for one drain.
+     * Startup catch-up has its own budget. The held-peer refresher is sized for a
+     * trickle of promotion candidates, and sharing its cap would make both paths
+     * contend for one drain.
      */
     @Test
     public void startupCatchUpDoesNotShareTheHeldPeerBudget() {

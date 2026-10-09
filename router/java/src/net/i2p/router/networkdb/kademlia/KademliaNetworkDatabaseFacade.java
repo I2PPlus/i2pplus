@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -243,9 +242,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
-     *  Refresh the cached configuration from properties at most once per
-     *  CONFIG_REFRESH_MS, or immediately when the context changes.
-     *  Benign race: duplicate refreshes are idempotent writes.
+     * Refresh the cached configuration from properties at most once per
+     * CONFIG_REFRESH_MS, or immediately when the context changes.
+     * Benign race: duplicate refreshes are idempotent writes.
      */
     private static void refreshConfig(RouterContext ctx) {
         long now = ctx.clock().now();
@@ -273,11 +272,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long MAX_META_LEASE_FUTURE = 65535*1000L;
 
     /**
-     *  This needs to be long enough to give us time to start up, but less than 20m
-     *  (when we start accepting tunnels and could be a IBGW)
-     *  Actually no, we need this soon if we are a new router or other routers have
-     *  forgotten about us, else we can't build IB exploratory tunnels.
-     *  Unused.
+     * This needs to be long enough to give us time to start up, but less than 20m
+     * (when we start accepting tunnels and could be a IBGW)
+     * Actually no, we need this soon if we are a new router or other routers have
+     * forgotten about us, else we can't build IB exploratory tunnels.
+     * Unused.
      */
     protected static final long PUBLISH_JOB_DELAY = 15*1000L;
 
@@ -376,9 +375,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public PeerSelector getPeerSelector() {return _peerSelector;}
 
     /**
-     *  Reseed checker, or null for a client DB.
+     * Reseed checker, or null for a client DB.
      *
-     *  @return the reseed checker
+     * @return the reseed checker
      */
     @Override
     public ReseedChecker reseedChecker() {
@@ -407,22 +406,22 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     KBucketSet<Hash> getKBuckets() {return _kb;}
     /**
-     *  The data store.
+     * The data store.
      *
-     *  @return the data store
+     * @return the data store
      */
     DataStore getDataStore() {return _ds;}
 
     /**
-     *  Time of the last explore run.
+     * Time of the last explore run.
      *
-     *  @return the last explore new date
+     * @return the last explore new date
      */
     long getLastExploreNewDate() {return _lastExploreNew;}
     /**
-     *  Time of the last explore run.
+     * Time of the last explore run.
      *
-     *  @param when the new date
+     * @param when the new date
      */
     void setLastExploreNewDate(long when) {_lastExploreNew = when;}
 
@@ -582,19 +581,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         if (!QUIET && !isClientDb()) {
             /**
-             *  Fill the search queue with random keys in buckets that are too small
-             *  Disabled since KBucketImpl.generateRandomKey() is b0rked,
-             *  and anyway, we want to search for a completely random key,
-             *  not a random key for a particular kbucket.
+             * Fill the search queue with random keys in buckets that are too small
+             * Disabled since KBucketImpl.generateRandomKey() is b0rked,
+             * and anyway, we want to search for a completely random key,
+             * not a random key for a particular kbucket.
              */
             if (_exploreJob == null) {_exploreJob = new StartExplorersJob(_context, this);}
 
             /**
-             *  Fire off a group of searches from the explore pool.
-             *  Don't start it right away, so we don't send searches for random keys out our 0-hop exploratory
-             *  tunnels (generating direct connections to one or more floodfill peers within seconds of startup).
-             *  We're trying to minimize the ff connections to lessen the load on the floodfills, and in any case,
-             *  let's try to build some real expl. tunnels first. No rush, it only runs every 30m.
+             * Fire off a group of searches from the explore pool.
+             * Don't start it right away, so we don't send searches for random keys out our 0-hop exploratory
+             * tunnels (generating direct connections to one or more floodfill peers within seconds of startup).
+             * We're trying to minimize the ff connections to lessen the load on the floodfills, and in any case,
+             * let's try to build some real expl. tunnels first. No rush, it only runs every 30m.
              */
             _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
             _context.jobQueue().addJob(_exploreJob);
@@ -709,12 +708,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  This used to return the number of routers that were in both the kbuckets
-     *  AND the data store, which was fine when the kbuckets held everything.
-     *  But now that is probably not what you want.
-     *  Just return the count in the data store.
+     * This used to return the number of routers that were in both the kbuckets
+     * AND the data store, which was fine when the kbuckets held everything.
+     * But now that is probably not what you want.
+     * Just return the count in the data store.
      *
-     *  @return 0 if this is a client DB
+     * @return 0 if this is a client DB
      */
     @Override
     public int getKnownRouters() {
@@ -747,10 +746,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  BlindData for the given key.
+     * BlindData for the given key.
      *
-     *  @param spk unblinded key
-     *  @return BlindData or null
+     * @param spk unblinded key
+     * @return BlindData or null
      */
     @Override
     public BlindData getBlindData(SigningPublicKey spk) {
@@ -758,9 +757,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  BlindData to put in the cache.
+     * BlindData to put in the cache.
      *
-     *  @param bd new BlindData to put in the cache
+     * @param bd new BlindData to put in the cache
      */
     @Override
     public void setBlindData(BlindData bd) {
@@ -769,9 +768,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  All cached BlindData.
+     * All cached BlindData.
      *
-     *  @return the blindData
+     * @return the blindData
      */
     @Override
     public List<BlindData> getBlindData() {
@@ -779,9 +778,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  For console ConfigKeyringHelper
-     *  @param spk the unblinded public key
-     *  @return true if removed
+     * For console ConfigKeyringHelper
+     * @param spk the unblinded public key
+     * @return true if removed
      */
     @Override
     public boolean removeBlindData(SigningPublicKey spk) {
@@ -796,9 +795,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Validated entry stored locally.
+     * Validated entry stored locally.
      *
-     *  @return RouterInfo, LeaseSet, or null, validated
+     * @return RouterInfo, LeaseSet, or null, validated
      */
     @Override
     public DatabaseEntry lookupLocally(Hash key) {
@@ -823,9 +822,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Not for use without validation.
+     * Not for use without validation.
      *
-     *  @return RouterInfo, LeaseSet, or null, NOT validated
+     * @return RouterInfo, LeaseSet, or null, NOT validated
      */
     @Override
     public DatabaseEntry lookupLocallyWithoutValidation(Hash key) {
@@ -834,15 +833,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Look up a LeaseSet, locally first.
+     * Look up a LeaseSet, locally first.
      *
-     *  <p>Searches remotely if the LeaseSet is not held locally, is not
-     *  negative-cached, and is not a local destination this router hosts.
+     * <p>Searches remotely if the LeaseSet is not held locally, is not
+     * negative-cached, and is not a local destination this router hosts.
      *
-     *  @param key the LeaseSet key
-     *  @param onFindJob run if the LeaseSet is found locally or in the search, may be null
-     *  @param onFailedLookupJob run if the lookup cannot be attempted or fails, may be null
-     *  @param timeoutMs how long to wait for the search before failing
+     * @param key the LeaseSet key
+     * @param onFindJob run if the LeaseSet is found locally or in the search, may be null
+     * @param onFailedLookupJob run if the lookup cannot be attempted or fails, may be null
+     * @param timeoutMs how long to wait for the search before failing
      */
     @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
@@ -850,20 +849,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Lookup using the client's tunnels
-     *  Use lookupDestination() if you don't need the LS or don't need it validated.
+     * Lookup using the client's tunnels
+     * Use lookupDestination() if you don't need the LS or don't need it validated.
      *
-     *  <p>A negative-cached key is not searched again: the failure job is run
-     *  instead. A client sub-NetDb local miss for a destination this router
-     *  hosts also fails without a search, since only the main NetDb holds such
-     *  a LeaseSet.
+     * <p>A negative-cached key is not searched again: the failure job is run
+     * instead. A client sub-NetDb local miss for a destination this router
+     * hosts also fails without a search, since only the main NetDb holds such
+     * a LeaseSet.
      *
-     *  @param key the LeaseSet key
-     *  @param onFindJob run if the LeaseSet is found locally or in the search, may be null
-     *  @param onFailedLookupJob run if the router is uninitialized, the key is
-     *                           negative-cached, or the search fails, may be null
-     *  @param timeoutMs how long to wait for the search before failing
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @param key the LeaseSet key
+     * @param onFindJob run if the LeaseSet is found locally or in the search, may be null
+     * @param onFailedLookupJob run if the router is uninitialized, the key is
+     * negative-cached, or the search fails, may be null
+     * @param timeoutMs how long to wait for the search before failing
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
     public void lookupLeaseSet(Hash key, Job onFindJob, Job onFailedLookupJob,
@@ -947,17 +946,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Unconditionally lookup using the client's tunnels, with no jobs.
-     *  No local lookup and no LeaseSet validation. Use this to refresh a
-     *  LeaseSet before expiration.
+     * Unconditionally lookup using the client's tunnels, with no jobs.
+     * No local lookup and no LeaseSet validation. Use this to refresh a
+     * LeaseSet before expiration.
      *
-     *  <p>The one check that does apply is the negative cache: a
-     *  negative-cached key returns without searching, since a recent search
-     *  already established that the key is unresolvable. Nothing is sent to the
-     *  caller if the router is uninitialized.
+     * <p>The one check that does apply is the negative cache: a
+     * negative-cached key returns without searching, since a recent search
+     * already established that the key is unresolvable. Nothing is sent to the
+     * caller if the router is uninitialized.
      *
-     *  @param key the LeaseSet key
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @param key the LeaseSet key
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
     public void lookupLeaseSetRemotely(Hash key, Hash fromLocalDest) {
@@ -968,18 +967,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Unconditionally lookup using the client's tunnels.
+     * Unconditionally lookup using the client's tunnels.
      *
-     *  <p>Same negative-cache suppression as the two-argument overload: a
-     *  negative-cached key is not searched again and the failure job is run
-     *  instead. Nothing is searched if the router is uninitialized.
+     * <p>Same negative-cache suppression as the two-argument overload: a
+     * negative-cached key is not searched again and the failure job is run
+     * instead. Nothing is searched if the router is uninitialized.
      *
-     *  @param key the LeaseSet key
-     *  @param onFindJob run if the LeaseSet is found, may be null
-     *  @param onFailedLookupJob run if the router is uninitialized, the key is
-     *                           negative-cached, or the search fails, may be null
-     *  @param timeoutMs how long to wait for the search before failing
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @param key the LeaseSet key
+     * @param onFindJob run if the LeaseSet is found, may be null
+     * @param onFailedLookupJob run if the router is uninitialized, the key is
+     * negative-cached, or the search fails, may be null
+     * @param timeoutMs how long to wait for the search before failing
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
     public void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
@@ -997,9 +996,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  LeaseSet stored locally.
+     * LeaseSet stored locally.
      *
-     *  @return the LeaseSet or null
+     * @return the LeaseSet or null
      */
     @Override
     public LeaseSet lookupLeaseSetLocally(Hash key) {
@@ -1074,14 +1073,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Nudge the inbound pool to re-publish our own LeaseSet when a client
-     *  is actively using it and the earliest lease is inside the proactive
-     *  window.  No-op without a stored LeaseSet or when the earliest lease
-     *  still has ample remaining life.
+     * Nudge the inbound pool to re-publish our own LeaseSet when a client
+     * is actively using it and the earliest lease is inside the proactive
+     * window.  No-op without a stored LeaseSet or when the earliest lease
+     * still has ample remaining life.
      *
-     *  @param key local destination hash
-     *  @param now current router time (ms)
-     *  @since 0.9.71+
+     * @param key local destination hash
+     * @param now current router time (ms)
+     * @since 0.9.71+
      */
     private void refreshLocalLeaseSetIfExpiring(Hash key, long now) {
         // lookupLeaseSetLocally falls back to the main NetDb for local dests
@@ -1108,19 +1107,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Lookup using the client's tunnels
-     *  Succeeds even if LS validation and store fails due to unsupported sig type, expired, etc.
+     * Lookup using the client's tunnels
+     * Succeeds even if LS validation and store fails due to unsupported sig type, expired, etc.
      *
-     *  Note that there are not separate success and fail jobs. Caller must call
-     *  lookupDestinationLocally() in the job to determine success.
+     * Note that there are not separate success and fail jobs. Caller must call
+     * lookupDestinationLocally() in the job to determine success.
      *
-     *  <p>The finished job is also run, without any search, if the router is
-     *  uninitialized or the key is negative-cached.
+     * <p>The finished job is also run, without any search, if the router is
+     * uninitialized or the key is negative-cached.
      *
-     *  @param key the destination key
-     *  @param onFinishedJob run when the lookup finishes, may not be null
-     *  @param timeoutMs how long to wait for the search before finishing
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @param key the destination key
+     * @param onFinishedJob run when the lookup finishes, may not be null
+     * @param timeoutMs how long to wait for the search before finishing
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
     @Override
     public void lookupDestination(Hash key, Job onFinishedJob, long timeoutMs, Hash fromLocalDest) {
@@ -1142,9 +1141,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Destination stored locally, or null.
+     * Destination stored locally, or null.
      *
-     *  @return the Destination or null
+     * @return the Destination or null
      */
     @Override
     public Destination lookupDestinationLocally(Hash key) {
@@ -1160,9 +1159,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Whether the router advertises the given capability.
+     * Whether the router advertises the given capability.
      *
-     *  @return true if contains
+     * @return true if contains
      */
     private boolean containsCapability(RouterInfo ri, char capability) {
         String caps = ri.getCapabilities();
@@ -1170,17 +1169,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Look up a RouterInfo, resolving over the network when not cached locally.
+     * Look up a RouterInfo, resolving over the network when not cached locally.
      *
-     *  Screening (country/capability bans, blocklists) applies only to an
-     *  entry we actually hold; a screened-out entry fails the callback
-     *  instead of succeeding. A cache miss always starts a real search:
-     *  data-plane callers (transit next-hop resolution in BuildHandler and
-     *  TunnelParticipant, tunnel receivers, message distributors) depend on
-     *  this actually finding the peer, and an instant fail here turns every
-     *  next-hop miss into a rejected join or a silently dropped message.
-     *  Negatively-cached keys short-circuit inside IterativeSearchJob, so
-     *  repeated searches for known-dead peers stay cheap.
+     * Screening (country/capability bans, blocklists) applies only to an
+     * entry we actually hold; a screened-out entry fails the callback
+     * instead of succeeding. A cache miss always starts a real search:
+     * data-plane callers (transit next-hop resolution in BuildHandler and
+     * TunnelParticipant, tunnel receivers, message distributors) depend on
+     * this actually finding the peer, and an instant fail here turns every
+     * next-hop miss into a rejected join or a silently dropped message.
+     * Negatively-cached keys short-circuit inside IterativeSearchJob, so
+     * repeated searches for known-dead peers stay cheap.
      */
     @Override
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
@@ -1305,16 +1304,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Whether policy bans (country/XG/LU/capability) may be applied to this
-     *  router during resolution. Controlled by router.banlist.banNextHop:
-     *  when false, peers we are not directly connected to - transit next-hop
-     *  candidates and client tunnel endpoints heard from the network - are
-     *  exempt, so transit and client traffic never banlist a peer merely
-     *  because it appeared as a resolution target. Security screening
-     *  (permanent/hostile blocklists) is unaffected.
+     * Whether policy bans (country/XG/LU/capability) may be applied to this
+     * router during resolution. Controlled by router.banlist.banNextHop:
+     * when false, peers we are not directly connected to - transit next-hop
+     * candidates and client tunnel endpoints heard from the network - are
+     * exempt, so transit and client traffic never banlist a peer merely
+     * because it appeared as a resolution target. Security screening
+     * (permanent/hostile blocklists) is unaffected.
      *
-     *  @param key the router being resolved
-     *  @return true if policy bans may fire for this lookup
+     * @param key the router being resolved
+     * @return true if policy bans may fire for this lookup
      */
     private boolean allowPolicyBan(Hash key) {
         if ("true".equals(_context.getProperty("router.banlist.banNextHop", "true"))) {return true;}
@@ -1372,9 +1371,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Trigger a retroactive purge sweep of the NetDb.
-     *  Bans and removes all routers matching enabled LU/XG/custom-cap bans.
-     *  Only call this on config change, not on startup or disable.
+     * Trigger a retroactive purge sweep of the NetDb.
+     * Bans and removes all routers matching enabled LU/XG/custom-cap bans.
+     * Only call this on config change, not on startup or disable.
      */
     public void purgeMatchingRouters() {
         if (!_initialized) return;
@@ -1399,9 +1398,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         /**
-         *  Job name.
+         * Job name.
          *
-         *  @return the name
+         * @return the name
          */
         @Override
         public String getName() { return "NetDb capability purge"; }
@@ -1430,18 +1429,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Whether the router is on the permanent blocklist.
+     * Whether the router is on the permanent blocklist.
      *
-     *  @return permanentlyBlocklisted
+     * @return permanentlyBlocklisted
      */
     private boolean isPermanentlyBlocklisted(Hash key) {
         return _context.banlist().isBanlistedForever(key);
     }
 
     /**
-     *  Whether the router is on the hostile blocklist.
+     * Whether the router is on the hostile blocklist.
      *
-     *  @return hostileBlocklisted
+     * @return hostileBlocklisted
      */
     private boolean isHostileBlocklisted(Hash key) {
         return _context.banlist().isBanlistedHostile(key);
@@ -1738,9 +1737,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         /**
-         *  Job name.
+         * Job name.
          *
-         *  @return the name
+         * @return the name
          */
         @Override
         public String getName() { return "Republish LeaseSets (batch)"; }
@@ -1835,9 +1834,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Stops publishing the given LeaseSet.
+     * Stops publishing the given LeaseSet.
      *
-     *  @param target hash to stop publishing
+     * @param target hash to stop publishing
      */
     void stopPublishing(Hash target) {
         Set<RepublishLeaseSetJob> jobs = _publishingLeaseSets.remove(target);
@@ -1854,7 +1853,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Stores to local db only.
      * Overridden in FNDF to actually send to the floodfills.
      * @throws IllegalArgumentException if the local router info is invalid
-     *         or if this is a client DB
+     * or if this is a client DB
      */
     @Override
     public void publish(RouterInfo localRouterInfo) throws IllegalArgumentException {
@@ -1869,9 +1868,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     void routerInfoPublishSuccessful() {_lastRIPublishTime = _context.clock().now();}
 
     /**
-     *  Time of the last successful RI publication.
+     * Time of the last successful RI publication.
      *
-     *  @return the lastRouterInfoPublishTime
+     * @return the lastRouterInfoPublishTime
      */
     @Override
     public long getLastRouterInfoPublishTime() {return _lastRIPublishTime;}
@@ -1881,10 +1880,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * <p>This method performs several checks including:</p>
      * <ul>
-     *   <li>Verifying the key matches the LeaseSet destination.</li>
-     *   <li>Validating the LeaseSet's cryptographic signature.</li>
-     *   <li>Checking if the LeaseSet is too old (expired).</li>
-     *   <li>Checking if the LeaseSet expires too far in the future.</li>
+     * <li>Verifying the key matches the LeaseSet destination.</li>
+     * <li>Validating the LeaseSet's cryptographic signature.</li>
+     * <li>Checking if the LeaseSet is too old (expired).</li>
+     * <li>Checking if the LeaseSet expires too far in the future.</li>
      * </ul>
      *
      * <p>Note: Unlike RouterInfos, this validation is only done once at storage time.
@@ -1946,11 +1945,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Check that the key matches the LeaseSet hash.
+     * Check that the key matches the LeaseSet hash.
      *
-     *  @param key the expected key (destination hash) for this LeaseSet
-     *  @param leaseSet the LeaseSet instance to validate
-     *  @return a descriptive reason why the key does not match, or null
+     * @param key the expected key (destination hash) for this LeaseSet
+     * @param leaseSet the LeaseSet instance to validate
+     * @return a descriptive reason why the key does not match, or null
      */
     private String validateKeyMatch(Hash key, LeaseSet leaseSet) {
         if (key.equals(leaseSet.getHash())) {return null;}
@@ -1965,13 +1964,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Verify the LeaseSet's cryptographic signature validity.
+     * Verify the LeaseSet's cryptographic signature validity.
      *
-     *  @param key the expected key (destination hash) for this LeaseSet
-     *  @param leaseSet the LeaseSet instance to validate
-     *  @param leaseBase32 base32 of the LeaseSet hash, for logging
-     *  @return a descriptive reason why the signature is invalid, or null
-     *  @throws UnsupportedCryptoException if the signature type is unsupported
+     * @param key the expected key (destination hash) for this LeaseSet
+     * @param leaseSet the LeaseSet instance to validate
+     * @param leaseBase32 base32 of the LeaseSet hash, for logging
+     * @return a descriptive reason why the signature is invalid, or null
+     * @throws UnsupportedCryptoException if the signature type is unsupported
      */
     private String validateSignature(Hash key, LeaseSet leaseSet, String leaseBase32) throws UnsupportedCryptoException {
         if (leaseSet.verifySignature()) {return null;}
@@ -1983,15 +1982,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Reject a LeaseSet whose timestamps are outdated (stale).
+     * Reject a LeaseSet whose timestamps are outdated (stale).
      *
-     *  @param key the expected key (destination hash) for this LeaseSet
-     *  @param leaseSet the LeaseSet instance to validate
-     *  @param earliest earliest relevant date
-     *  @param latest latest relevant date
-     *  @param now current time
-     *  @param idShort shortened destination ID for logs and messages
-     *  @return a descriptive reason why the LeaseSet is expired, or null
+     * @param key the expected key (destination hash) for this LeaseSet
+     * @param leaseSet the LeaseSet instance to validate
+     * @param earliest earliest relevant date
+     * @param latest latest relevant date
+     * @param now current time
+     * @param idShort shortened destination ID for logs and messages
+     * @return a descriptive reason why the LeaseSet is expired, or null
      */
     private String checkExpiredLeaseSet(Hash key, LeaseSet leaseSet, long earliest, long latest, long now, String idShort) {
         final long TEN_MINUTES_MS = 10 * 60 * 1000L;  // 10 minutes in milliseconds
@@ -2016,15 +2015,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Reject a LeaseSet that expires too far into the future, to handle
-     *  clock skew issues.
+     * Reject a LeaseSet that expires too far into the future, to handle
+     * clock skew issues.
      *
-     *  @param leaseSet the LeaseSet instance to validate
-     *  @param type the LeaseSet type
-     *  @param latest latest relevant date
-     *  @param now current time
-     *  @param idShort shortened destination ID for logs and messages
-     *  @return a descriptive reason why the LeaseSet is rejected, or null
+     * @param leaseSet the LeaseSet instance to validate
+     * @param type the LeaseSet type
+     * @param latest latest relevant date
+     * @param now current time
+     * @param idShort shortened destination ID for logs and messages
+     * @return a descriptive reason why the LeaseSet is rejected, or null
      */
     private String checkFutureExpiration(LeaseSet leaseSet, int type, long latest, long now, String idShort) {
         // Determine limits for future expiration timestamps
@@ -2136,12 +2135,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Copy the received-by / received-as-reply / received-as-published
-     *  metadata flags from the incoming LeaseSet onto the stored copy,
-     *  without re-storing the entry.
+     * Copy the received-by / received-as-reply / received-as-published
+     * metadata flags from the incoming LeaseSet onto the stored copy,
+     * without re-storing the entry.
      *
-     *  @param rv the stored copy, non-null
-     *  @param leaseSet the incoming LeaseSet
+     * @param rv the stored copy, non-null
+     * @param leaseSet the incoming LeaseSet
      */
     private void copyStoreMetadata(LeaseSet rv, LeaseSet leaseSet) {
         Hash to = leaseSet.getReceivedBy();
@@ -2151,13 +2150,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Reject a store whose LeaseSet hash collides with an existing
-     *  LeaseSet for a different destination.
+     * Reject a store whose LeaseSet hash collides with an existing
+     * LeaseSet for a different destination.
      *
-     *  @param rv the stored copy, or null
-     *  @param leaseSet the incoming LeaseSet
-     *  @param force if true, skip the collision check
-     *  @throws IllegalArgumentException on a hash collision
+     * @param rv the stored copy, or null
+     * @param leaseSet the incoming LeaseSet
+     * @param force if true, skip the collision check
+     * @throws IllegalArgumentException on a hash collision
      */
     private void checkForHashCollision(LeaseSet rv, LeaseSet leaseSet, boolean force) {
         if (rv != null && !force) {
@@ -2170,11 +2169,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  Resolve blind data for an encrypted LeaseSet so validate() can
-     *  verify the signature, setting the secret before the destination.
+     * Resolve blind data for an encrypted LeaseSet so validate() can
+     * verify the signature, setting the secret before the destination.
      *
-     *  @param encls the encrypted LeaseSet
-     *  @param leaseSet the incoming LeaseSet, for the signing key
+     * @param encls the encrypted LeaseSet
+     * @param leaseSet the incoming LeaseSet, for the signing key
      */
     private void resolveBlindData(EncryptedLeaseSet encls, LeaseSet leaseSet) {
         BlindData bd = blindCache().getReverseData(leaseSet.getSigningKey());
@@ -2199,12 +2198,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  After storing, handle the blind data bookkeeping: an encrypted
-     *  LeaseSet we have now decrypted is stored under its own key, and a
-     *  blinded-when-published LeaseSet marks its destination as blinded.
+     * After storing, handle the blind data bookkeeping: an encrypted
+     * LeaseSet we have now decrypted is stored under its own key, and a
+     * blinded-when-published LeaseSet marks its destination as blinded.
      *
-     *  @param encls the encrypted LeaseSet, or null
-     *  @param leaseSet the stored LeaseSet
+     * @param encls the encrypted LeaseSet, or null
+     * @param leaseSet the stored LeaseSet
      */
     private void handleBlindStore(EncryptedLeaseSet encls, LeaseSet leaseSet) {
         if (encls != null) {
@@ -2560,9 +2559,9 @@ return false;
     }
 
     /**
-     *  Whether the router should be XG-banned.
+     * Whether the router should be XG-banned.
      *
-     *  @return true if XG
+     * @return true if XG
      */
     private boolean checkXG(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (!_context.banlist().isXgBanEnabled()) return false;
@@ -2606,16 +2605,16 @@ return false;
     }
 
      /**
-     * Determines whether the given router qualifies as an XG router that should be blocked.
-     *
-     * An XG router is defined as:
-     * - Has the G capability (no tunnels)
-     * - Has the X (unlimited bandwidth) capability
-     *
-     * @param routerInfo the RouterInfo to evaluate
-     * @param isUs true if the router is the local router
-     * @return true if the router is an XG router and should be blocked
-     */
+      * Determines whether the given router qualifies as an XG router that should be blocked.
+      *
+      * An XG router is defined as:
+      * - Has the G capability (no tunnels)
+      * - Has the X (unlimited bandwidth) capability
+      *
+      * @param routerInfo the RouterInfo to evaluate
+      * @param isUs true if the router is the local router
+      * @return true if the router is an XG router and should be blocked
+      */
     private boolean isRouterXG(RouterInfo routerInfo, boolean isUs) {
         String caps = routerInfo.getCapabilities();
 
@@ -2812,9 +2811,9 @@ return false;
     }
 
     /**
-     *  Why the router's short expiration is disqualifying, or null.
+     * Why the router's short expiration is disqualifying, or null.
      *
-     *  @return reason or null
+     * @return reason or null
      */
     private String checkShortExpiration(RouterInfo routerInfo, String caps, String routerId, boolean isUs) {
         if (routerInfo == null) {return null;}
@@ -2938,13 +2937,13 @@ return false;
     }
 
     /**
-     *  If the validate fails, call this
-     *  to determine if it was because of unsupported crypto.
+     * If the validate fails, call this
+     * to determine if it was because of unsupported crypto.
      *
-     *  If so, this will banlist-forever the router hash or permanently negative cache the dest hash,
-     *  and then throw the exception. Otherwise it does nothing.
+     * If so, this will banlist-forever the router hash or permanently negative cache the dest hash,
+     * and then throw the exception. Otherwise it does nothing.
      *
-     *  @throws UnsupportedCryptoException if that's why it failed.
+     * @throws UnsupportedCryptoException if that's why it failed.
      */
     private void processStoreFailure(Hash h, DatabaseEntry entry) throws UnsupportedCryptoException {
         if (h != null && entry.getHash().equals(h)) {
@@ -3099,36 +3098,36 @@ return false;
     }
 
     /**
-     *  Begin a kademlia-style iterative search for the key, which can take up
-     *  to timeoutMs and will fire the appropriate jobs on success or timeout
-     *  (or if the search completes without any match).
+     * Begin a kademlia-style iterative search for the key, which can take up
+     * to timeoutMs and will fire the appropriate jobs on success or timeout
+     * (or if the search completes without any match).
      *
-     *  Abstract because only a concrete facade knows how to reach floodfills;
-     *  {@link FloodfillNetworkDatabaseFacade} implements this with
-     *  IterativeSearchJob. Data-plane callers such as {@link #lookupRouterInfo}
-     *  route transit traffic through here, so there is deliberately no base
-     *  fallback: a facade that cannot search must say so at compile time.
+     * Abstract because only a concrete facade knows how to reach floodfills;
+     * {@link FloodfillNetworkDatabaseFacade} implements this with
+     * IterativeSearchJob. Data-plane callers such as {@link #lookupRouterInfo}
+     * route transit traffic through here, so there is deliberately no base
+     * fallback: a facade that cannot search must say so at compile time.
      *
-     *  @param key the hash to search for
-     *  @param onFindJob job on find
-     *  @param onFailedLookupJob job on failure
-     *  @param timeoutMs timeout in ms
-     *  @param isLease whether searching for lease
-     *  @return implementation-defined; results are delivered via the callbacks
+     * @param key the hash to search for
+     * @param onFindJob job on find
+     * @param onFailedLookupJob job on failure
+     * @param timeoutMs timeout in ms
+     * @param isLease whether searching for lease
+     * @return implementation-defined; results are delivered via the callbacks
      */
     abstract SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease);
 
     /**
-     *  Search using the client's tunnels; see
-     *  {@link #search(Hash, Job, Job, long, boolean)}.
+     * Search using the client's tunnels; see
+     * {@link #search(Hash, Job, Job, long, boolean)}.
      *
-     *  @param key the hash to search for
-     *  @param onFindJob job on find
-     *  @param onFailedLookupJob job on failure
-     *  @param timeoutMs timeout in ms
-     *  @param isLease whether searching for lease
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @return implementation-defined; results are delivered via the callbacks
+     * @param key the hash to search for
+     * @param onFindJob job on find
+     * @param onFailedLookupJob job on failure
+     * @param timeoutMs timeout in ms
+     * @param isLease whether searching for lease
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @return implementation-defined; results are delivered via the callbacks
      */
     abstract SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease,
                               Hash fromLocalDest);
@@ -3144,10 +3143,10 @@ return false;
     }
 
     /**
-     *  LeaseSets published by this router's clients.
+     * LeaseSets published by this router's clients.
      *
-     *  @return the clientLeases
-     *  @since 0.9.64+
+     * @return the clientLeases
+     * @since 0.9.64+
      */
     @Override
     public Set<LeaseSet> getClientLeases() {
@@ -3163,10 +3162,10 @@ return false;
     }
 
     /**
-     *  LeaseSets published to the network.
+     * LeaseSets published to the network.
      *
-     *  @return the publishedLeases
-     *  @since 0.9.64+
+     * @return the publishedLeases
+     * @since 0.9.64+
      */
     @Override
     public Set<LeaseSet> getPublishedLeases() {
@@ -3184,10 +3183,10 @@ return false;
     }
 
     /**
-     *  LeaseSets not published to the network.
+     * LeaseSets not published to the network.
      *
-     *  @return the unpublishedLeases
-     *  @since 0.9.64+
+     * @return the unpublishedLeases
+     * @since 0.9.64+
      */
     @Override
     public Set<LeaseSet> getUnpublishedLeases() {
@@ -3205,9 +3204,9 @@ return false;
     }
 
     /**
-     *  LeaseSets stored in the floodfill database.
+     * LeaseSets stored in the floodfill database.
      *
-     *  @return the floodfillLeases
+     * @return the floodfillLeases
      */
     @Override
     public Set<LeaseSet> getFloodfillLeases() {
@@ -3220,9 +3219,9 @@ return false;
     }
 
     /**
-     *  RouterInfos stored in the database.
+     * RouterInfos stored in the database.
      *
-     *  @return the routers
+     * @return the routers
      */
     @Override
     public Set<RouterInfo> getRouters() {
@@ -3238,9 +3237,9 @@ return false;
     /** Smallest allowed period */
     private static final int MIN_PER_PEER_TIMEOUT = 2500;
     /**
-     *  We want FNDF.PUBLISH_TIMEOUT and RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT
-     *  to be greater than MAX_PER_PEER_TIMEOUT * TIMEOUT_MULTIPLIER by a factor of at least
-     *  3 or 4, to allow at least that many peers to be attempted for a store.
+     * We want FNDF.PUBLISH_TIMEOUT and RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT
+     * to be greater than MAX_PER_PEER_TIMEOUT * TIMEOUT_MULTIPLIER by a factor of at least
+     * 3 or 4, to allow at least that many peers to be attempted for a store.
      */
     private static final int MAX_PER_PEER_TIMEOUT = 15*1000;
     /** Multiplier for Kademlia RPC timeout calculation. */
@@ -3273,14 +3272,14 @@ return false;
      * @param ds the database entry
      * @param sendTimeout timeout in ms for the reply-based FloodfillStoreJob path
      * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53;
-     *                 passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
+     * passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
      */
     abstract void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore);
 
     /**
-     *  Increment in the negative lookup cache
+     * Increment in the negative lookup cache
      *
-     *  @param key for Destinations or RouterIdentities
+     * @param key for Destinations or RouterIdentities
      */
     void lookupFailed(Hash key) {_negativeCache.lookupFailed(key);}
 
@@ -3294,10 +3293,10 @@ return false;
     void lookupTimeout(Hash key) {_negativeCache.lookupTimeout(key);}
 
     /**
-     *  Is the key in the negative lookup cache?
+     * Is the key in the negative lookup cache?
      *
-     *  @param key for Destinations or RouterIdentities
-     *  @return true if cached
+     * @param key for Destinations or RouterIdentities
+     * @return true if cached
      */
     boolean isNegativeCached(Hash key) {
         boolean rv = _negativeCache.isCached(key);
@@ -3334,26 +3333,26 @@ return false;
     }
 
     /**
-     *  Negative cache until restart
+     * Negative cache until restart
      *
-     *  @param dest the destination
+     * @param dest the destination
      */
     void failPermanently(Destination dest) {_negativeCache.failPermanently(dest);}
 
     /**
-     *  Is it permanently negative cached?
+     * Is it permanently negative cached?
      *
-     *  @param key only for Destinations; for RouterIdentities, see Banlist
-     *  @return whether negative cached forever
+     * @param key only for Destinations; for RouterIdentities, see Banlist
+     * @return whether negative cached forever
      */
     @Override
     public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
 
     /**
-     *  Render the KBucket contents as HTML. Writes nothing before startup().
+     * Render the KBucket contents as HTML. Writes nothing before startup().
      *
-     *  @param out where to write the HTML
-     *  @throws IOException on write errors
+     * @param out where to write the HTML
+     * @throws IOException on write errors
      */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
@@ -3362,9 +3361,9 @@ return false;
     }
 
     /**
-     *  "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb.
+     * "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb.
      *
-     *  @return "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb
+     * @return "MainNetDb" for the main netdb, or "ClientNetDb [base32]" for a client netdb
      */
     @Override
     public String toString() {
@@ -3528,11 +3527,11 @@ return false;
     }
 
     /**
-     *  Best-effort display name for a tracked LeaseSet in logs: the registered
-     *  hostname when available, otherwise a truncated b32. Never gates refresh.
+     * Best-effort display name for a tracked LeaseSet in logs: the registered
+     * hostname when available, otherwise a truncated b32. Never gates refresh.
      *
-     *  @param ns may be null
-     *  @since 0.9.71+
+     * @param ns may be null
+     * @since 0.9.71+
      */
     private static String logName(NamingService ns, Hash key) {
         if (ns != null) {
@@ -3553,9 +3552,9 @@ return false;
         }
 
         /**
-         *  Job name.
+         * Job name.
          *
-         *  @return the name
+         * @return the name
          */
         @Override
         public String getName() { return "Refresh client LeaseSets"; }

@@ -53,12 +53,11 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
-     *  Quote:
-     *  Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
-     *  above 5 ms there is very little or no improvement in utilization.
+     * Quote:
+     * Below a target of 5 ms, utilization suffers for some conditions and traffic loads;
+     * above 5 ms there is very little or no improvement in utilization.
      *
-     *  I2P: Lowered to 5ms for reduced latency in high-performance scenarios
-     *
+     * I2P: Lowered to 5ms for reduced latency in high-performance scenarios
      */
     private static final int DEFAULT_CODEL_TARGET = 5;
     /** Property key for CoDel target delay */
@@ -67,11 +66,10 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private volatile long _target;
 
     /**
-     *  Quote:
-     *  A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
+     * Quote:
+     * A setting of 100 ms works well across a range of RTTs from 10 ms to 1 second
      *
-     *  I2P: Lowered to 50ms for faster reaction to congestion
-     *
+     * I2P: Lowered to 50ms for faster reaction to congestion
      */
     private static final int DEFAULT_CODEL_INTERVAL = 50;
     /** Property key for CoDel interval */
@@ -95,8 +93,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  Update the target delay for all active instances.
-     *  @param target the new target delay in ms
+     * Update the target delay for all active instances.
+     * @param target the new target delay in ms
      */
     public static void updateAllTargets(long target) {
         expungeStaleInstances();
@@ -107,8 +105,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  Update the interval for all active instances.
-     *  @param interval the new interval in ms
+     * Update the interval for all active instances.
+     * @param interval the new interval in ms
      */
     public static void updateAllIntervals(long interval) {
         expungeStaleInstances();
@@ -127,11 +125,11 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
     /**
-     *  CoDel priority blocking queue with default target and interval.
+     * CoDel priority blocking queue with default target and interval.
      *
-     *  @param ctx the I2P application context
-     *  @param name a name for this queue instance
-     *  @param initialCapacity the initial capacity for the priority queue
+     * @param ctx the I2P application context
+     * @param name a name for this queue instance
+     * @param initialCapacity the initial capacity for the priority queue
      */
     public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity) {
         this(ctx, name, initialCapacity, ctx.getProperty(PROP_CODEL_TARGET, DEFAULT_CODEL_TARGET),
@@ -139,13 +137,13 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  CoDel priority blocking queue with explicit target and interval.
+     * CoDel priority blocking queue with explicit target and interval.
      *
-     *  @param ctx the I2P application context
-     *  @param name for stats
-     *  @param initialCapacity the initial capacity for the priority queue
-     *  @param target the CoDel target delay in ms
-     *  @param interval the CoDel interval in ms
+     * @param ctx the I2P application context
+     * @param name for stats
+     * @param initialCapacity the initial capacity for the priority queue
+     * @param target the CoDel target delay in ms
+     * @param interval the CoDel interval in ms
      */
     /**
      * Description for a queue's mean delay stat.
@@ -260,7 +258,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  Updates stats and possibly drops while draining.
+     * Updates stats and possibly drops while draining.
      */
     @Override
     public int drainTo(Collection<? super E> c) {
@@ -274,7 +272,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  Updates stats and possibly drops while draining.
+     * Updates stats and possibly drops while draining.
      */
     @Override
     public int drainTo(Collection<? super E> c, int maxElements) {
@@ -285,20 +283,20 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  Drains all, without updating stats or dropping.
+     * Drains all, without updating stats or dropping.
      *
-     *  @param c the collection to drain into
-     *  @return the number of elements drained
+     * @param c the collection to drain into
+     * @return the number of elements drained
      */
     public int drainAllTo(Collection<? super E> c) {
         return super.drainTo(c);
     }
 
     /**
-     *  Has the head of the queue been waiting too long,
-     *  or is the queue too big?
+     * Has the head of the queue been waiting too long,
+     * or is the queue too big?
      *
-     *  @return whether backlogged
+     * @return whether backlogged
      */
     @Override
     public synchronized boolean isBacklogged() {
@@ -323,9 +321,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  Caller must synch on this
+     * Caller must synch on this
      *
-     *  @param entry may be null
+     * @param entry may be null
      */
     private boolean updateVars(E entry) {
         /*
@@ -355,9 +353,9 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     private void getCurrentTime() {_now = _context.clock().now();}
 
     /**
-     *  Dequeue the next element, applying CoDel drops as needed.
+     * Dequeue the next element, applying CoDel drops as needed.
      *
-     *  @return if null, call again
+     * @return if null, call again
      */
     private E deque() throws InterruptedException {
         E rv = super.take();
@@ -365,10 +363,10 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  Apply CoDel control to the given entry, dropping if needed.
+     * Apply CoDel control to the given entry, dropping if needed.
      *
-     *  @param rv may be null
-     *  @return rv or a subequent entry or null if dropped
+     * @param rv may be null
+     * @return rv or a subequent entry or null if dropped
      */
 
     private E codel(E rv) {
@@ -442,7 +440,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     }
 
     /**
-     *  Caller must synch on this
+     * Caller must synch on this
      */
     private void control_law(long t) {
         _drop_next = t + (long) (_interval / Math.sqrt(_count));

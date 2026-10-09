@@ -8,11 +8,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  Tests the next-hop contact outcome summary added to {@link BuildHandler}.
+ * Tests the next-hop contact outcome summary added to {@link BuildHandler}.
  *
- *  The failure this covers was invisible: 42% of handled inbound builds hit the
- *  hop-contact timeout, but the only record was one DEBUG line per event, so an
- *  eepsite silently stopped serving and nothing at WARN reflected it.
+ * The failure this covers was invisible: 42% of handled inbound builds hit the
+ * hop-contact timeout, but the only record was one DEBUG line per event, so an
+ * eepsite silently stopped serving and nothing at WARN reflected it.
  */
 public class BuildHandlerNextHopSummaryTest {
 
@@ -32,9 +32,9 @@ public class BuildHandlerNextHopSummaryTest {
     }
 
     /**
-     *  The denominator is replied+timedOut, not all outcomes: "dropped" is a
-     *  rejection we made, not a peer that failed to answer, so including it
-     *  would understate the real unanswered rate.
+     * The denominator is replied+timedOut, not all outcomes: "dropped" is a
+     * rejection we made, not a peer that failed to answer, so including it
+     * would understate the real unanswered rate.
      */
     @Test
     public void denominatorExcludesDropped() {
@@ -65,9 +65,9 @@ public class BuildHandlerNextHopSummaryTest {
     }
 
     /**
-     *  Exactly at the flag threshold the summary stays quiet. The rate is
-     *  timedOut/(replied+timedOut), so 20% needs 20 unanswered per 80 answered,
-     *  not 20 per 100 — 20/120 is 17%.
+     * Exactly at the flag threshold the summary stays quiet. The rate is
+     * timedOut/(replied+timedOut), so 20% needs 20 unanswered per 80 answered,
+     * not 20 per 100 — 20/120 is 17%.
      */
     @Test
     public void thresholdBoundary() {
@@ -78,14 +78,14 @@ public class BuildHandlerNextHopSummaryTest {
     }
 
     /**
-     *  Counting must accumulate into the right buckets.
+     * Counting must accumulate into the right buckets.
      *
-     *  <p>Every call passes the log and the clock, never a counting-only
-     *  variant.  That is the regression this pins: the first version of the
-     *  feature had a second overload that only incremented, and both hot-path
-     *  call sites used it, so the counters moved and the summary never fired.
-     *  Unit tests of the function itself passed the whole time.  Requiring the
-     *  log at every call site makes a silent split impossible again.
+     * <p>Every call passes the log and the clock, never a counting-only
+     * variant.  That is the regression this pins: the first version of the
+     * feature had a second overload that only incremented, and both hot-path
+     * call sites used it, so the counters moved and the summary never fired.
+     * Unit tests of the function itself passed the whole time.  Requiring the
+     * log at every call site makes a silent split impossible again.
      */
     @Test
     public void countingAccumulatesPerOutcome() {
@@ -109,10 +109,10 @@ public class BuildHandlerNextHopSummaryTest {
     }
 
     /**
-     *  The dropped bucket must be reachable from production, not only from a
-     *  test.  A bucket nothing writes to always reads zero, which looks like a
-     *  healthy router and hides the rejections entirely — so assert the source
-     *  actually records the two drop paths we care about.
+     * The dropped bucket must be reachable from production, not only from a
+     * test.  A bucket nothing writes to always reads zero, which looks like a
+     * healthy router and hides the rejections entirely — so assert the source
+     * actually records the two drop paths we care about.
      */
     @Test
     public void droppedBucketIsWiredToRealDropPaths() throws Exception {
@@ -128,9 +128,9 @@ public class BuildHandlerNextHopSummaryTest {
     }
 
     /**
-     *  The summary is rate limited: a burst of events must not produce a log
-     *  line each. With a null log nothing is emitted, but the counters still
-     *  accumulate so the next real summary sees the full burst.
+     * The summary is rate limited: a burst of events must not produce a log
+     * line each. With a null log nothing is emitted, but the counters still
+     * accumulate so the next real summary sees the full burst.
      */
     @Test
     public void countersAccumulateEvenWhenNotLogged() {

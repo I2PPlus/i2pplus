@@ -5,7 +5,6 @@ package net.i2p.sam;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.ByteArrayInputStream;
@@ -150,14 +149,14 @@ class SAMUtils {
     }
 
     /**
-     *  Parse SAM parameters, and put them into a Properties object
+     * Parse SAM parameters, and put them into a Properties object
      *
-     *  Modified from EepGet.
-     *  COMMAND and OPCODE are mapped to upper case; keys, values, and ping data are not.
-     *  Double quotes around values are stripped.
+     * Modified from EepGet.
+     * COMMAND and OPCODE are mapped to upper case; keys, values, and ping data are not.
+     * Double quotes around values are stripped.
      *
-     *  Possible input:
-     *<pre>
+     * Possible input:
+     * <pre>
      *  COMMAND
      *  COMMAND OPCODE
      *  COMMAND OPCODE [key=val]...
@@ -167,22 +166,22 @@ class SAMUtils {
      *  PING any   thing goes
      *  PONG any   thing   goes
      *
-     *  Escaping is allowed with a backslash, e.g. \"
+     * Escaping is allowed with a backslash, e.g. \"
      *  No spaces before or after '=' allowed
      *  Keys may not be quoted
      *  COMMAND, OPCODE, and keys may not have '=' or whitespace unless escaped
      *  Duplicate keys not allowed
-     *</pre>
+     * </pre>
      *
-     *  A key without a value is not allowed by the spec, but is
-     *  returned with the value "true".
+     * A key without a value is not allowed by the spec, but is
+     * returned with the value "true".
      *
-     *  COMMAND is returned as the value of the key ""COMMAND"".
-     *  OPCODE, or the remainder of the PING/PONG line if any, is returned as the value of the key ""OPCODE"".
+     * COMMAND is returned as the value of the key ""COMMAND"".
+     * OPCODE, or the remainder of the PING/PONG line if any, is returned as the value of the key ""OPCODE"".
      *
-     *  @param args non-null
-     *  @throws SAMException on some errors but not all
-     *  @return non-null, may be empty. Does not throw on missing COMMAND or OPCODE; caller must check.
+     * @param args non-null
+     * @throws SAMException on some errors but not all
+     * @return non-null, may be empty. Does not throw on missing COMMAND or OPCODE; caller must check.
      */
     public static Properties parseParams(String args) throws SAMException {
         if (args == null) {

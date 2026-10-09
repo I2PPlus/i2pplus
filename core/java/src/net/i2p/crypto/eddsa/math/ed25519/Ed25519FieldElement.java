@@ -33,24 +33,24 @@ public class Ed25519FieldElement extends FieldElement {
     }
 
     /**
-     *  Copy the source field element's data into this element's array.
-     *  Package-private accumulator support — allows reuse of a single
-     *  field element instance across multiple operations instead of
-     *  allocating a new int[10] + wrapper for each op.
+     * Copy the source field element's data into this element's array.
+     * Package-private accumulator support — allows reuse of a single
+     * field element instance across multiple operations instead of
+     * allocating a new int[10] + wrapper for each op.
      *
-     *  @param source the field element to copy from
-     *  @since 0.9.71+
+     * @param source the field element to copy from
+     * @since 0.9.71+
      */
     void set(Ed25519FieldElement source) {
         System.arraycopy(source.t, 0, t, 0, 10);
     }
 
     /**
-     *  Add a field element into this element's array in place.
-     *  Package-private accumulator support.
+     * Add a field element into this element's array in place.
+     * Package-private accumulator support.
      *
-     *  @param val the field element to add
-     *  @since 0.9.71+
+     * @param val the field element to add
+     * @since 0.9.71+
      */
     void addInPlace(Ed25519FieldElement val) {
         int[] g = val.t;
@@ -58,11 +58,11 @@ public class Ed25519FieldElement extends FieldElement {
     }
 
     /**
-     *  Subtract a field element from this element's array in place.
-     *  Package-private accumulator support.
+     * Subtract a field element from this element's array in place.
+     * Package-private accumulator support.
      *
-     *  @param val the field element to subtract
-     *  @since 0.9.71+
+     * @param val the field element to subtract
+     * @since 0.9.71+
      */
     void subInPlace(Ed25519FieldElement val) {
         int[] g = val.t;
@@ -70,12 +70,12 @@ public class Ed25519FieldElement extends FieldElement {
     }
 
     /**
-     *  Return a new field element with a copy of this element's data.
-     *  Package-private accumulator support — call this to extract the
-     *  final result after a sequence of in-place operations.
+     * Return a new field element with a copy of this element's data.
+     * Package-private accumulator support — call this to extract the
+     * final result after a sequence of in-place operations.
      *
-     *  @return a new Ed25519FieldElement with a copy of the data
-     *  @since 0.9.71+
+     * @return a new Ed25519FieldElement with a copy of the data
+     * @since 0.9.71+
      */
     Ed25519FieldElement toFieldElement() {
         int[] copy = new int[10];
@@ -1072,7 +1072,7 @@ public class Ed25519FieldElement extends FieldElement {
     /**
      * Constant-time conditional move. Well, actually it is a conditional copy.
      * Logic is inspired by the SUPERCOP implementation at:
-     *     https://github.com/floodyberry/supercop/blob/master/crypto_sign/ed25519/ref10/fe_cmov.c
+     * https://github.com/floodyberry/supercop/blob/master/crypto_sign/ed25519/ref10/fe_cmov.c
      *
      * @param val the other field element.
      * @param b must be 0 or 1, otherwise results are undefined.

@@ -70,9 +70,9 @@ public class SSLEepGet extends EepGet {
     private static final boolean DEFAULT_USE_DNS_OVER_HTTPS = true;
 
     /**
-     *  Not all may be supported.
+     * Not all may be supported.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public enum ProxyType {
         /** No proxy. */
@@ -92,72 +92,72 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  A new SSLEepGet with a new SSLState
+     * A new SSLEepGet with a new SSLState
      */
     public SSLEepGet(I2PAppContext ctx, OutputStream outputStream, String url) {
         this(ctx, outputStream, url, null);
     }
 
     /**
-     *  Create an SSLEepGet that writes to a stream, using an existing SSL state.
+     * Create an SSLEepGet that writes to a stream, using an existing SSL state.
      *
-     *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
-     *               This makes repeated fetches from the same host MUCH faster,
-     *               and prevents repeated key store loads even for different hosts.
+     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     * This makes repeated fetches from the same host MUCH faster,
+     * and prevents repeated key store loads even for different hosts.
      *
-     *  @since 0.8.2
+     * @since 0.8.2
      */
     public SSLEepGet(I2PAppContext ctx, OutputStream outputStream, String url, SSLState state) {
         this(ctx, null, outputStream, url, -1, state);
     }
 
     /**
-     *  Create an SSLEepGet that writes to a stream, using an existing SSL state,
-     *  limited to a maximum response size.
+     * Create an SSLEepGet that writes to a stream, using an existing SSL state,
+     * limited to a maximum response size.
      *
-     *  @param maxSize The maximum size of the response
-     *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
-     *               This makes repeated fetches from the same host MUCH faster,
-     *               and prevents repeated key store loads even for different hosts.
+     * @param maxSize The maximum size of the response
+     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     * This makes repeated fetches from the same host MUCH faster,
+     * and prevents repeated key store loads even for different hosts.
      *
-     *  @since 0.9.48
+     * @since 0.9.48
      */
     public SSLEepGet(I2PAppContext ctx, OutputStream outputStream, String url, long maxSize, SSLState state) {
         this(ctx, null, outputStream, url, maxSize, state);
     }
 
     /**
-     *  A new SSLEepGet with a new SSLState
+     * A new SSLEepGet with a new SSLState
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     public SSLEepGet(I2PAppContext ctx, String outputFile, String url) {
         this(ctx, outputFile, url, null);
     }
 
     /**
-     *  Create an SSLEepGet that writes to a file, using an existing SSL state.
+     * Create an SSLEepGet that writes to a file, using an existing SSL state.
      *
-     *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
-     *               This makes repeated fetches from the same host MUCH faster,
-     *               and prevents repeated key store loads even for different hosts.
+     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     * This makes repeated fetches from the same host MUCH faster,
+     * and prevents repeated key store loads even for different hosts.
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     public SSLEepGet(I2PAppContext ctx, String outputFile, String url, SSLState state) {
         this(ctx, outputFile, null, url, -1, state);
     }
 
     /**
-     *  Use a proxy.
+     * Use a proxy.
      *
-     *  @param proxyHost Must be valid hostname or literal IPv4/v6.
-     *                   If type is INTERNAL, set to "localhost".
+     * @param proxyHost Must be valid hostname or literal IPv4/v6.
+     * If type is INTERNAL, set to "localhost".
      *
-     *  @param proxyPort Must be valid, -1 disallowed, no default.
-     *                   If type is INTERNAL, set to 4444.
+     * @param proxyPort Must be valid, -1 disallowed, no default.
+     * If type is INTERNAL, set to 4444.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public SSLEepGet(
             I2PAppContext ctx, ProxyType type, String proxyHost, int proxyPort, OutputStream outputStream, String url) {
@@ -165,19 +165,19 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Use a proxy.
+     * Use a proxy.
      *
-     *  @param proxyHost Must be valid hostname or literal IPv4/v6.
-     *                   If type is INTERNAL, set to "localhost".
+     * @param proxyHost Must be valid hostname or literal IPv4/v6.
+     * If type is INTERNAL, set to "localhost".
      *
-     *  @param proxyPort Must be valid, -1 disallowed, no default.
-     *                   If type is INTERNAL, set to 4444.
+     * @param proxyPort Must be valid, -1 disallowed, no default.
+     * If type is INTERNAL, set to 4444.
      *
-     *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
-     *               This makes repeated fetches from the same host MUCH faster,
-     *               and prevents repeated key store loads even for different hosts.
+     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     * This makes repeated fetches from the same host MUCH faster,
+     * and prevents repeated key store loads even for different hosts.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public SSLEepGet(
             I2PAppContext ctx,
@@ -200,15 +200,15 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Use a proxy.
+     * Use a proxy.
      *
-     *  @param proxyHost Must be valid hostname or literal IPv4/v6.
-     *                   If type is INTERNAL, set to "localhost".
+     * @param proxyHost Must be valid hostname or literal IPv4/v6.
+     * If type is INTERNAL, set to "localhost".
      *
-     *  @param proxyPort Must be valid, -1 disallowed, no default.
-     *                   If type is INTERNAL, set to 4444.
+     * @param proxyPort Must be valid, -1 disallowed, no default.
+     * If type is INTERNAL, set to 4444.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public SSLEepGet(
             I2PAppContext ctx, ProxyType type, String proxyHost, int proxyPort, String outputFile, String url) {
@@ -216,19 +216,19 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Use a proxy.
+     * Use a proxy.
      *
-     *  @param proxyHost Must be valid hostname or literal IPv4/v6.
-     *                   If type is INTERNAL, set to "localhost".
+     * @param proxyHost Must be valid hostname or literal IPv4/v6.
+     * If type is INTERNAL, set to "localhost".
      *
-     *  @param proxyPort Must be valid, -1 disallowed, no default.
-     *                   If type is INTERNAL, set to 4444.
+     * @param proxyPort Must be valid, -1 disallowed, no default.
+     * If type is INTERNAL, set to 4444.
      *
-     *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
-     *               This makes repeated fetches from the same host MUCH faster,
-     *               and prevents repeated key store loads even for different hosts.
+     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     * This makes repeated fetches from the same host MUCH faster,
+     * and prevents repeated key store loads even for different hosts.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public SSLEepGet(
             I2PAppContext ctx,
@@ -251,13 +251,13 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Output file and output stream: one null, one non-null
+     * Output file and output stream: one null, one non-null
      *
-     *  @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
-     *               This makes repeated fetches from the same host MUCH faster,
-     *               and prevents repeated key store loads even for different hosts.
+     * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
+     * This makes repeated fetches from the same host MUCH faster,
+     * and prevents repeated key store loads even for different hosts.
      *
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     private SSLEepGet(
             I2PAppContext ctx, String outputFile, OutputStream outputStream, String url, long maxSize, SSLState state) {
@@ -273,15 +273,15 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Loads certs from location of javax.net.ssl.keyStore property,
-     *  else from $JAVA_HOME/lib/security/jssacacerts,
-     *  else from $JAVA_HOME/lib/security/cacerts.
+     * Loads certs from location of javax.net.ssl.keyStore property,
+     * else from $JAVA_HOME/lib/security/jssacacerts,
+     * else from $JAVA_HOME/lib/security/cacerts.
      *
-     *  Then adds certs found in the $I2P/certificates/ssl/ directory
-     *  and in the ~/.i2p/certificates/ssl/ directory.
+     * Then adds certs found in the $I2P/certificates/ssl/ directory
+     * and in the ~/.i2p/certificates/ssl/ directory.
      *
-     *  @return null on failure
-     *  @since 0.8.2
+     * @return null on failure
+     * @since 0.8.2
      */
     private SSLContext initSSLContext() {
         KeyStore ks = KeyStoreUtil.loadSystemKeyStore();
@@ -338,10 +338,10 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  From http://blogs.sun.com/andreas/resource/InstallCert.java
-     *  This just saves the certificate chain for later inspection.
+     * From http://blogs.sun.com/andreas/resource/InstallCert.java
+     * This just saves the certificate chain for later inspection.
      *
-     *  @since 0.8.2
+     * @since 0.8.2
      */
     private static class SavingTrustManager implements X509TrustManager {
         private final X509TrustManager tm;
@@ -380,9 +380,9 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Modified from http://blogs.sun.com/andreas/resource/InstallCert.java
+     * Modified from http://blogs.sun.com/andreas/resource/InstallCert.java
      *
-     *  @since 0.8.2
+     * @since 0.8.2
      */
     private static void saveCerts(String host, SavingTrustManager stm) {
         X509Certificate[] chain = stm.chain;
@@ -410,9 +410,9 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  An opaque class for the caller to pass to repeated instantiations of SSLEepGet.
+     * An opaque class for the caller to pass to repeated instantiations of SSLEepGet.
      *
-     *  @since 0.8.2
+     * @since 0.8.2
      */
     public static class SSLState {
         private final SSLContext context;
@@ -423,34 +423,34 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Pass this back to the next SSLEepGet constructor for faster fetches.
-     *  This may be called either after the constructor or after the fetch.
+     * Pass this back to the next SSLEepGet constructor for faster fetches.
+     * This may be called either after the constructor or after the fetch.
      *
-     *  @return the s s l state
-     *  @since 0.8.2
+     * @return the s s l state
+     * @since 0.8.2
      */
     public SSLState getSSLState() {
         return new SSLState(_sslContext);
     }
 
     /**
-     *  Override the config setting, force DNSoverHTTPS on or off
-     *  Call before the fetch.
+     * Override the config setting, force DNSoverHTTPS on or off
+     * Call before the fetch.
      *
-     *  @since 0.9.49
+     * @since 0.9.49
      */
     public void forceDNSOverHTTPS(boolean on) {
         forceDNSOverHTTPS(on, false);
     }
 
     /**
-     *  Override the config setting, force DNSoverHTTPS on or off
-     *  Call before the fetch.
+     * Override the config setting, force DNSoverHTTPS on or off
+     * Call before the fetch.
      *
-     *  @param forceIPv6 use IPv6 for BOTH the connection to the DoH server
-     *         AND for the queried address. on must be true.
+     * @param forceIPv6 use IPv6 for BOTH the connection to the DoH server
+     * AND for the queried address. on must be true.
      *
-     *  @since 0.9.66
+     * @since 0.9.66
      */
     public void forceDNSOverHTTPS(boolean on, boolean forceIPv6) {
         _forceDoH = on ? (forceIPv6 ? 3 : 2) : 1;
@@ -818,14 +818,14 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Connect to a HTTP proxy.
-     *  Proxy address must be in _proxyHost and _proxyPort.
-     *  Side effects: Sets _proxy, _proxyIn, _proxyOut,
-     *  and other globals via readHeaders()
+     * Connect to a HTTP proxy.
+     * Proxy address must be in _proxyHost and _proxyPort.
+     * Side effects: Sets _proxy, _proxyIn, _proxyOut,
+     * and other globals via readHeaders()
      *
-     *  @param host what the proxy should connect to
-     *  @param port what the proxy should connect to
-     *  @since 0.9.33
+     * @param host what the proxy should connect to
+     * @param port what the proxy should connect to
+     * @since 0.9.33
      */
     private void httpProxyConnect(String host, int port) throws IOException {
         // connect to the proxy
@@ -841,13 +841,13 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Connect to a HTTP proxy.
-     *  Proxy address must be in _proxyHost and _proxyPort.
-     *  Side effects: Sets _proxy, _proxyIn, _proxyOut,
-     *  and other globals via readHeaders()
+     * Connect to a HTTP proxy.
+     * Proxy address must be in _proxyHost and _proxyPort.
+     * Side effects: Sets _proxy, _proxyIn, _proxyOut,
+     * and other globals via readHeaders()
      *
-     *  @param port what the proxy should connect to, probably 4444
-     *  @since 0.9.33
+     * @param port what the proxy should connect to, probably 4444
+     * @since 0.9.33
      */
     private void internalHttpProxyConnect(String host, int port) throws IOException {
         // connect to the proxy
@@ -856,14 +856,14 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Connect to a HTTP proxy.
-     *  Proxy address must be in _proxyHost and _proxyPort.
-     *  Side effects: Sets _proxyIn, _proxyOut,
-     *  and other globals via readHeaders()
+     * Connect to a HTTP proxy.
+     * Proxy address must be in _proxyHost and _proxyPort.
+     * Side effects: Sets _proxyIn, _proxyOut,
+     * and other globals via readHeaders()
      *
-     *  @param host what the proxy should connect to
-     *  @param port what the proxy should connect to
-     *  @since 0.9.33
+     * @param host what the proxy should connect to
+     * @param port what the proxy should connect to
+     * @since 0.9.33
      */
     private void httpProxyConnect(Socket proxy, String host, int port) throws IOException {
         _proxyIn = _proxy.getInputStream();
@@ -906,14 +906,14 @@ public class SSLEepGet extends EepGet {
     }
 
     /**
-     *  Connect to a SOCKS proxy.
-     *  Proxy address must be in _proxyHost and _proxyPort.
-     *  Side effects: Sets _proxy, _proxyIn, _proxyOut,
-     *  and other globals via readHeaders()
+     * Connect to a SOCKS proxy.
+     * Proxy address must be in _proxyHost and _proxyPort.
+     * Side effects: Sets _proxy, _proxyIn, _proxyOut,
+     * and other globals via readHeaders()
      *
-     *  @param host what the proxy should connect to
-     *  @param port what the proxy should connect to
-     *  @since 0.9.33
+     * @param host what the proxy should connect to
+     * @param port what the proxy should connect to
+     * @since 0.9.33
      */
     private void socksProxyConnect(boolean isSocks5, String host, int port) throws IOException {
         if (_fetchHeaderTimeout > 0) {

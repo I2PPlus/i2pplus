@@ -6,15 +6,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- *  Tests the strike accumulation that gates tier demotion for a peer that did
- *  not answer a build request.
+ * Tests the strike accumulation that gates tier demotion for a peer that did
+ * not answer a build request.
  *
- *  <p>Previously this policy was exercised only against a mock of itself, which
- *  asserted that a local counter incremented.  {@code nextStrikeCount} is the
- *  real seam, so these tests drive it directly: the behaviour that matters is
- *  that two consecutive non-replies do <em>not</em> reach the threshold, which
- *  is why eviction had to be moved to the immediate path in
- *  {@code BuildExecutor}.
+ * <p>Previously this policy was exercised only against a mock of itself, which
+ * asserted that a local counter incremented.  {@code nextStrikeCount} is the
+ * real seam, so these tests drive it directly: the behaviour that matters is
+ * that two consecutive non-replies do <em>not</em> reach the threshold, which
+ * is why eviction had to be moved to the immediate path in
+ * {@code BuildExecutor}.
  */
 public class ProfileOrganizerStrikeCountTest {
 
@@ -35,8 +35,8 @@ public class ProfileOrganizerStrikeCountTest {
     }
 
     /**
-     *  The behaviour that justified the immediate eviction path: two silent
-     *  builds must leave the count below the demotion threshold.
+     * The behaviour that justified the immediate eviction path: two silent
+     * builds must leave the count below the demotion threshold.
      */
     @Test
     public void twoFailuresStayBelowTheThreshold() {
@@ -75,9 +75,9 @@ public class ProfileOrganizerStrikeCountTest {
     }
 
     /**
-     *  The immediate eviction path is what actually removes the peer, so the
-     *  threshold must be a backstop rather than the primary mechanism — a
-     *  single non-reply has to be enough on its own.
+     * The immediate eviction path is what actually removes the peer, so the
+     * threshold must be a backstop rather than the primary mechanism — a
+     * single non-reply has to be enough on its own.
      */
     @Test
     public void oneFailureIsBelowThresholdSoImmediatePathIsRequired() {

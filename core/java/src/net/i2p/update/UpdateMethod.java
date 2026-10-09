@@ -1,9 +1,9 @@
 package net.i2p.update;
 
 /**
- *  Transport mechanism for getting something.
+ * Transport mechanism for getting something.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public enum UpdateMethod {
     /** Dummy: internal use only */

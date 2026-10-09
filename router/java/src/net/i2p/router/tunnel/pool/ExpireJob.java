@@ -30,7 +30,7 @@ class ExpireJob extends JobImpl {
     private static final long OB_EARLY_EXPIRE = 30*1000L;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
     /** Keep tunnels alive for 10 minutes after LeaseSet refresh so clients
-     *  with cached (stale) LeaseSets can still connect using old tunnel IDs. */
+     * with cached (stale) LeaseSets can still connect using old tunnel IDs. */
     private static final long LEASESET_GRACE_PERIOD = 10 * 60 * 1000L;
     // Must be greater than tunnel lifetime (11 min) + LEASESET_GRACE_PERIOD (10 min)
     // to allow Phase 2 (dispatcher removal) to fire.  With early expiration,
@@ -121,10 +121,10 @@ class ExpireJob extends JobImpl {
     }
 
     /**
-     *  Remove a tunnel from the expiration queue.
-     *  Called during pool shutdown to prevent memory leaks.
-     *  @param cfg config to remove
-     *  @since 0.9.69+
+     * Remove a tunnel from the expiration queue.
+     * Called during pool shutdown to prevent memory leaks.
+     * @param cfg config to remove
+     * @since 0.9.69+
      */
     public static void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
         if (cfg == null) return;
@@ -133,11 +133,11 @@ class ExpireJob extends JobImpl {
     }
 
     /**
-     *  Get the unique key for this tunnel config.
-     *  Uses tunnel IDs when available; falls back to identity hash for
-     *  partially cleaned-up or zero-ID configs.
-     *  @return key or null
-     *  @since 0.9.69+
+     * Get the unique key for this tunnel config.
+     * Uses tunnel IDs when available; falls back to identity hash for
+     * partially cleaned-up or zero-ID configs.
+     * @return key or null
+     * @since 0.9.69+
      */
     public static Long getTunnelKey(PooledTunnelCreatorConfig cfg) {
         if (cfg == null) return null;
@@ -345,14 +345,14 @@ class ExpireJob extends JobImpl {
     }
 
     /**
-     *  Maximum number of times an UNTESTED tunnel's expiry can be extended
-     *  to give tests time to complete.  Each extension is {@link #UNTESTED_EXTENSION_MS}.
+     * Maximum number of times an UNTESTED tunnel's expiry can be extended
+     * to give tests time to complete.  Each extension is {@link #UNTESTED_EXTENSION_MS}.
      */
     static final int MAX_UNTESTED_EXTENSIONS = 6;
 
     /**
-     *  How long to extend an UNTESTED tunnel's expiry each time.
-     *  30s gives the test pipeline enough time for one full test cycle.
+     * How long to extend an UNTESTED tunnel's expiry each time.
+     * 30s gives the test pipeline enough time for one full test cycle.
      */
     static final long UNTESTED_EXTENSION_MS = 30 * 1000L;
 

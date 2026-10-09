@@ -33,9 +33,9 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  *
- *  Session key manager for ratchet encryption.
+ * Session key manager for ratchet encryption.
  *
- *  @since 0.9.44
+ * @since 0.9.44
  */
 public class RatchetSKM extends SessionKeyManager implements SessionTagListener {
     private final Log _log;
@@ -123,7 +123,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  Cannot be restarted
+     * Cannot be restarted
      */
     @Override
     public void shutdown() {
@@ -154,20 +154,20 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  The local destination for this SKM
+     * The local destination for this SKM
      *
-     *  @return our destination or null for the router SKM
-     *  @since 0.9.46
+     * @return our destination or null for the router SKM
+     * @since 0.9.46
      */
     public Destination getDestination() {
         return _destination;
     }
 
     /**
-     *  The encryption type for this session key manager.
+     * The encryption type for this session key manager.
      *
-     *  @return the encryption type
-     *  @since 0.9.44
+     * @return the encryption type
+     * @since 0.9.44
      */
     public EncType getType() {
         return _type;
@@ -222,11 +222,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  Check if a public key is a duplicate
+     * Check if a public key is a duplicate
      *
-     *  @param pk the public key to check
-     *  @return true if a dup
-     *  @since 0.9.46
+     * @param pk the public key to check
+     * @return true if a dup
+     * @since 0.9.46
      */
     boolean isDuplicate(PublicKey pk) {
         return _replayFilter.add(pk.getData(), 0, 32);
@@ -479,25 +479,25 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  How many to send, IF we need to.
+     * How many to send, IF we need to.
      *
-     *  @return the configured value (not adjusted for current available)
+     * @return the configured value (not adjusted for current available)
      */
     @Override
     public int getTagsToSend() { return 0; }
 
     /**
-     *  The configured threshold for sending more tags.
+     * The configured threshold for sending more tags.
      *
-     *  @return the configured value
+     * @return the configured value
      */
     @Override
     public int getLowThreshold() { return 999999; }
 
     /**
-     *  Whether to send more tags, always false here.
+     * Whether to send more tags, always false here.
      *
-     *  @return false always
+     * @return false always
      */
     @Override
     public boolean shouldSendTags(PublicKey target, SessionKey key, int lowThreshold) {
@@ -777,9 +777,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /// begin SessionTagListener ///
 
     /**
-     *  Map the tag to this tagset.
+     * Map the tag to this tagset.
      *
-     *  @return true if added, false if dup
+     * @return true if added, false if dup
      */
     @Override
     public boolean addTag(RatchetSessionTag tag, RatchetTagSet ts) {
@@ -787,7 +787,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  Remove the tag associated with this tagset.
+     * Remove the tag associated with this tagset.
      */
     @Override
     public void expireTag(RatchetSessionTag tag, RatchetTagSet ts) {
@@ -881,7 +881,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  Render the session status HTML.
+     * Render the session status HTML.
      */
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
@@ -997,7 +997,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  For debugging
+     * For debugging
      */
     private static String toString(PublicKey target) {
         if (target == null)
@@ -1006,8 +1006,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  Just for the HTML method above so we can see what's going on easier
-     *  Earliest first
+     * Just for the HTML method above so we can see what's going on easier
+     * Earliest first
      */
     private static class RatchetTagSetComparator implements Comparator<RatchetTagSet>, Serializable {
          /** Compare two entries for ordering */
@@ -1017,7 +1017,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     *  The state for a crypto session to a single public key
+     * The state for a crypto session to a single public key
      */
     private class OutboundSession {
         private final PublicKey _target;
@@ -1029,16 +1029,16 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         private long _lastUsed;
         private long _lastReceived;
         /**
-         *  Before the first ack, all tagsets go here. These are never expired, we rely
-         *  on the callers to call failTags() or ackTags() to remove them from this list.
-         *  Actually we now do a failsafe expire.
-         *  Unsynchronized, sync to use.
-         *  No particular order.
+         * Before the first ack, all tagsets go here. These are never expired, we rely
+         * on the callers to call failTags() or ackTags() to remove them from this list.
+         * Actually we now do a failsafe expire.
+         * Unsynchronized, sync to use.
+         * No particular order.
          */
         private final Set<RatchetTagSet> _unackedTagSets;
         /**
-         *  There is only one active outbound tagset.
-         *  Synch on _unackedTagSets to access this.
+         * There is only one active outbound tagset.
+         * Synch on _unackedTagSets to access this.
          */
         private RatchetTagSet _tagSet;
         private final ConcurrentHashMap<Integer, ReplyCallback> _callbacks;
@@ -1046,10 +1046,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         private SimpleTimer2.TimedEvent _ackTimer;
         private Destination _destination;
         /**
-         *  True after the first tagset is acked.
-         *  Upon repeated failures, we may revert back to false.
-         *  This prevents us getting "stuck" forever, using tags that weren't acked
-         *  to deliver the next set of tags.
+         * True after the first tagset is acked.
+         * Upon repeated failures, we may revert back to false.
+         * This prevents us getting "stuck" forever, using tags that weren't acked
+         * to deliver the next set of tags.
          */
         private volatile boolean _acked;
 
@@ -1398,10 +1398,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  Reverse key to send, or null
+         * Reverse key to send, or null
          *
-         *  @return the reverse send key
-         *  @since 0.9.46
+         * @return the reverse send key
+         * @since 0.9.46
          */
         private NextSessionKey getReverseSendKey() {
             synchronized (_unackedTagSets) {
@@ -1415,10 +1415,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  A tag was received for this inbound (ES) tagset.
+         * A tag was received for this inbound (ES) tagset.
          *
-         *  @param set the inbound tagset
-         *  @since 0.9.46
+         * @param set the inbound tagset
+         * @since 0.9.46
          */
         void tagConsumed(RatchetTagSet set) {
             _lastReceived = set.getDate();
@@ -1467,10 +1467,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  This is used only by renderStatusHTML().
-         *  It includes both acked and unacked RatchetTagSets.
+         * This is used only by renderStatusHTML().
+         * It includes both acked and unacked RatchetTagSets.
          *
-         *  @return list of RatchetTagSet objects
+         * @return list of RatchetTagSet objects
          */
         List<RatchetTagSet> getTagSets() {
             List<RatchetTagSet> rv;
@@ -1514,10 +1514,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  ONLY updated for inbound NS/NSR/ES tag used
+         * ONLY updated for inbound NS/NSR/ES tag used
          *
-         *  @return the last received date
-         *  @since 0.9.46
+         * @return the last received date
+         * @since 0.9.46
          */
         public long getLastReceivedDate() {
             return _lastReceived;
@@ -1668,7 +1668,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  @since 0.9.46
+         * @since 0.9.46
          */
         public void registerCallback(int id, int n, ReplyCallback callback) {
             Integer key = Integer.valueOf((id << 16) | n);
@@ -1682,7 +1682,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  @since 0.9.46
+         * @since 0.9.46
          */
         public void receivedACK(int id, int n) {
             Integer key = Integer.valueOf((id << 16) | n);
@@ -1698,7 +1698,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  @since 0.9.46
+         * @since 0.9.46
          */
         public void ackRequested(int id, int n) {
             Integer key = Integer.valueOf((id << 16) | n);
@@ -1706,10 +1706,10 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  Pending acks drained from the queue, up to the send limit.
+         * Pending acks drained from the queue, up to the send limit.
          *
-         *  @return the acks to send, non empty, or null
-         *  @since 0.9.46
+         * @return the acks to send, non empty, or null
+         * @since 0.9.46
          */
         private List<Integer> getAcksToSend() {
             if (_acksToSend == null)
@@ -1725,7 +1725,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         *  @since 0.9.46
+         * @since 0.9.46
          */
         public int expireCallbacks(long now) {
             if (_callbacks.isEmpty())

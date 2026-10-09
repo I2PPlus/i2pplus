@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.DataHelper;
@@ -140,6 +139,6 @@ public class HexDump {
     }
 
     /**
-     *  @since 0.9.21
+     * @since 0.9.21
      */
 }

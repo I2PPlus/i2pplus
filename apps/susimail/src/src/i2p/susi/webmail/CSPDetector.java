@@ -10,9 +10,9 @@ class CSPDetector {
     CSPDetector() {}
 
     /**
-     *  ref: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
-     *  @param ua the user agent string
-     *  @return true if supported
+     * ref: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
+     * @param ua the user agent string
+     * @return true if supported
      */
     public static boolean supportsCSP(String ua) {
         if (ua == null) {return false;}

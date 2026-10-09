@@ -21,11 +21,11 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     private final EdDSAParameterSpec spec;
 
     /**
-     *  Create a new EdDSA private key specification from a seed.
+     * Create a new EdDSA private key specification from a seed.
      *
-     *  @param seed the private key
-     *  @param spec the parameter specification for this key
-     *  @throws IllegalArgumentException if seed length is wrong or hash algorithm is unsupported
+     * @param seed the private key
+     * @param spec the parameter specification for this key
+     * @throws IllegalArgumentException if seed length is wrong or hash algorithm is unsupported
      */
     public EdDSAPrivateKeySpec(byte[] seed, EdDSAParameterSpec spec) {
         int bd8 = spec.getCurve().getField().getb() / 8;
@@ -54,13 +54,13 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
-     *  Initialize directly from the hash.
-     *  getSeed() will return null if this constructor is used.
+     * Initialize directly from the hash.
+     * getSeed() will return null if this constructor is used.
      *
-     *  @param spec the parameter specification for this key
-     *  @param h the private key
-     *  @throws IllegalArgumentException if hash length is wrong
-     *  @since 0.9.27 (GitHub issue #17)
+     * @param spec the parameter specification for this key
+     * @param h the private key
+     * @throws IllegalArgumentException if hash length is wrong
+     * @since 0.9.27 (GitHub issue #17)
      */
     public EdDSAPrivateKeySpec(EdDSAParameterSpec spec, byte[] h) {
         int bd4 = spec.getCurve().getField().getb() / 4;
@@ -80,26 +80,26 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
-     *  No validation of any parameters other than a.
-     *  getSeed() and getH() will return null if this constructor is used.
+     * No validation of any parameters other than a.
+     * getSeed() and getH() will return null if this constructor is used.
      *
-     *  @param a must be "clamped" (for Ed) or reduced mod l (for Red)
-     *  @param aPoint if null, will be derived from a.
-     *  @throws IllegalArgumentException if a not clamped or reduced
-     *  @since 0.9.39
+     * @param a must be "clamped" (for Ed) or reduced mod l (for Red)
+     * @param aPoint if null, will be derived from a.
+     * @throws IllegalArgumentException if a not clamped or reduced
+     * @since 0.9.39
      */
     public EdDSAPrivateKeySpec(byte[] a, GroupElement aPoint, EdDSAParameterSpec spec) {
         this(null, null, a, aPoint, spec);
     }
 
     /**
-     *  No validation of any parameters other than a.
+     * No validation of any parameters other than a.
      *
-     *  @param seed may be null
-     *  @param h may be null
-     *  @param a must be "clamped" (for Ed) or reduced mod l (for Red)
-     *  @param aPoint if null, will be derived from a.
-     *  @throws IllegalArgumentException if a not clamped or reduced
+     * @param seed may be null
+     * @param h may be null
+     * @param a must be "clamped" (for Ed) or reduced mod l (for Red)
+     * @param aPoint if null, will be derived from a.
+     * @throws IllegalArgumentException if a not clamped or reduced
      */
     public EdDSAPrivateKeySpec(byte[] seed, byte[] h, byte[] a, GroupElement aPoint, EdDSAParameterSpec spec) {
         this.seed = seed;
@@ -110,36 +110,36 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
-     *  Return the seed, or null if constructed from the private key directly.
+     * Return the seed, or null if constructed from the private key directly.
      *
-     *  @return will be null if constructed directly from the private key
+     * @return will be null if constructed directly from the private key
      */
     public byte[] getSeed() {
         return seed;
     }
 
     /**
-     *  Return the hash.
+     * Return the hash.
      *
-     *  @return the hash
+     * @return the hash
      */
     public byte[] getH() {
         return h;
     }
 
     /**
-     *  Return the private key.
+     * Return the private key.
      *
-     *  @return the private key
+     * @return the private key
      */
     public byte[] geta() {
         return a;
     }
 
     /**
-     *  Return the public key.
+     * Return the public key.
      *
-     *  @return the public key
+     * @return the public key
      */
     public GroupElement getA() {
         return A;

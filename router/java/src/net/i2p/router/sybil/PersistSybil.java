@@ -32,10 +32,10 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- *  Store and retrieve analysis files from disk.
- *  Each file is named with a timestamp.
+ * Store and retrieve analysis files from disk.
+ * Each file is named with a timestamp.
  *
- *  @since 0.9.38
+ * @since 0.9.38
  */
 public class PersistSybil {
 
@@ -59,11 +59,11 @@ public class PersistSybil {
     }
 
     /**
-     *  Store each entry.
+     * Store each entry.
      *
-     *  @param date the timestamp for the file
-     *  @param entries each one should be "entry" at the root
-     *  @throws IOException if an I/O error occurs
+     * @param date the timestamp for the file
+     * @param entries each one should be "entry" at the root
+     * @throws IOException if an I/O error occurs
      */
     public synchronized void store(long date, Map<Hash, Points> entries) throws IOException {
         File dir = new SecureDirectory(_context.getConfigDir(), DIR);
@@ -87,9 +87,9 @@ public class PersistSybil {
     }
 
     /**
-     *  The list of stored analysis sets, as a time stamp.
+     * The list of stored analysis sets, as a time stamp.
      *
-     *  @return non-null, sorted by updated date, newest first
+     * @return non-null, sorted by updated date, newest first
      */
     public synchronized List<Long> load() {
         File dir = new File(_context.getConfigDir(), DIR);
@@ -109,11 +109,11 @@ public class PersistSybil {
     }
 
     /**
-     *  Load the analysis for a certain date.
+     * Load the analysis for a certain date.
      *
-     *  @param date the timestamp for the file
-     *  @return non-null, unsorted
-     *  @throws IOException if an I/O error occurs
+     * @param date the timestamp for the file
+     * @return non-null, unsorted
+     * @throws IOException if an I/O error occurs
      */
     public synchronized Map<Hash, Points> load(long date) throws IOException {
         File dir = new File(_context.getConfigDir(), DIR);
@@ -145,11 +145,11 @@ public class PersistSybil {
     }
 
     /**
-     *  Load all the analysis for a certain hash.
+     * Load all the analysis for a certain hash.
      *
-     *  @param h the hash to load
-     *  @return non-null, unsorted
-     *  @throws IOException if an I/O error occurs
+     * @param h the hash to load
+     * @return non-null, unsorted
+     * @throws IOException if an I/O error occurs
      */
     public synchronized Map<Long, Points> load(Hash h) throws IOException {
         String bh = h.toBase64() + ':';
@@ -176,10 +176,10 @@ public class PersistSybil {
     }
 
     /**
-     *  Remove all files older than configured threshold
-     *  Inline for now, thread later if necessary
+     * Remove all files older than configured threshold
+     * Inline for now, thread later if necessary
      *
-     *  @since 0.9.41
+     * @since 0.9.41
      */
     public synchronized void removeOld() {
         // if we don't have a console, don't keep too many
@@ -223,10 +223,10 @@ public class PersistSybil {
 
 
     /**
-     *  Delete the file for a particular date
+     * Delete the file for a particular date
      *
-     *  @param date the timestamp for the file
-     *  @return success
+     * @param date the timestamp for the file
+     * @return success
      */
     public synchronized boolean delete(long date) {
         File dir = new File(_context.getConfigDir(), DIR);
@@ -235,10 +235,10 @@ public class PersistSybil {
     }
 
     /**
-     *  Get the blocklist path
+     * Get the blocklist path
      *
-     *  @return the blocklist file
-     *  @since 0.9.57
+     * @return the blocklist file
+     * @since 0.9.57
      */
     public File getBlocklistFile() {
         File f = new File(_context.getConfigDir(), SDIR);
@@ -246,10 +246,9 @@ public class PersistSybil {
     }
 
     /**
-     *  Delete the blocklist
+     * Delete the blocklist
      *
      * @since 0.9.63+
-     *
      */
     public void deleteBlocklistFile() {
         File blocklistFile = getBlocklistFile();
@@ -266,10 +265,10 @@ public class PersistSybil {
     }
 
     /**
-     *  Read the blocklist
+     * Read the blocklist
      *
-     *  @return map of ip or hash to expiration (ms), or null on failure
-     *  @since 0.9.50
+     * @return map of ip or hash to expiration (ms), or null on failure
+     * @since 0.9.50
      */
     Map<String, Long> readBlocklist() {
         File f = getBlocklistFile();
@@ -280,10 +279,10 @@ public class PersistSybil {
     }
 
     /**
-     *  Read the blocklist
+     * Read the blocklist
      *
-     *  @return map of ip or hash to expiration (ms), or null on failure
-     *  @since 0.9.50
+     * @return map of ip or hash to expiration (ms), or null on failure
+     * @since 0.9.50
      */
     private synchronized Map<String, Long> readBlocklist(File blFile) {
         Map<String, Long> rv = null;
@@ -316,13 +315,13 @@ public class PersistSybil {
     }
 
     /**
-     *  Write the blocklist.
-     *  The format is different than other blocklists because we include an expiration.
-     *  Format: One per line: ip or hash,expiration time (ms)
+     * Write the blocklist.
+     * The format is different than other blocklists because we include an expiration.
+     * Format: One per line: ip or hash,expiration time (ms)
      *
-     *  @param blocks non-empty, will be merged with existing entries
-     *  @param blockUntil the expiration time in ms
-     *  @since 0.9.50
+     * @param blocks non-empty, will be merged with existing entries
+     * @param blockUntil the expiration time in ms
+     * @since 0.9.50
      */
     synchronized void storeBlocklist(Set<String> blocks, long blockUntil) {
         File dir = new SecureDirectory(_context.getConfigDir(), SDIR);
@@ -357,9 +356,9 @@ public class PersistSybil {
     }
 
     /**
-     *  Notify the update manager of a new blocklist version.
+     * Notify the update manager of a new blocklist version.
      *
-     *  @since 0.9.50
+     * @since 0.9.50
      */
     private void notifyVersion(long v) {
         ClientAppManager cmgr = _context.clientAppManager();

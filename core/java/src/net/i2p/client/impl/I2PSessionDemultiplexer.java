@@ -141,13 +141,13 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     }
 
     /**
-     *  For those that don't need to hear about the protocol and ports
-     *  in messageAvailable()
-     *  (Streaming lib)
+     * For those that don't need to hear about the protocol and ports
+     * in messageAvailable()
+     * (Streaming lib)
      *
-     *  @param l the listener
-     *  @param proto the protocol number
-     *  @param port the port number
+     * @param l the listener
+     * @param proto the protocol number
+     * @param port the port number
      */
     public void addListener(I2PSessionListener l, int proto, int port) {
         if (proto < 0 || proto > 254 || port < 0 || port > 65535) throw new IllegalArgumentException();
@@ -157,12 +157,12 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     }
 
     /**
-     *  For those that do care
-     *  UDP perhaps
+     * For those that do care
+     * UDP perhaps
      *
-     *  @param l the listener
-     *  @param proto the protocol number
-     *  @param port the port number
+     * @param l the listener
+     * @param proto the protocol number
+     * @param port the port number
      */
     public void addMuxedListener(I2PSessionMuxedListener l, int proto, int port) {
         if (proto < 0 || proto > 254 || port < 0 || port > 65535) throw new IllegalArgumentException();

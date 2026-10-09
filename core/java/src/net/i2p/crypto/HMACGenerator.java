@@ -14,10 +14,10 @@ import net.i2p.util.SimpleByteCache;
  *
  * <p>Key operations include:</p>
  * <ul>
- *   <li>HMAC calculation with given key and message data</li>
- *   <li>Inline MAC verification for performance optimization</li>
- *   <li>Support for different hash algorithms (SHA-1, SHA-256)</li>
- *   <li>Integration with I2P's session key management</li>
+ * <li>HMAC calculation with given key and message data</li>
+ * <li>Inline MAC verification for performance optimization</li>
+ * <li>Support for different hash algorithms (SHA-1, SHA-256)</li>
+ * <li>Integration with I2P's session key management</li>
  * </ul>
  *
  * <p><strong>Implementation Note:</strong> As of 0.9.42, this class serves
@@ -37,13 +37,13 @@ public abstract class HMACGenerator {
     /**
      * Calculate the HMAC of the data with the given key
      *
-     *  @param key the session key
-     *  @param data the data to HMAC
-     *  @param offset the starting offset in data
-     *  @param length the length
-     *  @param target out parameter the first 16 bytes contain the HMAC, the last 16 bytes are zero
-     *  @param targetOffset offset into target to put the hmac
-     *  @throws IllegalArgumentException for bad key or target too small
+     * @param key the session key
+     * @param data the data to HMAC
+     * @param offset the starting offset in data
+     * @param length the length
+     * @param target out parameter the first 16 bytes contain the HMAC, the last 16 bytes are zero
+     * @param targetOffset offset into target to put the hmac
+     * @throws IllegalArgumentException for bad key or target too small
      */
     public abstract void calculate(SessionKey key, byte[] data, int offset, int length, byte[] target, int targetOffset);
 

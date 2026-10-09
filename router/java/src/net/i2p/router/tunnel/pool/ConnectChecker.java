@@ -40,18 +40,18 @@ import net.i2p.util.Log;
     }
 
     /**
-     *  Is NTCP disabled?
+     * Is NTCP disabled?
      *
-     *  @return true if NTCP is disabled
-     *  @since 0.9.34
+     * @return true if NTCP is disabled
+     * @since 0.9.34
      */
     protected boolean isNTCPDisabled() {return !TransportManager.isNTCPEnabled(ctx);}
 
     /**
-     *  Is SSU disabled?
+     * Is SSU disabled?
      *
-     *  @return true if SSU is disabled
-     *  @since 0.9.34
+     * @return true if SSU is disabled
+     * @since 0.9.34
      */
     protected boolean isSSUDisabled() {return !ctx.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);}
 
@@ -63,21 +63,21 @@ import net.i2p.util.Log;
     private boolean isSSU2Enabled() {return true;}
 
     /**
-     *  Can "from" connect to "to" based on published addresses?
+     * Can "from" connect to "to" based on published addresses?
      *
-     *  This is intended for tunnel candidates, where we already have
-     *  the RI. Will not force RI lookups.
-     *  Either from or to may be us.
+     * This is intended for tunnel candidates, where we already have
+     * the RI. Will not force RI lookups.
+     * Either from or to may be us.
      *
-     *  This is best effort, as we can't know for sure.
-     *  Published addresses or introducers may have changed.
-     *  Even if a can't connect to b, they may already be connected
-     *  as b connected to a.
+     * This is best effort, as we can't know for sure.
+     * Published addresses or introducers may have changed.
+     * Even if a can't connect to b, they may already be connected
+     * as b connected to a.
      *
-     *  @param from the source router hash
-     *  @param to the destination router hash
-     *  @return true if we don't have either RI
-     *  @since 0.9.34
+     * @param from the source router hash
+     * @param to the destination router hash
+     * @return true if we don't have either RI
+     * @since 0.9.34
      */
     public boolean canConnect(Hash from, Hash to) {
         Hash us = ctx.routerHash();
@@ -156,18 +156,18 @@ import net.i2p.util.Log;
     }
 
     /**
-     *  Can we connect to "to" based on published addresses?
+     * Can we connect to "to" based on published addresses?
      *
-     *  This is intended for tunnel candidates, where we already have
-     *  the RI. Will not force RI lookups.
+     * This is intended for tunnel candidates, where we already have
+     * the RI. Will not force RI lookups.
      *
-     *  This is best effort, as we can't know for sure.
-     *  Does not check isEstablished(); do that first.
+     * This is best effort, as we can't know for sure.
+     * Does not check isEstablished(); do that first.
      *
-     *  @param ourMask our connection mask
-     *  @param to the destination router info
-     *  @return true if we can connect
-     *  @since 0.9.34
+     * @param ourMask our connection mask
+     * @param to the destination router info
+     * @return true if we can connect
+     * @since 0.9.34
      */
     public boolean canConnect(int ourMask, RouterInfo to) {
         Collection<RouterAddress> ra = to.getAddresses();
@@ -178,18 +178,18 @@ import net.i2p.util.Log;
     }
 
     /**
-     *  Can "from" connect to us based on published addresses?
+     * Can "from" connect to us based on published addresses?
      *
-     *  This is intended for tunnel candidates, where we already have
-     *  the RI. Will not force RI lookups.
+     * This is intended for tunnel candidates, where we already have
+     * the RI. Will not force RI lookups.
      *
-     *  This is best effort, as we can't know for sure.
-     *  Does not check isEstablished(); do that first.
+     * This is best effort, as we can't know for sure.
+     * Does not check isEstablished(); do that first.
      *
-     *  @param from the source router info
-     *  @param ourMask our connection mask
-     *  @return true if from can connect to us
-     *  @since 0.9.34
+     * @param from the source router info
+     * @param ourMask our connection mask
+     * @return true if from can connect to us
+     * @since 0.9.34
      */
     public boolean canConnect(RouterInfo from, int ourMask) {
         if (ourMask == 0) {return false;}
@@ -201,12 +201,12 @@ import net.i2p.util.Log;
     }
 
     /**
-     *  Our inbound mask.
-     *  For most cases, we use what we published, i.e. getConnectMask()
+     * Our inbound mask.
+     * For most cases, we use what we published, i.e. getConnectMask()
      *
-     *  @param us our router info
-     *  @return bitmask for accepting connections
-     *  @since 0.9.34
+     * @param us our router info
+     * @return bitmask for accepting connections
+     * @since 0.9.34
      */
     public int getInboundMask(RouterInfo us) {
         // to us
@@ -256,12 +256,12 @@ import net.i2p.util.Log;
     }
 
     /**
-     *  Our outbound mask.
-     *  For most cases, we use our comm system status.
+     * Our outbound mask.
+     * For most cases, we use our comm system status.
      *
-     *  @param us our router info
-     *  @return bitmask for initiating connections
-     *  @since 0.9.34
+     * @param us our router info
+     * @return bitmask for initiating connections
+     * @since 0.9.34
      */
     public int getOutboundMask(RouterInfo us) {
         // from us
@@ -328,11 +328,11 @@ import net.i2p.util.Log;
     private static final String IHOST[] = {"ihost0", "ihost1", "ihost2"};
 
     /**
-     *  The bitmask of supported transports for the given addresses.
+     * The bitmask of supported transports for the given addresses.
      *
-     *  @param addrs non-empty, set your own default if empty
-     *  @return bitmask of v4/v6 NTCP/SSU
-     *  @since 0.9.34
+     * @param addrs non-empty, set your own default if empty
+     * @return bitmask of v4/v6 NTCP/SSU
+     * @since 0.9.34
      */
     private static int getConnectMask(Collection<RouterAddress> addrs) {
         int rv = 0;

@@ -70,13 +70,13 @@ public class UDPTransport extends TransportImpl {
     private final List<UDPEndpoint> _endpoints;
     private final Object _addDropLock = new Object();
     /**
-     *  Map of known peers, keyed by their identity hash.
-     *  Used for fast lookup of peer state information during message handling and routing.
+     * Map of known peers, keyed by their identity hash.
+     * Used for fast lookup of peer state information during message handling and routing.
      */
     private final Map<Hash, PeerState> _peersByIdent;
     /**
-     *  Map of known peers, keyed by their remote host and port.
-     *  Used to identify peers based on source address in incoming packets.
+     * Map of known peers, keyed by their remote host and port.
+     * Used to identify peers based on source address in incoming packets.
      */
     private final Map<RemoteHostId, PeerState> _peersByRemoteHost;
     private final Map<Long, PeerState2> _peersByConnID;
@@ -87,7 +87,7 @@ public class UDPTransport extends TransportImpl {
     private volatile PacketPusher _pusher;
     private final InboundMessageFragments _inboundFragments;
     /**
-     *  Manages peer reachability testing to determine if we are firewalled or reachable.
+     * Manages peer reachability testing to determine if we are firewalled or reachable.
      */
     private final PeerTestManager _testManager;
     private final IntroductionManager _introManager;
@@ -108,7 +108,7 @@ public class UDPTransport extends TransportImpl {
     private final int _networkID;
 
     /**
-     *  Do we have a public IPv6 address?
+     * Do we have a public IPv6 address?
      */
     private volatile boolean _haveIPv6Address;
     private volatile long _lastInboundIPv6;
@@ -116,8 +116,8 @@ public class UDPTransport extends TransportImpl {
     private final int _min_v6_peers;
 
     /**
-     *  Flag indicating whether the router's external address needs to be rebuilt.
-     *  This is typically set after significant network changes or reachability updates.
+     * Flag indicating whether the router's external address needs to be rebuilt.
+     * This is typically set after significant network changes or reachability updates.
      */
     private volatile boolean _needsRebuild;
     private final Object _rebuildLock = new Object();
@@ -126,8 +126,8 @@ public class UDPTransport extends TransportImpl {
     private SessionKey _introKey;
 
     /**
-     *  List of RemoteHostId for peers whose packets we want to drop outright
-     *  This is only for old network IDs (pre-0.6.1.10), so it isn't really used now.
+     * List of RemoteHostId for peers whose packets we want to drop outright
+     * This is only for old network IDs (pre-0.6.1.10), so it isn't really used now.
      */
     private final Set<RemoteHostId> _dropList;
 
@@ -193,8 +193,8 @@ public class UDPTransport extends TransportImpl {
     private static final String DEFAULT_PREFER_UDP = "false";
 
     /** Override whether we will change our advertised port no matter what our peers tell us.
-     *  See getIsPortFixed() for default behaviour.
-     *  Value sourced from {@link Transport#PROP_FIXED_PORT}.
+     * See getIsPortFixed() for default behaviour.
+     * Value sourced from {@link Transport#PROP_FIXED_PORT}.
      */
     public static final String PROP_FIXED_PORT = Transport.PROP_FIXED_PORT;
 
@@ -209,9 +209,9 @@ public class UDPTransport extends TransportImpl {
     /** Config key for laptop power-saving mode. Value sourced from {@link Transport#PROP_LAPTOP_MODE}. */
     public static final String PROP_LAPTOP_MODE = Transport.PROP_LAPTOP_MODE;
     /**
-     *  Last IPv6 config.
-     *  Value sourced from {@link Transport#PROP_IPV6}.
-     *  @since 0.9.43
+     * Last IPv6 config.
+     * Value sourced from {@link Transport#PROP_IPV6}.
+     * @since 0.9.43
      */
     public static final String PROP_IPV6 = Transport.PROP_IPV6;
 
@@ -224,9 +224,9 @@ public class UDPTransport extends TransportImpl {
     /** Override the "large" (max) MTU, default is PeerState.LARGE_MTU */
     private static final String PROP_DEFAULT_MTU = "i2np.udp.mtu";
     /**
-     *  Config key for the SSU introducer key published in hidden-mode RouterInfos.
-     *  Value sourced from {@link Transport#PROP_INTRO_KEY}.
-     *  @since 0.9.48
+     * Config key for the SSU introducer key published in hidden-mode RouterInfos.
+     * Value sourced from {@link Transport#PROP_INTRO_KEY}.
+     * @since 0.9.48
      */
     public static final String PROP_INTRO_KEY = Transport.PROP_INTRO_KEY;
 
@@ -312,8 +312,8 @@ public class UDPTransport extends TransportImpl {
     private final TransportBid[] _cachedBid;
 
     /**
-     *  RI sigtypes supported in 0.9.16, but due to a bug in InboundEstablishState
-     *  fixed in 0.9.17, we cannot connect out to routers before that version.
+     * RI sigtypes supported in 0.9.16, but due to a bug in InboundEstablishState
+     * fixed in 0.9.17, we cannot connect out to routers before that version.
      */
     private static final String MIN_SIGTYPE_VERSION = "0.9.17";
 
@@ -400,10 +400,10 @@ public class UDPTransport extends TransportImpl {
                                                                       Status.IPV4_SNAT_IPV6_UNKNOWN);
 
     /**
-     *  Create the UDP transport for the given router context and SSU2 XDH factory.
+     * Create the UDP transport for the given router context and SSU2 XDH factory.
      *
-     *  @param ctx the router context
-     *  @param xdh non-null
+     * @param ctx the router context
+     * @param xdh non-null
      */
     public UDPTransport(RouterContext ctx, X25519KeyFactory xdh) {
         super(ctx);
@@ -565,11 +565,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Pick a port if not previously configured, so that TransportManager may
-     *  call getRequestedPort() before we've started to get a best-guess of what our
-     *  port is going to be, and pass that to NTCP
-     *
-     *  @since IPv6
+     * Pick a port if not previously configured, so that TransportManager may
+     * call getRequestedPort() before we've started to get a best-guess of what our
+     * port is going to be, and pass that to NTCP
      */
     private void setupPort() {
         int port = getRequestedPort();
@@ -1048,9 +1046,9 @@ public class UDPTransport extends TransportImpl {
      * Valid SSU version of Bob's SSU address
      * for our outbound connections as Alice.
      *
-     *  @param addr the remote RouterAddress, whose transport style selects the version
-     *  @return the valid version 1 or 2, or 0 if unusable
-     *  @since 0.9.54
+     * @param addr the remote RouterAddress, whose transport style selects the version
+     * @return the valid version 1 or 2, or 0 if unusable
+     * @since 0.9.54
      */
     int getSSUVersion(RouterAddress addr) {
         String style = addr.getTransportStyle();
@@ -1115,10 +1113,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Published or requested port
+     * Published or requested port
      *
-     *  @param ipv6 {@code true} for the IPv6 socket
-     *  @return the published port, else the requested port
+     * @param ipv6 {@code true} for the IPv6 socket
+     * @return the published port, else the requested port
      */
     int getExternalPort(boolean ipv6) {
         RouterAddress addr = getCurrentAddress(ipv6);
@@ -1131,34 +1129,33 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Published IP, IPv4 only.
+     * Published IP, IPv4 only.
      *
-     *  Reads the cached IPv4 address rather than scanning _currentAddresses,
-     *  so this does not take the address-list monitor. For the per-packet
-     *  comparison, prefer {@link #isCurrentIPv4(byte[])} over copying the array.
+     * Reads the cached IPv4 address rather than scanning _currentAddresses,
+     * so this does not take the address-list monitor. For the per-packet
+     * comparison, prefer {@link #isCurrentIPv4(byte[])} over copying the array.
      *
-     *  @return a copy of the IP, or null if we have no IPv4 address
-     *  @since 0.9.2
+     * @return a copy of the IP, or null if we have no IPv4 address
+     * @since 0.9.2
      */
     byte[] getExternalIP() {
         return getCurrentIPv4();
     }
 
     /**
-     *  For PeerTestManager
-     *  @return {@code true} if we have a published IPv6 address
-     *  @since 0.9.30
+     * For PeerTestManager
+     * @return {@code true} if we have a published IPv6 address
+     * @since 0.9.30
      */
     boolean hasIPv6Address() {
         return _haveIPv6Address;
     }
 
     /**
-     *  Is this IP too close to ours to trust it for
-     *  things like relaying?
-     *  @param ip IPv4 or IPv6
-     *  @return {@code true} if it shares our subnet prefix (2 bytes IPv4, 4 bytes IPv6)
-     *  @since IPv6
+     * Is this IP too close to ours to trust it for
+     * things like relaying?
+     * @param ip IPv4 or IPv6
+     * @return {@code true} if it shares our subnet prefix (2 bytes IPv4, 4 bytes IPv6)
      */
     boolean isTooClose(byte[] ip) {
         if (allowLocal())
@@ -1176,10 +1173,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  The current port of the first matching endpoint.
-     *  To be enhanced to handle multiple endpoints of the same type.
-     *  @return port or -1
-     *  @since IPv6
+     * The current port of the first matching endpoint.
+     * To be enhanced to handle multiple endpoints of the same type.
+     * @return port or -1
      */
     private int getListenPort(boolean ipv6) {
         for (UDPEndpoint endpoint : _endpoints) {
@@ -1221,10 +1217,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  MTU for the socket interface at addr.
-     *  @param addr null ok
-     *  @return the MTU in bytes
-     *  @since 0.9.2
+     * MTU for the socket interface at addr.
+     * @param addr null ok
+     * @return the MTU in bytes
+     * @since 0.9.2
      */
     private int setMTU(InetAddress addr) {
         // TODO remove config
@@ -1406,10 +1402,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Callback from UPnP.
-     *  If we we have an IP address and UPnP claims success, believe it.
-     *  If this is wrong, the peer test will figure it out and change the status.
-     *  Don't do anything if UPnP claims failure.
+     * Callback from UPnP.
+     * If we we have an IP address and UPnP claims success, believe it.
+     * If this is wrong, the peer test will figure it out and change the status.
+     * Don't do anything if UPnP claims failure.
      */
     @Override
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason) {
@@ -1720,60 +1716,60 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the reported (peer-observed) port should be discarded in favour
-     *  of the currently configured external listen port.
+     * Whether the reported (peer-observed) port should be discarded in favour
+     * of the currently configured external listen port.
      *
-     *  The port is pinned when the operator fixed it ({@code fixedPort} with a
-     *  known listen port) or when the peer reported no port at all.
+     * The port is pinned when the operator fixed it ({@code fixedPort} with a
+     * known listen port) or when the peer reported no port at all.
      *
-     *  @param fixedPort true if the transport runs with a fixed port
-     *  @param externalListenPort current external listen port
-     *  @param reportedPort port reported by the peer (may be &lt;= 0)
-     *  @return true if {@code reportedPort} must be discarded
-     *  @since 0.9.71+
+     * @param fixedPort true if the transport runs with a fixed port
+     * @param externalListenPort current external listen port
+     * @param reportedPort port reported by the peer (may be &lt;= 0)
+     * @return true if {@code reportedPort} must be discarded
+     * @since 0.9.71+
      */
     static boolean shouldOverrideReportedPort(boolean fixedPort, int externalListenPort, int reportedPort) {
         return (fixedPort && externalListenPort > 0) || reportedPort <= 0;
     }
 
     /**
-     *  Whether the peer-reported address differs from the current external
-     *  address and is worth acting on. A reported port of 0 means "keep the
-     *  current port", so a zero port is never an address change.
+     * Whether the peer-reported address differs from the current external
+     * address and is worth acting on. A reported port of 0 means "keep the
+     * current port", so a zero port is never an address change.
      *
-     *  @param externalListenHost current external host, may be null
-     *  @param externalListenPort current external port
-     *  @param ourIP reported host (IPv4 or IPv6)
-     *  @param ourPort reported port, 0 = keep current
-     *  @return true if the address pair should be updated
-     *  @since 0.9.71+
+     * @param externalListenHost current external host, may be null
+     * @param externalListenPort current external port
+     * @param ourIP reported host (IPv4 or IPv6)
+     * @param ourPort reported port, 0 = keep current
+     * @return true if the address pair should be updated
+     * @since 0.9.71+
      */
     static boolean isAddressChange(byte[] externalListenHost, int externalListenPort, byte[] ourIP, int ourPort) {
         return ourPort > 0 && !eq(externalListenHost, externalListenPort, ourIP, ourPort);
     }
 
     /**
-     *  Whether the reported host differs from the current external host.
+     * Whether the reported host differs from the current external host.
      *
-     *  @param externalListenHost current external host, may be null
-     *  @param ourIP reported host
-     *  @return true if the host differs
-     *  @since 0.9.71+
+     * @param externalListenHost current external host, may be null
+     * @param ourIP reported host
+     * @return true if the host differs
+     * @since 0.9.71+
      */
     static boolean isIPChange(byte[] externalListenHost, byte[] ourIP) {
         return externalListenHost != null && !DataHelper.eq(ourIP, externalListenHost);
     }
 
     /**
-     *  Whether a peer-reported external port change should be persisted to the
-     *  configuration. The configured external port (explicit operator setting)
-     *  takes precedence over any report and is never overwritten.
+     * Whether a peer-reported external port change should be persisted to the
+     * configuration. The configured external port (explicit operator setting)
+     * takes precedence over any report and is never overwritten.
      *
-     *  @param externalListenPort current external listen port
-     *  @param ourPort reported port
-     *  @param configuredExternalPort externally configured port, 0 if none
-     *  @return true if the reported port must be persisted
-     *  @since 0.9.71+
+     * @param externalListenPort current external listen port
+     * @param ourPort reported port
+     * @param configuredExternalPort externally configured port, 0 if none
+     * @return true if the reported port must be persisted
+     * @since 0.9.71+
      */
     static boolean shouldSaveExternalPort(int externalListenPort, int ourPort, int configuredExternalPort) {
         return externalListenPort > 0 && ourPort > 0 &&
@@ -1781,17 +1777,17 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the configured IP change rate and startup window require a
-     *  hard restart with a fresh identity (laptop mode).
+     * Whether the configured IP change rate and startup window require a
+     * hard restart with a fresh identity (laptop mode).
      *
-     *  @param oldIP the previously configured IP, null if never set
-     *  @param hasWrapper true if running under the service wrapper
-     *  @param laptopMode true if the i2np.laptopMode property is set
-     *  @param lastChanged ms of the previous IP change, 0 if unknown
-     *  @param now current time ms
-     *  @param uptime router uptime ms
-     *  @return true if the router should restart with a new identity
-     *  @since 0.9.71+
+     * @param oldIP the previously configured IP, null if never set
+     * @param hasWrapper true if running under the service wrapper
+     * @param laptopMode true if the i2np.laptopMode property is set
+     * @param lastChanged ms of the previous IP change, 0 if unknown
+     * @param now current time ms
+     * @param uptime router uptime ms
+     * @return true if the router should restart with a new identity
+     * @since 0.9.71+
      */
     static boolean shouldRestartForLaptopMode(String oldIP, boolean hasWrapper, boolean laptopMode,
                                               long lastChanged, long now, long uptime) {
@@ -1800,11 +1796,11 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Parse the stored last-IP-change timestamp, tolerating garbage.
+     * Parse the stored last-IP-change timestamp, tolerating garbage.
      *
-     *  @param value the property value, may be null or non-numeric
-     *  @return the timestamp in ms, or 0 when unset or unparsable
-     *  @since 0.9.71+
+     * @param value the property value, may be null or non-numeric
+     * @return the timestamp in ms, or 0 when unset or unparsable
+     * @since 0.9.71+
      */
     static long parseLastAddressChange(String value) {
         if (value == null)
@@ -1814,20 +1810,20 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the given IP is one of this host's local addresses.
+     * Whether the given IP is one of this host's local addresses.
      *
-     *  @param ip absolute IPv4 or IPv6 address bytes, may be null
-     *  @return true if it matches a local interface address
-     *  @since 0.9.71+
+     * @param ip absolute IPv4 or IPv6 address bytes, may be null
+     * @return true if it matches a local interface address
+     * @since 0.9.71+
      */
     static boolean isLocalAddress(byte[] ip) {
         return Addresses.getAddresses(false, true).contains(Addresses.toString(ip));
     }
 
     /**
-     *  Compare two address and port pairs for equality; either address may be null.
+     * Compare two address and port pairs for equality; either address may be null.
      *
-     *  @param laddr and raddr may be null
+     * @param laddr and raddr may be null
      */
     private static final boolean eq(byte[] laddr, int lport, byte[] raddr, int rport) {
         return (rport == lport) && DataHelper.eq(laddr, raddr);
@@ -1885,22 +1881,22 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  The peer state for the peer with the given ident, or null
-     *  if no state exists.
+     * The peer state for the peer with the given ident, or null
+     * if no state exists.
      *
-     *  @param remotePeer the router identity hash
-     *  @return the peer state, or null if none exists
+     * @param remotePeer the router identity hash
+     * @return the peer state, or null if none exists
      */
     PeerState getPeerState(Hash remotePeer) {
         return _peersByIdent.get(remotePeer);
     }
 
     /**
-     *  Measured round trip time to a peer over SSU.
+     * Measured round trip time to a peer over SSU.
      *
-     *  <p>PeerState seeds its RTT at 0 and only assigns a real value from an
-     *  observed round trip, so 0 here means the session has not measured yet.
-     *  Callers treat that as unknown, not as an impossibly good peer.
+     * <p>PeerState seeds its RTT at 0 and only assigns a real value from an
+     * observed round trip, so 0 here means the session has not measured yet.
+     * Callers treat that as unknown, not as an impossibly good peer.
      *
      * @param peer the peer to measure
      * @return the measured RTT in ms, or 0 if there is no session or none measured
@@ -1927,10 +1923,10 @@ public class UDPTransport extends TransportImpl {
      * Was the state for this SSU2 receive connection ID recently closed?
      * Lock-free single ConcurrentHashMap read; hits the per-packet receive path
      * on a connection-ID miss (attacker-triggerable), so the shared add/drop
-     *  lock must not be taken here.
-     *  @param rcvConnID the receive connection ID of the closed session
-     *  @return the destroyed state, or null if the ID is not in the recent list
-     *  @since 0.9.56
+     * lock must not be taken here.
+     * @param rcvConnID the receive connection ID of the closed session
+     * @return the destroyed state, or null if the ID is not in the recent list
+     * @since 0.9.56
      */
     PeerStateDestroyed getRecentlyClosed(long rcvConnID) {
         return _recentlyClosedConnIDs.get(Long.valueOf(rcvConnID));
@@ -1981,10 +1977,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Remove and add to peersByRemoteHost map
-     *  @param peer the peer whose port changed
-     *  @param newPort the peer's new port
-     *  @since 0.9.3
+     * Remove and add to peersByRemoteHost map
+     * @param peer the peer whose port changed
+     * @param newPort the peer's new port
+     * @since 0.9.3
      */
     void changePeerPort(PeerState peer, int newPort) {
         // this happens a lot
@@ -2003,10 +1999,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Remove and add to peersByRemoteHost map
-     *  @param peer the peer whose address changed
-     *  @param newAddress the peer's new IP and port
-     *  @since 0.9.56
+     * Remove and add to peersByRemoteHost map
+     * @param peer the peer whose address changed
+     * @param newAddress the peer's new IP and port
+     * @since 0.9.56
      */
     void changePeerAddress(PeerState2 peer, RemoteHostId newAddress) {
         RemoteHostId oldAddress;
@@ -2024,9 +2020,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  For IntroductionManager
-     *  @return may be null if not started
-     *  @since 0.9.2
+     * For IntroductionManager
+     * @return may be null if not started
+     * @since 0.9.2
      */
     EstablishmentManager getEstablisher() {
         return _establisher;
@@ -2229,11 +2225,11 @@ public class UDPTransport extends TransportImpl {
     boolean isInDropList(RemoteHostId peer) { return _dropList.contains(peer); }
 
     /**
-     *  This does not send a session destroy, caller must do that if desired.
+     * This does not send a session destroy, caller must do that if desired.
      *
-     *  @param peer the router identity hash of the peer to drop
-     *  @param shouldBanlist doesn't really, only sets unreachable
-     *  @param why cause, for the debug log only, may be null
+     * @param peer the router identity hash of the peer to drop
+     * @param shouldBanlist doesn't really, only sets unreachable
+     * @param why cause, for the debug log only, may be null
      */
     void dropPeer(Hash peer, boolean shouldBanlist, String why) {
         PeerState state = getPeerState(peer);
@@ -2242,11 +2238,11 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  This does not send a session destroy, caller must do that if desired.
+     * This does not send a session destroy, caller must do that if desired.
      *
-     *  @param peer the session to drop, recursing if another session shares its ident or host
-     *  @param shouldBanlist doesn't really, only sets unreachable
-     *  @param why cause, for the debug log only, may be null
+     * @param peer the session to drop, recursing if another session shares its ident or host
+     * @param shouldBanlist doesn't really, only sets unreachable
+     * @param why cause, for the debug log only, may be null
      */
     void dropPeer(PeerState peer, boolean shouldBanlist, String why) {
         if (_log.shouldDebug()) {
@@ -2294,9 +2290,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  This does not send a session destroy, caller must do that if desired.
+     * This does not send a session destroy, caller must do that if desired.
      *
-     *  @param shouldBanlist doesn't really, only sets unreachable
+     * @param shouldBanlist doesn't really, only sets unreachable
      */
     private void locked_dropPeer(PeerState peer, boolean shouldBanlist, String why) {
         peer.dropOutbound();
@@ -2345,11 +2341,11 @@ public class UDPTransport extends TransportImpl {
 
 
     /**
-     *  This sends it directly out, bypassing OutboundMessageFragments.
-     *  The only queueing is for the bandwidth limiter.
-     *  BLOCKING if OB queue is full.
+     * This sends it directly out, bypassing OutboundMessageFragments.
+     * The only queueing is for the bandwidth limiter.
+     * BLOCKING if OB queue is full.
      *
-     *  @param packet already built, addressed, and encrypted
+     * @param packet already built, addressed, and encrypted
      */
     void send(UDPPacket packet) {
         if (_pusher != null) {
@@ -2362,12 +2358,12 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Send a session destroy message, bypassing OMF and PacketPusher.
-     *  BLOCKING if OB queue is full.
+     * Send a session destroy message, bypassing OMF and PacketPusher.
+     * BLOCKING if OB queue is full.
      *
-     *  @param peer the session to tear down, SSU1 peers are ignored
-     *  @param reasonCode SSU2 only, ignored for SSU1
-     *  @since 0.8.9
+     * @param peer the session to tear down, SSU1 peers are ignored
+     * @param reasonCode SSU2 only, ignored for SSU1
+     * @since 0.8.9
      */
     void sendDestroy(PeerState peer, int reasonCode) {
         if (!(peer instanceof PeerState2)) {return;}
@@ -2383,10 +2379,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Send a session destroy message to everybody.
-     *  BLOCKING for at least 1 sec per 1K peers, more if BW is very low or if OB queue is full.
+     * Send a session destroy message to everybody.
+     * BLOCKING for at least 1 sec per 1K peers, more if BW is very low or if OB queue is full.
      *
-     *  @since 0.8.9
+     * @since 0.8.9
      */
     private void destroyAll() {
         for (UDPEndpoint endpoint : _endpoints) {
@@ -2425,11 +2421,11 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Bid on a message to the given router.
+     * Bid on a message to the given router.
      *
-     *  @param toAddress target router info
-     *  @param dataSize message size in bytes
-     *  @return the bid, or null if we can't (or shouldn't) send via UDP
+     * @param toAddress target router info
+     * @param dataSize message size in bytes
+     * @return the bid, or null if we can't (or shouldn't) send via UDP
      */
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
         if (isTooLarge(dataSize)) {
@@ -2506,36 +2502,36 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Not-a-note: the message is too large for SSU to carry at all.
+     * Not-a-note: the message is too large for SSU to carry at all.
      *
-     *  @param dataSize message size in bytes
-     *  @return true if the message exceeds the maximum SSU message size
-     *  @since 0.9.71+
+     * @param dataSize message size in bytes
+     * @return true if the message exceeds the maximum SSU message size
+     * @since 0.9.71+
      */
     static boolean isTooLarge(int dataSize) {
         return dataSize > OutboundMessageState.MAX_MSG_SIZE;
     }
 
     /**
-     *  Whether the target router belongs to a different network than ours.
+     * Whether the target router belongs to a different network than ours.
      *
-     *  @param nid the target router's network id
-     *  @param ourNetworkId this router's network id
-     *  @return true when the network ids differ
-     *  @since 0.9.71+
+     * @param nid the target router's network id
+     * @param ourNetworkId this router's network id
+     * @return true when the network ids differ
+     * @since 0.9.71+
      */
     static boolean isDifferentNetwork(int nid, int ourNetworkId) {
         return nid != ourNetworkId;
     }
 
     /**
-     *  Reject known c++ SSU disconnect bugs (through 0.9.52), which drop
-     *  inbound sessions shortly after establishment.
+     * Reject known c++ SSU disconnect bugs (through 0.9.52), which drop
+     * inbound sessions shortly after establishment.
      *
-     *  @param cost the target's address cost (10 = SSU1, 9 = SSU2)
-     *  @param version the target's router software version
-     *  @return true when the target may exhibit the disconnect bug
-     *  @since 0.9.71+
+     * @param cost the target's address cost (10 = SSU1, 9 = SSU2)
+     * @param version the target's router software version
+     * @return true when the target may exhibit the disconnect bug
+     * @since 0.9.71+
      */
     static boolean rejectCppBug(int cost, String version) {
         if (cost == 10)
@@ -2544,40 +2540,40 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the target identity uses a signature type we cannot verify.
+     * Whether the target identity uses a signature type we cannot verify.
      *
-     *  @param type the target identity's signature type
-     *  @return true when the type is missing or unsupported by this build
-     *  @since 0.9.71+
+     * @param type the target identity's signature type
+     * @return true when the type is missing or unsupported by this build
+     * @since 0.9.71+
      */
     static boolean sigTypeUnsupported(SigType type) {
         return type == null || !type.isAvailable();
     }
 
     /**
-     *  Whether we need a minimum software version on the target because we
-     *  are not DSA-signed: non-DSA routers cannot be reached by pre-0.9.17
-     *  builds that do not understand their signature types.
+     * Whether we need a minimum software version on the target because we
+     * are not DSA-signed: non-DSA routers cannot be reached by pre-0.9.17
+     * builds that do not understand their signature types.
      *
-     *  @param ourSigType this router's signature type
-     *  @param theirVersion the target's router software version
-     *  @return true when our non-DSA signature requires a 0.9.17+ target
-     *  @since 0.9.71+
+     * @param ourSigType this router's signature type
+     * @param theirVersion the target's router software version
+     * @return true when our non-DSA signature requires a 0.9.17+ target
+     * @since 0.9.71+
      */
     static boolean needsMinimumSigTypeVersion(SigType ourSigType, String theirVersion) {
         return ourSigType != SigType.DSA_SHA1 && VersionComparator.comp(theirVersion, MIN_SIGTYPE_VERSION) < 0;
     }
 
     /**
-     *  Reject a floodfill router that we have no history with, or that has
-     *  rejected tunnel creation far more often than it has agreed.
+     * Reject a floodfill router that we have no history with, or that has
+     * rejected tunnel creation far more often than it has agreed.
      *
-     *  Be less aggressive about rejecting floodfills when firewalled, as we need more peers.
-     *  Temporary - let NTCP2 deal with them (prop. 165).
+     * Be less aggressive about rejecting floodfills when firewalled, as we need more peers.
+     * Temporary - let NTCP2 deal with them (prop. 165).
      *
-     *  @param to target identity hash
-     *  @param toAddress target router info
-     *  @return true to skip bidding on this router
+     * @param to target identity hash
+     * @param toAddress target router info
+     * @return true to skip bidding on this router
      */
     private boolean rejectFloodfill(Hash to, RouterInfo toAddress) {
         if (toAddress.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) < 0)
@@ -2593,27 +2589,27 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Are we behind a firewall, with no way to accept incoming UDP?
+     * Are we behind a firewall, with no way to accept incoming UDP?
      *
-     *  @return true if any firewall state is active
+     * @return true if any firewall state is active
      */
     private boolean isFirewalled() {
         return isFirewalled(_context.commSystem().getStatus());
     }
 
     /**
-     *  Select the bid tier for a message to an unestablished peer.
+     * Select the bid tier for a message to an unestablished peer.
      *
-     *  Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
-     *  we have a selection to run peer tests with.  If we are firewalled, and we don't have
-     *  enough peers that volunteered to also introduce us, also bid aggressively so we are
-     *  preferred over NTCP - otherwise we only talk UDP to those that are firewalled, and we
-     *  will never get any introducers.
+     * Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
+     * we have a selection to run peer tests with.  If we are firewalled, and we don't have
+     * enough peers that volunteered to also introduce us, also bid aggressively so we are
+     * preferred over NTCP - otherwise we only talk UDP to those that are firewalled, and we
+     * will never get any introducers.
      *
-     *  @param addr validated target SSU address
-     *  @param cost the target's address cost
-     *  @param weAreFirewalled status computed by {@link #isFirewalled()}
-     *  @return the bid
+     * @param addr validated target SSU address
+     * @param cost the target's address cost
+     * @param weAreFirewalled status computed by {@link #isFirewalled()}
+     * @return the bid
      */
     private TransportBid selectBid(RouterAddress addr, int cost, boolean weAreFirewalled) {
         if (alwaysPreferUDP()) {
@@ -2665,10 +2661,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  First available address of the target that we can use.
-     *  @param target the remote RouterInfo whose addresses are scanned in order
-     *  @return address or null
-     *  @since 0.9.6
+     * First available address of the target that we can use.
+     * @param target the remote RouterInfo whose addresses are scanned in order
+     * @return address or null
+     * @since 0.9.6
      */
     RouterAddress getTargetAddress(RouterInfo target) {
         List<RouterAddress> addrs = getTargetAddresses(target);
@@ -2733,34 +2729,34 @@ public class UDPTransport extends TransportImpl {
     private String getPublishStyle() {return STYLE2;}
 
     /**
-     *  Is an established peer idle past the threshold in both directions, and so
-     *  due for teardown and re-establishment rather than continued selection?
+     * Is an established peer idle past the threshold in both directions, and so
+     * due for teardown and re-establishment rather than continued selection?
      *
-     *  <p>Pure decision, extracted from {@link #send(OutNetMessage)} so the truth
-     *  table can be pinned in a test without a router.
+     * <p>Pure decision, extracted from {@link #send(OutNetMessage)} so the truth
+     * table can be pinned in a test without a router.
      *
-     *  <p>This predicate is deliberately <em>time-only</em>, where the code it
-     *  replaces also required {@code getConsecutiveFailedSends() > 2}. That counter is
-     *  incremented from exactly one place, {@link #failed(OutboundMessageState, boolean)},
-     *  and only once a message has exhausted its retransmits or expired. A half-open
-     *  session therefore never accumulates it — the peer still ACKs enough traffic to
-     *  keep messages alive, or we stop sending and never reach {@code failed()} at all.
-     *  Either way the session stays in {@code _peersByIdent} indefinitely and keeps
-     *  answering {@link #isEstablished(Hash)} true, so peer selection keeps choosing peers
-     *  we have not heard from in days. Of the hop records on expired builds, 85% had this
-     *  shape and only 15% had been heard from within 3 seconds.
+     * <p>This predicate is deliberately <em>time-only</em>, where the code it
+     * replaces also required {@code getConsecutiveFailedSends() > 2}. That counter is
+     * incremented from exactly one place, {@link #failed(OutboundMessageState, boolean)},
+     * and only once a message has exhausted its retransmits or expired. A half-open
+     * session therefore never accumulates it — the peer still ACKs enough traffic to
+     * keep messages alive, or we stop sending and never reach {@code failed()} at all.
+     * Either way the session stays in {@code _peersByIdent} indefinitely and keeps
+     * answering {@link #isEstablished(Hash)} true, so peer selection keeps choosing peers
+     * we have not heard from in days. Of the hop records on expired builds, 85% had this
+     * shape and only 15% had been heard from within 3 seconds.
      *
-     *  <p>The slack is intentional. {@link #MAX_IDLE_TIME} is {@link #EXPIRE_TIMEOUT}, 20
-     *  minutes, which already governed this drop and which the consecutive-failure path
-     *  relaxes toward. A peer silent in both directions for twenty minutes is not carrying
-     *  traffic, and a false positive costs one re-establishment, not a lost session.
+     * <p>The slack is intentional. {@link #MAX_IDLE_TIME} is {@link #EXPIRE_TIMEOUT}, 20
+     * minutes, which already governed this drop and which the consecutive-failure path
+     * relaxes toward. A peer silent in both directions for twenty minutes is not carrying
+     * traffic, and a false positive costs one re-establishment, not a lost session.
      *
-     *  @param now current time in ms
-     *  @param lastSend time of the last fully sent message, or 0 if never
-     *  @param lastRecv time of the last receive, or 0 if never
-     *  @param maxIdleTime idle threshold in ms
-     *  @return true if the session is idle in both directions past the threshold
-     *  @since 0.9.71+
+     * @param now current time in ms
+     * @param lastSend time of the last fully sent message, or 0 if never
+     * @param lastRecv time of the last receive, or 0 if never
+     * @param maxIdleTime idle threshold in ms
+     * @return true if the session is idle in both directions past the threshold
+     * @since 0.9.71+
      */
     static boolean isIdleEstablished(long now, long lastSend, long lastRecv, long maxIdleTime) {
         // A zero timestamp means never sent or never received, which is not evidence of
@@ -2770,13 +2766,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Is the peer idle in both directions past the threshold, disregarding send failures.
+     * Is the peer idle in both directions past the threshold, disregarding send failures.
      *
-     *  @param peer the peer state, may be null
-     *  @param now current time in ms
-     *  @param maxIdleTime idle threshold in ms
-     *  @return true if the peer should be dropped and re-established
-     *  @since 0.9.71+
+     * @param peer the peer state, may be null
+     * @param now current time in ms
+     * @param maxIdleTime idle threshold in ms
+     * @return true if the peer should be dropped and re-established
+     * @since 0.9.71+
      */
     boolean isIdleEstablished(PeerState peer, long now, long maxIdleTime) {
         if (peer == null) {return false;}
@@ -2838,21 +2834,21 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Send only if established, otherwise fail immediately.
-     *  Never queue with the establisher.
-     *  @param msg the message to send, which must have an established peer
-     *  @since 0.9.2
+     * Send only if established, otherwise fail immediately.
+     * Never queue with the establisher.
+     * @param msg the message to send, which must have an established peer
+     * @since 0.9.2
      */
     void sendIfEstablished(OutNetMessage msg) {
         _fragments.add(msg);
     }
 
     /**
-     *  "injected" message from the EstablishmentManager.
-     *  If you have multiple messages, use the list variant, so the messages may be bundled efficiently.
+     * "injected" message from the EstablishmentManager.
+     * If you have multiple messages, use the list variant, so the messages may be bundled efficiently.
      *
-     *  @param msg the message to send, which must have an established peer
-     *  @param peer the message MUST be going to this peer
+     * @param msg the message to send, which must have an established peer
+     * @param peer the message MUST be going to this peer
      */
     void send(I2NPMessage msg, PeerState peer) {
         try {
@@ -2867,13 +2863,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  "injected" message from the EstablishmentManager, plus pending messages to send,
-     *  so the messages may be bundled efficiently. Called at end of outbound establishment.
+     * "injected" message from the EstablishmentManager, plus pending messages to send,
+     * so the messages may be bundled efficiently. Called at end of outbound establishment.
      *
-     *  @param msg may be null if nothing to inject
-     *  @param msgs pending messages to bundle with {@code msg}, non-null, may be empty
-     *  @param peer all messages MUST be going to this peer
-     *  @since 0.9.24
+     * @param msg may be null if nothing to inject
+     * @param msgs pending messages to bundle with {@code msg}, non-null, may be empty
+     * @param peer all messages MUST be going to this peer
+     * @since 0.9.24
      */
     void send(I2NPMessage msg, List<OutNetMessage> msgs, PeerState peer) {
         try {
@@ -2897,12 +2893,12 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  "injected" messages from the EstablishmentManager.
-     *  Called at end of inbound establishment.
+     * "injected" messages from the EstablishmentManager.
+     * Called at end of inbound establishment.
      *
-     *  @param msgs the messages to bundle, non-null, may be empty
-     *  @param peer all messages MUST be going to this peer
-     *  @since 0.9.24
+     * @param msgs the messages to bundle, non-null, may be empty
+     * @param peer all messages MUST be going to this peer
+     * @since 0.9.24
      */
     void send(List<I2NPMessage> msgs, PeerState peer) {
         try {
@@ -2970,18 +2966,18 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Update our IPv4 address and optionally tell the router to rebuild and republish the router info.
+     * Update our IPv4 address and optionally tell the router to rebuild and republish the router info.
      *
-     *  If PROP_EXTERNAL_HOST is set, use those addresses (comma/space separated).
-     *  If a hostname is configured in that property, use it.
-     *  As of 0.9.32, a hostname is resolved here into one or more addresses
-     *  and the IPs are published, to implement proposal 141.
+     * If PROP_EXTERNAL_HOST is set, use those addresses (comma/space separated).
+     * If a hostname is configured in that property, use it.
+     * As of 0.9.32, a hostname is resolved here into one or more addresses
+     * and the IPs are published, to implement proposal 141.
      *
-     *  A max of one v4 and one v6 address will be set. Significant changes both
-     *  here and in NTCP would be required to publish multiple v4 or v6 addresses.
+     * A max of one v4 and one v6 address will be set. Significant changes both
+     * here and in NTCP would be required to publish multiple v4 or v6 addresses.
      *
-     *  @param allowRebuildRouterInfo whether to tell the router
-     *  @return the new address if changed, else null
+     * @param allowRebuildRouterInfo whether to tell the router
+     * @return the new address if changed, else null
      */
     private RouterAddress rebuildExternalAddress(boolean allowRebuildRouterInfo, boolean ipv6) {
         if (_log.shouldDebug())
@@ -3067,13 +3063,12 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Update our IPv4 or IPv6 address and optionally tell the router to rebuild and republish the router info.
+     * Update our IPv4 or IPv6 address and optionally tell the router to rebuild and republish the router info.
      *
-     *  @param ip new ip valid IPv4 or IPv6 or null
-     *  @param port new valid port or -1
-     *  @param allowRebuildRouterInfo whether to tell the router
-     *  @return the new address if changed, else null
-     *  @since IPv6
+     * @param ip new ip valid IPv4 or IPv6 or null
+     * @param port new valid port or -1
+     * @param allowRebuildRouterInfo whether to tell the router
+     * @return the new address if changed, else null
      */
     private RouterAddress rebuildExternalAddress(byte[] ip, int port, boolean allowRebuildRouterInfo) {
         if (_log.shouldDebug())
@@ -3086,15 +3081,14 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Update our IPv4 or IPv6 address and optionally tell the router to rebuild and republish the router info.
-     *  FIXME no way to remove an IPv6 address
+     * Update our IPv4 or IPv6 address and optionally tell the router to rebuild and republish the router info.
+     * FIXME no way to remove an IPv6 address
      *
-     *  @param host new validated IPv4 or IPv6 or DNS hostname or null
-     *              or ":" to force IPv6 introducer rebuild
-     *  @param port new validated port or 0/-1
-     *  @param allowRebuildRouterInfo whether to tell the router
-     *  @return the new address if changed, else null
-     *  @since IPv6
+     * @param host new validated IPv4 or IPv6 or DNS hostname or null
+     * or ":" to force IPv6 introducer rebuild
+     * @param port new validated port or 0/-1
+     * @param allowRebuildRouterInfo whether to tell the router
+     * @return the new address if changed, else null
      */
     private RouterAddress rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
         /** Lock for rebuilding external address. */
@@ -3104,10 +3098,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Rebuild the external address from the given validated host; caller must hold the rebuild lock.
+     * Rebuild the external address from the given validated host; caller must hold the rebuild lock.
      *
-     *  @param host new validated IPv4 or IPv6 or DNS hostname or null
-     *              or ":" to force IPv6 introducer rebuild
+     * @param host new validated IPv4 or IPv6 or DNS hostname or null
+     * or ":" to force IPv6 introducer rebuild
      */
     private RouterAddress locked_rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
         if (_log.shouldDebug())
@@ -3138,14 +3132,14 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Rebuild the external address of a hidden router: nothing is published,
-     *  so only an address with 4/6 caps is made.
+     * Rebuild the external address of a hidden router: nothing is published,
+     * so only an address with 4/6 caps is made.
      *
-     *  @param host new validated host or null
-     *  @param port new validated port or 0/-1
-     *  @param allowRebuildRouterInfo whether to tell the router
-     *  @param isIPv6 true for an IPv6 address
-     *  @return the new address if changed, else null
+     * @param host new validated host or null
+     * @param port new validated port or 0/-1
+     * @param allowRebuildRouterInfo whether to tell the router
+     * @param isIPv6 true for an IPv6 address
+     * @return the new address if changed, else null
      */
     private RouterAddress rebuildHiddenExternalAddress(String host, int port, boolean allowRebuildRouterInfo, boolean isIPv6) {
         OrderedProperties options = new OrderedProperties();
@@ -3195,15 +3189,15 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Pick inbound introducers for the address options.
-     *  The intro manager now sorts introducers, so deepEquals() will not fail
-     *  even with the same introducers (was only a problem when we had very
-     *  very few peers to pick from).
+     * Pick inbound introducers for the address options.
+     * The intro manager now sorts introducers, so deepEquals() will not fail
+     * even with the same introducers (was only a problem when we had very
+     * very few peers to pick from).
      *
-     *  @param isIPv6 true for an IPv6 address
-     *  @param current current address, used as the introducer pool source
-     *  @param options address options to fill in
-     *  @return true if introducers were selected
+     * @param isIPv6 true for an IPv6 address
+     * @param current current address, used as the introducer pool source
+     * @param options address options to fill in
+     * @return true if introducers were selected
      */
     private boolean selectIntroducers(boolean isIPv6, RouterAddress current, OrderedProperties options) {
         int found = _introManager.pickInbound(current, isIPv6, options, PUBLIC_RELAY_COUNT);
@@ -3222,12 +3216,12 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Select the address capacity string for the given state.
+     * Select the address capacity string for the given state.
      *
-     *  @param isIPv6 true for an IPv6 address
-     *  @param directIncluded whether a direct address is in the options
-     *  @param introducersRequired whether this address must have introducers
-     *  @return the capacity string
+     * @param isIPv6 true for an IPv6 address
+     * @param directIncluded whether a direct address is in the options
+     * @param introducersRequired whether this address must have introducers
+     * @return the capacity string
      */
     private String selectCapacity(boolean isIPv6, boolean directIncluded, boolean introducersRequired) {
         if (!canTestAsCharlie(isIPv6)) {
@@ -3242,17 +3236,17 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Publish the fully populated address (direct and/or introducers).
+     * Publish the fully populated address (direct and/or introducers).
      *
-     *  @param host new validated host or null
-     *  @param port new validated port or 0/-1
-     *  @param allowRebuildRouterInfo whether to tell the router
-     *  @param isIPv6 true for an IPv6 address
-     *  @param directIncluded whether a direct address is in the options
-     *  @param introducersIncluded whether introducers are in the options
-     *  @param mtu the MTU for this address
-     *  @param options address options (host, port, caps, mtu, introducers)
-     *  @return the new address if changed, else null
+     * @param host new validated host or null
+     * @param port new validated port or 0/-1
+     * @param allowRebuildRouterInfo whether to tell the router
+     * @param isIPv6 true for an IPv6 address
+     * @param directIncluded whether a direct address is in the options
+     * @param introducersIncluded whether introducers are in the options
+     * @param mtu the MTU for this address
+     * @param options address options (host, port, caps, mtu, introducers)
+     * @return the new address if changed, else null
      */
     private RouterAddress rebuildPublishedAddress(String host, int port, boolean allowRebuildRouterInfo, boolean isIPv6,
                                                   boolean directIncluded, boolean introducersIncluded, int mtu, OrderedProperties options) {
@@ -3323,16 +3317,16 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  No direct address and no introducers available; publish an empty
-     *  "4" or "6" address so peers know the address exists, and retry later.
+     * No direct address and no introducers available; publish an empty
+     * "4" or "6" address so peers know the address exists, and retry later.
      *
-     *  @param host new validated host or null
-     *  @param port new validated port or 0/-1
-     *  @param allowRebuildRouterInfo whether to tell the router
-     *  @param isIPv6 true for an IPv6 address
-     *  @param introducersRequired whether this address must have introducers
-     *  @param mtu the MTU for this address
-     *  @return the new address if changed, else null
+     * @param host new validated host or null
+     * @param port new validated port or 0/-1
+     * @param allowRebuildRouterInfo whether to tell the router
+     * @param isIPv6 true for an IPv6 address
+     * @param introducersRequired whether this address must have introducers
+     * @param mtu the MTU for this address
+     * @return the new address if changed, else null
      */
     private RouterAddress rebuildEmptyAddress(String host, int port, boolean allowRebuildRouterInfo, boolean isIPv6,
                                               boolean introducersRequired, int mtu) {
@@ -3368,15 +3362,15 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Simple storage of IP and port, since
-     *  we don't put them in the real, published RouterAddress anymore
-     *  if we are firewalled.
+     * Simple storage of IP and port, since
+     * we don't put them in the real, published RouterAddress anymore
+     * if we are firewalled.
      *
-     *  Side effect: Sets our MTU
+     * Side effect: Sets our MTU
      *
-     *  Caller must sync on _rebuildLock
+     * Caller must sync on _rebuildLock
      *
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     private void replaceCurrentExternalAddress(RouterAddress ra, boolean isIPv6) {
         if (isIPv6)
@@ -3390,15 +3384,15 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Avoid deadlocks part 999
-     *  @since 0.9.49
+     * Avoid deadlocks part 999
+     * @since 0.9.49
      */
     private void rebuildRouterInfo() {
         (new RebuildEvent()).schedule(0);
     }
 
     /**
-     *  @since 0.9.49
+     * @since 0.9.49
      */
     private class RebuildEvent extends SimpleTimer2.TimedEvent {
         /** Rebuild event. */
@@ -3412,13 +3406,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Simple fetch of stored IP and port, since
-     *  we don't put them in the real, published RouterAddress anymore
-     *  if we are firewalled.
+     * Simple fetch of stored IP and port, since
+     * we don't put them in the real, published RouterAddress anymore
+     * if we are firewalled.
      *
-     *  @param isIPv6 true for IPv6, false for IPv4
-     *  @return the external address or null
-     *  @since 0.9.18, public for PacketBuilder2 and TransportManager since 0.9.50
+     * @param isIPv6 true for IPv6, false for IPv4
+     * @return the external address or null
+     * @since 0.9.18, public for PacketBuilder2 and TransportManager since 0.9.50
      */
     public RouterAddress getCurrentExternalAddress(boolean isIPv6) {
         // deadlock thru here ticket #1699
@@ -3429,9 +3423,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Replace then tell NTCP that we changed.
+     * Replace then tell NTCP that we changed.
      *
-     *  @param address the new address or null to remove all
+     * @param address the new address or null to remove all
      */
     @Override
     protected void replaceAddress(RouterAddress address) {
@@ -3440,10 +3434,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Remove then tell NTCP that we changed.
+     * Remove then tell NTCP that we changed.
      *
-     *  @param address the address to remove
-     *  @since 0.9.20
+     * @param address the address to remove
+     * @since 0.9.20
      */
     @Override
     protected void removeAddress(RouterAddress address) {
@@ -3452,10 +3446,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Remove then tell NTCP that we changed.
+     * Remove then tell NTCP that we changed.
      *
-     *  @param ipv6 true to remove the IPv6 address, false for IPv4
-     *  @since 0.9.20
+     * @param ipv6 true to remove the IPv6 address, false for IPv4
+     * @since 0.9.20
      */
     @Override
     protected void removeAddress(boolean ipv6) {
@@ -3466,7 +3460,7 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Do we require introducers?
+     * Do we require introducers?
      */
     private boolean introducersRequired(boolean ipv6) {
         if (_context.router().isHidden())
@@ -3519,13 +3513,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  MIGHT we require introducers?
-     *  This is like introducersRequired, but if we aren't sure, this returns true.
-     *  Used only by EstablishmentManager.
+     * MIGHT we require introducers?
+     * This is like introducersRequired, but if we aren't sure, this returns true.
+     * Used only by EstablishmentManager.
      *
-     *  @param ipv6 {@code true} to test the IPv6 side of our reachability
-     *  @return {@code true} if introducers may be required
-     *  @since 0.9.24
+     * @param ipv6 {@code true} to test the IPv6 side of our reachability
+     * @return {@code true} if introducers may be required
+     * @since 0.9.24
      */
     boolean introducersMaybeRequired(boolean ipv6) {
         if (_context.router().isHidden())
@@ -3573,11 +3567,11 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  For EstablishmentManager.
+     * For EstablishmentManager.
      *
-     *  @param ipv6 {@code true} to test the IPv6 side of our reachability
-     *  @return {@code true} if we are eligible to offer relay introductions
-     *  @since 0.9.3
+     * @param ipv6 {@code true} to test the IPv6 side of our reachability
+     * @return {@code true} if we are eligible to offer relay introductions
+     * @since 0.9.3
      */
     boolean canIntroduce(boolean ipv6) {
         // we don't expect inbound connections when hidden, but it could happen
@@ -3754,10 +3748,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Whether the peer for the given destination is backlogged.
+     * Whether the peer for the given destination is backlogged.
      *
-     *  @return whether backlogged
-     *  @since 0.9.3
+     * @return whether backlogged
+     * @since 0.9.3
      */
     @Override
     public boolean isBacklogged(Hash dest) {
@@ -3862,50 +3856,50 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  XDH key factory for SSU2, or null if not configured for SSU2.
+     * XDH key factory for SSU2, or null if not configured for SSU2.
      *
-     *  @return null if not configured for SSU2
-     *  @since 0.9.54
+     * @return null if not configured for SSU2
+     * @since 0.9.54
      */
     X25519KeyFactory getXDHFactory() {
         return _xdhFactory;
     }
 
     /**
-     *  Packet builder for SSU2, or null if not configured for SSU2.
+     * Packet builder for SSU2, or null if not configured for SSU2.
      *
-     *  @return null if not configured for SSU2
-     *  @since 0.9.54
+     * @return null if not configured for SSU2
+     * @since 0.9.54
      */
     PacketBuilder2 getBuilder2() {
         return _packetBuilder2;
     }
 
     /**
-     *  The introduction manager
+     * The introduction manager
      *
-     *  @return the manager, or null if not started
-     *  @since 0.9.54
+     * @return the manager, or null if not started
+     * @since 0.9.54
      */
     IntroductionManager getIntroManager() {
         return _introManager;
     }
 
     /**
-     *  The peer test manager
+     * The peer test manager
      *
-     *  @return the manager, or null if not started
-     *  @since 0.9.54
+     * @return the manager, or null if not started
+     * @since 0.9.54
      */
     PeerTestManager getPeerTestManager() {
         return _testManager;
     }
 
     /**
-     *  The inbound fragment reassembler
+     * The inbound fragment reassembler
      *
-     *  @return the reassembler, or null if not started
-     *  @since 0.9.54
+     * @return the reassembler, or null if not started
+     * @since 0.9.54
      */
     InboundMessageFragments getInboundFragments() {
         return _inboundFragments;
@@ -4091,12 +4085,12 @@ if (_alive)
     }
 
     /**
-     *  Whether a comm-system reachability status means we are firewalled for
-     *  at least one address family.
+     * Whether a comm-system reachability status means we are firewalled for
+     * at least one address family.
      *
-     *  @param status the current comm-system status
-     *  @return true for any of the six firewalled statuses
-     *  @since 0.9.71+
+     * @param status the current comm-system status
+     * @return true for any of the six firewalled statuses
+     * @since 0.9.71+
      */
     static boolean isFirewalled(net.i2p.router.CommSystemFacade.Status status) {
         return status == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
@@ -4108,14 +4102,14 @@ if (_alive)
     }
 
     /**
-     *  Adjust the idle-timeout towards the target as a function of spare
-     *  connection capacity, ramping slowly when the loop is running short.
+     * Adjust the idle-timeout towards the target as a function of spare
+     * connection capacity, ramping slowly when the loop is running short.
      *
-     *  @param expireTimeout current idle-expire timeout
-     *  @param haveCap true when connection capacity remains
-     *  @param lastLoopShort true if the previous loop was a short (fast) pass
-     *  @return the adjusted timeout, clamped to [MIN_EXPIRE_TIMEOUT, EXPIRE_TIMEOUT]
-     *  @since 0.9.71+
+     * @param expireTimeout current idle-expire timeout
+     * @param haveCap true when connection capacity remains
+     * @param lastLoopShort true if the previous loop was a short (fast) pass
+     * @return the adjusted timeout, clamped to [MIN_EXPIRE_TIMEOUT, EXPIRE_TIMEOUT]
+     * @since 0.9.71+
      */
     static long adjustExpireTimeout(long expireTimeout, boolean haveCap, boolean lastLoopShort) {
         if (haveCap) {
@@ -4136,59 +4130,59 @@ if (_alive)
     }
 
     /**
-     *  Hard-cap idle cutoff: peers idle past this are dropped when the
-     *  connection maximum is exceeded, otherwise the cutoff is unbounded.
+     * Hard-cap idle cutoff: peers idle past this are dropped when the
+     * connection maximum is exceeded, otherwise the cutoff is unbounded.
      *
-     *  @param now current time ms
-     *  @param overCapacity true when peer count exceeds the connection max
-     *  @return the idle cutoff (30s before now), or Long.MIN_VALUE when not over capacity
-     *  @since 0.9.71+
+     * @param now current time ms
+     * @param overCapacity true when peer count exceeds the connection max
+     * @return the idle cutoff (30s before now), or Long.MIN_VALUE when not over capacity
+     * @since 0.9.71+
      */
     static long idleHardCutoff(long now, boolean overCapacity) {
         return overCapacity ? now - 30*1000L : Long.MIN_VALUE;
     }
 
     /**
-     *  Idle cutoff for a peer tier. Firewalled routers keep peers much
-     *  longer by flooring the cutoff at {@code firewalledMin}.
+     * Idle cutoff for a peer tier. Firewalled routers keep peers much
+     * longer by flooring the cutoff at {@code firewalledMin}.
      *
-     *  @param now current time ms
-     *  @param timeout tier timeout
-     *  @param weAreFirewalled true for lenient firewalled behavior
-     *  @param firewalledMin minimum timeout when firewalled
-     *  @return the inactivity cutoff; peers idle before it are expirable
-     *  @since 0.9.71+
+     * @param now current time ms
+     * @param timeout tier timeout
+     * @param weAreFirewalled true for lenient firewalled behavior
+     * @param firewalledMin minimum timeout when firewalled
+     * @return the inactivity cutoff; peers idle before it are expirable
+     * @since 0.9.71+
      */
     static long inactivityCutoff(long now, long timeout, boolean weAreFirewalled, long firewalledMin) {
         return weAreFirewalled ? now - Math.max(timeout, firewalledMin) : now - timeout;
     }
 
     /**
-     *  Whether we have recently relied on this peer as a relay or
-     *  introducer, in which case it gets the long inactivity tier.
+     * Whether we have recently relied on this peer as a relay or
+     * introducer, in which case it gets the long inactivity tier.
      *
-     *  @param weRelayToThemAs nonzero when we offer this peer as introducer
-     *  @param introducerTime ms since this peer was used as introducer
-     *  @param pingCutoff the 2-hour reference cutoff
-     *  @return true if the peer was relied on recently
-     *  @since 0.9.71+
+     * @param weRelayToThemAs nonzero when we offer this peer as introducer
+     * @param introducerTime ms since this peer was used as introducer
+     * @param pingCutoff the 2-hour reference cutoff
+     * @return true if the peer was relied on recently
+     * @since 0.9.71+
      */
     static boolean reliedOnRecently(long weRelayToThemAs, long introducerTime, long pingCutoff) {
         return weRelayToThemAs > 0 || introducerTime > pingCutoff;
     }
 
     /**
-     *  Whether an inbound (or capacity-starved) peer with may-disconnect
-     *  set and near-zero traffic is a stale candidate for the aggressive
-     *  15-second cutoff.
+     * Whether an inbound (or capacity-starved) peer with may-disconnect
+     * set and near-zero traffic is a stale candidate for the aggressive
+     * 15-second cutoff.
      *
-     *  @param haveCap true when connection capacity remains
-     *  @param inbound true if the peer connected inbound
-     *  @param mayDisconnect peer's may-disconnect flag
-     *  @param messagesReceived messages received from the peer
-     *  @param messagesSent messages sent to the peer
-     *  @return true when the peer qualifies for the stale-cutoff tier
-     *  @since 0.9.71+
+     * @param haveCap true when connection capacity remains
+     * @param inbound true if the peer connected inbound
+     * @param mayDisconnect peer's may-disconnect flag
+     * @param messagesReceived messages received from the peer
+     * @param messagesSent messages sent to the peer
+     * @return true when the peer qualifies for the stale-cutoff tier
+     * @since 0.9.71+
      */
     static boolean mayDisconnectLowTraffic(boolean haveCap, boolean inbound, boolean mayDisconnect,
                                            int messagesReceived, int messagesSent) {
@@ -4197,15 +4191,15 @@ if (_alive)
     }
 
     /**
-     *  Select the inactivity tier for a peer.
+     * Select the inactivity tier for a peer.
      *
-     *  @param reliedOnRecently peer acted as relay/introducer recently
-     *  @param mayDisconnectLowTraffic peer is stale and may disconnect
-     *  @param longInactivityCutoff lenient tier cutoff
-     *  @param mayDisconCutoff aggressive stale-peer cutoff
-     *  @param shortInactivityCutoff default tier cutoff
-     *  @return the cutoff to compare both last-send and last-receive against
-     *  @since 0.9.71+
+     * @param reliedOnRecently peer acted as relay/introducer recently
+     * @param mayDisconnectLowTraffic peer is stale and may disconnect
+     * @param longInactivityCutoff lenient tier cutoff
+     * @param mayDisconCutoff aggressive stale-peer cutoff
+     * @param shortInactivityCutoff default tier cutoff
+     * @return the cutoff to compare both last-send and last-receive against
+     * @since 0.9.71+
      */
     static long pickInactivityCutoff(boolean reliedOnRecently, boolean mayDisconnectLowTraffic,
                                      long longInactivityCutoff, long mayDisconCutoff, long shortInactivityCutoff) {
@@ -4217,44 +4211,44 @@ if (_alive)
     }
 
     /**
-     *  Whether a peer has been idle (no receive and no send) since the
-     *  given cutoff.
+     * Whether a peer has been idle (no receive and no send) since the
+     * given cutoff.
      *
-     *  @param lastReceive last receive time ms
-     *  @param lastSend last send time ms
-     *  @param cutoff inactivity cutoff ms
-     *  @return true if both activity stamps precede the cutoff
-     *  @since 0.9.71+
+     * @param lastReceive last receive time ms
+     * @param lastSend last send time ms
+     * @param cutoff inactivity cutoff ms
+     * @return true if both activity stamps precede the cutoff
+     * @since 0.9.71+
      */
     static boolean idleSince(long lastReceive, long lastSend, long cutoff) {
         return lastReceive < cutoff && lastSend < cutoff;
     }
 
     /**
-     *  Firewall-keepalive slice gate: roughly one peer in SLICES pings per
-     *  pass, so pings are spread out over the short loop.
+     * Firewall-keepalive slice gate: roughly one peer in SLICES pings per
+     * pass, so pings are spread out over the short loop.
      *
-     *  @param runCount current expire-loop run counter
-     *  @param peerHash peer's hashCode
-     *  @return true if this peer is scheduled for a keepalive ping
-     *  @since 0.9.71+
+     * @param runCount current expire-loop run counter
+     * @param peerHash peer's hashCode
+     * @return true if this peer is scheduled for a keepalive ping
+     * @since 0.9.71+
      */
     static boolean firewallPingSliceMatched(int runCount, int peerHash) {
         return ((runCount ^ peerHash) & (SLICES - 1)) == 0;
     }
 
     /**
-     *  Whether a firewall keepalive ping should be sent to this peer:
-     *  ping mode on, peer in this pass's slice, and no send-or-ping or
-     *  receive in the PING_FIREWALL_CUTOFF window.
+     * Whether a firewall keepalive ping should be sent to this peer:
+     * ping mode on, peer in this pass's slice, and no send-or-ping or
+     * receive in the PING_FIREWALL_CUTOFF window.
      *
-     *  @param shouldPingFirewall ping mode is active
-     *  @param sliceMatched peer selected for this pass
-     *  @param lastSendOrPing last send-or-ping time ms
-     *  @param lastReceive last receive time ms
-     *  @param pingFirewallCutoff ping-due cutoff ms
-     *  @return true when the keepalive ping should be sent
-     *  @since 0.9.71+
+     * @param shouldPingFirewall ping mode is active
+     * @param sliceMatched peer selected for this pass
+     * @param lastSendOrPing last send-or-ping time ms
+     * @param lastReceive last receive time ms
+     * @param pingFirewallCutoff ping-due cutoff ms
+     * @return true when the keepalive ping should be sent
+     * @since 0.9.71+
      */
     static boolean shouldFirewallPing(boolean shouldPingFirewall, boolean sliceMatched,
                                       long lastSendOrPing, long lastReceive, long pingFirewallCutoff) {
@@ -4263,32 +4257,32 @@ if (_alive)
     }
 
     /**
-     *  Whether the peer session key is old enough to warrant re-publishing
-     *  our RouterInfo. Publishes on the first loop at/after each RI_STORE_INTERVAL
-     *  boundary.
+     * Whether the peer session key is old enough to warrant re-publishing
+     * our RouterInfo. Publishes on the first loop at/after each RI_STORE_INTERVAL
+     * boundary.
      *
-     *  @param uptime ms since the peer session key was established
-     *  @param loopTime ms of the current loop interval
-     *  @return true when a periodic RouterInfo store is due
-     *  @since 0.9.71+
+     * @param uptime ms since the peer session key was established
+     * @param loopTime ms of the current loop interval
+     * @return true when a periodic RouterInfo store is due
+     * @since 0.9.71+
      */
     static boolean shouldStoreRI(long uptime, long loopTime) {
         return uptime >= RI_STORE_INTERVAL && (uptime % RI_STORE_INTERVAL) < loopTime;
     }
 
     /**
-     *  IPv4 only
+     * IPv4 only
      */
     private void setReachabilityStatus(Status status) {
         setReachabilityStatus(status, false);
     }
 
     /**
-     *  Update the reachability status of this router, optionally for an IPv6 change.
+     * Update the reachability status of this router, optionally for an IPv6 change.
      *
-     *  @param status the merged IPv4/IPv6 reachability status
-     *  @param isIPv6 Is the change an IPv6 change?
-     *  @since 0.9.27
+     * @param status the merged IPv4/IPv6 reachability status
+     * @param isIPv6 Is the change an IPv6 change?
+     * @since 0.9.27
      */
     void setReachabilityStatus(Status status, boolean isIPv6) {
         /** Lock for rebuilding external address. */
@@ -4298,11 +4292,11 @@ if (_alive)
     }
 
     /**
-     *  1) Merge IPv4 or IPv6 newStatus into the current IPv4+IPv6 status
-     *  2a) If current status changed, call rebuildExternalAddress()
-     *  2b) Otherwise, If we need to retest, call PeerTestEvent.forceRunSoon()
+     * 1) Merge IPv4 or IPv6 newStatus into the current IPv4+IPv6 status
+     * 2a) If current status changed, call rebuildExternalAddress()
+     * 2b) Otherwise, If we need to retest, call PeerTestEvent.forceRunSoon()
      *
-     *  @param isIPv6 Is the change an IPv6 change?
+     * @param isIPv6 Is the change an IPv6 change?
      */
     private void locked_setReachabilityStatus(Status newStatus, boolean isIPv6) {
         Status old = _reachabilityStatus;
@@ -4402,17 +4396,17 @@ if (_alive)
     }
 
     /**
-     *  Whether an UNKNOWN reachability update should reschedule a peer test.
+     * Whether an UNKNOWN reachability update should reschedule a peer test.
      *
-     *  UNKNOWN is only a click-flag, never stored; any UNKNOWN result against
-     *  UNKNOWN always repeats the test. States with an unknown IPv6 component
-     *  also repeat on an IPv6 test (independent of the IPv4 component), while the
-     *  remaining statuses are unchanged and just bump the counter.
+     * UNKNOWN is only a click-flag, never stored; any UNKNOWN result against
+     * UNKNOWN always repeats the test. States with an unknown IPv6 component
+     * also repeat on an IPv6 test (independent of the IPv4 component), while the
+     * remaining statuses are unchanged and just bump the counter.
      *
-     *  @param old the current reachability status
-     *  @param isIPv6 true if the update concerns IPv6
-     *  @return true if a peer test should be run immediately
-     *  @since 0.9.71+
+     * @param old the current reachability status
+     * @param isIPv6 true if the update concerns IPv6
+     * @return true if a peer test should be run immediately
+     * @since 0.9.71+
      */
     static boolean shouldRerunStatusTest(Status old, boolean isIPv6) {
         switch (old) {
@@ -4431,15 +4425,15 @@ if (_alive)
     }
 
     /**
-     *  Collapse a merged status when the transport runs in IPv6-only mode.
+     * Collapse a merged status when the transport runs in IPv6-only mode.
      *
-     *  The IPv4 component cannot be tested, so any merged state with an IPv4
-     *  UNKNOWN component becomes the matching DISABLED state.
+     * The IPv4 component cannot be tested, so any merged state with an IPv4
+     * UNKNOWN component becomes the matching DISABLED state.
      *
-     *  @param status the merged IPv4+IPv6 status
-     *  @param isIPv6Only true if the transport is configured IPv6-only
-     *  @return the status to store
-     *  @since 0.9.71+
+     * @param status the merged IPv4+IPv6 status
+     * @param isIPv6Only true if the transport is configured IPv6-only
+     * @return the status to store
+     * @since 0.9.71+
      */
     static Status applyIPv6Only(Status status, boolean isIPv6Only) {
         if (!isIPv6Only)
@@ -4454,17 +4448,17 @@ if (_alive)
     }
 
     /**
-     *  Collapse a merged status when the router has no IPv6 address to publish.
+     * Collapse a merged status when the router has no IPv6 address to publish.
      *
-     *  The IPv6 component of the status is dropped and only the IPv4 result
-     *  matters; in particular a firewalled-or-ok v6 component cannot turn the
-     *  IPv4 result into a paradox (firewalled-&gt;OK-&gt;firewalled+OK thrash),
-     *  so the *_IPV6_OK states map down to the plain IPv4 equivalents.
+     * The IPv6 component of the status is dropped and only the IPv4 result
+     * matters; in particular a firewalled-or-ok v6 component cannot turn the
+     * IPv4 result into a paradox (firewalled-&gt;OK-&gt;firewalled+OK thrash),
+     * so the *_IPV6_OK states map down to the plain IPv4 equivalents.
      *
-     *  @param status the merged IPv4+IPv6 status
-     *  @param hasIPv6Address true if the router has an IPv6 address to publish
-     *  @return the status to store
-     *  @since 0.9.71+
+     * @param status the merged IPv4+IPv6 status
+     * @param hasIPv6Address true if the router has an IPv6 address to publish
+     * @return the status to store
+     * @since 0.9.71+
      */
     static Status applyNoIPv6Address(Status status, boolean hasIPv6Address) {
         if (hasIPv6Address)
@@ -4484,18 +4478,18 @@ if (_alive)
     }
 
     /**
-     *  Whether the status transition must be confirmed by a second test before
-     *  it is committed, to prevent thrashing between OK and firewalled.
+     * Whether the status transition must be confirmed by a second test before
+     * it is committed, to prevent thrashing between OK and firewalled.
      *
-     *  Any jump into, out of, or between the firewalled group is staged as
-     *  pending confirmation; for IPv4, leaving the IPv4-unknown group is also
-     *  staged (an IPv6-unrelated UNKNOWN result must not flip IPv4 flapping).
+     * Any jump into, out of, or between the firewalled group is staged as
+     * pending confirmation; for IPv4, leaving the IPv4-unknown group is also
+     * staged (an IPv6-unrelated UNKNOWN result must not flip IPv4 flapping).
      *
-     *  @param old the current reachability status
-     *  @param status the (possibly adjusted) merged new status
-     *  @param isIPv6 true if the update concerns IPv6
-     *  @return true if the new status must be confirmed by a second test
-     *  @since 0.9.71+
+     * @param old the current reachability status
+     * @param status the (possibly adjusted) merged new status
+     * @param isIPv6 true if the update concerns IPv6
+     * @return true if the new status must be confirmed by a second test
+     * @since 0.9.71+
      */
     static boolean requiresConfirmation(Status old, Status status, boolean isIPv6) {
         return (STATUS_OK.contains(old) && STATUS_FW.contains(status)) ||
@@ -4505,14 +4499,14 @@ if (_alive)
     }
 
     /**
-     *  The IPv6 external-address rebuild to perform after a committed status
-     *  change.
+     * The IPv6 external-address rebuild to perform after a committed status
+     * change.
      *
-     *  @param old the previous reachability status
-     *  @param status the new committed reachability status
-     *  @param explicitAddressSpecified true if the operator configured an explicit IPv6 address
-     *  @return the rebuild action to take
-     *  @since 0.9.71+
+     * @param old the previous reachability status
+     * @param status the new committed reachability status
+     * @param explicitAddressSpecified true if the operator configured an explicit IPv6 address
+     * @return the rebuild action to take
+     * @since 0.9.71+
      */
     static IPv6Rebuild decideIPv6Rebuild(Status old, Status status, boolean explicitAddressSpecified) {
         if (STATUS_IPV6_FW_2.contains(status))
@@ -4523,9 +4517,9 @@ if (_alive)
     }
 
     /**
-     *  IPv6 external-address rebuild action for a reachability status change.
+     * IPv6 external-address rebuild action for a reachability status change.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     enum IPv6Rebuild {
         /** publish i/s/v with the existing address (must include the IPv6 flag) */
@@ -4553,19 +4547,19 @@ if (_alive)
     }
 
     /**
-     *  Is IPv4 Symmetric NATted?
-     *  @return {@code true} if the IPv4 status is one of the SYMNAT states
-     *  @since 0.9.57
+     * Is IPv4 Symmetric NATted?
+     * @return {@code true} if the IPv4 status is one of the SYMNAT states
+     * @since 0.9.57
      */
     boolean isSymNatted() {
         return STATUS_IPV4_SYMNAT.contains(getReachabilityStatus());
     }
 
     /**
-     *  Can we be a Charlie right now?
-     *  @param ipv6 {@code true} to test the IPv6 side of our reachability
-     *  @return true if we can participate
-     *  @since 0.9.57
+     * Can we be a Charlie right now?
+     * @param ipv6 {@code true} to test the IPv6 side of our reachability
+     * @return true if we can participate
+     * @since 0.9.57
      */
     boolean canTestAsCharlie(boolean ipv6) {
         Status status = getReachabilityStatus();
@@ -4575,22 +4569,22 @@ if (_alive)
     }
 
     /**
-     *  Pick a Bob (if we are Alice) or a Charlie (if we are Bob).
+     * Pick a Bob (if we are Alice) or a Charlie (if we are Bob).
      *
-     *  For Bob (as called from PeerTestEvent below), returns an established IPv4/v6 peer.
-     *  While the protocol allows Alice to select an unestablished Bob, we don't support that.
+     * For Bob (as called from PeerTestEvent below), returns an established IPv4/v6 peer.
+     * While the protocol allows Alice to select an unestablished Bob, we don't support that.
      *
-     *  For Charlie (as called from PeerTestManager), returns an established IPv4 or IPv6 peer.
-     *  (doesn't matter how Bob and Charlie communicate)
+     * For Charlie (as called from PeerTestManager), returns an established IPv4 or IPv6 peer.
+     * (doesn't matter how Bob and Charlie communicate)
      *
-     *  Any returned peer must advertise an IPv4 address to prove it is IPv4-capable.
-     *  Ditto for v6.
+     * Any returned peer must advertise an IPv4 address to prove it is IPv4-capable.
+     * Ditto for v6.
      *
-     *  @param peerRole The role of the peer we are looking for, BOB or CHARLIE only (NOT our role)
-     *  @param version 1 or 2 for role CHARLIE; ignored for role BOB
-     *  @param isIPv6 true to get a v6-capable peer back
-     *  @param dontInclude may be null
-     *  @return peer or null
+     * @param peerRole The role of the peer we are looking for, BOB or CHARLIE only (NOT our role)
+     * @param version 1 or 2 for role CHARLIE; ignored for role BOB
+     * @param isIPv6 true to get a v6-capable peer back
+     * @param dontInclude may be null
+     * @return peer or null
      */
     PeerState pickTestPeer(PeerTestState.Role peerRole, int version, boolean isIPv6, RemoteHostId dontInclude) {
         if (peerRole == ALICE)
@@ -4677,9 +4671,9 @@ if (_alive)
     }
 
     /**
-     *  Periodically ping the introducers, split out since we need to do it faster
-     *  than we rebuild our address.
-     *  @since 0.8.11
+     * Periodically ping the introducers, split out since we need to do it faster
+     * than we rebuild our address.
+     * @since 0.8.11
      */
     private class PingIntroducers extends SimpleTimer2.TimedEvent {
         /** Ping introducers. */
@@ -4692,8 +4686,8 @@ if (_alive)
     }
 
     /**
-     *  For PeerStateDestroyed, to kill the timers on overflow, else the memory won't be freed.
-     *  @since 0.9.57
+     * For PeerStateDestroyed, to kill the timers on overflow, else the memory won't be freed.
+     * @since 0.9.57
      */
     private static class DestroyedCache extends LHMCache<Long, PeerStateDestroyed> {
 

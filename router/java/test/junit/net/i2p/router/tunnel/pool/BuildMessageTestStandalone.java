@@ -60,9 +60,9 @@ public class BuildMessageTestStandalone extends TestCase {
     }
 
     /**
-     *  Test building a message of the given type.
+     * Test building a message of the given type.
      *
-     *  @param testType outbound: 1=ElG; 2=ECIES; 3=ECIES short; inbound: 4-6
+     * @param testType outbound: 1=ElG; 2=ECIES; 3=ECIES short; inbound: 4-6
      */
     private void x_testBuildMessage(RouterContext ctx, int testType) {
         Log log = ctx.logManager().getLog(getClass());
@@ -238,10 +238,10 @@ public class BuildMessageTestStandalone extends TestCase {
     }
 
     /**
-     *  This creates a 3-hop (4 entries in the config) tunnel.
-     *  The first entry in the outbound config is the gateway (us),
-     *  and is mostly ignored.
-     *  Ditto last entry in inbound config.
+     * This creates a 3-hop (4 entries in the config) tunnel.
+     * The first entry in the outbound config is the gateway (us),
+     * and is mostly ignored.
+     * Ditto last entry in inbound config.
      */
     private TunnelCreatorConfig createConfig(I2PAppContext ctx, int testType, boolean isInbound) {
         _peers = new Hash[4];
@@ -282,7 +282,7 @@ public class BuildMessageTestStandalone extends TestCase {
     }
 
     /**
-     *  @since 0.9.51
+     * @since 0.9.51
      */
     public static void main(String[] args) {
         BuildMessageTestStandalone test = new BuildMessageTestStandalone();

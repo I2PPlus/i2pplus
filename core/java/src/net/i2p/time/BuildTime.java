@@ -17,16 +17,16 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 /**
- *  The build date as set in i2p.jar,
- *  and reasonable min and max values for the current time,
- *  to be used as sanity checks.
+ * The build date as set in i2p.jar,
+ * and reasonable min and max values for the current time,
+ * to be used as sanity checks.
  *
- *  Idea taken from Chrome, which assumes any clock more than
- *  2 days before or 1 year after the build date is bad.
+ * Idea taken from Chrome, which assumes any clock more than
+ * 2 days before or 1 year after the build date is bad.
  *
- *  Not maintained as a public API, not for use by plugins or applications.
+ * Not maintained as a public API, not for use by plugins or applications.
  *
- *  @since 0.9.25 modded from FileDumpHelper
+ * @since 0.9.25 modded from FileDumpHelper
  */
 public class BuildTime {
 
@@ -85,29 +85,29 @@ public class BuildTime {
     }
 
     /**
-     *  The build date for i2p.jar.
+     * The build date for i2p.jar.
      *
-     *  @return the earliest possible time if actual build date is unknown
+     * @return the earliest possible time if actual build date is unknown
      */
     public static long getBuildTime() {
         return _buildTime;
     }
 
     /**
-     *  The earliest it could possibly be right now.
-     *  Latest of the build time minus a day, or a hardcoded time.
+     * The earliest it could possibly be right now.
+     * Latest of the build time minus a day, or a hardcoded time.
      *
-     *  @return the time
+     * @return the time
      */
     public static long getEarliestTime() {
         return _earliestTime;
     }
 
     /**
-     *  The latest it could possibly be right now.
-     *  Hardcoded.
+     * The latest it could possibly be right now.
+     * Hardcoded.
      *
-     *  @return the time
+     * @return the time
      */
     public static long getLatestTime() {
         return _latestTime;
@@ -116,9 +116,9 @@ public class BuildTime {
     private BuildTime() {}
 
     /**
-     *  Won't be available on Android or on any builds not using our build.xml.
+     * Won't be available on Android or on any builds not using our build.xml.
      *
-     *  @return 0 if unknown
+     * @return 0 if unknown
      */
     private static long getBuildTime(SimpleDateFormat fmt, String jar) {
         if (SystemVersion.isAndroid()) {
@@ -161,8 +161,8 @@ public class BuildTime {
     }
 
     /**
-     *  Run the BuildTime command-line utility.
-     *  @param args command-line arguments
+     * Run the BuildTime command-line utility.
+     * @param args command-line arguments
      */
     public static void main(String[] args) {
         System.out.println("Hard earliest: " + Instant.ofEpochMilli(EARLIEST_LONG));

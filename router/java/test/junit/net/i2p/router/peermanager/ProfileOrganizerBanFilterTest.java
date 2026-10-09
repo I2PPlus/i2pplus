@@ -27,22 +27,22 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests that no selection path can hand out a banlisted peer.
+ * Tests that no selection path can hand out a banlisted peer.
  *
- *  <p>Motivation: {@code BuildHandler} drops tunnel requests whose next hop is
- *  banned, and a burst of those warnings says peer selection handed out peers the
- *  banlist already held. The ban gate lives in {@code passesBasicGates} rather
- *  than in each selection loop, so the risk is not that a gate is missing but
- *  that some path bypasses the chokepoint. These tests pin the chokepoint from
- *  both sides: the peer is selectable before the ban and unselectable after it,
- *  across the fast tier, the not-failing last-resort pool and the direct
- *  {@code isSelectable} entry point.
+ * <p>Motivation: {@code BuildHandler} drops tunnel requests whose next hop is
+ * banned, and a burst of those warnings says peer selection handed out peers the
+ * banlist already held. The ban gate lives in {@code passesBasicGates} rather
+ * than in each selection loop, so the risk is not that a gate is missing but
+ * that some path bypasses the chokepoint. These tests pin the chokepoint from
+ * both sides: the peer is selectable before the ban and unselectable after it,
+ * across the fast tier, the not-failing last-resort pool and the direct
+ * {@code isSelectable} entry point.
  *
- *  <p>The before/after pairing matters. Asserting only that a banned peer is
- *  rejected would also pass if the peer were rejected for an unrelated reason —
- *  a stale RouterInfo, a lost profile — and would prove nothing about bans.
+ * <p>The before/after pairing matters. Asserting only that a banned peer is
+ * rejected would also pass if the peer were rejected for an unrelated reason —
+ * a stale RouterInfo, a lost profile — and would prove nothing about bans.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class ProfileOrganizerBanFilterTest {
 
@@ -127,8 +127,8 @@ public class ProfileOrganizerBanFilterTest {
     }
 
     /**
-     *  The core contract, on the direct entry point every path funnels through:
-     *  selectable before the ban, not selectable after it.
+     * The core contract, on the direct entry point every path funnels through:
+     * selectable before the ban, not selectable after it.
      */
     @Test
     public void banIsWhatMakesAPeerUnselectable() throws Exception {
@@ -141,9 +141,9 @@ public class ProfileOrganizerBanFilterTest {
     }
 
     /**
-     *  The last-resort pool is the path most likely to bypass a gate, because it
-     *  runs when the tiers could not supply enough peers and is documented as
-     *  willing to consider peers the tier drawers would reject.
+     * The last-resort pool is the path most likely to bypass a gate, because it
+     * runs when the tiers could not supply enough peers and is documented as
+     * willing to consider peers the tier drawers would reject.
      */
     @Test
     public void lastResortPoolSkipsBannedPeers() throws Exception {
@@ -158,10 +158,10 @@ public class ProfileOrganizerBanFilterTest {
     }
 
     /**
-     *  Passing a null exclusion set must not disable ban filtering. The gate is
-     *  documented as independent of the exclusion set, because a caller handing
-     *  over a plain set used to reduce {@code contains()} to a membership test
-     *  and silently skip the banlist.
+     * Passing a null exclusion set must not disable ban filtering. The gate is
+     * documented as independent of the exclusion set, because a caller handing
+     * over a plain set used to reduce {@code contains()} to a membership test
+     * and silently skip the banlist.
      */
     @Test
     public void nullExcludeSetStillFiltersBans() throws Exception {
@@ -191,13 +191,13 @@ public class ProfileOrganizerBanFilterTest {
     }
 
     /**
-     *  Lifting the ban must clear the banlist entry itself.
+     * Lifting the ban must clear the banlist entry itself.
      *
-     *  <p>Deliberately asserts the banlist rather than selectability: banning has
-     *  side effects beyond the entry (the peer is dropped from transport state),
-     *  and whether a just-unbanned peer is immediately selectable again depends on
-     *  those, not on the ban filter. What must hold is that the ban is gone, or
-     *  {@code tearDown} has nothing to clean up and the next test inherits it.
+     * <p>Deliberately asserts the banlist rather than selectability: banning has
+     * side effects beyond the entry (the peer is dropped from transport state),
+     * and whether a just-unbanned peer is immediately selectable again depends on
+     * those, not on the ban filter. What must hold is that the ban is gone, or
+     * {@code tearDown} has nothing to clean up and the next test inherits it.
      */
     @Test
     public void unbanClearsTheBanlistEntry() throws Exception {
@@ -210,9 +210,9 @@ public class ProfileOrganizerBanFilterTest {
     }
 
     /**
-     *  The rejection log needs the ban cause: without it a burst of
-     *  {@code tunnel.buildBanHit} cannot be attributed to whichever subsystem is
-     *  banning peers, and the only alternative is temporary logging in each.
+     * The rejection log needs the ban cause: without it a burst of
+     * {@code tunnel.buildBanHit} cannot be attributed to whichever subsystem is
+     * banning peers, and the only alternative is temporary logging in each.
      */
     @Test
     public void banCauseIsReported() throws Exception {
@@ -239,10 +239,10 @@ public class ProfileOrganizerBanFilterTest {
     }
 
     /**
-     *  The gate must be per peer, not a global kill switch: banning one peer has
-     *  to leave every other candidate selectable, or a single ban would silently
-     *  empty the pool and look exactly like the starvation this gate exists to
-     *  avoid.
+     * The gate must be per peer, not a global kill switch: banning one peer has
+     * to leave every other candidate selectable, or a single ban would silently
+     * empty the pool and look exactly like the starvation this gate exists to
+     * avoid.
      */
     @Test
     public void banDoesNotAffectOtherPeers() throws Exception {

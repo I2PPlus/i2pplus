@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.app.ClientAppManager;
@@ -56,9 +55,9 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     *  File may not exist or have old logs in it if not opened yet
+     * File may not exist or have old logs in it if not opened yet
      *
-     *  @return non-null
+     * @return non-null
      */
     public abstract String currentFile();
 
@@ -100,9 +99,9 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     *  Wake up the writer to immediately re-read config and flush pending records.
+     * Wake up the writer to immediately re-read config and flush pending records.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     public void wakeup() {
         _lastReadConfig = 0;
@@ -185,9 +184,9 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     *  Write a msg with the date stamp of the last duplicate
+     * Write a msg with the date stamp of the last duplicate
      *
-     *  @since 0.9.21
+     * @since 0.9.21
      */
     private void writeDupMessage(int dupCount, LogRecord lastRecord) {
         String dmsg = dupMessage(dupCount, lastRecord, false, false);
@@ -199,9 +198,9 @@ abstract class LogWriter implements Runnable {
     }
 
     /**
-     *  Return a msg with the date stamp of the last duplicate
+     * Return a msg with the date stamp of the last duplicate
      *
-     *  @since 0.9.3
+     * @since 0.9.3
      */
     private String dupMessage(int dupCount, LogRecord lastRecord, boolean reverse, boolean html) {
         boolean nohtml = !html || SystemVersion.isAndroid();
@@ -213,9 +212,9 @@ abstract class LogWriter implements Runnable {
     private static final String ROUTER_BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     *  gettext
+     * gettext
      *
-     *  @since 0.9.3
+     * @since 0.9.3
      */
     private String ngettext(String b, String c, int a) {
         return Translate.getString(a, b, c, _manager.getContext(), BUNDLE_NAME);

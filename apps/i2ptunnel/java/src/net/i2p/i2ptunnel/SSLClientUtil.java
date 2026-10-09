@@ -34,41 +34,41 @@ public class SSLClientUtil {
     private static final String CERT_DIR = "certificates/i2ptunnel";
 
     /**
-     *  Create a new selfsigned cert and keystore and pubkey cert if they don't exist.
-     *  May take a while.
+     * Create a new selfsigned cert and keystore and pubkey cert if they don't exist.
+     * May take a while.
      *
-     *  @param opts in/out, updated if rv is true
-     *  @return false if it already exists; if true, caller must save opts
-     *  @throws IOException on creation fail
+     * @param opts in/out, updated if rv is true
+     * @return false if it already exists; if true, caller must save opts
+     * @throws IOException on creation fail
      */
     public static boolean verifyKeyStore(Properties opts) throws IOException {
         return verifyKeyStore(opts, "");
     }
 
     /**
-     *  Create a new selfsigned cert and keystore and pubkey cert if they don't exist.
-     *  May take a while.
+     * Create a new selfsigned cert and keystore and pubkey cert if they don't exist.
+     * May take a while.
      *
-     *  @param opts in/out, updated if rv is true
-     *  @param optPfx add this prefix when getting/setting options
-     *  @return false if it already exists; if true, caller must save opts
-     *  @throws IOException on creation fail
+     * @param opts in/out, updated if rv is true
+     * @param optPfx add this prefix when getting/setting options
+     * @return false if it already exists; if true, caller must save opts
+     * @throws IOException on creation fail
      */
     public static boolean verifyKeyStore(Properties opts, String optPfx) throws IOException {
         return verifyKeyStore(opts, optPfx, null);
     }
 
     /**
-     *  Create a new selfsigned cert and keystore and pubkey cert if they don't exist.
-     *  May take a while.
+     * Create a new selfsigned cert and keystore and pubkey cert if they don't exist.
+     * May take a while.
      *
-     *  @param opts in/out, updated if rv is true
-     *  @param optPfx add this prefix when getting/setting options
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
-     *  @return false if it already exists; if true, caller must save opts
-     *  @throws IOException on creation fail
-     *  @since 0.9.34 added altNames param
+     * @param opts in/out, updated if rv is true
+     * @param optPfx add this prefix when getting/setting options
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @return false if it already exists; if true, caller must save opts
+     * @throws IOException on creation fail
+     * @since 0.9.34 added altNames param
      */
     public static boolean verifyKeyStore(Properties opts, String optPfx, Set<String> altNames) throws IOException {
         String name = opts.getProperty(optPfx + PROP_KEY_ALIAS);
@@ -107,14 +107,14 @@ public class SSLClientUtil {
 
 
     /**
-     *  Create a new keystore with a keypair in it.
+     * Create a new keystore with a keypair in it.
      *
-     *  @param name used in CNAME
-     *  @param opts in/out, updated if rv is true, must contain PROP_KEY_ALIAS
-     *  @param optPfx add this prefix when getting/setting options
-     *  @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     *                  cname, localhost, 127.0.0.1, and ::1 will be automatically added.
-     *  @return success, if true, opts will have password properties added to be saved
+     * @param name used in CNAME
+     * @param opts in/out, updated if rv is true, must contain PROP_KEY_ALIAS
+     * @param optPfx add this prefix when getting/setting options
+     * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
+     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     * @return success, if true, opts will have password properties added to be saved
      */
     private static boolean createKeyStore(File ks, Properties opts, String optPfx, Set<String> altNames) {
         // make a random 48 character password (30 * 8 / 5)
@@ -144,12 +144,12 @@ public class SSLClientUtil {
     }
 
     /**
-     *  Pull the cert back OUT of the keystore and save it as ascii
-     *  so the clients can get to it.
+     * Pull the cert back OUT of the keystore and save it as ascii
+     * so the clients can get to it.
      *
-     *  @param name used to generate output file name
-     *  @param opts must contain optPfx + PROP_KEY_ALIAS
-     *  @param optPfx add this prefix when getting options
+     * @param name used to generate output file name
+     * @param opts must contain optPfx + PROP_KEY_ALIAS
+     * @param optPfx add this prefix when getting options
      */
     private static void exportCert(File ks, String name, Properties opts, String optPfx) {
         File sdir = new SecureDirectory(I2PAppContext.getGlobalContext().getConfigDir(), CERT_DIR);
@@ -166,8 +166,8 @@ public class SSLClientUtil {
     }
 
     /**
-     *  Sets up the SSLContext and sets the socket factory.
-     *  No option prefix allowed.
+     * Sets up the SSLContext and sets the socket factory.
+     * No option prefix allowed.
      *
      * @throws IOException GeneralSecurityExceptions are wrapped in IOE for convenience
      * @return factory, throws on all errors

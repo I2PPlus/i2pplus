@@ -14,7 +14,6 @@ import java.security.spec.AlgorithmParameterSpec;
  *
  * @author str4d
  * @since 0.9.15
- *
  */
 public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable {
     private static final long serialVersionUID = 8274987108472012L;
@@ -79,9 +78,9 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
     }
 
     /**
-     *  Return the base (generator) point.
+     * Return the base (generator) point.
      *
-     *  @return the base (generator)
+     * @return the base (generator)
      */
     public GroupElement getB() {
         return B;

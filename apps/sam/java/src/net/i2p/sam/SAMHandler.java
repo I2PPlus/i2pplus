@@ -5,7 +5,6 @@ package net.i2p.sam;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -22,7 +21,6 @@ import net.i2p.util.Log;
  * Base class for SAM protocol handlers.  It implements common
  * methods, but is not able to actually parse the protocol itself:
  * this task is delegated to subclasses.
- *
  */
 abstract class SAMHandler implements Runnable, Handler {
 
@@ -217,7 +215,6 @@ abstract class SAMHandler implements Runnable, Handler {
 
     /**
      * Actually handle the SAM protocol.
-     *
      */
     protected abstract void handle();
 
@@ -245,7 +242,7 @@ abstract class SAMHandler implements Runnable, Handler {
     }
 
     /**
-     *  Caller must synch.
+     * Caller must synch.
      *
      * @param data the bytes to write
      * @param out the socket channel to write to

@@ -13,13 +13,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- *  Rate limiting of the duplicate-CLOSE report.
+ * Rate limiting of the duplicate-CLOSE report.
  *
- *  <p>The duplicate itself is already handled idempotently by the CAS in
- *  {@code notifyCloseSent()}, so the report is a safety net rather than a fault. Measured at
- *  roughly one per second under an ordinary streaming workload, a WARN per occurrence buried
- *  the warnings that mattered — this test pins the limiter that replaces it, and that the
- *  suppressed total stays visible so nothing is silently lost.
+ * <p>The duplicate itself is already handled idempotently by the CAS in
+ * {@code notifyCloseSent()}, so the report is a safety net rather than a fault. Measured at
+ * roughly one per second under an ordinary streaming workload, a WARN per occurrence buried
+ * the warnings that mattered — this test pins the limiter that replaces it, and that the
+ * suppressed total stays visible so nothing is silently lost.
  *
  * @since 0.9.71+
  */
@@ -93,8 +93,8 @@ public class ConnectionDuplicateCloseLimiterTest {
     }
 
     /**
-     *  The steady-state case that motivated this: a busy connection notifies roughly once a
-     *  second. That must produce one log line, not sixty.
+     * The steady-state case that motivated this: a busy connection notifies roughly once a
+     * second. That must produce one log line, not sixty.
      */
     @Test
     public void oneNotificationPerSecondYieldsOneReportPerMinute() throws Exception {

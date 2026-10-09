@@ -14,21 +14,21 @@ public class LogConsoleBuffer {
     private final UIMessages _critBuffer;
 
     /**
-     *  Uses default limit from LogManager.
-     *  As of 0.8.8, limit is not checked at runtime.
+     * Uses default limit from LogManager.
+     * As of 0.8.8, limit is not checked at runtime.
      *
-     *  @param context unused
+     * @param context unused
      */
     public LogConsoleBuffer(I2PAppContext context) {
         this(LogManager.DEFAULT_CONSOLEBUFFERSIZE);
     }
 
     /**
-     *  @param limit max size of each buffer
-     *  In theory the limit is configurable, but it isn't in the UI,
-     *  so set it at construction.
+     * @param limit max size of each buffer
+     * In theory the limit is configurable, but it isn't in the UI,
+     * so set it at construction.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     public LogConsoleBuffer(int limit) {
         lim = Math.max(limit, 4);
@@ -44,8 +44,7 @@ public class LogConsoleBuffer {
     }
 
     /**
-     *  Only adds to the critical buffer, not to both.
-     *
+     * Only adds to the critical buffer, not to both.
      */
     void addCritical(String msg) {
         _critBuffer.addMessageNoEscape(msg);

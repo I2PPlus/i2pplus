@@ -6,12 +6,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 /**
- *  Tests that an in-flight refusal names the gate that refused it.
+ * Tests that an in-flight refusal names the gate that refused it.
  *
- *  The reservation path has two independent gates: a router-wide concurrent
- *  test cap and a per-pool budget. They bind for different reasons and need
- *  different tuning, but both used to log the same "budget exhausted" line,
- *  so live logs could not say which knob to turn.
+ * The reservation path has two independent gates: a router-wide concurrent
+ * test cap and a per-pool budget. They bind for different reasons and need
+ * different tuning, but both used to log the same "budget exhausted" line,
+ * so live logs could not say which knob to turn.
  */
 public class TestJobRefusalReasonTest {
 
@@ -70,8 +70,8 @@ public class TestJobRefusalReasonTest {
     }
 
     /**
-     *  A pool-budget refusal must return the global permit it just took, so a
-     *  refusal cannot starve unrelated pools by leaking capacity.
+     * A pool-budget refusal must return the global permit it just took, so a
+     * refusal cannot starve unrelated pools by leaking capacity.
      */
     @Test
     public void poolRefusalReleasesGlobalPermit() {

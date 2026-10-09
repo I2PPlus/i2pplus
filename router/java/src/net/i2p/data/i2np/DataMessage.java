@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -33,9 +32,9 @@ public class DataMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Payload data.
+     * Payload data.
      *
-     *  @return the data
+     * @return the data
      */
     public byte[] getData() {
         return _data;
@@ -44,8 +43,8 @@ public class DataMessage extends FastI2NPMessageImpl {
     /**
      * The data payload, settable only once so the saved checksum stays valid.
      *
-     *  @param data the data
-     *  @throws IllegalStateException if data previously set, to protect saved checksum
+     * @param data the data
+     * @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {
         if (_data != null)
@@ -54,9 +53,9 @@ public class DataMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Payload size in bytes.
+     * Payload size in bytes.
      *
-     *  @return the data size
+     * @return the data size
      */
     public int getSize() {
         return _data.length;

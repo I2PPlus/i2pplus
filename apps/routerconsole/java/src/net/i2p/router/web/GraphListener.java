@@ -28,16 +28,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- *  Creates and updates the in-memory or on-disk RRD database,
- *  and provides methods to generate graphs of the data
- *
- *  @since 0.6.1.13
+ * Creates and updates the in-memory or on-disk RRD database,
+ * and provides methods to generate graphs of the data
  */
 public class GraphListener implements RateSummaryListener {
     /**
-     *  Whether RRDs are kept on disk between restarts rather than held in memory.
+     * Whether RRDs are kept on disk between restarts rather than held in memory.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public static final String PROP_PERSISTENT = "routerconsole.graphPersistent";
     /** note that .jrb files are NOT compatible with .rrd files */
@@ -72,12 +70,12 @@ public class GraphListener implements RateSummaryListener {
     /** Number of rows in the RRD archive. */
     private int _rows;
     /**
-     *  Consecutive write failures at which the report stops being routine.
+     * Consecutive write failures at which the report stops being routine.
      *
-     *  <p>No longer a teardown threshold. A momentary I/O error used to detach the
-     *  listener here, which converted a transient fault into a permanent hole in the
-     *  graph and then left it unfilled for up to a full sync interval. Retirement is
-     *  now only ever the heal ladder's explicit REBUILD.
+     * <p>No longer a teardown threshold. A momentary I/O error used to detach the
+     * listener here, which converted a transient fault into a permanent hole in the
+     * graph and then left it unfilled for up to a full sync interval. Retirement is
+     * now only ever the heal ladder's explicit REBUILD.
      */
     private static final int MAX_CONSECUTIVE_ERRORS = 10;
     /** Current consecutive error count. */
@@ -85,15 +83,15 @@ public class GraphListener implements RateSummaryListener {
     /** Wall-clock ms of the last successful RRD write, or 0 if none has succeeded. */
     private volatile long _lastUpdateSuccess;
     /**
-     *  Wall-clock ms when this listener took its Rate registration, or 0 if never.
+     * Wall-clock ms when this listener took its Rate registration, or 0 if never.
      *
-     *  <p>The origin for how long a listener that has never written has had the chance
-     *  to write. Measured from the router's graphing start instead, a listener created a
-     *  second ago inherits the age of the whole graphing session and is reported as
-     *  stalled before it has ever had a period to coalesce, so every rebuild and every
-     *  on-demand graph would trip the error.
+     * <p>The origin for how long a listener that has never written has had the chance
+     * to write. Measured from the router's graphing start instead, a listener created a
+     * second ago inherits the age of the whole graphing session and is reported as
+     * stalled before it has ever had a period to coalesce, so every rebuild and every
+     * on-demand graph would trip the error.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile long _attachedMs;
     /** Total successful RRD writes. */
@@ -103,99 +101,99 @@ public class GraphListener implements RateSummaryListener {
     /** Steps written by {@link #backfill(List)} since this listener attached. */
     private volatile long _backfillCount;
     /**
-     *  Coalesce count of the Rate when this listener attached.
+     * Coalesce count of the Rate when this listener attached.
      *
-     *  <p>{@link Rate#getCoalesceCount()} counts from the Rate's construction, and a
-     *  stat registered at router startup has been coalescing long before the console
-     *  attaches to it. Comparing that absolute count against this listener's own write
-     *  count would report the entire pre-attach history as drift, on every listener,
-     *  forever. The baseline is what makes the ledger an actual invariant rather than
-     *  a number that only ever grows.
+     * <p>{@link Rate#getCoalesceCount()} counts from the Rate's construction, and a
+     * stat registered at router startup has been coalescing long before the console
+     * attaches to it. Comparing that absolute count against this listener's own write
+     * count would report the entire pre-attach history as drift, on every listener,
+     * forever. The baseline is what makes the ledger an actual invariant rather than
+     * a number that only ever grows.
      */
     private volatile long _coalesceBaseline;
     /** Write count of this listener when it attached; 0 for a fresh instance. */
     private volatile long _updateBaseline;
     /**
-     *  Steps proven lost because the Rate no longer retains them.
+     * Steps proven lost because the Rate no longer retains them.
      *
-     *  <p>The retained-sample ring holds a fixed handful of coalesces, so a listener
-     *  that was unreachable for longer than that can never recover the intervening
-     *  steps. Those are reported once rather than retried forever, which needs a
-     *  counter as well as a flag: "drift is positive" says a step was lost, but only
-     *  a count says how many are gone for good.
+     * <p>The retained-sample ring holds a fixed handful of coalesces, so a listener
+     * that was unreachable for longer than that can never recover the intervening
+     * steps. Those are reported once rather than retried forever, which needs a
+     * counter as well as a flag: "drift is positive" says a step was lost, but only
+     * a count says how many are gone for good.
      *
-     *  @see #chargePermanentLoss(long)
+     * @see #chargePermanentLoss(long)
      */
     private volatile long _unrecoverableSteps;
     /**
-     *  Coalesce delta at which {@link #_unrecoverableSteps} was last charged.
+     * Coalesce delta at which {@link #_unrecoverableSteps} was last charged.
      *
-     *  <p>Keyed on the coalesce delta rather than on the drift because the coalesce
-     *  delta only ever grows, so each lost step is charged exactly once even when the
-     *  drift dips back to zero after a heal and climbs again.
+     * <p>Keyed on the coalesce delta rather than on the drift because the coalesce
+     * delta only ever grows, so each lost step is charged exactly once even when the
+     * drift dips back to zero after a heal and climbs again.
      */
     private volatile long _unrecoverableCoalesceDelta;
 
     /**
-     *  When the most recent RRD write succeeded, or 0 if none has.
+     * When the most recent RRD write succeeded, or 0 if none has.
      *
-     *  @return wall-clock ms of the last successful write, or 0 if none
+     * @return wall-clock ms of the last successful write, or 0 if none
      */
     long getLastUpdateSuccess() { return _lastUpdateSuccess; }
 
     /**
-     *  When this listener attached, the origin for a never-written listener's age.
+     * When this listener attached, the origin for a never-written listener's age.
      *
-     *  @return wall-clock ms when the listener took its Rate registration, or 0 if never
-     *  @since 0.9.71+
+     * @return wall-clock ms when the listener took its Rate registration, or 0 if never
+     * @since 0.9.71+
      */
     long getAttachedMs() { return _attachedMs; }
 
     /**
-     *  Number of successful RRD writes since startup.
+     * Number of successful RRD writes since startup.
      *
-     *  @return the live-write count, backfilled steps included
+     * @return the live-write count, backfilled steps included
      */
     long getUpdateCount() { return _updateCount; }
 
     /**
-     *  Steps written by {@link #backfill(List)} since this listener attached.
+     * Steps written by {@link #backfill(List)} since this listener attached.
      *
-     *  @return backfilled step count
-     *  @since 0.9.71+
+     * @return backfilled step count
+     * @since 0.9.71+
      */
     long getBackfillCount() { return _backfillCount; }
 
     /**
-     *  Newest archive step stored, live or backfilled.
+     * Newest archive step stored, live or backfilled.
      *
-     *  @return wall-clock ms of the newest stored step, whole seconds, or 0 if none
-     *  @since 0.9.71+
+     * @return wall-clock ms of the newest stored step, whole seconds, or 0 if none
+     * @since 0.9.71+
      */
     long getLastStoredTimeMs() { return _lastStoredTimeMs; }
 
     /**
-     *  Consecutive failed writes, reset by any successful live write.
+     * Consecutive failed writes, reset by any successful live write.
      *
-     *  @return current streak length
-     *  @since 0.9.71+
+     * @return current streak length
+     * @since 0.9.71+
      */
     int getConsecutiveErrors() { return _consecutiveErrors; }
 
     /**
-     *  Steps proven lost beyond the Rate's retained-sample ring.
+     * Steps proven lost beyond the Rate's retained-sample ring.
      *
-     *  @return cumulative permanently lost step count
-     *  @since 0.9.71+
+     * @return cumulative permanently lost step count
+     * @since 0.9.71+
      */
     long getUnrecoverableSteps() { return _unrecoverableSteps; }
 
     /**
-     *  Coalesces on this Rate since this listener attached.
+     * Coalesces on this Rate since this listener attached.
      *
-     *  @see #_coalesceBaseline
-     *  @return coalesce delta since attach, never negative
-     *  @since 0.9.71+
+     * @see #_coalesceBaseline
+     * @return coalesce delta since attach, never negative
+     * @since 0.9.71+
      */
     long getCoalesceDelta() {
         long delta = _rate.getCoalesceCount() - _coalesceBaseline;
@@ -203,10 +201,10 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Steps this listener has stored since it attached.
+     * Steps this listener has stored since it attached.
      *
-     *  @return stored delta since attach, never negative
-     *  @since 0.9.71+
+     * @return stored delta since attach, never negative
+     * @since 0.9.71+
      */
     long getStoredDelta() {
         long delta = _updateCount - _updateBaseline;
@@ -214,28 +212,28 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  The ledger invariant: coalesces the Rate produced, minus steps this listener stored.
+     * The ledger invariant: coalesces the Rate produced, minus steps this listener stored.
      *
-     *  <p>Positive means a coalesce produced a sample this listener never put into the
-     *  RRD, which is a provably lost step rather than an inference from a stalled
-     *  write. Zero is the only healthy value; negative is not reachable, because a
-     *  step is only stored after its coalesce has already been counted.
+     * <p>Positive means a coalesce produced a sample this listener never put into the
+     * RRD, which is a provably lost step rather than an inference from a stalled
+     * write. Zero is the only healthy value; negative is not reachable, because a
+     * step is only stored after its coalesce has already been counted.
      *
-     *  @return coalesces minus stored steps
-     *  @since 0.9.71+
+     * @return coalesces minus stored steps
+     * @since 0.9.71+
      */
     long getCoalesceDrift() { return getCoalesceDelta() - getStoredDelta(); }
 
     /**
-     *  Record that the drift on this listener cannot be backfilled.
+     * Record that the drift on this listener cannot be backfilled.
      *
-     *  <p>Charged against the coalesce delta rather than the drift, which only grows,
-     *  so every lost step is charged exactly once. A later heal that drops the drift
-     *  back to zero and a further outage both still get reported.
+     * <p>Charged against the coalesce delta rather than the drift, which only grows,
+     * so every lost step is charged exactly once. A later heal that drops the drift
+     * back to zero and a further outage both still get reported.
      *
-     *  @param coalesceDelta coalesce delta from {@link #getCoalesceDelta()}
-     *  @return steps newly charged, 0 when they were already charged
-     *  @since 0.9.71+
+     * @param coalesceDelta coalesce delta from {@link #getCoalesceDelta()}
+     * @return steps newly charged, 0 when they were already charged
+     * @since 0.9.71+
      */
     synchronized long chargePermanentLoss(long coalesceDelta) {
         long added = coalesceDelta - _unrecoverableCoalesceDelta;
@@ -250,19 +248,19 @@ public class GraphListener implements RateSummaryListener {
     /** Number of periods in one day (1440 = 60 minutes * 24 hours at 1-minute resolution). */
     static final int PERIODS = 60 * 24;  // 1440
     /**
-     *  Offset (seconds) subtracted from "now" when computing the fetch window end,
-     *  so a clock skewed slightly ahead of system time does not yield NaNs.
-     *  Shared with GraphRenderer, which applies the same window for plotting.
+     * Offset (seconds) subtracted from "now" when computing the fetch window end,
+     * so a clock skewed slightly ahead of system time does not yield NaNs.
+     * Shared with GraphRenderer, which applies the same window for plotting.
      *
-     *  @since 0.9.70+
+     * @since 0.9.70+
      */
     static final int GRAPH_END_OFFSET_SECONDS = 75;
     /** Minimum number of rows to keep in the archive. */
     private static final int MIN_ROWS = PERIODS;
     /**
-     *  Most rows a persistent RRD archive keeps, three months at one-minute resolution.
+     * Most rows a persistent RRD archive keeps, three months at one-minute resolution.
      *
-     *  @since 0.9.33
+     * @since 0.9.33
      */
     public static final int MAX_ROWS = 91 * MIN_ROWS;
     /** Three months in milliseconds (used to compute max rows for persistent RRDs). */
@@ -328,16 +326,16 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Value to store for a period, given the totals the rate hands its listeners.
+     * Value to store for a period, given the totals the rate hands its listeners.
      *
-     *  <p>Pure so the backfill path and the live path cannot drift apart: a backfilled
-     *  step recorded with a different rule than the live steps around it would put a
-     *  spike in the middle of an otherwise consistent trace.
+     * <p>Pure so the backfill path and the live path cannot drift apart: a backfilled
+     * step recorded with a different rule than the live steps around it would put a
+     * spike in the middle of an otherwise consistent trace.
      *
-     *  @param totalValue the total value for the period
-     *  @param eventCount the number of events in the period
-     *  @return the primary datasource value for the step
-     *  @since 0.9.71+
+     * @param totalValue the total value for the period
+     * @param eventCount the number of events in the period
+     * @return the primary datasource value for the step
+     * @since 0.9.71+
      */
     static double sampleValue(double totalValue, long eventCount) {
         if (eventCount <= 0) {
@@ -352,15 +350,15 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Record a step that is now in the RRD, advancing the write ledger.
+     * Record a step that is now in the RRD, advancing the write ledger.
      *
-     *  <p>Synchronized because the count is the numerator of the drift invariant the
-     *  watchdog reads: a lost increment here is reported as a lost step, so the ledger
-     *  has to be exact rather than a volatile increment that the delivery thread and
-     *  the watchdog's backfill can race. The monitor covers the field updates only,
-     *  never the RRD write that precedes them.
+     * <p>Synchronized because the count is the numerator of the drift invariant the
+     * watchdog reads: a lost increment here is reported as a lost step, so the ledger
+     * has to be exact rather than a volatile increment that the delivery thread and
+     * the watchdog's backfill can race. The monitor covers the field updates only,
+     * never the RRD write that precedes them.
      *
-     *  @param whenSeconds archive step written, in seconds
+     * @param whenSeconds archive step written, in seconds
      */
     private synchronized void noteWrite(long whenSeconds) {
         long stamp = whenSeconds * 1000L;
@@ -371,21 +369,21 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Count a failed write and report it, without giving up the listener.
+     * Count a failed write and report it, without giving up the listener.
      *
-     *  <p>Below the threshold this is routine and rate limited; from the threshold on it
-     *  is an ERROR naming the rate, because a streak this long is not going to clear
-     *  itself and the operator has to know which graph is affected. Reported every
-     *  {@link #MAX_CONSECUTIVE_ERRORS} failures rather than on every one, so a rate with
-     *  a persistently failing RRD cannot turn the log into the stall it used to avoid.
+     * <p>Below the threshold this is routine and rate limited; from the threshold on it
+     * is an ERROR naming the rate, because a streak this long is not going to clear
+     * itself and the operator has to know which graph is affected. Reported every
+     * {@link #MAX_CONSECUTIVE_ERRORS} failures rather than on every one, so a rate with
+     * a persistently failing RRD cannot turn the log into the stall it used to avoid.
      *
-     *  <p>Deliberately does not call {@link #stopListening()}. Retiring on a transient
-     *  I/O error left a hole in the graph that nothing refilled for up to a full sync
-     *  interval, and the detach was indistinguishable from a real fault in the logs.
-     *  Recording now stops on its own - the ledger drift grows - and the heal ladder
-     *  reopens or rebuilds the handle when it can.
+     * <p>Deliberately does not call {@link #stopListening()}. Retiring on a transient
+     * I/O error left a hole in the graph that nothing refilled for up to a full sync
+     * interval, and the detach was indistinguishable from a real fault in the logs.
+     * Recording now stops on its own - the ledger drift grows - and the heal ladder
+     * reopens or rebuilds the handle when it can.
      *
-     *  @param t the failure
+     * @param t the failure
      */
     private void noteWriteFailure(Throwable t) {
         int errors = ++_consecutiveErrors;
@@ -403,9 +401,9 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Name the rate this listener records, for log lines that must say which graph.
+     * Name the rate this listener records, for log lines that must say which graph.
      *
-     *  @return the rate's stat name and period
+     * @return the rate's stat name and period
      */
     private String rateName() {
         RateStat rs = _rate.getRateStat();
@@ -413,21 +411,21 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Replay retained samples whose steps this listener never stored, oldest first.
+     * Replay retained samples whose steps this listener never stored, oldest first.
      *
-     *  <p>Recovery for a listener that missed a few steps while nothing was obviously
-     *  wrong: the values are still in the Rate's retained-sample ring, and an archive
-     *  step is empty forever once nothing writes it, so writing them late beats losing
-     *  them.
+     * <p>Recovery for a listener that missed a few steps while nothing was obviously
+     * wrong: the values are still in the Rate's retained-sample ring, and an archive
+     * step is empty forever once nothing writes it, so writing them late beats losing
+     * them.
      *
-     *  <p>{@code RrdDb.store} rejects any timestamp not strictly newer than the last
-     *  one stored, so a sample that lands on or before {@link #getLastStoredTimeMs()} is
-     *  skipped rather than attempted: the write path has already covered the recent
-     *  steps and the ring can overlap them.
+     * <p>{@code RrdDb.store} rejects any timestamp not strictly newer than the last
+     * one stored, so a sample that lands on or before {@link #getLastStoredTimeMs()} is
+     * skipped rather than attempted: the write path has already covered the recent
+     * steps and the ring can overlap them.
      *
-     *  @param samples retained samples, oldest first; may be null or empty
-     *  @return number of steps written
-     *  @since 0.9.71+
+     * @param samples retained samples, oldest first; may be null or empty
+     * @return number of steps written
+     * @since 0.9.71+
      */
     public int backfill(List<Rate.CoalescedSample> samples) {
         if (samples == null || samples.isEmpty()) {
@@ -484,34 +482,34 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Truncate a wall-clock stamp to the whole second an RRD actually stores.
+     * Truncate a wall-clock stamp to the whole second an RRD actually stores.
      *
-     *  <p>Pure because the whole skip rule is this truncation applied against
-     *  {@link #getLastStoredTimeMs()}: comparing raw milliseconds would let a sample
-     *  999ms into a step the listener already stored look newer than it is, and the
-     *  write would then be rejected by the archive as non-monotonic.
+     * <p>Pure because the whole skip rule is this truncation applied against
+     * {@link #getLastStoredTimeMs()}: comparing raw milliseconds would let a sample
+     * 999ms into a step the listener already stored look newer than it is, and the
+     * write would then be rejected by the archive as non-monotonic.
      *
-     *  @param timestampMs wall-clock ms
-     *  @return the same instant truncated down to a whole second, in ms
-     *  @since 0.9.71+
+     * @param timestampMs wall-clock ms
+     * @return the same instant truncated down to a whole second, in ms
+     * @since 0.9.71+
      */
     static long toArchiveSecondMs(long timestampMs) { return timestampMs / 1000 * 1000; }
 
     /**
-     *  Can a listener still recover its drift, or are the missing steps gone?
+     * Can a listener still recover its drift, or are the missing steps gone?
      *
-     *  <p>The Rate retains a fixed, small ring of coalesces. Once every retained sample
-     *  is already stored, the steps the listener missed are older than anything the
-     *  Rate remembers, and no amount of retrying will produce them. Telling those two
-     *  cases apart is what keeps the watchdog from re-attempting a hopeless backfill
-     *  every ten seconds and from calling a permanent gap a transient one.
+     * <p>The Rate retains a fixed, small ring of coalesces. Once every retained sample
+     * is already stored, the steps the listener missed are older than anything the
+     * Rate remembers, and no amount of retrying will produce them. Telling those two
+     * cases apart is what keeps the watchdog from re-attempting a hopeless backfill
+     * every ten seconds and from calling a permanent gap a transient one.
      *
-     *  <p>Pure, so the boundary is unit tested without a Rate, an RRD or a clock.
+     * <p>Pure, so the boundary is unit tested without a Rate, an RRD or a clock.
      *
-     *  @param lastStoredTimeMs newest stored step from {@link #getLastStoredTimeMs()}
-     *  @param retained the Rate's retained samples, oldest first; may be null
-     *  @return true if at least one retained sample is newer than the last stored step
-     *  @since 0.9.71+
+     * @param lastStoredTimeMs newest stored step from {@link #getLastStoredTimeMs()}
+     * @param retained the Rate's retained samples, oldest first; may be null
+     * @return true if at least one retained sample is newer than the last stored step
+     * @since 0.9.71+
      */
     static boolean recoverable(long lastStoredTimeMs, List<Rate.CoalescedSample> retained) {
         if (retained == null) {
@@ -526,16 +524,16 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Whether the open RRD handle can still take a write.
+     * Whether the open RRD handle can still take a write.
      *
-     *  <p>Distinct from {@link #isDetached()}: a detached listener has no handle at
-     *  all, whereas this can be false for a listener that still holds a handle which
-     *  something else has already closed. That is the cheapest fault to heal, since
-     *  the listener, its registration and its RRD file all survive and only the handle
-     *  has to be re-obtained.
+     * <p>Distinct from {@link #isDetached()}: a detached listener has no handle at
+     * all, whereas this can be false for a listener that still holds a handle which
+     * something else has already closed. That is the cheapest fault to heal, since
+     * the listener, its registration and its RRD file all survive and only the handle
+     * has to be re-obtained.
      *
-     *  @return true if the handle is open and can accept a write
-     *  @since 0.9.71+
+     * @return true if the handle is open and can accept a write
+     * @since 0.9.71+
      */
     boolean isWritable() {
         RrdDb db = _db;
@@ -543,77 +541,77 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Whether this listener has stopped recording.
+     * Whether this listener has stopped recording.
      *
-     *  A detached listener keeps its entry in GraphGenerator's rate-to-listener
-     *  map, so the generator uses this to notice that it needs re-creating.
+     * A detached listener keeps its entry in GraphGenerator's rate-to-listener
+     * map, so the generator uses this to notice that it needs re-creating.
      *
-     *  @return true if the RRD database is closed and no longer receiving samples
-     *  @since 0.9.71+
+     * @return true if the RRD database is closed and no longer receiving samples
+     * @since 0.9.71+
      */
     boolean isDetached() { return _db == null; }
 
     /**
-     *  Whether this listener is still the one its Rate notifies on coalesce.
+     * Whether this listener is still the one its Rate notifies on coalesce.
      *
-     *  <p>Distinct from {@link #isDetached()}: a Rate holds exactly one summary
-     *  listener, so registering a replacement silently orphans this instance while its
-     *  RRD stays open. That instance is attached - so it renders fine and the console
-     *  shows a plausible graph - but it can never be called again, and nothing about
-     *  that state is visible without asking the Rate.
+     * <p>Distinct from {@link #isDetached()}: a Rate holds exactly one summary
+     * listener, so registering a replacement silently orphans this instance while its
+     * RRD stays open. That instance is attached - so it renders fine and the console
+     * shows a plausible graph - but it can never be called again, and nothing about
+     * that state is visible without asking the Rate.
      *
-     *  @return true if {@link Rate#getSummaryListener()} is this instance
-     *  @since 0.9.71+
+     * @return true if {@link Rate#getSummaryListener()} is this instance
+     * @since 0.9.71+
      */
     boolean isRegistered() { return ownsRegistration(_rate.getSummaryListener(), this); }
 
     /**
-     *  Does {@code self} still own a Rate's summary-listener registration?
+     * Does {@code self} still own a Rate's summary-listener registration?
      *
-     *  <p>Reference identity, deliberately not {@link #equals(Object)}: two listeners
-     *  for the same Rate are {@code equals} but only one of them is ever called, so
-     *  only reference equality answers "is this instance the live one".
+     * <p>Reference identity, deliberately not {@link #equals(Object)}: two listeners
+     * for the same Rate are {@code equals} but only one of them is ever called, so
+     * only reference equality answers "is this instance the live one".
      *
-     *  @param registered current registration, as returned by {@link Rate#getSummaryListener()}
-     *  @param self the listener asking
-     *  @return true only if {@code self} is the registered instance
-     *  @since 0.9.71+
+     * @param registered current registration, as returned by {@link Rate#getSummaryListener()}
+     * @param self the listener asking
+     * @return true only if {@code self} is the registered instance
+     * @since 0.9.71+
      */
     static boolean ownsRegistration(RateSummaryListener registered, RateSummaryListener self) {
         return registered == self;
     }
 
     /**
-     *  JRobin can only deal with 20 character data source names, so we need to create a unique,
-     *  munged version from the user/developer-visible name.
+     * JRobin can only deal with 20 character data source names, so we need to create a unique,
+     * munged version from the user/developer-visible name.
      *
-     *  @param ctx the context whose SHA munges the name
-     *  @param wanted the stat name, or the stat name and period, to munge
-     *  @return a 20-character datasource id, distinct for each name
+     * @param ctx the context whose SHA munges the name
+     * @param wanted the stat name, or the stat name and period, to munge
+     * @return a 20-character datasource id, distinct for each name
      */
     static String createName(I2PAppContext ctx, String wanted) {
         return ctx.sha().calculateHash(DataHelper.getUTF8(wanted)).toBase64().substring(0,20);
     }
 
     /**
-     *  Datasource id to the stat it records, so a log line can name the stat rather than
-     *  the 20-character munge JRobin requires.
+     * Datasource id to the stat it records, so a log line can name the stat rather than
+     * the 20-character munge JRobin requires.
      *
-     *  <p>Bounded by the distinct stat-and-period pairs ever graphed - one entry each,
-     *  replaced in place when a listener is rebuilt - so it holds no per-rebuild state.
+     * <p>Bounded by the distinct stat-and-period pairs ever graphed - one entry each,
+     * replaced in place when a listener is rebuilt - so it holds no per-rebuild state.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final ConcurrentMap<String, String> STAT_NAMES = new ConcurrentHashMap<String, String>();
 
     /**
-     *  Record which stat a datasource id stands for.
+     * Record which stat a datasource id stands for.
      *
-     *  <p>Called when a listener opens its RRD, which is the only place the id is minted.
+     * <p>Called when a listener opens its RRD, which is the only place the id is minted.
      *
-     *  @param id the 20-character datasource id from {@link #createName}
-     *  @param statName the stat name and period the id was minted from
-     *  @since 0.9.71+
+     * @param id the 20-character datasource id from {@link #createName}
+     * @param statName the stat name and period the id was minted from
+     * @since 0.9.71+
      */
     static void registerName(String id, String statName) {
         if (id != null && statName != null) {
@@ -622,16 +620,16 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Translate a datasource id back to the stat it records.
+     * Translate a datasource id back to the stat it records.
      *
-     *  <p>The ids are a hash of the stat name, so they cannot be inverted - a log line
-     *  quoting one names nothing an operator can look up. Pass every id a human reads
-     *  through here.
+     * <p>The ids are a hash of the stat name, so they cannot be inverted - a log line
+     * quoting one names nothing an operator can look up. Pass every id a human reads
+     * through here.
      *
-     *  @param id the datasource id
-     *  @return the registered stat name, or {@code id} itself when nothing registered it
-     *          (an unknown id is still worth logging)
-     *  @since 0.9.71+
+     * @param id the datasource id
+     * @return the registered stat name, or {@code id} itself when nothing registered it
+     * (an unknown id is still worth logging)
+     * @since 0.9.71+
      */
     static String statName(String id) {
         String name = id != null ? STAT_NAMES.get(id) : null;
@@ -646,14 +644,14 @@ public class GraphListener implements RateSummaryListener {
     public Rate getRate() { return _rate; }
 
     /**
-     *  Open (or re-open) the RRD database and take the Rate's summary registration.
+     * Open (or re-open) the RRD database and take the Rate's summary registration.
      *
-     *  <p>The ledger baseline is taken before the file is touched, not after: a
-     *  coalesce that happens while this method is opening the database is a step the
-     *  listener was never registered for, so it is lost and the drift has to say so.
-     *  Baselineing afterwards would quietly forgive it.
+     * <p>The ledger baseline is taken before the file is touched, not after: a
+     * coalesce that happens while this method is opening the database is a step the
+     * listener was never registered for, so it is lost and the drift has to say so.
+     * Baselineing afterwards would quietly forgive it.
      *
-     *  @return success
+     * @return success
      */
     public boolean startListening() {
         _attachedMs = System.currentTimeMillis();
@@ -667,20 +665,20 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Re-obtain the RRD handle, keeping this listener registered and its ledger intact.
+     * Re-obtain the RRD handle, keeping this listener registered and its ledger intact.
      *
-     *  <p>The cheapest heal there is, for the case where the handle is closed but the
-     *  listener itself, its Rate registration and its recorded history all survive.
-     *  Rebuilding instead would work too, at the cost of a new listener, a new
-     *  renderer and a window in which the rate has no listener at all - so the ladder
-     *  tries this first.
+     * <p>The cheapest heal there is, for the case where the handle is closed but the
+     * listener itself, its Rate registration and its recorded history all survive.
+     * Rebuilding instead would work too, at the cost of a new listener, a new
+     * renderer and a window in which the rate has no listener at all - so the ladder
+     * tries this first.
      *
-     *  <p>Neither the ledger baseline nor the write count is reset: the drift is the
-     *  fault being healed, and a heal that quietly rebased it would hide the very loss
-     *  it is repairing.
+     * <p>Neither the ledger baseline nor the write count is reset: the drift is the
+     * fault being healed, and a heal that quietly rebased it would hide the very loss
+     * it is repairing.
      *
-     *  @return true if a fresh, writable handle is in place
-     *  @since 0.9.71+
+     * @return true if a fresh, writable handle is in place
+     * @since 0.9.71+
      */
     boolean reopen() {
         closeHandle();
@@ -688,18 +686,18 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Build the RRD handle, sample and renderer for this listener.
+     * Build the RRD handle, sample and renderer for this listener.
      *
-     *  <p>Split out of {@link #startListening()} so {@link #reopen()} can obtain a new
-     *  handle without touching the Rate. Does no I/O on any rate's monitor: it is
-     *  called from the sync task and from the health watchdog, never from a
-     *  Rate-synchronized callback.
+     * <p>Split out of {@link #startListening()} so {@link #reopen()} can obtain a new
+     * handle without touching the Rate. Does no I/O on any rate's monitor: it is
+     * called from the sync task and from the health watchdog, never from a
+     * Rate-synchronized callback.
      *
-     *  <p>The three fields are published together, at the end and only on success, so
-     *  a failure part-way through leaves the listener detached rather than attached
-     *  with a null sample that the delivery thread would dereference.
+     * <p>The three fields are published together, at the end and only on success, so
+     * a failure part-way through leaves the listener detached rather than attached
+     * with a null sample that the delivery thread would dereference.
      *
-     *  @return true if {@link #_db} is set and writable
+     * @return true if {@link #_db} is set and writable
      */
     private boolean openRdd() {
         RateStat rs = _rate.getRateStat();
@@ -813,10 +811,10 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Drop a half-built handle so a failed open cannot leak a file descriptor.
+     * Drop a half-built handle so a failed open cannot leak a file descriptor.
      *
-     *  @param db the handle to release, or null if none was built
-     *  @param baseName the rate's name, for the log line
+     * @param db the handle to release, or null if none was built
+     * @param baseName the rate's name, for the log line
      */
     private void closeQuietly(RrdDb db, String baseName) {
         if (db == null) {
@@ -844,15 +842,15 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Release the RRD handle, leaving the Rate registration alone.
+     * Release the RRD handle, leaving the Rate registration alone.
      *
-     *  <p>Shared by {@link #stopListening()} and {@link #reopen()}: the only difference
-     *  between tearing a listener down and healing it is whether the Rate keeps
-     *  pointing at this instance, and that has to be the caller's decision.
+     * <p>Shared by {@link #stopListening()} and {@link #reopen()}: the only difference
+     * between tearing a listener down and healing it is whether the Rate keeps
+     * pointing at this instance, and that has to be the caller's decision.
      *
-     *  <p>The handle is cleared before it is closed, so a delivery thread that is
-     *  midway through a write sees a null database and skips rather than writing to a
-     *  handle that is on its way out.
+     * <p>The handle is cleared before it is closed, so a delivery thread that is
+     * midway through a write sees a null database and skips rather than writing to a
+     * handle that is on its way out.
      */
     private void closeHandle() {
         RrdDb db = _db;
@@ -875,21 +873,21 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Drop our registration on the Rate, but only if we still hold it.
+     * Drop our registration on the Rate, but only if we still hold it.
      *
-     *  <p>{@link Rate} keeps a single summary listener, so an instance tearing down
-     *  after a newer one has registered would otherwise stop the newer one being
-     *  called. The newer one keeps its open RRD and still reports itself attached,
-     *  so recording dies with no write error, no detach, and no exception anywhere
-     *  - every health check keeps saying healthy.
+     * <p>{@link Rate} keeps a single summary listener, so an instance tearing down
+     * after a newer one has registered would otherwise stop the newer one being
+     * called. The newer one keeps its open RRD and still reports itself attached,
+     * so recording dies with no write error, no detach, and no exception anywhere
+     * - every health check keeps saying healthy.
      *
-     *  <p>{@link Rate#clearSummaryListener} does the ownership test and the clear as
-     *  one atomic operation, so a registration that appears between the two cannot be
-     *  dropped. A clear that finds the registration already gone is the ordinary
-     *  post-detach case and is not reported; only a registration held by a different
-     *  live listener is, because that means two teardowns raced.
+     * <p>{@link Rate#clearSummaryListener} does the ownership test and the clear as
+     * one atomic operation, so a registration that appears between the two cannot be
+     * dropped. A clear that finds the registration already gone is the ordinary
+     * post-detach case and is not reported; only a registration held by a different
+     * live listener is, because that means two teardowns raced.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private void clearRateRegistration() {
         // Rate.clearSummaryListener performs the ownership test and the clear as one
@@ -905,19 +903,19 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Single graph.
+     * Single graph.
      *
-     *  @param out the output stream to write the graph to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now
-     *  @param showCredit if true, keep the signature line
-     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
+     * @param out the output stream to write the graph to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now
+     * @param showCredit if true, keep the signature line
+     * @throws IOException if this listener has no open RRD, or the graph cannot be produced
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                            boolean hideTitle, boolean showEvents, int periodCount,
@@ -927,23 +925,23 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Single or two-data-source graph.
+     * Single or two-data-source graph.
      *
-     *  @param out the output stream to write the graph to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now
-     *  @param showCredit if true, keep the signature line
-     *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
-     *  @param titleOverride If non-null, overrides the title
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
-     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
-     *  @since 0.9.6
+     * @param out the output stream to write the graph to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now
+     * @param showCredit if true, keep the signature line
+     * @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
+     * @param titleOverride If non-null, overrides the title
+     * @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     * @throws IOException if this listener has no open RRD, or the graph cannot be produced
+     * @since 0.9.6
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                            boolean hideTitle, boolean showEvents, int periodCount,
@@ -957,29 +955,29 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  As {@link #renderGraph}, but emitting the plot geometry and series as JSON
-     *  rather than drawing the graph.
+     * As {@link #renderGraph}, but emitting the plot geometry and series as JSON
+     * rather than drawing the graph.
      *
-     *  <p>A graph is served as an {@code <img>}, so its SVG is an isolated document and a
-     *  client cannot read the numbers out of it. This is the separate request that carries
-     *  them, for a cursor readout.
+     * <p>A graph is served as an {@code <img>}, so its SVG is an isolated document and a
+     * client cannot read the numbers out of it. This is the separate request that carries
+     * them, for a cursor readout.
      *
-     *  @param out the output stream to write the graph or the metadata to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now
-     *  @param showCredit if true, keep the signature line
-     *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
-     *  @param titleOverride If non-null, overrides the title
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
-     *  @param meta true to write the metadata instead of the image
-     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
-     *  @since 0.9.71+
+     * @param out the output stream to write the graph or the metadata to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now
+     * @param showCredit if true, keep the signature line
+     * @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
+     * @param titleOverride If non-null, overrides the title
+     * @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     * @param meta true to write the metadata instead of the image
+     * @throws IOException if this listener has no open RRD, or the graph cannot be produced
+     * @since 0.9.71+
      */
     public void renderGraphMeta(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                            boolean hideTitle, boolean showEvents, int periodCount,
@@ -993,26 +991,26 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Render this stat with any number of extra series overlaid as lines.
+     * Render this stat with any number of extra series overlaid as lines.
      *
-     *  <p>Every series shares one axis, so the caller must supply stats that measure the
-     *  same thing; see {@link GraphGroups} for the sanctioned groupings.
+     * <p>Every series shares one axis, so the caller must supply stats that measure the
+     * same thing; see {@link GraphGroups} for the sanctioned groupings.
      *
-     *  @param out the output stream to write the graph to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now
-     *  @param showCredit if true, keep the signature line
-     *  @param extras extra series in legend order, or null for none
-     *  @param titleOverride If non-null, overrides the title
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
-     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
-     *  @since 0.9.71+
+     * @param out the output stream to write the graph to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now
+     * @param showCredit if true, keep the signature line
+     * @param extras extra series in legend order, or null for none
+     * @param titleOverride If non-null, overrides the title
+     * @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     * @throws IOException if this listener has no open RRD, or the graph cannot be produced
+     * @since 0.9.71+
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                            boolean hideTitle, boolean showEvents, int periodCount,
@@ -1026,24 +1024,24 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  As {@link #renderGraph}, but emitting the plot geometry and series as JSON.
+     * As {@link #renderGraph}, but emitting the plot geometry and series as JSON.
      *
-     *  @param out the output stream to write the graph or the metadata to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now
-     *  @param showCredit if true, keep the signature line
-     *  @param extras extra series in legend order, or null for none
-     *  @param titleOverride If non-null, overrides the title
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
-     *  @param meta true to write the metadata instead of the image
-     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
-     *  @since 0.9.71+
+     * @param out the output stream to write the graph or the metadata to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now
+     * @param showCredit if true, keep the signature line
+     * @param extras extra series in legend order, or null for none
+     * @param titleOverride If non-null, overrides the title
+     * @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     * @param meta true to write the metadata instead of the image
+     * @throws IOException if this listener has no open RRD, or the graph cannot be produced
+     * @since 0.9.71+
      */
     public void renderGraphMeta(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                            boolean hideTitle, boolean showEvents, int periodCount,
@@ -1057,27 +1055,27 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  Render this stat with any number of extra series, every series drawn as a line.
+     * Render this stat with any number of extra series, every series drawn as a line.
      *
-     *  <p>Identical to {@link #renderGraph(OutputStream, int, int, boolean, boolean, boolean,
-     *  boolean, int, int, boolean, List, String, boolean)} except that the primary is a line
-     *  rather than a filled area, so no member of the group is hidden behind another.
+     * <p>Identical to {@link #renderGraph(OutputStream, int, int, boolean, boolean, boolean,
+     * boolean, int, int, boolean, List, String, boolean)} except that the primary is a line
+     * rather than a filled area, so no member of the group is hidden behind another.
      *
-     *  @param out the output stream to write the graph to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now
-     *  @param showCredit if true, keep the signature line
-     *  @param extras extra series in legend order, or null for none
-     *  @param titleOverride If non-null, overrides the title
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
-     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
-     *  @since 0.9.71+
+     * @param out the output stream to write the graph to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now
+     * @param showCredit if true, keep the signature line
+     * @param extras extra series in legend order, or null for none
+     * @param titleOverride If non-null, overrides the title
+     * @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     * @throws IOException if this listener has no open RRD, or the graph cannot be produced
+     * @since 0.9.71+
      */
     public void renderGraphLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                                 boolean hideTitle, boolean showEvents, int periodCount,
@@ -1091,24 +1089,24 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     *  As {@link #renderGraphLines}, but emitting the plot geometry and series as JSON.
+     * As {@link #renderGraphLines}, but emitting the plot geometry and series as JSON.
      *
-     *  @param out the output stream to write the graph or the metadata to
-     *  @param width image width in pixels
-     *  @param height image height in pixels
-     *  @param hideLegend if true, omit the legend
-     *  @param hideGrid if true, omit the grid lines
-     *  @param hideTitle if true, omit the title
-     *  @param showEvents if true, plot the event count rather than the stat
-     *  @param periodCount number of time periods to display, or -1 for default
-     *  @param end number of periods before now
-     *  @param showCredit if true, keep the signature line
-     *  @param extras extra series in legend order, or null for none
-     *  @param titleOverride If non-null, overrides the title
-     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
-     *  @param meta true to write the metadata instead of the image
-     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
-     *  @since 0.9.71+
+     * @param out the output stream to write the graph or the metadata to
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend if true, omit the legend
+     * @param hideGrid if true, omit the grid lines
+     * @param hideTitle if true, omit the title
+     * @param showEvents if true, plot the event count rather than the stat
+     * @param periodCount number of time periods to display, or -1 for default
+     * @param end number of periods before now
+     * @param showCredit if true, keep the signature line
+     * @param extras extra series in legend order, or null for none
+     * @param titleOverride If non-null, overrides the title
+     * @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     * @param meta true to write the metadata instead of the image
+     * @throws IOException if this listener has no open RRD, or the graph cannot be produced
+     * @since 0.9.71+
      */
     public void renderGraphMetaLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                                 boolean hideTitle, boolean showEvents, int periodCount,
@@ -1160,10 +1158,10 @@ public class GraphListener implements RateSummaryListener {
     long now() {return _context.clock().now();}
 
     /**
-     *  The backend factory matching this listener's persistence setting.
+     * The backend factory matching this listener's persistence setting.
      *
-     *  @return the NIO file factory when persistent, otherwise the in-memory one
-     *  @since 0.9.46
+     * @return the NIO file factory when persistent, otherwise the in-memory one
+     * @since 0.9.46
      */
     RrdBackendFactory getBackendFactory() {return getBackendFactory(_isPersistent);}
 
@@ -1184,14 +1182,14 @@ public class GraphListener implements RateSummaryListener {
     int getRows() {return _rows;}
 
     /**
-     *  Fetch the last {@code count} data points from the RRD database for use by the
-     *  dual-baseline minigraph renderer (data-rx/data-tx attributes on the canvas).
-     *  Points are right-aligned; the returned array is NaN-padded on the left when
-     *  fewer points are available.
+     * Fetch the last {@code count} data points from the RRD database for use by the
+     * dual-baseline minigraph renderer (data-rx/data-tx attributes on the canvas).
+     * Points are right-aligned; the returned array is NaN-padded on the left when
+     * fewer points are available.
      *
-     *  @param count number of most recent data points to retrieve
-     *  @return array of average values (units depend on the stat), length = count
-     *  @since 0.9.70+
+     * @param count number of most recent data points to retrieve
+     * @return array of average values (units depend on the stat), length = count
+     * @since 0.9.70+
      */
     public double[] getLastValues(int count) {
         double[] result = new double[count];

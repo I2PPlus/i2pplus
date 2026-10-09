@@ -8,14 +8,14 @@ import org.junit.Test;
 import net.i2p.util.RandomSource;
 
 /**
- *  Unit tests for {@link EventPumper#evaluateInboundFlood(long, int, int, long, boolean, int, int, RandomSource)},
- *  the pure decision half of the inbound flood throttle. Pins the exact arithmetic so
- *  the reasoning that underlies it (accept-rate spike over baseline, warmed-up period,
- *  two-thirds connection ceiling) cannot be broken accidentally, and confirms the hot
- *  path is fully deterministic: once the flood gate opens, the probabilistic term is
- *  always saturated, so {@code nextInt()} is never consulted.
+ * Unit tests for {@link EventPumper#evaluateInboundFlood(long, int, int, long, boolean, int, int, RandomSource)},
+ * the pure decision half of the inbound flood throttle. Pins the exact arithmetic so
+ * the reasoning that underlies it (accept-rate spike over baseline, warmed-up period,
+ * two-thirds connection ceiling) cannot be broken accidentally, and confirms the hot
+ * path is fully deterministic: once the flood gate opens, the probabilistic term is
+ * always saturated, so {@code nextInt()} is never consulted.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class InboundFloodDecisionTest {
 
@@ -26,9 +26,9 @@ public class InboundFloodDecisionTest {
     private static final int TWO_THIRDS = MAX_CONNECTIONS * 2 / 3;
 
     /**
-     *  A random source that always returns a fixed value from {@code nextInt(int)}
-     *  and counts invocations, so tests can assert whether the probabilistic
-     *  branch was ever reached.
+     * A random source that always returns a fixed value from {@code nextInt(int)}
+     * and counts invocations, so tests can assert whether the probabilistic
+     * branch was ever reached.
      */
     private static final class ScriptedRandom extends RandomSource {
         private final int _result;
@@ -42,8 +42,8 @@ public class InboundFloodDecisionTest {
     }
 
     /**
-     *  No current-period activity means the "current - last" subtraction allows
-     *  everything, regardless of the stale-event totals.
+     * No current-period activity means the "current - last" subtraction allows
+     * everything, regardless of the stale-event totals.
      */
     @Test
     public void testNoCurrentActivityAllowed() {
@@ -54,8 +54,8 @@ public class InboundFloodDecisionTest {
     }
 
     /**
-     *  The accept rate is meaningless in the first seconds after a period rollover,
-     *  so the throttle is always disengaged during warmup.
+     * The accept rate is meaningless in the first seconds after a period rollover,
+     * so the throttle is always disengaged during warmup.
      */
     @Test
     public void testWarmupPeriodAllowed() {
@@ -65,8 +65,8 @@ public class InboundFloodDecisionTest {
     }
 
     /**
-     *  Current rate at or near the baseline never trips the flood gate, even when
-     *  the router is at its connection ceiling.
+     * Current rate at or near the baseline never trips the flood gate, even when
+     * the router is at its connection ceiling.
      */
     @Test
     public void testBaselineRateAllowed() {
@@ -77,8 +77,8 @@ public class InboundFloodDecisionTest {
     }
 
     /**
-     *  A huge accept-rate spike is still allowed while the router is below
-     *  two-thirds of its connection ceiling - load is the second gate.
+     * A huge accept-rate spike is still allowed while the router is below
+     * two-thirds of its connection ceiling - load is the second gate.
      */
     @Test
     public void testBelowConnectionCeilingAllowed() {
@@ -88,10 +88,10 @@ public class InboundFloodDecisionTest {
     }
 
     /**
-     *  Once the gate opens (rate spike + high connection count), rejection is
-     *  deterministic: the accept-probability term saturates well past the 128
-     *  ceiling, so the random draw is never actually consumed. Verdicted carries
-     *  the numbers used for logging.
+     * Once the gate opens (rate spike + high connection count), rejection is
+     * deterministic: the accept-probability term saturates well past the 128
+     * ceiling, so the random draw is never actually consumed. Verdicted carries
+     * the numbers used for logging.
      */
     @Test
     public void testFloodDropDeterministic() {
@@ -113,8 +113,8 @@ public class InboundFloodDecisionTest {
     }
 
     /**
-     *  The previous-period baseline is floored at 15 events; a drop must report
-     *  the floored value (used in the warn log), never the raw sub-floor count.
+     * The previous-period baseline is floored at 15 events; a drop must report
+     * the floored value (used in the warn log), never the raw sub-floor count.
      */
     @Test
     public void testLastEventFloorApplied() {
@@ -127,9 +127,9 @@ public class InboundFloodDecisionTest {
     }
 
     /**
-     *  The floor is symmetric: a sub-floor last period makes "current" shrink by
-     *  the deficit, so small totals can legitimately read as zero activity.
-     *  rawCurrent=5, rawLast=10 -> last=15, current=0 -> allowed.
+     * The floor is symmetric: a sub-floor last period makes "current" shrink by
+     * the deficit, so small totals can legitimately read as zero activity.
+     * rawCurrent=5, rawLast=10 -> last=15, current=0 -> allowed.
      */
     @Test
     public void testLastEventFloorSubtractionShrinksCurrent() {
@@ -140,8 +140,8 @@ public class InboundFloodDecisionTest {
     }
 
     /**
-     *  The saturation factor tightens the flood threshold: when the transport
-     *  reports full capacity the same overloaded rate must still be dropped.
+     * The saturation factor tightens the flood threshold: when the transport
+     * reports full capacity the same overloaded rate must still be dropped.
      */
     @Test
     public void testSaturatedTransportStillDrops() {

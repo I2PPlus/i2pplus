@@ -5,23 +5,21 @@ package net.i2p.router;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.i2np.I2NPMessage;
 
 /**
  * Defines an executable task that can be fired off in reply to a message
- *
  */
 public interface ReplyJob extends Job {
 
     /**
-     *  Called by InNetMessagePool when an I2NPMessage
-     *  matching a MessageSelector registered with the OutboundMessageRegistry
-     *  is received
+     * Called by InNetMessagePool when an I2NPMessage
+     * matching a MessageSelector registered with the OutboundMessageRegistry
+     * is received
      *
-     *  @param message the received I2NP message
+     * @param message the received I2NP message
      */
     public void setMessage(I2NPMessage message);
 }

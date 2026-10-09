@@ -20,10 +20,10 @@ import java.net.Socket;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  A simple SOCKS 5 client.
- *  Note: Caller is advised to setSoTimeout on the socket. Not done here.
+ * A simple SOCKS 5 client.
+ * Note: Caller is advised to setSoTimeout on the socket. Not done here.
  *
- *  @since 0.9.33 adapted from net.i2p.i2ptunnel.socks.SOCKS5Server
+ * @since 0.9.33 adapted from net.i2p.i2ptunnel.socks.SOCKS5Server
  */
 @SuppressWarnings("PMD.CloseResource")
 public class SOCKS5Client {
@@ -31,32 +31,32 @@ public class SOCKS5Client {
     private SOCKS5Client() {}
 
     /**
-     *  Act as a SOCKS 5 client to connect to a proxy
+     * Act as a SOCKS 5 client to connect to a proxy
      *
-     *  Will throw and close sock on all errors.
-     *  Caller must close sock on success.
+     * Will throw and close sock on all errors.
+     * Caller must close sock on success.
      *
-     *  @param sock socket to the proxy
-     *  @param connHostName hostname for the proxy to connect to
-     *  @param connPort port for the proxy to connect to
-     *  @throws IOException if the connection fails or the proxy rejects the request
+     * @param sock socket to the proxy
+     * @param connHostName hostname for the proxy to connect to
+     * @param connPort port for the proxy to connect to
+     * @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(Socket sock, String connHostName, int connPort) throws IOException {
         connect(sock, connHostName, connPort, null, null);
     }
 
     /**
-     *  Act as a SOCKS 5 client to connect to a proxy
+     * Act as a SOCKS 5 client to connect to a proxy
      *
-     *  Will throw and close sock on all errors.
-     *  Caller must close sock on success.
+     * Will throw and close sock on all errors.
+     * Caller must close sock on success.
      *
-     *  @param sock socket to the proxy
-     *  @param connHostName hostname for the proxy to connect to
-     *  @param connPort port for the proxy to connect to
-     *  @param configUser username for proxy authentication or null
-     *  @param configPW password for proxy authentication or null
-     *  @throws IOException if the connection fails or the proxy rejects the request
+     * @param sock socket to the proxy
+     * @param connHostName hostname for the proxy to connect to
+     * @param connPort port for the proxy to connect to
+     * @param configUser username for proxy authentication or null
+     * @param configPW password for proxy authentication or null
+     * @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(Socket sock, String connHostName, int connPort, String configUser, String configPW) throws IOException {
         InputStream in = null;
@@ -74,34 +74,34 @@ public class SOCKS5Client {
     }
 
     /**
-     *  Act as a SOCKS 5 client to connect to a proxy
+     * Act as a SOCKS 5 client to connect to a proxy
      *
-     *  Will throw and close pin and pout on all errors.
-     *  Caller must close pin and pout on success.
+     * Will throw and close pin and pout on all errors.
+     * Caller must close pin and pout on success.
      *
-     *  @param pin input stream from the proxy
-     *  @param pout output stream to the proxy
-     *  @param connHostName hostname for the proxy to connect to
-     *  @param connPort port for the proxy to connect to
-     *  @throws IOException if the connection fails or the proxy rejects the request
+     * @param pin input stream from the proxy
+     * @param pout output stream to the proxy
+     * @param connHostName hostname for the proxy to connect to
+     * @param connPort port for the proxy to connect to
+     * @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(InputStream pin, OutputStream pout, String connHostName, int connPort) throws IOException {
         connect(pin, pout, connHostName, connPort, null, null);
     }
 
     /**
-     *  Act as a SOCKS 5 client to connect to a proxy
+     * Act as a SOCKS 5 client to connect to a proxy
      *
-     *  Will throw and close pin and pout on all errors.
-     *  Caller must close pin and pout on success.
+     * Will throw and close pin and pout on all errors.
+     * Caller must close pin and pout on success.
      *
-     *  @param pin input stream from the proxy
-     *  @param pout output stream to the proxy
-     *  @param connHostName hostname for the proxy to connect to
-     *  @param connPort port for the proxy to connect to
-     *  @param configUser username for proxy authentication or null
-     *  @param configPW password for proxy authentication or null
-     *  @throws IOException if the connection fails or the proxy rejects the request
+     * @param pin input stream from the proxy
+     * @param pout output stream to the proxy
+     * @param connHostName hostname for the proxy to connect to
+     * @param connPort port for the proxy to connect to
+     * @param configUser username for proxy authentication or null
+     * @param configPW password for proxy authentication or null
+     * @throws IOException if the connection fails or the proxy rejects the request
      */
     public static void connect(InputStream pin, OutputStream pout, String connHostName, int connPort, String configUser, String configPW) throws IOException {
         DataOutputStream out = null;

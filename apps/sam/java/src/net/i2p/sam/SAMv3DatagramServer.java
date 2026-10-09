@@ -5,7 +5,6 @@ package net.i2p.sam;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 
@@ -25,11 +24,11 @@ import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 
 /**
- *  This is the thread listening on 127.0.0.1:7655 or as specified by
- *  sam.udp.host and sam.udp.port properties.
- *  This is used for both repliable and raw datagrams.
+ * This is the thread listening on 127.0.0.1:7655 or as specified by
+ * sam.udp.host and sam.udp.port properties.
+ * This is used for both repliable and raw datagrams.
  *
- *  @since 0.9.24 moved from SAMv3Handler
+ * @since 0.9.24 moved from SAMv3Handler
  */
 class SAMv3DatagramServer implements Handler {
 
@@ -40,11 +39,11 @@ class SAMv3DatagramServer implements Handler {
 	private final int _port;
 
 	/**
-	 *  Does not start listener.
-	 *  Caller must call start().
+	 * Does not start listener.
+	 * Caller must call start().
 	 *
-	 *  @param parent may be null
-	 *  @param props configuration properties (reserved for future use)
+	 * @param parent may be null
+	 * @param props configuration properties (reserved for future use)
 	 */
 	public SAMv3DatagramServer(SAMBridge parent, String host, int port, Properties props) throws IOException {
 		_parent = parent;
@@ -57,8 +56,8 @@ class SAMv3DatagramServer implements Handler {
 	}
 
 	/**
-	 *  Only call once.
-	 *  @since 0.9.22
+	 * Only call once.
+	 * @since 0.9.22
 	 */
 	public synchronized void start() {
 		_listener.start();
@@ -67,8 +66,8 @@ class SAMv3DatagramServer implements Handler {
 	}
 
 	/**
-	 *  Cannot be restarted.
-	 *  @since 0.9.22
+	 * Cannot be restarted.
+	 * @since 0.9.22
 	 */
 	public synchronized void stopHandling() {
 		try {

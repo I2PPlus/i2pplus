@@ -26,9 +26,9 @@ import java.util.Map;
  *
  * <p>Generated keys are suitable for:</p>
  * <ul>
- *   <li>Digital signatures and verification</li>
- *   <li>I2P destination keys</li>
- *   <li>Router identity and communication</li>
+ * <li>Digital signatures and verification</li>
+ * <li>I2P destination keys</li>
+ * <li>Router identity and communication</li>
  * </ul>
  *
  * @author str4d
@@ -92,7 +92,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     }
 
     /**
-     *  @return the generated key pair
+     * @return the generated key pair
      */
     @Override
     public KeyPair generateKeyPair() {

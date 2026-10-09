@@ -1,9 +1,9 @@
 package net.i2p.util;
 
 /**
- *  A Westwood bandwidth estimator
+ * A Westwood bandwidth estimator
  *
- *  @since 0.9.46 consolidated from streaming and udp in 0.9.50
+ * @since 0.9.46 consolidated from streaming and udp in 0.9.50
  */
 public interface BandwidthEstimator {
 

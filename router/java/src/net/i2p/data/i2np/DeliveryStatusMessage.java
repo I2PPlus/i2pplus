@@ -5,7 +5,6 @@ package net.i2p.data.i2np;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -59,18 +58,18 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     }
 
     /**
-     *  Misnamed, as it is generally (always?) set by the creator to the current time,
-     *  in some future usage it could be set on arrival
+     * Misnamed, as it is generally (always?) set by the creator to the current time,
+     * in some future usage it could be set on arrival
      *
-     *  @return the arrival time
+     * @return the arrival time
      */
     public long getArrival() { return _arrival; }
 
     /**
-     *  Misnamed, as it is generally (always?) set by the creator to the current time,
-     *  in some future usage it could be set on arrival
+     * Misnamed, as it is generally (always?) set by the creator to the current time,
+     * in some future usage it could be set on arrival
      *
-     *  @param arrival the arrival time
+     * @param arrival the arrival time
      */
     public void setArrival(long arrival) {
         // To accomodate setting on arrival,

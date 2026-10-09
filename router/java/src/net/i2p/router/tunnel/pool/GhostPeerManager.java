@@ -267,16 +267,16 @@ public class GhostPeerManager {
     }
 
     /**
-     *  Offense count for a repeat timeout: previous count plus one, reset to
-     *  zero when the previous mark is older than the decay window (or the
-     *  clock moved backwards).  Pure decision helper.
+     * Offense count for a repeat timeout: previous count plus one, reset to
+     * zero when the previous mark is older than the decay window (or the
+     * clock moved backwards).  Pure decision helper.
      *
-     *  @param currentOffenses offense count on the existing mark, &lt; 0 treated as 0
-     *  @param lastMarkAt when the existing mark was written (ms), 0 if none
-     *  @param now current router time (ms)
-     *  @param decayMs window in which repeat offenses count (ms)
-     *  @return offense count to apply to the new mark
-     *  @since 0.9.71+
+     * @param currentOffenses offense count on the existing mark, &lt; 0 treated as 0
+     * @param lastMarkAt when the existing mark was written (ms), 0 if none
+     * @param now current router time (ms)
+     * @param decayMs window in which repeat offenses count (ms)
+     * @return offense count to apply to the new mark
+     * @since 0.9.71+
      */
     static int nextOffenses(int currentOffenses, long lastMarkAt, long now, long decayMs) {
         int base = currentOffenses < 0 ? 0 : currentOffenses;
@@ -287,13 +287,13 @@ public class GhostPeerManager {
     }
 
     /**
-     *  Escalating ghost cooldown: base doubled per offense, capped at
-     *  {@link #MAX_ESCALATION_SHIFT} doublings (4× base).  Pure helper.
+     * Escalating ghost cooldown: base doubled per offense, capped at
+     * {@link #MAX_ESCALATION_SHIFT} doublings (4× base).  Pure helper.
      *
-     *  @param baseMs cooldown for a first offense (ms)
-     *  @param offenses repeat timeouts within the decay window, &lt;= 0 means base
-     *  @return cooldown for this mark (ms)
-     *  @since 0.9.71+
+     * @param baseMs cooldown for a first offense (ms)
+     * @param offenses repeat timeouts within the decay window, &lt;= 0 means base
+     * @return cooldown for this mark (ms)
+     * @since 0.9.71+
      */
     static long escalationCooldownMs(long baseMs, int offenses) {
         if (baseMs <= 0 || offenses <= 0) {
@@ -474,11 +474,11 @@ public class GhostPeerManager {
     }
 
     /**
-     *  The configured timeout threshold: consecutive strikes required
-     *  before a peer is excluded (values below 1 are treated as 1 by
-     *  {@link #recordTimeout}).
+     * The configured timeout threshold: consecutive strikes required
+     * before a peer is excluded (values below 1 are treated as 1 by
+     * {@link #recordTimeout}).
      *
-     *  @return threshold number of timeouts before exclusion
+     * @return threshold number of timeouts before exclusion
      */
     public int getThreshold() {
         return getTimeoutThreshold(_context);

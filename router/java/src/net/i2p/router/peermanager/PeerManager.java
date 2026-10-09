@@ -5,7 +5,6 @@ package net.i2p.router.peermanager;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.ArrayList;
@@ -59,10 +58,10 @@ class PeerManager {
     private static final long REORGANIZE_TIME = 30*1000L;
     private static final long REORGANIZE_TIME_MEDIUM = 90*1000L;
     /**
-     *  We don't want this much longer than the average connect time,
-     *  as the CapacityCalculator now includes connection as a factor.
-     *  This must also be less than 10 minutes, which is the shortest
-     *  Rate contained in the profile, as the Rates must be coalesced.
+     * We don't want this much longer than the average connect time,
+     * as the CapacityCalculator now includes connection as a factor.
+     * This must also be less than 10 minutes, which is the shortest
+     * Rate contained in the profile, as the Rates must be coalesced.
      */
     static final long REORGANIZE_TIME_LONG = 250*1000L;
     /** After first two hours of uptime ~= 246 */
@@ -71,10 +70,10 @@ class PeerManager {
     // for profiles stored to disk
     private static final long EXPIRE_AGE = 7*24*60*60*1000L;
     /**
-     *  Timeout for a RouterInfo lookup issued on behalf of a stored profile whose peer
-     *  the netdb cannot resolve, in ms.
+     * Timeout for a RouterInfo lookup issued on behalf of a stored profile whose peer
+     * the netdb cannot resolve, in ms.
      *
-     *  @since 0.9.72
+     * @since 0.9.72
      */
     private static final long ADDRESS_REFRESH_TIMEOUT_MS = 30 * 1000L;
 
@@ -98,8 +97,8 @@ class PeerManager {
         Router.CAPABILITY_NO_TUNNELS;
 
     /**
-     *  Profiles are now loaded in a separate thread,
-     *  so this should return quickly.
+     * Profiles are now loaded in a separate thread,
+     * so this should return quickly.
      */
     public PeerManager(RouterContext context) {
         _context = context;
@@ -133,12 +132,12 @@ class PeerManager {
     }
 
     /**
-     *  Reorganize the profiles. Also periodically store them,
-     *  and delete very old ones.
+     * Reorganize the profiles. Also periodically store them,
+     * and delete very old ones.
      *
-     *  This takes too long to run on the SimpleTimer2 queue
+     * This takes too long to run on the SimpleTimer2 queue
      *
-     *  @since 0.9.10
+     * @since 0.9.10
      */
     private class ReorgThread extends I2PThread {
         private final SimpleTimer2.TimedEvent _event;
@@ -232,8 +231,8 @@ class PeerManager {
     Set<Hash> selectPeers() {return _organizer.selectAllPeers();}
 
     /**
-     *  @param cutoff only store if most recent activity is newer than this (absolute time)
-     *  @return success
+     * @param cutoff only store if most recent activity is newer than this (absolute time)
+     * @return success
      */
     private boolean storeProfile(Hash peer, long cutoff) {
         PeerProfile prof = _organizer.getProfile(peer);
@@ -258,23 +257,23 @@ class PeerManager {
     }
 
     /**
-     *  Is this peer in a bandwidth tier too low to be worth remembering across a
-     *  restart?
+     * Is this peer in a bandwidth tier too low to be worth remembering across a
+     * restart?
      *
-     *  <p>K, L, M and Unknown are the tiers a peer advertises when it cannot or will
-     *  not commit bandwidth. Their profiles are still tracked in memory, where they
-     *  matter to selection and to the fast/high-cap tiers; what is not worth the
-     *  disk is the persisted history of a peer whose RouterInfo already tells us it
-     *  will not host a tunnel usefully.
+     * <p>K, L, M and Unknown are the tiers a peer advertises when it cannot or will
+     * not commit bandwidth. Their profiles are still tracked in memory, where they
+     * matter to selection and to the fast/high-cap tiers; what is not worth the
+     * disk is the persisted history of a peer whose RouterInfo already tells us it
+     * will not host a tunnel usefully.
      *
-     *  <p>A missing or unreadable RouterInfo is <em>not</em> treated as low
-     *  bandwidth: absence of evidence is not evidence, and refusing to persist a peer
-     *  we simply have not looked up yet would discard the very profiles a floodfill
-     *  lookup would then have to rebuild.
+     * <p>A missing or unreadable RouterInfo is <em>not</em> treated as low
+     * bandwidth: absence of evidence is not evidence, and refusing to persist a peer
+     * we simply have not looked up yet would discard the very profiles a floodfill
+     * lookup would then have to rebuild.
      *
-     *  @param peer hash of the peer to classify
-     *  @return true if the peer advertises K, L, M or Unknown bandwidth
-     *  @since 0.9.71+
+     * @param peer hash of the peer to classify
+     * @return true if the peer advertises K, L, M or Unknown bandwidth
+     * @since 0.9.71+
      */
     private boolean isLowBandwidthPeer(Hash peer) {
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
@@ -284,19 +283,19 @@ class PeerManager {
     }
 
     /**
-     *  Load the profiles in a separate thread, so we don't spend
-     *  forever in the constructor (slowing down the Router constructor
-     *  via RouterContext.initAll()).
-     *  This also instantiates Reorg, so only call this once
+     * Load the profiles in a separate thread, so we don't spend
+     * forever in the constructor (slowing down the Router constructor
+     * via RouterContext.initAll()).
+     * This also instantiates Reorg, so only call this once
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     private void loadProfilesInBackground() {(new I2PThread(new ProfileLoader(), "PeerProfLoad")).start();}
 
     /**
-     *  Load the profiles and instantiate Reorg, waiting for 60s uptime to allow the routerinfos to load first
+     * Load the profiles and instantiate Reorg, waiting for 60s uptime to allow the routerinfos to load first
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
 
     private class ProfileLoader implements Runnable {
@@ -318,7 +317,7 @@ class PeerManager {
     }
 
     /**
-     *  This may take a long time - 30 seconds or more
+     * This may take a long time - 30 seconds or more
      */
     void loadProfiles() {
         // Peers whose profile survived but whose RouterInfo the netdb cannot supply.
@@ -346,15 +345,15 @@ class PeerManager {
     }
 
     /**
-     *  Requests RouterInfos for stored profiles whose peer the netdb cannot resolve.
+     * Requests RouterInfos for stored profiles whose peer the netdb cannot resolve.
      *
-     *  <p>Scheduled once loading finishes, then every
-     *  {@link RouterInfoRefresher#MISSING_ROUTERINFO_MIN_INTERVAL_MS}. The lookups are
-     *  fire-and-forget, so the timer thread only issues them and returns; the netdb
-     *  negatively caches keys it has already failed to resolve, so a peer that never
-     *  comes back is cheap to keep skipping.
+     * <p>Scheduled once loading finishes, then every
+     * {@link RouterInfoRefresher#MISSING_ROUTERINFO_MIN_INTERVAL_MS}. The lookups are
+     * fire-and-forget, so the timer thread only issues them and returns; the netdb
+     * negatively caches keys it has already failed to resolve, so a peer that never
+     * comes back is cheap to keep skipping.
      *
-     *  @since 0.9.72
+     * @since 0.9.72
      */
     private class MissingRouterInfoDrain extends SimpleTimer2.TimedEvent {
 
@@ -432,12 +431,12 @@ class PeerManager {
     }
 
     /**
-     *  Non-blocking test peer selection.  Returns null if the read lock
-     *  cannot be acquired (reorganize in progress).  Used exclusively by
-     *  {@link PeerTestJob} to avoid blocking the job queue thread.
+     * Non-blocking test peer selection.  Returns null if the read lock
+     * cannot be acquired (reorganize in progress).  Used exclusively by
+     * {@link PeerTestJob} to avoid blocking the job queue thread.
      *
-     *  @return selected peers, or null if lock not acquired
-     *  @since 0.9.71+
+     * @return selected peers, or null if lock not acquired
+     * @since 0.9.71+
      */
     List<Hash> selectTestPeersNonBlocking(int needed) {
         Set<Hash> peers = new HashSet<>(needed);
@@ -450,7 +449,7 @@ class PeerManager {
     }
 
     /**
-     *  @param caps non-null, case is ignored
+     * @param caps non-null, case is ignored
      */
     public void setCapabilities(Hash peer, String caps) {
         if (_log.shouldDebug()) {
@@ -499,8 +498,8 @@ class PeerManager {
     }
 
     /**
-     *  @param capability case-insensitive
-     *  @return non-null unmodifiable set
+     * @param capability case-insensitive
+     * @return non-null unmodifiable set
      */
     public Set<Hash> getPeersByCapability(char capability) {
         Set<Hash> peers = locked_getPeers(capability);
@@ -509,9 +508,9 @@ class PeerManager {
     }
 
     /**
-     *  @param capability case-insensitive
-     *  @return how many
-     *  @since 0.9.45
+     * @param capability case-insensitive
+     * @return how many
+     * @since 0.9.45
      */
     public int countPeersByCapability(char capability) {
         Set<Hash> peers = locked_getPeers(capability);

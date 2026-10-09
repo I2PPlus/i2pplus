@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.crypto.EncType;
@@ -22,38 +21,38 @@ import javax.security.auth.Destroyable;
  *
  * <p>Type and length:</p>
  * <ul>
- *   <li>The {@link EncType} is fixed at construction and never changes, and
- *       it determines the length: 256 bytes for the default
- *       {@link EncType#ELGAMAL_2048}, 32 for {@link EncType#ECIES_X25519}.
- *       {@link #KEYSIZE_BYTES} is the default type's length only.</li>
- *   <li>For ElGamal the array is the private exponent padded to the key size,
- *       which is why {@link #hashCode()} uses the last 4 bytes - the leading
- *       ones are all zero.</li>
- *   <li>Call {@link #destroy()} when the key is no longer needed. That zeroes
- *       the array and returns it to the byte cache, so after it the key
- *       reports {@link #isDestroyed()} and {@link #length()} still returns the
- *       type's length but the data is gone.</li>
+ * <li>The {@link EncType} is fixed at construction and never changes, and
+ * it determines the length: 256 bytes for the default
+ * {@link EncType#ELGAMAL_2048}, 32 for {@link EncType#ECIES_X25519}.
+ * {@link #KEYSIZE_BYTES} is the default type's length only.</li>
+ * <li>For ElGamal the array is the private exponent padded to the key size,
+ * which is why {@link #hashCode()} uses the last 4 bytes - the leading
+ * ones are all zero.</li>
+ * <li>Call {@link #destroy()} when the key is no longer needed. That zeroes
+ * the array and returns it to the byte cache, so after it the key
+ * reports {@link #isDestroyed()} and {@link #length()} still returns the
+ * type's length but the data is gone.</li>
  * </ul>
  *
  * <p>Caching:</p>
  * <ul>
- *   <li>The derived public key is cached in memory: the first
- *       {@link #toPublic()} computes it, later calls return the same
- *       {@link PublicKey} instance. A key built with the
- *       {@link #PrivateKey(EncType, byte[], PublicKey)} constructor starts
- *       with the caller's instance. There is no key cache of any kind here,
- *       and no create() factory method - build the key directly, or read it
- *       from a {@link PrivateKeyFile}.</li>
+ * <li>The derived public key is cached in memory: the first
+ * {@link #toPublic()} computes it, later calls return the same
+ * {@link PublicKey} instance. A key built with the
+ * {@link #PrivateKey(EncType, byte[], PublicKey)} constructor starts
+ * with the caller's instance. There is no key cache of any kind here,
+ * and no create() factory method - build the key directly, or read it
+ * from a {@link PrivateKeyFile}.</li>
  * </ul>
  *
  * <p>Thread safety:</p>
  * <ul>
- *   <li>Not thread-safe. The data cannot be reassigned once set, but the
- *       cached public key and the zeroing done by {@link #destroy()} are
- *       unsynchronized writes to plain fields, and {@link #getData()} hands
- *       out the backing array. Share a fully populated key, or pass it
- *       through a synchronized structure, and do not destroy() or write to
- *       the array while another thread may be using it.</li>
+ * <li>Not thread-safe. The data cannot be reassigned once set, but the
+ * cached public key and the zeroing done by {@link #destroy()} are
+ * unsynchronized writes to plain fields, and {@link #getData()} hands
+ * out the backing array. Share a fully populated key, or pass it
+ * through a synchronized structure, and do not destroy() or write to
+ * the array while another thread may be using it.</li>
  * </ul>
  *
  * @author jrandom
@@ -68,18 +67,18 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     private PublicKey _pubKey;
 
     /**
-     *  Constructor for an empty key of the default type, for reading from a
-     *  stream. Call readBytes() or fromBase64() to fill it in.
+     * Constructor for an empty key of the default type, for reading from a
+     * stream. Call readBytes() or fromBase64() to fill it in.
      */
     public PrivateKey() {
         this(DEF_TYPE);
     }
 
     /**
-     *  Constructor with type.
+     * Constructor with type.
      *
-     *  @param type non-null
-     *  @since 0.9.38
+     * @param type non-null
+     * @since 0.9.38
      */
     public PrivateKey(EncType type) {
         super();
@@ -97,13 +96,13 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  Constructor with type and data.
+     * Constructor with type and data.
      *
-     *  @param type non-null
-     *  @param data must be non-null, and of the type's key length
-     *  @throws IllegalArgumentException if data is null or the wrong length,
-     *                                  or if type is null
-     *  @since 0.9.38
+     * @param type non-null
+     * @param data must be non-null, and of the type's key length
+     * @throws IllegalArgumentException if data is null or the wrong length,
+     * or if type is null
+     * @since 0.9.38
      */
     public PrivateKey(EncType type, byte[] data) {
         this(type);
@@ -112,14 +111,14 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  Constructor with type, data, and cached public key.
+     * Constructor with type, data, and cached public key.
      *
-     *  @param type non-null
-     *  @param data must be non-null, and of the type's key length
-     *  @param pubKey corresponding pubKey to be cached, non-null
-     *  @throws IllegalArgumentException if data is null or the wrong length,
-     *                                  or if pubKey is null or of another type
-     *  @since 0.9.44
+     * @param type non-null
+     * @param data must be non-null, and of the type's key length
+     * @param pubKey corresponding pubKey to be cached, non-null
+     * @throws IllegalArgumentException if data is null or the wrong length,
+     * or if pubKey is null or of another type
+     * @since 0.9.44
      */
     public PrivateKey(EncType type, byte[] data, PublicKey pubKey) {
         this(type, data);
@@ -146,10 +145,10 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  Encryption type of this private key.
+     * Encryption type of this private key.
      *
-     *  @return non-null
-     *  @since 0.9.38
+     * @return non-null
+     * @since 0.9.38
      */
     public EncType getType() {
         return _type;
@@ -169,12 +168,12 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  Destroy this key and clear its data, per the javax.security.auth.Destroyable
-     *  interface. The data is zeroed and returned to the byte cache, the cached
-     *  public key is dropped, and the key reports isDestroyed() afterwards.
-     *  Calling this more than once is harmless.
+     * Destroy this key and clear its data, per the javax.security.auth.Destroyable
+     * interface. The data is zeroed and returned to the byte cache, the cached
+     * public key is dropped, and the key reports isDestroyed() afterwards.
+     * Calling this more than once is harmless.
      *
-     *  @since 0.9.40
+     * @since 0.9.40
      */
     @Override
     public void destroy() {
@@ -199,12 +198,12 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     }
 
     /**
-     *  The type and either the base64 data (keys of 32 bytes or less) or just
-     *  the size, so the secret is not printed. Prints "null" for the data of
-     *  a destroyed key.
+     * The type and either the base64 data (keys of 32 bytes or less) or just
+     * the size, so the secret is not printed. Prints "null" for the data of
+     * a destroyed key.
      *
-     *  @return a string representation
-     *  @since 0.9.38
+     * @return a string representation
+     * @since 0.9.38
      */
     @Override
     public String toString() {

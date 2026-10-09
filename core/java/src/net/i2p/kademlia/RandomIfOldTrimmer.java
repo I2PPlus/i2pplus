@@ -4,19 +4,19 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.SimpleDataStructure;
 
 /**
- *  Removes a random element, but only if the bucket hasn't changed in 5 minutes.
+ * Removes a random element, but only if the bucket hasn't changed in 5 minutes.
  *
  *
- *  @param <T> type of SimpleDataStructure objects in the bucket
- *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ * @param <T> type of SimpleDataStructure objects in the bucket
+ * @since 0.9.2 in i2psnark, moved to core in 0.9.10
  */
 public class RandomIfOldTrimmer<T extends SimpleDataStructure> extends RandomTrimmer<T> {
 
     /**
-     *  Create a trimmer that only trims a bucket that hasn't changed in 5 minutes.
+     * Create a trimmer that only trims a bucket that hasn't changed in 5 minutes.
      *
-     *  @param ctx the context
-     *  @param max maximum bucket size
+     * @param ctx the context
+     * @param max maximum bucket size
      */
     public RandomIfOldTrimmer(I2PAppContext ctx, int max) {
         super(ctx, max);

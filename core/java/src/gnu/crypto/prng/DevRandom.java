@@ -21,9 +21,9 @@ class DevRandom implements IRandomStandalone {
     private final File file = new File(F);
 
     /**
-     *  Check if /dev/random is available.
-     *  @return true if /dev/random can be read
-     *  @since 0.9.66
+     * Check if /dev/random is available.
+     * @return true if /dev/random can be read
+     * @since 0.9.66
      */
     public static boolean isSupported() {
         return (new File(F)).canRead();

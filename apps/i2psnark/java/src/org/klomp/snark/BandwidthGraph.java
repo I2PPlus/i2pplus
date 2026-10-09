@@ -11,18 +11,18 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Self-contained bandwidth sampler for the snark screen log graph.
+ * Self-contained bandwidth sampler for the snark screen log graph.
  *
- *  Every SAMPLE_INTERVAL_MS, snapshots the cumulative traffic counters (peer wire
- *  rates summed over torrents, datagram counters fed by DatagramSender and the
- *  receive paths, HTTP tracker counters fed by I2PSnarkUtil) and stores per-interval
- *  byte totals in a fixed ring. Runs for the webapp's lifetime, independent of any
- *  browser being open, so the graph stays continuous.
+ * Every SAMPLE_INTERVAL_MS, snapshots the cumulative traffic counters (peer wire
+ * rates summed over torrents, datagram counters fed by DatagramSender and the
+ * receive paths, HTTP tracker counters fed by I2PSnarkUtil) and stores per-interval
+ * byte totals in a fixed ring. Runs for the webapp's lifetime, independent of any
+ * browser being open, so the graph stays continuous.
  *
- *  Flushes to the tmp dir every FLUSH_INTERVAL_MS so history survives webapp or
- *  router restarts; entries older than WINDOW_MS are dropped on load.
+ * Flushes to the tmp dir every FLUSH_INTERVAL_MS so history survives webapp or
+ * router restarts; entries older than WINDOW_MS are dropped on load.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class BandwidthGraph extends SimpleTimer2.TimedEvent {
 
@@ -59,10 +59,10 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     private static volatile BandwidthGraph _instance;
 
     /**
-     *  Start the sampler for this snark manager, loading prior history from the
-     *  tmp-dir file when present. Subsequent calls are no-ops.
+     * Start the sampler for this snark manager, loading prior history from the
+     * tmp-dir file when present. Subsequent calls are no-ops.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public static synchronized void start(SnarkManager manager) {
         if (_instance != null) {return;}
@@ -70,9 +70,9 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Stop the sampler and flush pending history. Safe to call repeatedly.
+     * Stop the sampler and flush pending history. Safe to call repeatedly.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public static synchronized void stop() {
         BandwidthGraph g = _instance;
@@ -83,11 +83,11 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  The current sample version: increments once per stored sample. Clients use it
-     *  to detect new data without parsing the samples themselves.
+     * The current sample version: increments once per stored sample. Clients use it
+     * to detect new data without parsing the samples themselves.
      *
-     *  @return monotonically increasing sample counter
-     *  @since 0.9.71+
+     * @return monotonically increasing sample counter
+     * @since 0.9.71+
      */
     public static long getVersion() {
         BandwidthGraph g = _instance;
@@ -95,11 +95,11 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Serialize the ring oldest-first as "timestampSec,rxKB,txKB;...".
-     *  Values are KB (bytes/1024 rounded) to keep the wire format compact.
+     * Serialize the ring oldest-first as "timestampSec,rxKB,txKB;...".
+     * Values are KB (bytes/1024 rounded) to keep the wire format compact.
      *
-     *  @return compact CSV of every stored sample, empty string when none
-     *  @since 0.9.71+
+     * @return compact CSV of every stored sample, empty string when none
+     * @since 0.9.71+
      */
     public static String getSamples() {
         BandwidthGraph g = _instance;
@@ -131,8 +131,8 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  One sampling pass: derive interval bytes from counter deltas plus current
-     *  peer-wire rates, append to the ring, and flush periodically.
+     * One sampling pass: derive interval bytes from counter deltas plus current
+     * peer-wire rates, append to the ring, and flush periodically.
      */
     public synchronized void timeReached() {
         try {
@@ -151,7 +151,7 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Snapshot counters, compute deltas, and append one ring entry.
+     * Snapshot counters, compute deltas, and append one ring entry.
      */
     private void sample() {
         SnarkManager mgr = _manager;
@@ -192,15 +192,15 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Counter delta with reset detection: a cumulative source that shrank was
-     *  reset, so only the post-reset amount is attributable to this interval.
+     * Counter delta with reset detection: a cumulative source that shrank was
+     * reset, so only the post-reset amount is attributable to this interval.
      */
     private static long delta(long current, long previous) {
         return current >= previous ? current - previous : current;
     }
 
     /**
-     *  @return CSV "ts,rxKB,txKB;..." oldest-first — KB keeps the data URL small
+     * @return CSV "ts,rxKB,txKB;..." oldest-first — KB keeps the data URL small
      */
     private synchronized String serialize() {
         StringBuilder buf = new StringBuilder(48 * _count);
@@ -218,8 +218,8 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Write the serialized ring to the tmp-dir file atomically-ish (write temp,
-     *  rename), ignoring all errors — persistence is best-effort by design.
+     * Write the serialized ring to the tmp-dir file atomically-ish (write temp,
+     * rename), ignoring all errors — persistence is best-effort by design.
      */
     private synchronized void flush() {
         try {
@@ -234,8 +234,8 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Load persisted samples younger than the window, seeding the ring so a fresh
-     *  webapp start still shows recent history.
+     * Load persisted samples younger than the window, seeding the ring so a fresh
+     * webapp start still shows recent history.
      */
     private void load() {
         File file = file();
@@ -281,8 +281,8 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     *  Persistence location: the JVM tmp dir (defaulting to /tmp), matching the
-     *  BandwidthHistory pattern.
+     * Persistence location: the JVM tmp dir (defaulting to /tmp), matching the
+     * BandwidthHistory pattern.
      */
     private static File file() {
         String dir = System.getProperty("java.io.tmpdir", "/tmp");

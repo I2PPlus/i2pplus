@@ -6,7 +6,7 @@ import java.util.Arrays;
  */
 public interface RateSummaryListener {
     /**
-     *  Called to add rate statistics for a period.
+     * Called to add rate statistics for a period.
      *
      * @param totalValue sum of all event values in the most recent period
      * @param eventCount how many events occurred
@@ -16,8 +16,8 @@ public interface RateSummaryListener {
     void add(double totalValue, long eventCount, double totalEventTime, long period);
 
     /**
-     *  Get the last N data points from persistent storage (if available).
-     *  Default returns all NaN; override in implementations that store history.
+     * Get the last N data points from persistent storage (if available).
+     * Default returns all NaN; override in implementations that store history.
      *
      * @param count number of data points requested
      * @return array of length count, NaN-padded where data is unavailable

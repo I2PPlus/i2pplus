@@ -55,7 +55,7 @@ public class ConnectionCAWindowGrowthTest {
     }
 
     /** Deficit-driven effective ACK counts accumulate toward faster ramp — total
-     *  harvested increments over N rounds stays within one of N/(factor*window). */
+     * harvested increments over N rounds stays within one of N/(factor*window). */
     @Test
     public void testAggregationStaysBounded() {
         long acc = 0;
@@ -74,7 +74,7 @@ public class ConnectionCAWindowGrowthTest {
     }
 
     /** Determinism: identical inputs always produce identical credit, and the
-     *  cumulative window growth matches the expectation curve, not a draw. */
+     * cumulative window growth matches the expectation curve, not a draw. */
     @Test
     public void testDeterministicReproducibility() {
         long a = ConnectionPacketHandler.caGrowthCredit(123L, 5, 1, 500);

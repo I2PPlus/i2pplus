@@ -36,13 +36,13 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** Max connect timeout override in ms, 0 = use global i2p.streaming.maxConnectTimeout. */
     private long _maxConnectTimeout;
     /** Smoothed rtt. Volatile: read from the throttle/retransmit hot path
-     *  (writer thread, timer thread, reader thread) without the monitor the
-     *  compound methods still use. */
+     * (writer thread, timer thread, reader thread) without the monitor the
+     * compound methods still use. */
     private volatile int _smoothedRtt;
     /** Min rtt. Unknown until the first sample: seeding the floor with a
-     *  guess (e.g. the initial RTT) would fabricate a minimum on any path whose
-     *  real floor is higher, and _minRtt feeds the bandwidth-derived ssthresh
-     *  floor. Like mainline: Integer.MAX_VALUE until updateRTT() narrows it. */
+     * guess (e.g. the initial RTT) would fabricate a minimum on any path whose
+     * real floor is higher, and _minRtt feeds the bandwidth-derived ssthresh
+     * floor. Like mainline: Integer.MAX_VALUE until updateRTT() narrows it. */
     private volatile int _minRtt = Integer.MAX_VALUE;
     /** Rtt deviation. */
     private volatile int _rttDeviation;
@@ -161,17 +161,17 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
 
     /**
-     *  How long an established connection may keep a packet in flight with no forward
-     *  progress before it is force-closed, in ms.
+     * How long an established connection may keep a packet in flight with no forward
+     * progress before it is force-closed, in ms.
      *
-     *  <p>Deliberately its own setting rather than a product of {@code maxResends} and
-     *  {@code maxRTO}. {@code maxResends} is the per-<em>packet</em> budget and governs
-     *  loss tolerance; multiplying it by an RTO cap produced a four-minute connection
-     *  lifetime as a side effect of a loss-tolerance knob. While the client tunnel pool
-     *  is short of healthy tunnels, every second a dead stream is held is a second it
-     *  occupies capacity that a live stream needs, and the resulting reconnects starve
-     *  the pool further. Ninety seconds still rides out several firings past the RTO
-     *  cap, so a genuinely transient loss survives.
+     * <p>Deliberately its own setting rather than a product of {@code maxResends} and
+     * {@code maxRTO}. {@code maxResends} is the per-<em>packet</em> budget and governs
+     * loss tolerance; multiplying it by an RTO cap produced a four-minute connection
+     * lifetime as a side effect of a loss-tolerance knob. While the client tunnel pool
+     * is short of healthy tunnels, every second a dead stream is held is a second it
+     * occupies capacity that a live stream needs, and the resulting reconnects starve
+     * the pool further. Ninety seconds still rides out several firings past the RTO
+     * cap, so a genuinely transient loss survives.
      */
     static final String PROP_STALL_GIVEUP_MS = "i2p.streaming.stallGiveupMs";
 
@@ -195,16 +195,16 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setInitialRTO(int val) { defaultInitialRTO = Math.max(500, Math.min(30000, val)); }
 
     /**
-      * Default 8000 accommodates RTT up to ~4s with standard TCP deviation.
-      * Shorter than the historical 30000 so a stalled path costs less: a lost
-      * packet blocks the stream head-of-line until its RTO backoff expires, and
-      * the Tuner only tightens this on paths that keep confirming sends. On a
-      * dead path (no confirmTime events) the Tuner sees no signal, so the code
-      * default IS the retransmit pace and the zombie-window backstop
-      * (maxResends * maxRTO) for that path. 8000 keeps each loss stall modest
-      * and the default 30-resend backstop (~4 min) inside a range a recovered
-      * path can still resume from, instead of the 15-min hang the 30s default
-      * gave. Tuner may raise this for very high-latency networks.
+     * Default 8000 accommodates RTT up to ~4s with standard TCP deviation.
+     * Shorter than the historical 30000 so a stalled path costs less: a lost
+     * packet blocks the stream head-of-line until its RTO backoff expires, and
+     * the Tuner only tightens this on paths that keep confirming sends. On a
+     * dead path (no confirmTime events) the Tuner sees no signal, so the code
+     * default IS the retransmit pace and the zombie-window backstop
+     * (maxResends * maxRTO) for that path. 8000 keeps each loss stall modest
+     * and the default 30-resend backstop (~4 min) inside a range a recovered
+     * path can still resume from, instead of the 15-min hang the 30s default
+     * gave. Tuner may raise this for very high-latency networks.
      */
     private static volatile int maxRTO = 8000;
 
@@ -261,9 +261,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static void setMinResendDelay(int val) { minResendDelay = Math.max(100, Math.min(5000, val)); }
 
     /**
-      * Max resend delay (ms). Raised to 20000 to accommodate high-RTT paths without premature retransmit
-      * while still providing faster recovery than the 30000 default.
-      */
+     * Max resend delay (ms). Raised to 20000 to accommodate high-RTT paths without premature retransmit
+     * while still providing faster recovery than the 30000 default.
+     */
     private static volatile int maxResendDelay = 20000;
 
     /**
@@ -344,11 +344,11 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
 
     /**
-     *  Operator-tunable ceiling for the Tuner's {@code maxConcurrentStreamsOverride}.
-     *  The effective cap taken by a manager is the min of its configured value
-     *  ({@link #PROP_MAX_STREAMS}) and the override, so this only bounds the Tuner;
-     *  it can never raise a manager above its own per-tunnel ceiling.
-     *  @since 0.9.71+
+     * Operator-tunable ceiling for the Tuner's {@code maxConcurrentStreamsOverride}.
+     * The effective cap taken by a manager is the min of its configured value
+     * ({@link #PROP_MAX_STREAMS}) and the override, so this only bounds the Tuner;
+     * it can never raise a manager above its own per-tunnel ceiling.
+     * @since 0.9.71+
      */
     public static final String PROP_MAX_MAX_STREAMS = "i2p.streaming.maxMaxConcurrentStreams";
     /** Default ceiling; operator may raise via PROP_MAX_MAX_STREAMS. @since 0.9.71+ */
@@ -387,8 +387,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static final int DEFAULT_MAX_SENDS = 30;
 
     /**
-     *  Default wall-clock budget for giving up on forward progress. See
-     *  {@link #PROP_STALL_GIVEUP_MS}.
+     * Default wall-clock budget for giving up on forward progress. See
+     * {@link #PROP_STALL_GIVEUP_MS}.
      */
     static final long DEFAULT_STALL_GIVEUP_MS = 90000;
 
@@ -406,12 +406,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setInitialWindowSize(int val) { initialWindowSize = Math.max(4, Math.min(1024, val)); }
 
     /**
-     *  Reactive cap on concurrent streams (both per-manager inbound budget and the
-     *  outbound wait queue), written by the router's Tuner under saturation. Applies
-     *  to every ConnectionManager. 0 (the default) means "no override": each manager
-     *  uses its own configured {@code i2p.streaming.maxConcurrentStreams} captured at
-     *  init. When positive, a manager enforces the {@code min(configured, override)}.
-     *  @since 0.9.71+
+     * Reactive cap on concurrent streams (both per-manager inbound budget and the
+     * outbound wait queue), written by the router's Tuner under saturation. Applies
+     * to every ConnectionManager. 0 (the default) means "no override": each manager
+     * uses its own configured {@code i2p.streaming.maxConcurrentStreams} captured at
+     * init. When positive, a manager enforces the {@code min(configured, override)}.
+     * @since 0.9.71+
      */
     static volatile int maxConcurrentStreamsOverride = 0;
 
@@ -429,14 +429,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     }
 
     /**
-     *  Tuner-managed default for inbound packet receive workers, read when a
-     *  {@code PacketDispatcher} is created. 0 (the default) means "no override":
-     *  each manager uses its configured {@code i2p.streaming.receiveWorkerThreads}
-     *  or the platform core count. When positive, new dispatchers start with this
-     *  many shards; the Tuner also resizes live dispatchers via
-     *  {@code PacketDispatcher.resizeAll}. Bounded by the per-manager cap used by
-     *  PacketHandler.
-     *  @since 0.9.71+
+     * Tuner-managed default for inbound packet receive workers, read when a
+     * {@code PacketDispatcher} is created. 0 (the default) means "no override":
+     * each manager uses its configured {@code i2p.streaming.receiveWorkerThreads}
+     * or the platform core count. When positive, new dispatchers start with this
+     * many shards; the Tuner also resizes live dispatchers via
+     * {@code PacketDispatcher.resizeAll}. Bounded by the per-manager cap used by
+     * PacketHandler.
+     * @since 0.9.71+
      */
     static volatile int receiveWorkerThreads = 0;
 
@@ -466,19 +466,19 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     static void setAcceptWorkerThreads(int val) { acceptWorkerThreads = Math.max(0, Math.min(16, val)); }
 
     /**
-      *  Operator-tunable ceiling for the Tuner's stream-cap override.
-     *  Reads from router.config via {@code i2p.streaming.maxMaxConcurrentStreams},
-     *  falling back to the compiled default.
-     *  @return the current ceiling
-     *  @since 0.9.71+
+     * Operator-tunable ceiling for the Tuner's stream-cap override.
+     * Reads from router.config via {@code i2p.streaming.maxMaxConcurrentStreams},
+     * falling back to the compiled default.
+     * @return the current ceiling
+     * @since 0.9.71+
      */
     static int getMaxMaxConcurrentStreams() {
         return I2PAppContext.getGlobalContext().getProperty(PROP_MAX_MAX_STREAMS, maxMaxConcurrentStreams);
     }
     /**
-     *  Operator-tunable ceiling for the Tuner's stream-cap override; clamped to [64, 8192].
-     *  @param val the ceiling on the stream-cap override
-     *  @since 0.9.71+
+     * Operator-tunable ceiling for the Tuner's stream-cap override; clamped to [64, 8192].
+     * @param val the ceiling on the stream-cap override
+     * @since 0.9.71+
      */
     static void setMaxMaxConcurrentStreams(int val) { maxMaxConcurrentStreams = Math.max(64, Math.min(8192, val)); }
 
@@ -643,9 +643,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public static long getMinPacingRate() { return minPacingRate; }
 /**
-     * Min pacing rate.
-     * @param val the floor on pacing throughput in bytes/sec
-     */
+ * Min pacing rate.
+ * @param val the floor on pacing throughput in bytes/sec
+ */
     public static void setMinPacingRate(long val) { minPacingRate = Math.max(1024, Math.min(256 * 1024, val)); }
 
     /**
@@ -672,16 +672,16 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /*
      * Message size derivation (1730 == 2 tunnel messages):
-     *   1024 Tunnel Message - 21 Header = 1003 Tunnel Payload
-     *   - 39 Unfragmented instructions = 964 Garlic Message
-     *   - 16 I2NP header - 4 length = 944 Garlic payload (AES padded)
-     *   - 32 tag - 2 count - 4 size - 32 hash - 1 flags - 1 clove count
-     *   - 33 delivery - 4 ID - 8 exp - 3 clove cert - 3 garlic cert - 4 ID - 8 exp
-     *     = 809 Data Message - 16 I2NP - 4 length = 789 Gzipped
-     *   - 23 gzip overhead = 766 - 28 streaming header = 738 (1 msg)
+     * 1024 Tunnel Message - 21 Header = 1003 Tunnel Payload
+     * - 39 Unfragmented instructions = 964 Garlic Message
+     * - 16 I2NP header - 4 length = 944 Garlic payload (AES padded)
+     * - 32 tag - 2 count - 4 size - 32 hash - 1 flags - 1 clove count
+     * - 33 delivery - 4 ID - 8 exp - 3 clove cert - 3 garlic cert - 4 ID - 8 exp
+     * = 809 Data Message - 16 I2NP - 4 length = 789 Gzipped
+     * - 23 gzip overhead = 766 - 28 streaming header = 738 (1 msg)
      *
-     *   With 2 tunnel messages: 738 * 2 + 254 = 1730
-     *   See also: 3 msgs = 2722, 4 msgs = 3714
+     * With 2 tunnel messages: 738 * 2 + 254 = 1730
+     * See also: 3 msgs = 2722, 4 msgs = 3714
      *
      * Historical values: 4096 (pre-0.6.1.14), 960 (0.6.1.14-0.6.4),
      * 1730 (0.6.5+). The earlier 960 didn't actually fit in one tunnel msg
@@ -968,26 +968,26 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public void setMaxConnectTimeout(long maxConnectTimeoutMs) {_maxConnectTimeout = maxConnectTimeoutMs;}
 
     /**
-     *  Whether every packet on this connection must be signed, or only
-     *  SYN/FIN-class packets.
+     * Whether every packet on this connection must be signed, or only
+     * SYN/FIN-class packets.
      *
-     *  <p>Defaults to false, and no property or GUI setting exposes it: it is
-     *  only ever set in-process via {@link #setRequireFullySigned(boolean)} and
-     *  carried to a new connection when options are copied from an existing
-     *  one.  When true it takes effect in both directions: every outbound
-     *  packet gets FLAG_SIGNATURE_INCLUDED and FLAG_SIGNATURE_REQUESTED, and
-     *  ConnectionPacketHandler rejects any inbound packet that does not carry a
-     *  valid signature.
+     * <p>Defaults to false, and no property or GUI setting exposes it: it is
+     * only ever set in-process via {@link #setRequireFullySigned(boolean)} and
+     * carried to a new connection when options are copied from an existing
+     * one.  When true it takes effect in both directions: every outbound
+     * packet gets FLAG_SIGNATURE_INCLUDED and FLAG_SIGNATURE_REQUESTED, and
+     * ConnectionPacketHandler rejects any inbound packet that does not carry a
+     * valid signature.
      *
-     *  @return true if all packets must be signed, false for SYN/FIN only
+     * @return true if all packets must be signed, false for SYN/FIN only
      */
     public boolean getRequireFullySigned() {return _fullySigned;}
     /**
-     *  Whether all packets on this connection require signing.  See
-     *  {@link #getRequireFullySigned()} for the effect; there is no property to
-     *  configure this with.
+     * Whether all packets on this connection require signing.  See
+     * {@link #getRequireFullySigned()} for the effect; there is no property to
+     * configure this with.
      *
-     *  @param sign true to require all packets signed
+     * @param sign true to require all packets signed
      */
     public void setRequireFullySigned(boolean sign) {_fullySigned = sign;}
 
@@ -1041,14 +1041,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public int getRTT() {return _smoothedRtt;}
 
     /**
-     *  Whether a real RTT sample has ever been recorded for this connection.
+     * Whether a real RTT sample has ever been recorded for this connection.
      *
-     *  <p>Until the first sample arrives, {@link #getRTT} and
-     *  {@link #getWindowSize} hold the class defaults rather than a
-     *  measurement. A connection torn down before that — a hard kill during
-     *  connect, say — must not have those defaults published as though they
-     *  were observed, or every such teardown biases the lifetime aggregates the
-     *  Tuner reads toward the floor.
+     * <p>Until the first sample arrives, {@link #getRTT} and
+     * {@link #getWindowSize} hold the class defaults rather than a
+     * measurement. A connection torn down before that — a hard kill during
+     * connect, say — must not have those defaults published as though they
+     * were observed, or every such teardown biases the lifetime aggregates the
+     * Tuner reads toward the floor.
      *
      * @return true if at least one RTT sample has been recorded
      * @since 0.9.71+
@@ -1295,7 +1295,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * Effective passive flush delay in ms.
      * @return effective passive flush delay in ms: explicit value if set,
-     *         otherwise the Tuner-managed global default
+     * otherwise the Tuner-managed global default
      */
     public int getPassiveFlushDelay() {
         return _passiveFlushDelay > 0 ? _passiveFlushDelay : MessageOutputStream.getDefaultPassiveFlushDelay();
@@ -1313,26 +1313,26 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public int getMaxResends() {return _maxResends;}
 
     /**
-     *  Wall-clock ms an established connection may hold a packet in flight with no
-     *  forward progress before being force-closed.
+     * Wall-clock ms an established connection may hold a packet in flight with no
+     * forward progress before being force-closed.
      *
-     *  @return the stall give-up budget in ms
-     *  @since 0.9.71+
+     * @return the stall give-up budget in ms
+     * @since 0.9.71+
      */
     public long getStallGiveupMs() {return _stallGiveupMs;}
 
     /**
-     *  Wall-clock budget for giving up on forward progress. See
-     *  {@link #PROP_STALL_GIVEUP_MS}.
+     * Wall-clock budget for giving up on forward progress. See
+     * {@link #PROP_STALL_GIVEUP_MS}.
      *
-     *  @param ms wall-clock budget in ms; negative or zero disables the backstop
-     *  @since 0.9.71+
+     * @param ms wall-clock budget in ms; negative or zero disables the backstop
+     * @since 0.9.71+
      */
     public void setStallGiveupMs(long ms) {_stallGiveupMs = Math.max(ms, 0);}
     /**
      * Maximum retries per message.
      * @param numSends the per-packet resend budget; negative values clamp to 0,
-     *        which disables the retransmit give-up
+     * which disables the retransmit give-up
      */
     public void setMaxResends(int numSends) {_maxResends = Math.max(numSends, 0);}
 
@@ -1344,7 +1344,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * Inactivity timeout before action.
      * @param timeout the idle time before the inactivity action fires, in ms;
-     *        stored unclamped
+     * stored unclamped
      */
     public void setInactivityTimeout(int timeout) {_inactivityTimeout = timeout;}
 
@@ -1632,7 +1632,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @param name property key to look up
      * @param defaultVal fallback when opts is null or the key is absent
      * @return the parsed flag, or defaultVal if unset; anything
-     *         {@link Boolean#parseBoolean} does not read as true is false
+     * {@link Boolean#parseBoolean} does not read as true is false
      */
     private static boolean getBool(Properties opts, String name, boolean defaultVal) {
         if (opts == null) return defaultVal;

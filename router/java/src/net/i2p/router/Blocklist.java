@@ -59,7 +59,7 @@ import net.i2p.util.SystemVersion;
  * 1) The list of IP ranges, read in from a file at startup
  * 2) The list of hashes, read in from the same file
  * 3) A list of single IPs, initially empty, added to as needed
- *</pre>
+ * </pre>
  *
  * Read in the IP blocklist from a file, store it in-memory as efficiently
  * as we can, and perform tests against it as requested.
@@ -113,7 +113,7 @@ public class Blocklist {
     /** Feed blocklist file path */
     private static final String BLOCKLIST_FEED_FILE = "docs/feed/blocklist/blocklist.txt";
     /** Country-based blocklist filename.
-     *  @since 0.9.48
+     * @since 0.9.48
      */
     public static final String BLOCKLIST_COUNTRY_FILE = "blocklist-country.txt";
 
@@ -132,9 +132,9 @@ public class Blocklist {
     private static final Object DUMMY = Integer.valueOf(0);
 
     /**
-     *  For Update Manager
+     * For Update Manager
      *
-     *  @since 0.9.48
+     * @since 0.9.48
      */
     public static final String ID_FEED = "feed";
     /** System blocklist ID */
@@ -151,10 +151,10 @@ public class Blocklist {
     public static final String ID_TOR = "tor";
 
     /**
-     *  Constructor.
-     *  Router MUST call startup()
+     * Constructor.
+     * Router MUST call startup()
      *
-     *  @param context the router context
+     * @param context the router context
      */
     public Blocklist(RouterContext context) {
         _context = context;
@@ -169,9 +169,9 @@ public class Blocklist {
     }
 
     /**
-     *  Initialize configurable properties.
+     * Initialize configurable properties.
      *
-     *  @since 0.9.70
+     * @since 0.9.70
      */
     private void initConfig() {
         _blocklistEnabled = _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED);
@@ -180,19 +180,19 @@ public class Blocklist {
     }
 
     /**
-     *  Reload configuration from properties.
-     *  Called when settings are changed in the console.
+     * Reload configuration from properties.
+     * Called when settings are changed in the console.
      *
-     *  @since 0.9.70
+     * @since 0.9.70
      */
     public void reloadConfig() {
         initConfig();
     }
 
     /**
-     *  Clear all blocked IPs and peers.
+     * Clear all blocked IPs and peers.
      *
-     *  @since 0.9.70
+     * @since 0.9.70
      */
     public void clearAll() {
         _peerBlocklist.clear();
@@ -203,26 +203,26 @@ public class Blocklist {
     }
 
     /**
-     *  Check if blocklist is enabled.
+     * Check if blocklist is enabled.
      *
-     *  @return true if blocklist is enabled
-     *  @since 0.9.70
+     * @return true if blocklist is enabled
+     * @since 0.9.70
      */
     public boolean isBlocklistEnabled() { return _blocklistEnabled; }
 
     /**
-     *  Check if Tor blocklist is enabled.
+     * Check if Tor blocklist is enabled.
      *
-     *  @return true if Tor blocklist is enabled
-     *  @since 0.9.70
+     * @return true if Tor blocklist is enabled
+     * @since 0.9.70
      */
     public boolean isTorBlocklistEnabled() { return _blocklistTorEnabled; }
 
     /**
-     *  Check if country blocklist is enabled.
+     * Check if country blocklist is enabled.
      *
-     *  @return true if country blocklist is enabled
-     *  @since 0.9.70
+     * @return true if country blocklist is enabled
+     * @since 0.9.70
      */
     public boolean isCountryBlocklistEnabled() { return _blocklistCountryEnabled; }
 
@@ -238,9 +238,9 @@ public class Blocklist {
     }
 
     /**
-     *  Get the blocklist expiration interval from configuration.
+     * Get the blocklist expiration interval from configuration.
      *
-     *  @return the expiration interval in milliseconds, or 0 if disabled
+     * @return the expiration interval in milliseconds, or 0 if disabled
      */
     private int expireInterval() {
         String expireIntervalValue = _context.getProperty(PROP_BLOCKLIST_EXPIRE_INTERVAL, "0");
@@ -273,13 +273,13 @@ public class Blocklist {
     }
 
     /**
-     *  Loads the following files in-order:
-     *  $I2P/blocklist.txt
-     *  $I2P/blocklist_tor.txt
-     *  ~/.i2p/blocklist.txt
-     *  ~/.i2p/docs/feed/blocklist/blocklist.txt
-     *  ~/.i2p/blocklist-countries.txt
-     *  File if specified with router.blocklist.file
+     * Loads the following files in-order:
+     * $I2P/blocklist.txt
+     * $I2P/blocklist_tor.txt
+     * ~/.i2p/blocklist.txt
+     * ~/.i2p/docs/feed/blocklist/blocklist.txt
+     * ~/.i2p/blocklist-countries.txt
+     * File if specified with router.blocklist.file
      */
     public synchronized void startup() {
         if (_started) {return;}
@@ -346,7 +346,7 @@ public class Blocklist {
     }
 
     /**
-     *  @since 0.9.48
+     * @since 0.9.48
      */
     private static class BLFile {
         public final File file;
@@ -356,9 +356,9 @@ public class Blocklist {
     }
 
     /**
-     *  Delay telling update manager until it's there
+     * Delay telling update manager until it's there
      *
-     *  @since 0.9.48
+     * @since 0.9.48
      */
     private class VersionNotifier extends SimpleTimer2.TimedEvent {
         public final List<BLFile> blfs;
@@ -410,7 +410,7 @@ public class Blocklist {
         private final List<BLFile> _files;
 
         /**
-         *  @param files not necessarily existing, but avoid dups
+         * @param files not necessarily existing, but avoid dups
          */
         public ReadinJob (List<BLFile> files) {
             super(_context);
@@ -505,11 +505,11 @@ public class Blocklist {
     }
 
     /**
-     *  The blocklist-country.txt file was created or updated.
-     *  Read it in. Not required normally, as the country file
-     *  is read by startup().
+     * The blocklist-country.txt file was created or updated.
+     * Read it in. Not required normally, as the country file
+     * is read by startup().
      *
-     *  @since 0.9.48
+     * @since 0.9.48
      */
     public synchronized void addCountryFile() {
         File blFile = new File(_context.getConfigDir(), BLOCKLIST_COUNTRY_FILE);
@@ -532,7 +532,7 @@ public class Blocklist {
     }
 
     /**
-     *  Disable the blocklist and clear all entries.
+     * Disable the blocklist and clear all entries.
      */
     public void disable() {
         // hmm better block out any checks in process
@@ -543,11 +543,11 @@ public class Blocklist {
     }
 
     /**
-     *  Allocate an array for blocklist entries.
+     * Allocate an array for blocklist entries.
      *
-     *  @param files the list of blocklist files to read
-     *  @return the allocated array, or null on out of memory error
-     *  @since 0.9.18 split out from readBlocklistFile()
+     * @param files the list of blocklist files to read
+     * @return the allocated array, or null on out of memory error
+     * @since 0.9.18 split out from readBlocklistFile()
      */
     private long[] allocate(List<BLFile> files) {
         int maxSize = 0;
@@ -560,37 +560,37 @@ public class Blocklist {
     }
 
    /**
-     *  Read in and parse the blocklist.
-     *  The blocklist need not be sorted, and may contain overlapping entries.
-     *
-     *  Acceptable formats (IPV4 only):
-     *  #comment (# must be in column 1)
-     *  comment:IP-IP
-     *  comment:morecomments:IP-IP
-     *  IP-IP
-     *  (comments also allowed before any of the following)
-     *  IP/masklength
-     *  IP
-     *  hostname (DNS looked up at list readin time, not dynamically, so may not be much use)
-     *  44-byte Base64 router hash
-     *
-     *  Acceptable formats (IPV6 only):
-     *  comment:IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
-     *  IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
-     *
-     *  No whitespace allowed after the last ':'.
-     *
-     *  For further information and downloads:
-     *  http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
-     *  http://blocklist.googlepages.com/
-     *  http://www.cymru.com/Documents/bogon-list.html
-     *
-     *  Must call allocate() before and merge() after.
-     *
-     *  @param blocklist out parameter, entries stored here
-     *  @param count current number of entries
-     *  @return new number of entries
-     */
+    * Read in and parse the blocklist.
+    * The blocklist need not be sorted, and may contain overlapping entries.
+    *
+    * Acceptable formats (IPV4 only):
+    * #comment (# must be in column 1)
+    * comment:IP-IP
+    * comment:morecomments:IP-IP
+    * IP-IP
+    * (comments also allowed before any of the following)
+    * IP/masklength
+    * IP
+    * hostname (DNS looked up at list readin time, not dynamically, so may not be much use)
+    * 44-byte Base64 router hash
+    *
+    * Acceptable formats (IPV6 only):
+    * comment:IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
+    * IPv6 (must replace : with ; e.g. abcd;1234;0;12;;ff)
+    *
+    * No whitespace allowed after the last ':'.
+    *
+    * For further information and downloads:
+    * http://www.bluetack.co.uk/forums/index.php?autocom=faq&CODE=02&qid=17
+    * http://blocklist.googlepages.com/
+    * http://www.cymru.com/Documents/bogon-list.html
+    *
+    * Must call allocate() before and merge() after.
+    *
+    * @param blocklist out parameter, entries stored here
+    * @param count current number of entries
+    * @return new number of entries
+    */
     private int readBlocklistFile(BLFile blf, long[] blocklist, int count) {
         File blFile = blf.file;
         if (blFile == null || (!blFile.exists()) || blFile.length() <= 0) {
@@ -656,9 +656,9 @@ public class Blocklist {
     }
 
     /**
-     *  @param count valid entries in blocklist before merge
-     *  @return count valid entries in blocklist after merge
-     *  @since 0.9.18 split out from readBlocklistFile()
+     * @param count valid entries in blocklist before merge
+     * @return count valid entries in blocklist after merge
+     * @since 0.9.18 split out from readBlocklistFile()
      */
     private int merge(long[] blocklist, int count) {
         long start = _context.clock().now();
@@ -691,7 +691,7 @@ public class Blocklist {
     }
 
     /**
-     *  The result of parsing one line.
+     * The result of parsing one line.
      */
     private static class Entry {
         /** The comment extracted from the line. */
@@ -704,10 +704,10 @@ public class Blocklist {
         final Hash peer;
 
         /**
-         *  @param c the comment
-         *  @param h the router hash (may be null)
-         *  @param i1 the starting IP
-         *  @param i2 the ending IP
+         * @param c the comment
+         * @param h the router hash (may be null)
+         * @param i1 the starting IP
+         * @param i2 the ending IP
          */
         public Entry(String c, Hash h, byte[] i1, byte[] i2) {
              comment = c;
@@ -718,7 +718,7 @@ public class Blocklist {
     }
 
     /**
-     *  Parse one line, returning a temp data structure with the result
+     * Parse one line, returning a temp data structure with the result
      */
     private Entry parse(String buf, boolean shouldLog) { // NOSONAR S3012: called from readBlocklistFile() and banlistRouter()
         byte[] ip1;
@@ -796,10 +796,10 @@ public class Blocklist {
     }
 
     /**
-     *  Count the number of entries in a blocklist file.
+     * Count the number of entries in a blocklist file.
      *
-     *  @param blFile the blocklist file to count
-     *  @return the number of non-comment, non-blank lines
+     * @param blFile the blocklist file to count
+     * @return the number of non-comment, non-blank lines
      */
     private int getSize(File blFile) {
         if ( (!blFile.exists()) || (blFile.length() <= 0) ) return 0;
@@ -817,12 +817,12 @@ public class Blocklist {
     }
 
     /**
-     *  Merge and remove overlapping entries from a sorted list.
-     *  Caller must re-sort if return code is > 0.
+     * Merge and remove overlapping entries from a sorted list.
+     * Caller must re-sort if return code is > 0.
      *
-     *  @param blist the sorted blocklist array
-     *  @param count the number of valid entries in the array
-     *  @return the number of overlapping entries removed
+     * @param blist the sorted blocklist array
+     * @param count the number of valid entries in the array
+     * @return the number of overlapping entries removed
      */
     private int removeOverlap(long[] blist, int count) {
         if (count <= 0) {return 0;}
@@ -978,7 +978,6 @@ public class Blocklist {
      *
      * @param ip IPv6 non-negative
      * @return true if it was NOT previously on the list
-     * @since IPv6
      */
     private boolean add(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
@@ -1004,7 +1003,6 @@ public class Blocklist {
      *
      * @param ip IPv6 non-negative
      * @return whether on single list
-     * @since IPv6
      */
     private boolean isOnSingleList(BigInteger ip) {
         if (_singleIPv6Blocklist != null) {
@@ -1046,12 +1044,12 @@ public class Blocklist {
     }
 
     /**
-     *  Check if a peer is blocklisted by IP address.
-     *  If so, and it isn't banlisted, banlist it forever or for the configured override period.
+     * Check if a peer is blocklisted by IP address.
+     * If so, and it isn't banlisted, banlist it forever or for the configured override period.
      *
-     *  @param peer the router hash to check
-     *  @return true if the peer's IP is in the blocklist
-     *  @since 0.9.29
+     * @param peer the router hash to check
+     * @return true if the peer's IP is in the blocklist
+     * @since 0.9.29
      */
     public boolean isBlocklisted(Hash peer) {
         List<byte[]> ips = getAddresses(peer);
@@ -1066,12 +1064,12 @@ public class Blocklist {
     }
 
     /**
-     *  Check if a peer is blocklisted by IP address.
-     *  If so, and it isn't banlisted, banlist it forever or for the configured override period.
+     * Check if a peer is blocklisted by IP address.
+     * If so, and it isn't banlisted, banlist it forever or for the configured override period.
      *
-     *  @param pinfo the router info to check
-     *  @return true if the peer's IP is in the blocklist
-     *  @since 0.9.29
+     * @param pinfo the router info to check
+     * @return true if the peer's IP is in the blocklist
+     * @since 0.9.29
      */
     public boolean isBlocklisted(RouterInfo pinfo) {
         List<byte[]> ips = getAddresses(pinfo);
@@ -1087,11 +1085,11 @@ public class Blocklist {
     }
 
     /**
-     *  Check if an IP address is blocklisted.
-     *  Calling this externally won't banlist the peer, this is just an IP check.
+     * Check if an IP address is blocklisted.
+     * Calling this externally won't banlist the peer, this is just an IP check.
      *
-     *  @param ip the IP address as a string (IPv4 or IPv6)
-     *  @return true if the IP is blocklisted
+     * @param ip the IP address as a string (IPv4 or IPv6)
+     * @return true if the IP is blocklisted
      */
     public boolean isBlocklisted(String ip) {
         if (!_haveIPv6 && ip.indexOf(':') >= 0) {return false;}
@@ -1101,11 +1099,11 @@ public class Blocklist {
     }
 
     /**
-     *  Check if an IP address is blocklisted.
-     *  Calling this externally won't banlist the peer, this is just an IP check.
+     * Check if an IP address is blocklisted.
+     * Calling this externally won't banlist the peer, this is just an IP check.
      *
-     *  @param ip the IP address as a byte array (IPv4 or IPv6)
-     *  @return true if the IP is blocklisted
+     * @param ip the IP address as a byte array (IPv4 or IPv6)
+     * @return true if the IP is blocklisted
      */
     public boolean isBlocklisted(byte[] ip) {
         if (ip.length == 4) {return isBlocklisted(toInt(ip));}
@@ -1130,12 +1128,12 @@ public class Blocklist {
     }
 
     /**
-     *  Check if an IP is permanently blocklisted using binary search.
-     *  Public for console only, not a public API.
+     * Check if an IP is permanently blocklisted using binary search.
+     * Public for console only, not a public API.
      *
-     *  @param ip the IPv4 address as an integer
-     *  @return true if the IP is in the permanent blocklist
-     *  @since 0.9.45 split out from above, public since 0.9.48 for console
+     * @param ip the IPv4 address as an integer
+     * @return true if the IP is in the permanent blocklist
+     * @since 0.9.45 split out from above, public since 0.9.48 for console
      */
     public boolean isPermanentlyBlocklisted(int ip) {
         return isPermanentlyBlocklisted(ip, _blocklist, _blocklistSize);
@@ -1168,11 +1166,11 @@ public class Blocklist {
     }
 
     /**
-     *  Check if an IP is included in a compressed blocklist entry.
+     * Check if an IP is included in a compressed blocklist entry.
      *
-     *  @param ip the IP to check
-     *  @param entry the compressed blocklist entry
-     *  @return true if the IP is within the entry's range
+     * @param ip the IP to check
+     * @param entry the compressed blocklist entry
+     * @return true if the IP is within the entry's range
      */
     private static boolean match(int ip, long entry) {
         if (getFrom(entry) > ip) {return false;}
@@ -1180,33 +1178,31 @@ public class Blocklist {
     }
 
     /**
-     *  Check if an IP is higher than the entry's starting IP.
+     * Check if an IP is higher than the entry's starting IP.
      *
-     *  @param ip the IP to check
-     *  @param entry the compressed blocklist entry
-     *  @return true if the IP is higher than the entry's starting IP
+     * @param ip the IP to check
+     * @param entry the compressed blocklist entry
+     * @return true if the IP is higher than the entry's starting IP
      */
     private static boolean isHigher(int ip, long entry) {return ip > getFrom(entry);}
 
     /* Methods to get and store the from/to values in the array */
 
     /**
-     *  Extract the starting IP from a compressed blocklist entry.
-     *  Public for console only, not a public API.
+     * Extract the starting IP from a compressed blocklist entry.
+     * Public for console only, not a public API.
      *
-     *  @param entry the compressed blocklist entry
-     *  @return the starting IP as an integer
-     *  @since public since 0.9.48
+     * @param entry the compressed blocklist entry
+     * @return the starting IP as an integer
      */
     public static int getFrom(long entry) {return (int) ((entry >> 32) & 0xffffffff);}
 
     /**
-     *  Extract the ending IP from a compressed blocklist entry.
-     *  Public for console only, not a public API.
+     * Extract the ending IP from a compressed blocklist entry.
+     * Public for console only, not a public API.
      *
-     *  @param entry the compressed blocklist entry
-     *  @return the ending IP as an integer
-     *  @since public since 0.9.48
+     * @param entry the compressed blocklist entry
+     * @return the ending IP as an integer
      */
     public static int getTo(long entry) {return (int) (entry & 0xffffffff);}
 
@@ -1215,7 +1211,6 @@ public class Blocklist {
      * The XOR is so the signed sort is in normal (unsigned) order.
      *
      * So the size is (cough) almost 2MB for the 240,000 line splist.txt.
-     *
      */
     private static long toEntry(byte[] ip1, byte[] ip2) {
         long entry = 0;
@@ -1225,24 +1220,24 @@ public class Blocklist {
     }
 
     /**
-     *  Store an IPv4 range as a compressed entry in the blocklist array.
+     * Store an IPv4 range as a compressed entry in the blocklist array.
      *
-     *  @param ip1 the starting IP as a byte array
-     *  @param ip2 the ending IP as a byte array
-     *  @param blocklist the blocklist
-     *  @param idx the index to store at
+     * @param ip1 the starting IP as a byte array
+     * @param ip2 the ending IP as a byte array
+     * @param blocklist the blocklist
+     * @param idx the index to store at
      */
     private static void store(byte[] ip1, byte[] ip2, long[] blocklist, int idx) {
         blocklist[idx] = toEntry(ip1, ip2);
     }
 
     /**
-     *  Store an IPv4 range as a compressed entry in the blocklist array.
+     * Store an IPv4 range as a compressed entry in the blocklist array.
      *
-     *  @param ip1 the starting IP as an integer
-     *  @param ip2 the ending IP as an integer
-     *  @param blocklist the blocklist
-     *  @param idx the index to store at
+     * @param ip1 the starting IP as an integer
+     * @param ip2 the ending IP as an integer
+     * @param blocklist the blocklist
+     * @param idx the index to store at
      */
     private static void store(int ip1, int ip2, long[] blocklist, int idx) {
         long entry = ((long) ip1) << 32;
@@ -1251,10 +1246,10 @@ public class Blocklist {
     }
 
     /**
-     *  Convert an IPv4 address from byte array to integer.
+     * Convert an IPv4 address from byte array to integer.
      *
-     *  @param ip the IP address as a byte array
-     *  @return the IP address as an integer
+     * @param ip the IP address as a byte array
+     * @return the IP address as an integer
      */
     private static int toInt(byte[] ip) {
         int rv = 0;
@@ -1263,10 +1258,10 @@ public class Blocklist {
     }
 
     /**
-     *  Convert a compressed blocklist entry to a string representation.
+     * Convert a compressed blocklist entry to a string representation.
      *
-     *  @param entry the compressed blocklist entry
-     *  @return the string representation (e.g., "127.0.0.1-127.0.0.255")
+     * @param entry the compressed blocklist entry
+     * @return the string representation (e.g., "127.0.0.1-127.0.0.255")
      */
     private static String toStr(long entry) {
         StringBuilder buf = new StringBuilder(32);
@@ -1279,12 +1274,11 @@ public class Blocklist {
     }
 
     /**
-     *  Convert an IPv4 address to a string representation.
-     *  Public for console only, not a public API.
+     * Convert an IPv4 address to a string representation.
+     * Public for console only, not a public API.
      *
-     *  @param ip the IPv4 address as an integer
-     *  @return the string representation (e.g., "192.168.1.1")
-     *  @since public since 0.9.48
+     * @param ip the IPv4 address as an integer
+     * @return the string representation (e.g., "192.168.1.1")
      */
     public static String toStr(int ip) {
         StringBuilder buf = new StringBuilder(16);
@@ -1299,7 +1293,6 @@ public class Blocklist {
      * We don't keep the comment field in-memory, so we have to go back out to the file to find it.
      *
      * Put this in a job because we're looking for the actual line in the blocklist file, this could take a while.
-     *
      */
     private void banlist(Hash peer, byte[] ip) {
         banlist(peer, ip, null);
@@ -1367,7 +1360,6 @@ public class Blocklist {
      * Additional jobs can wait.
      * Although could this clog up the job queue runners? Yes.
      * So we also stagger these jobs.
-     *
      */
     private void banlistRouter( Hash peer, String reason, String reasonCode, long duration) {
         if (duration > 0) {
@@ -1428,14 +1420,14 @@ public class Blocklist {
     }
 
     /**
-     *  Single IPs blocked until restart. Unsorted.
+     * Single IPs blocked until restart. Unsorted.
      *
-     *  Public for console only, not a public API
-     *  As of 0.9.57, will not contain IPs permanently banned,
-     *  except for ones banned permanently after being added to the transient list.
+     * Public for console only, not a public API
+     * As of 0.9.57, will not contain IPs permanently banned,
+     * except for ones banned permanently after being added to the transient list.
      *
-     *  @return a copy, unsorted
-     *  @since 0.9.48
+     * @return a copy, unsorted
+     * @since 0.9.48
      */
     public List<Integer> getTransientIPv4Blocks() {
         synchronized(_singleIPBlocklist) {
@@ -1444,12 +1436,12 @@ public class Blocklist {
     }
 
     /**
-     *  Single IPs blocked until restart. Unsorted.
+     * Single IPs blocked until restart. Unsorted.
      *
-     *  Public for console only, not a public API
+     * Public for console only, not a public API
      *
-     *  @return a copy, unsorted
-     *  @since 0.9.48
+     * @return a copy, unsorted
+     * @since 0.9.48
      */
     public List<BigInteger> getTransientIPv6Blocks() {
         if (!_haveIPv6) {return Collections.<BigInteger>emptyList();}
@@ -1460,13 +1452,13 @@ public class Blocklist {
     }
 
     /**
-     *  IP ranges blocked until restart. Sorted, but as signed longs, so 128-255 are first
+     * IP ranges blocked until restart. Sorted, but as signed longs, so 128-255 are first
      *
-     *  Public for console only, not a public API
+     * Public for console only, not a public API
      *
-     *  @param max maximum entries to return
-     *  @return a copy, sorted
-     *  @since 0.9.48
+     * @param max maximum entries to return
+     * @return a copy, sorted
+     * @since 0.9.48
      */
     public synchronized long[] getPermanentBlocks(int max) {
         long[] rv;
@@ -1488,19 +1480,19 @@ public class Blocklist {
     }
 
     /**
-     *  Get the size of the permanent blocklist.
-     *  Public for console only, not a public API.
+     * Get the size of the permanent blocklist.
+     * Public for console only, not a public API.
      *
-     *  @return the number of entries in the permanent blocklist
-     *  @since 0.9.48
+     * @return the number of entries in the permanent blocklist
+     * @since 0.9.48
      */
     public synchronized int getBlocklistSize() {return _blocklistSize;}
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
-     *  Use this only in static initializers. It does not translate!
+     * Mark a string for extraction by xgettext and translation.
+     * Use this only in static initializers. It does not translate!
      *
-     *  @return s
+     * @return s
      */
     private static final String _x(String s) {return s;}
 

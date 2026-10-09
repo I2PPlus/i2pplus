@@ -170,8 +170,8 @@ public interface DHState extends Destroyable, Cloneable {
     void copyFrom(DHState other);
 
     /**
-     *  I2P
-     *  @since 0.9.44
+     * I2P
+     * @since 0.9.44
      */
     public DHState clone() throws CloneNotSupportedException;
 }

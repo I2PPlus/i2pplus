@@ -10,9 +10,9 @@ import net.i2p.data.i2np.GarlicClove;
 
 /**
  *
- *  Ratchet payload generation and parsing
+ * Ratchet payload generation and parsing
  *
- *  @since 0.9.44 adapted from NTCP2Payload
+ * @since 0.9.44 adapted from NTCP2Payload
  */
 class RatchetPayload {
 
@@ -34,9 +34,9 @@ class RatchetPayload {
     private static final int BLOCK_PADDING = 254;
 
     /**
-     *  For all callbacks, recommend throwing exceptions only from the handshake.
-     *  Exceptions will get thrown out of processPayload() and prevent
-     *  processing of succeeding blocks.
+     * For all callbacks, recommend throwing exceptions only from the handshake.
+     * Exceptions will get thrown out of processPayload() and prevent
+     * processing of succeeding blocks.
      */
     public interface PayloadCallback {
         /**
@@ -99,10 +99,10 @@ class RatchetPayload {
         public void gotAckRequest();
 
         /**
-         *  For stats.
+         * For stats.
          *
-         *  @param paddingLength the number of padding bytes, not including the 3-byte block header
-         *  @param frameLength the total size of the frame, including all blocks and block headers
+         * @param paddingLength the number of padding bytes, not including the 3-byte block header
+         * @param frameLength the total size of the frame, including all blocks and block headers
          */
         public void gotPadding(int paddingLength, int frameLength);
 
@@ -250,12 +250,12 @@ class RatchetPayload {
     }
 
     /**
-     *  Write blocks to a payload buffer.
+     * Write blocks to a payload buffer.
      *
-     *  @param payload writes to it starting at off
-     *  @param off the starting offset
-     *  @param blocks the blocks
-     *  @return the new offset
+     * @param payload writes to it starting at off
+     * @param off the starting offset
+     * @param blocks the blocks
+     * @return the new offset
      */
     public static int writePayload(byte[] payload, int off, List<Block> blocks) {
         for (Block block : blocks) {
@@ -272,18 +272,18 @@ class RatchetPayload {
         private final int type;
 
         /**
-         *  Block of the given type.
+         * Block of the given type.
          *
-         *  @param ttype the block type
+         * @param ttype the block type
          */
         public Block(int ttype) {
             type = ttype;
         }
 
         /**
-         *  Writes the block header and data to the target.
+         * Writes the block header and data to the target.
          *
-         *  @return new offset
+         * @return new offset
          */
         public int write(byte[] tgt, int off) {
             tgt[off++] = (byte) type;
@@ -296,34 +296,34 @@ class RatchetPayload {
         }
 
         /**
-         *  Total size of the block.
+         * Total size of the block.
          *
-         *  @return the size of the block, including the 3 byte header (type and size)
+         * @return the size of the block, including the 3 byte header (type and size)
          */
         public int getTotalLength() {
             return BLOCK_HEADER_SIZE + getDataLength();
         }
 
         /**
-         *  Data size of the block.
+         * Data size of the block.
          *
-         *  @return the size of the block, NOT including the 3 byte header (type and size)
+         * @return the size of the block, NOT including the 3 byte header (type and size)
          */
         public abstract int getDataLength();
 
         /**
-         *  Write the block data.
+         * Write the block data.
          *
-         *  @param tgt the target buffer
-         *  @param off the offset
-         *  @return new offset
+         * @param tgt the target buffer
+         * @param off the offset
+         * @return new offset
          */
         public abstract int writeData(byte[] tgt, int off);
 
         /**
-         *  Debug string with block type and length.
+         * Debug string with block type and length.
          *
-         *  @return debug string with block type and length
+         * @return debug string with block type and length
          */
         @Override
         public String toString() {
@@ -338,9 +338,9 @@ class RatchetPayload {
         private GarlicClove c;
 
         /**
-         *  The clove carried by this block.
+         * The clove carried by this block.
          *
-         *  @param clove the garlic clove
+         * @param clove the garlic clove
          */
         public GarlicBlock(GarlicClove clove) {
             super(BLOCK_GARLIC);
@@ -348,10 +348,10 @@ class RatchetPayload {
         }
 
         /**
-         *  Set the clove carried by this block, for reuse.
+         * Set the clove carried by this block, for reuse.
          *
-         *  @param clove the garlic clove
-         *  @since 0.9.71+
+         * @param clove the garlic clove
+         * @since 0.9.71+
          */
         void setClove(GarlicClove clove) {
             c = clove;
@@ -374,9 +374,9 @@ class RatchetPayload {
         private final I2PAppContext ctx;
 
         /**
-         *  Size of the zero-filled padding.
+         * Size of the zero-filled padding.
          *
-         *  @param size padding size, with zero-filled data
+         * @param size padding size, with zero-filled data
          */
         public PaddingBlock(int size) {
             this(null, size);
@@ -396,10 +396,10 @@ class RatchetPayload {
         }
 
         /**
-         *  Set the padding size, for reuse.
+         * Set the padding size, for reuse.
          *
-         *  @param size the new padding size
-         *  @since 0.9.71+
+         * @param size the new padding size
+         * @since 0.9.71+
          */
         void setSize(int size) {
             sz = size;
@@ -425,9 +425,9 @@ class RatchetPayload {
         private long now;
 
         /**
-         *  Timestamp carried by this block.
+         * Timestamp carried by this block.
          *
-         *  @param time the timestamp
+         * @param time the timestamp
          */
         public DateTimeBlock(long time) {
             super(BLOCK_DATETIME);
@@ -435,10 +435,10 @@ class RatchetPayload {
         }
 
         /**
-         *  Set the timestamp, for reuse.
+         * Set the timestamp, for reuse.
          *
-         *  @param time the timestamp
-         *  @since 0.9.71+
+         * @param time the timestamp
+         * @since 0.9.71+
          */
         void setTime(long time) {
             now = time;
@@ -461,9 +461,9 @@ class RatchetPayload {
         private final byte[] opts;
 
         /**
-         *  Options bytes carried by this block.
+         * Options bytes carried by this block.
          *
-         *  @param options the options
+         * @param options the options
          */
         public OptionsBlock(byte[] options) {
             super(BLOCK_OPTIONS);
@@ -487,9 +487,9 @@ class RatchetPayload {
         private NextSessionKey next;
 
         /**
-         *  Next session key carried by this block.
+         * Next session key carried by this block.
          *
-         *  @param nextKey the next session key
+         * @param nextKey the next session key
          */
         public NextKeyBlock(NextSessionKey nextKey) {
             super(BLOCK_NEXTKEY);
@@ -497,10 +497,10 @@ class RatchetPayload {
         }
 
         /**
-         *  Set the next session key, for reuse.
+         * Set the next session key, for reuse.
          *
-         *  @param nextKey the next session key
-         *  @since 0.9.71+
+         * @param nextKey the next session key
+         * @since 0.9.71+
          */
         void setNext(NextSessionKey nextKey) {
             next = nextKey;
@@ -542,9 +542,9 @@ class RatchetPayload {
         }
 
         /**
-         *  ACK block for multiple key IDs and counts.
+         * ACK block for multiple key IDs and counts.
          *
-         *  @param acks each is id &lt;&lt; 16 | n
+         * @param acks each is id &lt;&lt; 16 | n
          */
         public AckBlock(List<Integer> acks) {
             super(BLOCK_ACK);
@@ -557,10 +557,10 @@ class RatchetPayload {
         }
 
         /**
-         *  Set the ACK data, for reuse.  Reallocates only if the size changes.
+         * Set the ACK data, for reuse.  Reallocates only if the size changes.
          *
-         *  @param acks each is id &lt;&lt; 16 | n
-         *  @since 0.9.71+
+         * @param acks each is id &lt;&lt; 16 | n
+         * @since 0.9.71+
          */
         void setAcks(List<Integer> acks) {
             int len = 4 * acks.size();
@@ -614,9 +614,9 @@ class RatchetPayload {
         private final byte rsn;
 
         /**
-         *  Termination reason carried by this block.
+         * Termination reason carried by this block.
          *
-         *  @param reason the termination reason
+         * @param reason the termination reason
          */
         public TerminationBlock(int reason) {
             super(BLOCK_TERMINATION);

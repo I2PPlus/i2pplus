@@ -31,20 +31,19 @@ import java.nio.charset.StandardCharsets;
  * SMTP client for sending email through SMTP servers over I2P.
  * Supports command pipelining, attachments, and size limits optimized for I2P.
  * Includes base64 size calculations and 8BITMIME support for efficient I2P mail delivery.
- *
  */
 public class SMTPClient {
     /**
-     *  10.00 MB
-     *  smtp.postman.i2p as of 2024-06-22.
-     *  @since 0.9.33
+     * 10.00 MB
+     * smtp.postman.i2p as of 2024-06-22.
+     * @since 0.9.33
      */
     public static final long DEFAULT_MAX_SIZE = 10485760;
 
     /**
-     *  7629902 ~= 7.27 MB
-     *  Base64 encodes 57 chars to 76 + \r\n on a line
-     *  @since 0.9.33
+     * 7629902 ~= 7.27 MB
+     * Base64 encodes 57 chars to 76 + \r\n on a line
+     * @since 0.9.33
      */
     public static final long BINARY_MAX_SIZE = (long) ((DEFAULT_MAX_SIZE * 57.0d / 78) - 32*1024);
 
@@ -67,28 +66,28 @@ public class SMTPClient {
     }
 
     /**
-     *  Wait for response
-     *  @param cmd may be null
-     *  @return result code or 0 for failure
+     * Wait for response
+     * @param cmd may be null
+     * @return result code or 0 for failure
      */
     private int sendCmd(String cmd) {return sendCmd(cmd, true);}
 
     /**
-     *  @param cmd may be null
-     *  @param shouldWait if false, don't wait for response, and return 100
-     *  @return result code or 0 for failure
-     *  @since 0.9.13
+     * @param cmd may be null
+     * @param shouldWait if false, don't wait for response, and return 100
+     * @return result code or 0 for failure
+     * @since 0.9.13
      */
     private int sendCmd(String cmd, boolean shouldWait) {
         return sendCmd(cmd, shouldWait, false);
     }
 
     /**
-     *  @param cmd may be null
-     *  @param shouldWait if false, don't wait for response, and return 100
-     *  @param mask true to mask the command in debug logs (credentials)
-     *  @return result code or 0 for failure
-     *  @since 0.9.13
+     * @param cmd may be null
+     * @param shouldWait if false, don't wait for response, and return 100
+     * @param mask true to mask the command in debug logs (credentials)
+     * @return result code or 0 for failure
+     * @since 0.9.13
      */
     private int sendCmd(String cmd, boolean shouldWait, boolean mask) {
         if (socket == null) {return 0;}
@@ -104,21 +103,21 @@ public class SMTPClient {
     }
 
     /**
-     *  Does not flush, wait, or read
+     * Does not flush, wait, or read
      *
-     *  @param cmd non-null
-     *  @since 0.9.13
+     * @param cmd non-null
+     * @since 0.9.13
      */
     private void sendCmdNoWait(String cmd) throws IOException {
         sendCmdNoWait(cmd, false);
     }
 
     /**
-     *  Does not flush, wait, or read
+     * Does not flush, wait, or read
      *
-     *  @param cmd non-null
-     *  @param mask true to mask the command in debug logs (credentials)
-     *  @since 0.9.13
+     * @param cmd non-null
+     * @param mask true to mask the command in debug logs (credentials)
+     * @since 0.9.13
      */
     private void sendCmdNoWait(String cmd, boolean mask) throws IOException {
         if (_log.shouldDebug()) {
@@ -132,11 +131,11 @@ public class SMTPClient {
     }
 
     /**
-     *  Pipeline if supported
+     * Pipeline if supported
      *
-     *  @param cmds non-null
-     *  @return number of successful commands
-     *  @since 0.9.13
+     * @param cmds non-null
+     * @return number of successful commands
+     * @since 0.9.13
      */
     private int sendCmds(List<SendExpect> cmds) {
         int rv = 0;
@@ -168,16 +167,16 @@ public class SMTPClient {
     }
 
     /**
-     *  @return result code or 0 for failure
-     *  @since 0.9.13
+     * @return result code or 0 for failure
+     * @since 0.9.13
      */
     private int getResult() {return getFullResult().result;}
 
     /**
-     *  @return result code and string, all lines combined with \r separators,
-     *          first 3 bytes are the ASCII return code or "000" for failure
-     *          Result and Result.recv non null
-     *  @since 0.9.13
+     * @return result code and string, all lines combined with \r separators,
+     * first 3 bytes are the ASCII return code or "000" for failure
+     * Result and Result.recv non null
+     * @since 0.9.13
      */
     private Result getFullResult() {
         int result = 0;
@@ -211,10 +210,10 @@ public class SMTPClient {
     }
 
     /**
-     *  @param body headers and body, without the attachments
-     *  @param attachments may be null
-     *  @param boundary non-null if attachments is non-null
-     *  @return success
+     * @param body headers and body, without the attachments
+     * @param attachments may be null
+     * @param boundary non-null if attachments is non-null
+     * @return success
      */
     public boolean sendMail(String host, int port, String user, String pass, String sender,
                             List<String> recipients, StringBuilder body,
@@ -339,11 +338,11 @@ public class SMTPClient {
     }
 
     /**
-     *  Caller must close out
+     * Caller must close out
      *
-     *  @param body headers and body, without the attachments
-     *  @param attachments may be null
-     *  @param boundary non-null if attachments is non-null
+     * @param body headers and body, without the attachments
+     * @param attachments may be null
+     * @param boundary non-null if attachments is non-null
      */
     public static void writeMail(Writer out, StringBuilder body,
                                  List<Attachment> attachments, String boundary) throws IOException {
@@ -385,8 +384,8 @@ public class SMTPClient {
     }
 
     /**
-     *  A command to send and a result code to expect
-     *  @since 0.9.13
+     * A command to send and a result code to expect
+     * @since 0.9.13
      */
     private static class SendExpect {
         /**
@@ -411,7 +410,7 @@ public class SMTPClient {
 
         /**
          * SendExpect.
-         *  @param sen true if the command contains credentials to mask in debug logs
+         * @param sen true if the command contains credentials to mask in debug logs
          */
         public SendExpect(String s, int e, boolean sen) {
             send = s;
@@ -421,8 +420,8 @@ public class SMTPClient {
     }
 
     /**
-     *  A result string and code
-     *  @since 0.9.13
+     * A result string and code
+     * @since 0.9.13
      */
     private static class Result {
         /**

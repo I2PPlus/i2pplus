@@ -36,12 +36,12 @@ public class BuildExecutorAdaptiveDistinctnessTest {
     private static final String[] BAND_NAMES = {"FAST", "GOOD", "MODERATE", "LOW"};
 
     /**
-     *  Every branch must produce a distinct value at some base in the Tuner's range.
+     * Every branch must produce a distinct value at some base in the Tuner's range.
      *
-     *  <p>This is the property that was broken. Asserting it per-base would be too
-     *  strict -- some branch pairs legitimately coincide at a given base -- but
-     *  requiring each band to be reachable somewhere is exactly what a clamp at the
-     *  base's own endpoints destroys.
+     * <p>This is the property that was broken. Asserting it per-base would be too
+     * strict -- some branch pairs legitimately coincide at a given base -- but
+     * requiring each band to be reachable somewhere is exactly what a clamp at the
+     * base's own endpoints destroys.
      */
     @Test
     public void everyNonSteadyBranchIsReachableSomewhere() {
@@ -66,11 +66,11 @@ public class BuildExecutorAdaptiveDistinctnessTest {
     }
 
     /**
-     *  The FAST branch must actually shorten the budget somewhere.
+     * The FAST branch must actually shorten the budget somewhere.
      *
-     *  <p>Guards the specific symptom: with the floor at the base's own value, the
-     *  -3s reduction was clamped straight back and the router could never shorten a
-     *  build deadline on a healthy network.
+     * <p>Guards the specific symptom: with the floor at the base's own value, the
+     * -3s reduction was clamped straight back and the router could never shorten a
+     * build deadline on a healthy network.
      */
     @Test
     public void fastBranchCanShortenTheBudget() {
@@ -85,10 +85,10 @@ public class BuildExecutorAdaptiveDistinctnessTest {
     }
 
     /**
-     *  At the top of the Tuner range, the failure branches must stay distinguishable.
+     * At the top of the Tuner range, the failure branches must stay distinguishable.
      *
-     *  <p>This is the case that was pinned 75% of the time: base 30s with GOOD,
-     *  MODERATE and LOW all clamping to 30s.
+     * <p>This is the case that was pinned 75% of the time: base 30s with GOOD,
+     * MODERATE and LOW all clamping to 30s.
      */
     @Test
     public void failureBranchesDistinctAtTopOfRange() {
@@ -102,9 +102,9 @@ public class BuildExecutorAdaptiveDistinctnessTest {
     }
 
     /**
-     *  At the bottom of the Tuner range, the reduction must stay distinguishable.
+     * At the bottom of the Tuner range, the reduction must stay distinguishable.
      *
-     *  <p>The mirror image: base 10s with FAST clamping up to 10s.
+     * <p>The mirror image: base 10s with FAST clamping up to 10s.
      */
     @Test
     public void fastBranchDistinctAtBottomOfRange() {
@@ -116,11 +116,11 @@ public class BuildExecutorAdaptiveDistinctnessTest {
     }
 
     /**
-     *  Four distinct success rates must be able to yield four distinct budgets.
+     * Four distinct success rates must be able to yield four distinct budgets.
      *
-     *  <p>Existence rather than per-base: somewhere in the range the ladder must
-     *  discriminate all four bands at once, which a degenerate clamp makes impossible
-     *  at every base.
+     * <p>Existence rather than per-base: somewhere in the range the ladder must
+     * discriminate all four bands at once, which a degenerate clamp makes impossible
+     * at every base.
      */
     @Test
     public void allFourBandsAreSimultaneouslyDistinct() {
@@ -137,10 +137,10 @@ public class BuildExecutorAdaptiveDistinctnessTest {
     }
 
     /**
-     *  The ladder must be monotone non-decreasing as success falls.
+     * The ladder must be monotone non-decreasing as success falls.
      *
-     *  <p>A worse network should never get a shorter deadline. This held before and
-     *  must survive the unclamp; it is the one property a naive fix would break.
+     * <p>A worse network should never get a shorter deadline. This held before and
+     * must survive the unclamp; it is the one property a naive fix would break.
      */
     @Test
     public void shorterDeadlinesForWorseNetworks() {

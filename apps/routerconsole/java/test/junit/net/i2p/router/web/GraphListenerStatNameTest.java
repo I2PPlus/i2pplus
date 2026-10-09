@@ -6,26 +6,26 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 /**
- *  Tests for {@link GraphListener}'s datasource id to stat name map.
+ * Tests for {@link GraphListener}'s datasource id to stat name map.
  *
- *  <p>The id is a 20-character hash of the stat name and period, minted because JRobin
- *  caps datasource names at 20 characters; it cannot be inverted, so a log line quoting
- *  one on its own names nothing an operator can look up. The map is what makes the
- *  stalled-listener report say "jobQueue.jobLag.60000" instead of "BOPP6eO8n6WPbvCXIZzQ".
+ * <p>The id is a 20-character hash of the stat name and period, minted because JRobin
+ * caps datasource names at 20 characters; it cannot be inverted, so a log line quoting
+ * one on its own names nothing an operator can look up. The map is what makes the
+ * stalled-listener report say "jobQueue.jobLag.60000" instead of "BOPP6eO8n6WPbvCXIZzQ".
  *
- *  <p>Only the static map is under test: {@code GraphListener} itself needs a router
- *  context to open an RRD, and registration happens at that point.
+ * <p>Only the static map is under test: {@code GraphListener} itself needs a router
+ * context to open an RRD, and registration happens at that point.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class GraphListenerStatNameTest {
 
     /**
-     *  An id nothing registered: pass it through unchanged.
+     * An id nothing registered: pass it through unchanged.
      *
-     *  <p>Falling back is deliberate. An unknown id is still evidence - it says some
-     *  datasource exists that this console never opened - and logging the id beats
-     *  logging nothing or throwing in the middle of a fault report.
+     * <p>Falling back is deliberate. An unknown id is still evidence - it says some
+     * datasource exists that this console never opened - and logging the id beats
+     * logging nothing or throwing in the middle of a fault report.
      */
     @Test
     public void unknownIdIsLoggedAsItself() {
@@ -64,10 +64,10 @@ public class GraphListenerStatNameTest {
     }
 
     /**
-     *  Re-registering the id of a rebuilt listener replaces the entry in place.
+     * Re-registering the id of a rebuilt listener replaces the entry in place.
      *
-     *  <p>A listener rebuild mints the same id from the same stat, so the map must hold
-     *  one entry per stat rather than growing one per rebuild.
+     * <p>A listener rebuild mints the same id from the same stat, so the map must hold
+     * one entry per stat rather than growing one per rebuild.
      */
     @Test
     public void rebuildingAListenerKeepsOneEntryPerStat() {

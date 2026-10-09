@@ -5,7 +5,6 @@ package net.i2p.router.dummy;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Collections;
@@ -30,9 +29,9 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 public class DummyClientManagerFacade extends ClientManagerFacade {
     private RouterContext _context;
     /**
-     *  Initializes this facade with the router context.
+     * Initializes this facade with the router context.
      *
-     *  @param ctx the router context
+     * @param ctx the router context
      */
     public DummyClientManagerFacade(RouterContext ctx) {
         _context = ctx;
@@ -64,20 +63,20 @@ public class DummyClientManagerFacade extends ClientManagerFacade {
     public void requestLeaseSet(Hash dest, LeaseSet set) { /* Intentionally empty - dummy implementation */ }
 
     /**
-     *  Return the floodfill network database facade.
+     * Return the floodfill network database facade.
      *
-     *  @return the client floodfill network database facade
-     *  @since 0.9.61
+     * @return the client floodfill network database facade
+     * @since 0.9.61
      */
     public FloodfillNetworkDatabaseFacade getClientFloodfillNetworkDatabaseFacade(Hash dbid) {
         return null;
     }
 
     /**
-     *  Return the set of primary hashes.
+     * Return the set of primary hashes.
      *
-     *  @return the primary hashes
-     *  @since 0.9.61
+     * @return the primary hashes
+     * @since 0.9.61
      */
     public Set<Hash> getPrimaryHashes() {
         return Collections.emptySet();

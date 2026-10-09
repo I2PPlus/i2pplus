@@ -5,7 +5,6 @@ package net.i2p.router.message;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.data.Certificate;
@@ -55,10 +54,10 @@ public class PayloadGarlicConfig extends GarlicConfig {
     }
 
     /**
-     *  Not supported for single-clove configs.
+     * Not supported for single-clove configs.
      *
-     *  @throws UnsupportedOperationException always
-     *  @since 0.9.12
+     * @throws UnsupportedOperationException always
+     * @since 0.9.12
      */
     @Override
     public void addClove(GarlicConfig config) {
@@ -66,20 +65,20 @@ public class PayloadGarlicConfig extends GarlicConfig {
     }
 
     /**
-     *  Return zero, as this is a single-clove config.
+     * Return zero, as this is a single-clove config.
      *
-     *  @return zero
-     *  @since 0.9.12
+     * @return zero
+     * @since 0.9.12
      */
     @Override
     public int getCloveCount() { return 0; }
 
     /**
-     *  Not supported for single-clove configs.
+     * Not supported for single-clove configs.
      *
-     *  @throws UnsupportedOperationException always
-     *  @return the clove
-     *  @since 0.9.12
+     * @throws UnsupportedOperationException always
+     * @return the clove
+     * @since 0.9.12
      */
     @Override
     public GarlicConfig getClove(int index) {
@@ -87,9 +86,9 @@ public class PayloadGarlicConfig extends GarlicConfig {
     }
 
     /**
-     *  No-op for single-clove configs.
+     * No-op for single-clove configs.
      *
-     *  @since 0.9.12
+     * @since 0.9.12
      */
     @Override
     public void clearCloves() { /* Intentionally empty - single-clove config */ }

@@ -2,7 +2,6 @@ package net.i2p.client.impl;
 
 /*
  * free (adj.): unencumbered; not under the control of others
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -37,7 +36,7 @@ class SessionIdleTimer extends SimpleTimer2.TimedEvent {
     private long _lastActive;
 
     /**
-     *  reduce, shutdown, or both must be true
+     * reduce, shutdown, or both must be true
      */
     public SessionIdleTimer(I2PAppContext context, I2PSessionImpl session, boolean reduce, boolean shutdown) {
         super(context.simpleTimer2());

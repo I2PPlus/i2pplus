@@ -5,7 +5,6 @@ package net.i2p.router.transport;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -27,27 +26,27 @@ import net.i2p.router.OutNetMessage;
  *
  * <strong>Transport Types:</strong>
  * <ul>
- *   <li>NTCP - Stream-based TCP transport with encryption</li>
- *   <li>UDP - Datagram-based transport with reliability</li>
- *   <li>SSU - Sessionless UDP for introduction</li>
+ * <li>NTCP - Stream-based TCP transport with encryption</li>
+ * <li>UDP - Datagram-based transport with reliability</li>
+ * <li>SSU - Sessionless UDP for introduction</li>
  * </ul>
  *
  * <strong>Implementation Requirements:</strong>
  * <ul>
- *   <li>Implement all interface methods for proper functionality</li>
- *   <li>Handle both IPv4 and IPv6 addressing</li>
- *   <li>Support concurrent message sending and receiving</li>
- *   <li>Provide proper error handling and logging</li>
- *   <li>Integrate with TransportManager lifecycle</li>
+ * <li>Implement all interface methods for proper functionality</li>
+ * <li>Handle both IPv4 and IPv6 addressing</li>
+ * <li>Support concurrent message sending and receiving</li>
+ * <li>Provide proper error handling and logging</li>
+ * <li>Integrate with TransportManager lifecycle</li>
  * </ul>
  *
  * <strong>Plugin Development:</strong>
  * To implement a new transport plugin:
  * <ol>
- *   <li>Implement this interface and required base classes</li>
- *   <li>Add transport to TransportManager.startListening()</li>
- *   <li>Ensure proper configuration and discovery</li>
- *   <li>Test with existing I2P network compatibility</li>
+ * <li>Implement this interface and required base classes</li>
+ * <li>Add transport to TransportManager.startListening()</li>
+ * <li>Ensure proper configuration and discovery</li>
+ * <li>Test with existing I2P network compatibility</li>
  * </ol>
  *
  * <strong>Note:</strong> API is subject to change. Please contact the
@@ -65,106 +64,106 @@ public interface Transport {
     // compile unchanged while every value is defined here, once.
 
     /**
-     *  Style identifier for the NTCP transport, used in RouterAddress style tags,
-     *  transport map keys, and style comparisons.
+     * Style identifier for the NTCP transport, used in RouterAddress style tags,
+     * transport map keys, and style comparisons.
      */
     public static final String STYLE_NTCP = "NTCP";
     /**
-     *  Style identifier for the NTCP2 protocol variant of the NTCP transport.
+     * Style identifier for the NTCP2 protocol variant of the NTCP transport.
      */
     public static final String STYLE_NTCP2 = "NTCP2";
     /**
-     *  Style identifier for the SSU transport, used in RouterAddress style tags,
-     *  transport map keys, and style comparisons.
+     * Style identifier for the SSU transport, used in RouterAddress style tags,
+     * transport map keys, and style comparisons.
      */
     public static final String STYLE_SSU = "SSU";
     /**
-     *  Style identifier for the SSU2 protocol variant of the SSU transport.
+     * Style identifier for the SSU2 protocol variant of the SSU transport.
      */
     public static final String STYLE_SSU2 = "SSU2";
     /**
-     *  Config key for the port the NTCP transport listens for inbound connections on.
+     * Config key for the port the NTCP transport listens for inbound connections on.
      */
     public static final String PROP_I2NP_NTCP_PORT = "i2np.ntcp.port";
     /**
-     *  Config key controlling whether NTCP may auto-update its advertised port
-     *  based on peer feedback.
+     * Config key controlling whether NTCP may auto-update its advertised port
+     * based on peer feedback.
      */
     public static final String PROP_I2NP_NTCP_AUTO_PORT = "i2np.ntcp.autoport";
     /**
-     *  Config key controlling whether NTCP may auto-update its advertised IP
-     *  based on peer feedback.
+     * Config key controlling whether NTCP may auto-update its advertised IP
+     * based on peer feedback.
      */
     public static final String PROP_I2NP_NTCP_AUTO_IP = "i2np.ntcp.autoip";
     /**
-     *  Config key for an explicitly configured hostname the NTCP transport advertises.
-     *  The SSU equivalent is {@link #PROP_EXTERNAL_HOST}.
+     * Config key for an explicitly configured hostname the NTCP transport advertises.
+     * The SSU equivalent is {@link #PROP_EXTERNAL_HOST}.
      */
     public static final String PROP_I2NP_NTCP_HOSTNAME = "i2np.ntcp.hostname";
     /**
-     *  Config key for the NTCP2 static private key.
+     * Config key for the NTCP2 static private key.
      */
     public static final String PROP_NTCP2_SP = "i2np.ntcp2.sp";
     /**
-     *  Config key for the NTCP2 static IV.
+     * Config key for the NTCP2 static IV.
      */
     public static final String PROP_NTCP2_IV = "i2np.ntcp2.iv";
     /**
-     *  Config key for the SSU2 static private key.
+     * Config key for the SSU2 static private key.
      */
     public static final String PROP_SSU2_SP = "i2np.ssu2.sp";
     /**
-     *  Config key for the SSU2 static IV.
+     * Config key for the SSU2 static IV.
      */
     public static final String PROP_SSU2_IKEY = "i2np.ssu2.ikey";
     /**
-     *  Config key for the SSU internal port, the port the SSU transport binds.
+     * Config key for the SSU internal port, the port the SSU transport binds.
      */
     public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
     /**
-     *  Config key to force advertising a fixed external IP address.
+     * Config key to force advertising a fixed external IP address.
      */
     public static final String PROP_EXTERNAL_HOST = "i2np.udp.host";
     /**
-     *  Config key to force advertising a fixed external port.
+     * Config key to force advertising a fixed external port.
      */
     public static final String PROP_EXTERNAL_PORT = "i2np.udp.port";
     /**
-     *  Config key to keep the SSU advertised port fixed regardless of peer feedback.
+     * Config key to keep the SSU advertised port fixed regardless of peer feedback.
      */
     public static final String PROP_FIXED_PORT = "i2np.udp.fixedPort";
     /**
-     *  Config key naming the allowed sources of address updates, e.g. "local,upnp,ssu".
+     * Config key naming the allowed sources of address updates, e.g. "local,upnp,ssu".
      */
     public static final String PROP_SOURCES = "i2np.udp.addressSources";
     /**
-     *  Default value of {@link #PROP_SOURCES}: the local interface, UPnP, and
-     *  SSU-learned addresses.
+     * Default value of {@link #PROP_SOURCES}: the local interface, UPnP, and
+     * SSU-learned addresses.
      */
     public static final String DEFAULT_SOURCES = AddressSource.SOURCE_INTERFACE.toConfigString() + ',' +
                                                  AddressSource.SOURCE_UPNP.toConfigString() + ',' +
                                                  AddressSource.SOURCE_SSU.toConfigString();
     /**
-     *  Config key remembering the last IPv4 address so IP changes can be detected
-     *  across restarts.
+     * Config key remembering the last IPv4 address so IP changes can be detected
+     * across restarts.
      */
     public static final String PROP_IP = "i2np.lastIP";
     /**
-     *  Config key enabling laptop power-saving mode, which reduces connection activity.
+     * Config key enabling laptop power-saving mode, which reduces connection activity.
      */
     public static final String PROP_LAPTOP_MODE = "i2np.laptopMode";
     /**
-     *  Config key remembering the last IPv6 address.
-     *  @since 0.9.43
+     * Config key remembering the last IPv6 address.
+     * @since 0.9.43
      */
     public static final String PROP_IPV6 = "i2np.lastIPv6";
     /**
-     *  Config key to require SSU introducers regardless of our reachability status.
+     * Config key to require SSU introducers regardless of our reachability status.
      */
     public static final String PROP_FORCE_INTRODUCERS = "i2np.udp.forceIntroducers";
     /**
-     *  Config key for the SSU introducer key published in hidden-mode RouterInfos.
-     *  @since 0.9.48
+     * Config key for the SSU introducer key published in hidden-mode RouterInfos.
+     * @since 0.9.48
      */
     public static final String PROP_INTRO_KEY = "i2np.udp.introKey";
 
@@ -178,7 +177,7 @@ public interface Transport {
      *
      * @param toAddress the target router's contact information
      * @param dataSize size of message payload, assumes full 16-byte header,
-     *                  transports should adjust as necessary for their overhead
+     * transports should adjust as necessary for their overhead
      * @return a TransportBid containing send details, or null if unwilling to send
      */
     public TransportBid bid(RouterInfo toAddress, int dataSize);
@@ -200,16 +199,16 @@ public interface Transport {
     public void send(OutNetMessage msg);
 
     /**
-     *  The transport's own measured round trip time to a peer.
+     * The transport's own measured round trip time to a peer.
      *
-     *  <p>This is the direct link cost of reaching the peer, which is what
-     *  first-hop selection needs. It is deliberately distinct from
-     *  {@code PeerProfile.getTunnelTestTimeAverage()}, which is the round trip
-     *  through an entire multi-hop tunnel and is not a valid measure of one hop.
+     * <p>This is the direct link cost of reaching the peer, which is what
+     * first-hop selection needs. It is deliberately distinct from
+     * {@code PeerProfile.getTunnelTestTimeAverage()}, which is the round trip
+     * through an entire multi-hop tunnel and is not a valid measure of one hop.
      *
-     *  <p>Implementations that do not track latency return 0, which callers
-     *  must read as <em>unknown</em> rather than as zero latency. Unknown is
-     *  never treated as slow.
+     * <p>Implementations that do not track latency return 0, which callers
+     * must read as <em>unknown</em> rather than as zero latency. Unknown is
+     * never treated as slow.
      *
      * @param peer the peer to measure
      * @return the estimated round trip time in ms, or 0 if not measured
@@ -233,7 +232,6 @@ public interface Transport {
      * to support multiple addresses per transport.
      *
      * @return list of all currently listening addresses, never null
-     * @since IPv6 support was added
      */
     public List<RouterAddress> getCurrentAddresses();
 
@@ -256,7 +254,6 @@ public interface Transport {
     /**
      * Do we have any current address?
      * @return whether current address is present
-     * @since IPv6
      */
     public boolean hasCurrentAddress();
 
@@ -267,10 +264,10 @@ public interface Transport {
      * network configuration and update its advertised addresses accordingly.
      * The transport should consider:
      * <ul>
-     *   <li>Current network interface status</li>
-     *   <li>UPnP discovery results</li>
-     *   <li>Configuration file settings</li>
-     *   <li>Firewall and NAT constraints</li>
+     * <li>Current network interface status</li>
+     * <li>UPnP discovery results</li>
+     * <li>Configuration file settings</li>
+     * <li>Firewall and NAT constraints</li>
      * </ul>
      *
      * @return updated list of all addresses the transport is now advertising, never null
@@ -278,8 +275,7 @@ public interface Transport {
     public List<RouterAddress> updateAddress();
 
     /**
-     *  Source of transport address configuration.
-     *  @since IPv6
+     * Source of transport address configuration.
      */
     public enum AddressSource {
         /** Address from a UPnP port mapping. */
@@ -297,9 +293,9 @@ public interface Transport {
         }
 
     /**
-     *  Config string for this address source.
+     * Config string for this address source.
      *
-     *  @return config string
+     * @return config string
      */
     public String toConfigString() {
             return cfgstr;
@@ -316,10 +312,10 @@ public interface Transport {
      *
      * <strong>Call Conditions:</strong>
      * <ul>
-     *   <li>Should NOT be called if IP didn't change from source's perspective</li>
-     *   <li>Should NOT be called for local/private addresses</li>
-     *   <li>May be called multiple times (once for IPv4, once for IPv6)</li>
-     *   <li>Transport should validate source before accepting</li>
+     * <li>Should NOT be called if IP didn't change from source's perspective</li>
+     * <li>Should NOT be called for local/private addresses</li>
+     * <li>May be called multiple times (once for IPv4, once for IPv6)</li>
+     * <li>Transport should validate source before accepting</li>
      * </ul>
      *
      * <strong>Timing:</strong>
@@ -349,12 +345,12 @@ public interface Transport {
     public void externalAddressRemoved(AddressSource source, boolean ipv6);
 
     /**
-     *  Notify a transport of the results of trying to forward a port.
+     * Notify a transport of the results of trying to forward a port.
      *
-     *  @param ip may be null
-     *  @param port the internal port
-     *  @param externalPort the external port, which for now should always be the same as
-     *                      the internal port if the forwarding was successful.
+     * @param ip may be null
+     * @param port the internal port
+     * @param externalPort the external port, which for now should always be the same as
+     * the internal port if the forwarding was successful.
      */
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason);
 
@@ -369,9 +365,9 @@ public interface Transport {
      * <strong>Note:</strong>
      * This cannot be determined from getCurrentAddress() because:
      * <ul>
-     *   <li>Transport must open the port before publishing address</li>
-     *   <li>UPnP may map different external port</li>
-     *   <li>External port is what gets advertised, not internal</li>
+     * <li>Transport must open the port before publishing address</li>
+     * <li>UPnP may map different external port</li>
+     * <li>External port is what gets advertised, not internal</li>
      * </ul>
      *
      * @return preferred internal port for UPnP forwarding, -1 for no preference, or 0 for any port
@@ -418,21 +414,21 @@ public interface Transport {
     public List<Hash> getEstablished();
 
     /**
-     *  Number of peers.
+     * Number of peers.
      *
-     *  @return peer count
+     * @return peer count
      */
     public int countPeers();
     /**
-     *  Number of active peers.
+     * Number of active peers.
      *
-     *  @return active peer count
+     * @return active peer count
      */
     public int countActivePeers();
     /**
-     *  Number of active send peers.
+     * Number of active send peers.
      *
-     *  @return active send peer count
+     * @return active send peer count
      */
     public int countActiveSendPeers();
 
@@ -446,13 +442,13 @@ public interface Transport {
      *
      * <strong>Array Format:</strong>
      * <ul>
-     *   <li>Version 1 (8 bytes): IPv4 inbound/outbound counts</li>
-     *   <li>Version 2 (8 bytes): IPv4 inbound/outbound, IPv6 inbound/outbound counts</li>
+     * <li>Version 1 (8 bytes): IPv4 inbound/outbound counts</li>
+     * <li>Version 2 (8 bytes): IPv4 inbound/outbound, IPv6 inbound/outbound counts</li>
      * </ul>
      *
      * @return 8-byte array with peer counts:
-     *         version 1: [ipv4_in, ipv4_out, ipv6_in, ipv6_out, 0, 0, 0, 0]
-     *         version 2: [ipv4_in, ipv4_out, ipv6_in, ipv6_out, 0, 0, 0, 0]
+     * version 1: [ipv4_in, ipv4_out, ipv6_in, ipv6_out, 0, 0, 0, 0]
+     * version 2: [ipv4_in, ipv4_out, ipv6_in, ipv6_out, 0, 0, 0, 0]
      * @since 0.9.57
      */
     public int[] getPeerCounts();
@@ -481,7 +477,7 @@ public interface Transport {
      * returned a Vector, now returns a List as of 0.9.46.
      *
      * @return list of clock skew measurements in milliseconds,
-     *         may be empty if no measurements available
+     * may be empty if no measurements available
      */
     public List<Long> getClockSkews();
 
@@ -548,10 +544,10 @@ public interface Transport {
      *
      * <strong>Important Notes:</strong>
      * <ul>
-     *   <li>This is NOT reset if the peer contacts us successfully</li>
-     *   <li>Status persists until peer is contacted or expires</li>
-     *   <li>Used for connection retry decisions</li>
-     *   <li>Different from isUnreachable() which checks current state</li>
+     * <li>This is NOT reset if the peer contacts us successfully</li>
+     * <li>Status persists until peer is contacted or expires</li>
+     * <li>Used for connection retry decisions</li>
+     * <li>Different from isUnreachable() which checks current state</li>
      * </ul>
      *
      * @param peer hash of the peer to check reachability for
@@ -601,10 +597,10 @@ public interface Transport {
      *
      * <strong>Advisory Nature:</strong>
      * <ul>
-     *   <li>Transport is not required to disconnect</li>
-     *   <li>Used for peer management and load balancing</li>
-     *   <li>May be called by router or other components</li>
-     *   <li>Transport should evaluate based on its own state</li>
+     * <li>Transport is not required to disconnect</li>
+     * <li>Used for peer management and load balancing</li>
+     * <li>May be called by router or other components</li>
+     * <li>Transport should evaluate based on its own state</li>
      * </ul>
      *
      * @param peer hash of the peer that may be disconnected
@@ -622,10 +618,10 @@ public interface Transport {
      *
      * <strong>Use Cases:</strong>
      * <ul>
-     *   <li>Peer misbehavior or protocol violations</li>
-     *   <li>Router shutdown or transport shutdown</li>
-     *   <li>Network topology changes requiring disconnection</li>
-     *   <li>Administrative or manual disconnection requests</li>
+     * <li>Peer misbehavior or protocol violations</li>
+     * <li>Router shutdown or transport shutdown</li>
+     * <li>Network topology changes requiring disconnection</li>
+     * <li>Administrative or manual disconnection requests</li>
      * </ul>
      *
      * @param peer hash of the peer to forcefully disconnect from

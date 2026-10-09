@@ -5,7 +5,6 @@ package net.i2p.router.message;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Set;
@@ -53,7 +52,6 @@ import net.i2p.util.Log;
  * </pre>
  *
  * The low-level construction is in GarlicMessageBuilder.
- *
  */
 class OutboundClientMessageJobHelper {
 
@@ -82,9 +80,9 @@ class OutboundClientMessageJobHelper {
      * @param tagsToSendOverride if &gt; 0, use this instead of skm's default
      * @param lowTagsOverride if &gt; 0, use this instead of skm's default
      * @param wrappedKey for ElGamal, non-null with null data, output parameter
-     *                   that will be filled with the SessionKey used, may be null for ECIES
+     * that will be filled with the SessionKey used, may be null for ECIES
      * @param wrappedTags for ElGamal, output parameter that will be filled with the sessionTags used,
-     *                    may be null for ECIES
+     * may be null for ECIES
      *
      * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param requireAck if true, bundle replyToken in an ack clove
@@ -186,10 +184,10 @@ class OutboundClientMessageJobHelper {
     }
 
     /**
-     *  Build a clove that sends a DeliveryStatusMessage to us.
-     *  As of 0.9.12, the DSM is wrapped in a GarlicMessage.
-     *  @param skm encrypt dsm with this skm non-null
-     *  @return null on error
+     * Build a clove that sends a DeliveryStatusMessage to us.
+     * As of 0.9.12, the DSM is wrapped in a GarlicMessage.
+     * @param skm encrypt dsm with this skm non-null
+     * @return null on error
      */
     private static PayloadGarlicConfig buildAckClove(RouterContext ctx, Hash from, TunnelInfo replyToTunnel,
                                                      long replyToken, long expiration,
@@ -244,8 +242,8 @@ class OutboundClientMessageJobHelper {
     }
 
     /**
-     *  Make a basic DSM
-     *  @since 0.9.12
+     * Make a basic DSM
+     * @since 0.9.12
      */
     private static DeliveryStatusMessage buildDSM(RouterContext ctx, long replyToken) {
         DeliveryStatusMessage msg = new DeliveryStatusMessage(ctx);
@@ -255,12 +253,12 @@ class OutboundClientMessageJobHelper {
     }
 
     /**
-     *  As of 0.9.12, encrypt to hide it from the target and the return path OBEP and IBGW.
-     *  Wrap a DSM in a GarlicMessage, add the fake session to the SKM.
+     * As of 0.9.12, encrypt to hide it from the target and the return path OBEP and IBGW.
+     * Wrap a DSM in a GarlicMessage, add the fake session to the SKM.
      *
-     *  @param skm encrypt dsm with this skm non-null
-     *  @return null on error
-     *  @since 0.9.12
+     * @param skm encrypt dsm with this skm non-null
+     * @return null on error
+     * @since 0.9.12
      */
     private static GarlicMessage wrapDSM(RouterContext ctx, SessionKeyManager skm,
                                          DeliveryStatusMessage dsm, long expiration) {

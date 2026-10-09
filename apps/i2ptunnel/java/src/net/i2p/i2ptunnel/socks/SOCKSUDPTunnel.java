@@ -25,10 +25,10 @@ import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
  * A Datagram Tunnel that can have multiple bidirectional ports on the UDP side.
  *
  * TX:
- *   (multiple SOCKSUDPPorts -&gt; ) I2PSink
+ * (multiple SOCKSUDPPorts -&gt; ) I2PSink
  *
  * RX:
- *   (SOCKSUDPWrapper in multiple SOCKSUDPPorts &lt;- ) MultiSink &lt;- I2PSource
+ * (SOCKSUDPWrapper in multiple SOCKSUDPPorts &lt;- ) MultiSink &lt;- I2PSource
  *
  * The replies must be to the same I2CP toPort as the outbound fromPort.
  * If the server does not honor that, the replies will be dropped.
@@ -43,8 +43,8 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     private final MultiSink<SOCKSUDPPort> demuxer;
 
     /**
-     *  Set up a tunnel with no UDP side yet.
-     *  Use add() for each port.
+     * Set up a tunnel with no UDP side yet.
+     * Use add() for each port.
      */
     public SOCKSUDPTunnel(I2PTunnel tunnel) {
         super(null, tunnel, tunnel, tunnel);
@@ -56,12 +56,12 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
 
 
     /**
-     *  Adds a new UDP port to the tunnel for bidirectional SOCKS UDP communication.
+     * Adds a new UDP port to the tunnel for bidirectional SOCKS UDP communication.
      *
-     *  @param host the local address to bind to
-     *  @param port the local port to bind to, or 0 for any available port
-     *  @return the actual port number the socket was bound to
-     *  @since 0.9.53
+     * @param host the local address to bind to
+     * @param port the local port to bind to, or 0 for any available port
+     * @return the actual port number the socket was bound to
+     * @since 0.9.53
      */
     public int add(InetAddress host, int port) {
         SOCKSUDPPort sup = new SOCKSUDPPort(host, port, ports);
@@ -72,10 +72,10 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     }
 
     /**
-     *  Removes a UDP port from the tunnel and stops its associated resources.
+     * Removes a UDP port from the tunnel and stops its associated resources.
      *
-     *  @param port the UDP port number to remove
-     *  @since 0.9.53
+     * @param port the UDP port number to remove
+     * @since 0.9.53
      */
     public void remove(Integer port) {
         SOCKSUDPPort sup = this.ports.remove(port);
@@ -84,10 +84,10 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     }
 
     /**
-     *  Starts the tunnel and begins processing datagrams.
-     *  Ports must be added after this call.
+     * Starts the tunnel and begins processing datagrams.
+     * Ports must be added after this call.
      *
-     *  @since 0.9.53
+     * @since 0.9.53
      */
     @Override
     public final void startRunning() {
@@ -97,11 +97,11 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     }
 
     /**
-     *  Closes the tunnel and all associated ports.
+     * Closes the tunnel and all associated ports.
      *
-     *  @param forced if true, force immediate close without graceful shutdown
-     *  @return true if closed successfully
-     *  @since 0.9.53
+     * @param forced if true, force immediate close without graceful shutdown
+     * @return true if closed successfully
+     * @since 0.9.53
      */
     @Override
     public boolean close(boolean forced) {

@@ -51,8 +51,8 @@ public class I2Ping extends I2PTunnelClientBase {
     }
 
     /**
-     *  tunnel.getOptions must contain "command".
-     *  @throws IllegalArgumentException if it doesn't
+     * tunnel.getOptions must contain "command".
+     * @throws IllegalArgumentException if it doesn't
      */
     public I2Ping(Logging l, boolean ownDest, EventDispatcher notifyThis, I2PTunnel tunnel) {
         super(-1, ownDest, l, notifyThis, "I2Ping", tunnel);
@@ -62,7 +62,7 @@ public class I2Ping extends I2PTunnelClientBase {
     }
 
     /**
-     *  Overrides super. No client ServerSocket is created.
+     * Overrides super. No client ServerSocket is created.
      */
     @Override
     public void run() {

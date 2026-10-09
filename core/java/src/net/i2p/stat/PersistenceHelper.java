@@ -8,9 +8,9 @@ import java.time.Instant;
 import java.util.Properties;
 
 /**
- *  Output rate data.
- *  This is used via ProfilePersistenceHelper and the output
- *  must be compatible.
+ * Output rate data.
+ * This is used via ProfilePersistenceHelper and the output
+ * must be compatible.
  */
 class PersistenceHelper {
     private static final String NL = System.getProperty("line.separator");

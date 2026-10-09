@@ -15,7 +15,7 @@ public class Util {
     /**
      * For debugging
      * http://forums.sun.com/thread.jspa?threadID=597652
- *
+     *
      * @since 0.7.14
      */
     public static double biLog2(BigInteger a) {

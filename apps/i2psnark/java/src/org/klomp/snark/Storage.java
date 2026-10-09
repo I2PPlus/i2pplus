@@ -55,13 +55,13 @@ import net.i2p.util.SystemVersion;
  *
  * <p>This class handles all aspects of storing and retrieving torrent pieces:
  * <ul>
- *   <li>Creating and managing files/directories for torrent data</li>
- *   <li>Reading and writing piece data to disk</li>
- *   <li>Tracking downloaded pieces via BitField</li>
- *   <li>Validating downloaded pieces against piece hashes</li>
- *   <li>File pre-allocation for sparse file support</li>
- *   <li>Priority-based file selection for partial downloads</li>
- *   <li>File checking and rechecking for data integrity</li>
+ * <li>Creating and managing files/directories for torrent data</li>
+ * <li>Reading and writing piece data to disk</li>
+ * <li>Tracking downloaded pieces via BitField</li>
+ * <li>Validating downloaded pieces against piece hashes</li>
+ * <li>File pre-allocation for sparse file support</li>
+ * <li>Priority-based file selection for partial downloads</li>
+ * <li>File checking and rechecking for data integrity</li>
  * </ul>
  *
  * <p>Storage implements Closeable and should be properly closed after use.
@@ -144,16 +144,16 @@ public class Storage implements Closeable {
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
     /** Cap on the buffer used for piece verification during a full recheck; checking never
-     *  allocates a whole piece-sized buffer (piece_size can be 64MB+ on large-piece torrents). */
+     * allocates a whole piece-sized buffer (piece_size can be 64MB+ on large-piece torrents). */
     private static final int VERIFY_BUFSIZE = 256 * 1024;
 
     /** Number of worker threads that verify pieces in parallel during a full recheck;
-     *  scaled to the CPU count, at least 4. Override with the i2psnark.verifyThreads property. */
+     * scaled to the CPU count, at least 4. Override with the i2psnark.verifyThreads property. */
     private static final int DEFAULT_VERIFY_THREADS = Math.max(SystemVersion.getCores() / 4, 4);
 
     /** Cap on simultaneous storage checks across all torrents; prevents a disk I/O storm when many
-     *  torrents start or are rechecked at the same time. Override with the
-     *  i2psnark.maxConcurrentChecks property (read once at class load; restart to change). */
+     * torrents start or are rechecked at the same time. Override with the
+     * i2psnark.maxConcurrentChecks property (read once at class load; restart to change). */
     private static final int MAX_CONCURRENT_CHECKS = Math.max(1,
             I2PAppContext.getGlobalContext().getProperty("i2psnark.maxConcurrentChecks", 4));
 
@@ -842,7 +842,7 @@ public class Storage implements Closeable {
      * Preview bytes is rv[1].
      *
      * @return number of bytes remaining and number of bytes available for a preview for each file,
-     *     use indexOf() to get index for a file
+     * use indexOf() to get index for a file
      * @since 0.9.45
      */
     public long[][] remaining2() {
@@ -1759,7 +1759,7 @@ public class Storage implements Closeable {
      * <p>TODO thread the checking so we can return and display something on the UI
      *
      * @param recheck if true, this is a check after we downloaded the last piece, and we don't
-     *     modify the global bitfield unless the check fails.
+     * modify the global bitfield unless the check fails.
      * @return true if changed (only valid if recheck == true)
      */
     private boolean checkCreateFiles(boolean recheck) throws IOException {
@@ -1767,7 +1767,7 @@ public class Storage implements Closeable {
     }
 
     /** Worker threads for a parallel piece verification: the i2psnark.verifyThreads property
-     *  when set, otherwise scaled to the CPU count (at least 4). */
+     * when set, otherwise scaled to the CPU count (at least 4). */
     static int getVerifyThreads(I2PAppContext ctx) {
         int configured = ctx.getProperty("i2psnark.verifyThreads", 0);
         return configured > 0 ? configured : DEFAULT_VERIFY_THREADS;
@@ -2139,11 +2139,11 @@ public class Storage implements Closeable {
      * @param piece the piece number
      * @param shouldPreallocate whether to balloon sparse files
      * @param forceRW if true, open the data files read-write even when the
-     *        storage thinks they are complete, and try to make them writable
-     *        if permissions deny it.  Without this, checkRAF() opens files
-     *        read-only for a complete torrent, and the write (or the
-     *        pre-allocation ballooning) then fails with EBADF on a healthy
-     *        disk.
+     * storage thinks they are complete, and try to make them writable
+     * if permissions deny it.  Without this, checkRAF() opens files
+     * read-only for a complete torrent, and the write (or the
+     * pre-allocation ballooning) then fails with EBADF on a healthy
+     * disk.
      * @throws IOException when some storage related error occurs.
      * @since 0.9.71+
      */
@@ -2595,8 +2595,8 @@ public class Storage implements Closeable {
      * @param off the offset within the piece
      * @param length the number of bytes to read
      * @param closeAfterRead if true, close each file handle as soon as the read that used it
-     *     completes. The creation-time hash pass walks the whole torrent and would otherwise
-     *     hold one handle per file until it finished.
+     * completes. The creation-time hash pass walks the whole torrent and would otherwise
+     * hold one handle per file until it finished.
      * @return the number of bytes read
      * @throws IOException on read failure
      */
@@ -2674,19 +2674,19 @@ public class Storage implements Closeable {
         }
 
         /**
-     * The file containing the cursor position.
-     *
-     * @return the file containing the cursor position
-     */
+         * The file containing the cursor position.
+         *
+         * @return the file containing the cursor position
+         */
         TorrentFile getFile() {
             return _torrentFiles.get(i);
         }
 
         /**
-     * The offset of the cursor within the current file.
-     *
-     * @return the offset of the cursor within the current file
-     */
+         * The offset of the cursor within the current file.
+         *
+         * @return the offset of the cursor within the current file
+         */
         long getOffset() {
             return start;
         }
@@ -2806,7 +2806,7 @@ public class Storage implements Closeable {
          * @param active the file to read and write now (staging or data dir)
          * @param finalFile the data-directory location
          * @param workFile the staging-dir location, or null when the file is
-         *     already in the data directory
+         * already in the data directory
          * @param len expected length
          * @param padding whether this is a BEP 47 padding placeholder
          * @since 0.9.71+

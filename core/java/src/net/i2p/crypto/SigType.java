@@ -25,10 +25,10 @@ import net.i2p.util.SystemVersion;
  */
 public enum SigType {
     /**
-     *  DSA_SHA1 is the default.
-     *  Pubkey 128 bytes; privkey 20 bytes; hash 20 bytes; sig 40 bytes
+     * DSA_SHA1 is the default.
+     * Pubkey 128 bytes; privkey 20 bytes; hash 20 bytes; sig 40 bytes
      *
-     *  @since 0.9.8
+     * @since 0.9.8
      */
     DSA_SHA1(
             0,
@@ -123,11 +123,11 @@ public enum SigType {
             "0.9.12"),
 
     /**
-     *  Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
+     * Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
      *
-     *  Due to bugs in previous versions, minimum version is 0.9.17.
+     * Due to bugs in previous versions, minimum version is 0.9.17.
      *
-     *  @since 0.9.15
+     * @since 0.9.15
      */
     EdDSA_SHA512_Ed25519(
             7,
@@ -143,10 +143,10 @@ public enum SigType {
             "0.9.17"),
 
     /**
-     *  Prehash version (double hashing, for offline use such as su3, not for use on the network)
-     *  Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
+     * Prehash version (double hashing, for offline use such as su3, not for use on the network)
+     * Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
      *
-     *  @since 0.9.25
+     * @since 0.9.25
      */
     EdDSA_SHA512_Ed25519ph(
             8,
@@ -164,10 +164,10 @@ public enum SigType {
     // 9 and 10 reserved for GOST - see proposal 134
 
     /**
-     *  Blinded version of EdDSA, use for encrypted LS2
-     *  Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
+     * Blinded version of EdDSA, use for encrypted LS2
+     * Pubkey 32 bytes; privkey 32 bytes; hash 64 bytes; sig 64 bytes
      *
-     *  @since 0.9.39
+     * @since 0.9.39
      */
     RedDSA_SHA512_Ed25519(
             11,
@@ -304,10 +304,10 @@ public enum SigType {
     }
 
     /**
-     *  The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
+     * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *
-     *  @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
-     *  @return the params
+     * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
+     * @return the params
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
         if (params == null) throw new InvalidParameterSpecException(toString() + " is not available in this JVM");
@@ -315,16 +315,16 @@ public enum SigType {
     }
 
     /** A private, unshared MessageDigest instance for this signature type,
-     *  in its initial state.
+     * in its initial state.
      *
-     *  A MessageDigest is stateful and not thread safe, so the prototype is
-     *  never returned directly; it is cloned on every call. Cloning skips the
-     *  JCA provider lookup (algorithm string hashing plus provider list
-     *  scanning) that {@link MessageDigest#getInstance(String)} performs, and
-     *  the clone shares no state with the prototype or with any other clone.
+     * A MessageDigest is stateful and not thread safe, so the prototype is
+     * never returned directly; it is cloned on every call. Cloning skips the
+     * JCA provider lookup (algorithm string hashing plus provider list
+     * scanning) that {@link MessageDigest#getInstance(String)} performs, and
+     * the clone shares no state with the prototype or with any other clone.
      *
-     *  @throws UnsupportedOperationException if not supported
-     *  @return a new digest instance owned by the caller
+     * @throws UnsupportedOperationException if not supported
+     * @return a new digest instance owned by the caller
      */
     public MessageDigest getDigestInstance() {
         MessageDigest proto = getDigestPrototype();
@@ -341,10 +341,10 @@ public enum SigType {
     }
 
     /**
-     *  The pristine digest prototype for this type, created on first use.
+     * The pristine digest prototype for this type, created on first use.
      *
-     *  @throws UnsupportedOperationException if not supported
-     *  @return the prototype, which callers must not use or modify
+     * @throws UnsupportedOperationException if not supported
+     * @return the prototype, which callers must not use or modify
      */
     private MessageDigest getDigestPrototype() {
         MessageDigest rv = digestProto;
@@ -356,11 +356,11 @@ public enum SigType {
     }
 
     /**
-     *  Provider lookup for a digest by name. Called at most once per SigType.
+     * Provider lookup for a digest by name. Called at most once per SigType.
      *
-     *  @param name the JCA digest name
-     *  @throws UnsupportedOperationException if not supported
-     *  @return a new digest instance
+     * @param name the JCA digest name
+     * @throws UnsupportedOperationException if not supported
+     * @return a new digest instance
      */
     private static MessageDigest createDigestInstance(String name) {
         if (name.equals("SHA-1")) return SHA1.getInstance();
@@ -373,12 +373,12 @@ public enum SigType {
     }
 
     /**
-     *  Create a Hash instance for this signature type.
+     * Create a Hash instance for this signature type.
      *
      *
-     *  @throws UnsupportedOperationException if not supported
-     *  @return the hash instance
-     *  @since 0.9.9
+     * @throws UnsupportedOperationException if not supported
+     * @return the hash instance
+     * @since 0.9.9
      */
     public SimpleDataStructure getHashInstance() {
         switch (getHashLen()) {
@@ -416,11 +416,11 @@ public enum SigType {
     }
 
     /**
-     *  Checks if this signature type is available in the JVM.
+     * Checks if this signature type is available in the JVM.
      *
      *
-     *  @return true if supported in this JVM
-     *  @since 0.9.12
+     * @return true if supported in this JVM
+     * @since 0.9.12
      */
     public boolean isAvailable() {
         return isAvail;
@@ -459,10 +459,10 @@ public enum SigType {
     }
 
     /**
-     *  Checks if the signature type with the given code is available.
+     * Checks if the signature type with the given code is available.
      *
-     *  @return true if supported in this JVM
-     *  @since 0.9.15
+     * @return true if supported in this JVM
+     * @since 0.9.15
      */
     public static boolean isAvailable(int code) {
         SigType type = getByCode(code);
@@ -471,11 +471,11 @@ public enum SigType {
     }
 
     /**
-     *  Checks if the signature type with the given name or number is available.
+     * Checks if the signature type with the given name or number is available.
      *
-     *  @param stype number or name
-     *  @return true if supported in this JVM
-     *  @since 0.9.15
+     * @param stype number or name
+     * @return true if supported in this JVM
+     * @since 0.9.15
      */
     public static boolean isAvailable(String stype) {
         SigType type = parseSigType(stype);
@@ -498,7 +498,7 @@ public enum SigType {
 
     /** Signature type by code.
      *
-     *  @return Null if not supported.
+     * @return Null if not supported.
      */
     public static SigType getByCode(int code) {
         if (code < 0 || code >= BY_CODE.length) return null;
@@ -506,11 +506,11 @@ public enum SigType {
     }
 
     /**
-     *  Convenience for user apps
+     * Convenience for user apps
      *
-     *  @param stype number or name
-     *  @return null if not found
-     *  @since 0.9.9 moved from SU3File in 0.9.12
+     * @param stype number or name
+     * @return null if not found
+     * @since 0.9.9 moved from SU3File in 0.9.12
      */
     public static SigType parseSigType(String stype) {
         try {

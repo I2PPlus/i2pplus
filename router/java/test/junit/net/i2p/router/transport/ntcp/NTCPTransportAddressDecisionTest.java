@@ -17,17 +17,17 @@ import net.i2p.util.OrderedProperties;
 import org.junit.Test;
 
 /**
- *  Unit tests for the address-selection decisions extracted from
- *  {@link NTCPTransport#externalAddressReceived(byte[], boolean, int)} and
- *  {@link NTCPTransport#getConfiguredIP()}, plus the pure decisions reused by
- *  {@link NTCPTransport#startListening()} and {@link NTCPTransport#bindAddress(int)}.
+ * Unit tests for the address-selection decisions extracted from
+ * {@link NTCPTransport#externalAddressReceived(byte[], boolean, int)} and
+ * {@link NTCPTransport#getConfiguredIP()}, plus the pure decisions reused by
+ * {@link NTCPTransport#startListening()} and {@link NTCPTransport#bindAddress(int)}.
  *
- *  <p>All helpers are static/package-visible so the externally triggered and
- *  restart-heavy flows they came from are testable without a router: auto-host
- *  preference parsing, host override, firewalled-family skipping, port-change
- *  classification, and listener rebinding checks.
+ * <p>All helpers are static/package-visible so the externally triggered and
+ * restart-heavy flows they came from are testable without a router: auto-host
+ * preference parsing, host override, firewalled-family skipping, port-change
+ * classification, and listener rebinding checks.
  *
- *  @since 0.9.71+
+ * @since 0.9.71+
  */
 public class NTCPTransportAddressDecisionTest {
 

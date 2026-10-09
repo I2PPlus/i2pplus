@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -18,48 +17,48 @@ import java.io.InputStream;
  *
  * <p>Creating a Hash:</p>
  * <ul>
- *   <li>{@link #create(byte[])} and its siblings go through a static
- *       {@link SDSCache} and are the preferred way to obtain one. The cache is
- *       keyed on the first 4 bytes of the data and holds weak references, so
- *       entries disappear under memory pressure; its maximum size is scaled by
- *       the JVM's available memory. On a cache hit the byte array passed in is
- *       handed back to {@link net.i2p.util.SimpleByteCache} for reuse and must not be
- *       touched afterwards.</li>
- *   <li>{@code new Hash(byte[])} bypasses the cache entirely. Use create() when
- *       the same hash may be built repeatedly.</li>
- *   <li>{@link #create(InputStream)} reads exactly 32 bytes from the stream and
- *       wraps them; it does not hash the stream. To hash arbitrary data, use
- *       {@link #calculateHash()} or a SHA256Generator.</li>
+ * <li>{@link #create(byte[])} and its siblings go through a static
+ * {@link SDSCache} and are the preferred way to obtain one. The cache is
+ * keyed on the first 4 bytes of the data and holds weak references, so
+ * entries disappear under memory pressure; its maximum size is scaled by
+ * the JVM's available memory. On a cache hit the byte array passed in is
+ * handed back to {@link net.i2p.util.SimpleByteCache} for reuse and must not be
+ * touched afterwards.</li>
+ * <li>{@code new Hash(byte[])} bypasses the cache entirely. Use create() when
+ * the same hash may be built repeatedly.</li>
+ * <li>{@link #create(InputStream)} reads exactly 32 bytes from the stream and
+ * wraps them; it does not hash the stream. To hash arbitrary data, use
+ * {@link #calculateHash()} or a SHA256Generator.</li>
  * </ul>
  *
  * <p>Rendering:</p>
  * <ul>
- *   <li>{@link #toBase64()} caches its result in a volatile field.</li>
- *   <li>{@link #toBase32()} caches its result the same way.</li>
+ * <li>{@link #toBase64()} caches its result in a volatile field.</li>
+ * <li>{@link #toBase32()} caches its result the same way.</li>
  * </ul>
  *
  * <p>Comparison:</p>
  * <ul>
- *   <li>{@link #hashCode()} is the precomputed value of the first 4 bytes, held
- *       in a volatile field. It is not constant-time.</li>
- *   <li>equals() is inherited from {@link SimpleDataStructure} and is
- *       {@link java.util.Arrays#equals(byte[], byte[])} - not constant-time, and
- *       not class-specific, so another 32-byte SimpleDataStructure such as a
- *       {@link SessionKey} holding the same bytes compares equal to a Hash.</li>
+ * <li>{@link #hashCode()} is the precomputed value of the first 4 bytes, held
+ * in a volatile field. It is not constant-time.</li>
+ * <li>equals() is inherited from {@link SimpleDataStructure} and is
+ * {@link java.util.Arrays#equals(byte[], byte[])} - not constant-time, and
+ * not class-specific, so another 32-byte SimpleDataStructure such as a
+ * {@link SessionKey} holding the same bytes compares equal to a Hash.</li>
  * </ul>
  *
  * <p>Thread safety:</p>
  * <ul>
- *   <li>The data cannot be reassigned once set, so a Hash that is safely
- *       published (constructed and then handed to other threads) can be shared
- *       freely; the derived {@code _base64ed}, {@code _base32ed} and
- *       {@code _cachedHashCode} fields are volatile. {@link #_data} itself is
- *       neither final nor volatile, so a
- *       Hash built by a constructor and published through an unsynchronized
- *       data structure may expose stale data.</li>
- *   <li>{@link #getData()} hands out the backing array, so a caller that
- *       mutates it corrupts the cached hash code and the cached Base64 and
- *       Base32 strings, as well as any byte cache that shares the array.</li>
+ * <li>The data cannot be reassigned once set, so a Hash that is safely
+ * published (constructed and then handed to other threads) can be shared
+ * freely; the derived {@code _base64ed}, {@code _base32ed} and
+ * {@code _cachedHashCode} fields are volatile. {@link #_data} itself is
+ * neither final nor volatile, so a
+ * Hash built by a constructor and published through an unsynchronized
+ * data structure may expose stale data.</li>
+ * <li>{@link #getData()} hands out the backing array, so a caller that
+ * mutates it corrupts the cached hash code and the cached Base64 and
+ * Base32 strings, as well as any byte cache that shares the array.</li>
  * </ul>
  *
  * @author jrandom
@@ -80,14 +79,14 @@ public class Hash extends SimpleDataStructure {
     private static final SDSCache<Hash> _cache = new SDSCache<>(Hash.class, HASH_LENGTH, CACHE_SIZE);
 
     /**
-     *  Pull from cache or return new
+     * Pull from cache or return new
      *
-     *  WARNING - If the SDS is found in the cache, the passed-in
-     *  byte array will be returned to the SimpleByteCache for reuse.
-     *  Do NOT save a reference to the passed-in data, or use or modify it,
-     *  after this call.
+     * WARNING - If the SDS is found in the cache, the passed-in
+     * byte array will be returned to the SimpleByteCache for reuse.
+     * Do NOT save a reference to the passed-in data, or use or modify it,
+     * after this call.
      *
-     *  Ignore this warning and you WILL corrupt the cache or other data structures.
+     * Ignore this warning and you WILL corrupt the cache or other data structures.
      *
      * @return the cached or new hash
      * @throws IllegalArgumentException if data is not the correct number of bytes
@@ -178,11 +177,11 @@ public class Hash extends SimpleDataStructure {
     }
 
     /**
-     *  The .b32.i2p form of the hash. Cached after the first call, like
-     *  toBase64(), and dropped by setData() and readBytes().
+     * The .b32.i2p form of the hash. Cached after the first call, like
+     * toBase64(), and dropped by setData() and readBytes().
      *
-     *  @return "{52 chars}.b32.i2p" or null if data not set.
-     *  @since 0.9.25
+     * @return "{52 chars}.b32.i2p" or null if data not set.
+     * @since 0.9.25
      */
     public String toBase32() {
         if (_data == null) return null;
@@ -195,12 +194,12 @@ public class Hash extends SimpleDataStructure {
     }
 
     /**
-     *  Drop the shared cache of Hash instances, so cached instances become
-     *  eligible for collection. Hashes already handed to callers are unaffected,
-     *  and the byte arrays the cached instances held are not returned to the
-     *  byte cache.
+     * Drop the shared cache of Hash instances, so cached instances become
+     * eligible for collection. Hashes already handed to callers are unaffected,
+     * and the byte arrays the cached instances held are not returned to the
+     * byte cache.
      *
-     *  @since 0.9.17
+     * @since 0.9.17
      */
     public static void clearCache() {
         _cache.clear();

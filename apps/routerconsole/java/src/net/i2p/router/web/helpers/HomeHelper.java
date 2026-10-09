@@ -26,8 +26,6 @@ import net.i2p.I2PAppContext;
  * Renders main dashboard with service links, favorites, monitoring,
  * and quick access to router management features.
  * Supports both /home and /confighome pages.
- *
- * @since 0.9
  */
 public class HomeHelper extends HelperBase {
 
@@ -334,20 +332,20 @@ public class HomeHelper extends HelperBase {
     }
 
     /**
-     *  Drop sites that are gone from the Sites of Interest listing.
+     * Drop sites that are gone from the Sites of Interest listing.
      *
-     *  <p>Applies only to the favourites shown on the home and sitemap pages. The config
-     *  table is left complete so a link that is merely down can still be seen and removed.
+     * <p>Applies only to the favourites shown on the home and sitemap pages. The config
+     * table is left complete so a link that is merely down can still be seen and removed.
      *
-     *  <p>A site is dropped when the naming service cannot resolve it, or when the addressbook
-     *  checker's last probe of it failed. A site that resolves but has not been probed yet is
-     *  kept, so a cold results file does not empty the page. Links that are not I2P names -
-     *  clearnet, and the console's own paths - are never dropped, since neither source can
-     *  judge them.
+     * <p>A site is dropped when the naming service cannot resolve it, or when the addressbook
+     * checker's last probe of it failed. A site that resolves but has not been probed yet is
+     * kept, so a cold results file does not empty the page. Links that are not I2P names -
+     * clearnet, and the console's own paths - are never dropped, since neither source can
+     * judge them.
      *
-     *  @param apps the configured links
-     *  @return those that should still be shown
-     *  @since 0.9.71+
+     * @param apps the configured links
+     * @return those that should still be shown
+     * @since 0.9.71+
      */
     private Collection<App> hideUnreachable(Collection<App> apps) {
         if (apps == null || apps.isEmpty()) { return apps; }
@@ -381,10 +379,12 @@ public class HomeHelper extends HelperBase {
 
     private static final String SS = Character.toString(S);
 
-    /*** Context.
-  @param ctx context
-     *  @param config the configuration
-     *  @return collection of apps */
+    /**
+     * Context.
+     * @param ctx context
+     * @param config the configuration
+     * @return collection of apps
+     */
     static Collection<App> buildApps(RouterContext ctx, String config) {
         String[] args = DataHelper.split(config, SS);
         Set<App> apps = new TreeSet<>(new AppComparator());
@@ -398,9 +398,11 @@ public class HomeHelper extends HelperBase {
         return apps;
     }
 
-    /*** Config string.
-  @param config the config string
-     *  @return collection of search apps */
+    /**
+     * Config string.
+     * @param config the config string
+     * @return collection of search apps
+     */
     static Collection<App> buildSearchApps(String config) {
         String[] args = DataHelper.split(config, SS);
         Set<App> apps = new TreeSet<>(new AppComparator());
@@ -412,11 +414,13 @@ public class HomeHelper extends HelperBase {
         return apps;
     }
 
-    /*** Context.
-  @param ctx context
-     *  @param prop the property name
-     *  @param apps the apps to save
-     *  @param full whether to save full data */
+    /**
+     * Context.
+     * @param ctx context
+     * @param prop the property name
+     * @param apps the apps to save
+     * @param full whether to save full data
+     */
     static void saveApps(RouterContext ctx, String prop, Collection<App> apps, boolean full) {
         StringBuilder buf = new StringBuilder(1024);
         for (App app : apps) {

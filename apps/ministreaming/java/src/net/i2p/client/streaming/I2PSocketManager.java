@@ -26,43 +26,42 @@ import net.i2p.data.Destination;
  * is sending and receiving data through the streaming library using an
  * I2PSocketManager, it should not attempt to call I2PSession's setSessionListener
  * or receive any messages with its .receiveMessage
- *
  */
 public interface I2PSocketManager {
 
     /**
-     *  The I2P session associated with this manager.
+     * The I2P session associated with this manager.
      *
-     *  @return the session, non-null
+     * @return the session, non-null
      */
     public I2PSession getSession();
 
     /**
-     *  For a server, you must call connect() on the returned object.
-     *  Connecting the primary session does NOT connect any subsessions.
-     *  If the primary session is not connected, connecting a subsession will connect the primary session first.
+     * For a server, you must call connect() on the returned object.
+     * Connecting the primary session does NOT connect any subsessions.
+     * If the primary session is not connected, connecting a subsession will connect the primary session first.
      *
-     *  @return a new subsession, non-null
-     *  @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
-     *                          and different signing keys
-     *  @param opts subsession options if any, may be null
-     *  @since 0.9.21
+     * @return a new subsession, non-null
+     * @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
+     * and different signing keys
+     * @param opts subsession options if any, may be null
+     * @since 0.9.21
      */
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
 
     /**
-     *  Remove a subsession.
+     * Remove a subsession.
      *
-     *  @param session the subsession to remove
-     *  @since 0.9.21
+     * @param session the subsession to remove
+     * @since 0.9.21
      */
     public void removeSubsession(I2PSession session);
 
     /**
-     *  All subsessions of the primary session.
+     * All subsessions of the primary session.
      *
-     *  @return a list of subsessions, non-null, does not include the primary session
-     *  @since 0.9.21
+     * @return a list of subsessions, non-null, does not include the primary session
+     * @since 0.9.21
      */
     public List<I2PSession> getSubsessions();
 
@@ -80,45 +79,45 @@ public interface I2PSocketManager {
     public long getAcceptTimeout();
 
     /**
-     *  Update the options on a running socket manager.
-     *  Parameters in the I2PSocketOptions interface may be changed directly
-     *  with the setters; no need to use this method for those.
-     *  This does NOT update the underlying I2CP or tunnel options; use getSession().updateOptions() for that.
-     *  @param options as created from a call to buildOptions(properties), non-null
+     * Update the options on a running socket manager.
+     * Parameters in the I2PSocketOptions interface may be changed directly
+     * with the setters; no need to use this method for those.
+     * This does NOT update the underlying I2CP or tunnel options; use getSession().updateOptions() for that.
+     * @param options as created from a call to buildOptions(properties), non-null
      */
     public void setDefaultOptions(I2PSocketOptions options);
 
     /**
-     *  Current options, not a copy, setters may be used to make changes.
+     * Current options, not a copy, setters may be used to make changes.
      *
-     *  @return the default options
+     * @return the default options
      */
     public I2PSocketOptions getDefaultOptions();
 
     /**
-     *  Returns non-null socket.
-     *  This method does not throw exceptions, but methods on the returned socket
-     *  may throw exceptions if the socket or socket manager is closed.
+     * Returns non-null socket.
+     * This method does not throw exceptions, but methods on the returned socket
+     * may throw exceptions if the socket or socket manager is closed.
      *
-     *  @return non-null
+     * @return non-null
      */
     public I2PServerSocket getServerSocket();
 
     /**
-     *  Create a copy of the current options, to be used in a setDefaultOptions() call.
+     * Create a copy of the current options, to be used in a setDefaultOptions() call.
      *
-     *  @return a copy of the current options
+     * @return a copy of the current options
      */
     public I2PSocketOptions buildOptions();
 
     /**
-     *  Create a modified copy of the current options, to be used in a setDefaultOptions() call.
+     * Create a modified copy of the current options, to be used in a setDefaultOptions() call.
      *
-     *  Defaults in opts are honored: a property absent from opts keeps its
-     *  current value rather than reverting to the default.
+     * Defaults in opts are honored: a property absent from opts keeps its
+     * current value rather than reverting to the default.
      *
-     *  @param opts The new options, may be null
-     *  @return a modified copy of the current options
+     * @param opts The new options, may be null
+     * @return a modified copy of the current options
      */
     public I2PSocketOptions buildOptions(Properties opts);
 
@@ -222,9 +221,9 @@ public interface I2PSocketManager {
     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload);
 
     /**
-     *  For logging / diagnostics only
+     * For logging / diagnostics only
      *
-     *  @return the name
+     * @return the name
      */
     public String getName();
 
@@ -244,7 +243,7 @@ public interface I2PSocketManager {
      * @param name the name
      * @throws UnsupportedOperationException always
      * @deprecated nothing calls this; build the manager with
-     *     I2PSocketManagerFactory.createManager().
+     * I2PSocketManagerFactory.createManager().
      */
     @Deprecated
     public void init(I2PAppContext context, I2PSession session, Properties opts, String name);
@@ -267,34 +266,34 @@ public interface I2PSocketManager {
     }
 
     /**
-     *  Like getServerSocket but returns a real ServerSocket for easier porting of apps.
+     * Like getServerSocket but returns a real ServerSocket for easier porting of apps.
      *
-     *  @return a standard ServerSocket
-     *  @throws IOException on I/O error
-     *  @since 0.8.4
+     * @return a standard ServerSocket
+     * @throws IOException on I/O error
+     * @since 0.8.4
      */
     public ServerSocket getStandardServerSocket() throws IOException;
 
     /**
-     *  Like connect() but returns a real Socket, and throws only IOE,
-     *  for easier porting of apps.
+     * Like connect() but returns a real Socket, and throws only IOE,
+     * for easier porting of apps.
      *
-     *  @param peer the destination
-     *  @return a connected Socket
-     *  @throws IOException on I/O error
-     *  @since 0.8.4
+     * @param peer the destination
+     * @return a connected Socket
+     * @throws IOException on I/O error
+     * @since 0.8.4
      */
     public Socket connectToSocket(Destination peer) throws IOException;
 
     /**
-     *  Like connect() but returns a real Socket, and throws only IOE,
-     *  for easier porting of apps.
+     * Like connect() but returns a real Socket, and throws only IOE,
+     * for easier porting of apps.
      *
-     *  @param peer the destination
-     *  @param timeout ms if &gt; 0, forces blocking (disables connectDelay)
-     *  @return a connected Socket
-     *  @throws IOException on I/O error
-     *  @since 0.8.4
+     * @param peer the destination
+     * @param timeout ms if &gt; 0, forces blocking (disables connectDelay)
+     * @return a connected Socket
+     * @throws IOException on I/O error
+     * @since 0.8.4
      */
     public Socket connectToSocket(Destination peer, int timeout) throws IOException;
 }

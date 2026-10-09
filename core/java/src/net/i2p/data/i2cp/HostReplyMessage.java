@@ -3,7 +3,6 @@ package net.i2p.data.i2cp;
 /*
  * Released into the public domain
  * with no warranty of any kind, either expressed or implied.
- *
  */
 
 import net.i2p.data.DataFormatException;
@@ -81,13 +80,13 @@ public class HostReplyMessage extends I2CPMessageImpl {
     public HostReplyMessage() {}
 
     /**
-     *  A message with RESULT_SUCCESS and a non-null Destination.
+     * A message with RESULT_SUCCESS and a non-null Destination.
      *
-     *  @param id the session id
-     *  @param d non-null
-     *  @param reqID 0 to 2**32 - 1
-     *  @param options for replies to lookup types 2-4, may be null, see proposal 167
-     *  @since 0.9.69
+     * @param id the session id
+     * @param d non-null
+     * @param reqID 0 to 2**32 - 1
+     * @param options for replies to lookup types 2-4, may be null, see proposal 167
+     * @since 0.9.69
      */
     public HostReplyMessage(SessionId id, Destination d, long reqID, Properties options) {
         if (id == null || d == null) {
@@ -103,11 +102,11 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  A message with a failure code and no Destination.
+     * A message with a failure code and no Destination.
      *
-     *  @param id the session id
-     *  @param failureCode 1-255
-     *  @param reqID from the HostLookup 0 to 2**32 - 1
+     * @param id the session id
+     * @param failureCode 1-255
+     * @param reqID from the HostLookup 0 to 2**32 - 1
      */
     public HostReplyMessage(SessionId id, int failureCode, long reqID) {
         if (id == null) {
@@ -143,27 +142,27 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     *  Gets the request ID.
+     * Gets the request ID.
      *
-     *  @return 0 to 2**32 - 1
+     * @return 0 to 2**32 - 1
      */
     public long getReqID() {
         return _reqID;
     }
 
     /**
-     *  Gets the result code.
+     * Gets the result code.
      *
-     *  @return 0 on success, 1-255 on failure
+     * @return 0 on success, 1-255 on failure
      */
     public int getResultCode() {
         return _code;
     }
 
     /**
-     *  Gets the destination.
+     * Gets the destination.
      *
-     *  @return non-null only if result code is zero
+     * @return non-null only if result code is zero
      */
     public Destination getDestination() {
         return _dest;
@@ -171,8 +170,8 @@ public class HostReplyMessage extends I2CPMessageImpl {
 
     /**
      * Non-null only if result code is zero and options are present.
-     *  @return non-null only if result code is zero and options are present
-     *  @since 0.9.69 see proposal 167
+     * @return non-null only if result code is zero and options are present
+     * @since 0.9.69 see proposal 167
      */
     public Properties getOptions() {
         return _options;

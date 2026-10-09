@@ -6,7 +6,6 @@ package net.i2p.util;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import net.i2p.I2PAppContext;
@@ -33,10 +32,10 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     protected final transient I2PAppContext _context;
 
     /**
-     *  Deprecated - do not instantiate this directly, as you won't get the
-     *  good one (Fortuna). Use getInstance() or
-     *  I2PAppContext.getGlobalContext().random() to get the FortunaRandomSource
-     *  instance.
+     * Deprecated - do not instantiate this directly, as you won't get the
+     * good one (Fortuna). Use getInstance() or
+     * I2PAppContext.getGlobalContext().random() to get the FortunaRandomSource
+     * instance.
      */
     public RandomSource(I2PAppContext context) {
         super();
@@ -73,10 +72,10 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     *  This code unused, see FortunaRandomSource override
+     * This code unused, see FortunaRandomSource override
      *
-     *  @return all possible int values, positive and negative
-     *  @since 0.9.54
+     * @return all possible int values, positive and negative
+     * @since 0.9.54
      */
     public int signedNextInt() {
         return nextInt();
@@ -142,7 +141,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     *  May block up to 10 seconds
+     * May block up to 10 seconds
      */
     public void loadSeed() {
         byte[] buf = new byte[1024];
@@ -173,7 +172,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     *  May block up to 10 seconds
+     * May block up to 10 seconds
      */
     public final boolean initSeed(byte[] buf) {
         boolean ok = false;
@@ -205,11 +204,11 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     *  Thread to prevent hanging on init,
-     *  presumably due to /dev/random blocking,
-     *  which is common in VMs.
+     * Thread to prevent hanging on init,
+     * presumably due to /dev/random blocking,
+     * which is common in VMs.
      *
-     *  @since 0.9.18
+     * @since 0.9.18
      */
     private static class SecureRandomInit implements Runnable {
         private final byte[] buf;
@@ -243,10 +242,10 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     }
 
     /**
-     *  XORs the seed into buf
+     * XORs the seed into buf
      *
-     *  @param f absolute path
-     *  @return success
+     * @param f absolute path
+     * @return success
      */
     private static final boolean seedFromFile(File f, byte[] buf) {
         if (f.exists()) {

@@ -116,7 +116,7 @@ public class DatabaseReader implements Closeable {
 
         /**
          * @param val List of locale codes to use in name property from most
-         *            preferred to least preferred.
+         * preferred to least preferred.
          * @return Builder object
          */
         public Builder locales(List<String> val) {
@@ -137,8 +137,8 @@ public class DatabaseReader implements Closeable {
          * @param val The file mode used to open the GeoIP2 database
          * @return Builder object
          * @throws java.lang.IllegalArgumentException if you initialized the Builder with a URL, which uses
-         *                                            {@link FileMode#MEMORY}, but you provided a different
-         *                                            FileMode to this method.
+         * {@link FileMode#MEMORY}, but you provided a different
+         * FileMode to this method.
          */
         public Builder fileMode(FileMode val) {
             if (this.stream != null && FileMode.MEMORY != val) {
@@ -162,22 +162,22 @@ public class DatabaseReader implements Closeable {
     /**
      * Returns a map containing:
      *
-     *<ul><li>continent: Map containing:
-     *  <ul><li>code: String
-     *      <li>names: Map of lang to translated name
-     *      <li>geoname_id: Long
-     *  </ul>
-     *<ul><li>country: Map containing:
-     *  <ul><li>iso_code: String
-     *      <li>names: Map of lang to translated name
-     *      <li>geoname_id: Long
-     *  </ul>
-     *<ul><li>registered_country: Map containing:
-     *  <ul><li>iso_code: String
-     *      <li>names: Map of lang to translated name
-     *      <li>geoname_id: Long
-     *  </ul>
-     *</ul>
+     * <ul><li>continent: Map containing:
+     * <ul><li>code: String
+     * <li>names: Map of lang to translated name
+     * <li>geoname_id: Long
+     * </ul>
+     * <ul><li>country: Map containing:
+     * <ul><li>iso_code: String
+     * <li>names: Map of lang to translated name
+     * <li>geoname_id: Long
+     * </ul>
+     * <ul><li>registered_country: Map containing:
+     * <ul><li>iso_code: String
+     * <li>names: Map of lang to translated name
+     * <li>geoname_id: Long
+     * </ul>
+     * </ul>
      *
      * @param ipAddress IPv4 or IPv6 address to lookup.
      * @return A Map with the data for the IP address
@@ -240,12 +240,12 @@ public class DatabaseReader implements Closeable {
     }
 
     /**
-     *  I2P -
-     *  Write all IPv4 address ranges for the given country to out.
+     * I2P -
+     * Write all IPv4 address ranges for the given country to out.
      *
-     *  @param country two-letter case-insensitive
-     *  @param out caller must close
-     *  @since 0.9.48
+     * @param country two-letter case-insensitive
+     * @param out caller must close
+     * @since 0.9.48
      */
     public void countryToIP(String country, Writer out) throws IOException {
         reader.countryToIP(country.toUpperCase(Locale.US), out);

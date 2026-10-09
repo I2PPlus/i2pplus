@@ -26,29 +26,29 @@ import net.i2p.util.SystemVersion;
  *
  * <p><strong>Update Process:</strong></p>
  * <ul>
- *   <li>Searches for i2pupdate.zip in router dir or base dir</li>
- *   <li>Verifies write permissions to target directory</li>
- *   <li>Validates ZIP file integrity and structure</li>
- *   <li>Updates router configuration with version information</li>
- *   <li>Extracts update files to base directory</li>
- *   <li>Processes deletelist.txt for obsolete file removal</li>
- *   <li>Cleans up native libraries (jbigi, jcpuid)</li>
- *   <li>Removes update file and restarts JVM</li>
+ * <li>Searches for i2pupdate.zip in router dir or base dir</li>
+ * <li>Verifies write permissions to target directory</li>
+ * <li>Validates ZIP file integrity and structure</li>
+ * <li>Updates router configuration with version information</li>
+ * <li>Extracts update files to base directory</li>
+ * <li>Processes deletelist.txt for obsolete file removal</li>
+ * <li>Cleans up native libraries (jbigi, jcpuid)</li>
+ * <li>Removes update file and restarts JVM</li>
  * </ul>
  *
  * <p><strong>Error Handling:</strong></p>
  * <ul>
- *   <li>Renames failed updates to "BAD-i2pupdate.zip"</li>
- *   <li>Summarizes file deletions at end of process</li>
- *   <li>Handles permission issues gracefully</li>
- *   <li>Performs cleanup even on partial failures</li>
+ * <li>Renames failed updates to "BAD-i2pupdate.zip"</li>
+ * <li>Summarizes file deletions at end of process</li>
+ * <li>Handles permission issues gracefully</li>
+ * <li>Performs cleanup even on partial failures</li>
  * </ul>
  *
  * <p><strong>Restart Behavior:</strong></p>
  * <ul>
- *   <li>With wrapper: Automatic restart after update</li>
- *   <li>Without wrapper: Manual restart required</li>
- *   <li>Exit code: Router.EXIT_HARD_RESTART</li>
+ * <li>With wrapper: Automatic restart after update</li>
+ * <li>Without wrapper: Manual restart required</li>
+ * <li>Exit code: Router.EXIT_HARD_RESTART</li>
  * </ul>
  *
  * <p>If no update file is found, performs routine maintenance
@@ -135,13 +135,13 @@ public class InstallUpdate {
     }
 
     /**
-     *  Remove extracted libjbigi.so and libjcpuid.so files if we have a newer jbigi.jar,
-     *  so the new ones will be extracted.
-     *  We do this after the restart, not after the extract, because it's safer, and
-     *  because people may upgrade their jbigi.jar file manually.
+     * Remove extracted libjbigi.so and libjcpuid.so files if we have a newer jbigi.jar,
+     * so the new ones will be extracted.
+     * We do this after the restart, not after the extract, because it's safer, and
+     * because people may upgrade their jbigi.jar file manually.
      *
-     *  Copied from NativeBigInteger, which we can't access here or the
-     *  libs will get loaded.
+     * Copied from NativeBigInteger, which we can't access here or the
+     * libs will get loaded.
      */
     private static void deleteJbigiFiles(RouterContext context) {
         boolean isX86 = SystemVersion.isX86();
@@ -172,8 +172,8 @@ public class InstallUpdate {
     }
 
     /**
-     *  Delete a native library if the jbigi.jar is newer.
-     *  Copies to .bak first, then deletes.
+     * Delete a native library if the jbigi.jar is newer.
+     * Copies to .bak first, then deletes.
      */
     private static void deleteNativeLib(File jbigiJar, File lib) {
         if (lib.canWrite() && jbigiJar.lastModified() > lib.lastModified()) {
@@ -189,12 +189,12 @@ public class InstallUpdate {
     }
 
     /**
-     *  Delete all files listed in the delete file.
-     *  Format: One file name per line, comment lines start with '#'.
-     *  All file names must be relative to $I2P, absolute file names not allowed.
-     *  Summarizes deletions at the end.
-     *  Use no new I2P classes here so it may be called after zip extraction.
-     *  @since 0.8.12
+     * Delete all files listed in the delete file.
+     * Format: One file name per line, comment lines start with '#'.
+     * All file names must be relative to $I2P, absolute file names not allowed.
+     * Summarizes deletions at the end.
+     * Use no new I2P classes here so it may be called after zip extraction.
+     * @since 0.8.12
      */
     private static void deleteListedFiles(RouterContext context) {
         File deleteFile = new File(context.getBaseDir(), DELETE_FILE);
@@ -238,8 +238,8 @@ public class InstallUpdate {
     }
 
     /**
-     *  Recursive directory delete.
-     *  @return true if the directory was deleted
+     * Recursive directory delete.
+     * @return true if the directory was deleted
      */
     private static boolean deleteDir(File dir) {
         File[] files = dir.listFiles();

@@ -13,14 +13,14 @@ import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.data.router.RouterInfo;
 
 /**
- *  NTCP 2 payload generation and parsing utilities.
+ * NTCP 2 payload generation and parsing utilities.
  *
- *  @since 0.9.35
+ * @since 0.9.35
  */
 class NTCP2Payload {
 
     /**
-     *  Not instantiated - every member below is static.
+     * Not instantiated - every member below is static.
      */
     NTCP2Payload() {}
 
@@ -35,9 +35,9 @@ class NTCP2Payload {
     private static final int BLOCK_PADDING = 254;
 
     /**
-     *  For all callbacks, recommend throwing exceptions only from the handshake.
-     *  Exceptions will get thrown out of processPayload() and prevent
-     *  processing of succeeding blocks.
+     * For all callbacks, recommend throwing exceptions only from the handshake.
+     * Exceptions will get thrown out of processPayload() and prevent
+     * processing of succeeding blocks.
      */
     public interface PayloadCallback {
         /**
@@ -55,33 +55,33 @@ class NTCP2Payload {
         public void gotI2NP(I2NPMessage msg) throws I2NPMessageException;
 
         /**
-         *  Receive an options block, the peer's padding negotiation parameters.
-         *  @param options the option bytes, copied out of the frame
-         *  @param isHandshake true only for message 3 part 2
-         *  @throws DataFormatException if the callback cannot process the block
+         * Receive an options block, the peer's padding negotiation parameters.
+         * @param options the option bytes, copied out of the frame
+         * @param isHandshake true only for message 3 part 2
+         * @throws DataFormatException if the callback cannot process the block
          */
         public void gotOptions(byte[] options, boolean isHandshake) throws DataFormatException;
 
         /**
-         *  Receive a RouterInfo block.
-         *  @param ri will already be validated
-         *  @param isHandshake true only for message 3 part 2
-         *  @param flood true if the flag byte asks the receiver to flood this RouterInfo
-         *  @throws DataFormatException if the RouterInfo is rejected, e.g. an unpublished date
+         * Receive a RouterInfo block.
+         * @param ri will already be validated
+         * @param isHandshake true only for message 3 part 2
+         * @param flood true if the flag byte asks the receiver to flood this RouterInfo
+         * @throws DataFormatException if the RouterInfo is rejected, e.g. an unpublished date
          */
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException;
 
         /**
-         *  Receive a termination block, the peer is closing the connection.
-         *  @param reason the termination reason code
-         *  @param lastReceived in theory could wrap around to negative, but very unlikely
+         * Receive a termination block, the peer is closing the connection.
+         * @param reason the termination reason code
+         * @param lastReceived in theory could wrap around to negative, but very unlikely
          */
         public void gotTermination(int reason, long lastReceived);
 
         /**
-         *  For stats.
-         *  @param paddingLength the number of padding bytes, not including the 3-byte block header
-         *  @param frameLength the total size of the frame, including all blocks and block headers
+         * For stats.
+         * @param paddingLength the number of padding bytes, not including the 3-byte block header
+         * @param frameLength the total size of the frame, including all blocks and block headers
          */
         public void gotPadding(int paddingLength, int frameLength);
 
@@ -94,18 +94,18 @@ class NTCP2Payload {
     }
 
     /**
-     *  Incoming payload. Calls the callback for each received block.
+     * Incoming payload. Calls the callback for each received block.
      *
-     *  @param ctx used to deserialize the RouterInfo and I2NP blocks
-     *  @param cb receives each block in the order it appears in the frame
-     *  @param payload the frame bytes, holding a sequence of blocks
-     *  @param off index in payload of the first block's type byte
-     *  @param length how many bytes of payload to parse, bounding the block walk
-     *  @param isHandshake true only for message 3 part 2, which allows only RouterInfo, options and padding
-     *  @return number of blocks processed
-     *  @throws IOException on major errors
-     *  @throws DataFormatException on parsing of individual blocks
-     *  @throws I2NPMessageException on parsing of I2NP block
+     * @param ctx used to deserialize the RouterInfo and I2NP blocks
+     * @param cb receives each block in the order it appears in the frame
+     * @param payload the frame bytes, holding a sequence of blocks
+     * @param off index in payload of the first block's type byte
+     * @param length how many bytes of payload to parse, bounding the block walk
+     * @param isHandshake true only for message 3 part 2, which allows only RouterInfo, options and padding
+     * @return number of blocks processed
+     * @throws IOException on major errors
+     * @throws DataFormatException on parsing of individual blocks
+     * @throws I2NPMessageException on parsing of I2NP block
      */
     public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
                                      byte[] payload, int off, int length, boolean isHandshake)
@@ -167,16 +167,16 @@ class NTCP2Payload {
     }
 
     /**
-     *  Check the payload-wide ordering rules for the next block: no block may
-     *  follow padding, only padding may follow termination, and the first block
-     *  of a handshake frame must be a RouterInfo.
+     * Check the payload-wide ordering rules for the next block: no block may
+     * follow padding, only padding may follow termination, and the first block
+     * of a handshake frame must be a RouterInfo.
      *
-     *  @param isHandshake true for the handshake frame
-     *  @param blocks blocks already processed in this frame
-     *  @param gotPadding whether padding was already seen
-     *  @param gotTermination whether termination was already seen
-     *  @param type the next block type
-     *  @throws IOException if ordering is violated
+     * @param isHandshake true for the handshake frame
+     * @param blocks blocks already processed in this frame
+     * @param gotPadding whether padding was already seen
+     * @param gotTermination whether termination was already seen
+     * @param type the next block type
+     * @throws IOException if ordering is violated
      */
     private static void checkBlockOrder(boolean isHandshake, int blocks, boolean gotPadding,
                                         boolean gotTermination, int type) throws IOException {
@@ -189,10 +189,10 @@ class NTCP2Payload {
     }
 
     /**
-     *  Check that the block fits inside the frame.  Called with i pointing just
-     *  past the 3-byte header, so the block's offset is {@code i - 3 - off}.
+     * Check that the block fits inside the frame.  Called with i pointing just
+     * past the 3-byte header, so the block's offset is {@code i - 3 - off}.
      *
-     *  @throws IOException if the block runs over the end of the frame
+     * @throws IOException if the block runs over the end of the frame
      */
     private static void checkFrameOverflow(byte[] payload, int off, int length, int end,
                                            int i, int len, int blocks, int type) throws IOException {
@@ -204,9 +204,9 @@ class NTCP2Payload {
     }
 
     /**
-     *  Check that the block type is not allowed in a handshake frame.
+     * Check that the block type is not allowed in a handshake frame.
      *
-     *  @throws IOException if the block appears in a handshake frame
+     * @throws IOException if the block appears in a handshake frame
      */
     private static void checkHandshakeOnly(boolean isHandshake, int type) throws IOException {
         if (isHandshake)
@@ -214,7 +214,7 @@ class NTCP2Payload {
     }
 
     /**
-     *  Parse a DATETIME block (exactly 4 bytes) and report it to the callback.
+     * Parse a DATETIME block (exactly 4 bytes) and report it to the callback.
      */
     private static void processDateTime(PayloadCallback cb, byte[] payload, int i, int len)
                                         throws IOException, DataFormatException {
@@ -225,7 +225,7 @@ class NTCP2Payload {
     }
 
     /**
-     *  Copy an OPTIONS block and report it to the callback.
+     * Copy an OPTIONS block and report it to the callback.
      */
     private static void processOptions(PayloadCallback cb, byte[] payload, int i, int len,
                                        boolean isHandshake) throws DataFormatException {
@@ -235,8 +235,8 @@ class NTCP2Payload {
     }
 
     /**
-     *  Deserialize a ROUTERINFO block (a 1-byte flag then the RouterInfo) and
-     *  report it to the callback.
+     * Deserialize a ROUTERINFO block (a 1-byte flag then the RouterInfo) and
+     * report it to the callback.
      */
     private static void processRouterInfo(I2PAppContext ctx, PayloadCallback cb, byte[] payload,
                                           int i, int len, boolean isHandshake) throws IOException, DataFormatException {
@@ -250,7 +250,7 @@ class NTCP2Payload {
     }
 
     /**
-     *  Parse an I2NP block (at least 9 bytes) and report it to the callback.
+     * Parse an I2NP block (at least 9 bytes) and report it to the callback.
      */
     private static void processI2NP(I2PAppContext ctx, PayloadCallback cb, byte[] payload,
                                     int i, int len) throws IOException, I2NPMessageException {
@@ -261,9 +261,9 @@ class NTCP2Payload {
     }
 
     /**
-     *  Parse a TERMINATION block (at least 9 bytes) and report it to the callback.
+     * Parse a TERMINATION block (at least 9 bytes) and report it to the callback.
      *
-     *  @return true, so the caller records that termination has been seen
+     * @return true, so the caller records that termination has been seen
      */
     private static boolean processTermination(PayloadCallback cb, byte[] payload, int i, int len)
                                               throws IOException {
@@ -276,12 +276,12 @@ class NTCP2Payload {
     }
 
     /**
-     *  Write the blocks out to the frame, in list order.
+     * Write the blocks out to the frame, in list order.
      *
-     *  @param payload writes to it starting at off
-     *  @param off index in payload to write the first block's header at
-     *  @param blocks each one written at the offset the previous one ended at
-     *  @return the new offset
+     * @param payload writes to it starting at off
+     * @param off index in payload to write the first block's header at
+     * @param blocks each one written at the offset the previous one ended at
+     * @return the new offset
      */
     public static int writePayload(byte[] payload, int off, List<Block> blocks) {
         for (Block block : blocks) {
@@ -291,8 +291,8 @@ class NTCP2Payload {
     }
 
     /**
-     *  Base class for NTCP 2 payload blocks to be transmitted.
-     *  Not used for receive; we use callbacks instead.
+     * Base class for NTCP 2 payload blocks to be transmitted.
+     * Not used for receive; we use callbacks instead.
      */
     public abstract static class Block {
         private final int type;
@@ -322,18 +322,18 @@ class NTCP2Payload {
         }
 
         /**
-         *  How many bytes the whole block occupies in a frame.
+         * How many bytes the whole block occupies in a frame.
          *
-         *  @return the size of the block, including the 3 byte header (type and size)
+         * @return the size of the block, including the 3 byte header (type and size)
          */
         public int getTotalLength() {
             return BLOCK_HEADER_SIZE + getDataLength();
         }
 
         /**
-         *  Size of the data, which becomes the length field of the block header.
+         * Size of the data, which becomes the length field of the block header.
          *
-         *  @return the size of the block, NOT including the 3 byte header (type and size)
+         * @return the size of the block, NOT including the 3 byte header (type and size)
          */
         public abstract int getDataLength();
 

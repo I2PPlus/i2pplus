@@ -24,19 +24,19 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     }
 
     /**
-     *  Send a message, nonblocking
+     * Send a message, nonblocking
      *
-     *  @return success (false if no space available)
+     * @return success (false if no space available)
      */
     @Override
     public boolean offer(I2CPMessage msg) {return _out.offer(msg);}
 
     /**
-     *  Send a message, blocking.
+     * Send a message, blocking.
      *
-     *  @param timeout how long to wait for space (ms)
-     *  @return success (false if no space available or if timed out)
-     *  @since 0.9.3
+     * @param timeout how long to wait for space (ms)
+     * @return success (false if no space available or if timed out)
+     * @since 0.9.3
      */
     @Override
     public boolean offer(I2CPMessage msg, long timeout) throws InterruptedException {
@@ -44,36 +44,36 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     }
 
     /**
-     *  Receive a message, non-blocking
+     * Receive a message, non-blocking
      *
-     *  @return message or null if none available
+     * @return message or null if none available
      */
     @Override
     public I2CPMessage poll() {return _in.poll();}
 
     /**
-     *  @return messages waiting to be received
-     *  @since 0.9.71+
+     * @return messages waiting to be received
+     * @since 0.9.71+
      */
     @Override
     public int pending() {return _in.size();}
 
     /**
-     *  @return how many more messages will be accepted; {@link Integer#MAX_VALUE} when unbounded
-     *  @since 0.9.71+
+     * @return how many more messages will be accepted; {@link Integer#MAX_VALUE} when unbounded
+     * @since 0.9.71+
      */
     @Override
     public int remainingCapacity() {return _out.remainingCapacity();}
 
     /**
-     *  Send a message, blocking until space is available
+     * Send a message, blocking until space is available
      */
     public void put(I2CPMessage msg) throws InterruptedException {_out.put(msg);}
 
     /**
-     *  Receive a message, blocking until one is available
+     * Receive a message, blocking until one is available
      *
-     *  @return message
+     * @return message
      */
     public I2CPMessage take() throws InterruptedException {return _in.take();}
 

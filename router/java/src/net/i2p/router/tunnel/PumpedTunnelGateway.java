@@ -18,11 +18,11 @@ import net.i2p.util.SystemVersion;
  *
  * The processing flow is:
  * <ol>
- *  <li>add an I2NPMessage (and optionally, the target router or tunnel)</li>
- *  <li>messages queue in this PumpedTunnelGateway's internal _prequeue</li>
- *  <li>QueuePreprocessor pulls PendingGatewayMessages from _prequeue and processes them</li>
- *  <li>Fragments are sent to Sender, encrypted, and delivered to the Receiver</li>
- *  <li>Receiver directs the message to the next tunnel hop or endpoint</li>
+ * <li>add an I2NPMessage (and optionally, the target router or tunnel)</li>
+ * <li>messages queue in this PumpedTunnelGateway's internal _prequeue</li>
+ * <li>QueuePreprocessor pulls PendingGatewayMessages from _prequeue and processes them</li>
+ * <li>Fragments are sent to Sender, encrypted, and delivered to the Receiver</li>
+ * <li>Receiver directs the message to the next tunnel hop or endpoint</li>
  * </ol>
  *
  * This class uses specialized CoDel queues to manage queue delays and bufferbloat.
@@ -30,10 +30,10 @@ import net.i2p.util.SystemVersion;
  *
  * Thread safety:
  * <ul>
- *  <li>_prequeue is a thread-safe blocking queue managing pending messages</li>
- *  <li>_queue is synchronized for modifications and preprocessing</li>
- *  <li>Expiration pruning is done outside locks to minimize contention</li>
- *  <li>The pump() method is safe for concurrent invocation by pumper threads</li>
+ * <li>_prequeue is a thread-safe blocking queue managing pending messages</li>
+ * <li>_queue is synchronized for modifications and preprocessing</li>
+ * <li>Expiration pruning is done outside locks to minimize contention</li>
+ * <li>The pump() method is safe for concurrent invocation by pumper threads</li>
  * </ul>
  */
 class PumpedTunnelGateway extends TunnelGateway {
@@ -43,13 +43,13 @@ class PumpedTunnelGateway extends TunnelGateway {
     public final boolean _isInbound;
     private final Hash _nextHop;
     /**
-     *  Gateway queue depths observed since the last flush, reported as one
-     *  mean sample per pump rather than one sample per message.  The stat is a
-     *  level the Tuner and the graphs read as a per-period average, so the
-     *  mean is the same quantity; sampling it per message cost a stat lookup
-     *  and one monitor per rate period for every message enqueued, which on a
-     *  busy gateway is thousands a second.
-     *  @since 0.9.71+
+     * Gateway queue depths observed since the last flush, reported as one
+     * mean sample per pump rather than one sample per message.  The stat is a
+     * level the Tuner and the graphs read as a per-period average, so the
+     * mean is the same quantity; sampling it per message cost a stat lookup
+     * and one monitor per rate period for every message enqueued, which on a
+     * busy gateway is thousands a second.
+     * @since 0.9.71+
      */
     private final RateStatMeanBatch _queueSizeBatch = new RateStatMeanBatch();
 

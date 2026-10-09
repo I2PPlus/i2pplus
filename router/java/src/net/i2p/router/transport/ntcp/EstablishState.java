@@ -36,40 +36,40 @@ interface EstablishState {
     public void prepareOutbound();
 
     /**
-     *  Whether the handshake failed.
+     * Whether the handshake failed.
      *
-     *  @return whether the handshake failed
+     * @return whether the handshake failed
      */
     public boolean isCorrupt();
 
     /**
-     *  Failure reason, or null if not failed.
+     * Failure reason, or null if not failed.
      *
-     *  @return the failure reason, or null if not failed
+     * @return the failure reason, or null if not failed
      */
     public String getFailReason();
 
     /**
-     *  If synchronized on this, fails with
-     *  deadlocks from all over via CSFI.isEstablished().
-     *  Also CSFI.getFramedAveragePeerClockSkew().
+     * If synchronized on this, fails with
+     * deadlocks from all over via CSFI.isEstablished().
+     * Also CSFI.getFramedAveragePeerClockSkew().
      *
-     *  @return is the handshake complete and valid?
+     * @return is the handshake complete and valid?
      */
     public boolean isComplete();
 
     /**
-     *  NTCP version.
-     *  @return 1, 2, or 0 if unknown
-     *  @since 0.9.35
+     * NTCP version.
+     * @return 1, 2, or 0 if unknown
+     * @since 0.9.35
      */
     public int getVersion();
 
     /**
-     *  Release resources on timeout.
-     *  @param reason the reason
-     *  @param e may be null
-     *  @since 0.9.16
+     * Release resources on timeout.
+     * @param reason the reason
+     * @param e may be null
+     * @since 0.9.16
      */
     public void close(String reason, Exception e);
 

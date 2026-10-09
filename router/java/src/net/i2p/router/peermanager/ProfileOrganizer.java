@@ -149,11 +149,11 @@ public class ProfileOrganizer {
     private static final long ACTIVE_WINDOW_MS = 60 * 60 * 1000L;
 
     /**
-     *  Per-cycle bounds and counters for the promotion deferral on a stale
-     *  RouterInfo.  A cycle is opened by {@link #lockedRebuildTiers} and its
-     *  counters are published by {@link #recordRouterInfoRefreshStats} before the
-     *  reorg write lock is released.
-     *  @since 0.9.72
+     * Per-cycle bounds and counters for the promotion deferral on a stale
+     * RouterInfo.  A cycle is opened by {@link #lockedRebuildTiers} and its
+     * counters are published by {@link #recordRouterInfoRefreshStats} before the
+     * reorg write lock is released.
+     * @since 0.9.72
      */
     private final RouterInfoRefresher _refresher = new RouterInfoRefresher();
 
@@ -238,16 +238,16 @@ public class ProfileOrganizer {
     private final InverseCapacityComparator _comp;
 
     /**
-     *  Property key naming the fast tier's refill target.
+     * Property key naming the fast tier's refill target.
      */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
     /**
-     *  Network size above which tier thresholds scale with the network instead of
-     *  staying at their configured default.
+     * Network size above which tier thresholds scale with the network instead of
+     * staying at their configured default.
      */
     static final int SCALING_THRESHOLD = 3000;
     /**
-     *  Fast tier refill target, in peers, as last configured or autotuned.
+     * Fast tier refill target, in peers, as last configured or autotuned.
      */
     public static volatile int _defaultMinFastPeers = 1000;
     /**
@@ -266,48 +266,48 @@ public class ProfileOrganizer {
     public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(2000, val)); }
 
     /**
-     *  Property key naming the RouterInfo age past which a promotion is held back,
-     *  in hours.
+     * Property key naming the RouterInfo age past which a promotion is held back,
+     * in hours.
      */
     public static final String PROP_MAX_ROUTERINFO_AGE_HOURS = "profileOrganizer.maxRouterInfoAgeHours";
     /**
-     *  Default RouterInfo age past which a tier promotion is held back, in hours.
+     * Default RouterInfo age past which a tier promotion is held back, in hours.
      */
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
     /**
-     *  RouterInfo age past which a tier promotion is held back, in ms.
+     * RouterInfo age past which a tier promotion is held back, in ms.
      *
-     *  <p>Separate from {@link #PROP_MAX_ROUTERINFO_AGE_HOURS}, which is the bar
-     *  a RouterInfo must clear to be selected at all. That bar is deliberately
-     *  loose (2h) because a proof of life can stand in for a fresh RouterInfo;
-     *  this one is a promotion-time policy with no such fallback, so it is set
-     *  where the RouterInfo itself is likely to have been superseded: routers
-     *  republish hourly, so anything older than one publishing interval has a
-     *  good chance of describing a peer that has since changed.
+     * <p>Separate from {@link #PROP_MAX_ROUTERINFO_AGE_HOURS}, which is the bar
+     * a RouterInfo must clear to be selected at all. That bar is deliberately
+     * loose (2h) because a proof of life can stand in for a fresh RouterInfo;
+     * this one is a promotion-time policy with no such fallback, so it is set
+     * where the RouterInfo itself is likely to have been superseded: routers
+     * republish hourly, so anything older than one publishing interval has a
+     * good chance of describing a peer that has since changed.
      *
-     *  <p>Holding a promotion costs the peer a tier slot and nothing else — no
-     *  lookup is issued, so the only way a held peer re-enters is by being
-     *  republished to, or by showing proof of life.
+     * <p>Holding a promotion costs the peer a tier slot and nothing else — no
+     * lookup is issued, so the only way a held peer re-enters is by being
+     * republished to, or by showing proof of life.
      *
-     *  <p>Set to 0 or less to disable the deferral entirely, which restores plain
-     *  promotion on whatever the netdb holds.
+     * <p>Set to 0 or less to disable the deferral entirely, which restores plain
+     * promotion on whatever the netdb holds.
      *
-     *  @since 0.9.72
+     * @since 0.9.72
      */
     public static final String PROP_ROUTERINFO_REFRESH_AGE_MS = "profileOrganizer.routerInfoRefreshAgeMs";
     /**
-     *  One hour, i.e. one republish interval.
-     *  @since 0.9.72
+     * One hour, i.e. one republish interval.
+     * @since 0.9.72
      */
     public static final long DEFAULT_ROUTERINFO_REFRESH_AGE_MS = 60 * 60 * 1000L;
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
     /**
-     *  Property key naming the fast tier's ceiling.
+     * Property key naming the fast tier's ceiling.
      */
     public static final String PROP_MAXIMUM_FAST_PEERS = "profileOrganizer.maxFastPeers";
     /**
-     *  Fast tier ceiling, in peers.
+     * Fast tier ceiling, in peers.
      */
     public static volatile int _defaultMaxFastPeers = 2000;
     /**
@@ -326,15 +326,15 @@ public class ProfileOrganizer {
     public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(3000, val)); }
 
     /**
-     *  Property key naming the high-capacity tier's refill target.
+     * Property key naming the high-capacity tier's refill target.
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
     /**
-     *  Default high-capacity tier refill target, in peers.
+     * Default high-capacity tier refill target, in peers.
      */
     public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 1000;
     /**
-     *  High-capacity tier refill target, in peers, as last configured or autotuned.
+     * High-capacity tier refill target, in peers, as last configured or autotuned.
      */
     public static volatile int _defaultMinHighCapPeers = DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS;
     /**
@@ -352,11 +352,11 @@ public class ProfileOrganizer {
      */
     public static void setMinHighCapacityPeers(int val) { _defaultMinHighCapPeers = Math.max(50, Math.min(3000, val)); }
     /**
-     *  Property key naming the high-capacity tier's ceiling.
+     * Property key naming the high-capacity tier's ceiling.
      */
     public static final String PROP_MAXIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.maxHighCapacityPeers";
     /**
-     *  High-capacity tier ceiling, in peers.
+     * High-capacity tier ceiling, in peers.
      */
     public static volatile int _defaultMaxHighCapPeers = 3000;
     /**
@@ -381,30 +381,30 @@ public class ProfileOrganizer {
     /** Cooldown period (ms) after demotion before peer can be re-promoted */
     private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000L; // 10 minutes
     /**
-     *  Exclude peers from tunnel selection after this many cumulative failures
-     *  OR when the lifetime failure ratio exceeds {@link #MAX_LIFETIME_FAILURE_RATIO},
-     *  whichever is stricter.  The hard cap is high (50) to avoid permanently
-     *  excluding long-lived peers that accumulated failures over days but are
-     *  currently healthy.  Between {@link #SOFT_FAILURE_PENALTY_THRESHOLD} (20)
-     *  and this cap, peers are penalized (lower selection priority) but not
-     *  excluded — a lightweight exponential backoff that still allows recovery.
+     * Exclude peers from tunnel selection after this many cumulative failures
+     * OR when the lifetime failure ratio exceeds {@link #MAX_LIFETIME_FAILURE_RATIO},
+     * whichever is stricter.  The hard cap is high (50) to avoid permanently
+     * excluding long-lived peers that accumulated failures over days but are
+     * currently healthy.  Between {@link #SOFT_FAILURE_PENALTY_THRESHOLD} (20)
+     * and this cap, peers are penalized (lower selection priority) but not
+     * excluded — a lightweight exponential backoff that still allows recovery.
      *
-     *  @since 0.9.71+ (raised from 20)
+     * @since 0.9.71+ (raised from 20)
      */
     private static final long MAX_LIFETIME_TUNNEL_FAILURES = 50;
     /**
-     *  Failure count above which peers receive a selection priority penalty
-     *  but are not excluded.  Between this and {@link #MAX_LIFETIME_TUNNEL_FAILURES},
-     *  peers are deprioritized rather than banned.
-     *  @since 0.9.71+
+     * Failure count above which peers receive a selection priority penalty
+     * but are not excluded.  Between this and {@link #MAX_LIFETIME_TUNNEL_FAILURES},
+     * peers are deprioritized rather than banned.
+     * @since 0.9.71+
      */
     private static final long SOFT_FAILURE_PENALTY_THRESHOLD = 20;
     /**
-     *  Maximum lifetime failure ratio (failed / (agreed + failed)) before a peer
-     *  is excluded.  A peer with 50%+ failure rate is unreliable regardless of
-     *  absolute count.  Combined with {@link #MAX_LIFETIME_TUNNEL_FAILURES},
-     *  this prevents long-lived peers with terrible records from staying selectable.
-     *  @since 0.9.71+
+     * Maximum lifetime failure ratio (failed / (agreed + failed)) before a peer
+     * is excluded.  A peer with 50%+ failure rate is unreliable regardless of
+     * absolute count.  Combined with {@link #MAX_LIFETIME_TUNNEL_FAILURES},
+     * this prevents long-lived peers with terrible records from staying selectable.
+     * @since 0.9.71+
      */
     private static final double MAX_LIFETIME_FAILURE_RATIO = 0.50;
 
@@ -543,12 +543,12 @@ public class ProfileOrganizer {
      */
     public static void setDefaultMaxProfiles(int val) { _defaultMaxProfiles = Math.max(MIN_MAX_PROFILES, Math.min(ABSOLUTE_MAX_PROFILES, val)); }
     /**
-     *  Ceiling on profiles held in memory, in profiles.
+     * Ceiling on profiles held in memory, in profiles.
      *
-     *  <p>Bounds the RAM store only. What is kept <em>on disk</em> is governed
-     *  separately by {@link #MAX_STORED_PROFILE_FILES}, so raising this to let the
-     *  router use more of its persisted knowledge does not shorten the retention of
-     *  that knowledge across a restart.
+     * <p>Bounds the RAM store only. What is kept <em>on disk</em> is governed
+     * separately by {@link #MAX_STORED_PROFILE_FILES}, so raising this to let the
+     * router use more of its persisted knowledge does not shorten the retention of
+     * that knowledge across a restart.
      */
     public static final int ABSOLUTE_MAX_PROFILES = 8000;
     /**
@@ -568,10 +568,10 @@ public class ProfileOrganizer {
      */
     public static final int MAX_STORED_PROFILE_FILES = 5000;
     /**
-     *  Floor for the in-memory profile cap, in profiles.
+     * Floor for the in-memory profile cap, in profiles.
      *
-     *  <p>Low enough that a small-heap router still runs; {@link #getDefaultMaxProfiles()}
-     *  returns this instead of {@link #ABSOLUTE_MAX_PROFILES} on a slow system.
+     * <p>Low enough that a small-heap router still runs; {@link #getDefaultMaxProfiles()}
+     * returns this instead of {@link #ABSOLUTE_MAX_PROFILES} on a slow system.
      */
     public static final int MIN_MAX_PROFILES = 800;
 
@@ -590,10 +590,10 @@ public class ProfileOrganizer {
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
 
     /**
-     *  Timestamp of the last starved-tier warning; selections hold only the read
-     *  lock, so this is read and written concurrently.
+     * Timestamp of the last starved-tier warning; selections hold only the read
+     * lock, so this is read and written concurrently.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile long _lastStarveWarn;
 
@@ -1208,7 +1208,7 @@ public class ProfileOrganizer {
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet mutable set tracking already-selected subnets
      * @param preferUnproven if true, prioritize peers with no tunnel
-     *                       test history so they accumulate profiling data
+     * test history so they accumulate profiling data
      */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                     int mask, MaskedIPSet ipSet, boolean preferUnproven) {
@@ -1251,18 +1251,18 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Non-blocking test peer selection: tries the full fast → high-cap →
-     *  active chain under a single {@link #tryReadLock()}.  Returns false
-     *  (leaving {@code matches} unchanged) if the read lock cannot be
-     *  acquired — the caller should skip this round and requeue.
-     *  Used exclusively by {@link PeerTestJob} to avoid blocking on
-     *  reorganize()'s write lock during startup profiling.
+     * Non-blocking test peer selection: tries the full fast → high-cap →
+     * active chain under a single {@link #tryReadLock()}.  Returns false
+     * (leaving {@code matches} unchanged) if the read lock cannot be
+     * acquired — the caller should skip this round and requeue.
+     * Used exclusively by {@link PeerTestJob} to avoid blocking on
+     * reorganize()'s write lock during startup profiling.
      *
-     *  @param howMany target number of peers
-     *  @param exclude peers to exclude
-     *  @param matches output set populated with selected peer hashes
-     *  @return true if selection ran, false if lock was not acquired
-     *  @since 0.9.71+
+     * @param howMany target number of peers
+     * @param exclude peers to exclude
+     * @param matches output set populated with selected peer hashes
+     * @return true if selection ran, false if lock was not acquired
+     * @since 0.9.71+
      */
     public boolean selectTestPeersNonBlocking(int howMany, Set<Hash> exclude, Set<Hash> matches) {
         if (!tryReadLock()) return false;
@@ -1286,12 +1286,12 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Select up to howMany peers from O/P/X bandwidth tiers (high shared bandwidth)
-     *  that are not failing.  Falls through to selectAllNotFailingPeers on shortfall.
+     * Select up to howMany peers from O/P/X bandwidth tiers (high shared bandwidth)
+     * that are not failing.  Falls through to selectAllNotFailingPeers on shortfall.
      *
-     *  @param howMany target number of peers
-     *  @param exclude peers to exclude (may be null)
-     *  @param matches output set populated with selected peer hashes
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
      */
     public void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches) {
         selectHighBandwidthPeers(howMany, exclude, matches, false, 0, null);
@@ -1368,19 +1368,19 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Reliability gate for high-bandwidth (O/P/X tier) selection: the peer
-     *  must show a tunnel acceptance ratio of at least 0.3 AND evidence of
-     *  recent activity — a successful peer test within 10 minutes, a heard-
-     *  from/send-success within 30 minutes, or an established commSystem
-     *  connection.  Peers with no profile are not gated (no data yet).
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Reliability gate for high-bandwidth (O/P/X tier) selection: the peer
+     * must show a tunnel acceptance ratio of at least 0.3 AND evidence of
+     * recent activity — a successful peer test within 10 minutes, a heard-
+     * from/send-success within 30 minutes, or an established commSystem
+     * connection.  Peers with no profile are not gated (no data yet).
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile the peer profile (non-null)
-     *  @param now current time in ms
-     *  @param established whether commSystem has an established connection
-     *  @return whether the peer passes the reliability gate
-     *  @since 0.9.71+
+     * @param profile the peer profile (non-null)
+     * @param now current time in ms
+     * @param established whether commSystem has an established connection
+     * @return whether the peer passes the reliability gate
+     * @since 0.9.71+
      */
     static boolean isReliableBandwidthPeer(PeerProfile profile, long now, boolean established) {
         if (profile.getTunnelAcceptanceRatio() < 0.3) return false;
@@ -1434,9 +1434,9 @@ public class ProfileOrganizer {
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet subnets already represented in this tunnel, consulted only
-     *              when mask is non-zero
+     * when mask is non-zero
      * @param preferUnproven if true, prioritize peers with no tunnel test history
-     *                       so they accumulate profiling data through exploratory builds
+     * so they accumulate profiling data through exploratory builds
      */
      private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                       int mask, MaskedIPSet ipSet, double buildSuccess, boolean preferUnproven) {
@@ -1503,13 +1503,13 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Fallback selection: fill the remaining slots from the union of all
-     *  peers (fast + high-capacity + not-failing).
+     * Fallback selection: fill the remaining slots from the union of all
+     * peers (fast + high-capacity + not-failing).
      *
-     *  @param howMany target number of peers
-     *  @param exclude peers to exclude (may be null)
-     *  @param matches output set populated with selected peer hashes
-     *  @param buildSuccess the build success ratio, fetched once per scan
+     * @param howMany target number of peers
+     * @param exclude peers to exclude (may be null)
+     * @param matches output set populated with selected peer hashes
+     * @param buildSuccess the build success ratio, fetched once per scan
      */
     private void selectRemainderFromAllPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, double buildSuccess) {
         if (_log.shouldDebug()) {
@@ -1617,15 +1617,15 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Fraction of a tier population that must carry a usable first-hop RTT before
-     *  latency is allowed to influence tier membership.
+     * Fraction of a tier population that must carry a usable first-hop RTT before
+     * latency is allowed to influence tier membership.
      *
-     *  <p>A low-latency decision taken over a small measured subset describes that
-     *  subset, not the tier: the peers we happen to have sessions with are the
-     *  ones we have been talking to, so an early sample is drawn from whoever was
-     *  contacted most recently rather than from the population. Requiring a
-     *  majority of the tier to be measured keeps the decision anchored to the tier
-     *  it is applied to.
+     * <p>A low-latency decision taken over a small measured subset describes that
+     * subset, not the tier: the peers we happen to have sessions with are the
+     * ones we have been talking to, so an early sample is drawn from whoever was
+     * contacted most recently rather than from the population. Requiring a
+     * majority of the tier to be measured keeps the decision anchored to the tier
+     * it is applied to.
      *
      * @param measured peers in the tier with a usable first-hop RTT
      * @param population peers in the tier
@@ -1638,19 +1638,19 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Refresh direct-link RTT for tier peers that already have a transport
-     *  session, and re-judge their low-latency standing.
+     * Refresh direct-link RTT for tier peers that already have a transport
+     * session, and re-judge their low-latency standing.
      *
-     *  <p>Decoupled from the build pre-connect on purpose. The pre-connect is a
-     *  one-shot probe fired to force establishment, so it reads the transport at
-     *  the least informative moment: a session that was just created has not
-     *  completed a round trip and reports zero. This samples instead from sessions
-     *  that have been up long enough to have measured, which is the value the
-     *  latency tiers actually want.
+     * <p>Decoupled from the build pre-connect on purpose. The pre-connect is a
+     * one-shot probe fired to force establishment, so it reads the transport at
+     * the least informative moment: a session that was just created has not
+     * completed a round trip and reports zero. This samples instead from sessions
+     * that have been up long enough to have measured, which is the value the
+     * latency tiers actually want.
      *
-     *  <p>Peers with no session are skipped rather than probed. Probing here would
-     *  re-create the problem above: establishing a session to measure it is what
-     *  makes the measurement unavailable.
+     * <p>Peers with no session are skipped rather than probed. Probing here would
+     * re-create the problem above: establishing a session to measure it is what
+     * makes the measurement unavailable.
      *
      * @return number of peers whose RTT was refreshed
      * @since 0.9.71+
@@ -1691,16 +1691,16 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Bounded random sample of the tier peers for RTT measurement, capped at
-     *  {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} with a rotated start so successive
-     *  cycles do not always read the same prefix.
+     * Bounded random sample of the tier peers for RTT measurement, capped at
+     * {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} with a rotated start so successive
+     * cycles do not always read the same prefix.
      *
-     *  <p>Sampling is safe here because a peer's RTT is a property of its transport
-     *  session, not an accumulator: a peer missed this cycle is measured in a
-     *  later one.
+     * <p>Sampling is safe here because a peer's RTT is a property of its transport
+     * session, not an accumulator: a peer missed this cycle is measured in a
+     * later one.
      *
-     *  @return the sampled profiles, at most {@link #sampleFirstHopRttLimit(int)}
-     *  @since 0.9.71+
+     * @return the sampled profiles, at most {@link #sampleFirstHopRttLimit(int)}
+     * @since 0.9.71+
      */
     private List<PeerProfile> sampleTierPeers() {
         int fast = _fastPeers.size();
@@ -1723,13 +1723,13 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  How many tier peers to sample for first-hop RTT in one reorganize.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * How many tier peers to sample for first-hop RTT in one reorganize.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param total combined size of the two tiers
-     *  @return the sample size, never negative
-     *  @since 0.9.71+
+     * @param total combined size of the two tiers
+     * @return the sample size, never negative
+     * @since 0.9.71+
      */
     static int sampleFirstHopRttLimit(int total) {
         if (total <= 0) return 0;
@@ -1757,18 +1757,18 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Peers in either the fast or the high-capacity tier, counting each peer once.
+     * Peers in either the fast or the high-capacity tier, counting each peer once.
      *
-     *  <p>A peer can be both, so neither tier contains the other and adding the two
-     *  counts over-reports. This is the number the profile-tier graph needs for its
-     *  high-capacity line to be a true subset of the fast line, rather than merely a
-     *  smaller number that happens to be plotted beside it.
+     * <p>A peer can be both, so neither tier contains the other and adding the two
+     * counts over-reports. This is the number the profile-tier graph needs for its
+     * high-capacity line to be a true subset of the fast line, rather than merely a
+     * smaller number that happens to be plotted beside it.
      *
-     *  <p>Walks the smaller tier and probes the larger, so the cost is
-     *  {@code O(min(fast, highCap))} once per coalesce rather than a full merge.
+     * <p>Walks the smaller tier and probes the larger, so the cost is
+     * {@code O(min(fast, highCap))} once per coalesce rather than a full merge.
      *
-     *  @return size of the union of the two tiers
-     *  @since 0.9.71+
+     * @return size of the union of the two tiers
+     * @since 0.9.71+
      */
     int fastOrHighCapCount() {
         Map<Hash, PeerProfile> smaller = _fastPeers.size() <= _highCapacityPeers.size()
@@ -1782,16 +1782,16 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Live size of the fast or high-capacity union, a peer in both tiers counted
-     *  once.  Read-locked, so it is safe to call outside a coalesce pass.
+     * Live size of the fast or high-capacity union, a peer in both tiers counted
+     * once.  Read-locked, so it is safe to call outside a coalesce pass.
      *
-     *  <p>Callers that already hold the write lock — {@code reorganize()} — must
-     *  call the package-visible {@link #fastOrHighCapCount()} directly; going
-     *  through this accessor would re-enter the lock.
+     * <p>Callers that already hold the write lock — {@code reorganize()} — must
+     * call the package-visible {@link #fastOrHighCapCount()} directly; going
+     * through this accessor would re-enter the lock.
      *
-     *  @return size of the union of the two tiers
-     *  @see #fastOrHighCapCount()
-     *  @since 0.9.71+
+     * @return size of the union of the two tiers
+     * @see #fastOrHighCapCount()
+     * @since 0.9.71+
      */
     public int getFastOrHighCapCount() {
         getReadLock();
@@ -1807,12 +1807,12 @@ public class ProfileOrganizer {
      * <p>
      * This method:
      * <ul>
-     *   <li>Coalesces stats if requested and uptime conditions are met. Peak
-     *       throughput values are never decayed.</li>
-     *   <li>Filters out unreachable, inactive, or low-tier peers.</li>
-     *   <li>Recalculates dynamic thresholds for speed, capacity, and integration.</li>
-     *   <li>Rebuilds internal tier maps and the global profile ordering.</li>
-     *   <li>Expires profiles that haven't been active recently to bound memory usage.</li>
+     * <li>Coalesces stats if requested and uptime conditions are met. Peak
+     * throughput values are never decayed.</li>
+     * <li>Filters out unreachable, inactive, or low-tier peers.</li>
+     * <li>Recalculates dynamic thresholds for speed, capacity, and integration.</li>
+     * <li>Rebuilds internal tier maps and the global profile ordering.</li>
+     * <li>Expires profiles that haven't been active recently to bound memory usage.</li>
      * </ul>
      * <p>
      * <strong>Memory Safety:</strong> To prevent unbounded memory growth (e.g., OOM after 8+ hours),
@@ -2014,24 +2014,24 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a profile has expired from its activity tier and should be
-     *  purged: no activity (send/heard/heard-about) within the tier's
-     *  expiration window.  Tiered expiration: Active > Passive > Gossip;
-     *  profiles with no tunnel history are purged on the tighter untracked
-     *  window regardless of tier.  A profile with zero timestamps sits in
-     *  the gossip tier.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Whether a profile has expired from its activity tier and should be
+     * purged: no activity (send/heard/heard-about) within the tier's
+     * expiration window.  Tiered expiration: Active > Passive > Gossip;
+     * profiles with no tunnel history are purged on the tighter untracked
+     * window regardless of tier.  A profile with zero timestamps sits in
+     * the gossip tier.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile profile to test; its expiration window is picked from its
-     *                 the newest activity timestamp
-     *  @param now current time in ms
-     *  @param expireActive active-tier window in ms
-     *  @param expirePassive passive-tier window in ms
-     *  @param expireGossip gossip-tier window in ms
-     *  @param expireUntracked untracked window in ms
-     *  @return whether the profile is expired
-     *  @since 0.9.71+
+     * @param profile profile to test; its expiration window is picked from its
+     * the newest activity timestamp
+     * @param now current time in ms
+     * @param expireActive active-tier window in ms
+     * @param expirePassive passive-tier window in ms
+     * @param expireGossip gossip-tier window in ms
+     * @param expireUntracked untracked window in ms
+     * @return whether the profile is expired
+     * @since 0.9.71+
      */
     static boolean isExpiredProfile(PeerProfile profile, long now, long expireActive, long expirePassive,
                                     long expireGossip, long expireUntracked) {
@@ -2056,8 +2056,8 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Builds the candidate profile set for this reorganize round, filtering
-     *  expired, unreachable, and excluded profiles.
+     * Builds the candidate profile set for this reorganize round, filtering
+     * expired, unreachable, and excluded profiles.
      */
     private CandidateSet buildCandidateProfiles(long now, long expireActive, long expirePassive,
                                                 long expireGossip, long expireUntracked) {
@@ -2096,8 +2096,8 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Result of buildCandidateProfiles(): the candidate set plus the totals
-     *  and counts consumed by the threshold and logging sections.
+     * Result of buildCandidateProfiles(): the candidate set plus the totals
+     * and counts consumed by the threshold and logging sections.
      */
     private static final class CandidateSet {
         final Set<PeerProfile> profiles;
@@ -2114,17 +2114,17 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Reinserts all active profiles into the tier maps.  Must be called with
-     *  the write lock held.
+     * Reinserts all active profiles into the tier maps.  Must be called with
+     * the write lock held.
      *
-     *  <p>Also opens the promotion-deferral cycle, which the tier rebuild is the
-     *  only place that can judge: a promotion is the moment a stale RouterInfo
-     *  starts costing something, and this loop is the sole promotion path that
-     *  sees the whole profile population at once.
+     * <p>Also opens the promotion-deferral cycle, which the tier rebuild is the
+     * only place that can judge: a promotion is the moment a stale RouterInfo
+     * starts costing something, and this loop is the sole promotion path that
+     * sees the whole profile population at once.
      *
-     *  @param candidates the surviving profile set
-     *  @param buildSuccess cached tunnel build success ratio
-     *  @since 0.9.72
+     * @param candidates the surviving profile set
+     * @param buildSuccess cached tunnel build success ratio
+     * @since 0.9.72
      */
     private void lockedRebuildTiers(Set<PeerProfile> candidates, double buildSuccess) {
         // Fetched once for the whole rebuild; lockedPlaceProfile() would otherwise
@@ -2145,20 +2145,20 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Common gate for fast/high-cap tier fill passes: the peer must be
-     *  selectable, have acceptable tunnel acceptance, no recent tunnel
-     *  failures, and not be in loss probation.  Evaluation order preserves
-     *  the original short-circuit chain (cheap pure checks before the
-     *  netDb-backed selectability check is already handled by callers that
-     *  test other cheap conditions first).
-     *  <p>
-     *  No side effects — safe to evaluate without holding locks.
+     * Common gate for fast/high-cap tier fill passes: the peer must be
+     * selectable, have acceptable tunnel acceptance, no recent tunnel
+     * failures, and not be in loss probation.  Evaluation order preserves
+     * the original short-circuit chain (cheap pure checks before the
+     * netDb-backed selectability check is already handled by callers that
+     * test other cheap conditions first).
+     * <p>
+     * No side effects — safe to evaluate without holding locks.
      *
-     *  @param profile the candidate profile
-     *  @param buildSuccess the build success ratio in [0.0, 1.0]
-     *  @param now current time in ms
-     *  @return whether the peer passes the tier gates
-     *  @since 0.9.71+
+     * @param profile the candidate profile
+     * @param buildSuccess the build success ratio in [0.0, 1.0]
+     * @param now current time in ms
+     * @return whether the peer passes the tier gates
+     * @since 0.9.71+
      */
     boolean passesTierGates(PeerProfile profile, double buildSuccess, long now) {
         // Use basic gates instead of isSelectable to avoid stale RouterInfo
@@ -2173,16 +2173,16 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  True if the peer showed recent activity within the given cutoff: a
-     *  heard-from or successful send at or after the cutoff.  Used to keep
-     *  stale peers out of the fast/high-cap tiers.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * True if the peer showed recent activity within the given cutoff: a
+     * heard-from or successful send at or after the cutoff.  Used to keep
+     * stale peers out of the fast/high-cap tiers.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile profile whose heard-from and last-successful-send timestamps are checked
-     *  @param activeCutoff earliest allowed activity timestamp in ms
-     *  @return whether the peer has recent activity
-     *  @since 0.9.71+
+     * @param profile profile whose heard-from and last-successful-send timestamps are checked
+     * @param activeCutoff earliest allowed activity timestamp in ms
+     * @return whether the peer has recent activity
+     * @since 0.9.71+
      */
     static boolean hasRecentTierActivity(PeerProfile profile, long activeCutoff) {
         return profile.getLastHeardFrom() >= activeCutoff ||
@@ -2200,11 +2200,11 @@ public class ProfileOrganizer {
      * excluded. Pure decision — no context access, safe for unit tests.
      *
      * @param boundaryRttMs the fast-tier RTT boundary from the last reorganize
-     *                      ({@link #_thresholdRTT}); its own scaling amplifies the
-     *                      typical pool latency so the ceiling tracks the network
+     * ({@link #_thresholdRTT}); its own scaling amplifies the
+     * typical pool latency so the ceiling tracks the network
      * @return the selection ceiling in ms; never below {@link #AUTO_RTT_FLOOR_MS}
-     *             and never above {@link #AUTO_RTT_CAP_MS}. A boundary at or below 0
-     *             (no measurement yet) returns the floor so nothing is over-trimmed.
+     * and never above {@link #AUTO_RTT_CAP_MS}. A boundary at or below 0
+     * (no measurement yet) returns the floor so nothing is over-trimmed.
      * @since 0.9.71+
      */
     static long computeFastRttCeiling(double boundaryRttMs) {
@@ -2259,16 +2259,16 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Full eligibility gate for filling the fast/high-cap tiers from the
-     *  active profile set: not ourselves, passes the tier gates, and active
-     *  within the cutoff window.
+     * Full eligibility gate for filling the fast/high-cap tiers from the
+     * active profile set: not ourselves, passes the tier gates, and active
+     * within the cutoff window.
      *
-     *  @param profile the candidate profile
-     *  @param buildSuccess the build success ratio in [0.0, 1.0]
-     *  @param now current time in ms
-     *  @param activeCutoff earliest allowed activity timestamp in ms
-     *  @return whether the peer may be added to the tier
-     *  @since 0.9.71+
+     * @param profile the candidate profile
+     * @param buildSuccess the build success ratio in [0.0, 1.0]
+     * @param now current time in ms
+     * @param activeCutoff earliest allowed activity timestamp in ms
+     * @return whether the peer may be added to the tier
+     * @since 0.9.71+
      */
     private boolean isEligibleForTierFill(PeerProfile profile, double buildSuccess, long now, long activeCutoff) {
         if (profile.getPeer().equals(_us)) return false;
@@ -2278,8 +2278,8 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Fills the fast tier to the minimum via up to three fallback passes.
-     *  Must be called with the write lock held.  Returns the number added.
+     * Fills the fast tier to the minimum via up to three fallback passes.
+     * Must be called with the write lock held.  Returns the number added.
      */
     private int fillFastTierFallbacks(long now, Set<PeerProfile> activeProfiles, double buildSuccess) {
         int minFast = getMinimumFastPeers();
@@ -2349,9 +2349,9 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Fills the high-capacity tier to the minimum with recently-active
-     *  selectable peers.  Must be called with the write lock held.  Returns
-     *  the number added.
+     * Fills the high-capacity tier to the minimum with recently-active
+     * selectable peers.  Must be called with the write lock held.  Returns
+     * the number added.
      */
     private int fillHighCapFallback(long now, Set<PeerProfile> activeProfiles, double buildSuccess) {
         int minHighCap = getMinimumHighCapacityPeers();
@@ -2374,8 +2374,8 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Purges peers with recent tunnel failures or in loss probation from the
-     *  fast and high-capacity tiers.  Must be called with the write lock held.
+     * Purges peers with recent tunnel failures or in loss probation from the
+     * fast and high-capacity tiers.  Must be called with the write lock held.
      */
     private void purgeUnusableFromTiers(long now) {
         // Rebuild clears tiers, so this catches peers admitted via lockedPromoteProfileToTiers()
@@ -2389,12 +2389,12 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Removes peers with recent tunnel failures or in loss probation from
-     *  the given tier map.  Must be called with the write lock held.
+     * Removes peers with recent tunnel failures or in loss probation from
+     * the given tier map.  Must be called with the write lock held.
      *
-     *  @param tier the tier map to purge
-     *  @param tierName "fast" or "high-cap" for the log message
-     *  @param now current time in ms
+     * @param tier the tier map to purge
+     * @param tierName "fast" or "high-cap" for the log message
+     * @param now current time in ms
      */
     private void purgeUnusableFromMap(Map<Hash, PeerProfile> tier, String tierName, long now) {
         boolean isFast = (tier == _fastPeers);
@@ -2425,37 +2425,37 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a shrunken tier needs restoration: below half its old size
-     *  and the old size was substantial.  Prevents starvation when
-     *  thresholds shift unfavorably.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Whether a shrunken tier needs restoration: below half its old size
+     * and the old size was substantial.  Prevents starvation when
+     * thresholds shift unfavorably.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param currentSize current tier size
-     *  @param oldSize pre-reorganize tier size
-     *  @return whether the tier should be restored
-     *  @since 0.9.71+
+     * @param currentSize current tier size
+     * @param oldSize pre-reorganize tier size
+     * @return whether the tier should be restored
+     * @since 0.9.71+
      */
     static boolean needsTierRestore(int currentSize, int oldSize) {
         return currentSize < oldSize / 2 && oldSize > 100;
     }
 
     /**
-     *  Whether a preserved pre-reorganize tier entry may be re-added: not
-     *  already present in the tier, selectable, no recent tunnel failures,
-     *  not in loss probation (fast tier) or below the loss demotion
-     *  threshold (high-cap tier), and acceptable tunnel acceptance.
-     *  Evaluation order matches the original restore loops.
+     * Whether a preserved pre-reorganize tier entry may be re-added: not
+     * already present in the tier, selectable, no recent tunnel failures,
+     * not in loss probation (fast tier) or below the loss demotion
+     * threshold (high-cap tier), and acceptable tunnel acceptance.
+     * Evaluation order matches the original restore loops.
      *
-     *  @param peer the peer hash
-     *  @param profile the preserved profile
-     *  @param tier the tier map being restored into
-     *  @param buildSuccess the build success ratio in [0.0, 1.0]
-     *  @param now current time in ms
-     *  @param highCap whether restoring the high-cap tier (loss-demotion
-     *                 gate instead of loss probation)
-     *  @return whether the peer may be restored
-     *  @since 0.9.71+
+     * @param peer the peer hash
+     * @param profile the preserved profile
+     * @param tier the tier map being restored into
+     * @param buildSuccess the build success ratio in [0.0, 1.0]
+     * @param now current time in ms
+     * @param highCap whether restoring the high-cap tier (loss-demotion
+     * gate instead of loss probation)
+     * @return whether the peer may be restored
+     * @since 0.9.71+
      */
     private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, PeerProfile> tier,
                                          double buildSuccess, long now, boolean highCap) {
@@ -2469,8 +2469,8 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Re-adds preserved pre-reorganize tier entries when the rebuild shrank
-     *  the tiers too much.  Must be called with the write lock held.
+     * Re-adds preserved pre-reorganize tier entries when the rebuild shrank
+     * the tiers too much.  Must be called with the write lock held.
      */
     private void restorePreservedPeers(long now, Set<Hash> oldFastPeers,
                                        Set<Hash> oldHighCapPeers, double buildSuccess) {
@@ -2521,9 +2521,9 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Counts profiles with recent activity, over the same set as
-     *  {@link #countActivePeersInLastHour()} so the published gauge and the on-demand scan
-     *  agree. Called during the reorganise, which already holds the write lock.
+     * Counts profiles with recent activity, over the same set as
+     * {@link #countActivePeersInLastHour()} so the published gauge and the on-demand scan
+     * agree. Called during the reorganise, which already holds the write lock.
      */
     private int countActiveProfiles(long now) {
         int activeCount = 0;
@@ -2535,7 +2535,7 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Counts quality peers (fast/high-cap with good acceptance plus recent activity).
+     * Counts quality peers (fast/high-cap with good acceptance plus recent activity).
      */
     private int countQualityPeers(long now, double buildSuccess) {
         int qualityCount = 0;
@@ -2605,20 +2605,20 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  How many of the given capacities are strictly above the mean.
+     * How many of the given capacities are strictly above the mean.
      *
-     *  <p>Scanned rather than derived from an index into the sorted array: the
-     *  mean is a repeated value whenever capacities cluster, and
-     *  {@code Arrays.binarySearch} returns only <em>some</em> index among equal
-     *  entries, so an index-derived count silently includes peers whose capacity
-     *  merely equals the mean and can flip the {@code >= minHighCap} branch.
-     *  The scan is over a primitive array the sort above already walked.
+     * <p>Scanned rather than derived from an index into the sorted array: the
+     * mean is a repeated value whenever capacities cluster, and
+     * {@code Arrays.binarySearch} returns only <em>some</em> index among equal
+     * entries, so an index-derived count silently includes peers whose capacity
+     * merely equals the mean and can flip the {@code >= minHighCap} branch.
+     * The scan is over a primitive array the sort above already walked.
      *
-     *  @param capacities the capacities; the caller holds them sorted, but the
-     *                    count does not depend on their order
-     *  @param meanCapacity the mean to compare against
-     *  @return the number of entries greater than the mean, never negative
-     *  @since 0.9.71+
+     * @param capacities the capacities; the caller holds them sorted, but the
+     * count does not depend on their order
+     * @param meanCapacity the mean to compare against
+     * @return the number of entries greater than the mean, never negative
+     * @since 0.9.71+
      */
     static int countExceedingMean(double[] capacities, double meanCapacity) {
         int numExceedingMean = 0;
@@ -2633,10 +2633,10 @@ public class ProfileOrganizer {
      * <p>
      * Eviction priority (from most to least likely to be kept):
      * <ol>
-     *   <li>Peers in _fastPeers (fast + reliable)</li>
-     *   <li>Peers in _highCapacityPeers</li>
-     *   <li>Peers with recent activity (last 48 hours)</li>
-     *   <li>Peers with higher capacity value</li>
+     * <li>Peers in _fastPeers (fast + reliable)</li>
+     * <li>Peers in _highCapacityPeers</li>
+     * <li>Peers with recent activity (last 48 hours)</li>
+     * <li>Peers with higher capacity value</li>
      * </ol>
      * <p>
      * This method assumes the write lock is held.
@@ -2730,13 +2730,13 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Clamps the configured max-profiles value into [100, ABSOLUTE_MAX_PROFILES].
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Clamps the configured max-profiles value into [100, ABSOLUTE_MAX_PROFILES].
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param maxProfiles the configured or default value
-     *  @return the clamped value
-     *  @since 0.9.71+
+     * @param maxProfiles the configured or default value
+     * @return the clamped value
+     * @since 0.9.71+
      */
     static int clampMaxProfiles(int maxProfiles) {
         if (maxProfiles < 100) maxProfiles = 100;
@@ -2745,22 +2745,22 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a profile is eligible for eviction under the profile cap:
-     *  not protected by a fast/high-cap tier slot that still has room below
-     *  its limit, and no send or heard-from activity within the active window.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Whether a profile is eligible for eviction under the profile cap:
+     * not protected by a fast/high-cap tier slot that still has room below
+     * its limit, and no send or heard-from activity within the active window.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile the profile under consideration
-     *  @param fastPeers the current fast tier map
-     *  @param highCapPeers the current high-cap tier map
-     *  @param activeThreshold the activity window cutoff (now - 48h)
-     *  @param fastPeerLimit fast tier size at or below which its members keep
-     *                       eviction protection; above it, fast members are evictable like any other
-     *  @param highCapacityLimit high-cap tier size at or below which its members
-     *                           keep eviction protection; above it, high-cap members are evictable
-     *  @return whether the profile may be evicted
-     *  @since 0.9.71+
+     * @param profile the profile under consideration
+     * @param fastPeers the current fast tier map
+     * @param highCapPeers the current high-cap tier map
+     * @param activeThreshold the activity window cutoff (now - 48h)
+     * @param fastPeerLimit fast tier size at or below which its members keep
+     * eviction protection; above it, fast members are evictable like any other
+     * @param highCapacityLimit high-cap tier size at or below which its members
+     * keep eviction protection; above it, high-cap members are evictable
+     * @return whether the profile may be evicted
+     * @since 0.9.71+
      */
     static boolean isEvictable(PeerProfile profile, Map<Hash, PeerProfile> fastPeers,
                                Map<Hash, PeerProfile> highCapPeers, long activeThreshold,
@@ -2775,18 +2775,18 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether the peer's last activity (send, heard-from, or heard-about)
-     *  is older than the absent threshold — i.e. it has been absent from
-     *  the netDb for at least that long.  A peer that was never contacted
-     *  (all-zero timestamps) counts as stale.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Whether the peer's last activity (send, heard-from, or heard-about)
+     * is older than the absent threshold — i.e. it has been absent from
+     * the netDb for at least that long.  A peer that was never contacted
+     * (all-zero timestamps) counts as stale.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile profile whose newest send, heard-from or heard-about timestamp sets the age
-     *  @param now current time in ms
-     *  @param absentThreshold stale threshold in ms
-     *  @return whether the peer is stale-absent
-     *  @since 0.9.71+
+     * @param profile profile whose newest send, heard-from or heard-about timestamp sets the age
+     * @param now current time in ms
+     * @param absentThreshold stale threshold in ms
+     * @return whether the peer is stale-absent
+     * @since 0.9.71+
      */
     static boolean isStaleAbsentPeer(PeerProfile profile, long now, long absentThreshold) {
         long lastActivity = Math.max(profile.getLastSendSuccessful(),
@@ -2795,9 +2795,9 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Evict profiles for peers no longer in the network database.
-     *  Keeps profile files on disk — they'll be reloaded if the peer reappears.
-     *  Acquires the write lock.
+     * Evict profiles for peers no longer in the network database.
+     * Keeps profile files on disk — they'll be reloaded if the peer reappears.
+     * Acquires the write lock.
      */
     void evictProfilesNotInNetdb() {
         if (isLowBuildSuccess()) return;
@@ -2868,18 +2868,18 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Rank boundary for the speed threshold: the top 30% of qualifying peers,
-     *  capped at 50.  0-based, so rank 0 is the fastest.
-     *  <p>
-     *  The qualifying count drives the rank, never the profile count: the profile
-     *  count is an order of magnitude larger and would pin the rank at the cap,
-     *  asking for a peer that does not exist.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Rank boundary for the speed threshold: the top 30% of qualifying peers,
+     * capped at 50.  0-based, so rank 0 is the fastest.
+     * <p>
+     * The qualifying count drives the rank, never the profile count: the profile
+     * count is an order of magnitude larger and would pin the rank at the cap,
+     * asking for a peer that does not exist.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param qualifyingCount number of peers that passed the capacity and activity gates
-     *  @return the rank to read the boundary peer from, or 0 for an empty set
-     *  @since 0.9.71+
+     * @param qualifyingCount number of peers that passed the capacity and activity gates
+     * @return the rank to read the boundary peer from, or 0 for an empty set
+     * @since 0.9.71+
      */
     static int speedThresholdCutoff(int qualifyingCount) {
         if (qualifyingCount <= 0) return 0;
@@ -2887,16 +2887,16 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  The profile whose speed becomes the speed threshold: the one at rank
-     *  {@link #speedThresholdCutoff(int)} of the qualifying set, ranked fastest
-     *  first.  Only that one profile is ever read, and the rank is capped at 50,
-     *  so a bounded top-K selection replaces a full sort of every profile.
+     * The profile whose speed becomes the speed threshold: the one at rank
+     * {@link #speedThresholdCutoff(int)} of the qualifying set, ranked fastest
+     * first.  Only that one profile is ever read, and the rank is capped at 50,
+     * so a bounded top-K selection replaces a full sort of every profile.
      *
-     *  @param profiles candidates, not necessarily sorted
-     *  @param now current time in ms, for the activity test
-     *  @param capacityThreshold minimum capacity to qualify
-     *  @return the boundary profile, or null if none qualifies
-     *  @since 0.9.71+
+     * @param profiles candidates, not necessarily sorted
+     * @param now current time in ms, for the activity test
+     * @param capacityThreshold minimum capacity to qualify
+     * @return the boundary profile, or null if none qualifies
+     * @since 0.9.71+
      */
     static PeerProfile selectSpeedBoundary(Collection<PeerProfile> profiles, long now,
                                            double capacityThreshold) {
@@ -2906,31 +2906,31 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a profile qualifies for the speed-threshold ranking: enough
-     *  capacity to count and recently active.  One definition, shared by the
-     *  qualifying count and the bounded selection so the two passes cannot
-     *  disagree about who is in the set.
+     * Whether a profile qualifies for the speed-threshold ranking: enough
+     * capacity to count and recently active.  One definition, shared by the
+     * qualifying count and the bounded selection so the two passes cannot
+     * disagree about who is in the set.
      *
-     *  @param profile the profile to test
-     *  @param now current time in ms, for the activity test
-     *  @param capacityThreshold minimum capacity to qualify
-     *  @return true if the profile takes part in the speed ranking
-     *  @since 0.9.71+
+     * @param profile the profile to test
+     * @param now current time in ms, for the activity test
+     * @param capacityThreshold minimum capacity to qualify
+     * @return true if the profile takes part in the speed ranking
+     * @since 0.9.71+
      */
     private static boolean qualifiesForSpeedRank(PeerProfile profile, long now, double capacityThreshold) {
         return profile.getCapacityValue() >= capacityThreshold && profile.getIsActive(now);
     }
 
     /**
-     *  How many of the given profiles qualify for the speed-threshold ranking.
-     *  The rank read from the ranked set is a fraction of this count, not of the
-     *  profile count, so it has to be known before the boundary is selected.
+     * How many of the given profiles qualify for the speed-threshold ranking.
+     * The rank read from the ranked set is a fraction of this count, not of the
+     * profile count, so it has to be known before the boundary is selected.
      *
-     *  @param profiles candidates, not necessarily sorted
-     *  @param now current time in ms, for the activity test
-     *  @param capacityThreshold minimum capacity to qualify
-     *  @return the qualifying count, never negative
-     *  @since 0.9.71+
+     * @param profiles candidates, not necessarily sorted
+     * @param now current time in ms, for the activity test
+     * @param capacityThreshold minimum capacity to qualify
+     * @return the qualifying count, never negative
+     * @since 0.9.71+
      */
     static int countQualifying(Collection<PeerProfile> profiles, long now, double capacityThreshold) {
         int qualifying = 0;
@@ -2941,23 +2941,23 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Select the {@code k}-th fastest qualifying profile (1-based) without
-     *  sorting the whole candidate set.
+     * Select the {@code k}-th fastest qualifying profile (1-based) without
+     * sorting the whole candidate set.
      *
-     *  <p>Holds the {@code k} fastest profiles seen so far in an unsorted bounded
-     *  array plus the index of the slowest: a slower profile is discarded in
-     *  O(1), one that displaces the slowest costs a {@code k}-element rescan.
-     *  Worst case O(n·k), and {@code k} is at most 51 for the only caller.
+     * <p>Holds the {@code k} fastest profiles seen so far in an unsorted bounded
+     * array plus the index of the slowest: a slower profile is discarded in
+     * O(1), one that displaces the slowest costs a {@code k}-element rescan.
+     * Worst case O(n·k), and {@code k} is at most 51 for the only caller.
      *
-     *  <p>Ties in speed may resolve to a different peer of equal speed than a
-     *  full sort would have picked; only the boundary value is read.
+     * <p>Ties in speed may resolve to a different peer of equal speed than a
+     * full sort would have picked; only the boundary value is read.
      *
-     *  @param profiles candidates, not necessarily sorted
-     *  @param now current time in ms, for the activity test
-     *  @param capacityThreshold minimum capacity to qualify
-     *  @param k how many of the fastest to keep, 1-based
-     *  @return the k-th fastest qualifying profile, or null if fewer than k qualify
-     *  @since 0.9.71+
+     * @param profiles candidates, not necessarily sorted
+     * @param now current time in ms, for the activity test
+     * @param capacityThreshold minimum capacity to qualify
+     * @param k how many of the fastest to keep, 1-based
+     * @return the k-th fastest qualifying profile, or null if fewer than k qualify
+     * @since 0.9.71+
      */
     static PeerProfile selectNthFastest(Collection<PeerProfile> profiles, long now,
                                         double capacityThreshold, int k) {
@@ -2992,23 +2992,23 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Fetch a peer's local RouterInfo without re-running the network database's
-     *  {@code validate()}.
+     * Fetch a peer's local RouterInfo without re-running the network database's
+     * {@code validate()}.
      *
-     *  <p>Every caller here reads raw RouterInfo content (tier, capabilities,
-     *  addresses) and applies its own gate, so nothing depends on validation
-     *  rejecting an entry that is present — it already ran when the entry was
-     *  stored.  Callers must not use this to evict: the validating lookup's
-     *  failure path calls {@code fail(key)}, which is the netDb's job.
+     * <p>Every caller here reads raw RouterInfo content (tier, capabilities,
+     * addresses) and applies its own gate, so nothing depends on validation
+     * rejecting an entry that is present — it already ran when the entry was
+     * stored.  Callers must not use this to evict: the validating lookup's
+     * failure path calls {@code fail(key)}, which is the netDb's job.
      *
-     *  <p>Falls back to {@code lookupRouterInfoLocally} on a miss, needed only
-     *  for {@code DummyNetworkDatabaseFacade}: it serves
-     *  {@code lookupRouterInfoLocally} from its own map and returns null from
-     *  {@code lookupLocallyWithoutValidation}.
+     * <p>Falls back to {@code lookupRouterInfoLocally} on a miss, needed only
+     * for {@code DummyNetworkDatabaseFacade}: it serves
+     * {@code lookupRouterInfoLocally} from its own map and returns null from
+     * {@code lookupLocallyWithoutValidation}.
      *
-     *  @param peer the peer hash
-     *  @return the local RouterInfo, or null if absent or not a RouterInfo
-     *  @since 0.9.71+
+     * @param peer the peer hash
+     * @return the local RouterInfo, or null if absent or not a RouterInfo
+     * @since 0.9.71+
      */
     private RouterInfo lookupRouterInfoUnvalidated(Hash peer) {
         NetworkDatabaseFacade netDb = _context.netDb();
@@ -3021,24 +3021,24 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Check if a peer should be excluded from profiling.
-     *  Excludes low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
+     * Check if a peer should be excluded from profiling.
+     * Excludes low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
      *
-     *  <p>This is the single gate in front of profile creation, and it covers all
-     *  three ways one can be made: {@link #getOrCreateProfileNonblocking},
-     *  {@link #addProfile} (which is how stored profiles are loaded at startup), and
-     *  the periodic sweep. A peer failing it therefore has no profile at all, so it
-     *  costs no RAM and cannot be written to disk.
+     * <p>This is the single gate in front of profile creation, and it covers all
+     * three ways one can be made: {@link #getOrCreateProfileNonblocking},
+     * {@link #addProfile} (which is how stored profiles are loaded at startup), and
+     * the periodic sweep. A peer failing it therefore has no profile at all, so it
+     * costs no RAM and cannot be written to disk.
      *
-     *  <p>The bandwidth half of this check was documented here but never performed:
-     *  the body tested only the no-tunnels capability, while the tier test sat in
-     *  {@link #isLowBandwidthTier} with no caller in the codebase. Peers advertising
-     *  K, L, M or Unknown were profiled, tracked and persisted despite advertising
-     *  that they will not usefully host a tunnel.
+     * <p>The bandwidth half of this check was documented here but never performed:
+     * the body tested only the no-tunnels capability, while the tier test sat in
+     * {@link #isLowBandwidthTierName} with no caller in the codebase. Peers advertising
+     * K, L, M or Unknown were profiled, tracked and persisted despite advertising
+     * that they will not usefully host a tunnel.
      *
-     *  @param peer the peer hash
-     *  @return true if the peer should not be profiled
-     *  @since 0.9.70+
+     * @param peer the peer hash
+     * @return true if the peer should not be profiled
+     * @since 0.9.70+
      */
     boolean isExcludedFromProfiling(Hash peer) {
         RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
@@ -3047,15 +3047,15 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Should a peer advertising these capabilities and bandwidth tier be profiled?
+     * Should a peer advertising these capabilities and bandwidth tier be profiled?
      *
-     *  <p>Pure decision form of {@link #isExcludedFromProfiling(Hash)}, so the rule
-     *  can be pinned without a RouterInfo or a network database.
+     * <p>Pure decision form of {@link #isExcludedFromProfiling(Hash)}, so the rule
+     * can be pinned without a RouterInfo or a network database.
      *
-     *  @param capabilities the peer's advertised capabilities, never null
-     *  @param bandwidthTier the peer's advertised bandwidth tier
-     *  @return true if no profile should be created for the peer
-     *  @since 0.9.71+
+     * @param capabilities the peer's advertised capabilities, never null
+     * @param bandwidthTier the peer's advertised bandwidth tier
+     * @return true if no profile should be created for the peer
+     * @since 0.9.71+
      */
     static boolean isExcludedFromProfiling(String capabilities, String bandwidthTier) {
         if (capabilities == null) {return true;}
@@ -3064,22 +3064,22 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a bandwidth tier name is one of the tiers excluded from
-     *  profiling.  Pure decision — no context access, safe for unit tests.
+     * Whether a bandwidth tier name is one of the tiers excluded from
+     * profiling.  Pure decision — no context access, safe for unit tests.
      *
-     *  @param tier the advertised bandwidth tier
-     *  @return true for K, L, M, or Unknown
-     *  @since 0.9.71+
+     * @param tier the advertised bandwidth tier
+     * @return true for K, L, M, or Unknown
+     * @since 0.9.71+
      */
     static boolean isLowBandwidthTierName(String tier) {
         return "K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier);
     }
 
     /**
-     *  Check if a peer has a congestion capability cap (D or E).
+     * Check if a peer has a congestion capability cap (D or E).
      *
-     *  @return true if the peer is moderately or severely congested
-     *  @since 0.9.70+
+     * @return true if the peer is moderately or severely congested
+     * @since 0.9.70+
      */
     private boolean isCongestedPeer(Hash peer) {
         RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
@@ -3090,18 +3090,18 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether the peer qualifies for the high-capacity tier based on
-     *  advertised bandwidth tier and capabilities.  Requires X/P/O bandwidth
-     *  tier and no D (congestion), E (severe congestion), G (no tunnels),
-     *  or U (firewalled/unreachable) capability flags.
+     * Whether the peer qualifies for the high-capacity tier based on
+     * advertised bandwidth tier and capabilities.  Requires X/P/O bandwidth
+     * tier and no D (congestion), E (severe congestion), G (no tunnels),
+     * or U (firewalled/unreachable) capability flags.
      *
-     *  <p>Bandwidth tier is a fact about the peer rather than an observation
-     *  that can erode, so these peers are eligible for fast-tier fast-track
-     *  regardless of measured throughput.
+     * <p>Bandwidth tier is a fact about the peer rather than an observation
+     * that can erode, so these peers are eligible for fast-tier fast-track
+     * regardless of measured throughput.
      *
-     *  @param peer the peer to check
-     *  @return true if X/P/O tier and no D/E/G/U caps
-     *  @since 0.9.71+
+     * @param peer the peer to check
+     * @return true if X/P/O tier and no D/E/G/U caps
+     * @since 0.9.71+
      */
     private boolean isHighBandwidthCapable(Hash peer) {
         RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
@@ -3110,18 +3110,18 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a bandwidth tier and capability string together qualify the peer
-     *  for the high-capacity / fast tiers: X/P/O tier and none of the D (moderate
-     *  congestion), E (severe congestion), G (no tunnels) or U (unreachable)
-     *  capability flags.
-     *  <p>
-     *  Pure decision — no context access, so a (tier, caps) pair already in hand
-     *  can be tested without a router.
+     * Whether a bandwidth tier and capability string together qualify the peer
+     * for the high-capacity / fast tiers: X/P/O tier and none of the D (moderate
+     * congestion), E (severe congestion), G (no tunnels) or U (unreachable)
+     * capability flags.
+     * <p>
+     * Pure decision — no context access, so a (tier, caps) pair already in hand
+     * can be tested without a router.
      *
-     *  @param tier the advertised bandwidth tier
-     *  @param caps the peer's capability string
-     *  @return true if X/P/O tier and no D/E/G/U caps
-     *  @since 0.9.71+
+     * @param tier the advertised bandwidth tier
+     * @param caps the peer's capability string
+     * @return true if X/P/O tier and no D/E/G/U caps
+     * @since 0.9.71+
      */
     static boolean qualifiesHighBandwidthTier(String tier, String caps) {
         if (!"X".equals(tier) && !"P".equals(tier) && !"O".equals(tier)) return false;
@@ -3161,12 +3161,12 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Get the high-capacity RTT ceiling for display and diagnostics.
-     *  High-cap has no RTT gate — acceptance ratio and loss gates
-     *  handle quality.  Returns 0 (no ceiling).
+     * Get the high-capacity RTT ceiling for display and diagnostics.
+     * High-cap has no RTT gate — acceptance ratio and loss gates
+     * handle quality.  Returns 0 (no ceiling).
      *
-     *  @return 0 (high-cap has no RTT ceiling)
-     *  @since 0.9.71+
+     * @return 0 (high-cap has no RTT ceiling)
+     * @since 0.9.71+
      */
     public double getHighCapRTTThreshold() {return 0;}
 
@@ -3175,28 +3175,28 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Minimum candidates to gate-check for a single-peer selection.  The sample
-     *  is the per-attempt lottery size, not the whole reachable set: the scan
-     *  start is rotated (see {@link #lockedSelectPeers}) so selections are
-     *  spread across the tier instead of re-examining its first few entries.
+     * Minimum candidates to gate-check for a single-peer selection.  The sample
+     * is the per-attempt lottery size, not the whole reachable set: the scan
+     * start is rotated (see {@link #lockedSelectPeers}) so selections are
+     * spread across the tier instead of re-examining its first few entries.
      *
-     *  <p>This floor, not the {@code howMany * 20} term, is what governs
-     *  single-hop selection: every first-hop and last-hop call passes
-     *  {@code howMany = 1}, giving {@code max(20, MIN)}.  The floor therefore
-     *  sets how many candidates the caller's first-hop quality loop has to
-     *  reject from before it relaxes its transport-session requirement, and
-     *  that loop is what stands between a build and a gateway that cannot
-     *  receive it.  A thin sample makes the loop run dry and descend rather
-     *  than reject.
+     * <p>This floor, not the {@code howMany * 20} term, is what governs
+     * single-hop selection: every first-hop and last-hop call passes
+     * {@code howMany = 1}, giving {@code max(20, MIN)}.  The floor therefore
+     * sets how many candidates the caller's first-hop quality loop has to
+     * reject from before it relaxes its transport-session requirement, and
+     * that loop is what stands between a build and a gateway that cannot
+     * receive it.  A thin sample makes the loop run dry and descend rather
+     * than reject.
      *
-     *  <p>Raised from 64 to {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} (256).  Note
-     *  this is 12x the {@code howMany * 20} term the formula intends, so the
-     *  constant is the operative value for hop selection and is treated as a
-     *  tunable rather than a detail.  Configurable via
-     *  {@code profileOrganizer.minCandidateSample} so it can be raised to 512
-     *  without a rebuild if 256 proves insufficient.
+     * <p>Raised from 64 to {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} (256).  Note
+     * this is 12x the {@code howMany * 20} term the formula intends, so the
+     * constant is the operative value for hop selection and is treated as a
+     * tunable rather than a detail.  Configurable via
+     * {@code profileOrganizer.minCandidateSample} so it can be raised to 512
+     * without a rebuild if 256 proves insufficient.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     /** Default floor for candidates examined per selection. @since 0.9.71+ */
     static final int DEFAULT_MIN_CANDIDATE_SAMPLE = 256;
@@ -3207,14 +3207,14 @@ public class ProfileOrganizer {
     private static volatile int _minCandidateSample = DEFAULT_MIN_CANDIDATE_SAMPLE;
 
     /**
-     *  Read the candidate-sample floor, honouring the configured override.
-     *  Clamped to {@code [16, }{@link #MAX_CANDIDATE_SAMPLE}{@code ]} so a bad
-     *  value degrades to a sane range rather than scanning the whole tier or
-     *  collapsing to a single candidate.
+     * Read the candidate-sample floor, honouring the configured override.
+     * Clamped to {@code [16, }{@link #MAX_CANDIDATE_SAMPLE}{@code ]} so a bad
+     * value degrades to a sane range rather than scanning the whole tier or
+     * collapsing to a single candidate.
      *
-     *  @param ctx the router context
-     *  @return the floor to use for {@code maxCandidateSample}
-     *  @since 0.9.71+
+     * @param ctx the router context
+     * @return the floor to use for {@code maxCandidateSample}
+     * @since 0.9.71+
      */
     public static int getMinCandidateSample(RouterContext ctx) {
         if (ctx == null) {return _minCandidateSample;}
@@ -3223,56 +3223,56 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Override the candidate-sample floor at runtime.
-     *  @param val the new floor, clamped to {@code [16, }{@link #MAX_CANDIDATE_SAMPLE}{@code ]}
-     *  @since 0.9.71+
+     * Override the candidate-sample floor at runtime.
+     * @param val the new floor, clamped to {@code [16, }{@link #MAX_CANDIDATE_SAMPLE}{@code ]}
+     * @since 0.9.71+
      */
     public static void setMinCandidateSample(int val) {
         _minCandidateSample = Math.max(16, Math.min(MAX_CANDIDATE_SAMPLE, val));
     }
 
     /**
-     *  Minimum delay between "tier returned no candidates" warnings.  A starved
-     *  tier is the signal that one gate is rejecting everything, so the warning
-     *  carries the per-gate counts; it must not flood the log while starvation
-     *  persists across build passes.
+     * Minimum delay between "tier returned no candidates" warnings.  A starved
+     * tier is the signal that one gate is rejecting everything, so the warning
+     * carries the per-gate counts; it must not flood the log while starvation
+     * persists across build passes.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final long STARVE_WARN_INTERVAL_MS = 60 * 1000;
 
     /**
-     *  Cap on how many tier peers to gate-check when selecting {@code howMany}
-     *  tunnels.  Scanning all ~670 fast peers per selection was a CPU hot path;
-     *  a 20× sample (min 20) cut work ~10× on large tiers but, because HashMap
-     *  iteration order is stable, every selection examined the same prefix of
-     *  the tier — the rest of it stayed unreachable while that prefix kept
-     *  passing, so tier size never became choice.  With the scan start rotated,
-     *  the sample is the size of one attempt's lottery: 64 gives
-     *  lockedPickLowestPriority a real low-latency pick while remaining an
-     *  order of magnitude cheaper than a full tier scan.  A 10× sample was tried
-     *  before the original 20× and hurt build success, so the 20× multiplier for
-     *  larger requests is kept.
+     * Cap on how many tier peers to gate-check when selecting {@code howMany}
+     * tunnels.  Scanning all ~670 fast peers per selection was a CPU hot path;
+     * a 20× sample (min 20) cut work ~10× on large tiers but, because HashMap
+     * iteration order is stable, every selection examined the same prefix of
+     * the tier — the rest of it stayed unreachable while that prefix kept
+     * passing, so tier size never became choice.  With the scan start rotated,
+     * the sample is the size of one attempt's lottery: 64 gives
+     * lockedPickLowestPriority a real low-latency pick while remaining an
+     * order of magnitude cheaper than a full tier scan.  A 10× sample was tried
+     * before the original 20× and hurt build success, so the 20× multiplier for
+     * larger requests is kept.
      *
-     *  @param howMany tunnels requested (may be 0 or negative)
-     *  @param peerCount size of the tier map (may be 0)
-     *  @return maximum candidates to examine, never negative
-     *  @since 0.9.71+
+     * @param howMany tunnels requested (may be 0 or negative)
+     * @param peerCount size of the tier map (may be 0)
+     * @return maximum candidates to examine, never negative
+     * @since 0.9.71+
      */
     static int maxCandidateSample(int howMany, int peerCount) {
         return maxCandidateSample(howMany, peerCount, _minCandidateSample);
     }
 
     /**
-     *  Candidate-sample cap for a configurable floor.  Split out from
-     *  {@link #maxCandidateSample(int, int)} so the arithmetic is testable
-     *  without a RouterContext.
+     * Candidate-sample cap for a configurable floor.  Split out from
+     * {@link #maxCandidateSample(int, int)} so the arithmetic is testable
+     * without a RouterContext.
      *
-     *  @param howMany peers the caller wants
-     *  @param peerCount size of the tier being sampled
-     *  @param floor minimum candidates to examine regardless of {@code howMany}
-     *  @return maximum candidates to examine, never negative
-     *  @since 0.9.71+
+     * @param howMany peers the caller wants
+     * @param peerCount size of the tier being sampled
+     * @param floor minimum candidates to examine regardless of {@code howMany}
+     * @return maximum candidates to examine, never negative
+     * @since 0.9.71+
      */
     static int maxCandidateSample(int howMany, int peerCount, int floor) {
         if (peerCount <= 0)
@@ -3288,28 +3288,28 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Collects up to {@link #maxCandidateSample} candidates from a tier and hands them to
-     *  {@link #lockedPickLowestPriority}.
+     * Collects up to {@link #maxCandidateSample} candidates from a tier and hands them to
+     * {@link #lockedPickLowestPriority}.
      *
-     *  <p>The scan start is a random offset into the tier.  Tier maps are plain
-     *  HashMaps, so iteration order is stable across calls; without the offset
-     *  every hop of every pool examined the same prefix, which both starved the
-     *  rest of the tier and piled "too many tunnels" onto the same few peers.
-     *  Peers in the tier were already vetted by isSelectable at tier-entry time,
-     *  so only fast-changing gates are re-checked here (banlist, ghosts,
-     *  first-hop cooldown, lifetime failures) rather than full proof-of-life,
-     *  which would reject too many peers on stale RouterInfo.
+     * <p>The scan start is a random offset into the tier.  Tier maps are plain
+     * HashMaps, so iteration order is stable across calls; without the offset
+     * every hop of every pool examined the same prefix, which both starved the
+     * rest of the tier and piled "too many tunnels" onto the same few peers.
+     * Peers in the tier were already vetted by isSelectable at tier-entry time,
+     * so only fast-changing gates are re-checked here (banlist, ghosts,
+     * first-hop cooldown, lifetime failures) rather than full proof-of-life,
+     * which would reject too many peers on stale RouterInfo.
      *
-     *  @param peers tier to scan; must be a field map so the starved warning can name it
-     *  @param howMany peers requested
-     *  @param toExclude live exclusion set, mutated with peers rejected by a hard gate
-     *  @param matches output set, already holding any previously selected peers
-     *  @param randomKey sub-tier slice key, or null to skip slicing
-     *  @param subTierMode sub-tier mask, or null to skip slicing
-     *  @param mask IP /n diversity restriction, 0 to disable
-     *  @param ipSet mutable subnet set, null when mask is 0
-     *  @param buildSuccess build success ratio fetched once by the caller
-     *  @param rttCeiling soft ceiling; peers above it are skipped, never excluded
+     * @param peers tier to scan; must be a field map so the starved warning can name it
+     * @param howMany peers requested
+     * @param toExclude live exclusion set, mutated with peers rejected by a hard gate
+     * @param matches output set, already holding any previously selected peers
+     * @param randomKey sub-tier slice key, or null to skip slicing
+     * @param subTierMode sub-tier mask, or null to skip slicing
+     * @param mask IP /n diversity restriction, 0 to disable
+     * @param ipSet mutable subnet set, null when mask is 0
+     * @param buildSuccess build success ratio fetched once by the caller
+     * @param rttCeiling soft ceiling; peers above it are skipped, never excluded
      */
     private void lockedSelectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, SessionKey randomKey, Slice subTierMode,
@@ -3410,19 +3410,19 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Rate-limited warning naming the gate that emptied a tier scan.  A tier
-     *  reporting zero candidates is invisible upstream — the caller just falls
-     *  through to the next tier — so without this a 1000-peer tier rejected by a
-     *  single gate looks identical to genuine scarcity.
+     * Rate-limited warning naming the gate that emptied a tier scan.  A tier
+     * reporting zero candidates is invisible upstream — the caller just falls
+     * through to the next tier — so without this a 1000-peer tier rejected by a
+     * single gate looks identical to genuine scarcity.
      *
-     *  @param peers the tier that produced no candidates
-     *  @param examined entries walked before giving up
-     *  @param skipExcluded rejected by the live exclusion set
-     *  @param skipGated rejected by a hard gate (ban, ghost, first-hop, lifetime failures)
-     *  @param skipSliced rejected by the sub-tier slice
-     *  @param skipIp rejected by IP diversity
-     *  @param skipRtt above the adaptive RTT ceiling
-     *  @since 0.9.71+
+     * @param peers the tier that produced no candidates
+     * @param examined entries walked before giving up
+     * @param skipExcluded rejected by the live exclusion set
+     * @param skipGated rejected by a hard gate (ban, ghost, first-hop, lifetime failures)
+     * @param skipSliced rejected by the sub-tier slice
+     * @param skipIp rejected by IP diversity
+     * @param skipRtt above the adaptive RTT ceiling
+     * @since 0.9.71+
      */
     private void warnTierStarved(Map<Hash, PeerProfile> peers, int examined, int skipExcluded, int skipGated,
                                  int skipSliced, int skipIp, int skipRtt) {
@@ -3440,15 +3440,15 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Selects the lowest-priority candidates, penalizing moderately-lossy peers.
-     *  Must be called with the read lock held.
+     * Selects the lowest-priority candidates, penalizing moderately-lossy peers.
+     * Must be called with the read lock held.
      *
-     *  <p>Both lossy thresholds are resolved once for the whole list rather than
-     *  per candidate.  The lottery draw uses {@link ThreadLocalRandom} rather
-     *  than {@code _context.random()}: it only breaks ties among peers that have
-     *  already passed every gate, so it carries no cryptographic requirement,
-     *  while {@code _context.random().nextFloat()} is a monitored read on the
-     *  process-wide Fortuna instance and serialized every concurrent selection.
+     * <p>Both lossy thresholds are resolved once for the whole list rather than
+     * per candidate.  The lottery draw uses {@link ThreadLocalRandom} rather
+     * than {@code _context.random()}: it only breaks ties among peers that have
+     * already passed every gate, so it carries no cryptographic requirement,
+     * while {@code _context.random().nextFloat()} is a monitored read on the
+     * process-wide Fortuna instance and serialized every concurrent selection.
      */
     private void lockedPickLowestPriority(List<Map.Entry<Hash, PeerProfile>> candidates, int howMany,
                                            Set<Hash> matches) {
@@ -3477,26 +3477,26 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Choose up to {@code howMany} candidates in ascending priority order.
+     * Choose up to {@code howMany} candidates in ascending priority order.
      *
-     *  <p>This loop is the reason the peer-selection callers may size a fixed-capacity
-     *  {@link net.i2p.util.ArraySet} to exactly the number of peers they asked for:
-     *  <ul>
-     *  <li>{@link net.i2p.router.tunnel.pool.ClientPeerSelector} builds four fallback sets as
-     *      {@code new ArraySet<>(needed)} and passes {@code needed} as {@code howMany}.
-     *  <li>{@link net.i2p.router.tunnel.pool.ExploratoryPeerSelector} builds
-     *      {@code new ArraySet<>(1)} and asks for one peer.
-     *  </ul>
-     *  An {@link net.i2p.util.ArraySet} throws {@code SetFullException} once written past its
-     *  capacity, so if this loop ever wrote more than {@code howMany} entries those callers
-     *  would throw at runtime rather than degrade. The bound {@code s < howMany && s < sz} is
-     *  therefore load-bearing, and it is pinned by
-     *  {@code PeerSelectionBoundTest.picksNeverExceedHowMany} and its neighbours.
+     * <p>This loop is the reason the peer-selection callers may size a fixed-capacity
+     * {@link net.i2p.util.ArraySet} to exactly the number of peers they asked for:
+     * <ul>
+     * <li>{@link net.i2p.router.tunnel.pool.ClientPeerSelector} builds four fallback sets as
+     * {@code new ArraySet<>(needed)} and passes {@code needed} as {@code howMany}.
+     * <li>{@link net.i2p.router.tunnel.pool.ExploratoryPeerSelector} builds
+     * {@code new ArraySet<>(1)} and asks for one peer.
+     * </ul>
+     * An {@link net.i2p.util.ArraySet} throws {@code SetFullException} once written past its
+     * capacity, so if this loop ever wrote more than {@code howMany} entries those callers
+     * would throw at runtime rather than degrade. The bound {@code s < howMany && s < sz} is
+     * therefore load-bearing, and it is pinned by
+     * {@code PeerSelectionBoundTest.picksNeverExceedHowMany} and its neighbours.
      *
-     *  <p>Distinctness falls out of the swap rather than from a membership test: the chosen
-     *  entry is moved to index {@code s} and the next inner scan starts at {@code s + 1}, so an
-     *  entry already picked can never be revisited. {@code candidates} and {@code priority} are
-     *  reordered in place to achieve that, which is why both are taken as mutable.
+     * <p>Distinctness falls out of the swap rather than from a membership test: the chosen
+     * entry is moved to index {@code s} and the next inner scan starts at {@code s + 1}, so an
+     * entry already picked can never be revisited. {@code candidates} and {@code priority} are
+     * reordered in place to achieve that, which is why both are taken as mutable.
      *
      * @param candidates peer hashes, reordered in place
      * @param priority per-candidate score, parallel to {@code candidates}, reordered in place
@@ -3521,10 +3521,10 @@ public class ProfileOrganizer {
     }
 
 /**
-     *  Scan up to {@link #maxCandidateSample} established peers for the active
-     *  tier, in {@link RandomIterator} order so the peers examined differ from
-     *  call to call.  Capped for the same reason as {@link #lockedSelectPeers}:
-     *  one attempt's worth of lottery, not a walk of the whole list.
+     * Scan up to {@link #maxCandidateSample} established peers for the active
+     * tier, in {@link RandomIterator} order so the peers examined differ from
+     * call to call.  Capped for the same reason as {@link #lockedSelectPeers}:
+     * one attempt's worth of lottery, not a walk of the whole list.
      */
     private void lockedSelectActive(List<Hash> connected, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess) {
@@ -3553,23 +3553,23 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Subnet-diversity gate: reject the peer if any of its masked addresses,
-     *  ports, or family option is already represented in {@code ipSet}, and
-     *  otherwise claim them.  Claimed in one pass rather than through a
-     *  throwaway {@link MaskedIPSet} that was then walked twice.
+     * Subnet-diversity gate: reject the peer if any of its masked addresses,
+     * ports, or family option is already represented in {@code ipSet}, and
+     * otherwise claim them.  Claimed in one pass rather than through a
+     * throwaway {@link MaskedIPSet} that was then walked twice.
      */
     private boolean notRestricted(Hash peer, MaskedIPSet ipSet, int mask) {
         return addSameIPFingerprint(ipSet, peer, mask);
     }
 
     /**
-     *  Claim a candidate's IP/port/family fingerprint in {@code keys},
-     *  reporting whether anything was already claimed.
+     * Claim a candidate's IP/port/family fingerprint in {@code keys},
+     * reporting whether anything was already claimed.
      *
-     *  <p>Load-bearing asymmetry: the peer is rejected if <em>any</em> of its keys
-     *  was already present, but <em>all</em> of its keys are added either way, so
-     *  a peer colliding on its last key still leaves its earlier keys claimed.
-     *  Claiming conditionally would make selection order-dependent.
+     * <p>Load-bearing asymmetry: the peer is rejected if <em>any</em> of its keys
+     * was already present, but <em>all</em> of its keys are added either way, so
+     * a peer colliding on its last key still leaves its earlier keys claimed.
+     * Claiming conditionally would make selection order-dependent.
      */
     private boolean addSameIPFingerprint(MaskedIPSet keys, Hash peer, int mask) {
         RouterContext ctx = _context;
@@ -3598,23 +3598,23 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Fingerprint key for one masked IP, byte-identical to the key
-     *  {@code MaskedIPSet.maskedIP} builds for the same address and mask.
+     * Fingerprint key for one masked IP, byte-identical to the key
+     * {@code MaskedIPSet.maskedIP} builds for the same address and mask.
      *
-     *  <p>Format: a family-delimiting leading char ('.' for IPv4, ':' for IPv6,
-     *  which also doubles the matched byte count), then two '0'-offset hex
-     *  nibbles per matched byte.  The leading char differs by address family and
-     *  port keys begin with 'p', family keys with 'x', so an IP key can never
-     *  equal a port or family key.  Keeping the {@link MaskedIPSet} format means
-     *  an accumulator built by MaskedIPSet's own constructor still compares
-     *  equal; the floodfill path's packed-{@code long} key cannot be used because
-     *  the accumulator arrives as a {@code MaskedIPSet} from callers outside this
-     *  package.  {@code ProfileOrganizerSelectionCostTest} pins the format.
+     * <p>Format: a family-delimiting leading char ('.' for IPv4, ':' for IPv6,
+     * which also doubles the matched byte count), then two '0'-offset hex
+     * nibbles per matched byte.  The leading char differs by address family and
+     * port keys begin with 'p', family keys with 'x', so an IP key can never
+     * equal a port or family key.  Keeping the {@link MaskedIPSet} format means
+     * an accumulator built by MaskedIPSet's own constructor still compares
+     * equal; the floodfill path's packed-{@code long} key cannot be used because
+     * the accumulator arrives as a {@code MaskedIPSet} from callers outside this
+     * package.  {@code ProfileOrganizerSelectionCostTest} pins the format.
      *
-     *  @param ip an IPv4 (4-byte) or IPv6 (16-byte) address
-     *  @param mask 1-4, the number of leading bytes to match
-     *  @return the fingerprint key; equal keys mean "same masked subnet"
-     *  @since 0.9.71+
+     * @param ip an IPv4 (4-byte) or IPv6 (16-byte) address
+     * @param mask 1-4, the number of leading bytes to match
+     * @return the fingerprint key; equal keys mean "same masked subnet"
+     * @since 0.9.71+
      */
     static String maskedIPKey(byte[] ip, int mask) {
         final char delim;
@@ -3636,8 +3636,8 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Sub-tier slice index for a peer, keyed off the session key so the same
-     *  key always yields the same slice.
+     * Sub-tier slice index for a peer, keyed off the session key so the same
+     * key always yields the same slice.
      */
     private int getSubTier(Hash peer, long k0, long k1) {
         return ((int) SipHashInline.hash24(k0, k1, peer.getData())) & 0x03;
@@ -3681,35 +3681,35 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Returns false when the peer is us, banlisted, or recently failed as
-     *  first hop.
+     * Returns false when the peer is us, banlisted, or recently failed as
+     * first hop.
      *
-     *  <p>The self check is first because this is the chokepoint every
-     *  selection path funnels through, including
-     *  {@link #selectRemainderFromAllPeers} via {@link #isSelectable(Hash, double)}.
-     *  The local RouterInfo is present in our own netdb, so we are a legitimate
-     *  entry in every candidate pool.
+     * <p>The self check is first because this is the chokepoint every
+     * selection path funnels through, including
+     * {@link #selectRemainderFromAllPeers} via {@link #isSelectable(Hash, double)}.
+     * The local RouterInfo is present in our own netdb, so we are a legitimate
+     * entry in every candidate pool.
      *
-     *  <p>Note that we are <em>supposed</em> to be in the tunnel we build, at
-     *  one end: {@code ClientPeerSelector.finalizeSelection} inserts us
-     *  directly, and {@code ExploratoryPeerSelector} adds us to its exclude
-     *  set. Neither goes through this method, so excluding us here costs
-     *  nothing. What this guard prevents is being drawn as an <em>extra</em>
-     *  hop — a mid-hop in a tunnel we are already an end of, which can only
-     *  produce a build that loops back on itself. The tier drawers
-     *  ({@code lockedSelectPeers}, {@code lockedSelectActive}) each excluded
-     *  self locally; the remainder path used when tiers cannot supply enough
-     *  peers did not, so the two protections could disagree. Checking here
-     *  rather than in each selection loop means no present or future path can
-     *  reintroduce the gap.
+     * <p>Note that we are <em>supposed</em> to be in the tunnel we build, at
+     * one end: {@code ClientPeerSelector.finalizeSelection} inserts us
+     * directly, and {@code ExploratoryPeerSelector} adds us to its exclude
+     * set. Neither goes through this method, so excluding us here costs
+     * nothing. What this guard prevents is being drawn as an <em>extra</em>
+     * hop — a mid-hop in a tunnel we are already an end of, which can only
+     * produce a build that loops back on itself. The tier drawers
+     * ({@code lockedSelectPeers}, {@code lockedSelectActive}) each excluded
+     * self locally; the remainder path used when tiers cannot supply enough
+     * peers did not, so the two protections could disagree. Checking here
+     * rather than in each selection loop means no present or future path can
+     * reintroduce the gap.
      *
-     *  <p>Scope, stated precisely because it was previously overstated: this
-     *  guard has not been shown to fix any observed build failure. A router
-     *  appearing in an expiring-build log line is expected — it is the
-     *  gateway — so that log is not evidence of self-selection. Whether we
-     *  were being drawn at a mid-hop has not been established.
+     * <p>Scope, stated precisely because it was previously overstated: this
+     * guard has not been shown to fix any observed build failure. A router
+     * appearing in an expiring-build log line is expected — it is the
+     * gateway — so that log is not evidence of self-selection. Whether we
+     * were being drawn at a mid-hop has not been established.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private boolean passesBasicGates(Hash peer) {
         // Null-safe: _us is set by PeerManager's constructor, but a null here
@@ -3744,20 +3744,20 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Banned-candidate rejections seen since the last
-     *  {@link #flushSelectionCounters()}.
-     *  @since 0.9.71+
+     * Banned-candidate rejections seen since the last
+     * {@link #flushSelectionCounters()}.
+     * @since 0.9.71+
      */
     private final AtomicInteger _bannedAtSelection = new AtomicInteger();
 
     /**
-     *  Record the banned-candidate rejections accumulated since the last flush
-     *  as a single {@code tunnel.peerBannedAtSelection} sample.  The count stays
-     *  exact: the atomic get-and-reset loses nothing, it only attributes a
-     *  rejection to whichever scan drains it first.  A count of zero writes
-     *  nothing.
+     * Record the banned-candidate rejections accumulated since the last flush
+     * as a single {@code tunnel.peerBannedAtSelection} sample.  The count stays
+     * exact: the atomic get-and-reset loses nothing, it only attributes a
+     * rejection to whichever scan drains it first.  A count of zero writes
+     * nothing.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private void flushSelectionCounters() {
         int banned = _bannedAtSelection.getAndSet(0);
@@ -3767,37 +3767,37 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Returns true when the peer has excessive cumulative tunnel failures.
-     *  Uses a dual gate: hard exclusion at {@link #MAX_LIFETIME_TUNNEL_FAILURES}
-     *  failures or when the lifetime failure ratio exceeds
-     *  {@link #MAX_LIFETIME_FAILURE_RATIO}.  Between
-     *  {@link #SOFT_FAILURE_PENALTY_THRESHOLD} and the hard cap, peers are not
-     *  excluded but receive a selection priority penalty (handled by the caller
-     *  via {@link #getExcessiveFailurePenalty(Hash, PeerProfile)}).
-     *  <p>
-     *  The blame system (tunnelFailed()) only increments statistics — it never
-     *  bans.  Without this check, peers with 200+ failures keep getting selected
-     *  because the ghost peer system clears on any success and the first-hop
-     *  cooldown is only 5 minutes.
+     * Returns true when the peer has excessive cumulative tunnel failures.
+     * Uses a dual gate: hard exclusion at {@link #MAX_LIFETIME_TUNNEL_FAILURES}
+     * failures or when the lifetime failure ratio exceeds
+     * {@link #MAX_LIFETIME_FAILURE_RATIO}.  Between
+     * {@link #SOFT_FAILURE_PENALTY_THRESHOLD} and the hard cap, peers are not
+     * excluded but receive a selection priority penalty (handled by the caller
+     * via {@link #getExcessiveFailurePenalty(Hash, PeerProfile)}).
+     * <p>
+     * The blame system (tunnelFailed()) only increments statistics — it never
+     * bans.  Without this check, peers with 200+ failures keep getting selected
+     * because the ghost peer system clears on any success and the first-hop
+     * cooldown is only 5 minutes.
      *
-     *  @param peer the peer hash
-     *  @return true when the peer should be excluded from selection
+     * @param peer the peer hash
+     * @return true when the peer should be excluded from selection
      */
     private boolean hasExcessiveLifetimeFailures(Hash peer) {
         return isExcessiveLifetimeFailure(getProfileNonblocking(peer));
     }
 
     /**
-     *  Whether the given profile carries excessive cumulative tunnel failures.
-     *  Same dual gate as {@link #hasExcessiveLifetimeFailures(Hash)}, for callers
-     *  that already hold the profile and so avoid a re-probe per candidate.  A
-     *  null profile or null history is not a failure.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Whether the given profile carries excessive cumulative tunnel failures.
+     * Same dual gate as {@link #hasExcessiveLifetimeFailures(Hash)}, for callers
+     * that already hold the profile and so avoid a re-probe per candidate.  A
+     * null profile or null history is not a failure.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param prof the profile, may be null
-     *  @return true when the peer should be excluded from selection
-     *  @since 0.9.71+
+     * @param prof the profile, may be null
+     * @return true when the peer should be excluded from selection
+     * @since 0.9.71+
      */
     static boolean isExcessiveLifetimeFailure(PeerProfile prof) {
         if (prof == null) return false;
@@ -3814,17 +3814,17 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Selection penalty multiplier for peers between the soft and hard failure
-     *  thresholds.  Peers with {@link #SOFT_FAILURE_PENALTY_THRESHOLD} to
-     *  {@link #MAX_LIFETIME_TUNNEL_FAILURES} lifetime failures are not excluded
-     *  but receive a penalty that lowers their selection priority.  Returns
-     *  1.0 (no penalty) for peers below the soft threshold or above the hard
-     *  threshold (they'd be excluded anyway).  Pure decision — no side effects.
+     * Selection penalty multiplier for peers between the soft and hard failure
+     * thresholds.  Peers with {@link #SOFT_FAILURE_PENALTY_THRESHOLD} to
+     * {@link #MAX_LIFETIME_TUNNEL_FAILURES} lifetime failures are not excluded
+     * but receive a penalty that lowers their selection priority.  Returns
+     * 1.0 (no penalty) for peers below the soft threshold or above the hard
+     * threshold (they'd be excluded anyway).  Pure decision — no side effects.
      *
-     *  @param peer the peer hash
-     *  @param prof the peer's profile, or null if it has none
-     *  @return a penalty multiplier in (1.0, 2.0] — higher means more penalized
-     *  @since 0.9.71+
+     * @param peer the peer hash
+     * @param prof the peer's profile, or null if it has none
+     * @return a penalty multiplier in (1.0, 2.0] — higher means more penalized
+     * @since 0.9.71+
      */
     static double getExcessiveFailurePenalty(Hash peer, PeerProfile prof) {
         if (prof == null) return 1.0;
@@ -3838,8 +3838,8 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Checks the RouterInfo for hidden flag, stale proof of life, usable
-     *  transport address, bandwidth tier, and tunnel exclusion.
+     * Checks the RouterInfo for hidden flag, stale proof of life, usable
+     * transport address, bandwidth tier, and tunnel exclusion.
      */
     private boolean hasValidRouterInfo(Hash peer, RouterInfo info, double buildSuccess) {
         if (info.isHidden()) return false;
@@ -3873,19 +3873,19 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a RouterInfo's advertised bandwidth tier is one that cannot host
-     *  a tunnel: L, M, or N.
-     *  <p>
-     *  The raw string is compared directly rather than through
-     *  {@code DataHelper.stripHTML}, which is not a weakening: stripHTML only
-     *  substitutes spaces for {@code < > " '}, so {@code stripHTML(t).equals("L")}
-     *  holds exactly when {@code t} is the one-character string {@code "L"}.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * Whether a RouterInfo's advertised bandwidth tier is one that cannot host
+     * a tunnel: L, M, or N.
+     * <p>
+     * The raw string is compared directly rather than through
+     * {@code DataHelper.stripHTML}, which is not a weakening: stripHTML only
+     * substitutes spaces for {@code < > " '}, so {@code stripHTML(t).equals("L")}
+     * holds exactly when {@code t} is the one-character string {@code "L"}.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param rawTier the tier string as advertised, possibly HTML-obfuscated
-     *  @return whether the tier excludes the peer from tunnel hosting
-     *  @since 0.9.71+
+     * @param rawTier the tier string as advertised, possibly HTML-obfuscated
+     * @return whether the tier excludes the peer from tunnel hosting
+     * @since 0.9.71+
      */
     static boolean isExcludedBuildTier(String rawTier) {
         if (rawTier == null) return false;
@@ -3893,13 +3893,13 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Maximum RouterInfo age in ms, cached alongside
-     *  {@link #getTunnelBuildSuccess()} on the same
-     *  {@link #BUILD_SUCCESS_CACHE_MS} cadence: it is a constant read per
-     *  candidate, and 15s of staleness on a proof-of-life bar is immaterial.
+     * Maximum RouterInfo age in ms, cached alongside
+     * {@link #getTunnelBuildSuccess()} on the same
+     * {@link #BUILD_SUCCESS_CACHE_MS} cadence: it is a constant read per
+     * candidate, and 15s of staleness on a proof-of-life bar is immaterial.
      *
-     *  @return the max RouterInfo age in ms
-     *  @since 0.9.71+
+     * @return the max RouterInfo age in ms
+     * @since 0.9.71+
      */
     private long getMaxRouterInfoAgeMs() {
         long now = _context.clock().now();
@@ -3919,7 +3919,7 @@ public class ProfileOrganizer {
     private volatile long _cachedMaxRouterInfoAgeTime;
 
     /**
-     *  Returns true when the RouterInfo has a reachable NTCP/NTCP2/SSU/SSU2 address.
+     * Returns true when the RouterInfo has a reachable NTCP/NTCP2/SSU/SSU2 address.
      */
     private boolean hasUsableTransportAddress(RouterInfo info) {
         boolean hasUsableAddress = false;
@@ -3938,19 +3938,19 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  True if the peer has shown proof of life within
-     *  {@link #PROOF_OF_LIFE_WINDOW_MS}: a successful send, heard-from, or
-     *  heard-about within the last hour.  A null profile (never seen) is not
-     *  evidence of life.  Used to trust a RouterInfo that is older than the
-     *  maximum age — the RouterInfo alone is not enough, the peer must have
-     *  been active recently.
-     *  <p>
-     *  Pure decision — no context access, safe for unit tests.
+     * True if the peer has shown proof of life within
+     * {@link #PROOF_OF_LIFE_WINDOW_MS}: a successful send, heard-from, or
+     * heard-about within the last hour.  A null profile (never seen) is not
+     * evidence of life.  Used to trust a RouterInfo that is older than the
+     * maximum age — the RouterInfo alone is not enough, the peer must have
+     * been active recently.
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile the peer profile, null if none
-     *  @param now current time in ms
-     *  @return whether the peer has recent proof of life
-     *  @since 0.9.71+
+     * @param profile the peer profile, null if none
+     * @param now current time in ms
+     * @return whether the peer has recent proof of life
+     * @since 0.9.71+
      */
     static boolean hasRecentProofOfLife(PeerProfile profile, long now) {
         if (profile == null) return false;
@@ -4037,24 +4037,24 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     /**
-     *  Evaluate a profile for promotion to the tiers, reporting whether the only
-     *  thing that stopped it was an unusable transport address.
+     * Evaluate a profile for promotion to the tiers, reporting whether the only
+     * thing that stopped it was an unusable transport address.
      *
-     *  <p>The return value exists for {@link #promoteToFillTiers()}, whose
-     *  underfill log line wants to distinguish a candidate held back by policy
-     *  from a candidate that was never examined. That line used to carry a local
-     *  counter which was declared and then never incremented, so it always
-     *  reported zero holds and read as "the gate never fires" for an entire
-     *  diagnostic run.
+     * <p>The return value exists for {@link #promoteToFillTiers()}, whose
+     * underfill log line wants to distinguish a candidate held back by policy
+     * from a candidate that was never examined. That line used to carry a local
+     * counter which was declared and then never incremented, so it always
+     * reported zero holds and read as "the gate never fires" for an entire
+     * diagnostic run.
      *
-     *  @param profile the profile to evaluate
-     *  @param buildSuccess the windowed build success ratio
-     *  @param minHighCap minimum high-capacity peers
-     *  @param maxFast maximum fast peers
-     *  @param maxHighCap maximum high-capacity peers
-     *  @return true only if promotion was held because the RouterInfo has no
-     *               usable transport address; false for every other outcome
-     *  @since 0.9.71+
+     * @param profile the profile to evaluate
+     * @param buildSuccess the windowed build success ratio
+     * @param minHighCap minimum high-capacity peers
+     * @param maxFast maximum fast peers
+     * @param maxHighCap maximum high-capacity peers
+     * @return true only if promotion was held because the RouterInfo has no
+     * usable transport address; false for every other outcome
+     * @since 0.9.71+
      */
     private boolean lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess,
                                                int minHighCap, int maxFast, int maxHighCap) {
@@ -4185,28 +4185,28 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether this peer's stored RouterInfo is stale enough that promoting on it
-     *  risks a build failure.
+     * Whether this peer's stored RouterInfo is stale enough that promoting on it
+     * risks a build failure.
      *
-     *  <p>Reads the same staleness notion {@link #hasValidRouterInfo} uses — older
-     *  than the threshold and no proof of life — against the shorter
-     *  {@link #PROP_ROUTERINFO_REFRESH_AGE_MS}. Proof of life exempts working
-     *  peers, which is what keeps the affected population small: a peer we have
-     *  talked to in the last hour is judged on what it just told us, not on how
-     *  old its last publication is.
+     * <p>Reads the same staleness notion {@link #hasValidRouterInfo} uses — older
+     * than the threshold and no proof of life — against the shorter
+     * {@link #PROP_ROUTERINFO_REFRESH_AGE_MS}. Proof of life exempts working
+     * peers, which is what keeps the affected population small: a peer we have
+     * talked to in the last hour is judged on what it just told us, not on how
+     * old its last publication is.
      *
-     *  @param profile the profile being promoted
-     *  @param now current time in ms
-     *  @return whether the stored RouterInfo is too old to promote on
-     *  @since 0.9.72
+     * @param profile the profile being promoted
+     * @param now current time in ms
+     * @return whether the stored RouterInfo is too old to promote on
+     * @since 0.9.72
      */
     /**
-     *  Does this peer's RouterInfo carry no address we could still send to?
+     * Does this peer's RouterInfo carry no address we could still send to?
      *
-     *  <p>Reads the netdb unvalidated, matching what selection and the build requestor do, so
-     *  the gate cannot reject a peer on stricter grounds than the path that would later use
-     *  it. A missing entry counts as "no usable address": we cannot prove otherwise, and
-     *  promoting an unverifiable peer is precisely the case this gate exists to stop.
+     * <p>Reads the netdb unvalidated, matching what selection and the build requestor do, so
+     * the gate cannot reject a peer on stricter grounds than the path that would later use
+     * it. A missing entry counts as "no usable address": we cannot prove otherwise, and
+     * promoting an unverifiable peer is precisely the case this gate exists to stop.
      *
      * @param peer hash of the candidate under consideration
      * @return true if the peer should be held out of the selection tiers
@@ -4229,22 +4229,22 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a RouterInfo is old enough that promoting on it risks a build
-     *  failure: published before the threshold and no proof of life.
+     * Whether a RouterInfo is old enough that promoting on it risks a build
+     * failure: published before the threshold and no proof of life.
      *
-     *  <p>An absent RouterInfo is not stale, it is missing, and is not this
-     *  predicate's business: {@link #isHighBandwidthCapable} and
-     *  {@link #isFastTierCapable} already refuse to promote a peer with no
-     *  RouterInfo at all, so there is no promotion here to hold.
+     * <p>An absent RouterInfo is not stale, it is missing, and is not this
+     * predicate's business: {@link #isHighBandwidthCapable} and
+     * {@link #isFastTierCapable} already refuse to promote a peer with no
+     * RouterInfo at all, so there is no promotion here to hold.
      *
-     *  <p>Pure decision — no context access, safe for unit tests.
+     * <p>Pure decision — no context access, safe for unit tests.
      *
-     *  @param info the peer's stored RouterInfo, may be null
-     *  @param profile the peer profile supplying proof of life, may be null
-     *  @param now current time in ms
-     *  @param refreshAgeMs staleness threshold in ms
-     *  @return whether the RouterInfo is too stale to promote on
-     *  @since 0.9.72
+     * @param info the peer's stored RouterInfo, may be null
+     * @param profile the peer profile supplying proof of life, may be null
+     * @param now current time in ms
+     * @param refreshAgeMs staleness threshold in ms
+     * @return whether the RouterInfo is too stale to promote on
+     * @since 0.9.72
      */
     static boolean needsRouterInfoRefresh(RouterInfo info, PeerProfile profile, long now, long refreshAgeMs) {
         if (info == null) return false;
@@ -4254,24 +4254,24 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Apply the hold to one tier insert: leave the peer out of the tier, or let
-     *  it in.
+     * Apply the hold to one tier insert: leave the peer out of the tier, or let
+     * it in.
      *
-     *  <p>The starvation guard is the reason this is not a plain veto.  A tier
-     *  that is already at its configured minimum is one the fallback passes
-     *  would defend anyway, so leaving a stale peer out of it costs nothing
-     *  there.  Below the minimum the hold would compete with those passes for
-     *  the same candidates and the tier could end up short, which is the worse
-     *  of the two failures: a stale promotion risks one bad build, an empty tier
-     *  sends every build back to the general pool.  When the guard opens, the
-     *  promotion is counted so the team can see exactly how often that happens.
+     * <p>The starvation guard is the reason this is not a plain veto.  A tier
+     * that is already at its configured minimum is one the fallback passes
+     * would defend anyway, so leaving a stale peer out of it costs nothing
+     * there.  Below the minimum the hold would compete with those passes for
+     * the same candidates and the tier could end up short, which is the worse
+     * of the two failures: a stale promotion risks one bad build, an empty tier
+     * sends every build back to the general pool.  When the guard opens, the
+     * promotion is counted so the team can see exactly how often that happens.
      *
-     *  @param peer the peer being promoted
-     *  @param staleRouterInfo whether the peer carries a stale RouterInfo
-     *  @param tierSize current size of the tier being joined
-     *  @param safeFloor size at or above which this tier can leave it out
-     *  @return whether the promotion must be held back
-     *  @since 0.9.72
+     * @param peer the peer being promoted
+     * @param staleRouterInfo whether the peer carries a stale RouterInfo
+     * @param tierSize current size of the tier being joined
+     * @param safeFloor size at or above which this tier can leave it out
+     * @return whether the promotion must be held back
+     * @since 0.9.72
      */
     private boolean holdPromotionForRefresh(Hash peer, boolean staleRouterInfo, int tierSize,
                                             int safeFloor) {
@@ -4290,47 +4290,47 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a promotion may be held back on a stale RouterInfo without
-     *  risking the tier it would join.
+     * Whether a promotion may be held back on a stale RouterInfo without
+     * risking the tier it would join.
      *
-     *  <p>The floor is the tier's configured minimum, which is also what
-     *  {@link #fillFastTierFallbacks} and {@link #fillHighCapFallback} drive the
-     *  tier back up to and what {@link #restorePreservedPeers} protects at half.
-     *  At or above the minimum the tier can afford to leave the peer out; below
-     *  it, it cannot.
+     * <p>The floor is the tier's configured minimum, which is also what
+     * {@link #fillFastTierFallbacks} and {@link #fillHighCapFallback} drive the
+     * tier back up to and what {@link #restorePreservedPeers} protects at half.
+     * At or above the minimum the tier can afford to leave the peer out; below
+     * it, it cannot.
      *
-     *  <p>Pure decision — no context access, safe for unit tests.
+     * <p>Pure decision — no context access, safe for unit tests.
      *
-     *  @param tierSize current size of the tier the peer would join
-     *  @param safeFloor size at or above which the tier can leave it out
-     *  @return whether the promotion should be held back
-     *  @since 0.9.72
+     * @param tierSize current size of the tier the peer would join
+     * @param safeFloor size at or above which the tier can leave it out
+     * @return whether the promotion should be held back
+     * @since 0.9.72
      */
     static boolean shouldDeferPromotionOnStaleRouterInfo(int tierSize, int safeFloor) {
         return tierSize >= safeFloor;
     }
 
     /**
-     *  RouterInfo age past which a promotion is held back, in ms.  Read once per
-     *  reorganisation cycle rather than cached per candidate, because that is
-     *  the only place it is consulted.
+     * RouterInfo age past which a promotion is held back, in ms.  Read once per
+     * reorganisation cycle rather than cached per candidate, because that is
+     * the only place it is consulted.
      *
-     *  @return the staleness threshold in ms; &lt;= 0 disables the hold
-     *  @since 0.9.72
+     * @return the staleness threshold in ms; &lt;= 0 disables the hold
+     * @since 0.9.72
      */
     private long getRouterInfoRefreshAgeMs() {
         return _context.getProperty(PROP_ROUTERINFO_REFRESH_AGE_MS, DEFAULT_ROUTERINFO_REFRESH_AGE_MS);
     }
 
     /**
-     *  Publish the promotion-deferral counters for the cycle just finished.
+     * Publish the promotion-deferral counters for the cycle just finished.
      *
-     *  <p>{@code peer.routerInfoRefreshNeeded} is a population, so it is written
-     *  every cycle including zero — a flat zero line is the signal that nothing
-     *  is being held back. The stale-promotion count is an event count and
-     *  follows the existing convention of writing nothing when it is zero.
+     * <p>{@code peer.routerInfoRefreshNeeded} is a population, so it is written
+     * every cycle including zero — a flat zero line is the signal that nothing
+     * is being held back. The stale-promotion count is an event count and
+     * follows the existing convention of writing nothing when it is zero.
      *
-     *  @since 0.9.72
+     * @since 0.9.72
      */
     private void recordRouterInfoRefreshStats() {
         int deferred = _refresher.deferredCount();
@@ -4346,18 +4346,18 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether the peer should be skipped for tier promotion: not selectable,
-     *  in a strict country, low tunnel acceptance, high-latency penalty,
-     *  congested, or in loss probation.  Mirrors the eligibility gates of
-     *  lockedPlaceProfile().
-     *  <p>
-     *  No side effects — safe to evaluate without holding locks.
+     * Whether the peer should be skipped for tier promotion: not selectable,
+     * in a strict country, low tunnel acceptance, high-latency penalty,
+     * congested, or in loss probation.  Mirrors the eligibility gates of
+     * lockedPlaceProfile().
+     * <p>
+     * No side effects — safe to evaluate without holding locks.
      *
-     *  @param profile the profile under consideration
-     *  @param peer the peer hash
-     *  @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
-     *  @return whether promotion should be skipped
-     *  @since 0.9.71+
+     * @param profile the profile under consideration
+     * @param peer the peer hash
+     * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
+     * @return whether promotion should be skipped
+     * @since 0.9.71+
      */
      boolean skipsPromotion(PeerProfile profile, Hash peer, double buildSuccess) {
          long now = _context.clock().now();
@@ -4459,23 +4459,23 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Summarise why the selection tiers could not be filled.
+     * Summarise why the selection tiers could not be filled.
      *
-     *  <p>Short because there were no candidates left to try is a discovery problem; short
-     *  because every candidate was gated out is a policy problem. Those call for different
-     *  fixes, and from outside the reorg they look identical, so the breakdown is reported
-     *  rather than inferred.
+     * <p>Short because there were no candidates left to try is a discovery problem; short
+     * because every candidate was gated out is a policy problem. Those call for different
+     * fixes, and from outside the reorg they look identical, so the breakdown is reported
+     * rather than inferred.
      *
-     *  @param where the caller, for attribution
-     *  @param fast the fast-tier size achieved
-     *  @param fastTarget the fast-tier size wanted
-     *  @param highCap the high-capacity-tier size achieved
-     *  @param highCapTarget the high-capacity-tier size wanted
-     *  @param examined candidates walked
-     *  @param alreadyTiered candidates skipped because already in both tiers
-     *  @param heldNoAddress candidates that cleared every gate except having no usable address
-     *  @return a single line naming the shortfall and its causes
-     *  @since 0.9.71+
+     * @param where the caller, for attribution
+     * @param fast the fast-tier size achieved
+     * @param fastTarget the fast-tier size wanted
+     * @param highCap the high-capacity-tier size achieved
+     * @param highCapTarget the high-capacity-tier size wanted
+     * @param examined candidates walked
+     * @param alreadyTiered candidates skipped because already in both tiers
+     * @param heldNoAddress candidates that cleared every gate except having no usable address
+     * @return a single line naming the shortfall and its causes
+     * @since 0.9.71+
      */
     static String describeTierFill(String where, int fast, int fastTarget,
                                    int highCap, int highCapTarget,
@@ -4638,12 +4638,12 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     /**
-     *  Record a measured direct-link RTT against a peer.
+     * Record a measured direct-link RTT against a peer.
      *
-     *  <p>Owns the profile write so callers holding a transport measurement do
-     *  not have to know how the value is stored or aged out. The value decays
-     *  on the existing Active tier window, so a first-hop latency never
-     *  outlives the evidence class it belongs to.
+     * <p>Owns the profile write so callers holding a transport measurement do
+     * not have to know how the value is stored or aged out. The value decays
+     * on the existing Active tier window, so a first-hop latency never
+     * outlives the evidence class it belongs to.
      *
      * @param peer the measured peer
      * @param rtt the measured round trip time in ms
@@ -4793,13 +4793,13 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Release the reorganize write lock, then refresh peers held out of the tiers.
+     * Release the reorganize write lock, then refresh peers held out of the tiers.
      *
-     *  <p>The single exit point for every path that runs a tier refill under the lock. Doing
-     *  the refresh here rather than at each call site is deliberate: a call site that forgot
-     *  it would leave the queue to fill and never drain, and there were ten of them. It has to
-     *  be here, and not inside {@link #promoteToFillTiers}, because a refill runs with the
-     *  lock held and issuing a lookup is network work that must never run under it.
+     * <p>The single exit point for every path that runs a tier refill under the lock. Doing
+     * the refresh here rather than at each call site is deliberate: a call site that forgot
+     * it would leave the queue to fill and never drain, and there were ten of them. It has to
+     * be here, and not inside {@link #promoteToFillTiers}, because a refill runs with the
+     * lock held and issuing a lookup is network work that must never run under it.
      *
      * @since 0.9.71+
      */
@@ -4809,11 +4809,11 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Issue RouterInfo lookups for peers held out of the tiers for want of a usable address.
+     * Issue RouterInfo lookups for peers held out of the tiers for want of a usable address.
      *
-     *  <p>Called after the reorganize write lock is released. Doubly bounded - a per-drain
-     *  batch and a minimum interval between drains - so neither a large scan nor a burst of
-     *  demotions can turn this into a request flood.
+     * <p>Called after the reorganize write lock is released. Doubly bounded - a per-drain
+     * batch and a minimum interval between drains - so neither a large scan nor a burst of
+     * demotions can turn this into a request flood.
      *
      * @since 0.9.71+
      */
@@ -4838,45 +4838,45 @@ public class ProfileOrganizer {
     private static final long ADDRESS_REFRESH_TIMEOUT_MS = 30 * 1000L;
 
     /**
-     *  Record that a stored profile was loaded for a peer the netdb cannot resolve.
+     * Record that a stored profile was loaded for a peer the netdb cannot resolve.
      *
-     *  @param peer the peer whose RouterInfo is missing
-     *  @return true if recorded, false if the recovery list was already full
-     *  @since 0.9.72
+     * @param peer the peer whose RouterInfo is missing
+     * @return true if recorded, false if the recovery list was already full
+     * @since 0.9.72
      */
     boolean noteMissingRouterInfo(Hash peer) { return _refresher.noteMissingRouterInfo(peer); }
 
     /**
-     *  Whether enough time has passed to request the next batch of missing RouterInfos.
+     * Whether enough time has passed to request the next batch of missing RouterInfos.
      *
-     *  @param now current time in milliseconds
-     *  @return true if the drain interval has elapsed
-     *  @since 0.9.72
+     * @param now current time in milliseconds
+     * @return true if the drain interval has elapsed
+     * @since 0.9.72
      */
     boolean mayDrainMissingRouterInfo(long now) { return _refresher.mayDrainMissingRouterInfo(now); }
 
     /**
-     *  Hand over the next batch of peers whose RouterInfo should be requested.
+     * Hand over the next batch of peers whose RouterInfo should be requested.
      *
-     *  @param now current time in milliseconds
-     *  @return the peers to look up, possibly empty
-     *  @since 0.9.72
+     * @param now current time in milliseconds
+     * @return the peers to look up, possibly empty
+     * @since 0.9.72
      */
     List<Hash> takeMissingRouterInfoBatch(long now) { return _refresher.takeMissingRouterInfoBatch(now); }
 
     /**
-     *  Peers still waiting for their RouterInfo to be requested.
+     * Peers still waiting for their RouterInfo to be requested.
      *
-     *  @return the number pending
-     *  @since 0.9.72
+     * @return the number pending
+     * @since 0.9.72
      */
     int getMissingRouterInfoPending() { return _refresher.getMissingRouterInfoPending(); }
 
     /**
-     *  Peers not recorded because the recovery list was full.
+     * Peers not recorded because the recovery list was full.
      *
-     *  @return the number dropped
-     *  @since 0.9.72
+     * @return the number dropped
+     * @since 0.9.72
      */
     int getMissingRouterInfoDropped() { return _refresher.getMissingRouterInfoDropped(); }
 
@@ -4960,20 +4960,20 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Demote a peer from fast/high-cap tiers when its direct-link latency is poor.
+     * Demote a peer from fast/high-cap tiers when its direct-link latency is poor.
      *
-     *  <p>{@code responseTimeMs} is the round trip through an entire multi-hop
-     *  tunnel, which {@code TestJob.noteSuccess} attributes to every peer in that
-     *  tunnel. That is a reasonable profile statistic but the wrong input for
-     *  first-hop selection: a peer with a fast direct link is blamed for the other
-     *  hops it happened to be a member of, and the result is compared against a
-     *  first-hop threshold. In production that evicted a large share of the fast
-     *  tier on a latency distribution taken across the wrong hops, shrinking the
-     *  candidate pool and leaving slower survivors.
+     * <p>{@code responseTimeMs} is the round trip through an entire multi-hop
+     * tunnel, which {@code TestJob.noteSuccess} attributes to every peer in that
+     * tunnel. That is a reasonable profile statistic but the wrong input for
+     * first-hop selection: a peer with a fast direct link is blamed for the other
+     * hops it happened to be a member of, and the result is compared against a
+     * first-hop threshold. In production that evicted a large share of the fast
+     * tier on a latency distribution taken across the wrong hops, shrinking the
+     * candidate pool and leaving slower survivors.
      *
-     *  <p>The tier decision therefore uses {@link PeerProfile#getFirstHopRtt},
-     *  measured on the direct link. The passed-in tunnel time is not consulted.
-     *  A peer with no recorded first-hop RTT is left alone: unknown is not slow.
+     * <p>The tier decision therefore uses {@link PeerProfile#getFirstHopRtt},
+     * measured on the direct link. The passed-in tunnel time is not consulted.
+     * A peer with no recorded first-hop RTT is left alone: unknown is not slow.
      *
      * @param peer the peer to evaluate
      * @param responseTimeMs full-tunnel test round trip, unused by the tier decision
@@ -4986,12 +4986,12 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Whether a measured first-hop RTT warrants removal from the fast tiers.
+     * Whether a measured first-hop RTT warrants removal from the fast tiers.
      *
-     *  <p>Pure so the policy is testable without a populated profile. An unknown
-     *  measurement (negative) is never slow: we have not probed the peer, and
-     *  evicting on absent evidence would drain the tier of exactly the peers we
-     *  have not looked at yet.
+     * <p>Pure so the policy is testable without a populated profile. An unknown
+     * measurement (negative) is never slow: we have not probed the peer, and
+     * evicting on absent evidence would drain the tier of exactly the peers we
+     * have not looked at yet.
      *
      * @param firstHopRttMs direct-link RTT in ms, negative when unknown
      * @param thresholdMs the latency ceiling in ms
@@ -5003,11 +5003,11 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Remove a peer from the fast/high-cap tiers if its measured direct-link RTT
-     *  reaches the low-latency threshold.
+     * Remove a peer from the fast/high-cap tiers if its measured direct-link RTT
+     * reaches the low-latency threshold.
      *
-     *  <p>The threshold is unchanged at {@code router.peerTestTimeout * 2}; only the
-     *  measurement changed, from a whole tunnel to one hop.
+     * <p>The threshold is unchanged at {@code router.peerTestTimeout * 2}; only the
+     * measurement changed, from a whole tunnel to one hop.
      *
      * @param peer the peer to evaluate
      * @param firstHopRttMs direct-link RTT in ms, negative when unknown
@@ -5082,14 +5082,14 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Small-sample decision: below {@link #MIN_TUNNEL_REQUESTS} lifetime
-     *  requests, apply the loose startup thresholds.
+     * Small-sample decision: below {@link #MIN_TUNNEL_REQUESTS} lifetime
+     * requests, apply the loose startup thresholds.
      *
-     *  @param profile the peer profile
-     *  @param ratio the acceptance ratio in [0.0, 1.0]
-     *  @param highStress whether build success is below the attack threshold
-     *  @return whether low tunnel acceptance
-     *  @since 0.9.71+ (extracted from isLowTunnelAcceptance)
+     * @param profile the peer profile
+     * @param ratio the acceptance ratio in [0.0, 1.0]
+     * @param highStress whether build success is below the attack threshold
+     * @return whether low tunnel acceptance
+     * @since 0.9.71+ (extracted from isLowTunnelAcceptance)
      */
     private boolean isLowAcceptanceLowSample(PeerProfile profile, double ratio, boolean highStress) {
         double threshold = highStress ? 0.10 : 0.20;
@@ -5103,17 +5103,17 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Mature decision: effective minimum ratio, with a cooldown for
-     *  recent bandwidth rejections.
+     * Mature decision: effective minimum ratio, with a cooldown for
+     * recent bandwidth rejections.
      *
-     *  @param profile the peer profile
-     *  @param th the tunnel history (non-null)
-     *  @param ratio the acceptance ratio in [0.0, 1.0]
-     *  @param agreed lifetime accepted requests
-     *  @param rejected lifetime rejected requests
-     *  @param highStress whether build success is below the attack threshold
-     *  @return whether low tunnel acceptance
-     *  @since 0.9.71+ (extracted from isLowTunnelAcceptance)
+     * @param profile the peer profile
+     * @param th the tunnel history (non-null)
+     * @param ratio the acceptance ratio in [0.0, 1.0]
+     * @param agreed lifetime accepted requests
+     * @param rejected lifetime rejected requests
+     * @param highStress whether build success is below the attack threshold
+     * @return whether low tunnel acceptance
+     * @since 0.9.71+ (extracted from isLowTunnelAcceptance)
      */
     private boolean isLowAcceptanceMature(PeerProfile profile, TunnelHistory th, double ratio,
                                           long agreed, long rejected, boolean highStress) {
@@ -5471,44 +5471,44 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Fallback tier size for a threshold that scales with network size.
+     * Fallback tier size for a threshold that scales with network size.
      *
-     *  <p>Networks at or below {@link #SCALING_THRESHOLD} known routers use the
-     *  configured base; above it the base scales with a fraction of the network.
+     * <p>Networks at or below {@link #SCALING_THRESHOLD} known routers use the
+     * configured base; above it the base scales with a fraction of the network.
      *
-     *  @param known routers in the network database
-     *  @param base configured size to use, and the floor once scaling applies
-     *  @param divisor network size is divided by this once scaling applies
-     *  @return the size to use unless a property overrides it
-     *  @since 0.9.71+
+     * @param known routers in the network database
+     * @param base configured size to use, and the floor once scaling applies
+     * @param divisor network size is divided by this once scaling applies
+     * @return the size to use unless a property overrides it
+     * @since 0.9.71+
      */
     static int defaultTierSize(int known, int base, int divisor) {
         return known > SCALING_THRESHOLD ? Math.max(known / divisor, base) : base;
     }
 
     /**
-     *  Ceiling on the fast tier from the number of reachable peers.
+     * Ceiling on the fast tier from the number of reachable peers.
      *
-     *  <p>1.5x headroom over active for near-active peers, never below {@code base}.
+     * <p>1.5x headroom over active for near-active peers, never below {@code base}.
      *
-     *  @param active peers reachable over any transport
-     *  @param base floor to keep even when very few peers are reachable
-     *  @return the fast tier ceiling
-     *  @since 0.9.71+
+     * @param active peers reachable over any transport
+     * @param base floor to keep even when very few peers are reachable
+     * @return the fast tier ceiling
+     * @since 0.9.71+
      */
     static int fastActiveCap(int active, int base) {
         return Math.max(active + active / 2, base);
     }
 
     /**
-     *  Ceiling on the high-capacity tier from the number of reachable peers.
+     * Ceiling on the high-capacity tier from the number of reachable peers.
      *
-     *  <p>2x headroom, since high-cap is a broader category, never below {@code base}.
+     * <p>2x headroom, since high-cap is a broader category, never below {@code base}.
      *
-     *  @param active peers reachable over any transport
-     *  @param base floor to keep even when very few peers are reachable
-     *  @return the high-capacity tier ceiling
-     *  @since 0.9.71+
+     * @param active peers reachable over any transport
+     * @param base floor to keep even when very few peers are reachable
+     * @return the high-capacity tier ceiling
+     * @since 0.9.71+
      */
     static int highCapActiveCap(int active, int base) {
         return Math.max(active * 2, base);
@@ -5583,24 +5583,24 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Current high-capacity tier population.  Paired with
-     *  {@link #getFastPeerCount()} so first-hop selection can report the pool
-     *  it drew from: a 256-candidate sample means something very different
-     *  against a 200-peer tier (the whole pool) than a 1500-peer one (a
-     *  fraction), and the two call for different responses.
+     * Current high-capacity tier population.  Paired with
+     * {@link #getFastPeerCount()} so first-hop selection can report the pool
+     * it drew from: a 256-candidate sample means something very different
+     * against a 200-peer tier (the whole pool) than a 1500-peer one (a
+     * fraction), and the two call for different responses.
      *
-     *  @return the number of peers in the high-capacity tier
-     *  @since 0.9.71+
+     * @return the number of peers in the high-capacity tier
+     * @since 0.9.71+
      */
     public int getHighCapPeerCount() {
         return _highCapacityPeers.size();
     }
 
     /**
-     *  The candidate-sample floor currently in effect, for logging.
-     *  @param ctx the router context
-     *  @return the floor passed to {@link #maxCandidateSample}
-     *  @since 0.9.71+
+     * The candidate-sample floor currently in effect, for logging.
+     * @param ctx the router context
+     * @return the floor passed to {@link #maxCandidateSample}
+     * @since 0.9.71+
      */
     public int getEffectiveCandidateSample(RouterContext ctx) {
         return getMinCandidateSample(ctx);
@@ -5720,56 +5720,56 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Short-lived cache for {@link #getTunnelBuildSuccess()}.  The 6 RateStat
-     *  lookups are expensive when called per-candidate in peer selection (up to
-     *  400 peers × 6 lookups).  The ratio is a 10-minute rolling average, so
-     *  a 15s cache (<2.5% staleness) eliminates ~40x redundant lookups with
-     *  negligible impact on decision accuracy.
+     * Short-lived cache for {@link #getTunnelBuildSuccess()}.  The 6 RateStat
+     * lookups are expensive when called per-candidate in peer selection (up to
+     * 400 peers × 6 lookups).  The ratio is a 10-minute rolling average, so
+     * a 15s cache (<2.5% staleness) eliminates ~40x redundant lookups with
+     * negligible impact on decision accuracy.
      */
     private volatile double _cachedBuildSuccess = 1.0;
     private volatile long _cachedBuildSuccessTime;
     private static final long BUILD_SUCCESS_CACHE_MS = 15_000;
 
     /**
-     *  Peers with zero tunnel history are allowed into fast/high-cap tiers if
-     *  they were heard from within this window.  Alive peers that haven't yet
-     *  built tunnels get a chance; dead peers are excluded.  Under-performers
-     *  are evicted by existing mechanisms (latency, acceptance ratio, loss
-     *  probation) within minutes.
+     * Peers with zero tunnel history are allowed into fast/high-cap tiers if
+     * they were heard from within this window.  Alive peers that haven't yet
+     * built tunnels get a chance; dead peers are excluded.  Under-performers
+     * are evicted by existing mechanisms (latency, acceptance ratio, loss
+     * probation) within minutes.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private static final long NO_HISTORY_ACTIVITY_WINDOW_MS = 5 * 60 * 1000L;
 
     /**
-     *  Recent tunnel build success ratio, from router statistics.
-     *  <p>
-     *  TEN_MINUTES window: a short window reacts quickly to network health
-     *  changes, so the attack-mode gates below track the current situation
-     *  instead of lifetime averages.  When no data is available (stats not
-     *  yet created at boot, or an empty window), the ratio is 1.0 — no data
-     *  means neutral, not "under attack"; a missing-stat 0.0 put the router
-     *  into permanent attack mode before stats existed.
+     * Recent tunnel build success ratio, from router statistics.
+     * <p>
+     * TEN_MINUTES window: a short window reacts quickly to network health
+     * changes, so the attack-mode gates below track the current situation
+     * instead of lifetime averages.  When no data is available (stats not
+     * yet created at boot, or an empty window), the ratio is 1.0 — no data
+     * means neutral, not "under attack"; a missing-stat 0.0 put the router
+     * into permanent attack mode before stats existed.
      *
-     *  <p>The cache covers the no-data path too: on fallback the cached 1.0 is
-     *  (re)stamped so a missing StatManager early in boot cannot turn every
-     *  per-candidate call into a fresh 6-lookup scan.
+     * <p>The cache covers the no-data path too: on fallback the cached 1.0 is
+     * (re)stamped so a missing StatManager early in boot cannot turn every
+     * per-candidate call into a fresh 6-lookup scan.
      *
-     *  @return the tunnel build success in [0.0, 1.0], 1.0 when no data
-     *  @since 0.9.71+
+     * @return the tunnel build success in [0.0, 1.0], 1.0 when no data
+     * @since 0.9.71+
      */
     /**
-     *  Maps an unknown build-success reading onto a neutral 1.0.
+     * Maps an unknown build-success reading onto a neutral 1.0.
      *
-     *  <p>An absent stat, or a window in which nothing has settled yet, is not evidence of
-     *  failure. Reading it as anything else would trip {@link #isLowBuildSuccess()} and switch
-     *  off profile eviction, lengthen ghost cooldowns and put the first-hop selector into its
-     *  defensive path for no reason - so "unknown" has to arrive upstream of every one of those
-     *  as 1.0.
+     * <p>An absent stat, or a window in which nothing has settled yet, is not evidence of
+     * failure. Reading it as anything else would trip {@link #isLowBuildSuccess()} and switch
+     * off profile eviction, lengthen ghost cooldowns and put the first-hop selector into its
+     * defensive path for no reason - so "unknown" has to arrive upstream of every one of those
+     * as 1.0.
      *
-     *  @param ratio the raw ratio, or NaN when unknown
-     *  @return {@code ratio}, or 1.0 when it is NaN
-     *  @since 0.9.71+
+     * @param ratio the raw ratio, or NaN when unknown
+     * @return {@code ratio}, or 1.0 when it is NaN
+     * @since 0.9.71+
      */
     static double neutraliseUnknownBuildSuccess(double ratio) {
         return Double.isNaN(ratio) ? 1.0 : ratio;

@@ -15,11 +15,11 @@ import java.util.Locale;
  * Change Log:
  * </p>
  * <ul>
- *  <li>v1.3.6 - Fixed OutputStream.flush() so that 'position' is reset.</li>
- *  <li>v1.3.5 - Added flag to turn on and off line breaks. Fixed bug in input stream
- *      where last buffer being read, if not completely full, was not returned.</li>
- *  <li>v1.3.4 - Fixed when "improperly padded stream" error was thrown at the wrong time.</li>
- *  <li>v1.3.3 - Fixed I/O streams which were totally messed up.</li>
+ * <li>v1.3.6 - Fixed OutputStream.flush() so that 'position' is reset.</li>
+ * <li>v1.3.5 - Added flag to turn on and off line breaks. Fixed bug in input stream
+ * where last buffer being read, if not completely full, was not returned.</li>
+ * <li>v1.3.4 - Fixed when "improperly padded stream" error was thrown at the wrong time.</li>
+ * <li>v1.3.3 - Fixed I/O streams which were totally messed up.</li>
  * </ul>
  *
  * <p>
@@ -41,8 +41,8 @@ public class Base64 {
 
 
     /**
-     *  Output will be a multiple of 4 chars, including 0-2 trailing '='
-     *  As of 0.9.14, encodes the UTF-8 encoding of source. Prior to that, used the platform's encoding.
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * As of 0.9.14, encodes the UTF-8 encoding of source. Prior to that, used the platform's encoding.
      *
      * @param source the string to encode, if null will return ""
      * @return the Base64 encoded string
@@ -52,7 +52,7 @@ public class Base64 {
     }
 
     /**
-     *  Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='
      *
      * @param source the byte array to encode, if null will return ""
      * @return the Base64 encoded string
@@ -62,7 +62,7 @@ public class Base64 {
     }
 
     /**
-     *  Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='
      *
      * @param source the byte array to encode, if null will return ""
      * @param off the offset in the source array
@@ -74,7 +74,7 @@ public class Base64 {
     }
 
     /**
-     *  Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='
      *
      * @param source the byte array to encode, if null will return ""
      * @param useStandardAlphabet Warning, must be false for I2P compatibility
@@ -85,7 +85,7 @@ public class Base64 {
     }
 
     /**
-     *  Output will be a multiple of 4 chars, including 0-2 trailing '='
+     * Output will be a multiple of 4 chars, including 0-2 trailing '='
      *
      * @param source the byte array to encode, if null will return ""
      * @param off the offset in the source array
@@ -98,16 +98,16 @@ public class Base64 {
     }
 
     /**
-     *  Decodes data from Base64 notation using the I2P alphabet.
+     * Decodes data from Base64 notation using the I2P alphabet.
      *
-     *  As of 0.9.14, does not require trailing '=' if remaining bits are zero.
-     *  Prior to that, trailing 1, 2, or 3 chars were ignored.
+     * As of 0.9.14, does not require trailing '=' if remaining bits are zero.
+     * Prior to that, trailing 1, 2, or 3 chars were ignored.
      *
-     *  As of 0.9.14, trailing garbage after an '=' will cause an error.
-     *  Prior to that, it was ignored.
+     * As of 0.9.14, trailing garbage after an '=' will cause an error.
+     * Prior to that, it was ignored.
      *
-     *  As of 0.9.14, whitespace will cause an error.
-     *  Prior to that, it was ignored.
+     * As of 0.9.14, whitespace will cause an error.
+     * Prior to that, it was ignored.
      *
      * @param s Base 64 encoded string using the I2P alphabet A-Z, a-z, 0-9, -, ~
      * @return the decoded data, null on error
@@ -117,7 +117,7 @@ public class Base64 {
     }
 
     /**
-     *  Decodes data from Base64 notation using the I2P alphabet.
+     * Decodes data from Base64 notation using the I2P alphabet.
      *
      * @param s the Base64 encoded string
      * @param useStandardAlphabet Warning, must be false for I2P compatibility
@@ -148,9 +148,9 @@ public class Base64 {
                                             (byte) '8', (byte) '9', (byte) '+', (byte) '/'};
 
     /**
-     *  The I2P Alphabet.
+     * The I2P Alphabet.
      *
-     *  @since 0.9.29
+     * @since 0.9.29
      */
     public static final String ALPHABET_I2P = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-~";
 
@@ -201,7 +201,7 @@ public class Base64 {
     }
 
     /**
-     *  Command-line tool for encoding and decoding Base64.
+     * Command-line tool for encoding and decoding Base64.
      *
      * @param args command-line arguments
      */
@@ -341,7 +341,7 @@ public class Base64 {
 
     /**
      * Alphabet.
-     *  @param alpha alphabet
+     * @param alpha alphabet
      */
     private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte[] alpha) {
 
@@ -440,7 +440,6 @@ public class Base64 {
      * @param off Offset in array where conversion should begin
      * @param len Length of data to convert
      * @param breakLines Break lines at 80 characters or less.
-     * @since 1.4
      */
     private static void encodeBytes(byte[] source, int off, int len, boolean breakLines, StringBuilder out, byte[] alpha) {
         int d = 0;
@@ -481,7 +480,6 @@ public class Base64 {
      * @param destination the array to hold the conversion
      * @param destOffset the index where output will be put
      * @return the number of decoded bytes converted 1-3, or -1 on error, never zero
-     * @since 1.3
      */
     private static int decode4to3(byte d0, byte d1, byte d2, byte d3, byte[] destination, int destOffset) {
         if (d0 < 0 || d1 < 0)
@@ -534,7 +532,6 @@ public class Base64 {
      *
      * @param s the string to decode
      * @return the decoded data, null on error
-     * @since 1.4
      */
     private static byte[] standardDecode(String s) {
         final int len = s.length();
@@ -568,7 +565,6 @@ public class Base64 {
      *
      * @param s the string to decode
      * @return The data as a string, or null on error
-     * @since 1.4
      */
     public static String decodeToString(String s) {
         byte[] b = decode(s);
@@ -596,7 +592,6 @@ public class Base64 {
      * @param off    The offset of where to begin decoding
      * @param len    The length of characters to decode
      * @return decoded data, null on error
-     * @since 1.3
      */
     private static byte[] decode(String source, int off, int len) {
         int len34 = len * 3 / 4;

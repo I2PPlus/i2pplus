@@ -49,12 +49,12 @@ import net.i2p.util.VersionComparator;
  *
  * <p>This class manages the complete inbound NTCP 2 connection lifecycle:
  * <ul>
- *   <li>Receives and processes Alice's handshake messages (1 and 3)</li>
- *   <li>Sends Bob's responses (messages 2 and 4)</li>
- *   <li>Performs Noise protocol XK handshake with Elligator2</li>
- *   <li>Validates peer RouterInfo and signatures</li>
- *   <li>Establishes data phase keys (ChaChaPoly + SipHash)</li>
- *   <li>Handles clock skew detection and peer banlisting</li>
+ * <li>Receives and processes Alice's handshake messages (1 and 3)</li>
+ * <li>Sends Bob's responses (messages 2 and 4)</li>
+ * <li>Performs Noise protocol XK handshake with Elligator2</li>
+ * <li>Validates peer RouterInfo and signatures</li>
+ * <li>Establishes data phase keys (ChaChaPoly + SipHash)</li>
+ * <li>Handles clock skew detection and peer banlisting</li>
  * </ul>
  *
  * <p>State transitions:
@@ -169,8 +169,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *
      * <p>This method dispatches to the appropriate handler based on state:
      * <ul>
-     *   <li>{@link State#IB_INIT}: Waits for sufficient data to determine NTCP version</li>
-     *   <li>{@link #STATES_NTCP2}: Delegates to receiveInboundNTCP2()</li>
+     * <li>{@link State#IB_INIT}: Waits for sufficient data to determine NTCP version</li>
+     * <li>{@link #STATES_NTCP2}: Delegates to receiveInboundNTCP2()</li>
      * </ul>
      *
      * <p>For NTCP 2, this method receives messages 1 and 3 from Alice,
@@ -278,22 +278,22 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *
      * <p>Performs the following checks after receiving Alice's RouterIdentity in message 3:
      * <ul>
-     *   <li>Banlist checks (permanent, hostile, temporary)</li>
-     *   <li>IP address recording for banlisted peers</li>
-     *   <li>Clock skew validation and adjustment</li>
-     *   <li>Clock update (desperate one-time adjustment)</li>
+     * <li>Banlist checks (permanent, hostile, temporary)</li>
+     * <li>IP address recording for banlisted peers</li>
+     * <li>Clock skew validation and adjustment</li>
+     * <li>Clock update (desperate one-time adjustment)</li>
      * </ul>
      *
      * <p>Side effects:
      * <ul>
-     *   <li>Sets _msg3p2FailReason when returning false</li>
-     *   <li>May blocklist the peer's IP address</li>
-     *   <li>May update the router's clock offset</li>
+     * <li>Sets _msg3p2FailReason when returning false</li>
+     * <li>May blocklist the peer's IP address</li>
+     * <li>May update the router's clock offset</li>
      * </ul>
      *
      * @param aliceHash the hash of Alice's RouterIdentity to validate
      * @return true if the peer is valid and connection should proceed;
-     *         false if validation failed (caller should return immediately)
+     * false if validation failed (caller should return immediately)
      * @since 0.9.36 pulled out of verifyInbound()
      */
     private boolean verifyInbound(Hash aliceHash) {
@@ -362,9 +362,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *
      * <p>Side effects when returning false:
      * <ul>
-     *   <li>Sets _msg3p2FailReason to REASON_BANNED</li>
-     *   <li>Blocklists the peer's IP address</li>
-     *   <li>Marks the router as unreachable</li>
+     * <li>Sets _msg3p2FailReason to REASON_BANNED</li>
+     * <li>Blocklists the peer's IP address</li>
+     * <li>Marks the router as unreachable</li>
      * </ul>
      *
      * @param alice the RouterInfo received from Alice
@@ -389,20 +389,20 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     }
 
     /**
-     *  NTCP2 only. State must be one of IB_NTCP2_*.
-     *  Decoded X must be in _X.
-     *  Remaining part of msg1 must be in _X or src.
-     *  Padding if any is still in src and will be read here.
+     * NTCP2 only. State must be one of IB_NTCP2_*.
+     * Decoded X must be in _X.
+     * Remaining part of msg1 must be in _X or src.
+     * Padding if any is still in src and will be read here.
      *
-     *  Side effect: Sets state to IB_NTCP2_GOT_MSG1, IB_NTCP2_GOT_PADDING, or a failure state.
+     * Side effect: Sets state to IB_NTCP2_GOT_MSG1, IB_NTCP2_GOT_PADDING, or a failure state.
      *
-     *  we are Bob, so receive these bytes as part of an inbound connection
-     *  This method receives messages 1 and 3, and sends message 2.
+     * we are Bob, so receive these bytes as part of an inbound connection
+     * This method receives messages 1 and 3, and sends message 2.
      *
-     *  All data must be copied out of the buffer as Reader.processRead()
-     *  will return it to the pool.
+     * All data must be copied out of the buffer as Reader.processRead()
+     * will return it to the pool.
      *
-     *  @since 0.9.36
+     * @since 0.9.36
      */
     private synchronized void receiveInboundNTCP2(ByteBuffer src) {
         if (_state == State.IB_NTCP2_GOT_X && src.hasRemaining()) {
@@ -653,10 +653,10 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *
      * <p>Message 2 contains:
      * <ul>
-     *   <li>Bob's Noise public key (Y), 32 bytes</li>
-     *   <li>Options: padding length (2 bytes), timestamp (4 bytes)</li>
-     *   <li>Padding (variable length, 0-64 bytes)</li>
-     *   <li>AES-CBC MAC (16 bytes)</li>
+     * <li>Bob's Noise public key (Y), 32 bytes</li>
+     * <li>Options: padding length (2 bytes), timestamp (4 bytes)</li>
+     * <li>Padding (variable length, 0-64 bytes)</li>
+     * <li>AES-CBC MAC (16 bytes)</li>
      * </ul>
      *
      * <p>The IV for CBC encryption must be in _prevEncrypted (extracted from
@@ -732,29 +732,29 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <p>This method is called after successfully receiving and validating message 3.
      * It performs the following:
      * <ul>
-     *   <li>Splits the Noise handshake to derive ChaChaPoly cipher states</li>
-     *   <li>Generates SipHash keys for message authentication</li>
-     *   <li>Either finishes the connection or sends termination</li>
-     *   <li>Processes any "extra" data in the buffer for the data phase</li>
-     *   <li>Zeros out sensitive key material</li>
+     * <li>Splits the Noise handshake to derive ChaChaPoly cipher states</li>
+     * <li>Generates SipHash keys for message authentication</li>
+     * <li>Either finishes the connection or sends termination</li>
+     * <li>Processes any "extra" data in the buffer for the data phase</li>
+     * <li>Zeros out sensitive key material</li>
      * </ul>
      *
      * <p>On success (_msg3p2FailReason &lt; 0):
      * <ul>
-     *   <li>Calls con.finishInboundEstablishment() with keys and states</li>
-     *   <li>Transitions to VERIFIED state</li>
+     * <li>Calls con.finishInboundEstablishment() with keys and states</li>
+     * <li>Transitions to VERIFIED state</li>
      * </ul>
      *
      * <p>On failure (_msg3p2FailReason &gt;= 0):
      * <ul>
-     *   <li>Calls con.failInboundEstablishment() with termination reason</li>
-     *   <li>Transitions to CORRUPT state</li>
+     * <li>Calls con.failInboundEstablishment() with termination reason</li>
+     * <li>Transitions to CORRUPT state</li>
      * </ul>
      *
      * <p>Note: If you don't call this method, call fail() directly.
      *
      * @param buf ByteBuffer possibly containing "extra" data for immediate processing
-     *            in the data phase; typically present for inbound connections
+     * in the data phase; typically present for inbound connections
      * @since 0.9.36
      */
     private synchronized void setDataPhase(ByteBuffer buf) {
@@ -810,28 +810,28 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *
      * <p>Validations performed:
      * <ul>
-     *   <li>Ensures RouterInfo contains an NTCP2-capable address</li>
-     *   <li>Extracts and validates the "s" (static key) option</li>
-     *   <li>Compares static key against the Noise handshake public key</li>
-     *   <li>Verifies the peer's identity via verifyInbound()</li>
-     *   <li>Checks IP address consistency (RI-published vs. actual connection)</li>
-     *   <li>Validates router version, capabilities, and network ID</li>
-     *   <li>Stores RouterInfo in the network database</li>
+     * <li>Ensures RouterInfo contains an NTCP2-capable address</li>
+     * <li>Extracts and validates the "s" (static key) option</li>
+     * <li>Compares static key against the Noise handshake public key</li>
+     * <li>Verifies the peer's identity via verifyInbound()</li>
+     * <li>Checks IP address consistency (RI-published vs. actual connection)</li>
+     * <li>Validates router version, capabilities, and network ID</li>
+     * <li>Stores RouterInfo in the network database</li>
      * </ul>
      *
      * <p>Side effects:
      * <ul>
-     *   <li>Sets _msg3p2FailReason on validation failure</li>
-     *   <li>May banlist the peer hash and/or blocklist the IP</li>
-     *   <li>Stores RouterInfo in netdb</li>
-     *   <li>Sets _aliceIdent and calls con.setRemotePeer()</li>
+     * <li>Sets _msg3p2FailReason on validation failure</li>
+     * <li>May banlist the peer hash and/or blocklist the IP</li>
+     * <li>Stores RouterInfo in netdb</li>
+     * <li>Sets _aliceIdent and calls con.setRemotePeer()</li>
      * </ul>
      *
      * @param ri Alice's RouterInfo from message 3
      * @param isHandshake always true; indicates this is during handshake processing
      * @param flood true if the RouterInfo should be flooded to the network
      * @throws DataFormatException if validation fails (bad sig, no static key,
-     *                              key mismatch, IP mismatch, banned, etc.)
+     * key mismatch, IP mismatch, banned, etc.)
      * @since 0.9.36
      */
     @Override
@@ -1110,9 +1110,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *
      * <p>Actions:
      * <ul>
-     *   <li>Releases _curEncrypted buffer if verification failed (passed to NTCPConnection on success)</li>
-     *   <li>Zeros out _X buffer for security</li>
-     *   <li>Releases _X and _msg3tmp buffers back to caches</li>
+     * <li>Releases _curEncrypted buffer if verification failed (passed to NTCPConnection on success)</li>
+     * <li>Zeros out _X buffer for security</li>
+     * <li>Releases _X and _msg3tmp buffers back to caches</li>
      * </ul>
      *
      * @param isVerified true if handshake succeeded; false if it failed

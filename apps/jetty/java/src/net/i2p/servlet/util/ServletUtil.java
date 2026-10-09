@@ -10,16 +10,16 @@ public class ServletUtil {
     private ServletUtil() {};
 
     /**
-     *  @param ua User-Agent string, non-null
-     *  @return true if a text-mode or mobile browser
+     * @param ua User-Agent string, non-null
+     * @return true if a text-mode or mobile browser
      */
     public static boolean isSmallBrowser(String ua) {
         return isTextBrowser(ua) || isMobileBrowser(ua);
     }
 
     /**
-     *  @param ua User-Agent string, non-null
-     *  @return true if a text-mode browser
+     * @param ua User-Agent string, non-null
+     * @return true if a text-mode browser
      */
     public static boolean isTextBrowser(String ua) {
         return
@@ -30,11 +30,11 @@ public class ServletUtil {
 
 
     /**
-     *  The intent here is to return true for phones but
-     *  false for big tablets? But not consistent.
+     * The intent here is to return true for phones but
+     * false for big tablets? But not consistent.
      *
-     *  @param ua User-Agent string, non-null
-     *  @return true if a mobile browser
+     * @param ua User-Agent string, non-null
+     * @return true if a mobile browser
      */
     public static boolean isMobileBrowser(String ua) {
         return
@@ -63,18 +63,18 @@ public class ServletUtil {
     }
 
     /**
-      * Truncate a String.
-      * Same as s.substring(0, len) except that
-      * it won't split a surrogate pair or at a ZWJ.
-      *
-      * @param s non-null
-      * @param len greater than zero
-      * @return s if shorter; s.substring(0, len) if
-      *           the char at len-1 is not a high surrogate
-      *           or the char at len-1 or len is not a zero-width joiner;
-      *           s.substring(0, len+1 or len+2) if it is
-      * @since 0.9.33
-      */
+     * Truncate a String.
+     * Same as s.substring(0, len) except that
+     * it won't split a surrogate pair or at a ZWJ.
+     *
+     * @param s non-null
+     * @param len greater than zero
+     * @return s if shorter; s.substring(0, len) if
+     * the char at len-1 is not a high surrogate
+     * or the char at len-1 or len is not a zero-width joiner;
+     * s.substring(0, len+1 or len+2) if it is
+     * @since 0.9.33
+     */
     public static String truncate(String s, int len) {
         if (s.length() <= len)
             return s;
@@ -88,12 +88,12 @@ public class ServletUtil {
     }
 
     /**
-     *  Sanitize an encoded String from getQueryString().
-     *  Does not decode.
+     * Sanitize an encoded String from getQueryString().
+     * Does not decode.
      *
-     *  @param s may be null
-     *  @return s or null if s was null or s contained any problematic characters
-     *  @since 0.9.70
+     * @param s may be null
+     * @return s or null if s was null or s contained any problematic characters
+     * @since 0.9.70
      */
     public static String sanitizeQuery(String s) {
         if (s == null)

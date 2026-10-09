@@ -5,7 +5,6 @@ package net.i2p.router.networkdb.kademlia;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.util.Collection;
@@ -129,8 +128,8 @@ public interface DataStore {
     public int countLeaseSets();
 
     /**
-     *  @return total size (RI and LS)
-     *  @since 0.8.8
+     * @return total size (RI and LS)
+     * @since 0.8.8
      */
     public int size();
 }

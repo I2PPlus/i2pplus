@@ -18,11 +18,11 @@ import javax.crypto.SecretKey;
  *
  * <p>Features and capabilities:
  * <ul>
- *   <li>HMAC-SHA256 based derivation for cryptographic security</li>
- *   <li>Support for one or two output keys with optional info parameter</li>
- *   <li>Thread-safe operation with no internal state</li>
- *   <li>Fixed 32-byte output size for consistency across I2P</li>
- *   <li>Reusable instances for performance optimization</li>
+ * <li>HMAC-SHA256 based derivation for cryptographic security</li>
+ * <li>Support for one or two output keys with optional info parameter</li>
+ * <li>Thread-safe operation with no internal state</li>
+ * <li>Fixed 32-byte output size for consistency across I2P</li>
+ * <li>Reusable instances for performance optimization</li>
  * </ul>
  *
  * @see <a href="https://tools.ietf.org/html/rfc5869">RFC 5869 - HKDF</a>
@@ -34,7 +34,7 @@ public final class HKDF {
     private static final byte[] ONE = new byte[] {1};
 
     /**
-     *  @param context the app context
+     * @param context the app context
      */
     public HKDF(I2PAppContext context) {
         _context = context;
@@ -43,9 +43,9 @@ public final class HKDF {
     /**
      * One output, no info.
      *
-     *  @param key first 32 bytes used as the key
-     *  @param data the input data
-     *  @param out must be exactly 32 bytes
+     * @param key first 32 bytes used as the key
+     * @param data the input data
+     * @param out must be exactly 32 bytes
      */
     public void calculate(byte[] key, byte[] data, byte[] out) {
         HMAC256Generator hmac = _context.hmac256();
@@ -60,10 +60,10 @@ public final class HKDF {
     /**
      * One output with info.
      *
-     *  @param key first 32 bytes used as the key
-     *  @param data the input data
-     *  @param info non-null ASCII, "" if none
-     *  @param out must be exactly 32 bytes
+     * @param key first 32 bytes used as the key
+     * @param data the input data
+     * @param info non-null ASCII, "" if none
+     * @param out must be exactly 32 bytes
      */
     public void calculate(byte[] key, byte[] data, String info, byte[] out) {
         HMAC256Generator hmac = _context.hmac256();

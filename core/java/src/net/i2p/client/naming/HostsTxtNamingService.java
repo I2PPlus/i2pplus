@@ -80,8 +80,8 @@ public class HostsTxtNamingService extends MetaNamingService {
     }
 
     /**
-     *  All services aggregated, unless options contains
-     *  the property "file", in which case only for that file
+     * All services aggregated, unless options contains
+     * the property "file", in which case only for that file
      * @return the names
      */
     @Override

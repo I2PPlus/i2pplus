@@ -240,18 +240,18 @@ class AccessFilter implements StatefulConnectionFilter {
     }
 
     /**
-     *  Read the persisted breached-b32 set for a recorder file, capturing its
-     *  {@code (lastModified, length)} signature at read time.
-     *  <p>
-     *  The set is the plain set of lines in the file (raw b32 strings); no
-     *  parsing is done, matching the historic reader. A missing or non-file
-     *  yields an empty set with {@code valid == false} so a later appearance
-     *  of the file is detected as a change.
+     * Read the persisted breached-b32 set for a recorder file, capturing its
+     * {@code (lastModified, length)} signature at read time.
+     * <p>
+     * The set is the plain set of lines in the file (raw b32 strings); no
+     * parsing is done, matching the historic reader. A missing or non-file
+     * yields an empty set with {@code valid == false} so a later appearance
+     * of the file is detected as a change.
      *
-     *  @param file the breach recorder file
-     *  @return the read set plus its signature
-     *  @throws IOException on an error reading the file
-     *  @since 0.9.71+
+     * @param file the breach recorder file
+     * @return the read set plus its signature
+     * @throws IOException on an error reading the file
+     * @since 0.9.71+
      */
     static RecorderFileState readRecorderFile(File file) throws IOException {
         if (!(file.exists() && file.isFile()))
@@ -267,20 +267,20 @@ class AccessFilter implements StatefulConnectionFilter {
     }
 
     /**
-     *  Whether a recorder file's on-disk signature still matches the one
-     *  captured when {@code cached} was read, i.e. whether the cached breached
-     *  set can be reused without opening the file again.
-     *  <p>
-     *  The recorder file is almost always written only by this filter, so on
-     *  the 5-second sync cycle the file is unchanged and the set is reused.
-     *  External edits (recreating the file) change the signature and force a
-     *  re-read, so user changes are still picked up. Misses on a missing file
-     *  are reported as unchanged so an absent file does not re-read either.
+     * Whether a recorder file's on-disk signature still matches the one
+     * captured when {@code cached} was read, i.e. whether the cached breached
+     * set can be reused without opening the file again.
+     * <p>
+     * The recorder file is almost always written only by this filter, so on
+     * the 5-second sync cycle the file is unchanged and the set is reused.
+     * External edits (recreating the file) change the signature and force a
+     * re-read, so user changes are still picked up. Misses on a missing file
+     * are reported as unchanged so an absent file does not re-read either.
      *
-     *  @param cached the previous {@link RecorderFileState}, or null on first use
-     *  @param file the breach recorder file
-     *  @return true if {@code cached.breached} is still current
-     *  @since 0.9.71+
+     * @param cached the previous {@link RecorderFileState}, or null on first use
+     * @param file the breach recorder file
+     * @return true if {@code cached.breached} is still current
+     * @since 0.9.71+
      */
     static boolean recorderFileUnchanged(RecorderFileState cached, File file) {
         if (file.exists() && file.isFile()) {
@@ -292,10 +292,10 @@ class AccessFilter implements StatefulConnectionFilter {
     }
 
     /**
-     *  Parsed recorder file plus the {@code (lastModified, length)} signature
-     *  it was read under.
+     * Parsed recorder file plus the {@code (lastModified, length)} signature
+     * it was read under.
      *
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static final class RecorderFileState {
         final boolean valid;
@@ -304,11 +304,11 @@ class AccessFilter implements StatefulConnectionFilter {
         final Set<String> breached;
 
         /**
-         *  @param valid true if the file was a real file when read
-         *  @param modified the file's lastModified() value
-         *  @param length the file's length() value
-         *  @param breached the parsed b32 set
-         *  @since 0.9.71+
+         * @param valid true if the file was a real file when read
+         * @param modified the file's lastModified() value
+         * @param length the file's length() value
+         * @param breached the parsed b32 set
+         * @since 0.9.71+
          */
         RecorderFileState(boolean valid, long modified, long length, Set<String> breached) {
             this.valid = valid;

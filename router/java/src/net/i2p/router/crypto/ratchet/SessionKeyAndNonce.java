@@ -19,17 +19,17 @@ class SessionKeyAndNonce extends SessionKey {
     private final PublicKey _remoteKey;
 
     /**
-     *  For outbound Existing Session
+     * For outbound Existing Session
      */
     public SessionKeyAndNonce(byte[] data, int nonce) {
         this(data, 0, nonce, null);
     }
 
     /**
- * For inbound Existing Session
- *
- * @since 0.9.46
- */
+     * For inbound Existing Session
+     *
+     * @since 0.9.46
+     */
     public SessionKeyAndNonce(byte[] data, int id, int nonce, PublicKey remoteKey) {
         super(data);
         _id = id;
@@ -39,7 +39,7 @@ class SessionKeyAndNonce extends SessionKey {
     }
 
     /**
-     *  For New Session Replies
+     * For New Session Replies
      */
     public SessionKeyAndNonce(HandshakeState state) {
         super();
@@ -58,21 +58,21 @@ class SessionKeyAndNonce extends SessionKey {
     }
 
     /**
-     *  For inbound ES, else 0
+     * For inbound ES, else 0
      *
-     *  @return the i d
-     *  @since 0.9.46
+     * @return the i d
+     * @since 0.9.46
      */
     public int getID() {
         return _id;
     }
 
     /**
-     *  For inbound ES, else null.
-     *  For NSR, use getHansdhakeState().getRemotePublicKey().getPublicKey().
+     * For inbound ES, else null.
+     * For NSR, use getHansdhakeState().getRemotePublicKey().getPublicKey().
      *
-     *  @return the remote key
-     *  @since 0.9.46
+     * @return the remote key
+     * @since 0.9.46
      */
     public PublicKey getRemoteKey() {
         return _remoteKey;

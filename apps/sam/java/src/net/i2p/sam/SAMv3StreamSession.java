@@ -4,7 +4,6 @@
  * with no warranty of any kind, either expressed or implied.
  * It probably won't  make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 package net.i2p.sam;
@@ -99,8 +98,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     *   Build a Stream Session on an existing I2P session
-     *   registered with the given nickname
+     * Build a Stream Session on an existing I2P session
+     * registered with the given nickname
      *
      * Caller MUST call start().
      *
@@ -125,7 +124,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      *
      * @param sock the accepted I2P socket
      * @return true if queued; false if the queue is full (caller must
-     *         reset the socket)
+     * reset the socket)
      * @throws IllegalStateException if called on a non-subsession
      * @since 0.9.25
      */
@@ -147,7 +146,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * for shutdown and avoid leaking threads on idle sessions.
      *
      * @return the next queued socket, or null if the queue is empty
-     *         after the timeout (caller must handle null)
+     * after the timeout (caller must handle null)
      * @throws ConnectException if the thread is interrupted
      * @since 0.9.25
      */
@@ -425,8 +424,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
-     *  Forward sockets from I2P to the host/port provided.
-     *  Accepts and forwarding may not be done at the same time.
+     * Forward sockets from I2P to the host/port provided.
+     * Accepts and forwarding may not be done at the same time.
      */
     public void startForwardingIncoming(Properties props, boolean sendPorts)
             throws SAMException, InterruptedIOException {
@@ -694,8 +693,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
 
         /**
-         *  Handler interface
-         *  @since 0.9.20
+         * Handler interface
+         * @since 0.9.20
          */
         public void stopHandling() {
             try {
@@ -713,7 +712,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
     }
     /**
-     *  stop Forwarding Incoming connection coming from I2P
+     * stop Forwarding Incoming connection coming from I2P
      * @throws SAMException
      * @throws InterruptedIOException
      */

@@ -138,7 +138,7 @@ public class EventLog {
     public static final String WATCHDOG = "watchdog";
 
     /**
-     *  Evict oldest entries if cache exceeds limit.
+     * Evict oldest entries if cache exceeds limit.
      */
     private synchronized void evictIfNeeded() {
         if (_cache.size() <= MAX_CACHE_ENTRIES)
@@ -159,9 +159,9 @@ public class EventLog {
     }
 
     /**
-     *  Event log for the given file, which should be absolute.
+     * Event log for the given file, which should be absolute.
      *
-     *  @param file should be absolute
+     * @param file should be absolute
      */
     public EventLog(I2PAppContext ctx, File file) {
         _context = ctx;
@@ -171,21 +171,21 @@ public class EventLog {
     }
 
     /**
-     *  Append an event. Fails silently.
+     * Append an event. Fails silently.
      *
-     *  @param event no spaces, e.g. "started"
-     *  @throws IllegalArgumentException if event contains a space or newline
+     * @param event no spaces, e.g. "started"
+     * @throws IllegalArgumentException if event contains a space or newline
      */
     public void addEvent(String event) {
         addEvent(event, null);
     }
 
     /**
-     *  Append an event. Fails silently.
+     * Append an event. Fails silently.
      *
-     *  @param event no spaces or newlines, e.g. "started"
-     *  @param info no newlines, may be blank or null
-     *  @throws IllegalArgumentException if event contains a space or either contains a newline
+     * @param event no spaces or newlines, e.g. "started"
+     * @param info no newlines, may be blank or null
+     * @throws IllegalArgumentException if event contains a space or either contains a newline
      */
     public synchronized void addEvent(String event, String info) {
         if (event.contains(" ") || event.contains("\n") ||
@@ -206,12 +206,12 @@ public class EventLog {
     }
 
     /**
-     *  Caches.
-     *  Fails silently.
+     * Caches.
+     * Fails silently.
      *
-     *  @param event matching this event only, case sensitive
-     *  @param since since this time, 0 for all
-     *  @return non-null, Map of times to (possibly empty) info strings, sorted, earliest first, unmodifiable
+     * @param event matching this event only, case sensitive
+     * @param since since this time, 0 for all
+     * @return non-null, Map of times to (possibly empty) info strings, sorted, earliest first, unmodifiable
      */
     public synchronized SortedMap<Long, String> getEvents(String event, long since) {
         SortedMap<Long, String> rv = _cache.get(event);
@@ -246,14 +246,14 @@ public class EventLog {
     }
 
     /**
-     *  All events since a given time.
-     *  Does not cache. Fails silently.
-     *  Values in the returned map have the format "event[ info]".
-     *  Events do not contain spaces.
+     * All events since a given time.
+     * Does not cache. Fails silently.
+     * Values in the returned map have the format "event[ info]".
+     * Events do not contain spaces.
      *
-     *  @param since since this time, 0 for all
-     *  @return non-null, Map of times to info strings, sorted, earliest first, unmodifiable
-     *  @since 0.9.14
+     * @param since since this time, 0 for all
+     * @return non-null, Map of times to info strings, sorted, earliest first, unmodifiable
+     * @since 0.9.14
      */
     public synchronized SortedMap<Long, String> getEvents(long since) {
         SortedMap<Long, String> rv = new TreeMap<>();
@@ -278,12 +278,12 @@ public class EventLog {
     }
 
     /**
-     *  Timestamp of last event.
+     * Timestamp of last event.
      *
-     *  @param event matching this event, case sensitive
-     *  @param since since this time, 0 for all
-     *  @return last event time, or 0 for none
-     *  @since 0.9.47
+     * @param event matching this event, case sensitive
+     * @param since since this time, 0 for all
+     * @return last event time, or 0 for none
+     * @since 0.9.47
      */
     public synchronized long getLastEvent(String event, long since) {
         long rv = 0;

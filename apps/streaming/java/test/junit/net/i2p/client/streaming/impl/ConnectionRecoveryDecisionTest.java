@@ -77,8 +77,8 @@ public class ConnectionRecoveryDecisionTest {
     }
 
     /** Creation anchoring: frequent retransmissions (fresh lastSend) cannot
-     *  extend the deadline — an old packet being actively resent is still dead
-     *  once its CREATION age exceeds the budget. */
+     * extend the deadline — an old packet being actively resent is still dead
+     * once its CREATION age exceeds the budget. */
     @Test
     public void testRepeatedResendsDoNotExtendDeadline() {
         long createdOn = 100_000;
@@ -116,7 +116,7 @@ public class ConnectionRecoveryDecisionTest {
     }
 
     /** Connect-phase connections (nothing ever received) are never declared
-     *  silent — they are bounded separately by the SYN give-up budget. */
+     * silent — they are bounded separately by the SYN give-up budget. */
     @Test
     public void testNeverReceivedNotSilent() {
         assertFalse(Connection.remoteSilentTooLong(-1, 120_000, 500_000));
@@ -140,8 +140,8 @@ public class ConnectionRecoveryDecisionTest {
     }
 
     /** Receive anchoring: retransmitting (a fresh last SEND) does not extend the
-     *  deadline — the connection is still dead once the remote has been silent
-     *  for the full window. */
+     * deadline — the connection is still dead once the remote has been silent
+     * for the full window. */
     @Test
     public void testResendsToSilentRemoteDoNotExtendDeadline() {
         long lastReceivedOn = 100_000;
@@ -171,7 +171,7 @@ public class ConnectionRecoveryDecisionTest {
     }
 
     /** The remote-silence bound still disarms on a truly unknown last-received
-     *  time even with the effective (floored) window. */
+     * time even with the effective (floored) window. */
     @Test
     public void testBoundRequiresKnownLastReceived() {
         long now = 500_000;
@@ -180,7 +180,7 @@ public class ConnectionRecoveryDecisionTest {
     }
 
     /** Wiring-level: a zero configured timeout no longer disarms the bound; the
-     *  effective window floor is what gates it. */
+     * effective window floor is what gates it. */
     @Test
     public void testZeroConfigStillFiresBoundWithFallback() {
         long lastReceivedOn = 100_000;
@@ -282,7 +282,7 @@ public class ConnectionRecoveryDecisionTest {
     }
 
     /** Outstanding retransmits block recovery even when the ACKs have passed: a stale
-     *  ACK on a NACK path must not claim recovery before the paced resends clear. */
+     * ACK on a NACK path must not claim recovery before the paced resends clear. */
     @Test
     public void testOutstandingResendsBlockRecovery() {
         assertFalse(Connection.lossEpisodeRecovered(true, 1000, 500, 1));

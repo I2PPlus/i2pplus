@@ -10,10 +10,10 @@ import net.i2p.util.Log;
 
 import java.nio.charset.StandardCharsets;
 /**
- *  Thread to do inbound filtering.
- *  Moved from I2PTunnelIRCClient.java
+ * Thread to do inbound filtering.
+ * Moved from I2PTunnelIRCClient.java
  *
- *  @since 0.8.9
+ * @since 0.8.9
  */
 public class IrcInboundFilter implements Runnable {
 
@@ -36,8 +36,8 @@ public class IrcInboundFilter implements Runnable {
     }
 
     /**
-     *  @param helper may be null
-     *  @since 0.8.9
+     * @param helper may be null
+     * @since 0.8.9
      */
     public IrcInboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log, DCCHelper helper) {
         local = lcl;

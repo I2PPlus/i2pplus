@@ -17,18 +17,17 @@ import java.util.Vector;
  * <p>Key features:
  *
  * <ul>
- *   <li>Type-safe argument collection
- *   <li>XML element name constant
- *   <li>Vector-based implementation for efficiency
- *   <li>Service description integration
- *   <li>Action parameter management
+ * <li>Type-safe argument collection
+ * <li>XML element name constant
+ * <li>Vector-based implementation for efficiency
+ * <li>Service description integration
+ * <li>Action parameter management
  * </ul>
  *
  * <p>This class is used by UPnP services to manage collections of action arguments, enabling proper
  * XML description generation and action invocation parameter handling.
  *
  * @author Satoshi Konno
- * @since 1.0
  */
 public class ArgumentList extends Vector<Argument> {
     ////////////////////////////////////////////////
@@ -48,20 +47,20 @@ public class ArgumentList extends Vector<Argument> {
     ////////////////////////////////////////////////
 
     /**
-     *  Get an argument by index.
+     * Get an argument by index.
      *
-     *  @param n the index
-     *  @return the argument at that index
+     * @param n the index
+     * @return the argument at that index
      */
     public Argument getArgument(int n) {
         return get(n);
     }
 
     /**
-     *  Get an argument by name.
+     * Get an argument by name.
      *
-     *  @param name the argument name
-     *  @return the argument with that name, or null if not found
+     * @param name the argument name
+     * @return the argument with that name, or null if not found
      */
     public Argument getArgument(String name) {
         int nArgs = size();

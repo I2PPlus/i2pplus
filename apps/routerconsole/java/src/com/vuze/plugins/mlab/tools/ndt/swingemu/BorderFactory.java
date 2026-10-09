@@ -20,17 +20,16 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  *
  * <p>All operations return stub components, maintaining API compatibility
  * without requiring an actual graphical display system.</p>
- *
  */
 public class BorderFactory {
     /** utility class */
     private BorderFactory() {}
 
 	/**
-	 *  Create a titled border stub.
+	 * Create a titled border stub.
 	 *
-	 *  @param str the border title
-	 *  @return a stub Component
+	 * @param str the border title
+	 * @return a stub Component
 	 */
 	public static Component
 	createTitledBorder(

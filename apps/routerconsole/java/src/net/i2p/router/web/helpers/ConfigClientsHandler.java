@@ -311,8 +311,7 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
-     *  Stop a running client by index.
-     *  @since Implemented in 0.9.6 using ClientAppManager
+     * Stop a running client by index.
      */
     private void stopClient(int i) {
         List<ClientAppConfig> clients = ClientAppConfig.getClientApps(_context);
@@ -438,8 +437,8 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
-     *  Install a plugin from a local file upload.
-     *  @since 0.9.19
+     * Install a plugin from a local file upload.
+     * @since 0.9.19
      */
     private void installPluginFromFile() {
         InputStream in = _requestWrapper.getInputStream("pluginFile");
@@ -517,8 +516,8 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
-     *  Update all installed plugins.
-     *  @since 0.8.13
+     * Update all installed plugins.
+     * @since 0.8.13
      */
     private void updateAllPlugins() {
         if (NewsHelper.isAnyUpdateInProgress()) {
@@ -539,8 +538,8 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
-     *  @param app null for a new install
-     *  @param url http: or file:
+     * @param app null for a new install
+     * @param url http: or file:
      */
     private void installPlugin(String app, String url) {
         ConsoleUpdateManager mgr = UpdateHandler.updateManager(_context);
@@ -615,13 +614,13 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
-     *  Plugin checks, updates, and installs are always proxied.
-     *  See if the proxy tunnel is available, unless we're configured
-     *  to use something else (probably not).
-     *  Outputs form error if returning false.
+     * Plugin checks, updates, and installs are always proxied.
+     * See if the proxy tunnel is available, unless we're configured
+     * to use something else (probably not).
+     * Outputs form error if returning false.
      *
-     *  @return true if available
-     *  @since 0.9.20
+     * @return true if available
+     * @since 0.9.20
      */
     private boolean verifyProxy() {
         String proxyHost = _context.getProperty(ConfigUpdateHandler.PROP_PROXY_HOST, ConfigUpdateHandler.DEFAULT_PROXY_HOST);
@@ -663,8 +662,8 @@ public class ConfigClientsHandler extends FormHandler {
     }
 
     /**
-     *  Handle interface form
-     *  @since 0.8.3
+     * Handle interface form
+     * @since 0.8.3
      */
     private void saveInterfaceChanges() {
         boolean restart = false;

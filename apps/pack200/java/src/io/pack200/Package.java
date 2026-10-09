@@ -138,7 +138,7 @@ class Package {
         attrDefs = Collections.unmodifiableMap(ad);
     }
     /** Return the highest version number of all classes,
-     *  or 0 if there are no classes.
+     * or 0 if there are no classes.
      */
     private void setHighestClassVersion() {
         if (observedHighestClassVersion != null)
@@ -324,13 +324,13 @@ class Package {
         }
 
         /** Given a global map of ICs (keyed by thisClass),
-         *  compute the subset of its Map.values which are
-         *  required to be present in the local InnerClasses
-         *  attribute.  Perform this calculation without
-         *  reference to any actual InnerClasses attribute.
-         *  <p>
-         *  The order of the resulting list is consistent
-         *  with that of Package.this.allInnerClasses.
+         * compute the subset of its Map.values which are
+         * required to be present in the local InnerClasses
+         * attribute.  Perform this calculation without
+         * reference to any actual InnerClasses attribute.
+         * <p>
+         * The order of the resulting list is consistent
+         * with that of Package.this.allInnerClasses.
          */
         public List<InnerClass> computeGloballyImpliedICs() {
             Set<Entry> cpRefs = new HashSet<>();
@@ -410,14 +410,14 @@ class Package {
         }
 
         /** When packing, anticipate the effect of expandLocalICs.
-         *  Replace the local ICs by their symmetric difference
-         *  with the globally implied ICs for this class; if this
-         *  difference is empty, remove the local ICs altogether.
-         *  <p>
-         *  An empty local IC attribute is reserved to signal
-         *  the unpacker to delete the attribute altogether,
-         *  so a missing local IC attribute signals the unpacker
-         *  to use the globally implied ICs changed.
+         * Replace the local ICs by their symmetric difference
+         * with the globally implied ICs for this class; if this
+         * difference is empty, remove the local ICs altogether.
+         * <p>
+         * An empty local IC attribute is reserved to signal
+         * the unpacker to delete the attribute altogether,
+         * so a missing local IC attribute signals the unpacker
+         * to use the globally implied ICs changed.
          */
         void minimizeLocalICs() {
             List<InnerClass> diff = computeICdiff();
@@ -448,8 +448,8 @@ class Package {
         }
 
         /** When unpacking, undo the effect of minimizeLocalICs.
-         *  Must return negative if any IC tuples may have been deleted.
-         *  Otherwise, return positive if any IC tuples were added.
+         * Must return negative if any IC tuples may have been deleted.
+         * Otherwise, return positive if any IC tuples were added.
          */
         int expandLocalICs() {
             List<InnerClass> localICs = innerClasses;

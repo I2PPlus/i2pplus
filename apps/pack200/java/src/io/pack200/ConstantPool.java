@@ -49,8 +49,8 @@ class ConstantPool {
     }
 
     /** Factory for Utf8 string constants.
-     *  Used for well-known strings like "SourceFile", "<init>", etc.
-     *  Also used to back up more complex constant pool entries, like Class.
+     * Used for well-known strings like "SourceFile", "{@code &lt;init&gt;}", etc.
+     * Also used to back up more complex constant pool entries, like Class.
      */
     public static synchronized Utf8Entry getUtf8Entry(String value) {
         Map<String, Utf8Entry> utf8Entries  = Utils.getTLGlobals().getUtf8Entries();
@@ -1206,9 +1206,9 @@ class ConstantPool {
     }
 
     /** Return a set of indexes partitioning these entries.
-     *  The keys array must of length this.size(), and marks entries.
-     *  The result array is as long as one plus the largest key value.
-     *  Entries with a negative key are dropped from the partition.
+     * The keys array must of length this.size(), and marks entries.
+     * The result array is as long as one plus the largest key value.
+     * Entries with a negative key are dropped from the partition.
      */
     public static
     Index[] partition(Index ix, int[] keys) {
@@ -1458,9 +1458,9 @@ class ConstantPool {
     }
 
     /** Close the set cpRefs under the getRef(*) relation.
-     *  Also, if flattenSigs, replace all signatures in cpRefs
-     *  by their equivalent Utf8s.
-     *  Also, discard null from cpRefs.
+     * Also, if flattenSigs, replace all signatures in cpRefs
+     * by their equivalent Utf8s.
+     * Also, discard null from cpRefs.
      */
     public static void completeReferencesIn(Set<Entry> cpRefs, boolean flattenSigs) {
          completeReferencesIn(cpRefs, flattenSigs, null);

@@ -6,7 +6,6 @@ package net.i2p.data.i2cp;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.IOException;
@@ -56,10 +55,10 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     }
 
     /**
-      *  Sets the session ID.
-      *
-      * @param id 0-65535
-      */
+     * Sets the session ID.
+     *
+     * @param id 0-65535
+     */
     public void setSessionId(long id) {
         _sessionId = (int) id;
     }

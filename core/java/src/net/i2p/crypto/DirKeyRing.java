@@ -15,10 +15,10 @@ import java.security.cert.CRLException;
 import java.security.cert.X509Certificate;
 
 /**
- *  Simple storage of each cert in a separate file in a directory.
- *  Limited sanitization of filenames.
+ * Simple storage of each cert in a separate file in a directory.
+ * Limited sanitization of filenames.
  *
- *  @since 0.9.9, public since 0.9.28
+ * @since 0.9.9, public since 0.9.28
  */
 public class DirKeyRing implements KeyRing {
 
@@ -34,18 +34,18 @@ public class DirKeyRing implements KeyRing {
     }
 
     /**
-     *  Load a public key from the certificate in the given scope.
-     *  Cert must be in the file (escaped keyName).crt,
-     *  and have a CN == keyName.
+     * Load a public key from the certificate in the given scope.
+     * Cert must be in the file (escaped keyName).crt,
+     * and have a CN == keyName.
      *
-     *  This DOES do a revocation check.
+     * This DOES do a revocation check.
      *
-     *  CN check unsupported on Android.
+     * CN check unsupported on Android.
      *
-     *  @param keyName the key name, also the expected certificate CN
-     *  @param scope the directory under the keyring base
-     *  @param type unused
-     *  @return null if file doesn't exist, throws on all other errors
+     * @param keyName the key name, also the expected certificate CN
+     * @param scope the directory under the keyring base
+     * @param type unused
+     * @return null if file doesn't exist, throws on all other errors
      */
     @Override
     public PublicKey getKey(String keyName, String scope, SigType type) throws GeneralSecurityException, IOException {
@@ -67,11 +67,11 @@ public class DirKeyRing implements KeyRing {
     }
 
     /**
-     *  Store a public key. Unimplemented, unused - this ring is read-only.
+     * Store a public key. Unimplemented, unused - this ring is read-only.
      *
-     *  @param keyName the key name
-     *  @param scope the directory under the keyring base
-     *  @param key the key
+     * @param keyName the key name
+     * @param scope the directory under the keyring base
+     * @param key the key
      */
     @Override
     public void setKey(String keyName, String scope, PublicKey key) { /* nop */ }

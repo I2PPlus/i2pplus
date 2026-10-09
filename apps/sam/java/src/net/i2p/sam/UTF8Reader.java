@@ -10,19 +10,19 @@ import java.nio.charset.CoderResult;
 import java.nio.charset.StandardCharsets;
 
 /**
- *  An unbuffered version of InputStreamReader.
+ * An unbuffered version of InputStreamReader.
  *
- *  Does not read any extra characters, as long as input is well-formed.
- *  This permits the partial reading of an InputStream as UTF-8
- *  and then passing the remainder of the input stream elsewhere.
- *  This isn't the most robust for malformed input, so it
- *  may not be appropriate for e.g. HTTP headers.
+ * Does not read any extra characters, as long as input is well-formed.
+ * This permits the partial reading of an InputStream as UTF-8
+ * and then passing the remainder of the input stream elsewhere.
+ * This isn't the most robust for malformed input, so it
+ * may not be appropriate for e.g. HTTP headers.
  *
- *  Not thread-safe, obviously.
+ * Not thread-safe, obviously.
  *
- *  May be moved to net.i2p.util if anybody else needs it.
+ * May be moved to net.i2p.util if anybody else needs it.
  *
- *  @since 0.9.24 somewhat adapted from net.i2p.util.TranslateReader
+ * @since 0.9.24 somewhat adapted from net.i2p.util.TranslateReader
  */
 public class UTF8Reader extends Reader {
 
@@ -35,7 +35,7 @@ public class UTF8Reader extends Reader {
     private static final int REPLACEMENT = 0xfffd;
 
     /**
-     *  @param in UTF-8
+     * @param in UTF-8
      */
     public UTF8Reader(InputStream in) {
         super();
@@ -43,7 +43,7 @@ public class UTF8Reader extends Reader {
     }
 
     /**
-     *  @return replacement character on decoding error
+     * @return replacement character on decoding error
      */
     @Override
     public int read() throws IOException {

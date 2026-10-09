@@ -8,16 +8,16 @@ import java.util.Map;
  * <p>The [HAC] defines a PRNG (as implemented in this library) as follows:</p>
  *
  * <ul>
- *    <li>"5.6 Definition: A pseudorandom bit generator (PRBG) is said to pass
- *    the <em>next-bit test</em> if there is no polynomial-time algorithm which,
- *    on input of the first <code>L</code> bits of an output sequence <code>S</code>,
- *    can predict the <code>(L+1)</code>st bit of <code>S</code> with a
- *    probability significantly grater than <code>1/2</code>."</li>
+ * <li>"5.6 Definition: A pseudorandom bit generator (PRBG) is said to pass
+ * the <em>next-bit test</em> if there is no polynomial-time algorithm which,
+ * on input of the first <code>L</code> bits of an output sequence <code>S</code>,
+ * can predict the <code>(L+1)</code>st bit of <code>S</code> with a
+ * probability significantly grater than <code>1/2</code>."</li>
  *
- *    <li>"5.8 Definition: A PRBG that passes the <em>next-bit test</em>
- *    (possibly under some plausible but unproved mathematical assumption such
- *    as the intractability of factoring integers) is called a
- *    <em>cryptographically secure pseudorandom bit generator</em> (CSPRBG)."</li>
+ * <li>"5.8 Definition: A PRBG that passes the <em>next-bit test</em>
+ * (possibly under some plausible but unproved mathematical assumption such
+ * as the intractability of factoring integers) is called a
+ * <em>cryptographically secure pseudorandom bit generator</em> (CSPRBG)."</li>
  * </ul>
  *
  * <p><b>IMPLEMENTATION NOTE</b>: Although all the concrete classes in this
@@ -33,12 +33,11 @@ import java.util.Map;
  * <p>References:</p>
  *
  * <ol>
- *    <li><a href="http://www.cacr.math.uwaterloo.ca/hac">[HAC]</a>: Handbook of
- *    Applied Cryptography.<br>
- *    CRC Press, Inc. ISBN 0-8493-8523-7, 1997<br>
- *    Menezes, A., van Oorschot, P. and S. Vanstone.</li>
+ * <li><a href="http://www.cacr.math.uwaterloo.ca/hac">[HAC]</a>: Handbook of
+ * Applied Cryptography.<br>
+ * CRC Press, Inc. ISBN 0-8493-8523-7, 1997<br>
+ * Menezes, A., van Oorschot, P. and S. Vanstone.</li>
  * </ol>
- *
  */
 public interface IRandomStandalone extends Cloneable {
 
@@ -66,36 +65,36 @@ public interface IRandomStandalone extends Cloneable {
     void init(Map<String, byte[]> attributes);
 
    /**
-     * <p>Returns the next 8 bits of random data generated from this instance.</p>
-     *
-     * @return the next 8 bits of random data generated from this instance.
-     * @throws IllegalStateException if the instance is not yet initialised.
-     * theoretical limit for generating non-repetitive pseudo-random data.
-     */
+    * <p>Returns the next 8 bits of random data generated from this instance.</p>
+    *
+    * @return the next 8 bits of random data generated from this instance.
+    * @throws IllegalStateException if the instance is not yet initialised.
+    * theoretical limit for generating non-repetitive pseudo-random data.
+    */
     byte nextByte() throws IllegalStateException;
 
    /**
-    *  Fill the output byte array with random bytes.
+    * Fill the output byte array with random bytes.
     *
-    *  @param out the output array to fill
-    *  @since 0.9.58 added to interface
+    * @param out the output array to fill
+    * @since 0.9.58 added to interface
     */
     public void nextBytes(byte[] out) throws IllegalStateException;
 
    /**
-     * <p>Fills the designated byte array, starting from byte at index
-     * <code>offset</code>, for a maximum of <code>length</code> bytes with the
-     * output of this generator instance.
-     *
-     * @param out the placeholder to contain the generated random bytes.
-     * @param offset the starting index in <i>out</i> to consider. This method
-     * does nothing if this parameter is not within <code>0</code> and
-     * <code>out.length</code>.
-     * @param length the maximum number of required random bytes. This method
-     * does nothing if this parameter is less than <code>1</code>.
-     * @throws IllegalStateException if the instance is not yet initialised.
-     * theoretical limit for generating non-repetitive pseudo-random data.
-     */
+    * <p>Fills the designated byte array, starting from byte at index
+    * <code>offset</code>, for a maximum of <code>length</code> bytes with the
+    * output of this generator instance.
+    *
+    * @param out the placeholder to contain the generated random bytes.
+    * @param offset the starting index in <i>out</i> to consider. This method
+    * does nothing if this parameter is not within <code>0</code> and
+    * <code>out.length</code>.
+    * @param length the maximum number of required random bytes. This method
+    * does nothing if this parameter is less than <code>1</code>.
+    * @throws IllegalStateException if the instance is not yet initialised.
+    * theoretical limit for generating non-repetitive pseudo-random data.
+    */
     void nextBytes(byte[] out, int offset, int length)
         throws IllegalStateException;
 

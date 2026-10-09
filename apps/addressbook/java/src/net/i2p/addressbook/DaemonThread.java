@@ -10,7 +10,6 @@ import net.i2p.util.I2PAppThread;
  * A thread that waits five minutes, then runs the addressbook daemon.
  *
  * @author Ragnarok
- *
  */
 public class DaemonThread extends I2PAppThread implements NamingServiceUpdater {
 
@@ -41,7 +40,7 @@ public class DaemonThread extends I2PAppThread implements NamingServiceUpdater {
     }
 
     /**
-     *  Halt the thread and stop the daemon.
+     * Halt the thread and stop the daemon.
      */
     public void halt() {
         daemon.stop();
@@ -49,13 +48,13 @@ public class DaemonThread extends I2PAppThread implements NamingServiceUpdater {
     }
 
     /**
-     *  The NamingServiceUpdater interface.
-     *  While this may be called directly, the recommended way
-     *  is to call I2PAppContext.namingService().requestUpdate(Properties)
-     *  which will call this.
+     * The NamingServiceUpdater interface.
+     * While this may be called directly, the recommended way
+     * is to call I2PAppContext.namingService().requestUpdate(Properties)
+     * which will call this.
      *
-     *  @param options ignored, may be null
-     *  @since 0.8.7
+     * @param options ignored, may be null
+     * @since 0.8.7
      */
     public void update(Properties options) {
         interrupt();

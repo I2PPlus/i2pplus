@@ -23,12 +23,12 @@ import net.i2p.util.Log;
 public class RouterClock extends Clock {
 
     /**
-     *  How often we will slew the clock
-     *  i.e. ppm = 1000000/MAX_SLEW
-     *  We should be able to slew really fast,
-     *  this is probably a lot faster than what NTP does
-     *  1/50 is 12s in a 10m tunnel lifetime, that should be fine.
-     *  All of this is @since 0.7.12
+     * How often we will slew the clock
+     * i.e. ppm = 1000000/MAX_SLEW
+     * We should be able to slew really fast,
+     * this is probably a lot faster than what NTP does
+     * 1/50 is 12s in a 10m tunnel lifetime, that should be fine.
+     * All of this is @since 0.7.12
      */
     private static final long MAX_SLEW = 25;
     /**
@@ -48,10 +48,10 @@ public class RouterClock extends Clock {
     private final RouterTimestamper _timeStamper;
 
     /**
-     *  If the system clock shifts by this much,
-     *  call the callback, we probably need a soft restart.
+     * If the system clock shifts by this much,
+     * call the callback, we probably need a soft restart.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     private static final long MASSIVE_SHIFT_FORWARD = 360L*1000;
     private static final long MASSIVE_SHIFT_BACKWARD = 61L*1000;
@@ -63,7 +63,7 @@ public class RouterClock extends Clock {
     private volatile long _lastShiftNanos;
 
     /**
-     *  Does not start. Caller MUST call start()
+     * Does not start. Caller MUST call start()
      */
     public RouterClock(RouterContext context) {
         super(context);
@@ -314,9 +314,9 @@ public class RouterClock extends Clock {
     }
 
     /*
-     *  A large system clock shift happened. Tell people about it.
+     * A large system clock shift happened. Tell people about it.
      *
-     *  @since 0.8.8
+     * @since 0.8.8
      */
     private synchronized void notifyMassive(long shift) {
         long nowNanos = System.nanoTime();
@@ -369,10 +369,10 @@ public class RouterClock extends Clock {
     public interface ClockShiftListener {
 
         /**
-         *  Notifies the listener that the router clock shifted.
+         * Notifies the listener that the router clock shifted.
          *
-         *  @param delta The system clock and adjusted clock just changed by this much,
-         *               in milliseconds (approximately)
+         * @param delta The system clock and adjusted clock just changed by this much,
+         * in milliseconds (approximately)
          */
         public void clockShift(long delta);
     }

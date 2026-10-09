@@ -938,8 +938,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         *  Peer count from the tracker response.
-         *  @return the peer count, derived from peers seen plus seed/leech counts
+         * Peer count from the tracker response.
+         * @return the peer count, derived from peers seen plus seed/leech counts
          */
         public int getPeerCount() {
             return TrackerInfo.getPeerCount(peers, complete, incomplete);

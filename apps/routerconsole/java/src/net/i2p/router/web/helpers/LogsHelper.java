@@ -27,7 +27,7 @@ import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
 /** Helper for the logs page.
- *  @since 0.9.33
+ * @since 0.9.33
  */
 public class LogsHelper extends HelperBase {
 
@@ -50,13 +50,13 @@ public class LogsHelper extends HelperBase {
     private static final Pattern ANCHOR_CLOSE = Pattern.compile("</a>");
 
 /**
- *  Ordered literal rewrites applied to an escaped log message, up to the
- *  double-bracket cleanup. Order is load-bearing and not mergeable: this table
- *  turns "&amp;hellip;" into "...", which MSG_REWRITES_C turns into
- *  "&hellip;", and it ticks "false" before a later rewrite can restore
- *  "[&#10008;] positives" to "false positives".
+ * Ordered literal rewrites applied to an escaped log message, up to the
+ * double-bracket cleanup. Order is load-bearing and not mergeable: this table
+ * turns "&amp;hellip;" into "...", which MSG_REWRITES_C turns into
+ * "&hellip;", and it ticks "false" before a later rewrite can restore
+ * "[&#10008;] positives" to "false positives".
  *
- *  @since 0.9.72+
+ * @since 0.9.72+
  */
     private static final String[][] MSG_REWRITES_A = {
         {"&amp;darr;", "&darr;"},
@@ -84,11 +84,11 @@ public class LogsHelper extends HelperBase {
     };
 
 /**
- *  The middle of the rewrite chain, run after the double-bracket cleanup and
- *  before the bullet rewrite. The un-ticking has to see the "&#10004;" and
- *  "&#10008;" that the first table produces.
+ * The middle of the rewrite chain, run after the double-bracket cleanup and
+ * before the bullet rewrite. The un-ticking has to see the "&#10004;" and
+ * "&#10008;" that the first table produces.
  *
- *  @since 0.9.72+
+ * @since 0.9.72+
  */
     private static final String[][] MSG_REWRITES_B = {
         {"=[&#10004;]", "=true"},
@@ -101,11 +101,11 @@ public class LogsHelper extends HelperBase {
     };
 
 /**
- *  The tail of the rewrite chain, run after the bullet rewrite. "..." has to be
- *  rewritten here, not in the first table, because it is what that table's
- *  "&amp;hellip;" rewrite produces.
+ * The tail of the rewrite chain, run after the bullet rewrite. "..." has to be
+ * rewritten here, not in the first table, because it is what that table's
+ * "&amp;hellip;" rewrite produces.
  *
- *  @since 0.9.72+
+ * @since 0.9.72+
  */
     private static final String[][] MSG_REWRITES_C = {
         {"\r\n\r\n", ""},
@@ -119,11 +119,11 @@ public class LogsHelper extends HelperBase {
     };
 
     /**
-     *  Ordered literal rewrites applied to a raw wrapper log buffer. Order is
-     *  load-bearing: "INFO   | ERROR" is rewritten into "| ERROR  |" first, and
-     *  the later "| ERROR  |" → "| ERR  |" then has to see that result.
+     * Ordered literal rewrites applied to a raw wrapper log buffer. Order is
+     * load-bearing: "INFO   | ERROR" is rewritten into "| ERROR  |" first, and
+     * the later "| ERROR  |" → "| ERR  |" then has to see that result.
      *
-     *  @since 0.9.72+
+     * @since 0.9.72+
      */
     private static final String[][] WRAPPER_LOG_REWRITES = {
         {"| |", "|"},
@@ -168,18 +168,18 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Return the JSTL taglib version string.
+     * Return the JSTL taglib version string.
      *
-     *  @return non-null, "n/a" on failure
-     *  @since 0.9.26
+     * @return non-null, "n/a" on failure
+     * @since 0.9.26
      */
     public String getJstlVersion() {return _jstlVersion;}
 
     /**
-     *  Look up the JSTL version via reflection.
+     * Look up the JSTL version via reflection.
      *
-     *  @return non-null, "n/a" on failure
-     *  @since 0.9.26
+     * @return non-null, "n/a" on failure
+     * @since 0.9.26
      */
     private static String jstlVersion() {
         String rv = "n/a";
@@ -227,10 +227,10 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Call before getLogs()
+     * Call before getLogs()
      *
-     *  @return -1 if none
-     *  @since 0.9.46
+     * @return -1 if none
+     * @since 0.9.46
      */
     public int getLastMessageNumber() {
         UIMessages msgs = _context.logManager().getBuffer().getUIMessages();
@@ -239,11 +239,11 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Call before getLogs(), getCriticalLogs(), or getLastMessageNumber()
-     *  Side effect - calls logManager.flush()
+     * Call before getLogs(), getCriticalLogs(), or getLastMessageNumber()
+     * Side effect - calls logManager.flush()
      *
-     *  @return -1 if none
-     *  @since 0.9.46
+     * @return -1 if none
+     * @since 0.9.46
      */
     public int getLastCriticalMessageNumber() {
         _context.logManager().flush();
@@ -253,12 +253,12 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Clear log messages up through the specified message IDs.
+     * Clear log messages up through the specified message IDs.
      *
-     *  @param n -1 for none
-     *  @param crit -1 for none
-     *  @param consoleNonce must match
-     *  @since 0.9.46
+     * @param n -1 for none
+     * @param crit -1 for none
+     * @param consoleNonce must match
+     * @since 0.9.46
      */
     public void clearThrough(int n, int crit, long wn, long wts, String wf, HttpSession session, String consoleNonce) {
         if (session != null) {
@@ -282,9 +282,9 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  last line number -1 on error
-     *  @param obuf out parameter
-     *  @return Long timestamp, Long last line number, String filename (escaped)
+     * last line number -1 on error
+     * @param obuf out parameter
+     * @return Long timestamp, Long last line number, String filename (escaped)
      */
 
     public Object[] getServiceLogs(StringBuilder obuf) {
@@ -444,17 +444,17 @@ public class LogsHelper extends HelperBase {
     private final static String NL = System.getProperty("line.separator");
 
 /**
- *  Apply an ordered table of literal rewrites.
+ * Apply an ordered table of literal rewrites.
  *
- *  <p>Equivalent to chaining {@link String#replace(CharSequence, CharSequence)}
- *  down the table in order, so a rewrite routinely matches text an earlier one
- *  produced. A rewrite whose needle is absent costs one indexOf and allocates
- *  nothing, which is the common case.
+ * <p>Equivalent to chaining {@link String#replace(CharSequence, CharSequence)}
+ * down the table in order, so a rewrite routinely matches text an earlier one
+ * produced. A rewrite whose needle is absent costs one indexOf and allocates
+ * nothing, which is the common case.
  *
- *  @param msg the text to rewrite, never null
- *  @param rewrites {needle, replacement} pairs, applied in array order
- *  @return the rewritten text
- *  @since 0.9.72+
+ * @param msg the text to rewrite, never null
+ * @param rewrites {needle, replacement} pairs, applied in array order
+ * @return the rewritten text
+ * @since 0.9.72+
  */
     static String applyRewrites(String msg, String[][] rewrites) {
         for (String[] rewrite : rewrites) {
@@ -554,7 +554,7 @@ public class LogsHelper extends HelperBase {
      * http://stackoverflow.com/questions/14887690/how-do-i-get-the-tanuki-wrapper-log-files-to-be-utf-8-encoded
      *
      * Warning - this inefficiently allocates a StringBuilder of size maxNumLines*80,
-     *           so don't make it too big.
+     * so don't make it too big.
      * Warning - converts \r\n to \n
      *
      * @param utf8 true for utf-8, false for system locale
@@ -602,8 +602,8 @@ public class LogsHelper extends HelperBase {
     private static final String CORE_BUNDLE_NAME = "net.i2p.util.messages";
 
     /**
-     *  translate a string from the core bundle
-     *  @since 0.9.45
+     * translate a string from the core bundle
+     * @since 0.9.45
      */
     private String _c(String s) {
         return Translate.getString(s, _context, CORE_BUNDLE_NAME);
@@ -617,8 +617,8 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     *  Compare two log lines by timestamp (first space-delimited token) then content.
-     *  @since 0.9.70+
+     * Compare two log lines by timestamp (first space-delimited token) then content.
+     * @since 0.9.70+
      */
     private static int compareLogLines(String a, String b) {
         String[] aParts = SPACE_SPLIT.split(a);

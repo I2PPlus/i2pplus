@@ -6,16 +6,16 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.SegmentedNetworkDatabaseFacade;
 
 /**
- *  Dummy network database segmentor for testing.
- *  @since 0.9.61
+ * Dummy network database segmentor for testing.
+ * @since 0.9.61
  */
 public class DummyNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseFacade {
     private final NetworkDatabaseFacade _fndb;
 
     /**
-     *  Create a segmentor backed by a dummy network database facade.
+     * Create a segmentor backed by a dummy network database facade.
      *
-     *  @param ctx the context
+     * @param ctx the context
      */
     public DummyNetworkDatabaseSegmentor(RouterContext ctx) {
         _fndb = new DummyNetworkDatabaseFacade(ctx);

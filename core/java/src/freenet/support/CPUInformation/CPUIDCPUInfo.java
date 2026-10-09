@@ -1,9 +1,9 @@
 package freenet.support.CPUInformation;
 
 /**
- *  Moved out of CPUID.java
- *  Ref: http://en.wikipedia.org/wiki/CPUID
- *  @since 0.8.7
+ * Moved out of CPUID.java
+ * Ref: http://en.wikipedia.org/wiki/CPUID
+ * @since 0.8.7
  */
 class CPUIDCPUInfo implements CPUInfo {
     public String getVendor() {return CPUID.getCPUVendorID();}

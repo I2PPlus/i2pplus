@@ -24,7 +24,6 @@ import java.util.Locale;
  * Decode accepts upper or lower case.
  *
  * @author zzz
- * @since 0.7
  */
 @SuppressWarnings("PMD.CloseResource")
 public class Base32 {
@@ -126,8 +125,8 @@ public class Base32 {
     }
 
     /**
-     *  Run the Base32 command-line utility.
-     *  @param args command-line arguments
+     * Run the Base32 command-line utility.
+     * @param args command-line arguments
      */
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -191,11 +190,11 @@ public class Base32 {
     }
 
     /**
-     *  Returns lower case.
-     *  Does not add trailing '='.
+     * Returns lower case.
+     * Does not add trailing '='.
      *
-     *  @param source if null will return ""
-     *  @return the Base32-encoded string, or &quot;&quot; if source is null
+     * @param source if null will return ""
+     * @return the Base32-encoded string, or &quot;&quot; if source is null
      */
     public static String encode(String source) {
         return (source != null ? encode(DataHelper.getUTF8(source)) : "");

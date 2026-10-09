@@ -14,7 +14,7 @@ final class RSAConstants {
 
     /**
      * Parameter spec.
-     *  @return the parameter spec
+     * @return the parameter spec
      */
     private static RSAKeyGenParameterSpec genSpec(int size, BigInteger exp) {
         return new RSAKeyGenParameterSpec(size, exp);

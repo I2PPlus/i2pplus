@@ -8,9 +8,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *  Unit tests for the pure tunnel-failover decision helpers extracted from
- *  I2PTunnelClientBase.createI2PSocketWithFailover: dead-pool fail-fast,
- *  timeout-failure cap, and timeout classification.
+ * Unit tests for the pure tunnel-failover decision helpers extracted from
+ * I2PTunnelClientBase.createI2PSocketWithFailover: dead-pool fail-fast,
+ * timeout-failure cap, and timeout classification.
  */
 public class ConnectFailoverDecisionTest {
 

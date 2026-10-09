@@ -17,10 +17,10 @@ import net.i2p.router.util.RouterPasswordManager;
 import net.i2p.data.DataHelper;
 
 /**
- *  Manage both plaintext and salted/hashed password storage in
- *  router.config.
+ * Manage both plaintext and salted/hashed password storage in
+ * router.config.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public class ConsolePasswordManager extends RouterPasswordManager {
 
@@ -39,14 +39,14 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
 /**
-     *  Straight MD5. Compatible with Jetty.
-     *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param subrealm the subrealm
-     *  @param user null or "" for no user, already trimmed
-     *  @param pw plain text, already trimmed
-     *  @return if pw verified
-     */
+ * Straight MD5. Compatible with Jetty.
+ *
+ * @param realm e.g. i2cp, routerconsole, etc.
+ * @param subrealm the subrealm
+ * @param user null or "" for no user, already trimmed
+ * @param pw plain text, already trimmed
+ * @return if pw verified
+ */
     public boolean checkMD5(String realm, String subrealm, String user, String pw) {
         // Check PBKDF2 first (new format)
         if (checkPBKDF2(realm, user, pw))
@@ -62,14 +62,14 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  PBKDF2 hash for password storage.
-     *  Backward compatible - checks PBKDF2 first, falls back to MD5.
+     * PBKDF2 hash for password storage.
+     * Backward compatible - checks PBKDF2 first, falls back to MD5.
      *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @param user null or "" for no user, already trimmed
-     *  @param pw plain text, already trimmed
-     *  @return if pw verified
-     *  @since 0.9.70+
+     * @param realm e.g. i2cp, routerconsole, etc.
+     * @param user null or "" for no user, already trimmed
+     * @param pw plain text, already trimmed
+     * @return if pw verified
+     * @since 0.9.70+
      */
     private boolean checkPBKDF2(String realm, String user, String pw) {
         String pfx = realm;
@@ -95,20 +95,20 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  Decode a fixed-width hex string into exactly hex.length()/2 bytes.
+     * Decode a fixed-width hex string into exactly hex.length()/2 bytes.
      *
-     *  DELIBERATE DEVIATION from the DataHelper canonical-source rule:
-     *  DataHelper.fromHexString() decodes via BigInteger and returns the
-     *  minimum-length, sign-aware representation - a leading '0' nibble is
-     *  stripped and a first nibble of 8-f gains an extra 0x00 byte. Password
-     *  salts and hashes must round-trip at their exact stored width; using
-     *  fromHexString here corrupted ~15/16 of PBKDF2 credentials and locked
-     *  users out of the console.
+     * DELIBERATE DEVIATION from the DataHelper canonical-source rule:
+     * DataHelper.fromHexString() decodes via BigInteger and returns the
+     * minimum-length, sign-aware representation - a leading '0' nibble is
+     * stripped and a first nibble of 8-f gains an extra 0x00 byte. Password
+     * salts and hashes must round-trip at their exact stored width; using
+     * fromHexString here corrupted ~15/16 of PBKDF2 credentials and locked
+     * users out of the console.
      *
-     *  @param hex even-length hex string, either case, no prefix
-     *  @return decoded bytes, always exactly hex.length()/2 long
-     *  @throws IllegalArgumentException on odd length or non-hex character
-     *  @since 0.9.70+
+     * @param hex even-length hex string, either case, no prefix
+     * @return decoded bytes, always exactly hex.length()/2 long
+     * @throws IllegalArgumentException on odd length or non-hex character
+     * @since 0.9.70+
      */
     static byte[] HexDecode(String hex) {
         int len = hex.length();
@@ -128,11 +128,11 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  Get all MD5 usernames and passwords. Compatible with Jetty.
-     *  Any "null" user is NOT included..
+     * Get all MD5 usernames and passwords. Compatible with Jetty.
+     * Any "null" user is NOT included..
      *
-     *  @param realm e.g. i2cp, routerconsole, etc.
-     *  @return Map of usernames to passwords (hex with leading zeros, 32 characters)
+     * @param realm e.g. i2cp, routerconsole, etc.
+     * @return Map of usernames to passwords (hex with leading zeros, 32 characters)
      */
     public Map<String, String> getMD5(String realm) {
         String pfx = realm + '.';
@@ -150,10 +150,10 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  Get all users with PBKDF2 passwords.
+     * Get all users with PBKDF2 passwords.
      *
-     *  @param realm e.g. routerconsole.auth.i2prouter
-     *  @return Map of usernames to PBKDF2 hashes
+     * @param realm e.g. routerconsole.auth.i2prouter
+     * @return Map of usernames to PBKDF2 hashes
      */
     public Map<String, String> getPBKDF2(String realm) {
         String pfx = realm + '.';
@@ -171,10 +171,10 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  Migrate from plaintext to MD5 hash
-     *  Ref: RFC 2617
+     * Migrate from plaintext to MD5 hash
+     * Ref: RFC 2617
      *
-     *  @return success or nothing to migrate
+     * @return success or nothing to migrate
      */
     private boolean migrateConsole() {
         synchronized(ConsolePasswordManager.class) {
@@ -198,16 +198,16 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  Straight MD5, no salt
-     *  Compatible with Jetty and RFC 2617.
-     *  <p>
-     *  Upgrades to PBKDF2 on save (subrealm is unused for PBKDF2).
+     * Straight MD5, no salt
+     * Compatible with Jetty and RFC 2617.
+     * <p>
+     * Upgrades to PBKDF2 on save (subrealm is unused for PBKDF2).
      *
-     *  @param realm The full realm, e.g. routerconsole.auth.i2prouter, etc.
-     *  @param subrealm unused (for backward compatibility)
-     *  @param user non-null, non-empty, already trimmed
-     *  @param pw plain text
-     *  @return if saved
+     * @param realm The full realm, e.g. routerconsole.auth.i2prouter, etc.
+     * @param subrealm unused (for backward compatibility)
+     * @param user non-null, non-empty, already trimmed
+     * @param pw plain text
+     * @return if saved
      */
     public boolean saveMD5(String realm, String subrealm, String user, String pw) {
         // Upgrade to PBKDF2 on save
@@ -215,15 +215,15 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  Save password as PBKDF2 hash.
-     *  Backward compatible - saves new PBKDF2, keeps old MD5 for migration.
+     * Save password as PBKDF2 hash.
+     * Backward compatible - saves new PBKDF2, keeps old MD5 for migration.
      *
-     *  @param realm The full realm
-     *  @param subrealm unused for PBKDF2
-     *  @param user non-null, non-empty
-     *  @param pw plain text
-     *  @return if saved
-     *  @since 0.9.70+
+     * @param realm The full realm
+     * @param subrealm unused for PBKDF2
+     * @param user non-null, non-empty
+     * @param pw plain text
+     * @return if saved
+     * @since 0.9.70+
      */
     private boolean savePBKDF2(String realm, String subrealm, String user, String pw) {
         String pfx = realm;
@@ -249,12 +249,12 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     }
 
     /**
-     *  Encode a byte array to a lowercase hex string.
-     *  Two hex characters per byte with leading zeros.
+     * Encode a byte array to a lowercase hex string.
+     * Two hex characters per byte with leading zeros.
      *
-     *  @param data the byte array to encode
-     *  @return lowercase hex string
-     *  @since 0.9.71+
+     * @param data the byte array to encode
+     * @return lowercase hex string
+     * @since 0.9.71+
      */
     static String HexEncode(byte[] data) {
         StringBuilder sb = new StringBuilder(data.length * 2);

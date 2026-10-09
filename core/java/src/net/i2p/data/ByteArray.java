@@ -6,7 +6,6 @@ package net.i2p.data;
  * with no warranty of any kind, either expressed or implied.
  * It probably won't make your computer catch on fire, or eat
  * your children, but it might.  Use at your own risk.
- *
  */
 
 import java.io.Serializable;
@@ -14,7 +13,6 @@ import java.io.Serializable;
 /**
  * Wrap up an array of bytes so that they can be compared and placed in hashes,
  * maps, and the like.
- *
  */
 public class ByteArray implements Serializable, Comparable<ByteArray> {
     /** Underlying byte array data. */
@@ -25,13 +23,13 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     private int _offset;
 
     /**
-     *  Creates an empty ByteArray.
+     * Creates an empty ByteArray.
      */
     public ByteArray() {}
 
     /**
-     *  Sets valid = data.length, unless data is null
-     *  Sets offset = 0
+     * Sets valid = data.length, unless data is null
+     * Sets offset = 0
      *
      * @param data the byte array, may be null
      */
@@ -41,8 +39,8 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     *  Sets offset = offset
-     *  Sets valid = length
+     * Sets offset = offset
+     * Sets valid = length
      *
      * @param data the byte array, may be null but why would you do that
      * @param offset the starting offset
@@ -55,7 +53,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     *  Returns the underlying byte array.
+     * Returns the underlying byte array.
      *
      * @return the data
      */
@@ -64,8 +62,8 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     *  Sets the underlying byte array.
-     *  Warning, does not set valid
+     * Sets the underlying byte array.
+     * Warning, does not set valid
      *
      * @param data the new byte array
      */
@@ -158,7 +156,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     }
 
     /**
-     *  Returns this ByteArray as a Base64 encoded string.
+     * Returns this ByteArray as a Base64 encoded string.
      *
      * @return the Base64 encoded string
      */
