@@ -440,20 +440,23 @@ public class GhostPeerManager {
      * Clears ghost status immediately, including its offense history — a peer
      * that just routed a tunnel is proven live.
      *
+     * <p>Called for every peer on every successful build, so the overwhelming
+     * majority of calls find no mark present. Only a call that actually removed
+     * a mark is counted: a success from a peer that was never excluded is not a
+     * recovery, and counting those inflated this stat to roughly 3.4x the number
+     * of marks added, which made the two counters impossible to reconcile.
+     *
      * @param peer the peer
      */
     public void recordSuccess(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
-        // Counted before the map write so a mark that is not present reports nothing:
-        // a success from a peer that was never excluded is not a recovery.
-        _context.statManager().addRateData("tunnel.ghostMarksCleared", 1);
         // Same monitor as recordTimeout so a removal can never interleave
         // between its map write and its count delta.  Rare enough that the
         // exact rescan is cheaper than tracking a removal delta here.
         synchronized (this) {
-            if (_ghostMarks.remove(peer) != null) {
-                rescanActiveLocked(_context.clock().now());
-            }
+            if (_ghostMarks.remove(peer) == null) {return;}
+            _context.statManager().addRateData("tunnel.ghostMarksCleared", 1);
+            rescanActiveLocked(_context.clock().now());
         }
     }
 
