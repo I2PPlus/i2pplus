@@ -385,7 +385,18 @@ public class TunnelPool {
      *  @since 0.9.71+
      */
     private volatile boolean _everHadHealthyTunnel;
-    private static final long PRE_BUILD_THROTTLE_MS = 60_000;
+      /**
+       *  Last healthy count emitted in a thin-pool warning, or -1 before any.
+       *
+       *  <p>The executor ticks far faster than the pool's health changes, so warning
+       *  per tick reprinted an unchanged 2/8 hundreds of times a minute. That is
+       *  worse than noisy: it buries the build failures it sits next to, and a
+       *  repeated identical value carries no more information than one line.
+       *
+       *  @since 0.9.71+
+       */
+      private volatile int _lastThinPoolWarned = -1;
+      private static final long PRE_BUILD_THROTTLE_MS = 60_000;
     private volatile long _lastEmergencyBuildTime;
     private static final long EMERGENCY_COOLDOWN_MS = 30_000;
     /**
@@ -1640,7 +1651,7 @@ public class TunnelPool {
      *
      *  @param t tunnel to classify; may be null (not degraded)
      *  @return true when soft failures indicate the tunnel cannot be trusted
-     *          to carry data even though tests may still pass
+     *               to carry data even though tests may still pass
      *  @since 0.9.71+
      */
     static boolean isSoftDegraded(TunnelInfo t) {
@@ -2866,11 +2877,11 @@ public class TunnelPool {
      * @param tunnels list of tunnels to build from; the caller must not modify it concurrently
      * @param isServerPool whether this is an inbound non-exploratory pool
      * @param rotateForPropagation if true, rotate out the oldest lease when its
-     *        end time matches the previous publication's earliest end time, so
-     *        floodfill peers see wasNew=true and re-flood the LeaseSet
+     *                             end time matches the previous publication's earliest end time, so
+     *                             floodfill peers see wasNew=true and re-flood the LeaseSet
      * @param rotatedOut if rotation removed a tunnel from the LeaseSet, filled
-     *        with that tunnel, otherwise empty; may be null when rotation is
-     *        not needed
+     *                   with that tunnel, otherwise empty; may be null when rotation is
+     *                   not needed
      * @return LeaseSet or null if not enough tunnels
      */
     private LeaseSet buildNewLeaseSetFromTunnels(List<TunnelInfo> tunnels, boolean isServerPool,
@@ -3038,7 +3049,7 @@ public class TunnelPool {
      *
      *  @param tunnels candidate tunnels to inspect
      *  @param expireAfter don't return tunnels that near their expiry so the
-     *         LeaseSet can propagate before the lease lapses
+     *                     LeaseSet can propagate before the lease lapses
      *  @return the traffic-proven UNTESTED inbound tunnels, quality-sorted
      *  @since 0.9.71+
      */
@@ -3065,7 +3076,7 @@ public class TunnelPool {
      *
      *  @param tunnel the tunnel to inspect (must be inbound)
      *  @param expireAfter don't accept tunnels that near expiry so the
-     *         LeaseSet can propagate before the lease lapses
+     *                     LeaseSet can propagate before the lease lapses
      *  @param now wall-clock timestamp for the freshness check
      *  @return true if the tunnel is eligible to publish as a traffic-proven lease
      *  @since 0.9.71+
@@ -3546,7 +3557,7 @@ public class TunnelPool {
      *  @param failures hard (test+data) or soft failure count
      *  @param soft true when the reporting status was a soft send timeout
      *  @return true if the tunnel should be marked and retained rather than
-     *          left selectable
+     *               left selectable
      *  @since 0.9.71+
      */
     static boolean exceedsRemovalThreshold(int failures, boolean soft) {
@@ -3907,7 +3918,7 @@ public class TunnelPool {
      *  Count unexpired tunnels when all of them expire beyond the given
      *  threshold.
      *  @return the number of unexpired tunnels, or 0 if any unexpired
-     *          tunnel expires within the threshold
+     *              tunnel expires within the threshold
      */
     private int countAllHealthyTunnels(long now, long expiryThreshold) {
         int tunnelCount = 0;
@@ -4924,10 +4935,10 @@ public class TunnelPool {
      *  as builds complete again.
      *
      *  @param consecutiveBuildTimeouts consecutive silent build timeouts
-     *          since the last successful or answered build
+     *                                  since the last successful or answered build
      * @return 0 with no sustained difficulty, 1 after
-     *         {@link #SPARE_LOW_THRESHOLD} timeouts, 2 after
-     *         {@link #SPARE_HIGH_THRESHOLD}
+     *           {@link #SPARE_LOW_THRESHOLD} timeouts, 2 after
+     *           {@link #SPARE_HIGH_THRESHOLD}
      * @since 0.9.71+
      */
     static int computeDifficultySpare(int consecutiveBuildTimeouts) {
@@ -4956,7 +4967,7 @@ public class TunnelPool {
      *  @param now current router time (ms)
      *  @param windowMs window length (ms)
      *  @return start time to use for the next count — {@code now} when the
-     *          window is missing or expired, otherwise unchanged
+     *                window is missing or expired, otherwise unchanged
      *  @since 0.9.71+
      */
     static long rotateWindowStart(long windowStart, long now, long windowMs) {
@@ -4996,7 +5007,7 @@ public class TunnelPool {
      *
      *  @param rate build-timeout rate in [0.0, 1.0], NaN for no data
      *  @return pre-build window in ms, in
-     *          [{@value #PRE_BUILD_WINDOW_MS}, {@value #MAX_PRE_BUILD_WINDOW_MS}]
+     *                    [{@value #PRE_BUILD_WINDOW_MS}, {@value #MAX_PRE_BUILD_WINDOW_MS}]
      *  @since 0.9.71+
      */
     static long computePreBuildWindowMs(double rate) {
@@ -5041,7 +5052,7 @@ public class TunnelPool {
      *  This pool's build-timeout rate over the current window.
      *
      *  @return rate in [0.0, 1.0]; 0.0 when the window is empty or stale
-     *          (no builds within {@link #BUILD_RATE_WINDOW_MS})
+     *               (no builds within {@link #BUILD_RATE_WINDOW_MS})
      *  @since 0.9.71+
      */
     private double getBuildTimeoutRate() {
@@ -5554,7 +5565,7 @@ public class TunnelPool {
      *  @param safeActive all safe tunnels including soft-degraded
      *  @param inProgress builds currently in flight
      *  @param incompleteLeaseSet true when the pool cannot publish a full LeaseSet
-     *          or is soft-degraded-dominated
+     *                            or is soft-degraded-dominated
      *  @return true if the deficit build should be skipped this cycle
      *  @since 0.9.71+
      */
@@ -5990,7 +6001,7 @@ public class TunnelPool {
      *  @param usableCount usable tunnel count at snapshot time
      *  @param inProgressCount in-progress build count at snapshot time
      *  @return true if the cooldown has NOT yet elapsed, so the next emergency
-     *          build must wait
+     *               build must wait
      *  @since 0.9.71+
      */
     static boolean isEmergencyCooldownActive(long elapsedMs, long usableCount, long inProgressCount) {
@@ -6102,8 +6113,10 @@ public class TunnelPool {
         // "healthy < target / 2" used integer division, so a target of 1 gave 0 and the
         // emergency fast-path could never fire for it.
         if (isMateriallyShort(healthy, target)) {
-            if (_log.shouldWarn()) {
-                _log.warn(toString() + " -> Thin pool (" + healthy + "/" + target + " healthy) -> fast-path pre-build");
+            int lastWarned = _lastThinPoolWarned;
+            if (ThinPoolLogState.shouldLog(lastWarned, healthy) && _log.shouldWarn()) {
+                _lastThinPoolWarned = healthy;
+                _log.warn(ThinPoolLogState.formatThinPool(toString(), healthy, target));
             }
             ensureSufficientTunnelsNow(_context.clock().now());
             return;
@@ -6309,8 +6322,8 @@ public class TunnelPool {
      *  re-trigger more builds without limit.
      *
      *  @param bypassPacing if true, mark each build as emergency recovery so
-     *  it bypasses the executor's per-peer in-flight guard — used when the
-     *  pool has zero usable tunnels and every build must go out now
+     *                      it bypasses the executor's per-peer in-flight guard — used when the
+     *                      pool has zero usable tunnels and every build must go out now
      */
     private void buildReplacementTunnels(int needed, boolean bypassPacing) {
         // Collapsed recovery (bypassPacing): allow up to `needed` in flight
@@ -6367,7 +6380,7 @@ public class TunnelPool {
      *
      *  @param forceZeroHop true to force a zero-hop tunnel
      *  @param excludeFirstHops first-hop peers already selected by concurrent
-     *         builds in the same dispatch batch
+     *                          builds in the same dispatch batch
      *  @return the tunnel config, or null if none could be configured
      *  @since 0.9.71+
      */
@@ -6442,7 +6455,7 @@ public class TunnelPool {
      *
      *  @param lifetimeMs the configured tunnel lifetime in ms
      *  @return the maximum stagger in ms, 0 when the lifetime alone reaches
-     *          the boundary
+     *              the boundary
      *  @since 0.9.71+
      */
     static long maxExpirationStagger(long lifetimeMs) {
@@ -6893,7 +6906,7 @@ public class TunnelPool {
     /**
      *  Whether the paired tunnel should be blamed for this build result.
      *  @return false when the build failed and the pool is exploratory or
-     *          suffering sustained first-hop timeouts
+     *                suffering sustained first-hop timeouts
      */
     private boolean shouldBlamePaired(boolean success) {
         if (!success) {
