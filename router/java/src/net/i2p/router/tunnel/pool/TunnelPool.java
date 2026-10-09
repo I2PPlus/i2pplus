@@ -104,6 +104,34 @@ public class TunnelPool {
      * @since 0.9.71+
      */
     private static final long SHORTFALL_LOG_INTERVAL_MS = 60 * 1000L;
+    /**
+     * Rate stat recording how many tunnels {@link #getHealthyTunnelCount()} dropped
+     * for want of a transport session to their local hop.
+     *
+     * @since 0.9.71+
+     */
+    static final String ZOMBIE_STAT_HEALTHY = "tunnel.poolZombieLocalHopUnhealthy";
+    /**
+     * Rate stat recording how many tunnels {@link #getUsableTunnelCount()} dropped
+     * for the same reason. Kept separate from {@link #ZOMBIE_STAT_HEALTHY} because
+     * the two counts apply different filters, so their excluded figures are not
+     * derivable from one another.
+     *
+     * @since 0.9.71+
+     */
+    static final String ZOMBIE_STAT_USABLE = "tunnel.poolZombieLocalHopUnusable";
+    /**
+     * Minimum gap between repeated "health excludes N zombie tunnels" warnings from
+     * one pool. These counts run on the ensure loop rather than once a second, so
+     * without a throttle a persistently dead local hop would emit a warning per
+     * pass. Zombies are a steady-state condition rather than an event, which is
+     * also why this warns once a minute at most instead of on every change.
+     *
+     * @since 0.9.71+
+     */
+    private static final long ZOMBIE_LOG_INTERVAL_MS = 60 * 1000L;
+    /** Wall-clock guard for the zombie warning; see {@link #ZOMBIE_LOG_INTERVAL_MS}. */
+    private long _nextZombieLog;
     private final AtomicLong _windowAttempts = new AtomicLong();
     private final AtomicLong _windowTimeouts = new AtomicLong();
     private volatile long _windowStartMs;
@@ -1586,6 +1614,7 @@ public class TunnelPool {
     int getUsableTunnelCount() {
         long now = _context.clock().now();
         int count = 0;
+        int zombies = 0;
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : _tunnels) {
@@ -1593,10 +1622,11 @@ public class TunnelPool {
                 if (t.getTunnelFailed() || t.getTestStatus().isUnusable()) continue;
                 // Same zombie exclusion as getHealthyTunnelCount: without a session
                 // to our next hop this tunnel cannot carry anything.
-                if (isLocalHopUnreachable(t)) continue;
+                if (isLocalHopUnreachable(t)) {zombies++; continue;}
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
+        reportZombies(ZOMBIE_STAT_USABLE, count, zombies);
         return count;
     }
 
@@ -1620,6 +1650,7 @@ public class TunnelPool {
     int getHealthyTunnelCount() {
         long now = _context.clock().now();
         int count = 0;
+        int zombies = 0;
         _tunnelsLock.lock();
         try {
             for (TunnelInfo t : _tunnels) {
@@ -1630,11 +1661,48 @@ public class TunnelPool {
                 // No transport session to our next hop: the tunnel survives as a
                 // zombie, so counting it here is what lets a pool report 8/8 healthy
                 // while delivering nothing.
-                if (isLocalHopUnreachable(t)) continue;
+                if (isLocalHopUnreachable(t)) {zombies++; continue;}
                 count++;
             }
         } finally {_tunnelsLock.unlock();}
+        reportZombies(ZOMBIE_STAT_HEALTHY, count, zombies);
         return count;
+    }
+
+    /**
+     * Record how many tunnels the health counts excluded for want of a local
+     * transport session, alongside the count that survived the filter.
+     *
+     * <p>Without this the zombie exclusion is unobservable: the counts silently
+     * changed what they report, and nothing in the log or the stats graph showed
+     * how many tunnels the filter actually caught. A pool reporting 6 healthy of 8
+     * because two are zombies is a very different situation from one reporting 6
+     * healthy of 6, and only the excluded count tells them apart.
+     *
+     * <p>Both figures are passed in rather than re-read from the sibling count,
+     * because that count calls back into here: reading it here would recurse. The
+     * two counts also filter differently (healthy additionally drops soft-degraded
+     * and backlogged tunnels), so their totals are not derivable from each other.
+     *
+     * <p>The stat is written on every pass, including zero, so the rate graph
+     * shows the pool as healthy-or-zombie rather than simply going silent when
+     * there are no zombies. The log line is rate-limited because these counts run
+     * on the ensure loop, not once a second.
+     *
+     * @param stat which health count produced this pass, one of
+     *             {@link #ZOMBIE_STAT_HEALTHY} or {@link #ZOMBIE_STAT_USABLE}
+     * @param kept the number of tunnels this count is returning to its caller
+     * @param excluded the number dropped for want of a local transport session
+     * @since 0.9.71+
+     */
+    private void reportZombies(String stat, int kept, int excluded) {
+        _context.statManager().addRateData(stat, excluded);
+        if (excluded == 0) {return;}
+        long now = _context.clock().now();
+        if (!_log.shouldLog(Log.WARN) || now < _nextZombieLog) {return;}
+        _nextZombieLog = now + ZOMBIE_LOG_INTERVAL_MS;
+        _log.warn("Pool health excludes " + excluded + " of " + (kept + excluded)
+                  + " tunnels with no transport session to their local hop -> kept: " + kept);
     }
 
     /**
@@ -3966,9 +4034,17 @@ public class TunnelPool {
         }
     }
 
-    /**
+/**
      * Count unexpired tunnels when all of them expire beyond the given
-     *  threshold.
+     * threshold.
+     *
+     * <p>Applies the same zombie exclusion as {@link #getHealthyTunnelCount()} and
+     * {@link #getUsableTunnelCount()}, but deliberately records no rate stat: this
+     * is a yes/no probe for the lease republish decision, and it can return early
+     * with 0 as soon as it meets a near-expiry tunnel, so its total is not a
+     * settled count and a rate built from it would mix partial walks with complete
+     * ones. The two settled counts above are where the zombie total belongs.
+     *
      * @return the number of unexpired tunnels, or 0 if any unexpired
      *             tunnel expires within the threshold
      */

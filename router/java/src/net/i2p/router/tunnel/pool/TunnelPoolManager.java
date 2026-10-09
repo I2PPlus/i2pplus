@@ -159,6 +159,15 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // Per-direction test outcomes: successful tests emit no log line, so
         // these are the only visibility into outbound test health.
         TestJob.registerDirectionStats(ctx.statManager(), RATES);
+        // Zombie-tunnel exclusions. Registered here so addRateData() in
+        // TunnelPool's health counts records them instead of reporting invalid
+        // names; the counts themselves are what produce these figures.
+        ctx.statManager().createRequiredRateStat(TunnelPool.ZOMBIE_STAT_HEALTHY,
+                "Zombie tunnels excluded from the healthy count",
+                "Tunnels", RATES);
+        ctx.statManager().createRequiredRateStat(TunnelPool.ZOMBIE_STAT_USABLE,
+                "Zombie tunnels excluded from the usable count",
+                "Tunnels", RATES);
     }
 
     /**
