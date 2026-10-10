@@ -485,7 +485,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * @param onFailure may be null; called when no floodfill peers are available or reply-based store fails
      * @param sendTimeout timeout in ms for the reply-based FloodfillStoreJob path
      * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53;
-     * passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
+     *                 passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
      */
     @Override
     void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore) {
@@ -1048,7 +1048,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * List of the hashes of currently known floodfill peers.
      *
      * @return list of floodfill peer hashes, not including our own hash;
-     * not sorted and not shuffled
+     *         not sorted and not shuffled
      */
     public List<Hash> getFloodfillPeers() {
         FloodfillPeerSelector sel = (FloodfillPeerSelector)getPeerSelector();

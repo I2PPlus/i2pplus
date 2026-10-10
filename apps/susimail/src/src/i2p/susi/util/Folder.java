@@ -168,7 +168,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Remove an element from the folder.
 	 *
-	 * @param element the element
+	 * @param element the entry to drop, matched with equals()
 	 */
 	public void removeElement(O element) {
 		removeElements(Collections.singleton(element));
@@ -197,7 +197,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Add an element only if it does not already exist.
 	 *
-	 * @param element the element
+	 * @param element the entry to insert unless an equal one is already present
 	 * @return true if added
 	 */
 	public boolean addElement(O element) {
@@ -379,7 +379,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Gets index of an element in the array regardless of sorting direction.
 	 *
-	 * @param element the element
+	 * @param element the entry to locate, compared with equals()
 	 * @return the index, or -1 if not found
 	 */
 	private int getIndexOf( O element )
@@ -470,7 +470,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Returns true if the element is the last in the sorted array.
 	 *
-	 * @param element the element
+	 * @param element the entry to compare against the last one
 	 * @return true if the element is the last
 	 */
 	public synchronized boolean isLastElement( O element )
@@ -483,7 +483,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Returns true if the element is the first in the sorted array.
 	 *
-	 * @param element the element
+	 * @param element the entry to compare against the first one
 	 * @return true if the element is the first
 	 */
 	public synchronized boolean isFirstElement( O element )
@@ -496,7 +496,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Returns the page this element is on, using the current sort, or 1 if not found.
 	 *
-	 * @param element the element
+	 * @param element the entry whose page is wanted
 	 * @return the page number (1-based)
 	 * @since 0.9.33
 	 */

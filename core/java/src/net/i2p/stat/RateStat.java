@@ -156,7 +156,7 @@ public class RateStat {
 /**
  * Update all of the rates for the various periods with the given value.
  *
- * @param value the value
+ * @param value the sample value added to every period's rate
  * @param eventDuration the event duration
  */
 public void addData(long value, long eventDuration) {

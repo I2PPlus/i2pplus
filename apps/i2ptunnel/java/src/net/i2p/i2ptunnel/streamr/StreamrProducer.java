@@ -21,7 +21,7 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
      * @param privkeyname name of the private key
      * @param l logging facility
      * @param notifyThis event dispatcher for notifications
-     * @param tunnel the tunnel
+     * @param tunnel the owning I2PTunnel, which supplies the client options and context
      * @since 0.9.53
      */
     public StreamrProducer(int port,

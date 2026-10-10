@@ -86,7 +86,7 @@ public class ConfigPeerHandler extends FormHandler {
 
     /**
      * Set the peer hash.
-     * @param peer the peer
+     * @param peer the base64 router hash to filter on
      */
     public void setPeer(String peer) { _peer = peer; }
     /**

@@ -487,7 +487,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param now current time from the router clock
      * @param window recency window for proof
      * @param replacements eligible proven candidates, most preferred first;
-     * consumed as used
+     *                     consumed as used
      * @return number of swaps performed
      * @since 0.9.71+
      */
@@ -709,9 +709,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *
      * @param settings the tunnel pool settings
      * @return ordered list of Hash objects (one per peer) specifying what order
-     * they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     * the local router in the list.  Never null; an empty list means
-     * no peers could be selected.
+     *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
+     *         the local router in the list.  Never null; an empty list means
+     *         no peers could be selected.
      */
     public abstract List<Hash> selectPeers(TunnelPoolSettings settings);
 
@@ -724,7 +724,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *
      * @param settings the tunnel pool settings
      * @param excludeFirstHops first-hop peers already targeted by concurrent
-     * builds in the same dispatch batch, may be null
+     *                         builds in the same dispatch batch, may be null
      * @return ordered list of Hash objects (ENDPOINT FIRST), never null
      * @since 0.9.71+
      */
@@ -878,9 +878,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * As of 0.9.58, this returns a set populated only by TunnelManager.selectPeersInTooManyTunnels(),
-     * for passing to ProfileOrganizer.
-     * The set will be populated via the contains() calls.
+     * Create the exclusion set for this pool, for passing to ProfileOrganizer.
+     * The set is seeded with TunnelManager.selectPeersInTooManyTunnels() and
+     * is then populated via the contains() calls.
      *
      * @param isInbound true for inbound tunnels
      * @param isExploratory true for exploratory tunnels
@@ -1191,7 +1191,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param buildSuccess the build success ratio in [0.0, 1.0]
      * @param uptimeMs router uptime in milliseconds
      * @param alreadyRelaxed whether the caps were already relaxed, i.e. the latch state
-     * from the previous decision
+     *                       from the previous decision
      * @return the configured caps with M/N/O/D/P removed when relaxing, otherwise unchanged
      * @since 0.9.71+ four-argument form carries the hysteresis latch
      */
@@ -2539,7 +2539,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param peer hash of the peer to check
      * @param buildSuccess the build success ratio, fetched once by the caller
      * @return true if the peer has a profile and has not been heard from or
-     * about within the activity window
+     *         about within the activity window
      */
     static boolean isStalePeer(RouterContext ctx, Hash peer, double buildSuccess) {
         PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peer);
@@ -2647,7 +2647,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param startupGrace true while the router is within its startup grace period
      * @param min the multiplier returned when fast peers are plentiful
      * @param max the multiplier returned while the router is short of fast peers,
-     *        or during the startup grace period
+     *            or during the startup grace period
      * @return multiplier in [min, max]
      * @since 0.9.71+
      */
@@ -2737,7 +2737,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * registered, so a silently dead instrument cannot recur.
      *
      * @param ctx router context; null is ignored so callers on odd paths do not
-     * need a null check of their own
+     *            need a null check of their own
      * @since 0.9.71+
      */
     public static void publishWindowMultiplier(RouterContext ctx) {
@@ -2786,7 +2786,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *
      * @param ctx the router context
      * @param aggressive if true, also pre-connect to non-established eligible peers
-     * (used when any pool has 0 tunnels)
+     *                   (used when any pool has 0 tunnels)
      */
     public static void keepAlive(RouterContext ctx, boolean aggressive) {
         long now = ctx.clock().now();

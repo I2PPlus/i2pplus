@@ -22,7 +22,7 @@ public class LkupResult implements LookupResult {
 
     /**
      * Deferred.
-     * @param nonce the nonce
+     * @param nonce the nonce to carry on the deferred reply
      */
     LkupResult(int nonce) {
         this(RESULT_DEFERRED, null, nonce);
@@ -33,7 +33,7 @@ public class LkupResult implements LookupResult {
      *
      * @param code result code
      * @param dest destination
-     * @param nonce the nonce
+     * @param nonce the nonce of the reply this result answers
      */
     LkupResult(int code, Destination dest, int nonce) {
         _code = code;

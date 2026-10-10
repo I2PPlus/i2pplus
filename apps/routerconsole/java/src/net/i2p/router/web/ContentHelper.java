@@ -29,14 +29,14 @@ public class ContentHelper extends HelperBase {
      * Caution, use absolute paths only, do not assume files are in CWD
      *
      * @param page the absolute path of the content file to include, resolved by
-     *        filename() to a localized variant such as file_lang.ext when one exists
+     *             filename() to a localized variant such as file_lang.ext when one exists
      */
     public void setPage(String page) { _page = page; }
     /**
      * setStartAtBeginning.
      *
      * @param moo parsed as a boolean: true keeps the first lines of the file,
-     *        false (the default) keeps the last
+     *            false (the default) keeps the last
      */
     public void setStartAtBeginning(String moo) {
         _startAtBeginning = Boolean.parseBoolean(moo);
@@ -47,7 +47,7 @@ public class ContentHelper extends HelperBase {
      *  CSRF nonce check; language is now handled by CSSHelper.
      *
      * @param l the requested language, accepted so the bean property keeps
-     *        working but discarded
+     *          working but discarded
      */
     public void setLang(String l) {
         // not implemented, see above
@@ -57,7 +57,7 @@ public class ContentHelper extends HelperBase {
      * setMaxLines.
      *
      * @param lines the maximum number of lines to keep, parsed as an integer;
-     *        null or any non-numeric value means unlimited
+     *              null or any non-numeric value means unlimited
      */
     public void setMaxLines(String lines) {
         if (lines != null) {

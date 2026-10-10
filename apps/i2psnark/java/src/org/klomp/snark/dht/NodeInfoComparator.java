@@ -54,7 +54,7 @@ class NodeInfoComparator implements Comparator<NodeInfo>, Serializable {
      * @param lhs the first node to compare
      * @param rhs the second node to compare
      * @return negative value if lhs is closer to target, positive if rhs is closer, 0 if equal
-     *     distance
+     *         distance
      */
     public int compare(NodeInfo lhs, NodeInfo rhs) {
         byte[] lhsDelta = DataHelper.xor(lhs.getNID().getData(), _base);

@@ -733,20 +733,20 @@ public class EepGet {
          * Total length should be == alreadyTransferred + currentWrite + bytesRemaining for all calls.
          *
          * @param alreadyTransferred total of all attempts, not including currentWrite
-         * If nonzero on the first call, a partial file of that length was found,
-         * _and_ the server supports resume.
-         * If zero on a subsequent call after some bytes are transferred
-         * (and presumably after an attemptFailed), the server does _not_
-         * support resume and we had to start over.
-         * To track _actual_ transfer if the output file could already exist,
-         * the listener should keep its own counter,
-         * or subtract the initial alreadyTransferred value.
-         * And watch out for alreadyTransferred resetting if a resume failed...
+         *                           If nonzero on the first call, a partial file of that length was found,
+         *                           _and_ the server supports resume.
+         *                           If zero on a subsequent call after some bytes are transferred
+         *                           (and presumably after an attemptFailed), the server does _not_
+         *                           support resume and we had to start over.
+         *                           To track _actual_ transfer if the output file could already exist,
+         *                           the listener should keep its own counter,
+         *                           or subtract the initial alreadyTransferred value.
+         *                           And watch out for alreadyTransferred resetting if a resume failed...
          *
          * @param currentWrite since last call to the listener
          * @param bytesTransferred includes headers, retries, redirects, discarded partial downloads, ...
          * @param bytesRemaining on this attempt only, currentWrite already subtracted -
-         * or -1 if chunked encoding or server does not return a length
+         *                       or -1 if chunked encoding or server does not return a length
          * @param url the URL being fetched
          */
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url);
@@ -1092,9 +1092,9 @@ public class EepGet {
      * inactivity timeout covers the wait between bytes once the body has started.
      *
      * @param fetchHeaderTimeout &lt;= 0 for none (proxy will timeout if none, none isn't recommended if no proxy)
-     * forced to totalTimeout if totalTimeout is set and this is &lt;= 0
+     *                           forced to totalTimeout if totalTimeout is set and this is &lt;= 0
      * @param totalTimeout operation-wide deadline for the whole fetch, including retries and
-     * backoff between attempts; &lt;= 0 for default none
+     *                     backoff between attempts; &lt;= 0 for default none
      * @param inactivityTimeout &lt;= 0 for default {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes)
      * @return success
      */
@@ -1284,7 +1284,7 @@ public class EepGet {
      * @param ioe failure raised by the attempt
      * @param aborted whether our SocketTimeout watchdog aborted this attempt
      * @param attemptStartBytes body bytes transferred when the attempt started;
-     * header and connect phases advance no body bytes
+     *                          header and connect phases advance no body bytes
      * @param bytesTransferred body bytes transferred now, after the failure
      * @return true when the attempt timed out after making progress
      * @since 0.9.71+
@@ -1946,7 +1946,7 @@ public class EepGet {
      * the caller's own contract.
      *
      * @param alreadyTransferred resume offset; greater than zero when this
-     * class generated the Range header
+     *                           class generated the Range header
      * @param extraHeaders caller headers as "Name: value", may be null
      * @return the expected Content-Range start, or -1 when unknown
      * @since 0.9.71+
@@ -2881,11 +2881,11 @@ public class EepGet {
      * The server response (200, etc).
      *
      * @return -1 if invalid, or if the proxy never responded,
-     * or if no proxy was used and the server never responded.
-     * If a non-proxied request partially succeeded (for example a redirect followed
-     * by a fail, or a partial fetch followed by a fail), this will
-     * be the last status code received.
-     * Note that fetch() may return false even if this returns 200.
+     *         or if no proxy was used and the server never responded.
+     *         If a non-proxied request partially succeeded (for example a redirect followed
+     *         by a fail, or a partial fetch followed by a fail), this will
+     *         be the last status code received.
+     *         Note that fetch() may return false even if this returns 200.
      *
      * @since 0.8.8
      */
@@ -2898,11 +2898,11 @@ public class EepGet {
      * Note that the text may contain % encoding.
      *
      * @return null if invalid, or if the proxy never responded,
-     * or if no proxy was used and the server never responded.
-     * If a non-proxied request partially succeeded (for example a redirect followed
-     * by a fail, or a partial fetch followed by a fail), this will
-     * be the last status code received.
-     * Note that fetch() may return false even if this returns "OK".
+     *         or if no proxy was used and the server never responded.
+     *         If a non-proxied request partially succeeded (for example a redirect followed
+     *         by a fail, or a partial fetch followed by a fail), this will
+     *         be the last status code received.
+     *         Note that fetch() may return false even if this returns "OK".
      *
      * @since 0.9.9
      */
@@ -3119,7 +3119,6 @@ public class EepGet {
     protected class AuthState {
         private final String username;
         private final String password;
-        // as recvd in 407
         /**
          * Auth mode as received in the 407 response.
          */
@@ -3199,7 +3198,7 @@ public class EepGet {
          * @param uri the request target, needed for the digest A2 hash
          * @return the auth header
          * @throws IOException if the digest challenge is missing or unusable, or if the proxy
-         * asked for an authentication mode this client does not implement
+         *                     asked for an authentication mode this client does not implement
          */
         public String getAuthHeader(String method, String uri) throws IOException {
             switch (authMode) {

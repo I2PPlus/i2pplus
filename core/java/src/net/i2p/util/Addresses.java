@@ -133,7 +133,7 @@ public abstract class Addresses {
  * All non-IPv6 addresses excluding local, broadcast, and multicast addresses.
  *
  * @return a sorted set of all addresses, excluding
- * IPv6, local, broadcast, multicast, etc.
+ *         IPv6, local, broadcast, multicast, etc.
  */
     public static SortedSet<String> getAddresses() {
         return getAddresses(false, false);
@@ -143,7 +143,7 @@ public abstract class Addresses {
  * All addresses excluding only link-local and multicast addresses.
  *
  * @return a sorted set of all addresses, excluding
- * only link-local and multicast
+ *         only link-local and multicast
  *
  * @since 0.8.3
  */

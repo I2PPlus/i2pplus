@@ -31,7 +31,11 @@ class ClientWriterRunner implements Runnable {
     private static final long MAX_SEND_WAIT = SystemVersion.isSlow() ? 10 * 1000 : 5 * 1000;
 
     /**
-     *  As of 0.9.11 does not start the thread, caller must call startWriting()
+     * Create the writer for a session, buffering I2CP messages queued for
+     * output to that session.
+     *
+     * As of 0.9.11 does not start the thread, caller must call startWriting()
+     *
      * @param out stream the I2CP messages are written to, buffered internally
      * @param session session to poll for closure and to report write failures to
      */

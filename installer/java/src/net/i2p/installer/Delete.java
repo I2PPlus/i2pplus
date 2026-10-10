@@ -18,7 +18,7 @@ public class Delete {
      * Delete files specified on the command line.
      *
      * @param args paths to remove, each passed to {@link FileUtil#rmdir}
-     *        as a single file and not a directory tree
+     *             as a single file and not a directory tree
      */
     public static void main(String[] args) {
         for(int file=0; file < args.length; file++)

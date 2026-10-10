@@ -461,7 +461,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * and a New Session Reply message should be sent.
      * Otherwise, an Existing Session message should be sent.
      *
-     * @param target the target
+     * @param target the remote router to take the next outbound tag for
      * @return the next available tag, or null
      */
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {

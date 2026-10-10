@@ -28,7 +28,7 @@ public class MLKEMGenerator
      * generateEncapsulated.
      *
      * @param recipientKey the recipient's ML-KEM public key, from which the parameter set and
-     *        engine are taken
+     *                     engine are taken
      * @return the freshly drawn shared secret together with the ciphertext to send to the
      *         recipient
      */
@@ -48,9 +48,9 @@ public class MLKEMGenerator
      * internalGenerateEncapsulated.
      *
      * @param recipientKey the recipient's ML-KEM public key, from which the parameter set and
-     *        engine are taken
+     *                     engine are taken
      * @param randBytes the 32 bytes of randomness to encrypt with, instead of drawing fresh
-     *        ones for reproducible tests
+     *                  ones for reproducible tests
      * @return the shared secret derived from randBytes together with the ciphertext to send to
      *         the recipient
      */

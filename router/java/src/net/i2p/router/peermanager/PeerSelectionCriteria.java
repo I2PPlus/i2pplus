@@ -63,7 +63,7 @@ class PeerSelectionCriteria {
     /**
      * The purpose for which the peers will be used.
      *
-     * @param purpose the purpose
+     * @param purpose a PURPOSE_ constant, naming why the peers will be used
      */
     public void setPurpose(int purpose) { _purpose = purpose; }
 }

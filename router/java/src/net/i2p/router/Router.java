@@ -1990,7 +1990,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      * @param args null ok
      * @throws IllegalArgumentException if an unrecognized option is given, or more than
-     *     one argument is passed
+     *                                  one argument is passed
      */
     public static void main(String[] args) {
         boolean rebuild = false;

@@ -40,7 +40,7 @@ public class HealthHelper extends HelperBase {
      * Whether this router is a floodfill with floodfill enabled.
      *
      * @return true if the network database is a floodfill that is currently
-     * publishing, false if there is no context or it is not a floodfill
+     *         publishing, false if there is no context or it is not a floodfill
      * @since 0.9.70+
      */
     public boolean isFloodfill() {

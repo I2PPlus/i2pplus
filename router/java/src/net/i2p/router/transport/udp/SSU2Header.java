@@ -224,7 +224,7 @@ final class SSU2Header {
          * Available in all header types.
          *
          * @return the packet number, for an I2P header sent before data phase it
-         *     may be 0
+         *         may be 0
          */
         public long getPacketNumber() { return DataHelper.fromLong(data, PKT_NUM_OFFSET, PKT_NUM_LEN); }
         /**

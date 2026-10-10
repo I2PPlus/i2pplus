@@ -628,12 +628,12 @@ class BanlistRenderer {
      * This is a lot more expensive than _t(s), so use sparingly.
      *
      * @param s string to be translated containing {0}
-     * The {0} will be replaced by the parameter.
-     * Single quotes must be doubled, i.e. ' -> '' in the string.
+     *          The {0} will be replaced by the parameter.
+     *          Single quotes must be doubled, i.e. ' -> '' in the string.
      * @param o parameter, not translated.
-     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     * Do not double the single quotes in the parameter.
-     * Use autoboxing to call with ints, longs, floats, etc.
+     *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     *          Do not double the single quotes in the parameter.
+     *          Use autoboxing to call with ints, longs, floats, etc.
      */
     private String _t(String s, Object o) {
         return Messages.getString(s, o, _context);

@@ -106,9 +106,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
      *
      * @param raw the socket stream that the response headers and body are written to
      * @param allowKeepAliveIn We may, but are not required to, keep the input socket alive.
-     * This is the server on the server side and I2P on the client side.
+     *                         This is the server on the server side and I2P on the client side.
      * @param allowKeepAliveOut We may, but are not required to, keep the output socket alive.
-     * This is I2P on the server side and the browser on the client side.
+     *                          This is I2P on the server side and the browser on the client side.
      * @param isHead is this a response to a HEAD, and thus no data is expected (RFC 2616 sec. 4.4)
      * @param cb non-null if allowKeepAlive is true
      * @since 0.9.62

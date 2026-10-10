@@ -160,7 +160,7 @@ public final class ECIESAEADEngine {
      * @param keyManager holds the session key material and ratchet preference
      * @return decrypted data or null on failure
      * @throws DataFormatException if the underlying garlic parse fails and cannot be
-     *         recovered by trying the remaining crypto schemes
+     *                             recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
         return _muxedEngine.decrypt(data, elgKey, ecKey, keyManager);
@@ -196,7 +196,7 @@ public final class ECIESAEADEngine {
      * @param keyManager holds the session tags and key material used to decrypt
      * @return decrypted data or null on failure
      * @throws DataFormatException if the underlying garlic parse fails and cannot be
-     *         recovered by trying the remaining crypto schemes
+     *                             recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey targetPrivateKey,
                             RatchetSKM keyManager) throws DataFormatException {
@@ -1089,11 +1089,11 @@ public final class ECIESAEADEngine {
      * @param target public key to which the data should be encrypted.
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
-     * may be null for anonymous (N-in-IK)
+     *             may be null for anonymous (N-in-IK)
      *
      * @param keyManager session key manager, required when priv is non-null
      * @param callback may be null, if non-null an ack will be requested (except NS/NSR),
-     * not used when priv is null
+     *                 not used when priv is null
      *
      * @return encrypted data or null on failure
      */
@@ -1114,7 +1114,7 @@ public final class ECIESAEADEngine {
      *
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
-     * may be null for anonymous (N-in-IK)
+     *             may be null for anonymous (N-in-IK)
      *
      * @param keyManager session key manager, required when priv is non-null
      * @param callback may be null, not used when priv is null

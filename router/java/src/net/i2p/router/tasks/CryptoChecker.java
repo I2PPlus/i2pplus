@@ -58,7 +58,7 @@ public class CryptoChecker {
      * and System.out for visibility during startup.
      *
      * @param ctx router context for logging; if null, logs only to System.out
-     * (used when called from main method during startup)
+     *            (used when called from main method during startup)
      *
      * @since 0.9.15
      */

@@ -91,8 +91,8 @@ public class ConfigNetHandler extends FormHandler {
     /**
      * setUdpAutoIP.
      * @param mode comma-separated list of IP address detection sources to use
-     *        ("local", "upnp", "ssu"), "fixed" to use the manually entered
-     *        address, or "hidden" to withhold our address from the NetDb
+     *             ("local", "upnp", "ssu"), "fixed" to use the manually entered
+     *             address, or "hidden" to withhold our address from the NetDb
      */
     public void setUdpAutoIP(String mode) {
         _udpAutoIP = mode;

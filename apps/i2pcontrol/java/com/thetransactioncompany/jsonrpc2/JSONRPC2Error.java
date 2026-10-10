@@ -120,9 +120,9 @@ public class JSONRPC2Error extends Exception {
 	 * Sets the specified data to a JSON-RPC 2.0 error.
 	 *
 	 * @param err  The JSON-RPC 2.0 error to have its data field set. Must
-	 * not be {@code null}.
+	 *             not be {@code null}.
 	 * @param data Optional error data, must <a href="#map">map</a> to a
-	 * valid JSON type.
+	 *             valid JSON type.
 	 *
 	 * @return A new JSON-RPC 2.0 error with the set data.
 	 */
@@ -138,7 +138,7 @@ public class JSONRPC2Error extends Exception {
 	 * message. The optional data is omitted.
 	 *
 	 * @param code    The error code (standard pre-defined or
-	 * application-specific).
+	 *                application-specific).
 	 * @param message The error message.
 	 */
 	public JSONRPC2Error(int code, String message) {
@@ -152,10 +152,10 @@ public class JSONRPC2Error extends Exception {
 	 * message and data.
 	 *
 	 * @param code    The error code (standard pre-defined or
-	 * application-specific).
+	 *                application-specific).
 	 * @param message The error message.
 	 * @param data    Optional error data, must <a href="#map">map</a>
-	 * to a valid JSON type.
+	 *                to a valid JSON type.
 	 */
 	public JSONRPC2Error(int code, String message, Object data) {
 
@@ -191,7 +191,7 @@ public class JSONRPC2Error extends Exception {
 	 * Sets the specified data to a JSON-RPC 2.0 error.
 	 *
 	 * @param data Optional error data, must <a href="#map">map</a> to a
-	 * valid JSON type.
+	 *             valid JSON type.
 	 *
 	 * @return A new JSON-RPC 2.0 error with the set data.
 	 */
@@ -261,7 +261,7 @@ public class JSONRPC2Error extends Exception {
   * @param object The object to compare to.
   *
   * @return {@code true} if both objects are instances if this class and
-	 * their error codes are identical, {@code false} if not.
+	 *         their error codes are identical, {@code false} if not.
   */
 	@Override
         public boolean equals(Object object) {

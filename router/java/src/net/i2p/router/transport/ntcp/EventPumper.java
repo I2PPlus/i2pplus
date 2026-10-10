@@ -1426,8 +1426,8 @@ class EventPumper implements Runnable {
      * writer pool and other connections).
      *
      * @since 0.9.71+ single-writer drain without _writeLock; previously the
-     *                 drain ran under the connection's write lock and was also
-     *                 invoked directly from producer threads
+     *        drain ran under the connection's write lock and was also
+     *        invoked directly from producer threads
      */
     private boolean processWrite(final NTCPConnection con, final SelectionKey key) {
         boolean rv = false;

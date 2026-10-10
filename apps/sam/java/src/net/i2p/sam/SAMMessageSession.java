@@ -231,7 +231,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * @param name the base32 hostname, or full destination, to resolve
      * @return the Destination or null
      * @throws I2PSessionException if the lookup does not complete within the 10 second
-     *         session timeout
+     *                             session timeout
      * @since 0.9.69
      */
     static Destination lookupDest(I2PSession session, String name) throws I2PSessionException {

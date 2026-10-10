@@ -28,27 +28,27 @@ public interface UpdateManager {
     /**
      * Call once for each type/method pair.
      *
-     * @param updater the updater
+     * @param updater the Updater to be told when a newer version appears
      * @param type the update type
      * @param method the update method
-     * @param priority the priority
+     * @param priority higher values are notified first
      */
     public void register(Updater updater, UpdateType type, UpdateMethod method, int priority);
 
     /**
      * Register a checker for updates.
      *
-     * @param checker the checker
+     * @param checker the Checker to poll for a newer version
      * @param type the update type
      * @param method the update method
-     * @param priority the priority
+     * @param priority higher values are polled first
      */
     public void register(Checker checker, UpdateType type, UpdateMethod method, int priority);
 
     /**
      * Unregister an updater.
      *
-     * @param updater the updater
+     * @param updater the Updater to stop notifying
      * @param type the update type
      * @param method the update method
      */
@@ -57,7 +57,7 @@ public interface UpdateManager {
     /**
      * Unregister a checker.
      *
-     * @param checker the checker
+     * @param checker the Checker to stop polling
      * @param type the update type
      * @param method the update method
      */

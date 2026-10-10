@@ -178,8 +178,8 @@ public class SMTPClient {
 
     /**
      * @return result code and string, all lines combined with \r separators,
-     * first 3 bytes are the ASCII return code or "000" for failure
-     * Result and Result.recv non null
+     *         first 3 bytes are the ASCII return code or "000" for failure
+     *         Result and Result.recv non null
      * @since 0.9.13
      */
     private Result getFullResult() {

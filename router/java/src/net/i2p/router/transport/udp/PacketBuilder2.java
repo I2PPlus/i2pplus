@@ -236,7 +236,7 @@ class PacketBuilder2 {
      * message ID).
      *
      * @param fragmentSize size of the fragment payload from
-     * {@link OutboundMessageState#fragmentSize(int)}
+     *                     {@link OutboundMessageState#fragmentSize(int)}
      * @param fragment {@code 0} for the first fragment, &gt; 0 for follow-ons
      * @return total body bytes for this fragment
      * @since 0.9.71+
@@ -391,7 +391,7 @@ class PacketBuilder2 {
      * Build a packet from multiple fragments and optional other blocks.
      *
      * @param fragments one or more fragments of a message, in fragment order;
-     * empty for an ack-only packet
+     *                  empty for an ack-only packet
      * @param otherBlocks may be null or empty
      * @param peer the destination session
      * @return ready to send packet, non-null
@@ -1499,8 +1499,8 @@ class PacketBuilder2 {
 
     /**
      * @param packet containing 16 byte header and all data with
-     * length set to the end of the data.
-     * This will extend the length by 16 for the MAC.
+     *               length set to the end of the data.
+     *               This will extend the length by 16 for the MAC.
      */
     private void encryptDataPacket(UDPPacket packet, CipherState chacha, long n,
                                     byte[] hdrKey1, byte[] hdrKey2) {
@@ -1533,8 +1533,8 @@ class PacketBuilder2 {
 
     /**
      * @param len current length of the packet including IP/UDP header
-     * (unless header subtracted from max)
-     * If len == 0 ensure 8 byte block minimum
+     *            (unless header subtracted from max)
+     *            If len == 0 ensure 8 byte block minimum
      * @param max max length of the packet
      * @return null if no room
      */
@@ -1544,8 +1544,8 @@ class PacketBuilder2 {
 
     /**
      * @param len current length of the packet including IP/UDP header
-     * (unless header subtracted from max)
-     * If len == 0 ensure 8 byte block minimum
+     *            (unless header subtracted from max)
+     *            If len == 0 ensure 8 byte block minimum
      * @param max max length of the packet
      * @param maxPadding max length of the padding (not including block header)
      * @return null if no room

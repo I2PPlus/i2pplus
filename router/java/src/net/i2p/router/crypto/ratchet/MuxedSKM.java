@@ -38,14 +38,14 @@ public class MuxedSKM extends SessionKeyManager {
         _ec = ec;
     }
     /**
-     * Return the elgSKM
+     * Return the ElGamal key manager that handles legacy transient sessions.
      *
      * @return the ElGamal session key manager this instance multiplexes
      */
 
     public TransientSessionKeyManager getElgSKM() { return _elg; }
     /**
-     * Return the eCSKM
+     * Return the ratchet key manager that handles ECIES-X25519 sessions.
      *
      * @return the ratchet session key manager this instance multiplexes
      */

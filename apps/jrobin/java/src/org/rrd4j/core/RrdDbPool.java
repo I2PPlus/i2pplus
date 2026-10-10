@@ -304,7 +304,7 @@ public class RrdDbPool {
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalStateException if the thread was interrupted
      * @deprecated A RrdDb remember if it was open directly or from a pool, no need to manage it
-     *     manually any more
+     *             manually any more
      */
     @Deprecated
     public void release(RrdDb rrdDb) throws IOException {
@@ -472,7 +472,7 @@ public class RrdDbPool {
      * Request RRD from definition
      *
      * @param rrdDef the definition of the RRD to create, which also supplies
-     *        the canonical URI
+     *               the canonical URI
      * @param factory the backend factory that opens the storage
      * @return the newly created pooled RrdDb, with a use count of one
      * @throws IOException if the storage cannot be created
@@ -531,7 +531,7 @@ public class RrdDbPool {
      * @param uri the canonical storage URI of the RRD to create
      * @param factory the backend factory that opens the storage
      * @param importer the data importer run over the new RRD while it is still
-     *        unpooled
+     *                 unpooled
      * @return the newly created pooled RrdDb, with a use count of one
      * @throws IOException if the storage cannot be created
      */
@@ -581,7 +581,7 @@ public class RrdDbPool {
      *
      * @param path Path to the RRD that should be created.
      * @param sourcePath Path to external data which is to be converted to Rrd4j's native RRD file
-     *     format.
+     *              format.
      * @return Reference to the newly created RRD.
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalStateException if the thread was interrupted
@@ -609,7 +609,7 @@ public class RrdDbPool {
      *
      * @param uri URI to the RRD that should be created
      * @param sourcePath Path to external data which is to be converted to Rrd4j's native RRD file
-     *     format
+     *              format
      * @return Reference to the newly created RRD
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalStateException if the thread was interrupted
@@ -623,7 +623,7 @@ public class RrdDbPool {
      *
      * @param defaultFactory The factory to use.
      * @throws IllegalStateException if called while the pool is not empty or the thread was
-     *     interrupted
+     *                               interrupted
      * @throws java.lang.IllegalStateException if the thread was interrupted
      * @deprecated the pool is no longer a singleton, create a new pool instead of changing it.
      */
@@ -650,7 +650,7 @@ public class RrdDbPool {
      *
      * @param newCapacity Maximum number of simultaneously open RRD.
      * @throws IllegalStateException if called while the pool is not empty or the thread was
-     *     interrupted.
+     *                               interrupted.
      */
     public void setCapacity(int newCapacity) {
         try {

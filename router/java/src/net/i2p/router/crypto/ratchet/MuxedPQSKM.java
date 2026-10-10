@@ -38,13 +38,13 @@ public class MuxedPQSKM extends SessionKeyManager {
         _pq = pq;
     }
     /**
-     * Return the eCSKM
+     * The ECIES ratchet key manager combined into this hybrid.
      * @return the ECIES ratchet key manager
      */
 
     public RatchetSKM getECSKM() { return _ec; }
     /**
-     * Return the pQSKM
+     * The post-quantum ratchet key manager combined into this hybrid.
      * @return the post-quantum ratchet key manager
      */
 

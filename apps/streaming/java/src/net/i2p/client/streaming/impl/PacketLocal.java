@@ -207,7 +207,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * the value.
      *
      * @return the RTT sample in ms, or -1 if the packet was never sent or
-     * never ACKed
+     *         never ACKed
      * @since 0.9.71+
      */
     public synchronized int getRttTime() {
@@ -338,7 +338,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * @param offset starting point in the buffer
      * @return Count of bytes written
      * @throws IllegalStateException if the offline signature has expired, or
-     * if signing the packet failed
+     *                               if signing the packet failed
      * @since 0.9.20 moved from Packet
      */
     public int writeSignedPacket(byte[] buffer, int offset) throws IllegalStateException {
@@ -535,14 +535,14 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * {@code getAdaptiveSynTimeout} evidence-gated pattern).
      *
      * @param packetAcked whether the specific packet was acknowledged
-     * ({@code WriteStatus.writeSuccessful()})
+     *                    ({@code WriteStatus.writeSuccessful()})
      * @param highestAckedThrough current connection-wide forward-ACK progress
-     * ({@code Connection.getHighestAckedThrough()})
+     *                            ({@code Connection.getHighestAckedThrough()})
      * @param ackProgressAtStart  forward-ACK progress captured at wait start
      * @return {@code true} if this is unambiguously ACK starvation and the send
-     * should fail fast; {@code false} if the connection made progress
-     * (or the packet was acked) and the send should be left to the
-     * normal timeout path
+     *         should fail fast; {@code false} if the connection made progress
+     *         (or the packet was acked) and the send should be left to the
+     *         normal timeout path
      * @since 0.9.71+
      */
     static boolean isAckStarvation(boolean packetAcked, long highestAckedThrough, long ackProgressAtStart) {
@@ -599,7 +599,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      * guard on {@code getAckTime()}.
      *
      * @return {@code true} if the packet was ACKed or cancelled, so its payload
-     * was released; {@code false} if it may still be transmitted
+     *         was released; {@code false} if it may still be transmitted
      * @since 0.9.71+
      */
     public synchronized boolean writeReleased() { return _ackOn > 0 || _cancelledOn > 0; }

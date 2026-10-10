@@ -130,7 +130,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      *
      * @param sock the accepted I2P socket
      * @return true if queued; false if the queue is full (caller must
-     * reset the socket)
+     *         reset the socket)
      * @throws IllegalStateException if called on a non-subsession
      * @since 0.9.25
      */
@@ -156,7 +156,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * for shutdown and avoid leaking threads on idle sessions.
      *
      * @return the next queued socket, or null if the queue is empty
-     * after the timeout (caller must handle null)
+     *         after the timeout (caller must handle null)
      * @throws ConnectException if the thread is interrupted
      * @since 0.9.25
      */

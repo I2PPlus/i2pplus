@@ -110,7 +110,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
 
     /**
      * Destination to send the message to.
-     * @param destination the destination
+     * @param destination the target replacing the destination already set
      * @deprecated use 4-arg constructor
      */
     @Deprecated
@@ -130,7 +130,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     /**
      * Message payload being sent.
      *
-     * @param payload the payload
+     * @param payload the payload replacing the payload already set
      * @deprecated use 4-arg constructor
      */
     @Deprecated

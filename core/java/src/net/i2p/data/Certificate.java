@@ -287,7 +287,7 @@ public class Certificate extends DataStructureImpl {
     /**
      * Reads the certificate from the source array.
      *
-     * @param source the source
+     * @param source the array holding the certificate data
      * @param offset the starting offset in the source
      * @return the bytes consumed
      * @throws IllegalStateException if already set

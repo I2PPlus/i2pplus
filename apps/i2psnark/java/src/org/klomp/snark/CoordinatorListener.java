@@ -53,7 +53,7 @@ interface CoordinatorListener {
     /**
      * Adds a status message for display to the user.
      *
-     * @param message the message
+     * @param message the status text to display to the user
      */
     public void addMessage(String message);
 

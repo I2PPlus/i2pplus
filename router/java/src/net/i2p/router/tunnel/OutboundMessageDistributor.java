@@ -40,7 +40,7 @@ class OutboundMessageDistributor {
      *
      * @param ctx our router context
      * @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
-     * OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
+     *                 OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
      */
     public OutboundMessageDistributor(RouterContext ctx, int priority) {
         this(ctx, priority, null);
@@ -51,7 +51,7 @@ class OutboundMessageDistributor {
      *
      * @param ctx our router context
      * @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
-     * OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
+     *                 OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
      * @param bwe null for none
      * @since 0.9.68
      */

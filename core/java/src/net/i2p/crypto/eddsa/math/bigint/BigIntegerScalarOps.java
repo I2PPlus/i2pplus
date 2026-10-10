@@ -48,7 +48,7 @@ public class BigIntegerScalarOps implements ScalarOps {
      * @param a The first scalar.
      * @param b The second scalar.
      * @param c The third scalar.
-     * @return The result.
+     * @return the reduced product-plus-sum, encoded
      */
     @Override
     public byte[] multiplyAndAdd(byte[] a, byte[] b, byte[] c) {

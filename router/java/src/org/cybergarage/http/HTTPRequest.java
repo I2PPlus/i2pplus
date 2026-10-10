@@ -150,7 +150,7 @@ public class HTTPRequest extends HTTPPacket {
      *
      * @param value the URI string to set
      * @param isCheckRelativeURL if true, converts the URI to a relative URL using
-     *     HTTP.toRelativeURL()
+     *                           HTTP.toRelativeURL()
      */
     public void setURI(String value, boolean isCheckRelativeURL) {
         uri = value;

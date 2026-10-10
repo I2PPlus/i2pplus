@@ -363,7 +363,7 @@ public class Archive {
      * archive.
      *
      * @return the number of primary data points required for a consolidated data point in this
-     * archive.
+     *         archive.
      */
     public int getPdpCount() {
         return pdpCount;

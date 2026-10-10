@@ -745,7 +745,7 @@ public class MetaInfo {
      * @param piece zero-based piece index, from 0 to {@link #getPieces()} - 1
      * @return the piece length
      * @throws IndexOutOfBoundsException when piece is equal to or greater then the number of pieces
-     *     in the torrent.
+     *                                   in the torrent.
      */
     public int getPieceLength(int piece) {
         int pieces = getPieces();
@@ -888,7 +888,7 @@ public class MetaInfo {
      * @param announce may be null
      * @return the copy, sharing the same infohash and info map
      * @throws InvalidBEncodingException if the info dictionary built from this torrent is
-     *     missing or malformed
+     *                                   missing or malformed
      */
     public MetaInfo reannounce(String announce) throws InvalidBEncodingException {
         Map<String, BEValue> m = new HashMap<>();

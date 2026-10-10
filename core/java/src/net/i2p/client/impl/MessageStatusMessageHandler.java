@@ -35,9 +35,9 @@ class MessageStatusMessageHandler extends HandlerImpl {
      * Handle an incoming I2CP message.
      *
      * @param message the inbound MessageStatusMessage to act on, already checked by the
-     *        superclass to be of the type this handler registered for
+     *                superclass to be of the type this handler registered for
      * @param session the session that received the message, used to send the
-     *        ReceiveMessageBeginMessage that fetches a newly available message
+     *                ReceiveMessageBeginMessage that fetches a newly available message
      */
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {

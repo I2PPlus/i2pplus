@@ -33,7 +33,7 @@ import net.i2p.util.Log;
  * 2036-compliant as of 0.9.50, see NtpMessage.
  *
  * @author Adam Buckley
- * (minor refactoring by jrandom)
+ *         (minor refactoring by jrandom)
  *
  * @since 0.9.1 moved from net.i2p.time
  */

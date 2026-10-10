@@ -76,7 +76,7 @@ public class BDecoder {
      * once: the digest is finalized by this call.
      *
      * @return the SHA-1 digest of the info dictionary bytes, or null if there was no info
-     *     dictionary in the stream
+     *         dictionary in the stream
      */
     public byte[] get_special_map_digest() {
         if (sha_digest == null) return null;

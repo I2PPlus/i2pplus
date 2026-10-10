@@ -100,7 +100,7 @@ public class LeaseSet2 extends LeaseSet {
      * If not called, will be set on write.
      *
      * @param now the publication time in milliseconds since the epoch, rounded
-     *        to the nearest second before being stored
+     *            to the nearest second before being stored
      * @since 0.9.64
      */
     public void setPublished(long now) {
@@ -228,7 +228,7 @@ public class LeaseSet2 extends LeaseSet {
      * Encryption keys should be added in order of server preference, most-preferred first.
      *
      * @param key the key to append; the first one added becomes the key returned
-     *        by getEncryptionKey()
+     *            by getEncryptionKey()
      */
     public void addEncryptionKey(PublicKey key) {
         if (_encryptionKey == null) {setEncryptionKey(key);}
@@ -371,7 +371,7 @@ public class LeaseSet2 extends LeaseSet {
      * Blinded hash, if known at creation.
      *
      * @param bh the blinded hash of this leaseset's destination, as computed at
-     *        creation time for an encrypted LeaseSet2
+     *           creation time for an encrypted LeaseSet2
      */
     public void setBlindedHash(Hash bh) {_blindedHash = bh;}
 

@@ -83,7 +83,7 @@ public class Jsoner {
      * @param readableDeserializable representing content to be deserialized as JSON.
      * @return either a boolean, null, Number, String, JsonObject, or JsonArray that best represents the deserializable.
      * @throws DeserializationException if an unexpected token is encountered in the deserializable. To recover from a
-     *         DeserializationException: fix the deserializable
+     *                                  DeserializationException: fix the deserializable
      *         to no longer have an unexpected token and try again. */
     public static Object deserialize(final Reader readableDeserializable) throws DeserializationException {
         return Jsoner.deserialize(readableDeserializable, EnumSet.of(DeserializationOptions.ALLOW_JSON_ARRAYS, DeserializationOptions.ALLOW_JSON_OBJECTS, DeserializationOptions.ALLOW_JSON_DATA)).get(0);
@@ -94,7 +94,7 @@ public class Jsoner {
      * @param flags representing the allowances and restrictions on deserialization.
      * @return the allowable object best represented by the deserializable.
      * @throws DeserializationException if a disallowed or unexpected token is encountered in the deserializable. To
-     *         recover from a DeserializationException: fix the
+     *                                  recover from a DeserializationException: fix the
      *         deserializable to no longer have a disallowed or unexpected token and try again. */
     private static JsonArray deserialize(final Reader deserializable, final Set<DeserializationOptions> flags) throws DeserializationException {
         final Yylex lexer = new Yylex(deserializable);
@@ -241,8 +241,8 @@ public class Jsoner {
      * @param deserializable representing content to be deserialized as JSON.
      * @return either a boolean, null, Number, String, JsonObject, or JsonArray that best represents the deserializable.
      * @throws DeserializationException if an unexpected token is encountered in the deserializable. To recover from a
-     *         DeserializationException: fix the deserializable
-     *         to no longer have an unexpected token and try again.
+     *                                  DeserializationException: fix the deserializable
+     *                                  to no longer have an unexpected token and try again.
      * @see Jsoner#deserialize(Reader)
      * @see StringReader */
     public static Object deserialize(final String deserializable) throws DeserializationException {
@@ -267,7 +267,7 @@ public class Jsoner {
     /** A convenience method that assumes a JsonArray must be deserialized.
      * @param deserializable representing content to be deserializable as a JsonArray.
      * @param defaultValue representing what would be returned if deserializable isn't a JsonArray or an IOException,
-     *        NullPointerException, or DeserializationException occurs during deserialization.
+     *                     NullPointerException, or DeserializationException occurs during deserialization.
      * @return a JsonArray that represents the deserializable, or the defaultValue if there isn't a JsonArray that
      *         represents deserializable.
      * @see Jsoner#deserialize(Reader) */
@@ -292,7 +292,7 @@ public class Jsoner {
     /** A convenience method that assumes a JsonObject must be deserialized.
      * @param deserializable representing content to be deserializable as a JsonObject.
      * @param defaultValue representing what would be returned if deserializable isn't a JsonObject or an IOException,
-     *        NullPointerException, or DeserializationException occurs during deserialization.
+     *                     NullPointerException, or DeserializationException occurs during deserialization.
      * @return a JsonObject that represents the deserializable, or the defaultValue if there isn't a JsonObject that
      *         represents deserializable.
      * @see Jsoner#deserialize(Reader) */
@@ -328,8 +328,8 @@ public class Jsoner {
      * "123e321" appended to "-1" throws DeserializationException(NumberFormatException)
      * "null12.33.21null" throws DeserializationException(NumberFormatException)
      * @param deserializable representing concatenated content to be deserialized as JSON in one reader. Its contents
-     *        may
-     *        not contain two numbers concatenated together.
+     *                       may
+     *                       not contain two numbers concatenated together.
      * @return a JsonArray that contains each of the concatenated objects as its elements. Each concatenated element is
      *         either a boolean, null, Number, String, JsonArray, or JsonObject that best represents the concatenated
      *         content inside deserializable.
@@ -438,7 +438,7 @@ public class Jsoner {
 
     /** Formats the JSON string to be more easily human readable using tabs for indentation.
      * @param printable representing a JSON formatted string with out extraneous characters, like one returned from
-     *        Jsoner#serialize(Object).
+     *                  Jsoner#serialize(Object).
      * @return printable except it will have '\n' then '\t' characters inserted after '[', '{', ',' and before ']' '}'
      *         tokens in the JSON. It will return null if printable isn't a JSON string. */
     public static String prettyPrint(final String printable) {
@@ -447,7 +447,7 @@ public class Jsoner {
 
     /** Formats the JSON string to be more easily human readable using an arbitrary amount of spaces for indentation.
      * @param printable representing a JSON formatted string with out extraneous characters, like one returned from
-     *        Jsoner#serialize(Object).
+     *                  Jsoner#serialize(Object).
      * @param spaces representing the amount of spaces to use for indentation. Must be between 2 and 10.
      * @return printable except it will have '\n' then space characters inserted after '[', '{', ',' and before ']' '}'
      *         tokens in the JSON. It will return null if printable isn't a JSON string.
@@ -467,7 +467,7 @@ public class Jsoner {
 
     /** Makes the JSON string more easily human readable using indentation of the caller's choice.
      * @param printable representing a JSON formatted string with out extraneous characters, like one returned from
-     *        Jsoner#serialize(Object).
+     *                  Jsoner#serialize(Object).
      * @param indentation representing the indentation used to format the JSON string.
      * @return printable except it will have '\n' then indentation characters inserted after '[', '{', ',' and before
      *         ']' '}'

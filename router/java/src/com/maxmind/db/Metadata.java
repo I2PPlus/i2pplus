@@ -123,7 +123,7 @@ public final class Metadata {
      * Gets the IP version the database holds address data for.
      *
      * @return whether the database contains IPv4 or IPv6 address data. The only
-     * possible values are 4 and 6.
+     *         possible values are 4 and 6.
      */
     public int getIpVersion() {
         return this.ipVersion;
@@ -161,7 +161,7 @@ public final class Metadata {
      * Note that each node consists of two records.
      *
      * @return the number of bits in a record in the search tree. Note that each
-     * node consists of two records.
+     *         node consists of two records.
      */
     int getRecordSize() {
         return this.recordSize;

@@ -153,8 +153,8 @@ class PartialPiece implements Comparable<PartialPiece> {
      * SUB_PARTSIZE bytes of padding.
      *
      * @param minOffset byte offset to start scanning at, rounded up to a sub-block boundary; the
-     *        caller advances it past the last request (callers pass 0 or off + len, both already
-     *        sub-block aligned) so in-flight chunks are not re-requested
+     *                  caller advances it past the last request (callers pass 0 or off + len, both already
+     *                  sub-block aligned) so in-flight chunks are not re-requested
      * @return the next Request for downloading or null if complete
      */
     public synchronized Request getRequest(int minOffset) {

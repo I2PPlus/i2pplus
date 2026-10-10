@@ -59,7 +59,7 @@ public class NSEC3PARAM extends Data {
      * @param dis the stream positioned at the start of the NSEC3PARAM record body
      * @return the NSEC3PARAM record read from the stream
      * @throws IOException if the stream ends before the salt, or the declared salt
-     *         length is not delivered in full
+     *                     length is not delivered in full
      */
     public static NSEC3PARAM parse(DataInputStream dis) throws IOException {
         byte hashAlgorithm = dis.readByte();

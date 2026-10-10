@@ -32,8 +32,8 @@ class SessionStatusMessageHandler extends HandlerImpl {
     /**
      * Handle an incoming I2CP message.
      *
-     * @param message the message
-     * @param session the session
+     * @param message the SessionStatusMessage being handled
+     * @param session the session to apply the reported status to
      */
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {

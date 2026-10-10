@@ -684,7 +684,7 @@ class ProfilePersistenceHelper {
      * Supply the set to collect peers-without-RouterInfo into.
      *
      * @param missingRouterInfo the set to fill during {@link #readProfiles()},
-     * or null to collect nothing
+     *                          or null to collect nothing
      * @since 0.9.72
      */
     void setMissingRouterInfoSink(Set<Hash> missingRouterInfo) { _missingRouterInfo = missingRouterInfo; }
@@ -726,7 +726,7 @@ class ProfilePersistenceHelper {
      *
      * @param absentFromNetDb true if no usable RouterInfo is held for the peer
      * @param lastActivity newest of last-sent-successfully, last-heard-from and
-     * last-heard-about, or 0 if the profile records none
+     *                     last-heard-about, or 0 if the profile records none
      * @param now current time in ms
      * @param staleAge age beyond which an absent peer is treated as gone, in ms
      * @return true if the file may be deleted regardless of store size
@@ -756,7 +756,7 @@ class ProfilePersistenceHelper {
      * @param retentionFloor file count to keep, exclusive of stale profiles
      * @param surplusAvailable surplus profiles not already counted as stale
      * @return number of surplus files to delete, never negative and never more
-     * than {@code surplusAvailable}
+     *         than {@code surplusAvailable}
      * @since 0.9.71+
      */
     static int surplusToDelete(int storedFiles, int retentionFloor, int surplusAvailable) {

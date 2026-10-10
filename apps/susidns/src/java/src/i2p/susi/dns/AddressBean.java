@@ -45,7 +45,7 @@ public class AddressBean {
     /**
      * Constructs an AddressBean with hostname and destination object.
      * @param name the hostname
-     * @param destination the destination
+     * @param destination the {@link Destination} being published
      * @since 0.9.66
      */
     public AddressBean(String name, Destination destination) {
@@ -55,7 +55,7 @@ public class AddressBean {
     /**
      * Constructs an AddressBean with hostname and destination as byte array.
      * @param name the hostname
-     * @param destination the destination
+     * @param destination the 387-byte destination being published
      * @since 0.9.66
      */
     public AddressBean(String name, byte[] destination) {

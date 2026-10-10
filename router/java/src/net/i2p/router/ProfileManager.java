@@ -99,7 +99,7 @@ public interface ProfileManager {
      * @param peer hash of the peer participating in the tunnel
      * @param rtt round trip latency in milliseconds, not used in the rate accounting
      * @param size bytes pushed, accumulated into a long so a period total
-     *        exceeding 2 GB is not truncated
+     *             exceeding 2 GB is not truncated
      */
     void tunnelDataPushed(Hash peer, long rtt, long size);
 

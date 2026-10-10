@@ -125,7 +125,7 @@ class PeerConnectionOut implements Runnable {
      * Creates a new outgoing connection handler.
      *
      * @param peer the remote peer this connection sends to, whose state and
-     *        preferences drive the message queue
+     *             preferences drive the message queue
      * @param dout the output stream to send messages on
      */
     public PeerConnectionOut(Peer peer, DataOutputStream dout) {
@@ -592,7 +592,7 @@ class PeerConnectionOut implements Runnable {
      * @param begin the offset within that piece where the wanted bytes start
      * @param length the number of bytes wanted from that offset
      * @param loader the callback that reads the wanted bytes from storage when
-     *        the message is actually sent
+     *               the message is actually sent
      * @since 0.8.2
      */
     void sendPiece(int piece, int begin, int length, DataLoader loader) {
@@ -783,7 +783,7 @@ class PeerConnectionOut implements Runnable {
      * Queue an allowed fast message (BEP 6).
      *
      * @param piece the zero-based index of the piece the peer may request
-     *        without asking
+     *              without asking
      */
     void sendAllowedFast(int piece) {
         Message m = new Message(Message.ALLOWED_FAST, piece);

@@ -79,7 +79,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      * @param ctx context
      * @param destKeyStream stream containing the private key data,
-     *                             format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
      * @param options set of options to configure the router with, if null will use System properties
      * @throws I2PSessionException if there is a problem loading the private keys
@@ -99,7 +99,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      * @param primary the SubSession this one multiplexes alongside, or null
      * @param destKeyStream stream containing the private key data,
-     *                             format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
      * @param options set of options to configure the router with, if null will use System properties
      * @throws I2PSessionException if there is a problem loading the private keys
@@ -129,9 +129,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      *  @param lsnr the listener to add
      *  @param proto 1-254 or PROTO_ANY (0) for all; recommended:
-     *         I2PSession.PROTO_STREAMING
-     *         I2PSession.PROTO_DATAGRAM
-     *         255 disallowed
+     *               I2PSession.PROTO_STREAMING
+     *               I2PSession.PROTO_DATAGRAM
+     *               255 disallowed
      *
      *  @param port 1-65535 or PORT_ANY (0) for all
      */
@@ -214,10 +214,10 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @param keyUsed unused - no end-to-end crypto
      *  @param tagsSent unused - no end-to-end crypto
      *  @param proto 1-254 or 0 for unset; recommended:
-     *         I2PSession.PROTO_UNSPECIFIED
-     *         I2PSession.PROTO_STREAMING
-     *         I2PSession.PROTO_DATAGRAM
-     *         255 disallowed
+     *               I2PSession.PROTO_UNSPECIFIED
+     *               I2PSession.PROTO_STREAMING
+     *               I2PSession.PROTO_DATAGRAM
+     *               255 disallowed
      *
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
@@ -235,10 +235,10 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @param keyUsed unused - no end-to-end crypto
      *  @param tagsSent unused - no end-to-end crypto
      *  @param proto 1-254 or 0 for unset; recommended:
-     *         I2PSession.PROTO_UNSPECIFIED
-     *         I2PSession.PROTO_STREAMING
-     *         I2PSession.PROTO_DATAGRAM
-     *         255 disallowed
+     *               I2PSession.PROTO_UNSPECIFIED
+     *               I2PSession.PROTO_STREAMING
+     *               I2PSession.PROTO_DATAGRAM
+     *               255 disallowed
      *
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
@@ -259,10 +259,10 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  Always uses sendNoEffort for now.
      *
      *  @param proto 1-254 or 0 for unset; recommended:
-     *         I2PSession.PROTO_UNSPECIFIED
-     *         I2PSession.PROTO_STREAMING
-     *         I2PSession.PROTO_DATAGRAM
-     *         255 disallowed
+     *               I2PSession.PROTO_UNSPECIFIED
+     *               I2PSession.PROTO_STREAMING
+     *               I2PSession.PROTO_DATAGRAM
+     *               255 disallowed
      *
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset

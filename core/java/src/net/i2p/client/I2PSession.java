@@ -160,10 +160,10 @@ public interface I2PSession {
      * @param keyUsed UNUSED, IGNORED.
      * @param tagsSent UNUSED, IGNORED.
      * @param proto 1-254 or 0 for unset; recommended:
-     * I2PSession.PROTO_UNSPECIFIED
-     * I2PSession.PROTO_STREAMING
-     * I2PSession.PROTO_DATAGRAM
-     * 255 disallowed
+     *              I2PSession.PROTO_UNSPECIFIED
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
@@ -185,10 +185,10 @@ public interface I2PSession {
      * @param tagsSent UNUSED, IGNORED.
      * @param expire absolute expiration timestamp, NOT interval from now
      * @param proto 1-254 or 0 for unset; recommended:
-     * I2PSession.PROTO_UNSPECIFIED
-     * I2PSession.PROTO_STREAMING
-     * I2PSession.PROTO_DATAGRAM
-     * 255 disallowed
+     *              I2PSession.PROTO_UNSPECIFIED
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
@@ -210,10 +210,10 @@ public interface I2PSession {
      * @param tagsSent UNUSED, IGNORED.
      * @param expire absolute expiration timestamp, NOT interval from now
      * @param proto 1-254 or 0 for unset; recommended:
-     * I2PSession.PROTO_UNSPECIFIED
-     * I2PSession.PROTO_STREAMING
-     * I2PSession.PROTO_DATAGRAM
-     * 255 disallowed
+     *              I2PSession.PROTO_UNSPECIFIED
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
@@ -233,10 +233,10 @@ public interface I2PSession {
      * @param offset offset into the payload
      * @param size number of bytes to send
      * @param proto 1-254 or 0 for unset; recommended:
-     * I2PSession.PROTO_UNSPECIFIED
-     * I2PSession.PROTO_STREAMING
-     * I2PSession.PROTO_DATAGRAM
-     * 255 disallowed
+     *              I2PSession.PROTO_UNSPECIFIED
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
@@ -260,10 +260,10 @@ public interface I2PSession {
      * @param offset offset into the payload
      * @param size number of bytes to send
      * @param proto 1-254 or 0 for unset; recommended:
-     * I2PSession.PROTO_UNSPECIFIED
-     * I2PSession.PROTO_STREAMING
-     * I2PSession.PROTO_DATAGRAM
-     * 255 disallowed
+     *              I2PSession.PROTO_UNSPECIFIED
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
@@ -601,9 +601,9 @@ public interface I2PSession {
      *
      * @param lsnr the listener to add
      * @param proto 1-254 or PROTO_ANY (0) for all; recommended:
-     * I2PSession.PROTO_STREAMING
-     * I2PSession.PROTO_DATAGRAM
-     * 255 disallowed
+     *              I2PSession.PROTO_STREAMING
+     *              I2PSession.PROTO_DATAGRAM
+     *              255 disallowed
      *
      * @param port 1-65535 or PORT_ANY (0) for all
      * @since 0.7.1

@@ -526,7 +526,7 @@ int getPosition(){
    * @return      the next token
    * @exception   java.io.IOException  if any I/O-Error occurs
    * @throws      DeserializationException if the token does not match any rule,
-   *                i.e. the input is not valid JSON
+   *                                       i.e. the input is not valid JSON
    */
   public Yytoken yylex() throws java.io.IOException, DeserializationException {
     int zzInput;

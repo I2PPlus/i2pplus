@@ -684,7 +684,7 @@ public class JobQueue {
      * Next job in queue.
      *
      * @return the next runnable job in priority order, or null once the queue
-     * has been shut down
+     *         has been shut down
      */
     Job getNext() {
         while (_alive) {

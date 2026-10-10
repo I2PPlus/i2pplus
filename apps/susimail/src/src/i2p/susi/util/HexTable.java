@@ -39,7 +39,7 @@ public class HexTable {
 
     /**
      * Direct access to table entry for backward compatibility
-     * @param index the index
+     * @param index a byte value between 0 and 255
      * @return hex string at that index
      */
     public static String getTableEntry(int index) {

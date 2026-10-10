@@ -82,7 +82,7 @@ class SSU2Bitfield {
      * @param bit the absolute message number to set, non-negative
      * @return previous value, true if previously set or unknown
      * @throws IndexOutOfBoundsException if bit is smaller then zero
-     * OR if the shift is too big
+     *                                   OR if the shift is too big
      */
     public boolean set(long bit) throws IndexOutOfBoundsException {
         if (bit < 0) {throw new IndexOutOfBoundsException(Long.toString(bit));}
@@ -226,7 +226,7 @@ class SSU2Bitfield {
      * @param rangeCount number of (nack, ack) range pairs
      * @return a bitfield covering every message the block acks
      * @throws IllegalArgumentException if the ranges describe a span larger than
-     * {@link #MAX_ACK_SPAN}
+     *                                  {@link #MAX_ACK_SPAN}
      */
     public static SSU2Bitfield fromACKBlock(long thru, int acnt, byte[] ranges, int rangeCount) {
         int t = (int) thru;

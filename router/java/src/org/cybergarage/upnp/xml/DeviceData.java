@@ -276,7 +276,7 @@ public class DeviceData extends NodeData {
      * Sets the SSDP port for binding.
      *
      * @param port The port to use for binding the SSDP service. The port will be used as source
-     *     port for all SSDP messages
+     *             port for all SSDP messages
      * @since 1.8
      */
     public void setSSDPPort(int port) {
@@ -287,7 +287,7 @@ public class DeviceData extends NodeData {
      * Returns the SSDP port used for binding.
      *
      * @return The port used for binding the SSDP service. The port will be used as source port for
-     *     all SSDP messages
+     *         all SSDP messages
      */
     public int getSSDPPort() {
         return this.ssdpPort;
@@ -297,7 +297,7 @@ public class DeviceData extends NodeData {
      * Sets the SSDP bind addresses.
      *
      * @param inets The <code>InetAddress</code> that will be binded for listing this service. Use
-     *     <code>null</code> for the default behaviur.
+     *              <code>null</code> for the default behaviur.
      * @see org.cybergarage.upnp.ssdp
      * @see org.cybergarage.upnp
      * @see org.cybergarage.net.HostInterface
@@ -311,7 +311,7 @@ public class DeviceData extends NodeData {
      * Returns the SSDP bind addresses.
      *
      * @return The <code>InetAddress</code> that will be binded for this service <code>null
-     *     </code> means that defulat behaviur will be used
+     *         </code> means that defulat behaviur will be used
      * @since 1.8
      */
     public InetAddress[] getSSDPBindAddress() {

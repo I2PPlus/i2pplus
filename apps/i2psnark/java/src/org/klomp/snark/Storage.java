@@ -870,7 +870,7 @@ public class Storage implements Closeable {
      * Preview bytes is rv[1].
      *
      * @return number of bytes remaining and number of bytes available for a preview for each file,
-     * use indexOf() to get index for a file
+     *         use indexOf() to get index for a file
      * @since 0.9.45
      */
     public long[][] remaining2() {
@@ -1096,7 +1096,7 @@ public class Storage implements Closeable {
      * @param savedBitField the completion state loaded from the metadata file, or null to ignore
      * @throws IllegalStateException if called more than once
      * @throws IOException if a required file or directory cannot be created or deleted, or the
-     *     on-disk file lengths do not sum to the length in the metainfo
+     *                     on-disk file lengths do not sum to the length in the metainfo
      */
     public void check(long savedTime, BitField savedBitField) throws IOException {
         boolean areFilesPublic = _util.getFilesPublic();
@@ -1797,7 +1797,7 @@ public class Storage implements Closeable {
      * <p>TODO thread the checking so we can return and display something on the UI
      *
      * @param recheck if true, this is a check after we downloaded the last piece, and we don't
-     * modify the global bitfield unless the check fails.
+     *                modify the global bitfield unless the check fails.
      * @return true if changed (only valid if recheck == true)
      */
     private boolean checkCreateFiles(boolean recheck) throws IOException {
@@ -2187,11 +2187,11 @@ public class Storage implements Closeable {
      * @param piece the piece number
      * @param shouldPreallocate whether to balloon sparse files
      * @param forceRW if true, open the data files read-write even when the
-     * storage thinks they are complete, and try to make them writable
-     * if permissions deny it.  Without this, checkRAF() opens files
-     * read-only for a complete torrent, and the write (or the
-     * pre-allocation ballooning) then fails with EBADF on a healthy
-     * disk.
+     *                storage thinks they are complete, and try to make them writable
+     *                if permissions deny it.  Without this, checkRAF() opens files
+     *                read-only for a complete torrent, and the write (or the
+     *                pre-allocation ballooning) then fails with EBADF on a healthy
+     *                disk.
      * @throws IOException when some storage related error occurs.
      * @since 0.9.71+
      */
@@ -2644,8 +2644,8 @@ public class Storage implements Closeable {
      * @param off the offset within the piece
      * @param length the number of bytes to read
      * @param closeAfterRead if true, close each file handle as soon as the read that used it
-     * completes. The creation-time hash pass walks the whole torrent and would otherwise
-     * hold one handle per file until it finished.
+     *                       completes. The creation-time hash pass walks the whole torrent and would otherwise
+     *                       hold one handle per file until it finished.
      * @return the number of bytes read
      * @throws IOException on read failure
      */
@@ -2855,7 +2855,7 @@ public class Storage implements Closeable {
          * @param active the file to read and write now (staging or data dir)
          * @param finalFile the data-directory location
          * @param workFile the staging-dir location, or null when the file is
-         * already in the data directory
+         *                 already in the data directory
          * @param len expected length
          * @param padding whether this is a BEP 47 padding placeholder
          * @since 0.9.71+

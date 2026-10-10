@@ -41,7 +41,7 @@ class SubSession extends I2PSessionMuxedImpl {
      * @param destKeyStream location from which to read keys
      * @param options session options
      * @throws I2PSessionException if the generated signing key is identical to the
-     *         primary session's
+     *                             primary session's
      */
     public SubSession(I2PSession primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super((I2PSessionMuxedImpl) primary, destKeyStream, options);
@@ -104,7 +104,7 @@ class SubSession extends I2PSessionMuxedImpl {
      * if not previously connected.
      *
      * @throws I2PSessionException if there is a configuration error or the router is
-     * not reachable
+     *                             not reachable
      */
     @Override
     public void connect() throws I2PSessionException {

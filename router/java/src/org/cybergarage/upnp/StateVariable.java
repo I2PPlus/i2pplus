@@ -167,7 +167,7 @@ public class StateVariable extends NodeData {
      * Sets the sendEvents attribute of this state variable.
      *
      * @param state true to notify subscribers when the value changes, false to
-     *     suppress notification
+     *              suppress notification
      */
     public void setSendEvents(boolean state) {
         getStateVariableNode()
@@ -178,7 +178,7 @@ public class StateVariable extends NodeData {
      * Reports whether this state variable notifies subscribers on change.
      *
      * @return true if the sendEvents attribute reads "yes", false if it reads
-     *     "no" or is absent
+     *         "no" or is absent
      */
     public boolean isSendEvents() {
         String state = getStateVariableNode().getAttributeValue(SENDEVENTS);

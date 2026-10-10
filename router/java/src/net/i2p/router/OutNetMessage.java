@@ -105,7 +105,8 @@ public class OutNetMessage implements CDPQEntry {
      * @param context the router context
      * @param msg generally non-null
      * @param expiration the expiration time
-     * @param priority the priority
+     * @param priority the send priority; higher is sent sooner, 100
+     *                 (PRIORITY_LOWEST) through 1000 (PRIORITY_HIGHEST)
      * @param target generally non-null
      * @since 0.9.9
      */
@@ -307,7 +308,8 @@ public class OutNetMessage implements CDPQEntry {
     public void setReplySelector(MessageSelector selector) {_replySelector = selector;}
 
     /**
-     * As of 0.9.55, returns the previous number of failed transports.
+     * Record a transport that failed to deliver this message, and return how many
+     * transports had already failed.
      *
      * @param transportStyle the transport that failed
      * @return the number of previously failed transports
@@ -333,6 +335,8 @@ public class OutNetMessage implements CDPQEntry {
     }
 
     /**
+     * The transports that have failed to deliver this message.
+     *
      * As of 0.9.55, changed from a Set to a List
      *
      * @return the list of failed transports

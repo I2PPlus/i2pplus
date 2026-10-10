@@ -300,7 +300,7 @@ public class FIFOBandwidthLimiter {
      * allocators or concurrent reuse of the same candidate.
      *
      * @param candidate the request from a previous allocation for this
-     * consumer, or null for a new request
+     *                  consumer, or null for a new request
      * @param bytesIn the number of bytes requested
      * @param purpose the purpose of the request, for logging
      * @return the request to use; never null
@@ -394,7 +394,7 @@ public class FIFOBandwidthLimiter {
      * shortcut still applies, it is returned as-is.
      *
      * @param candidate the request from a previous allocation for this
-     * consumer, or null for a new request
+     *                  consumer, or null for a new request
      * @param bytesOut the number of bytes requested
      * @param priority 0 for now
      * @param purpose the purpose of the request, for logging

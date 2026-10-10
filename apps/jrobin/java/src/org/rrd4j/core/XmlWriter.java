@@ -143,7 +143,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      */
     public void writeTag(String tag, Object value) {
         if (value != null) {
@@ -158,7 +158,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      */
     public void writeTag(String tag, int value) {
         writeTag(tag, Integer.toString(value));
@@ -169,7 +169,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      */
     public void writeTag(String tag, long value) {
         writeTag(tag, Long.toString(value));
@@ -180,7 +180,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      * @param nanString a {@link java.lang.String} object.
      */
     public void writeTag(String tag, double value, String nanString) {
@@ -192,7 +192,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      */
     public void writeTag(String tag, double value) {
         writeTag(tag, doubleFormatter.format(value, DEFAULT_NAN_STRING));
@@ -203,7 +203,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      */
     public void writeTag(String tag, boolean value) {
         writeTag(tag, Boolean.toString(value));
@@ -214,7 +214,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      */
     public void writeTag(String tag, Color value) {
         int rgb = value.getRGB() & 0xFFFFFF;
@@ -226,7 +226,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      */
     public void writeTag(String tag, Font value) {
         startTag(tag);
@@ -250,7 +250,7 @@ public class XmlWriter implements AutoCloseable {
      *
      * @param tag XML tag name
      * @param value value to be placed between <code>&lt;tag&gt;</code> and <code>&lt;/tag&gt;
-     *     </code>
+     *              </code>
      */
     public void writeTag(String tag, File value) {
         writeTag(tag, value.getPath());

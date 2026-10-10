@@ -101,7 +101,7 @@ class PeerManager {
      * so this should return quickly.
      *
      * @param context the router context, whose profile organizer and log manager
-     *        seed the peer indexes
+     *                seed the peer indexes
      */
     public PeerManager(RouterContext context) {
         _context = context;
@@ -403,9 +403,9 @@ class PeerManager {
      * Other purpose constants were removed; add new purposes as needed.
      *
      * @param criteria supplies the selection purpose and the minimum number of
-     *        peers to gather before falling back
+     *                 peers to gather before falling back
      * @return up to the requested number of peer hashes, excluding ourselves;
-     * the list may be shorter or empty if too few peers are known
+     *         the list may be shorter or empty if too few peers are known
      */
     List<Hash> selectPeers(PeerSelectionCriteria criteria) {
         Set<Hash> peers = new HashSet<>(criteria.getMinimumRequired());

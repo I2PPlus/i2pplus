@@ -232,10 +232,10 @@ class CapacityCalculator {
      * @param rejectStat Reject counter (1 = 1 reject)
      * @param failedStat Failed counter (100 = 1 fail)
      *
-     * Let A = accects, R = rejects, F = fails
+     *                   Let A = accects, R = rejects, F = fails
      *
      * @return estimated and adjusted accepts per hour, for the given period
-     * which is, more or less, max(0, 5 + (A * (A / (A + 2R))) - (4 * F))
+     *         which is, more or less, max(0, 5 + (A * (A / (A + 2R))) - (4 * F))
      */
     private static double estimateCapacity(RateStat acceptStat, RateStat rejectStat, RateStat failedStat, int period) {
         Rate curAccepted = acceptStat.getRate(period);

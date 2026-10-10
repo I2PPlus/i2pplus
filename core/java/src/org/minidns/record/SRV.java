@@ -47,7 +47,7 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
      * @param data the whole message being parsed, used to resolve names
      * @return the decoded SRV record
      * @throws IOException if the stream ends early or the target name cannot
-     *         be read
+     *                     be read
      */
     public static SRV parse(DataInputStream dis, byte[] data)
         throws IOException {

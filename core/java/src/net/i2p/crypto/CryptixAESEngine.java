@@ -299,7 +299,7 @@ public final class CryptixAESEngine extends AESEngine {
      * eldest entry in insertion order.
      *
      * @param sessionKey the session key (value-equality, may be a fresh object
-     * each call carrying the same bytes as a cached one)
+     *                   each call carrying the same bytes as a cached one)
      * @return a spec reusing the key's internal byte array; never null
      * @since 0.9.71+
      */

@@ -67,7 +67,7 @@ public abstract class NamingService {
      * @param hostname the host name to resolve, which may be a hostname,
                    an IPv4 address, or a Base 32 address
      * @return the Destination for this hostname, or
-     * <code>null</code> if name is unknown.
+     *         <code>null</code> if name is unknown.
      */
     public Destination lookup(String hostname) {
         return lookup(hostname, null, null);
@@ -79,8 +79,8 @@ public abstract class NamingService {
      *
      * @param dest non-null destination to look up
      * @return a hostname for this Destination, or <code>null</code>
-     * if none is known. It is safe for subclasses to always return
-     * <code>null</code> if no reverse lookup is possible.
+     *         if none is known. It is safe for subclasses to always return
+     *         <code>null</code> if no reverse lookup is possible.
      */
     public String reverseLookup(Destination dest) {
         return reverseLookup(dest, null);
@@ -93,8 +93,8 @@ public abstract class NamingService {
      *
      * @param h non-null hash to look up
      * @return a hostname for this hash, or <code>null</code>
-     * if none is known. It is safe for subclasses to always return
-     * <code>null</code> if no reverse lookup is possible.
+     *         if none is known. It is safe for subclasses to always return
+     *         <code>null</code> if no reverse lookup is possible.
      */
     public String reverseLookup(Hash h) {
         return null;
@@ -259,8 +259,8 @@ public abstract class NamingService {
      * so use is discouraged.
      *
      * @return all mappings
-     * or empty Map if none;
-     * Returned Map is not necessarily sorted, implementation dependent
+     *         or empty Map if none;
+     *         Returned Map is not necessarily sorted, implementation dependent
      *
      * @since 0.8.7
      */
@@ -274,8 +274,8 @@ public abstract class NamingService {
      *
      * @param options NamingService-specific, can be null
      * @return all mappings (matching the options if non-null)
-     * or empty Map if none;
-     * Returned Map is not necessarily sorted, implementation dependent
+     *         or empty Map if none;
+     *         Returned Map is not necessarily sorted, implementation dependent
      *
      * @since 0.8.7
      */
@@ -294,8 +294,8 @@ public abstract class NamingService {
      *
      * @param options NamingService-specific, can be null
      * @return all mappings (matching the options if non-null)
-     * or empty Map if none;
-     * Returned Map is not necessarily sorted, implementation dependent
+     *         or empty Map if none;
+     *         Returned Map is not necessarily sorted, implementation dependent
      *
      * @since 0.8.7, implemented in 0.9.20
      */
@@ -375,7 +375,7 @@ public abstract class NamingService {
      * All known hostnames.
      *
      * @return all known hostnames or empty Set if none;
-     * Returned Set is not necessarily sorted, implementation dependent
+     *         Returned Set is not necessarily sorted, implementation dependent
      *
      * @since 0.8.7
      */
@@ -388,8 +388,8 @@ public abstract class NamingService {
      *
      * @param options NamingService-specific, can be null
      * @return all known hostnames (matching the options if non-null)
-     * or empty Set if none;
-     * Returned Set is not necessarily sorted, implementation dependent
+     *         or empty Set if none;
+     *         Returned Set is not necessarily sorted, implementation dependent
      *
      * @since 0.8.7
      */
@@ -773,8 +773,8 @@ public abstract class NamingService {
      *
      * @param h non-null
      * @return a non-empty list of hostnames for this hash, or <code>null</code>
-     * if none is known. It is safe for subclasses to always return
-     * <code>null</code> if no reverse lookup is possible.
+     *         if none is known. It is safe for subclasses to always return
+     *         <code>null</code> if no reverse lookup is possible.
      *
      * @since 0.9.26
      */
@@ -789,8 +789,8 @@ public abstract class NamingService {
      *
      * @param dest non-null destination to look up
      * @return a non-empty list of hostnames for this Destination, or <code>null</code>
-     * if none is known. It is safe for subclasses to always return
-     * <code>null</code> if no reverse lookup is possible.
+     *         if none is known. It is safe for subclasses to always return
+     *         <code>null</code> if no reverse lookup is possible.
      *
      * @since 0.9.26
      */
@@ -837,7 +837,7 @@ public abstract class NamingService {
      *
      * @param hostname non-null
      * @return true if hostname (case insensitive) ends with .b32.i2p or .b32.i2p.alt
-     * and is long enough. May or may not be blinded.
+     *         and is long enough. May or may not be blinded.
      *
      * @since 0.9.66
      */
@@ -857,7 +857,7 @@ public abstract class NamingService {
      *
      * @param hostname non-null
      * @return true if hostname (case insensitive) ends with .b32.i2p or .b32.i2p.alt
-     * and is long enough.
+     *         and is long enough.
      *
      * @since 0.9.66
      */

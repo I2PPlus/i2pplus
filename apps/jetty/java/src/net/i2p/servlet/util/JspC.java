@@ -56,7 +56,7 @@ public class JspC {
      *
      * @param args arguments forwarded to org.apache.jasper.JspC, after fixupArgs()
      * @throws IllegalArgumentException if -webapp is repeated, has no value, or does
-     *         not name an existing directory; fixupArgs() runs outside the try below
+     *                                  not name an existing directory; fixupArgs() runs outside the try below
      */
     public static void main(String[] args) {
        if (REPRODUCIBLE)

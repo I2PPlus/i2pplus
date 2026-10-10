@@ -262,7 +262,7 @@ public abstract class TransportImpl implements Transport {
      * Per-transport connection limit
      *
      * @return the maximum concurrent peer connections for this transport,
-     * 0 when the comm system is a test dummy
+     *         0 when the comm system is a test dummy
      */
     public int getMaxConnections() {
         if (_context.commSystem().isDummy()) {return 0;} // testing

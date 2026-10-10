@@ -31,7 +31,7 @@ public interface I2CPMessage {
      * @param size number of bytes in the message payload
      * @param type type of message (should equal getType())
      * @throws I2CPMessageException if the stream doesn't contain a valid message
-     *          that this class can read.
+     *                              that this class can read.
      *
      * @throws IOException if there is a problem reading from the stream
      */
@@ -44,7 +44,7 @@ public interface I2CPMessage {
      *
      * @param in stream to read from
      * @throws I2CPMessageException if the stream doesn't contain a valid message
-     *          that this class can read.
+     *                              that this class can read.
      *
      * @throws IOException if there is a problem reading from the stream
      */
@@ -56,7 +56,7 @@ public interface I2CPMessage {
      *
      * @param out OutputStream
      * @throws I2CPMessageException if the current object doesn't have sufficient data
-     *          to write a properly formatted message.
+     *                              to write a properly formatted message.
      *
      * @throws IOException if there is a problem writing to the stream
      */

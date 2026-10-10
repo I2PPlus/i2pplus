@@ -811,7 +811,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      *
      * @param nickname the tunnel nickname to assign, or null to leave the configured nickname
      * @param capTunnels whether to cap the tunnel quantities at two, used for the shared session
-     *            which IdleChecker ramps up and down as necessary
+     *                   which IdleChecker ramps up and down as necessary
      */
     private Properties buildOpts(String nickname, boolean capTunnels) {
         Properties opts = _context.getProperties();
@@ -1614,7 +1614,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param peer the peer to dial, whose destination must not be ours or banlisted
      * @return the connected socket, or null if the connection could not be established
      * @throws IOException if the socket manager is missing, or the peer is us, banlisted,
-     *         or unreachable
+     *                     or unreachable
      */
     I2PSocket connect(PeerID peer) throws IOException {
         return connect(peer, _manager, getMyDestination());
@@ -1628,7 +1628,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param ih the torrent's info hash
      * @return the connected socket, or null if the connection could not be established
      * @throws IOException if the socket manager is missing, or the peer is us, banlisted,
-     *         or unreachable
+     *                     or unreachable
      * @since 0.9.71+
      */
     I2PSocket connect(PeerID peer, byte[] ih) throws IOException {
@@ -1907,13 +1907,13 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param initialSize buffer size
      * @param maxSize fails if greater
      * @param ih the torrent's info hash
-     * <p>When the torrent has no destination of its own - which is every torrent while
-     * {@link #getMultiDest()} is off, the default - the fetch goes over the shared
-     * session instead. Returning null here is what silently disabled every HTTP tracker
-     * announce: all of the default open trackers are http, and each one failed
-     * immediately with "No response from", leaving a magnet with no working peer source
-     * at all. Fetching over the shared session is exactly what the single-destination
-     * configuration already means.
+     *           <p>When the torrent has no destination of its own - which is every torrent while
+     *           {@link #getMultiDest()} is off, the default - the fetch goes over the shared
+     *           session instead. Returning null here is what silently disabled every HTTP tracker
+     *           announce: all of the default open trackers are http, and each one failed
+     *           immediately with "No response from", leaving a magnet with no working peer source
+     *           at all. Fetching over the shared session is exactly what the single-destination
+     *           configuration already means.
      *
      * @return null on error
      * @since 0.9.71+
@@ -2039,7 +2039,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Base64 Hash or Hash.i2p or name.i2p using naming service
      *
      * @param ip destination string: base64, a .b32.i2p address, or a name.i2p hostname
-     *         resolved through the naming service
+     *           resolved through the naming service
      * @return the Destination, or null if it cannot be parsed or the name does not resolve
      */
     Destination getDestination(String ip) {
@@ -2548,11 +2548,11 @@ public class I2PSnarkUtil implements DisconnectListener {
      * use sparingly.
      *
      * @param s string to be translated containing {0} The {0} will be replaced by the parameter.
-     *     Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     *          Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      * @param o parameter, not translated. To translate parameter also, use _t("foo {0} bar",
-     *     _t("baz")) Do not double the single quotes in the parameter. Use autoboxing to call with
-     *     ints, longs, floats, etc.
-     * @return the string
+     *          _t("baz")) Do not double the single quotes in the parameter. Use autoboxing to call with
+     *          ints, longs, floats, etc.
+     * @return the translated string, with {0} replaced by o
      */
     public String getString(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);
@@ -2563,10 +2563,10 @@ public class I2PSnarkUtil implements DisconnectListener {
      * this is a lot more expensive than getString(s, ctx), so use sparingly.
      *
      * @param s string to be translated containing {0} and {1} Single quotes
-     *     must be doubled, i.e. ' -&gt; '' in the string.
+     *          must be doubled, i.e. ' -&gt; '' in the string.
      * @param o first parameter, not translated
      * @param o2 second parameter, not translated
-     * @return the string
+     * @return the translated string, with {0} and {1} replaced by o and o2
      */
     public String getString(String s, Object o, Object o2) {
         return Translate.getString(s, o, o2, _context, BUNDLE_NAME);

@@ -291,7 +291,7 @@ public class BuildHandler implements Runnable {
      * @param key next hop of this request
      * @param limit concurrent distinct-key ceiling
      * @return true if attached and a lookup should be issued; false when
-     * the ceiling is reached and the request must queue
+     *         the ceiling is reached and the request must queue
      * @since 0.9.71+
      */
     static boolean attachLookupKey(ConcurrentHashMap<Hash, AtomicInteger> inFlight, Hash key, int limit) {
@@ -346,7 +346,7 @@ public class BuildHandler implements Runnable {
      * cannot reclaim the slot while a retry attempt is still in flight.
      *
      * @param state the build request state carrying the per-request
-     * released flag shared with the callbacks
+     *              released flag shared with the callbacks
      * @param nextPeer the attached next hop
      * @param decremented exactly-once flag shared with HandleReq/TimeoutReq
      * @param attempts total lookup attempts covered (initial + retries)
@@ -2012,7 +2012,7 @@ public class BuildHandler implements Runnable {
      * a reachability problem.
      *
      * @param outcome one of {@link #NEXT_HOP_REPLIED}, {@link #NEXT_HOP_TIMEOUT},
-     * {@link #NEXT_HOP_DROPPED}
+     *                {@link #NEXT_HOP_DROPPED}
      * @param log the log to write to, may be null
      * @param now current time in ms
      * @return true if a summary was logged

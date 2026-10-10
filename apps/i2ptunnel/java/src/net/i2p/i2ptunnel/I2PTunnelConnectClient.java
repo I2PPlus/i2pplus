@@ -60,6 +60,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
          "Your browser is misconfigured. Do not use the proxy to access the router console or other localhost destinations.<BR>";
 
     /**
+     * Create an HTTPS proxy tunnel for connecting out to arbitrary destinations,
+     * with optional outproxy chaining.
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
@@ -70,7 +72,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
      * @param notifyThis event dispatcher for notifications
      * @param tunnel the parent I2PTunnel instance, supplying the listening host and client options
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     * valid config to contact the router
+     *                                  valid config to contact the router
      */
     public I2PTunnelConnectClient(int localPort, Logging l, boolean ownDest,
                                String wwwProxy, EventDispatcher notifyThis,

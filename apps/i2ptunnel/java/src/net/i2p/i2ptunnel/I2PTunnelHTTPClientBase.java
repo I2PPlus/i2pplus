@@ -824,9 +824,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * or an implausible length is replaced.
      *
      * @param authorization the full header value e.g. "Basic dXNlcjpwYXNz"
-     * (no "Proxy-Authorization:" prefix), may be null
+     *                      (no "Proxy-Authorization:" prefix), may be null
      * @return e.g. "Basic (13 bytes)", never the credentials; "null" if null
-     * and "malformed" for a hostile scheme
+     *         and "malformed" for a hostile scheme
      * @since 0.9.71+
      */
     static String summarizeAuthorization(String authorization) {

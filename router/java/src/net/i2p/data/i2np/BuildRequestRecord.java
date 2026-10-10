@@ -24,11 +24,12 @@ import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
 import net.i2p.util.Log;
 
 /**
- * As of 0.9.48, supports two formats.
- * As of 0.9.51, supports three formats.
+ * A tunnel build request record, in one of three formats.
  * The original 222-byte ElGamal format, the new 464-byte ECIES format,
  * and the newest 154-byte ECIES format.
  * See proposal 152 and 157 for details on the new formats.
+ *
+ * Two formats were supported as of 0.9.48, three as of 0.9.51.
  *
  * None of the readXXX() calls are cached. For efficiency,
  * they should only be called once.

@@ -216,10 +216,10 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * @param xdh The key pair factory for ephemeral keys
      *
      * @throws IllegalArgumentException The protocolName is not
-     * formatted correctly, or the role is not recognized.
+     *                                  formatted correctly, or the role is not recognized.
      *
      * @throws NoSuchAlgorithmException One of the cryptographic algorithms
-     * that is specified in the protocolName is not supported.
+     *                                  that is specified in the protocolName is not supported.
      */
     public HandshakeState(NoiseInit.PatternID patternId, int role, KeyFactory xdh) throws NoSuchAlgorithmException
     {
@@ -236,10 +236,10 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * @param hdh The key pair factory for hybrid keys, Alice side only, or null for Bob or non-hybrid
      *
      * @throws IllegalArgumentException The protocolName is not
-     * formatted correctly, or the role is not recognized.
+     *                                  formatted correctly, or the role is not recognized.
      *
      * @throws NoSuchAlgorithmException One of the cryptographic algorithms
-     * that is specified in the protocolName is not supported.
+     *                                  that is specified in the protocolName is not supported.
      */
     public HandshakeState(NoiseInit.PatternID patternId, int role, KeyFactory xdh, KeyFactory hdh) throws NoSuchAlgorithmException
     {
@@ -392,8 +392,8 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      *
      * @return true if a local static key is needed; false if not.
      *
-     * If the local static key has already been set, then this function
-     * will return false.
+     *         If the local static key has already been set, then this function
+     *         will return false.
      */
     public boolean needsLocalKeyPair()
     {
@@ -408,7 +408,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * with a local static key.
      *
      * @return true if the local static key has been configured;
-     * false if not.
+     *         false if not.
      */
     public boolean hasLocalKeyPair()
     {
@@ -422,7 +422,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * Gets the public key object for the remote static key.
      *
      * @return The public key, or null if a remote static key
-     * is not required.
+     *         is not required.
      */
     public DHState getRemotePublicKey()
     {
@@ -434,8 +434,8 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      *
      * @return true if a remote static key is needed; false if not.
      *
-     * If the remote static key has already been set, then this function
-     * will return false.
+     *         If the remote static key has already been set, then this function
+     *         will return false.
      */
     public boolean needsRemotePublicKey()
     {
@@ -450,7 +450,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * with a remote static key.
      *
      * @return true if the remote static key has been configured;
-     * false if not.
+     *         false if not.
      */
     public boolean hasRemotePublicKey()
     {
@@ -497,16 +497,16 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * messages.  The getAction() function indicates the action to take next.
      *
      * @throws IllegalStateException The handshake has already started, or one or
-     * more of the required parameters has not been supplied.
+     *                               more of the required parameters has not been supplied.
      *
      * @throws UnsupportedOperationException An attempt was made to start a
-     * fallback handshake pattern without first calling fallback() on a
-     * previous handshake.
+     *                                       fallback handshake pattern without first calling fallback() on a
+     *                                       previous handshake.
      *
      * @see #getAction()
      * @see #writeMessage(byte[], int, byte[], int, int)
      * @see #readMessage(byte[], int, int, byte[], int)
-     * see #fallback()
+     *      see #fallback()
      */
     public void start()
     {
@@ -559,8 +559,8 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * the handshake part of the protocol.
      *
      * @return One of HandshakeState.NO_ACTION, HandshakeState.WRITE_MESSAGE,
-     * HandshakeState.READ_MESSAGE, HandshakeState.SPLIT, or
-     * HandshakeState.FAILED.
+     *         HandshakeState.READ_MESSAGE, HandshakeState.SPLIT, or
+     *         HandshakeState.FAILED.
      */
     public int getAction()
     {
@@ -603,13 +603,13 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * N: Message 1: 32
      *
      * @param message The buffer that will be populated with the
-     * handshake packet to be written to the transport.
+     *                handshake packet to be written to the transport.
      * @param messageOffset First offset within the message buffer
-     * to be populated.
+     *                      to be populated.
      * @param payload Buffer containing the payload to add to the
-     * handshake message; can be null if there is no payload.
+     *                handshake message; can be null if there is no payload.
      * @param payloadOffset Offset into the payload buffer of the
-     * first payload buffer.
+     *               first payload buffer.
      * @param payloadLength Length of the payload in bytes.
      *
      * @return The length of the data written to the message buffer.
@@ -617,10 +617,10 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * @throws IllegalStateException The action is not WRITE_MESSAGE.
      *
      * @throws IllegalArgumentException The payload is null, but
-     * payloadOffset or payloadLength is non-zero.
+     *                                  payloadOffset or payloadLength is non-zero.
      *
      * @throws ShortBufferException The message buffer does not have
-     * enough space for the handshake message.
+     *                              enough space for the handshake message.
      *
      * @see #getAction()
      * @see #readMessage(byte[], int, int, byte[], int)
@@ -822,23 +822,23 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * and have the same offset.
      *
      * @param message Buffer containing the incoming handshake
-     * that was read from the transport.
+     *                that was read from the transport.
      * @param messageOffset Offset of the first message byte.
      * @param messageLength The length of the incoming message.
      * @param payload Buffer that will be populated with the message payload.
      * @param payloadOffset Offset of the first byte in the
-     * payload buffer to be populated with payload data.
+     *               payload buffer to be populated with payload data.
      *
      * @return The length of the payload.
      *
      * @throws IllegalStateException The action is not READ_MESSAGE.
      *
      * @throws ShortBufferException The message buffer does not have
-     * sufficient bytes for a valid message or the payload buffer does
-     * not have enough space for the decrypted payload.
+     *                              sufficient bytes for a valid message or the payload buffer does
+     *                              not have enough space for the decrypted payload.
      *
      * @throws BadPaddingException A MAC value in the message failed
-     * to verify.
+     *                             to verify.
      *
      * @see #getAction()
      * @see #writeMessage(byte[], int, byte[], int, int)
@@ -1047,7 +1047,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * @param secondaryKey The buffer containing the secondary key.
      * @param offset The offset of the first secondary key byte.
      * @param length The length of the secondary key in bytes, which
-     * must be either 0 or 32.
+     *               must be either 0 or 32.
      * @return The pair of ciphers for sending and receiving.
      *
      * @throws IllegalStateException The action is not SPLIT.
@@ -1113,10 +1113,10 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      *
      * @param flags The flags from the handshake's pattern.
      * @param prefix The prefix from the protocol name; typically
-     * "Noise" or "NoisePSK".
+     *               "Noise" or "NoisePSK".
      * @param role The role, HandshakeState.INITIATOR or HandshakeState.RESPONDER.
      * @param isFallback Set to true if we need the requirements for a
-     * fallback pattern; false for a regular pattern.
+     *                   fallback pattern; false for a regular pattern.
      *
      * @return The set of requirements for the handshake.
      */

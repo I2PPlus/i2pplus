@@ -29,7 +29,8 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
     /**
      * Create a new EdDSA parameter specification.
      *
-     * @param curve the curve
+     * @param curve the curve the parameters describe; its field size must match
+     *              the hash output length
      * @param hashAlgo the JCA string for the hash algorithm
      * @param sc the parameter L represented as ScalarOps
      * @param b the parameter B

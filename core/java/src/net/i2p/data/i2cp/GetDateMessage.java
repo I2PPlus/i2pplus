@@ -55,10 +55,10 @@ public class GetDateMessage extends I2CPMessageImpl {
      * Client side must promote defaults to the primary map.
      *
      * @param version the client's version String to be sent to the router; may be null;
-     * must be non-null if options is non-null and non-empty.
+     *                must be non-null if options is non-null and non-empty.
      *
      * @param options Client options to be sent to the router; primarily for authentication; may be null;
-     * keys and values 255 bytes (not chars) max each
+     *                keys and values 255 bytes (not chars) max each
      *
      * @since 0.9.11
      */

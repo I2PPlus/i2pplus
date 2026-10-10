@@ -38,7 +38,7 @@ public abstract class RRWithTarget extends Data {
     /**
      * RRWithTarget.
      * @param target the owner name the rdata is anchored to, stored under both
-     *        the current field and the deprecated {@link #name} alias
+     *               the current field and the deprecated {@link #name} alias
      */
     protected RRWithTarget(DnsName target) {
         this.target = target;

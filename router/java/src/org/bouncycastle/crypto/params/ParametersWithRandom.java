@@ -18,7 +18,7 @@ public class ParametersWithRandom
      * Wrap parameters with random.
      * @param parameters the cipher parameters to wrap; they are returned unchanged by getParameters()
      * @param random the secure random source for operations needing one, resolved through the
-     * CryptoServicesRegistrar; null selects the registrar's default instance
+     *               CryptoServicesRegistrar; null selects the registrar's default instance
      */
     public ParametersWithRandom(
         CipherParameters    parameters,

@@ -83,7 +83,7 @@ class PolyVec
      * Reduce every coefficient modulo q and pack the vector for transmission.
      *
      * @return the packed vector, 320 or 352 bytes per polynomial depending on
-     * the engine's PolyVecCompressedBytes setting
+     *         the engine's PolyVecCompressedBytes setting
      */
     public byte[] compressPolyVec()
     {
@@ -287,7 +287,7 @@ class PolyVec
      * Pack every polynomial in this vector into a single buffer.
      *
      * @return every polynomial packed back to back at KyberPolyBytes each,
-     * giving a buffer of polyVecBytes bytes
+     *         giving a buffer of polyVecBytes bytes
      */
     public byte[] toBytes()
     {

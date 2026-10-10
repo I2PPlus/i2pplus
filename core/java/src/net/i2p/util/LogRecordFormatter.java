@@ -106,7 +106,7 @@ class LogRecordFormatter {
      * @param manager the log manager supplying the date format, shared and therefore
      * @param logRecord the record whose date field is rendered
      * @return the formatted timestamp string
-     *        not thread-safe
+     *         not thread-safe
      */
     public static String getWhen(LogManager manager, LogRecord logRecord) {
         SimpleDateFormat fmt = manager.getDateFormat();
@@ -158,8 +158,8 @@ class LogRecordFormatter {
      * @param str the raw name, or null (treated as empty)
      * @param size the exact output width, must be &gt; 3
      * @return a string of exactly {@code size} chars: right-padded with spaces
-     * when short, or the last {@code size - 3} chars prefixed with "…"
-     * when longer than {@code size}
+     *         when short, or the last {@code size - 3} chars prefixed with "…"
+     *         when longer than {@code size}
      * @since 0.9.71+
      */
     static String padOrTruncate(String str, int size) {

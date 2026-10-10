@@ -1456,7 +1456,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * For retransmit see allocateSend() above.
      *
      * @param data the SessionConfirmed packet bodies, retained only if this is
-     *        the first send so a retransmission can resend the same bytes
+     *             the first send so a retransmission can resend the same bytes
      */
     synchronized void confirmedPacketsSent(byte[][] data) {
         if (_sessConfForReTX == null) {_sessConfForReTX = data;}

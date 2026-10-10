@@ -304,10 +304,10 @@ public class FetchData {
      * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
      * @return the consolidated value as a double
      * @throws java.lang.IllegalArgumentException Thrown if the given datasource name cannot be
-     *     found in fetched data.
-     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
-     *     string constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
-     *     consolidation functions are "MIN", "MAX", "LAST", "FIRST", "AVERAGE" and "TOTAL" (these
+     *                                            found in fetched data.
+     *                                            with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     *                                            string constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     *                                            consolidation functions are "MIN", "MAX", "LAST", "FIRST", "AVERAGE" and "TOTAL" (these
      * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
      */
     @Deprecated
@@ -329,7 +329,7 @@ public class FetchData {
      * @return Aggregated value for the expression under the named consolidation function
      * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
      * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
-     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     *             with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     public double getRpnAggregate(String rpnExpression, ConsolFun consolFun) {
@@ -355,8 +355,8 @@ public class FetchData {
      * @return 95th percentile of fetched source values
      * @throws java.lang.IllegalArgumentException Thrown if invalid source name is supplied
      * @deprecated This method is deprecated. Uses instance of {@link
-     *     org.rrd4j.data.Variable.PERCENTILE}, used with {@link
-     *     org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     *             org.rrd4j.data.Variable.PERCENTILE}, used with {@link
+     *             org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     public double get95Percentile(String dsName) {
@@ -372,8 +372,8 @@ public class FetchData {
      * @return 95-percentile of the values the expression produced
      * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
      * @deprecated This method is deprecated. Uses instance of {@link
-     *     org.rrd4j.data.Variable.PERCENTILE}, used with {@link
-     *     org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     *             org.rrd4j.data.Variable.PERCENTILE}, used with {@link
+     *             org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     public double getRpn95Percentile(String rpnExpression) {

@@ -88,7 +88,7 @@ class NTCP2Options {
     /**
      *  Merge our options with the peer's options.
      * @param his the peer's advertised options, whose send values are clamped
-     *        against our receive values and vice versa
+     *            against our receive values and vice versa
      *  @return new merged options
      */
     public NTCP2Options merge(NTCP2Options his) {

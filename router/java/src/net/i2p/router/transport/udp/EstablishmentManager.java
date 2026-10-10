@@ -915,7 +915,7 @@ public class EstablishmentManager {
      *
      * @param code the relay response code
      * @return the matching intro state; State selection must mirror
-     * {@link #isBobRelayReject}
+     *         {@link #isBobRelayReject}
      * @since 0.9.71
      */
     static OutboundEstablishState2.IntroState relayResponseIntroState(int code) {
@@ -2587,8 +2587,8 @@ public class EstablishmentManager {
      * @param state2 SSU2-specific state, for intro bookkeeping
      * @param cb payload callback results
      * @return the signed portion of the response data (everything but the
-     * trailing token), or null if Charlie's RouterInfo is unknown or
-     * no introducer signature validated
+     *         trailing token), or null if Charlie's RouterInfo is unknown or
+     *         no introducer signature validated
      */
     private byte[] verifyIntroducerSignature(OutboundEstablishState state, OutboundEstablishState2 state2, HPCallback cb) {
         Hash charlieHash = state.getRemoteIdentity().getHash();
@@ -2645,7 +2645,7 @@ public class EstablishmentManager {
      * @param id the actual sender of the HolePunch
      * @param data the signed portion of the response
      * @return the validated port (possibly the sender's source port), or -1
-     * if the data is invalid
+     *         if the data is invalid
      */
     private int validateHolePunchAddress(OutboundEstablishState state, RemoteHostId id, byte[] data) {
         int iplen = SSU2Util.getRelayDataAddrLen(data);

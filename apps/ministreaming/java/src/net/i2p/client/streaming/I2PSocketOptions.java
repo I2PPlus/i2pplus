@@ -56,7 +56,7 @@ public interface I2PSocketOptions {
      * Default 30 seconds.
      *
      * @return milliseconds to wait, or a non-positive value for no connect
-     * timeout, i.e. the handshake is not given up on a timer
+     *         timeout, i.e. the handshake is not given up on a timer
      */
     public long getConnectTimeout();
 

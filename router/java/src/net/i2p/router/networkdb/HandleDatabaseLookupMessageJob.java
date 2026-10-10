@@ -273,7 +273,7 @@ public class HandleDatabaseLookupMessageJob extends JobImpl {
     /**
      * Send an I2NP message to the specified peer.
      *
-     * @param message the message
+     * @param message the I2NP message being sent as the reply
      * @param toPeer the destination peer
      * @param replyTunnel the reply tunnel, or null for direct delivery
      */

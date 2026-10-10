@@ -126,7 +126,7 @@ public final class MagnetHandler {
      * @param path the API path to append, e.g. "/_add"
      * @return the absolute API URI
      * @throws IllegalArgumentException if the resulting URI is not a
-     *         valid absolute URI
+     *                                  valid absolute URI
      * @since 0.9.71+
      */
     static URI buildApiUri(String base, String path) {

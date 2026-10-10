@@ -73,7 +73,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * Retry or Session Created in response.
      *
      * @param packet with all header encryption removed,
-     * either a SessionRequest OR a TokenRequest.
+     *               either a SessionRequest OR a TokenRequest.
      * @param ctx the router context
      * @param transport the UDP transport this inbound handshake belongs to
      * @throws GeneralSecurityException if the connection IDs in the packet are identical
@@ -486,7 +486,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * @param now current clock time
      * @param published the RI's publication date
      * @return REASON_SKEW when the publication date is outside the accepted skew
-     * window, otherwise REASON_MSG3
+     *         window, otherwise REASON_MSG3
      * @since 0.9.71+
      */
     static int storeFailureReason(long now, long published) {
@@ -505,7 +505,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * @param publicKey the X25519 public key from {@code _handshakeState}
      * @return the verified IKey, to install as the send header key
      * @throws DataFormatException with a type-specific message on any bad key or
-     * an S/public-key mismatch
+     *                             an S/public-key mismatch
      * @since 0.9.71+
      */
     static byte[] parseSessionKeys(RouterAddress ra, byte[] publicKey) throws DataFormatException {
@@ -550,7 +550,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * @param canIntroduce true if the transport can introduce on the peer's IP family
      * @param randomKeep the pre-rolled 1-in-4 opportunistic keep draw
      * @return {@link #INTRO_KEEP}, {@link #INTRO_BLOCKED}, {@link #INTRO_VERSION}
-     * or {@link #INTRO_OPPORTUNISTIC}
+     *         or {@link #INTRO_OPPORTUNISTIC}
      * @since 0.9.71+
      */
     static int decideIntroduction(String version, String caps, boolean sentPortOk, boolean canIntroduce, boolean randomKeep) {
@@ -949,7 +949,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * All exceptions thrown from here will be fatal. fail() will be called before throwing.
      * @param packet the retried Session Request or Token Request, header encryption removed
      * @throws GeneralSecurityException if the packet fails address, connection ID, token,
-     * version or clock-skew validation; fail() has already been called
+     *                                  version or clock-skew validation; fail() has already been called
      */
     public synchronized void receiveSessionOrTokenRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
         try {
@@ -1083,7 +1083,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      *
      * @param packet the SessionConfirmed message, header encryption removed
      * @return the new PeerState2 if are done, may also be retrieved from getPeerState(),
-     * or null if more fragments to go
+     *         or null if more fragments to go
      */
     public synchronized PeerState2 receiveSessionConfirmed(UDPPacket packet) {
         try {

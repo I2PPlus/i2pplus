@@ -107,7 +107,7 @@ public class LeaseSetKeys {
      * @param revocationKey unused, may be null
      * @param decryptionKeys non-null, non-empty
      * @throws IllegalArgumentException if the list is empty, holds two keys of the same
-     * encryption type, mixes ElGamal with a PQ key, or holds an unrecognized type
+     *                                  encryption type, mixes ElGamal with a PQ key, or holds an unrecognized type
      * @since 0.9.44
      */
     public LeaseSetKeys(Destination dest, SigningPrivateKey revocationKey, List<PrivateKey> decryptionKeys) {

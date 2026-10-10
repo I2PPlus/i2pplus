@@ -67,7 +67,7 @@ class RrdGraphGenerator {
     /**
      * Create graph
      * @throws IOException if the source RRD cannot be read while fetching data
-     *         or the rendered image cannot be written out
+     *                     or the rendered image cannot be written out
      */
 
     void createGraph() throws IOException {
@@ -1038,7 +1038,7 @@ class RrdGraphGenerator {
     }
 
     /**
-     * Return the leading
+     * The vertical advance applied between legend rows.
      *
      * @return the line advance in pixels applied between legend rows
      */

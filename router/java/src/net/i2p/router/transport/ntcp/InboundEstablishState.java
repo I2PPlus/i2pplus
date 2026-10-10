@@ -293,7 +293,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      *
      * @param aliceHash the hash of Alice's RouterIdentity to validate
      * @return true if the peer is valid and connection should proceed;
-     * false if validation failed (caller should return immediately)
+     *         false if validation failed (caller should return immediately)
      * @since 0.9.36 pulled out of verifyInbound()
      */
     private boolean verifyInbound(Hash aliceHash) {
@@ -754,7 +754,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * <p>Note: If you don't call this method, call fail() directly.
      *
      * @param buf ByteBuffer possibly containing "extra" data for immediate processing
-     * in the data phase; typically present for inbound connections
+     *            in the data phase; typically present for inbound connections
      * @since 0.9.36
      */
     private synchronized void setDataPhase(ByteBuffer buf) {
@@ -831,7 +831,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
      * @param isHandshake always true; indicates this is during handshake processing
      * @param flood true if the RouterInfo should be flooded to the network
      * @throws DataFormatException if validation fails (bad sig, no static key,
-     * key mismatch, IP mismatch, banned, etc.)
+     *                             key mismatch, IP mismatch, banned, etc.)
      * @since 0.9.36
      */
     @Override

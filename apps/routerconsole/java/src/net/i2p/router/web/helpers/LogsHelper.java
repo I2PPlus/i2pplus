@@ -284,12 +284,12 @@ public class LogsHelper extends HelperBase {
      * @param crit -1 for none
      * @param wn last line number of the wrapper log already shown, or -1 for none
      * @param wts timestamp in ms of the wrapper log line already shown, or -1
-     *        for none
+     *            for none
      * @param wf filename of the wrapper log already shown, or null for none
      * @param session the console session holding the nonce, or null to fall back
-     *        to the process-wide nonce
+     *                to the process-wide nonce
      * @param consoleNonce the submitted anti-CSRF token, which must equal the
-     *        session's nonce, or the process-wide one if no session was given
+     *                     session's nonce, or the process-wide one if no session was given
      * @since 0.9.46
      */
     public void clearThrough(int n, int crit, long wn, long wts, String wf, HttpSession session, String consoleNonce) {

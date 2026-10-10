@@ -65,7 +65,7 @@ public class I2CPMessageReader {
     /**
      * For internal extension only. No stream.
      *
-     * @param lsnr the lsnr
+     * @param lsnr the listener to notify of messages, errors and disconnects
      * @since 0.8.3
      */
     protected I2CPMessageReader(I2CPMessageEventListener lsnr) {

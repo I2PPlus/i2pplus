@@ -30,7 +30,7 @@ class HostReplyMessageHandler extends HandlerImpl {
      * Handle an incoming I2CP message.
      *
      * @param message the HostReplyMessage from the router
-     * @param session the session
+     * @param session the session the reply result applies to
      */
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {

@@ -42,17 +42,17 @@ public class DataChunk {
      * step and one column per datasource.
      *
      * @param nameindex datasource name to column index, used to locate a named
-     *        datasource within the value grid
+     *                  datasource within the value grid
      * @param startTime timestamp in seconds since the epoch of the chunk's first
-     *        row, rounded down to a whole number of steps
+     *                  row, rounded down to a whole number of steps
      * @param startOffset row number of the first row, relative to the archive's
-     *        current row; negative when the requested range starts before the
-     *        archive's oldest row
+     *                    current row; negative when the requested range starts before the
+     *                    archive's oldest row
      * @param endOffset row number one past the chunk's last row, relative to the
-     *        archive's current row; negative for a range ending before it
+     *                  archive's current row; negative for a range ending before it
      * @param step seconds between consecutive rows
      * @param dsCount number of datasources, which must match the datasource
-     *        count recorded in the RRD file
+     *                count recorded in the RRD file
      * @param rows number of rows to allocate, one per step spanning the range
      */
     DataChunk(

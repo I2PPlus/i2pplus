@@ -37,11 +37,10 @@ public class TuningHelper extends HelperBase {
     /**
      * setNonce.
      * @param nonce the console CSRF nonce to embed in the hidden field of the
-     *        rendered tuning form
+     *              rendered tuning form
      */
     public void setNonce(String nonce) { _nonce = nonce; }
 
-    // human-readable labels for raw param names
     /**
      * Param name to human label. Package-private so the conformance test can
      * verify the two maps stay in step; see {@code TuningHelperParamConformanceTest},
@@ -195,10 +194,10 @@ public class TuningHelper extends HelperBase {
         DISPLAY_NAMES.put("router.defaultProcessingTimeThrottle", _x("Message Processing Throttle"));
     }
 
-    // brief purpose descriptions (<=120 chars)
     /**
-     * Param name to console description. Package-visible for the same reason as
-     * {@link #DISPLAY_NAMES}.
+     * Param name to console description, at most 70 characters since it renders
+     * beside its control in the tuning page. Package-visible for the same
+     * reason as {@link #DISPLAY_NAMES}.
      */
     static final Map<String, String> PARAM_DESCRIPTIONS = new HashMap<>();
     static {

@@ -645,7 +645,7 @@ class ConnectionPacketHandler {
      * If this is a SYN packet and the con's SendStreamId is not set.
      *
      * @return true if the packet is ok for this connection, false if we shouldn't
-     * continue processing.
+     *         continue processing.
      */
     private boolean verifyPacket(Packet packet, Connection con) throws I2PException {
         if (packet.isFlagSet(Packet.FLAG_RESET)) {
@@ -744,7 +744,7 @@ class ConnectionPacketHandler {
     /**
      * Verify the signature if necessary.
      *
-     * @param packet the packet
+     * @param packet the packet whose signature is checked
      * @param con the connection
      * @throws I2PException if the signature was necessary and it was invalid
      */

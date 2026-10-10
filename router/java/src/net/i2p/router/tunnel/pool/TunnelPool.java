@@ -1805,7 +1805,7 @@ public class TunnelPool {
      *
      * @param t tunnel to classify; may be null (not degraded)
      * @return true when soft failures indicate the tunnel cannot be trusted
-     *              to carry data even though tests may still pass
+     *         to carry data even though tests may still pass
      * @since 0.9.71+
      */
     static boolean isSoftDegraded(TunnelInfo t) {
@@ -3733,7 +3733,7 @@ public class TunnelPool {
      * @param failures hard (test+data) or soft failure count
      * @param soft true when the reporting status was a soft send timeout
      * @return true if the tunnel should be marked and retained rather than
-     *              left selectable
+     *         left selectable
      * @since 0.9.71+
      */
     static boolean exceedsRemovalThreshold(int failures, boolean soft) {
@@ -4102,7 +4102,7 @@ public class TunnelPool {
      * ones. The two settled counts above are where the zombie total belongs.
      *
      * @return the number of unexpired tunnels, or 0 if any unexpired
-     *             tunnel expires within the threshold
+     *         tunnel expires within the threshold
      */
     private int countAllHealthyTunnels(long now, long expiryThreshold) {
         int tunnelCount = 0;
@@ -5131,8 +5131,8 @@ public class TunnelPool {
      * @param consecutiveBuildTimeouts consecutive silent build timeouts
      *                                 since the last successful or answered build
      * @return 0 with no sustained difficulty, 1 after
-     *           {@link #SPARE_LOW_THRESHOLD} timeouts, 2 after
-     *           {@link #SPARE_HIGH_THRESHOLD}
+     *         {@link #SPARE_LOW_THRESHOLD} timeouts, 2 after
+     *         {@link #SPARE_HIGH_THRESHOLD}
      * @since 0.9.71+
      */
     static int computeDifficultySpare(int consecutiveBuildTimeouts) {
@@ -5161,7 +5161,7 @@ public class TunnelPool {
      * @param now current router time (ms)
      * @param windowMs window length (ms)
      * @return start time to use for the next count — {@code now} when the
-     *               window is missing or expired, otherwise unchanged
+     *         window is missing or expired, otherwise unchanged
      * @since 0.9.71+
      */
     static long rotateWindowStart(long windowStart, long now, long windowMs) {
@@ -5201,7 +5201,7 @@ public class TunnelPool {
      *
      * @param rate build-timeout rate in [0.0, 1.0], NaN for no data
      * @return pre-build window in ms, in
-     *                   [{@value #PRE_BUILD_WINDOW_MS}, {@value #MAX_PRE_BUILD_WINDOW_MS}]
+     *         [{@value #PRE_BUILD_WINDOW_MS}, {@value #MAX_PRE_BUILD_WINDOW_MS}]
      * @since 0.9.71+
      */
     static long computePreBuildWindowMs(double rate) {
@@ -5246,7 +5246,7 @@ public class TunnelPool {
      * This pool's build-timeout rate over the current window.
      *
      * @return rate in [0.0, 1.0]; 0.0 when the window is empty or stale
-     *              (no builds within {@link #BUILD_RATE_WINDOW_MS})
+     *         (no builds within {@link #BUILD_RATE_WINDOW_MS})
      * @since 0.9.71+
      */
     private double getBuildTimeoutRate() {
@@ -6201,7 +6201,7 @@ public class TunnelPool {
      * @param usableCount usable tunnel count at snapshot time
      * @param inProgressCount in-progress build count at snapshot time
      * @return true if the cooldown has NOT yet elapsed, so the next emergency
-     *              build must wait
+     *         build must wait
      * @since 0.9.71+
      */
     static boolean isEmergencyCooldownActive(long elapsedMs, long usableCount, long inProgressCount) {
@@ -6655,7 +6655,7 @@ public class TunnelPool {
      *
      * @param lifetimeMs the configured tunnel lifetime in ms
      * @return the maximum stagger in ms, 0 when the lifetime alone reaches
-     *             the boundary
+     *         the boundary
      * @since 0.9.71+
      */
     static long maxExpirationStagger(long lifetimeMs) {
@@ -7107,7 +7107,7 @@ public class TunnelPool {
     /**
      * Whether the paired tunnel should be blamed for this build result.
      * @return false when the build failed and the pool is exploratory or
-     *               suffering sustained first-hop timeouts
+     *         suffering sustained first-hop timeouts
      */
     private boolean shouldBlamePaired(boolean success) {
         if (!success) {

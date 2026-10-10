@@ -65,7 +65,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         setMessageExpiration(context.clock().now() + EXPIRATION_PERIOD);
     }
     /**
-     * Return the tunnelId
+     * Numeric form of the tunnel ID, for callers that cannot use a {@link TunnelId}.
      *
      * @return the tunnel this data message is addressed to
      */
@@ -82,7 +82,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         _tunnelId = id;
     }
     /**
-     * Return the tunnelIdObj
+     * The {@link TunnelId} form of the tunnel ID, built once and then cached.
      *
      * @return the cached TunnelId object for this message's tunnel
      */
@@ -103,7 +103,7 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
         _tunnelId = id.getTunnelId();
     }
     /**
-     * Return the data
+     * The payload this message carries, for a message already read or written.
      *
      * @return the tunnel payload bytes
      */

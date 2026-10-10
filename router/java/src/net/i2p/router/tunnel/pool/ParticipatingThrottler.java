@@ -439,8 +439,8 @@ public class ParticipatingThrottler {
      * @param isUnreachable true if the router is unreachable
      * @param isLowShare true if the router has low bandwidth share
      * @param isFast true if the router has high bandwidth share; not consumed by
-     * the current arithmetic, kept so the signature matches
-     * {@link #calculateLimit} and {@link #shouldThrottle(Hash, boolean)}
+     *               the current arithmetic, kept so the signature matches
+     *               {@link #calculateLimit} and {@link #shouldThrottle(Hash, boolean)}
      * @param maxTunnels the configured participating tunnel ceiling
      * @param bwUsage outbound bandwidth usage as a fraction of the limit, 0 when unknown
      * @param sysLoad system load 0-100
@@ -683,8 +683,8 @@ public class ParticipatingThrottler {
      * @param bantime ban duration in milliseconds
      * @param ri the RouterInfo, for ban logging
      * @param countRequest true when this request advanced the counter;
-     * consult-only checks downgrade DROP to REJECT and
-     * never ban on a count they did not contribute to
+     *                     consult-only checks downgrade DROP to REJECT and
+     *                     never ban on a count they did not contribute to
      * @return Result indicating ACCEPT, REJECT, or DROP action
      */
     private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare,

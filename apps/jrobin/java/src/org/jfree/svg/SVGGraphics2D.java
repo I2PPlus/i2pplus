@@ -914,7 +914,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * information about the hints that can be used with {@code SVGGraphics2D}.
      *
      * @param hintKey the hint key ({@code null} permitted, but the result will be {@code null}
-     *     also).
+     *                also).
      * @return The current value for the specified hint (possibly {@code null}).
      * @see #setRenderingHint(java.awt.RenderingHints.Key, java.lang.Object)
      */
@@ -3181,9 +3181,9 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param id the element id ({@code null} permitted).
      * @param includeDimensions include the width and height attributes?
      * @param viewBox the view box specification (if {@code null} then no {@code viewBox} attribute
-     *     will be defined).
+     *                will be defined).
      * @param preserveAspectRatio the value of the {@code preserveAspectRatio} attribute (if {@code
-     *     null} then not attribute will be defined).
+     *                            null} then not attribute will be defined).
      * @param meetOrSlice the value of the meetOrSlice attribute.
      * @return A string containing the SVG element.
      * @since 3.2

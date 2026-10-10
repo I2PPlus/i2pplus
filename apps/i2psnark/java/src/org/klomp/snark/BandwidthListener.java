@@ -49,7 +49,7 @@ public interface BandwidthListener {
     /**
      * Checks if we should request the given number of bytes from a peer.
      *
-     * @param peer the peer
+     * @param peer the peer the bytes would be requested from
      * @param size the number of bytes to request
      * @return true if the request should be made, false otherwise
      */

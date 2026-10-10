@@ -266,7 +266,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
      * immediately after new RRD creation.
      *
      * @throws IllegalArgumentException if the length is bigger than the possible mapping position
-     *     (2GiB).
+     *                                  (2GiB).
      */
     protected synchronized void setLength(long newLength) throws IOException {
         if (newLength < 0 || newLength > Integer.MAX_VALUE) {

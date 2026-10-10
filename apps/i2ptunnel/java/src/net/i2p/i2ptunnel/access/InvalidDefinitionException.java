@@ -17,7 +17,7 @@ public class InvalidDefinitionException extends Exception {
      * Constructs a new InvalidDefinitionException with the specified detail message and cause.
      *
      * @param reason the detail message
-     * @param cause the cause
+     * @param cause the underlying failure that made the definition invalid
      */
     public InvalidDefinitionException(String reason, Throwable cause) {
         super(reason, cause);

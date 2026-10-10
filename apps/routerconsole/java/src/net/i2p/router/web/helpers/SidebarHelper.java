@@ -100,7 +100,7 @@ public class SidebarHelper extends HelperBase {
      * For form validation and session-bound nonce generation
      *
      * @param session the request session to bind, read back when minting CSRF
-     *        nonces and when rendering the config restart status
+     *                nonces and when rendering the config restart status
      * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
@@ -280,7 +280,7 @@ public class SidebarHelper extends HelperBase {
      * or the always-allow property.
      *
      * @return true if the network database is up and either reseed is warranted
-     * or it has been force-allowed, else false
+     *         or it has been force-allowed, else false
      */
     public boolean allowReseed() {
         long uptime = _context.router().getUptime();
@@ -683,7 +683,7 @@ public class SidebarHelper extends HelperBase {
      * Cache the tunnel build success result for the current sidebar refresh cycle.
      *
      * @param value the computed percentage
-     * @return the value
+     * @return value, as stored in the cache
      */
     private int cacheBuildSuccess(int value) {
         _buildSuccessCachedUntil = _context.clock().now() + statsCacheMs();
@@ -705,8 +705,8 @@ public class SidebarHelper extends HelperBase {
      * Should we warn about a possible firewall problem?
      *
      * @return true if the network database is ready, the router has been up over two
-     * minutes, and it knows enough routers but has no active peers, which is the
-     * signature of inbound traffic being blocked
+     *         minutes, and it knows enough routers but has no active peers, which is the
+     *         signature of inbound traffic being blocked
      */
     public boolean showFirewallWarning() {
         if (_context == null) { return false; }

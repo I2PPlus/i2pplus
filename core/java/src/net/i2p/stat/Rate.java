@@ -237,7 +237,7 @@ public class Rate {
      * must not grow the heap. Never null.
      *
      * @param max the most samples to return; clamped to the ring size, and
-     * non-positive values yield an empty list
+     *            non-positive values yield an empty list
      * @return an immutable list of at most {@code max} samples, oldest first
      * @since 0.9.71+
      */
@@ -401,7 +401,7 @@ public class Rate {
     }
 
     /**
-     * Since rate creation, what was the total value acrued through all events?
+     * What was the total value accrued through all events over the rate's lifetime?
      *
      * @return the lifetime total value
      */
@@ -410,7 +410,7 @@ public class Rate {
     }
 
     /**
-     * Since rate creation, how many events have occurred?
+     * How many events have occurred over the rate's lifetime?
      *
      * @return the lifetime event count
      */
@@ -419,7 +419,7 @@ public class Rate {
     }
 
     /**
-     * Since rate creation, how much of the time was spent doing the events?
+     * How much of the time was spent doing the events over the rate's lifetime?
      *
      * @return accumulated event time in ms over the rate's lifetime
      */
@@ -512,8 +512,8 @@ public class Rate {
      * @param props the properties previously written by store()
      * @param prefix prefix to the property entries (should NOT end with a period)
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has
-     * elapsed since it was written out, but if it is false, we'll
-     * treat the data with as much freshness (or staleness) as appropriate.
+     *                       elapsed since it was written out, but if it is false, we'll
+     *                       treat the data with as much freshness (or staleness) as appropriate.
      *
      * @throws IllegalArgumentException if the data was formatted incorrectly
      */
@@ -723,7 +723,7 @@ public class Rate {
      *
      * @param expected the listener believed to be registered; may be null
      * @return true if the listener was cleared by this call, false if the
-     * registration was already absent or held by someone else
+     *         registration was already absent or held by someone else
      * @since 0.9.71+
      */
     public synchronized boolean clearSummaryListener(RateSummaryListener expected) {
@@ -937,7 +937,7 @@ public class Rate {
      *
      * @param out where to store the computed averages.
      * @param useLifetime whether the lifetime average should be used if
-     * there are no events.
+     *                    there are no events.
      *
      * @return the same RateAverages object for chaining
      * @since 0.9.4
@@ -1016,8 +1016,8 @@ public class Rate {
      * @param props the properties previously written by store()
      * @param prefix prefix to the property entries (should NOT end with a period)
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has elapsed since it was
-     * written out, but if it is false, we'll treat the data with as much freshness
-     * (or staleness) as appropriate.
+     *                       written out, but if it is false, we'll treat the data with as much freshness
+     *                       (or staleness) as appropriate.
      *
      * @throws IllegalArgumentException if the data was formatted incorrectly
      */

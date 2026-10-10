@@ -561,9 +561,9 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @param path Path to existing RRD.
      * @param readOnly Should be set to <code>false</code> if you want to update the underlying RRD.
-     *     If you want just to fetch data from the RRD file (read-only access), specify <code>true
-     *     </code>. If you try to update RRD file open in read-only mode (<code>readOnly</code> set
-     *     to <code>true</code>), <code>IOException</code> will be thrown.
+     *                 If you want just to fetch data from the RRD file (read-only access), specify <code>true
+     *                 </code>. If you try to update RRD file open in read-only mode (<code>readOnly</code> set
+     *                 to <code>true</code>), <code>IOException</code> will be thrown.
      * @throws java.io.IOException Thrown in case of I/O error.
      * @deprecated Use the builder instead.
      */
@@ -581,9 +581,9 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @param uri URI to existing RRD.
      * @param readOnly Should be set to <code>false</code> if you want to update the underlying RRD.
-     *     If you want just to fetch data from the RRD file (read-only access), specify <code>true
-     *     </code>. If you try to update RRD file open in read-only mode (<code>readOnly</code> set
-     *     to <code>true</code>), <code>IOException</code> will be thrown.
+     *                 If you want just to fetch data from the RRD file (read-only access), specify <code>true
+     *                 </code>. If you try to update RRD file open in read-only mode (<code>readOnly</code> set
+     *                 to <code>true</code>), <code>IOException</code> will be thrown.
      * @throws java.io.IOException Thrown in case of I/O error.
      * @deprecated Use the builder instead.
      */
@@ -598,9 +598,9 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @param path Path to existing RRD.
      * @param readOnly Should be set to <code>false</code> if you want to update the underlying RRD.
-     *     If you want just to fetch data from the RRD file (read-only access), specify <code>true
-     *     </code>. If you try to update RRD file open in read-only mode (<code>readOnly</code> set
-     *     to <code>true</code>), <code>IOException</code> will be thrown.
+     *                 If you want just to fetch data from the RRD file (read-only access), specify <code>true
+     *                 </code>. If you try to update RRD file open in read-only mode (<code>readOnly</code> set
+     *                 to <code>true</code>), <code>IOException</code> will be thrown.
      * @param factory Backend factory which will be used for this RRD.
      * @throws FileNotFoundException Thrown if the requested file does not exist.
      * @throws java.io.IOException Thrown in case of general I/O error (bad RRD file, for example).
@@ -1036,8 +1036,8 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * @param fetchStart Starting timestamp for fetch request.
      * @param fetchEnd Ending timestamp for fetch request.
      * @param resolution Fetch resolution (see RRDTool's <a
-     *     href="http://oss.oetiker.ch/rrdtool/doc/rrdfetch.en.html" target="man">rrdfetch man
-     *     page</a> for an explanation of this parameter.
+     *                   href="http://oss.oetiker.ch/rrdtool/doc/rrdfetch.en.html" target="man">rrdfetch man
+     *                   page</a> for an explanation of this parameter.
      * @return Request object that should be used to actually fetch data from RRD
      */
     public FetchRequest createFetchRequest(
@@ -1530,7 +1530,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @return Canonical path to RRD file;
      * @throws java.io.IOException Thrown in case of I/O error or if the underlying backend is not
-     *     derived from RrdFileBackend.
+     *                             derived from RrdFileBackend.
      */
     public String getCanonicalPath() throws IOException {
         if (backend instanceof RrdFileBackend) {
@@ -1601,7 +1601,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @param factoryName Name of the backend factory to be set as default.
      * @throws java.lang.IllegalArgumentException Thrown if invalid factory name is supplied, or not
-     *     called before the first backend object (before the first RrdDb object) is created.
+     *                                            called before the first backend object (before the first RrdDb object) is created.
      * @deprecated uses {@link RrdBackendFactory#setActiveFactories(RrdBackendFactory...)} instead.
      */
     @Deprecated
@@ -1631,7 +1631,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * @return Last stored value for the given datasource
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown if no datasource in this RrdDb matches the
-     *     given datasource name
+     *                                            given datasource name
      */
     public synchronized double getLastDatasourceValue(String dsName) throws IOException {
         int dsIndex = getDsIndex(dsName);

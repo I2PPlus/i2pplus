@@ -785,7 +785,7 @@ class Connection {
      * @param oldestLastSend send time of the oldest unacked packet, or 0 if none
      * @param rto the connection's current RTO in ms
      * @param immediateAlreadyFired true if an immediate fire already happened for
-     *        this overdue episode
+     *                              this overdue episode
      * @return delay in ms; 0 requests an immediate fire
      */
     static int nextRetransmitDelay(long now, long oldestLastSend, long rto,
@@ -833,7 +833,7 @@ class Connection {
      * configured budget — so the proxy can emit the "Website Unreachable" page sooner.
      *
      * @param measuredRttMs a recent round-trip time for this peer in ms, or &lt;=0 when no
-     *                      RTT evidence is available (never measured, no cache entry)
+     *          RTT evidence is available (never measured, no cache entry)
      * @param initialRtoMs  the configured initial RTO (i2p.streaming.initialRTO) in ms
      * @return the fixed inter-SYN retransmit interval (ms) to use
      * @since 0.9.70+ evidence-gated and RTT-aware SYN pacing
@@ -1323,7 +1323,7 @@ class Connection {
      *
      * @param packetSize size in bytes of the packet about to go out
      * @param pacingRate rate in bytes per second; must be a real rate, as the
-     *        {@link Long#MAX_VALUE} "no pacing" sentinel is screened by the caller
+     *                   {@link Long#MAX_VALUE} "no pacing" sentinel is screened by the caller
      * @return delay in ms, 0 if no pacing needed
      */
     private long calculatePacingDelay(int packetSize, long pacingRate) {
@@ -1371,7 +1371,7 @@ class Connection {
      *
      *  @param maxSlowStartWindow the Tuner-managed slow-start cap, in messages
      * @param globalMaxWindow the Tuner-managed window ceiling floor
-     *         ({@code i2p.streaming.maxWindowSize}), in messages
+     *                        ({@code i2p.streaming.maxWindowSize}), in messages
      * @param initialWindowSize the configured starting window, in messages
      * @return the initial slow-start threshold in messages, in
      *         {@code [1, maxSlowStartWindow]}
@@ -1409,7 +1409,7 @@ class Connection {
      * @return true if the packet should be sent, false for a fatal error
      *         will return false after 5 minutes even if timeoutMs is &lt;= 0.
      * @throws IOException if the peer reset the connection, or either side closed
-     *         the socket, while waiting for a window slot
+     *                     the socket, while waiting for a window slot
      * @throws InterruptedException if interrupted while waiting on the window lock
      */
     public boolean packetSendChoke(long timeoutMs) throws IOException, InterruptedException {
@@ -1496,7 +1496,7 @@ class Connection {
      *
      * @return true, always; unusable connections throw rather than return false
      * @throws IOException if the peer reset, the socket closed, or the output
-     *         stream closed
+     *                     stream closed
      */
     private boolean isConnectedOrError() throws IOException {
         if (!_connected.get()) {
@@ -2085,7 +2085,7 @@ class Connection {
      *  @param hadCongestionMark true when a congestion cut has ever occurred
      *  @param ackThrough highest contiguously-acked sequence number
      *  @param lastCongestionHighestUnacked highest unacked sequence number at
-     *         the cut, -1 if none
+     *                                      the cut, -1 if none
      *  @param activeResends retransmits still awaiting their ACK
      *  @return true when the lost window has been recovered
      *  @since 0.9.71+
@@ -2142,8 +2142,8 @@ class Connection {
      * budget boundary from being killed.
      *
      * @param budgetMs the worst-case in-flight budget in ms, computed by the
-     *                caller as the retransmit budget times the maximum single
-     *                retransmit timeout; {@code <= 0} disables the check
+     *                 caller as the retransmit budget times the maximum single
+     *                 retransmit timeout; {@code <= 0} disables the check
      * @param now current time in ms since epoch
      * @param createdOn creation time of the oldest packet, in ms since epoch
      *                  (PacketLocal.getCreatedOn()), or &lt;= 0 if unknown
@@ -2245,7 +2245,7 @@ class Connection {
      *
      * @param totalSends total send attempts incl. resends (PacketLocal.getNumSends())
      * @param softResends of those, resends tagged as soft-failure-triggered
-     *                    (PacketLocal.getNumSoftResends())
+     *         (PacketLocal.getNumSoftResends())
      * @param maxResends configured per-packet retransmit budget (&gt; 0)
      * @return true if the non-soft send attempts exceed the budget
      * @since 0.9.71+
@@ -2299,7 +2299,7 @@ class Connection {
      *
      * @param totalSends total SYN send attempts incl. resends (PacketLocal.getNumSends())
      * @param softResends of those, resends tagged as soft-failure-triggered
-     *                    (PacketLocal.getNumSoftResends())
+     *         (PacketLocal.getNumSoftResends())
      * @param maxSynSends per-connection SYN give-up budget (getMaxSynSends())
      * @return true if the non-soft SYN send attempts exceed the budget
      * @since 0.9.71+
@@ -2453,7 +2453,7 @@ class Connection {
      *
      *  @param now wall-clock time of this soft-failure report (ms)
      *  @param lastSoftFailRetransmit wall-clock time of the last permitted
-     *         immediate retransmit (ms), 0 if none yet this connection
+     *                                immediate retransmit (ms), 0 if none yet this connection
      *  @param minSpacingMs minimum gap between immediate retransmits (ms)
      *  @return true if the retransmit should be deferred to the existing timer
      *  @since 0.9.71+
@@ -2472,7 +2472,7 @@ class Connection {
      *  or in ConnectionManager or ConnectionHandler.
      *
      *  @param packet the ACK or data packet to send for the first time;
-     *         null is ignored
+     *                null is ignored
      */
     void sendPacket(PacketLocal packet) {
         if (packet == null) {
@@ -2580,10 +2580,10 @@ class Connection {
      *  receive thread; do not retain a reference across calls.
      *
      *  @param ackThrough the highest packet sequence number the peer has
-     *         received contiguously; anything lower counts as ACKed unless
-     *         NACKed
+     *                    received contiguously; anything lower counts as ACKed unless
+     *                    NACKed
      *  @param nacks sequence numbers explicitly reported as lost, or null or
-     *         empty if the peer sent none
+     *               empty if the peer sent none
      *  @return List of packets acked for the first time (empty if none);
      *          a shared mutable buffer, not a fresh copy
      */
@@ -3332,7 +3332,7 @@ class Connection {
      * Socket associated with this connection.
      *
      * @param socket the socket the connection will read and write on once it is
-     *        established
+     *               established
      */
     public void setSocket(I2PSocketFull socket) {_socket = socket;}
 
@@ -3470,7 +3470,7 @@ class Connection {
      *  options.getSendAckDelay() from now (1000 ms)
      *
      *  @param when the desired send time in ms since the epoch, or &lt; 0 for
-     *         "never"
+     *              "never"
      */
     public void setNextSendTime(long when) {
         synchronized(_nextSendLock) {
@@ -3605,7 +3605,7 @@ if (!on) {
      *  that fixed burst fed the loss that caused the next cut.
      *
      * @param saved the window captured when the choke began, always positive at
-     *        the call site
+     *              the call site
      * @param ceiling the current per-stream window ceiling, in messages
      * @return the window to restore, in {@code [1, ceiling]}
      * @since 0.9.71+
@@ -4138,7 +4138,7 @@ if (!on) {
          * Schedule the retransmit timer if it is not already running.
          *
          * @param delay how long from now to wait before firing the retransmit
-         *             (ms), normally the packet's timeout
+         *              (ms), normally the packet's timeout
          * @return true if the timer was armed, false if one was already
          *         running and the pending schedule was left untouched
          */

@@ -563,8 +563,8 @@ class OutboundEstablishState {
      * The next time a message should be sent.
      *
      * @return 0 at initialization (to force sending session request),
-     * rcv time after receiving a packet,
-     * send time + delay after sending a packet (including session request)
+     *         rcv time after receiving a packet,
+     *         send time + delay after sending a packet (including session request)
      */
     public synchronized long getNextSendTime() { return _nextSend; }
 

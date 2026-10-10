@@ -65,7 +65,7 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      * detected as a duplicate.
      *
      * @param dataDir null to default to snark data directory
-     * @param ctx the ctx
+     * @param ctx the I2P application context supplying the logger
      * @param mgr the manager that owns this downloader
      * @param url the torrent file URL to fetch
      */

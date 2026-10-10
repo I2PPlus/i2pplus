@@ -270,10 +270,10 @@ public class DataHelper {
      *
      * @param rawStream stream to read the mapping from
      * @param props The Properties to load into.
-     * As of 0.9.38, if null, a new OrderedProperties will be created.
+     *              As of 0.9.38, if null, a new OrderedProperties will be created.
      *
      * @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
-     * and an immutable EmptyProperties if empty.
+     *         and an immutable EmptyProperties if empty.
      *
      * @throws DataFormatException if the format is invalid
      * @throws IOException if there is a problem reading the data
@@ -290,11 +290,11 @@ public class DataHelper {
      *
      * @param rawStream stream to read the mapping from
      * @param props The Properties to load into.
-     * As of 0.9.38, if null, a new OrderedProperties will be created.
+     *              As of 0.9.38, if null, a new OrderedProperties will be created.
      *
      * @param enforceOrder if true, throw DataFormatException if keys are not ordered
      * @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
-     * and an immutable EmptyProperties if empty.
+     *         and an immutable EmptyProperties if empty.
      *
      * @throws DataFormatException if the format is invalid
      * @throws IOException if there is a problem reading the data
@@ -353,7 +353,7 @@ public class DataHelper {
      * @param rawStream stream to write to
      * @param props properties to write out, may be null
      * @throws DataFormatException if there is not enough valid data to write out,
-     * or a length limit is exceeded
+     *                             or a length limit is exceeded
      *
      * @throws IOException if there is an IO error writing out the data
      */
@@ -409,7 +409,7 @@ public class DataHelper {
      * @param utf8 if true, encode strings as UTF-8
      * @param sort should we sort the properties? (set to false if already sorted, e.g. OrderedProperties)
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
-     * (not including the two length bytes) is greater than 65535 bytes.
+     *                             (not including the two length bytes) is greater than 65535 bytes.
      * @throws IOException if there is an IO error
      *
      * @since 0.8.7
@@ -466,9 +466,9 @@ public class DataHelper {
      * @param props source may be null
      * @return new offset
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
-     * (not including the two length bytes) is greater than 65535 bytes.
+     *                             (not including the two length bytes) is greater than 65535 bytes.
      * @throws IOException never thrown here; declared because the ByteArrayStream
-     * used to assemble the properties inherits OutputStream.write(int)
+     *                     used to assemble the properties inherits OutputStream.write(int)
      */
     public static int toProperties(byte[] target, int offset, Properties props) throws DataFormatException, IOException {
         if (props != null && !props.isEmpty()) {
@@ -713,7 +713,7 @@ public class DataHelper {
      * @param props properties to store
      * @param file the file to write to
      * @throws IllegalArgumentException if a key contains any of "#=\n" or starts with ';',
-     * or a value contains '#' or '\n'
+     *                                  or a value contains '#' or '\n'
      * @throws IOException if there is an IO error
      */
     public static void storeProps(Properties props, File file) throws IOException {
@@ -1193,7 +1193,7 @@ public class DataHelper {
      *
      * @param out stream to write string
      * @param string string to write out: null strings are perfectly valid, but strings of excess length will
-     * cause a DataFormatException to be thrown
+     *               cause a DataFormatException to be thrown
      *
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
@@ -1221,7 +1221,7 @@ public class DataHelper {
      *
      * @param out stream to write string
      * @param string UTF-8 string to write out: null strings are perfectly valid, but strings of excess length will
-     * cause a DataFormatException to be thrown
+     *               cause a DataFormatException to be thrown
      *
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
@@ -1695,7 +1695,7 @@ public class DataHelper {
      * @param in the input stream
      * @param buf the buffer to append to
      * @return true if the line was read, false if eof was reached on an empty line
-     * (returns true for non-empty last line without a newline)
+     *         (returns true for non-empty last line without a newline)
      * @throws IOException if there is an IO error
      */
     public static boolean readLine(InputStream in, StringBuilder buf) throws IOException {
@@ -1712,7 +1712,7 @@ public class DataHelper {
      * @param buf the buffer to append to
      * @param hash null OK
      * @return true if the line was read, false if eof was reached on an empty line
-     * (returns true for non-empty last line without a newline)
+     *         (returns true for non-empty last line without a newline)
      * @throws IOException if there is an IO error
      * @since 0.8.8
      */
@@ -2324,7 +2324,7 @@ public class DataHelper {
      * @param orig the GZIP compressed data
      * @return null if orig is null
      * @throws IOException if uncompressed is over 40 KB,
-     * or on a decompression error
+     *                     or on a decompression error
      *
      */
     public static byte[] decompress(byte[] orig) throws IOException {
@@ -2339,7 +2339,7 @@ public class DataHelper {
      * @param length the number of compressed bytes to decompress
      * @return null if orig is null
      * @throws IOException if uncompressed is over 40 KB,
-     * or on a decompression error
+     *                     or on a decompression error
      *
      */
     public static byte[] decompress(byte[] orig, int offset, int length) throws IOException {

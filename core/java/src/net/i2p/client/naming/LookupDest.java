@@ -39,7 +39,7 @@ public class LookupDest {
     /**
      * Create a new LookupDest instance.
      *
-     * @param context context
+     * @param context the application context, unused by this constructor
      */
     protected LookupDest(I2PAppContext context) {}
 

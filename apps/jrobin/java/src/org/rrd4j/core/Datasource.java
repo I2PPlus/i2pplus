@@ -202,7 +202,7 @@ public class Datasource implements RrdUpdater<Datasource> {
      *
      * @param newTime sample time in seconds since the epoch
      * @param newValue sample value; samples further apart than the heartbeat are ignored, as are
-     *        rates that fall outside the configured min/max
+     *                 rates that fall outside the configured min/max
      * @throws java.io.IOException if the datasource state cannot be read, updated or archived
      */
     final void process(long newTime, double newValue) throws IOException {
@@ -380,7 +380,7 @@ public class Datasource implements RrdUpdater<Datasource> {
      * @param heartbeat New heartbeat value
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown if invalid (non-positive) heartbeat value
-     *     is specified.
+     *                                            is specified.
      */
     public void setHeartbeat(long heartbeat) throws IOException {
         if (heartbeat < 1L) {
@@ -429,12 +429,12 @@ public class Datasource implements RrdUpdater<Datasource> {
      * is set to true, all archived values less then <code>minValue</code> will be fixed to NaN.
      *
      * @param minValue New minimal value. Specify <code>Double.NaN</code> if no minimal value should
-     *     be set
+     *                 be set
      * @param filterArchivedValues true, if archived datasource values should be fixed; false,
-     *     otherwise.
+     *                             otherwise.
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown if invalid minValue was supplied (not less
-     *     then maxValue)
+     *                                            then maxValue)
      */
     public void setMinValue(double minValue, boolean filterArchivedValues) throws IOException {
         double maxValue = this.maxValue.get();
@@ -457,12 +457,12 @@ public class Datasource implements RrdUpdater<Datasource> {
      * is set to true, all archived values greater then <code>maxValue</code> will be fixed to NaN.
      *
      * @param maxValue New maximal value. Specify <code>Double.NaN</code> if no max value should be
-     *     set.
+     *                 set.
      * @param filterArchivedValues true, if archived datasource values should be fixed; false,
-     *     otherwise.
+     *                             otherwise.
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown if invalid maxValue was supplied (not
-     *     greater then minValue)
+     *                                            greater then minValue)
      */
     public void setMaxValue(double maxValue, boolean filterArchivedValues) throws IOException {
         double minValue = this.minValue.get();
@@ -486,11 +486,11 @@ public class Datasource implements RrdUpdater<Datasource> {
      * <code>maxValue</code> will be fixed to NaN.
      *
      * @param minValue New minimal value. Specify <code>Double.NaN</code> if no min value should be
-     *     set.
+     *                 set.
      * @param maxValue New maximal value. Specify <code>Double.NaN</code> if no max value should be
-     *     set.
+     *                 set.
      * @param filterArchivedValues true, if archived datasource values should be fixed; false,
-     *     otherwise.
+     *                             otherwise.
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown if invalid min/max values were supplied
      */

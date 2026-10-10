@@ -95,16 +95,14 @@ public final class ElGamalEngine {
      * @param data data to encrypt, must be 222 bytes or less
      * @param publicKey public key encrypt to
      * @return encrypted data, will be exactly 514 bytes long
-     * Contains the two-part encrypted data starting at bytes 0 and 257.
-     * If the encrypted parts are smaller than 257 bytes, they will be
-     * padded with leading zeros.
-     * The parts appear to always be 256 bytes or less, in other words,
-     * bytes 0 and 257 are always zero.
+     *         Contains the two-part encrypted data starting at bytes 0 and 257.
+     *         If the encrypted parts are smaller than 257 bytes, they will be
+     *         padded with leading zeros.
+     *         The parts appear to always be 256 bytes or less, in other words,
+     *         bytes 0 and 257 are always zero.
      *
-     * cleartext is smaller than 222 bytes, it is recommended that the caller pad
-     * the cleartext to 222 bytes with random data.
-     *
-     *
+     *         cleartext is smaller than 222 bytes, it is recommended that the caller pad
+     *         the cleartext to 222 bytes with random data.
      *
      *
      *
@@ -118,7 +116,9 @@ public final class ElGamalEngine {
      *
      *
      *
-     * As the encrypted data may contain a substantial number of zeros if the
+     *
+     *
+     *         As the encrypted data may contain a substantial number of zeros if the
      */
     public byte[] encrypt(byte[] data, PublicKey publicKey) {
         if ((data == null) || (data.length > ELG_CLEARTEXT_LENGTH)) throw new IllegalArgumentException("Data to encrypt must be <= 222 bytes");
@@ -180,9 +180,9 @@ public final class ElGamalEngine {
      * Decrypt the data
      *
      * @param encrypted encrypted data, must be exactly 514 bytes
-     * Contains the two-part encrypted data starting at bytes 0 and 257.
-     * If the encrypted parts are smaller than 257 bytes, they must be
-     * padded with leading zeros.
+     *                  Contains the two-part encrypted data starting at bytes 0 and 257.
+     *                  If the encrypted parts are smaller than 257 bytes, they must be
+     *                  padded with leading zeros.
      *
      * @param privateKey private key to decrypt with
      * @return unencrypted data or null on failure

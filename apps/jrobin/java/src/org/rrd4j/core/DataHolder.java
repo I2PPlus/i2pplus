@@ -24,7 +24,7 @@ public interface DataHolder {
      * Returns boolean value representing {@link org.rrd4j.core.RrdDbPool RrdDbPool} usage policy.
      *
      * @return true, if the pool will be used internally to fetch data from RRD files, false
-     *     otherwise.
+     *         otherwise.
      */
     boolean isPoolUsed();
 
@@ -187,7 +187,7 @@ public interface DataHolder {
      *
      * @param name - the new virtual datasource name
      * @param defName - the datasource from which to extract the percentile. Must be a previously
-     *     defined virtual datasource
+     *                defined virtual datasource
      * @param var - a new instance of a Variable used to do the calculation
      */
     void datasource(String name, String defName, Variable var);
@@ -206,7 +206,7 @@ public interface DataHolder {
      * org.rrd4j.core.FetchData} object.
      *
      * @param name Source name.
-     * @param fetchData FetchData object.
+     * @param fetchData the fetched values for the source.
      */
     void datasource(String name, FetchData fetchData);
 
@@ -217,7 +217,7 @@ public interface DataHolder {
      *
      * @param name Source name.
      * @param dsName Source name in fetchData.
-     * @param fetchData FetchData object.
+     * @param fetchData the fetched values for the source.
      */
     void datasource(String name, String dsName, FetchData fetchData);
 }

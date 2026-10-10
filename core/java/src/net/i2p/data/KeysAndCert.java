@@ -167,7 +167,7 @@ public class KeysAndCert extends DataStructureImpl {
      *
      * @param cert the non-null certificate
      * @return the key certificate, or null if the certificate is not of type
-     * CERTIFICATE_TYPE_KEY or its payload is too short
+     *         CERTIFICATE_TYPE_KEY or its payload is too short
      */
     private KeyCertificate getKeyCertificate(Certificate cert) {
         if (cert.getCertificateType() != Certificate.CERTIFICATE_TYPE_KEY) return null;

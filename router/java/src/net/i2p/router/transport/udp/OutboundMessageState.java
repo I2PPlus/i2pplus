@@ -216,7 +216,8 @@ class OutboundMessageState implements CDPQEntry {
     }
 
     /**
-     * As of 0.9.49, includes packet overhead
+     * The total size of the fragments that have not yet been acked, counting the
+     * packet overhead of each fragment needing to be sent.
      * @return the unacked size
      */
     public synchronized int getUnackedSize() {
@@ -422,7 +423,7 @@ class OutboundMessageState implements CDPQEntry {
      * For SSU 2 only.
      *
      * @param fragmentNum the zero-based fragment number to clear, ignored when
-     *        outside the range of fragments in this message
+     *                    outside the range of fragments in this message
      * @return true if the message was completely ACKed
      * @since 0.9.54
      */

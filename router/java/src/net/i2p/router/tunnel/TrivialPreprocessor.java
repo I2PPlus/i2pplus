@@ -162,7 +162,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      * Write the first fragment of a tunnel message.
      *
      * @param msg the pending gateway message
-     * @param target the target
+     * @param target the buffer to write the control byte and fragment body into
      * @param offset the starting offset
      * @return the new offset after writing
      */
@@ -234,7 +234,7 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      * Write a subsequent fragment of a tunnel message.
      *
      * @param msg the pending gateway message
-     * @param target the target
+     * @param target the buffer to write the control byte and fragment body into
      * @param offset the starting offset
      * @return the new offset after writing
      */
@@ -286,8 +286,8 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
      * @param msg the pending gateway message
      * @return generally 3 or 35 or 39 for first fragment, 7 for subsequent fragments.
      *
-     * Does NOT include 4 for the message ID if the message will be fragmented;
-     * call getInstructionAugmentationSize() for that.
+     *         Does NOT include 4 for the message ID if the message will be fragmented;
+     *         call getInstructionAugmentationSize() for that.
      */
     protected static int getInstructionsSize(PendingGatewayMessage msg) {
         if (msg.getFragmentNumber() > 0)

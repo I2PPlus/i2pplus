@@ -215,7 +215,7 @@ public class LeaseSet extends DatabaseEntry {
      * Encryption public key for this leaseset.
      *
      * @param encryptionKey the ElGamal or ECIES key tunnel build requests are
-     *        encrypted to, matched to the receiver by the key type
+     *                      encrypted to, matched to the receiver by the key type
      * @throws IllegalStateException if already signed
      */
     public void setEncryptionKey(PublicKey encryptionKey) {
@@ -240,7 +240,7 @@ public class LeaseSet extends DatabaseEntry {
      * Must be the same type as the Destination's SigningPublicKey.
      *
      * @param key the revocation key, which must match the signing public key
-     *        type of the destination or the leaseset cannot be verified
+     *            type of the destination or the leaseset cannot be verified
      * @throws IllegalArgumentException if different type
      */
     public void setSigningKey(SigningPublicKey key) {
@@ -251,6 +251,8 @@ public class LeaseSet extends DatabaseEntry {
     }
 
     /**
+     * Record the local client that received this leaseset.
+     *
      * As of 0.9.65, no longer sets receivedAsReply to true
      *
      * @param localClient may be null
@@ -265,7 +267,7 @@ public class LeaseSet extends DatabaseEntry {
      * Adds a lease to this leaseset.
      *
      * @param lease the lease to add, which must have a gateway and, outside a
-     *        meta LeaseSet2, a tunnel ID
+     *              meta LeaseSet2, a tunnel ID
      * @throws IllegalStateException if already signed
      */
     public void addLease(Lease lease) {
@@ -294,7 +296,7 @@ public class LeaseSet extends DatabaseEntry {
      * Number of leases in this leaseset.
      *
      * @return 0-16
-     * A LeaseSet with no leases is revoked.
+     *         A LeaseSet with no leases is revoked.
      */
     public int getLeaseCount() {
         if (isEncrypted()) {
@@ -542,7 +544,7 @@ public class LeaseSet extends DatabaseEntry {
      * Must be called after all the leases are in place, but before sign().
      *
      * @param key the session key whose first block is the AES key, with the
-     *        remainder used to derive the initialization vector
+     *            remainder used to derive the initialization vector
      */
     public void encrypt(SessionKey key) {
         try {
@@ -647,7 +649,7 @@ public class LeaseSet extends DatabaseEntry {
     /**
      * True if it was encrypted, and we decrypted it successfully.
      * @return true if it was encrypted, and we decrypted it successfully.
-     * Decrypts on first call.
+     *         Decrypts on first call.
      */
     private synchronized boolean isEncrypted() {
         if (_decrypted) {

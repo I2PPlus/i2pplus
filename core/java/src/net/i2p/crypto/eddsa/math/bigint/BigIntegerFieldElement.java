@@ -101,7 +101,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
      * Return this field element modulo m.
      *
      * @param m the modulus
-     * @return the result
+     * @return this element reduced modulo m
      */
     public FieldElement mod(FieldElement m) {
         return new BigIntegerFieldElement(f, bi.mod(((BigIntegerFieldElement) m).bi));
@@ -112,7 +112,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
      *
      * @param e the exponent
      * @param m the modulus
-     * @return the result
+     * @return this element raised to the power e, modulo m
      */
     public FieldElement modPow(FieldElement e, FieldElement m) {
         return new BigIntegerFieldElement(f, bi.modPow(((BigIntegerFieldElement) e).bi, ((BigIntegerFieldElement) m).bi));
@@ -122,7 +122,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
      * Return this field element to the power e.
      *
      * @param e the exponent
-     * @return the result
+     * @return this element raised to the power e, reduced modulo the field's q
      */
     public FieldElement pow(FieldElement e) {
         return modPow(e, f.getQ());

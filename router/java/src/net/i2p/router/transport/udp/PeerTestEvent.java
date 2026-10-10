@@ -52,11 +52,11 @@ import net.i2p.util.SimpleTimer2;
      * Peer test event.
      *
      * @param ctx the router context supplying the clock and the timer this
-     *        event is scheduled on
+     *            event is scheduled on
      * @param udp the transport supplying Bob peer candidates and the
-     *        configured firewalled state
+     *            configured firewalled state
      * @param ptmgr the manager that runs the reachability test against the
-     *        chosen peer
+     *              chosen peer
      */
     PeerTestEvent(RouterContext ctx, UDPTransport udp, PeerTestManager ptmgr) {
         super(ctx.simpleTimer2());
@@ -156,7 +156,7 @@ import net.i2p.util.SimpleTimer2;
      * Run within the specified time at the latest
      * @param isIPv6 true to test IPv6 reachability, false to test IPv4
      * @param delay milliseconds to wait before the test runs, at most
-     *        MIN_TEST_FREQUENCY
+     *              MIN_TEST_FREQUENCY
      * @since 0.9.39
      */
     public synchronized void forceRunSoon(boolean isIPv6, long delay) {
@@ -181,7 +181,7 @@ import net.i2p.util.SimpleTimer2;
      * Caller MUST also call schedule(), reschedule(),
      * forceRunSoon(), or forceRunImmediately()
      * @param isAlive true keeps the event scheduled for later tests, false
-     *        cancels it
+     *                cancels it
      */
     public synchronized void setIsAlive(boolean isAlive) {
         _alive = isAlive;

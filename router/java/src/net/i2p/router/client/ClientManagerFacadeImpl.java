@@ -197,8 +197,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param set LeaseSet with requested leases - this object must be updated to contain the
-     * signed version (as well as any changed/added/removed Leases)
-     * The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
+     *            signed version (as well as any changed/added/removed Leases)
+     *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      *
      * @param timeout ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized
@@ -215,8 +215,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param set LeaseSet with requested leases - this object must be updated to contain the
-     * signed version (as well as any changed/added/removed Leases).
-     * The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
+     *            signed version (as well as any changed/added/removed Leases).
+     *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      */
     @Override
     public void requestLeaseSet(Hash dest, LeaseSet set) {

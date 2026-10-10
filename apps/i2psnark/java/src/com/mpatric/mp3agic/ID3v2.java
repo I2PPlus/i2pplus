@@ -57,7 +57,7 @@ public interface ID3v2 extends ID3v1 {
     /**
      * Set the beats per minute.
      *
-     * @param bpm the BPM value
+     * @param bpm the tempo in beats per minute to store
      */
     void setBPM(int bpm);
 

@@ -121,7 +121,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     }
 
     /**
-     * Return the hash.
+     * Return the clamped hash of the seed, H(k), from which the scalar a is derived.
      *
      * @return the hash
      */

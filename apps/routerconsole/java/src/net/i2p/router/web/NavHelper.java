@@ -33,9 +33,9 @@ public class NavHelper implements NavService, ClientApp {
      *
      * @param appName standard name for the app (plugin)
      * @param displayName translated name the app will be called in the link
-     * warning, this is the display name aka ConsoleLinkName, not the plugin name
+     *                    warning, this is the display name aka ConsoleLinkName, not the plugin name
      * @param path full path pointing to the application's root
-     * (e.g. /i2ptunnel/index.jsp), non-null
+     *             (e.g. /i2ptunnel/index.jsp), non-null
      * @param tooltip HTML escaped text or null
      * @param iconpath path-only URL starting with /, HTML escaped, or null
      * @since 0.9.20 added iconpath parameter

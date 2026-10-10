@@ -51,6 +51,8 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
     private InternalSocketRunner _isr;
 
     /**
+     * Create a standard client tunnel listening on localPort, forwarding to the
+     * given destinations.
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
@@ -62,7 +64,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * @param tunnel the I2PTunnel instance, supplying the context and listen host
      * @param pkf the path to a persistent private key file, or null to generate one
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     * valid config to contact the router
+     *                                  valid config to contact the router
      */
     public I2PTunnelClient(int localPort, String destinations, Logging l,
                            boolean ownDest, EventDispatcher notifyThis,

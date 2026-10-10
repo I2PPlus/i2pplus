@@ -287,10 +287,10 @@ public class PeerState {
      *
      * @param peers collection of active peer states
      * @return array: [avgSendWindow, avgRTO, avgConcurrentMsgs, avgEffectiveRTO],
-     * or null if no peers. Index 1 is the raw per-peer estimate (the
-     * historical series, unchanged for existing readers); index 3 is
-     * the clamped [MIN_RTO, MAX_RTO] value each peer actually uses to
-     * schedule retransmits, so the two can be compared.
+     *         or null if no peers. Index 1 is the raw per-peer estimate (the
+     *         historical series, unchanged for existing readers); index 3 is
+     *         the clamped [MIN_RTO, MAX_RTO] value each peer actually uses to
+     *         schedule retransmits, so the two can be compared.
      * @since 0.9.70+; index 3 added 0.9.71+
      */
     public static long[] getAggregateStats(Collection<PeerState> peers) {
@@ -1171,7 +1171,7 @@ public class PeerState {
      * Consecutive failed sends count.
      *
      * @return how many sends to this peer have failed back to back, reset by the
-     * first send that succeeds
+     *         first send that succeeds
      */
     public int getConsecutiveFailedSends() {return _consecutiveFailedSends;}
 
@@ -1677,7 +1677,7 @@ public class PeerState {
      * @param current the current {@code _concurrentMessagesAllowed}
      * @param queued how many messages are currently in {@code _outboundQueue}
      * @param randomInt a uniform draw in [0, {@link #INIT_CONCURRENT_MSGS}); only
-     * consumed when {@code rtt <= 0}, pass 0 otherwise
+     *         consumed when {@code rtt <= 0}, pass 0 otherwise
      * @return the new concurrent-message limit
      * @since 0.9.71+
      */
@@ -1868,7 +1868,7 @@ public class PeerState {
      * @param maxPktSz the size of the ACKed maximum-size packet
      * @param mtuDecreases the value of {@code _mtuDecreases}
      * @param randomInt the uniform draw in [0, mtuDecreases), consumed only when
-     * {@code mtuDecreases > 1}; pass 0 otherwise
+     *                  {@code mtuDecreases > 1}; pass 0 otherwise
      * @return true if the MTU may be increased
      * @since 0.9.71+
      */
@@ -2247,7 +2247,7 @@ public class PeerState {
      *
      * @param now what time it is now
      * @return how long to wait before sending, or Integer.MAX_VALUE if we have nothing to send.
-     * If ready now, will return 0.
+     *         If ready now, will return 0.
      * @since 0.9.48
      */
     int getNextDelay(long now) {

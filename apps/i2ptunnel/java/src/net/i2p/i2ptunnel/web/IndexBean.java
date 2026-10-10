@@ -179,7 +179,7 @@ public class IndexBean {
     /**
      * Set the current nonce.
      *
-     * @param nonce the nonce value
+     * @param nonce the nonce to require of subsequent submissions; ignored if null or blank
      */
     public void setNonce(String nonce) {
         if ((nonce == null) || (nonce.trim().length() <= 0)) return;
@@ -283,7 +283,7 @@ public class IndexBean {
     /**
      * Set the tunnel number.
      *
-     * @param tunnel the tunnel
+     * @param tunnel the tunnel number to select, parsed as an integer; ignored if null or blank
      */
     public void setTunnel(String tunnel) {
         if ((tunnel == null) || (tunnel.trim().length() <= 0)) return;
@@ -588,7 +588,7 @@ public class IndexBean {
         /**
          * Create a timestamped message with the current time.
          *
-         * @param message the message
+         * @param message the message text to timestamp
          */
         public TimestampedMessage(String message) {
             this.message = message;

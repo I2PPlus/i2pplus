@@ -238,8 +238,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * Add the long entry, returning whether it was a duplicate.
      *
      * @return true if the entry added is a duplicate.  the number of low order
-     * bits used is determined by the entryBytes parameter used on creation of the
-     * filter.
+     *         bits used is determined by the entryBytes parameter used on creation of the
+     *         filter.
      */
     @Override
     public boolean add(long entry) {
@@ -250,7 +250,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * Check whether the entry is already known, without adding it.
      *
      * @return true if the entry is already known.  this does NOT add the
-     * entry however.
+     *         entry however.
      */
     @Override
     public boolean isKnown(long entry) {
@@ -335,7 +335,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * Add the entry to the current set if new, or check membership only.
      *
      * @param addIfNew if true, add the element to current if it is not already there or in previous;
-     * if false, only check
+     *                 if false, only check
      *
      * @return if the element is in either the current or previous set
      */

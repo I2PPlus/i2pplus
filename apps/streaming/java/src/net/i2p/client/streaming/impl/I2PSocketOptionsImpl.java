@@ -117,7 +117,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * @param opts properties to read from, null yields the default
      * @param name the property name to look up
      * @param defaultVal returned when the property is absent or not an integer
-     * @return the int
+     * @return the parsed integer, or defaultVal when absent or unparseable
      */
     protected static int getInt(Properties opts, String name, int defaultVal) {
         if (opts == null) return defaultVal;
@@ -166,7 +166,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * Default 30 seconds.
      *
      * @return milliseconds to wait, or a non-positive value for no connect
-     * timeout, i.e. the handshake is not given up on a timer
+     *         timeout, i.e. the handshake is not given up on a timer
      */
     @Override
     public long getConnectTimeout() {

@@ -104,7 +104,7 @@ class PacketDispatcher {
      * @param queueCapacity queue size per shard, at least 1 (higher clamped)
      * @param processor not null
      * @param context used to record the receive-backlog / queue-depth rates,
-     * may be null in tests (stats disabled)
+     *                may be null in tests (stats disabled)
      */
     PacketDispatcher(int workerCount, int queueCapacity, PacketProcessor processor, I2PAppContext context) {
         _context = context;

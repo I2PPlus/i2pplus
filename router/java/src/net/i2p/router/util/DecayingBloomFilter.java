@@ -151,7 +151,7 @@ public class DecayingBloomFilter {
      * yields the most extenders that are safe (4, using 30 of the 32 bytes).
      *
      * @param entryBytes how large are the entries, already validated to 1-16
-     * or 32, so for anything below 32 the result is always at least 1
+     *                   or 32, so for anything below 32 the result is always at least 1
      * @return the number of extenders; 0 only for a full 32 byte entry
      * @since 0.9.71+
      */
@@ -198,9 +198,9 @@ public class DecayingBloomFilter {
      * @param context the I2P app context
      * @param durationMs entries last for at least this long, but no more than twice this long
      * @param entryBytes how large are the entries to be added?  must be 1-16, or
-     * 32.  Entries narrower than 32 bytes are expanded to 32 by
-     * concatenating their XORing against random values; 17-31
-     * cannot reach 32 in whole blocks and are refused.
+     *                   32.  Entries narrower than 32 bytes are expanded to 32 by
+     *                   concatenating their XORing against random values; 17-31
+     *                   cannot reach 32 in whole blocks and are refused.
      * @throws IllegalArgumentException if entryBytes is not 1-16 or 32
      * @see #checkEntryBytes(int)
      */
@@ -234,7 +234,7 @@ public class DecayingBloomFilter {
      * @param name filter name for logging
      * @param m filter size exponent, max is 29
      * @throws IllegalArgumentException if entryBytes is not 1-16 or 32, or if m
-     * is over 29
+     *                                  is over 29
      */
     public DecayingBloomFilter(I2PAppContext context, int durationMs, int entryBytes, String name, int m) {
         checkEntryBytes(entryBytes);
@@ -438,10 +438,10 @@ public class DecayingBloomFilter {
      *
      * @param entry the value to encode
      * @return the thread's scratch array of exactly _entryBytes bytes. The
-     * caller must consume it before the next call on the same thread.
+     *         caller must consume it before the next call on the same thread.
      * @throws IllegalArgumentException if entryBytes is over 8, since
-     * DataHelper.toLong() cannot write more than 8 bytes; use the
-     * byte array form of add() for wider entries
+     *                                  DataHelper.toLong() cannot write more than 8 bytes; use the
+     *                                  byte array form of add() for wider entries
      * @since 0.9.71+
      */
     private byte[] encodeLong(long entry) {
@@ -499,7 +499,7 @@ public class DecayingBloomFilter {
      *
      * @param entry the long value to check
      * @return true if the entry is already known.  this does NOT add the
-     * entry however.
+     *         entry however.
      */
     public boolean isKnown(long entry) {
         if (ALWAYS_MISS) return false;

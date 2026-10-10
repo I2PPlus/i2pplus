@@ -133,7 +133,7 @@ public class NSEC3 extends Data {
      * @param length the total length of the record in the stream, used to size the type bitmap
      * @return the parsed record
      * @throws IOException if the stream ends inside a field or the declared
-     *         lengths do not add up to the record length
+     *                     lengths do not add up to the record length
      */
     public static NSEC3 parse(DataInputStream dis, int length) throws IOException {
         byte hashAlgorithm = dis.readByte();

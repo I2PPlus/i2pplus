@@ -465,7 +465,7 @@ class RatchetPayload {
         /**
          * Options bytes carried by this block.
          *
-         * @param options the options
+         * @param options the NTCP2 options in their serialized form
          */
         public OptionsBlock(byte[] options) {
             super(BLOCK_OPTIONS);

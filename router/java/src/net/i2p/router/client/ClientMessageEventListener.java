@@ -200,7 +200,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     /**
-     * As of 0.8.7, does nothing. Do not allow a client to set the router's clock.
+     * Do not allow a client to set the router's clock.
+     * As of 0.8.7 this handler deliberately does nothing.
      */
     private void handleSetDate(SetDateMessage message) {
         // intentionally empty - do not allow clients to set the router clock
@@ -598,7 +599,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      * Handle a CreateLeaseSet message. Override for testing.
      *
-     * @param message the message
+     * @param message the client request supplying the LeaseSet, its signing
+     *                keys, and the session it applies to
      */
     protected void handleCreateLeaseSet(CreateLeaseSetMessage message) {
         LeaseSet ls = message.getLeaseSet();
@@ -802,7 +804,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      * Handle a DestLookup message. Override for testing.
      *
-     * @param message the message
+     * @param message the request naming the RouterInfo hash to resolve
      */
     protected void handleDestLookup(DestLookupMessage message) {
         // no session id in DLM
@@ -813,7 +815,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     /**
      * Handle a HostLookup message. Override for testing.
      *
-     * @param message the message
+     * @param message the lookup request supplying the session and request ID
      * @since 0.9.11
      */
     protected void handleHostLookup(HostLookupMessage message) {
@@ -889,7 +891,7 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      *
      * protected for unit test override
      *
-     * @param message the message
+     * @param message the client's bandwidth query, which carries no data
      */
     protected void handleGetBWLimits(GetBandwidthLimitsMessage message) {
         if (_log.shouldInfo()) {_log.info("Received Bandwidth Limits request");}

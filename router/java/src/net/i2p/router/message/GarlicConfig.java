@@ -150,7 +150,7 @@ class GarlicConfig {
     /**
      * Returns the clove at the specified index
      *
-     * @param index the index
+     * @param index the 0-based position in the clove list
      * @return the clove config
      */
     public GarlicConfig getClove(int index) { return _cloveConfigs.get(index); }

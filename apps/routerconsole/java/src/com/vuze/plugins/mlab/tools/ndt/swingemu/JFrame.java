@@ -39,7 +39,7 @@ JFrame
 	 * Creates a frame carrying the given title, which this headless stub never displays.
 	 *
 	 * @param s the title text this frame is constructed with, which this headless
-	 *        stub never displays
+	 *          stub never displays
 	 */
 	public
 	JFrame(

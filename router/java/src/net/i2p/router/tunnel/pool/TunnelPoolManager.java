@@ -495,7 +495,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Get the share ratio of participating tunnels.
      * @return (number of part. tunnels) / (estimated total number of hops in our expl.+client tunnels)
-     * We just use length setting, not variance, for speed
+     *         We just use length setting, not variance, for speed
      * @since 0.7.10
      */
     public double getShareRatio() {
@@ -800,7 +800,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Uses delayed cleanup to allow tunnels to continue operating
      * until they naturally expire. Prevents pool collapse when client disconnects.
      * @param destination the hash of the client whose pools are scheduled for removal; a
-     *        {@code null} hash is ignored
+     *                    {@code null} hash is ignored
      */
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
@@ -840,7 +840,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Force immediate removal of a pool - used for router shutdown.
      * @param destination the hash of the client whose pools are dropped immediately; a
-     *        {@code null} hash is ignored
+     *                    {@code null} hash is ignored
      * @since 0.9.69+
      */
     public synchronized void forceRemoveTunnels(Hash destination) {
@@ -920,7 +920,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * Queue a recurring test job if appropriate.
      *
      * @param cfg the configuration of the tunnel that just built, whose pool the
-     *        test job queues against
+     *            test job queues against
      */
     void buildComplete(PooledTunnelCreatorConfig cfg) {
         if (cfg.getLength() > 1 &&

@@ -162,7 +162,7 @@ class I2CPMessageProducer {
      *
      * @param session the session to create the CreateSessionMessage for
      * @throws I2PSessionException if the session's offline signature has expired,
-     *         if the session config cannot be signed, or if the message cannot be queued
+     *                             if the session config cannot be signed, or if the message cannot be queued
      */
     public void connect(I2PSessionImpl session) throws I2PSessionException {
         updateBandwidth(session);
@@ -450,7 +450,7 @@ class I2CPMessageProducer {
      * @param session the session on whose behalf the LeaseSet is created
      * @param leaseSet the LeaseSet to send, of type 0, 1 or 3
      * @param privs the private keys to encrypt the LeaseSet with, the first
-     *        entry being the signing key for type 0 and 1 LeaseSets
+     *              entry being the signing key for type 0 and 1 LeaseSets
      * @throws I2PSessionException if the session is closed
      */
     public void createLeaseSet(

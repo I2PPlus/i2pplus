@@ -30,7 +30,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
      * SSDPNotifySocket.
      *
      * @param bindAddr the local address the socket is bound to, which also decides
-     *        whether an IPv4 or IPv6 multicast group is joined
+     *                 whether an IPv4 or IPv6 multicast group is joined
      * @throws IOException if the socket cannot be bound to the given address
      */
     public SSDPNotifySocket(String bindAddr) throws IOException {
@@ -58,7 +58,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
      * setControlPoint.
      *
      * @param ctrlp the control point that should receive the notifications sent
-     *        through this socket, or null to detach the current one
+     *              through this socket, or null to detach the current one
      */
     public void setControlPoint(ControlPoint ctrlp) {
         this.controlPoint = ctrlp;
@@ -78,7 +78,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
      *
      * @param req the {@link SSDPNotifyRequest} to send
      * @return true if and only if the trasmission succeced<br>
-     *     Because it rely on UDP doesn't mean that it's also received
+     *         Because it rely on UDP doesn't mean that it's also received
      */
     public boolean post(SSDPNotifyRequest req) {
         String ssdpAddr = SSDP.ADDRESS;

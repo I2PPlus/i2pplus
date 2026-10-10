@@ -574,7 +574,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Applies only to future connections; calling this does not affect existing connections.
      *
      * @param ms socket read idle timeout in milliseconds; zero or less means no
-     *        timeout, the -1 default
+     *           timeout, the -1 default
      */
     public void setReadTimeout(long ms) {readTimeout = ms;}
 

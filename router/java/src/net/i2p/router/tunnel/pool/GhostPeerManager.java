@@ -210,7 +210,7 @@ public class GhostPeerManager {
      * repairs the old stale-entry hole where an expired, never-pruned entry
      * made {@code putIfAbsent} silently no-op and left the peer unmarked.
      *
-     * @param peer the peer
+     * @param peer the router hash of the peer that timed out; our own hash is ignored
      */
     public void recordTimeout(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
@@ -451,7 +451,7 @@ public class GhostPeerManager {
      * recovery, and counting those inflated this stat to roughly 3.4x the number
      * of marks added, which made the two counters impossible to reconcile.
      *
-     * @param peer the peer
+     * @param peer the router hash of the peer that just routed a tunnel; our own hash is ignored
      */
     public void recordSuccess(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
@@ -495,7 +495,7 @@ public class GhostPeerManager {
     /**
      * Clear ghost status for a peer (manual intervention).
      *
-     * @param peer the peer
+     * @param peer the router hash whose ghost mark should be removed
      */
     public void clearGhost(Hash peer) {
         if (peer == null) {return;}

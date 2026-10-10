@@ -33,7 +33,7 @@ interface PeerListener {
      *
      * @param peer the Peer that got the message.
      * @param choke true when the peer got a choke message, false when the peer got an unchoke
-     *     message.
+     *              message.
      */
     void gotChoke(Peer peer, boolean choke);
 
@@ -42,7 +42,7 @@ interface PeerListener {
      *
      * @param peer the Peer that got the message.
      * @param interest true when the peer got a interested message, false when the peer got an
-     *     uninterested message.
+     *                 uninterested message.
      */
     void gotInterest(Peer peer, boolean interest);
 
@@ -87,7 +87,7 @@ interface PeerListener {
      * @param off byte offset into the piece.
      * @param len length of the chunk requested.
      * @return a byte array containing the piece or null when the piece is not available (which is a
-     *     protocol error).
+     *         protocol error).
      */
     ByteArray gotRequest(Peer peer, int piece, int off, int len);
 
@@ -106,7 +106,7 @@ interface PeerListener {
      * Called when the peer has disconnected and the peer task may have a partially downloaded piece
      * that the PeerCoordinator can save
      *
-     * @param peer the peer
+     * @param peer the peer that just disconnected
      * @param pcs the still-outstanding piece requests whose partial data can be salvaged
      * @since 0.8.2
      */

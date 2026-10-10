@@ -104,7 +104,7 @@ public class MLKEMPrivateKeyParameters
      * Encoded.
      *
      * @return the concatenation of s, t, rho, hpk and nonce, the expanded form
-     *     accepted by the two-argument constructor
+     *         accepted by the two-argument constructor
      */
     public byte[] getEncoded()
     {
@@ -185,7 +185,7 @@ public class MLKEMPrivateKeyParameters
      * Seed.
      *
      * @return a copy of the deterministic key generation seed, or null when
-     *     this key was not generated from one
+     *         this key was not generated from one
      */
     public byte[] getSeed()
     {

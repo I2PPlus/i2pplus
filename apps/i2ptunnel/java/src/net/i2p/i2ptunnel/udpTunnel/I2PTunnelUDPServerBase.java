@@ -72,7 +72,7 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      * @param notifyThis event dispatcher for notifications
      * @param tunnel the owning I2PTunnel, which supplies the client options and context
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we cant create a socketManager
+     *                                  badly that we cant create a socketManager
      */
     public I2PTunnelUDPServerBase(File privkey, String privkeyname, Logging l,
                            EventDispatcher notifyThis, I2PTunnel tunnel) {

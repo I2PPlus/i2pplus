@@ -819,7 +819,7 @@ public abstract class BuildRequestor {
      * @param cfg the tunnel configuration
      * @param exec the build executor to notify on completion
      * @return true if the retry was initiated, false if pre-connect
-     * failed and the build should be abandoned
+     *         failed and the build should be abandoned
      * @since 0.9.71+
      */
     static boolean preConnectFallback(RouterContext ctx, Hash peer,

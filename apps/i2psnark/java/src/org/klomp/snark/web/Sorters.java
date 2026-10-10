@@ -55,7 +55,7 @@ class Sorters {
      * </ul>
      *
      * @param type the column to sort by, negative to reverse the order, as
-     *        listed in the tag table above
+     *             listed in the tag table above
      * @param lang the locale used to collate torrent names
      * @param servlet for file type callback only
      * @return a comparator implementing the requested column ordering, falling
@@ -640,7 +640,7 @@ class Sorters {
          * @param storage may be null
          * @param remainingArray precomputed, non-null iff storage is non-null
          * @param previewArray precomputed preview lengths indexed the same way,
-         *        or null when no previews have been computed
+         *                     or null when no previews have been computed
          */
         public FileAndIndex(
                 File file, Storage storage, long[] remainingArray, long[] previewArray) {
@@ -673,7 +673,7 @@ class Sorters {
      * </ul>
      *
      * @param type the column to sort by, negative to reverse the order, as
-     *        listed in the tag table above
+     *             listed in the tag table above
      * @param servlet for file type callback only
      * @return a comparator implementing the requested column ordering, falling
      *         back to name ordering for an unlisted column

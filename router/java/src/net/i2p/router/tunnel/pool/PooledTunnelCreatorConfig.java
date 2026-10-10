@@ -218,7 +218,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * The ID of the gateway of the paired tunnel used to send/receive the build request
      *
      * @return for paired inbound, the GW rcv tunnel ID; for paired outbound, the GW send tunnel ID.
-     * null if not previously set
+     *         null if not previously set
      * @since 0.9.53
      */
     public TunnelId getPairedGW() {return _pairedGW;}
@@ -230,7 +230,7 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * than the first; the expiry report wants the send that actually went out.
      *
      * @param msgId the {@code getUniqueId()} of the {@code TunnelBuildMessage}
-     * handed to the transport or dispatcher
+     *              handed to the transport or dispatcher
      * @since 0.9.71+
      */
     public void setLastRequestMsgId(long msgId) {if (msgId != 0) {_lastRequestMsgId = msgId;}}

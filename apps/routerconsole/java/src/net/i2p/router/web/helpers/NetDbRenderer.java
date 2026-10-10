@@ -1096,10 +1096,10 @@ class NetDbRenderer {
      * @param pageSize number of routers per page
      * @param page zero-based page index
      * @param mode rendering mode:
-     * 0 = summary charts,
-     * 1 = full router infos,
-     * 2 = compact router infos,
-     * 3 = summary charts sorted by country count
+     *             0 = summary charts,
+     *             1 = full router infos,
+     *             2 = compact router infos,
+     *             3 = summary charts sorted by country count
      * @throws java.io.IOException if an I/O error occurs
      */
     public void renderStatusHTML(Writer out, int pageSize, int page, int mode) throws IOException {

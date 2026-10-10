@@ -137,7 +137,7 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * @param responseTimeMs response time in ms
      * @param severity how much the peer doesnt want to participate in the
-     * tunnel (large == more severe)
+     *                 tunnel (large == more severe)
      */
     @Override
     public void tunnelRejected(Hash peer, long responseTimeMs, int severity) {

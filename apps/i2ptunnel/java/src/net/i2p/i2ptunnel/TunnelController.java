@@ -310,8 +310,8 @@ public class TunnelController implements Logging {
      * @param config original key=value mapping non-null
      * @param prefix beginning of key values that are relevant to this tunnel
      * @param createKey for servers, whether we want to create a brand new destination
-     * with private keys at the location specified or not (does not
-     * overwrite existing ones)
+     *                  with private keys at the location specified or not (does not
+     *                  overwrite existing ones)
      */
     public TunnelController(Properties config, String prefix, boolean createKey) {
         _tunnel = new I2PTunnel(this);
@@ -808,7 +808,7 @@ public class TunnelController implements Logging {
      * Defaults in config properties are not honored.
      *
      * @return keys with the "option." prefix stripped, non-null
-     * Much better than getClientOptions()
+     *         Much better than getClientOptions()
      */
     public Properties getClientOptionProps() {
         Properties opts = new Properties();
@@ -1025,12 +1025,12 @@ public class TunnelController implements Logging {
     }
 
     /**
-     * As of 0.9.1, updates the options on an existing session
+     * Update the options on an existing session.
      *
      * @param config  key=value mapping for all tunnels; only the entries whose
-     * key starts with prefix are taken
+     *                key starts with prefix are taken
      * @param prefix  tunnel's key prefix, stripped from the keys it matched; an
-     * empty prefix takes config as-is
+     *                empty prefix takes config as-is
      */
     public void setConfig(Properties config, String prefix) {
         Properties props = filterProperties(config, prefix);
@@ -1411,7 +1411,7 @@ public class TunnelController implements Logging {
     /**
      * Whether this tunnel shares its tunnels with other client tunnels.
      * @return "true" or "false" as a string, never null; server types always
-     * report "false" and a client with the property unset reports "true"
+     *         report "false" and a client with the property unset reports "true"
      */
     public String getSharedClient() {
          if (!isClient())

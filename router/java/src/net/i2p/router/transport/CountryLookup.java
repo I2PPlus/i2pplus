@@ -353,7 +353,7 @@ public class CountryLookup {
     /**
      * Provides country code mappings.
      * @return Unmodifiable map of lower-case country codes to untranslated names.
-     * Returns empty map if geoIP data is unavailable.
+     *         Returns empty map if geoIP data is unavailable.
      * @since 0.9.53
      */
     public Map<String, String> getCountries() {

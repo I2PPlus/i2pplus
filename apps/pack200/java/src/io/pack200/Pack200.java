@@ -540,7 +540,7 @@ public abstract class Pack200 {
          * <p>
          * The returned map implements all optional {@link SortedMap} operations
          * @return A sorted association of property key strings to property
-         * values.
+         *         values.
          */
         SortedMap<String,String> properties();
 

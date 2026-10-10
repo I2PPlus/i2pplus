@@ -17,9 +17,9 @@ class InboundGatewayProcessor extends HopProcessor {
     }
 
     /**
-     * Since we are the inbound gateway, use the IV given to us as the first
+     * Use the IV given to us as the first
      * 16 bytes, ignore the 'prev' hop, and encrypt the message like every
-     * other participant.
+     * other participant - we are the inbound gateway.
      *
      * @param orig the buffer holding the message to process
      * @param offset the index within the buffer where the message starts

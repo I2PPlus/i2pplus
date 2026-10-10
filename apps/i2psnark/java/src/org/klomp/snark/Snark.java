@@ -74,7 +74,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
      * @param util the I2PSnarkUtil
-     * @param torrent the torrent
+     * @param torrent the .torrent file name, used as the storage base name
      * @param ip the IP address
      * @param user_port the user port
      * @param slistener the storage listener
@@ -117,7 +117,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
      * @param util the I2PSnarkUtil
-     * @param torrent the torrent
+     * @param torrent the .torrent file name, used as the storage base name
      * @param ip the IP address
      * @param user_port the user port
      * @param slistener the storage listener
@@ -246,7 +246,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * <p>Will not start itself. Caller must call startTorrent() if desired.
      *
      * @param util the I2PSnarkUtil
-     * @param torrent the torrent
+     * @param torrent a placeholder .torrent file name, since the info hash is all that is known
      * @param ih the info hash
      * @param trackerURL the tracker URL
      * @param complistener the complete listener
@@ -773,7 +773,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * The file name of the .torrent file.
      *
      * @return file name of .torrent file (should be full absolute path), or a fake name if in
-     *     magnet mode.
+     *         magnet mode.
      * @since 0.8.4
      */
     public String getName() {
@@ -784,7 +784,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * The base name of the torrent.
      *
      * @return base name of torrent [filtered version of getMetaInfo.getName()], or a fake name if
-     *     in magnet mode
+     *         in magnet mode
      * @since 0.8.4
      */
     public String getBaseName() {
@@ -798,7 +798,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * The base name with path and error info, for error logging only.
      *
      * @return base name for torrent [filtered version of getMetaInfo.getName()], or a fake name if
-     *     in magnet mode, followed by path info and error message, for error logging only
+     *         in magnet mode, followed by path info and error message, for error logging only
      * @since 0.9.44
      */
     private String getBaseInfo() {
@@ -1201,7 +1201,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * Bytes not yet in storage. Does NOT account for skipped files.
      *
      * @return exact value. or -1 if no storage yet. getNeeded() * pieceLength(0) isn't accurate if
-     *     last piece is still needed.
+     *         last piece is still needed.
      * @since 0.8.9
      */
     public long getRemainingLength() {
@@ -1264,7 +1264,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * so the whole torrent counts as needed.
      *
      * @return number of pieces still needed, or -1 if neither the metainfo nor the storage
-     *     is available
+     *         is available
      * @since 0.8.4
      */
     public long getNeeded() {
@@ -1295,8 +1295,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * The number of pieces.
      *
      * @return number of pieces, or -1 if the metainfo is not known yet (a magnet that has
-     *     not resolved), in which case {@link #getPieceLength(int)} reports the 16 KiB
-     *     placeholder length
+     *         not resolved), in which case {@link #getPieceLength(int)} reports the 16 KiB
+     *         placeholder length
      * @since 0.8.4
      */
     public int getPieces() {
@@ -1500,7 +1500,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * Call after editing torrent. Caller must ensure infohash, files, etc. did not change.
      *
      * @param metainfo the replacement metainfo describing the same torrent under new
-     *        parameters such as trackers and comment metadata
+     *                 parameters such as trackers and comment metadata
      * @since 0.9.53
      */
     public void replaceMetaInfo(MetaInfo metainfo) {
@@ -1529,7 +1529,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * StorageListener callback called when a piece check completes.
      *
-     * @param storage the storage
+     * @param storage the Storage that completed the check
      * @param num the piece number
      * @param checked true if the piece hash was correct
      */
@@ -1546,7 +1546,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * StorageListener callback called when all pieces have been checked.
      *
-     * @param storage the storage
+     * @param storage the Storage that finished checking every piece
      */
     @Override
     public void storageAllChecked(Storage storage) {
@@ -1569,7 +1569,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * StorageListener callback called when the torrent has completed.
      *
-     * @param storage the storage
+     * @param storage the Storage that reported the download complete
      */
     @Override
     public void storageCompleted(Storage storage) {
@@ -1596,7 +1596,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * StorageListener callback to update the coordinator's wanted piece set.
      *
-     * @param storage the storage
+     * @param storage the Storage whose wanted piece set has changed
      */
     @Override
     public void setWantedPieces(Storage storage) {

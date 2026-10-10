@@ -142,9 +142,9 @@ public final class Curve25519 {
     /**
      * Reduce a number modulo 2^255 - 19.
      *
-     * @param result The result.
+     * @param result receives the reduced value
      * @param x The value to be reduced.  This array will be
-     * modified during the reduction.
+     *          modified during the reduction.
      * @param size The number of limbs in the high order half of x.
      */
     private void reduce(int[] result, int[] x, int size) {
@@ -197,7 +197,7 @@ public final class Curve25519 {
     /**
      * Multiplies two numbers modulo 2^255 - 19.
      *
-     * @param result The result.
+     * @param result receives the product
      * @param x The first number to multiply.
      * @param y The second number to multiply.
      */
@@ -232,7 +232,7 @@ public final class Curve25519 {
     /**
      * Squares a number modulo 2^255 - 19.
      *
-     * @param result The result.
+     * @param result receives the square
      * @param x The number to square.
      */
     private void square(int[] result, int[] x) {
@@ -242,7 +242,7 @@ public final class Curve25519 {
     /**
      * Multiplies a number by the a24 constant, modulo 2^255 - 19.
      *
-     * @param result The result.
+     * @param result receives the product
      * @param x The number to multiply by a24.
      */
     private void mulA24(int[] result, int[] x) {
@@ -261,7 +261,7 @@ public final class Curve25519 {
     /**
      * Adds two numbers modulo 2^255 - 19.
      *
-     * @param result The result.
+     * @param result receives the sum
      * @param x The first number to add.
      * @param y The second number to add.
      */
@@ -279,7 +279,7 @@ public final class Curve25519 {
     /**
      * Subtracts two numbers modulo 2^255 - 19.
      *
-     * @param result The result.
+     * @param result receives the difference
      * @param x The first number to subtract.
      * @param y The second number to subtract.
      */
@@ -460,7 +460,7 @@ public final class Curve25519 {
      * @param privateKey The private key to use in the evaluation.
      * @param publicKey The public key to use in the evaluation, or null
      *                  MUST have MSB high bit cleared, i.e. publicKey[31] &amp; 0x80 == 0
-     * if the base point of the curve should be used.
+     *                  if the base point of the curve should be used.
      * @throws IllegalArgumentException on low-order input see RFC 7748
      */
     public static void eval(byte[] result, int offset, byte[] privateKey, byte[] publicKey) {

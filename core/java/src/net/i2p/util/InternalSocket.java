@@ -37,7 +37,7 @@ public class InternalSocket extends Socket {
      *
      *  @param port &gt; 0
      *  @throws IOException if the port is not positive, or no internal server
-     *  is listening on it
+     *                      is listening on it
      */
     public InternalSocket(int port) throws IOException {
         if (port <= 0) throw new IOException("Bad port number");
@@ -49,11 +49,11 @@ public class InternalSocket extends Socket {
      *  Convenience method to return either a Socket or an InternalSocket
      *
      *  @param host the host requested, which is only honoured for the loopback
-     *         names inside a running router
+     *              names inside a running router
      *  @param port &gt; 0
      *  @return the socket
      *  @throws IOException if neither an internal socket nor a TCP socket to the
-     *  given host and port can be opened
+     *                      given host and port can be opened
      */
     public static Socket getSocket(String host, int port) throws IOException {
         if (I2PAppContext.getGlobalContext().isRouterContext() && (host.equals("127.0.0.1") || host.equals("localhost"))) {
@@ -87,7 +87,7 @@ public class InternalSocket extends Socket {
      * Input stream
      *
      * @param is the replacement stream, installed by the internal server after
-     *        a client has connected
+     *           a client has connected
      */
     void setInputStream(InputStream is) {
         _is = is;
@@ -97,7 +97,7 @@ public class InternalSocket extends Socket {
      * Output stream
      *
      * @param os the replacement stream, installed by the internal server after
-     *        a client has connected
+     *           a client has connected
      */
     void setOutputStream(OutputStream os) {
         _os = os;

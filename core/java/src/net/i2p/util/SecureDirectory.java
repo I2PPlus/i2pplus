@@ -39,7 +39,7 @@ public class SecureDirectory extends File {
      *
      * @param pathname the path
      * @param groupPerms true to create the directory group-accessible (770)
-     * instead of owner-only (700)
+     *                   instead of owner-only (700)
      * @since 0.9.71+
      */
     public SecureDirectory(String pathname, boolean groupPerms) {

@@ -102,7 +102,7 @@ class RRDFile implements Constants {
      * Open RRD file
      * @param file the RRD to memory-map read-only
      * @throws IOException if the file cannot be opened or mapped, or if it is
-     *         larger than 2**31 bytes, which a ByteBuffer cannot address
+     *                     larger than 2**31 bytes, which a ByteBuffer cannot address
      */
     RRDFile(File file) throws IOException {
         long len = file.length();

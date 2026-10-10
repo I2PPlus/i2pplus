@@ -16,9 +16,9 @@ public final class ChaChaCore {
      * Hashes an input block with ChaCha20.
      *
      * @param output The output block, which must contain at least 16
-     * elements and must not overlap with the input.
+     *               elements and must not overlap with the input.
      * @param input The input block, which must contain at least 16
-     * elements.
+     *              elements.
      */
     public static void hash(int[] output, int[] input) {
         int index;
@@ -59,7 +59,7 @@ public final class ChaChaCore {
      * Initializes a ChaCha20 block with a 256-bit key.
      *
      * @param output The output block, which must consist of at
-     * least 16 words.
+     *               least 16 words.
      * @param key The buffer containing the key.
      * @param offset Offset of the key in the buffer.
      */
@@ -86,11 +86,11 @@ public final class ChaChaCore {
      * Initializes the 64-bit initialization vector in a ChaCha20 block.
      *
      * @param output The output block, which must consist of at
-     * least 16 words and must have been initialized by initKey256()
-     * or initKey128().
+     *               least 16 words and must have been initialized by initKey256()
+     *               or initKey128().
      * @param iv The 64-bit initialization vector value.
      *
-     * The counter portion of the output block is set to zero.
+     *           The counter portion of the output block is set to zero.
      */
     public static void initIV(int[] output, long iv) {
         output[12] = 0;

@@ -81,7 +81,7 @@ public abstract class DataImporter implements Closeable {
      *
      * @param dsIndex zero-based index of the data source
      * @return the maximum gap in seconds between two updates before the data source is declared
-     *     dead
+     *         dead
      * @throws java.io.IOException if the export cannot be read
      */
     public abstract long getHeartbeat(int dsIndex) throws IOException;

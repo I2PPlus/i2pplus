@@ -151,7 +151,7 @@ class ConnectionHandler {
      * @param configuredTimeoutMs the configured accept timeout (i2p.streaming.acceptTimeout)
      * @param buildSuccess tunnel build success as a fraction [0.0, 1.0]; NaN when unavailable
      * @param recentExpireRatePct percent of recent SYN-queue entries that expired un-accepted,
-     * or a negative value when the rate is not known yet
+     *                            or a negative value when the rate is not known yet
      * @param rttMs a recent round-trip time sample in milliseconds, or &lt;=0 when unavailable
      * @return the timeout (ms) to arm the SYN reap with
      */
@@ -245,7 +245,7 @@ class ConnectionHandler {
      * reported as {@code -1} so the adaptive clamp never fires on startup.
      *
      * @return percent of queued SYNs that expired un-accepted [0,100], or -1 when
-     * not enough history has accumulated yet
+     *         not enough history has accumulated yet
      */
     private int getSynExpireRatePct() {
         long now = _context.clock().now();
@@ -606,9 +606,9 @@ class ConnectionHandler {
      * by accept worker threads.
      *
      * @param timeoutMs max amount of time to wait for a connection (if less
-     * than 1ms, wait indefinitely)
+     *                  than 1ms, wait indefinitely)
      * @return the connection received, never null; a timeout or a shut-down
-     * handler is reported by throwing instead
+     *         handler is reported by throwing instead
      * @throws RouterRestartException (extends I2PException) if the router is apparently restarting
      * @throws ConnectException if the I2PServerSocket is closed, or if interrupted.
      * @throws SocketTimeoutException if a timeout was previously set with setSoTimeout and the timeout has been reached.

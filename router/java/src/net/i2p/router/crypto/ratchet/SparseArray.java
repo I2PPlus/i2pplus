@@ -225,8 +225,8 @@ class SparseArray<E> implements Cloneable {
      * @param index Index to begin at
      * @param size Number of mappings to remove
      *
-     * <p>For indices outside of the range <code>0...size()-1</code>,
-     * the behavior is undefined.</p>
+     *             <p>For indices outside of the range <code>0...size()-1</code>,
+     *             the behavior is undefined.</p>
      */
     public void removeAtRange(int index, int size) {
         final int end = Math.min(mSize, index + size);

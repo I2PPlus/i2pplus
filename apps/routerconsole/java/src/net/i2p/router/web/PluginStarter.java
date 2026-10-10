@@ -880,7 +880,7 @@ public class PluginStarter implements Runnable {
      * The signing keys from all the plugins
      * @param ctx context supplying the config dir holding each plugin.config
      * @return Map of key to keyname
-     * Last one wins if a dup (installer should prevent dups)
+     *         Last one wins if a dup (installer should prevent dups)
      */
     public static Map<String, String> getPluginKeys(I2PAppContext ctx) {
         Map<String, String> rv = new HashMap<>();
@@ -914,7 +914,7 @@ public class PluginStarter implements Runnable {
     /**
      * @param action "start" or "stop" or "uninstall"
      * @throws Exception just about anything if an app has a delay less than zero, caller would be wise to catch Throwable
-     * If no apps have a delay less than zero, it shouldn't throw anything
+     *                   If no apps have a delay less than zero, it shouldn't throw anything
      */
     private static void runClientApps(RouterContext ctx, File pluginDir, List<ClientAppConfig> apps, String action) throws Exception {
         Log log = ctx.logManager().getLog(PluginStarter.class);

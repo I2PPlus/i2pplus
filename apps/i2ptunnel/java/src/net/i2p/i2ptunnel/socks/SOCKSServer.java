@@ -133,7 +133,7 @@ abstract class SOCKSServer {
      * Checks whether the i2ptunnel is configured to route through an outproxy plugin.
      *
      * @return true if an outproxy plugin should handle the connection, false to route
-     * it directly; defaults to true when the property is unset
+     *         it directly; defaults to true when the property is unset
      * @since 0.9.27
      */
     private boolean shouldUseOutproxyPlugin() {

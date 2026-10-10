@@ -249,6 +249,8 @@ class ClientManager {
     }
 
     /**
+     * Test whether the ClientManager is running.
+     *
      * As of 0.9.45, this returns true iff the ClientManager is running.
      * Prior to that, it also required all external I2CP listeners
      * that were registered to be running.
@@ -262,7 +264,8 @@ class ClientManager {
     /**
      * Register a new client connection.
      *
-     * @param runner the runner
+     * @param runner the client connection to start and hold as pending until it
+     *               claims a destination
      */
     public void registerConnection(ClientConnectionRunner runner) {
         try {
@@ -277,7 +280,8 @@ class ClientManager {
     /**
      * Remove all sessions for this runner.
      *
-     * @param runner the runner
+     * @param runner the client connection whose session IDs and destination
+     *               mappings are dropped
      */
     public void unregisterConnection(ClientConnectionRunner runner) {
         synchronized (_pendingRunners) {_pendingRunners.remove(runner);}
@@ -321,7 +325,7 @@ class ClientManager {
      * Remove the hash for the encrypted LS.
      * Call before unregisterConnection, or when the hash changes.
      *
-     * @param runner the runner
+     * @param runner the connection the hash belongs to; not consulted by the body
      * @param hash the hash to remove
      * @since 0.9.39
      */
@@ -335,7 +339,7 @@ class ClientManager {
      * Side effect: Sets the session ID of the runner.
      * Caller must call runner.disconnectClient() on failure.
      *
-     * @param runner the runner
+     * @param runner the connection claiming the destination
      * @param dest the destination
      * @return SessionStatusMessage return code, 1 for success, != 1 for failure
      */
@@ -386,9 +390,9 @@ class ClientManager {
      * Add to the clients list. Check for a dup hash.
      * Caller must call runner.disconnectClient() on failure.
      *
+     * @param runner the connection to associate with the hash
      * @param hash the location of the encrypted LS, will change every day
      * @return success, false on dup
-     * @param runner the runner
      * @since 0.9.39
      */
     public boolean registerEncryptedDestination(ClientConnectionRunner runner, Hash hash) {
@@ -562,8 +566,8 @@ class ClientManager {
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param set LeaseSet with requested leases - this object must be updated to contain the
-     * signed version (as well as any changed/added/removed Leases).
-     * The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
+     *            signed version (as well as any changed/added/removed Leases).
+     *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      *
      * @param timeout ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized
@@ -586,8 +590,8 @@ class ClientManager {
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param ls  LeaseSet with requested leases - this object must be updated to contain the
-     * signed version (as well as any changed/added/removed Leases).
-     * The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
+     *            signed version (as well as any changed/added/removed Leases).
+     *            The LeaseSet contains Leases only; it is unsigned and does not have the destination set.
      */
     public void requestLeaseSet(Hash dest, LeaseSet ls) {
         ClientConnectionRunner runner = getRunner(dest);

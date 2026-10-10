@@ -1300,7 +1300,7 @@ public class DnsMessage {
          * Set the time at which the message was received.
          *
          * @param receiveTimestamp the receive time in milliseconds since the
-         *                        epoch, or -1 if the message was not received.
+         *                         epoch, or -1 if the message was not received.
          * @return a reference to this builder.
          */
         public Builder setReceiveTimestamp(long receiveTimestamp) {

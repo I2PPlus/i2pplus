@@ -78,8 +78,8 @@ public class GarlicMessageBuilder {
      *                   output parameter that will be filled with the SessionKey used
      *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
-     *                       If non-empty on return you must call skm.tagsDelivered() when sent
-     *                       and then call skm.tagsAcked() or skm.failTags() later.
+     *                    If non-empty on return you must call skm.tagsDelivered() when sent
+     *                    and then call skm.tagsAcked() or skm.failTags() later.
      *
      * @param skm non-null
      * @return null if expired
@@ -263,7 +263,7 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap, must have key set with setRecipientPublicKey()
      * @param from the local destination whose LeaseSet keys supply the private key
      * @param to the remote destination the message is addressed to, whose keys
-     *        select the ratchet session
+     *           select the ratchet session
      * @param skm the session key manager holding that ratchet session
      * @param callback may be null
      * @return null if expired or on other errors

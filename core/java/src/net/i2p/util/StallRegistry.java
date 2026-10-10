@@ -87,7 +87,7 @@ public class StallRegistry {
      * @param now        current time in ms
      * @param cooldownMs how long a mark stays in effect; non-positive disables
      * @return elapsed ms since the mark, or {@code cooldownMs} when unmarked,
-     * disabled, or long expired — never less than the cooldown
+     *         disabled, or long expired — never less than the cooldown
      * @since 0.9.71+
      */
     public static long stallAge(Hash remote, long now, long cooldownMs) {

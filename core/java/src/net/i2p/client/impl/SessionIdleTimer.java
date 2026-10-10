@@ -40,7 +40,7 @@ class SessionIdleTimer extends SimpleTimer2.TimedEvent {
      *
      * @param context the application context supplying the timer and the log manager
      * @param session the session whose i2cp options supply the idle thresholds and
-     *        the reduction quantity
+     *                the reduction quantity
      * @param reduce if true, cut the session's tunnel quantity back after the idle time
      * @param shutdown if true, close the session after the idle time
      */

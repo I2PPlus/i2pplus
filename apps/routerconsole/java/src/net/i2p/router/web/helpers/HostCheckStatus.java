@@ -102,7 +102,7 @@ public class HostCheckStatus {
      *
      * @param routerDir the router's working directory
      * @return host to reachable flag; empty if the results file could not be read, which
-     * judges nothing rather than judging everything
+     *         judges nothing rather than judging everything
      */
     public static synchronized Map<String, Boolean> probed(File routerDir) {
         refresh(routerDir);

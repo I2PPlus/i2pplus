@@ -184,7 +184,7 @@ class StoreState {
      * Adds a pending message for tracking.
      *
      * @param peer the peer the message is queued to, which is also counted as
-     *        attempted
+     *             attempted
      * @param msg the wrapped message to hand back from getPendingMessage()
      * @since 0.7.10
      */
@@ -198,7 +198,7 @@ class StoreState {
      *
      * @param peer the peer whose pending message should be taken
      * @return the message or null; will only return the message once, so
-     * tags are only acked or failed once.
+     *         tags are only acked or failed once.
      * @since 0.7.10
      */
     public MessageWrapper.WrappedMessage getPendingMessage(Hash peer) {

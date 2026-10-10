@@ -53,7 +53,7 @@ public class ServiceList extends Vector<Service> {
      *
      * @param n the zero-based index of the wanted service
      * @return the service at that position, or null if the index is out of range
-     * or the underlying element could not be read
+     *         or the underlying element could not be read
      */
     public Service getService(int n) {
         Object obj = null;

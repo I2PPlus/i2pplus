@@ -345,7 +345,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Snapshot of the running tasks.
      *
      * @return an unmodifiable snapshot, non-null; changes to the tunnel's task
-     * list are not reflected in an already-returned list
+     *         list are not reflected in an already-returned list
      */
     public List<I2PTunnelTask> getTasks() {
         return Collections.unmodifiableList(new ArrayList<>(tasks));
@@ -357,8 +357,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * remains the way to reach them.
      *
      * @return an unmodifiable snapshot, non-null; changes to the tunnel's session
-     * set are not reflected in an already-returned list. The iteration
-     * order follows the underlying set and is not specified.
+     *         set are not reflected in an already-returned list. The iteration
+     *         order follows the underlying set and is not specified.
      */
     public List<I2PSession> getSessions() {
         if (_sessions.isEmpty()) {return Collections.emptyList();}

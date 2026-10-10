@@ -91,7 +91,7 @@ public final class SimpleByteCache {
      * collected - nothing zeroes them.
      *
      * @param cacheSize how many objects (NOT memory bytes) to keep before
-     * discarding released objects
+     *                  discarding released objects
      * @param size how large should the objects cached be?
      * @return the instance
      */
@@ -282,7 +282,7 @@ public final class SimpleByteCache {
          * @param key the array size
          * @param val the cache to store if the key is free
          * @return the value now stored for the key - val, or the one that was
-         * already there
+         *         already there
          */
         synchronized SimpleByteCache putIfAbsent(int key, SimpleByteCache val) {
             Table t = _table;

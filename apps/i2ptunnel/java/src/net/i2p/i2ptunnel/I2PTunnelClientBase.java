@@ -246,7 +246,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param handlerName the handler name
      * @param tunnel the I2PTunnel instance
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we can't create a socketManager
+     *                                  badly that we can't create a socketManager
      */
     public I2PTunnelClientBase(int localPort, boolean ownDest, Logging l,
                                EventDispatcher notifyThis, String handlerName,
@@ -272,7 +272,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param tunnel the I2PTunnel instance
      * @param pkf Path to the private key file, or null to generate a transient key
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we can't create a socketManager
+     *                                  badly that we can't create a socketManager
      */
     public I2PTunnelClientBase(int localPort, boolean ownDest, Logging l,
                                EventDispatcher notifyThis, String handlerName,
@@ -318,7 +318,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *
      * We need a socket manager before getDefaultOptions() and most other things
      * @throws IllegalStateException if the I2CP configuration is b0rked so
-     * badly that we cant create a socketManager
+     *                               badly that we cant create a socketManager
      */
     protected void verifySocketManager() {
         synchronized(sockLock) {
@@ -390,7 +390,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param pkf the private key file path, or null
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we cant create a socketManager
+     *                                  badly that we cant create a socketManager
      */
     protected static synchronized I2PSocketManager getSocketManager(I2PTunnel tunnel, String pkf) {
         // shadows instance _log
@@ -435,20 +435,22 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we cant create a socketManager
+     *                                  badly that we cant create a socketManager
      */
     protected I2PSocketManager buildSocketManager() {
         return buildSocketManager(getTunnel(), this.privKeyFile, this.l);
     }
 
     /**
+     * Create a disconnected socket manager for the tunnel, with no private key file.
+     *
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
      * @param tunnel the I2PTunnel instance
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we cant create a socketManager
+     *                                  badly that we cant create a socketManager
      */
     protected static I2PSocketManager buildSocketManager(I2PTunnel tunnel) {
         return buildSocketManager(tunnel, null);
@@ -458,6 +460,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private static final int MAX_RETRIES = 50;
 
     /**
+     * Create a disconnected socket manager for the tunnel, loading the
+     * persistent client dest from pkf if it is non-null.
+     *
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
@@ -465,13 +470,17 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param pkf absolute path or null
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we cant create a socketManager
+     *                                  badly that we cant create a socketManager
      */
     protected static I2PSocketManager buildSocketManager(I2PTunnel tunnel, String pkf) {
         return buildSocketManager(tunnel, pkf, null);
     }
 
     /**
+     * Create a disconnected socket manager for the tunnel, loading the
+     * persistent client dest from pkf if it is non-null, and logging any
+     * key file error to log.
+     *
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
      * Call verifySocketManager() for that.
      *
@@ -480,7 +489,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param log the logging instance
      * @return non-null
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we cant create a socketManager
+     *                                  badly that we cant create a socketManager
      */
     protected static I2PSocketManager buildSocketManager(I2PTunnel tunnel, String pkf, Logging log) {
         // shadows instance _log
@@ -525,7 +534,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * This may take a LONG time.
      *
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
-     * badly that we cant create a socketManager
+     *                                  badly that we cant create a socketManager
      * @since 0.9.20
      */
     private void connectManager() {
@@ -829,7 +838,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param dest The destination to connect to, non-null
      * @param opt Option to be used to open the socket
      * @param deadlineMs absolute wall-clock deadline in ms since the epoch,
-     * or {@link #NO_DEADLINE} for no shared budget
+     *                   or {@link #NO_DEADLINE} for no shared budget
      * @return a new I2PSocket
      * @throws I2PException if there is some other I2P-related problem
      * @throws ConnectException if the peer refuses the connection
@@ -863,7 +872,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param dest The destination to connect to, non-null
      * @param opt Socket options
      * @param deadlineMs absolute wall-clock deadline in ms since the epoch,
-     * or {@link #NO_DEADLINE} for no shared budget
+     *                   or {@link #NO_DEADLINE} for no shared budget
      * @return a new I2PSocket
      * @throws I2PException if there is some other I2P-related problem
      * @throws ConnectException if the peer refuses the connection
@@ -1092,7 +1101,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param deadlineMs absolute deadline in ms since the epoch, or {@link #NO_DEADLINE}
      * @param nowMs current time in ms since the epoch
      * @return the requested timeout reduced to the remaining budget; 0 when
-     * the deadline has passed (callers must skip the step)
+     *         the deadline has passed (callers must skip the step)
      * @since 0.9.71+
      */
     static long clampToDeadlineMs(long requestedMs, long deadlineMs, long nowMs) {
@@ -1150,7 +1159,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * @param poolState latest {@link #poolState()} reading (0 = still building)
      * @param alreadyExtended true if this request already consumed its grace
      * @return the extended deadline, or {@code deadlineMs} unchanged when no
-     * extension applies
+     *         extension applies
      * @since 0.9.71+
      */
     static long extendDeadlineForBuildingPool(long deadlineMs, long nowMs, int poolState,
@@ -1201,8 +1210,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * getInProgressCount() counts builds in progress.
      *
      * @return 1 if the pool has valid tunnels, 0 if it exists but is still
-     * building, -1 if it exists but is dead (no valid, none building),
-     * -2 if unknown (standalone client, no router pool)
+     *         building, -1 if it exists but is dead (no valid, none building),
+     *         -2 if unknown (standalone client, no router pool)
      * @since 0.9.71+
      */
     protected int poolState() {
@@ -1431,7 +1440,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * can exercise it without a live tunnel.
      *
      * @param customized whether this tunnel declared an explicit
-     * {@value #PROP_MAX_CONNECTIONS} override
+     *                   {@value #PROP_MAX_CONNECTIONS} override
      * @param ownCap      the tunnel's resolved cap ({@link #resolveMaxConnections} result)
      * @param globalDefault the Tuner-managed default cap
      * @return the effective cap: &gt;= 1 when gated, 0 meaning unlimited

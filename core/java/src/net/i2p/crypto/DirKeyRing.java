@@ -71,7 +71,7 @@ public class DirKeyRing implements KeyRing {
      *
      * @param keyName the key name
      * @param scope the directory under the keyring base
-     * @param key the key
+     * @param key the key that would be stored, ignored
      */
     @Override
     public void setKey(String keyName, String scope, PublicKey key) { /* nop */ }

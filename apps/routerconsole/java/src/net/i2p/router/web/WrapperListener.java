@@ -28,7 +28,7 @@ class WrapperListener {
      *  Registers with the wrapper in the constructor.
      *
      * @param ctx the router context handed to the nested signal handler, which
-     *        logs through it when the wrapper reports a signal
+     *            logs through it when the wrapper reports a signal
      */
     public WrapperListener(RouterContext ctx) {
         _listener = new SignalHandler(ctx);

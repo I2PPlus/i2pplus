@@ -180,7 +180,7 @@ public class Destination extends KeysAndCert {
      * key destinations with ArrayIndexOutOfBoundsException.
      * Broken for sig types P521 and RSA before 0.9.15
      *
-     * @param target the target
+     * @param target the buffer receiving the serialised destination
      * @param offset the offset to start writing
      * @return the written length (NOT the new offset)
      */

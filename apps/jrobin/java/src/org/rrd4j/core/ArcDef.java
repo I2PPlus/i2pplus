@@ -33,8 +33,8 @@ public class ArcDef {
      * page</a>
      *
      * @param consolFun Consolidation function. Allowed values are "AVERAGE", "MIN", "MAX", "LAST"
-     *     and "TOTAL" (these string constants are conveniently defined in the {@link
-     *     org.rrd4j.ConsolFun} class).
+     *                  and "TOTAL" (these string constants are conveniently defined in the {@link
+     *                  org.rrd4j.ConsolFun} class).
      * @param xff X-files factor, between 0 and 1.
      * @param steps Number of archive steps.
      * @param rows Number of archive rows.

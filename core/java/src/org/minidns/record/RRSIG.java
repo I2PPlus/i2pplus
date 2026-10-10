@@ -156,7 +156,7 @@ public class RRSIG extends Data {
      * @param signatureInception the time from which on the signature is valid.
      * @param keyTag the key tag of the DNSKEY which must validate this signature.
      * @param signerName the owner name of the DNSKEY RRset holding the signing
-     *                  key, in presentation format.
+     *                   key, in presentation format.
      * @param signature the signature over the RRSIG RDATA without the signature
      *                  field and over the covered RRset.
      */
@@ -195,7 +195,7 @@ public class RRSIG extends Data {
      * @param signatureInception the time from which on the signature is valid.
      * @param keyTag the key tag of the DNSKEY which must validate this signature.
      * @param signerName the owner name of the DNSKEY RRset holding the signing
-     *                  key, in presentation format.
+     *                   key, in presentation format.
      * @param signature the signature over the RRSIG RDATA without the signature
      *                  field and over the covered RRset.
      */

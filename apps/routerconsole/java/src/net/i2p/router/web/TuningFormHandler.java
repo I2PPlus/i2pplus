@@ -4256,7 +4256,7 @@ public class TuningFormHandler extends FormHandler {
 
     /**
      * Apply an auto-tuning override.
-     * @param tuner the Tuner instance
+     * @param tuner the Tuner the override is written to
      * @param paramName the Tuner param name
      * @param value form value: "-1" = auto, numeric = manual lock
      */

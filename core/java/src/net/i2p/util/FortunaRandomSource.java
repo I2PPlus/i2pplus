@@ -33,7 +33,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
 
     /**
      * May block up to 10 seconds or forever
-     * @param context the context
+     * @param context the router context
      */
     public FortunaRandomSource(I2PAppContext context) {
         super(context);
@@ -215,7 +215,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
     /**
      * Not part of java.util.SecureRandom, but added for efficiency, since Fortuna supports it.
      *
-     * @return the result
+     * @return a single random byte
      * @since 0.9.24
      */
     public byte nextByte() {

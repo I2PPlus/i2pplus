@@ -779,7 +779,7 @@ public class Service {
      *
      * @param ssdpPacket the search request, whose ST header selects the target
      * @return false if the request carries no ST header, true once any matching
-     *     search response has been queued
+     *         search response has been queued
      */
     public boolean serviceSearchResponse(SSDPPacket ssdpPacket) {
         String ssdpST = ssdpPacket.getST();

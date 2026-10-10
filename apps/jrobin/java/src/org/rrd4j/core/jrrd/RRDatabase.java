@@ -258,7 +258,7 @@ public class RRDatabase implements Closeable {
      * @param type the consolidation function that should have been applied to the data.
      * @return the raw data.
      * @throws java.lang.IllegalArgumentException if there was a problem locating a data archive
-     *     with the requested consolidation function.
+     *                                            with the requested consolidation function.
      * @throws java.io.IOException if there was a problem reading data from the database.
      */
     public DataChunk getData(ConsolidationFunctionType type) throws IOException {
@@ -282,7 +282,7 @@ public class RRDatabase implements Closeable {
      * @param step the step size to use.
      * @return the raw data.
      * @throws java.lang.IllegalArgumentException if there was a problem locating a data archive
-     *     with the requested consolidation function.
+     *                                            with the requested consolidation function.
      * @throws java.io.IOException if there was a problem reading data from the database.
      */
     public DataChunk getData(

@@ -187,7 +187,7 @@ public class TLSA extends Data {
      *
      * @param dis the stream positioned at the start of the record body
      * @param length the number of bytes the whole record occupies, of which the
-     *        first three are the usage, selector and matching type
+     *               first three are the usage, selector and matching type
      * @return the TLSA record read from the stream
      * @throws IOException if the stream ends before the record does
      */

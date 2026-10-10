@@ -241,7 +241,7 @@ public abstract class ImageWorker {
      * @param y the y coordinates to reduce
      * @param from first sample index of the range, inclusive
      * @param to one past the last sample index of the range, exclusive; the same exclusive bound
-     *          in both directions
+     *           in both directions
      * @param reverse true to walk from {@code to - 1} down to {@code from} instead of upwards
      * @param xDev destination x coordinates
      * @param yDev destination y coordinates
@@ -292,7 +292,7 @@ public abstract class ImageWorker {
      *
      * @param x the sample x coordinates, one per sample
      * @param start first sample index of the run, inclusive, as returned by
-     *        {@link PathIterator#getNextPath()}
+     *              {@link PathIterator#getNextPath()}
      * @return the column the run's first vertex must be drawn at
      * @since 0.9.71
      */

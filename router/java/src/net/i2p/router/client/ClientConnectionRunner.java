@@ -994,7 +994,7 @@ class ClientConnectionRunner {
      * Send async abuse message to the client
      *
      * @param dest the offending destination
-     * @param reason the reason
+     * @param reason the human-readable description of the abuse
      * @param severity the severity level
      */
     public void reportAbuse(Destination dest, String reason, int severity) {
@@ -1042,9 +1042,9 @@ class ClientConnectionRunner {
      *
      * @param h the Destination's hash
      * @param set LeaseSet with requested leases - this object must be updated to contain the
-     * signed version (as well as any changed/added/removed Leases)
-     * The LeaseSet contains Leases only, it is unsigned.
-     * Must be unique for this hash, do not reuse for subsessions.
+     *            signed version (as well as any changed/added/removed Leases)
+     *            The LeaseSet contains Leases only, it is unsigned.
+     *            Must be unique for this hash, do not reuse for subsessions.
      *
      * @param expirationTime ms to wait before failing
      * @param onCreateJob Job to run after the LeaseSet is authorized, null OK

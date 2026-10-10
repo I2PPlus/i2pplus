@@ -382,7 +382,7 @@ public class RrdToolkit {
      * @param datasourceName Name of the datasource in the specified RRD file
      * @param newMinValue New min value for the datasource
      * @param filterArchivedValues set to <code>true</code> if archived values less than <code>
-     *     newMinValue</code> should be set to NaN; set to false, otherwise.
+     *                             newMinValue</code> should be set to NaN; set to false, otherwise.
      * @throws java.io.IOException Thrown in case of I/O error
      */
     public static void setDsMinValue(
@@ -404,7 +404,7 @@ public class RrdToolkit {
      * @param datasourceName Name of the datasource in the specified RRD file
      * @param newMaxValue New max value for the datasource
      * @param filterArchivedValues set to <code>true</code> if archived values greater than <code>
-     *     newMaxValue</code> should be set to NaN; set to false, otherwise.
+     *                             newMaxValue</code> should be set to NaN; set to false, otherwise.
      * @throws java.io.IOException Thrown in case of I/O error
      */
     public static void setDsMaxValue(
@@ -427,7 +427,7 @@ public class RrdToolkit {
      * @param newMinValue New min value for the datasource
      * @param newMaxValue New max value for the datasource
      * @param filterArchivedValues set to <code>true</code> if archived values outside of the
-     *     specified min/max range should be replaced with NaNs.
+     *                             specified min/max range should be replaced with NaNs.
      * @throws java.io.IOException Thrown in case of I/O error
      */
     public static void setDsMinMaxValue(
@@ -545,7 +545,7 @@ public class RrdToolkit {
      * @param directory Source directory
      * @param extension File extension (like ".rrd", ".jrb", ".rrd.jrb")
      * @param resursive true if all subdirectories should be traversed for the same extension, false
-     *     otherwise
+     *                  otherwise
      * @return Array of sorted canonical file names with the given extension
      * @throws java.io.IOException Thrown in case of I/O error
      */

@@ -36,8 +36,8 @@ public interface I2NPMessage {
      * @param data the full serialized message, header included
      * @param type I2NP message type. If less than zero, read the type from data
      * @param offset where to start
-     *           starting at type if type is &lt; 0 (16 byte header)
-     *           starting at ID if type is &gt;= 0 (15 byte header)
+     *               starting at type if type is &lt; 0 (16 byte header)
+     *               starting at ID if type is &gt;= 0 (15 byte header)
      * @return size of the message read (including headers)
      * @throws I2NPMessageException if there is no valid message
      */
@@ -50,8 +50,8 @@ public interface I2NPMessage {
      * @param data the data, may or may not include the type
      * @param type I2NP message type. If less than zero, read the type from data
      * @param offset where to start
-     *           starting at type if type is &lt; 0 (16 byte header)
-     *           starting at ID if type is &gt;= 0 (15 byte header)
+     *               starting at type if type is &lt; 0 (16 byte header)
+     *               starting at ID if type is &gt;= 0 (15 byte header)
      * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
      *               This includes the type byte only if type &lt; 0
      * @return size of the message read (including headers)
@@ -73,7 +73,7 @@ public interface I2NPMessage {
      * @param dataSize how long into the data to read
      * @param type I2NP message type
      * @throws I2NPMessageException if the stream doesn't contain a valid message
-     *          that this class can read.
+     *                              that this class can read.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException;
     /**
@@ -88,7 +88,7 @@ public interface I2NPMessage {
      * @param type I2NP message type
      * @param handler the target for the message the buffer contains
      * @throws I2NPMessageException if the stream doesn't contain a valid message
-     *          that this class can read.
+     *                              that this class can read.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException;
 
@@ -131,7 +131,7 @@ public interface I2NPMessage {
      * Expiration for this message, assigned when written.
      *
      * @param exp the expiration as milliseconds since the epoch, which is also
-     *        when the peer should stop forwarding the message
+     *            when the peer should stop forwarding the message
      */
     public void setMessageExpiration(long exp);
 
@@ -165,7 +165,7 @@ public interface I2NPMessage {
      * Full 16 byte header for NTCP 1.
      *
      * @param buffer the destination array, which must have room for
-     *        {@link #getMessageSize()} bytes
+     *               {@link #getMessageSize()} bytes
      * @return the new offset (NOT the length)
      */
     public int toByteArray(byte[] buffer);
@@ -177,7 +177,7 @@ public interface I2NPMessage {
      * Full 16 byte header for NTCP 1.
      *
      * @param buffer the destination array, which must have room for
-     *        {@link #getMessageSize()} bytes from {@code off} on
+     *               {@link #getMessageSize()} bytes from {@code off} on
      * @param off the offset to start writing at
      * @return the new offset (NOT the length)
      * @since 0.9.36
@@ -191,7 +191,7 @@ public interface I2NPMessage {
      * Short 5 byte header for SSU.
      *
      * @param buffer the destination array, written from index 0, which must have
-     *        room for {@link #getRawMessageSize()} bytes
+     *               room for {@link #getRawMessageSize()} bytes
      * @return the length written
      */
     public int toRawByteArray(byte[] buffer);
@@ -203,7 +203,7 @@ public interface I2NPMessage {
      * Short 9 byte header for NTCP 2.
      *
      * @param buffer the destination array, which must have room for
-     *        {@link #getRawMessageSize()} bytes from {@code off} on
+     *               {@link #getRawMessageSize()} bytes from {@code off} on
      * @param off the offset to start writing at
      * @return the new offset (NOT the length)
      * @since 0.9.36

@@ -327,7 +327,7 @@ public class JSONRPC2Notification extends JSONRPC2Message {
      *
      * @return The positional (JSON array) parameters, {@code null} if none
      * @since 1.30
-     *         or named.
+     *        or named.
      */
     public List<Object> getPositionalParams() {
 
@@ -341,7 +341,7 @@ public class JSONRPC2Notification extends JSONRPC2Message {
      *
      * @return The named (JSON object) parameters, {@code null} if none or
      * @since 1.30
-     *         positional.
+     *        positional.
      */
     public Map<String,Object> getNamedParams() {
 
@@ -383,7 +383,7 @@ public class JSONRPC2Notification extends JSONRPC2Message {
      *
      * @param positionalParams The positional (JSON array) request
      * @since 1.30
-     *                         parameters, {@code null} if none.
+     *        parameters, {@code null} if none.
      */
     public void setPositionalParams(final List<Object> positionalParams) {
 
@@ -400,7 +400,7 @@ public class JSONRPC2Notification extends JSONRPC2Message {
      *
      * @param namedParams The named (JSON object) request parameters,
      * @since 1.30
-     *                    {@code null} if none.
+     *        {@code null} if none.
      */
     public void setNamedParams(final Map<String,Object> namedParams) {
 

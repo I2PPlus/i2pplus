@@ -60,8 +60,8 @@ public class GeoIPv6 {
      * @param search a sorted array of IPs to search
      * @param codeCache the country code cache
      * @return an array of country codes, same order as the search param,
-     * or a zero-length array on total failure.
-     * Individual array elements will be null for lookup failure of that item.
+     *         or a zero-length array on total failure.
+     *         Individual array elements will be null for lookup failure of that item.
      */
     public static String[] readGeoIPFile(I2PAppContext context, Long[] search, Map<String, String> codeCache) {
         Log log = context.logManager().getLog(GeoIPv6.class);
@@ -81,8 +81,8 @@ public class GeoIPv6 {
      *
      * @param search a sorted array of IPs to search
      * @return an array of country codes, same order as the search param,
-     * or a zero-length array on total failure.
-     * Individual array elements will be null for lookup failure of that item.
+     *         or a zero-length array on total failure.
+     *         Individual array elements will be null for lookup failure of that item.
      */
     private static String[] readGeoIPFile(I2PAppContext context, File geoFile, Long[] search, Map<String, String> codeCache, Log log) {
         String[] rv = new String[search.length];

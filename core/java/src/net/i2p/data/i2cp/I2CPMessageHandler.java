@@ -39,7 +39,7 @@ public class I2CPMessageHandler {
      * @return Fully populated I2CPMessage
      * @throws IOException if there is an IO problem reading from the stream
      * @throws I2CPMessageException if there is a problem handling the particular
-     * message - if it is an unknown type or has improper formatting, etc.
+     *                              message - if it is an unknown type or has improper formatting, etc.
      */
     public static I2CPMessage readMessage(InputStream in) throws IOException, I2CPMessageException {
         int length;

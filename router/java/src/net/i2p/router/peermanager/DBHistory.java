@@ -197,7 +197,7 @@ public class DBHistory {
      * @param oldPeers number of peers we have seen before
      * @param invalid number of peers that are invalid / out of date / otherwise b0rked
      * @param duplicate number of peers we asked them not to give us (though they're allowed to send us
-     * themselves if they don't know anyone else)
+     *                  themselves if they don't know anyone else)
      */
     public void lookupReply(int newPeers, int oldPeers, int invalid, int duplicate) {
         if (invalid > 0) {_invalidReplyRate.addData(invalid);}

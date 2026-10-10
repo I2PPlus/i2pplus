@@ -190,7 +190,7 @@ public class SingleFileNamingService extends NamingService {
      *
      * @param hostname case-sensitive; caller should convert to lower case
      * @param options if non-null, any prefixed with '=' will be appended
-     * in subscription format
+     *                in subscription format
      */
     @Override
     public boolean put(String hostname, Destination d, Properties options) {
@@ -241,7 +241,7 @@ public class SingleFileNamingService extends NamingService {
      *
      * @param hostname case-sensitive; caller should convert to lower case
      * @param options if non-null, any prefixed with '=' will be appended
-     * in subscription format
+     *                in subscription format
      */
     @Override
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
@@ -362,11 +362,11 @@ public class SingleFileNamingService extends NamingService {
      * Return all entries matching the options.
      *
      * @param options null OK, or as follows:
-     * Key "search": return only those matching substring
-     * Key "startsWith": return only those starting with
-     * ("[0-9]" allowed)
-     * Key "skip": number of matching entries to skip
-     * Key "limit": maximum number of matching entries to return
+     *                Key "search": return only those matching substring
+     *                Key "startsWith": return only those starting with
+     *                ("[0-9]" allowed)
+     *                Key "skip": number of matching entries to skip
+     *                Key "limit": maximum number of matching entries to return
      * @return the entries
      * @since 0.9.71+
      */
@@ -442,13 +442,13 @@ public class SingleFileNamingService extends NamingService {
      * Overridden since we store base64 natively.
      *
      * @param options null OK, or as follows:
-     * Key "search": return only those matching substring
-     * Key "startsWith": return only those starting with
-     * ("[0-9]" allowed)
+     *                Key "search": return only those matching substring
+     *                Key "startsWith": return only those starting with
+     *                ("[0-9]" allowed)
      *
      * @return all mappings (matching the options if non-null)
-     * or empty Map if none.
-     * Returned Map is not sorted.
+     *         or empty Map if none.
+     *         Returned Map is not sorted.
      *
      * @since 0.9.20
      */

@@ -210,7 +210,7 @@ public abstract class DelegatingDnssecRR extends Data {
      * getDigestHex.
      *
      * @return the DNSKEY digest as upper-case hexadecimal without a {@code 0x} prefix or leading
-     * zeroes, built once and then cached
+     *         zeroes, built once and then cached
      */
     public String getDigestHex() {
         if (digestHexCache == null) {

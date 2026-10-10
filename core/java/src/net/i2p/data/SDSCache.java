@@ -70,7 +70,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      * @param rvClass the class that we are storing, i.e. an extension of SimpleDataStructure
      * @param len the length of the byte array in the SimpleDataStructure
      * @param max maximum size of the cache assuming 128MB of mem.
-     * The actual max size will be scaled based on available memory.
+     *            The actual max size will be scaled based on available memory.
      */
     public SDSCache(Class<V> rvClass, int len, int max) {
         int size = (int) (max * FACTOR);
@@ -114,7 +114,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      *
      * @param data non-null, the byte array for the SimpleDataStructure
      * @return the cached value if available, otherwise
-     * makes a new object and returns it
+     *         makes a new object and returns it
      *
      * @throws IllegalArgumentException if data is not the correct number of bytes
      * @throws NullPointerException if data is null
@@ -150,7 +150,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      * @param b non-null byte array containing the data, data will be copied to not hold the reference
      * @param off offset in the array to start reading from
      * @return the cached value if available, otherwise
-     * makes a new object and returns it
+     *         makes a new object and returns it
      * @throws ArrayIndexOutOfBoundsException if not enough bytes
      * @throws NullPointerException if b is null
      */
@@ -164,7 +164,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      * Stream from which the bytes will be read.
      * @param in a stream from which the bytes will be read
      * @return the cached value if available, otherwise
-     * makes a new object and returns it
+     *         makes a new object and returns it
      * @throws IOException if not enough bytes
      */
     public V get(InputStream in) throws IOException {
@@ -238,8 +238,8 @@ public class SDSCache<V extends SimpleDataStructure> {
         /**
          * @param key the 4-byte index
          * @return the reference for the key, or null. A slot whose key is
-         * published but whose reference is not yet reads as empty, so a
-         * reader racing a put may see a miss; the put holds the lock.
+         *         published but whose reference is not yet reads as empty, so a
+         *         reader racing a put may see a miss; the put holds the lock.
          */
         @SuppressWarnings("unchecked")
         WeakReference<V> get(int key) {

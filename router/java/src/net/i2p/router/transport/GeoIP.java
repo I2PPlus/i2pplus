@@ -1579,7 +1579,7 @@ public class GeoIP {
     *
     * @param search a sorted array of IPs to search
     * @return an array of country codes, same order as the search param,
-    * or a zero-length array on failure
+    *         or a zero-length array on failure
     */
     private String[] readGeoIPFile(Long[] search) {
         String geoDir = _context.getProperty(PROP_GEOIP_DIR, GEOIP_DIR_DEFAULT);

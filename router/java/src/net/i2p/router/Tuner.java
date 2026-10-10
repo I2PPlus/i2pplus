@@ -404,7 +404,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * @param id thread id
          * @return index into {@link #CPU_STAGES}, or {@link #NO_STAGE} /
-         *               {@link #UNRESOLVED}
+         *         {@link #UNRESOLVED}
          */
         int stageOf(long id) {
             int idx = _live.index(id);
@@ -2768,7 +2768,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @param target  the desired target value
          * @param step    the maximum change per cycle
          * @return current moved by at most step toward target; the value is
-         *                 computed and returned, not applied
+         *         computed and returned, not applied
          * @since 0.9.70+
          */
         protected static int clamp(int current, int target, int step) {
@@ -4902,7 +4902,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param rtxPerMille    {@code stream.rtxRatio} (resends per 1000 messages), or NaN
      * @param rtxBytesPerMille {@code stream.rtxRatioBytes} (resend bytes per 1000 bytes), or NaN
      * @return the retransmission rate clamped to [0.0, 1.0], or NaN when no
-     *             signal is available at all
+     *         signal is available at all
      * @since 0.9.71+
      */
     static double streamingLossRate(double dupEvents, double sendEvents,
@@ -4979,7 +4979,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param min lower bound for the window (inclusive)
      * @param max upper bound for the window (inclusive)
      * @return the BDP window target in {@code [min, max]}, or -1 if there is no usable signal;
-     *             never returns a value outside {@code [min, max]}
+     *         never returns a value outside {@code [min, max]}
      * @since 0.9.71+
      */
     static int computeStreamingBdpTarget(double bwSendBps, double rttMs, int messageSize, int min, int max) {
@@ -9682,7 +9682,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *  period, is the only thing that widens it.
          *
          * @param observed build success rate; carried for the base-class contract
-         *                  and deliberately not consulted
+         *                 and deliberately not consulted
          * @return the multiplier to apply
          * @since 0.9.71+
          */

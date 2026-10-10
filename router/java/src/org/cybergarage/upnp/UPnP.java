@@ -59,7 +59,7 @@ public class UPnP {
      * Generates the server identification string for UPnP operations.
      *
      * @return a server identification string in the format "OS/Version UPnP/1.0
-     *     FrameworkName/FrameworkVersion"
+     *         FrameworkName/FrameworkVersion"
      */
     public static final String getServerName() {
         String osName = System.getProperty("os.name");

@@ -1096,12 +1096,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      * <p>Called with {@code _cache.tunnelCache} locked.
      *
      * @return the rotated tunnel, or null when there is no cached tunnel or it
-     * is no longer valid - the caller then falls through to normal
-     * selection logic.  When rotation is saturated (the pool offered no
-     * tunnel distinguishable from the previously-used one), the cached
-     * entry is evicted before returning null, so the fall-through
-     * re-selects fresh instead of riding the tunnel that stalled the
-     * previous connection.
+     *         is no longer valid - the caller then falls through to normal
+     *         selection logic.  When rotation is saturated (the pool offered no
+     *         tunnel distinguishable from the previously-used one), the cached
+     *         entry is evicted before returning null, so the fall-through
+     *         re-selects fresh instead of riding the tunnel that stalled the
+     *         previous connection.
      */
     private TunnelInfo selectFreshConnectionTunnel() {
         TunnelInfo cached = _cache.tunnelCache.get(_hashPair);
@@ -1347,7 +1347,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      *
      * @param sourceHash the local sending destination's hash, or null when unknown
      * @param destHash the remote destination's hash (unused — kept so the
-     * source-vs-dest choice is pinned by tests rather than implicit)
+     *                 source-vs-dest choice is pinned by tests rather than implicit)
      * @return the pool-map key to nudge, or null when the source is unknown
      * @since 0.9.71+
      */

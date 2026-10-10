@@ -102,22 +102,22 @@ public abstract class RrdBackendFactory implements Closeable {
      * Returns backend factory for the given backend factory name.
      *
      * @param name Backend factory name. Initially supported names are:
-     *     <ul>
-     *       <li><b>FILE</b>: Default factory which creates backends based on the java.io.* package.
-     *           RRD data is stored in files on the disk
-     *       <li><b>SAFE</b>: Default factory which creates backends based on the java.io.* package.
-     *           RRD data is stored in files on the disk. This backend is "safe". Being safe means
-     *           that RRD files can be safely shared between several JVM's.
-     *       <li><b>NIO</b>: Factory which creates backends based on the java.nio.* package. RRD
-     *           data is stored in files on the disk
-     *       <li><b>MEMORY</b>: Factory which creates memory-oriented backends. RRD data is stored
-     *           in memory, it gets lost as soon as JVM exits.
-     *       <li><b>BERKELEY</b>: a memory-oriented backend that ensure persistent in a <a
-     *           href="http://www.oracle.com/technetwork/database/berkeleydb/overview/index-093405.html">Berkeley
-     *           Db</a> storage.
-     *       <li><b>MONGODB</b>: a memory-oriented backend that ensure persistent in a <a
-     *           href="http://www.mongodb.org/">MongoDB</a> storage.
-     *     </ul>
+     *             <ul>
+     *             <li><b>FILE</b>: Default factory which creates backends based on the java.io.* package.
+     *             RRD data is stored in files on the disk
+     *             <li><b>SAFE</b>: Default factory which creates backends based on the java.io.* package.
+     *             RRD data is stored in files on the disk. This backend is "safe". Being safe means
+     *             that RRD files can be safely shared between several JVM's.
+     *             <li><b>NIO</b>: Factory which creates backends based on the java.nio.* package. RRD
+     *             data is stored in files on the disk
+     *             <li><b>MEMORY</b>: Factory which creates memory-oriented backends. RRD data is stored
+     *             in memory, it gets lost as soon as JVM exits.
+     *             <li><b>BERKELEY</b>: a memory-oriented backend that ensure persistent in a <a
+     *             href="http://www.oracle.com/technetwork/database/berkeleydb/overview/index-093405.html">Berkeley
+     *             Db</a> storage.
+     *             <li><b>MONGODB</b>: a memory-oriented backend that ensure persistent in a <a
+     *             href="http://www.mongodb.org/">MongoDB</a> storage.
+     *             </ul>
      *
      * @deprecated Uses active factory instead
      * @return Backend factory for the given factory name
@@ -433,7 +433,7 @@ public abstract class RrdBackendFactory implements Closeable {
      * @param uri an URI that the current backend can handle.
      * @param relative if true, return an URI relative to the {@code rootUri}
      * @return a calculate normalized absolute URI or null if the tried URL don't match against the
-     *     root.
+     *         root.
      */
     protected URI resolve(URI rootUri, URI uri, boolean relative) {
         String scheme = uri.getScheme();
@@ -532,7 +532,7 @@ public abstract class RrdBackendFactory implements Closeable {
      *
      * @param path the storage path, relative to this factory's root URI
      * @param readOnly true to open the storage for reading only, false to allow
-     *        writes
+     *                 writes
      * @return the backend that performs all I/O for the given storage path
      * @throws java.io.IOException if the storage cannot be opened
      */
@@ -542,7 +542,7 @@ public abstract class RrdBackendFactory implements Closeable {
      * Creates RrdBackend object for the given storage path.
      *
      * @param rrdDb the pool database the backend is registered against, so it can
-     *        be told when the backend is closed
+     *              be told when the backend is closed
      * @param path Storage path
      * @param readOnly True, if the storage should be accessed in read/only mode. False otherwise.
      * @return Backend object which handles all I/O operations for the given storage path
@@ -559,7 +559,7 @@ public abstract class RrdBackendFactory implements Closeable {
      * Creates RrdBackend object for the given storage path.
      *
      * @param rrdDb the pool database the backend is registered against, so it
-     *        can be told when the backend is closed
+     *              can be told when the backend is closed
      * @param uri Storage uri
      * @param readOnly True, if the storage should be accessed in read/only mode. False otherwise.
      * @return Backend object which handles all I/O operations for the given storage path

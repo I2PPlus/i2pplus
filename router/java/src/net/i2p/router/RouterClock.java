@@ -66,7 +66,7 @@ public class RouterClock extends Clock {
      * Does not start. Caller MUST call start()
      *
      * @param context the router context used to create the timestamper and to
-     *        resolve clock settings
+     *                resolve clock settings
      */
     public RouterClock(RouterContext context) {
         super(context);
@@ -375,7 +375,7 @@ public class RouterClock extends Clock {
          * Notifies the listener that the router clock shifted.
          *
          * @param delta The system clock and adjusted clock just changed by this much,
-         * in milliseconds (approximately)
+         *              in milliseconds (approximately)
          */
         public void clockShift(long delta);
     }

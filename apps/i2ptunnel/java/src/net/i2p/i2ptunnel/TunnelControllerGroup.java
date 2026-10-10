@@ -513,9 +513,9 @@ public class TunnelControllerGroup implements ClientApp {
      * @param context the context the tunnels are created in
      * @param mgr may be null
      * @param args zero or one args, which may be one config file or one config
-     * directory. If not absolute will be relative to the context's config dir,
-     * if empty or null, the default is i2ptunnel.config for a
-     * config file and i2ptunnel.config.d for a config directory
+     *             directory. If not absolute will be relative to the context's config dir,
+     *             if empty or null, the default is i2ptunnel.config for a
+     *             config file and i2ptunnel.config.d for a config directory
      * @throws IllegalArgumentException if too many args
      * @since 0.9.4
      */
@@ -557,7 +557,7 @@ public class TunnelControllerGroup implements ClientApp {
      *
      * @param args must be the args passed to TunnelControllerGroup.
      * @return an array of exactly 2 strings, where [0] is the the value for
-     * _configFile and [1] is the value for _configDirectory
+     *         _configFile and [1] is the value for _configDirectory
      */
     private String[] setupArguments(String[] args){
         String configFile = DEFAULT_CONFIG_FILE;
@@ -587,7 +587,7 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Load the tunnel configs from a file, for running standalone.
      * @param args one arg, the config file, if not absolute will be relative to the context's config dir,
-     * if no args, the default is i2ptunnel.config
+     *             if no args, the default is i2ptunnel.config
      * @throws IllegalArgumentException if unable to load from config from file
      */
     public static void main(String[] args) {
@@ -2258,9 +2258,9 @@ public class TunnelControllerGroup implements ClientApp {
      * @param desired per-tunnel ceilings (any values; clamped internally)
      * @param floor the per-tunnel floor; negative treated as 0
      * @return per-tunnel allocation, same length as {@code desired};
-     * each entry &gt;= the shared floor whenever the budget allows;
-     * the sum equals min({@code budget}, sum of ceilings) except when
-     * the budget is smaller than one thread per tunnel
+     *         each entry &gt;= the shared floor whenever the budget allows;
+     *         the sum equals min({@code budget}, sum of ceilings) except when
+     *         the budget is smaller than one thread per tunnel
      * @since 0.9.71+
      */
     static int[] allocateServerThreads(int budget, int[] desired, int floor) {

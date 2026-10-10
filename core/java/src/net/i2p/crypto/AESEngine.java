@@ -91,7 +91,7 @@ public class AESEngine {
      * @param iv IV for CBC, must be 16 bytes
      * @param paddedSize minimum size of output
      * @return encrypted data or null on error
-     * Obsolete — prefer encrypt(byte[], int, byte[], int, SessionKey, byte[], int).
+     *         Obsolete — prefer encrypt(byte[], int, byte[], int, SessionKey, byte[], int).
      */
     public byte[] safeEncrypt(byte[] payload, SessionKey sessionKey, byte[] iv, int paddedSize) {
         if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return null;
@@ -125,7 +125,7 @@ public class AESEngine {
      * @param sessionKey session key for decryption
      * @param iv IV for CBC, must be 16 bytes
      * @return decrypted data or null on error
-     * Obsolete — prefer decrypt(byte[], int, byte[], int, SessionKey, byte[], int).
+     *         Obsolete — prefer decrypt(byte[], int, byte[], int, SessionKey, byte[], int).
      */
     public byte[] safeDecrypt(byte[] payload, SessionKey sessionKey, byte[] iv) {
         if ((iv == null) || (payload == null) || (sessionKey == null) || (iv.length != 16)) return null;

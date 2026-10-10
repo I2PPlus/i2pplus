@@ -232,7 +232,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /**
      * Convenience method, is the type any variant of leaseset?
      *
-     * @param type the type
+     * @param type one of the DatabaseEntry key type constants
      * @return true for any type of LeaseSet, false for RouterInfo, false for others
      * @since 0.9.38
      */
@@ -389,9 +389,9 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      *
      * @since 0.9.58 moved up from LeaseSet
      *
-     * use this carefully, when updating the flag make sure the old and new
-     * leaseSet are actually equivalent, or simply copy the reply value,
-     * as copyStoreMetadata() in KademliaNetworkDatabaseFacade does.
+     *        use this carefully, when updating the flag make sure the old and new
+     *        leaseSet are actually equivalent, or simply copy the reply value,
+     *        as copyStoreMetadata() in KademliaNetworkDatabaseFacade does.
      */
     public void setReceivedAsPublished() {
         _receivedAsPublished = true;

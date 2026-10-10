@@ -243,7 +243,7 @@ public class SimpleTimer2 {
      * @param threshold consecutive saturated samples tolerated before reporting
      * @param episodeReported whether this episode has already been reported
      * @return REPORT once per episode, OK when not saturated (ending the
-     * episode), PENDING otherwise
+     *         episode), PENDING otherwise
      * @since 0.9.71+
      */
     static WatchdogDecision evaluateSaturation(int activeCount, int poolSize, int queueSize,
@@ -285,9 +285,9 @@ public class SimpleTimer2 {
      * @param threshold such samples tolerated before reporting
      * @param episodeReported whether this episode has already been reported
      * @param maxObservedGapMs longest quiet period this timer has previously come
-     * back from; zero when no baseline has been established
+     *                         back from; zero when no baseline has been established
      * @return REPORT once per episode, OK on progress or an idle timer (ending
-     * the episode), PENDING otherwise
+     *         the episode), PENDING otherwise
      * @since 0.9.71+
      */
     static WatchdogDecision evaluateStall(long completed, long lastCompleted,
@@ -667,8 +667,8 @@ public class SimpleTimer2 {
      *
      * @param event the TimedEvent to run, which reschedules itself from its own timeReached()
      * @param timeoutMs delay to the first run, in ms, and lower bound for the
-     * period the event chooses for itself; the value is not
-     * enforced after the first run
+     *                  period the event chooses for itself; the value is not
+     *                  enforced after the first run
      * @throws IllegalArgumentException if timeoutMs less than 5000
      * @since 0.9.70+
      */
@@ -684,7 +684,7 @@ public class SimpleTimer2 {
      * @param event the TimedEvent to run, which reschedules itself from its own timeReached()
      * @param delay run the first iteration after delay ms
      * @param timeoutMs lower bound in ms for the period the event picks for
-     * itself, enforced only by the check below
+     *                  itself, enforced only by the check below
      * @throws IllegalArgumentException if timeoutMs less than 5000
      * @since 0.9.70+
      */
@@ -859,7 +859,7 @@ public class SimpleTimer2 {
          *
          * @param timeoutMs timeout in milliseconds
          * @param useEarliestTime if true and already scheduled, use the earlier
-         * timeout; if false and already scheduled, use the later
+         *                        timeout; if false and already scheduled, use the later
          */
         public synchronized void reschedule(long timeoutMs, boolean useEarliestTime) {
             if (timeoutMs <= 0) {

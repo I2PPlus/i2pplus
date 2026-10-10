@@ -76,7 +76,7 @@ public class ShellService implements ClientApp {
      * @param context the application context supplying the log manager
      * @param listener the client app manager to notify of this app's state changes
      * @param args the command line arguments: the executable path first, then the
-     *        arguments to pass to that executable
+     *             arguments to pass to that executable
      */
     public ShellService(I2PAppContext context, ClientAppManager listener, String[] args) {
         _context = context;

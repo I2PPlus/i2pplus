@@ -63,28 +63,28 @@ public class TunnelHistory {
      * Total tunnels the peer has agreed to participate in
      *
      * @return the count since the last decay, applied every 15 minutes by
-     *     {@link #coalesceStats()}
+     *         {@link #coalesceStats()}
      */
     public long getLifetimeAgreedTo() {return _lifetimeAgreedTo.get();}
     /**
      * Total tunnels the peer has refused to participate in (does not include timeouts)
      *
      * @return the count since the last decay, applied every 15 minutes by
-     *     {@link #coalesceStats()}
+     *         {@link #coalesceStats()}
      */
     public long getLifetimeRejected() {return _lifetimeRejected.get();}
     /**
      * Total tunnel builds to this peer that timed out without a response
      *
      * @return the count since the last decay, applied every 15 minutes by
-     *     {@link #coalesceStats()}
+     *         {@link #coalesceStats()}
      */
     public long getLifetimeTimedOut() {return _lifetimeTimedOut.get();}
     /**
      * Total tunnels the peer has agreed to participate in that were later marked as failed prematurely
      *
      * @return the count since the last decay, applied every 15 minutes by
-     *     {@link #coalesceStats()}
+     *         {@link #coalesceStats()}
      */
     public long getLifetimeFailed() {return _lifetimeFailed.get();}
     /**
@@ -97,28 +97,28 @@ public class TunnelHistory {
      * When the peer last refused to participate in a tunnel with level of critical
      *
      * @return milliseconds since the epoch, or 0 if the peer has never
-     *     rejected at this severity
+     *         rejected at this severity
      */
     public long getLastRejectedCritical() {return _lastRejectedCritical;}
     /**
      * When the peer last refused to participate in a tunnel complaining of bandwidth overload
      *
      * @return milliseconds since the epoch, or 0 if the peer has never
-     *     rejected at this severity
+     *         rejected at this severity
      */
     public long getLastRejectedBandwidth() {return _lastRejectedBandwidth;}
     /**
      * When the peer last refused to participate in a tunnel complaining of transient overload
      *
      * @return milliseconds since the epoch, or 0 if the peer has never
-     *     rejected at this severity
+     *         rejected at this severity
      */
     public long getLastRejectedTransient() {return _lastRejectedTransient;}
     /**
      * When the peer last refused to participate in a tunnel probabalistically
      *
      * @return milliseconds since the epoch, or 0 if the peer has never
-     *     rejected at this severity
+     *         rejected at this severity
      */
     public long getLastRejectedProbabalistic() {return _lastRejectedProbabalistic;}
     /**
@@ -131,7 +131,7 @@ public class TunnelHistory {
      * When the last tunnel the peer participated in failed
      *
      * @return milliseconds since the epoch, or 0 if no participating tunnel
-     *     has failed
+     *         has failed
      */
     public long getLastFailed() {return _lastFailed;}
 
@@ -139,7 +139,7 @@ public class TunnelHistory {
      * When the peer last passed a tunnel test
      *
      * @return milliseconds since the epoch, or 0 if the peer has never passed
-     *     a tunnel test
+     *         a tunnel test
      */
     public long getLastTestedSuccessfully() {return _lastTestedSuccessfully;}
 
@@ -191,7 +191,7 @@ public class TunnelHistory {
      * Count a tunnel rejection at the given severity and record its time.
      *
      * @param severity how much the peer doesnt want to participate in the
-     * tunnel (large == more severe)
+     *                 tunnel (large == more severe)
      */
     public void incrementRejected(int severity) {
         _lifetimeRejected.incrementAndGet();

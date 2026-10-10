@@ -1222,7 +1222,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     /**
      * from NewsFetcher
      * @return false if the update policy is notify-only or news has suppressed
-     * installs, or a downloaded router update zip is still pending
+     *         installs, or a downloaded router update zip is still pending
      */
     boolean shouldInstall() {
         String policy = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_POLICY);
@@ -1394,11 +1394,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * Only for router updates
      *
      * @param uri download URI, used only for the status text and to tell an
-     * I2P+ (skank) build from a stock one
+     *            I2P+ (skank) build from a stock one
      * @param lastmod server-supplied last-modified timestamp in ms, as a
-     * string; the current time is used when null or unparseable
+     *                string; the current time is used when null or unparseable
      * @param updFile the downloaded file, verified as a zip and then copied
-     * into the router directory
+     *                into the router directory
      * @return true if the verified file was copied for install at next restart
      */
     private boolean handleUnsignedFile(URI uri, String lastmod, File updFile) {

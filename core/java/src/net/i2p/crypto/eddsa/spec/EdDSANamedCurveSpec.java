@@ -17,7 +17,7 @@ public class EdDSANamedCurveSpec extends EdDSAParameterSpec {
      * Create a named curve specification.
      *
      * @param name the curve name
-     * @param curve the curve parameters
+     * @param curve the twisted Edwards curve, supplying the finite field and parameter d
      * @param hashAlgo the hash algorithm
      * @param sc the scalar ops
      * @param b the base point

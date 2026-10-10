@@ -53,7 +53,9 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     public static final String PROP_DCC = "i2ptunnel.ircclient.enableDCC";
 
     /**
-     * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
+     * Create an IRC client on the given local port.
+     *
+     * Since 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
@@ -64,7 +66,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
      * @param tunnel the I2PTunnel instance
      * @param pkf path to the private key file, or null to generate a transient key
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     * valid config to contact the router
+     *                                  valid config to contact the router
      */
     public I2PTunnelIRCClient(
                               int localPort,

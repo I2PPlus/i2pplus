@@ -70,9 +70,9 @@ import org.freenetproject.ForwardPortStatus;
  * @author Florent Daigni&egrave;re &lt;nextgens@freenetproject.org&gt;
  *
  *
- * some code has been borrowed from Limewire : @see com.limegroup.gnutella.UPnPManager
+ *         some code has been borrowed from Limewire : @see com.limegroup.gnutella.UPnPManager
  *
- * Public only for command line usage. Not a public API, not for external use.
+ *         Public only for command line usage. Not a public API, not for external use.
  *
  * @see "http://www.upnp.org/"
  * @see "http://en.wikipedia.org/wiki/Universal_Plug_and_Play"

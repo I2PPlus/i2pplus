@@ -571,7 +571,7 @@ public final class CryptixRijndael_Algorithm {
      * @param keySize    The size of the user key material in bytes.
      * @param blockSize  The desired block size in bytes.
      * @return The number of rounds for a given Rijndael's key and
-     *      block sizes.
+     *         block sizes.
      */
     public static final int getRounds(int keySize, int blockSize) {
         switch (keySize) {

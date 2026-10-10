@@ -317,7 +317,10 @@ class UDPAddress {
     public String getHost() { return _host; }
 
     /**
-     * As of 0.9.32, will NOT resolve hostnames.
+     * The InetAddress for the router address's host, looked up on first use.
+     *
+     * Hostnames are not resolved; a host that is not a literal IP address
+     * gives a null address.
      *
      * @return InetAddress or null
      */
@@ -349,7 +352,10 @@ class UDPAddress {
     int getIntroducerCount() { return (_introTags == null ? 0 : _introTags.length); }
 
     /**
-     * As of 0.9.32, will NOT resolve hostnames.
+     * The InetAddress for the introducer at index i, looked up on first use.
+     *
+     * Hostnames are not resolved; a host that is not a literal IP address
+     * gives a null address.
      *
      * @param i the introducer index, from 0
      * @return null if invalid or for SSU2
@@ -479,10 +485,10 @@ class UDPAddress {
     }
 
     ////////////////
-    // cache copied from Addresses.java but caching InetAddress instead of byte[]
 
     /**
      * Textual IP to InetAddress, because InetAddress.getByName() is slow.
+     * Copied from Addresses.java, but caching InetAddress rather than byte[].
      */
     private static final Map<String, InetAddress> _inetAddressCache;
 

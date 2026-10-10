@@ -97,7 +97,7 @@ class RatchetTagSet implements TagSetHandle {
     /**
      * Outbound NSR Tagset
      *
-     * @param hkdf the HKDF instance
+     * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param state the handshake state
      * @param rootKey the root key
      * @param data the data key
@@ -111,7 +111,7 @@ class RatchetTagSet implements TagSetHandle {
     /**
      * Outbound ES Tagset
      *
-     * @param hkdf the HKDF instance
+     * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param rootKey the root key
      * @param data the data key
      * @param date For outbound: creation time
@@ -126,7 +126,7 @@ class RatchetTagSet implements TagSetHandle {
     /**
      * Inbound NSR Tagset
      *
-     * @param hkdf the HKDF instance
+     * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param lsnr the session tag listener
      * @param state the handshake state
      * @param rootKey the root key
@@ -143,7 +143,7 @@ class RatchetTagSet implements TagSetHandle {
     /**
      * Inbound ES Tagset
      *
-     * @param hkdf the HKDF instance
+     * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param lsnr the session tag listener
      * @param remoteKey the remote public key
      * @param rootKey the root key
@@ -163,7 +163,7 @@ class RatchetTagSet implements TagSetHandle {
     /**
      * Tag set for a ratchet session with the given keys and sizes.
      *
-     * @param hkdf the HKDF instance
+     * @param hkdf the HKDF used to derive the next root, tag and symmetric keys
      * @param lsnr the session tag listener
      * @param state the handshake state
      * @param remoteKey the remote public key
@@ -439,7 +439,7 @@ class RatchetTagSet implements TagSetHandle {
      * Inbound only.
      *
      * @param tag the message tag presented by the inbound message, looked up in the
-     *        set and removed once found
+     *            set and removed once found
      * @return associated SessionKey or null if not found.
      */
     public SessionKeyAndNonce consume(RatchetSessionTag tag) {

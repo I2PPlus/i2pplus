@@ -36,8 +36,8 @@ public final class Noise {
      * @return The cipher object if the name is recognized.
      *
      * @throws NoSuchAlgorithmException The name is not recognized as a
-     * valid Noise protocol name, or there is no cryptography provider
-     * in the system that implements the algorithm.
+     *                                  valid Noise protocol name, or there is no cryptography provider
+     *                                  in the system that implements the algorithm.
      */
     public static CipherState createCipher(String name) throws NoSuchAlgorithmException
     {
@@ -55,8 +55,8 @@ public final class Noise {
      * @return The hash object if the name is recognized.
      *
      * @throws NoSuchAlgorithmException The name is not recognized as a
-     * valid Noise protocol name, or there is no cryptography provider
-     * in the system that implements the algorithm.
+     *                                  valid Noise protocol name, or there is no cryptography provider
+     *                                  in the system that implements the algorithm.
      */
     public static MessageDigest createHash(String name) throws NoSuchAlgorithmException
     {
@@ -113,9 +113,9 @@ public final class Noise {
      *
      * @throws BadPaddingException The AEAD exception.
      *
-     * If the underlying JDK does not have the AEADBadTagException
-     * class, then this function will instead throw an instance of
-     * the superclass BadPaddingException.
+     *                             If the underlying JDK does not have the AEADBadTagException
+     *                             class, then this function will instead throw an instance of
+     *                             the superclass BadPaddingException.
      */
     static void throwBadTagException() throws BadPaddingException
     {

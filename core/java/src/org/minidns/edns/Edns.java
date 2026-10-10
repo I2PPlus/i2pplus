@@ -167,7 +167,7 @@ public class Edns {
      * getEdnsOption.
      *
      * @param <O> the option type the caller expects, so the unchecked cast to it
-     *        is checked at the call site
+     *            is checked at the call site
      * @param optionCode the code of the option to look for in the variable part
      * @return the matching option, or null if the variable part carries no such code
      */

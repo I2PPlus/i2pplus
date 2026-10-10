@@ -41,10 +41,10 @@ public class I2NPMessageHandler {
     /**
      * Read an I2NPMessage from the byte array and return the fully populated object.
      *
-     * @param data the data
-     * @return the result
+     * @param data the buffer holding the serialized message
+     * @return the fully populated message
      * @throws I2NPMessageException if there is a problem handling the particular
-     * message - if it is an unknown type or has improper formatting, etc.
+     *                              message - if it is an unknown type or has improper formatting, etc.
      */
     public I2NPMessage readMessage(byte[] data) throws I2NPMessageException {
         readMessage(data, 0, data.length);
@@ -54,9 +54,9 @@ public class I2NPMessageHandler {
     /**
      * Result is retreived with lastRead()
      *
-     * @param data the data
-     * @param offset the offset
-     * @return the result
+     * @param data the buffer holding the serialized message
+     * @param offset the index in data at which the message starts
+     * @return the number of bytes read from data
      * @throws net.i2p.data.i2np.I2NPMessageException on error
      */
     public int readMessage(byte[] data, int offset) throws I2NPMessageException {
@@ -69,11 +69,11 @@ public class I2NPMessageHandler {
      *
      * Result is retreived with lastRead()
      *
-     * @param data the data
-     * @param offset the offset
+     * @param data the buffer holding the serialized message
+     * @param offset the index in data at which the message starts
      * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
-     * must be at least 16
-     * @return the result
+     *               must be at least 16
+     * @return the number of bytes read from data
      * @throws net.i2p.data.i2np.I2NPMessageException on error
      * @since 0.8.12
      */

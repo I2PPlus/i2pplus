@@ -27,7 +27,7 @@ class RobinArray implements Robin {
      * @param parentArc the archive whose single datasource this array stores
      * @param rows the number of rows the array holds, which fixes its size
      * @param shouldInitialize true to zero the pointer and fill the rows with
-     *        NaN, false to leave whatever the storage already holds
+     *                         NaN, false to leave whatever the storage already holds
      * @throws java.io.IOException if the underlying storage cannot be written
      */
     RobinArray(Archive parentArc, int rows, boolean shouldInitialize) throws IOException {

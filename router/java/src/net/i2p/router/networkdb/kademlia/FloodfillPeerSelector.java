@@ -213,13 +213,13 @@ public class FloodfillPeerSelector extends PeerSelector {
      * @param maxNumRouters max to return
      * @param kbuckets now unused
      *
-     * Sorted by closest to the key if &gt; maxNumRouters, otherwise not
-     * The list is in 3 groups - sorted by routing key within each group.
-     * Group 1: No store or lookup failure in a long time, and
-     * lookup fail rate no more than 1.5 * average
-     * Group 2: No store or lookup failure in a little while or
-     * success newer than failure
-     * Group 3: All others
+     *                 Sorted by closest to the key if &gt; maxNumRouters, otherwise not
+     *                 The list is in 3 groups - sorted by routing key within each group.
+     *                 Group 1: No store or lookup failure in a long time, and
+     *                 lookup fail rate no more than 1.5 * average
+     *                 Group 2: No store or lookup failure in a little while or
+     *                 success newer than failure
+     *                 Group 3: All others
      */
     List<Hash> selectFloodfillParticipants(Hash key, int maxNumRouters, KBucketSet<Hash> kbuckets) {
         Set<Hash> ignore = Collections.singleton(_context.routerHash());
@@ -408,7 +408,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      * @param mask 1-4, the number of leading bytes to match
      * @return the packed fingerprint; equal keys mean "same masked subnet"
      * @throws IllegalArgumentException if the packed key would exceed 60 bits
-     * (IPv6 with mask 4), which no caller uses
+     *                                  (IPv6 with mask 4), which no caller uses
      * @since 0.9.71+
      */
     static long maskedIPKey(byte[] ip, int mask) {

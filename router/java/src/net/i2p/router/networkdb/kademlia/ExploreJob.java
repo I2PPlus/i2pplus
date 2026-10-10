@@ -95,7 +95,7 @@ public class ExploreJob extends SearchJob {
      * @param facade        Facade handling the Kademlia network database operations
      * @param key           Target key to explore/search for
      * @param isRealExplore True if this is a standard exploration (no floodfills returned),
-     * false if a standard lookup (floodfills returned, useful when floodfill count is low)
+     *                      false if a standard lookup (floodfills returned, useful when floodfill count is low)
      * @param msgIDBloomXor XOR value for message ID Bloom filter (used internally)
      */
     public ExploreJob(RouterContext context, KademliaNetworkDatabaseFacade facade, Hash key, boolean isRealExplore, long msgIDBloomXor) {
@@ -119,7 +119,7 @@ public class ExploreJob extends SearchJob {
      * @param peer          RouterInfo object representing the peer to which the message will be sent
      *
      * @return an encrypted or plain DatabaseLookupMessage wrapped as an I2NPMessage,
-     * or null on error
+     *         or null on error
      */
     @Override
     protected I2NPMessage buildMessage(TunnelId replyTunnelId, Hash replyGateway, long expiration, RouterInfo peer) {

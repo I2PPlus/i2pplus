@@ -124,7 +124,7 @@ public interface TunnelManagerFacade extends Service {
      * @param client hash of the destination whose pool is checked
      * @param tunnel candidate, rejected if failed or expired
      * @return true only if unfailed, unexpired and listed in that client's
-     * inbound or outbound pool, matching the tunnel's direction
+     *         inbound or outbound pool, matching the tunnel's direction
      */
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel);
 
@@ -150,14 +150,14 @@ public interface TunnelManagerFacade extends Service {
      * How many free inbound client tunnels do we have available?
      *
      * @return total over all destinations of GOOD (tested and passed)
-     * inbound client tunnels
+     *         inbound client tunnels
      */
     public int getInboundClientTunnelCount();
     /**
      * How many outbound client tunnels do we have available?
      *
      * @return total over all destinations of GOOD (tested and passed)
-     * outbound client tunnels
+     *         outbound client tunnels
      */
     public int getOutboundClientTunnelCount();
     /**
@@ -165,7 +165,7 @@ public interface TunnelManagerFacade extends Service {
      *
      * @param destination hash of the destination owning the outbound pool
      * @return GOOD tunnel count, or the count including untested tunnels
-     * while bootstrapping, or 0 if no pool is registered
+     *         while bootstrapping, or 0 if no pool is registered
      */
     public int getOutboundClientTunnelCount(Hash destination);
     /**
@@ -173,7 +173,7 @@ public interface TunnelManagerFacade extends Service {
      *
      * @param destination hash of the destination owning the inbound pool
      * @return GOOD tunnel count, or the count including untested tunnels
-     * while bootstrapping, or 0 if no pool is registered
+     *         while bootstrapping, or 0 if no pool is registered
      */
     public int getInboundClientTunnelCount(Hash destination);
     /**
@@ -187,7 +187,7 @@ public interface TunnelManagerFacade extends Service {
      * When does the last tunnel we are participating in expire?
      *
      * @return expiration of the latest-expiring participating tunnel in
-     * milliseconds since the epoch, or -1 if we participate in none
+     *         milliseconds since the epoch, or -1 if we participate in none
      */
     public long getLastParticipatingExpiration();
 
@@ -211,7 +211,7 @@ public interface TunnelManagerFacade extends Service {
      *
      * @param client connecting destination, whose hash keys the pools created here
      * @param settings per-destination inbound and outbound pool settings, which
-     * replace those of any pools that already exist
+     *                 replace those of any pools that already exist
      */
     public void buildTunnels(Destination client, ClientTunnelSettings settings);
 
@@ -219,7 +219,7 @@ public interface TunnelManagerFacade extends Service {
      * Must be called AFTER deregistration by the client manager.
      *
      * @param client destination whose pools are scheduled for removal, deferred
-     * so its tunnels keep operating until they expire
+     *               so its tunnels keep operating until they expire
      * @since 0.9.48
      */
     public void removeTunnels(Destination client);
@@ -301,7 +301,7 @@ public interface TunnelManagerFacade extends Service {
      * For TunnelRenderer in router console
      *
      * @param out list that the client inbound, client outbound and both
-     * exploratory pools are appended to
+     *            exploratory pools are appended to
      */
     public void listPools(List<TunnelPool> out);
     /**

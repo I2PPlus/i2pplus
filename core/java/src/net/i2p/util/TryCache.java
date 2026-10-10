@@ -68,7 +68,7 @@ public class TryCache<T> {
      * Try to return the item to the cache.
      * If the cache is full, the item is discarded.
      *
-     * @param item the item
+     * @param item the value to hand back to the cache for reuse
      */
     public void release(T item) {
         if (DEBUG_DUP) {

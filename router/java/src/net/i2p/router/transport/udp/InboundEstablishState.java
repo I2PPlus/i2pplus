@@ -115,7 +115,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
      *
      *  @param ctx router context, used for the clock and the log
      *  @param addr the remote address the session request arrived from, which becomes
-     *             the peer's address and remote host id
+     *              the peer's address and remote host id
      *  @since 0.9.54
      */
     protected InboundEstablishState(RouterContext ctx, InetSocketAddress addr) {

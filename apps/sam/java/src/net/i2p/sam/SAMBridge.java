@@ -341,7 +341,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * Handlers must call on startup
      *
      * @param handler the connection handler to add to the set stopped and
-     *        started with this bridge
+     *                started with this bridge
      * @since 0.9.20
      */
     public void register(Handler handler) {
@@ -356,7 +356,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * Handlers must call on stop
      *
      * @param handler the connection handler to drop from the set of handlers
-     *        started and stopped with this bridge
+     *                started and stopped with this bridge
      * @since 0.9.20
      */
     public void unregister(Handler handler) {
@@ -561,7 +561,8 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * As of 0.9.20, stops running handlers and sessions.
+     * Stop the bridge, shutting down the handler pool and the handlers and
+     * sessions running on it.
      *
      * @since 0.9.6
      */
@@ -580,8 +581,9 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * Return the state
-     * @return the state
+     * Report the bridge's position in the ClientApp lifecycle.
+     *
+     * @return the current ClientAppState
      * @since 0.9.6
      */
     public ClientAppState getState() {
@@ -589,8 +591,9 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * Return the name
-     * @return the name
+     * Report the constant service name, without the listen address.
+     *
+     * @return "SAM", always
      * @since 0.9.6
      */
     public String getName() {

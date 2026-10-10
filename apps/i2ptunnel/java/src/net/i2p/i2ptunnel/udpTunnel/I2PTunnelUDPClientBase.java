@@ -68,7 +68,7 @@ import net.i2p.util.EventDispatcher;
      * @param notifyThis event dispatcher for notifications
      * @param tunnel the parent tunnel, supplying the context and I2CP options
      * @throws IllegalArgumentException if the I2CP configuration is so broken
-     * that we can't create a socketManager
+     *                                  that we can't create a socketManager
      */
     public I2PTunnelUDPClientBase(String destination, Logging l, EventDispatcher notifyThis,
                                   I2PTunnel tunnel) throws IllegalArgumentException {

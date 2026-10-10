@@ -27,7 +27,7 @@ public class WizardHandler extends FormHandler {
     /**
      *  Bind the helper (scope session) to this handler (scope request)
      * @param helper session-scoped WizardHelper holding the wizard state this
-     *        request handler drives
+     *               request handler drives
      */
     public void setWizardHelper(WizardHelper helper) {_helper = helper;}
 

@@ -154,7 +154,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      * Creates a new SigningPublicKey from byte data with default type.
      *
      * @param data the raw key material, which must match the length of the default DSA-SHA1
-     *        type or be null for a key whose data is set later
+     *             type or be null for a key whose data is set later
      */
     public SigningPublicKey(byte[] data) {
         this(DEF_TYPE, data);
@@ -180,9 +180,9 @@ public class SigningPublicKey extends SimpleDataStructure {
      * Signing public key from a string of base64 data.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
-     * on a prior instance of SigningPublicKey
+     *         on a prior instance of SigningPublicKey
      * @throws DataFormatException if the base64 cannot be decoded or the decoded bytes are not
-     *         a key of the length the signature type requires
+     *                             a key of the length the signature type requires
      */
     public SigningPublicKey(String base64Data) throws DataFormatException {
         this();
@@ -269,7 +269,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      *
      * @param kcert the key certificate
      * @return the leading padding, or a shared empty array if there is no
-     * padding or the type is unknown
+     *         padding or the type is unknown
      * @throws IllegalStateException if this is already typed to a different type
      * @since 0.9.12
      */

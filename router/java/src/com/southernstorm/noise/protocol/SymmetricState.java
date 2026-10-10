@@ -24,7 +24,7 @@ class SymmetricState implements Destroyable, Cloneable {
      *
      * @param patternId the handshake pattern naming the cipher, hash and initial chaining key to use
      * @throws NoSuchAlgorithmException The cipher or hash algorithm in the
-     * protocol name is not supported.
+     *                                  protocol name is not supported.
      */
     public SymmetricState(NoiseInit.PatternID patternId) throws NoSuchAlgorithmException
     {
@@ -65,7 +65,7 @@ class SymmetricState implements Destroyable, Cloneable {
      * Gets the length of MAC values in the current state.
      *
      * @return The length of the MAC value for the underlying cipher
-     * or zero if the cipher has not yet been initialized with a key.
+     *         or zero if the cipher has not yet been initialized with a key.
      */
     public int getMACLength()
     {
@@ -156,23 +156,23 @@ class SymmetricState implements Destroyable, Cloneable {
      *
      * @param plaintext The buffer containing the plaintext to encrypt.
      * @param plaintextOffset The offset within the plaintext buffer of the
-     * first byte or plaintext data.
+     *                        first byte or plaintext data.
      * @param ciphertext The buffer to place the ciphertext in.  This can
-     * be the same as the plaintext buffer.
+     *                   be the same as the plaintext buffer.
      * @param ciphertextOffset The first offset within the ciphertext buffer
-     * to place the ciphertext and the MAC tag.
+     *                         to place the ciphertext and the MAC tag.
      * @param length The length of the plaintext.
      * @return The length of the ciphertext plus the MAC tag.
      *
      * @throws ShortBufferException There is not enough space in the
-     * ciphertext buffer for the encrypted data plus MAC value.
+     *                              ciphertext buffer for the encrypted data plus MAC value.
      *
-     * The plaintext and ciphertext buffers can be the same for in-place
-     * encryption.  In that case, plaintextOffset must be identical to
-     * ciphertextOffset.
+     *                              The plaintext and ciphertext buffers can be the same for in-place
+     *                              encryption.  In that case, plaintextOffset must be identical to
+     *                              ciphertextOffset.
      *
-     * There must be enough space in the ciphertext buffer to accomodate
-     * length + getMACLength() bytes of data starting at ciphertextOffset.
+     *                              There must be enough space in the ciphertext buffer to accomodate
+     *                              length + getMACLength() bytes of data starting at ciphertextOffset.
      */
     public int encryptAndHash(byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) throws ShortBufferException
     {
@@ -204,22 +204,22 @@ class SymmetricState implements Destroyable, Cloneable {
      *
      * @param ciphertext The buffer containing the ciphertext to decrypt.
      * @param ciphertextOffset The offset within the ciphertext buffer of
-     * the first byte of ciphertext data.
+     *                         the first byte of ciphertext data.
      * @param plaintext The buffer to place the plaintext in.  This can be
-     * the same as the ciphertext buffer.
+     *                  the same as the ciphertext buffer.
      * @param plaintextOffset The first offset within the plaintext buffer
-     * to place the plaintext.
+     *                        to place the plaintext.
      * @param length The length of the incoming ciphertext plus the MAC tag.
      * @return The length of the plaintext with the MAC tag stripped off.
      *
      * @throws ShortBufferException There is not enough space in the plaintext
-     * buffer for the decrypted data.
+     *                              buffer for the decrypted data.
      *
      * @throws BadPaddingException The MAC value failed to verify.
      *
-     * The plaintext and ciphertext buffers can be the same for in-place
-     * decryption.  In that case, ciphertextOffset must be identical to
-     * plaintextOffset.
+     *                             The plaintext and ciphertext buffers can be the same for in-place
+     *                             decryption.  In that case, ciphertextOffset must be identical to
+     *                             plaintextOffset.
      */
     public int decryptAndHash(byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) throws ShortBufferException, BadPaddingException
     {
@@ -264,7 +264,7 @@ class SymmetricState implements Destroyable, Cloneable {
      * @param secondaryKey The buffer containing the secondary key.
      * @param offset The offset of the first secondary key byte.
      * @param length The length of the secondary key in bytes, which
-     * must be either 0 or 32.
+     *               must be either 0 or 32.
      * @return The pair of ciphers for sending and receiving.
      *
      * @throws IllegalArgumentException The length is not 0 or 32.
@@ -308,8 +308,8 @@ class SymmetricState implements Destroyable, Cloneable {
      *
      * @return The handshake hash.  This must not be modified by the caller.
      *
-     * The handshake hash value is only of use to the application after
-     * split() has been called.
+     *         The handshake hash value is only of use to the application after
+     *         split() has been called.
      */
     public byte[] getHandshakeHash()
     {
@@ -342,7 +342,7 @@ class SymmetricState implements Destroyable, Cloneable {
      * @param outputOffset Offset into the output buffer to place the hash value.
      * @param outputLength The length of the hash output.
      *
-     * The output buffer can be the same as the input data buffer.
+     *                     The output buffer can be the same as the input data buffer.
      */
     private void hashOne(byte[] data, int offset, int length, byte[] output, int outputOffset, int outputLength)
     {
@@ -368,7 +368,7 @@ class SymmetricState implements Destroyable, Cloneable {
      * @param outputOffset Offset into the output buffer to place the hash value.
      * @param outputLength The length of the hash output.
      *
-     * The output buffer can be same as either of the input buffers.
+     *                     The output buffer can be same as either of the input buffers.
      */
     private void hashTwo(byte[] data1, int offset1, int length1,
                          byte[] data2, int offset2, int length2,
@@ -448,11 +448,11 @@ class SymmetricState implements Destroyable, Cloneable {
      * @param output1 The first output buffer.
      * @param output1Offset Offset into the first output buffer.
      * @param output1Length Length of the first output which can be
-     * less than the hash length.
+     *               less than the hash length.
      * @param output2 The second output buffer.
      * @param output2Offset Offset into the second output buffer.
      * @param output2Length Length of the second output which can be
-     * less than the hash length.
+     *               less than the hash length.
      */
     private void hkdf(byte[] key, int keyOffset, int keyLength,
                       byte[] data, int dataOffset, int dataLength,

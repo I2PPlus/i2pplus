@@ -33,7 +33,7 @@ public class SOCKSUDPWrapper implements Source, Sink {
      * Create a wrapper sharing an existing per-destination header cache.
      *
      * @param cache the header cache to reuse for outgoing datagrams, keyed by
-     *        destination address
+     *              destination address
      */
     public SOCKSUDPWrapper(Map<I2PSocketAddress, SOCKSHeader> cache) {
         this.cache = cache;

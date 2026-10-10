@@ -216,7 +216,7 @@ public class I2PAppContext {
      * NOT a public API, for use by RouterContext only, NOT for external use.
      *
      * @param doInit should this context be used as the global one (if necessary)?
-     * Will only apply if there is no global context now.
+     *               Will only apply if there is no global context now.
      *
      * @param envProps environment properties, may be null
      */
@@ -1055,7 +1055,7 @@ public class I2PAppContext {
      * This method moved from Router in 0.7.1 so that clients
      * may use it without depending on router.jar.
      *
-     * @param task the task
+     * @param task the Runnable to invoke during shutdown
      * @since 0.7.1
      */
     public void addShutdownTask(Runnable task) {
@@ -1065,7 +1065,7 @@ public class I2PAppContext {
     /**
      * Remove a shutdown task.
      *
-     * @param task the task
+     * @param task the previously added Runnable to drop from the shutdown set
      * @since 0.9.53
      */
     public void removeShutdownTask(Runnable task) {
@@ -1142,11 +1142,13 @@ public class I2PAppContext {
     }
 
     /**
-     * As of 0.9.30, returns non-null in I2PAppContext, null in RouterContext.
-     * Prior to that, returned null always.
-     * Overridden in RouterContext to return the RouterAppManager.
+     * The ClientAppManager for this context. Overridden in RouterContext to
+     * return the RouterAppManager.
      *
-     * @return As of 0.9.30, returns non-null in I2PAppContext, null in RouterContext
+     * As of 0.9.30 this returns non-null in I2PAppContext and null in a router
+     * context. Prior to that, it returned null always.
+     *
+     * @return the app manager, null in a router context
      * @since 0.9.11, in RouterContext since 0.9.4
      */
     public ClientAppManager clientAppManager() {

@@ -150,7 +150,7 @@ public class GraphHelper extends FormHandler {
      * setPeriodCount.
      *
      * @param str period count in minutes; non-numeric text is ignored and numbers
-     * are clamped to MIN_C..MAX_C
+     *            are clamped to MIN_C..MAX_C
      */
     public void setPeriodCount(String str) {
         setC(str);
@@ -160,7 +160,7 @@ public class GraphHelper extends FormHandler {
      * Ends the view window that many periods before the most recent one.
      *
      * @param str how many periods back to end, so 0 ends at the latest period;
-     * non-numeric text is ignored
+     *            non-numeric text is ignored
      */
     public void setE(String str) {
         try {_end = Math.max(0, Integer.parseInt(str));}
@@ -171,7 +171,7 @@ public class GraphHelper extends FormHandler {
      * Shorter form of {@link #setPeriodCount} bound to the c= URL parameter.
      *
      * @param str period count in minutes; non-numeric text is ignored and numbers
-     * are clamped to MIN_C..MAX_C
+     *            are clamped to MIN_C..MAX_C
      */
     public void setC(String str) {
         try {_periodCount = Math.max(MIN_C, Math.min(Integer.parseInt(str), MAX_C));}
@@ -182,7 +182,7 @@ public class GraphHelper extends FormHandler {
      * setShowEvents.
      *
      * @param b true to plot individual events, false to plot averages; an absent,
-     * empty or unrecognised value leaves the current mode in force
+     *          empty or unrecognised value leaves the current mode in force
      */
     public void setShowEvents(String b) {
         _showEvents = resolveShowEvents(b, _showEvents);
@@ -221,7 +221,7 @@ public class GraphHelper extends FormHandler {
      * setHeight.
      *
      * @param str image height in pixels; non-numeric text is ignored and numbers
-     * are clamped to MIN_Y..MAX_Y
+     *            are clamped to MIN_Y..MAX_Y
      */
     public void setHeight(String str) {
         setH(str);
@@ -231,7 +231,7 @@ public class GraphHelper extends FormHandler {
      * Shorter form of {@link #setHeight} bound to the h= URL parameter.
      *
      * @param str image height in pixels; non-numeric text is ignored and numbers
-     * are clamped to MIN_Y..MAX_Y
+     *            are clamped to MIN_Y..MAX_Y
      */
     public void setH(String str) {
         try {_height = Math.max(MIN_Y, Math.min(Integer.parseInt(str), MAX_Y));}
@@ -242,7 +242,7 @@ public class GraphHelper extends FormHandler {
      * setWidth.
      *
      * @param str image width in pixels; non-numeric text is ignored and numbers
-     * are clamped to MIN_X..MAX_X
+     *            are clamped to MIN_X..MAX_X
      */
     public void setWidth(String str) {
         setW(str);
@@ -252,7 +252,7 @@ public class GraphHelper extends FormHandler {
      * Shorter form of {@link #setWidth} bound to the w= URL parameter.
      *
      * @param str image width in pixels; non-numeric text is ignored and numbers
-     * are clamped to MIN_X..MAX_X
+     *            are clamped to MIN_X..MAX_X
      */
     public void setW(String str) {
         try {_width = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));}
@@ -263,8 +263,8 @@ public class GraphHelper extends FormHandler {
      * setRefreshDelay.
      *
      * @param str refresh delay in seconds; a positive value is raised to
-     * MIN_REFRESH, zero or negative selects never refresh, and
-     * non-numeric text is ignored
+     *            MIN_REFRESH, zero or negative selects never refresh, and
+     *            non-numeric text is ignored
      */
     public void setRefreshDelay(String str) {
         try {
@@ -286,7 +286,7 @@ public class GraphHelper extends FormHandler {
      * Sets the glow effect drawn around graph lines.
      *
      * @param foo only the exact text {@code false} turns the glow off; any other
-     * value enables it
+     *            value enables it
      * @since 0.9.70+
      */
     public void setGraphGlow(String foo) {_graphGlow = !"false".equals(foo);}
@@ -295,7 +295,7 @@ public class GraphHelper extends FormHandler {
      * Sets bezier curves in place of a staircase plot.
      *
      * @param foo only the exact text {@code false} turns smoothing off; any other
-     * value enables it
+     *            value enables it
      */
     public void setGraphSmooth(String foo) {_graphSmooth = !"false".equals(foo);}
 
@@ -303,7 +303,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether graphs are drawn with filled areas.
      *
      * @param foo only the exact text {@code false} turns filling off; any other
-     * value enables it
+     *            value enables it
      */
     public void setGraphFill(String foo) {_graphFill = !"false".equals(foo);}
 
@@ -311,7 +311,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether related stats are merged into one overlaid plot.
      *
      * @param foo only the exact text {@code false} turns combining off; any other
-     * value enables it
+     *            value enables it
      * @since 0.9.71+
      */
     public void setGraphCombine(String foo) {_graphCombine = !"false".equals(foo);}
@@ -320,7 +320,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether graph axes are labelled in UTC instead of local time.
      *
      * @param foo only the exact text {@code false} turns UTC off; any other
-     * value enables it
+     *            value enables it
      * @since 0.9.70+
      */
     public void setUseUtc(String foo) {_useUtc = !"false".equals(foo);}
@@ -329,7 +329,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether the legend is suppressed on graphs.
      *
      * @param foo {@code true} hides the legend and {@code false} shows it; any
-     * other value leaves the current setting alone
+     *            other value leaves the current setting alone
      * @since 0.9.32
      */
     public void setHideLegend(String foo) {
@@ -346,7 +346,7 @@ public class GraphHelper extends FormHandler {
      * Sets whether restart markers are suppressed on graphs.
      *
      * @param foo {@code true} suppresses them and {@code false} restores them;
-     * any other value leaves the current setting alone
+     *            any other value leaves the current setting alone
      * @since 0.9.70+
      */
     public void setHideRestarts(String foo) {

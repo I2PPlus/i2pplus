@@ -107,7 +107,7 @@ public enum SigContext {
          * Creates a signature context specification from the given context string.
          *
          * @param context the ASCII context string, must be exactly 16 characters,
-         *               or null for no context (SC_NONE)
+         *                or null for no context (SC_NONE)
          *
          * @throws IllegalArgumentException if the context string is not exactly 16 characters
          */

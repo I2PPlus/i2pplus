@@ -1194,7 +1194,7 @@ class SidebarRenderer {
      * is false, emits data-rx/data-tx attributes for the dual-baseline canvas renderer
      * (inbound inverted top, outbound normal bottom). Otherwise, serves the RRD4J SVG.
      * @return the graph markup: data attributes for the canvas renderer,
-     * or an RRD4J SVG in legacy mode
+     *         or an RRD4J SVG in legacy mode
      * @since 0.9.32
      */
     public String renderBandwidthGraphHTML() {
@@ -1592,7 +1592,7 @@ class SidebarRenderer {
      * The newest news headlines, at most three and none older than 60 days.
      *
      * @return the section markup, empty when no helper is bound or the
-     * current news has already been hidden
+     *         current news has already been hidden
      * @since 0.9.1
      */
     public String renderNewsHeadingsHTML() {

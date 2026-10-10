@@ -50,7 +50,7 @@ public class Writer {
      * Writer thread count.
      *
      * @return the configured number of writer threads, always within
-     * MIN_THREADS to MAX_THREADS
+     *         MIN_THREADS to MAX_THREADS
      */
     public static int getThreadCount() { return _threadCount; }
 
@@ -58,7 +58,7 @@ public class Writer {
      * Number of threads currently processing (not parked).
      *
      * @return how many of the pooled writer threads are running rather than
-     * parked waiting for a connection
+     *         parked waiting for a connection
      */
     public int getActiveCount() { return _activeCount.get(); }
 
@@ -77,7 +77,7 @@ public class Writer {
      * Writer thread count, bounded by MIN_THREADS-MAX_THREADS.
      *
      * @param count the requested thread count, clamped into the MIN_THREADS to
-     * MAX_THREADS range before being stored
+     *              MAX_THREADS range before being stored
      */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
 
@@ -85,7 +85,7 @@ public class Writer {
      * Starts the given number of writer threads.
      *
      * @param numWriters how many additional writer threads to spin up; each one
-     * is added to the pool without stopping or replacing an existing runner
+     *                   is added to the pool without stopping or replacing an existing runner
      */
     public synchronized void startWriting(int numWriters) {
         for (int i = 1; i <= numWriters; i++) {
@@ -139,9 +139,9 @@ public class Writer {
      * Registers a connection to be written. High-frequency per-buffer path.
      *
      * @param con the connection whose next outbound buffer must be serialized
-     * and sent by this pool
+     *            and sent by this pool
      * @param source a caller-supplied label naming the code that requested the
-     * write, used only for debug logging
+     *               write, used only for debug logging
      */
     public void wantsWrite(NTCPConnection con, String source) {
         boolean already = false;
@@ -167,7 +167,7 @@ public class Writer {
      * Removes a closed connection from the queues.
      *
      * @param con the connection that has closed and must no longer be drained
-     * or written
+     *            or written
      */
     public void connectionClosed(NTCPConnection con) {
         synchronized (_pendingConnections) {

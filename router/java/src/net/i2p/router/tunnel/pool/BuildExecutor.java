@@ -143,7 +143,7 @@ public class BuildExecutor implements Runnable {
      * @param s settings of the pool in question
      * @param keepConfiguredQuantity true to return the configured quantity verbatim
      * @return the effective target: the configured quantity when flagged,
-     *              else at least 2
+     *         else at least 2
      * @since 0.9.71+
      */
     static int effectiveTarget(RouterContext ctx, TunnelPoolSettings s, boolean keepConfiguredQuantity) {
@@ -2421,7 +2421,7 @@ public class BuildExecutor implements Runnable {
      *
      * @param cfg the prospective build
      * @return true if a build to the same first hop is already in flight
-     *               or the peer has recently failed repeatedly as first hop
+     *         or the peer has recently failed repeatedly as first hop
      */
     private boolean hasBuildInFlightToFirstHop(PooledTunnelCreatorConfig cfg) {
         Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
@@ -3031,7 +3031,7 @@ public class BuildExecutor implements Runnable {
      *  build budget proportionally instead of 50/50.
      *
      * @param pools pools to scan; dead pools and pools without a destination
-     *               are skipped
+     *              are skipped
      * @return destination -&gt; int[2] {inboundQty, outboundQty}, never null
      * @since 0.9.71+
      */

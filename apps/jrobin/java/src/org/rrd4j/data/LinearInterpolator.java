@@ -80,7 +80,7 @@ public class LinearInterpolator extends Plottable {
      * @param timestamps timestamps in seconds
      * @param values corresponding datasource values
      * @throws java.lang.IllegalArgumentException Thrown if supplied arrays do not contain at least
-     *     two values, or if timestamps are not ordered, or array lengths are not equal.
+     *                                            two values, or if timestamps are not ordered, or array lengths are not equal.
      */
     public LinearInterpolator(long[] timestamps, double[] values) {
         this.timestamps = timestamps;
@@ -94,7 +94,7 @@ public class LinearInterpolator extends Plottable {
      * @param dates Array of Date objects
      * @param values corresponding datasource values
      * @throws java.lang.IllegalArgumentException Thrown if supplied arrays do not contain at least
-     *     two values, or if timestamps are not ordered, or array lengths are not equal.
+     *                                            two values, or if timestamps are not ordered, or array lengths are not equal.
      */
     public LinearInterpolator(Date[] dates, double[] values) {
         this.values = values;
@@ -111,7 +111,7 @@ public class LinearInterpolator extends Plottable {
      * @param dates array of GregorianCalendar objects
      * @param values corresponding datasource values
      * @throws java.lang.IllegalArgumentException Thrown if supplied arrays do not contain at least
-     *     two values, or if timestamps are not ordered, or array lengths are not equal.
+     *                                            two values, or if timestamps are not ordered, or array lengths are not equal.
      */
     public LinearInterpolator(Calendar[] dates, double[] values) {
         this.values = values;
@@ -167,8 +167,8 @@ public class LinearInterpolator extends Plottable {
      * href="http://www.JerryDallal.com/LHSP/slr.htm">here</a>.
      *
      * @param interpolationMethod Should be <code>INTERPOLATE_LEFT</code>, <code>INTERPOLATE_RIGHT
-     *     </code>, <code>INTERPOLATE_LINEAR</code> or <code>INTERPOLATE_REGRESSION</code>. Any
-     *     other value will be interpreted as INTERPOLATE_LINEAR (default).
+     *                            </code>, <code>INTERPOLATE_LINEAR</code> or <code>INTERPOLATE_REGRESSION</code>. Any
+     *                            other value will be interpreted as INTERPOLATE_LINEAR (default).
      * @deprecated uses {@link #setInterpolationMethod(Method)} instead.
      */
     @Deprecated

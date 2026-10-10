@@ -149,8 +149,8 @@ public class StatisticsManager {
      * @param stats the properties to add to
      * @param selectedPeriods the periods to include, or null for all
      * @param fudgeQuantity the data being published in this stat is too sensitive to, uh
-     * publish, so we're kludge the quantity (allowing the fairly safe
-     * publication of the average values
+     *                      publish, so we're kludge the quantity (allowing the fairly safe
+     *                      publication of the average values
      */
     private void includeRate(String rateName, Properties stats, long[] selectedPeriods,
                              boolean fudgeQuantity) {

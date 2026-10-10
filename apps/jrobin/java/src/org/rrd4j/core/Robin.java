@@ -30,7 +30,7 @@ public interface Robin extends RrdUpdater<Robin> {
      * @param newValues Array of double values to be stored in the archive
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown if the length of the input array is
-     *     different from the length of this archive
+     *                                            different from the length of this archive
      */
     void setValues(double... newValues) throws IOException;
 

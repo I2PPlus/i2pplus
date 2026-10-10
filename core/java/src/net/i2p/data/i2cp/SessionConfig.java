@@ -270,7 +270,7 @@ public class SessionConfig extends DataStructureImpl {
      * Sign the structure using the supplied private key
      *
      * @param signingKey SigningPrivateKey to sign with.
-     * If offline data is set, must be with the transient key.
+     *                   If offline data is set, must be with the transient key.
      *
      * @throws DataFormatException if the data cannot be signed
      */

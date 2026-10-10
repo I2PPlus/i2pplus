@@ -57,7 +57,7 @@ public class HTTPServer implements Runnable {
     /**
      * getName.
      * @return the Server response header value, built as the OS name and version
-     * followed by the CyberHTTP name and version
+     *         followed by the CyberHTTP name and version
      */
     public static String getName() {
         String osName = System.getProperty("os.name");

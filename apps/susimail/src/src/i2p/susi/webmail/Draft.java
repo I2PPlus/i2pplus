@@ -156,7 +156,7 @@ class Draft extends Mail {
 	/**
 	 * Removes an attachment by index and deletes its data file.
 	 *
-	 * @param index the index
+	 * @param index the 0-based position in the attachment list; out of range is ignored
 	 */
 	public synchronized void removeAttachment(int index) {
 		if (index >= 0 && index < attachments.size()) {

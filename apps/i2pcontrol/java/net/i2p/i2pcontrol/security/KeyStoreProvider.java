@@ -157,7 +157,7 @@ public class KeyStoreProvider {
      * @return ks, loaded from keyStoreFile
      * @throws IOException if the file cannot be read
      * @throws GeneralSecurityException if the file is not a valid keystore
-     * for the default type
+     *                                  for the default type
      */
     private static KeyStore load(KeyStore ks, File keyStoreFile) throws IOException, GeneralSecurityException {
         try (InputStream is = new FileInputStream(keyStoreFile)) {

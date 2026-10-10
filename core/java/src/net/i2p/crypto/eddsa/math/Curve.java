@@ -50,7 +50,7 @@ public class Curve implements Serializable {
     }
 
     /**
-     * Return the field.
+     * Return the field this curve is defined over.
      *
      * @return the field
      */

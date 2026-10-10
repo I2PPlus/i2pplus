@@ -215,7 +215,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
      * @param participating current transit tunnel count
      * @param maxParticipating the configured participating-tunnel capacity
      * @return true if usage is at or above {@link #CULL_CAPACITY_FRACTION};
-     * false when capacity is unknown or usage is below it
+     *         false when capacity is unknown or usage is below it
      * @since 0.9.71+
      */
     static boolean nearCapacity(int participating, int maxParticipating) {

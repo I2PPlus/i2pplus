@@ -182,7 +182,7 @@ class Sorters {
          * @param a non-null
          * @param b non-null
          * @return negative, zero or positive as the first mail sorts before, at the same
-         * date as, or after the second; a mail with no date sorts last
+         *         date as, or after the second; a mail with no date sorts last
          */
         public static int scompare(Mail a, Mail b) {
             return a.date != null ? ( b.date != null ? a.date.compareTo( b.date ) : -1 ) : ( b.date != null ? 1 : 0 );

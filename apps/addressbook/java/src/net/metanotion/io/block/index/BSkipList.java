@@ -55,7 +55,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      * @param spanSize the size of spans
      * @param bf the BlockFile
      * @param skipPage the page number of this skiplist
-     * @param key the key
+     * @param key the key serializer
      * @param val the value serializer
      * @throws IOException if an I/O error occurs
      */
@@ -69,7 +69,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      * @param spanSize the size of spans
      * @param bf the BlockFile
      * @param skipPage the page number of this skiplist
-     * @param key the key
+     * @param key the key serializer
      * @param val the value serializer
      * @param fileOnly if true, only read from file (no caching)
      * @throws IOException if an I/O error occurs
@@ -236,7 +236,7 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     /**
      * Find the entry with the given key.
      *
-     * @param key the key
+     * @param key the key to look up
      * @return a SkipIterator pointing to the entry, or end if not found
      */
     @Override

@@ -25,7 +25,7 @@ interface StorageListener {
     /**
      * Called when the storage creates a new file of a given length.
      *
-     * @param storage the storage instance
+     * @param storage the torrent storage the event came from
      * @param name the file name
      * @param length the file length
      */
@@ -34,7 +34,7 @@ interface StorageListener {
     /**
      * Called to indicate that length bytes have been allocated.
      *
-     * @param storage the storage instance
+     * @param storage the torrent storage the event came from
      * @param length the number of bytes allocated
      */
     void storageAllocated(Storage storage, long length);
@@ -44,7 +44,7 @@ interface StorageListener {
      * When the piece hash matches the expected piece hash checked will be true, otherwise it will
      * be false.
      *
-     * @param storage the storage instance
+     * @param storage the torrent storage the event came from
      * @param num the piece number
      * @param checked whether the piece hash matches
      */
@@ -54,14 +54,14 @@ interface StorageListener {
      * Called when all pieces in the storage have been checked. Does not mean that the storage is
      * complete, just that the state of the storage is known.
      *
-     * @param storage the storage instance
+     * @param storage the torrent storage the event came from
      */
     void storageAllChecked(Storage storage);
 
     /**
      * Called the one time when the data is completely received and checked.
      *
-     * @param storage the storage instance
+     * @param storage the torrent storage the event came from
      */
     void storageCompleted(Storage storage);
 

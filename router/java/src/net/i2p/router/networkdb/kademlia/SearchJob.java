@@ -205,7 +205,7 @@ public class SearchJob extends JobImpl {
      *
      * @param ctx router context whose properties decide the floodfill restriction
      * @return false whenever floodfill is enabled or the explore-when-floodfill
-     *               property is not "true", otherwise the netDb.floodfillOnly property
+     *         property is not "true", otherwise the netDb.floodfillOnly property
      */
     static boolean onlyQueryFloodfillPeers(RouterContext ctx) {
         String forceExplore = ctx.getProperty("router.exploreWhenFloodfill");
@@ -231,8 +231,8 @@ public class SearchJob extends JobImpl {
      * @param peer router hash whose peer timeout is being looked up, used only
      *             once floodfill peers are exhausted
      * @return the peer's own timeout in ms, or the fixed floodfill timeout while
-     *             floodfill queries remain, shortened so it never runs past the
-     *             search deadline but never below 2s
+     *         floodfill queries remain, shortened so it never runs past the
+     *         search deadline but never below 2s
      */
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;
@@ -305,9 +305,9 @@ public class SearchJob extends JobImpl {
      * Max # of concurrent searches
      *
      * @return how many peers may be queried at once: 1 while overloaded (job
-     *             queue lag above 500ms, message delay above 800ms or CPU load
-     *             above 80), else the greater of half the cores and 8 for a LeaseSet
-     *             search, or a third of the cores and 3 otherwise
+     *         queue lag above 500ms, message delay above 800ms or CPU load
+     *         above 80), else the greater of half the cores and 8 for a LeaseSet
+     *         search, or a third of the cores and 3 otherwise
      */
     protected int getBredth() {
         boolean isOverloaded = getContext().jobQueue().getMaxLag() > 500 ||
@@ -840,7 +840,7 @@ public class SearchJob extends JobImpl {
      * @param isLease whether the deferred search targets a LeaseSet, forwarded
      *                to the replacement search if this one has already completed
      * @return how many searches are now deferred, or 0 if this search had already
-     *             completed, in which case a replacement search is started instead
+     *         completed, in which case a replacement search is started instead
      */
     public int addDeferred(Job onFind, Job onFail, long expiration, boolean isLease) {
         Search search = new Search(onFind, onFail, expiration, isLease);

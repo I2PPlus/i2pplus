@@ -518,7 +518,7 @@ public class BCrypt {
 	 * Cycically extract a word of key material
 	 * @param data	the string to extract the data from
 	 * @param offp	a "pointer" (as a one-entry array) to the
-	 * current offset into data
+	 *             current offset into data
 	 * @return	the next word of material from data
 	 */
 	private static int streamtoword(byte data[], int offp[]) {
@@ -608,7 +608,7 @@ public class BCrypt {
 	 * @param password	the password to hash
 	 * @param salt	the binary salt to hash with the password
 	 * @param log_rounds	the binary logarithm of the number
-	 * of rounds of hashing to apply
+	 *                   of rounds of hashing to apply
 	 * @param cdata         the plaintext to encrypt
 	 * @return	an array containing the binary hashed password
 	 */
@@ -650,7 +650,7 @@ public class BCrypt {
 	 * Hash a password using the OpenBSD bcrypt scheme
 	 * @param password	the password to hash
 	 * @param salt	the salt to hash with (perhaps generated
-	 * using BCrypt.gensalt)
+	 *             using BCrypt.gensalt)
 	 * @return	the hashed password
 	 */
 	@SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
@@ -712,8 +712,8 @@ public class BCrypt {
 	/**
 	 * Generate a salt for use with the BCrypt.hashpw() method
 	 * @param log_rounds	the log2 of the number of rounds of
-	 * hashing to apply - the work factor therefore increases as
-	 * 2**log_rounds.
+	 *                   hashing to apply - the work factor therefore increases as
+	 *                   2**log_rounds.
 	 * @param random		an instance of SecureRandom to use
 	 * @return	an encoded salt value
 	 */
@@ -740,8 +740,8 @@ public class BCrypt {
 	/**
 	 * Generate a salt for use with the BCrypt.hashpw() method
 	 * @param log_rounds	the log2 of the number of rounds of
-	 * hashing to apply - the work factor therefore increases as
-	 * 2**log_rounds.
+	 *                   hashing to apply - the work factor therefore increases as
+	 *                   2**log_rounds.
 	 * @return	an encoded salt value
 	 */
 	public static String gensalt(int log_rounds) {

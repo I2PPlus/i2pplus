@@ -166,7 +166,7 @@ public final class SigUtil {
      * @param type the I2P signature type naming the base algorithm to convert with
      * @return I2P public key
      * @throws GeneralSecurityException if the JAVA key does not match the base
-     *         algorithm of the type, or the type names an unknown algorithm
+     *                                  algorithm of the type, or the type names an unknown algorithm
      */
     public static SigningPublicKey fromJavaKey(PublicKey pk, SigType type) throws GeneralSecurityException {
         switch (type.getBaseAlgorithm()) {
@@ -243,7 +243,7 @@ public final class SigUtil {
      * @param type the I2P signature type naming the base algorithm to convert with
      * @return I2P private key
      * @throws GeneralSecurityException if the JAVA key does not match the base
-     *         algorithm of the type, or the type names an unknown algorithm
+     *                                  algorithm of the type, or the type names an unknown algorithm
      */
     public static SigningPrivateKey fromJavaKey(PrivateKey pk, SigType type) throws GeneralSecurityException {
         switch (type.getBaseAlgorithm()) {
@@ -363,7 +363,7 @@ public final class SigUtil {
      * @param pk non-null
      * @return Java EdDSAPublicKey
      * @throws GeneralSecurityException if the I2P key bytes cannot be converted
-     *         to a Java EdDSA key
+     *                                  to a Java EdDSA key
      * @since 0.9.15
      */
     public static EdDSAPublicKey toJavaEdDSAKey(SigningPublicKey pk) throws GeneralSecurityException {
@@ -382,7 +382,7 @@ public final class SigUtil {
      * @param pk non-null
      * @return Java EdDSAPrivateKey
      * @throws GeneralSecurityException if the I2P key bytes cannot be converted
-     *         to a Java EdDSA key
+     *                                  to a Java EdDSA key
      * @since 0.9.15
      */
     public static EdDSAPrivateKey toJavaEdDSAKey(SigningPrivateKey pk) throws GeneralSecurityException {
@@ -451,7 +451,7 @@ public final class SigUtil {
      * @param type the I2P signature type
      * @return I2P private key
      * @throws GeneralSecurityException if the key type names neither an EdDSA
-     *         seed nor a RedDSA private scalar
+     *                                  seed nor a RedDSA private scalar
      * @since 0.9.15
      */
     public static SigningPrivateKey fromJavaKey(EdDSAPrivateKey pk, SigType type) throws GeneralSecurityException {
@@ -916,7 +916,7 @@ public final class SigUtil {
      * @param len the nominal length of each BigInteger the encoding holds
      * @return two BigIntegers
      * @throws SignatureException if the encoding does not hold the two integers
-     *         of the expected length
+     *                            of the expected length
      * @since 0.9.25
      */
     public static NativeBigInteger[] aSN1ToBigInteger(byte[] asn, int len) throws SignatureException {

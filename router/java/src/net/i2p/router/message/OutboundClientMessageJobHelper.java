@@ -80,9 +80,9 @@ class OutboundClientMessageJobHelper {
      * @param tagsToSendOverride if &gt; 0, use this instead of skm's default
      * @param lowTagsOverride if &gt; 0, use this instead of skm's default
      * @param wrappedKey for ElGamal, non-null with null data, output parameter
-     * that will be filled with the SessionKey used, may be null for ECIES
+     *                   that will be filled with the SessionKey used, may be null for ECIES
      * @param wrappedTags for ElGamal, output parameter that will be filled with the sessionTags used,
-     * may be null for ECIES
+     *                    may be null for ECIES
      *
      * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param requireAck if true, bundle replyToken in an ack clove
@@ -253,8 +253,9 @@ class OutboundClientMessageJobHelper {
     }
 
     /**
-     * As of 0.9.12, encrypt to hide it from the target and the return path OBEP and IBGW.
      * Wrap a DSM in a GarlicMessage, add the fake session to the SKM.
+     * Since 0.9.12 it is encrypted, to hide it from the target and the return
+     * path OBEP and IBGW.
      *
      * @param skm encrypt dsm with this skm non-null
      * @return null on error

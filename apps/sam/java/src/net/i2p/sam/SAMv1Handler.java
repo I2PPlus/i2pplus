@@ -1073,7 +1073,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      *
      * @param msg may be null
      * @return non-null, "" if msg is null, MESSAGE=msg or MESSAGE="msg a b c"
-     * with leading space if msg is non-null
+     *         with leading space if msg is non-null
      * @since 0.9.20
      */
     protected static String createMessageString(String msg) {

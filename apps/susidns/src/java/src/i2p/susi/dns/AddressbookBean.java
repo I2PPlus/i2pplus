@@ -171,7 +171,7 @@ public class AddressbookBean extends BaseBean {
      * Load properties for a hostname from the raw hosts.txt file.
      * This parses the #! format for properties.
      * @param bean the AddressBean to set properties on
-     * @param hostname the hostname
+     * @param hostname the host whose hosts.txt entry is to be parsed
      */
     private void loadPropertiesFromFile(AddressBean bean, String hostname) {
         if (_propsByHost == null) {
@@ -656,7 +656,7 @@ public class AddressbookBean extends BaseBean {
      *
      * This always returns true anyway, because getBook() always returns a valid book.
      *
-     * @return true
+     * @return true if the book is one of router, master, local, published or private
      * @since 0.9.28
      */
     public boolean isValidBook() {
@@ -701,7 +701,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Sets the destination string.
-     * @param destination the destination
+     * @param destination the destination string to store, stripped of any HTML
      */
     public void setDestination(String destination) {
         this.destination = DataHelper.stripHTML(destination).trim();
@@ -725,7 +725,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Resets the deletion marks.
-     * @param dummy dummy parameter
+     * @param dummy unused, required by the JavaBeans setter convention
      */
     public void setResetDeletionMarks(String dummy) {
         deletionMarks.clear();
@@ -733,7 +733,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Marks an entry for deletion.
-     * @param name the name
+     * @param name the name of the entry to mark for deletion
      */
     public void setMarkedForDeletion(String name) {
         deletionMarks.addLast(DataHelper.stripHTML(name));
@@ -741,7 +741,7 @@ public class AddressbookBean extends BaseBean {
 
     /**
      * Sets the hostname string.
-     * @param hostname the hostname
+     * @param hostname the hostname string to store, stripped of any HTML
      */
     public void setHostname(String hostname) {
         this.hostname = DataHelper.stripHTML(hostname).trim();

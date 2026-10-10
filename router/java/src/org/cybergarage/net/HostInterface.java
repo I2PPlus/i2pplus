@@ -125,7 +125,7 @@ public class HostInterface {
      * getNHostAddresses.
      *
      * @return the number of usable host addresses across the network interfaces, or 1
-     * when a single interface has been assigned
+     *         when a single interface has been assigned
      */
     public static final int getNHostAddresses() {
         if (hasAssignedInterface() == true) return 1;
@@ -153,7 +153,7 @@ public class HostInterface {
      * Collects the addresses of the selected network interfaces.
      *
      * @param ipfilter bitmask of IPV4_BITMASK, IPV6_BITMASK and LOCAL_BITMASK; with
-     *        LOCAL_BITMASK clear, loopback addresses are skipped
+     *                 LOCAL_BITMASK clear, loopback addresses are skipped
      * @param interfaces names of the network interfaces to inspect, or null for all
      * @return InetAddress[]
      * @since 1.8.0
@@ -304,7 +304,7 @@ public class HostInterface {
      * getIPv4Address.
      *
      * @return the first usable host address that is IPv4, or an empty string if
-     * there is none
+     *         there is none
      */
     public static final String getIPv4Address() {
         int addrCnt = getNHostAddresses();
@@ -319,7 +319,7 @@ public class HostInterface {
      * getIPv6Address.
      *
      * @return the first usable host address that is IPv6, or an empty string if
-     * there is none
+     *         there is none
      */
     public static final String getIPv6Address() {
         int addrCnt = getNHostAddresses();
@@ -341,7 +341,7 @@ public class HostInterface {
      * @param port the TCP port number to place in the URL
      * @param uri the path and query to append, beginning with a slash
      * @return the absolute http URL naming that host, port and uri, with an IPv6
-     * address literal bracketed
+     *         address literal bracketed
      */
     public static final String getHostURL(String host, int port, String uri) {
         String hostAddr = host;

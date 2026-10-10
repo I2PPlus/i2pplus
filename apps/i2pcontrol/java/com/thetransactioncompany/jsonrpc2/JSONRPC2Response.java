@@ -291,7 +291,9 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * only if the request was successful. Use the
 	 * {@link #getError getError} method to check this.
 	 *
-	 * @return The result.
+	 * @return The request result, of any JSON type - a number, a boolean, a
+	 *         string, an array or an object - or {@code null} if the request
+	 *         failed.
 	 */
 	public Object getResult() {
 

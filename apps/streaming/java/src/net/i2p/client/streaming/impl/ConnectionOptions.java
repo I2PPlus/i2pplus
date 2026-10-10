@@ -1295,7 +1295,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * Effective passive flush delay in ms.
      * @return effective passive flush delay in ms: explicit value if set,
-     * otherwise the Tuner-managed global default
+     *         otherwise the Tuner-managed global default
      */
     public int getPassiveFlushDelay() {
         return _passiveFlushDelay > 0 ? _passiveFlushDelay : MessageOutputStream.getDefaultPassiveFlushDelay();
@@ -1332,7 +1332,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * Maximum retries per message.
      * @param numSends the per-packet resend budget; negative values clamp to 0,
-     * which disables the retransmit give-up
+     *                 which disables the retransmit give-up
      */
     public void setMaxResends(int numSends) {_maxResends = Math.max(numSends, 0);}
 
@@ -1344,7 +1344,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /**
      * Inactivity timeout before action.
      * @param timeout the idle time before the inactivity action fires, in ms;
-     * stored unclamped
+     *                stored unclamped
      */
     public void setInactivityTimeout(int timeout) {_inactivityTimeout = timeout;}
 
@@ -1632,7 +1632,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @param name property key to look up
      * @param defaultVal fallback when opts is null or the key is absent
      * @return the parsed flag, or defaultVal if unset; anything
-     * {@link Boolean#parseBoolean} does not read as true is false
+     *         {@link Boolean#parseBoolean} does not read as true is false
      */
     private static boolean getBool(Properties opts, String name, boolean defaultVal) {
         if (opts == null) return defaultVal;

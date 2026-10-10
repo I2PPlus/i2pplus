@@ -39,7 +39,7 @@ public class GroupElement implements Serializable {
     /**
      * Creates a new group element in P2 representation.
      *
-     * @param curve The curve
+     * @param curve The twisted Edwards curve the point lies on
      * @param x The X coordinate
      * @param y The Y coordinate
      * @param z The Z coordinate
@@ -56,7 +56,7 @@ public class GroupElement implements Serializable {
     /**
      * Creates a new group element in P3 representation, without pre-computation.
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param x The $X$ coordinate.
      * @param y The $Y$ coordinate.
      * @param z The $Z$ coordinate.
@@ -75,7 +75,7 @@ public class GroupElement implements Serializable {
     /**
      * Creates a new group element in P3 representation, potentially with pre-computation.
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param x The $X$ coordinate.
      * @param y The $Y$ coordinate.
      * @param z The $Z$ coordinate.
@@ -97,7 +97,7 @@ public class GroupElement implements Serializable {
     /**
      * Creates a new group element in P1P1 representation.
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param x The $X$ coordinate.
      * @param y The $Y$ coordinate.
      * @param z The $Z$ coordinate.
@@ -116,7 +116,7 @@ public class GroupElement implements Serializable {
     /**
      * Creates a new group element in PRECOMP representation.
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param ypx The $y + x$ value.
      * @param ymx The $y - x$ value.
      * @param xy2d The $2 * d * x * y$ value.
@@ -133,7 +133,7 @@ public class GroupElement implements Serializable {
     /**
      * Creates a new group element in CACHED representation.
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param ypX The $Y + X$ value.
      * @param ymX The $Y - X$ value.
      * @param z The $Z$ coordinate.
@@ -198,7 +198,7 @@ public class GroupElement implements Serializable {
     /**
      * Creates a group element for a curve, without any pre-computation.
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param repr The representation used to represent the group element.
      * @param x The $X$ coordinate.
      * @param y The $Y$ coordinate.
@@ -218,7 +218,7 @@ public class GroupElement implements Serializable {
     /**
      * Creates a group element for a curve, with optional pre-computation.
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param repr The representation used to represent the group element.
      * @param x The $X$ coordinate.
      * @param y The $Y$ coordinate.
@@ -258,7 +258,7 @@ public class GroupElement implements Serializable {
      * <li>If $sign(x) \ne$ bit 255 of $s$ then negate $x$.
      * </ul>
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param s The encoded point.
      */
     public GroupElement(final Curve curve, final byte[] s) {
@@ -278,7 +278,7 @@ public class GroupElement implements Serializable {
      * <li>If $sign(x) \ne$ bit 255 of $s$ then negate $x$.
      * </ul>
      *
-     * @param curve The curve.
+     * @param curve The twisted Edwards curve the point lies on.
      * @param s The encoded point.
      * @param precomputeSingleAndDouble If true, populate both precmp and dblPrecmp, else set both to null.
      * @since 0.9.36

@@ -80,7 +80,8 @@ public class SOCKSHeader {
     }
 
     /**
-     * As of 0.9.53, returns IP address as a string for address types 1 and 4.
+     * The requested address, as a hostname or an IP address string.
+     * As of 0.9.53 the IP address types 1 and 4 are returned as a string.
      *
      * @return hostname or null for unknown address type
      */

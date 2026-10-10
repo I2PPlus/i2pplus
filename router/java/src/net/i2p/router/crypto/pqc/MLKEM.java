@@ -66,7 +66,7 @@ public final class MLKEM {
      *
      * @param type must be one of the internal types MLKEM*_INT
      * @return a two element array holding the encoded public key in [0] and
-     * the encoded private key in [1]
+     *         the encoded private key in [1]
      * @throws GeneralSecurityException if the type is not an ML-KEM type
      */
     public static byte[][] generateKeys(EncType type) throws GeneralSecurityException {
@@ -129,7 +129,7 @@ public final class MLKEM {
      * @param ciphertext the ciphertext to decrypt
      * @param decapkey the decapsulation key
      * @return the 32 byte shared secret, never null; a rejected ciphertext
-     * yields a pseudorandom value rather than an error
+     *         yields a pseudorandom value rather than an error
      * @throws GeneralSecurityException if the type is not an ML-KEM type
      */
     public static byte[] decaps(EncType type, byte[] ciphertext, byte[] decapkey)

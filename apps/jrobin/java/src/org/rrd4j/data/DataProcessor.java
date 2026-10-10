@@ -140,7 +140,7 @@ public class DataProcessor implements DataHolder {
      * Returns boolean value representing {@link org.rrd4j.core.RrdDbPool RrdDbPool} usage policy.
      *
      * @return true, if the pool will be used internally to fetch data from RRD files, false
-     *     otherwise.
+     *         otherwise.
      */
     @Override
     public boolean isPoolUsed() {
@@ -151,7 +151,7 @@ public class DataProcessor implements DataHolder {
      * Sets the {@link org.rrd4j.core.RrdDbPool RrdDbPool} usage policy.
      *
      * @param poolUsed true, if the pool should be used to fetch data from RRD files, false
-     *     otherwise.
+     *                 otherwise.
      */
     @Override
     public void setPoolUsed(boolean poolUsed) {
@@ -186,7 +186,7 @@ public class DataProcessor implements DataHolder {
      * change once you decide to change the dimension of your graph.
      *
      * @param pixelCount The number of pixels. If you process RRD data in order to display it on the
-     *     graph, this should be the width of your graph.
+     *                   graph, this should be the width of your graph.
      */
     public void setPixelCount(int pixelCount) {
         this.pixelCount = pixelCount;
@@ -301,8 +301,8 @@ public class DataProcessor implements DataHolder {
      * @param sourceName Datasource name
      * @return an array of datasource values
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     *     if datasource values are not yet calculated (method {@link #processData()} was not
-     *     called)
+     *                                            if datasource values are not yet calculated (method {@link #processData()} was not
+     *                                            called)
      */
     public double[] getValues(String sourceName) {
         Source source = getSource(sourceName);
@@ -321,25 +321,25 @@ public class DataProcessor implements DataHolder {
      * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
      * @return a aggregate value as a double calculated from the source.
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     *     if datasource values are not yet calculated (method {@link #processData()} was not
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
-     *     consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL (these string
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     called)
-     *     called)
+     *                                            if datasource values are not yet calculated (method {@link #processData()} was not
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     *                                            consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL (these string
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
+     *                                            called)
      * @deprecated Use {@link Variable} based method instead.
      */
     @Deprecated
@@ -357,8 +357,8 @@ public class DataProcessor implements DataHolder {
      * @param sourceName Datasource name
      * @return Object containing all aggregated values
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     *     if datasource values are not yet calculated (method {@link #processData()} was not
-     *     called)
+     *                                            if datasource values are not yet calculated (method {@link #processData()} was not
+     *                                            called)
      * @deprecated Use {@link Variable} based method instead.
      */
     @Deprecated
@@ -446,7 +446,7 @@ public class DataProcessor implements DataHolder {
      *
      * @param sourceName Datasource name.
      * @param percentile Boundary percentile. Value of 95 (%) is suitable in most cases, but you are
-     *     free to provide your own percentile boundary between zero and 100.
+     *                   free to provide your own percentile boundary between zero and 100.
      * @return Requested percentile of fetched source values
      * @deprecated Use {@link Variable} based method instead.
      */
@@ -476,12 +476,12 @@ public class DataProcessor implements DataHolder {
      * object.
      *
      * @return All datasource values for all datasources. The first index is the index of the
-     *     datasource, the second index is the index of the datasource value. The number of
-     *     datasource values is equal to the number of timestamps returned with {@link
-     *     #getTimestamps()} method.
+     *         datasource, the second index is the index of the datasource value. The number of
+     *         datasource values is equal to the number of timestamps returned with {@link
+     *         #getTimestamps()} method.
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
-     *     if datasource values are not yet calculated (method {@link #processData()} was not
-     *     called)
+     *                                            if datasource values are not yet calculated (method {@link #processData()} was not
+     *                                            called)
      */
     public double[][] getValues() {
         String[] names = getSourceNames();
@@ -558,7 +558,7 @@ public class DataProcessor implements DataHolder {
      *
      * @param name source name.
      * @param rpnExpression RPN expression containing comma delimited simple and complex source
-     *     names, RPN constants, functions and operators.
+     *                      names, RPN constants, functions and operators.
      * @deprecated Uses {@link #datasource(String, String)} instead
      */
     @Deprecated
@@ -586,7 +586,7 @@ public class DataProcessor implements DataHolder {
      *
      * @param name source name.
      * @param rpnExpression RPN expression containing comma delimited simple and complex source
-     *     names, RPN constants, functions and operators.
+     *                      names, RPN constants, functions and operators.
      * @since 3.7
      */
     @Override
@@ -619,7 +619,7 @@ public class DataProcessor implements DataHolder {
      *
      * @param name - the new virtual datasource name
      * @param sourceName - the datasource from which to extract the percentile. Must be a previously
-     *     defined virtual datasource
+     *                   defined virtual datasource
      * @param percentile - the percentile to extract from the source datasource
      * @deprecated Use {@link Variable} based method instead.
      */
@@ -637,7 +637,7 @@ public class DataProcessor implements DataHolder {
      *
      * @param name - the new virtual datasource name
      * @param defName - the datasource from which to extract the percentile. Must be a previously
-     *     defined virtual datasource
+     *                defined virtual datasource
      * @param var - a new instance of a Variable used to do the calculation
      * @deprecated Uses {@link #datasource(String, String, Variable)} instead.
      */
@@ -655,7 +655,7 @@ public class DataProcessor implements DataHolder {
      *
      * @param name - the new virtual datasource name
      * @param defName - the datasource from which to extract the percentile. Must be a previously
-     *     defined virtual datasource
+     *                defined virtual datasource
      * @param var - a new instance of a Variable used to do the calculation
      * @since 3.7
      */
@@ -737,11 +737,11 @@ public class DataProcessor implements DataHolder {
      * @param file Path to RRD file.
      * @param dsName Data source name defined in the RRD file.
      * @param consolFunc Consolidation function that will be used to extract data from the RRD file
-     *     ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
-     *     the {@link org.rrd4j.ConsolFun ConsolFun} class).
+     *                   ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
+     *                   the {@link org.rrd4j.ConsolFun ConsolFun} class).
      * @param backend Name of the RrdBackendFactory that should be used for this RrdDb.
      * @deprecated uses {@link #datasource(String, String, String, ConsolFun, RrdBackendFactory)}
-     *     instead
+     *             instead
      */
     @Deprecated
     public void addDatasource(
@@ -763,11 +763,11 @@ public class DataProcessor implements DataHolder {
      * @param file Path to RRD file.
      * @param dsName Data source name defined in the RRD file.
      * @param consolFunc Consolidation function that will be used to extract data from the RRD file
-     *     ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
-     *     the {@link org.rrd4j.ConsolFun ConsolFun} class).
+     *                   ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
+     *                   the {@link org.rrd4j.ConsolFun ConsolFun} class).
      * @param backend Name of the RrdBackendFactory that should be used for this RrdDb.
      * @deprecated uses {@link #datasource(String, String, String, ConsolFun, RrdBackendFactory)}
-     *     instead
+     *             instead
      */
     @Deprecated
     public void addDatasource(
@@ -791,8 +791,8 @@ public class DataProcessor implements DataHolder {
      * @param file Path to RRD file.
      * @param dsName Data source name defined in the RRD file.
      * @param consolFunc Consolidation function that will be used to extract data from the RRD file
-     *     ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
-     *     the {@link org.rrd4j.ConsolFun ConsolFun} class).
+     *                   ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
+     *                   the {@link org.rrd4j.ConsolFun ConsolFun} class).
      * @param backend Name of the RrdBackendFactory that should be used for this RrdDb.
      * @since 3.7
      */
@@ -819,8 +819,8 @@ public class DataProcessor implements DataHolder {
      * @param uri URI to RRD file.
      * @param dsName Data source name defined in the RRD file.
      * @param consolFunc Consolidation function that will be used to extract data from the RRD file
-     *     ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
-     *     the {@link org.rrd4j.ConsolFun ConsolFun} class).
+     *                   ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
+     *                   the {@link org.rrd4j.ConsolFun ConsolFun} class).
      * @param backend Name of the RrdBackendFactory that should be used for this RrdDb.
      * @since 3.7
      */
@@ -921,7 +921,7 @@ public class DataProcessor implements DataHolder {
      * @param pixelCount Graph width
      * @return Per-pixel datasource values
      * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated
-     *     (method {@link #processData()} was not called)
+     *                                            (method {@link #processData()} was not called)
      */
     public double[] getValuesPerPixel(String sourceName, int pixelCount) {
         setPixelCount(pixelCount);
@@ -937,7 +937,7 @@ public class DataProcessor implements DataHolder {
      * @param sourceName Datasource name
      * @return Per-pixel datasource values
      * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated
-     *     (method {@link #processData()} was not called)
+     *                                            (method {@link #processData()} was not called)
      */
     public double[] getValuesPerPixel(String sourceName) {
         double[] values = getValues(sourceName);

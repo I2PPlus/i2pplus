@@ -28,19 +28,19 @@ import java.util.Arrays;
  *
  * @author <A HREF="mailto:jddixon@users.sourceforge.net">Jim Dixon</A>
  *
- * BloomSHA1.java and KeySelector.java are BSD licensed from the xlattice
- * app - http://xlattice.sourceforge.net/
+ *         BloomSHA1.java and KeySelector.java are BSD licensed from the xlattice
+ *         app - http://xlattice.sourceforge.net/
  *
- * minor tweaks by jrandom, exposing unsynchronized access and
- * allowing larger M and K.  changes released into the public domain.
+ *         minor tweaks by jrandom, exposing unsynchronized access and
+ *         allowing larger M and K.  changes released into the public domain.
  *
- * Note that this is used only by DecayingBloomFilter, which uses only
- * the unsynchronized locked_foo() methods.
- * Deprecated for use outside of the router; to be moved to router.jar.
+ *         Note that this is used only by DecayingBloomFilter, which uses only
+ *         the unsynchronized locked_foo() methods.
+ *         Deprecated for use outside of the router; to be moved to router.jar.
  *
- * As of 0.8.11, the locked_foo() methods are thread-safe, in that they work,
- * but there is a minor risk of false-negatives if two threads are
- * accessing the same bloom filter integer.
+ *         As of 0.8.11, the locked_foo() methods are thread-safe, in that they work,
+ *         but there is a minor risk of false-negatives if two threads are
+ *         accessing the same bloom filter integer.
  */
 
 public class BloomSHA1 {
@@ -77,7 +77,7 @@ public class BloomSHA1 {
      * @param m determines number of bits in filter
      * @param k number of hash functions
      *
-     * See KeySelector for important restriction on max m and k
+     *          See KeySelector for important restriction on max m and k
      */
     public BloomSHA1( int m, int k) {
         // XXX need to devise more reasonable set of checks

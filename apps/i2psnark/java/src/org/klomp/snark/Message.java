@@ -226,7 +226,7 @@ class Message {
      *
      * @param dos the output stream to write to
      * @return true if the message was written, false if the deferred data could not be loaded and
-     *     the message was dropped
+     *         the message was dropped
      * @throws IOException if an I/O error occurs
      */
     boolean sendMessage(DataOutputStream dos) throws IOException {

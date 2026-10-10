@@ -159,7 +159,7 @@ public class SocketController implements RouterApp {
      *
      * @return Server - A new server built from current configuration.
      * @throws IOException if the configured listen address cannot be resolved, the configured port is
-     * already bound, or the configuration file cannot be written back
+     *                     already bound, or the configuration file cannot be written back
      */
     public ServerSocket buildServer() throws IOException {
         String address = _conf.getConf("i2pcontrol.listen.address", "127.0.0.1");

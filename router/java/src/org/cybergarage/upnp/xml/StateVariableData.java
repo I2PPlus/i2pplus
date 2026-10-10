@@ -70,7 +70,7 @@ public class StateVariableData extends NodeData {
      * getQueryListener.
      *
      * @return the listener notified when this variable is queried, or null if
-     * none is registered
+     *         none is registered
      */
     public QueryListener getQueryListener() {
         return queryListener;

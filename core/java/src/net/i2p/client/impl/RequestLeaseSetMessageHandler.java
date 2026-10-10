@@ -107,7 +107,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * RequestLeaseSetMessageHandler.
      *
      * @param context the client context the handler runs in, passed to the
-     *        superclass for logging and session lookup
+     *                superclass for logging and session lookup
      */
     public RequestLeaseSetMessageHandler(I2PAppContext context) {
         this(context, RequestLeaseSetMessage.MESSAGE_TYPE);
@@ -117,9 +117,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * For extension
      *
      * @param context the client context the handler runs in, passed to the
-     *        superclass for logging and session lookup
+     *                superclass for logging and session lookup
      * @param messageType the I2CP message type to register for, so subclasses
-     *        can claim a different request message
+     *                    can claim a different request message
      * @since 0.9.7
      */
     protected RequestLeaseSetMessageHandler(I2PAppContext context, int messageType) {
@@ -135,7 +135,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * Side effect: sets _ls2Type
      *
      * @param session the session whose LeaseSet2 preference is consulted, and
-     *        which is torn down when that preference cannot be parsed
+     *                which is torn down when that preference cannot be parsed
      * @return true if LS2 should be used
      * @since 0.9.38
      */
@@ -165,9 +165,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * Handle an incoming I2CP message.
      *
      * @param message the inbound I2CP request naming the destination whose LeaseSet
-     *        should be published
+     *                should be published
      * @param session the session that sent the request and that the resulting
-     *        LeaseSet is published for
+     *                LeaseSet is published for
      */
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
@@ -296,10 +296,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * @param leaseEnd absolute lease end from the router request
      * @param published LS2 published timestamp, or 0 for LS1 / unset
      * @param now current time when the floor is computed; the later of
-     * {@code published} and {@code now} sets the margin, so delay
-     * between publishing and signing does not shrink it
+     *            {@code published} and {@code now} sets the margin, so delay
+     *            between publishing and signing does not shrink it
      * @return leaseEnd if already safely after both instants,
-     * else max(published, now) + 1s
+     *         else max(published, now) + 1s
      * @since 0.9.71+
      */
     static long ensurePositiveLs2Expiry(long leaseEnd, long published, long now) {
@@ -392,8 +392,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * @param isLS2 true for LS2, false for LS1
      * @param session the I2CP session requesting the LeaseSet
      * @return true if the LeaseSet was signed and handed to the session,
-     * false if it was rejected or signing failed; callers use this
-     * to advance the monotonic publish floor only on success
+     *         false if it was rejected or signing failed; callers use this
+     *         to advance the monotonic publish floor only on success
      * @since 0.9.7
      */
     protected synchronized boolean signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session) {
@@ -410,10 +410,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * @param isLS2 true for LS2, false for LS1
      * @param session the I2CP session requesting the LeaseSet
      * @param message the request that produced this set, or null when the
-     * caller cannot supply it (no transient retry is scheduled then)
+     *                caller cannot supply it (no transient retry is scheduled then)
      * @param attempt number of prompt re-runs already performed for this request
      * @return true if the LeaseSet was signed and handed to the session,
-     * false if it was rejected or signing failed
+     *         false if it was rejected or signing failed
      * @since 0.9.71+
      */
     protected synchronized boolean signLeaseSet(LeaseSet leaseSet, boolean isLS2, I2PSessionImpl session,
@@ -759,7 +759,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      *
      * @param reason the DataFormatException message, or null
      * @return true for expiry and empty-request rejections that a prompt
-     * re-run of the request can resolve
+     *         re-run of the request can resolve
      * @since 0.9.71+
      */
     static boolean isTransientSignFailure(String reason) {
@@ -808,7 +808,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * and timely release of private key material.
      *
      * @param dest the destination whose cached lease info and private keys are
-     *        to be dropped
+     *             to be dropped
      * @since 0.9.70+
      */
     public void removeLeaseSet(Destination dest) {

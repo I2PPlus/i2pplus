@@ -1471,7 +1471,7 @@ public class NTCPConnection implements Closeable {
      *  the buffer to the pool after the frame has fully drained.
      *
      *  @param tmp to be used for output of NTCP2Payload.writePayload(),
-     *         must have room for block output. May be released immediately on return.
+     *             must have room for block output. May be released immediately on return.
      *  @since 0.9.36
      */
     private void sendNTCP2(byte[] tmp, List<Block> blocks) {
@@ -1760,9 +1760,9 @@ public class NTCPConnection implements Closeable {
      * hold _writeLock across the socket drain.
      *
      * @since 0.9.71+ single-writer contract (previously attempted a direct,
-     *                 lock-serialized drain from the calling thread); the
-     *                 "ntcp.writeBufs.size" stat is now sampled at most
-     *                 once per second instead of every frame
+     *        lock-serialized drain from the calling thread); the
+     *        "ntcp.writeBufs.size" stat is now sampled at most
+     *        once per second instead of every frame
      */
     private void write(ByteBuffer buf) {
         if (_writeBufs.size() >= MAX_WRITE_BUFS) {

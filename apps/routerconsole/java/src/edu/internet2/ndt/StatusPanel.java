@@ -28,7 +28,7 @@ public class StatusPanel extends JPanel {
      * @param testsNum Total number of tests scheduled to be run
      *
      * @param sParamaEnableMultiple String indicating whether multiple tests
-     * have been scheduled
+     *                              have been scheduled
      */
     /**
      * StatusPanel.

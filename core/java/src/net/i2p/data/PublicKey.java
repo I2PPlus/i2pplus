@@ -108,7 +108,7 @@ public class PublicKey extends SimpleDataStructure {
      *
      * @param data the data to decrypt
      * @param off the offset into the data
-     * @return the result
+     * @return the public key read from data, from the cache when possible
      * @since 0.8.3
      */
     public static PublicKey create(byte[] data, int off) {
@@ -120,7 +120,7 @@ public class PublicKey extends SimpleDataStructure {
      * ELGAMAL_2048 only!
      *
      * @param in the input stream
-     * @return the result
+     * @return the public key read from in, from the cache when possible
      * @throws java.io.IOException if an I/O error occurs
      * @since 0.8.3
      */
@@ -189,7 +189,7 @@ public class PublicKey extends SimpleDataStructure {
      * Public key from a string of base64 data. ElGamal only.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
-     * on a prior instance of PublicKey
+     *         on a prior instance of PublicKey
      * @throws net.i2p.data.DataFormatException if the data is malformed
      */
     public PublicKey(String base64Data) throws DataFormatException {
@@ -274,7 +274,7 @@ public class PublicKey extends SimpleDataStructure {
      *
      * @param kcert the key certificate
      * @return the trailing padding, or a shared empty array if there is no
-     * padding or the type is unknown
+     *         padding or the type is unknown
      * @throws IllegalStateException if this is already typed to a different type
      * @since 0.9.42
      */

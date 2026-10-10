@@ -11,7 +11,7 @@ class SchedulerReceived extends SchedulerImpl {
     /**
      * SchedulerReceived.
      * @param ctx the application context supplying the clock and log used by
-     *        the scheduler
+     *            the scheduler
      */
     public SchedulerReceived(I2PAppContext ctx) {
         super(ctx);

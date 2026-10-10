@@ -606,7 +606,7 @@ public final class KeyStoreUtil {
      * @param alias the name of the key
      * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou e.g. console
      * @param keyPW the key password, must be at least 6 characters
@@ -671,7 +671,7 @@ public final class KeyStoreUtil {
      * @param alias the name of the key
      * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou e.g. console
      * @param validDays e.g. 3652 (10 years)
@@ -737,15 +737,15 @@ public final class KeyStoreUtil {
      * @param keySize e.g. 1024
      * @param keyPW the key password, must be at least 6 characters
      * @return all you need:
-     * rv[0] is a Java PublicKey
-     * rv[1] is a Java PrivateKey
-     * rv[2] is a Java X509Certificate
-     * rv[3] is a Java X509CRL
+     *         rv[0] is a Java PublicKey
+     *         rv[1] is a Java PrivateKey
+     *         rv[2] is a Java X509Certificate
+     *         rv[3] is a Java X509CRL
      *
      * @throws GeneralSecurityException if the keyAlg and keySize pair is not supported,
-     * or the keypair, certificate, or CRL cannot be generated or stored
+     *                                  or the keypair, certificate, or CRL cannot be generated or stored
      * @throws IOException if the directory holding the keystore cannot be created,
-     * or the keystore cannot be written
+     *                     or the keystore cannot be written
      * @since 0.9.25
      */
     public static Object[] createKeysAndCRL(
@@ -783,7 +783,7 @@ public final class KeyStoreUtil {
      * @param alias the name of the key
      * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou e.g. console
      * @param validDays e.g. 3652 (10 years)
@@ -791,15 +791,15 @@ public final class KeyStoreUtil {
      * @param keySize e.g. 1024
      * @param keyPW the key password, must be at least 6 characters
      * @return all you need:
-     * rv[0] is a Java PublicKey
-     * rv[1] is a Java PrivateKey
-     * rv[2] is a Java X509Certificate
-     * rv[3] is a Java X509CRL
+     *         rv[0] is a Java PublicKey
+     *         rv[1] is a Java PrivateKey
+     *         rv[2] is a Java X509Certificate
+     *         rv[3] is a Java X509CRL
      *
      * @throws GeneralSecurityException if the keyAlg and keySize pair is not supported,
-     * or the keypair, certificate, or CRL cannot be generated or stored
+     *                                  or the keypair, certificate, or CRL cannot be generated or stored
      * @throws IOException if the directory holding the keystore cannot be created,
-     * or the keystore cannot be written
+     *                     or the keystore cannot be written
      * @since 0.9.34 added altNames param
      */
     public static Object[] createKeysAndCRL(
@@ -851,13 +851,13 @@ public final class KeyStoreUtil {
      * @param type the signature algorithm to generate the keypair for
      * @param keyPW the key password, must be at least 6 characters
      * @return all you need:
-     * rv[0] is a Java PublicKey
-     * rv[1] is a Java PrivateKey
-     * rv[2] is a Java X509Certificate
-     * rv[3] is a Java X509CRL
+     *         rv[0] is a Java PublicKey
+     *         rv[1] is a Java PrivateKey
+     *         rv[2] is a Java X509Certificate
+     *         rv[3] is a Java X509CRL
      *
      * @throws GeneralSecurityException if the keystore cannot be created or opened, the password is wrong,
-     * or the key entry cannot be stored
+     *                                  or the key entry cannot be stored
      * @throws IOException if the keystore cannot be read or written
      * @since 0.9.25
      */
@@ -888,22 +888,22 @@ public final class KeyStoreUtil {
      * @param alias the name of the key
      * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou e.g. console
      * @param validDays e.g. 3652 (10 years)
      * @param type the signature algorithm to generate the keypair for
      * @param keyPW the key password, must be at least 6 characters
      * @return all you need:
-     * rv[0] is a Java PublicKey
-     * rv[1] is a Java PrivateKey
-     * rv[2] is a Java X509Certificate
-     * rv[3] is a Java X509CRL
+     *         rv[0] is a Java PublicKey
+     *         rv[1] is a Java PrivateKey
+     *         rv[2] is a Java X509Certificate
+     *         rv[3] is a Java X509CRL
      *
      * @throws GeneralSecurityException if the keypair, certificate, or CRL cannot be
-     * generated, or the private key or certificate chain cannot be stored
+     *                                  generated, or the private key or certificate chain cannot be stored
      * @throws IOException if the directory holding the keystore cannot be created,
-     * or the keystore cannot be written
+     *                     or the keystore cannot be written
      * @since 0.9.34 added altNames param
      */
     public static Object[] createKeysAndCRL(
@@ -1077,7 +1077,7 @@ public final class KeyStoreUtil {
      * @param keyPW the key password, must be at least 6 characters
      * @return the key or null if not found
      * @throws GeneralSecurityException if the keystore cannot be opened, the password is wrong,
-     * or the JCE provider rejects the keystore type
+     *                                  or the JCE provider rejects the keystore type
      * @throws IOException if the keystore file cannot be read
      */
     public static PrivateKey getPrivateKey(File ks, String ksPW, String alias, String keyPW)
@@ -1104,7 +1104,7 @@ public final class KeyStoreUtil {
      * @param keyPW the key password, must be at least 6 characters
      * @param out the stream to write the key and chain to; not closed by this method
      * @throws GeneralSecurityException if the keystore cannot be opened, the password is wrong,
-     * or no private key is stored under the alias
+     *                                  or no private key is stored under the alias
      * @throws IOException if the keystore file cannot be read or the output stream cannot be written
      * @since 0.9.25
      */
@@ -1136,8 +1136,8 @@ public final class KeyStoreUtil {
      * @param validDays new cert to expire this many days from now
      * @return the new certificate
      * @throws GeneralSecurityException if the keystore cannot be opened, the password is wrong,
-     * no private key is stored under the alias, the cert chain length is not 1,
-     * or the renewed certificate cannot be generated or stored
+     *                                  no private key is stored under the alias, the cert chain length is not 1,
+     *                                  or the renewed certificate cannot be generated or stored
      * @throws IOException if the keystore file cannot be read or written
      * @since 0.9.34
      */
@@ -1186,14 +1186,14 @@ public final class KeyStoreUtil {
      * @param ks path to the keystore
      * @param ksPW the keystore password, may be null
      * @param alias the name of the key. If null, will be taken from the Subject CN
-     * of the first certificate in the chain.
+     *              of the first certificate in the chain.
      *
      * @param keyPW the key password, must be at least 6 characters
      * @param in the stream to read the key and chain from; closed by this method
      * @return the alias as specified or extracted
      * @throws GeneralSecurityException if the keystore cannot be created or opened, the password is wrong,
-     * alias is null and no certificate in the chain carries a Subject CN, or the JCE provider
-     * rejects the keystore type
+     *                                  alias is null and no certificate in the chain carries a Subject CN, or the JCE provider
+     *                                  rejects the keystore type
      * @throws IOException if the input stream cannot be read or the keystore cannot be written
      * @since 0.9.25
      */
@@ -1238,7 +1238,7 @@ public final class KeyStoreUtil {
      * @param pk the private key to store
      * @param certs the certificate chain for the key, stored in the order given
      * @throws GeneralSecurityException if the keystore cannot be created or opened, the password is wrong,
-     * or the key entry cannot be stored
+     *                                  or the key entry cannot be stored
      * @throws IOException if the keystore cannot be written
      * @since 0.9.25
      */
@@ -1266,7 +1266,7 @@ public final class KeyStoreUtil {
      * @param alias the name of the key
      * @return the certificate or null if not found
      * @throws GeneralSecurityException if the keystore cannot be opened, the password is wrong,
-     * or the JCE provider rejects the keystore type
+     *                                  or the JCE provider rejects the keystore type
      * @throws IOException if the keystore file cannot be read
      */
     public static Certificate getCert(File ks, String ksPW, String alias) throws GeneralSecurityException, IOException {

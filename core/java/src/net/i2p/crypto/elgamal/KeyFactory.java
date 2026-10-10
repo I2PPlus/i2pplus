@@ -126,11 +126,11 @@ public final class KeyFactory extends KeyFactorySpi {
      * converts them into the requested specification format.
      *
      * @param <T> the type of the returned key specification
-     * @param key the key
+     * @param key the ElGamal key to extract the parameters from
      * @param keySpec the requested specification class
      * @return the corresponding key specification
      * @throws InvalidKeySpecException if the requested specification type is unsupported
-     *                                  or the key cannot be converted
+     *                                 or the key cannot be converted
      *
      * @since 0.9.25
      */
@@ -160,7 +160,7 @@ public final class KeyFactory extends KeyFactorySpi {
      * security providers, but currently no other ElGamal providers are known
      * or supported in the I2P environment.
      *
-     * @param key the key
+     * @param key the key to translate between providers
      * @return the translated key
      * @throws InvalidKeyException always, as no other ElGamal providers are supported
      * @since 0.9.25

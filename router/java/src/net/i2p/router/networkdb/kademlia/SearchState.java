@@ -53,9 +53,9 @@ class SearchState {
      * SearchState.
      *
      * @param context the context supplying the log and the clock this search
-     *        is timed against
+     *                is timed against
      * @param key the search target that peers are ranked against by XOR
-     *        distance
+     *            distance
      */
     public SearchState(RouterContext context, Hash key) {
         _log = context.logManager().getLog(SearchState.class);
@@ -285,7 +285,7 @@ class SearchState {
      *
      * @param peer the peer that answered with data for this search
      * @return the milliseconds between request and reply, or -1 if the
-     *        request was never recorded
+     *         request was never recorded
      */
     public long dataFound(Hash peer) {
         long rv = -1;
@@ -303,7 +303,7 @@ class SearchState {
      *
      * @param peer the peer that answered this search without data
      * @return the milliseconds between request and reply, or -1 if the
-     *        request was never recorded
+     *         request was never recorded
      */
     public long replyFound(Hash peer) {
         synchronized (_repliedPeers) {_repliedPeers.add(peer);}

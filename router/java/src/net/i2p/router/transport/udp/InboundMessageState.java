@@ -36,7 +36,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Creates a new InboundMessageState with no fragments.
-     * @param ctx the ctx
+     * @param ctx the router context
      * @param messageId the ID of the message the fragments belong to
      * @param from the peer the fragments arrive from
      */
@@ -54,7 +54,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Creates an InboundMessageState and stores the first received fragment.
-     * @param ctx the ctx
+     * @param ctx the router context
      * @param messageId the ID of the message the fragments belong to
      * @param from the peer the fragments arrive from
      * @param data buffer holding the fragment payload
@@ -62,7 +62,7 @@ class InboundMessageState implements CDQEntry {
      * @param len number of fragment bytes to copy out of data
      * @param fragmentNum zero-based position of this fragment in the message
      * @param isLast true if this fragment completes the message, so its total
-     *        size is now known
+     *               size is now known
      * @throws DataFormatException if fragment is invalid
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from,
@@ -90,7 +90,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Receives and stores a fragment.
-     *  @param data the data
+     * @param data the buffer holding the fragment payload
      *  @param off index in data at which this fragment starts
      *  @param len number of fragment bytes to copy out of data
      *  @param fragmentNum zero-based position of this fragment in the message
@@ -144,7 +144,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns whether the specified fragment has been received.
-     *  @param fragmentNum the fragmentNum
+     * @param fragmentNum zero-based position of the fragment in the message
      *  @return whether fragment is present
      */
     public boolean hasFragment(int fragmentNum) {
@@ -248,7 +248,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Creates a bitfield representing received fragments.
-     * @return the value
+     * @return a bitfield marking every fragment received so far
      */
     public ACKBitfield createACKBitfield() {
         synchronized(lock) {

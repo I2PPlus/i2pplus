@@ -15,7 +15,7 @@ public interface I2PServerSocket {
     /**
      * Closes the socket.
      * @throws I2PException if the socket cannot be closed, usually because the
-     *         underlying I2PSession is already gone
+     *                      underlying I2PSession is already gone
      */
     public void close() throws I2PException;
 
@@ -30,8 +30,8 @@ public interface I2PServerSocket {
      * @return a connected I2PSocket, never null
      *
      * @throws I2PException if there is a problem with reading a new socket
-     * from the data available (e.g. the I2PSession is closed);
-     * this may be an I2PSessionException which extends I2PException
+     *                      from the data available (e.g. the I2PSession is closed);
+     *                      this may be an I2PSessionException which extends I2PException
      *
      * @throws RouterRestartException (extends I2PException) if the router is apparently restarting
      * @throws ConnectException if the I2PServerSocket is closed, or if interrupted.

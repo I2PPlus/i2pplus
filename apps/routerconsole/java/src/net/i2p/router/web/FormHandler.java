@@ -127,7 +127,7 @@ public abstract class FormHandler {
      * Configure this bean to query a particular router context
      *
      * @param contextId beginning few characters of the routerHash, or null to pick
-     * the first one we come across.
+     *                  the first one we come across.
      */
     public void setContextId(String contextId) {
         try {
@@ -502,12 +502,12 @@ public abstract class FormHandler {
      * This is a lot more expensive than _t(s), so use sparingly.
      *
      * @param s string to be translated containing {0}
-     * The {0} will be replaced by the parameter.
-     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     *          The {0} will be replaced by the parameter.
+     *          Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      * @param o parameter, not translated.
-     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     * Do not double the single quotes in the parameter.
-     * Use autoboxing to call with ints, longs, floats, etc.
+     *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     *          Do not double the single quotes in the parameter.
+     *          Use autoboxing to call with ints, longs, floats, etc.
      * @return the translated string
      */
     public String _t(String s, Object o) {return Messages.getString(s, o, _context);}

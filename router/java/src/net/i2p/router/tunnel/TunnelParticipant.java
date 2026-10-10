@@ -56,9 +56,9 @@ class TunnelParticipant {
      *
      * @param ctx the router context supplying the log and the tunnel pools
      * @param config the hop configuration this participant is running, which
-     *        carries the bandwidth allocation and RED queue settings
+     *               carries the bandwidth allocation and RED queue settings
      * @param processor the hop processor that forwards the reassembled message
-     *        to the next hop
+     *                  to the next hop
      */
     public TunnelParticipant(RouterContext ctx, HopConfig config, HopProcessor processor) {
         this(ctx, config, processor, null);
@@ -69,7 +69,7 @@ class TunnelParticipant {
      *
      * @param ctx the router context supplying the log and the tunnel pools
      * @param inEndProc the processor that reassembles and decrypts inbound tunnel
-     *        messages and delivers them to this endpoint's destination
+     *                  messages and delivers them to this endpoint's destination
      */
     public TunnelParticipant(RouterContext ctx, InboundEndpointProcessor inEndProc) {
         this(ctx, null, null, inEndProc);
@@ -165,7 +165,7 @@ class TunnelParticipant {
      *
      * @param msg the 1024 byte tunnel data message that arrived on this tunnel
      * @param recvFrom the hash of the gateway that delivered the message, used
-     *        to blame the hop that mangled or dropped it
+     *                 to blame the hop that mangled or dropped it
      */
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
         byte[] data = msg.getData();

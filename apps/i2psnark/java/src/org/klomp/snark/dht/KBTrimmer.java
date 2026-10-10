@@ -69,7 +69,7 @@ class KBTrimmer implements KBucketTrimmer<NID> {
      * @param kbucket the Kademlia bucket to trim
      * @param toAdd the node ID that will be added if trimming succeeds
      * @return true if trimming was successful and space is available for the new node, false
-     *     otherwise
+     *         otherwise
      */
     public boolean trim(KBucket<NID> kbucket, NID toAdd) {
         long now = _ctx.clock().now();

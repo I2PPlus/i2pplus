@@ -129,7 +129,7 @@ final class MonotoneSpline {
      * @param xv vertex x coordinates
      * @param yv vertex y coordinates
      * @param m slopes as returned by {@link #tangents(double[], double[], int, int)} for this
-     *           vertex range
+     *          vertex range
      * @since 0.9.71
      */
     static void appendForward(GeneralPath path, int[] xv, int[] yv, double[] m) {
@@ -166,7 +166,7 @@ final class MonotoneSpline {
      * @param xv vertex x coordinates
      * @param yv vertex y coordinates
      * @param m slopes as returned by {@link #tangents(double[], double[], int, int)} for this
-     *           vertex range
+     *          vertex range
      * @since 0.9.71
      */
     static void appendReverse(GeneralPath path, int[] xv, int[] yv, double[] m) {

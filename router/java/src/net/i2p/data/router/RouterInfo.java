@@ -591,7 +591,7 @@ public class RouterInfo extends DatabaseEntry {
      * @param in the stream to read the RouterInfo from
      * @param verifySig if true, validate the signature as the bytes are read
      * @throws DataFormatException if the data cannot be parsed, or if verifySig is
-     * true and the signature does not validate
+     *                             true and the signature does not validate
      * @throws IllegalStateException if RouterInfo was already read in
      * @throws IOException if the stream cannot be read
      */

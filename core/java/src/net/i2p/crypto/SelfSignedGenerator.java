@@ -123,13 +123,13 @@ public final class SelfSignedGenerator {
      * @param type the signature algorithm the certificate is signed with
      *
      * @return length 4 array:
-     * rv[0] is a Java PublicKey
-     * rv[1] is a Java PrivateKey
-     * rv[2] is a Java X509Certificate
-     * rv[3] is a Java X509CRL
+     *         rv[0] is a Java PublicKey
+     *         rv[1] is a Java PrivateKey
+     *         rv[2] is a Java X509Certificate
+     *         rv[3] is a Java X509CRL
      *
      * @throws GeneralSecurityException if the keypair cannot be generated or
-     *         the certificate cannot be signed
+     *                                  the certificate cannot be signed
      */
     public static Object[] generate(
             String cname, String ou, String o, String l, String st, String c, int validDays, SigType type)
@@ -142,7 +142,7 @@ public final class SelfSignedGenerator {
      *
      * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
@@ -153,10 +153,10 @@ public final class SelfSignedGenerator {
      * @param type the signature type to generate the keypair for
      *
      * @return length 4 array:
-     * rv[0] is a Java PublicKey
-     * rv[1] is a Java PrivateKey
-     * rv[2] is a Java X509Certificate
-     * rv[3] is a Java X509CRL
+     *         rv[0] is a Java PublicKey
+     *         rv[1] is a Java PrivateKey
+     *         rv[2] is a Java X509Certificate
+     *         rv[3] is a Java X509CRL
      *
      * @throws GeneralSecurityException if the keypair cannot be generated or signed
      * @since 0.9.34 added altNames param
@@ -210,7 +210,7 @@ public final class SelfSignedGenerator {
      *
      * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
@@ -219,10 +219,10 @@ public final class SelfSignedGenerator {
      * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      *
      * @return length 4 array:
-     * rv[0] is a Java PublicKey
-     * rv[1] is a Java PrivateKey
-     * rv[2] is a Java X509Certificate
-     * rv[3] is a Java X509CRL
+     *         rv[0] is a Java PublicKey
+     *         rv[1] is a Java PrivateKey
+     *         rv[2] is a Java X509Certificate
+     *         rv[3] is a Java X509CRL
      *
      * @since 0.9.34 added altNames param
      */
@@ -341,10 +341,10 @@ public final class SelfSignedGenerator {
      *
      * @param validDays how long the renewed certificate stays valid
      * @return length 4 array:
-     * rv[0] is a Java PublicKey, from cert as passed in
-     * rv[1] is a Java PrivateKey, jpriv as passed in
-     * rv[2] is a Java X509Certificate, new one
-     * rv[3] is a Java X509CRL, new one
+     *         rv[0] is a Java PublicKey, from cert as passed in
+     *         rv[1] is a Java PrivateKey, jpriv as passed in
+     *         rv[2] is a Java X509Certificate, new one
+     *         rv[3] is a Java X509CRL, new one
      *
      * @throws GeneralSecurityException if the renewed certificate cannot be signed
      * @since 0.9.34 added altNames param
@@ -433,7 +433,7 @@ public final class SelfSignedGenerator {
      *
      * @param cname the common name, non-null
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @param ou The OU (organizational unit) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param o The O (organization)in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
@@ -683,7 +683,7 @@ public final class SelfSignedGenerator {
      *
      * @param pubbytes the DER-encoded public key bit string the extension identifier is derived from
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
      * @return ASN.1 encoded object
      */
@@ -987,7 +987,7 @@ public final class SelfSignedGenerator {
      * @param oid the dotted object identifier, e.g. 1.2.840.113549.1.1.1
      * @return ASN.1 encoded object
      * @throws IllegalArgumentException if the identifier has fewer than two components, a component is
-     *         out of range, or the encoding exceeds 127 bytes
+     *                                  out of range, or the encoding exceeds 127 bytes
      */
     private static byte[] getEncodedOID(String oid) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(64);

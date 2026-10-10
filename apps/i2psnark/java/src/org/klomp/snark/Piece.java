@@ -95,7 +95,7 @@ class Piece implements Comparable<Piece> {
     /**
      * Adds a peer to the set of peers that have this piece. Caller must synchronize.
      *
-     * @param peer the peer
+     * @param peer the peer to credit with holding this piece, stored by peer ID
      * @return true if the peer was added, false if already present
      */
     public boolean addPeer(Peer peer) {
@@ -106,7 +106,7 @@ class Piece implements Comparable<Piece> {
      * Removes a peer from those that have this piece.
      * Caller must synchronize.
      *
-     * @param peer the peer
+     * @param peer the peer to drop, matched against the stored peer ID
      * @return true if removed
      */
     public boolean removePeer(Peer peer) {
@@ -137,7 +137,7 @@ class Piece implements Comparable<Piece> {
      * Used to avoid deadlocks when querying each peer.
      * Caller must synchronize.
      *
-     * @param peer the peer
+     * @param peer the peer whose request state is being set, stored by peer ID
      * @param requested true to mark as requested, false to unmark
      * @since 0.8.3
      */
@@ -201,7 +201,7 @@ class Piece implements Comparable<Piece> {
      * Checks if the given peer is currently requesting this piece.
      * Caller must synchronize.
      *
-     * @param peer the peer
+     * @param peer the peer to test for, matched against the stored peer ID
      * @return true if peer is requesting, false otherwise
      * @since 0.8.3
      */

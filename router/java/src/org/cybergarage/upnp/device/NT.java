@@ -43,7 +43,7 @@ public class NT {
      * method comment
      * @param ntValue the NT header value to test, may be null
      * @return true if ntValue is non-null and begins with upnp:rootdevice,
-     *        false otherwise, including for a null value
+     *         false otherwise, including for a null value
      */
     public static final boolean isRootDevice(String ntValue) {
         if (ntValue == null) return false;

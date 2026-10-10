@@ -35,7 +35,7 @@ final class MuxedEngine {
      * @param keyManager holds the session key material and ratchet preference
      * @return decrypted data or null on failure
      * @throws DataFormatException if the underlying garlic parse fails and cannot be
-     *         recovered by trying the remaining crypto schemes
+     *                             recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
         if (elgKey.getType() != EncType.ELGAMAL_2048 ||

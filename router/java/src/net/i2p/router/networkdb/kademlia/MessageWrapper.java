@@ -47,11 +47,11 @@ public class MessageWrapper {
      * ELGAMAL ONLY. Both from and to must support ElGamal.
      *
      * @param ctx router context, used for the session key manager and the random
-     *        message ID
+     *            message ID
      * @param m the message to garlic wrap
      * @param from must be a local client with a session key manager,
-     * or null to use the router's session key manager.
-     * SessionKeyManager MUST support ElGamal.
+     *             or null to use the router's session key manager.
+     *             SessionKeyManager MUST support ElGamal.
      * @param to must be ELGAMAL_2048 EncType
      * @return null on encrypt failure
      */
@@ -103,10 +103,10 @@ public class MessageWrapper {
          *
          * @param msg the garlic message that was built, to be sent as-is
          * @param skm the session key manager that owns the session key, notified
-         *        on ack or failure
+         *            on ack or failure
          * @param sentTo the recipient's public key, used when reporting tags
          * @param sentKey the session key the tags were delivered under, or null
-         *        if none were sent
+         *                if none were sent
          * @param tsh handle for the delivered tags, or null if none were sent
          */
         WrappedMessage(GarlicMessage msg, SessionKeyManager skm, PublicKey sentTo, SessionKey sentKey, TagSetHandle tsh) {

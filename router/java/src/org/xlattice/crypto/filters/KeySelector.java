@@ -35,15 +35,15 @@ package org.xlattice.crypto.filters;
  *
  * @author <A HREF="mailto:jddixon@users.sourceforge.net">Jim Dixon</A>
  *
- * BloomSHA1.java and KeySelector.java are BSD licensed from xlattice
- * app - http://xlattice.sourceforge.net/
+ *         BloomSHA1.java and KeySelector.java are BSD licensed from xlattice
+ *         app - http://xlattice.sourceforge.net/
  *
- * minor tweaks by jrandom, exposing unsynchronized access and
- * allowing larger M and K.  changes released into the public domain.
+ *         minor tweaks by jrandom, exposing unsynchronized access and
+ *         allowing larger M and K.  changes released into the public domain.
  *
- * As of 0.8.11, bitoffset and wordoffset out parameters moved from fields
- * to selector arguments, to allow concurrency.
- * ALl methods are now thread-safe.
+ *         As of 0.8.11, bitoffset and wordoffset out parameters moved from fields
+ *         to selector arguments, to allow concurrency.
+ *         ALl methods are now thread-safe.
  */
 public class KeySelector {
 
@@ -173,15 +173,15 @@ public class KeySelector {
      *
      * @throws IllegalArgumentException if parameters exceed implementation limits
      *
-     * <p>Implementation constraints:<br>
-     * - Maximum for 32-byte keys: m=23, k=11<br>
-     * - Formula constraint: ((5k + (k-1)(m-5)) / 8) + 2 ≤ keySizeInBytes<br>
-     * - Larger values may cause ArrayIndexOutOfBoundsException<br>
-     * - m must be ≥ 2 for valid stride calculations</p>
+     *                                  <p>Implementation constraints:<br>
+     *                                  - Maximum for 32-byte keys: m=23, k=11<br>
+     *                                  - Formula constraint: ((5k + (k-1)(m-5)) / 8) + 2 ≤ keySizeInBytes<br>
+     *                                  - Larger values may cause ArrayIndexOutOfBoundsException<br>
+     *                                  - m must be ≥ 2 for valid stride calculations</p>
      *
-     * <p>Note: The constraint formula ensures that the calculated offsets
-     * don't exceed the key boundaries. For larger m/k values,
-     * consider using larger key sizes or alternative selection algorithms.</p>
+     *                                  <p>Note: The constraint formula ensures that the calculated offsets
+     *                                  don't exceed the key boundaries. For larger m/k values,
+     *                                  consider using larger key sizes or alternative selection algorithms.</p>
      */
     public KeySelector (int m, int k) {
         //if ( (m < 2) || (m > 20)|| (k < 1)

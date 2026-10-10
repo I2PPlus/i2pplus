@@ -31,7 +31,7 @@ public class ThinPoolLogState {
      * regression-then-recovery cycle, so any difference counts as news.
      *
      * @param lastWarned value passed to the previous call, or {@link #NEVER_WARNED}
-     * if none has been logged yet
+     *                   if none has been logged yet
      * @param healthy current healthy tunnel count, which may be 0
      * @return true if this state has not been logged before
      * @since 0.9.71+

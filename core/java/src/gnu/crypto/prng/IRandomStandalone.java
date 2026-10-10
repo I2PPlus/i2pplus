@@ -58,9 +58,9 @@ public interface IRandomStandalone extends Cloneable {
     * appropriate attributes.</p>
     *
     * @param attributes a set of name-value pairs that describe the desired
-    * future instance behaviour.
+    *                   future instance behaviour.
     * @throws IllegalArgumentException if at least one of the defined name/
-    * value pairs contains invalid data.
+    *                                  value pairs contains invalid data.
     */
     void init(Map<String, byte[]> attributes);
 
@@ -69,7 +69,7 @@ public interface IRandomStandalone extends Cloneable {
     *
     * @return the next 8 bits of random data generated from this instance.
     * @throws IllegalStateException if the instance is not yet initialised.
-    * theoretical limit for generating non-repetitive pseudo-random data.
+    *                               theoretical limit for generating non-repetitive pseudo-random data.
     */
     byte nextByte() throws IllegalStateException;
 
@@ -88,12 +88,12 @@ public interface IRandomStandalone extends Cloneable {
     *
     * @param out the placeholder to contain the generated random bytes.
     * @param offset the starting index in <i>out</i> to consider. This method
-    * does nothing if this parameter is not within <code>0</code> and
-    * <code>out.length</code>.
+    *               does nothing if this parameter is not within <code>0</code> and
+    *               <code>out.length</code>.
     * @param length the maximum number of required random bytes. This method
-    * does nothing if this parameter is less than <code>1</code>.
+    *               does nothing if this parameter is less than <code>1</code>.
     * @throws IllegalStateException if the instance is not yet initialised.
-    * theoretical limit for generating non-repetitive pseudo-random data.
+    *                               theoretical limit for generating non-repetitive pseudo-random data.
     */
     void nextBytes(byte[] out, int offset, int length)
         throws IllegalStateException;
@@ -134,7 +134,7 @@ public interface IRandomStandalone extends Cloneable {
     * @param offset The offset from whence to begin reading random bytes.
     * @param length The number of random bytes to add.
     * @throws IndexOutOfBoundsException If <i>offset</i>, <i>length</i>,
-    * or <i>offset</i>+<i>length</i> is out of bounds.
+    *                                   or <i>offset</i>+<i>length</i> is out of bounds.
     */
     void addRandomBytes(byte[] in, int offset, int length);
 

@@ -734,7 +734,7 @@ public class NTCPTransport extends TransportImpl {
      * @param nid the peer's announced network id
      * @param ourNetworkID our own network id
      * @return OK if equal; NO_NETWORK if the peer sent the no-network sentinel (~0);
-     * WRONG_NETWORK otherwise
+     *         WRONG_NETWORK otherwise
      * @since 0.9.71+
      */
     static NetworkIdIssue classifyNetworkId(int nid, int ourNetworkID) {
@@ -926,7 +926,7 @@ public class NTCPTransport extends TransportImpl {
      * Queue up the afterSend call, which can take some time with jobs, etc.
      *
      * @param msg the message that finished sending, whose afterSend runs later
-     *        on the finisher thread
+     *            on the finisher thread
      */
     void sendComplete(OutNetMessage msg) {_finisher.add(msg);}
 
@@ -1014,7 +1014,7 @@ public class NTCPTransport extends TransportImpl {
      * The connection removed; usually the con passed in, but possibly a second connection with the same peer.
      * @param con the connection being torn down, whose remote peer identifies it
      * @return usually the con passed in, but possibly a second connection with the same peer...
-     * only con or null as of 0.9.37
+     *         only con or null as of 0.9.37
      */
     NTCPConnection removeCon(NTCPConnection con) {
         NTCPConnection removed = null;
@@ -1691,7 +1691,7 @@ public class NTCPTransport extends TransportImpl {
      * Add us to the establishment timeout process.
      *
      * @param con the connection being established, which {@link #expireTimedOut()}
-     *        closes if it has not established in time
+     *            closes if it has not established in time
      */
     void establishing(NTCPConnection con) {_establishing.add(con);}
 

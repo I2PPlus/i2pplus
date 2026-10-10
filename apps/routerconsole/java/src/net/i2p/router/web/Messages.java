@@ -39,14 +39,14 @@ public class Messages extends Translate {
      * This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
      * @param s string to be translated containing {0}
-     * The {0} will be replaced by the parameter.
-     * Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     *          The {0} will be replaced by the parameter.
+     *          Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      * @param o parameter, not translated.
-     * To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     * Do not double the single quotes in the parameter.
-     * Use autoboxing to call with ints, longs, floats, etc.
+     *          To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     *          Do not double the single quotes in the parameter.
+     *          Use autoboxing to call with ints, longs, floats, etc.
      * @param ctx supplies the routerconsole.lang property, else current locale
-     * @return the string
+     * @return the translated string, with {0} replaced by the parameter
      */
     public static String getString(String s, Object o, I2PAppContext ctx) {
         return Translate.getString(s, o, ctx, BUNDLE_NAME);
@@ -59,7 +59,7 @@ public class Messages extends Translate {
      * @param o first parameter, not translated
      * @param o2 second parameter, not translated
      * @param ctx supplies the routerconsole.lang property, else current locale
-     * @return the string
+     * @return the translated string, with {0} and {1} replaced
      * @since 0.7.14
      */
     public static String getString(String s, Object o, Object o2, I2PAppContext ctx) {
@@ -74,7 +74,7 @@ public class Messages extends Translate {
      * @param s singular string, may contain {0} for the count
      * @param p plural string, may contain {0} for the count
      * @param ctx supplies the routerconsole.lang property, else current locale
-     * @return the string
+     * @return s or p, per the plural rules for n
      * @since 0.7.14
      */
     public static String getString(int n, String s, String p, I2PAppContext ctx) {

@@ -108,7 +108,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * CommSystemFacadeImpl.
      *
      * @param context the router context, used to build the transport manager,
-     *        GeoIP database and rDNS/country lookup services
+     *                GeoIP database and rDNS/country lookup services
      */
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
@@ -394,11 +394,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * The framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
      * @param percentToInclude 1-100
      * @return The framed average clock skew of connected peers in milliseconds, or the clock offset if we cannot answer.
-     * Average is calculated over the middle "percentToInclude" peers.
+     *         Average is calculated over the middle "percentToInclude" peers.
      *
-     * A positive number means our clock is ahead of theirs.
+     *         A positive number means our clock is ahead of theirs.
      *
-     * Todo: change List to milliseconds
+     *         Todo: change List to milliseconds
      */
     @Override
     public long getFramedAveragePeerClockSkew(int percentToInclude) {
@@ -574,7 +574,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * As of 0.9.31, only outputs UPnP status
+     * Render the status of the transport manager to the console as HTML.
+     *
+     * As of 0.9.31, only outputs UPnP status.
      *
      * Warning - blocking, very slow, queries the active UPnP router,
      * will take many seconds if it has vanished.
@@ -612,7 +614,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
       * </ul>
       *
       * @return list of RouterAddress objects for all active transports,
-      * may be empty if no addresses available
+      *         may be empty if no addresses available
       */
      @Override
      public List<RouterAddress> createAddresses() {
@@ -892,7 +894,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * Domain name from a reverse DNS hostname
      * @param hostname the reverse DNS hostname, whose leading labels are
-     *        stripped down to the registrable domain
+     *                 stripped down to the registrable domain
      * @return domain name only from reverse dns hostname lookups
      * @since 0.9.58+
      */
@@ -901,7 +903,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * Return first valid IP (v4 or v6) we find, any transport.
      * @param ri RouterInfo whose addresses are examined in order until one
-     *        parses as a valid address
+     *           parses as a valid address
      * @return IP or null
      * @since 0.9.18
      */

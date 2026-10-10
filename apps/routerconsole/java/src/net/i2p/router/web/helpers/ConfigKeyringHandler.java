@@ -209,7 +209,8 @@ public class ConfigKeyringHandler extends FormHandler {
     /**
      * Set the peer destination from form.
      *
-     * @param peer the peer
+     * @param peer the destination the keyring change applies to; trimmed of
+     *             surrounding whitespace
      */
     public void setPeer(String peer) {
         if (peer != null)

@@ -299,7 +299,7 @@ public interface RrdGraphConstants {
          * Return the default RRD4J's default font for the given strength
          *
          * @param type {@link java.awt.Font#BOLD} for a bold fond, any other value return plain
-         *     style.
+         *             style.
          * @param size the size for the new Font
          * @return a new {@link java.awt.Font} instance
          */

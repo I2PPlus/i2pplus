@@ -49,7 +49,7 @@ public class CloveSet {
     /**
      * Get the clove at the specified index.
      *
-     * @param index the index
+     * @param index the zero-based position within the garlic message
      * @return the clove at the given index
      * @throws ArrayIndexOutOfBoundsException if the index is out of range
      */

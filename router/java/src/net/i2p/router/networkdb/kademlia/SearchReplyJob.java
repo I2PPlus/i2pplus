@@ -49,7 +49,7 @@ class SearchReplyJob extends JobImpl {
      * @param message the reply carrying the peer hashes to process
      * @param peer the router that sent the reply
      * @param duration the time in milliseconds the search had been running when the reply
-     *        arrived; negative or zero is stored as 0
+     *                 arrived; negative or zero is stored as 0
      */
     public SearchReplyJob(RouterContext enclosingContext, SearchJob job, DatabaseSearchReplyMessage message, Hash peer, long duration) {
         super(enclosingContext);

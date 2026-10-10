@@ -179,7 +179,7 @@ public class SecurityManager {
      * @param tokenID - The token to validate
      * @throws InvalidAuthTokenException if no token with that ID is known
      * @throws ExpiredAuthTokenException if the token is known but past its
-     * expiry, in which case it is also removed from the store
+     *                                   expiry, in which case it is also removed from the store
      */
     public void verifyToken(String tokenID) throws InvalidAuthTokenException, ExpiredAuthTokenException {
         synchronized (authTokens) {
@@ -198,9 +198,9 @@ public class SecurityManager {
      * Clean up old authorization tokens to keep the token store slim and fit.
      */
     private class Sweeper extends SimpleTimer2.TimedEvent {
-        // Start running periodic task after 1 day, run periodically every 30 minutes.
         /**
-         * Sweeper.
+         * Schedule the cleanup pass, starting one day after startup and
+         * repeating every 30 minutes.
          */
         public Sweeper() {
             super(_context.simpleTimer2(), AuthToken.VALIDITY_TIME * 24*60*60*1000L);

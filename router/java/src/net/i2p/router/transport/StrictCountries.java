@@ -83,7 +83,7 @@ public abstract class StrictCountries {
      * Whether the country is in the restricted set.
      *
      * @param country two-letter code, case-independent; null or any other
-     * length is not restricted
+     *                length is not restricted
      * @return true if the code is in the restricted set
      */
     public static boolean contains(String country) {

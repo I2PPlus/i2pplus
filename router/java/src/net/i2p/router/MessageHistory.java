@@ -176,7 +176,7 @@ public class MessageHistory {
     /**
      * Note that a message was dispatched to a tunnel.
      *
-     * @param info the info
+     * @param info description of what was dispatched, logged verbatim
      */
     public void tunnelDispatched(String info) {
         if (!_doLog) return;
@@ -189,7 +189,7 @@ public class MessageHistory {
      *
      * @param messageId the message ID
      * @param tunnelId the tunnel ID
-     * @param type the type
+     * @param type the message type being sent
      */
     public void tunnelDispatched(long messageId, long tunnelId, String type) {
         if (!_doLog) return;
@@ -203,7 +203,7 @@ public class MessageHistory {
      * @param tunnelId the tunnel ID
      * @param toTunnel the tunnel
      * @param toPeer the peer
-     * @param type the type
+     * @param type the message type being sent
      */
     public void tunnelDispatched(long messageId, long tunnelId, long toTunnel, Hash toPeer, String type) {
         if (!_doLog) return;
@@ -219,7 +219,7 @@ public class MessageHistory {
      * @param messageId the message ID
      * @param innerMessageId the inner message ID
      * @param tunnelId the tunnel ID
-     * @param type the type
+     * @param type the message type being sent
      */
     public void tunnelDispatched(long messageId, long innerMessageId, long tunnelId, String type) {
         if (!_doLog) return;
@@ -253,10 +253,10 @@ public class MessageHistory {
     /**
      * The peer did not accept the tunnel join for the given reason
      *
-     * @param peer the peer
-     * @param tunnel the tunnel
+     * @param peer the router that rejected the join
+     * @param tunnel the tunnel whose join was refused
      * @param replyThrough the reply-through router
-     * @param reason the reason
+     * @param reason the reason reported by the rejecting router
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void tunnelRejected(Hash peer, TunnelId tunnel, Hash replyThrough, String reason) {
@@ -274,7 +274,7 @@ public class MessageHistory {
     /**
      * Note that a router rejected our request to participate in a tunnel.
      *
-     * @param peer the peer
+     * @param peer the router that refused to take part
      * @param msg the message
      */
     public void tunnelParticipantRejected(Hash peer, String msg) {

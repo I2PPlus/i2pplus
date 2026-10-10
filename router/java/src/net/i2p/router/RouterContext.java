@@ -101,8 +101,8 @@ public class RouterContext extends I2PAppContext {
      * @param router may be null for unit tests if you are careful
      * @param envProps configuration properties to override the defaults, or null to use none
      * @param doInit should this context be used as the global one (if necessary)?
-     * Will only apply if there is no global context now.
-     * If false, caller should call setGlobalContext() afterwards.
+     *               Will only apply if there is no global context now.
+     *               If false, caller should call setGlobalContext() afterwards.
      *
      * @since 0.9.33
      */
@@ -688,9 +688,10 @@ public class RouterContext extends I2PAppContext {
     }
 
     /**
-     * As of 0.9.15, this returns a dummy SessionKeyManager in I2PAppContext.
-     * Overridden in RouterContext to return the full TransientSessionKeyManager
-     * or MuxedSKM, depending on configured router encryption type.
+     * Create the session key manager for the router, picking the implementation
+     * from the router's configured encryption type: a RatchetSKM for an
+     * ECIES_X25519 key, otherwise a TransientSessionKeyManager.
+     * Overridden here because I2PAppContext returns a dummy SessionKeyManager.
      *
      * @since 0.9.15
      */

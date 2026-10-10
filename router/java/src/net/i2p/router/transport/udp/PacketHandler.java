@@ -184,7 +184,7 @@ class PacketHandler {
     /**
      * Queue a received packet for processing.
      *
-     * @param packet the packet
+     * @param packet the received packet to hand to the inbound thread
      * @throws InterruptedException if interrupted while waiting
      */
     public void queueReceived(UDPPacket packet) throws InterruptedException {

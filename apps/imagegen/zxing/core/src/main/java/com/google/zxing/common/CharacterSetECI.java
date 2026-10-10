@@ -129,7 +129,7 @@ public enum CharacterSetECI {
    *
    * @param value character set ECI value
    * @return {@code CharacterSetECI} representing ECI of given value, or null if it is legal but
-   *   unsupported
+   *         unsupported
    * @throws FormatException if ECI value is invalid
    */
   public static CharacterSetECI getCharacterSetECIByValue(int value) throws FormatException {
@@ -144,7 +144,7 @@ public enum CharacterSetECI {
    *
    * @param name character set ECI encoding name
    * @return CharacterSetECI representing ECI for character encoding, or null if it is legal
-   *   but unsupported
+   *         but unsupported
    */
   public static CharacterSetECI getCharacterSetECIByName(String name) {
     return NAME_TO_ECI.get(name);

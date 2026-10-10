@@ -440,7 +440,7 @@ class ConnectionManager {
      * @param why human-readable trigger, e.g. "exceeded max 50 conns/minute"
      * @param now current clock time
      * @return true if the dest is banned after this call (newly banned,
-     * extended, or already banned); false if bans are disabled
+     *         extended, or already banned); false if bans are disabled
      * @since 0.9.71+
      */
     boolean banPeer(Hash h, String why, long now) {
@@ -501,7 +501,7 @@ class ConnectionManager {
      * @param h remote dest hash, may be null
      * @param max the per-dest concurrent stream ceiling; &le; 0 disables the gate
      * @return true if the slot was taken (the caller now owns a slot and must
-     * either bind it to a reservation token or release it)
+     *         either bind it to a reservation token or release it)
      * @since 0.9.71+
      */
     static boolean reserveStreamSlot(ConcurrentHashMap<Hash, AtomicInteger> ledger,
@@ -587,7 +587,7 @@ class ConnectionManager {
      *
      * @param waiting the waiter counter, non-null
      * @return the value after the release, or the unchanged value if it was
-     * already zero
+     *         already zero
      * @since 0.9.71+
      */
     static int releaseWaiting(AtomicInteger waiting) {
@@ -811,7 +811,7 @@ class ConnectionManager {
      * Pure decision for the sub-second SYN-burst gate: whether a dest has sent
      * more than {@code burst} SYNs within the last {@code windowMs} ms.
      * @param burstStartMs epoch ms of the first SYN in the current burst window
-     * (the ''oldest'' still counted), null if none
+     *                     (the ''oldest'' still counted), null if none
      * @param count number of SYNs attributed to the open window
      * @param now current clock time
      * @param windowMs rolling window length
@@ -844,9 +844,9 @@ class ConnectionManager {
      * @param now current clock time
      * @param autoban the autoban policy snapshotted when this SYN was evaluated
      * @return the window start of the burst window that tripped (used to key
-     * the strike to a distinct burst), or -1 if this SYN did not trip
-     * the gate (below threshold, window just re-armed, gate disabled,
-     * or autoban enforcement off)
+     *         the strike to a distinct burst), or -1 if this SYN did not trip
+     *         the gate (below threshold, window just re-armed, gate disabled,
+     *         or autoban enforcement off)
      * @since 0.9.71+
      */
     private long checkSynBurst(Hash h, long now, boolean autoban) {
@@ -983,7 +983,7 @@ class ConnectionManager {
      * @param now current clock time
      * @param strikeWindowMs strike forgiveness window (pass {@link #STRIKE_WINDOW_MS})
      * @param requiredStrikes distinct burst windows needed to ban; values below
-     * 2 are raised to 2 so a single window can never ban on its own
+     *                        2 are raised to 2 so a single window can never ban on its own
      * @return the action to take for this trip
      * @since 0.9.71+
      */
@@ -1099,7 +1099,7 @@ class ConnectionManager {
      * @param h remote dest hash, non-null
      * @param now current clock time
      * @return true if this SYN should be dropped (dest already temp-banned, or
-     * this SYN is a second distinct burst strike and just banned it)
+     *         this SYN is a second distinct burst strike and just banned it)
      * @since 0.9.71+
      */
     boolean checkInboundSynFlood(Hash h, long now) {
@@ -1404,8 +1404,8 @@ class ConnectionManager {
      *
      * @param synPacket SYN packet to process
      * @return created Connection with the packet's data already delivered to it,
-     * or null if the syn's streamId was already taken,
-     * or if the connection was rejected
+     *         or null if the syn's streamId was already taken,
+     *         or if the connection was rejected
      */
     public Connection receiveConnection(Packet synPacket) {
         Destination from = synPacket.getOptionalFrom();
@@ -1631,7 +1631,7 @@ class ConnectionManager {
      * @param from the peer destination
      * @param fromHash {@code from.calculateHash()} (already computed by the caller)
      * @param retryAfter seconds for the Retry-After header; {@link #MAX_TIME}
-     * means never retry (silent drop)
+     *                   means never retry (silent drop)
      */
     private void sendRejectResponse(Packet synPacket, Destination from, Hash fromHash, int retryAfter) {
         String resp = _defaultOptions.getLimitAction();
@@ -1734,7 +1734,7 @@ class ConnectionManager {
      *
      * @param con null if unknown
      * @param ping Ping packet to process, must have From and Sig fields,
-     * with signature already verified, only if answerPings() returned true
+     *             with signature already verified, only if answerPings() returned true
      * @return true if we sent a pong
      * @since 0.9.12 from PacketHandler.receivePing()
      */
@@ -1801,9 +1801,9 @@ class ConnectionManager {
      *
      * @param con the connection to assign an ID to
      * @param destHash the remote dest whose budget admitted this stream; the
-     * reservation token for the new ID points here
+     *                 reservation token for the new ID points here
      * @since 0.9.12 consolidated from receiveConnection() and connect();
-     * destHash added 0.9.71+ for reservation binding
+     *        destHash added 0.9.71+ for reservation binding
      */
     private void assignReceiveStreamId(Connection con, Hash destHash) {
         // A pooled connection's previous generation already claimed its slot
@@ -2132,8 +2132,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
          * @param text description
          * @param secs seconds for the Retry-After header
          * @param silent if true, suppress the per-rejection WARN log. Used for
-         * repeated rejections of an already-temp-banned dest so a hammering
-         * peer doesn't spam the log on every SYN.
+         *               repeated rejections of an already-temp-banned dest so a hammering
+         *               peer doesn't spam the log on every SYN.
          */
         public Reason(String text, int secs, boolean silentFlags) {
             txt = text; seconds = secs; silent = silentFlags;
@@ -2167,7 +2167,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      *
      * @param syn the incoming SYN packet
      * @return a Reason with seconds for Retry-After header; MAX_TIME for
-     * drop, 0 if unknown; or null if not rejected
+     *         drop, 0 if unknown; or null if not rejected
      */
     private Reason shouldRejectConnection(Packet syn) {
         // unfortunately we don't have access to the router client manager here,
@@ -2750,7 +2750,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
      * @param toPort the destination port
      * @param timeoutMs greater than zero
      * @param payload non-null, include in packet, up to 32 bytes may be returned in pong
-     * not copied, do not modify
+     *                not copied, do not modify
      * @return the payload received in the pong, zero-length if none, null on failure or timeout
      * @since 0.9.18
      */

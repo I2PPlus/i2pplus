@@ -189,9 +189,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Paint for standard graph elements indexed by {@link ElementsNames}.
      *
      * @since 0.9.71 the array also has an eleventh slot,
-     * {@link RrdGraphConstants#COLOR_SERIES_DASH}, which holds a {@link Float} dash
-     * length rather than a colour. Widening to an Object array keeps the long-standing
-     * Paint[] contract for every colour index, so the field is left typed as it was.
+     *        {@link RrdGraphConstants#COLOR_SERIES_DASH}, which holds a {@link Float} dash
+     *        length rather than a colour. Widening to an Object array keeps the long-standing
+     *        Paint[] contract for every colour index, so the field is left typed as it was.
      */
     private final Paint[] colors =
             new Paint[] {
@@ -410,7 +410,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * required.
      *
      * @param timestamps Array of timestamps. The first array item will be chosen for the starting
-     *     timestamp. The last array item will be chosen for the ending timestamp.
+     *                   timestamp. The last array item will be chosen for the ending timestamp.
      */
     public void setTimeSpan(long[] timestamps) {
         setTimeSpan(timestamps[0], timestamps[timestamps.length - 1]);
@@ -617,7 +617,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * </table>
      *
      * @param formatProvider An {@link Optional} holding the {@link TimeLabelFormat} to use or empy
-     *     to keep the default.
+     *                       to keep the default.
      * @since 3.10
      */
     public void setTimeLabelFormatter(
@@ -632,7 +632,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param gridStep Minor grid step
      * @param labelFactor Specifies how many minor minor grid steps will appear between labels
-     *     (major grid lines)
+     *                    (major grid lines)
      */
     public void setValueAxis(double gridStep, int labelFactor) {
         valueAxisSetting = new ValueAxisSetting(gridStep, labelFactor);
@@ -726,7 +726,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Sets the character width on the left side of the graph for y-axis values.
      *
      * @param unitsLength Number of characters on the left side of the graphs reserved for vertical
-     *     axis labels.
+     *                    axis labels.
      */
     public void setUnitsLength(int unitsLength) {
         this.unitsLength = unitsLength;
@@ -943,7 +943,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * argument you can disable this behavior.
      *
      * @param rigid true if upper and lower limits should not be expanded to accommodate values
-     *     outside of the specified range. False otherwise (default).
+     *              outside of the specified range. False otherwise (default).
      */
     public void setRigid(boolean rigid) {
         this.rigid = rigid;
@@ -1010,7 +1010,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * #setColor(int, java.awt.Paint)} for full explanation.
      *
      * @param colorName One of the following strings: "BACK", "CANVAS", "SHADEA", "SHADEB", "GRID",
-     *     "MGRID", "FONT", "FRAME", "ARROW", "XAXIS", "YAXIS"
+     *                  "MGRID", "FONT", "FRAME", "ARROW", "XAXIS", "YAXIS"
      * @param color Any color (paint) you like
      * @deprecated Using {@link #setColor(ElementsNames, Paint)}
      */
@@ -1041,7 +1041,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * because out of graph boundaries.
      *
      * @param forceRulesLegend true if rule legend should be always printed, false otherwise
-     *     (default).
+     *                         (default).
      */
     public void setForceRulesLegend(boolean forceRulesLegend) {
         this.forceRulesLegend = forceRulesLegend;
@@ -1191,7 +1191,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Sets font.
      *
      * @param fontTag Font tag as String, as explained in {@link
-     *     #setFont(org.rrd4j.graph.RrdGraphConstants.FontTag, Font, boolean)}.
+     *                #setFont(org.rrd4j.graph.RrdGraphConstants.FontTag, Font, boolean)}.
      * @param font Font to be used for tag
      */
     public void setFont(final String fontTag, final Font font) {
@@ -1202,7 +1202,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Sets font.
      *
      * @param fontTag Font tag as String, as explained in {@link
-     *     #setFont(org.rrd4j.graph.RrdGraphConstants.FontTag, Font, boolean)}.
+     *                #setFont(org.rrd4j.graph.RrdGraphConstants.FontTag, Font, boolean)}.
      * @param font Font to be used for tag
      * @param setAll Boolean to flag whether to set all fonts if fontTag == FONTTAG_DEFAULT
      */
@@ -1214,7 +1214,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Sets font.
      *
      * @param fontTag Font tag as String, as explained in {@link
-     *     #setFont(org.rrd4j.graph.RrdGraphConstants.FontTag, Font, boolean)}.
+     *                #setFont(org.rrd4j.graph.RrdGraphConstants.FontTag, Font, boolean)}.
      * @param font Font to be used for tag
      * @param setAll Boolean to flag whether to set all fonts if fontTag == FONTTAG_DEFAULT
      * @param keepSizes Boolean to flag whether to keep original font sizes if setting all fonts.
@@ -1277,7 +1277,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * @param consolFun Consolidation function (AVERAGE, MIN, MAX, LAST)
      * @param backend Backend to be used while fetching data from a RRD file.
      * @deprecated Uses {@link #datasource(String, String, String, ConsolFun, RrdBackendFactory)}
-     *     instead
+     *             instead
      */
     @Deprecated
     public void datasource(
@@ -1363,7 +1363,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param name - the new virtual datasource name
      * @param defName - the datasource from which to extract the percentile. Must be a previously
-     *     defined virtual datasource
+     *                defined virtual datasource
      * @param var - a new instance of a Variable used to do the calculation
      */
     @Override
@@ -1389,7 +1389,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * org.rrd4j.core.FetchData} object.
      *
      * @param name Source name.
-     * @param fetchData FetchData object.
+     * @param fetchData the fetched values for the source.
      */
     @Override
     public void datasource(String name, FetchData fetchData) {
@@ -1403,7 +1403,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param name Source name.
      * @param dsName Source name in fetchData.
-     * @param fetchData FetchData object.
+     * @param fetchData the fetched values for the source.
      */
     @Override
     public void datasource(String name, String dsName, FetchData fetchData) {
@@ -1955,7 +1955,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * @param srcName Virtual source name
      * @param color Stacked graph color
      * @throws java.lang.IllegalArgumentException Thrown if this STACK has no previously defined
-     *     AREA, STACK or LINE graph bellow it.
+     *                                            AREA, STACK or LINE graph bellow it.
      */
     public void stack(String srcName, Paint color) {
         stack(srcName, color, null);
@@ -1972,7 +1972,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * @param color Stacked graph color
      * @param legend Legend text
      * @throws java.lang.IllegalArgumentException Thrown if this STACK has no previously defined
-     *     AREA, STACK or LINE graph bellow it.
+     *                                            AREA, STACK or LINE graph bellow it.
      */
     public void stack(String srcName, Paint color, String legend) {
         SourcedPlotElement parent = findParent();
@@ -2107,13 +2107,13 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Sets first day of the week.
      *
      * @param firstDayOfWeek One of the following constants: {@link
-     *     org.rrd4j.graph.RrdGraphConstants#MONDAY MONDAY}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#TUESDAY TUESDAY}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#WEDNESDAY WEDNESDAY}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#THURSDAY THURSDAY}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#FRIDAY FRIDAY}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#SATURDAY SATURDAY}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#SUNDAY SUNDAY}
+     *                       org.rrd4j.graph.RrdGraphConstants#MONDAY MONDAY}, {@link
+     *                       org.rrd4j.graph.RrdGraphConstants#TUESDAY TUESDAY}, {@link
+     *                       org.rrd4j.graph.RrdGraphConstants#WEDNESDAY WEDNESDAY}, {@link
+     *                       org.rrd4j.graph.RrdGraphConstants#THURSDAY THURSDAY}, {@link
+     *                       org.rrd4j.graph.RrdGraphConstants#FRIDAY FRIDAY}, {@link
+     *                       org.rrd4j.graph.RrdGraphConstants#SATURDAY SATURDAY}, {@link
+     *                       org.rrd4j.graph.RrdGraphConstants#SUNDAY SUNDAY}
      */
     public void setFirstDayOfWeek(int firstDayOfWeek) {
         this.firstDayOfWeek = firstDayOfWeek;

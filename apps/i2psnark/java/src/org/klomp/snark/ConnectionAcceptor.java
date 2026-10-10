@@ -79,9 +79,9 @@ class ConnectionAcceptor implements Runnable {
      * Multitorrent. Caller MUST call startAccepting()
      *
      * @param util the I2PSnark utility instance supplying the config and
-     *        storage this acceptor works through
+     *             storage this acceptor works through
      * @param set the peer coordinator set covering every torrent, handed to the
-     *        multitorrent PeerAcceptor this constructor creates
+     *            multitorrent PeerAcceptor this constructor creates
      */
     public ConnectionAcceptor(I2PSnarkUtil util, PeerCoordinatorSet set) {
         _util = util;
@@ -110,9 +110,9 @@ class ConnectionAcceptor implements Runnable {
      * Unused (single torrent). Do NOT call startAccepting().
      *
      * @param util the I2PSnark utility instance supplying the config and
-     *        storage this acceptor works through
+     *             storage this acceptor works through
      * @param peeracceptor the single-torrent acceptor that does the peer
-     *        handshaking, already created by the caller
+     *                     handshaking, already created by the caller
      */
     public ConnectionAcceptor(I2PSnarkUtil util, PeerAcceptor peeracceptor) {
         this.peeracceptor = peeracceptor;
@@ -128,11 +128,11 @@ class ConnectionAcceptor implements Runnable {
      * Single torrent on its own destination. Do NOT call startAccepting().
      *
      * @param util the I2PSnark utility instance supplying the config and
-     *        storage this acceptor works through
+     *             storage this acceptor works through
      * @param peeracceptor the single-torrent acceptor that does the peer
-     *        handshaking, already created by the caller
+     *                     handshaking, already created by the caller
      * @param td the destination this one torrent is published under, used to
-     *        tell whether an incoming connection is meant for it
+     *           tell whether an incoming connection is meant for it
      * @since 0.9.71+
      */
     public ConnectionAcceptor(I2PSnarkUtil util, PeerAcceptor peeracceptor, TorrentDest td) {
@@ -469,9 +469,7 @@ class ConnectionAcceptor implements Runnable {
         }
 
         /**
-         * Add a torrent's coordinator to this loop's routing set.
-         *
-         * @param coordinator the coordinator
+         * @param coordinator the torrent to add to this loop's routing set
          */
         public void add(PeerCoordinator coordinator) {
             _set.add(coordinator);
@@ -480,7 +478,7 @@ class ConnectionAcceptor implements Runnable {
         /**
          * Remove a torrent's coordinator from this loop's routing set.
          *
-         * @param coordinator the coordinator
+         * @param coordinator the torrent coordinator to drop from the routing set
          */
         public void remove(PeerCoordinator coordinator) {
             _set.remove(coordinator);

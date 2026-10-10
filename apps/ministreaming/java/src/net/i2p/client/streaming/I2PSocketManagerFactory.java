@@ -194,7 +194,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * or null for a transient destination. Caller must close.
+     *                           or null for a transient destination. Caller must close.
      * @return the newly created socket manager, or null if there were errors
      */
     public static I2PSocketManager createManager(InputStream myPrivateKeyStream) {
@@ -209,7 +209,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * or null for a transient destination. Caller must close.
+     *                           or null for a transient destination. Caller must close.
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
      * @since 0.9.40
@@ -226,7 +226,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * or null for a transient destination. Caller must close.
+     *                           or null for a transient destination. Caller must close.
      * @param opts Streaming and I2CP options, may be null
      * @return the newly created socket manager, or null if there were errors
      */
@@ -242,7 +242,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * or null for a transient destination. Caller must close.
+     *                           or null for a transient destination. Caller must close.
      * @param opts Streaming and I2CP options, may be null
      * @param filter The filter to use for incoming connections
      * @return the newly created socket manager, or null if there were errors
@@ -260,7 +260,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * or null for a transient destination. Caller must close.
+     *                           or null for a transient destination. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
@@ -279,7 +279,7 @@ public class I2PSocketManagerFactory {
      * The nonblocking createDisconnectedManager() is preferred.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * or null for a transient destination. Caller must close.
+     *                           or null for a transient destination. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
@@ -362,13 +362,13 @@ public class I2PSocketManagerFactory {
      * with significant delay for tunnel building.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * or null for a transient destination. Caller must close.
+     *                           or null for a transient destination. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
      * @return the newly created socket manager, non-null (throws on error)
      * @throws I2PSessionException if the manager could not be created, including failure to
-     * generate a transient destination or to establish the session with the router
+     *                             generate a transient destination or to establish the session with the router
      * @since 0.9.8
      */
     public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream, String i2cpHost,
@@ -391,14 +391,14 @@ public class I2PSocketManagerFactory {
      * with significant delay for tunnel building.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * or null for a transient destination. Caller must close.
+     *                           or null for a transient destination. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
      * @param filter the incoming connection filter providing allow/deny decisions
      * @return the newly created socket manager, non-null (throws on error)
      * @throws I2PSessionException if the keys for a transient destination could not be
-     * generated, or the manager could not be created with the given connection filter
+     *                             generated, or the manager could not be created with the given connection filter
      * @since 0.9.40
      */
     public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream,
@@ -430,7 +430,7 @@ public class I2PSocketManagerFactory {
      * Blocks for a long time while the router builds tunnels if connect is true.
      *
      * @param myPrivateKeyStream private key stream, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
-     * non-null. Caller must close.
+     *                           non-null. Caller must close.
      * @param i2cpHost I2CP host null to use default, ignored if in router context
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null

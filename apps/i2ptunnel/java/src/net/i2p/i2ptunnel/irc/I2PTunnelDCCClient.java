@@ -38,6 +38,8 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
     public static final String CONNECT_STOP_EVENT = "connectionStopped";
 
     /**
+     * Create an IRC DCC client tunnel, offering one outbound file transfer
+     * connection to dest:remotePort.
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
@@ -50,7 +52,7 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
      * @param tunnel the owning tunnel, supplying the router context and clock
      * @param clientId id handed to the superclass to tag jobs and log messages
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     * valid config to contact the router
+     *                                  valid config to contact the router
      */
     public I2PTunnelDCCClient(String dest, int localPort, int remotePort, Logging l,
                            I2PSocketManager sktMgr, EventDispatcher notifyThis,

@@ -53,7 +53,7 @@ public class TimeParser {
      * Constructs TimeParser instance from the given input string.
      *
      * @param dateString at-style time specification (read rrdfetch man page for the complete
-     *     explanation)
+     *                   explanation)
      */
     public TimeParser(String dateString) {
         scanner = new TimeScanner(dateString);

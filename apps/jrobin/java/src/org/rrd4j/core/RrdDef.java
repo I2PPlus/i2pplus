@@ -326,12 +326,12 @@ public class RrdDef {
      *
      * @param dsName Data source name.
      * @param dsType Data source type. Valid types are "COUNTER", "GAUGE", "DERIVE" and "ABSOLUTE"
-     *     (these string constants are conveniently defined in the {@link org.rrd4j.DsType} class).
+     *               (these string constants are conveniently defined in the {@link org.rrd4j.DsType} class).
      * @param heartbeat Data source heartbeat.
      * @param minValue Minimal acceptable value. Use <code>Double.NaN</code> if unknown.
      * @param maxValue Maximal acceptable value. Use <code>Double.NaN</code> if unknown.
      * @throws java.lang.IllegalArgumentException Thrown if new datasource definition uses already
-     *     used data source name.
+     *                                            used data source name.
      */
     public void addDatasource(
             String dsName, DsType dsType, long heartbeat, double minValue, double maxValue) {
@@ -419,7 +419,7 @@ public class RrdDef {
      *
      * @param arcDef Archive definition.
      * @throws java.lang.IllegalArgumentException Thrown if archive with the same consolidation
-     *     function and the same number of steps is already added.
+     *                                            function and the same number of steps is already added.
      */
     public void addArchive(ArcDef arcDef) {
         if (arcDefs.contains(arcDef)) {
@@ -433,7 +433,7 @@ public class RrdDef {
      *
      * @param arcDefs Array of archive definition objects
      * @throws java.lang.IllegalArgumentException Thrown if RRD definition already contains archive
-     *     with the same consolidation function and the same number of steps.
+     *                                            with the same consolidation function and the same number of steps.
      */
     public void addArchive(ArcDef... arcDefs) {
         for (ArcDef arcDef : arcDefs) {
@@ -451,7 +451,7 @@ public class RrdDef {
      * @param steps Number of archive steps
      * @param rows Number of archive rows
      * @throws java.lang.IllegalArgumentException Thrown if archive with the same consolidation
-     *     function and the same number of steps is already added.
+     *                                            function and the same number of steps is already added.
      */
     public void addArchive(ConsolFun consolFun, double xff, int steps, int rows) {
         addArchive(new ArcDef(consolFun, xff, steps, rows));
@@ -603,7 +603,7 @@ public class RrdDef {
      * Save single datasource
      *
      * @param dsName the name of the one datasource to keep; every other is
-     *        removed from this definition
+     *               removed from this definition
      */
     void saveSingleDatasource(String dsName) {
         dsDefs.removeIf(dsDef -> !dsDef.getDsName().equals(dsName));
@@ -797,7 +797,7 @@ public class RrdDef {
      * @param arcCount the number of archives defined over the time range
      * @param rowsCount the total number of rows across those archives
      * @param dsNames the datasource names, whose length beyond the fixed
-     *        string size adds to the stored payload
+     *                string size adds to the stored payload
      * @return the estimated size in bytes of the resulting RRD file
      */
     static long calculateSize(int dsCount, int arcCount, int rowsCount, String[] dsNames) {

@@ -149,7 +149,7 @@ public class SOAP {
      * setXMLParser.
      *
      * @param parser the parser to install as the shared XML parser used by this
-     *        class when it has to parse a SOAP message itself
+     *               class when it has to parse a SOAP message itself
      */
     public static final void setXMLParser(Parser parser) {
         xmlParser = parser;

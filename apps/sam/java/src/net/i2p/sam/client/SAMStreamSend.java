@@ -194,7 +194,7 @@ public class SAMStreamSend {
      * @param version the SAM protocol version to negotiate, at least 3.2 for user and password
      * @param isSSL true to connect to the bridge over TLS rather than plaintext
      * @param mode the stream connect mode, one of STREAM, PACKET or STREAM_RAW, optionally
-     *        or'ed with MASTER to use a master session
+     *             or'ed with MASTER to use a master session
      * @param user the bridge username, or null when the bridge requires no authentication
      * @param password the password matching {@code user}, or null for no authentication
      * @param sessionOpts space separated session options appended to the STREAM CONNECT command

@@ -31,14 +31,15 @@ final class GenericGFPoly {
   private final int[] coefficients;
 
   /**
-   * to perform computations
-   * from most significant (highest-power term) coefficient to least significant
-   * or if leading coefficient is 0 and this is not a
-   * constant polynomial (that is, it is not the monomial "0")
+   * Builds a polynomial over a given field, in the standard form.
    *
    * @param field the {@link GenericGF} instance representing the field to use
+   *              to perform computations
    * @param coefficients coefficients as ints representing elements of GF(size), arranged
+   *                     from most significant (highest-power term) coefficient to least significant
    * @throws IllegalArgumentException if argument is null or empty,
+   *                                  or if leading coefficient is 0 and this is not a
+   *                                  constant polynomial (that is, it is not the monomial "0")
    */
   GenericGFPoly(GenericGF field, int[] coefficients) {
     if (coefficients.length == 0) {

@@ -1224,7 +1224,7 @@ public class Blocklist {
      *
      * @param ip1 the starting IP as a byte array
      * @param ip2 the ending IP as a byte array
-     * @param blocklist the blocklist
+     * @param blocklist the array to write the compressed entry into
      * @param idx the index to store at
      */
     private static void store(byte[] ip1, byte[] ip2, long[] blocklist, int idx) {
@@ -1236,7 +1236,7 @@ public class Blocklist {
      *
      * @param ip1 the starting IP as an integer
      * @param ip2 the ending IP as an integer
-     * @param blocklist the blocklist
+     * @param blocklist the array to write the compressed entry into
      * @param idx the index to store at
      */
     private static void store(int ip1, int ip2, long[] blocklist, int idx) {

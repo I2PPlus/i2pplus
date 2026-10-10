@@ -108,7 +108,7 @@ public class NewsManager implements ClientApp {
      * Does NOT store them to disk.
      *
      * @param entries the entries to add or replace, matched against existing entries
-     *        by id, or by title for entries parsed from the old news.xml
+     *                by id, or by title for entries parsed from the old news.xml
      */
     public synchronized void addEntries(List<NewsEntry> entries) {
         for (NewsEntry e : entries) {

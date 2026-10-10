@@ -300,7 +300,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
      *  in one critical section so a concurrent registration cannot be missed.
      *
      *  @param alreadyCounted true when the worker reserved its retirement slot in
-     *                       {@link #mayRetire} and so must not be counted again
+     *                        {@link #mayRetire} and so must not be counted again
      */
     private synchronized void workerStopped(boolean alreadyCounted) {
         if (!alreadyCounted) {liveThreads--;}

@@ -110,7 +110,7 @@ public class NewsXMLParser {
      * Process the XML file.
      *
      * @param file XML content only. Any su3 or gunzip handling must have
-     * already happened.
+     *             already happened.
      * @return the root node
      * @throws IOException on any parse error
      */
@@ -122,7 +122,7 @@ public class NewsXMLParser {
      * Process the XML input stream.
      *
      * @param in XML content only. Any su3 or gunzip handling must have
-     * already happened.
+     *           already happened.
      * @return the root node
      * @throws IOException on any parse error
      */

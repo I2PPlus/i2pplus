@@ -94,7 +94,7 @@ public class Sample {
      * @param values Data source values.
      * @return This <code>Sample</code> object
      * @throws java.lang.IllegalArgumentException Thrown if the number of supplied values is zero or
-     *     greater than the number of data sources defined in the RRD.
+     *                                            greater than the number of data sources defined in the RRD.
      */
     public Sample setValues(double... values) {
         if (values.length <= this.values.length) {

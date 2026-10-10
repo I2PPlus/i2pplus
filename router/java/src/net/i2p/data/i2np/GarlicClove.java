@@ -127,7 +127,7 @@ public class GarlicClove extends DataStructureImpl {
      * @param offset the offset into source at which the clove starts
      * @return length read
      * @throws DataFormatException if the delivery instructions, message or
-     * certificate cannot be parsed
+     *                             certificate cannot be parsed
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {
         int cur = offset;
@@ -157,7 +157,7 @@ public class GarlicClove extends DataStructureImpl {
      * @param offset the offset into source at which the clove starts
      * @param len the number of bytes of source that make up the clove
      * @throws DataFormatException if the delivery instructions or message cannot
-     * be parsed
+     *                             be parsed
      * @since 0.9.44
      */
     public void readBytesRatchet(byte[] source, int offset, int len) throws DataFormatException {

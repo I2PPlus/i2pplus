@@ -57,11 +57,11 @@ abstract class TunnelGateway {
      *
      * @param context the router context
      * @param preprocessor this pulls Pending messages off a list, builds some
-     * full preprocessed messages, and pumps those into the sender
+     *                     full preprocessed messages, and pumps those into the sender
      * @param sender this takes a preprocessed message, encrypts it, and sends it to
-     * the receiver
+     *               the receiver
      * @param receiver this receives the encrypted message and forwards it off
-     * to the first hop
+     *                 to the first hop
      */
     protected TunnelGateway(RouterContext context, QueuePreprocessor preprocessor, Sender sender, Receiver receiver) {
         _context = context;
@@ -118,7 +118,7 @@ abstract class TunnelGateway {
          * Encrypt and forward preprocessed data to the receiver.
          *
          * @param preprocessed the preprocessed data
-         * @param receiver the receiver
+         * @param receiver the gateway end that will accept the encrypted data
          * @return message ID it was sent in, or -1 if it was deferred
          */
         public long sendPreprocessed(byte[] preprocessed, Receiver receiver);
@@ -133,12 +133,12 @@ abstract class TunnelGateway {
          * Caller must synchronize on the list!
          *
          * @param pending list of Pending objects for messages either unsent
-         * or partly sent.  This list should be update with any
-         * values removed (the preprocessor owns the lock)
-         * Messages are not removed from the list until actually sent.
-         * The status of unsent and partially-sent messages is stored in
-         * the Pending structure.
-         * @param sender the sender
+         *                or partly sent.  This list should be update with any
+         *                values removed (the preprocessor owns the lock)
+         *                Messages are not removed from the list until actually sent.
+         *                The status of unsent and partially-sent messages is stored in
+         *                the Pending structure.
+         * @param sender the sender to hand the encrypted data to
          * @param receiver the receiver to accept encrypted data
          * @return true if we should delay before preprocessing again
          */

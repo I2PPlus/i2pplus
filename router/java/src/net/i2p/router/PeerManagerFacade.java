@@ -20,28 +20,28 @@ public interface PeerManagerFacade extends Service {
     /**
      * All peers with the given capability.
      *
-     * @param capability the capability
+     * @param capability the capability code to match, e.g. {@code 'f'} for floodfill
      * @return the peers by capability
      */
     public Set<Hash> getPeersByCapability(char capability);
     /**
      * Count of peers with the given capability.
      *
-     * @param capability the capability
+     * @param capability the capability code to match, e.g. {@code 'f'} for floodfill
      * @return the count
      */
     public int countPeersByCapability(char capability);
 /**
  * The capabilities for a peer.
  *
- * @param peer the peer
+ * @param peer the router hash of the peer whose capabilities are to be set
  * @param caps the peer's capabilities, a case-insensitive string of PeerCapability chars
  */
     public void setCapabilities(Hash peer, String caps);
     /**
      * Remove all capabilities from a peer.
      *
-     * @param peer the peer
+     * @param peer the router hash of the peer to clear capabilities from
      */
     public void removeCapabilities(Hash peer);
     /**

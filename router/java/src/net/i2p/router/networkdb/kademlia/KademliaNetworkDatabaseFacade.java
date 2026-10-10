@@ -860,7 +860,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param key the LeaseSet key
      * @param onFindJob run if the LeaseSet is found locally or in the search, may be null
      * @param onFailedLookupJob run if the router is uninitialized, the key is
-     * negative-cached, or the search fails, may be null
+     *                          negative-cached, or the search fails, may be null
      * @param timeoutMs how long to wait for the search before failing
      * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
@@ -976,7 +976,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param key the LeaseSet key
      * @param onFindJob run if the LeaseSet is found, may be null
      * @param onFailedLookupJob run if the router is uninitialized, the key is
-     * negative-cached, or the search fails, may be null
+     *                          negative-cached, or the search fails, may be null
      * @param timeoutMs how long to wait for the search before failing
      * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      */
@@ -1853,7 +1853,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Stores to local db only.
      * Overridden in FNDF to actually send to the floodfills.
      * @throws IllegalArgumentException if the local router info is invalid
-     * or if this is a client DB
+     *                                  or if this is a client DB
      */
     @Override
     public void publish(RouterInfo localRouterInfo) throws IllegalArgumentException {
@@ -3272,7 +3272,7 @@ return false;
      * @param ds the database entry
      * @param sendTimeout timeout in ms for the reply-based FloodfillStoreJob path
      * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53;
-     * passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
+     *                 passed through to FloodfillStoreJob (unused for wide-flood-only RI path)
      */
     abstract void sendStore(Hash key, DatabaseEntry ds, Job onSuccess, Job onFailure, long sendTimeout, Set<Hash> toIgnore);
 

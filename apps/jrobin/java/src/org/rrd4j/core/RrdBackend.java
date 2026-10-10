@@ -70,7 +70,7 @@ public abstract class RrdBackend {
      * Creates backend for a RRD storage with the given path.
      *
      * @param path String identifying RRD storage. For files on the disk, this argument should
-     *     represent file path. Other storage types might interpret this argument differently.
+     *             represent file path. Other storage types might interpret this argument differently.
      */
     protected RrdBackend(String path) {
         this.path = path;
@@ -180,7 +180,7 @@ public abstract class RrdBackend {
      * never cache RRD file sections in memory.
      *
      * @return <code>true</code> if file caching is enabled, <code>false</code> otherwise. By
-     *     default, the method returns <code>true</code> but it can be overridden in subclasses.
+     *         default, the method returns <code>true</code> but it can be overridden in subclasses.
      */
     protected boolean isCachingAllowed() {
         return factory.cachingAllowed;

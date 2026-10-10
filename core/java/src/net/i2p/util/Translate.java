@@ -89,13 +89,13 @@ public abstract class Translate {
      *  This is a lot more expensive than getString(s, ctx), so use sparingly.
      *
      *  @param s string to be translated containing {0}
-     *  The {0} will be replaced by the parameter.
-     *  Single quotes must be doubled, i.e. ' -&gt; '' in the string.
+     *           The {0} will be replaced by the parameter.
+     *           Single quotes must be doubled, i.e. ' -&gt; '' in the string.
      *
      *  @param o parameter, not translated.
-     *  To translate parameter also, use _t("foo {0} bar", _t("baz"))
-     *  Do not double the single quotes in the parameter.
-     *  Use autoboxing to call with ints, longs, floats, etc.
+     *           To translate parameter also, use _t("foo {0} bar", _t("baz"))
+     *           Do not double the single quotes in the parameter.
+     *           Use autoboxing to call with ints, longs, floats, etc.
      *  @param ctx the application context, which supplies the language and country
      *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
      *  @return the translated string with {0} replaced by o, or s itself if no translation exists

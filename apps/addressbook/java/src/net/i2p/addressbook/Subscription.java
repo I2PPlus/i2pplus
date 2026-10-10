@@ -27,7 +27,7 @@ class Subscription {
      *            the last-modified header we received the last time we read
      *            this subscription. May be null.
      * @param lastFetched when the subscription was last fetched (Java time, as a String).
-     *            May be null.
+     *                    May be null.
      */
     public Subscription(String location, String etag, String lastModified, String lastFetched) {
         this.location = location;

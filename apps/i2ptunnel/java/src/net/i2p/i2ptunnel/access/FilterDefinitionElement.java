@@ -20,7 +20,8 @@ abstract class FilterDefinitionElement {
     /**
      * Create an element that applies a single threshold to the destinations it names.
      *
-     * @param threshold the threshold
+     * @param threshold the access limit enforced against the destinations this
+     *                  element names
      */
     FilterDefinitionElement(Threshold threshold) {
         this.threshold = threshold;
@@ -32,7 +33,7 @@ abstract class FilterDefinitionElement {
      *
      * @param map the destination-to-tracker map the discovered hashes are added to
      * @throws IOException if the destinations this element names cannot be read,
-     * as when a file-backed element cannot be opened
+     *                     as when a file-backed element cannot be opened
      */
     abstract void update(Map<Hash, DestTracker> map) throws IOException;
 
@@ -51,7 +52,7 @@ abstract class FilterDefinitionElement {
      * @param b32 the 60 character ".b32.i2p" address to decode
      * @return the destination hash the address names
      * @throws InvalidDefinitionException if the string is not a well formed .b32.i2p
-     * address, or its base 32 payload does not decode
+     *                                    address, or its base 32 payload does not decode
      */
     protected static Hash fromBase32(String b32) throws InvalidDefinitionException {
         if (b32.length() != 60)

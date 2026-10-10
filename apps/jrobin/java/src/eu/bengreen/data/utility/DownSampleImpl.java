@@ -64,9 +64,9 @@ public abstract class DownSampleImpl implements DownSampler {
      * and mismatched array lengths.
      *
      * @param sampled the empty output set allocated by downsize(), holding exactly
-     *        threshold timestamp and value slots to fill
+     *                threshold timestamp and value slots to fill
      * @param timestamps the full source timestamps in seconds since the epoch, more than
-     *        threshold in number
+     *                   threshold in number
      * @param values the full source values, the same length as timestamps
      * @return the same sampled set, with the threshold chosen ranks written into it
      */

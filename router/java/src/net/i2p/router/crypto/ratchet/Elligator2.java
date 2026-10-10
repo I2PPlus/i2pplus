@@ -184,7 +184,7 @@ class Elligator2 {
      * It's also able to return null if the representative is invalid (there are only 10 invalid representatives).
      *
      * @param representative the encoded data, little endian, 32 bytes
-     * WILL BE MODIFIED by masking byte 31
+     *                       WILL BE MODIFIED by masking byte 31
      *
      * @return x or null on failure
      */
@@ -200,7 +200,7 @@ class Elligator2 {
      *
      * @param alternative out parameter, or null if you don't care
      * @param representative the encoded data, little endian, 32 bytes;
-     * WILL BE MODIFIED by masking byte 31
+     *                       WILL BE MODIFIED by masking byte 31
      *
      * @return x or null on failure
      */

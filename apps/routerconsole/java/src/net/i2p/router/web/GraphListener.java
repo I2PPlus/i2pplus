@@ -628,7 +628,7 @@ public class GraphListener implements RateSummaryListener {
      *
      * @param id the datasource id
      * @return the registered stat name, or {@code id} itself when nothing registered it
-     * (an unknown id is still worth logging)
+     *         (an unknown id is still worth logging)
      * @since 0.9.71+
      */
     static String statName(String id) {

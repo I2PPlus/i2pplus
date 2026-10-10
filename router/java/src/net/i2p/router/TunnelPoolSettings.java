@@ -418,7 +418,7 @@ public class TunnelPoolSettings {
      * Support removed in the ClientPeerSelector in 0.8.6; restored in 0.9.53
      *
      * @return 0-4 Number of bytes to match to determine if peers in the same IP range should
-     * not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
+     *         not be in the same tunnel. 0 = disable check; 1 = /8; 2 = /16; 3 = /24; 4 = exact IP match
      */
     public int getIPRestriction() { return _IPRestriction; }
 

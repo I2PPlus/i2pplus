@@ -30,7 +30,7 @@ public class ReservedLdhLabel extends LdhLabel {
      * isReservedLdhLabel.
      *
      * @param label the candidate label string, checked for LDH syntax before the reserved
-     *        "--" pattern is tested
+     *              "--" pattern is tested
      * @return true if the string is a well-formed LDH label with "--" in its third and fourth
      *         characters
      */

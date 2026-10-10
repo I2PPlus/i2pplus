@@ -515,7 +515,7 @@ public class TransportManager implements TransportEventListener {
      * Tell all transports... but don't loop.
      *
      * @param source where the address came from, so the transport that reported
-     *        it is not told about its own address
+     *               it is not told about its own address
      * @param ip the new external address, 4 bytes for IPv4 or 16 for IPv6
      * @param port the external port, or 0 when the source did not report one
      */
@@ -533,7 +533,7 @@ public class TransportManager implements TransportEventListener {
      *  Tell all transports... but don't loop.
      *
      * @param source where the removal came from, so the transport that reported
-     *        it is not told to drop its own address
+     *               it is not told to drop its own address
      * @param ipv6 true to remove the IPv6 addresses, false for the IPv4 ones
      * @since 0.9.20
      */

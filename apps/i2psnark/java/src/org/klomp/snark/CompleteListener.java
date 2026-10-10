@@ -68,7 +68,7 @@ public interface CompleteListener {
     /**
      * Returns the saved time for the torrent's last modification.
      *
-     * @param snark the Snark instance
+     * @param snark the Snark instance holding the stored timestamp
      * @return the saved torrent time in milliseconds
      */
     public long getSavedTorrentTime(Snark snark);
@@ -76,7 +76,7 @@ public interface CompleteListener {
     /**
      * Returns the saved bitfield for the torrent.
      *
-     * @param snark the Snark instance
+     * @param snark the Snark instance holding the stored bitfield
      * @return the saved bitfield, or null if none
      */
     public BitField getSavedTorrentBitField(Snark snark);

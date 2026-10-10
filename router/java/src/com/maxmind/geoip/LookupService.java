@@ -659,7 +659,7 @@ public class LookupService {
      * Returns information about the database.
      *
      * @return the database edition and build epoch, or an empty DatabaseInfo if the
-     *     file carries no trailing info block
+     *         file carries no trailing info block
      */
     public synchronized DatabaseInfo getDatabaseInfo() {
         if (databaseInfo != null) {

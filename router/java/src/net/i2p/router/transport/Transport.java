@@ -177,7 +177,7 @@ public interface Transport {
      *
      * @param toAddress the target router's contact information
      * @param dataSize size of message payload, assumes full 16-byte header,
-     * transports should adjust as necessary for their overhead
+     *                 transports should adjust as necessary for their overhead
      * @return a TransportBid containing send details, or null if unwilling to send
      */
     public TransportBid bid(RouterInfo toAddress, int dataSize);
@@ -351,7 +351,7 @@ public interface Transport {
      * @param ip may be null
      * @param port the internal port
      * @param externalPort the external port, which for now should always be the same as
-     * the internal port if the forwarding was successful.
+     *                     the internal port if the forwarding was successful.
      * @param success true if the router managed to establish the mapping
      * @param reason the text describing the outcome, for the console and the logs
      */
@@ -450,8 +450,8 @@ public interface Transport {
      * </ul>
      *
      * @return 8-byte array with peer counts:
-     * version 1: [ipv4_in, ipv4_out, ipv6_in, ipv6_out, 0, 0, 0, 0]
-     * version 2: [ipv4_in, ipv4_out, ipv6_in, ipv6_out, 0, 0, 0, 0]
+     *         version 1: [ipv4_in, ipv4_out, ipv6_in, ipv6_out, 0, 0, 0, 0]
+     *         version 2: [ipv4_in, ipv4_out, ipv6_in, ipv6_out, 0, 0, 0, 0]
      * @since 0.9.57
      */
     public int[] getPeerCounts();
@@ -480,7 +480,7 @@ public interface Transport {
      * returned a Vector, now returns a List as of 0.9.46.
      *
      * @return list of clock skew measurements in milliseconds,
-     * may be empty if no measurements available
+     *         may be empty if no measurements available
      */
     public List<Long> getClockSkews();
 

@@ -186,7 +186,7 @@ public class SSDPPacket {
      * getCacheControl.
      *
      * @return the CACHE-CONTROL header value, or an empty string if the message
-     * carries none
+     *         carries none
      */
     public String getCacheControl() {
         return HTTPHeader.getValue(getData(), HTTP.CACHE_CONTROL);
@@ -272,7 +272,7 @@ public class SSDPPacket {
      * getHostInetAddress.
      *
      * @return the InetAddress named in the HOST header, or the loopback address if
-     * that header carries no port
+     *         that header carries no port
      */
     public InetAddress getHostInetAddress() {
         String addrStr = "127.0.0.1";
@@ -335,7 +335,7 @@ public class SSDPPacket {
      * getLeaseTime.
      *
      * @return the lease time in seconds, or 0 if the CACHE-CONTROL header carries no
-     * usable max-age
+     *         usable max-age
      */
     public int getLeaseTime() {
         return SSDP.getLeaseTime(getCacheControl());

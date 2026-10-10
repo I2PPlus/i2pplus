@@ -27,7 +27,7 @@ public class EncodingException extends IOException {
 	 * Create an EncodingException with a message and cause.
 	 *
 	 * @param msg the detail message
-	 * @param cause the cause
+	 * @param cause the exception that triggered the encoding failure
 	 * @since 0.9.33
 	 */
 	public EncodingException(String msg, Exception cause)

@@ -101,7 +101,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      * @param type non-null
      * @param data must be non-null, and of the type's key length
      * @throws IllegalArgumentException if data is null or the wrong length,
-     * or if type is null
+     *                                  or if type is null
      * @since 0.9.38
      */
     public PrivateKey(EncType type, byte[] data) {
@@ -117,7 +117,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      * @param data must be non-null, and of the type's key length
      * @param pubKey corresponding pubKey to be cached, non-null
      * @throws IllegalArgumentException if data is null or the wrong length,
-     * or if pubKey is null or of another type
+     *                                  or if pubKey is null or of another type
      * @since 0.9.44
      */
     public PrivateKey(EncType type, byte[] data, PublicKey pubKey) {
@@ -130,7 +130,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      * Private key of the default type from a string of base64 data.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
-     * on a prior instance of PrivateKey)
+     *         on a prior instance of PrivateKey)
      * @throws DataFormatException if the data is not valid
      */
     public PrivateKey(String base64Data) throws DataFormatException {

@@ -205,10 +205,10 @@ class MagnetState {
      * @param length the byte count to copy, which must equal the chunk size in a complete file
      * @return true if this was the last piece, false otherwise
      * @throws IllegalArgumentException if not initialized, chunk number is invalid, or length is
-     *     incorrect
+     *                                  incorrect
      * @throws Exception if there's an error building the MetaInfo
      * @throws StackOverflowError if the received metadata nests lists or maps deeply
-     *     enough to exhaust the decoder's recursion
+     *                            enough to exhaust the decoder's recursion
      */
     public boolean saveChunk(int chunk, byte[] data, int off, int length) throws Throwable {
         if (!isInitialized) throw new IllegalArgumentException("Not initialized");

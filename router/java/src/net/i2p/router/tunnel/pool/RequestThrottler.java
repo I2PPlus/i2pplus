@@ -311,7 +311,7 @@ public class RequestThrottler {
      * so unloaded routers carry LU traffic while loaded ones shed it.
      *
      * @param loadScore the 0.0-1.0 load score from
-     * {@link ParticipatingThrottler#calculateLoadScore}
+     *                  {@link ParticipatingThrottler#calculateLoadScore}
      * @return the enforcement probability, clamped to 0.0-1.0
      * @since 0.9.71+
      */

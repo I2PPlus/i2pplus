@@ -49,7 +49,7 @@ public class RetransmissionTimer {
 
     /**
      * Schedule an event via one of the dedicated timers.
-     * @param event the event
+     * @param event the SimpleTimer2 event to fire once timeoutMs has elapsed
      * @param timeoutMs delay in ms
      * @since 0.9.70+
      */

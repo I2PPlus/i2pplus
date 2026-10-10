@@ -22,7 +22,7 @@ public class DecodingException extends IOException {
 	 * Constructs a DecodingException with the specified detail message and cause.
 	 *
 	 * @param msg detail message
-	 * @param cause the cause
+	 * @param cause the underlying exception that made decoding fail
 	 * @since 0.9.34
 	 */
 	public DecodingException(String msg, Exception cause)

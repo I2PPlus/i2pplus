@@ -194,7 +194,7 @@ class UDPPacket implements CDPQEntry {
      * Priority level.
      *
      * @param pri the send priority on the OutNetMessage scale of 100 to 1000,
-     *        where a larger value means a more urgent packet
+     *            where a larger value means a more urgent packet
      */
     public void setPriority(int pri) {
         _priority = pri;
@@ -228,7 +228,7 @@ class UDPPacket implements CDPQEntry {
      * Mark type.
      *
      * @param type 1 to flag the packet as an ack, which lets the sender record
-     *        ack send timings separately; any other value is simply stored
+     *             ack send timings separately; any other value is simply stored
      */
     public void markType(int type) {
         verifyNotReleased();
@@ -278,7 +278,7 @@ class UDPPacket implements CDPQEntry {
      * Fragment count
      *
      * @param count the number of data fragments this packet carries, or -1 to
-     *        mark it as an ack with no fragment data
+     *              mark it as an ack with no fragment data
      */
     void setFragmentCount(int count) {
         _fragmentCount = count;

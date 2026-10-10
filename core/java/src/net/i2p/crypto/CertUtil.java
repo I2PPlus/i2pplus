@@ -233,7 +233,7 @@ public final class CertUtil {
      *
      * @param p the X500Principal
      * @param type e.g. "CN"
-     * @return the value
+     * @return the attribute value, or null if absent, p is null, or on Android
      */
     private static String getValue(X500Principal p, String type) {
         if (SystemVersion.isAndroid()) {

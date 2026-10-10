@@ -36,13 +36,13 @@ class Yytoken {
     private final Types type;
     private final Object value;
 
-    /**
-     * Types.DATUM.
-     * * @see Types
-     *
-     * @param type represents the kind of token the instantiated token will be.
-     * @param value represents the value the token is associated with, will be ignored unless type is equal to
-     */
+        /**
+         * Types.DATUM.
+         * @see Types
+         *
+         * @param type represents the kind of token the instantiated token will be.
+         * @param value represents the value the token is associated with, will be ignored unless type is equal to
+         */
     Yytoken(final Types type, final Object value) {
         /* Sanity check. Make sure the value is ignored for the proper value unless it is a datum token. */
         switch (type) {
@@ -67,7 +67,9 @@ class Yytoken {
     }
 
     /**
-     * * @see Types
+     * The kind of token this is, as parsed from the JSON stream.
+     *
+     * @see Types
      *
      * @return which of the Types the token is.
      */
@@ -76,7 +78,9 @@ class Yytoken {
     }
 
     /**
-     * * @see Types
+     * The payload this token carries; only DATUM tokens have a meaningful value.
+     *
+     * @see Types
      *
      * @return what the token is.
      */

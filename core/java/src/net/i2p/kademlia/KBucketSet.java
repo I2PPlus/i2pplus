@@ -77,10 +77,10 @@ public class KBucketSet<T extends SimpleDataStructure> {
      *
      * @param context the router context
      * @param us the local identity (typically a SHA1Hash or Hash)
-     * The class must have a zero-argument constructor.
+     *           The class must have a zero-argument constructor.
      * @param max the Kademlia value "k", the max per bucket, must be &gt; 4
      * @param b the Kademlia value "b", split buckets an extra 2**(b-1) times,
-     * 1 &lt;= b &lt;= 8, use 1 for bittorrent, Kademlia paper recommends 5
+     *          1 &lt;= b &lt;= 8, use 1 for bittorrent, Kademlia paper recommends 5
      * @throws IllegalArgumentException if max &lt;= 4, or b is outside 1..8
      * @throws RuntimeException if the us class has no zero-argument constructor
      */
@@ -150,9 +150,9 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * Add a peer to the appropriate bucket.
      * Will split the bucket if necessary.
      *
-     * @param peer the peer
+     * @param peer the router hash to insert
      * @return true if the peer is new to the bucket it goes in, or false if it was
-     * already in it. Always returns false on an attempt to add ourselves.
+     *         already in it. Always returns false on an attempt to add ourselves.
      */
     public boolean add(T peer) {
         KBucket<T> bucket;
@@ -591,7 +591,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * The number of bits minus 1 (range number) for the xor of the key.
      * Package private for testing only. Others shouldn't need this.
      *
-     * @param key the key
+     * @param key the router hash whose bucket range is wanted
      * @return 0 to max-1 or -1 for us
      */
     int getRange(T key) {
@@ -627,7 +627,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * Generate a random key to go within this bucket
      * Package private for testing only. Others shouldn't need this.
      *
-     * @param bucket the bucket
+     * @param bucket the bucket to pick a random key for
      * @return a random key in the bucket's range
      */
     T generateRandomKey(KBucket<T> bucket) {
@@ -709,7 +709,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * Make a new SimpleDataStrucure from the data
      *
      * @param data size &lt;= SDS length, else throws IAE
-     * Can be 1 bigger if top byte is zero
+     *             Can be 1 bigger if top byte is zero
      */
     @SuppressWarnings("unchecked")
     private T makeKey(byte[] data) {

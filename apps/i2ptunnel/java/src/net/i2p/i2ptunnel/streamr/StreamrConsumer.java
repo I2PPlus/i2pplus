@@ -21,7 +21,7 @@ public class StreamrConsumer extends I2PTunnelUDPClientBase {
      * @param destination I2P destination to subscribe to
      * @param l logging facility
      * @param notifyThis event dispatcher for notifications
-     * @param tunnel the tunnel
+     * @param tunnel the parent tunnel, supplying the context and I2CP options
      * @since 0.9.53
      */
     public StreamrConsumer(InetAddress host, int port, String destination,

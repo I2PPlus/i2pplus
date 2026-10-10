@@ -22,7 +22,7 @@ public class TorrentKRPC extends KRPC {
      *
      * @param ctx application context
      * @param shared the main DHT instance, whose routing table, tracker, and blacklist are
-     *            shared; must be started already
+     *               shared; must be started already
      * @param session the transient session of the torrents' destination
      * @param ihs the infohashes of the torrents served on this destination
      */

@@ -71,7 +71,7 @@ public class SSLClientUtil {
      * @param opts in/out, updated if rv is true
      * @param optPfx add this prefix when getting/setting options
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      * @return false if it already exists; if true, caller must save opts
      * @throws IOException on creation fail
      * @since 0.9.34 added altNames param
@@ -119,7 +119,7 @@ public class SSLClientUtil {
      * @param opts in/out, updated if rv is true, must contain PROP_KEY_ALIAS
      * @param optPfx add this prefix when getting/setting options
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
-     * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
+     *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      * @return success, if true, opts will have password properties added to be saved
      */
     private static boolean createKeyStore(File ks, Properties opts, String optPfx, Set<String> altNames) {
@@ -178,7 +178,7 @@ public class SSLClientUtil {
      * @param opts tunnel client options, read without a prefix for the keystore name,
      * @return factory, throws on all errors
      * @throws IOException GeneralSecurityExceptions are wrapped in IOE for convenience
-     *             the key password and the keystore password
+     *                     the key password and the keystore password
      */
     public static SSLServerSocketFactory initializeFactory(Properties opts) throws IOException {
         String ksPass = opts.getProperty(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);

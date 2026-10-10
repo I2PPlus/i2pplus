@@ -88,7 +88,8 @@ public class JobStats {
     /**
      * Create statistics tracker for a named job type.
      *
-     * @param name the name
+     * @param name the job type being tracked; names in {@link #HIGH_FREQ_JOBS}
+     *             get a larger recent-execution window
      */
     public JobStats(String name) {
         _job = name;
@@ -232,7 +233,7 @@ public class JobStats {
         else {return 0;}
     }
     /**
-     * Return the recentStats
+     * Summarise the executions that fell inside the recent tracking window.
      *
      * @return run counts and time totals restricted to the recent tracking
      *         window, with -1 for the maxima and minima if no run fell in it
@@ -314,7 +315,7 @@ public class JobStats {
             this.minPendingTime = minPendingTime;
         }
         /**
-         * Return the avgTime
+         * Average the run times of the executions in this window.
          *
          * @return the mean run time in milliseconds, or 0 if no runs were counted
          */
@@ -322,7 +323,7 @@ public class JobStats {
             return runs > 0 ? totalTime / (double) runs : 0;
         }
         /**
-         * Return the avgPendingTime
+         * Average the queue wait times of the executions in this window.
          *
          * @return the mean queue wait in milliseconds, or 0 if no runs were counted
          */

@@ -458,9 +458,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @param s the Sender to run
      * @param desc descriptive name for error messages
      * @return true if the body was submitted asynchronously, false if it ran
-     * inline or was aborted
+     *         inline or was aborted
      * @throws IOException part of the handoff API's signature; the body reports every
-     * failure through the Sender rather than throwing
+     *                     failure through the Sender rather than throwing
      * @since 0.9.71+
      */
     static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc)
@@ -480,9 +480,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @param desc descriptive name for error messages
      * @param onCompletion may be null; must not throw
      * @return true if the body was submitted asynchronously, false if it ran
-     * inline or was aborted
+     *         inline or was aborted
      * @throws IOException part of the handoff API's signature; the body reports every
-     * failure through the Sender rather than throwing
+     *                     failure through the Sender rather than throwing
      * @since 0.9.71+
      */
 
@@ -540,7 +540,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * a disabled window (&lt;= 0) never stalls.
      *
      * @param lastReadNanos Sender#getLastReadNanos(); 0 or negative if the
-     * worker has not started the copy yet
+     *                      worker has not started the copy yet
      * @param nowNanos current System.nanoTime()
      * @param stallNs stall window in nanoseconds; &lt;= 0 disables
      * @return true if the watchdog should close the streams and finish
@@ -636,7 +636,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @param writeAgeMs age of the last-write stamp
      * @param bytesTransferred bytes already moved by the body
      * @return one of {@link #STALL_SIDE_SOURCE}, {@link #STALL_SIDE_DESTINATION},
-     * or {@link #STALL_SIDE_INDETERMINATE}
+     *         or {@link #STALL_SIDE_INDETERMINATE}
      * @since 0.9.71+
      */
     static String classifyStalledSide(long readAgeMs, long writeAgeMs, long bytesTransferred) {
@@ -1112,7 +1112,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *
      * @param opts the client options; may be null
      * @return timeout in ms within [{@link #MIN_KEEPALIVE_TIMEOUT_MS},
-     * {@link #MAX_KEEPALIVE_TIMEOUT_MS}]
+     *         {@link #MAX_KEEPALIVE_TIMEOUT_MS}]
      * @since 0.9.71+
      */
     static long parseKeepAliveTimeout(Properties opts) {
@@ -1125,7 +1125,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *
      * @param opts the client options; may be null
      * @return timeout in ms within [{@link #MIN_HEADER_TIMEOUT_MS},
-     * {@link #MAX_HEADER_TIMEOUT_MS}]
+     *         {@link #MAX_HEADER_TIMEOUT_MS}]
      * @since 0.9.71+
      */
     static long parseHeaderTimeout(Properties opts) {
@@ -2143,7 +2143,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
           /**
            * @param tunnelId far-side label for transfer logs, e.g.
-           * {@code [skank / aanoquc2]}; may be null
+           *                 {@code [skank / aanoquc2]}; may be null
            * @since 0.9.71+
            */
           public CompressedRequestor(Socket webserver, I2PSocket browser, String headers,
@@ -2184,7 +2184,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * @param s the Sender to run
          * @param desc descriptive name for error messages
          * @throws IOException if the transfer goes idle for the stall timeout,
-         * fails, or the pool rejects the task
+         *                     fails, or the pool rejects the task
          */
         private void runOnIO(Sender s, String desc) throws IOException {
             ThreadPoolExecutor ioPool = _ioPool != null ? _ioPool.get() : null;
@@ -2724,7 +2724,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * @param in the input stream to read from
          * @param name descriptive name for logging
          * @param targetLabel far-side identity, e.g. {@code [skank / aanoquc2]};
-         * may be null or empty
+         *                    may be null or empty
          * @param log the logging instance
          * @since 0.9.71+
          */

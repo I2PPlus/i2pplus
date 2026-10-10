@@ -189,7 +189,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * @param off offset into the buffer to start writing from
      * @param size how many bytes of the buffer to write (may be 0)
      * @param forceIncrement even if the buffer is empty, increment the packetId
-     * so we get an ACK back
+     *                       so we get an ACK back
      * @return the packet sent
      */
     public PacketLocal send(byte[] buf, int off, int size, boolean forceIncrement) {
@@ -216,7 +216,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      * @param off offset into the buffer to start writing from
      * @param size how many bytes of the buffer to write (may be 0)
      * @param forceIncrement even if the buffer is empty, increment the packetId
-     * so we get an ACK back
+     *                       so we get an ACK back
      * @return the packet to be sent
      */
     private PacketLocal buildPacket(byte[] buf, int off, int size, boolean forceIncrement) {

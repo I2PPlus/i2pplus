@@ -25,9 +25,9 @@ class HopProcessor {
     private final IVValidator _validator;
 
     /**
-     * As of i2p 0.6, the tunnel crypto changed to encrypt the IV both before
-     * and after using it at each hop so as to prevent a certain type of replay/confirmation
-     * attack.
+     * Length in bytes of the per-hop IV preceding the message data (16).
+     * The tunnel crypto encrypts the IV both before and after using it at each
+     * hop so as to prevent a certain type of replay/confirmation attack.
      *
      * See: http://osdir.com/ml/network.i2p/2005-07/msg00031.html
      */
@@ -54,7 +54,7 @@ class HopProcessor {
      * @param orig IV+data of the message
      * @param offset index into orig where the IV begins
      * @param length how long after the offset does the IV+message go for?
-     * Should always be 1024 bytes.
+     *               Should always be 1024 bytes.
      * @param prev previous hop in the tunnel, or null if we are the gateway
      * @return true if the message was updated and valid, false if it was not.
      */

@@ -1171,7 +1171,7 @@ public class HostChecker {
     /**
      * Get ping result for a hostname
      *
-     * @param hostname hostname
+     * @param hostname the hostname whose stored ping result is wanted
      * @return ping result, or null if no test has been performed
      */
     public PingResult getPingResult(String hostname) {

@@ -904,7 +904,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      *
      * @param session the session that reported the error
      * @param message the error message
-     * @param error the error
+     * @param error the cause of the error, non-null
      */
     @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {

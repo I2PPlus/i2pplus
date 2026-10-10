@@ -154,7 +154,7 @@ public class PerfectStringHash implements Hash<String> {
      * Constructs a minimal perfect string hashing over the supplied strings.
      *
      * @param values an array of unique non-null strings that will be reordered such that <code>
-     *     hash(values[i]) == i</code>.
+     *               hash(values[i]) == i</code>.
      */
     public PerfectStringHash(final String[] values) {
         final int length = values.length;

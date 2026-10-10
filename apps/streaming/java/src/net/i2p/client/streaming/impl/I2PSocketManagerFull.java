@@ -278,7 +278,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      *
      * @return a new subsession, non-null
      * @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
-     * and different signing keys
+     *                         and different signing keys
      * @param opts subsession options if any, may be null
      * @since 0.9.21
      */
@@ -1035,7 +1035,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      * Tuner. The resize drains each dispatcher's shard queues before rebuilding,
      * so per-connection ordering and the never-drop guarantee are preserved.
      * @param val the new worker count, clamped to {@code [1, 8]}; 0 only updates
-     * the default for future managers
+     *            the default for future managers
      * @since 0.9.71+
      */
     public static void resizeReceiveWorkers(int val) {

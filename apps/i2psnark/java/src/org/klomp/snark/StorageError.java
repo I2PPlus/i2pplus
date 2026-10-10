@@ -68,7 +68,7 @@ public enum StorageError {
      * request and retry.
      *
      * @return true if the torrent must stop, false if the failed request may be
-     * dropped and retried
+     *         dropped and retried
      */
     public boolean isFatal() {
         return fatal;

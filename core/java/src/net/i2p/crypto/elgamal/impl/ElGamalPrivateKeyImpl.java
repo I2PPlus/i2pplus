@@ -40,7 +40,8 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /**
      * Create a copy of the given ElGamal private key.
      *
-     * @param key the key
+     * @param key the ElGamal private key, read for both its exponent and its
+     *            parameters
      */
     public ElGamalPrivateKeyImpl(ElGamalPrivateKey key) {
         this.x = key.getX();

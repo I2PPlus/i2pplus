@@ -217,7 +217,7 @@ public class SubscriptionRequest extends HTTPRequest {
      * Get the subscription ID from the SID header, dropping the uuid: prefix.
      *
      * @return the bare subscription ID, or an empty string if the header is
-     *     unset or carries no SID
+     *         unset or carries no SID
      */
     public String getSID() {
         // Thanks for Grzegorz Lehmann and Stefano Lenzi(12/06/04)

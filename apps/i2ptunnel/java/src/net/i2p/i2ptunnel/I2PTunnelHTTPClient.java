@@ -182,7 +182,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * over-admission is impossible even under heavy parallel load.
      *
      * @return true if the permit was acquired, false if the destination is at
-     * its connection limit
+     *         its connection limit
      * @since 0.9.71+
      */
     private static boolean tryAcquireConnPermit(Hash dest) {
@@ -350,7 +350,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
-     * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
+     * Create an HTTP proxy client on the given local port.
+     *
+     * Since 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
      * @param localPort the local port to bind to
@@ -361,7 +363,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @param notifyThis event dispatcher for notifications
      * @param tunnel the parent I2PTunnel instance
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     * valid config to contact the router
+     *                                  valid config to contact the router
      */
     public I2PTunnelHTTPClient(int localPort, Logging l, boolean ownDest,
                                String wwwProxy, EventDispatcher notifyThis,
@@ -2045,8 +2047,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
          * @param port remote port (0 = default)
          * @param permit connection permit this attempt leases
          * @return the attempt generation, or -1 when the slot is not idle
-         * (cancelled, full, or another attempt in flight); on -1 the
-         * caller keeps ownership of {@code permit}
+         *         (cancelled, full, or another attempt in flight); on -1 the
+         *         caller keeps ownership of {@code permit}
          * @since 0.9.71+
          */
         long open(Hash destHash, int port, Hash permit) {
@@ -2071,7 +2073,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
          * @param gen generation returned by {@link #open(Hash, int, Hash)}
          * @param sock the connected socket
          * @return true when installed (slot is now {@link State#FULL}),
-         * false when the attempt is stale or the slot retired
+         *         false when the attempt is stale or the slot retired
          * @since 0.9.71+
          */
         boolean install(long gen, I2PSocket sock) {
@@ -2096,7 +2098,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
          * @param destHash destination the caller needs
          * @param port remote port the caller needs (0 = default)
          * @return the installed socket, or null when the slot is not full or
-         * the installed socket was for a different destination/port
+         *         the installed socket was for a different destination/port
          * @since 0.9.71+
          */
         I2PSocket take(Hash destHash, int port) {
@@ -2177,7 +2179,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
          * attempt in flight and no socket installed.
          *
          * @return true when the slot is OPEN, no attempt is in flight, and no
-         * installed socket is held
+         *         installed socket is held
          * @since 0.9.71+
          */
         boolean isIdle() {
@@ -2310,7 +2312,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * @param emptyBudget max connect attempts for this request
      * @param requestId logging prefix id
      * @param quiet when true, suppress per-attempt Info logs (used for the
-     * staggered first race leg so the second leg's log is the pair marker)
+     *              staggered first race leg so the second leg's log is the pair marker)
      * @return a connected socket, or null if the budget / dead pool stopped us
      * @since 0.9.71+
      */
@@ -2426,7 +2428,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *
      * @param attempt the 1-based connect failure count (how many failures so far)
      * @return the delay in ms: 0 for attempt &lt;= 0, else 1000 &lt;&lt; (attempt-1)
-     * bounded to 8000
+     *         bounded to 8000
      * @since 0.9.71+
      */
     static long getConnectRetryDelayMs(int attempt) {
@@ -2662,7 +2664,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      * The hostname of the given host.
      * @return b32hash.b32.i2p, or "i2p" on lookup failure.
-     * Prior to 0.7.12, returned b64 key
+     *         Prior to 0.7.12, returned b64 key
      */
     private String getHostName(String host) {
         if (host == null) {return null;}
@@ -2789,8 +2791,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      *
      * @param query an ENCODED query, removed if null
      * @return rv[0] is ENCODED query with helper removed, non-null but possibly empty;
-     * rv[1] is DECODED helper value, non-null but possibly empty;
-     * rv null if no helper present
+     *         rv[1] is DECODED helper value, non-null but possibly empty;
+     *         rv null if no helper present
      */
     private static String[] removeHelper(String query) {
         int keystart = 0;

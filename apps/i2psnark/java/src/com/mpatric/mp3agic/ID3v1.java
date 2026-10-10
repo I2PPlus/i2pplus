@@ -75,7 +75,7 @@ public interface ID3v1 {
     /**
      * Set year.
      *
-     * @param year year
+     * @param year the release year stored in the 4-byte ID3v1 year field
      */
     void setYear(String year);
 
@@ -110,7 +110,7 @@ public interface ID3v1 {
     /**
      * Set comment.
      *
-     * @param comment comment
+     * @param comment the free-text comment stored in the ID3v1 comment field
      */
     void setComment(String comment);
 

@@ -36,7 +36,7 @@ import net.i2p.util.VersionComparator;
  * Caller must delete file when done.
  *
  * @since 0.9.19 modified from BundleRouterInfos in installer/tools,
- * moved from routerconsole to net.i2p.router.networkdb.reseed in 0.9.34
+ *        moved from routerconsole to net.i2p.router.networkdb.reseed in 0.9.34
  */
 public class ReseedBundler {
 
@@ -67,7 +67,7 @@ public class ReseedBundler {
      * @param count how many router infos to bundle; at least MINIMUM are required unless fewer qualify
      * @return the freshly written zip in the router temp directory, which the caller must move or delete
      * @throws IOException if no eligible router infos were found, if fewer than the requested count qualified,
-     * or if the temp file could not be written
+     *                     or if the temp file could not be written
      */
     @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
     public File createZip(int count) throws IOException {

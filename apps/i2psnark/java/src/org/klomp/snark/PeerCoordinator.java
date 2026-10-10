@@ -705,7 +705,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Returns the rate in Bps over last complete CHECK_PERIOD seconds.
      *
      * @return the upload rate in bytes per second over the most recent complete
-     *     CHECK_PERIOD, or 0 when halted or before the first sample is recorded
+     *         CHECK_PERIOD, or 0 when halted or before the first sample is recorded
      */
     public long getCurrentUploadRate() {
         if (halted) {
@@ -724,8 +724,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      *
      * @param array rolling byte-count samples, most recent entry first, ending at a negative value
      * @return the weighted average rate in bytes per second, weighting each
-     *     sample more heavily the more recent it is, or 0 when the ring holds
-     *     no complete sample
+     *         sample more heavily the more recent it is, or 0 when the ring holds
+     *         no complete sample
      */
     static long getRate(long[] array) {
         long rate = 0;
@@ -822,7 +822,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Inbound. Not halted, peers &lt; max.
      *
      * @return true while the coordinator is running and holds fewer than the
-     *     configured maximum peer connections, so another inbound may be accepted
+     *         configured maximum peer connections, so another inbound may be accepted
      * @since 0.9.1
      */
     public boolean needPeers() {
@@ -833,8 +833,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Outbound. Not halted, peers &lt; max, and need pieces.
      *
      * @return true while the coordinator is running, holds at least two
-     *     connections below the maximum so new peers can displace stale ones,
-     *     and either pieces are still wanted or a comment request is due
+     *         connections below the maximum so new peers can displace stale ones,
+     *         and either pieces are still wanted or a comment request is due
      * @since 0.9.1
      */
     public boolean needOutboundPeers() {
@@ -1266,7 +1266,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * pieces are wanted.
      *
      * @param record if true, actually record in our data structures that we gave the request to
-     *     this peer. If false, do not update the data structures.
+     *               this peer. If false, do not update the data structures.
      * @since 0.8.2
      */
     private Piece wantPiece(Peer peer, BitField havePieces, boolean record) {
@@ -1281,7 +1281,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * allowed fast pieces from a peer that chokes us.
      *
      * @param record if true, actually record in our data structures that we gave the request to
-     *     this peer. If false, do not update the data structures.
+     *               this peer. If false, do not update the data structures.
      * @param allowed the pieces servable while choked, or null for no restriction
      * @since 0.9.71+
      */
@@ -1849,7 +1849,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * <p>Also mark the piece unrequested if this peer was the only one.
      *
      * @param peer partials, must include the zero-offset (empty) ones too. No dup pieces. len field
-     *     in Requests is ignored.
+     *             in Requests is ignored.
      * @since 0.8.2
      */
     @Override
@@ -2490,7 +2490,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * the total upload limit.
      *
      * @return the current uploader count plus one, capped at MAX_UPLOADERS, or one
-     *     less than the current count while Snark reports the total upload limit exceeded
+     *         less than the current count while Snark reports the total upload limit exceeded
      */
     public int allowedUploaders() {
         int up = uploaders.get();

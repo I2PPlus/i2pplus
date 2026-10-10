@@ -105,7 +105,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      * No stats updated here, caller should handle stats.
      *
      * @param messageID message identifier added to the recently-completed
-     *        bloom filter
+     *                  bloom filter
      * @return true if this message was a duplicate
      * @since 0.9.54
      */
@@ -121,7 +121,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      * No stats updated here, caller should handle stats.
      *
      * @param messageID message identifier tested against the
-     *        recently-completed bloom filter
+     *                  recently-completed bloom filter
      * @return true if this message was recently received.
      * @since 0.9.54
      */

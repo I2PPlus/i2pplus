@@ -80,7 +80,7 @@ public class RouterWatchdog implements Runnable {
      * a hung job queue.
      *
      * @return true if job queue appears healthy, false if a job has been
-     * running longer than the maximum allowed time
+     *         running longer than the maximum allowed time
      */
     public boolean verifyJobQueueLiveliness() {
         long when = _context.jobQueue().getLastJobBegin();

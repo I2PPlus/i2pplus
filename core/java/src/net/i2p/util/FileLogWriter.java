@@ -43,7 +43,7 @@ class FileLogWriter extends LogWriter {
     /**
      * FileLogWriter.
      * @param manager the LogManager this writer drains records from; its
-     *        configuration supplies the log directory and rotation settings
+     *                configuration supplies the log directory and rotation settings
      */
     public FileLogWriter(LogManager manager) {
         super(manager);
@@ -71,7 +71,7 @@ class FileLogWriter extends LogWriter {
      *
      * @param dir the directory to test
      * @return true if the group has execute/search permission, or if permissions
-     * cannot be determined
+     *         cannot be determined
      */
     static boolean isGroupTraversable(File dir) {
         if (!SecureFileOutputStream.canSetPerms() || !SecureDirectory.isNotWindows)

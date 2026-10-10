@@ -46,7 +46,8 @@ public class SessionTag {
     }
 
     /**
-     * As of 0.9.44, non-null.
+     * Create a tag over a caller-supplied value, which must be exactly
+     * BYTE_LENGTH bytes long.
      * @param val as of 0.9.44, non-null
      */
     public SessionTag(byte[] val) {

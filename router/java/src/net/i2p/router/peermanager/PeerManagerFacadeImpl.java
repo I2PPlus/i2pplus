@@ -31,7 +31,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     /**
      * PeerManagerFacadeImpl.
      * @param ctx the router context whose log manager, profile persistence
-     *        store and peer tester this facade will use
+     *            store and peer tester this facade will use
      */
     public PeerManagerFacadeImpl(RouterContext ctx) {
         _context = ctx;

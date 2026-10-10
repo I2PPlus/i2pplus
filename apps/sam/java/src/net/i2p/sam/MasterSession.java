@@ -63,7 +63,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * @param dgServer the datagram server that raw and datagram subsessions register with
      * @param handler the SAMv3 handler this session answers commands from
      * @param props the MASTER session options, which may not include any of the
-     *        subsession-only keys such as PORT or PROTOCOL
+     *              subsession-only keys such as PORT or PROTOCOL
      * @throws IOException declared by the SAMv3StreamSession constructor called
      *                     here, but not raised by this body
      * @throws DataFormatException likewise declared but not raised by this body
@@ -110,7 +110,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * @param nick unique nickname for this subsession
      * @param style protocol style: "STREAM", "DATAGRAM", or "RAW"
      * @param props session properties (PORT required for DATAGRAM/RAW;
-     * LISTEN_PORT, LISTEN_PROTOCOL optional)
+     *              LISTEN_PORT, LISTEN_PROTOCOL optional)
      * @return null on success, or a descriptive error message
      */
     public synchronized String add(String nick, String style, Properties props) {

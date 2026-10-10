@@ -35,7 +35,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
         setMessageExpiration(context.clock().now() + EXPIRATION_PERIOD);
     }
     /**
-     * Return the tunnelId
+     * Return the tunnel to deliver this message to.
      * @return the ID of the tunnel to deliver to, null until setTunnelId has been called
      */
 

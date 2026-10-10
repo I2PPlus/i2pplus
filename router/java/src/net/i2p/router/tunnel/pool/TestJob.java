@@ -1192,7 +1192,7 @@ public class TestJob extends JobImpl {
      * therefore never qualify.
      *
      * @param lastTransferMs when the tunnel last carried production traffic,
-     *        0 if never
+     *                       0 if never
      * @param nowMs current time in ms
      * @return true when the traffic is recent enough to shield a test failure
      *  @since 0.9.71+
@@ -3833,7 +3833,7 @@ public class TestJob extends JobImpl {
      *  ebb line leaves most of the in-flight cap free for first tests.
      *
      *  @param lastTraffic ms timestamp of the tunnel's last real traffic,
-     *         or &lt;= 0 when it has carried none
+     *                     or &lt;= 0 when it has carried none
      *  @param now current time in ms
      *  @param status the tunnel's current test status
      *  @param inFlight tests currently dispatched to the network (all pools)
@@ -3899,7 +3899,7 @@ public class TestJob extends JobImpl {
      *
      * @param partner the tunnel the round was routed through, may be null
      * @param partnerFallback true when the partner came from the exploratory
-     *         pool because the paired pool could not supply one
+     *                        pool because the paired pool could not supply one
      * @return true to defer the round rather than count the failure
      * @since 0.9.71+
      */
@@ -4290,7 +4290,7 @@ public class TestJob extends JobImpl {
      * the period itself, so a short window never strands a selector.
      *
      * @param successTimeAvgMs average tunnel.testSuccessTime over the last minute,
-     *                          NaN if never measured
+     *                         NaN if never measured
      * @param sendProcessingMs average transport.sendProcessingTime, NaN if unknown
      * @param outLen outbound tunnel length, &lt;= 0 if no outbound tunnel
      * @param replyLen reply tunnel length, &lt;= 0 if no reply tunnel
@@ -4448,10 +4448,10 @@ public class TestJob extends JobImpl {
      *
      *  @param asap expedite the retest (failing tunnels)
      *  @param deferWhileActive when true, replace the delay with the bounded
-     *         ebb retry from {@link #activeGoodDeferDelay}, so the job comes
-     *         back to re-check contention shortly instead of vanishing for
-     *         the full traffic window — a long push here is what used to let
-     *         the tunnel expire out from under the retest chain
+     *                          ebb retry from {@link #activeGoodDeferDelay}, so the job comes
+     *                          back to re-check contention shortly instead of vanishing for
+     *                          the full traffic window — a long push here is what used to let
+     *                          the tunnel expire out from under the retest chain
      *  @return true if the retest was scheduled
      *  @since 0.9.71+
      */

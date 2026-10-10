@@ -1181,7 +1181,7 @@ public class Banlist {
      *
      * @param peer the router hash to check
      * @return age of the standing ban in ms, or -1 if the peer is not
-     * currently banlisted or the entry predates this field
+     *         currently banlisted or the entry predates this field
      * @since 0.9.71+
      */
     public long getBanAge(Hash peer) {
@@ -1202,7 +1202,7 @@ public class Banlist {
      *
      * @param peer the router hash to check
      * @return the recorded cause code or reason, or null when the peer is not
-     * currently banlisted or no cause was recorded
+     *         currently banlisted or no cause was recorded
      * @since 0.9.71+
      */
     public String getBanCause(Hash peer) {

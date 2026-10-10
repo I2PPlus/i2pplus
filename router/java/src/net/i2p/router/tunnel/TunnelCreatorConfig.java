@@ -449,7 +449,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *
      * @param bytes bytes counted against the tunnel
      * @param realTraffic true when this is production traffic, false for
-     * test or synthetic traffic
+     *                    test or synthetic traffic
      * @since 0.9.71+
      */
     public void incrementVerifiedBytesTransferred(int bytes, boolean realTraffic) {
@@ -476,7 +476,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * are pure sums, so bulk crediting equals per-fragment crediting.
      *
      * @param now wall clock at the call site, already compared against the
-     * coalesce deadline so the fast path never gets here
+     *            coalesce deadline so the fast path never gets here
      * @since 0.9.71+
      */
     private synchronized void coalescePeakThroughput(long now) {
@@ -678,7 +678,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *
      * @param raw stored soft failure count, &lt;= 0 means none
      * @param lastSoftFailure wall-clock time of the most recent soft
-     * failure (ms), &lt;= 0 means none
+     *                        failure (ms), &lt;= 0 means none
      * @param now current wall-clock time (ms)
      * @param windowMs window in which soft failures accumulate (ms)
      * @return the count to act on: 0 once the streak has aged out
@@ -700,7 +700,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *
      * @param raw stored first-hop failure count, &lt;= 0 means none
      * @param lastCounted wall-clock time of the most recent counted failure
-     * (ms), &lt;= 0 means none
+     *                    (ms), &lt;= 0 means none
      * @param now current wall-clock time (ms)
      * @param windowMs window in which first-hop failures accumulate (ms)
      * @return the count to act on: 0 once the streak has aged out
@@ -717,12 +717,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *
      * @param raw stored first-hop failure count, &lt;= 0 means none
      * @param lastCounted wall-clock time of the most recent counted failure
-     * (ms), &lt;= 0 means none
+     *                    (ms), &lt;= 0 means none
      * @param now current wall-clock time (ms)
      * @param spacingMs minimum spacing between counted failures (ms)
      * @param windowMs window in which first-hop failures accumulate (ms)
      * @return the new count (&gt;= 1), or -1 when this failure is a burst
-     * duplicate inside the spacing interval and must not be counted
+     *         duplicate inside the spacing interval and must not be counted
      * @since 0.9.71+
      */
     static int nextFirstHopFailureCount(int raw, long lastCounted, long now,
@@ -748,12 +748,12 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * spaced by {@link #FIRST_HOP_FAILURE_SPACING_MS}.
      *
      * @return -1 if not applicable (inbound or zero-hop tunnel), 0 if this
-     * failure changed nothing (inside the spacing interval, or the
-     * threshold was already reached and escalated), otherwise the
-     * current streak; a return value of
-     * {@link #FIRST_HOP_FAILURE_THRESHOLD} or more means the caller
-     * must fail the tunnel, and it is only handed that signal once
-     * until {@link #clearFirstHopFailures()} re-arms it
+     *         failure changed nothing (inside the spacing interval, or the
+     *         threshold was already reached and escalated), otherwise the
+     *         current streak; a return value of
+     *         {@link #FIRST_HOP_FAILURE_THRESHOLD} or more means the caller
+     *         must fail the tunnel, and it is only handed that signal once
+     *         until {@link #clearFirstHopFailures()} re-arms it
      * @since 0.9.71+
      */
     public int recordFirstHopSendFailure() {
@@ -855,7 +855,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * (PooledTunnelCreatorConfig) also notify the pool of the failure.
      *
      * @since 0.9.71+ (moved up from PooledTunnelCreatorConfig to break the
-     * tunnel -> pool package cycle)
+     *        tunnel -> pool package cycle)
      */
     public void tunnelFailedFirstHop() {
         if (isInbound() || getLength() <= 1) {return;}
@@ -880,7 +880,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * {@code PooledTunnelCreatorConfig}.
      *
      * @param streak the current streak, from 1 up to and including
-     * {@link #FIRST_HOP_FAILURE_THRESHOLD}
+     *               {@link #FIRST_HOP_FAILURE_THRESHOLD}
      * @since 0.9.71+
      */
     public void firstHopSendFailureStreak(int streak) {

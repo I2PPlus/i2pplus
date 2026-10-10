@@ -28,8 +28,8 @@ class OutboundGatewayProcessor {
     }
 
     /**
-     * Since we are the outbound gateway, pick a random IV and wrap the preprocessed
-     * data so that it will be exposed at the endpoint.
+     * Pick a random IV and wrap the preprocessed
+     * data so that it will be exposed at the endpoint - we are the outbound gateway.
      *
      * @param orig original data with an extra 16 byte IV prepended.
      * @param offset index into the array where the extra 16 bytes (IV) begins

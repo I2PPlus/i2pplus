@@ -52,8 +52,8 @@ public interface DHState extends Destroyable, Cloneable {
      * @param key The buffer containing the public key.
      * @param offset The first offset in the buffer that contains the key.
      *
-     * If this object previously held a key pair, then this function
-     * will change it into a public key only object.
+     *               If this object previously held a key pair, then this function
+     *               will change it into a public key only object.
      */
     void setPublicKey(byte[] key, int offset);
 
@@ -71,8 +71,8 @@ public interface DHState extends Destroyable, Cloneable {
      * @param key The buffer containing the [rivate key.
      * @param offset The first offset in the buffer that contains the key.
      *
-     * If this object previously held only a public key, then
-     * this function will change it into a key pair.
+     *               If this object previously held only a public key, then
+     *               this function will change it into a key pair.
      *
      * @deprecated use setKeys()
      */
@@ -107,7 +107,7 @@ public interface DHState extends Destroyable, Cloneable {
      * Determine if this object contains a public key.
      *
      * @return Returns true if this object contains a public key,
-     * or false if the public key has not yet been set.
+     *         or false if the public key has not yet been set.
      */
     boolean hasPublicKey();
 
@@ -115,7 +115,7 @@ public interface DHState extends Destroyable, Cloneable {
      * Determine if this object contains a private key.
      *
      * @return Returns true if this object contains a private key,
-     * or false if the private key has not yet been set.
+     *         or false if the private key has not yet been set.
      */
     boolean hasPrivateKey();
 
@@ -123,7 +123,7 @@ public interface DHState extends Destroyable, Cloneable {
      * Determine if the public key in this object is the special null value.
      *
      * @return Returns true if the public key is the special null value,
-     * or false otherwise.
+     *         or false otherwise.
      */
     boolean isNullPublicKey();
 
@@ -131,7 +131,7 @@ public interface DHState extends Destroyable, Cloneable {
      * Determine if this object contains an optional encoded public key.
      *
      * @return Returns true if this object contains an encoded public key,
-     * or false if the public key has not yet been set.
+     *         or false if the public key has not yet been set.
      *
      * @since 0.9.44
      */
@@ -155,7 +155,7 @@ public interface DHState extends Destroyable, Cloneable {
      * @param publicDH Object that contains the public key for the calculation.
      *
      * @throws IllegalArgumentException The publicDH object is not the same
-     * type as this object, or one of the objects does not contain a valid key.
+     *                                  type as this object, or one of the objects does not contain a valid key.
      */
     void calculate(byte[] sharedKey, int offset, DHState publicDH);
 
@@ -165,7 +165,7 @@ public interface DHState extends Destroyable, Cloneable {
      * @param other The other DH object to copy from
      *
      * @throws IllegalStateException The other DH object does not have
-     * the same type as this object.
+     *                               the same type as this object.
      */
     void copyFrom(DHState other);
 

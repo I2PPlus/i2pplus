@@ -428,7 +428,7 @@ public class WebMail extends HttpServlet {
      * @param a one of the two strings to compare, may be null
      * @param b the string compared against a, may be null
      * @return true if both are null or both non-null and equal, so a null
-     * operand never throws
+     *         operand never throws
      */
     public static boolean safeEquals(String a, String b) {
         return a == null ? b == null : a.equals(b);
@@ -476,7 +476,8 @@ public class WebMail extends HttpServlet {
      *
      * @param name
      * @param label
-     * @return the string
+     * @return the HTML markup for the header cell: the label followed by the
+     *         up and down image links
      */
     private static String sortHeader(String name, String label, String imgPath,
                                      String currentName, SortOrder currentOrder, int page, String folder) {
@@ -1518,7 +1519,7 @@ public class WebMail extends HttpServlet {
      * @param sessionObject
      * @param request
      * @return the next UIDL to see (if PREV/NEXT pushed), or null (if REALLYDELETE pushed), or showUIDL,
-     * or "delete" (if DELETE pushed). If null, next state should be LIST.
+     *         or "delete" (if DELETE pushed). If null, next state should be LIST.
      */
     private static String processMessageButtons(SessionObject sessionObject, String showUIDL, RequestWrapper request) {
         if (buttonPressed(request, PREV)) {
@@ -2583,7 +2584,7 @@ public class WebMail extends HttpServlet {
      * Determine if a user-provided override.css file is active
      *
      * @return true if an override.css exists in the current theme's
-     * susimail directory
+     *         susimail directory
      * @since 0.9.65+
      */
     public boolean isOverrideCssActive() {

@@ -42,9 +42,9 @@ public class UserAgentTools {
      * Extract the browser and OS fields from a User-Agent header.
      *
      * @param userAgent the raw header value, which is ignored here because NDT
-     *        reports unknown for every field it does not recognize
+     *                  reports unknown for every field it does not recognize
      * @return a three-element array of browser name, browser version and OS name,
-     * each "?" when the value is not one NDT knows
+     *         each "?" when the value is not one NDT knows
      */
     public static String[] getBrowser(String userAgent) {return getArray("?", "?", "?");}
 }

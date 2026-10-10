@@ -163,7 +163,7 @@ public class BloomFilterIVValidator implements IVValidator {
      *
      * @param m the new exponent, 0 to switch to the memory-proportional set
      * @param KBps the configured share in KBps, not consulted here; the set's
-     * cap comes from the heap budget
+     *             cap comes from the heap budget
      * @since 0.9.71+
      */
     public void reconfigure(int m, int KBps) {
@@ -226,7 +226,7 @@ public class BloomFilterIVValidator implements IVValidator {
          * @param validator the validator this policy retunes
          * @param ctx router context, held for the sizer but not read by it
          * @param KBps configured share bandwidth in KBps, retained for
-         * reconfigure()
+         *             reconfigure()
          */
         public IVFilterSizer(BloomFilterIVValidator validator, RouterContext ctx, int KBps) {
             _validator = validator;

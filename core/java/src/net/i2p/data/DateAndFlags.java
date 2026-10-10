@@ -110,7 +110,7 @@ public class DateAndFlags extends DataStructureImpl {
     /**
      * Set the date from a Date object.
      *
-     * @param date the date
+     * @param date the Date to take the milliseconds from
      */
     public void setDate(Date date) {
         _date = date.getTime();

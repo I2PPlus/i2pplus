@@ -717,13 +717,13 @@ public class BlockfileNamingService extends DummyNamingService {
      *
      * @param hostname upper/lower case ok
      * @param lookupOptions If non-null and contains the key "list", lookup in
-     * that list only, otherwise all lists
+     *                      that list only, otherwise all lists
      * @param storedOptions output parameter, may be null. If non-null, the
-     * properties stored with the entry ("a" date added, "s"
-     * source, and any options given when the name was added)
-     * are added to it when the name is found. A non-null value
-     * also disables the Base32 cache, since the cache does not
-     * retain the stored properties.
+     *                      properties stored with the entry ("a" date added, "s"
+     *                      source, and any options given when the name was added)
+     *                      are added to it when the name is found. A non-null value
+     *                      also disables the Base32 cache, since the cache does not
+     *                      retain the stored properties.
      * @return the destination, or null if not found
      */
     @Override
@@ -749,7 +749,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Single dest version lookup.
      *
      * @param lookupOptions If non-null and contains the key "list", lookup in
-     * that list only, otherwise all lists
+     *                      that list only, otherwise all lists
      * @param storedOptions If non-null, stored properties will be added
      * @return the destination, or null if not found
      */
@@ -810,9 +810,9 @@ public class BlockfileNamingService extends DummyNamingService {
      * Multiple dests version lookup.
      * DB MUST be version 4.
      *
-     * @param hostname the hostname
+     * @param hostname the host to look up, in one of the configured lists
      * @param lookupOptions If non-null and contains the key "list", lookup in
-     * that list only, otherwise all lists
+     *                      that list only, otherwise all lists
      * @param storedOptions output list for stored properties, may be null
      * @return non-null list of destinations, or null if not found
      * @since 0.9.26
@@ -879,8 +879,8 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * @param options If non-null and contains the key "list", add to that list
-     * (default "hosts.txt")
-     * Use the key "s" for the source
+     *                (default "hosts.txt")
+     *                Use the key "s" for the source
      */
     @Override
     public boolean put(String hostname, Destination d, Properties options) {
@@ -889,10 +889,10 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * @param options If non-null and contains the key "list", add to that list
-     * (default "hosts.txt")
-     * Use the key "s" for the source.
-     * Key "a" will be added with the current time, unless
-     * "a" is present in options.
+     *                (default "hosts.txt")
+     *                Use the key "s" for the source.
+     *                Key "a" will be added with the current time, unless
+     *                "a" is present in options.
      */
     @Override
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
@@ -1036,7 +1036,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * @param options If non-null and contains the key "list", remove
-     * from that list (default "hosts.txt", NOT all lists)
+     *                from that list (default "hosts.txt", NOT all lists)
      */
     @Override
     public boolean remove(String hostname, Properties options) {
@@ -1085,15 +1085,15 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * @param options If non-null and contains the key "list", get
-     * from that list (default "hosts.txt", NOT all lists)
-     * Key "skip": skip that many entries
-     * Key "limit": max number to return
-     * Key "search": return only those matching substring
-     * Key "startsWith": return only those starting with
-     * ("[0-9]" allowed)
-     * Key "beginWith": start here in the iteration
-     * Don't use both startsWith and beginWith.
-     * Search, startsWith, and beginWith values must be lower case.
+     *                from that list (default "hosts.txt", NOT all lists)
+     *                Key "skip": skip that many entries
+     *                Key "limit": max number to return
+     *                Key "search": return only those matching substring
+     *                Key "startsWith": return only those starting with
+     *                ("[0-9]" allowed)
+     *                Key "beginWith": start here in the iteration
+     *                Don't use both startsWith and beginWith.
+     *                Search, startsWith, and beginWith values must be lower case.
      * @return the entries
      */
     @Override
@@ -1183,15 +1183,15 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * @param options If non-null and contains the key "list", get
-     * from that list (default "hosts.txt", NOT all lists)
-     * Key "skip": skip that many entries
-     * Key "limit": max number to return
-     * Key "search": return only those matching substring
-     * Key "startsWith": return only those starting with
-     * ("[0-9]" allowed)
-     * Key "beginWith": start here in the iteration
-     * Don't use both startsWith and beginWith.
-     * Search, startsWith, and beginWith values must be lower case.
+     *                from that list (default "hosts.txt", NOT all lists)
+     *                Key "skip": skip that many entries
+     *                Key "limit": max number to return
+     *                Key "search": return only those matching substring
+     *                Key "startsWith": return only those starting with
+     *                ("[0-9]" allowed)
+     *                Key "beginWith": start here in the iteration
+     *                Don't use both startsWith and beginWith.
+     *                Search, startsWith, and beginWith values must be lower case.
      * @return the base64 entries
      * @since 0.9.20
      */
@@ -1282,11 +1282,11 @@ public class BlockfileNamingService extends DummyNamingService {
      * Caller must close writer.
      *
      * @param options If non-null and contains the key "list", get
-     * from that list (default "hosts.txt", NOT all lists)
-     * Key "search": return only those matching substring
-     * Key "startsWith": return only those starting with
-     * ("[0-9]" allowed)
-     * Key "beginWith": start here in the iteration
+     *                from that list (default "hosts.txt", NOT all lists)
+     *                Key "search": return only those matching substring
+     *                Key "startsWith": return only those starting with
+     *                ("[0-9]" allowed)
+     *                Key "beginWith": start here in the iteration
      * @since 0.9.30 override NamingService to add stored authentication strings
      */
     @Override
@@ -1411,15 +1411,15 @@ public class BlockfileNamingService extends DummyNamingService {
      * Broken prior to 0.9.62, would only return one name.
      *
      * @param options If non-null and contains the key "list", get
-     * from that list (default "hosts.txt", NOT all lists)
-     * Key "skip": skip that many entries
-     * Key "limit": max number to return
-     * Key "search": return only those matching substring
-     * Key "startsWith": return only those starting with
-     * ("[0-9]" allowed)
-     * Key "beginWith": start here in the iteration
-     * Don't use both startsWith and beginWith.
-     * Search, startsWith, and beginWith values must be lower case.
+     *                from that list (default "hosts.txt", NOT all lists)
+     *                Key "skip": skip that many entries
+     *                Key "limit": max number to return
+     *                Key "search": return only those matching substring
+     *                Key "startsWith": return only those starting with
+     *                ("[0-9]" allowed)
+     *                Key "beginWith": start here in the iteration
+     *                Don't use both startsWith and beginWith.
+     *                Search, startsWith, and beginWith values must be lower case.
      * @return the names
      * @since 0.9.20
      */
@@ -1553,7 +1553,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
     /**
      * @param options If non-null and contains the key "list", return the
-     * size of that list (default "hosts.txt", NOT all lists)
+     *                size of that list (default "hosts.txt", NOT all lists)
      */
     @Override
     public int size(Properties options) {
@@ -2022,8 +2022,8 @@ public class BlockfileNamingService extends DummyNamingService {
      *
      * @param props source may be null
      * @throws DataFormatException if any key string is over 255 bytes long,
-     * if any value string is over 4096 bytes long, or if the total length
-     * (not including the two length bytes) is greater than 65535 bytes.
+     *                             if any value string is over 4096 bytes long, or if the total length
+     *                             (not including the two length bytes) is greater than 65535 bytes.
      * @since 0.9.26
      */
     private static void writeProperties(ByteArrayOutputStream rawStream, Properties p)
@@ -2088,7 +2088,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *
      * @param out stream to write string
      * @param string to write out: null strings are valid, but strings of excess length will
-     * cause a DataFormatException to be thrown
+     *               cause a DataFormatException to be thrown
      * @throws DataFormatException if the string is not valid
      * @throws IOException if there is an IO error writing the string
      */

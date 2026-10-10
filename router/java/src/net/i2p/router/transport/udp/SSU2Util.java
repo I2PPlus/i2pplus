@@ -297,7 +297,7 @@ final class SSU2Util {
      *
      * @param code one of the REASON_* constants
      * @return a short phrase naming the termination reason, or a string naming the
-     *     unknown code when it is not one of the REASON_* constants
+     *         unknown code when it is not one of the REASON_* constants
      */
     public static String terminationCodeToString(int code) {
         switch (code) {

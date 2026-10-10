@@ -83,7 +83,7 @@ public interface I2PSessionMuxedListener extends I2PSessionListener {
      * Notify the client that some error occurred.
      * All registered listeners will be called.
      *
-     * @param session the session
+     * @param session the session that reported the error
      * @param message a human-readable description of the error
      * @param error the cause, non-null
      */

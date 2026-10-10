@@ -750,7 +750,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * with the P-R-G redirect (or G-R-G to hide params from the address bar).
      *
      * @return true if a form was submitted and the response is complete;
-     * false when there is no nonce and normal rendering should proceed
+     *         false when there is no nonce and normal rendering should proceed
      * @since 0.9.71+
      */
     private boolean handleFormSubmission(HttpServletRequest req, HttpServletResponse resp,
@@ -2311,7 +2311,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Append a single hidden form input.
      *
      * @param esc true to HTML-escape the value (free-text fields such as
-     * search), false to strip HTML (numeric and enum fields)
+     *            search), false to strip HTML (numeric and enum fields)
      */
     private static void appendHiddenInput(StringBuilder buf, String name, String value, boolean esc) {
         buf.append("<input type=hidden name=").append(name).append(" value=\"")
@@ -3082,8 +3082,8 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param snark the torrent whose .torrent file should be removed
      * @return true when no .torrent file remains, so the caller may proceed to
-     * remove downloaded data; false when the torrent is still present
-     * (magnet deleted, or the file could not be removed)
+     *         remove downloaded data; false when the torrent is still present
+     *         (magnet deleted, or the file could not be removed)
      * @since 0.9.71+
      */
     private boolean unlinkTorrentFile(Snark snark) {
@@ -4321,7 +4321,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Generates HTML status string and status code for a Snark based on its state and peer info.
      * Classification is delegated to {@link #classifyStatus}; this method only renders.
-     * @param snark the Snark instance
+     * @param snark the torrent whose state and peers are being rendered
      * @param curPeers current connected peers
      * @param knownPeers total known peers
      * @param downBps download speed
@@ -5294,8 +5294,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param out non-null response writer
      * @param buf staging buffer, emptied regardless of outcome
      * @return false if the client disconnected (writer error); callers should
-     * skip further drains, rendering continues only to keep counters
-     * and closing markup consistent
+     *         skip further drains, rendering continues only to keep counters
+     *         and closing markup consistent
      */
     static boolean drainTo(PrintWriter out, StringBuilder buf) {
         out.append(buf);
@@ -5335,10 +5335,10 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param postParams map of POST parameters or null if not a POST
      * @param sortParam the file sort key from the request, or null
      * @param out the response writer for streamed mode, or null to buffer
-     * everything into the returned string
+     *            everything into the returned string
      * @return buffered mode: the full page; streamed mode: the tail remaining
-     * after the last drained chunk (possibly empty); null only when
-     * postParams != null (P-R-G)
+     *         after the last drained chunk (possibly empty); null only when
+     *         postParams != null (P-R-G)
      * @throws IOException if the response writer or resource lookups fail
      * @since 0.7.14
      */
@@ -5589,7 +5589,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param buf target buffer
      * @param directory decoded directory display name for the page title,
-     * escaped here; may be empty
+     *                  escaped here; may be empty
      * @since 0.9.71+
      */
     private void renderHeader(StringBuilder buf, String directory) {

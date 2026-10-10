@@ -40,7 +40,7 @@ public class ReseedHandler extends HelperBase {
      * storeSession MUST be called first
      *
      * @param nonce the submitted nonce, matched against the session and then the
-     *        system property; a null value is ignored
+     *              system property; a null value is ignored
      * @since 0.9.69
      */
     public void setReseedNonce(String nonce) {

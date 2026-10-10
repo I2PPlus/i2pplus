@@ -260,9 +260,9 @@ class OutboundMessageFragments {
      * the retry into a spin - the bug {@link #foldSendDelay} documents.
      *
      * @return the packets to send, or null when there is nothing to send. Null does not
-     * mean shutdown: a round can allocate states whose fragments are all already
-     * acked, leaving {@link #preparePackets} with nothing to push, and that case
-     * is transient. Callers must treat null as "retry later" and must not spin.
+     *         mean shutdown: a round can allocate states whose fragments are all already
+     *         acked, leaving {@link #preparePackets} with nothing to push, and that case
+     *         is transient. Callers must treat null as "retry later" and must not spin.
      */
     public List<UDPPacket> getNextVolley() {
         PeerState peer = null;
@@ -387,9 +387,9 @@ class OutboundMessageFragments {
  * @param states the states a peer offered, never null here
  * @param peer the peer they belong to
  * @return the packets to send, or null when there is nothing to send: null states
- * or peer, or every offered state pushed no fragment because all of its
- * fragments are already acked. The last case is transient, which is why
- * {@link #getNextVolley} can return null without being shut down.
+ *         or peer, or every offered state pushed no fragment because all of its
+ *         fragments are already acked. The last case is transient, which is why
+ *         {@link #getNextVolley} can return null without being shut down.
  */
     private List<UDPPacket> preparePackets(List<OutboundMessageState> states, PeerState peer) {
         if (states == null || peer == null) {

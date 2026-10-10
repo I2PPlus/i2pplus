@@ -46,10 +46,10 @@ public interface I2PSocketManager {
      * @return a new subsession, non-null
      * @throws I2PSessionException if the router does not support sub-sessions, if a
      * @throws I2PSessionException if the router does not support sub-sessions, if a
-     * sub-session request is already pending, or if the new session duplicates an
-     * existing one by private key
+     *                             sub-session request is already pending, or if the new session duplicates an
+     *                             existing one by private key
      * @since 0.9.21
-     * existing one by private key
+     *        existing one by private key
      */
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
 
@@ -234,7 +234,7 @@ public interface I2PSocketManager {
     /**
      * For logging / diagnostics only
      *
-     * @param name the name
+     * @param name the label reported in logs and console output
      */
     public void setName(String name);
 
@@ -247,7 +247,7 @@ public interface I2PSocketManager {
      * @param name the display name the factory would otherwise have read from a config file
      * @throws UnsupportedOperationException always
      * @deprecated nothing calls this; build the manager with
-     * I2PSocketManagerFactory.createManager().
+     *             I2PSocketManagerFactory.createManager().
      */
     @Deprecated
     public void init(I2PAppContext context, I2PSession session, Properties opts, String name);

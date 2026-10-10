@@ -127,7 +127,7 @@ public class Field implements Serializable {
     }
 
     /**
-     * Return the encoding.
+     * Return the encoding for field elements, which converts them to and from bytes.
      *
      * @return the encoding
      */

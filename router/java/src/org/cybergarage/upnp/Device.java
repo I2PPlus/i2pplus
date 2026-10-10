@@ -215,7 +215,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      *
      * @param descriptionFile the file holding the description XML
      * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
-     *     device element
+     *                                     device element
      */
     public Device(File descriptionFile) throws InvalidDescriptionException {
         this(null, null);
@@ -227,7 +227,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      *
      * @param input the stream to read the description XML from
      * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
-     *     device element
+     *                                     device element
      * @since 1.8.0
      */
     public Device(InputStream input) throws InvalidDescriptionException {
@@ -240,7 +240,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      *
      * @param descriptionFileName the name of the file holding the description XML
      * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
-     *     device element
+     *                                     device element
      */
     public Device(String descriptionFileName) throws InvalidDescriptionException {
         this(new File(descriptionFileName));
@@ -562,7 +562,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      * Get the device that contains this one.
      *
      * @return A Device that contain this object.<br>
-     *     Return <code>null</code> if this is a root device.
+     *         Return <code>null</code> if this is a root device.
      */
     public Device getParentDevice() {
         if (isRootDevice()) return null;
@@ -684,7 +684,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      * @param input the stream to read the description XML from
      * @return true if the description was loaded
      * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
-     *     device element
+     *                                     device element
      * @since 1.8.0
      */
     public boolean loadDescription(InputStream input) throws InvalidDescriptionException {
@@ -713,7 +713,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      * @param descString the description XML
      * @return true if the description was loaded
      * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
-     *     device element
+     *                                     device element
      */
     public boolean loadDescription(String descString) throws InvalidDescriptionException {
         try {
@@ -741,7 +741,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      * @param file the file holding the description XML
      * @return true if the description was loaded
      * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
-     *     device element
+     *                                     device element
      */
     public boolean loadDescription(File file) throws InvalidDescriptionException {
         try {
@@ -1563,7 +1563,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      * getStateVariable.
      *
      * @param serviceType the service type to restrict the search to, or null to search every
-     *     service
+     *                    service
      * @param name the state variable name to search for
      * @return the matching state variable, or null
      */
@@ -2473,7 +2473,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      * Set the addresses the SSDP service binds to.
      *
      * @param inets The IP that will be used for binding the SSDP service. Use <code>null</code> to
-     *     get the default beahvior
+     *              get the default beahvior
      */
     public void setSSDPBindAddress(InetAddress[] inets) {
         this.getDeviceData().setSSDPBindAddress(inets);
@@ -2483,7 +2483,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
      * Get the addresses the SSDP service binds to.
      *
      * @return inets The IP that will be used for binding the SSDP service. null means the default
-     *     setted by the class UPnP
+     *         setted by the class UPnP
      */
     public InetAddress[] getSSDPBindAddress() {
         return this.getDeviceData().getSSDPBindAddress();

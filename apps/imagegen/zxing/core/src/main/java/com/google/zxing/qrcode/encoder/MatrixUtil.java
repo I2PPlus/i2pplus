@@ -136,7 +136,7 @@ final class MatrixUtil {
    * @param maskPattern the data mask 0-7 to apply, or -1 to leave the data unmasked
    * @param matrix the matrix to populate, sized for the given version
    * @throws WriterException if the mask pattern is out of range, or the data bits
-   *         do not exactly fill the remaining data region
+   *                         do not exactly fill the remaining data region
    */
   static void buildMatrix(BitArray dataBits,
                           ErrorCorrectionLevel ecLevel,
@@ -158,7 +158,7 @@ final class MatrixUtil {
    * @param version the symbol version, deciding whether the adjustment patterns appear
    * @param matrix the matrix to lay the function patterns into
    * @throws WriterException if a corner cell is already occupied, so the detection
-   *         or separation patterns do not fit
+   *                         or separation patterns do not fit
    */
   static void embedBasicPatterns(Version version, ByteMatrix matrix) throws WriterException {
     // Let's get started with embedding big squares at corners.
@@ -178,7 +178,7 @@ final class MatrixUtil {
    * @param maskPattern the data mask 0-7 in use, also encoded into the type information
    * @param matrix the matrix to write the two type information copies into
    * @throws WriterException if the mask pattern is out of range, or the generated
-   *         type information is not the expected 15 bits
+   *                         type information is not the expected 15 bits
    */
   static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
       throws WriterException {
@@ -216,7 +216,7 @@ final class MatrixUtil {
    * @param version the symbol version; nothing is written below version 7
    * @param matrix the matrix to write the two version information copies into
    * @throws WriterException if the generated version information is not the
-   *         expected 18 bits
+   *                         expected 18 bits
    */
   static void maybeEmbedVersionInfo(Version version, ByteMatrix matrix) throws WriterException {
     if (version.getVersionNumber() < 7) {  // Version info is necessary if version >= 7.
@@ -244,9 +244,9 @@ final class MatrixUtil {
    * @param dataBits the codeword bits to place, in the order they are consumed
    * @param maskPattern the data mask 0-7 to apply, or -1 to place the bits unmasked
    * @param matrix the matrix to fill, whose non-empty cells mark the already
-   *        embedded function patterns and are skipped
+   *               embedded function patterns and are skipped
    * @throws WriterException if the bits are not all consumed once the data region
-   *         is full, meaning they did not fit the symbol
+   *                         is full, meaning they did not fit the symbol
    */
   static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix)
       throws WriterException {
@@ -309,7 +309,7 @@ final class MatrixUtil {
    * Calculate BCH code
    * @param value the data whose error correction code is wanted
    * @param poly the BCH generator polynomial, whose bit length fixes the code,
-   *        for example 0x537 for type information or 0x1f25 for version information
+   *             for example 0x537 for type information or 0x1f25 for version information
    * @return the remainder of dividing value by poly, the BCH error correction code
    */
   static int calculateBCHCode(int value, int poly) {
@@ -334,7 +334,7 @@ final class MatrixUtil {
    * @param maskPattern the data mask 0-7 to encode alongside the level
    * @param bits the vector to append the 15 type information bits to
    * @throws WriterException if the mask pattern is out of range, or the generated
-   *         type information is not the expected 15 bits
+   *                         type information is not the expected 15 bits
    */
   static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits)
       throws WriterException {
@@ -361,7 +361,7 @@ final class MatrixUtil {
    * @param version the symbol version whose number is encoded
    * @param bits the vector to append the 18 version information bits to
    * @throws WriterException if the generated version information is not the
-   *         expected 18 bits
+   *                         expected 18 bits
    */
   static void makeVersionInfoBits(Version version, BitArray bits) throws WriterException {
     bits.appendBits(version.getVersionNumber(), 6);

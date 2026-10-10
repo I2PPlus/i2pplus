@@ -7,7 +7,7 @@ package org.rrd4j.data;
  * <p>You don't need to create objects of this class directly.
  *
  * @deprecated Use {@link org.rrd4j.data.Variable} with {@link
- *     org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)} instead.
+ *             org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)} instead.
  */
 @Deprecated
 public class Aggregates {
@@ -97,7 +97,7 @@ public class Aggregates {
     /**
      * Sets first value
      *
-     * @param first First value
+     * @param first the value to aggregate.
      */
     public void setFirst(double first) {
         this.first = first;
@@ -106,7 +106,7 @@ public class Aggregates {
     /**
      * Sets last value
      *
-     * @param last Last value
+     * @param last the value to aggregate.
      */
     public void setLast(double last) {
         this.last = last;
@@ -115,7 +115,7 @@ public class Aggregates {
     /**
      * Sets average value
      *
-     * @param average Average value
+     * @param average the value to aggregate.
      */
     public void setAverage(double average) {
         this.average = average;
@@ -124,7 +124,7 @@ public class Aggregates {
     /**
      * Sets total value
      *
-     * @param total Total value
+     * @param total the value to aggregate.
      */
     public void setTotal(double total) {
         this.total = total;

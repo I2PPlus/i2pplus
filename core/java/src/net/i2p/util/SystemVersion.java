@@ -805,7 +805,7 @@ public abstract class SystemVersion {
      * Use this to format a time in local time zone with DateFormat.setTimeZone().
      *
      * @param ctx the application context whose properties hold the saved system
-     *        time zone ID
+     *            time zone ID
      * @return the saved system time zone, or the JVM default if none was saved
      * @since 0.9.24
      */

@@ -229,7 +229,9 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /** Maximum size of the lookup cache. */
     protected static final int CACHE_MAX_SIZE = SystemVersion.isSlow() ? 64 : 256;
     /**
-     * Since 0.9.11, key is either a Hash or a String
+     * Cache of Destination lookups, keyed by a Hash or a String.
+     *
+     * Since 0.9.11 the key may be a String as well as a Hash.
      *
      * @since 0.8.9
      */
@@ -296,10 +298,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      * @param primary the muxed session sharing this session's context, handlers and producer
      * @param destKeyStream stream containing the private key data,
-     * format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
      * @throws I2PSessionException if the destination key stream cannot be read
-     *         or is not in the expected format
+     *                             or is not in the expected format
      * @since 0.9.21
      */
     protected I2PSessionImpl(I2PSessionImpl primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
@@ -362,7 +364,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      * @param context the I2P app context
      * @param destKeyStream stream containing the private key data,
-     * format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
      * @throws I2PSessionException if there is a problem loading the private keys
      */
@@ -750,7 +752,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * if not previously connected.
      *
      * @throws I2PSessionException if there is a configuration error or the router is
-     * not reachable
+     *                             not reachable
      */
     @Override
     public void connect() throws I2PSessionException {
@@ -992,7 +994,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      *
      * @param msgId the message ID
      * @param nonce router-assigned value identifying the request the update belongs to
-     * @param status the status
+     * @param status the MessageStatusMessage.STATUS_ code for the send outcome
      */
     public abstract void receiveStatus(int msgId, long nonce, int status);
 
@@ -1085,7 +1087,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
          * Notify that a message is available
          *
          * @param msgId the message ID
-         * @param size the size
+         * @param size the unencrypted payload length in bytes
          */
         public void available(long msgId, int size) {
             synchronized (AvailabilityNotifier.this) {

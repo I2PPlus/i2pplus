@@ -50,7 +50,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
      * Fetch the next subscription's address book, if the delay has been met.
      *
      * @return non-null AddressBook (empty if the minimum delay has not been met,
-     *          or there is no proxy tunnel, or the fetch otherwise fails)
+     *         or there is no proxy tunnel, or the fetch otherwise fails)
      */
     public AddressBook next() {
         Subscription sub = this.subIterator.next();

@@ -79,7 +79,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return a BigDecimal representing the value paired with the key.
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see BigDecimal
      * @see Number#toString()
      * @see JsonKey
@@ -105,7 +105,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the value stored at the key.
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see BigDecimal
      * @see Number#toString()
      * @deprecated 2.3.0 in favor of {@link #getBigDecimal(JsonKey)} */
@@ -131,7 +131,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return a BigDecimal representing the value paired with the key or JsonKey#getValue() if the key isn't present.
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see BigDecimal
      * @see Number#toString()
      * @see JsonKey
@@ -163,7 +163,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the value stored at the key or the default provided if the key doesn't exist.
      * @throws ClassCastException if there was a value but didn't match the assumed return types.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see BigDecimal
      * @see Number#toString()
      * @deprecated 2.3.0 in favor of {@link #getBigDecimalOrDefault(JsonKey)} */
@@ -259,7 +259,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return a Byte representing the value paired with the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#byteValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -280,7 +280,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the value stored at the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#byteValue()
      * @deprecated 2.3.0 in favor of {@link #getByte(JsonKey)} */
     @Deprecated
@@ -302,7 +302,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#byteValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -330,7 +330,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         doesn't exist.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#byteValue()
      * @deprecated 2.3.0 in favor of {@link #getByteOrDefault(JsonKey)} */
     @Deprecated
@@ -353,7 +353,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
 
     /** A convenience method that assumes there is a Collection at the given key.
      * @param <T> the kind of collection to expect at the key. Note unless manually added, collection values will be a
-     *        JsonArray.
+     *            JsonArray.
      * @param key representing where the value ought to be paired with.
      * @return a Collection representing the value paired with the key.
      * @throws ClassCastException if the value didn't match the assumed return type.
@@ -368,7 +368,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
 
     /** A convenience method that assumes there is a Collection at the given key.
      * @param <T> the kind of collection to expect at the key. Note unless manually added, collection values will be a
-     *        JsonArray.
+     *            JsonArray.
      * @param key representing where the value ought to be stored at.
      * @return the value stored at the key.
      * @throws ClassCastException if the value didn't match the assumed return type.
@@ -383,7 +383,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
 
     /** A convenience method that assumes there is a Collection at the given key.
      * @param <T> the kind of collection to expect at the key. Note unless manually added, collection values will be a
-     *        JsonArray.
+     *            JsonArray.
      * @param key representing where the value ought to be paired with.
      * @return a Collection representing the value paired with the key or JsonKey#getValue() if the key isn't present..
      * @throws ClassCastException if the value didn't match the assumed return type.
@@ -404,7 +404,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
 
     /** A convenience method that assumes there is a Collection at the given key.
      * @param <T> the kind of collection to expect at the key. Note unless manually added, collection values will be a
-     *        JsonArray.
+     *            JsonArray.
      * @param key representing where the value ought to be stored at.
      * @param defaultValue representing what is returned when the key isn't in the JsonObject.
      * @return the value stored at the key or the default provided if the key doesn't exist.
@@ -429,7 +429,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return a Double representing the value paired with the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#doubleValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -450,7 +450,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the value stored at the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#doubleValue()
      * @deprecated 2.3.0 in favor of {@link #getDouble(JsonKey)} */
     @Deprecated
@@ -472,7 +472,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#doubleValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -500,7 +500,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         doesn't exist.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#doubleValue()
      * @deprecated 2.3.0 in favor of {@link #getDoubleOrDefault(JsonKey)} */
     @Deprecated
@@ -527,11 +527,11 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @param <T> the Enum type the value at the key is expected to belong to.
      * @return an Enum representing the value paired with the key.
      * @throws ClassNotFoundException if the value was a String but the declaring enum type couldn't be determined with
-     *         it.
+     *                                it.
      * @throws ClassCastException if the element at the index was not a String or if the fully qualified enum name is of
-     *         the wrong type.
+     *                            the wrong type.
      * @throws IllegalArgumentException if an enum type was determined but it doesn't define an enum with the determined
-     *         name.
+     *                                  name.
      * @see Enum#valueOf(Class, String)
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey
@@ -590,11 +590,11 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @param <T> the Enum type the value at the key is expected to belong to.
      * @return the enum based on the string found at the key, or null if the value paired with the provided key is null.
      * @throws ClassNotFoundException if the value was a String but the declaring enum type couldn't be determined with
-     *         it.
+     *                                it.
      * @throws ClassCastException if the element at the index was not a String or if the fully qualified enum name is of
-     *         the wrong type.
+     *                            the wrong type.
      * @throws IllegalArgumentException if an enum type was determined but it doesn't define an enum with the determined
-     *         name.
+     *                                  name.
      * @see Enum#valueOf(Class, String)
      * @deprecated 2.3.0 in favor of {@link #getEnum(JsonKey)} */
     @Deprecated
@@ -651,11 +651,11 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @param <T> the Enum type the value at the key is expected to belong to.
      * @return an Enum representing the value paired with the key or JsonKey#getValue() if the key isn't present.
      * @throws ClassNotFoundException if the value was a String but the declaring enum type couldn't be determined with
-     *         it.
+     *                                it.
      * @throws ClassCastException if the element at the index was not a String or if the fully qualified enum name is of
-     *         the wrong type.
+     *                            the wrong type.
      * @throws IllegalArgumentException if an enum type was determined but it doesn't define an enum with the determined
-     *         name.
+     *                                  name.
      * @see Enum#valueOf(Class, String)
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey
@@ -718,11 +718,11 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the enum based on the string found at the key, or the defaultValue provided if the key doesn't exist, or
      *         null if the value paired with provided key is null.
      * @throws ClassNotFoundException if the value was a String but the declaring enum type couldn't be determined with
-     *         it.
+     *                                it.
      * @throws ClassCastException if the element at the index was not a String or if the fully qualified enum name is of
-     *         the wrong type.
+     *                            the wrong type.
      * @throws IllegalArgumentException if an enum type was determined but it doesn't define an enum with the determined
-     *         name.
+     *                                  name.
      * @see Enum#valueOf(Class, String)
      * @deprecated 2.3.0 in favor of {@link #getEnumOrDefault(JsonKey)} */
     @Deprecated
@@ -791,7 +791,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return a Float representing the value paired with the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#floatValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -812,7 +812,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the value stored at the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#floatValue()
      * @deprecated 2.3.0 in favor of {@link #getFloat(JsonKey)} */
     @Deprecated
@@ -834,7 +834,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#floatValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -862,7 +862,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         doesn't exist.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#floatValue()
      * @deprecated 2.3.0 in favor of {@link #getFloatOrDefault(JsonKey)} */
     @Deprecated
@@ -888,7 +888,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return an Integer representing the value paired with the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#intValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -909,7 +909,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the value stored at the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#intValue()
      * @deprecated 2.3.0 in favor of {@link #getInteger(JsonKey)} */
     @Deprecated
@@ -931,7 +931,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#intValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -959,7 +959,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         doesn't exist.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#intValue()
      * @deprecated 2.3.0 in favor of {@link #getIntegerOrDefault(JsonKey)} */
     @Deprecated
@@ -985,7 +985,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return a Long representing the value paired with the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#longValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -1006,7 +1006,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the value stored at the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#longValue()
      * @deprecated 2.3.0 in favor of {@link #getLong(JsonKey)} */
     @Deprecated
@@ -1028,7 +1028,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#longValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -1056,7 +1056,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         doesn't exist.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#longValue()
      * @deprecated 2.3.0 in favor of {@link #getLongOrDefault(JsonKey)} */
     @Deprecated
@@ -1151,7 +1151,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return a Short representing the value paired with the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#shortValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -1172,7 +1172,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      * @return the value stored at the key (which may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#shortValue()
      * @deprecated 2.3.0 in favor of {@link #getShort(JsonKey)} */
     @Deprecated
@@ -1194,7 +1194,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         may involve rounding or truncation).
      * @throws ClassCastException if the value didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#shortValue()
      * @see JsonKey
      * @since 2.3.0 to utilize JsonKey */
@@ -1222,7 +1222,7 @@ public class JsonObject extends HashMap<String, Object> implements Jsonable {
      *         doesn't exist.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @see Number#shortValue()
      * @deprecated 2.3.0 in favor of {@link #getShortOrDefault(JsonKey)} */
     @Deprecated

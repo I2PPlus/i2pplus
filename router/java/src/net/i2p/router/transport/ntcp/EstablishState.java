@@ -67,7 +67,7 @@ interface EstablishState {
 
     /**
      * Release resources on timeout.
-     * @param reason the reason
+     * @param reason failure description
      * @param e may be null
      * @since 0.9.16
      */

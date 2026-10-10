@@ -100,7 +100,7 @@ public class OutboundMessageRegistry {
      *
      * @param message Payload received that may be a reply to something we sent
      * @return non-null List of OutNetMessage describing messages that were waiting for
-     * the payload
+     *         the payload
      */
     @SuppressWarnings("unchecked")
     public List<OutNetMessage> getOriginalMessages(I2NPMessage message) {

@@ -93,7 +93,7 @@ public class Payload extends DataStructureImpl {
      * Unless you are doing encryption, use getEncryptedData() instead.
      *
      * @return body of the message, or null if the message has either not been
-     * decrypted yet or if the hash is not correct
+     *         decrypted yet or if the hash is not correct
      */
     public byte[] getUnencryptedData() {
         return _unencryptedData;

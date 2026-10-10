@@ -256,7 +256,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * @param ourRI true if the lookup is for this router's identity
      * @param floodfillMode true if the local router participates as floodfill
      * @param isFF true if the sender router is a floodfill
-     * @param type the type
+     * @param type the lookup message type, where exploratory and any lookups are rejected
      * @return true if the lookup is accepted, false if dropped
      *
      * @since 0.9.67+

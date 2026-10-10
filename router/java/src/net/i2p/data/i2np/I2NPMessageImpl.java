@@ -113,7 +113,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      *
      * @param type the message type or -1 if we should read it here
      * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
-     * This includes the type byte only if type &lt; 0
+     *               This includes the type byte only if type &lt; 0
      * @return total length of the message
      * @since 0.8.12
      */
@@ -389,7 +389,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * @param len the total number of readable bytes in buffer, at least 5
      * @param handler ignored, may be null
      * @return the deserialized message, never null; an unrecognized type yields
-     *     an UnknownI2NPMessage
+     *         an UnknownI2NPMessage
      * @throws I2NPMessageException if len is under 5, or the body cannot be parsed
      */
     public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte[] buffer, int offset,
@@ -425,7 +425,7 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * @param len the total number of readable bytes in buffer, at least 9
      * @param handler ignored, may be null
      * @return the deserialized message, never null; an unrecognized type yields
-     *     an UnknownI2NPMessage
+     *         an UnknownI2NPMessage
      * @throws I2NPMessageException if len is under 9, or the body cannot be parsed
      * @since 0.9.35
      */

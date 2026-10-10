@@ -275,7 +275,7 @@ public class Clock implements Timestamper.UpdateListener {
          * Called when the clock offset changes.
          *
          * @param delta = (new offset - old offset),
-         * where each offset = (now() - System.currentTimeMillis())
+         *              where each offset = (now() - System.currentTimeMillis())
          */
         public void offsetChanged(long delta);
     }

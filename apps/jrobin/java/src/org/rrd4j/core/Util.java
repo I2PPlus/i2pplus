@@ -358,7 +358,7 @@ public class Util {
      *
      * @param valueStr String representing boolean value
      * @return <code>true</code>, if valueStr equals to 'true', 'on', 'yes', 'y' or '1'; <code>false
-     *     </code> in all other cases.
+     *         </code> in all other cases.
      */
     public static boolean parseBoolean(String valueStr) {
         return valueStr != null
@@ -377,7 +377,7 @@ public class Util {
      * @param valueStr Input string, for example #FFAA24, #AABBCC33, 010203 or ABC13E4F
      * @return Paint object
      * @throws java.lang.IllegalArgumentException If the input string is not 6 or 8 characters long
-     *     (without optional '#')
+     *                                            (without optional '#')
      */
     public static Paint parseColor(String valueStr) {
         String c = valueStr.startsWith("#") ? valueStr.substring(1) : valueStr;
@@ -421,7 +421,7 @@ public class Util {
      * necessary.
      *
      * @return Path to demo directory (defaults to $HOME/rrd4j/) if directory exists or was
-     *     successfully created. Null if such directory could not be created.
+     *         successfully created. Null if such directory could not be created.
      */
     public static String getRrd4jDemoDirectory() {
         Path root;
@@ -442,7 +442,7 @@ public class Util {
      * Returns full path to the file stored in the demo directory of Rrd4j
      *
      * @param filename Partial path to the file stored in the demo directory of Rrd4j (just name and
-     *     extension, without parent directories)
+     *                 extension, without parent directories)
      * @return Full path to the file
      */
     public static String getRrd4jDemoPath(String filename) {
@@ -459,7 +459,7 @@ public class Util {
      * @param pathname1 first file path, absolute or relative
      * @param pathname2 second file path, absolute or relative
      * @return <code>true</code> if both paths exist and resolve to one file, <code>false</code> if
-     *     their existence differs or neither path exists
+     *         their existence differs or neither path exists
      * @throws java.io.IOException Thrown if a path cannot be resolved to its canonical form
      */
     static boolean sameFilePath(String pathname1, String pathname2) throws IOException {
@@ -712,7 +712,7 @@ public class Util {
          * @param node element whose child supplies the text
          * @param trimValue whether to strip leading and trailing whitespace from the text
          * @return text of the first child, trimmed if requested, or <code>null</code> if the node
-         *     has no child at all (an empty element such as <code>&lt;x/&gt;</code>)
+         *         has no child at all (an empty element such as <code>&lt;x/&gt;</code>)
          */
         public static String getValue(Node node, boolean trimValue) {
             String value = null;
@@ -808,7 +808,7 @@ public class Util {
          * @param parentNode node whose children are searched
          * @param childName element name to match
          * @return <code>true</code> for true/on/yes/y/1 (any case), <code>false</code> for anything
-         *     else including a missing text
+         *         else including a missing text
          * @throws java.lang.IllegalStateException If no child carries that name
          */
         public static boolean getChildValueAsBoolean(Node parentNode, String childName) {
@@ -821,7 +821,7 @@ public class Util {
          *
          * @param node element whose child supplies the text
          * @return <code>true</code> for true/on/yes/y/1 (any case), <code>false</code> for anything
-         *     else including a missing text
+         *         else including a missing text
          */
         public static boolean getValueAsBoolean(Node node) {
             String valueStr = getValue(node);
@@ -927,7 +927,7 @@ public class Util {
      * @param x the first value
      * @param y the second value
      * @return <code>true</code> if x and y are both equal to Double.NaN, or if x == y. <code>false
-     *     </code> otherwise
+     *         </code> otherwise
      */
     public static boolean equal(double x, double y) {
         return (Double.isNaN(x) && Double.isNaN(y)) || (x == y);

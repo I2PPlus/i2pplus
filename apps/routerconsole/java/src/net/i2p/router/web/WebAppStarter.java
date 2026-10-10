@@ -218,8 +218,8 @@ public class WebAppStarter {
      *
      * @param wac the context to configure
      * @param scanAnnotations Should we check for Servlet 3.0 annotations?
-     * The war MUST be set to extract (due to Jetty bug),
-     * and annotation classes MUST be available
+     *                        The war MUST be set to extract (due to Jetty bug),
+     *                        and annotation classes MUST be available
      */
     static void setWebAppConfiguration(WebAppContext wac, boolean scanAnnotations) {
         // see WebAppConfiguration for info
@@ -285,7 +285,7 @@ public class WebAppStarter {
      * Throws just about anything, caller would be wise to catch Throwable
      * @param ctx router context supplying the PortMapper
      * @param s the Jetty server holding the console contexts, so this also works
-     * during shutdown after the console has been unregistered
+     *          during shutdown after the console has been unregistered
      * @param appName context path, e.g. "i2psnark"
      * @since 0.9.41
      */
@@ -308,11 +308,12 @@ public class WebAppStarter {
     }
 
     /**
-     * As of 0.9.34, the appName will be registered with the PortMapper,
-     * and PortMapper.isRegistered() will be more efficient than this.
-     *
+     * Determine if a webapp is running.
      * Warning, this will NOT work during shutdown, because
      * the console is already unregistered.
+     *
+     * As of 0.9.34, the appName will be registered with the PortMapper,
+     * and PortMapper.isRegistered() will be more efficient than this.
      *
      * @param ctx router context used to locate the console server
      * @param appName context path, e.g. "i2psnark"

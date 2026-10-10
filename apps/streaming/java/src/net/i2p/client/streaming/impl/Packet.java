@@ -221,7 +221,7 @@ class Packet {
      * See readPacket() for inbound packets, and the setters for outbound packets.
      *
      * @param session the session this packet is sent or received on, or null
-     *        before one is assigned
+     *                before one is assigned
      */
     public Packet(I2PSession session) {_session = session;}
 
@@ -434,7 +434,7 @@ class Packet {
      * This also sets flag FLAG_SIGNATURE_INCLUDED
      *
      * @param sig the signature to attach to the packet, or null to clear it and
-     *        drop the flag
+     *            drop the flag
      */
     public void setOptionalSignature(Signature sig) {
         setFlag(FLAG_SIGNATURE_INCLUDED, sig != null);
@@ -467,7 +467,7 @@ class Packet {
      * Caller must also call setFlag(FLAG_DELAY_REQUESTED)
      *
      * @param delayMs how long the sender should be asked to wait in ms, clamped
-     *        to 0..MAX_DELAY_REQUEST
+     *                to 0..MAX_DELAY_REQUEST
      */
     public void setOptionalDelay(int delayMs) {
         if (delayMs > MAX_DELAY_REQUEST) {_optionDelay = MAX_DELAY_REQUEST;}
@@ -486,7 +486,7 @@ class Packet {
      * This also sets flag FLAG_MAX_PACKET_SIZE_INCLUDED
      *
      * @param numBytes the largest payload the sender should be told it may
-     *        receive, or 0 to unset the flag
+     *                 receive, or 0 to unset the flag
      */
     public void setOptionalMaxSize(int numBytes) {
         setFlag(FLAG_MAX_PACKET_SIZE_INCLUDED, numBytes > 0);
@@ -505,7 +505,7 @@ class Packet {
      * as the port is out-of-band in the I2CP header.
      *
      * @param port the local port to record, I2PSession.PORT_UNSPECIFIED (0) for
-     *        unspecified or PORT_ANY (0) for any
+     *             unspecified or PORT_ANY (0) for any
      * @since 0.8.9
      */
     public void setLocalPort(int port) {_localPort = port;}
@@ -522,7 +522,7 @@ class Packet {
      * as the port is out-of-band in the I2CP header.
      *
      * @param port the remote port to record, I2PSession.PORT_UNSPECIFIED (0) for
-     *        unspecified or PORT_ANY (0) for any
+     *             unspecified or PORT_ANY (0) for any
      * @since 0.8.9
      */
     public void setRemotePort(int port) {_remotePort = port;}
@@ -545,7 +545,7 @@ class Packet {
      * @param buffer bytes to write to a destination
      * @param offset starting point in the buffer to send
      * @param fakeSigLen if 0, include the real signature in _optionSignature;
-     * if nonzero, leave space for that many bytes
+     *                   if nonzero, leave space for that many bytes
      * @return the number of bytes written
      * @throws IllegalStateException if a required option is missing
      */
@@ -648,7 +648,7 @@ class Packet {
      *
      * @param keyType the signing key's type, or null when it is not known yet
      * @return How large the current packet would be
-     * the same way {@link #writePacket} will write it
+     *         the same way {@link #writePacket} will write it
      */
     int writtenSize(SigType keyType) {
         int size = 22;
@@ -714,7 +714,7 @@ class Packet {
      *
      * @param type the signing key's type, non-null
      * @return true if {@link #_optionSignature} is of that type afterwards,
-     * false if the bytes read cannot be a signature of that type
+     *         false if the bytes read cannot be a signature of that type
      */
     boolean alignSignatureToType(SigType type) {
         if (_optionSignature == null || type == null) {return false;}
@@ -734,10 +734,10 @@ class Packet {
      * @param buffer packet buffer containing the data
      * @param offset index into the buffer to start reading
      * @param length how many bytes within the buffer past the offset are
-     * part of the packet?
+     *               part of the packet?
      *
      * @throws IllegalArgumentException if the buffer is too small for the
-     * declared length, or the header is shorter than the minimum
+     *                                  declared length, or the header is shorter than the minimum
      * @throws IndexOutOfBoundsException if the data ends mid-packet
      */
     public void readPacket(byte[] buffer, int offset, int length) throws IllegalArgumentException {
@@ -880,7 +880,7 @@ class Packet {
      * @param ctx Application context
      * @param buffer data to validate with signature, or null to use our own buffer.
      * @return true if the signature exists and validates against the data,
-     * false otherwise.
+     *         false otherwise.
      * @since 0.9.39
      */
     public boolean verifySignature(I2PAppContext ctx, byte[] buffer) {
@@ -892,12 +892,12 @@ class Packet {
      *
      * @param ctx Application context
      * @param altSPK Signing key to verify with, ONLY if there is no FROM field in this packet.
-     * May be the SPK from a FROM field or offline sig field from a previous packet on this connection.
-     * Ignored if this packet contains a FROM option block.
-     * Null ok if none available.
+     *               May be the SPK from a FROM field or offline sig field from a previous packet on this connection.
+     *               Ignored if this packet contains a FROM option block.
+     *               Null ok if none available.
      * @param buffer data to validate with signature, or null to use our own buffer.
      * @return true if the signature exists and validates against the data,
-     * false otherwise.
+     *         false otherwise.
      */
     public boolean verifySignature(I2PAppContext ctx, SigningPublicKey altSPK, byte[] buffer) {
         if (_sigVerified) {return true;}

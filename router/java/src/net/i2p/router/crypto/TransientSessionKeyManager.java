@@ -407,8 +407,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * @param key the session key the tags are bound to
      * @param sessionTags the tags that were sent
      * @return the TagSetHandle, or null if the session could not be created.
-     * Caller MUST subsequently call failTags() or tagsAcked()
-     * with this handle.
+     *         Caller MUST subsequently call failTags() or tagsAcked()
+     *         with this handle.
      */
     @Override
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) {
@@ -901,8 +901,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          * @return list of TagSet objects
-         * This is used only by renderStatusHTML().
-         * It includes both acked and unacked TagSets.
+         *         This is used only by renderStatusHTML().
+         *         It includes both acked and unacked TagSets.
          */
         List<TagSet> getTagSets() {
             List<TagSet> rv;

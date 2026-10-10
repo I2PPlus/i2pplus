@@ -539,7 +539,7 @@ public class NativeBigInteger extends BigInteger {
      *
      * @param bitlen the bit length of the candidate prime to generate
      * @param certainty the Miller-Rabin rounds to run, so the probability of
-     *        compositeness is at most 2^-certainty
+     *                  compositeness is at most 2^-certainty
      * @param rnd the source of the candidate bits and the Miller-Rabin witnesses
      */
     public NativeBigInteger(int bitlen, int certainty, Random rnd) {
@@ -579,7 +579,7 @@ public class NativeBigInteger extends BigInteger {
      * Copy constructor from a BigInteger. Warning, not very efficient.
      *
      * @param val the value to copy, whose magnitude is read as a big-endian
-     *        two's complement byte array
+     *            two's complement byte array
      */
     public NativeBigInteger(BigInteger val) {
         // Now, why doesn't sun provide a constructor

@@ -132,7 +132,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      *  @param remoteHostId non-null, == claimedAddress if direct, or a hash-based one if indirect
      *  @param remotePeer must have supported sig type
      *  @param needIntroduction should we ask Bob to be an introducer for us?
-     *                ignored unless allowExtendedOptions is true
+     *                          ignored unless allowExtendedOptions is true
      *  @param introKey Bob's introduction key, as published in the netdb
      *  @param ra the router address
      *  @param addr non-null
@@ -596,8 +596,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      *
      * @param packet the UDP packet received
      * @throws GeneralSecurityException if the packet does not match the pending
-     *         Retry request - wrong address, connection IDs, or an unexpected
-     *         retry token - or carries a bad or zero DateTime block
+     *                                  Retry request - wrong address, connection IDs, or an unexpected
+     *                                  retry token - or carries a bad or zero DateTime block
      */
     public synchronized void receiveRetry(UDPPacket packet) throws GeneralSecurityException {
         try {
@@ -687,8 +687,8 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      *
      * @param packet the UDP packet received
      * @throws GeneralSecurityException if the packet does not match the pending
-     *         request - wrong address or connection IDs - or is missing its
-     *         DateTime or address block, or exceeds the two minute skew limit
+     *                                  request - wrong address or connection IDs - or is missing its
+     *                                  DateTime or address block, or exceeds the two minute skew limit
      */
     public synchronized void receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
         try {

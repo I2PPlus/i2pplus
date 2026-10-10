@@ -83,7 +83,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * This updates the acks.
      * keys and tags disabled since dropped in I2PSession
      *
-     * @param packet the packet
+     * @param packet the packet to send ahead of the queue, updating the acks
      * @return true if sent
      */
     public boolean enqueue(PacketLocal packet) {
@@ -440,7 +440,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
         /**
          * Timer for the scheduled removal.
-         * @param timer the timer
+         * @param timer the scheduler this task registers with
          */
         public RemoveExpired(SimpleTimer2 timer) {
              super(timer, REMOVE_EXPIRED_TIME);

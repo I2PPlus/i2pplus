@@ -260,7 +260,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * never started), so nothing can be late.
      *
      * @param lastRequestWriteMs epoch-ms of the most recent request-side
-     * write upstream, 0 if none
+     *                           write upstream, 0 if none
      * @param firstByteMs epoch-ms of the first response byte, 0 if none yet
      * @param nowMs current epoch-ms
      * @param timeoutMs deadline window in ms; non-positive disables it
@@ -458,7 +458,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          *
          * @param bodyReceived entity-body bytes delivered so far
          * @param contentLength entity Content-Length in bytes, or -1 if
-         * unknown; scales both caps
+         *                      unknown; scales both caps
          * @return true if another resume attempt may proceed
          */
         boolean tryConsume(long bodyReceived, long contentLength) {
@@ -647,7 +647,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
-     * Will synchronize on slock when removing.
+     *                 Will synchronize on slock when removing.
      * @deprecated use FailCallback constructor
      */
     @Deprecated
@@ -662,7 +662,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param initialI2PData may be null
      * @param initialSocketData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
-     * Will synchronize on slock when removing.
+     *                 Will synchronize on slock when removing.
      * @deprecated use FailCallback constructor
      */
     @Deprecated
@@ -677,9 +677,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
-     * Will synchronize on slock when removing.
+     *                 Will synchronize on slock when removing.
      * @param onTimeout May be null. If non-null and no data (except initial data) was received,
-     * it will be run before closing s.
+     *                  it will be run before closing s.
      * @deprecated use FailCallback constructor
      */
     @Deprecated
@@ -695,9 +695,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param initialI2PData may be null
      * @param initialSocketData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
-     * Will synchronize on slock when removing.
+     *                 Will synchronize on slock when removing.
      * @param onTimeout May be null. If non-null and no data (except initial data) was received,
-     * it will be run before closing s.
+     *                  it will be run before closing s.
      * @deprecated use FailCallback constructor
      */
     @Deprecated
@@ -715,9 +715,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param initialI2PData may be null
      * @param initialSocketData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
-     * Will synchronize on slock when removing.
+     *                 Will synchronize on slock when removing.
      * @param onFail May be null. If non-null and no data (except initial data) was received,
-     * it will be run before closing s.
+     *               it will be run before closing s.
      */
     public I2PTunnelRunner(Socket s, I2PSocket i2ps, Object slock, byte[] initialI2PData,
                            byte[] initialSocketData, List<I2PSocket> sockList, FailCallback onFail) {
@@ -733,14 +733,14 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param initialI2PData may be null
      * @param initialSocketData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
-     * Will synchronize on slock when removing.
+     *                 Will synchronize on slock when removing.
      * @param onFail May be null. If non-null and no data (except initial data) was received,
-     * it will be run before closing s.
+     *               it will be run before closing s.
      * @param keepAliveI2P Do not close the I2P socket when done.
      * @param keepAliveSocket Do not close the local socket when done.
-     * For client side only; must be false for server side.
-     * NO data will be forwarded from the socket to the i2psocket other than
-     * initialI2PData if this is true.
+     *                        For client side only; must be false for server side.
+     *                        NO data will be forwarded from the socket to the i2psocket other than
+     *                        initialI2PData if this is true.
      */
     public I2PTunnelRunner(Socket s, I2PSocket i2ps, Object slock, byte[] initialI2PData,
                            byte[] initialSocketData, List<I2PSocket> sockList, FailCallback onFail,
@@ -755,9 +755,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param initialI2PData may be null
      * @param initialSocketData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
-     * Will synchronize on slock when removing.
+     *                 Will synchronize on slock when removing.
      * @param onTimeout May be null. If non-null and no data (except initial data) was received,
-     * it will be run before closing s.
+     *                  it will be run before closing s.
      * @param onFail Trumps onTimeout
      * @param shouldStart should thread be started in constructor (bad, false recommended)
      */
@@ -774,16 +774,16 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param initialI2PData may be null
      * @param initialSocketData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
-     * Will synchronize on slock when removing.
+     *                 Will synchronize on slock when removing.
      * @param onTimeout May be null. If non-null and no data (except initial data) was received,
-     * it will be run before closing s.
+     *                  it will be run before closing s.
      * @param onFail Trumps onTimeout
      * @param shouldStart should thread be started in constructor (bad, false recommended)
      * @param keepAliveI2P Do not close the I2P socket when done.
      * @param keepAliveSocket Do not close the local socket when done.
-     * For client side only; must be false for server side.
-     * NO data will be forwarded from the socket to the i2psocket other than
-     * initialI2PData if this is true.
+     *                        For client side only; must be false for server side.
+     *                        NO data will be forwarded from the socket to the i2psocket other than
+     *                        initialI2PData if this is true.
      */
     private I2PTunnelRunner(Socket s, I2PSocket i2ps, Object slock, byte[] initialI2PData,
                             byte[] initialSocketData, List<I2PSocket> sockList, Runnable onTimeout,
@@ -1049,7 +1049,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param hasReconnectCallback whether a reconnect callback is installed
      * @param retryableRequest whether the buffered request is an idempotent GET/HEAD
      * @param canRangeResume whether the response stream can safely splice (see
-     * {@code HTTPResponseOutputStream.canRangeResume()})
+     *                       {@code HTTPResponseOutputStream.canRangeResume()})
      * @return true if the transfer should resume on a fresh connection
      * @since 0.9.71+
      */
@@ -1103,7 +1103,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param request the raw request bytes (request-line + headers), may be null
      * @param start first byte offset of the remaining entity (inclusive)
      * @return a new request array with the Range header, or the original when
-     * no rewrite applies; never null if {@code request} is non-null
+     *         no rewrite applies; never null if {@code request} is non-null
      * @since 0.9.71+
      */
     static byte[] withRangeHeader(byte[] request, long start) {
@@ -1135,7 +1135,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      *
      * @param request the raw request bytes (request-line + headers), may be null
      * @return a copy without Range lines (original array when none present);
-     * null if {@code request} is null
+     *         null if {@code request} is null
      * @since 0.9.71+
      */
     static byte[] withoutRangeHeader(byte[] request) {
@@ -1244,7 +1244,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * response stream (server-side or non-HTTP runner) — resume never applies.
      *
      * @return body bytes delivered, content length (-1 if unknown), and whether
-     * headers were written / Range can splice; defaults disable resume
+     *         headers were written / Range can splice; defaults disable resume
      * @since 0.9.71+
      */
     protected BodyProgress getBodyProgress() { return null; }
@@ -1278,9 +1278,9 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
          * @param bodyReceived entity-body bytes already written to the browser
          * @param contentLength original Content-Length, or -1 if unknown
          * @param headerWritten whether the first response headers already went
-         * to the browser
+         *                      to the browser
          * @param canRangeResume whether a Content-Length body can be safely
-         * spliced (not gzip, etc.)
+         *                       spliced (not gzip, etc.)
          */
         public BodyProgress(long bodyReceived, long contentLength,
                             boolean headerWritten, boolean canRangeResume) {
@@ -1335,10 +1335,10 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * caller supplied none.
      *
      * @param supplied caller-provided stream (race winner's pushback wrapper
-     * or a fresh socket stream), may be null
+     *                 or a fresh socket stream), may be null
      * @param sock current I2P socket to reacquire from, may be null
      * @return {@code supplied} when non-null; otherwise {@code sock}'s input
-     * stream; otherwise null
+     *         stream; otherwise null
      * @throws IOException if {@code sock} cannot open its input stream
      * @since 0.9.71+
      */
@@ -1626,7 +1626,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * fallback is still pending.
      *
      * @return true if a transient status aborted the last resume attempt
-     * and the loop has not yet observed it
+     *         and the loop has not yet observed it
      * @since 0.9.71+
      */
     protected boolean hasTransientResumeFailure() { return false; }
@@ -1658,7 +1658,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param data the bytes to test, may be null
      * @param prefix the byte sequence to match at the start of {@code data}
      * @return true if {@code data} is non-null, at least as long as {@code prefix}, and
-     * equals {@code prefix} ignoring ASCII case
+     *         equals {@code prefix} ignoring ASCII case
      * @since 0.9.62
      */
     private static boolean startsWithIgnoreCase(byte[] data, byte[] prefix) {

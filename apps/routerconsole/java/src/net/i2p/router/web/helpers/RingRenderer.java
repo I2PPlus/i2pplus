@@ -371,7 +371,7 @@ public class RingRenderer {
          * RingSection.
          *
          * @param value the proportion of the ring this arc covers, normalized with
-         *        the other sections to sum to 1.0 at render time
+         *              the other sections to sum to 1.0 at render time
          * @param cssClass the CSS color class naming this section's arc
          */
         public RingSection(double value, String cssClass) {

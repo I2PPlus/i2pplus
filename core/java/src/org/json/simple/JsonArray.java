@@ -47,10 +47,10 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
     /** A convenience method that assumes every element of the JsonArray is castable to T before adding it to a
      * collection of Ts.
      * @param <T> represents the type that all of the elements of the JsonArray should be cast to and the type the
-     *        collection will contain.
+     *            collection will contain.
      * @param destination represents where all of the elements of the JsonArray are added to after being cast to the
-     *        generic type
-     *        provided.
+     *                    generic type
+     *                    provided.
      * @throws ClassCastException if the unchecked cast of an element to T fails. */
     @SuppressWarnings("unchecked")
     public <T> void asCollection(final Collection<T> destination) {
@@ -100,7 +100,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
      * @return the value at the index provided cast to a byte.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
     public Byte getByte(final int index) {
@@ -117,7 +117,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
 
     /** A convenience method that assumes there is a Collection value at the given index.
      * @param <T> the kind of collection to expect at the index. Note unless manually added, collection values will be a
-     *        JsonArray.
+     *            JsonArray.
      * @param index represents where the value is expected to be at.
      * @return the value at the index provided cast to a Collection.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
@@ -135,7 +135,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
      * @return the value at the index provided cast to a double.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
     public Double getDouble(final int index) {
@@ -156,11 +156,11 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
      * @param <T> the Enum type the value at the index is expected to belong to.
      * @return the enum based on the string found at the index, or null if the value at the index was null.
      * @throws ClassNotFoundException if the element was a String but the declaring enum type couldn't be determined
-     *         with it.
+     *                                with it.
      * @throws ClassCastException if the element at the index was not a String or if the fully qualified enum name is of
-     *         the wrong type.
+     *                            the wrong type.
      * @throws IllegalArgumentException if an enum type was dynamically determined but it doesn't define an enum with
-     *         the dynamically determined name.
+     *                                  the dynamically determined name.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Enum#valueOf(Class, String)
      * @deprecated 2.3.0 Jsoner deprecated automatically serializing enums as Strings. */
@@ -227,7 +227,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
      * @return the value at the index provided cast to a float.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
     public Float getFloat(final int index) {
@@ -247,7 +247,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
      * @return the value at the index provided cast to a int.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
     public Integer getInteger(final int index) {
@@ -267,7 +267,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
      * @return the value at the index provided cast to a long.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
     public Long getLong(final int index) {
@@ -301,7 +301,7 @@ public class JsonArray extends ArrayList<Object> implements Jsonable {
      * @return the value at the index provided cast to a short.
      * @throws ClassCastException if there was a value but didn't match the assumed return type.
      * @throws NumberFormatException if a String isn't a valid representation of a BigDecimal or if the Number
-     *         represents the double or float Infinity or NaN.
+     *                               represents the double or float Infinity or NaN.
      * @throws IndexOutOfBoundsException if the index is outside of the range of element indexes in the JsonArray.
      * @see Number */
     public Short getShort(final int index) {

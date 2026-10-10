@@ -73,7 +73,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
      * @param notifyThis the dispatcher notified of connection and transfer events
      * @param tunnel the owning I2PTunnel supplying the router context and configuration
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     * valid config to contact the router
+     *                                  valid config to contact the router
      */
     public I2PTunnelDCCServer(I2PSocketManager sktMgr, Logging l,
                               EventDispatcher notifyThis, I2PTunnel tunnel) {

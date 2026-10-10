@@ -102,7 +102,7 @@ public class NotifyRequest extends SOAPRequest {
      * getSID.
      *
      * @return the bare subscription identifier with the {@code uuid:} prefix
-     *              stripped, or "" when the request carries no SID header
+     *         stripped, or "" when the request carries no SID header
      */
     public String getSID() {
         return Subscription.getSID(getHeaderValue(HTTP.SID));
@@ -126,7 +126,7 @@ public class NotifyRequest extends SOAPRequest {
      * getSEQ.
      *
      * @return the event sequence number from the header, or 0 when absent or
-     *              not parseable as a decimal integer
+     *         not parseable as a decimal integer
      */
     public long getSEQ() {
         return getLongHeaderValue(HTTP.SEQ);
@@ -144,7 +144,7 @@ public class NotifyRequest extends SOAPRequest {
      * @param varName the name of the state variable that changed
      * @param value the new value of that state variable
      * @return true once the NOTIFY method, URI, headers and property set
-     *              body have been filled in
+     *         body have been filled in
      */
     public boolean setRequest(Subscriber sub, String varName, String value) {
         String callback = sub.getDeliveryURL();
@@ -213,7 +213,7 @@ public class NotifyRequest extends SOAPRequest {
      * getPropertyList.
      *
      * @return the changed variables carried in the body, or an empty list when
-     *              the request has no envelope or no properties to report
+     *         the request has no envelope or no properties to report
      */
     public PropertyList getPropertyList() {
         PropertyList properties = new PropertyList();

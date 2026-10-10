@@ -121,7 +121,7 @@ public class RrdDefTemplate extends XmlTemplate {
      * @param xmlInputSource Xml input source
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown in case of XML related error (parsing
-     *     error, for example)
+     *                                            error, for example)
      */
     public RrdDefTemplate(InputSource xmlInputSource) throws IOException {
         super(xmlInputSource);
@@ -134,7 +134,7 @@ public class RrdDefTemplate extends XmlTemplate {
      * @param xmlString String containing XML template
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown in case of XML related error (parsing
-     *     error, for example)
+     *                                            error, for example)
      */
     public RrdDefTemplate(String xmlString) throws IOException {
         super(xmlString);
@@ -147,7 +147,7 @@ public class RrdDefTemplate extends XmlTemplate {
      * @param xmlFile File object representing file with XML template
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown in case of XML related error (parsing
-     *     error, for example)
+     *                                            error, for example)
      */
     public RrdDefTemplate(File xmlFile) throws IOException {
         super(xmlFile);
@@ -161,11 +161,11 @@ public class RrdDefTemplate extends XmlTemplate {
      * method returns, all placeholder values are preserved. To remove them all, call inherited
      * {@link org.rrd4j.core.XmlTemplate#clearValues() clearValues()} method explicitly.
      * @return RrdDef object constructed from the underlying XML template, with all placeholders
-     *     replaced with real values. This object can be passed to the constructor of the new RrdDb
-     *     object.
+     *         replaced with real values. This object can be passed to the constructor of the new RrdDb
+     *         object.
      * @throws java.lang.IllegalArgumentException Thrown (in most cases) if the value for some
-     *     placeholder was not supplied through {@link
-     *     org.rrd4j.core.XmlTemplate#setVariable(String, String) setVariable()} method call
+     *                                            placeholder was not supplied through {@link
+     *                                            org.rrd4j.core.XmlTemplate#setVariable(String, String) setVariable()} method call
      */
     public RrdDef getRrdDef() {
         if (!"rrd_def".equals(root.getTagName())) {

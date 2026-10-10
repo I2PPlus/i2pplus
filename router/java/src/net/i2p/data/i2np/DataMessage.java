@@ -43,7 +43,7 @@ public class DataMessage extends FastI2NPMessageImpl {
     /**
      * The data payload, settable only once so the saved checksum stays valid.
      *
-     * @param data the data
+     * @param data the payload this message will carry to the far endpoint
      * @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {

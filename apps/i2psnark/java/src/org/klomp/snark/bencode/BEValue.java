@@ -109,7 +109,7 @@ public class BEValue {
      * Number, otherwise it will throw a InvalidBEncodingException. The returned int is the result
      * of <code>Number.intValue()</code>.
      *
-     * @return the int
+     * @return the value narrowed by {@link Number#intValue()}
      * @throws InvalidBEncodingException if the value is not a Number
      */
     public int getInt() throws InvalidBEncodingException {

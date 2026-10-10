@@ -469,7 +469,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * @param authType 0, 1, or 3, see BlindData
      * @param clientKeys The client's X25519 public or private keys, null if unused
      * @throws IllegalStateException if already encrypted, not signed, or the inner
-     *         layer cannot be written
+     *                               layer cannot be written
      */
     public void encrypt(int authType, List<? extends SimpleDataStructure> clientKeys) {
         if (_encryptedData != null) throw new IllegalStateException("already encrypted");
@@ -857,7 +857,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * @param clientKeys X25519 public keys for DH, private keys for PSK
      * @throws IllegalStateException if already signed
      * @throws DataFormatException if the inner bytes cannot be serialized, or the
-     *         blinded key is not one of the supported signing key types
+     *                             blinded key is not one of the supported signing key types
      * @since 0.9.41
      */
     public void sign(SigningPrivateKey key, int authType, List<? extends SimpleDataStructure> clientKeys) throws DataFormatException {

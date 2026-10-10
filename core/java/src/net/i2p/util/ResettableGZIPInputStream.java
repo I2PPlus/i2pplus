@@ -52,7 +52,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *
      * @param compressedStream the GZIP member to decompress, read from on demand
      * @throws IOException if the GZIP header cannot be read or does not carry the
-     * magic bytes, compression method and flags this decoder requires
+     *                     magic bytes, compression method and flags this decoder requires
      */
     public ResettableGZIPInputStream(InputStream compressedStream) throws IOException {
         this();
@@ -65,7 +65,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
      *
      * @param compressedStream the GZIP member to decompress, read from on demand
      * @throws IOException if the stream ends inside the GZIP header, or the header
-     * carries the wrong magic bytes, compression method or extended flags
+     *                     carries the wrong magic bytes, compression method or extended flags
      */
     public final void initialize(InputStream compressedStream) throws IOException {
         len = 0;

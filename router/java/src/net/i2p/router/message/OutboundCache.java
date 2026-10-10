@@ -347,11 +347,11 @@ public class OutboundCache {
      *
      * @param old the outbound tunnel used by the previous connection, or null
      * @param candidates pool picks gathered for this rotation, never null; may
-     * be empty when no tunnels are currently available
+     *                   be empty when no tunnels are currently available
      * @param rnd randomness source for choosing among several distinct tunnels
      * @return a candidate distinct from {@code old} when one exists, otherwise
-     * {@code old} unchanged, so rotation is best-effort and never
-     * blocks or drops a connection
+     *         {@code old} unchanged, so rotation is best-effort and never
+     *         blocks or drops a connection
      * @since 0.9.71+
      */
     static TunnelInfo pickDistinctTunnel(TunnelInfo old, List<TunnelInfo> candidates, Random rnd) {

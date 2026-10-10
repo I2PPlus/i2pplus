@@ -192,7 +192,7 @@ class ClientListenerRunner implements Runnable {
     /**
      * Verify the first byte.
      *
-     * @param socket the socket
+     * @param socket the accepted connection to probe for the I2CP protocol byte
      * @return true if the first byte is the I2CP protocol byte
      */
     protected boolean validate(Socket socket) {

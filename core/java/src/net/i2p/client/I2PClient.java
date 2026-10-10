@@ -107,7 +107,7 @@ public interface I2PClient {
      * As of 0.9.19, defaults in options are honored.
      *
      * @param destKeyStream location from which to read the Destination, PrivateKey, and SigningPrivateKey from,
-     * format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
      * @param options set of options to configure the router with, if null will use System properties
      * @return new session allowing a Destination to receive all of its messages and send messages to any other Destination.
@@ -137,7 +137,7 @@ public interface I2PClient {
      * Caller must close stream.
      *
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
-     * format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param type the signature type for the destination
      * @return new destination
      * @throws I2PException on I2P protocol error

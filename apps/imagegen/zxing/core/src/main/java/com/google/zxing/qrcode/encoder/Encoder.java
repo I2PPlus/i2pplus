@@ -70,7 +70,7 @@ public final class Encoder {
    * @param ecLevel error correction level to use
    * @return {@link QRCode} representing the encoded QR code
    * @throws WriterException if encoding can't succeed, because of for example invalid content
-   * or configuration
+   *                         or configuration
    */
   public static QRCode encode(String content, ErrorCorrectionLevel ecLevel) throws WriterException {
     return encode(content, ecLevel, null);
@@ -319,7 +319,7 @@ public final class Encoder {
 
   /**
    * @return true if the number of input bits will fit in a code with the specified version and
-   * error correction level.
+   *         error correction level.
    */
   private static boolean willFit(int numInputBits, Version version, ErrorCorrectionLevel ecLevel) {
       // In the following comments, we use numbers of Version 7-H.
@@ -380,7 +380,7 @@ public final class Encoder {
    * @param numDataBytesInBlock a one-element array receiving the data codeword count
    * @param numECBytesInBlock a one-element array receiving the error correction codeword count
    * @throws WriterException if {@code blockID} is out of range, or the block geometry implied by
-   * the other counts is inconsistent
+   *                         the other counts is inconsistent
    */
   static void getNumDataBytesAndNumECBytesForBlockID(int numTotalBytes,
                                                      int numDataBytes,
@@ -433,7 +433,7 @@ public final class Encoder {
    * @param numRSBlocks the number of Reed-Solomon blocks to split the data across
    * @return a buffer holding the data and error correction codewords interleaved
    * @throws WriterException if the supplied counts disagree, or the result is not
-   * {@code numTotalBytes} long
+   *                         {@code numTotalBytes} long
    */
   static BitArray interleaveWithECBytes(BitArray bits,
                                         int numTotalBytes,
@@ -561,7 +561,7 @@ public final class Encoder {
    * @param bits the bit buffer the encoded characters are appended to
    * @param encoding the charset name used by the modes that fall back to bytes
    * @throws WriterException if {@code mode} is not one of the four encodable modes, or the content
-   * cannot be represented in it
+   *                         cannot be represented in it
    */
   static void appendBytes(String content,
                           Mode mode,
@@ -673,7 +673,7 @@ public final class Encoder {
    * @param content the Kanji text to encode, read as Shift_JIS
    * @param bits the bit buffer the encoded characters are appended to
    * @throws WriterException if the text does not convert to an even number of Shift_JIS bytes, or
-   * a byte pair is outside the two ranges Kanji mode defines
+   *                         a byte pair is outside the two ranges Kanji mode defines
    */
   static void appendKanjiBytes(String content, BitArray bits) throws WriterException {
     byte[] bytes;

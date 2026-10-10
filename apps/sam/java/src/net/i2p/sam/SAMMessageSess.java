@@ -91,7 +91,7 @@ interface SAMMessageSess extends Closeable {
      * @param name the base32 hostname, or full destination, to resolve
      * @return the Destination, or null if it could not be resolved
      * @throws I2PSessionException if the lookup does not complete within the
-     *         10 second session timeout
+     *                             10 second session timeout
      * @since 0.9.69
      */
     public Destination lookupDest(String name) throws I2PSessionException;

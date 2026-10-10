@@ -151,7 +151,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
 
     /**
      * @throws UnsupportedOperationException if the set has finished initializing;
-     *     before that the call is allowed so the Collection constructor can populate it
+     *                                       before that the call is allowed so the Collection constructor can populate it
      */
     @Override
     public boolean add(E o) {
@@ -162,7 +162,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
 
     /**
      * @throws UnsupportedOperationException if the set has finished initializing;
-     *     before that the call is allowed so the Collection constructor can populate it
+     *                                       before that the call is allowed so the Collection constructor can populate it
      */
     @Override
     public void addUnique(E o) {

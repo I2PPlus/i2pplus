@@ -227,7 +227,8 @@ public class RouterAddress extends DataStructureImpl {
     }
 
     /**
-     * As of 0.9.3, expiration MUST be all zeros as it is ignored on
+     * Write the cost, expiration, transport style, and options.
+     * As of 0.9.3 the expiration MUST be all zeros, as it is ignored on
      * readin and the signature will fail.
      */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {

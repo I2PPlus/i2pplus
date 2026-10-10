@@ -42,10 +42,10 @@ public class FileUtil {
      *
      * @param path path to the directory being deleted
      * @param failIfNotEmpty if true, do not delete anything if the directory
-     * is not empty (and return false)
+     *                       is not empty (and return false)
      *
      * @return true if the path no longer exists (aka was removed),
-     * false if it remains
+     *         false if it remains
      */
     public static final boolean rmdir(String path, boolean failIfNotEmpty) {
         return rmdir(new File(path), failIfNotEmpty);
@@ -56,10 +56,10 @@ public class FileUtil {
      *
      * @param target the file or directory being deleted
      * @param failIfNotEmpty if true, do not delete anything if the directory
-     * is not empty (and return false)
+     *                       is not empty (and return false)
      *
      * @return true if the path no longer exists (aka was removed),
-     * false if it remains
+     *         false if it remains
      */
     public static final boolean rmdir(File target, boolean failIfNotEmpty) {
         if (!target.exists()) {
@@ -84,15 +84,18 @@ public class FileUtil {
     }
 
     /**
-     * As of release 0.7.12, any files inside the zip that have a .jar.pack or .war.pack suffix
+     * Extract every entry of the zip archive into targetDir, creating missing
+     * parent directories as needed.
+     *
+     * Since 0.7.12, any files inside the zip that have a .jar.pack or .war.pack suffix
      * are transparently unpacked to a .jar or .war file using unpack200.
      * Logs at WARN level to wrapper.log
      *
      * @param zipfile the zip archive to extract
      * @param targetDir the directory the entries are written under, with any
-     *        missing parent directories created as needed
+     *                  missing parent directories created as needed
      * @return true if every entry was extracted, false if any entry was refused
-     *     or could not be read or written
+     *         or could not be read or written
      */
     public static boolean extractZip(File zipfile, File targetDir) {
         return extractZip(zipfile, targetDir, Log.WARN);
@@ -104,7 +107,7 @@ public class FileUtil {
      *
      * @param zipfile the zip archive to extract
      * @param targetDir the directory the entries are written under, with any
-     *        missing parent directories created as needed
+     *                  missing parent directories created as needed
      * @param logLevel Log.WARN, etc.
      * @return true if it was copied successfully
      * @since 0.9.7
@@ -203,7 +206,7 @@ public class FileUtil {
      * "junk" (sig and version)
      *
      * @param zipfile the zip archive to check, whose entries are decompressed
-     *        and discarded rather than written out
+     *                and discarded rather than written out
      * @return true if ok
      */
     public static boolean verifyZip(File zipfile) {
@@ -297,7 +300,7 @@ public class FileUtil {
      * Caller must close streams
      *
      * @throws IOException on unpack error or if the library is unavailable.
-     * Will not throw ClassNotFoundException.
+     *                  Will not throw ClassNotFoundException.
      * @throws java.lang.reflect.InvocationTargetException on duplicate zip entries in the packed jar
      * @since 0.8.1
      */
@@ -323,7 +326,7 @@ public class FileUtil {
      *
      * @param filename the path of the newline-delimited text file to read
      * @param startAtBeginning if true, read the first maxNumLines, otherwise read
-     * the last maxNumLines
+     *                         the last maxNumLines
      *
      * @param maxNumLines max number of lines (or -1 for unlimited)
      * @return string or null; does not throw IOException.
@@ -362,12 +365,12 @@ public class FileUtil {
      * but leaves it open when throwing IOE.
      *
      * @param path the file to dump, relative to the root, which may not escape
-     *        the root directory
+     *             the root directory
      * @param root the directory that path is resolved against
      * @param out the stream the file is copied to; closed on successful
-     *        completion but left open when an IOException is thrown
+     *            completion but left open when an IOException is thrown
      * @throws FileNotFoundException if path is empty, does not exist, or
-     *        resolves outside the root directory
+     *                               resolves outside the root directory
      */
     public static void readFile(String path, String root, OutputStream out) throws IOException {
         File rootDir = new File(root);
@@ -419,7 +422,7 @@ public class FileUtil {
      *
      * @param src the existing file to copy
      * @param dst the destination, which is treated as a directory when one
-     *        already exists at that path
+     *            already exists at that path
      * @param overwriteExisting if true, replace dst when it already exists
      * @param quiet don't log fails to wrapper log if true
      * @return true if it was copied successfully
@@ -480,7 +483,7 @@ public class FileUtil {
      * Usage: FileUtil (delete path | copy source dest | rename from to | unzip path.zip)
      *
      * @param args the subcommand and its operands: delete path | copy source
-     *        dest | rename from to | unzip path.zip
+     *             dest | rename from to | unzip path.zip
      */
     public static void main(String[] args) {
         if ((args == null) || (args.length < 2)) {

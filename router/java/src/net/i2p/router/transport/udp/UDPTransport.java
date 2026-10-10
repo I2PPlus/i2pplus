@@ -3085,7 +3085,7 @@ public class UDPTransport extends TransportImpl {
      * FIXME no way to remove an IPv6 address
      *
      * @param host new validated IPv4 or IPv6 or DNS hostname or null
-     * or ":" to force IPv6 introducer rebuild
+     *             or ":" to force IPv6 introducer rebuild
      * @param port new validated port or 0/-1
      * @param allowRebuildRouterInfo whether to tell the router
      * @return the new address if changed, else null
@@ -3101,7 +3101,7 @@ public class UDPTransport extends TransportImpl {
      * Rebuild the external address from the given validated host; caller must hold the rebuild lock.
      *
      * @param host new validated IPv4 or IPv6 or DNS hostname or null
-     * or ":" to force IPv6 introducer rebuild
+     *             or ":" to force IPv6 introducer rebuild
      */
     private RouterAddress locked_rebuildExternalAddress(String host, int port, boolean allowRebuildRouterInfo) {
         if (_log.shouldDebug())

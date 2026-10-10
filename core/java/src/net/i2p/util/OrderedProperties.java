@@ -22,10 +22,10 @@ import java.util.Set;
  *
  * @author zzz Rewritten
  *
- * Now unsorted until the keyset or entryset is requested.
- * The class is unsynchronized.
- * The keySet() and entrySet() methods return ordered sets.
- * Others - such as the enumerations values(), keys(), propertyNames() - do not.
+ *         Now unsorted until the keyset or entryset is requested.
+ *         The class is unsynchronized.
+ *         The keySet() and entrySet() methods return ordered sets.
+ *         Others - such as the enumerations values(), keys(), propertyNames() - do not.
  */
 public class OrderedProperties extends Properties {
 

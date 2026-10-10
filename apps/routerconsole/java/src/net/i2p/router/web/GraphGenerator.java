@@ -578,7 +578,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * @param startedMs wall-clock ms when graphing began
      * @param ratePeriod the rate's period in ms
      * @param coalesceStalled true when the coalesce sweep has not run recently enough to
-     * have fed these rates; see {@link net.i2p.stat.StatManager#getCoalesceSweepAgeMs(long)}
+     *                        have fed these rates; see {@link net.i2p.stat.StatManager#getCoalesceSweepAgeMs(long)}
      * @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
      * @since 0.9.71+
      */
@@ -652,9 +652,9 @@ public class GraphGenerator implements Runnable, ClientApp {
      *
      * @param cause classification from {@link #classifyStaleness}
      * @param lastEventCount events the rate accrued in its last completed period, or 0
-     * when it accrued none
+     *                       when it accrued none
      * @return {@link StaleCause#RATE_IDLE} when the rate produced no events in its last
-     * period, otherwise cause unchanged
+     *         period, otherwise cause unchanged
      * @since 0.9.71+
      */
     static StaleCause refineForIdleRate(StaleCause cause, long lastEventCount) {
@@ -984,7 +984,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * list so it keeps counting only what actually records.
      *
      * @param rate the series being rebuilt; re-opens its RRD file and names
-     * the rate in the log line
+     *             the rate in the log line
      * @param lsnr the listener being replaced, or null if the map lost it
      * @param why short reason for the log line
      * @return true if a replacement listener is now recording

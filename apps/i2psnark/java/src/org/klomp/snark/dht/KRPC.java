@@ -228,8 +228,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param ctx the I2P context, supplying the log manager, random source and router
      * @param session the I2P session the DHT messages are sent over
      * @param shared the KRPC instance whose routing table, tracker, and blacklist are shared with
-     *            this instance, or null for a standalone instance; a TorrentKRPC passes the main
-     *            instance and overrides start() and stop() to run only the message listener
+     *               this instance, or null for a standalone instance; a TorrentKRPC passes the main
+     *               instance and overrides start() and stop() to run only the message listener
      */
     protected KRPC(I2PAppContext ctx, String baseName, I2PSession session, KRPC shared) {
         _context = ctx;
@@ -453,7 +453,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param maxWait the maximum time to wait (ms) must be &gt; 0
      * @param annMax the number of peers to announce to
      * @param annMaxWait the maximum total time to wait for announces, may be 0 to return
-     *     immediately without waiting for acks
+     *                   immediately without waiting for acks
      * @param isSeed true if seed, false if leech
      * @param noSeeds true if we do not want seeds in the result
      * @return possibly empty (never null)
@@ -2090,7 +2090,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Handle a session disconnect.
      *
-     * @param session the session
+     * @param session the I2P session that closed
      */
     @Override
     public void disconnected(I2PSession session) {
@@ -2105,7 +2105,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      *
      * @param session the I2P session that reported the error
      * @param message the error message
-     * @param error the error
+     * @param error the throwable reported with the error
      */
     @Override
     public void errorOccurred(I2PSession session, String message, Throwable error) {
