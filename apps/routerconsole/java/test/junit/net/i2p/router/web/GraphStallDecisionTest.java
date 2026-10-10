@@ -160,7 +160,7 @@ public class GraphStallDecisionTest {
     ///////////// refineForIdleRate
 
     /**
-     * A rate that never coalesced since attach had no sample to write, so nothing is lost.
+     * A rate with no events in its last period had nothing to write, so nothing is lost.
      *
      * <p>This is the split that stops the false alarm: a stat nothing in the router ever
      * updates produced a permanent, unfixable ERROR claiming its graphs were stalled.
@@ -171,23 +171,43 @@ public class GraphStallDecisionTest {
                      GraphGenerator.refineForIdleRate(StaleCause.NEVER_WRITTEN, 0L));
     }
 
-    /** Once the rate has coalesced there was a sample to write, so the write path is at fault. */
+    /** Once the rate has events there was a sample to write, so the write path is at fault. */
     @Test
     public void testFedRateThatNeverWroteIsStillAFault() {
         assertEquals(StaleCause.NEVER_WRITTEN,
                      GraphGenerator.refineForIdleRate(StaleCause.NEVER_WRITTEN, 1L));
     }
 
-    /** Refinement only ever touches a never-written listener. */
+    /**
+     * A rate that stopped feeding after writing is idle, not broken.
+     *
+     * <p>This is the stopped-service case: the listener wrote for a while, then the rate
+     * went empty because the service behind it went away. Reporting that as
+     * WRITES_STOPPED blamed the write path for a service that had simply stopped, and
+     * escalated it to ERROR with no fault to fix.
+     */
+    @Test
+    public void testStoppedServiceIsNotAFault() {
+        assertEquals(StaleCause.RATE_IDLE,
+                     GraphGenerator.refineForIdleRate(StaleCause.WRITES_STOPPED, 0L));
+    }
+
+    /** A rate still producing events means the listener really did stop writing. */
+    @Test
+    public void testFedRateThatStoppedWritingIsStillAFault() {
+        assertEquals(StaleCause.WRITES_STOPPED,
+                     GraphGenerator.refineForIdleRate(StaleCause.WRITES_STOPPED, 1L));
+    }
+
+    /** Refinement only ever touches a listener that failed to write. */
     @Test
     public void testRefinementLeavesOtherCausesAlone() {
-        assertEquals(StaleCause.WRITES_STOPPED,
-                     GraphGenerator.refineForIdleRate(StaleCause.WRITES_STOPPED, 0L));
         assertEquals(StaleCause.UNREGISTERED,
                      GraphGenerator.refineForIdleRate(StaleCause.UNREGISTERED, 0L));
         assertEquals(StaleCause.COALESCE_STALLED,
                      GraphGenerator.refineForIdleRate(StaleCause.COALESCE_STALLED, 0L));
         assertEquals(StaleCause.OK, GraphGenerator.refineForIdleRate(StaleCause.OK, 0L));
+        assertEquals(StaleCause.OK, GraphGenerator.refineForIdleRate(StaleCause.OK, 1L));
     }
 
     /** An idle rate records nothing because nothing is happening, so it is not a fault. */

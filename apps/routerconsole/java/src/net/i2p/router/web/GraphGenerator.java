@@ -636,22 +636,32 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     * Split "has never written" into a broken data path and a rate with nothing to say.
+     * Split "the rate has nothing to say" out of the causes that lose data.
      *
-     * <p>A listener that has never written looks identical whether its RRD writes are
-     * failing or its rate has simply never coalesced. Only the first loses data. Coalesce
-     * count settles it: the rate handed the listener a sample to write, or it did not.
-     * Without this split, a stat nothing in the router ever updates produces an ERROR
-     * every reporting interval for the life of the process, naming a fault that has no fix.
+     * <p>A listener that has never written, or has stopped writing, looks identical
+     * whether its RRD writes are failing or whether nothing in the router is feeding its
+     * rate at all. Only the first loses data. Event count settles it: a rate with no
+     * events in its last completed period had nothing to hand the listener, so there is
+     * nothing being lost.
+     *
+     * <p>Event count rather than coalesce count, deliberately. Coalescing is driven by the
+     * StatManager sweep and happens on schedule whether or not any data arrives, so it
+     * keeps advancing for a rate nobody is updating. That made the coalesce form unable
+     * to distinguish "idle" from "fed but unwritten" for any listener that had been
+     * running, which is precisely the case a stopped service produces.
      *
      * @param cause classification from {@link #classifyStaleness}
-     * @param coalesceDelta times the rate coalesced since the listener attached
-     * @return {@link StaleCause#RATE_IDLE} for a never-written listener whose rate has not
-     * coalesced, otherwise cause unchanged
+     * @param lastEventCount events the rate accrued in its last completed period, or 0
+     * when it accrued none
+     * @return {@link StaleCause#RATE_IDLE} when the rate produced no events in its last
+     * period, otherwise cause unchanged
      * @since 0.9.71+
      */
-    static StaleCause refineForIdleRate(StaleCause cause, long coalesceDelta) {
-        if (cause != StaleCause.NEVER_WRITTEN || coalesceDelta > 0) {return cause;}
+    static StaleCause refineForIdleRate(StaleCause cause, long lastEventCount) {
+        if (cause != StaleCause.NEVER_WRITTEN && cause != StaleCause.WRITES_STOPPED) {
+            return cause;
+        }
+        if (lastEventCount > 0) {return cause;}
         return StaleCause.RATE_IDLE;
     }
 
@@ -715,6 +725,13 @@ public class GraphGenerator implements Runnable, ClientApp {
         long now = System.currentTimeMillis();
         CauseTally neverWritten = new CauseTally(StaleCause.NEVER_WRITTEN);
         CauseTally rateIdle = new CauseTally(StaleCause.RATE_IDLE);
+        // Split from rateIdle by how the listener got here: a rate idle since the
+        // listener attached never had a producer, while one idle after writing had one
+        // that went away -- usually a stopped service. Same "nothing lost" verdict, but
+        // the operator needs to tell the two apart, since only one is a service event.
+        // The tally keeps WRITES_STOPPED as its label because that is the cause it was
+        // refined from, and CauseTally.describe() prints that label verbatim.
+        CauseTally stoppedService = new CauseTally(StaleCause.WRITES_STOPPED);
         CauseTally unregistered = new CauseTally(StaleCause.UNREGISTERED);
         CauseTally writesStopped = new CauseTally(StaleCause.WRITES_STOPPED);
         CauseTally coalesceStalled = new CauseTally(StaleCause.COALESCE_STALLED);
@@ -736,14 +753,18 @@ public class GraphGenerator implements Runnable, ClientApp {
             if (cause == StaleCause.OK) {
                 continue;
             }
-            cause = refineForIdleRate(cause, lsnr.getCoalesceDelta());
+            // Event count, not coalesce count: coalescing runs on schedule whether or not
+            // any data arrives, so it cannot tell a stopped service from a live one.
+            StaleCause preRefined = cause;
+            cause = refineForIdleRate(cause, lsnr.getRate().getLastEventCount());
             CauseTally tally;
             switch (cause) {
                 case NEVER_WRITTEN:
                     tally = neverWritten;
                     break;
                 case RATE_IDLE:
-                    tally = rateIdle;
+                    // Which flavour of idle depends on the cause we refined away from.
+                    tally = preRefined == StaleCause.WRITES_STOPPED ? stoppedService : rateIdle;
                     break;
                 case UNREGISTERED:
                     tally = unregistered;
@@ -775,12 +796,19 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
         String msg = formatStaleness(_listeners.size(), neverWritten, unregistered, writesStopped,
                                   coalesceStalled);
-        if (rateIdle.count() > 0) {
-            // Appended, not counted in the headline: a rate nothing updates is idle, not
-            // broken, but the operator still needs to see which ones are holding the
-            // remaining "never written" graphs empty.
-            msg += "\n* " + rateIdle.describe() + " (rate not updated since attach, nothing lost)";
-        }
+          if (rateIdle.count() > 0) {
+              // Appended, not counted in the headline: a rate nothing updates is idle, not
+              // broken, but the operator still needs to see which ones are holding the
+              // remaining "never written" graphs empty.
+              msg += "\n* " + rateIdle.describe() + " (rate never fed, nothing lost)";
+          }
+          if (stoppedService.count() > 0) {
+              // Same verdict, different cause: this rate was being written and stopped,
+              // which is a service going away rather than a stat that was never wired up.
+              // Named so the operator can tell "nothing to graph" from "nothing running".
+              msg += "\n* " + stoppedService.describe()
+                          + " (service stopped, nothing lost)";
+          }
         if (_stallThrottle.allow(now, stalled, REPORT_REPEAT_MS)) {
             _stallReported = true;
             _log.error(msg);
