@@ -31,6 +31,8 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
     private volatile Runnable _command;
 
     /**
+     * Create a timer that runs a command after a period of socket inactivity.
+     *
      * @param delay The inactivity delay, greater than zero
      */
     public SocketTimeout(long delay) {
@@ -85,6 +87,8 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
 
     /**
      * If non-null, will be closed when the timer expires.
+     *
+     * @param s the socket to close on expiry, or null to leave the socket alone
      */
     public void setSocket(Socket s) {
         _targetSocket = s;
@@ -118,6 +122,8 @@ public class SocketTimeout extends SimpleTimer2.TimedEvent {
 
     /**
      * If non-null, will be run when the timer expires.
+     *
+     * @param job the command to run on expiry, or null to leave the current command in place
      */
     public void setTimeoutCommand(Runnable job) {
         _command = job;

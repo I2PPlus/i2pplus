@@ -216,6 +216,9 @@ public class NTCPTransport extends TransportImpl {
     private final String _b64Ntcp2StaticIV;
 
     /**
+     * Registers the NTCP rate statistics and loads or creates the NTCP2 static
+     * keys; nothing is started until startListening().
+     *
      * @param ctx the router context
      * @param xdh null to disable NTCP2
      */
@@ -694,6 +697,13 @@ public class NTCPTransport extends TransportImpl {
         NEAR_CAPACITY_COST
     }
 
+    /**
+     * How a peer's announced network id compares with ours: the same, absent, or
+     * a different network, which {@link #bid(RouterInfo, int)} treats as grounds
+     * for a ban rather than an unreachable peer.
+     *
+     * @since 0.9.71+
+     */
     static enum NetworkIdIssue {
         /** The peer is in our network. */
         OK,
@@ -905,12 +915,19 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Whether an additional outbound connection may be accepted.
+     *
+     * @return true if the connection count is below {@link #getMaxConnections()}
      */
     public boolean allowConnection() {
         return _conByIdent.size() < getMaxConnections();
     }
 
-    /** Queue up the afterSend call, which can take some time with jobs, etc. */
+    /**
+     * Queue up the afterSend call, which can take some time with jobs, etc.
+     *
+     * @param msg the message that finished sending, whose afterSend runs later
+     *        on the finisher thread
+     */
     void sendComplete(OutNetMessage msg) {_finisher.add(msg);}
 
     /**
@@ -971,7 +988,7 @@ public class NTCPTransport extends TransportImpl {
     /**
      * Tell the transport to disconnect from this peer with a reason for logging.
      *
-     * @param peer the peer
+     * @param peer the peer to drop, identified by its router hash
      * @param reason reason for disconnection (for logging), may be null
      * @since 0.9.38
      */
@@ -995,6 +1012,7 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * The connection removed; usually the con passed in, but possibly a second connection with the same peer.
+     * @param con the connection being torn down, whose remote peer identifies it
      * @return usually the con passed in, but possibly a second connection with the same peer...
      * only con or null as of 0.9.37
      */
@@ -1590,12 +1608,19 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * Hook for NTCPConnection
+     * The single reader thread shared by every NTCPConnection: one reader is
+     * started for the transport, and connections register with it rather than
+     * starting a thread each.
+     *
+     * @return the transport's shared reader thread
      */
     Reader getReader() {return _reader;}
 
     /**
-     * Hook for NTCPConnection
+     * The single writer thread shared by every NTCPConnection, started alongside
+     * the reader.
+     *
+     * @return the transport's shared writer thread
      */
     Writer getWriter() {return _writer;}
 
@@ -1621,11 +1646,17 @@ public class NTCPTransport extends TransportImpl {
     private String getPublishStyle() {return STYLE2;}
 
     /**
-     * Hook for NTCPConnection
+     * The single event pumper shared by every NTCPConnection, which also drives
+     * the periodic close of connections that never establish.
+     *
+     * @return the transport's shared event pumper
      */
     EventPumper getPumper() {return _pumper;}
 
     /**
+     * The X25519 key factory backing NTCP2 static key agreement, absent when the
+     * router was configured without NTCP2.
+     *
      * @return null if not configured for NTCP2
      * @since 0.9.36
      */
@@ -1640,19 +1671,28 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * NTCP establish timeout in ms.
+     *
+     * @return the current establishment timeout, 1500 to 10000
      * @since 0.9.70+
      */
     public static int getEstablishTimeout() { return ESTABLISH_TIMEOUT; }
 
     /**
      * NTCP establish timeout, bounded 1500-10000ms.
+     *
+     * @param ms the requested timeout in ms, clamped into 1500 to 10000
      * @since 0.9.70+
      */
     public static void setEstablishTimeout(int ms) {
         ESTABLISH_TIMEOUT = Math.max(1500, Math.min(10000, ms));
     }
 
-    /** Add us to the establishment timeout process. */
+    /**
+     * Add us to the establishment timeout process.
+     *
+     * @param con the connection being established, which {@link #expireTimedOut()}
+     *        closes if it has not established in time
+     */
     void establishing(NTCPConnection con) {_establishing.add(con);}
 
     /**
@@ -1750,22 +1790,25 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * The static priv key
+     * The NTCP2 static public key Bob publishes to Alice, base64 of the raw key.
      *
+     * @return the NTCP2 static public key
      * @since 0.9.36
      */
     byte[] getNTCP2StaticPubkey() {return _ntcp2StaticPubkey;}
 
     /**
-     * The static priv key
+     * The NTCP2 static private key for this router's own NTCP2 sessions.
      *
+     * @return the NTCP2 static private key
      * @since 0.9.35
      */
     byte[] getNTCP2StaticPrivkey() {return _ntcp2StaticPrivkey;}
 
     /**
-     * The static IV
+     * The NTCP2 static IV, shared by both sides of an NTCP2 session.
      *
+     * @return the NTCP2 static IV
      * @since 0.9.36
      */
     byte[] getNTCP2StaticIV() {return _ntcp2StaticIV;}
@@ -2631,34 +2674,74 @@ public class NTCPTransport extends TransportImpl {
 
     // ==================== Tuner delegation ====================
 
-    /** Selector loop delay in milliseconds. */
+    /**
+     * Selector loop delay in milliseconds.
+     *
+     * @return the delay between selector wakeups, 1 to 20
+     */
     public static long getSelectorLoopDelay() { return EventPumper.getSelectorLoopDelay(); }
 
-    /** Selector loop delay, bounded 1-100ms. */
+    /**
+     * Selector loop delay, bounded 1-20ms.
+     *
+     * @param ms the requested delay in ms, clamped into 1 to 20
+     */
     public static void setSelectorLoopDelay(long ms) { EventPumper.setSelectorLoopDelay(ms); }
 
-    /** Max idle loop rate in loops per second. */
+    /**
+     * Max idle loop rate in loops per second.
+     *
+     * @return the idle-loop ceiling in loops per second, 1 to 5000
+     */
     public static int getMaxIdleLps() { return EventPumper.getMaxIdleLps(); }
 
-    /** Max idle loop rate in loops per second, bounded 1-5000. */
+    /**
+     * Max idle loop rate in loops per second, bounded 1-5000.
+     *
+     * @param lps the requested ceiling in loops per second, clamped into 1 to 5000
+     */
     public static void setMaxIdleLps(int lps) { EventPumper.setMaxIdleLps(lps); }
 
-    /** Failsafe iteration frequency in milliseconds. */
+    /**
+     * Failsafe iteration frequency in milliseconds.
+     *
+     * @return the interval between failsafe passes, 2000 to 30000
+     */
     public static long getFailsafeIterationFreq() { return EventPumper.getFailsafeIterationFreq(); }
 
-    /** Failsafe iteration frequency, bounded by MIN-MAX. */
+    /**
+     * Failsafe iteration frequency, bounded to 2000-30000ms.
+     *
+     * @param ms the requested interval in ms, clamped into 2000 to 30000
+     */
     public static void setFailsafeIterationFreq(long ms) { EventPumper.setFailsafeIterationFreq(ms); }
 
-    /** Send finisher max threads. */
+    /**
+     * Send finisher max threads.
+     *
+     * @return the send finisher pool's maximum thread count, 2 to 16
+     */
     public static int getSendFinisherMaxThreads() { return NTCPSendFinisher.getMaxThreads(); }
 
-    /** Send finisher max threads. */
+    /**
+     * Send finisher max threads, bounded 2-16.
+     *
+     * @param threads the requested thread ceiling, clamped into 2 to 16
+     */
     public static void setSendFinisherMaxThreads(int threads) { NTCPSendFinisher.setMaxThreads(threads); }
 
-    /** Send finisher queue capacity. */
+    /**
+     * Send finisher queue capacity.
+     *
+     * @return the send finisher queue depth, 256 to 16384
+     */
     public static int getSendFinisherQueueCapacity() { return NTCPSendFinisher.getQueueCapacity(); }
 
-    /** Send finisher queue capacity. */
+    /**
+     * Send finisher queue capacity, bounded 256-16384.
+     *
+     * @param capacity the requested queue depth, clamped into 256 to 16384
+     */
     public static void setSendFinisherQueueCapacity(int capacity) { NTCPSendFinisher.setQueueCapacity(capacity); }
 
     /**

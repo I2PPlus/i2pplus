@@ -46,6 +46,9 @@ public class DBHistory {
 
     /**
      * DBHistory.
+     *
+     * @param context the router context the rates and clock are taken from
+     * @param statGroup the grouping applied to the two RateStats created here
      */
     public DBHistory(RouterContext context, String statGroup) {
         _context = context;
@@ -56,9 +59,17 @@ public class DBHistory {
                                          statGroup, new long[] { RateConstants.ONE_HOUR });
     }
 
-    /** How many times we have sent them a db lookup and received the value back from them. */
+    /**
+     * How many times we have sent them a db lookup and received the value back from them.
+     *
+     * @return the number of NetDb lookups this peer has answered
+     */
     public long getSuccessfulLookups() {return _successfulLookups.get();}
-    /** How many times we have sent them a db lookup and not received the value or a lookup reply. */
+    /**
+     * How many times we have sent them a db lookup and not received the value or a lookup reply.
+     *
+     * @return the number of NetDb lookups this peer has not answered
+     */
     public long getFailedLookups() {return _failedLookups.get();}
 
     /**
@@ -93,9 +104,17 @@ public class DBHistory {
      */
     public long getLastStoreFailed() {return _lastStoreFailed;}
 
-    /** How many times have they sent us data we didn't ask for and that we've never seen? */
+    /**
+     * How many times have they sent us data we didn't ask for and that we've never seen?
+     *
+     * @return the count of unprompted stores carrying data we had never seen before
+     */
     public long getUnpromptedDbStoreNew() {return _unpromptedDbStoreNew.get();}
-    /** How many times have they sent us data we didn't ask for but that we have seen? */
+    /**
+     * How many times have they sent us data we didn't ask for but that we have seen?
+     *
+     * @return the count of unprompted stores carrying data we had seen before
+     */
     public long getUnpromptedDbStoreOld() {return _unpromptedDbStoreOld.get();}
     /**
      * How often this peer failed to answer a NetDb request, in 10 minute and
@@ -111,7 +130,11 @@ public class DBHistory {
      * @return the combined lookup and store failure rate
      */
     public RateStat getFailedLookupRate() {return _failedLookupRate;}
-    /** Rate at which the peer sends us invalid reply data, to be investigated. */
+    /**
+     * Rate at which the peer sends us invalid reply data, to be investigated.
+     *
+     * @return the rate at which this peer sends invalid reply data
+     */
     public RateStat getInvalidReplyRate() {return _invalidReplyRate;}
 
     /**
@@ -192,18 +215,26 @@ public class DBHistory {
 
     /**
      * The count of successful lookups.
+     *
+     * @param num the count to store
      */
     public void setSuccessfulLookups(long num) {_successfulLookups.set(num);}
     /**
      * The count of failed lookups.
+     *
+     * @param num the count to store
      */
     public void setFailedLookups(long num) {_failedLookups.set(num);}
     /**
      * The count of unrequested db stores of data we have never seen.
+     *
+     * @param num the count to store
      */
     public void setUnpromptedDbStoreNew(long num) {_unpromptedDbStoreNew.set(num);}
     /**
      * The count of unrequested db stores of data we have seen before.
+     *
+     * @param num the count to store
      */
     public void setUnpromptedDbStoreOld(long num) {_unpromptedDbStoreOld.set(num);}
 
@@ -247,13 +278,20 @@ public class DBHistory {
 
     private static final String NL = System.getProperty("line.separator");
     private static final String HR = "# ----------------------------------------------------------------------------------------";
-    /** Write out the data from the profile to the stream including comments. */
+    /**
+     * Write out the data from the profile to the stream including comments.
+     *
+     * @param out the stream the profile is written to
+     * @throws IOException if out cannot be written
+     */
     public void store(OutputStream out) throws IOException {store(out, true);}
 
     /**
      * Write out the data from the profile to the stream.
      *
+     * @param out the stream the profile is written to
      * @param addComments add comment lines to the output
+     * @throws IOException if out cannot be written
      * @since 0.9.41
      */
     public void store(OutputStream out, boolean addComments) throws IOException {
@@ -284,6 +322,8 @@ public class DBHistory {
 
     /**
      * Load the DB history from the given properties.
+     *
+     * @param props the persisted properties naming the dbHistory.* counters
      */
     public void load(Properties props) {
         _failedLookups.set(getLong(props, "dbHistory.failedLookups"));

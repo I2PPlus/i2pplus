@@ -39,6 +39,12 @@ class MessageState {
     /**
      *  For synchronous waiting for accept with waitForAccept().
      *  UNUSED.
+     *
+     *  @param ctx the context supplying the clock and log used for the
+     *         sixty second lifetime and for warnings
+     *  @param nonce the transaction nonce this message was sent under
+     *  @param prefix text prepended to every log line so this send can be
+     *         told apart from others
      */
     public MessageState(I2PAppContext ctx, long nonce, String prefix) {
         _context = ctx;
@@ -52,8 +58,15 @@ class MessageState {
     }
 
     /**
-     *  For asynchronous notification
+     *  Track a sent message's delivery state for asynchronous notification
      *
+     *  @param ctx the context supplying the clock and log used to time the
+     *         wait and to report warnings
+     *  @param nonce the transaction nonce this message was sent under
+     *  @param session the session the message was sent through, also used
+     *         as the log prefix
+     *  @param listener notified on each state change while the message has
+     *         not yet expired
      *  @param expires absolute time (not interval)
      *  @since 0.9.14
      */
@@ -70,6 +83,9 @@ class MessageState {
 
     /**
      * Process a message status from the router and notify the listener.
+     *
+     *  @param status one of the MessageStatusMessage status codes the
+     *         router reported for this message
      */
     public void receive(int status) {
         State oldState;
@@ -87,6 +103,8 @@ class MessageState {
 
     /**
      * Message ID assigned to this message.
+     *
+     *  @param id the message ID the router assigned to the sent message
      */
     public void setMessageId(MessageId id) {
         _id = id;
@@ -102,7 +120,7 @@ class MessageState {
 
     /**
      * Return the elapsed time.
-     * @return the elapsed
+     * @return milliseconds elapsed on the router clock since the message was created
      */
     public long getElapsed() {
         return _context.clock().now() - _created;
@@ -110,7 +128,7 @@ class MessageState {
 
     /**
      * Return the expiration time.
-     * @return the expires
+     * @return the absolute router clock time at which the wait expires
      */
     public long getExpires() {
         return _expires;
@@ -118,6 +136,12 @@ class MessageState {
 
     /**
      *  For guaranteed/best effort only. Not really used.
+     *
+     *  @param expiration absolute time in milliseconds at which the wait is
+     *         abandoned, not an interval
+     *
+     *  @throws InterruptedException if the waiting thread is interrupted
+     *            before a status arrives or the deadline passes
      */
     public void waitForAccept(long expiration) throws InterruptedException {
         while (true) {
@@ -138,8 +162,9 @@ class MessageState {
     }
 
     /**
-     *  Update our flags
+     *  Record a status update, advancing the state only when it moves forward
      *
+     *  @param status the MessageStatusMessage status code just received
      *  @since 0.9.14
      */
     private void locked_update(int status) {
@@ -189,8 +214,10 @@ class MessageState {
     }
 
     /**
-     *  @return true if accepted (fixme and not failed)
-     *  @since 0.9.14
+     * Report whether the message was accepted for delivery.
+     *
+     * @return true if accepted (fixme and not failed)
+     * @since 0.9.14
      */
     public boolean wasAccepted() {
         synchronized (this) {
@@ -199,8 +226,10 @@ class MessageState {
     }
 
     /**
-     *  @return true if successful
-     *  @since 0.9.14
+     * Report whether the message was delivered successfully.
+     *
+     * @return true if successful
+     * @since 0.9.14
      */
     public boolean wasSuccessful() {
         synchronized (this) {

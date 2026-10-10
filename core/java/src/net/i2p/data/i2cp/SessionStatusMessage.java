@@ -46,7 +46,8 @@ public class SessionStatusMessage extends I2CPMessageImpl {
      */
     public static final int STATUS_INVALID = 3;
 
-    /** Session refused status.
+    /**
+     * Session refused status.
      *
      * @since 0.9.12
      */
@@ -86,6 +87,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
 
     /**
      * Session ID for this message.
+     * @param id the session whose status this message reports
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -101,6 +103,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
 
     /**
      * Status of the session.
+     * @param status one of the STATUS_* constants describing the session's current state
      */
     public final void setStatus(int status) {
         _status = status;

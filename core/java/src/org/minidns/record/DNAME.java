@@ -27,6 +27,11 @@ public class DNAME extends RRWithTarget {
 
     /**
      * parse.
+     *
+     * @param dis the stream positioned at the wire-format name starting this record's rdata
+     * @param data the whole message, needed to resolve compression pointers in the name
+     * @return the parsed record, holding the redirected subtree as its target
+     * @throws IOException if the stream ends inside the name
      */
     public static DNAME parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName target = DnsName.parse(dis, data);
@@ -35,6 +40,8 @@ public class DNAME extends RRWithTarget {
 
     /**
      * DNAME.
+     *
+     * @param target the redirected subtree in presentation form, e.g. "example.com"
      */
     public DNAME(String target) {
         this(DnsName.from(target));
@@ -42,6 +49,8 @@ public class DNAME extends RRWithTarget {
 
     /**
      * DNAME.
+     *
+     * @param target the redirected subtree, already parsed into its label form
      */
     public DNAME(DnsName target) {
         super(target);

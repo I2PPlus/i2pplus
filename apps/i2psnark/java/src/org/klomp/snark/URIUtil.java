@@ -35,6 +35,11 @@ import net.i2p.data.DataHelper;
 public class URIUtil {
 
     /**
+     * The encode and decode helpers below are static, so an instance carries nothing.
+     */
+    public URIUtil() {}
+
+    /**
      * Encode a URI path. This is the same encoding offered by URLEncoder, except that the '/'
      * character is not encoded.
      *

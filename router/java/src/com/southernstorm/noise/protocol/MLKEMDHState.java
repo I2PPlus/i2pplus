@@ -23,6 +23,7 @@ class MLKEMDHState implements DHState, Cloneable {
     /**
      *  Bob local/remote or Alice remote side, do not call generateKeyPair()
      *  @param isAlice true for Bob remote side, false for Bob local side and Alice remote side
+     *  @param patternId the handshake pattern selecting the ML-KEM parameter set
      */
     public MLKEMDHState(boolean isAlice, NoiseInit.PatternID patternId)
     {
@@ -31,6 +32,8 @@ class MLKEMDHState implements DHState, Cloneable {
 
     /**
      *  Alice local side
+     *  @param hdh the key factory used to generate and load this side's key pair
+     *  @param patternId the handshake pattern selecting the ML-KEM parameter set
      */
     public MLKEMDHState(KeyFactory hdh, NoiseInit.PatternID patternId)
     {
@@ -210,10 +213,10 @@ class MLKEMDHState implements DHState, Cloneable {
     }
 
     /**
-     *  Side effect: If we are Bob, copies the ciphertext to our public key
-         *  so it may be written out in the message.
-         *
-         *  @throws IllegalArgumentException on bad public key modulus
+     * Side effect: If we are Bob, copies the ciphertext to our public key
+     * so it may be written out in the message.
+     *
+     * @throws IllegalArgumentException on bad public key modulus
      */
     @Override
     public void calculate(byte[] sharedKey, int offset, DHState publicDH) {

@@ -4,4 +4,10 @@ package net.metanotion;
  * Exists only to enable package.html to be included in javadoc.
  * http://java.sun.com/j2se/javadoc/faq/index.html#packagewithoutjavafiles
  */
-abstract class Dummy {}
+abstract class Dummy {
+     /**
+      * Constructor. The class carries no state; it exists only so javadoc emits this package page.
+      */
+
+     Dummy() {}
+}

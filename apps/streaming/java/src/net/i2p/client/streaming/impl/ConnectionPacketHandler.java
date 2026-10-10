@@ -29,10 +29,12 @@ class ConnectionPacketHandler {
     /** Byte cache for packet buffers. */
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
 
-    /** Record every Nth receive-size stat sample. Per-packet RateStat updates
+    /**
+     * Record every Nth receive-size stat sample. Per-packet RateStat updates
      * lock each period's Rate; these size stats are display-only telemetry, so
      * sampling the aggregate (scaling the recorded value by the period)
-     * preserves the graph with a fraction of the monitor traffic. */
+     * preserves the graph with a fraction of the monitor traffic.
+     */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
     /** Sample counters for the per-packet size stats (one per call site). */
     private int _receiveMsgSizeCnt;
@@ -41,14 +43,17 @@ class ConnectionPacketHandler {
     /**
      * Maximum slow start window size.
      * Tunable via i2p.streaming.maxSlowStartWindow (default: 32).
+     * @param ctx the I2P application context, unused by this static lookup
      * @return the max slow start window
      */
     public static int getMaxSlowStartWindow(I2PAppContext ctx) {
         return ConnectionOptions.getMaxSlowStartWindowStatic();
     }
 
-    /** Immediate ACK delay in ms, applied as min(this, rtt/8) so it can only
-     * ever delay an immediate ACK by a fraction of the measured RTT. */
+    /**
+     * Immediate ACK delay in ms, applied as min(this, rtt/8) so it can only
+     * ever delay an immediate ACK by a fraction of the measured RTT.
+     */
     static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
     /** Period for rates. */

@@ -14,7 +14,11 @@ public class RatchetSessionTag {
     public static final int LENGTH = 8;
 
     private final long _data;
-    /** Tag from a long value for compact 8-byte storage. */
+    /**
+     * Tag from a long value for compact 8-byte storage.
+     *
+     * @param val the 64-bit tag value, stored as-is
+     */
 
     public RatchetSessionTag(long val) {
         _data = val;
@@ -60,7 +64,10 @@ public class RatchetSessionTag {
         return LENGTH;
     }
 
-    /** 12 chars */
+    /**
+     * 12 chars
+     * @return the tag encoded with the I2P base64 alphabet, 12 characters ending in '='
+     */
     public String toBase64() {
         // for efficiency
         StringBuilder buf = new StringBuilder(12);

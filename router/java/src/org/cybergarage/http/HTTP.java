@@ -26,6 +26,12 @@ import java.net.URL;
  * @since 1.0
  */
 public class HTTP {
+    /**
+     * Constructor. The header names, status codes and URL helpers below are all
+     * static, so an instance holds nothing.
+     */
+    public HTTP() {}
+
     ////////////////////////////////////////////////
     // Constants
     ////////////////////////////////////////////////

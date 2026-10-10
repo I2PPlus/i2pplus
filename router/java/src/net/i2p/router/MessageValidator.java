@@ -20,6 +20,9 @@ public class MessageValidator {
 
     /**
      * MessageValidator.
+     *
+     * @param context the router context supplying the log, clock and stats used
+     *        to validate messages
      */
     public MessageValidator(RouterContext context) {
         _log = context.logManager().getLog(MessageValidator.class);
@@ -35,6 +38,9 @@ public class MessageValidator {
     /**
      * Determine if this message should be accepted as valid (not expired, not a duplicate)
      *
+     * @param messageId the message ID to remember as received, so a second copy
+     *        with the same ID is rejected as a duplicate
+     * @param expiration the message expiry date in milliseconds since the epoch
      * @return reason why the message is invalid (or null if the message is valid)
      */
     public String validateMessage(long messageId, long expiration) {
@@ -55,6 +61,10 @@ public class MessageValidator {
 
     /**
      * Only check the expiration for the message
+     *
+     * @param expiration the message expiry date in milliseconds since the epoch,
+     *        compared against the current time with the clock fudge factor
+     * @return reason why the message is invalid (or null if the message is valid)
      */
     public String validateMessage(long expiration) {
         long now = _context.clock().now();

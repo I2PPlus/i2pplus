@@ -35,6 +35,7 @@ public class UTF8Reader extends Reader {
     private static final int REPLACEMENT = 0xfffd;
 
     /**
+     * Creates a reader that decodes the stream as UTF-8.
      * @param in UTF-8
      */
     public UTF8Reader(InputStream in) {

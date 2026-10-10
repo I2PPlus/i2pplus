@@ -14,6 +14,14 @@ import net.i2p.util.Log;
  */
 public class TunnelBandwidthHelper extends HelperBase {
     /**
+     * A stateless renderer - getTunnelBandwidth() reads the router context and builds a
+     * fresh TunnelRenderer per call - so a bare instance is ready to use.
+     */
+    public TunnelBandwidthHelper() {}
+
+    /**
+     * Render the tunnel bandwidth totals table for the console.
+     *
      * @return the tunnel bandwidth
      */
     public String getTunnelBandwidth() {

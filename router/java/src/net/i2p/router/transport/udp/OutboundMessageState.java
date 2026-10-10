@@ -69,6 +69,9 @@ class OutboundMessageState implements CDPQEntry {
      * "injected" message from the establisher.
      *
      * Called from UDPTransport.
+     * @param context the router context supplying the clock and bandwidth manager
+     * @param msg the message to fragment and send
+     * @param peer the peer the message is destined for
      * @throws IllegalArgumentException if too big or if msg or peer is null
      */
     public OutboundMessageState(I2PAppContext context, I2NPMessage msg, PeerState peer) {
@@ -79,6 +82,9 @@ class OutboundMessageState implements CDPQEntry {
      * Normal constructor.
      *
      * Called from OutboundMessageFragments.
+     * @param context the router context supplying the clock and bandwidth manager
+     * @param m the outbound message carrying the payload and its send options
+     * @param peer the peer the message is destined for
      * @throws IllegalArgumentException if too big or if msg or peer is null
      */
     public OutboundMessageState(I2PAppContext context, OutNetMessage m, PeerState peer) {
@@ -170,6 +176,9 @@ class OutboundMessageState implements CDPQEntry {
     public int getNACKs() { return _nacks.get(); }
 
     /**
+     * Reset the NACK counter to zero, so the retransmission accounting for this
+     * message starts over from the next ACK.
+     *
      * @since 0.9.49
      */
     public void clearNACKs() { _nacks.set(0); }
@@ -190,6 +199,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * Whether the message has expired at the given time.
+     * @param now the current time in milliseconds since the epoch to test against
      * @return whether expired
      * @since 0.9.38
      */
@@ -357,6 +367,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * Whether the fragment has not been ACKed.
+     * @param fragment the zero-based fragment number to test
      * @return true if the fragment has not been ACKed
      */
     public synchronized boolean needsSending(int fragment) {
@@ -393,6 +404,7 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * Ack all the fragments in the ack list.
      *
+     * @param bitfield the ACK bitfield received from the peer, marking the fragments it holds
      * @return true if the message was completely ACKed
      */
     public synchronized boolean acked(ACKBitfield bitfield) {
@@ -409,6 +421,8 @@ class OutboundMessageState implements CDPQEntry {
      * Ack this fragment number.
      * For SSU 2 only.
      *
+     * @param fragmentNum the zero-based fragment number to clear, ignored when
+     *        outside the range of fragments in this message
      * @return true if the message was completely ACKed
      * @since 0.9.54
      */

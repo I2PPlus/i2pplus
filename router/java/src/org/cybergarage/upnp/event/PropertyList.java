@@ -47,6 +47,12 @@ public class PropertyList extends Vector<Property> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * Gets the property at the given position in this list.
+     *
+     * @param n the zero-based index of the property in this list
+     * @return the Property stored at that index
+     */
     public Property getProperty(int n) {
         return get(n);
     }

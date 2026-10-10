@@ -36,7 +36,10 @@ public abstract class ReaderException extends Exception {
     // do nothing
   }
 
-  /** @param cause root cause */
+  /**
+   * Creates an exception that wraps the failure which caused it.
+   * @param cause root cause
+   */
   ReaderException(Throwable cause) {
     super(cause);
   }

@@ -10,6 +10,13 @@ package net.i2p.installer;
  */
 public class Main {
 
+    /**
+     * Constructor. The class is only ever entered through main(), which
+     * dispatches straight to one of the command classes; an instance is a
+     * placeholder for that entry point.
+     */
+    public Main() {}
+
     private static final String USAGE = "Usage: {copy|delete|exec|fixwinpaths} [args...]";
 
     /**

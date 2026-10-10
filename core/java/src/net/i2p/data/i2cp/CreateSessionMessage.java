@@ -30,6 +30,8 @@ public class CreateSessionMessage extends I2CPMessageImpl {
 
     /**
      * CreateSessionMessage.
+     *
+     * @param config the session properties to send to the router in this message
      */
     public CreateSessionMessage(SessionConfig config) {
         _sessionConfig = config;
@@ -52,6 +54,8 @@ public class CreateSessionMessage extends I2CPMessageImpl {
 
     /**
      * Session config for this message.
+     *
+     * @param config the session properties replacing the current ones
      */
     public void setSessionConfig(SessionConfig config) {
         _sessionConfig = config;

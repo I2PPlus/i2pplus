@@ -73,7 +73,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     private final String nick;
 
     /**
-     * @return the nick
+     * Return the nickname this session is registered under.
+     * @return the nick, the name the client registered this STREAM session under
      */
     public String getNick() {
         return nick;
@@ -85,10 +86,11 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      *
      * Caller MUST call start().
      *
-     * @param login The nickname
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws SAMException
+     * @param login the nickname this session is registered under
+     * @throws IOException declared on this constructor, but not raised by the body
+     * @throws DataFormatException likewise declared, but not raised by the body
+     * @throws SAMException if the destination or properties read from the record
+     *                      name no known direction or cannot build a session
      * @throws NullPointerException if login nickname is not registered
      */
     public SAMv3StreamSession(String login) throws IOException, DataFormatException, SAMException {
@@ -104,6 +106,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * Caller MUST call start().
      *
      * @param login nickname of the session
+     * @param props STREAM command arguments, read by the superclass
+     * @param handler handler used to send STREAM replies back to the client
+     * @param mgr socket manager used to create the stream sockets
+     * @param listenPort local port to accept on, 0 for any port
      * @since 0.9.25
      */
     public SAMv3StreamSession(
@@ -133,7 +139,11 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         return _acceptQueue.offer(sock);
     }
 
-    /** @return current accept queue size, 0 if not a subsession */
+    /**
+     * Return how many accepted sockets are waiting to be handed to the client.
+     *
+     * @return the number of sockets waiting in the accept queue, 0 if not a subsession
+     */
     public int getAcceptQueueSize() {
         return _acceptQueue != null ? _acceptQueue.size() : 0;
     }
@@ -181,8 +191,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
      * calling worker is free to process other commands immediately.
      *
      * @param handler handler whose socket becomes the I2P data pipe
-     * @param dest Base64-encoded Destination
-     * @param props connection options
+     * @param dest the Base64-encoded destination to connect to
+     * @param props the connection options read from the STREAM CONNECT command
      * @throws DataFormatException if dest is invalid
      */
     public void connectAsync(SAMv3Handler handler, String dest, Properties props)
@@ -242,7 +252,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
 
         /**
-         * run.
+         * Connect to the requested destination and serve the connection until it closes.
          */
         public void run() {
             SAMBridge bridge = handler.getBridge();
@@ -357,7 +367,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         final boolean fVerbose = verbose;
         rec.startThread(new I2PAppThread(new Runnable() {
             /**
-             * run.
+             * Accept queued connections until the session is shut down.
              */
             @Override
             public void run() {
@@ -426,6 +436,11 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     /**
      * Forward sockets from I2P to the host/port provided.
      * Accepts and forwarding may not be done at the same time.
+     *
+     * @param props session properties supplying HOST, PORT, SSL, and SILENT
+     * @param sendPorts true to report the local port back to the client
+     * @throws SAMException if PORT is missing or invalid, or a server is already defined
+     * @throws InterruptedIOException if this session is no longer registered
      */
     public void startForwardingIncoming(Properties props, boolean sendPorts)
             throws SAMException, InterruptedIOException {
@@ -500,7 +515,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
 
         /**
-         * run.
+         * Forward one incoming I2P connection to the SAM client until it closes.
          */
         public void run() {
             while (getSocketServer() != null) {
@@ -656,7 +671,8 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
 
         /**
-         * run.
+         * Pump bytes between the I2P connection and the SAM client's socket until
+         * either side closes or the thread is interrupted.
          */
         public void run() {
             if (bridge != null) bridge.register(this);
@@ -693,7 +709,9 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
 
         /**
-         * Handler interface
+         * Stop forwarding incoming I2P connections to the SAM client, and close the
+         * client-side socket.
+         *
          * @since 0.9.20
          */
         public void stopHandling() {
@@ -704,6 +722,7 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
     }
 
     /**
+     * Return the server socket this session accepts incoming I2P connections on.
      * @return the socket server
      */
     protected I2PServerSocket getSocketServer() {
@@ -712,9 +731,10 @@ class SAMv3StreamSession extends SAMStreamSession implements Session {
         }
     }
     /**
-     * stop Forwarding Incoming connection coming from I2P
-     * @throws SAMException
-     * @throws InterruptedIOException
+     * Stop forwarding an incoming connection coming from I2P.
+     * @throws SAMException if no socket server has been defined for this destination
+     * @throws InterruptedIOException if the session record for this nickname has
+     *                                already been removed
      */
     public void stopForwardingIncoming() throws SAMException, InterruptedIOException {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);

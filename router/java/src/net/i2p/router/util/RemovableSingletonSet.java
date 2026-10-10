@@ -25,6 +25,8 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
 
     /**
      * RemovableSingletonSet.
+     *
+     * @param element the sole element to hold, may not be null
      */
     public RemovableSingletonSet(E element) {
         if (element == null)

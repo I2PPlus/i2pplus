@@ -39,6 +39,7 @@ public class SOCKS4Client {
      * @param sock socket to the proxy
      * @param connHostName hostname for the proxy to connect to
      * @param connPort port for the proxy to connect to
+     * @throws IOException if the proxy rejects the request or the exchange fails; the socket is closed first
      */
     public static void connect(Socket sock, String connHostName, int connPort) throws IOException {
         InputStream in = null;

@@ -37,6 +37,9 @@ class FragmentedMessage {
 
     /**
      * FragmentedMessage.
+     *
+     * @param ctx the context supplying the clock and log used by this message
+     * @param messageId the id that ties the fragments of one message together
      */
     public FragmentedMessage(I2PAppContext ctx, long messageId) {
         _context = ctx;
@@ -57,6 +60,8 @@ class FragmentedMessage {
      * @param offset index into the payload where the fragment data starts (past headers/etc)
      * @param length how much past the offset should we snag?
      * @param isLast is this the last fragment in the message?
+     * @return true if the fragment was stored, false if the number, the length or
+     *         the offset range was out of bounds
      */
     public boolean receive(int fragmentNum, byte[] payload, int offset, int length, boolean isLast) {
         if (fragmentNum <= 0 || fragmentNum >= MAX_FRAGMENTS) {
@@ -98,6 +103,8 @@ class FragmentedMessage {
      * @param isLast is this the last fragment in the message?
      * @param toRouter what router is this destined for (may be null)
      * @param toTunnel what tunnel is this destined for (may be null)
+     * @return true if the fragment was stored, false if the length or the offset
+     *         range was out of bounds
      */
     public boolean receive(byte[] payload, int offset, int length, boolean isLast, Hash toRouter, TunnelId toTunnel) {
         if (length <= 0 || length > MAX_FRAGMENT_SIZE) {
@@ -186,15 +193,26 @@ class FragmentedMessage {
         return found;
     }
 
-    /** Used in the fragment handler so we can cancel the expire event on success. */
+    /**
+     * Used in the fragment handler so we can cancel the expire event on success.
+     *
+     * @return the scheduled expiry event, or null if none has been set
+     */
     public SimpleTimer2.TimedEvent getExpireEvent() { return _expireEvent; }
 
     /**
      * The expire event to cancel when this message completes.
+     *
+     * @param evt the timer event to cancel on completion
      */
     public void setExpireEvent(SimpleTimer2.TimedEvent evt) { _expireEvent = evt; }
 
-    /** Have we received all of the fragments? */
+    /**
+     * Have we received all of the fragments?
+     *
+     * @return true if the last fragment has been seen and no slot up to the
+     *         high-water mark is still empty
+     */
     public boolean isComplete() {
         if (!_lastReceived)
             return false;
@@ -227,7 +245,11 @@ class FragmentedMessage {
         return size;
     }
 
-    /** How long has this fragmented message been alive? */
+    /**
+     * How long has this fragmented message been alive?
+     *
+     * @return the milliseconds elapsed since construction
+     */
     public long getLifetime() { return _context.clock().now() - _createdOn; }
     /**
      * Whether this message has been released after completion.
@@ -254,6 +276,9 @@ class FragmentedMessage {
 
     /**
      * The complete reassembled message data, freeing the fragments.
+     *
+     * @return the concatenated fragment data, or null if the fragments have
+     *         already been released
      */
     public byte[] toByteArray() {
         synchronized (this) {

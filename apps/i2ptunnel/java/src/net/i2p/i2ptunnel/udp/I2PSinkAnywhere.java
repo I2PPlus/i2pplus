@@ -14,8 +14,11 @@ import net.i2p.data.Destination;
  */
 public class I2PSinkAnywhere implements Sink {
 
+    /** True when datagrams are sent without I2P datagram wrapping. */
     protected final boolean raw;
+    /** The session datagrams are sent over. */
     protected final I2PSession sess;
+    /** Wraps outgoing datagrams, or null in raw mode. */
     protected final I2PDatagramMaker maker;
 
     /**

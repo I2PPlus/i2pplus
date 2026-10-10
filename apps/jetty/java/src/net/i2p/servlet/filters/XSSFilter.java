@@ -16,6 +16,12 @@ import net.i2p.I2PAppContext;
  * @since 0.9.14
  */
 public class XSSFilter implements Filter {
+    /**
+     * The filter keeps no configuration - init() and destroy() are nops and the request
+     * wrapper is built per request - so a bare instance is ready to use.
+     */
+    public XSSFilter() {}
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         // no-op

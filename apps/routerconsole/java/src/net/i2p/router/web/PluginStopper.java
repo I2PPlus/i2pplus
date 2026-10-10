@@ -17,6 +17,9 @@ class PluginStopper extends PluginStarter {
 
     /**
      * PluginStopper.
+     *
+     * @param ctx the router context the plugin starter works against
+     * @param server the jetty server whose running plugins are to be stopped
      */
     public PluginStopper(RouterContext ctx, Server server) {
         super(ctx);

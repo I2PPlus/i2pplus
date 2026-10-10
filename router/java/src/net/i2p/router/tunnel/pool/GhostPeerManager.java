@@ -185,6 +185,11 @@ public class GhostPeerManager {
     private static final Comparator<Map.Entry<Hash, GhostMark>> BY_EXPIRY =
         Comparator.comparingLong((Map.Entry<Hash, GhostMark> e) -> e.getValue().until);
 
+    /**
+     * Create a ghost peer manager.
+     *
+     * @param context the router context
+     */
     public GhostPeerManager(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(GhostPeerManager.class);
@@ -466,7 +471,7 @@ public class GhostPeerManager {
      * history survives for escalation; they report {@code false} here and
      * count as inactive in {@link #getGhostCount()}.
      *
-     * @param peer the peer
+     * @param peer the router hash to test
      * @return true if the peer is a ghost and should be skipped
      */
     public boolean isGhost(Hash peer) {

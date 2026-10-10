@@ -78,6 +78,9 @@ abstract class SAMMessageSession implements SAMMessageSess {
     /**
      * Initialize a new SAM message-based session using an existing I2PSession.
      *
+     * @param sess the already-established I2P session to attach to, not owned by this wrapper
+     * @param listenProtocol the I2CP protocol to bind, or I2PSession.PROTO_ANY for all
+     * @param listenPort the local port to bind, or I2PSession.PORT_ANY to let the router choose
      * @since 0.9.25
      */
     protected SAMMessageSession(I2PSession sess, int listenProtocol, int listenPort)
@@ -224,7 +227,11 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * Lookup a destination through the I2CP session.
      * Blocking.
      *
+     * @param session the I2P session whose tunnel pool performs the lookup
+     * @param name the base32 hostname, or full destination, to resolve
      * @return the Destination or null
+     * @throws I2PSessionException if the lookup does not complete within the 10 second
+     *         session timeout
      * @since 0.9.69
      */
     static Destination lookupDest(I2PSession session, String name) throws I2PSessionException {

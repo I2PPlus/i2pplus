@@ -23,6 +23,12 @@ import java.nio.charset.StandardCharsets;
  */
 public class HeaderLine extends Encoding {
 	/**
+	 * Constructor. A header line is decoded from the raw header text handed to
+	 * each call, so a bare instance is ready to use.
+	 */
+	public HeaderLine() {}
+
+	/**
 	 * NAME.
 	 */
 	public static final String NAME = "HEADERLINE";

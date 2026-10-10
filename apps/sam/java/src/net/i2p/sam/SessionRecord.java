@@ -50,6 +50,8 @@ class SessionRecord {
 	}
 
 	/**
+	 * When this session was last looked up, used for session expiry.
+	 *
 	 * @return timestamp of last access via get(), or construction time
 	 */
 	long getLastAccessed() {

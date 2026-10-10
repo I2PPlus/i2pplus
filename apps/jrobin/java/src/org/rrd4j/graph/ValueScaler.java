@@ -71,6 +71,12 @@ class ValueScaler {
         /** The unit */
         final String unit;
 
+        /**
+         * Stores an already-scaled value together with the unit it was scaled into.
+         *
+         * @param value the value after division by the chosen scaling factor
+         * @param unit resolved unit symbol, empty when a milli prefix was folded into the factor
+         */
         public Scaled(double value, String unit) {
             this.value = value;
             this.unit = unit;

@@ -79,6 +79,9 @@ public class DeliveryInstructions extends DataStructureImpl {
     /**
      * Returns immutable local instructions, or new
      *
+     * @param data the buffer holding the encoded delivery instructions
+     * @param offset the index within data of the flags byte starting the instructions
+     * @return the shared LOCAL instance when the flags byte is zero, otherwise a newly parsed instance
      * @since 0.9.20
      */
     public static DeliveryInstructions create(byte[] data, int offset) {
@@ -103,7 +106,11 @@ public class DeliveryInstructions extends DataStructureImpl {
      */
     public SessionKey getEncryptionKey() { return /* _encryptionKey */ null; }
 
-    /** Default -1. */
+    /**
+     * Default -1.
+     *
+     * @return the delivery mode, 0 through 3, or -1 when no mode has been set
+     */
     public int getDeliveryMode() { return _deliveryMode; }
 
     /**
@@ -113,22 +120,46 @@ public class DeliveryInstructions extends DataStructureImpl {
      */
     public void setDeliveryMode(int mode) { _deliveryMode = mode; }
 
-    /** Default null. */
+    /**
+     * Default null.
+     *
+     * @return the destination hash, or null unless the mode is DESTINATION
+     */
     public Hash getDestination() { return _destinationHash; }
 
-    /** Required for DESTINATION. */
+    /**
+     * Required for DESTINATION.
+     *
+     * @param dest the destination to deliver to
+     */
     public void setDestination(Hash dest) { _destinationHash = dest; }
 
-    /** Default null. */
+    /**
+     * Default null.
+     *
+     * @return the router hash, or null unless the mode is ROUTER or TUNNEL
+     */
     public Hash getRouter() { return _routerHash; }
 
-    /** Required for ROUTER or TUNNEL. */
+    /**
+     * Required for ROUTER or TUNNEL.
+     *
+     * @param router the router to deliver to
+     */
     public void setRouter(Hash router) { _routerHash = router; }
 
-    /** Default null. */
+    /**
+     * Default null.
+     *
+     * @return the tunnel to deliver to, or null unless the mode is TUNNEL
+     */
     public TunnelId getTunnelId() { return _tunnelId; }
 
-    /** Required for TUNNEL. */
+    /**
+     * Required for TUNNEL.
+     *
+     * @param id the tunnel to deliver to
+     */
     public void setTunnelId(TunnelId id) { _tunnelId = id; }
 
     /**
@@ -141,6 +172,8 @@ public class DeliveryInstructions extends DataStructureImpl {
     /**
      * Defaults to false.
      * Obsolete — delay not implemented in this release.
+     *
+     * @param req true to request delayed delivery; the request is stored but never acted on
      */
     public void setDelayRequested(boolean req) { _delayRequested = req; }
 
@@ -154,6 +187,8 @@ public class DeliveryInstructions extends DataStructureImpl {
     /**
      * Defaults to 0.
      * Obsolete — delay not implemented in this release.
+     *
+     * @param seconds the delay to request, in seconds; stored but never acted on
      */
     public void setDelaySeconds(long seconds) { _delaySeconds = seconds; }
 
@@ -167,6 +202,9 @@ public class DeliveryInstructions extends DataStructureImpl {
 
     /**
      * Populate the delivery instructions from the byte array, starting at the given offset.
+     *
+     * @param data the buffer holding the encoded delivery instructions
+     * @param offset the index within data of the flags byte starting the instructions
      * @return the number of bytes read
      */
     public int readBytes(byte[] data, int offset) {
@@ -318,6 +356,9 @@ public class DeliveryInstructions extends DataStructureImpl {
 
     /**
      * Serialize the delivery instructions into the byte array, starting at the given offset.
+     *
+     * @param target the buffer to serialize into
+     * @param offset the index within target of the first byte written
      * @return the number of bytes written to the target
      */
     public int writeBytes(byte[] target, int offset) {

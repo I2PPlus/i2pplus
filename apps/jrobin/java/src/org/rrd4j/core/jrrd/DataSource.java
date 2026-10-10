@@ -28,6 +28,13 @@ public class DataSource {
     // initialized during RRDatabase construction
     private PDPStatusBlock pdpStatusBlock;
 
+    /**
+     * Reads one datasource record from the RRD header: the fixed-width name, the type string, and
+     * the ten-value parameter block carrying the minimum heartbeat and the value bounds. The
+     * record's byte length is retained so the file pointer can be stepped over it afterwards.
+     *
+     * @param file the RRD file positioned at the start of a datasource record
+     */
     DataSource(RRDFile file) {
 
         offset = file.getFilePointer();
@@ -41,7 +48,11 @@ public class DataSource {
         size = file.getFilePointer() - offset;
     }
 
-    /** Load PDP status block */
+    /**
+     * Load PDP status block
+     *
+     * @param file the RRD file to read the primary data point status block from
+     */
     void loadPDPStatusBlock(RRDFile file) {
         pdpStatusBlock = new PDPStatusBlock(file);
     }
@@ -101,7 +112,12 @@ public class DataSource {
         return name;
     }
 
-    /** Print info */
+    /**
+     * Print info
+     *
+     * @param s the stream the ds[...] properties are written to
+     * @param numberFormat the formatter used for the min and max values
+     */
     void printInfo(PrintStream s, NumberFormat numberFormat) {
 
         StringBuilder sb = new StringBuilder("ds[");
@@ -134,7 +150,11 @@ public class DataSource {
         s.println(pdpStatusBlock.unknownSeconds);
     }
 
-    /** Output XML */
+    /**
+     * Output XML
+     *
+     * @param s the stream the XML form of this data source is written to
+     */
     void toXml(PrintStream s) {
 
         s.println("\t<ds>");

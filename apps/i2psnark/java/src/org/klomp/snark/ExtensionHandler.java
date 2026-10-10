@@ -22,6 +22,12 @@ import org.klomp.snark.comments.CommentSet;
  * @since 0.8.2
  */
 abstract class ExtensionHandler {
+     /**
+      * Constructor for subclasses, each of which handles one BEP 10 extension protocol.
+      */
+
+     ExtensionHandler() {}
+
 
     /**
      * Handshake extension message ID (0).
@@ -52,11 +58,15 @@ abstract class ExtensionHandler {
     public static final String TYPE_DHT = "i2p_dht";
 
     /**
+     * Comment extension message ID (4).
+     *
      * @since 0.9.31
      */
     public static final int ID_COMMENT = 4;
 
     /**
+     * Comment extension type string, carried in the handshake's type map.
+     *
      * @since 0.9.31
      */
     public static final String TYPE_COMMENT = "ut_comment";
@@ -157,7 +167,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming extension message from a peer.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param listener the peer listener for callbacks
      * @param id the extension message ID
      * @param bs the raw message bytes
@@ -185,7 +195,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming extension handshake message.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -297,7 +307,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming metadata extension message (BEP 9).
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -371,7 +381,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a metadata chunk request to a peer.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param piece the chunk number to request
      */
     private static void sendRequest(Peer peer, int piece) {
@@ -381,7 +391,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a metadata request or reject message to a peer.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param type the message type (TYPE_REQUEST or TYPE_REJECT)
      * @param piece the chunk number
      */
@@ -396,7 +406,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a metadata chunk data message to a peer.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param piece the chunk number
      * @param data the chunk data bytes
      * @param totalSize the total metadata size
@@ -419,7 +429,7 @@ abstract class ExtensionHandler {
      * Handles an incoming PEX message. Uses the "added" key as a single string of concatenated
      * 32-byte peer hashes. added.f and dropped are unsupported.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -453,7 +463,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming DHT port message.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -476,7 +486,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a PEX message with the given peer list. added.f and dropped are unsupported.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param pList non-null list of peers to share
      */
     public static void sendPEX(Peer peer, List<Peer> pList) {
@@ -496,7 +506,7 @@ abstract class ExtensionHandler {
     /**
      * Sends DHT port numbers to a peer.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param qport the query port
      * @param rport the response port
      */
@@ -511,7 +521,7 @@ abstract class ExtensionHandler {
     /**
      * Handles an incoming comment request or response message.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param listener the peer listener for callbacks
      * @param bs the raw message bytes
      * @param log the logger instance
@@ -561,7 +571,7 @@ abstract class ExtensionHandler {
     /**
      * Sends a comment request to a peer.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param num the maximum number of comments to request
      */
     public static void sendCommentReq(Peer peer, int num) {
@@ -576,7 +586,7 @@ abstract class ExtensionHandler {
     /**
      * Sends comments to a peer. Caller must synchronize on comments.
      *
-     * @param peer the peer
+     * @param peer the peer the message arrived from
      * @param num the maximum number of comments to send
      * @param comments non-null set of comments to send
      */

@@ -14,7 +14,8 @@ package net.i2p.router.news;
  * CyberXML for Java
  *
  * Copyright (C) Satoshi Konno 2002
- * *****************************************************************/
+ * ****************************************************************
+ */
 
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
@@ -50,6 +51,8 @@ public class XMLParser extends JaxpParser {
 
     /**
      * XMLParser.
+     *
+     * @param ctx the context supplying the log manager for this parser
      */
     public XMLParser(I2PAppContext ctx) {
         super();
@@ -141,6 +144,9 @@ public class XMLParser extends JaxpParser {
 
     /**
      * A replacement for Node.toString(), which does not recognize #text.
+     *
+     * @param buf the buffer receiving the XML text of the node and its children
+     * @param node the root of the subtree to render
      */
     public static void toString(StringBuilder buf, Node node) {
         output(buf, node, 0);

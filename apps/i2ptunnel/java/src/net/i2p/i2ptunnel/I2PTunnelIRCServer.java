@@ -50,13 +50,21 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     private final String webircSpoofIP;
 
     /** IRC server config keys. */
+    /** config key for the registration method, {@code user} (default) or {@code webirc} */
     public static final String PROP_METHOD="ircserver.method";
+    /** default for {@link #PROP_METHOD}, selecting the USER-based hostname mangling */
     public static final String PROP_METHOD_DEFAULT="user";
+    /** config key for the cloak passphrase, where unset means random persistent cloaking */
     public static final String PROP_CLOAK="ircserver.cloakKey";
+    /** config key for the password sent in the WEBIRC handshake, with no quotes or spaces */
     public static final String PROP_WEBIRC_PASSWORD="ircserver.webircPassword";
+    /** config key for the IP address spoofed in the WEBIRC handshake */
     public static final String PROP_WEBIRC_SPOOF_IP="ircserver.webircSpoofIP";
+    /** default for {@link #PROP_WEBIRC_SPOOF_IP}, the loopback address */
     public static final String PROP_WEBIRC_SPOOF_IP_DEFAULT="127.0.0.1";
+    /** config key for the fake hostname template, where {@code %f} is the full B32 destination */
     public static final String PROP_HOSTNAME="ircserver.fakeHostname";
+    /** default for {@link #PROP_HOSTNAME}, the full B32 destination as a hostname */
     public static final String PROP_HOSTNAME_DEFAULT="%f.b32.i2p";
     private static final long HEADER_TIMEOUT = (long) 30*1000;
     private static final long TOTAL_HEADER_TIMEOUT = 2 * HEADER_TIMEOUT;
@@ -91,8 +99,20 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
 
 
     /**
+     * Construct an IRC client tunnel server.
+     *
+     * <p>The cloak key is generated on first use from a random 32 bytes when no
+     * passphrase is configured. The options supply the WEBIRC and cloaking
+     * settings, and the configuration must be valid to contact the router.
+     *
+     * @param host the IRC server to connect to on the far side of the tunnel
+     * @param port the port on that server to connect to
+     * @param privkey the file holding this tunnel's private key, or null if the
+     * @param privkeyname the name to show for the key in the console and logs
+     * @param l the logging implementation shared with the owning I2PTunnel
+     * @param notifyThis dispatcher told about connection events for this client
+     * @param tunnel the I2PTunnel this IRC client belongs to, whose client
      * @throws IllegalArgumentException if the I2PTunnel does not contain
-     * valid config to contact the router
      */
 
     public I2PTunnelIRCServer(InetAddress host, int port, File privkey, String privkeyname, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -128,7 +148,9 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     }
 
     /**
-     * blockingHandle.
+     * Register one incoming IRC client connection, blocking until it closes.
+     *
+     * @param socket the accepted connection from a local IRC client
      */
     @Override
     protected void blockingHandle(I2PSocket socket) {
@@ -353,6 +375,8 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
     }
 
     /**
+     * Thrown when a client's registration sequence is unacceptable and the connection is dropped.
+     *
      * @since 0.9.19
      */
     private static class RegistrationException extends IOException {

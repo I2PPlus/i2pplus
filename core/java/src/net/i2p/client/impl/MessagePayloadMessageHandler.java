@@ -29,6 +29,8 @@ import net.i2p.data.i2cp.ReceiveMessageEndMessage;
 class MessagePayloadMessageHandler extends HandlerImpl {
     /**
      * Create the handler for I2CP message payload messages.
+     *
+     * @param context the application context, whose log manager supplies the handler logger
      */
     public MessagePayloadMessageHandler(I2PAppContext context) {
         super(context, MessagePayloadMessage.MESSAGE_TYPE);
@@ -37,8 +39,8 @@ class MessagePayloadMessageHandler extends HandlerImpl {
     /**
      * Handle an incoming I2CP message.
      *
-     * @param message the message
-     * @param session the session
+     * @param message the incoming I2CP message, expected to be a MessagePayloadMessage
+     * @param session the session the payload belongs to, which collects the message
      */
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {

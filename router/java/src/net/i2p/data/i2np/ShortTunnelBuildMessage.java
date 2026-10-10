@@ -18,13 +18,20 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
      */
     public static final int SHORT_RECORD_SIZE = 218;
 
-    /** Zero record count, will be set with readMessage(). */
+    /**
+     * Zero record count, will be set with readMessage().
+     *
+     * @param context the context to use for the message
+     */
     public ShortTunnelBuildMessage(I2PAppContext context) {
         super(context, 0);
     }
 
     /**
-     * ShortTunnelBuildMessage.
+     * Create the message preallocated for the given number of build records.
+     *
+     * @param context the context to use for the message
+     * @param records the number of build records to reserve room for
      */
     public ShortTunnelBuildMessage(I2PAppContext context, int records) {
         super(context, records);

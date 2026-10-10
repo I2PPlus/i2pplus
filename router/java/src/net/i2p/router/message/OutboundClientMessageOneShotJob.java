@@ -200,6 +200,8 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /**
      * Send it.
      *
+     * @param ctx router context supplying the clock, log, and client netdb
+     * @param cache outbound cache holding the LeaseSet cooldown and last-valid state
      * @param msg may have a null payload for ratchet-layer acks
      */
     public OutboundClientMessageOneShotJob(RouterContext ctx, OutboundCache cache, ClientMessage msg) {
@@ -270,7 +272,11 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         _overallExpiration = overallExpiration;
     }
 
-    /** Called once at router startup. */
+    /**
+     * Called once at router startup.
+     *
+     * @param ctx router context whose stat manager receives the statistics
+     */
     public static void init(RouterContext ctx) {
         ctx.statManager().createFrequencyStat("client.sendMessageFailFrequency", "How often client fails to send a message", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.dispatchNoACK", "Messages sent without requesting an acknowledgement", "ClientMessages", RATES);

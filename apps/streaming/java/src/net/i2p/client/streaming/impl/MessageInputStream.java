@@ -281,6 +281,8 @@ class MessageInputStream extends InputStream {
      * Combined canAccept with automatic buffer growth.
      * If the buffer is full, tries to grow it before rejecting.
      *
+     * @param messageId the inbound message being offered
+     * @param payloadSize the size in bytes the message needs
      * @return true if the message can be accepted (possibly after buffer growth)
      */
     public boolean ensureCanAccept(long messageId, int payloadSize) {

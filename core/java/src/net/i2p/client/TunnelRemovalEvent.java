@@ -15,6 +15,7 @@ public class TunnelRemovalEvent {
     private final RemovalReason _reason;
     private final long _timestamp;
 
+    /** Why a tunnel was removed from a client's pool. */
     public enum RemovalReason {
         /** Tunnel was explicitly removed or failed */
         EXPLICIT_REMOVAL,

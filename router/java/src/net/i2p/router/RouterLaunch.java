@@ -14,11 +14,17 @@ package net.i2p.router;
 public class RouterLaunch {
 
     /**
+     * Launching is entirely main()'s job - it hands the arguments to Router - so an
+     * instance starts nothing and carries no state.
+     */
+    public RouterLaunch() {}
+
+    /**
      *  Usage: RouterLaunch [rebuild]
      *  No other options allowed, for now
      *
      *  @param args null ok
-     *  @throws IllegalArgumentException
+     *  @throws IllegalArgumentException if the arguments are not accepted by Router.main
      */
     public static void main(String[] args) {
 	Router.main(args);

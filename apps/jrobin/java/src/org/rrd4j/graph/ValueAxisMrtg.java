@@ -13,10 +13,10 @@ class ValueAxisMrtg extends Axis {
     private final RrdGraphDef gdef;
 
     /**
-     * Used for tests
+     * Sets up the axis from a graph already rendered by the image worker.
      *
-     * @param rrdGraph
-     * @param worker
+     * @param rrdGraph the graph whose image and definition set up this axis
+     * @param worker the image worker painting the graph
      */
     ValueAxisMrtg(RrdGraph rrdGraph, ImageWorker worker) {
         this.im = rrdGraph.im;
@@ -24,6 +24,11 @@ class ValueAxisMrtg extends Axis {
         this.worker = worker;
     }
 
+    /**
+     * Sets up the axis from a graph still being built by the generator.
+     *
+     * @param generator the generator whose image, definition and worker set up this axis
+     */
     ValueAxisMrtg(RrdGraphGenerator generator) {
         this.im = generator.im;
         this.gdef = generator.gdef;

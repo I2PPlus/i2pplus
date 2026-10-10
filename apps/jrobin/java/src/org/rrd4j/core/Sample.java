@@ -246,7 +246,12 @@ public class Sample {
         return buffer.toString();
     }
 
-    /** @return the rrdtool command */
+    /**
+     * Render this sample using the syntax of RRDTool's update command, quoting
+     * the backing database path and listing every data source value in order.
+     *
+     * @return the rrdtool update command text
+     */
     String getRrdToolCommand() {
         return dump();
     }

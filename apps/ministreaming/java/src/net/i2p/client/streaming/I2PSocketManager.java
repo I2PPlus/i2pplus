@@ -41,11 +41,15 @@ public interface I2PSocketManager {
      * Connecting the primary session does NOT connect any subsessions.
      * If the primary session is not connected, connecting a subsession will connect the primary session first.
      *
-     * @return a new subsession, non-null
      * @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
-     * and different signing keys
      * @param opts subsession options if any, may be null
+     * @return a new subsession, non-null
+     * @throws I2PSessionException if the router does not support sub-sessions, if a
+     * @throws I2PSessionException if the router does not support sub-sessions, if a
+     * sub-session request is already pending, or if the new session duplicates an
+     * existing one by private key
      * @since 0.9.21
+     * existing one by private key
      */
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
 
@@ -182,8 +186,8 @@ public interface I2PSocketManager {
      *
      * @param peer Destination to ping
      * @param timeoutMs timeout in ms, greater than zero
-     * @throws IllegalArgumentException on bad args
      * @return success or failure
+     * @throws IllegalArgumentException on bad args
      */
     public boolean ping(Destination peer, long timeoutMs);
 
@@ -197,8 +201,8 @@ public interface I2PSocketManager {
      * @param localPort 0 - 65535
      * @param remotePort 0 - 65535
      * @param timeoutMs timeout in ms, greater than zero
-     * @throws IllegalArgumentException on bad args
      * @return success or failure
+     * @throws IllegalArgumentException on bad args
      * @since 0.9.12
      */
     public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs);
@@ -214,8 +218,8 @@ public interface I2PSocketManager {
      * @param remotePort 0 - 65535
      * @param timeoutMs timeout in ms, greater than zero
      * @param payload to include in the ping
-     * @throws IllegalArgumentException on bad args
      * @return the payload received in the pong, zero-length if none, null on failure or timeout
+     * @throws IllegalArgumentException on bad args
      * @since 0.9.18
      */
     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload);
@@ -238,9 +242,9 @@ public interface I2PSocketManager {
      * Deprecated - Factory will initialize.
      *
      * @param context the I2P app context
-     * @param session the session
-     * @param opts the options
-     * @param name the name
+     * @param session the session the manager is to use for all its connections
+     * @param opts the properties the factory would otherwise have read from a config file
+     * @param name the display name the factory would otherwise have read from a config file
      * @throws UnsupportedOperationException always
      * @deprecated nothing calls this; build the manager with
      * I2PSocketManagerFactory.createManager().
@@ -250,10 +254,14 @@ public interface I2PSocketManager {
 
     /**
      * Register a listener to be notified when the I2P session disconnects.
+     *
+     * @param lsnr the listener to invoke on session disconnect
      */
     public void addDisconnectListener(DisconnectListener lsnr);
     /**
      * Remove a disconnection listener.
+     *
+     * @param lsnr the listener previously passed to {@link #addDisconnectListener}
      */
     public void removeDisconnectListener(DisconnectListener lsnr);
 

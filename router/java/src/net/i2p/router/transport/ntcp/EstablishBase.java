@@ -162,6 +162,9 @@ abstract class EstablishBase implements EstablishState {
 
     /**
      * EstablishBase.
+     * @param ctx the router context, supplying the log manager
+     * @param transport the NTCP transport this handshake runs under
+     * @param con the connection being established, whose inbound flag sizes the padding buffer
      */
     protected EstablishBase(RouterContext ctx, NTCPTransport transport, NTCPConnection con) {
         _context = ctx;
@@ -279,7 +282,12 @@ abstract class EstablishBase implements EstablishState {
      */
     protected void fail(String reason, Exception e) { fail(reason, e, false); }
 
-    /** Fail the handshake optionally suppressing skew stat. Caller must synch. */
+    /**
+     * Fail the handshake optionally suppressing skew stat. Caller must synch.
+     * @param reason failure description
+     * @param e the exception cause, may be null
+     * @param bySkew true to suppress the skew stat, as when we caused the skew ourselves
+     */
     protected void fail(String reason, Exception e, boolean bySkew) {
         _failReason = reason;
         synchronized(_stateLock) {
@@ -316,6 +324,7 @@ abstract class EstablishBase implements EstablishState {
 
     /**
      *  Only call once. Caller must synch.
+     *  @param isVerified true when the handshake completed and was not marked corrupt
      *  @since 0.9.16
      */
     protected void releaseBufs(boolean isVerified) {

@@ -35,14 +35,28 @@ class RrdGraphGenerator {
     private static final char[] SYMBOLS = {
         'y', 'z', 'a', 'f', 'p', 'n', 'µ', 'm', ' ', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'
     };
+    /** The graph definition this generator renders. */
     final RrdGraphDef gdef;
+    /** The worker that runs and caches the rendering. */
     final ImageWorker worker;
+    /** The processor that reads source data and applies consolidation. */
     private final DataProcessor dproc;
+    /** The rule set that maps data sources to graph lines and areas. */
     Mapper mapper;
+    /** Metadata about the graph, such as its value range and time bounds. */
     final RrdGraphInfo info = new RrdGraphInfo();
+    /** Cache key identifying this definition's settings. */
     private final String signature;
+    /** The dimensions and text layout of the rendered image. */
     final ImageParameters im;
 
+    /**
+     * Create a generator for one graph definition.
+     *
+     * @param gdef the definition describing what to plot
+     * @param worker the worker that runs and caches the rendering
+     * @param dproc the processor supplying consolidated data
+     */
     RrdGraphGenerator(RrdGraphDef gdef, ImageWorker worker, DataProcessor dproc) {
         this.gdef = gdef;
         this.worker = worker;
@@ -52,6 +66,8 @@ class RrdGraphGenerator {
     }
     /**
      * Create graph
+     * @throws IOException if the source RRD cannot be read while fetching data
+     *         or the rendered image cannot be written out
      */
 
     void createGraph() throws IOException {
@@ -991,23 +1007,41 @@ class RrdGraphGenerator {
 
     // helper methods
 
-    /** Return the font height */
+    /**
+     * Return the font height
+     *
+     * @param fonttag the text element whose configured font is measured
+     * @return the height in pixels of a line of that element's font
+     */
     double getFontHeight(RrdGraphConstants.FontTag fonttag) {
         return worker.getFontHeight(gdef.getFont(fonttag));
     }
 
-    /** Return the font char width */
+    /**
+     * Return the font char width
+     *
+     * @param fonttag the text element whose configured font is measured
+     * @return the width in pixels of one average character of that font
+     */
     double getFontCharWidth(RrdGraphConstants.FontTag fonttag) {
         return worker.getStringWidth("a", gdef.getFont(fonttag));
     }
 
-    /** Return the inter-legend space */
+    /**
+     * Return the inter-legend space
+     *
+     * @return the blank gap in pixels left between inter-legend rows
+     */
     double getInterlegendSpace() {
         return getFontCharWidth(RrdGraphConstants.FONTTAG_LEGEND)
                 * RrdGraphConstants.LEGEND_INTERSPACING;
     }
 
-    /** Return the leading */
+    /**
+     * Return the leading
+     *
+     * @return the line advance in pixels applied between legend rows
+     */
     double getLeading() {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND) * RrdGraphConstants.LEGEND_LEADING;
     }

@@ -22,6 +22,8 @@ import net.i2p.util.Clock;
 class SetDateMessageHandler extends HandlerImpl {
     /**
      * Create the handler for I2CP time messages.
+     *
+     * @param ctx the client context whose clock and log manager this handler uses
      */
     public SetDateMessageHandler(I2PAppContext ctx) {
         super(ctx, SetDateMessage.MESSAGE_TYPE);
@@ -30,8 +32,8 @@ class SetDateMessageHandler extends HandlerImpl {
     /**
      * Handle an incoming I2CP message.
      *
-     * @param message the message
-     * @param session the session
+     * @param message the SetDateMessage carrying the router's time and version
+     * @param session the session whose date and capabilities are updated
      */
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {

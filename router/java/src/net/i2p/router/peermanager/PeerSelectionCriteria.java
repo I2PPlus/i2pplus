@@ -20,6 +20,12 @@ class PeerSelectionCriteria {
     /** The peers will be used for a test message */
     public static final int PURPOSE_TEST = 1;
 
+    /**
+     * Leaves the minimum, the maximum and the purpose at 0, which matches no peer set;
+     * the setters below must fill them in before the criteria are used.
+     */
+    PeerSelectionCriteria() {}
+
     private int _minReq;
     private int _maxReq;
     private int _purpose;

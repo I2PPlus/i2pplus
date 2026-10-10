@@ -21,6 +21,8 @@ public abstract class XnLabel extends ReservedLdhLabel {
 
     /**
      * XnLabel.
+     *
+     * @param label the reserved LDH label, already in its internal ACE (punycode) form
      */
     protected XnLabel(String label) {
         super(label);

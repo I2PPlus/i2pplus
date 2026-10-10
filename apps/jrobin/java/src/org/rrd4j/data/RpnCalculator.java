@@ -760,7 +760,12 @@ class RpnCalculator {
     /** Sources names */
     private final List<String> sourcesNames;
 
-    /** Rpn calculator */
+    /**
+     * Rpn calculator
+     * @param rpnExpression the RPN expression, its tokens separated by commas
+     * @param sourceName the data series an unqualified PREV token refers to
+     * @param dataProcessor supplies the timestamps and the per-source value arrays
+     */
     RpnCalculator(String rpnExpression, String sourceName, DataProcessor dataProcessor) {
         this.rpnExpression = rpnExpression;
         this.sourceName = sourceName;
@@ -797,7 +802,10 @@ class RpnCalculator {
         }
         return token;
     }
-    /** Calculate values */
+    /**
+     * Calculate values
+     * @return one value per timestamp, the expression evaluated at each step
+     */
     double[] calculateValues() {
         State s = new State();
         for (int slot = 0; slot < timestamps.length; slot++) {

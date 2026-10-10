@@ -675,13 +675,27 @@ public class PeerState {
      * scan over _outboundMessages.
      * @since 0.9.71+
      */
-    enum Outcome { COMPLETE, EXPIRED, OVER_SENT, SENDABLE }
+    enum Outcome {
+        /** All fragments were acknowledged; the message leaves the send queue. */
+        COMPLETE,
+        /** The message's expiry has passed; it is dropped without further retransmits. */
+        EXPIRED,
+        /** The message exceeded {@link OutboundMessageFragments#MAX_VOLLEYS} in one scan. */
+        OVER_SENT,
+        /** The message may be sent this pass; it needs no further classification. */
+        SENDABLE }
 
     /**
      * Fast-retransmit recovery stage for a single message, by NACK count.
      * @since 0.9.71+
      */
-    enum FastRtxMode { NONE, START, CONTINUE }
+    enum FastRtxMode {
+        /** No NACKs have arrived, so no recovery is in progress. */
+        NONE,
+        /** The first NACK arrived and triggered a fast retransmit of the whole message. */
+        START,
+        /** A further NACK arrived while the fast retransmit was still running. */
+        CONTINUE }
 
     /**
      * Per-message outcome in a finishAndAllocate() scan, computed once per
@@ -1031,6 +1045,12 @@ public class PeerState {
     /**
      * For SSU2
      *
+     * @param ctx the router context, supplying the log manager and tunables
+     * @param transport the UDP transport that owns this peer state and can drop the peer
+     * @param addr the remote socket address; its IP bytes and port seed _remoteIP and _remotePort
+     * @param remotePeer the peer's RouterIdentity hash
+     * @param isInbound true when the peer dialed us, false when we dialed the peer
+     * @param rtt the round trip time in ms, or 0 when unmeasured, leaving the initial RTO in place
      * @since 0.9.54
      */
     protected PeerState(RouterContext ctx, UDPTransport transport,
@@ -1131,7 +1151,11 @@ public class PeerState {
      */
     public long getLastSendTime() {return _lastSendTime;}
 
-    /** Last send fully time. */
+    /**
+     * Last send fully time.
+     *
+     * @return the time in ms of the last send that did not need a retransmit
+     */
     public long getLastSendFullyTime() {return _lastSendFullyTime;}
 
     /**
@@ -1143,7 +1167,12 @@ public class PeerState {
      */
     public long getLastReceiveTime() {return _lastReceiveTime;}
 
-    /** Consecutive failed sends count. */
+    /**
+     * Consecutive failed sends count.
+     *
+     * @return how many sends to this peer have failed back to back, reset by the
+     * first send that succeeds
+     */
     public int getConsecutiveFailedSends() {return _consecutiveFailedSends;}
 
     /**
@@ -1158,12 +1187,20 @@ public class PeerState {
         synchronized(_sendWindowBytesRemainingLock) {return _sendWindowBytes.get();}
     }
 
-    /** Send window bytes remaining. */
+    /**
+     * Send window bytes remaining.
+     *
+     * @return the bytes still allowed in the current one-second send window
+     */
     public int getSendWindowBytesRemaining() {
         synchronized(_sendWindowBytesRemainingLock) {return _sendWindowBytesRemaining;}
     }
 
-    /** Remote IP address bytes. */
+    /**
+     * Remote IP address bytes.
+     *
+     * @return the raw address of the remote peer, 4 bytes for IPv4 and 16 for IPv6
+     */
     public byte[] getRemoteIP() {return _remoteIP;}
 
     /**
@@ -1184,7 +1221,11 @@ public class PeerState {
         return _remoteIPAddress;
     }
 
-    /** Remote port. */
+    /**
+     * Remote port.
+     *
+     * @return the UDP port number the remote peer is reached on
+     */
     public int getRemotePort() {return _remotePort;}
 
     /**
@@ -1204,7 +1245,11 @@ public class PeerState {
      */
     public long getTheyRelayToUsAs() {return _theyRelayToUsAs;}
 
-    /** Maximum transmission unit. */
+    /**
+     * Maximum transmission unit.
+     *
+     * @return the largest packet we will send to this peer, in bytes
+     */
     public int getMTU() {return _mtu;}
 
     /**
@@ -1302,7 +1347,11 @@ public class PeerState {
         }
     }
 
-    /** Increment consecutive failed sends. */
+    /**
+     * Increment consecutive failed sends.
+     *
+     * @return the consecutive failed send count after this increment
+     */
     int incrementConsecutiveFailedSends() {
         synchronized(_outboundLock) {
             _consecutiveFailedSends++;
@@ -1405,7 +1454,11 @@ public class PeerState {
         synchronized(_outboundLock) {return _consecutiveRejections;}
     }
 
-    /** Whether this is an inbound connection. */
+    /**
+     * Whether this is an inbound connection.
+     *
+     * @return true if we accepted this connection rather than dialling out
+     */
     public boolean isInbound() {return _isInbound;}
 
     /**
@@ -1482,6 +1535,8 @@ public class PeerState {
      * Expire partially received inbound messages, returning how many are still pending.
      * This should probably be fired periodically, in case a peer goes silent and we don't
      * try to send them any messages (and don't receive any messages from them either)
+     *
+     * @return the number of partially received inbound messages still pending
      */
     int expireInboundMessages() {
         int rv = 0;
@@ -1908,7 +1963,11 @@ public class PeerState {
         }
     }
 
-    /** Record that packets were transmitted. */
+    /**
+     * Record that packets were transmitted.
+     *
+     * @param packets the number of packets just handed to the transport, not bytes
+     */
     void packetsTransmitted(int packets) {
         synchronized(_outboundLock) {
             _packetsTransmitted += packets;
@@ -2001,22 +2060,38 @@ public class PeerState {
         synchronized (_inboundLock) {return _messagesReceived;}
     }
 
-    /** Packets transmitted count. */
+    /**
+     * Packets transmitted count.
+     *
+     * @return how many packets have been handed to the transport for this peer
+     */
     public int getPacketsTransmitted() {
         synchronized (_outboundLock) {return _packetsTransmitted;}
     }
 
-    /** Packets retransmitted count. */
+    /**
+     * Packets retransmitted count.
+     *
+     * @return how many packets had to be sent again after loss or congestion
+     */
     public int getPacketsRetransmitted() {
         synchronized (_outboundLock) {return _packetsRetransmitted;}
     }
 
-    /** Packets received count. */
+    /**
+     * Packets received count.
+     *
+     * @return how many packets have arrived from this peer
+     */
     public int getPacketsReceived() {
         synchronized (_inboundLock) {return _packetsReceived;}
     }
 
-    /** Packets received duplicate count. */
+    /**
+     * Packets received duplicate count.
+     *
+     * @return how many packets from this peer repeated data we had already stored
+     */
     public int getPacketsReceivedDuplicate() {
         synchronized (_inboundLock) {return _packetsReceivedDuplicate;}
     }
@@ -2272,6 +2347,7 @@ public class PeerState {
      *
      * SSU 2 only.
      *
+     * @param f the SSU2 fragment whose acknowledgement has arrived
      * @return true if this fragment of the message was acked for the first time
      */
     protected boolean acked(PacketBuilder2.Fragment f) {
@@ -2499,6 +2575,8 @@ public class PeerState {
 
     /**
      * Convenience for OutboundMessageState so it can fail itself
+     *
+     * @return the UDPTransport this peer state belongs to
      * @since 0.9.3
      */
     UDPTransport getTransport() {return _transport;}

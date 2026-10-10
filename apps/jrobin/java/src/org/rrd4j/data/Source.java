@@ -59,17 +59,17 @@ abstract class Source {
     }
 
     /**
-     * Returns the timestamps.
+     * The time, in seconds since the epoch, of each recorded value.
      *
-     * @return the timestamps array
+     * @return the array of timestamps, index-aligned with {@link #getValues()}
      */
     long[] getTimestamps() {
         return timestamps;
     }
 
     /**
-     * @param tStart
-     * @param tEnd
+     * @param tStart start of the aggregation window, in seconds since the epoch
+     * @param tEnd end of the aggregation window, in seconds since the epoch
      * @return the Aggregates
      * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
      *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
@@ -81,9 +81,9 @@ abstract class Source {
     }
 
     /**
-     * @param tStart
-     * @param tEnd
-     * @param percentile
+     * @param tStart start of the percentile window, in seconds since the epoch
+     * @param tEnd end of the percentile window, in seconds since the epoch
+     * @param percentile the percentile to compute, from 0.0 through 100.0
      * @return the percentile
      * @deprecated This method is deprecated. Uses instance of {@link
      *     org.rrd4j.data.Variable.PERCENTILE}, used with {@link

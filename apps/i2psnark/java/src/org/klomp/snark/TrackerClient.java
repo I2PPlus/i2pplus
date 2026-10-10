@@ -136,6 +136,9 @@ public class TrackerClient implements Runnable {
      * How long a stop should keep its sessions open for unannounces to
      * dispatch: one wave per 32-tracker batch, so small swarms wait ~3s and
      * bigger swarms scale up to UNANNOUNCE_MAX_WAIT.
+     *
+     * @return the wait in milliseconds, never below UNANNOUNCE_MIN_WAIT and never
+     *         above UNANNOUNCE_MAX_WAIT
      */
     static long unannounceDispatchWait() {
         int pending = _unannouncers.getActiveCount() + _unannouncers.getQueue().size();
@@ -208,11 +211,13 @@ public class TrackerClient implements Runnable {
             try { Thread.sleep(Math.min(sleepMs, 1000) + 50); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); return; }
         }
     }
-    /** Sleep after lots of fails — shortened from 10m so post-recovery
+    /**
+     * Sleep after lots of fails — shortened from 10m so post-recovery
      *  tracker retries fire within ~2m instead of waiting a full cycle.
      */
     private static final int LONG_SLEEP = 2 * 60 * 1000;
-    /** Max random spread added to the LONG_SLEEP failure floor so torrents
+    /**
+     * Max random spread added to the LONG_SLEEP failure floor so torrents
      *  that failed together don't re-announce in lockstep @since 0.9.71+
      */
     private static final int LONG_SLEEP_JITTER = 30 * 1000;
@@ -242,21 +247,27 @@ public class TrackerClient implements Runnable {
     /** Shortest interval between DHT tracker announces, in milliseconds. */
     private static final long MIN_DHT_ANNOUNCE_INTERVAL = 15 * (long) 60 * 1000;
 
-    /** Random jitter added to {@link #MIN_DHT_ANNOUNCE_INTERVAL} so DHT
+    /**
+     * Random jitter added to {@link #MIN_DHT_ANNOUNCE_INTERVAL} so DHT
      *  announces from many torrents do not fire in lockstep; the effective
-     *  threshold is 15m..19m. */
+     * threshold is 15m..19m.
+     */
     private static final int DHT_ANNOUNCE_JITTER = 4 * 60 * 1000;
 
-    /** Periodic scrape interval: refresh the swarm size (seeds + leeches) between
+    /**
+     * Periodic scrape interval: refresh the swarm size (seeds + leeches) between
      *  announces (BEP 15/48). The announce loop wakes every 5m, so this fires on
-     *  every other wake per active torrent. */
+     * every other wake per active torrent.
+     */
     private static final long SCRAPE_INTERVAL = 10 * (long) 60 * 1000;
 
     /** After a scrape with a non-zero swarm size, defer the next scrape this long */
     private static final long SCRAPE_GOOD_DEFER = 20 * (long) 60 * 1000;
 
-    /** Random jitter added to each scheduled scrape so scrapes from many
-     *  torrents to a shared tracker spread out instead of firing in lockstep */
+    /**
+     * Random jitter added to each scheduled scrape so scrapes from many
+     * torrents to a shared tracker spread out instead of firing in lockstep
+     */
     private static final int SCRAPE_JITTER = 5 * 60 * 1000;
 
     /** No guidance in BEP 5; standard practice is K (=8) */
@@ -318,6 +329,10 @@ public class TrackerClient implements Runnable {
      * @param meta null if in magnet mode
      * @param additionalTrackerURL may be null, from the ?tr= param in magnet mode, otherwise
      *     ignored
+     * @param util the I2PSnarkUtil instance shared with the rest of the client
+     * @param coordinator the peer coordinator supplying completion state and
+     *        requesting outbound peers
+     * @param snark the Snark for this torrent, supplying the info hash and peer ID
      */
     public TrackerClient(
             I2PSnarkUtil util,
@@ -431,7 +446,9 @@ public class TrackerClient implements Runnable {
      * Wait, capped at ms, for the unannounces submitted by the last halt() to
      * dispatch. Returns immediately when nothing was submitted or they are done.
      *
+     * @param ms the longest to wait, in milliseconds, for the last halt()'s
      * @since 0.9.71+
+     *        unannounces to dispatch
      */
     public void awaitUnannounces(long ms) {
         CountDownLatch latch = _unannounceLatch;
@@ -880,6 +897,18 @@ public class TrackerClient implements Runnable {
         return haveBackup && downloading && peersFromPrimaries <= 0;
     }
 
+    /**
+     * Whether a trackerless torrent should consult its backup trackers this round. A download
+     * always does; a seed does only while the DHT is still short of its bootstrap node count,
+     * since once the DHT is warm the trackers add nothing.
+     *
+     * @param havePrimary whether any primary tracker is configured
+     * @param haveBackup whether any fallback tracker is configured
+     * @param dhtEnabled whether a DHT instance is running for this torrent
+     * @param dhtSize the number of known nodes in that DHT
+     * @param downloading whether the torrent still wants peers, false for a seed
+     * @return true if the backup tracker round should run
+     */
     static boolean needBackupTrackers(
             boolean havePrimary,
             boolean haveBackup,
@@ -2038,8 +2067,8 @@ public class TrackerClient implements Runnable {
              lastResponseTime = 0;
          }
 
-         /**
-          * Call before restarting
+        /**
+         * Call before restarting
          *
          * @since 0.9.1
          */

@@ -2121,8 +2121,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the rectangle to intersect with the current clip.
+     * @param height the vertical extent of that rectangle.
      */
     @Override
     public void clipRect(int x, int y, int width, int height) {
@@ -2135,8 +2135,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the new user clip.
+     * @param height the vertical extent of that rectangle.
      * @see #getClip()
      */
     @Override
@@ -2184,8 +2184,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the region to clear with the background color.
+     * @param height the vertical extent of that region.
      * @see #getBackground()
      */
     @Override
@@ -2204,8 +2204,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the bounding rectangle, the rounded corners included.
+     * @param height the vertical extent of that bounding rectangle.
      * @param arcWidth the arc-width.
      * @param arcHeight the arc-height.
      * @see #fillRoundRect(int, int, int, int, int, int)
@@ -2221,8 +2221,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the bounding rectangle, the rounded corners included.
+     * @param height the vertical extent of that bounding rectangle.
      * @param arcWidth the arc-width.
      * @param arcHeight the arc-height.
      * @see #drawRoundRect(int, int, int, int, int, int)
@@ -2239,8 +2239,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the frame the oval is inscribed in, not a radius.
+     * @param height the vertical extent of that frame.
      * @see #fillOval(int, int, int, int)
      */
     @Override
@@ -2254,8 +2254,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the frame the oval is inscribed in, not a radius.
+     * @param height the vertical extent of that frame.
      * @see #drawOval(int, int, int, int)
      */
     @Override
@@ -2271,8 +2271,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the frame the arc is inscribed in, not a radius.
+     * @param height the vertical extent of that frame.
      * @param startAngle the start angle in degrees, 0 = 3 o'clock.
      * @param arcAngle the angle (anticlockwise) in degrees.
      * @see #fillArc(int, int, int, int, int, int)
@@ -2289,8 +2289,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the frame the arc is inscribed in, not a radius.
+     * @param height the vertical extent of that frame.
      * @param startAngle the start angle in degrees, 0 = 3 o'clock.
      * @param arcAngle the angle (anticlockwise) in degrees.
      * @see #drawArc(int, int, int, int, int, int)
@@ -3547,8 +3547,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent to store in the reusable rectangle.
+     * @param height the vertical extent to store in the reusable rectangle.
      */
     private void setRect(int x, int y, int width, int height) {
         if (this.rect == null) {
@@ -3565,8 +3565,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the bounding rectangle, the rounded corners included.
+     * @param height the vertical extent of that bounding rectangle.
      * @param arcWidth the arc width.
      * @param arcHeight the arc height.
      */
@@ -3584,8 +3584,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the frame the arc is inscribed in, not a radius.
+     * @param height the vertical extent of that frame.
      * @param startAngle the start angle in degrees, 0 = 3 o'clock.
      * @param arcAngle the angle (anticlockwise) in degrees.
      */
@@ -3603,8 +3603,8 @@ public final class SVGGraphics2D extends Graphics2D {
      *
      * @param x the x-coordinate.
      * @param y the y-coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the horizontal extent of the frame the oval is inscribed in, not a radius.
+     * @param height the vertical extent of that frame.
      */
     private void setOval(int x, int y, int width, int height) {
         if (this.oval == null) {

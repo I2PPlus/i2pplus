@@ -86,6 +86,12 @@ import net.i2p.crypto.SigType;
  */
 public abstract class DatabaseEntry extends DataStructureImpl {
     /**
+     * Constructor for NetDb entries; a subclass passes its entry type to the constructor that takes one.
+     */
+
+    public DatabaseEntry() {}
+
+    /**
      * Router info type. These are the same as in i2np's DatabaseStoreMessage.
      */
     public static final int KEY_TYPE_ROUTERINFO = 0;
@@ -93,7 +99,8 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     /** LeaseSet (v1) type. */
     public static final int KEY_TYPE_LEASESET = 1;
 
-    /** LeaseSet 2 type.
+    /**
+     * LeaseSet 2 type.
      *
      * @since 0.9.38
      */

@@ -29,6 +29,12 @@ import java.io.OutputStreamWriter;
  */
 public class FixWinPaths{
     /**
+     * Constructor. The rewrite is driven entirely by main() and the platform
+     * property, so an instance carries no state.
+     */
+    public FixWinPaths() {}
+
+    /**
      * Rewrite the forward slashes in the given wrapper.config to backslashes.
      * Does nothing unless os.name starts with "Win".
      * @param args exactly one element, the path of the wrapper.config to fix

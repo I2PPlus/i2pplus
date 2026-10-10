@@ -20,7 +20,8 @@ class MLKEMIndCpa
     private Symmetric symmetric;
 
     /**
-     * MLKEMIndCpa.
+     * Creates the IND-CPA layer, caching the sizes derived from the engine's parameter set.
+     * @param engine the parameter set supplying the Kyber constants, sizes and symmetric primitives
      */
     public MLKEMIndCpa(MLKEMEngine engine)
     {
@@ -47,6 +48,7 @@ class MLKEMIndCpa
     /**
      * Generates IndCpa Key Pair
      *
+     * @param d the 32-byte random seed from which the keypair is derived
      * @return KeyPair where each key is represented as bytes
      */
     byte[][] generateKeyPair(byte[] d)
@@ -117,7 +119,11 @@ class MLKEMIndCpa
     }
 
     /**
-     * encrypt.
+     * Encrypts a message under the IND-CPA public key, drawing all noise from the supplied coins.
+     * @param publicKeyInput the packed encapsulation key, the compressed key vector then the 32-byte seed
+     * @param msg the plaintext to encrypt, KyberIndCpaMsgBytes long
+     * @param coins the 32-byte random coins supplying the encryption noise
+     * @return the packed ciphertext, KyberIndCpaBytes long
      */
     public byte[] encrypt(byte[] publicKeyInput, byte[] msg, byte[] coins)
     {
@@ -221,7 +227,10 @@ class MLKEMIndCpa
     }
 
     /**
-     * packPublicKey.
+     * Packs a public key vector and its seed into the encapsulation key wire format.
+     * @param publicKeyPolyVec the key vector to serialize, filled in by this call
+     * @param seed the 32-byte public seed appended after the key vector
+     * @return the packed encapsulation key, KyberPublicKeyBytes long
      */
     public byte[] packPublicKey(PolyVec publicKeyPolyVec, byte[] seed)
     {
@@ -232,7 +241,10 @@ class MLKEMIndCpa
     }
 
     /**
-     * unpackPublicKey.
+     * Splits a packed encapsulation key into its key vector and its trailing public seed.
+     * @param publicKeyPolyVec the destination for the key vector in the leading bytes, before the seed
+     * @param publicKey the packed encapsulation key to split
+     * @return the trailing KyberSymBytes-byte public seed
      */
     public byte[] unpackPublicKey(PolyVec publicKeyPolyVec, byte[] publicKey)
     {
@@ -243,7 +255,9 @@ class MLKEMIndCpa
     }
 
     /**
-     * packSecretKey.
+     * Packs a secret key vector into the decapsulation key wire format.
+     * @param secretKeyPolyVec the decapsulation key vector to serialize
+     * @return the packed decapsulation key, KyberIndCpaSecretKeyBytes long
      */
     public byte[] packSecretKey(PolyVec secretKeyPolyVec)
     {
@@ -251,7 +265,9 @@ class MLKEMIndCpa
     }
 
     /**
-     * unpackSecretKey.
+     * Deserializes a packed decapsulation key into the destination vector.
+     * @param secretKeyPolyVec the destination for the deserialized key vector
+     * @param secretKey the packed decapsulation key
      */
     public void unpackSecretKey(PolyVec secretKeyPolyVec, byte[] secretKey)
     {
@@ -259,12 +275,15 @@ class MLKEMIndCpa
     }
 
     /**
-     * KyberGenerateMatrixNBlocks.
+     * Number of XOF blocks squeezed per matrix entry, computed once in the constructor.
      */
     public final int KyberGenerateMatrixNBlocks;
 
     /**
-     * generateMatrix.
+     * Expands a 32-byte seed into the KyberK by KyberK public matrix A by rejection sampling.
+     * @param aMatrix the KyberK by KyberK matrix to fill, one PolyVec per row
+     * @param seed the 32-byte seed absorbed by the XOF to expand the matrix
+     * @param transposed true to swap the row and column indices, producing the transposed matrix used by encryption
      */
     public void generateMatrix(PolyVec[] aMatrix, byte[] seed, boolean transposed)
     {
@@ -330,7 +349,10 @@ class MLKEMIndCpa
     }
 
     /**
-     * decrypt.
+     * Decrypts a ciphertext under the IND-CPA secret key, recovering the plaintext.
+     * @param secretKey the packed decapsulation key
+     * @param cipherText the packed ciphertext to decrypt
+     * @return the recovered plaintext, KyberIndCpaMsgBytes long
      */
     public byte[] decrypt(byte[] secretKey, byte[] cipherText)
     {

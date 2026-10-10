@@ -12,6 +12,12 @@ import net.i2p.router.web.HelperBase;
  */
 public class SearchHelper extends HelperBase {
 
+    /**
+     * No query or engine chosen yet, and the engine map starts empty until
+     * buildEngineMap() parses the router property.
+     */
+    public SearchHelper() {}
+
     private String _engine;
     private String _query;
     private Map<String, String> _engines = new TreeMap<>();
@@ -48,6 +54,7 @@ public class SearchHelper extends HelperBase {
 
     /**
      * setEngine.
+     * @param s search engine name to select; a non-default value is saved as the new default
      */
     public void setEngine(String s) {
         _engine = s;
@@ -59,6 +66,7 @@ public class SearchHelper extends HelperBase {
 
     /**
      * setQuery.
+     * @param s the search string to hand to the selected engine
      */
     public void setQuery(String s) {_query = s;}
 

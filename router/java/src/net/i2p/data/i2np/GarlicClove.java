@@ -42,6 +42,8 @@ public class GarlicClove extends DataStructureImpl {
 
     /**
      * GarlicClove.
+     *
+     * @param context the app context used to read messages and to log
      */
     public GarlicClove(I2PAppContext context) {
         _context = context;
@@ -55,6 +57,7 @@ public class GarlicClove extends DataStructureImpl {
     public DeliveryInstructions getInstructions() { return _instructions; }
     /**
      * Delivery instructions for this clove.
+     * @param instr the routing instructions this clove is to be delivered under
      */
     public void setInstructions(DeliveryInstructions instr) { _instructions = instr; }
     /**
@@ -64,6 +67,7 @@ public class GarlicClove extends DataStructureImpl {
     public I2NPMessage getData() { return _msg; }
     /**
      * Message payload wrapped in this clove.
+     * @param msg the I2NP message this clove carries
      */
     public void setData(I2NPMessage msg) { _msg = msg; }
     /**
@@ -73,6 +77,7 @@ public class GarlicClove extends DataStructureImpl {
     public long getCloveId() { return _cloveId; }
     /**
      * Unique identifier for this clove.
+     * @param id the unique identifier to record for this clove
      */
     public void setCloveId(long id) { _cloveId = id; }
     /**
@@ -82,6 +87,7 @@ public class GarlicClove extends DataStructureImpl {
     public long getExpiration() { return _expiration; }
     /**
      * Time after which this clove expires.
+     * @param exp the time in milliseconds since the epoch after which this clove expires
      */
     public void setExpiration(long exp) { _expiration = exp; }
     /**
@@ -91,6 +97,7 @@ public class GarlicClove extends DataStructureImpl {
     public Certificate getCertificate() { return _certificate; }
     /**
      * Certificate authorizing delivery of this clove.
+     * @param cert the certificate authorizing delivery of this clove
      */
     public void setCertificate(Certificate cert) { _certificate = cert; }
 
@@ -116,7 +123,11 @@ public class GarlicClove extends DataStructureImpl {
 
     /**
      * Read the clove from a byte array.
+     * @param source the array holding the serialized clove
+     * @param offset the offset into source at which the clove starts
      * @return length read
+     * @throws DataFormatException if the delivery instructions, message or
+     * certificate cannot be parsed
      */
     public int readBytes(byte[] source, int offset) throws DataFormatException {
         int cur = offset;
@@ -142,6 +153,11 @@ public class GarlicClove extends DataStructureImpl {
      * Short format for ECIES-Ratchet, saves 22 bytes.
      * NTCP2-style header, no ID, no separate expiration, no cert.
      *
+     * @param source the array holding the serialized ratchet-format clove
+     * @param offset the offset into source at which the clove starts
+     * @param len the number of bytes of source that make up the clove
+     * @throws DataFormatException if the delivery instructions or message cannot
+     * be parsed
      * @since 0.9.44
      */
     public void readBytesRatchet(byte[] source, int offset, int len) throws DataFormatException {
@@ -184,6 +200,8 @@ public class GarlicClove extends DataStructureImpl {
      * Short format for ECIES-Ratchet, saves 22 bytes.
      * NTCP2-style header, no ID, no separate expiration, no cert.
      *
+     * @param tgt the array the clove is written into
+     * @param offset the offset into tgt at which to start writing
      * @return new offset
      * @since 0.9.44
      */
@@ -205,6 +223,8 @@ public class GarlicClove extends DataStructureImpl {
 
     /**
      * Estimated serialized length of this clove.
+     *
+     * @return the number of bytes toByteArray will produce for this clove
      */
     public int estimateSize() {
         return _instructions.getSize()

@@ -59,7 +59,13 @@ class Request {
             throw new IndexOutOfBoundsException("Illegal Request " + toString());
     }
 
-    /** Read from stream */
+    /**
+     * Read from stream
+     *
+     * @param din stream carrying the requested block data
+     * @param bwl listener credited with the downloaded bytes
+     * @throws IOException if the stream ends early or the offset is not a block boundary
+     */
     public void read(DataInputStream din, BandwidthListener bwl) throws IOException {
         piece.read(din, off, len, bwl);
     }

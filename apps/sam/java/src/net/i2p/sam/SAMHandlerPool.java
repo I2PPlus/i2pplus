@@ -206,6 +206,7 @@ class SAMHandlerPool {
 
     /**
      * Number of handlers currently registered (connected)
+     * @return the number of connected SAM handler contexts currently registered
      * @since 0.9.70+
      */
     int getRegisteredCount() {
@@ -214,18 +215,21 @@ class SAMHandlerPool {
 
     /**
      * Number of worker threads actively processing a command.
+     * @return the number of worker threads currently running a command
      * @since 0.9.70+
      */
     int getActiveCount() { return _workers.getActiveCount(); }
 
     /**
      * Current worker pool size (may include idle threads).
+     * @return the number of worker threads created, including those now idle
      * @since 0.9.70+
      */
     int getPoolSize() { return _workers.getPoolSize(); }
 
     /**
      * Number of commands waiting in the worker queue.
+     * @return the number of commands waiting in the worker's queue
      * @since 0.9.70+
      */
     int getQueueSize() { return _workers.getQueue().size(); }
@@ -236,6 +240,7 @@ class SAMHandlerPool {
      * Limits concurrent connects to prevent overwhelming the streaming layer
      * while keeping pool workers unblocked. Excess CONNECTs queue up and are
      * dispatched as connector threads become available.
+     * @return the shared pool of four daemon threads that run blocking STREAM CONNECT operations
      * @since 0.9.70+
      */
     ThreadPoolExecutor getConnectors() { return _connectors; }

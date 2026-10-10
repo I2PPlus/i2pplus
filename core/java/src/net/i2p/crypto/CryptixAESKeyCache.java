@@ -14,6 +14,12 @@ import java.io.Serializable;
  * but the static methods are used in FortunaStandalone.
  */
 public final class CryptixAESKeyCache {
+    /**
+     * Constructor. The round-key cache itself is never instantiated - entries
+     * come from the static createNew() - so a bare instance holds nothing.
+     */
+    public CryptixAESKeyCache() {}
+
     private static final int KEYSIZE = 32; // 256bit AES
     private static final int BLOCKSIZE = 16;
     private static final int ROUNDS = CryptixRijndael_Algorithm.getRounds(KEYSIZE, BLOCKSIZE);
@@ -71,7 +77,14 @@ public final class CryptixAESKeyCache {
             Kd = new int[ROUNDS + 1][BC];
         }
 
-        /** @since 0.9.31 */
+        /**
+         * Allocates round-key arrays for a non-default AES variant, sizing both the
+         * encryption and the decryption schedule to the supplied round count and
+         * block size instead of the AES standard values used by {@link #createNew()}.
+         * @param rounds AES round count, 10 for a 128-bit key up to 14 for a 256-bit key
+         * @param bc block size in 32-bit words, 4 for the 16-byte AES block
+         * @since 0.9.31
+         */
         public KeyCacheEntry(int rounds, int bc) {
             Ke = new int[rounds + 1][bc];
             Kd = new int[rounds + 1][bc];

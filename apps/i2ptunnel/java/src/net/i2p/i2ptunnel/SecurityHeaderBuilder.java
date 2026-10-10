@@ -26,6 +26,12 @@ import java.util.Map;
  */
 public class SecurityHeaderBuilder {
 
+    /**
+     * Every add* method is static and the only field is the cookie filter list, so an
+     * instance carries nothing.
+     */
+    public SecurityHeaderBuilder() {}
+
     /** Cookie strings that should be filtered from Set-Cookie headers */
     private static final String[] COOKIE_STRINGS = {"STYXKEY", "visited=yes"};
 

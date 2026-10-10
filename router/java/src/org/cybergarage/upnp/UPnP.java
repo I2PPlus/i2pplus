@@ -25,6 +25,12 @@ import org.cybergarage.xml.Parser;
  * @author Satoshi Konno
  */
 public class UPnP {
+    /**
+     * Every constant, version string and protocol singleton below is static, so an
+     * instance carries nothing.
+     */
+    public UPnP() {}
+
     ////////////////////////////////////////////////
     //	Constants
     ////////////////////////////////////////////////

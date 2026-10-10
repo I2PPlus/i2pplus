@@ -74,6 +74,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      *
      * @param packet with all header encryption removed,
      * either a SessionRequest OR a TokenRequest.
+     * @param ctx the router context
+     * @param transport the UDP transport this inbound handshake belongs to
+     * @throws GeneralSecurityException if the connection IDs in the packet are identical
      */
     public InboundEstablishState2(RouterContext ctx, UDPTransport transport,
                                   UDPPacket packet) throws GeneralSecurityException {
@@ -220,8 +223,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     /**
-     * The negotiated SSU 2 version.
-     * @return the version
+     * Report the SSU 2 version negotiated with the peer.
+     * @return the negotiated protocol version number
      */
     @Override
     public int getVersion() {return _version;}
@@ -382,6 +385,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         /** set when the advertised IP differs from the sender's; null otherwise */
         final String mismatchMessage;
 
+        /**
+         * Record the chosen address and any IP-mismatch warning that came with it.
+         *
+         * @param ra the selected address, or null when no address qualified
+         * @param mismatchMessage the advertised-IP mismatch warning, or null when there is none
+         */
         AddressSelection(RouterAddress ra, String mismatchMessage) {
             this.ra = ra;
             this.mismatchMessage = mismatchMessage;
@@ -835,20 +844,23 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     public long getRcvConnID() {return _rcvConnID;}
     /**
-     * The token.
-     * @return the token
+     * Read the token this session presented to the peer.
+     * @return the SessionRequest token value
      */
     public long getToken() {return _token;}
     /**
-     * @return may be null
+     * Look up the next inbound establishment token for this session's peer.
+     *
+     * @return the token, or null for an IPv4 peer behind a symmetric NAT, where
+     *         a fresh token cannot be attributed to the correct session
      */
     public EstablishmentManager.Token getNextToken() {
         if (_aliceIP.length == 4 && _transport.isSymNatted()) {return null;}
         return _transport.getEstablisher().getInboundToken(_remoteHostId);
     }
     /**
-     * The handshake state.
-     * @return the handshake state
+     * Read the handshake progress for this session.
+     * @return the current handshake state
      */
     public HandshakeState getHandshakeState() {return _handshakeState;}
     /**
@@ -872,8 +884,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     public synchronized byte[] getRcvHeaderEncryptKey2() {return _rcvHeaderEncryptKey2;}
     /**
-     * The sent address.
-     * @return the sent address
+     * Read the peer address this session is talking to.
+     * @return the address the peer connected from
      */
     public InetSocketAddress getSentAddress() {return _aliceSocketAddress;}
 
@@ -935,6 +947,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     /**
      * All exceptions thrown from here will be fatal. fail() will be called before throwing.
+     * @param packet the retried Session Request or Token Request, header encryption removed
+     * @throws GeneralSecurityException if the packet fails address, connection ID, token,
+     * version or clock-skew validation; fail() has already been called
      */
     public synchronized void receiveSessionOrTokenRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
         try {
@@ -1066,6 +1081,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      *
      * Exceptions thrown from here are fatal.
      *
+     * @param packet the SessionConfirmed message, header encryption removed
      * @return the new PeerState2 if are done, may also be retrieved from getPeerState(),
      * or null if more fragments to go
      */
@@ -1301,6 +1317,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     /**
      * Note that we just sent the SessionCreated packet,
      * and save it for retransmission.
+     * @param pkt the SessionCreated datagram that was just sent, saved for retransmission
      */
     public synchronized void createdPacketSent(DatagramPacket pkt) {
         if (_sessCrForReTX == null) {
@@ -1446,6 +1463,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         private final int rsn;
         /**
          * Creates the RI exception.
+         * @param msg the detail message
+         * @param reason the reason code reported by getReason()
          */
         public RIException(String msg, int reason) {
             super(msg);
@@ -1453,19 +1472,22 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
         /**
          * Creates the RI exception.
+         * @param msg the detail message
+         * @param reason the reason code reported by getReason()
+         * @param t the cause of the rejection
          */
         public RIException(String msg, int reason, Throwable t) {
             super(msg, t);
             rsn = reason;
         }
         /**
-         * The reason code.
-         * @return the reason
+         * Read the SessionCreated rejection code carried by this failure.
+         * @return the numeric reason code
          */
         public int getReason() {return rsn;}
         /**
-         * The message with the reason code prefixed.
-         * @return the message
+         * Build the detail message, prefixed with the numeric reason code.
+         * @return the reason code followed by the underlying exception message
          */
         @Override
         public String getMessage() {return "Code " + rsn + ": " + super.getMessage();}

@@ -18,6 +18,7 @@ public class ShortEncryptedBuildRecord extends EncryptedBuildRecord {
     /**
      * Encrypted record with the given data.
      *
+     * @param data the layer-encrypted record bytes, LENGTH long or null
      * @throws IllegalArgumentException if data is not correct length (null is ok)
      */
     public ShortEncryptedBuildRecord(byte[] data) {

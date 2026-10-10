@@ -56,6 +56,8 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     /**
      * Session ID for this message.
+     *
+     * @param id the session this abuse report was sent from
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -71,6 +73,8 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     /**
      * Severity of the abuse.
+     *
+     * @param severity how serious the reported behaviour is judged to be
      */
     public void setSeverity(AbuseSeverity severity) {
         _severity = severity;
@@ -86,6 +90,8 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     /**
      * Reason for the abuse.
+     *
+     * @param reason the category of misbehaviour being reported
      */
     public void setReason(AbuseReason reason) {
         _reason = reason;
@@ -101,6 +107,8 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     /**
      * Message ID of the reported message.
+     *
+     * @param id the identifier of the message being complained about
      */
     public void setMessageId(MessageId id) {
         _messageId = id;

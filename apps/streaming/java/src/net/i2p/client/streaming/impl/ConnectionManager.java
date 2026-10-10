@@ -934,6 +934,7 @@ class ConnectionManager {
         }
 
         /**
+         * Records a strike with the running count of distinct burst windows seen for this dest.
          * @param windowStart window start of the burst that recorded the strike
          * @param strikeTime clock time at which the strike was recorded
          * @param count distinct burst windows recorded so far, at least 1
@@ -1312,6 +1313,8 @@ class ConnectionManager {
 
     /**
      * Was this conn recently closed?
+     * @param inboundID the inbound stream ID to look up in the recently-closed LRU
+     * @return true if the connection was closed recently and is still being tracked
      * @since 0.9.12
      */
     public boolean wasRecentlyClosed(long inboundID) {
@@ -1324,7 +1327,7 @@ class ConnectionManager {
 
     /**
      * Socket accept() timeout.
-     * @param x
+     * @param x accept timeout in milliseconds, passed through to the listener's accept()
      */
     public void setSoTimeout(long x) {
         _soTimeout = x;
@@ -2532,7 +2535,11 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             }
         }
     }
-    /** Register outbound id. */
+    /**
+     * Register outbound id.
+     *
+     * @param con the connection whose send stream ID is bound to it, ignored when &lt;= 0
+     */
     void registerOutboundId(Connection con) {
         long sendId = con.getSendStreamId();
         if (sendId > 0)
@@ -2639,7 +2646,8 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
             I2PSocketManagerFull.pcapWriter.flush();
     }
 
-    /** Connections currently managed.
+    /**
+     * Connections currently managed.
      * @return set of Connection objects
      */
     public Set<Connection> listConnections() {

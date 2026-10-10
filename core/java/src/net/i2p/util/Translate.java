@@ -27,10 +27,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 0.7.9
  */
 public abstract class Translate {
+
+    /**
+     * Constructor for subclasses; the translation methods in this base class are static.
+     */
+    public Translate() {}
+
     /** Property for the console language. */
     public static final String PROP_LANG = "routerconsole.lang";
 
-    /** @since 0.9.10 */
+    /**
+     * Property for the console country, two-letter upper case or "".
+     *
+     * @since 0.9.10
+     */
     public static final String PROP_COUNTRY = "routerconsole.country";
 
     /** Non-null, two- or three-letter lower case, may be "". */
@@ -47,7 +57,14 @@ public abstract class Translate {
 
     private static final String TEST_STRING = "XXXX";
 
-    /** Lang in routerconsole.lang property, else current locale. */
+    /**
+     * Look up a single translation key in a resource bundle.
+     *
+     * @param key the message key in the bundle
+     * @param ctx the application context, which supplies the language and country
+     * @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     * @return the translated string, or key itself if no translation exists
+     */
     public static String getString(String key, I2PAppContext ctx, String bun) {
         if (key == null) {
             (new NullPointerException("null translation string")).printStackTrace();
@@ -79,15 +96,24 @@ public abstract class Translate {
      *  To translate parameter also, use _t("foo {0} bar", _t("baz"))
      *  Do not double the single quotes in the parameter.
      *  Use autoboxing to call with ints, longs, floats, etc.
-     *  @param ctx the ctx
-     *  @param bun the bun
-     *  @return the result
+     *  @param ctx the application context, which supplies the language and country
+     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     *  @return the translated string with {0} replaced by o, or s itself if no translation exists
      */
     public static String getString(String s, Object o, I2PAppContext ctx, String bun) {
         return getString(s, ctx, bun, o);
     }
 
-    /** For {0} and {1}. */
+    /**
+     *  For {0} and {1}.
+     *
+     *  @param s the string to be translated, containing {0} and {1} placeholders
+     *  @param o the value substituted for {0}, not translated
+     *  @param o2 the value substituted for {1}, not translated
+     *  @param ctx the application context, which supplies the language and country
+     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     *  @return the translated string with {0} and {1} replaced, or s itself if no translation exists
+     */
     public static String getString(String s, Object o, Object o2, I2PAppContext ctx, String bun) {
         return getString(s, ctx, bun, o, o2);
     }
@@ -95,12 +121,12 @@ public abstract class Translate {
     /**
      *  Varargs
      *
-     *  @param oArray parameters
+     *  @param s the string to be translated, containing {0}, {1}, ... placeholders
+     *  @param ctx the application context, which supplies the language and country
+     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     *  @param oArray the values substituted for the placeholders, in order
+     *  @return the translated string with the placeholders replaced, or s itself if no translation exists
      *  @since 0.9.8
-4 * @param s the s
-4 * @param ctx the ctx
-4 * @param bun the bun
-4 * @return the result
      */
     public static String getString(String s, I2PAppContext ctx, String bun, Object... oArray) {
         String lang = getLanguage(ctx);
@@ -122,10 +148,10 @@ public abstract class Translate {
      *  @param n how many
      *  @param s singluar string, optionally with {0} e.g. "one tunnel"
      *  @param p plural string optionally with {0} e.g. "{0} tunnels"
+     *  @param ctx the application context, which supplies the language and country
+     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
+     *  @return the singular or plural form as selected by n, with {0} replaced by n
      *  @since 0.7.14
-4 * @param ctx the ctx
-4 * @param bun the bun
-4 * @return the result
      */
     public static String getString(int n, String s, String p, I2PAppContext ctx, String bun) {
         String lang = getLanguage(ctx);
@@ -149,8 +175,8 @@ public abstract class Translate {
     /**
      *  Two- or three-letter lower case
      *
+     *  @param ctx the application context holding the routerconsole.lang property
      *  @return lang in routerconsole.lang property, else current locale
-     *  @param ctx the ctx
      */
     public static String getLanguage(I2PAppContext ctx) {
         String lang = ctx.getProperty(PROP_LANG);
@@ -160,6 +186,7 @@ public abstract class Translate {
 
     /**
      *  Are we configured for a right-to-left language?
+     *  @param ctx the application context holding the routerconsole.lang property
      *  @return true for supported RTL languages
      *  @since 0.9.46
      */
@@ -181,6 +208,7 @@ public abstract class Translate {
     /**
      *  Two-letter upper case or ""
      *
+     *  @param ctx the application context holding the routerconsole.country property
      *  @return country in routerconsole.country property, else current locale
      *  @since 0.9.10
      */
@@ -243,6 +271,8 @@ public abstract class Translate {
      *
      *  @param langCode two- or three-letter lower-case
      *  @param dflt e.g. "English"
+     *  @param ctx the application context, which supplies the current language
+     *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
      *  @return the display language
      *  @since 0.9.5
      */

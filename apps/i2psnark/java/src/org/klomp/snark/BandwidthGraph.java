@@ -44,13 +44,26 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
     private static final AtomicLong _httpTx = new AtomicLong();
     private static final AtomicLong _httpRx = new AtomicLong();
 
-    /** Record datagram bytes sent (DHT + UDP tracker funnel). */
+    /**
+     * Record datagram bytes sent (DHT + UDP tracker funnel).
+     *
+     * @param bytes the datagram byte count to add to the cumulative sent total
+     */
     public static void datagramSent(int bytes) { _datagramTx.addAndGet(bytes); }
 
-    /** Record datagram bytes received (DHT + UDP tracker listeners). */
+    /**
+     * Record datagram bytes received (DHT + UDP tracker listeners).
+     *
+     * @param bytes the datagram byte count to add to the cumulative received total
+     */
     public static void datagramReceived(int bytes) { _datagramRx.addAndGet(bytes); }
 
-    /** Record an HTTP tracker/torrent fetch: approximate request size plus response size. */
+    /**
+     * Record an HTTP tracker/torrent fetch: approximate request size plus response size.
+     *
+     * @param txBytes the bytes sent, added only when greater than zero
+     * @param rxBytes the bytes received, added only when greater than zero
+     */
     public static void httpTransferred(long txBytes, long rxBytes) {
         if (txBytes > 0) {_httpTx.addAndGet(txBytes);}
         if (rxBytes > 0) {_httpRx.addAndGet(rxBytes);}
@@ -62,6 +75,7 @@ public class BandwidthGraph extends SimpleTimer2.TimedEvent {
      * Start the sampler for this snark manager, loading prior history from the
      * tmp-dir file when present. Subsequent calls are no-ops.
      *
+     * @param manager the manager whose torrent transfers the sampler records
      * @since 0.9.71+
      */
     public static synchronized void start(SnarkManager manager) {

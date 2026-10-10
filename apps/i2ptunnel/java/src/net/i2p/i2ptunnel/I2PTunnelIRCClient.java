@@ -36,12 +36,18 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     private final List<I2PSocketAddress> _addrs;
     // application should ping timeout before this
     private static final long DEFAULT_READ_TIMEOUT = 10 * (long) 60 * 1000;
+    /**
+     * Read timeout in milliseconds applied to each client socket, adjustable with
+     * setReadTimeout() after the tunnel is built.
+     */
     protected long readTimeout = DEFAULT_READ_TIMEOUT;
     private final boolean _dccEnabled;
     private I2PTunnelDCCServer _DCCServer;
     private DCCClientManager _DCCClientManager;
 
     /**
+     * Client option key enabling the DCC file transfer manager.
+     *
      * @since 0.8.9
      */
     public static final String PROP_DCC = "i2ptunnel.ircclient.enableDCC";
@@ -50,7 +56,13 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
+     * @param localPort if 0, use any port, get actual port selected with getLocalPort()
      * @param destinations peers we target, comma- or space-separated. Since 0.9.9, each dest may be appended with :port
+     * @param l the logging instance
+     * @param ownDest whether to use an owned destination
+     * @param notifyThis the event dispatcher for notifications
+     * @param tunnel the I2PTunnel instance
+     * @param pkf path to the private key file, or null to generate a transient key
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      * valid config to contact the router
      */

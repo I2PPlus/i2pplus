@@ -305,7 +305,14 @@ public class SimpleTimer2 {
      * calibration below then only judges timers that genuinely had work and did not run
      * it, which is the case worth a report.
      *
+     * @param completed executor completed task count, now
+     * @param lastCompleted executor completed task count, at the previous sample
+     * @param consecutiveStalledSamples immediately preceding samples with no progress
+     * @param threshold such samples tolerated before reporting
+     * @param episodeReported whether this episode has already been reported
+     * @param maxObservedGapMs longest quiet period this timer has come back from; zero if unmeasured
      * @param workDue true when the timer had a task whose delay had elapsed
+     * @return OK when work was not due or progress was made, PENDING below the threshold, REPORT once per episode
      * @see #evaluateStall(long, long, int, int, boolean, long)
      */
     static WatchdogDecision evaluateStall(long completed, long lastCompleted,
@@ -658,7 +665,7 @@ public class SimpleTimer2 {
      * event actually runs at is whatever its timeReached() passes to
      * schedule()/reschedule().
      *
-     * @param event the event
+     * @param event the TimedEvent to run, which reschedules itself from its own timeReached()
      * @param timeoutMs delay to the first run, in ms, and lower bound for the
      * period the event chooses for itself; the value is not
      * enforced after the first run
@@ -674,7 +681,7 @@ public class SimpleTimer2 {
      * The event self-reschedules via schedule() in timeReached(); the period
      * this method validates is not passed to the executor as a repetition rate.
      *
-     * @param event the event
+     * @param event the TimedEvent to run, which reschedules itself from its own timeReached()
      * @param delay run the first iteration after delay ms
      * @param timeoutMs lower bound in ms for the period the event picks for
      * itself, enforced only by the check below

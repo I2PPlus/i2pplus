@@ -19,9 +19,17 @@ public class VersionBean {
         super();
     }
 
-    /** @return the SusDNS version string */
+    /**
+     * The SusDNS application version, shown on the DNS server pages.
+     *
+     * @return the SusDNS version string
+     */
     public String getVersion() {return version;}
 
-    /** @return the SusDNS project URL */
+    /**
+     * The project's home page, shown on the DNS server pages.
+     *
+     * @return the SusDNS project URL
+     */
     public String getUrl() {return url;}
 }

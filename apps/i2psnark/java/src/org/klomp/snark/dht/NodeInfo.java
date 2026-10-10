@@ -47,7 +47,12 @@ class NodeInfo extends SimpleDataStructure {
      */
     public static final int LENGTH = NID.HASH_LENGTH + Hash.HASH_LENGTH + 2;
 
-    /** With a fake NID used for pings */
+    /**
+     * With a fake NID used for pings
+     *
+     * @param dest the destination that will be resolved when the node is contacted
+     * @param port the DHT query port, or 0 if unknown
+     */
     public NodeInfo(Destination dest, int port) {
         super();
         this.nID = KRPC.FAKE_NID;
@@ -161,7 +166,7 @@ class NodeInfo extends SimpleDataStructure {
      *
      * @param h the destination hash
      * @param p the port number
-     * @param random the random
+     * @param random the source filling the bytes that follow the hash and port
      * @return the generated NID
      */
     public static NID generateNID(Hash h, int p, RandomSource random) {
@@ -230,6 +235,7 @@ class NodeInfo extends SimpleDataStructure {
     /**
      * This can come in later but the hash must match.
      *
+     * @param dest the destination to attach, which must hash to the current hash
      * @throws IllegalArgumentException if hash of dest doesn't match previous hash
      */
     public void setDestination(Destination dest) throws IllegalArgumentException {
@@ -249,6 +255,11 @@ class NodeInfo extends SimpleDataStructure {
         return this.port;
     }
 
+    /**
+     * When this node was last successfully heard from, taken from the node ID.
+     *
+     * @return the timestamp in milliseconds since epoch, or 0 if never seen
+     */
     public long lastSeen() {
         return nID.lastSeen();
     }
@@ -292,6 +303,9 @@ class NodeInfo extends SimpleDataStructure {
     /**
      * To persistent storage string. Format: NID:Hash:Destination:port First 3 in base 64;
      * Destination may be empty string
+     *
+     * @return the colon-separated persistence form, with an empty destination
+     *         field when the full destination is not yet known
      */
     public String toPersistentString() {
         StringBuilder buf = new StringBuilder(650);

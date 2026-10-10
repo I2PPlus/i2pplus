@@ -73,6 +73,8 @@ public class RouterTimestamper extends Timestamper {
 
     /**
      *  Does not start. Caller MUST call startTimestamper()
+     *
+     * @param ctx the application context used to read properties and locate the router
      */
     public RouterTimestamper(I2PAppContext ctx) {
         this(ctx, null, true);
@@ -80,6 +82,9 @@ public class RouterTimestamper extends Timestamper {
 
     /**
      *  Does not start. Caller MUST call startTimestamper()
+     *
+     * @param ctx the application context used to read properties and locate the router
+     * @param lsnr listener notified of each time update, or null to register none yet
      */
     public RouterTimestamper(I2PAppContext ctx, UpdateListener lsnr) {
         this(ctx, lsnr, true);
@@ -87,6 +92,10 @@ public class RouterTimestamper extends Timestamper {
 
     /**
      *  Does not start. Caller MUST call startTimestamper()
+     *
+     * @param ctx the application context used to read properties and locate the router
+     * @param lsnr listener notified of each time update, or null to register none yet
+     * @param daemon true to run the query thread as a daemon the JVM may abandon at shutdown
      */
     public RouterTimestamper(I2PAppContext ctx, UpdateListener lsnr, boolean daemon) {
         super();
@@ -128,6 +137,7 @@ public class RouterTimestamper extends Timestamper {
     /**
      * NTP server at the given index in the configured list.
      *
+     * @param index zero-based position within the configured server list
      * @return the server
      */
     public String getServer(int index) {
@@ -152,12 +162,16 @@ public class RouterTimestamper extends Timestamper {
 
     /**
      * Register a listener to be notified of time updates.
+     *
+     * @param lsnr the listener to add; adding the same listener twice registers it once
      */
     public void addListener(UpdateListener lsnr) {
             _listeners.add(lsnr);
     }
     /**
      * Unregister a listener from time update notifications.
+     *
+     * @param lsnr the listener to remove; absent listeners are ignored
      */
     public void removeListener(UpdateListener lsnr) {
             _listeners.remove(lsnr);
@@ -173,6 +187,7 @@ public class RouterTimestamper extends Timestamper {
     /**
      * Time update listener at the given index.
      *
+     * @param index zero-based position within the registered listener list
      * @return the listener
      */
     public UpdateListener getListener(int index) {

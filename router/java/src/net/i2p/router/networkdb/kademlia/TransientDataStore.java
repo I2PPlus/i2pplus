@@ -56,6 +56,7 @@ class TransientDataStore implements DataStore {
 
     /**
      * TransientDataStore.
+     * @param ctx router context supplying the log manager and initializing the ban logger
      */
     public TransientDataStore(RouterContext ctx) {
         _context = ctx;
@@ -113,7 +114,8 @@ class TransientDataStore implements DataStore {
         return Collections.unmodifiableSet(_data.entrySet());
     }
 
-    /** For PersistentDataStore only - don't use here.
+    /**
+     * For PersistentDataStore only - don't use here.
      * @throws UnsupportedOperationException always
      */
     @Override
@@ -153,7 +155,8 @@ class TransientDataStore implements DataStore {
         return count;
     }
 
-    /** For PersistentDataStore only - don't use here.
+    /**
+     * For PersistentDataStore only - don't use here.
      * @throws UnsupportedOperationException always
      */
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
@@ -300,9 +303,9 @@ class TransientDataStore implements DataStore {
     /**
      * Unconditionally store, bypass all newer/older checks.
      *
-     * @return success
      * @param key non-null
      * @param data non-null
+     * @return success
      * @since 0.9.64
      */
     @Override
@@ -327,7 +330,8 @@ class TransientDataStore implements DataStore {
         return buf.toString();
     }
 
-    /** For PersistentDataStore only - don't use here.
+    /**
+     * For PersistentDataStore only - don't use here.
      * @throws UnsupportedOperationException always
      */
     public DatabaseEntry remove(Hash key, boolean persist) {

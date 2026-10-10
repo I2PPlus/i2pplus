@@ -76,7 +76,7 @@ public class RrdSyncThreadPool {
      * Registers a shutdown hook that destroys the underlying thread pool when when the JVM is about
      * to quit.
      *
-     * @return this
+     * @return this pool, so the call can be chained
      * @see #unregisterShutdownHook()
      */
     public RrdSyncThreadPool registerShutdownHook() {
@@ -115,7 +115,14 @@ public class RrdSyncThreadPool {
         syncExecutor.shutdown();
     }
 
-    /** Schedule sync task */
+    /**
+     * Run a sync task repeatedly, waiting between the end of one run and the start of the next
+     * @param command the sync runnable to run repeatedly
+     * @param initialDelay the wait before the first run
+     * @param delay the wait between the end of one run and the start of the next
+     * @param unit the time unit the two delays are expressed in
+     * @return the handle for the scheduled task, which is cancelled by shutdown()
+     */
     ScheduledFuture<?> scheduleWithFixedDelay(
             Runnable command, long initialDelay, long delay, TimeUnit unit) {
         return syncExecutor.scheduleWithFixedDelay(command, initialDelay, delay, unit);
@@ -139,6 +146,11 @@ public class RrdSyncThreadPool {
         /** Pool name */
         final String poolName;
 
+        /**
+         * Create a factory naming the threads it produces.
+         *
+         * @param poolName the name prefixed to each created thread's name
+         */
         DaemonThreadFactory(String poolName) {
             SecurityManager s = System.getSecurityManager();
             group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
@@ -146,7 +158,10 @@ public class RrdSyncThreadPool {
         }
 
         /**
-         * newThread.
+         * Create a daemon thread in this factory's group, with the next number in sequence.
+         *
+         * @param r the task the new thread will run
+         * @return the created thread, not yet started
          */
         public Thread newThread(Runnable r) {
             Thread t =
@@ -164,7 +179,7 @@ public class RrdSyncThreadPool {
     /** Shutdown hook thread */
     private class ShutdownThread extends Thread {
         /**
-         * ShutdownThread.
+         * Create the shutdown hook, naming it after the pool it tears down.
          */
         public ShutdownThread() {
             // include the RrdSyncThreadPool's toString in the thread name
@@ -172,7 +187,7 @@ public class RrdSyncThreadPool {
         }
 
         /**
-         * run.
+         * Shut the sync executor down when the JVM is quitting.
          */
         @Override
         public void run() {

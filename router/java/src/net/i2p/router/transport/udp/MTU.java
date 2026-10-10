@@ -207,7 +207,11 @@ public class MTU {
         return Math.max(PeerState.MIN_MTU, Math.min(PeerState.LARGE_MTU, rv));
     }
 
-    /** CLI test */
+    /**
+     * CLI test
+     * @param args hostnames or IP addresses of interfaces to report MTU for;
+              with no arguments, every local interface is reported
+     */
     public static void main(String[] args) {
         if (args.length > 0) {
             System.out.println("Cmd line interfaces:"); // NOSONAR S106 CLI output

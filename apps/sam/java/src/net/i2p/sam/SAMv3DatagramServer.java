@@ -43,7 +43,10 @@ class SAMv3DatagramServer implements Handler {
 	 * Caller must call start().
 	 *
 	 * @param parent may be null
+	 * @param host the local address to bind the datagram channel to
+	 * @param port the local port to bind, 0 to let the system choose
 	 * @param props configuration properties (reserved for future use)
+	 * @throws IOException if the channel cannot be opened or the local address cannot be bound
 	 */
 	public SAMv3DatagramServer(SAMBridge parent, String host, int port, Properties props) throws IOException {
 		_parent = parent;
@@ -80,15 +83,31 @@ class SAMv3DatagramServer implements Handler {
 
 	/**
 	 * send.
+	 *
+	 * @param addr the destination to deliver the datagram to
+	 * @param msg the datagram to send, positioned at its first byte and consumed by this call
+	 * @throws IOException if the datagram cannot be written to the channel
 	 */
 	public void send(SocketAddress addr, ByteBuffer msg) throws IOException {
 		_server.send(msg, addr);
 	}
 
-	/** @since 0.9.24 */
+	/**
+	 * The host this server listens on, as passed to the constructor and registered
+	 * with the port mapper so clients can find it.
+	 *
+	 * @return the local host address this server was bound to
+	 * @since 0.9.24
+	 */
 	public String getHost() { return _host; }
 
-	/** @since 0.9.24 */
+	/**
+	 * The port this server listens on, as passed to the constructor and registered
+	 * with the port mapper so clients can find it.
+	 *
+	 * @return the local port this server was bound to
+	 * @since 0.9.24
+	 */
 	public int getPort() { return _port; }
 
 	private class Listener implements Runnable {

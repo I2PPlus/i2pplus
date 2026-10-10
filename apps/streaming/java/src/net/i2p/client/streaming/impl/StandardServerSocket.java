@@ -31,6 +31,9 @@ class StandardServerSocket extends ServerSocket {
 
     /**
      * Doesn't really throw IOE but super() does
+     *
+     * @param socket the I2P server socket that accept() and close() delegate to
+     * @throws IOException always, from the no-argument ServerSocket constructor this must call
      */
     StandardServerSocket(I2PServerSocketFull socket) throws IOException {
         _socket = socket;

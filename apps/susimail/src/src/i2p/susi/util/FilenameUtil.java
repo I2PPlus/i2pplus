@@ -14,6 +14,12 @@ import net.i2p.data.DataHelper;
 public class FilenameUtil {
 
 	/**
+	 * Constructor. The sanitizers below are static functions of the name they
+	 * are given, so an instance carries no state.
+	 */
+	public FilenameUtil() {}
+
+	/**
 	 * Convert the UTF-8 to ASCII suitable for inclusion in a header
 	 * and for use as a cross-platform filename.
 	 * Replace chars likely to be illegal in filenames,
@@ -21,6 +27,8 @@ public class FilenameUtil {
 	 *
 	 * Ref: RFC 6266, RFC 5987, i2psnark Storage.ILLEGAL
 	 *
+	 * @param name filename to make ASCII-safe; trimmed, then illegal and non-ASCII chars become _
+	 * @return the sanitized name, suitable for a header or a cross-platform file
 	 * @since 0.9.18
 	 */
 	public static String sanitizeFilename(String name) {
@@ -52,6 +60,8 @@ public class FilenameUtil {
 	 * ref: https://blog.nodemailer.com/2017/01/27/the-mess-that-is-attachment-filenames/
 	 * ref: RFC 2231
 	 *
+	 * @param name filename to encode, including any non-ASCII characters
+	 * @return the RFC 5987 encoded value, prefixed with the "utf-8''" charset
 	 * @since 0.9.33
 	 */
 	public static String encodeFilenameRFC5987(String name) {

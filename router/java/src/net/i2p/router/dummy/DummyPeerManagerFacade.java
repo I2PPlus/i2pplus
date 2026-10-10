@@ -22,6 +22,12 @@ import net.i2p.router.peermanager.PeerTestJob;
  *
  */
 public class DummyPeerManagerFacade implements PeerManagerFacade {
+    /**
+     * Constructor. Every peer operation is an empty stub, so a bare instance is
+     * already a complete dummy peer manager.
+     */
+    public DummyPeerManagerFacade() {}
+
     @Override
     public void shutdown() { /* Intentionally empty - dummy implementation */ }
     public void startup() { /* Intentionally empty - dummy implementation */ }

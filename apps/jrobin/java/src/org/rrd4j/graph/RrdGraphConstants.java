@@ -479,6 +479,7 @@ public interface RrdGraphConstants {
      *
      * @param seriesCount how many independently plotted series the graph carries
      * @param width requested line width in pixels
+     * @param dashLength ink length of one dot; zero draws a solid line
      * @return a solid stroke for a lone series, otherwise round dots
      */
     static Stroke seriesStroke(int seriesCount, float width, float dashLength) {
@@ -544,6 +545,8 @@ public interface RrdGraphConstants {
         WATERMARK;
         /**
          * Set
+         * @param f the font to record for this tag, replacing any earlier entry
+         * @param fonts the per-tag font array, indexed by each tag's ordinal
          */
 
         public void set(Font f, Font[] fonts) {
@@ -551,6 +554,9 @@ public interface RrdGraphConstants {
         }
         /**
          * Get
+         * @param f unused, accepted only to mirror {@link #set(Font, Font[])}
+         * @param fonts the per-tag font array, indexed by each tag's ordinal
+         * @return the font recorded for this tag, or null if none was set
          */
 
         public Font get(Font f, Font[] fonts) {

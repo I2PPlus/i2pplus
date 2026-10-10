@@ -34,6 +34,12 @@ import net.i2p.util.Log;
  */
 class SAMUtils {
 
+     /**
+      * The parsers and key helpers below are static, and so is the logger, so an
+      * instance carries nothing.
+      */
+     SAMUtils() {}
+
      private final static Log _log = new Log(SAMUtils.class);
 
     /** The key for the command portion of a parsed SAM message */
@@ -180,8 +186,8 @@ class SAMUtils {
      * OPCODE, or the remainder of the PING/PONG line if any, is returned as the value of the key ""OPCODE"".
      *
      * @param args non-null
-     * @throws SAMException on some errors but not all
      * @return non-null, may be empty. Does not throw on missing COMMAND or OPCODE; caller must check.
+     * @throws SAMException on some errors but not all
      */
     public static Properties parseParams(String args) throws SAMException {
         if (args == null) {

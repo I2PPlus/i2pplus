@@ -72,6 +72,10 @@ public class Edns {
 
         /**
          * from.
+         *
+         * @param optionCode the numeric EDNS option code to look up
+         * @return the matching OptionCode, or UNKNOWN if no option is registered
+         *         for that code
          */
         public static OptionCode from(int optionCode) {
             OptionCode res = INVERSE_LUT.get(optionCode);
@@ -161,6 +165,11 @@ public class Edns {
 
     /**
      * getEdnsOption.
+     *
+     * @param <O> the option type the caller expects, so the unchecked cast to it
+     *        is checked at the call site
+     * @param optionCode the code of the option to look for in the variable part
+     * @return the matching option, or null if the variable part carries no such code
      */
     @SuppressWarnings({"unchecked", "TypeParameterUnusedInFormals"})
     public <O extends EdnsOption> O getEdnsOption(OptionCode optionCode) {

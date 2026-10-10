@@ -27,6 +27,12 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
  * @since 0.9.51
  */
 public class XI2PLocationFilter extends HandlerWrapper {
+    /**
+     * No location header prefix is cached and no failure is recorded; setLocation() picks
+     * the prefix up from the first request that carries one.
+     */
+    public XI2PLocationFilter() {}
+
     private static final String PROP_ENABLE_LOCATION_HEADER = "i2p.tunnel.webserverLocationHeader";
     private String X_I2P_Location = null;
     private long lastFailure = -1;

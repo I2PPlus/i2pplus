@@ -42,7 +42,10 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      * Creates a new instance of PooledTunnelCreatorConfig
      *
      * @param destination may be null
-     * @param pool non-null
+     * @param pool the owning pool, never null
+     * @param ctx the router context supplying the transport and profile lookups
+     * @param length the tunnel length in hops, 1 minimum (a 0-hop tunnel is length 1)
+     * @param isInbound true for a client inbound tunnel, false for an outbound one
      */
     public PooledTunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound, Hash destination, TunnelPool pool) {
         super(ctx, length, isInbound, destination);
@@ -54,7 +57,10 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
         }
     }
 
-    /** Called from TestJob. */
+    /**
+     * Record that a test of this tunnel succeeded, as TestJob does after a round trip.
+     * @param ms the round-trip time of the successful tunnel test, in milliseconds
+     */
     public void testJobSuccessful(int ms) {testSuccessful(ms);}
 
     /**
@@ -132,17 +138,23 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     }
 
     /**
-     * @return non-null
+     * Get the extra options configured on the owning pool.
+     *
+     * @return the pool's unknown options, never null
      */
     @Override
     public Properties getOptions() {return _pool.getSettings().getUnknownOptions();}
 
     /**
-     * @return non-null
+     * Get the pool this tunnel belongs to.
+     *
+     * @return the owning pool, never null
      */
     public TunnelPool getTunnelPool() {return _pool;}
 
     /**
+     * Test whether this tunnel was built because the pool had nothing else.
+     *
      * @return true if this tunnel was built as a last-resort fallback
      * @since 0.9.69+
      */
@@ -155,8 +167,9 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public void setLastResort() {_lastResort = true;}
 
     /**
+     * Test whether this build may ignore the per-peer in-flight guard.
+     *
      * @return true if this build bypasses the per-peer in-flight guard in
-     * {@link BuildExecutor#buildTunnel(net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig)}
      * @since 0.9.71+
      */
     public boolean isBypassPacing() {return _bypassPacing;}
@@ -176,12 +189,16 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     public void recordActivity() {_lastActivity = System.currentTimeMillis();}
 
     /**
+     * Get the time this tunnel last processed a message.
+     *
      * @return timestamp of last activity, or 0 if never used
      * @since 0.9.69+
      */
     public long getLastActivity() {return _lastActivity;}
 
     /**
+     * Test whether this tunnel has been used recently enough to count as live.
+     *
      * @return true if this tunnel has been recently active (within ACTIVITY_TIMEOUT)
      * @since 0.9.69+
      */

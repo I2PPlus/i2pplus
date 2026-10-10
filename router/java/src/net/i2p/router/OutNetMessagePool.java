@@ -20,6 +20,8 @@ public class OutNetMessagePool {
 
     /**
      * Constructor.
+     *
+     * @param context the router context whose transport and log manager are used
      */
     public OutNetMessagePool(RouterContext context) {
         _context = context;

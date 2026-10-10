@@ -69,6 +69,11 @@ public abstract class DelegatingDnssecRR extends Data {
 
     /**
      * parseSharedData.
+     *
+     * @param dis positioned after the fixed fields: a key tag, two algorithm bytes, then the digest
+     * @param length the record's total length in bytes, of which the first four are fixed fields
+     * @return the four parsed fields, with the digest copied out of the stream
+     * @throws IOException if the stream ends before the digest has been read in full
      */
     protected static SharedData parseSharedData(DataInputStream dis, int length) throws IOException {
         int keyTag = dis.readUnsignedShort();
@@ -102,6 +107,13 @@ public abstract class DelegatingDnssecRR extends Data {
 
     /**
      * DelegatingDnssecRR.
+     *
+     * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
+     * @param algorithm the signature algorithm, or null to derive it from {@code algorithmByte}
+     * @param algorithmByte the wire signature algorithm byte, asserted against {@code algorithm}
+     * @param digestType the digest algorithm, or null to derive it from {@code digestTypeByte}
+     * @param digestTypeByte the wire digest algorithm byte, asserted against {@code digestType}
+     * @param digest the DNSKEY digest, which must not be null
      */
     protected DelegatingDnssecRR(int keyTag, SignatureAlgorithm algorithm, byte algorithmByte, DigestAlgorithm digestType, byte digestTypeByte, byte[] digest) {
         this.keyTag = keyTag;
@@ -120,6 +132,11 @@ public abstract class DelegatingDnssecRR extends Data {
 
     /**
      * DelegatingDnssecRR.
+     *
+     * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
+     * @param algorithm the raw signature algorithm byte, looked up as {@link SignatureAlgorithm}
+     * @param digestType the raw digest algorithm byte, looked up as {@link DigestAlgorithm}
+     * @param digest the DNSKEY digest, which must not be null
      */
     protected DelegatingDnssecRR(int keyTag, byte algorithm, byte digestType, byte[] digest) {
         this(keyTag, null, algorithm, null, digestType, digest);
@@ -127,6 +144,11 @@ public abstract class DelegatingDnssecRR extends Data {
 
     /**
      * DelegatingDnssecRR.
+     *
+     * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
+     * @param algorithm the signature algorithm, whose number supplies the on-the-wire byte
+     * @param digestType the digest algorithm, whose value supplies the on-the-wire byte
+     * @param digest the DNSKEY digest, which must not be null
      */
     protected DelegatingDnssecRR(int keyTag, SignatureAlgorithm algorithm, DigestAlgorithm digestType, byte[] digest) {
         this(keyTag, algorithm, algorithm.number, digestType, digestType.value, digest);
@@ -134,6 +156,11 @@ public abstract class DelegatingDnssecRR extends Data {
 
     /**
      * DelegatingDnssecRR.
+     *
+     * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
+     * @param algorithm the signature algorithm, whose number supplies the on-the-wire byte
+     * @param digestType the raw digest algorithm byte, the enum being looked up from it
+     * @param digest the DNSKEY digest, which must not be null
      */
     protected DelegatingDnssecRR(int keyTag, SignatureAlgorithm algorithm, byte digestType, byte[] digest) {
         this(keyTag, algorithm, algorithm.number, null, digestType, digest);
@@ -167,6 +194,8 @@ public abstract class DelegatingDnssecRR extends Data {
 
     /**
      * getDigestBigInteger.
+     *
+     * @return the DNSKEY digest as an unsigned big-endian integer, built once and then cached
      */
     public BigInteger getDigestBigInteger() {
         if (digestBigIntCache == null) {
@@ -179,6 +208,9 @@ public abstract class DelegatingDnssecRR extends Data {
 
     /**
      * getDigestHex.
+     *
+     * @return the DNSKEY digest as upper-case hexadecimal without a {@code 0x} prefix or leading
+     * zeroes, built once and then cached
      */
     public String getDigestHex() {
         if (digestHexCache == null) {
@@ -189,6 +221,9 @@ public abstract class DelegatingDnssecRR extends Data {
 
     /**
      * digestEquals.
+     *
+     * @param otherDigest the digest to compare with, element by element, so a null yields false
+     * @return true if both digests hold the same bytes in the same order
      */
     public boolean digestEquals(byte[] otherDigest) {
         return Arrays.equals(digest, otherDigest);

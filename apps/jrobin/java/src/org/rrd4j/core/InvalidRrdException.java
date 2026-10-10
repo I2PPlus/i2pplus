@@ -11,6 +11,8 @@ public class InvalidRrdException extends RrdException {
 
     /**
      * InvalidRrdException.
+     *
+     * @param message the detail message naming the corruption found
      */
     public InvalidRrdException(String message) {
         super(message);
@@ -18,6 +20,9 @@ public class InvalidRrdException extends RrdException {
 
     /**
      * InvalidRrdException.
+     *
+     * @param message the detail message naming the corruption found
+     * @param cause the underlying failure that made the RRD unreadable
      */
     public InvalidRrdException(String message, Exception cause) {
         super(message, cause);

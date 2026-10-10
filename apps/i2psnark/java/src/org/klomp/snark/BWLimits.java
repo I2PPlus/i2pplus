@@ -22,6 +22,12 @@ import net.i2p.client.I2PSimpleClient;
  * synchronization.
  */
 public class BWLimits {
+    /**
+     * Constructor. The cached limits and their timestamp are static, so an
+     * instance carries no state of its own; only the static accessor is used.
+     */
+    public BWLimits() {}
+
     private static int[] cachedResult = null;
     private static long lastUpdateTime = 0L; // store time in milliseconds
     private static final long UPDATE_INTERVAL = 10 * (long) 60 * 1000;

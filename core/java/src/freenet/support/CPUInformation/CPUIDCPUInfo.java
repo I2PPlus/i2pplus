@@ -6,6 +6,12 @@ package freenet.support.CPUInformation;
  * @since 0.8.7
  */
 class CPUIDCPUInfo implements CPUInfo {
+    /**
+     * Constructor. Every answer is read from the static CPUID helpers, so an
+     * instance holds no state; one is created per support check.
+     */
+    CPUIDCPUInfo() {}
+
     public String getVendor() {return CPUID.getCPUVendorID();}
     public boolean hasMMX() {return (CPUID.getEDXCPUFlags() & (1 << 23)) != 0;} //EDX Bit 23
     public boolean hasSSE() {return (CPUID.getEDXCPUFlags() & (1 << 25)) != 0;} //EDX Bit 25

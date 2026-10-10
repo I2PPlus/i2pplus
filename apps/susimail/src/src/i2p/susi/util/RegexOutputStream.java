@@ -31,9 +31,10 @@ public class RegexOutputStream extends FilterOutputStream {
     int idx;
 
     /**
+     * or have two in a row. ASCII-only, no UTF-8.
+     *
      * @param out MUST be buffered because this writes one byte at a time
      * @param pattern the only special char recognized is '*' and cannot be at the beginning or end
-     * or have two in a row. ASCII-only, no UTF-8.
      * @param replace ASCII-only, no UTF-8.
      * @param onNoMatch force output of this at the end if no replacement made, or null
      */

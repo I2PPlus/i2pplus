@@ -165,27 +165,47 @@ public enum EncType {
         isPQ = base == EncAlgo.ECIES_MLKEM;
     }
 
-    /** The unique identifier for this type. */
+    /**
+     * The unique identifier for this type.
+     *
+     * @return the numeric code used in RouterInfo and LeaseSet encodings
+     */
     public int getCode() {
         return code;
     }
 
-    /** The length of the public key, in bytes. */
+    /**
+     * The length of the public key, in bytes.
+     *
+     * @return the key length in bytes
+     */
     public int getPubkeyLen() {
         return pubkeyLen;
     }
 
-    /** The length of the private key, in bytes. */
+    /**
+     * The length of the private key, in bytes.
+     *
+     * @return the key length in bytes
+     */
     public int getPrivkeyLen() {
         return privkeyLen;
     }
 
-    /** The standard base algorithm name used for the Java crypto factories. */
+    /**
+     * The standard base algorithm name used for the Java crypto factories.
+     *
+     * @return the JCE base algorithm family, without the padding or digest mode
+     */
     public EncAlgo getBaseAlgorithm() {
         return base;
     }
 
-    /** The standard name used for the Java crypto factories. */
+    /**
+     * The standard name used for the Java crypto factories.
+     *
+     * @return the full JCE transformation string, base algorithm plus mode
+     */
     public String getAlgorithmName() {
         return algoName;
     }
@@ -193,8 +213,8 @@ public enum EncType {
     /**
      * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *
-     * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      * @return the params
+     * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
         if (params == null) throw new InvalidParameterSpecException(toString() + " is not available in this JVM");
@@ -240,6 +260,7 @@ public enum EncType {
     /**
      * Checks if the encryption type with the given code is available.
      *
+     * @param code the numeric code assigned to the encryption type
      * @return true if supported in this JVM
      */
     public static boolean isAvailable(int code) {
@@ -251,7 +272,7 @@ public enum EncType {
     /**
      * Checks if the encryption type with the given name or number is available.
      *
-     * @param stype number or name
+     * @param stype the encryption type code or name to look up, as accepted by parseEncType
      * @return true if supported in this JVM
      */
     public static boolean isAvailable(String stype) {
@@ -284,8 +305,10 @@ public enum EncType {
         }
     }
 
-    /** Encryption type by code.
+    /**
+     * Encryption type by code.
      *
+     * @param code the numeric code assigned to the encryption type
      * @return Null if not supported.
      */
     public static EncType getByCode(int code) {
@@ -296,7 +319,7 @@ public enum EncType {
     /**
      * Convenience for user apps
      *
-     * @param stype number or name
+     * @param stype the encryption type code or name to look up, as accepted by parseEncType
      * @return null if not found
      */
     public static EncType parseEncType(String stype) {

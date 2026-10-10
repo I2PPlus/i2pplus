@@ -18,8 +18,10 @@ import net.i2p.router.web.NewsHelper;
  * simple helper to control restarts/shutdowns in the left hand nav
  */
 public class ConfigRestartBean {
+    /** Creates a bean; the container calls it with no arguments before rendering the nav. */
     public ConfigRestartBean() {}
-    /** all these are tagged below so no need to _x them here.
+    /**
+     * All these are tagged below so no need to _x them here.
      * order is: form value, form class, display text.
      */
     private static final String[] SET1 = {"shutdownImmediate", "stop now", "Shutdown immediately", "cancelShutdown", "cancel", "Cancel shutdown"};

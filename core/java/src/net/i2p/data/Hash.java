@@ -88,6 +88,7 @@ public class Hash extends SimpleDataStructure {
      *
      * Ignore this warning and you WILL corrupt the cache or other data structures.
      *
+     * @param data the 32 bytes to wrap, with null yielding a hash whose data is null
      * @return the cached or new hash
      * @throws IllegalArgumentException if data is not the correct number of bytes
      * @since 0.8.3
@@ -99,6 +100,8 @@ public class Hash extends SimpleDataStructure {
     /**
      * Pull from cache or return new
      *
+     * @param data the buffer holding the 32 bytes to wrap
+     * @param off the index within that buffer of the first of the 32 bytes
      * @return the cached or new hash
      * @throws ArrayIndexOutOfBoundsException if not enough bytes
      * @since 0.8.3
@@ -110,7 +113,9 @@ public class Hash extends SimpleDataStructure {
     /**
      * Pull from cache or return new
      *
+     * @param in the stream read for exactly the 32 bytes of the hash
      * @return the cached or new hash
+     * @throws IOException if the stream cannot be read or holds fewer than 32 bytes
      * @since 0.8.3
      */
     public static Hash create(InputStream in) throws IOException {
@@ -124,6 +129,7 @@ public class Hash extends SimpleDataStructure {
 
     /**
      * IllegalArgumentException if data is not 32 bytes (null is ok).
+     * @param data the 32 bytes to copy into the hash, with null leaving the data unset
      * @throws IllegalArgumentException if data is not 32 bytes (null is ok)
      */
     public Hash(byte[] data) {

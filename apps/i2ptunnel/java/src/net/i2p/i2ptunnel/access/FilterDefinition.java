@@ -15,6 +15,9 @@ class FilterDefinition {
     private final int purgeSeconds;
 
     /**
+     * Create a definition and derive the purge interval from the longest
+     * threshold window among the default, the elements and the recorders.
+     *
      * @param defaultThreshold threshold to apply to unknown remote destinations
      * @param elements the elements defined in the filter definition, if any
      * @param recorders the recorders defined in the filter definition, if any
@@ -35,22 +38,39 @@ class FilterDefinition {
         this.purgeSeconds = maxSeconds;
     }
 
-    /** @return the default threshold */
+    /**
+     * The threshold applied to a destination matched by no element.
+     *
+     * @return the default threshold
+     */
     Threshold getDefaultThreshold() {
         return defaultThreshold;
     }
 
-    /** @return the elements */
+    /**
+     * The per-destination thresholds parsed from the definition file.
+     *
+     * @return the elements
+     */
     FilterDefinitionElement[] getElements() {
         return elements;
     }
 
-    /** @return the recorders */
+    /**
+     * The loggers invoked when a destination's threshold is reached.
+     *
+     * @return the recorders
+     */
     Recorder[] getRecorders() {
         return recorders;
     }
 
-    /** @return the purge seconds */
+    /**
+     * How often to purge access records, in seconds; the widest threshold
+     * window in the definition.
+     *
+     * @return the purge seconds
+     */
     int getPurgeSeconds() {
         return purgeSeconds;
     }

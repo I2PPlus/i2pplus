@@ -21,6 +21,12 @@ import net.i2p.util.NativeBigInteger;
  */
 final class ECConstants {
 
+    /**
+     * Constructor. The curve, domain and provider lookups below all run in the
+     * static initializer, so an instance holds nothing.
+     */
+    ECConstants() {}
+
     private static final boolean DEBUG = false;
 
     private static void log(String s) {

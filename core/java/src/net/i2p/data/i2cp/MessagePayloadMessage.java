@@ -42,6 +42,9 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     /**
      * For writing
      *
+     * @param sessID the session the message belongs to, stored truncated to 32 bits
+     * @param msgID the message ID used to correlate the payload with its reply
+     * @param payload the payload to deliver to the session
      * @since 0.9.54
      */
     public MessagePayloadMessage(long sessID, long msgID, Payload payload) {
@@ -53,6 +56,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Get the session this message was sent on.
+     *
      * @return the session ID
      */
     public synchronized long getSessionId() {
@@ -79,6 +84,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Get the message ID, unique within the session.
+     *
      * @return the message ID
      */
     public synchronized long getMessageId() {
@@ -95,6 +102,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
+     * Get the payload carried by this message.
+     *
      * @return the payload
      */
     public synchronized Payload getPayload() {
@@ -102,7 +111,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     * @param payload the payload
+     * @param payload the payload to deliver to the session
      * @deprecated use 3-arg constructor
      */
     @Deprecated

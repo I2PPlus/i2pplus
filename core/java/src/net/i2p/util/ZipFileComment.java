@@ -33,13 +33,12 @@ public abstract class ZipFileComment {
     private static final int MAGIC_LEN = magicDirEnd.length;
 
     /**
-     * @param max The max length of the comment in bytes.
-     * If the actual comment is longer, it will not be found and
      * this method will throw an IOE
-     *
-     * @return empty string if no comment, or the comment.
      * The string is decoded with UTF-8
      *
+     * @param file the zip file to scan for the end-of-central-directory comment
+     * @param max The max length of the comment in bytes.
+     * @return empty string if no comment, or the comment.
      * @throws IOException if no valid end-of-central-directory record found
      */
     public static String getComment(File file, int max) throws IOException {
@@ -47,16 +46,14 @@ public abstract class ZipFileComment {
     }
 
     /**
-     * @param max The max length of the comment in bytes.
-     * If the actual comment is longer, it will not be found and
      * this method will throw an IOE
-     *
-     * @param skip Number of bytes to skip in the file before looking for the
      * zip header. Use 56 for sud/su2 files.
-     *
-     * @return empty string if no comment, or the comment.
      * The string is decoded with UTF-8
      *
+     * @param file the zip file to scan for the end-of-central-directory comment
+     * @param max The max length of the comment in bytes.
+     * @param skip Number of bytes to skip in the file before looking for the
+     * @return empty string if no comment, or the comment.
      * @throws IOException if no valid end-of-central-directory record found
      */
     public static String getComment(File file, int max, int skip) throws IOException {

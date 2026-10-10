@@ -16,6 +16,7 @@ public class WriterOutputStream extends OutputStream {
 
     /**
      * WriterOutputStream.
+     * @param writer the writer this stream writes into, letting a PrintWriter serve as an OutputStream
      */
     public WriterOutputStream(Writer writer) { _writer = writer; }
 

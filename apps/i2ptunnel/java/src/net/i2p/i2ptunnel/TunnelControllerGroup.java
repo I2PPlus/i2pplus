@@ -94,22 +94,26 @@ public class TunnelControllerGroup implements ClientApp {
     /** Session ownership map for preventing premature session close */
     private final Map<I2PSession, Set<TunnelController>> _sessions;
 
-    /** Pool of socket handlers for all clients; volatile so the per-tunnel and
+    /**
+     * Pool of socket handlers for all clients; volatile so the per-tunnel and
      * per-request read path ({@link #getClientExecutor()}) never takes
      * {@link #_executorLock} in steady state. Mutation (create/resize/kill)
      * stays under the lock.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     private volatile ThreadPoolExecutor _executor;
     private static final AtomicLong _executorThreadCount = new AtomicLong();
     private final Object _executorLock = new Object();
     /** how long to wait before dropping an idle thread */
     private static final long HANDLER_KEEPALIVE_MS = (long) 30*1000;
 
-    /** Private handler pools for server tunnels, keyed by the server instance.
+    /**
+     * Private handler pools for server tunnels, keyed by the server instance.
      * Each server tunnel owns its pool so a saturated destination (its threads
      * and its queue full) rejects only ITS excess connections; a flood on one
      * port can no longer consume threads that other ports need.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     private final ConcurrentHashMap<I2PTunnelServer, ServerHandler> _serverHandlers = new ConcurrentHashMap<>(4);
     private static final AtomicLong _serverExecutorThreadCount = new AtomicLong();
     private final Object _serverExecutorLock = new Object();
@@ -144,23 +148,27 @@ public class TunnelControllerGroup implements ClientApp {
      */
     static final int SERVER_HANDLER_HEADROOM = 1;
 
-    /** Private runner pools for client and server tunnels, keyed by tunnel
+    /**
+     * Private runner pools for client and server tunnels, keyed by tunnel
      * identity (I2PTunnel or I2PTunnelServer). Each pool is a share of the
      * global clientRunnerMax budget so a saturated dest/tunnel cannot consume
      * every runner thread; rejection is per-tunnel (AbortPolicy after the
      * short burst queue fills) rather than global.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     private final ConcurrentHashMap<Object, RunnerHandler> _runnerPools = new ConcurrentHashMap<>(8);
     private static final AtomicLong _runnerPoolThreadCount = new AtomicLong();
     private final Object _runnerPoolLock = new Object();
     private boolean _runnerPoolStatsRegistered;
     /** Absolute floor for a live tunnel's runner pool (shares of clientRunnerMax). */
     static final int RUNNER_POOL_FLOOR = 4;
-    /** Micro-burst absorption: tasks wait here when every worker is busy before
+    /**
+     * Micro-burst absorption: tasks wait here when every worker is busy before
      * AbortPolicy. Small enough that a stuck flood still rejects promptly
      * (and sheds with a real HTTP page), large enough to cover a browser's
      * parallel open (typically ~6) plus a short spike.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     static final int RUNNER_BURST_QUEUE = 64;
 
     /** Tuned by Tuner: heap-safety ceiling on summed server handler threads across all server tunnels */
@@ -450,8 +458,8 @@ public class TunnelControllerGroup implements ClientApp {
      * as we do not want to instantiate TCG too early. Android must do null
      * checks on the return value.
      *
-     * @throws IllegalArgumentException if unable to load from i2ptunnel.config
      * @return the instance
+     * @throws IllegalArgumentException if unable to load from i2ptunnel.config
      */
     public static TunnelControllerGroup getInstance() {
         synchronized (TunnelControllerGroup.class) {
@@ -475,8 +483,9 @@ public class TunnelControllerGroup implements ClientApp {
      * In Android, this should only be called from LoadClientsJob, as we do not
      * want to instantiate TCG too early.
      *
-     * @throws IllegalArgumentException if unable to load from i2ptunnel.config
+     * @param ctx the context the instance is built against, replacing a stale Android one
      * @return the instance
+     * @throws IllegalArgumentException if unable to load from i2ptunnel.config
      * @since 0.9.41
      */
     public static TunnelControllerGroup getInstance(I2PAppContext ctx) {
@@ -501,6 +510,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Instantiation only. Caller must call startup().
      * Config file problems will not throw exception until startup().
      *
+     * @param context the context the tunnels are created in
      * @param mgr may be null
      * @param args zero or one args, which may be one config file or one config
      * directory. If not absolute will be relative to the context's config dir,
@@ -981,6 +991,7 @@ public class TunnelControllerGroup implements ClientApp {
      *
      * DEPRECATED for use outside this class. Use startup() or getInstance().
      *
+     * @param cfgFile the config file or directory to read the tunnel definitions from
      * @throws IllegalArgumentException if unable to load from file
      */
     public synchronized void loadControllers(File cfgFile) {
@@ -1228,6 +1239,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Add the given tunnel to the set of known controllers (but don't add it to a config file or start it or anything)
+     *
+     * @param controller the tunnel to add to the known set
      */
     public synchronized void addController(TunnelController controller) {
         _controllersLock.writeLock().lock();
@@ -1243,6 +1256,7 @@ public class TunnelControllerGroup implements ClientApp {
      * Side effect - clears all messages the controller.
      * Does NOT delete the configuration - must call saveConfig() or removeConfig() also.
      *
+     * @param controller the tunnel to stop and drop, where null yields an empty message list
      * @return list of messages from the controller as it is stopped
      */
     public synchronized List<String> removeController(TunnelController controller) {
@@ -1422,6 +1436,9 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Save the configuration of this tunnel only, may be new.
      * Side effect: for split config, sets "confFile" property to absolute path.
+     *
+     * @param tc the controller whose configuration is saved
+     * @throws IOException if the config file cannot be written
      * @since 0.9.42
      */
     public synchronized void saveConfig(TunnelController tc) throws IOException {
@@ -1441,6 +1458,9 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Remove the configuration of this tunnel only
+     *
+     * @param tc the controller whose config file is renamed to a .bak and deleted
+     * @throws IOException if the config file cannot be renamed
      * @since 0.9.42
      */
     public synchronized void removeConfig(TunnelController tc) throws IOException {
@@ -1632,6 +1652,9 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Note the fact that the controller is using the session so that
      * it isn't destroyed prematurely.
+     *
+     * @param controller the controller claiming a reference to the session
+     * @param session the session being claimed
      */
     void acquire(TunnelController controller, I2PSession session) {
         synchronized (_sessions) {
@@ -1650,6 +1673,9 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Note the fact that the controller is no longer using the session, and if
      * no other controllers are using it, destroy the session.
+     *
+     * @param controller the controller giving up its reference to the session
+     * @param session the session being released
      */
     void release(TunnelController controller, I2PSession session) {
         boolean shouldClose = false;
@@ -2012,8 +2038,19 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.71+
      */
     static class RunnerHandler {
+        /**
+         * The maximum number of worker threads this tunnel's pool may grow to.
+         */
         volatile int ceiling;
+        /**
+         * The per-tunnel pool, created on first use; null until then.
+         */
         volatile ThreadPoolExecutor executor;
+        /**
+         * Creates the holder without a pool.
+         *
+         * @param ceiling the maximum number of worker threads this tunnel's pool may grow to
+         */
         RunnerHandler(int ceiling) {this.ceiling = ceiling;}
     }
 
@@ -2337,8 +2374,19 @@ public class TunnelControllerGroup implements ClientApp {
      * @since 0.9.71+
      */
     static class ServerHandler {
+        /**
+         * The per-tunnel server-handler cap, or -1 for the Tuner-managed default.
+         */
         volatile int override;
+        /**
+         * The per-tunnel handler pool, created on first use; null until then.
+         */
         volatile ThreadPoolExecutor executor;
+        /**
+         * Creates the holder without a pool.
+         *
+         * @param override the per-tunnel server-handler cap, or -1 for the Tuner-managed default
+         */
         ServerHandler(int override) {this.override = override;}
     }
 
@@ -2494,6 +2542,8 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Resize the shared (fallback) client executor max pool size. Called by Tuner
      * for the null-tunnel path; per-tunnel pools are resized by rebalanceAllRunnerPools().
+     *
+     * @param newMax the new maximum pool size, applied only while the shared executor is running
      */
     void resizeClientExecutor(int newMax) {
         synchronized (_executorLock) {

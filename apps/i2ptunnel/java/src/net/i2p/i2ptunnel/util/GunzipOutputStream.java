@@ -46,6 +46,8 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     /**
      * Build a new Gunzip stream
+     * @param uncompressedStream the sink the decompressed bytes are written to
+     * @throws IOException if the underlying CRC32/Deflater stream cannot be created
      */
     public GunzipOutputStream(OutputStream uncompressedStream) throws IOException {
         this(uncompressedStream, null);
@@ -54,6 +56,7 @@ public class GunzipOutputStream extends InflaterOutputStream {
     /**
      * With a callback when done
      *
+     * @param uncompressedStream the sink the decompressed bytes are written to
      * @param cb may be null
      * @since 0.9.62
      */

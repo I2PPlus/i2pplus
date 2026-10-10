@@ -49,6 +49,8 @@ public abstract class EdnsOption {
 
     /**
      * EdnsOption.
+     *
+     * @param optionData the raw option payload; its length becomes the option length
      */
     @SuppressWarnings("this-escape")
     protected EdnsOption(byte[] optionData) {

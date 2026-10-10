@@ -44,6 +44,8 @@ public class StatisticsManager {
 
     /**
      * StatisticsManager.
+     *
+     * @param context the router context supplying the identity, rates and config
      */
     public StatisticsManager(RouterContext context) {
         _context = context;
@@ -60,6 +62,7 @@ public class StatisticsManager {
      * Retrieve a snapshot of the statistics that should be published.
      *
      * This includes all standard options (as of 0.9.24, network ID and caps)
+     * @return the statistics as an unsigned Properties set
      */
     public Properties publishStatistics() {
         // if hash is null, will be caught in fkc.sign()
@@ -72,6 +75,7 @@ public class StatisticsManager {
      * This includes all standard options (as of 0.9.24, network ID and caps)
      *
      * @param h current router hash, non-null
+     * @return the statistics as an unsigned Properties set
      * @since 0.9.24
      */
     public Properties publishStatistics(Hash h) {

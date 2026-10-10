@@ -52,6 +52,12 @@ import net.i2p.data.DataHelper;
  */
 public class HostCheckStatus {
 
+    /**
+     * Constructor. Every read below resolves the status directory from the
+     * router context on the spot, so a bare instance holds no state.
+     */
+    public HostCheckStatus() {}
+
     /** Directory under the router dir holding the addressbook's own state. */
     static final String STATUS_DIR = "addressbook";
 
@@ -72,6 +78,7 @@ public class HostCheckStatus {
 
     /** The reachable flag as the checker writes it. */
     static final String REACHABLE_YES = "y";
+    /** The unreachable flag as the checker writes it. */
     static final String REACHABLE_NO = "n";
 
     /** Rows carry at least timestamp, host and reachable. */

@@ -40,7 +40,8 @@ import java.util.Set;
  */
 public interface I2PSession {
 
-     /** Send a new message to the given destination, containing the specified
+     /**
+      * Send a new message to the given destination, containing the specified
       * payload, returning true if the router feels confident that the message
       * was delivered.
       *
@@ -53,7 +54,8 @@ public interface I2PSession {
       */
      public boolean sendMessage(Destination dest, byte[] payload) throws I2PSessionException;
 
-     /** Send a new message to the given destination, containing the specified
+     /**
+      * Send a new message to the given destination, containing the specified
       * payload, returning true if the router feels confident that the message
       * was delivered.
       *
@@ -273,7 +275,8 @@ public interface I2PSession {
      */
     public long sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options, SendMessageStatusListener listener) throws I2PSessionException;
 
-    /** Receive a message that the router has notified the client about, returning
+    /**
+     * Receive a message that the router has notified the client about, returning
      * the payload.
      * This may only be called once for a given msgId (until the counter wraps)
      *
@@ -287,11 +290,13 @@ public interface I2PSession {
      * Throw away the received message, we don't want it.
      * Use instead of receiveMessage() to avoid gunzip overhead.
      *
+     * @param msgId message whose payload should be dropped rather than returned
      * @since 0.9.71
      */
     public void discardMessage(int msgId);
 
-    /** Instruct the router that the message received was abusive (including how
+    /**
+     * Instruct the router that the message received was abusive (including how
      * abusive on a 1-100 scale) in the hopes the router can do something to
      * minimize receiving abusive messages like that in the future.
      *
@@ -303,7 +308,8 @@ public interface I2PSession {
      */
      public void reportAbuse(int msgId, int severity) throws I2PSessionException;
 
-    /** Instruct the I2PSession where it should send event notifications
+    /**
+     * Instruct the I2PSession where it should send event notifications
      *
      * WARNING: It is recommended that you use a method that specifies the protocol and ports.
      *
@@ -321,11 +327,9 @@ public interface I2PSession {
     /**
      * Add a subsession.
      *
-     * @return a new subsession, non-null
      * @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
-     * and different signing keys
-     *
      * @param opts subsession options if any, may be null
+     * @return a new subsession, non-null
      * @throws I2PSessionException on error
      * @since 0.9.21
      */

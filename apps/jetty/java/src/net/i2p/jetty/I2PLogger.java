@@ -34,13 +34,19 @@ public class I2PLogger implements Logger
     private final StringBuilder _buffer = new StringBuilder();
 
 
-    /** no-arg constructor, uses global context */
+    /**
+     * Construct a logger against the global application context.
+     */
     public I2PLogger()
     {
         this(I2PAppContext.getGlobalContext());
     }
 
-    /** @param ctx the I2P application context */
+    /**
+     * Construct a logger against a specific application context.
+     *
+     * @param ctx the I2P application context
+     */
     public I2PLogger(I2PAppContext ctx)
     {
         _log = ctx.logManager().getLog(Server.class);
@@ -62,7 +68,14 @@ public class I2PLogger implements Logger
             _log.setMinimumPriority(Log.ERROR);
     }
 
-    /** @param msg the message @param arg0 first arg @param arg1 second arg */
+    /**
+     * Throwable when it is the only non-null argument
+     * together with the formatted line
+     *
+     * @param msg the message @param arg0 first arg @param arg1 second arg
+     * @param arg0 substituted for the first {} placeholder in msg, or logged as the
+     * @param arg1 substituted for the second {} placeholder, or logged as the throwable
+     */
     public void info(String msg,Object arg0, Object arg1)
     {
         if (arg0 == null && arg1 == null) {
@@ -86,7 +99,14 @@ public class I2PLogger implements Logger
         _log.debug(msg,th);
     }
 
-    /** @param msg the message @param arg0 first arg @param arg1 second arg */
+    /**
+     * Throwable when it is the only non-null argument
+     * together with the formatted line
+     *
+     * @param msg the message @param arg0 first arg @param arg1 second arg
+     * @param arg0 substituted for the first {} placeholder in msg, or logged as the
+     * @param arg1 substituted for the second {} placeholder, or logged as the throwable
+     */
     public void debug(String msg,Object arg0, Object arg1)
     {
         if (arg0 == null && arg1 == null) {
@@ -104,7 +124,14 @@ public class I2PLogger implements Logger
         }
     }
 
-    /** @param msg the message @param arg0 first arg @param arg1 second arg */
+    /**
+     * Throwable when it is the only non-null argument
+     * together with the formatted line
+     *
+     * @param msg the message @param arg0 first arg @param arg1 second arg
+     * @param arg0 substituted for the first {} placeholder in msg, or logged as the
+     * @param arg1 substituted for the second {} placeholder, or logged as the throwable
+     */
     public void warn(String msg,Object arg0, Object arg1)
     {
         if (arg0 == null && arg1 == null) {
@@ -269,7 +296,8 @@ public class I2PLogger implements Logger
     }
 
     /**
-     * @return the name
+     * Return the logger's name, as Jetty reports it.
+     * @return the logger's class name, "net.i2p.jetty.I2PLogger"
      * @since Jetty 7
      */
     public String getName() {

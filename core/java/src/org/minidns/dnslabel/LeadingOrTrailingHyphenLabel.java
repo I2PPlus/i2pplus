@@ -15,12 +15,20 @@ package org.minidns.dnslabel;
  */
 public final class LeadingOrTrailingHyphenLabel extends NonLdhLabel {
 
-    /** Create label */
+    /**
+     * Create label
+     * @param label the full label text, which is expected to have a leading or trailing hyphen
+     */
     LeadingOrTrailingHyphenLabel(String label) {
         super(label);
     }
 
-    /** @return true if label starts or ends with hyphen */
+    /**
+     * Test whether a label begins or ends with a hyphen.
+     *
+     * @param label the label text to inspect; an empty label is not a hyphen label
+     * @return true if label starts or ends with hyphen
+     */
     static boolean isLeadingOrTrailingHypenLabelInternal(String label) {
         if (label.isEmpty()) {
             return false;

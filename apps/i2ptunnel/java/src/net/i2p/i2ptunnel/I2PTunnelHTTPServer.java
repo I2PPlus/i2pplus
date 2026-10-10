@@ -183,30 +183,39 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         return t;
     });
 
-    /** Per-tunnel I/O pools for Server→Client data transfer, keyed by this
+    /**
+     * Per-tunnel I/O pools for Server→Client data transfer, keyed by this
      * server instance so a saturated dest cannot consume every IO thread.
      * Sized as shares of {@link TunnelControllerGroup#getIOTransferThreads()}.
      * Separate from the runner pool so pinned runner threads are never
      * consumed by slow downloads.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     private static final ConcurrentHashMap<Object, ThreadPoolExecutor> _ioPools =
         new ConcurrentHashMap<>(4);
     private static final Object _ioExecutorLock = new Object();
-    /** Default I/O transfer threads (global budget); Tuner adjusts via TunnelControllerGroup.
+    /**
+     * Default I/O transfer threads (global budget); Tuner adjusts via TunnelControllerGroup.
      * Sized for concurrent body transfers across many server tunnels (e.g. 16
-     * eepsites x floor 8 = 128 threads when fully loaded). */
+     * eepsites x floor 8 = 128 threads when fully loaded).
+     */
     static volatile int ioTransferThreads =
         Math.max(32, Math.min(128, Runtime.getRuntime().availableProcessors() * 4));
-    /** Absolute floor for a live server tunnel's I/O pool. Sized so several
+    /**
+     * Absolute floor for a live server tunnel's I/O pool. Sized so several
      * concurrent downloads can start without queueing past the browser's
-     * body-stall window. @since 0.9.71+ */
+     * body-stall window.
+     * @since 0.9.71+
+     */
     static final int IO_POOL_FLOOR = 8;
     /** Maximum global I/O budget (Tuner max must match). @since 0.9.71+ */
     static final int IO_THREADS_MAX = 256;
-    /** Idle timeout for Server→Client transfers (ms). If no read/write progress
+    /**
+     * Idle timeout for Server→Client transfers (ms). If no read/write progress
      * occurs for this long, the transfer is considered stalled and cancelled.
      * Measured between progress events, not as a total transfer deadline —
-     * multi-minute I2P downloads are expected and must not be killed. */
+     * multi-minute I2P downloads are expected and must not be killed.
+     */
     /**
      * Floor for the configured stall window, ms. A window below this is
      * shorter than any pause in a bulk transfer over a congested path and
@@ -215,10 +224,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @since 0.9.71+
      */
     static final long STALL_WINDOW_FLOOR_MS = 60_000L;
+    /** Current stall window, adjustable by the Tuner between the floor and max. */
     static volatile long ioStallTimeoutMs = STALL_WINDOW_FLOOR_MS;
-    /** Monotonically increasing counter of stall events detected by runOnIO
+    /**
+     * Monotonically increasing counter of stall events detected by runOnIO
      * or the Sender. Used by the Tuner as the observed signal for stall
-     * timeout adjustment. */
+     * timeout adjustment.
+     */
     static final AtomicLong _stallEventCount = new AtomicLong();
 
     /**
@@ -230,10 +242,12 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static final AtomicLong _bodyAbortCount = new AtomicLong();
 
-    /**
-     * @return bodies aborted due to I/O pool saturation since router start
-     * @since 0.9.71+
-     */
+      /**
+       * Count of bodies dropped because the I/O pool had no free worker.
+       *
+       * @return bodies aborted due to I/O pool saturation since router start
+       * @since 0.9.71+
+       */
     public static long getBodyAbortCount() { return _bodyAbortCount.get(); }
 
     /**
@@ -445,6 +459,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @param desc descriptive name for error messages
      * @return true if the body was submitted asynchronously, false if it ran
      * inline or was aborted
+     * @throws IOException part of the handoff API's signature; the body reports every
+     * failure through the Sender rather than throwing
      * @since 0.9.71+
      */
     static boolean handOffBody(ThreadPoolExecutor pool, Sender s, String desc)
@@ -459,9 +475,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * caller otherwise. The callback always runs, so a caller can rely on
      * it for connection teardown no matter which path was taken.
      *
+     * @param pool the I/O executor to submit to; null or shut down forces an inline run
+     * @param s the Sender to run; null runs the callback only and reports false
+     * @param desc descriptive name for error messages
      * @param onCompletion may be null; must not throw
      * @return true if the body was submitted asynchronously, false if it ran
      * inline or was aborted
+     * @throws IOException part of the handoff API's signature; the body reports every
+     * failure through the Sender rather than throwing
      * @since 0.9.71+
      */
 
@@ -575,9 +596,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /** Stall side reported when both stamps are equally stale. @since 0.9.71+ */
     static final String STALL_SIDE_INDETERMINATE = "source or destination (indeterminate)";
-    /** @since 0.9.71+ */
+    /**
+     * Stall side reported when the source moved nothing and only a read blocked.
+     *
+     * @since 0.9.71+
+     */
     static final String STALL_SIDE_SOURCE = "source (local backend silent)";
-    /** @since 0.9.71+ */
+    /**
+     * Stall side reported when the destination moved nothing.
+     *
+     * @since 0.9.71+
+     */
     static final String STALL_SIDE_DESTINATION = "destination (I2P egress congested)";
     /**
      * Below this many bytes a body has moved too little for a "moved nothing,
@@ -647,36 +676,45 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     public static final String OPT_USER_AGENTS = "userAgentRejectList";
     /** Config key to enable keepalive (legacy short form; see PROP_KEEPALIVE). */
     public static final String OPT_KEEPALIVE = "keepalive.i2p";
-    /** Config key to enable HTTP persistent connections; live via optionsUpdated.
+    /**
+     * Config key to enable HTTP persistent connections; live via optionsUpdated.
      * Falls back to the legacy {@link #OPT_KEEPALIVE} short key when unset.
      * Key: tunnel.N.option.i2ptunnel.server.keepalive
      * @since 0.9.71+
      */
     public static final String PROP_KEEPALIVE = "i2ptunnel.server.keepalive";
-    /** Config key for the idle keepalive wait before closing a persistent
+    /**
+     * Config key for the idle keepalive wait before closing a persistent
      * connection, in ms. Replaces the hard-coded 130s wait so a browser that
      * goes away does not pin a handler thread for over two minutes.
      * Key: tunnel.N.option.i2ptunnel.server.keepAliveTimeout
      * @since 0.9.71+
      */
     public static final String PROP_KEEPALIVE_TIMEOUT = "i2ptunnel.server.keepAliveTimeout";
-    /** Config key for the first-request header read timeout, in ms.
+    /**
+     * Config key for the first-request header read timeout, in ms.
      * Key: tunnel.N.option.i2ptunnel.server.headerTimeout
      * @since 0.9.71+
      */
     public static final String PROP_HEADER_TIMEOUT = "i2ptunnel.server.headerTimeout";
-    /** Default idle keepalive wait (ms); short enough to free the handler
-     * thread, long enough for a browser to reuse the connection. */
+    /**
+     * Default idle keepalive wait (ms); short enough to free the handler
+     * thread, long enough for a browser to reuse the connection.
+     */
     public static final long DEFAULT_KEEPALIVE_TIMEOUT_MS = 10 * 1000L;
-    /** Default first-request header timeout (ms).  30s matches the pre-config
+    /**
+     * Default first-request header timeout (ms).  30s matches the pre-config
      * hard-coded value and gives slow eepsites time to start responding before
-     * the 408 kill fires (which aborts Range-resume downloads mid-body). */
+     * the 408 kill fires (which aborts Range-resume downloads mid-body).
+     */
     public static final long DEFAULT_HEADER_TIMEOUT_MS = 30 * 1000L;
     /** Bounds for {@link #PROP_KEEPALIVE_TIMEOUT} (ms). */
     public static final long MIN_KEEPALIVE_TIMEOUT_MS = 1000L;
+    /** Ceiling for {@link #PROP_KEEPALIVE_TIMEOUT} (ms). */
     public static final long MAX_KEEPALIVE_TIMEOUT_MS = 300 * 1000L;
     /** Bounds for {@link #PROP_HEADER_TIMEOUT} (ms). */
     public static final long MIN_HEADER_TIMEOUT_MS = 1000L;
+    /** Ceiling for {@link #PROP_HEADER_TIMEOUT} (ms). */
     public static final long MAX_HEADER_TIMEOUT_MS = 120 * 1000L;
     /** Config key to add Allow response header. */
     public static final String OPT_ADD_RESPONSE_HEADER_ALLOW = "addResponseHeaderAllow";
@@ -770,28 +808,38 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         SERVER_SKIPHEADERS.add(X_STYX_REQ_ID_HEADER);
     }
 
-    /** Live first-request header timeout (ms); updated by optionsUpdated.
+    /**
+     * Live first-request header timeout (ms); updated by optionsUpdated.
      * Was a hard-coded 30s constant.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     private volatile long _headerTimeoutMs = DEFAULT_HEADER_TIMEOUT_MS;
-    /** Live idle keepalive wait (ms); updated by optionsUpdated.
+    /**
+     * Live idle keepalive wait (ms); updated by optionsUpdated.
      * Was a hard-coded 130s wait.
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     private volatile long _keepAliveTimeoutMs = DEFAULT_KEEPALIVE_TIMEOUT_MS;
-    /** Whether HTTP persistent connections are accepted; updated by optionsUpdated.
-     * @since 0.9.71+ */
+    /**
+     * Whether HTTP persistent connections are accepted; updated by optionsUpdated.
+     * @since 0.9.71+
+     */
     private volatile boolean _keepAlive = DEFAULT_KEEPALIVE;
-    /** Grace period for remaining header lines after the first line, on top of
-     * the initial header timeout (slowloris bound). */
+    /**
+     * Grace period for remaining header lines after the first line, on top of
+     * the initial header timeout (slowloris bound).
+     */
     private static final long HEADER_FINISH_TIMEOUT = DEFAULT_HEADER_TIMEOUT_MS;
     /** min time before socket error is escalated to ERROR level */
     private static final long START_INTERVAL = (60 * 1000) * 3;
     private static final int MAX_LINE_LENGTH = 8*1024;
-    /** ridiculously long, just to prevent OOM DOS
+    /**
+     * ridiculously long, just to prevent OOM DOS
      * @since 0.7.13
      */
     private static final int MAX_HEADERS = 60;
-    /** Includes request, just to prevent OOM DOS
+    /**
+     * Includes request, just to prevent OOM DOS
      * @since 0.9.20
      */
     private static final int MAX_TOTAL_HEADER_SIZE = 32*1024;
@@ -1108,33 +1156,51 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
-    /** @return whether HTTP persistent connections are currently enabled
-     * @since 0.9.71+ */
+      /**
+       * Whether a client may reuse one connection for several requests.
+       *
+       * @return whether HTTP persistent connections are currently enabled
+       * @since 0.9.71+
+       */
     public boolean isKeepAlive() {return _keepAlive;}
 
-    /** Enable/disable HTTP persistent connections without a tunnel restart.
+    /**
+     * Enable/disable HTTP persistent connections without a tunnel restart.
      * @param on true to accept persistent connections
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     public void setKeepAlive(boolean on) {_keepAlive = on;}
 
-    /** @return idle keepalive wait in ms
-     * @since 0.9.71+ */
+      /**
+       * How long an idle keepalive connection is held before it is probed.
+       *
+       * @return idle keepalive wait in ms
+       * @since 0.9.71+
+       */
     public long getKeepAliveTimeout() {return _keepAliveTimeoutMs;}
 
-    /** Set the idle keepalive wait, clamped to the configured bounds.
+    /**
+     * Set the idle keepalive wait, clamped to the configured bounds.
      * @param ms timeout in ms
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     public void setKeepAliveTimeout(long ms) {
         _keepAliveTimeoutMs = Math.max(MIN_KEEPALIVE_TIMEOUT_MS, Math.min(MAX_KEEPALIVE_TIMEOUT_MS, ms));
     }
 
-    /** @return first-request header timeout in ms
-     * @since 0.9.71+ */
+      /**
+       * How long the first request's headers may take to arrive.
+       *
+       * @return first-request header timeout in ms
+       * @since 0.9.71+
+       */
     public long getHeaderTimeout() {return _headerTimeoutMs;}
 
-    /** Set the first-request header timeout, clamped to the configured bounds.
+    /**
+     * Set the first-request header timeout, clamped to the configured bounds.
      * @param ms timeout in ms
-     * @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     public void setHeaderTimeout(long ms) {
         _headerTimeoutMs = Math.max(MIN_HEADER_TIMEOUT_MS, Math.min(MAX_HEADER_TIMEOUT_MS, ms));
     }
@@ -2445,7 +2511,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * @param timeout timeout for the header read
          * @param ctx the I2P app context
          * @return the formatted, filtered headers
-         * @throws IOException on error
+         * @throws IOException if the webserver stream fails
          */
         static String readAndRewriteServerResponse(InputStream serverin, int timeout, I2PAppContext ctx) throws IOException {
             StringBuilder command = new StringBuilder(512);
@@ -2470,7 +2536,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * On failure, propagate a reset to the other end of the connection,
          * simplified from I2PTunnelRunner.
          *
-         * @param ioex the failure
+         * @param ioex the failure that triggered the reset
          * @param req the request URL for logging
          */
         private void propagateFailure(IOException ioex, String req) {
@@ -2593,7 +2659,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
     }
 
+    /** Pumps a client request body through to the I2P side and back. */
     static class Sender implements Runnable {
+        /** Copy buffer size for both directions. */
         private static final int BUF_SIZE = 16*1024;
         private final OutputStream _out;
         private final InputStream _in;
@@ -2833,6 +2901,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         public long getBytesTransferred() { return _bytesTransferred; }
 
         /**
+         * The label this transfer is logged and reported under.
+         *
          * @return the transfer description ("Server -&gt; Client ..."); never null
          * @since 0.9.71+
          */
@@ -3034,6 +3104,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @param in if null, use socket.getInputStream() as InputStream
      * @param command out parameter, first line
      * @param skipHeaders MUST be lower case
+     * @param ctx I2P app context for clock and timeout
+     * @param initialTimeout timeout for the first line read
      * @return the parsed header multimap
      * @throws SocketTimeoutException if timeout is reached before newline
      * @throws EOFException if EOF is reached before newline

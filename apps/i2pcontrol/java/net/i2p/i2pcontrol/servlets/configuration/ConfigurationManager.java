@@ -32,6 +32,10 @@ public class ConfigurationManager {
 
     /**
      * ConfigurationManager.
+     *
+     * @param ctx the application context supplying the log manager
+     * @param dir the directory the configuration file is read from
+     * @param isPlugin true to read I2PControl.conf, false to read i2pcontrol.config
      */
     public ConfigurationManager(I2PAppContext ctx, File dir, boolean isPlugin) {
         _log = ctx.logManager().getLog(ConfigurationManager.class);
@@ -44,6 +48,9 @@ public class ConfigurationManager {
     }
 
     /**
+     * Report the file this manager reads its key=value settings from and
+     * writes them back to.
+     *
      * @return the conf file
      * @since 0.12
      */
@@ -175,7 +182,7 @@ public class ConfigurationManager {
     /**
      * Set a specific int setting
      * @param settingName the setting name
-     * @param nbr the nbr
+     * @param nbr the integer value to store for the setting
      */
     public synchronized void setConf(String settingName, int nbr) {
         integerConfigurations.put(settingName, nbr);
@@ -185,7 +192,7 @@ public class ConfigurationManager {
     /**
      * Set a specific string setting
      * @param settingName the setting name
-     * @param str the str
+     * @param str the string value to store for the setting
      */
     public synchronized void setConf(String settingName, String str) {
         stringConfigurations.put(settingName, str);
@@ -195,7 +202,7 @@ public class ConfigurationManager {
     /**
      * Set a specific boolean setting
      * @param settingName the setting name
-     * @param bool the bool
+     * @param bool the boolean value to store for the setting
      */
     public synchronized void setConf(String settingName, boolean bool) {
         booleanConfigurations.put(settingName, bool);

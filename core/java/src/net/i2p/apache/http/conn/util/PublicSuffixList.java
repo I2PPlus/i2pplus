@@ -46,6 +46,8 @@ public final class PublicSuffixList {
 
     /**
      * PublicSuffixList.
+     * @param rules the domain suffix rules, must not be null
+     * @param exceptions the exception rules, must not be null
      */
     public PublicSuffixList(final List<String> rules, final List<String> exceptions) {
         this.rules = Collections.unmodifiableList(Args.notNull(rules, "Domain suffix rules"));

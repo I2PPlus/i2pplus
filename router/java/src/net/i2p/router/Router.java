@@ -581,6 +581,8 @@ public class Router implements RouterClock.ClockShiftListener {
      * Not for external use.
      *
      * Warning - risk of deadlock - do not call while holding locks
+     *
+     * @param info the router info to adopt as ours; the caller must ensure it is valid
      */
     public void setRouterInfo(RouterInfo info) {
         Log log;
@@ -962,6 +964,8 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Is a graceful shutdown in progress? This may be cancelled.
      * Note that this also returns true if an uncancellable final shutdown is in progress.
+     *
+     * @return true while a graceful or final shutdown is running
      */
     public boolean gracefulShutdownInProgress() {
         synchronized(_stateLock) {return STATES_GRACEFUL.contains(_state);}
@@ -1083,9 +1087,17 @@ public class Router implements RouterClock.ClockShiftListener {
      * Bandwidth class capability for 256 KB/s.
      */
     public static final char CAPABILITY_BW256 = 'O';
-    /** @since 0.9.18 */
+    /**
+     * Bandwidth class capability for 512 KB/s.
+     *
+     * @since 0.9.18
+     */
     public static final char CAPABILITY_BW512 = 'P';
-    /** @since 0.9.18 */
+    /**
+     * Bandwidth class capability for unlimited bandwidth.
+     *
+     * @since 0.9.18
+     */
     public static final char CAPABILITY_BW_UNLIMITED = 'X';
     /** For testing */
     public static final String PROP_FORCE_BWCLASS = "router.forceBandwidthClass";
@@ -1099,11 +1111,27 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public static final char CAPABILITY_UNREACHABLE = 'U';
 
-    /** @since 0.9.58, proposal 162 */
+    /**
+     * Congestion capability: the peer reports moderate, sustained congestion
+     * (proposal 162, alongside {@link #CAPABILITY_CONGESTION_SEVERE} and
+     * {@link #CAPABILITY_NO_TUNNELS}).
+     *
+     * @since 0.9.58, proposal 162
+     */
     public static final char CAPABILITY_CONGESTION_MODERATE = 'D';
-    /** @since 0.9.58, proposal 162 */
+    /**
+     * Congestion capability: the peer reports severe congestion, at the level
+     * where it should stop being selected for new tunnels.
+     *
+     * @since 0.9.58, proposal 162
+     */
     public static final char CAPABILITY_CONGESTION_SEVERE = 'E';
-    /** @since 0.9.58, proposal 162 */
+    /**
+     * Congestion capability: the peer reports that it is up but cannot build
+     * tunnels, so it can still serve existing ones.
+     *
+     * @since 0.9.58, proposal 162
+     */
     public static final char CAPABILITY_NO_TUNNELS = 'G';
 
     /** For testing */
@@ -1316,6 +1344,9 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
+     * The router's event log, shared with the console pages that render it.
+     *
+     * @return the router's event log, which the console pages render
      * @since 0.9.3
      */
     public EventLog eventLog() {return _eventLog;}
@@ -1846,6 +1877,8 @@ public class Router implements RouterClock.ClockShiftListener {
      * successful, false otherwise)
      *
      * Synchronized with file read in getConfig()
+     *
+     * @return true if the properties were written, false if the write failed
      */
     public boolean saveConfig() {
         try {
@@ -1956,7 +1989,8 @@ public class Router implements RouterClock.ClockShiftListener {
      * Applications bundling I2P should instantiate a Router and call runRouter().
      *
      * @param args null ok
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if an unrecognized option is given, or more than
+     *     one argument is passed
      */
     public static void main(String[] args) {
         boolean rebuild = false;
@@ -2077,6 +2111,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Only for soft restart. Not for external use.
      *
+     * @param downtime the expected downtime in milliseconds, clamped up to a minimum of 1
      * @since 0.9.47
      */
     public void setEstimatedDowntime(long downtime) {
@@ -2127,6 +2162,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * When outboundOnly is false, outbound rate in bytes per second.
      * When true, max of inbound and outbound rate in bytes per second.
+     * @param outboundOnly true to report just the outbound rate, false for the larger of the two
      * @return the 1s rate
      */
     public int get1sRate(boolean outboundOnly) {
@@ -2154,6 +2190,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * When outboundOnly is false, outbound rate in bytes per second.
      * When true, max of inbound and outbound rate in bytes per second.
+     * @param outboundOnly true to report just the outbound rate, false for the larger of the two
      * @return the 15s rate
      */
     public int get15sRate(boolean outboundOnly) {
@@ -2181,6 +2218,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * When outboundOnly is false, outbound rate in bytes per second.
      * When true, max of inbound and outbound rate in bytes per second.
+     * @param outboundOnly true to report just the outbound rate, false for the larger of the two
      * @return the 1m rate
      */
     public int get1mRate(boolean outboundOnly) {

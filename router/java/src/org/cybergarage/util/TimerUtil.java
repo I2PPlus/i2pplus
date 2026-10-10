@@ -14,6 +14,11 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public final class TimerUtil {
     /**
+     * Both wait helpers are static, so an instance carries nothing.
+     */
+    public TimerUtil() {}
+
+    /**
      * Pauses the current thread for the specified amount of time.
      *
      * @param waitTime the time to wait in milliseconds

@@ -8,13 +8,18 @@ import java.util.Arrays;
  */
 class PolyVec
 {
+    /**
+     * The polynomials held by this vector, in order, always kyberK long.
+     */
     Poly[] vec;
     private MLKEMEngine engine;
     private int kyberK;
     private int polyVecBytes;
 
     /**
-     * PolyVec.
+     * Create a vector sized from the engine's Kyber parameter set.
+     *
+     * @param engine the engine supplying the KyberK and vector byte-length parameters
      */
     public PolyVec(MLKEMEngine engine)
     {
@@ -30,7 +35,9 @@ class PolyVec
     }
 
     /**
-     * PolyVec.
+     * Create a vector that refuses to be sized.
+     *
+     * @throws Exception always, because an engine is required to size the vector
      */
     public PolyVec()
         throws Exception
@@ -39,7 +46,10 @@ class PolyVec
     }
 
     /**
-     * getVectorIndex.
+     * Get the polynomial stored at a position in this vector.
+     *
+     * @param i the position in the vector, 0 to KyberK-1
+     * @return the polynomial stored at that position
      */
     public Poly getVectorIndex(int i)
     {
@@ -47,7 +57,7 @@ class PolyVec
     }
 
     /**
-     * polyVecNtt.
+     * Forward number theoretic transform every polynomial in this vector, in place.
      */
     public void polyVecNtt()
     {
@@ -59,7 +69,7 @@ class PolyVec
     }
 
     /**
-     * polyVecInverseNttToMont.
+     * Inverse number theoretic transform every polynomial in this vector, in place.
      */
     public void polyVecInverseNttToMont()
     {
@@ -70,7 +80,10 @@ class PolyVec
     }
 
     /**
-     * compressPolyVec.
+     * Reduce every coefficient modulo q and pack the vector for transmission.
+     *
+     * @return the packed vector, 320 or 352 bytes per polynomial depending on
+     * the engine's PolyVecCompressedBytes setting
      */
     public byte[] compressPolyVec()
     {
@@ -164,7 +177,9 @@ class PolyVec
     }
 
     /**
-     * decompressPolyVec.
+     * Expand a packed vector back into this vector's coefficients, in place.
+     *
+     * @param compressedPolyVecCipherText the packed vector to expand back into the coefficients, in the 320 or 352 bytes per polynomial layout
      */
     public void decompressPolyVec(byte[] compressedPolyVecCipherText)
     {
@@ -221,7 +236,12 @@ class PolyVec
     }
 
     /**
-     * pointwiseAccountMontgomery.
+     * Multiply two vectors pointwise and sum the products into a polynomial.
+     *
+     * @param out the polynomial accumulating the pointwise products
+     * @param inp1 the first multiplicand vector
+     * @param inp2 the second multiplicand vector
+     * @param engine the engine supplying KyberK and the polynomial size
      */
     public static void pointwiseAccountMontgomery(Poly out, PolyVec inp1, PolyVec inp2, MLKEMEngine engine)
     {
@@ -238,7 +258,7 @@ class PolyVec
     }
 
     /**
-     * reducePoly.
+     * Reduce every polynomial in this vector, in place.
      */
     public void reducePoly()
     {
@@ -250,7 +270,9 @@ class PolyVec
     }
 
     /**
-     * addPoly.
+     * Add another vector's coefficients into this one, in place.
+     *
+     * @param b the vector whose coefficients are added into this one
      */
     public void addPoly(PolyVec b)
     {
@@ -262,7 +284,10 @@ class PolyVec
     }
 
     /**
-     * toBytes.
+     * Pack every polynomial in this vector into a single buffer.
+     *
+     * @return every polynomial packed back to back at KyberPolyBytes each,
+     * giving a buffer of polyVecBytes bytes
      */
     public byte[] toBytes()
     {
@@ -276,7 +301,9 @@ class PolyVec
     }
 
     /**
-     * fromBytes.
+     * Split a packed vector into this vector's polynomials, in place.
+     *
+     * @param inputBytes the packed buffer, polyVecBytes long, holding each polynomial as KyberPolyBytes bytes back to back
      */
     public void fromBytes(byte[] inputBytes)
     {
@@ -287,7 +314,7 @@ class PolyVec
     }
 
     /**
-     * conditionalSubQ.
+     * Conditionally subtract q from every coefficient, in place.
      */
     public void conditionalSubQ()
     {
@@ -298,7 +325,7 @@ class PolyVec
     }
 
     /**
-     * toString.
+     * Render the vector as its polynomials' coefficient listings.
      */
     public String toString()
     {

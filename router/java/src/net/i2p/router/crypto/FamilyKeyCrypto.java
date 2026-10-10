@@ -87,6 +87,9 @@ public class FamilyKeyCrypto {
      *
      * If the context property netdb.family.name is set, this can be used for signing,
      * else only for verification.
+     *
+     * @param context the router context supplying the family name property and certificate directory
+     * @throws GeneralSecurityException if the configured family name is illegal or escapes the certificate directory
      */
     public FamilyKeyCrypto(RouterContext context) throws GeneralSecurityException {
         _context = context;
@@ -284,6 +287,7 @@ public class FamilyKeyCrypto {
      * or a certificate file for the family
      * in certificates/family.
      *
+     * @param ri the RouterInfo whose family option names the family and whose signature is checked
      * @return the verification result
      */
     public Result verify(RouterInfo ri) {
@@ -301,6 +305,7 @@ public class FamilyKeyCrypto {
      * Returns false if we don't have a family and sig, or they don't.
      * Returns false for ourselves.
      *
+     * @param ri the RouterInfo whose family option and signature are checked against our own family
      * @return true if family matches with good sig
      * @since 0.9.28
      */
@@ -645,6 +650,7 @@ public class FamilyKeyCrypto {
 
     /**
      * CLI entry point for manual family key operations.
+     * @param args the keystore file to create, followed by the family name to issue the keys under
      * @since 0.9.36
      */
     public static void main(String[] args) {

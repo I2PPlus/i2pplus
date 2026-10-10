@@ -40,7 +40,9 @@ public class RequestWrapper {
     private static final int MAX_STRING_SIZE = 64*1024;
 
     /**
-     * @param httpRequest
+     * Wrap a servlet request, noting whether it carries multipart parts.
+     *
+     * @param httpRequest the request to wrap
      */
     public RequestWrapper(HttpServletRequest httpRequest) {
       cache = new Hashtable<>();
@@ -50,23 +52,33 @@ public class RequestWrapper {
     }
 
     /**
-     * @param b
-     * @return the session
+     * The session bound to this request.
+     *
+     * @param b true to create a session when the request has none
+     * @return the bound session, or a new one when b is true
      */
     public HttpSession getSession(boolean b) {return httpRequest.getSession(b);}
 
     /**
+     * Look up a request parameter, falling back to the multipart part of the
+     * same name.
+     *
      * @param name Specific parameter key
-     * @return parameter value
+     * @return parameter value, or null when neither a parameter nor a part
+     *         carries that name
      */
     public String getParameter(String name) {return getParameter(name, null);}
 
     /**
-     * @return the session
+     * The session bound to this request, created if it has none.
+     *
+     * @return the bound session, created if the request has none
      */
     public HttpSession getSession() {return httpRequest.getSession();}
 
     /**
+     * The names this request carries, multipart part names included.
+     *
      * @return List of request parameter names
      * @throws IllegalStateException if the request is too large
      */
@@ -86,18 +98,25 @@ public class RequestWrapper {
     }
 
     /**
+     * The declared length of the request body.
+     *
      * @return The total length of the content.
      */
     public int getContentLength() {return httpRequest.getContentLength();}
 
     /**
+     * The request's content type header.
+     *
      * @return The content type of the request.
      */
     public String getContentType() {return httpRequest.getContentType();}
 
     /**
-     * @throws IllegalStateException if the request is too large
+     * The content type declared by a single multipart part.
+     *
+     * @param partName the multipart part to read the content type from
      * @return the content type
+     * @throws IllegalStateException if the request is too large
      */
     public String getContentType(String partName) {
         String result = null;
@@ -113,13 +132,21 @@ public class RequestWrapper {
     }
 
     /**
-     * @return the attribute
+     * Look up a request attribute; multipart parts are not consulted.
+     *
+     * @param string the name of the request attribute to look up
+     * @return the attribute, or null when the request carries none of that name
      */
     public Object getAttribute(String string) {return httpRequest.getAttribute(string);}
 
     /**
+     * Look up a request parameter or multipart part, falling back to a default.
+     *
+     * @param name the request parameter or multipart part name to look up
+     * @param defaultValue returned when the request carries no value for name; for a
+     *        multipart part also returned when the part is absent
+     * @return the value, or defaultValue when the request carries none
      * @throws IllegalStateException if the request is too large
-     * @return the parameter
      */
     public String getParameter(String name, String defaultValue) {
       String result = defaultValue;
@@ -159,8 +186,11 @@ public class RequestWrapper {
     }
 
     /**
+     * The filename the client submitted with a multipart part.
+     *
+     * @param partName the multipart part to read the submitted filename from
+     * @return the submitted filename, or null when the part is absent
      * @throws IllegalStateException if the request is too large
-     * @return the filename
      */
     public String getFilename(String partName) {
         String result = null;
@@ -176,8 +206,11 @@ public class RequestWrapper {
     }
 
     /**
-     * @throws IllegalStateException if the request is too large
+     * Open a multipart part's body for reading.
+     *
+     * @param partName the multipart part to open the body of
      * @return the input stream
+     * @throws IllegalStateException if the request is too large
      */
     public InputStream getInputStream(String partName) {
         InputStream result = null;

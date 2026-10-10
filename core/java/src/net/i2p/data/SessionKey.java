@@ -84,6 +84,9 @@ public class SessionKey extends SimpleDataStructure {
     /** A key with all zeroes in the data */
     public static final SessionKey INVALID_KEY = new SessionKey(new byte[KEYSIZE_BYTES]);
 
+    /**
+     * Create an empty key; the data must be set before use.
+     */
     public SessionKey() {
         super();
     }

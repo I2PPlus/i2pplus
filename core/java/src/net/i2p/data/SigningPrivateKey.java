@@ -103,6 +103,9 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     }
 
     /**
+     * Creates an empty signing private key for the given signature algorithm.
+     *
+     * @param type the signature algorithm this key is used with, which fixes the key length
      * @since 0.9.8
      */
     public SigningPrivateKey(SigType type) {
@@ -110,12 +113,20 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
         _type = type;
     }
 
-    /** Creates a new SigningPrivateKey from byte data with default type. */
+    /**
+     * Creates a new SigningPrivateKey from byte data with default type.
+     *
+     * @param data the raw private key bytes, which must match the default type's key length
+     */
     public SigningPrivateKey(byte[] data) {
         this(DEF_TYPE, data);
     }
 
     /**
+     * Creates a signing private key for the given algorithm from raw key bytes.
+     *
+     * @param type the signature algorithm, which fixes the key length and signing algorithm
+     * @param data the raw private key bytes, whose length must match the type's privkey length
      * @since 0.9.8
      */
     public SigningPrivateKey(SigType type, byte[] data) {
@@ -129,6 +140,8 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of SigningPrivateKey
+     * @throws DataFormatException if the string is not valid base64, or does not
+     * decode to the key length required by the default signature type
      */
     public SigningPrivateKey(String base64Data) throws DataFormatException {
         this();

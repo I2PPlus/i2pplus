@@ -213,14 +213,23 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
         return x;
     }
 
-    /** Read object */
+    /**
+     * Read object
+     * @param in the stream positioned at the serialized exponent and group parameters
+     * @throws IOException if the stream cannot be read or ends before the group parameters
+     * @throws ClassNotFoundException if a class named in the stream cannot be resolved
+     */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         x = (BigInteger) in.readObject();
 
         this.elSpec = new ElGamalParameterSpec((BigInteger) in.readObject(), (BigInteger) in.readObject());
     }
 
-    /** Write object */
+    /**
+     * Write object
+     * @param out the stream that receives the exponent and both group parameters
+     * @throws IOException if the underlying stream rejects or fails the write
+     */
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeObject(this.getX());
         out.writeObject(elSpec.getP());

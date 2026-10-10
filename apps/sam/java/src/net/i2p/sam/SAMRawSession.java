@@ -38,9 +38,9 @@ class SAMRawSession extends SAMMessageSession {
      * @param dest Base64-encoded destination and private keys (same format as PrivateKeyFile)
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
+     * @throws IOException declared on this constructor, but not raised by the body
+     * @throws DataFormatException likewise declared, but not raised by the body
+     * @throws I2PSessionException if the I2P session cannot be created from dest
      */
     protected SAMRawSession(String dest, Properties props,
                          SAMRawReceiver recv) throws IOException, DataFormatException, I2PSessionException {
@@ -56,7 +56,8 @@ class SAMRawSession extends SAMMessageSession {
      * @param destStream Input stream containing the destination and private keys (same format as PrivateKeyFile)
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws I2PSessionException
+     * @throws I2PSessionException if the I2P session cannot be created from the
+     *                             keys read out of destStream
      */
     public SAMRawSession(InputStream destStream, Properties props,
                          SAMRawReceiver recv) throws I2PSessionException {
@@ -67,7 +68,12 @@ class SAMRawSession extends SAMMessageSession {
     /**
      * Create a new SAM RAW session on an existing I2P session.
      *
+     * @param sess the already established session to share
      * @param props unused for now
+     * @param listenProtocol protocol number to accept datagrams for, 1-254 or PROTO_ANY (0)
+     * @param listenPort port to accept datagrams on, 1-65535 or PORT_ANY (0)
+     * @param recv Object that will receive incoming data
+     * @throws I2PSessionException if the shared session cannot be attached to
      * @since 0.9.25
      */
     protected SAMRawSession(I2PSession sess, Properties props, int listenProtocol, int listenPort,

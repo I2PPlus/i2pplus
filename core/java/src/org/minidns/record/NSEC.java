@@ -48,6 +48,12 @@ public class NSEC extends Data {
 
     /**
      * parse.
+     *
+     * @param dis the stream positioned at the start of the record payload
+     * @param data the buffer backing the whole record, used to parse the next owner name
+     * @param length the payload length in bytes
+     * @return the parsed record
+     * @throws IOException if length is shorter than the next owner name, or if the type bitmap is truncated
      */
     public static NSEC parse(DataInputStream dis, byte[] data, int length) throws IOException {
         DnsName next = DnsName.parse(dis, data);
@@ -63,6 +69,9 @@ public class NSEC extends Data {
 
     /**
      * NSEC.
+     *
+     * @param next the next owner name, as a textual DNS name
+     * @param types the RR types present at the owner name
      */
     public NSEC(String next, List<TYPE> types) {
         this(DnsName.from(next), types);
@@ -70,6 +79,9 @@ public class NSEC extends Data {
 
     /**
      * NSEC.
+     *
+     * @param next the next owner name, as a textual DNS name
+     * @param types the RR types present at the owner name
      */
     public NSEC(String next, TYPE... types) {
         this(DnsName.from(next), Arrays.asList(types));
@@ -77,6 +89,9 @@ public class NSEC extends Data {
 
     /**
      * NSEC.
+     *
+     * @param next the next owner name
+     * @param types the RR types present at the owner name
      */
     public NSEC(DnsName next, List<TYPE> types) {
         this.next = next;
@@ -113,7 +128,12 @@ public class NSEC extends Data {
         return sb.toString();
     }
 
-    /** Create type bitmap */
+    /**
+     * Create type bitmap
+     *
+     * @param types the RR types to encode, sorted into window blocks internally
+     * @return the bitmap in RFC 4034 window block form
+     */
     @SuppressWarnings("NarrowingCompoundAssignment")
     static byte[] createTypeBitMap(List<TYPE> types) {
         List<Integer> typeList = new ArrayList<>(types.size());
@@ -160,7 +180,13 @@ public class NSEC extends Data {
     }
 
     // TODO: This method should probably just return List<Integer> so that unknown types can be act on later.
-    /** Read type bitmap */
+    /**
+     * Read type bitmap
+     *
+     * @param typeBitmap the bitmap in RFC 4034 window block form
+     * @return the RR types it sets, with unknown types logged and skipped
+     * @throws IOException if the window blocks end before their declared bitmap bytes
+     */
     static List<TYPE> readTypeBitMap(byte[] typeBitmap) throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(typeBitmap));
         int read = 0;

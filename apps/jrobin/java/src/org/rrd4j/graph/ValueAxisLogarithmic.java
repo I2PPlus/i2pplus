@@ -21,7 +21,11 @@ class ValueAxisLogarithmic extends Axis {
     @FunctionalInterface
     private interface IntDoubleLabelConsumer {
         /**
-         * Accept
+         * Draw a tick label at the given position using the supplied format.
+         *
+         * @param a the tick index
+         * @param b the tick value to label
+         * @param formatPattern the decimal format applied to the label
          */
         void accept(int a, double b, String formatPattern);
         /** Accept a numeric label at the given position using default format. */
@@ -33,7 +37,11 @@ class ValueAxisLogarithmic extends Axis {
     @FunctionalInterface
     private interface IntDoubleLineConsumer {
         /**
-         * Accept
+         * Draw a gridline at the given position in the given colour.
+         *
+         * @param a the tick index
+         * @param b the tick value the line marks
+         * @param color the colour to stroke the line in
          */
         void accept(int a, double b, Paint color);
     }
@@ -45,10 +53,11 @@ class ValueAxisLogarithmic extends Axis {
     private final Locale locale;
 
     /**
-     * Used for tests
+     * Create a logarithmic axis for a graph that has already been rendered.
      *
-     * @param rrdGraph
-     * @param worker
+     * @param rrdGraph the already-rendered graph supplying the image parameters and font to scale
+     * @param worker the image worker that measures the axis font height and paints the axis
+     * @param locale the locale used to format tick labels and decimal separators
      */
     ValueAxisLogarithmic(RrdGraph rrdGraph, ImageWorker worker, Locale locale) {
         this.im = rrdGraph.im;
@@ -59,6 +68,13 @@ class ValueAxisLogarithmic extends Axis {
         this.locale = locale;
     }
 
+    /**
+     * Create a logarithmic axis using the generator's mapper, before rendering begins.
+     *
+     * @param rrdGraph the graph generator supplying the mapper and image parameters
+     * @param worker the image worker that measures the axis font height and paints the axis
+     * @param locale the locale used to format tick labels and decimal separators
+     */
     ValueAxisLogarithmic(RrdGraphGenerator rrdGraph, ImageWorker worker, Locale locale) {
         this.im = rrdGraph.im;
         this.gdef = rrdGraph.gdef;

@@ -22,6 +22,9 @@ class IterativeLookupSelector implements MessageSelector {
 
     /**
      * IterativeLookupSelector.
+     *
+     * @param ctx router context used for the job queue and logging
+     * @param search the job whose key and expiration this selector matches on
      */
     public IterativeLookupSelector(RouterContext ctx, IterativeSearchJob search) {
         _context = ctx;

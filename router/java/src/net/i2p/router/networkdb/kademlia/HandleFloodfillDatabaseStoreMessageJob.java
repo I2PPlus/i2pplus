@@ -66,7 +66,12 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     /**
      * Handle an incoming floodfill DatabaseStoreMessage.
      *
+     * @param ctx router context supplying the log manager and base job services
      * @param receivedMessage must never have reply token set if it came down a tunnel
+     * @param from identity of the sending router, may be null if the hash is known
+     * @param fromHash hash of the sending router, used to decide unsolicited stores
+     * @param facade floodfill database the message is stored in
+     * @param msgIDBloomXor XOR of the requester's bloom filter, replayed on any reply
      */
     public HandleFloodfillDatabaseStoreMessageJob(RouterContext ctx, DatabaseStoreMessage receivedMessage,
                                                   RouterIdentity from, Hash fromHash,

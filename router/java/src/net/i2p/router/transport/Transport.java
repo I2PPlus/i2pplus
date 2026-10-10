@@ -282,6 +282,7 @@ public interface Transport {
         SOURCE_UPNP("upnp"),
         /** Address of a local interface. */
         SOURCE_INTERFACE("local"),
+        /** Address port from the configured settings, not from discovery. */
         SOURCE_CONFIG("config"),
         /** Address from the SSU transport. */
         SOURCE_SSU("ssu");
@@ -322,7 +323,7 @@ public interface Transport {
      * Can be called before startListening() to set initial address,
      * or after transport is already running.
      *
-     * @param source the source
+     * @param source the address source reporting the newly seen address
      * @param ip the new external IP address (IPv4 or IPv6), may be null to indicate IPv4 failure or port-only change
      * @param port the new external port number, 0 if unknown or unchanged
      */
@@ -338,7 +339,7 @@ public interface Transport {
      * notifications from this source.
      *
      * This can be called after the transport is running.
-     * @param source the source
+     * @param source the address source whose address has gone away
      * @param ipv6 true for IPv6, false for IPv4
      * @since 0.9.20
      */
@@ -351,6 +352,8 @@ public interface Transport {
      * @param port the internal port
      * @param externalPort the external port, which for now should always be the same as
      * the internal port if the forwarding was successful.
+     * @param success true if the router managed to establish the mapping
+     * @param reason the text describing the outcome, for the console and the logs
      */
     public void forwardPortStatus(byte[] ip, int port, int externalPort, boolean success, String reason);
 
@@ -492,6 +495,7 @@ public interface Transport {
      * @param out writer
      * @param urlBase base URL
      * @param sortFlags flags
+     * @throws IOException if the status HTML cannot be written to the writer
      */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException;
 

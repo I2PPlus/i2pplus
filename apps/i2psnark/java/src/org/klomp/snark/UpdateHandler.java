@@ -21,6 +21,13 @@ class UpdateHandler implements Updater {
     private final UpdateManager _umgr;
     private final SnarkManager _smgr;
 
+    /**
+     * Wire an updater to the router's update manager and the torrent client.
+     *
+     * @param ctx the application context used by the download and the torrent client
+     * @param umgr the update manager that tracks and cancels running update tasks
+     * @param smgr the torrent client that fetches the signed update file by magnet
+     */
     public UpdateHandler(I2PAppContext ctx, UpdateManager umgr, SnarkManager smgr) {
         _context = ctx;
         _umgr = umgr;

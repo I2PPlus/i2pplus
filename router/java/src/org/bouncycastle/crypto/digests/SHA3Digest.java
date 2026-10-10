@@ -35,6 +35,9 @@ public class SHA3Digest
 
     /**
      * SHA3Digest.
+     *
+     * @param purpose the intended use of this digest, carried to the crypto
+     *        services registrar when the digest is registered
      */
     public SHA3Digest(CryptoServicePurpose purpose)
     {
@@ -43,6 +46,8 @@ public class SHA3Digest
 
     /**
      * SHA3Digest.
+     *
+     * @param bitLength the digest size in bits, one of 224, 256, 384 or 512
      */
     public SHA3Digest(int bitLength)
     {
@@ -51,6 +56,10 @@ public class SHA3Digest
 
     /**
      * SHA3Digest.
+     *
+     * @param bitLength the digest size in bits, one of 224, 256, 384 or 512
+     * @param purpose the intended use of this digest, carried to the crypto
+     *        services registrar when the digest is registered
      */
     public SHA3Digest(int bitLength, CryptoServicePurpose purpose)
     {
@@ -59,6 +68,9 @@ public class SHA3Digest
 
     /**
      * SHA3Digest.
+     *
+     * @param source the digest to copy the sponge state from, so a partially
+     *        absorbed message can be continued in the new instance
      */
     public SHA3Digest(SHA3Digest source)
     {

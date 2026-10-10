@@ -28,6 +28,7 @@ public class SecureDirectory extends File {
 
     /**
      * SecureDirectory, owner-only (700) on creation.
+     * @param pathname the directory path; perms are set when mkdir() creates it
      */
     public SecureDirectory(String pathname) {
         this(pathname, false);
@@ -47,7 +48,9 @@ public class SecureDirectory extends File {
     }
 
     /**
-     * SecureDirectory.
+     * SecureDirectory, owner-only (700) on creation.
+     * @param parent the path of the containing directory
+     * @param child the name of the directory within parent
      */
     public SecureDirectory(String parent, String child) {
         this(parent, child, false);
@@ -67,7 +70,9 @@ public class SecureDirectory extends File {
     }
 
     /**
-     * SecureDirectory.
+     * SecureDirectory, owner-only (700) on creation.
+     * @param parent the directory that will contain the new one
+     * @param child the name of the directory within parent
      */
     public SecureDirectory(File parent, String child) {
         this(parent, child, false);

@@ -50,7 +50,9 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
     /**
      * The EWMA decay factor for new estimators.
      * Higher = more smoothing, lower = faster adaptation.
+     * @param factor EWMA decay factor to apply to new estimators, 2-16; values
      * @since 0.9.70+
+               outside that range are silently ignored
      */
     public static void setDecayFactor(int factor) {
         if (factor >= 2 && factor <= 16)

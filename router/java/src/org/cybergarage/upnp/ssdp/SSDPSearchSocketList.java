@@ -41,15 +41,22 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     //  Constructor
     ////////////////////////////////////////////////
 
+    /** Local addresses the sockets are opened on, or null to bind all interfaces. */
     private InetAddress[] binds = null;
+    /** IPv4 SSDP multicast group the search requests are sent to. */
     private String multicastIPv4 = SSDP.ADDRESS;
+    /** IPv6 SSDP multicast group the search requests are sent to. */
     private String multicastIPv6 = SSDP.getIPv6Address();
+    /** SSDP port the search requests are sent to. */
     private int port = SSDP.PORT;
 
     /** Default constructor. */
     public SSDPSearchSocketList() {}
 
-    /** Constructor with bind addresses. */
+    /**
+     * Constructor with bind addresses.
+     * @param binds the local addresses the sockets are opened on
+     */
     public SSDPSearchSocketList(InetAddress[] binds) {
         this.binds = binds;
     }
@@ -74,12 +81,19 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     //  Methods
     ////////////////////////////////////////////////
 
-    /** Returns the socket at the given index. */
+    /**
+     * Returns the socket at the given index.
+     * @param n the zero-based position in the list
+     * @return the search socket at that position
+     */
     public SSDPSearchSocket getSSDPSearchSocket(int n) {
         return get(n);
     }
 
-    /** Adds a search listener to all sockets. */
+    /**
+     * Adds a search listener to all sockets.
+     * @param listener the listener to register on every socket in the list
+     */
     public void addSearchListener(SearchListener listener) {
         int nServers = size();
         for (int n = 0; n < nServers; n++) {
@@ -92,7 +106,10 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     //  Methods
     ////////////////////////////////////////////////
 
-    /** Opens all search sockets. */
+    /**
+     * Opens all search sockets.
+     * @return true always, even when every bind fails and no socket is opened
+     */
     public boolean open() {
         InetAddress[] binds = this.binds;
         String[] bindAddresses;

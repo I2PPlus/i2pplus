@@ -359,6 +359,8 @@ public class HostPing {
 
     /**
      * Command line interface
+     * @param args the command line: -n count, -t timeoutMs, -ls leaseSetType, -c, -d, -h or -l hostsFile,
+              --help, plus any bare .b32.i2p destinations to ping
      */
     public static void main(String[] args) {
         HostPing pingTool = new HostPing();

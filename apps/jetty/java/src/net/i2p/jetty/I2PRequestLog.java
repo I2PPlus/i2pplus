@@ -83,7 +83,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     /**
-     * @param filename The filename for the request log. This may be in the format expected by {@link RolloverFileOutputStream}
+     * Create a request log writing to the named file.
+     *
+     * @param filename the file to write to, in any format {@link RolloverFileOutputStream} accepts
      */
     public I2PRequestLog(String filename) {
         _extended = true;
@@ -93,7 +95,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     /**
-     * @param filename The filename for the request log. This may be in the format expected by {@link RolloverFileOutputStream}
+     * Redirect the log to another file.
+     *
+     * @param filename the file to write to, in any format {@link RolloverFileOutputStream} accepts; null is ignored
      */
     public void setFilename(String filename) {
         if (filename != null) {
@@ -104,12 +108,17 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     /**
-     * @return the filename
+     * The file the log is currently writing to.
+     *
+     * @return the log filename
      */
     public String getFilename() {return _filename;}
 
     /**
-     * @return the dated filename
+     * The log filename with any date tokens expanded.
+     *
+     * @return the filename in use right now, or the undated name when the log is
+     *         not rolling over
      */
     public String getDatedFilename() {
         if (_fileOut instanceof RolloverFileOutputStream) {
@@ -119,99 +128,146 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     /**
-     * @param format Format for the timestamps in the log file.
      * If not set, the pre-formated request timestamp is used.
+     *
+     * @param format Format for the timestamps in the log file.
      */
     public void setLogDateFormat(String format) {_logDateFormat = format;}
     /**
-     * @return the log date format
+     * The format used to timestamp each entry.
+     *
+     * @return the date format, or null to use the timestamp jetty already
+     *         formatted
      */
     public String getLogDateFormat() {return _logDateFormat;}
     /**
-     * setLogLocale.
+     * Set the locale timestamps are rendered in.
+     *
+     * @param logLocale the locale, or null for the platform default
      */
     public void setLogLocale(Locale logLocale) {_logLocale = logLocale;}
     /**
-     * @return the log locale
+     * The locale timestamps are rendered in.
+     *
+     * @return the locale, or null for the platform default
      */
     public Locale getLogLocale() {return _logLocale;}
     /**
-     * setLogTimeZone.
+     * Set the time zone timestamps are rendered in.
+     *
+     * @param tz the time zone ID, or null for the platform default
      */
     public void setLogTimeZone(String tz) {_logTimeZone = tz;}
     /**
-     * @return the log time zone
+     * The time zone timestamps are rendered in.
+     *
+     * @return the time zone ID, or null for the platform default
      */
     public String getLogTimeZone() {return _logTimeZone;}
     /**
-     * setRetainDays.
+     * Set how many days of rotated logs are kept.
+     *
+     * @param retainDays the retention period in days
      */
     public void setRetainDays(int retainDays) {_retainDays = retainDays;}
     /**
-     * @return the retain days
+     * How many days of rotated logs are kept.
+     *
+     * @return the retention period in days
      */
     public int getRetainDays() {return _retainDays;}
     /**
-     * setExtended.
+     * Select the extended, combined log format.
+     *
+     * @param extended true for the extended format
      */
     public void setExtended(boolean extended) {_extended = extended;}
     /**
-     * @return whether extended
+     * Whether the extended, combined log format is in use.
+     *
+     * @return true when the extended format is selected
      */
     public boolean isExtended() {return _extended;}
     /**
-     * setAppend.
+     * Choose whether output appends to or replaces an existing file.
+     *
+     * @param append true to append
      */
     public void setAppend(boolean append) {_append = append;}
     /**
-     * @return whether append
+     * Whether output is appended to an existing file rather than replacing it.
+     *
+     * @return true when appending
      */
     public boolean isAppend() {return _append;}
     /**
-     * setIgnorePaths.
+     * Set the request paths to leave out of the log.
+     *
+     * @param ignorePaths the paths to exclude, or null to log everything
      */
     public void setIgnorePaths(String[] ignorePaths) {_ignorePaths = ignorePaths;}
     /**
-     * @return the ignore paths
+     * The request paths left out of the log.
+     *
+     * @return the ignored paths, or null when nothing is excluded
      */
     public String[] getIgnorePaths() {return _ignorePaths;}
     /**
-     * setLogCookies.
+     * Record whether cookie headers are logged.
+     *
+     * @param logCookies true to log cookies
      */
     public void setLogCookies(boolean logCookies) {_logCookies = logCookies;}
     /**
-     * @return the log cookies
+     * Whether cookie headers are recorded.
+     *
+     * @return true when cookies are logged
      */
     public boolean getLogCookies() {return _logCookies;}
     /**
-     * @return the log server
+     * Whether the server identity is recorded in each entry.
+     *
+     * @return true when the server field is logged
      */
     public boolean getLogServer() {return _logServer;}
     /**
-     * setLogServer.
+     * Record whether the server field is logged.
+     *
+     * @param logServer true to log the server identity
      */
     public void setLogServer(boolean logServer) {_logServer=logServer;}
     /**
-     * setLogLatency.
+     * Record whether request latency is logged.
+     *
+     * @param logLatency true to log latency
      */
     public void setLogLatency(boolean logLatency) {_logLatency = logLatency;}
     /**
-     * @return the log latency
+     * Whether request latency is recorded.
+     *
+     * @return true when latency is logged
      */
     public boolean getLogLatency() {return _logLatency;}
     /**
-     * setPreferProxiedForAddress.
+     * Record whether proxied destinations are preferred for an address.
+     *
+     * @param preferProxiedForAddress true to prefer the proxied destination
      */
     public void setPreferProxiedForAddress(boolean preferProxiedForAddress) {_preferProxiedForAddress = preferProxiedForAddress;}
 
     /**
-     * @param b64 true to enable base 64 logging. False for base 32 logging. Default false.
+     * Choose the base used to encode destination hashes in the log.
+     *
+     * @param b64 true to log in base 64, false for base 32
      * @since 0.9.24
      */
     public void setB64(boolean b64) {_b64 = b64;}
 
     /**
-     * log.
+     * Write one request out in the configured format.
+     *
+     * @param request the request being logged
+     * @param response the response being logged
      */
     public void log(Request request, Response response) {
         if (!isStarted()) {return;}
@@ -357,7 +413,13 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
 
     }
 
-    /** Log extended (referrer and user-agent) */
+    /**
+     * Write the extended fields: the referrer and the user agent.
+     *
+     * @param request the request being logged
+     * @param writer where the log entry is written
+     * @throws IOException if the writer fails
+     */
     protected void logExtended(Request request,
                                Writer writer) throws IOException {
         String referer = request.getHeader("Referer");
@@ -378,7 +440,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     /**
-     * doStart.
+     * Open the log file and build the timestamp cache.
+     *
+     * @throws Exception if the log file cannot be opened
      */
     protected void doStart() throws Exception {
         if (_logDateFormat!=null) {
@@ -407,7 +471,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     /**
-     * doStop.
+     * Flush and close the log file.
+     *
+     * @throws Exception if the log file cannot be closed
      */
     protected void doStop() throws Exception {
         super.doStop();
@@ -433,7 +499,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
     }
 
     /**
-     * @return the log File Date Format
+     * The date pattern used to name rotated files.
+     *
+     * @return the filename date format
      */
     public String getFilenameDateFormat() {return _filenameDateFormat;}
 
@@ -441,7 +509,9 @@ public class I2PRequestLog extends AbstractLifeCycle implements RequestLog
      * Set the log file date format.
      * See RolloverFileOutputStream(String, boolean, int, TimeZone, String, String)
      *
-     * @param logFileDateFormat the logFileDateFormat to pass to RolloverFileOutputStream
+     * Set the date pattern used to name rotated files.
+     *
+     * @param logFileDateFormat the pattern passed to RolloverFileOutputStream
      */
     public void setFilenameDateFormat(String logFileDateFormat) {_filenameDateFormat=logFileDateFormat;}
 

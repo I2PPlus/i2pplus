@@ -19,6 +19,8 @@ public class PersistentKeyRing extends KeyRing {
 
     /**
      * PersistentKeyRing.
+     *
+     * @param ctx the router context, retained so keys can reach router.config
      */
     public PersistentKeyRing(RouterContext ctx) {
         super();

@@ -31,13 +31,14 @@ final class GenericGFPoly {
   private final int[] coefficients;
 
   /**
-   * @param field the {@link GenericGF} instance representing the field to use
    * to perform computations
-   * @param coefficients coefficients as ints representing elements of GF(size), arranged
    * from most significant (highest-power term) coefficient to least significant
-   * @throws IllegalArgumentException if argument is null or empty,
    * or if leading coefficient is 0 and this is not a
    * constant polynomial (that is, it is not the monomial "0")
+   *
+   * @param field the {@link GenericGF} instance representing the field to use
+   * @param coefficients coefficients as ints representing elements of GF(size), arranged
+   * @throws IllegalArgumentException if argument is null or empty,
    */
   GenericGFPoly(GenericGF field, int[] coefficients) {
     if (coefficients.length == 0) {
@@ -68,6 +69,7 @@ final class GenericGFPoly {
 
   /**
    * Get the coefficients.
+   * @return the coefficients, highest power of x first, so element 0 multiplies x^0
    */
   int[] getCoefficients() {
     return coefficients;
@@ -91,6 +93,7 @@ final class GenericGFPoly {
 
   /**
    * Get the coefficient.
+   * @param degree the power of x whose coefficient is wanted
    * @return coefficient of x^degree term in this polynomial
    */
   int getCoefficient(int degree) {
@@ -99,6 +102,7 @@ final class GenericGFPoly {
 
   /**
    * evaluate at.
+   * @param a the field element at which to evaluate
    * @return evaluation of this polynomial at a given point
    */
   int evaluateAt(int a) {
@@ -124,6 +128,8 @@ final class GenericGFPoly {
 
   /**
    * add or subtract.
+   * @param other the polynomial to add, which must be over the same field
+   * @return the field sum if the field is characteristic two, the difference otherwise
    */
   GenericGFPoly addOrSubtract(GenericGFPoly other) {
     if (!field.equals(other.field)) {
@@ -160,6 +166,8 @@ final class GenericGFPoly {
 
   /**
    * multiply.
+   * @param other the polynomial to multiply by, which must be over the same field
+   * @return a new polynomial holding the product
    */
   GenericGFPoly multiply(GenericGFPoly other) {
     if (!field.equals(other.field)) {
@@ -188,6 +196,8 @@ final class GenericGFPoly {
 
   /**
    * multiply.
+   * @param scalar the field element to multiply every coefficient by
+   * @return a new polynomial holding the scaled coefficients
    */
   GenericGFPoly multiply(int scalar) {
     if (scalar == 0) {
@@ -206,6 +216,9 @@ final class GenericGFPoly {
 
   /**
    * multiply by monomial.
+   * @param degree the power of x to multiply by, which must not be negative
+   * @param coefficient the field element scaling each existing coefficient
+   * @return a new polynomial shifted up by degree and scaled by coefficient
    */
   GenericGFPoly multiplyByMonomial(int degree, int coefficient) {
     if (degree < 0) {
@@ -224,6 +237,8 @@ final class GenericGFPoly {
 
   /**
    * divide.
+   * @param other the polynomial to divide by, which must be non-zero and over the same field
+   * @return a two-element array holding the quotient and the remainder
    */
   GenericGFPoly[] divide(GenericGFPoly other) {
     if (!field.equals(other.field)) {

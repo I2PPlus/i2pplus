@@ -11,6 +11,9 @@ class InboundSender implements TunnelGateway.Sender {
 
     /**
      * Binds the given context and hop config for the inbound gateway.
+     *
+     * @param ctx application context, passed to the gateway processor
+     * @param config hop configuration for the inbound tunnel
      */
     public InboundSender(I2PAppContext ctx, HopConfig config) {
         _processor = new InboundGatewayProcessor(ctx, config);

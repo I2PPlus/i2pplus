@@ -62,6 +62,12 @@ import net.i2p.util.Log;
  */
 public class IdenticonServlet extends HttpServlet {
 
+    /**
+     * Constructor. Jetty instantiates the servlet reflectively with no arguments
+     * and configures it through init parameters, so a bare instance is expected.
+     */
+    public IdenticonServlet() {}
+
     private static final long serialVersionUID = -3507466186902317988L;
     private static final String INIT_PARAM_VERSION = "version";
     private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
@@ -76,9 +82,13 @@ public class IdenticonServlet extends HttpServlet {
     static final int MIN_IDENTICON_SIZE = 16;
     /** Largest size the renderer is asked for; larger requests are clamped down. */
     static final int MAX_IDENTICON_SIZE = 1024;
+    /** Rendering version, folded into the ETag so rendering changes force a refresh. */
     private int version = 1;
+    /** Draws the PNG for a given code and size. */
     private final IdenticonRenderer renderer = new NineBlockIdenticonRenderer2();
+    /** Optional rendered-image cache; null disables caching. */
     private IdenticonCache cache;
+    /** How long a cached image stays fresh, in milliseconds. */
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
     /**

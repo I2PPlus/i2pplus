@@ -23,4 +23,10 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class MouseEvent {
 
+    /**
+     * Headless stand-in for an AWT mouse event; the stub holds no event data, so
+     * an instance needs nothing beyond construction.
+     */
+    public MouseEvent() {}
+
 }

@@ -99,6 +99,9 @@ class PeerManager {
     /**
      * Profiles are now loaded in a separate thread,
      * so this should return quickly.
+     *
+     * @param context the router context, whose profile organizer and log manager
+     *        seed the peer indexes
      */
     public PeerManager(RouterContext context) {
         _context = context;
@@ -216,7 +219,12 @@ class PeerManager {
         if (_log.shouldInfo()) {_log.info("Stored " + i + " out of " + total + " profiles");}
     }
 
-    /** @since 0.8.8 */
+    /**
+     * Drops every tracked peer profile and the capability index built from them,
+     * for a router that is not going to reuse this state.
+     *
+     * @since 0.8.8
+     */
     void clearProfiles() {
         _organizer.clearProfiles();
         _capabilitiesByPeer.clear();
@@ -393,6 +401,11 @@ class PeerManager {
      *
      * Only supports PURPOSE_TEST — used exclusively by PeerTestJob.
      * Other purpose constants were removed; add new purposes as needed.
+     *
+     * @param criteria supplies the selection purpose and the minimum number of
+     *        peers to gather before falling back
+     * @return up to the requested number of peer hashes, excluding ourselves;
+     * the list may be shorter or empty if too few peers are known
      */
     List<Hash> selectPeers(PeerSelectionCriteria criteria) {
         Set<Hash> peers = new HashSet<>(criteria.getMinimumRequired());
@@ -435,6 +448,7 @@ class PeerManager {
      * cannot be acquired (reorganize in progress).  Used exclusively by
      * {@link PeerTestJob} to avoid blocking the job queue thread.
      *
+     * @param needed how many peers to gather at most
      * @return selected peers, or null if lock not acquired
      * @since 0.9.71+
      */
@@ -449,6 +463,10 @@ class PeerManager {
     }
 
     /**
+     * Records the capability string a peer advertised and reindexes it in the
+     * per-capability lookup, dropping any capability it no longer holds.
+     *
+     * @param peer the router whose capabilities are being recorded
      * @param caps non-null, case is ignored
      */
     public void setCapabilities(Hash peer, String caps) {
@@ -484,6 +502,8 @@ class PeerManager {
 
     /**
      * Remove all capabilities for the peer from the index.
+     *
+     * @param peer the router to drop from every capability bucket
      */
     public void removeCapabilities(Hash peer) {
         if (_log.shouldDebug()) {_log.debug("Removing capabilities from [" + peer.toBase64().substring(0,6) + "]");}
@@ -498,6 +518,8 @@ class PeerManager {
     }
 
     /**
+     * Every tracked peer advertising a capability.
+     *
      * @param capability case-insensitive
      * @return non-null unmodifiable set
      */
@@ -508,6 +530,8 @@ class PeerManager {
     }
 
     /**
+     * How many tracked peers advertise a capability.
+     *
      * @param capability case-insensitive
      * @return how many
      * @since 0.9.45

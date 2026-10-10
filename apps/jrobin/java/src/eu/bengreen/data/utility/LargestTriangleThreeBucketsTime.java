@@ -13,6 +13,8 @@ public class LargestTriangleThreeBucketsTime extends DownSampleImpl {
 
     /**
      * LargestTriangleThreeBucketsTime.
+     *
+     * @param threshold the number of points to downsize the series to
      */
     public LargestTriangleThreeBucketsTime(int threshold) {
         super(threshold);

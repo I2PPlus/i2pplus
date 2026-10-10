@@ -31,8 +31,11 @@ class StoreMessageSelector implements MessageSelector {
     /**
      * Creates a new message selector for database store confirmations.
      *
+     * @param ctx the context supplying the log this selector reports matches to
      * @param storeJobId just for logging
      * @param peer just for logging
+     * @param waitingForId the unique ID carried by the DeliveryStatusMessage that confirms our store
+     * @param expiration the time in milliseconds after which the reply is no longer waited for
      */
     public StoreMessageSelector(RouterContext ctx, long storeJobId, RouterInfo peer, long waitingForId,
                                 long expiration) {

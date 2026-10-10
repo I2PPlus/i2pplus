@@ -14,7 +14,8 @@ import net.i2p.I2PException;
 public interface I2PServerSocket {
     /**
      * Closes the socket.
-     * @throws I2PException
+     * @throws I2PException if the socket cannot be closed, usually because the
+     *         underlying I2PSession is already gone
      */
     public void close() throws I2PException;
 

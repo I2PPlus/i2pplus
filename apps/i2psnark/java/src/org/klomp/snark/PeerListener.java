@@ -107,6 +107,7 @@ interface PeerListener {
      * that the PeerCoordinator can save
      *
      * @param peer the peer
+     * @param pcs the still-outstanding piece requests whose partial data can be salvaged
      * @since 0.8.2
      */
     void savePartialPieces(Peer peer, List<Request> pcs);
@@ -115,6 +116,7 @@ interface PeerListener {
      * Called when a peer has connected and there may be a partially downloaded piece that the
      * coordinatorator can give the peer task
      *
+     * @param peer the peer that just connected
      * @param havePieces the have-pieces bitmask for the peer
      * @return request (contains the partial data and valid length)
      * @since 0.8.2
@@ -126,6 +128,7 @@ interface PeerListener {
      * coordinator can give the peer task. May be called while the peer chokes us, to request a
      * BEP 6 allowed fast piece.
      *
+     * @param peer the peer that just connected
      * @param havePieces the have-pieces bitmask for the peer
      * @param allowed the pieces servable while choked, or null for no restriction
      * @return request (contains the partial data and valid length)
@@ -185,6 +188,8 @@ interface PeerListener {
     /**
      * Called when comments are requested via ut_comment
      *
+     * @param peer the Peer that got the message.
+     * @param num the number of comments asked for
      * @since 0.9.31
      */
     public void gotCommentReq(Peer peer, int num);
@@ -192,6 +197,8 @@ interface PeerListener {
     /**
      * Called when comments are received via ut_comment
      *
+     * @param peer the Peer that got the message.
+     * @param comments the comments carried by the message
      * @since 0.9.31
      */
     public void gotComments(Peer peer, List<Comment> comments);

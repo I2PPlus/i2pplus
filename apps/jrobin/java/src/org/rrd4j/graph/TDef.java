@@ -10,6 +10,13 @@ class TDef extends Source {
     /** Ds name */
     private final String dsName;
 
+    /**
+     * Create a graph definition bound to one fetched datasource.
+     *
+     * @param name the name this source is published under
+     * @param dsName the datasource name to read from the fetch result
+     * @param fetchData the fetch result the datasource is read from
+     */
     TDef(String name, String dsName, FetchData fetchData) {
         super(name);
         this.dsName = dsName;

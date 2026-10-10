@@ -32,6 +32,8 @@ public final class WriterException extends Exception {
 
   /**
    * WriterException.
+   *
+   * @param message the reason encoding failed, carried as the exception detail message
    */
   public WriterException(String message) {
     super(message);
@@ -39,6 +41,8 @@ public final class WriterException extends Exception {
 
   /**
    * WriterException.
+   *
+   * @param cause the underlying error that stopped encoding
    */
   public WriterException(Throwable cause) {
     super(cause);

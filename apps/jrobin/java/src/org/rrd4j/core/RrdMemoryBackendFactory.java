@@ -21,6 +21,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public class RrdMemoryBackendFactory extends RrdBackendFactory {
 
     /**
+     * A factory holding no open backends; the map starts empty and is filled by open()
+     * as RRDs are opened and released by delete().
+     */
+    public RrdMemoryBackendFactory() {}
+
+    /**
      * backends.
      */
     protected final Map<String, AtomicReference<ByteBuffer>> backends = new ConcurrentHashMap<>();

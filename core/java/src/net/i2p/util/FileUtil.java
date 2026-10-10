@@ -32,6 +32,12 @@ import java.nio.charset.StandardCharsets;
  */
 public class FileUtil {
     /**
+     * Constructor. Every operation here is a static function of the paths passed
+     * to it, so an instance carries no state.
+     */
+    public FileUtil() {}
+
+    /**
      * Delete the path as well as any files or directories underneath it.
      *
      * @param path path to the directory being deleted
@@ -81,6 +87,12 @@ public class FileUtil {
      * As of release 0.7.12, any files inside the zip that have a .jar.pack or .war.pack suffix
      * are transparently unpacked to a .jar or .war file using unpack200.
      * Logs at WARN level to wrapper.log
+     *
+     * @param zipfile the zip archive to extract
+     * @param targetDir the directory the entries are written under, with any
+     *        missing parent directories created as needed
+     * @return true if every entry was extracted, false if any entry was refused
+     *     or could not be read or written
      */
     public static boolean extractZip(File zipfile, File targetDir) {
         return extractZip(zipfile, targetDir, Log.WARN);
@@ -90,6 +102,9 @@ public class FileUtil {
      * Warning - do not call any new classes from here, or
      * update will crash the JVM.
      *
+     * @param zipfile the zip archive to extract
+     * @param targetDir the directory the entries are written under, with any
+     *        missing parent directories created as needed
      * @param logLevel Log.WARN, etc.
      * @return true if it was copied successfully
      * @since 0.9.7
@@ -187,6 +202,8 @@ public class FileUtil {
      * letting the unzip method skip over the leading 56 bytes of
      * "junk" (sig and version)
      *
+     * @param zipfile the zip archive to check, whose entries are decompressed
+     *        and discarded rather than written out
      * @return true if ok
      */
     public static boolean verifyZip(File zipfile) {
@@ -304,6 +321,7 @@ public class FileUtil {
      * Warning - converts \r\n to \n
      * Warning - inefficient if startAtBeginning is false, see console LogsHelper for better version
      *
+     * @param filename the path of the newline-delimited text file to read
      * @param startAtBeginning if true, read the first maxNumLines, otherwise read
      * the last maxNumLines
      *
@@ -342,6 +360,14 @@ public class FileUtil {
      *
      * Closes the OutputStream out on successful completion
      * but leaves it open when throwing IOE.
+     *
+     * @param path the file to dump, relative to the root, which may not escape
+     *        the root directory
+     * @param root the directory that path is resolved against
+     * @param out the stream the file is copied to; closed on successful
+     *        completion but left open when an IOException is thrown
+     * @throws FileNotFoundException if path is empty, does not exist, or
+     *        resolves outside the root directory
      */
     public static void readFile(String path, String root, OutputStream out) throws IOException {
         File rootDir = new File(root);
@@ -364,6 +390,9 @@ public class FileUtil {
     /**
      * Copy the file, optionally overwriting the destination.
      *
+     * @param source the path of the file to copy
+     * @param dest the path of the copy to create
+     * @param overwriteExisting if true, replace dest when it already exists
      * @return true if it was copied successfully
      */
     public static boolean copy(String source, String dest, boolean overwriteExisting) {
@@ -373,6 +402,9 @@ public class FileUtil {
     /**
      * Copy the file, optionally overwriting the destination, optionally logging failures.
      *
+     * @param source the path of the file to copy
+     * @param dest the path of the copy to create
+     * @param overwriteExisting if true, replace dest when it already exists
      * @param quiet don't log fails to wrapper log if true
      * @return true if it was copied successfully
      */
@@ -385,6 +417,10 @@ public class FileUtil {
     /**
      * Copy the file, optionally overwriting the destination, optionally logging failures.
      *
+     * @param src the existing file to copy
+     * @param dst the destination, which is treated as a directory when one
+     *        already exists at that path
+     * @param overwriteExisting if true, replace dst when it already exists
      * @param quiet don't log fails to wrapper log if true
      * @return true if it was copied successfully
      * @since 0.8.8
@@ -417,6 +453,8 @@ public class FileUtil {
      * Always overwrites any existing "to" file.
      * Method moved from SingleFileNamingService.
      *
+     * @param from the existing file to rename or move
+     * @param to the destination path, which is replaced if it already exists
      * @return true if it was renamed / copied successfully
      * @since 0.8.8
      */
@@ -440,6 +478,9 @@ public class FileUtil {
 
     /**
      * Usage: FileUtil (delete path | copy source dest | rename from to | unzip path.zip)
+     *
+     * @param args the subcommand and its operands: delete path | copy source
+     *        dest | rename from to | unzip path.zip
      */
     public static void main(String[] args) {
         if ((args == null) || (args.length < 2)) {

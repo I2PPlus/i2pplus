@@ -26,7 +26,12 @@ class SingleSearchJob extends FloodOnlySearchJob {
     private static final int TIMEOUT = 8*1000;
 
     /**
+     * Send one DatabaseLookupMessage straight to a chosen peer over
+     * exploratory tunnels, instead of flooding the networkDb with it.
+     *
+     * @param ctx the router context for the parent search job
      * @param key for Router Info ONLY
+     * @param to the peer the lookup is sent to
      */
     public SingleSearchJob(RouterContext ctx, Hash key, Hash to) {
         // warning, null FloodfillNetworkDatabaseFacade ...

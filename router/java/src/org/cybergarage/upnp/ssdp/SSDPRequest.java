@@ -32,128 +32,126 @@ import org.cybergarage.http.*;
  * @since 1.0
  */
 public class SSDPRequest extends HTTPRequest {
-    ////////////////////////////////////////////////
-    //	Constructor
-    ////////////////////////////////////////////////
-
     /**
-     * SSDPRequest.
+     * Construct an empty request announcing the HTTP/1.1 version SSDP requires.
      */
     public SSDPRequest() {
         setVersion(HTTP.VERSION_11);
     }
 
     /**
-     * SSDPRequest.
+     * Construct a request from headers already read off the wire.
+     *
+     * @param in the stream to parse the request headers from
      */
     public SSDPRequest(InputStream in) {
         super(in);
     }
 
-    ////////////////////////////////////////////////
-    //	NT
-    ////////////////////////////////////////////////
-
     /**
-     * setNT.
+     * Set the NT header, naming the notification type being advertised.
+     *
+     * @param value the notification type, such as &quot;upnp:rootdevice&quot; or &quot;ssdp:all&quot;
      */
     public void setNT(String value) {
         setHeader(HTTP.NT, value);
     }
 
     /**
-     * getNT.
+     * Return the NT header.
+     *
+     * @return the NT header value, or empty string if not set
      */
     public String getNT() {
         return getHeaderValue(HTTP.NT);
     }
 
-    ////////////////////////////////////////////////
-    //	NTS
-    ////////////////////////////////////////////////
-
     /**
-     * setNTS.
+     * Set the NTS header, naming the notification sub type.
+     *
+     * @param value the notification sub type, either &quot;ssdp:alive&quot; or &quot;ssdp:byebye&quot;
      */
     public void setNTS(String value) {
         setHeader(HTTP.NTS, value);
     }
 
     /**
-     * getNTS.
+     * Return the NTS header.
+     *
+     * @return the NTS header value, or empty string if not set
      */
     public String getNTS() {
         return getHeaderValue(HTTP.NTS);
     }
 
-    ////////////////////////////////////////////////
-    //	Location
-    ////////////////////////////////////////////////
-
     /**
-     * setLocation.
+     * Set the Location header, giving the URL of the device description document.
+     *
+     * @param value the URL of the device description document this request points at
      */
     public void setLocation(String value) {
         setHeader(HTTP.LOCATION, value);
     }
 
     /**
-     * getLocation.
+     * Return the Location header.
+     *
+     * @return the Location header value, or empty string if not set
      */
     public String getLocation() {
         return getHeaderValue(HTTP.LOCATION);
     }
 
-    ////////////////////////////////////////////////
-    //	USN
-    ////////////////////////////////////////////////
-
     /**
-     * setUSN.
+     * Set the USN header, naming the service being notified.
+     *
+     * @param value the unique service name identifying the service being notified
      */
     public void setUSN(String value) {
         setHeader(HTTP.USN, value);
     }
 
     /**
-     * getUSN.
+     * Return the USN header.
+     *
+     * @return the USN header value, or empty string if not set
      */
     public String getUSN() {
         return getHeaderValue(HTTP.USN);
     }
 
-    ////////////////////////////////////////////////
-    //	CacheControl
-    ////////////////////////////////////////////////
-
     /**
-     * setLeaseTime.
+     * Set the Cache-Control header, carrying this advertisement's max-age lease.
+     *
+     * @param len how many seconds this advertisement stays valid, written as max-age
      */
     public void setLeaseTime(int len) {
         setHeader(HTTP.CACHE_CONTROL, "max-age=" + Integer.toString(len));
     }
 
     /**
-     * getLeaseTime.
+     * Return the max-age lease carried by the Cache-Control header.
+     *
+     * @return the max-age lease in seconds, or 0 if the header is absent or unparseable
      */
     public int getLeaseTime() {
         String cacheCtrl = getHeaderValue(HTTP.CACHE_CONTROL);
         return SSDP.getLeaseTime(cacheCtrl);
     }
 
-    ////////////////////////////////////////////////
-    //	BootId
-    ////////////////////////////////////////////////
-
     /**
-     * setBootId.
+     * Set the BOOTID.UPNP.ORG header, recording the sender's boot generation.
+     *
+     * @param bootId the device boot ID, incremented on each reboot so stale advertisements are rejected
      */
     public void setBootId(int bootId) {
         setHeader(HTTP.BOOTID_UPNP_ORG, bootId);
     }
 
     /**
-     * getBootId.
+     * Return the BOOTID.UPNP.ORG header.
+     *
+     * @return the BOOTID.UPNP.ORG value, or 0 if not set
      */
     public int getBootId() {
         return getIntegerHeaderValue(HTTP.BOOTID_UPNP_ORG);

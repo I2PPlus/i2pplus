@@ -14,7 +14,12 @@ public class ParametersWithRandom
     private SecureRandom        random;
     private CipherParameters    parameters;
 
-    /** Wrap parameters with random. */
+    /**
+     * Wrap parameters with random.
+     * @param parameters the cipher parameters to wrap; they are returned unchanged by getParameters()
+     * @param random the secure random source for operations needing one, resolved through the
+     * CryptoServicesRegistrar; null selects the registrar's default instance
+     */
     public ParametersWithRandom(
         CipherParameters    parameters,
         SecureRandom        random)
@@ -23,7 +28,10 @@ public class ParametersWithRandom
         this.parameters = parameters;
     }
 
-    /** Wrap parameters with default random. */
+    /**
+     * Wrap parameters with default random.
+     * @param parameters the cipher parameters to wrap; they are returned unchanged by getParameters()
+     */
     public ParametersWithRandom(
         CipherParameters    parameters)
     {
@@ -32,6 +40,7 @@ public class ParametersWithRandom
 
     /**
      * getRandom.
+     * @return the secure random source carried by these parameters, never null
      */
     public SecureRandom getRandom()
     {
@@ -40,6 +49,7 @@ public class ParametersWithRandom
 
     /**
      * getParameters.
+     * @return the wrapped cipher parameters, exactly the instance supplied to the constructor
      */
     public CipherParameters getParameters()
     {

@@ -31,6 +31,9 @@ public class NewsHandler extends UpdateHandler implements Checker {
 
     /**
      * NewsHandler.
+     *
+     * @param ctx the router context for the news fetcher
+     * @param mgr the update manager that runs the fetched update tasks
      */
     public NewsHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         super(ctx, mgr);
@@ -55,6 +58,7 @@ public class NewsHandler extends UpdateHandler implements Checker {
     /**
      *  CLI fetch
      *
+     *  @param args command line arguments: -p proxy port, -l language, -u override news URL
      *  @since 0.9.57
      */
     public static void main(String[] args) {

@@ -373,6 +373,8 @@ public final class GraphGroups {
     private GraphGroups() {}
 
     /**
+     * List the stat names making up a graph group.
+     *
      * @param groupId a group id, or null
      * @return the member stat names in legend order, or an empty list if unknown
      */
@@ -392,7 +394,11 @@ public final class GraphGroups {
         return Collections.emptyList();
     }
 
-    /** @return every known group id, in display order */
+    /**
+     * List every known graph group id.
+     *
+     * @return every known group id, in display order
+     */
     public static Set<String> groupIds() {
         return Collections.unmodifiableSet(GROUPS.keySet());
     }

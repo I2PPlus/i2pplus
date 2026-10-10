@@ -72,6 +72,7 @@ public class CryptoCheck {
 
     /**
      * Print whether unlimited strength crypto is available.
+     * @param args ignored; the result comes from the static initializer
      */
     public static void main(String[] args) {
         System.out.println("Unlimited? " + isUnlimited());

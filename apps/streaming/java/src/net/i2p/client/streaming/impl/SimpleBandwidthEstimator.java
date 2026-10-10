@@ -62,7 +62,12 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             decayFactor = factor;
     }
 
-    /** New estimator bound to the given options. */
+    /**
+     * New estimator bound to the given options.
+     *
+     * @param ctx application context, used for the log and the initial timestamp
+     * @param opts connection options supplying the RTT floor and maximum message size
+     */
     SimpleBandwidthEstimator(I2PAppContext ctx, ConnectionOptions opts) {
         _log = ctx.logManager().getLog(SimpleBandwidthEstimator.class);
         _context = ctx;

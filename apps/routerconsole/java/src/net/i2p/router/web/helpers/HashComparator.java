@@ -13,6 +13,12 @@ import net.i2p.data.Hash;
  */
 class HashComparator implements Comparator<Hash>, Serializable {
     /**
+     * Constructor. The ordering is fixed by the hash byte layout, so an instance
+     * holds no state and the shared _instance below is used instead.
+     */
+    HashComparator() {}
+
+    /**
      * _instance.
      */
     public static final HashComparator _instance = new HashComparator();
@@ -33,6 +39,9 @@ class HashComparator implements Comparator<Hash>, Serializable {
 
     /**
      * comp.
+     * @param l left-hand Hash, compared through its raw data bytes
+     * @param r right-hand Hash, compared through its raw data bytes
+     * @return negative, zero or positive as l's bytes are less than, equal to, or greater than r's
      */
     public static int comp(Hash l, Hash r) {
         return DataHelper.compareTo(l.getData(), r.getData());

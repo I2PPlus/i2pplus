@@ -20,6 +20,13 @@ import net.i2p.data.DataHelper;
  * @since 0.8.2
  */
 public class Mp3Test {
+
+    /**
+     * All the work is done by the static {@link #main(String[])} entry point, so an
+     * instance would carry no state.
+     */
+    public Mp3Test() {}
+
     /**
      * Main entry point for the MP3 metadata test utility.
      *

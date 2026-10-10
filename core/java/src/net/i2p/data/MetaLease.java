@@ -52,6 +52,9 @@ import java.io.OutputStream;
  */
 public class MetaLease extends Lease {
 
+    /** Required for deserialization: readBytes() fills the inherited and own fields. */
+    public MetaLease() {}
+
     /** MetaLease length in bytes. */
     public static final int LENGTH = 40;
 
@@ -72,7 +75,8 @@ public class MetaLease extends Lease {
     /**
      * Set the cost of this lease.
      *
-     * @param cost the cost value
+     * @param cost the cost value recorded in the LeaseSet for this tunnel,
+              stored and compared as a raw int
      */
     public void setCost(int cost) {
         _cost = cost;
@@ -90,7 +94,8 @@ public class MetaLease extends Lease {
     /**
      * Set the type of this lease.
      *
-     * @param type the type
+     * @param type the tunnel type identifier recorded in the LeaseSet,
+              stored and compared as a raw int
      */
     public void setType(int type) {
         _type = type;
@@ -98,8 +103,8 @@ public class MetaLease extends Lease {
 
     /**
      * UnsupportedOperationException always.
-     * @throws UnsupportedOperationException always
      * @return the tunnel id
+     * @throws UnsupportedOperationException always
      */
     @Override
     public TunnelId getTunnelId() {

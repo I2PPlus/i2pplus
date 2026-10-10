@@ -117,6 +117,9 @@ class DHTTracker {
     }
 
     /**
+     * Construct a tracker that caches each built bloom filter for the default
+     * reuse interval.
+     *
      * @param ctx the app context
      * @param filterCacheTime how long built bloom filters are reused, milliseconds; for tests
      */
@@ -128,6 +131,7 @@ class DHTTracker {
         _log = _context.logManager().getLog(DHTTracker.class);
     }
 
+    /** Mark the tracker live and start the timer that expires stale torrents and peers. */
     public void start() {
         _isRunning = true;
         new Cleaner();

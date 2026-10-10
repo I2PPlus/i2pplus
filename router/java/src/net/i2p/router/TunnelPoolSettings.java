@@ -33,64 +33,76 @@ public class TunnelPoolSettings {
     private int _priority;
     private final Set<Hash> _aliases;
     private Hash _aliasOf;
-    /** @since 0.9.68+ first peer exclusions for diversity */
+    /**
+     * Peers excluded as the first hop of a new tunnel, for diversity. Null if
+     * none are configured.
+     *
+     * @since 0.9.68+ first peer exclusions for diversity
+     */
     private Set<Hash> _firstPeerExclusions;
-    /** @since 0.9.68+ last peer exclusions for diversity */
+    /**
+     * Peers excluded as the last hop of a new tunnel, for diversity. Null if
+     * none are configured.
+     *
+     * @since 0.9.68+ last peer exclusions for diversity
+     */
     private Set<Hash> _lastPeerExclusions;
     /** Prefix used to configure the inbound exploratory pool */
     public static final String      PREFIX_INBOUND_EXPLORATORY = "router.inboundPool.";
     /** Prefix used to configure the outbound exploratory pool */
     public static final String      PREFIX_OUTBOUND_EXPLORATORY = "router.outboundPool.";
     /**
-     * PROP_NICKNAME.
+     * Pool property naming the client a client pool serves.
      */
     public static final String      PROP_NICKNAME = "nickname";
     /**
-     * PROP_QUANTITY.
+     * Pool property for how many tunnels to keep available.
      */
     public static final String      PROP_QUANTITY = "quantity";
     /**
-     * PROP_BACKUP_QUANTITY.
+     * Pool property for how many spare tunnels to keep on hand.
      */
     public static final String      PROP_BACKUP_QUANTITY = "backupQuantity";
     /**
-     * PROP_DURATION.
+     * Pool property for how long a tunnel is kept before being expired, in minutes.
      */
     public static final String      PROP_DURATION = "duration";
     /**
-     * PROP_LENGTH.
+     * Pool property for the number of hops in each tunnel.
      */
     public static final String      PROP_LENGTH = "length";
     /**
-     * PROP_LENGTH_VARIANCE.
+     * Pool property for how much the hop count may vary around PROP_LENGTH.
      */
     public static final String      PROP_LENGTH_VARIANCE = "lengthVariance";
     /** Config property allowing zero-hop tunnels; unreliable, zero hops are always possible */
     public static final String      PROP_ALLOW_ZERO_HOP = "allowZeroHop";
     /**
-     * PROP_SHOULD_TEST.
+     * Pool property for whether the pool's tunnels are tested.
      */
     public static final String      PROP_SHOULD_TEST = "shouldTest";
     /**
-     * PROP_IP_RESTRICTION.
+     * Pool property for the IP address class the peers are drawn from, 0 to 4.
      */
     public static final String      PROP_IP_RESTRICTION = "IPRestriction";
     /**
-     * PROP_PRIORITY.
+     * Pool property for the outbound selection priority, -25 to 25.
      */
     public static final String      PROP_PRIORITY = "priority";
-    /** @since 0.9.17 */
+    /**
+     * Pool property holding the base64 random key used to order peer selection.
+     */
     public static final String      PROP_RANDOM_KEY = "randomKey";
     /**
-     * DEFAULT_QUANTITY.
+     * Default tunnels to keep available in a pool.
      */
     public static final int         DEFAULT_QUANTITY = 2;
     /**
-     * DEFAULT_BACKUP_QUANTITY.
+     * Default spare tunnels to keep on hand in a pool.
      */
     public static final int         DEFAULT_BACKUP_QUANTITY = 0;
     /**
-     * DEFAULT_DURATION.
+     * Default tunnel lifetime in milliseconds.
      */
     public static final int         DEFAULT_DURATION = 10*60*1000;
     private static final boolean    IS_SLOW = SystemVersion.isSlow();
@@ -104,11 +116,11 @@ public class TunnelPoolSettings {
     private static final int        DEFAULT_IB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
     private static final int        DEFAULT_OB_EXPL_LENGTH_VARIANCE = IS_SLOW ? 0 : 1;
     /**
-     * DEFAULT_ALLOW_ZERO_HOP.
+     * Default for PROP_ALLOW_ZERO_HOP: zero-hop tunnels are off.
      */
     public static final boolean     DEFAULT_ALLOW_ZERO_HOP = false;
     /**
-     * B.
+     * Default for PROP_IP_RESTRICTION, restricting peers to a class B (/16) address range.
      */
     public static final int         DEFAULT_IP_RESTRICTION = 2;    // class B (/16)
     private static final int        MIN_PRIORITY = -25;
@@ -117,14 +129,20 @@ public class TunnelPoolSettings {
     private final long _msgIDBloomXor;
 
     /**
-     * Exploratory tunnel
+     * An exploratory pool, with no destination and every default.
+     *
+     * @param isInbound true for the inbound pool, false for the outbound one
      */
     public TunnelPoolSettings(boolean isInbound) {
         this(null, isInbound);
     }
 
     /**
-     * Client tunnel unless dest == null
+     * A pool with the defaults, exploratory if dest is null and a client pool
+     * otherwise.
+     *
+     * @param dest the client destination, or null for an exploratory pool
+     * @param isInbound true for the inbound pool, false for the outbound one
      */
     public TunnelPoolSettings(Hash dest, boolean isInbound) {
         _destination = dest;
@@ -156,7 +174,11 @@ public class TunnelPoolSettings {
             _aliases = null;
     }
 
-    /** How many tunnels should be available at all times */
+    /**
+     * How many tunnels should be available at all times
+     *
+     * @return the desired quantity
+     */
     public int getQuantity() { return _quantity; }
     /**
      * How many tunnels should be available at all times.
@@ -165,7 +187,11 @@ public class TunnelPoolSettings {
      */
     public void setQuantity(int quantity) { _quantity = quantity; }
 
-    /** How many backup tunnels should be kept waiting in the wings */
+    /**
+     * How many backup tunnels should be kept waiting in the wings
+     *
+     * @return the desired backup quantity
+     */
     public int getBackupQuantity() { return _backupQuantity; }
     /**
      * How many backup tunnels should be kept waiting in the wings.
@@ -262,16 +288,30 @@ public class TunnelPoolSettings {
      * A temporary length to be used due to network conditions.
      * If less than zero, the standard length will be used.
      * Unused until 0.8.11
+     *
+     * @param length the override in hops, or negative for the standard length
      */
     public void setLengthOverride(int length) { _lengthOverride = length; }
 
-    /** Is this an inbound tunnel? */
+    /**
+     * Is this an inbound tunnel?
+     *
+     * @return true if the pool builds inbound tunnels
+     */
     public boolean isInbound() { return _isInbound; }
 
-    /** Is this an exploratory tunnel (or a client tunnel) */
+    /**
+     * Is this an exploratory tunnel (or a client tunnel)?
+     *
+     * @return true if the pool has no destination
+     */
     public boolean isExploratory() { return _isExploratory; }
 
-    /** What destination is this a client tunnel for (or null if exploratory) */
+    /**
+     * What destination is this a client tunnel for (or null if exploratory)?
+     *
+     * @return the client destination, or null for an exploratory pool
+     */
     public Hash getDestination() { return _destination; }
 
     /**
@@ -301,6 +341,7 @@ public class TunnelPoolSettings {
      * Other destination that this is an alias of (or null).
      * If non-null, don't build tunnels.
      *
+     * @param h the destination this pool is an alias of, or null
      * @since 0.9.21
      */
     public void setAliasOf(Hash h) {
@@ -356,7 +397,11 @@ public class TunnelPoolSettings {
      */
     public SessionKey getRandomKey() { return _randomKey; }
 
-    /** What user supplied name was given to the client connected (can be null) */
+    /**
+     * What user supplied name was given to the client connected (can be null)
+     *
+     * @return the nickname, or null if none was supplied
+     */
     public String getDestinationNickname() { return _destinationNickname; }
     /**
      * User supplied name given to the connected client.
@@ -403,7 +448,8 @@ public class TunnelPoolSettings {
      * Defaults in props are NOT honored.
      * In-JVM client side must promote defaults to the primary map.
      *
-     * @param prefix non-null
+     * @param prefix the pool prefix to match, non-null
+     * @param props the properties to read, every entry starting with prefix is considered
      */
     public void readFromProperties(String prefix, Properties props) {
         for (Map.Entry<Object, Object> e : props.entrySet()) {
@@ -451,9 +497,11 @@ public class TunnelPoolSettings {
     }
 
     /**
-     * Write the settings into the given properties map.
+     * Write the settings into the given properties map. Does nothing if props
+     * is null.
      *
-     * @param prefix non-null
+     * @param prefix the pool prefix to write each property under, non-null
+     * @param props the map to write into, or null to skip
      */
     public void writeToProperties(String prefix, Properties props) {
         if (props == null) return;

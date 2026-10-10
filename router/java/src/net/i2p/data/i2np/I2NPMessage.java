@@ -33,7 +33,7 @@ public interface I2NPMessage {
      * Read the body into the data structures, after the initial type byte, using
      * the current class's format as defined by the I2NP specification
      *
-     * @param data the data
+     * @param data the full serialized message, header included
      * @param type I2NP message type. If less than zero, read the type from data
      * @param offset where to start
      *           starting at type if type is &lt; 0 (16 byte header)
@@ -77,7 +77,18 @@ public interface I2NPMessage {
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException;
     /**
-     * Read the message fields from the byte array, using the given handler.
+     * Read the message fields from the byte array, dispatching them to the
+     * given handler. The base implementation ignores the handler and behaves as
+     * {@link #readMessage(byte[], int, int, int)}; subclasses that deliver the
+     * message asynchronously override this.
+     *
+     * @param data the buffer holding the message, header included
+     * @param offset where to start in the data array
+     * @param dataSize how long into the data to read
+     * @param type I2NP message type
+     * @param handler the target for the message the buffer contains
+     * @throws I2NPMessageException if the stream doesn't contain a valid message
+     *          that this class can read.
      */
     public void readMessage(byte[] data, int offset, int dataSize, int type, I2NPMessageHandler handler) throws I2NPMessageException;
 
@@ -94,6 +105,7 @@ public interface I2NPMessage {
      * return value will be Xor'ed with that value. Passing a msgIDBloomXor
      * value of 0 will result in the original ID being returned, instead of
      * passing 0 use the no-arg version.
+     * @param msgIDBloomXor value to XOR the id with, or 0 for the id unchanged
      * @return the unique id
      */
     public long getUniqueId(long msgIDBloomXor);
@@ -104,6 +116,8 @@ public interface I2NPMessage {
     public long getUniqueId();
     /**
      * Unique id for this message, assigned when written.
+     *
+     * @param id the unique id to attach to this message
      */
     public void setUniqueId(long id);
 
@@ -115,17 +129,31 @@ public interface I2NPMessage {
     public long getMessageExpiration();
     /**
      * Expiration for this message, assigned when written.
+     *
+     * @param exp the expiration as milliseconds since the epoch, which is also
+     *        when the peer should stop forwarding the message
      */
     public void setMessageExpiration(long exp);
 
 
-    /** How large the message is, including any checksums, i.e. full 16 byte header */
+    /**
+     * How large the message is, including any checksums, i.e. full 16 byte header
+     *
+     * @return the size in bytes of the message with the full NTCP 1 header
+     */
     public int getMessageSize();
 
-    /** How large the raw message is with the short 5 byte header */
+    /**
+     * How large the raw message is with the short 5 byte header
+     *
+     * @return the size in bytes of the message with the short SSU header
+     */
     public int getRawMessageSize();
 
     /**
+     * Serialize the message, header included, into a new array.
+     *
+     * @return a new array holding the whole message, full 16 byte header included
      * @since 0.9.48 from DataStructure
      */
     public byte[] toByteArray();
@@ -136,6 +164,8 @@ public interface I2NPMessage {
      * expiration, unique id, as well as a checksum bundled along.
      * Full 16 byte header for NTCP 1.
      *
+     * @param buffer the destination array, which must have room for
+     *        {@link #getMessageSize()} bytes
      * @return the new offset (NOT the length)
      */
     public int toByteArray(byte[] buffer);
@@ -146,6 +176,8 @@ public interface I2NPMessage {
      * expiration, unique id, as well as a checksum bundled along.
      * Full 16 byte header for NTCP 1.
      *
+     * @param buffer the destination array, which must have room for
+     *        {@link #getMessageSize()} bytes from {@code off} on
      * @param off the offset to start writing at
      * @return the new offset (NOT the length)
      * @since 0.9.36
@@ -158,6 +190,8 @@ public interface I2NPMessage {
      * unique id, or any checksum, but does include the type and expiration.
      * Short 5 byte header for SSU.
      *
+     * @param buffer the destination array, written from index 0, which must have
+     *        room for {@link #getRawMessageSize()} bytes
      * @return the length written
      */
     public int toRawByteArray(byte[] buffer);
@@ -168,6 +202,8 @@ public interface I2NPMessage {
      * unique id, or any checksum, but does include the type and expiration.
      * Short 9 byte header for NTCP 2.
      *
+     * @param buffer the destination array, which must have room for
+     *        {@link #getRawMessageSize()} bytes from {@code off} on
      * @param off the offset to start writing at
      * @return the new offset (NOT the length)
      * @since 0.9.36

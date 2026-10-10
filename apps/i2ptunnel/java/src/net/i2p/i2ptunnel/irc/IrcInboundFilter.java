@@ -36,7 +36,13 @@ public class IrcInboundFilter implements Runnable {
     }
 
     /**
+     * Create an inbound filter with optional DCC support.
+     *
      * @param helper may be null
+     * @param lcl the local socket allowed messages are written to
+     * @param rem the remote I2P socket lines are read from
+     * @param pong buffer for expected PONG responses, to identify our own IRC session
+     * @param log the logger for filtered-line and error reporting
      * @since 0.8.9
      */
     public IrcInboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log, DCCHelper helper) {

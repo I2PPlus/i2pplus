@@ -114,6 +114,8 @@ public final class ByteCache extends TryCache<ByteArray> {
     /**
      * Shared cache for the given entry size and capacity.
      *
+     * @param cacheSize the number of entries to hold, trimmed as needed to stay under MAX_CACHE
+     * @param size the byte length of every cached entry, raised to at least 1 and used as the cache key
      * @return the instance
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
@@ -208,6 +210,8 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     /**
      * Release the entry back to the cache, optionally zeroing its contents first.
+     * @param entry the structure being handed back, ignored if null or the wrong size
+     * @param shouldZero true to overwrite the entry's bytes with zeroes before pooling it
      */
     public final void release(ByteArray entry, boolean shouldZero) {
         if (entry == null || entry.getData() == null) {

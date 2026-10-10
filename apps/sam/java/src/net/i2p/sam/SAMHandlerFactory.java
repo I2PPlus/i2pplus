@@ -22,6 +22,12 @@ import net.i2p.util.VersionComparator;
  */
 class SAMHandlerFactory {
 
+    /**
+     * createSAMHandler() is static and the class holds only the protocol version and
+     * handshake timeout, so an instance carries nothing.
+     */
+    SAMHandlerFactory() {}
+
     private static final String VERSION = "3.3";
     private static final int HELLO_TIMEOUT = 75 * 1000;
 
@@ -31,8 +37,9 @@ class SAMHandlerFactory {
      *
      * @param s Socket attached to SAM client
      * @param i2cpProps config options for our i2cp connection
-     * @throws SAMException if the connection handshake (HELLO message) was malformed
+     * @param parent the bridge owning this session, supplying the secure session for authentication
      * @return A SAM protocol handler, or null if the client closed before the handshake
+     * @throws SAMException if the connection handshake (HELLO message) was malformed
      */
     public static SAMHandler createSAMHandler(SocketChannel s, Properties i2cpProps,
                                               SAMBridge parent) throws SAMException {

@@ -166,6 +166,14 @@ class NetDbRenderer {
         private final Map<String, String> _byDuration = new ConcurrentHashMap<>();
 
         /**
+         * A memo table holding nothing; _lang stays null until the first {@link #ago} call,
+         * which compares it against the current UI language and clears the table.
+         */
+        AgoMemo() {}
+
+        /**
+         * Render an age as a localized "duration ago" string.
+         *
          * @param duration the age, already run through {@link DataHelper#formatDuration2}
          * @param lang the current UI language
          * @param format the translator to memoize
@@ -781,7 +789,7 @@ class NetDbRenderer {
      * Renders the leaseset listing and keyspace estimate for the contentonly
      * fragment mode of the netdb page, reusing the full lease list render.
      *
-     * @param out output
+     * @param out the writer that receives the leaseset listing HTML
      * @param debug if true, show debug info
      * @throws java.io.IOException if an I/O error occurs
      * @since 0.9.70+
@@ -797,7 +805,7 @@ class NetDbRenderer {
      * is emitted before the div, mirroring the remote layout. Used by both the
      * full local netdb page and the fragment mode.
      *
-     * @param out output
+     * @param out the writer that receives the local leaseset listing HTML
      * @throws java.io.IOException if an I/O error occurs
      * @since 0.9.70+
      */
@@ -814,6 +822,9 @@ class NetDbRenderer {
 
     /**
      * Renders the local leaseset summary header (hidden until JS shows it).
+     *
+     * @param out where the HTML is written
+     * @throws IOException if the writer fails
      */
     public void renderLocalSummary(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
@@ -1160,6 +1171,13 @@ class NetDbRenderer {
     /**
      * Renders a list of RouterInfo objects to the given Writer.
      * Uses parallel rendering for sets up to 100 routers, streams for larger sets.
+     *
+     * @param routers the routers to render
+     * @param out where the HTML is written
+     * @param isLocal true to mark the routers as local
+     * @param page zero-based page index
+     * @param pageSize number of routers per page
+     * @throws IOException if the writer fails
      */
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize) throws IOException {
         renderRoutersToWriter(routers, out, isLocal, page, pageSize, true);
@@ -1168,7 +1186,14 @@ class NetDbRenderer {
     /**
      * Renders a list of RouterInfo objects to the given Writer.
      * Uses parallel rendering for sets up to 100 routers, streams for larger sets.
+     *
+     * @param routers the routers to render
+     * @param out where the HTML is written
+     * @param isLocal true to mark the routers as local
+     * @param page zero-based page index
+     * @param pageSize number of routers per page
      * @param applyPagination whether to apply pagination internally (false if list is already paginated)
+     * @throws IOException if the writer fails
      */
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize, boolean applyPagination) throws IOException {
         if (routers == null || routers.isEmpty()) return;
@@ -2048,7 +2073,7 @@ class NetDbRenderer {
     /**
      * Peer profile tier name or CSS class.
      *
-     * @param peer the peer
+     * @param peer the router hash whose tier is reported; null yields the local tier
      * @param fullname if true, return full name; else CSS class
      * @return the tier name or class
      */

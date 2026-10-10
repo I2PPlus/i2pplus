@@ -47,6 +47,8 @@ public class FileBuffer implements Buffer {
 	}
 
 	/**
+	 * Get the file being buffered.
+	 *
 	 * @return the underlying file
 	 */
 	public File getFile() {

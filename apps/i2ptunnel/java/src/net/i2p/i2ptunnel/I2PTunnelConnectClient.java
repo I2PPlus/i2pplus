@@ -63,6 +63,12 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
+     * @param localPort the local port to bind to
+     * @param l logging instance
+     * @param ownDest whether to use our own destination
+     * @param wwwProxy the outproxy destinations, separated by commas or spaces, or null for none
+     * @param notifyThis event dispatcher for notifications
+     * @param tunnel the parent I2PTunnel instance, supplying the listening host and client options
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      * valid config to contact the router
      */

@@ -262,6 +262,7 @@ public class ReverseDnsLookup {
 
     /**
      * The rDNS executor core pool size.
+     * @return the core pool size, bounded 2-8
      * @since 0.9.71
      */
     public static int getCorePoolSize() { return _corePoolSize; }
@@ -277,6 +278,7 @@ public class ReverseDnsLookup {
 
     /**
      * The rDNS executor max pool size.
+     * @return the max pool size, bounded 2-8
      * @since 0.9.71
      */
     public static int getMaxPoolSize() { return _maxPoolSize; }
@@ -292,6 +294,7 @@ public class ReverseDnsLookup {
 
     /**
      * The size of the rDNS cache file, in KB.
+     * @return the file size in KB, suffixed with "KB"
      * @since 0.9.71
      */
     public static String rdnsCacheSize() {
@@ -301,6 +304,7 @@ public class ReverseDnsLookup {
 
     /**
      * The number of entries in the rDNS cache.
+     * @return the number of cached IP address to host name mappings
      * @since 0.9.71
      */
     public static int countRdnsCacheEntries() {
@@ -491,6 +495,9 @@ public class ReverseDnsLookup {
 
         /**
          * CacheEntry.
+         *
+         * @param ipAddress the IP address the entry describes
+         * @param hostname the resolved host name, stored as "unknown" when null
          */
         public CacheEntry(String ipAddress, String hostname) {
             this(ipAddress, hostname, System.currentTimeMillis());
@@ -498,6 +505,10 @@ public class ReverseDnsLookup {
 
         /**
          * CacheEntry.
+         *
+         * @param ipAddress the IP address the entry describes
+         * @param hostname the resolved host name, stored as "unknown" when null
+         * @param timestamp epoch milliseconds at which the entry was cached, used to expire it
          */
         public CacheEntry(String ipAddress, String hostname, long timestamp) {
             this.ipAddress = ipAddress;
@@ -884,6 +895,7 @@ public class ReverseDnsLookup {
 
     /**
      * The canonical host name for the given IP address, resolved synchronously.
+     * @param ipAddress the peer IP address to resolve, a null or literal "null" yields "unknown"
      * @return the canonical host name
      * @since 0.9.58+
      */
@@ -929,6 +941,7 @@ public class ReverseDnsLookup {
      * (MMDB file read + regex normalization) and optional RDNS, then
      * returns null immediately — page rendering is never blocked.
      *
+     * @param ipAddress the peer IP address to name, a null or literal "null" yields null
      * @return cached hostname/ASN org name, or null if not yet resolved
      * @since 0.9.70+
      */

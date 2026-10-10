@@ -268,37 +268,58 @@ public enum SigType {
         isAvail = x_isAvailable();
     }
 
-    /** The unique identifier for this type. */
+    /**
+     * The unique identifier for this type.
+     * @return the code carried in the RouterIdentity
+     */
     public int getCode() {
         return code;
     }
 
-    /** The length of the public key, in bytes. */
+    /**
+     * The length of the public key, in bytes.
+     * @return the public key size
+     */
     public int getPubkeyLen() {
         return pubkeyLen;
     }
 
-    /** The length of the private key, in bytes. */
+    /**
+     * The length of the private key, in bytes.
+     * @return the private key size
+     */
     public int getPrivkeyLen() {
         return privkeyLen;
     }
 
-    /** The length of the hash, in bytes. */
+    /**
+     * The length of the hash, in bytes.
+     * @return the digest size
+     */
     public int getHashLen() {
         return hashLen;
     }
 
-    /** The length of the signature, in bytes. */
+    /**
+     * The length of the signature, in bytes.
+     * @return the signature size
+     */
     public int getSigLen() {
         return sigLen;
     }
 
-    /** The standard base algorithm name used for the Java crypto factories. */
+    /**
+     * The standard base algorithm name used for the Java crypto factories.
+     * @return the key family, one of DSA, EC, RSA or EdDSA
+     */
     public SigAlgo getBaseAlgorithm() {
         return base;
     }
 
-    /** The standard name used for the Java crypto factories. */
+    /**
+     * The standard name used for the Java crypto factories.
+     * @return the JCA signature algorithm name, e.g. SHA256withECDSA
+     */
     public String getAlgorithmName() {
         return algoName;
     }
@@ -306,15 +327,16 @@ public enum SigType {
     /**
      * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *
-     * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      * @return the params
+     * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {
         if (params == null) throw new InvalidParameterSpecException(toString() + " is not available in this JVM");
         return params;
     }
 
-    /** A private, unshared MessageDigest instance for this signature type,
+    /**
+     * A private, unshared MessageDigest instance for this signature type,
      * in its initial state.
      *
      * A MessageDigest is stateful and not thread safe, so the prototype is
@@ -323,8 +345,8 @@ public enum SigType {
      * scanning) that {@link MessageDigest#getInstance(String)} performs, and
      * the clone shares no state with the prototype or with any other clone.
      *
-     * @throws UnsupportedOperationException if not supported
      * @return a new digest instance owned by the caller
+     * @throws UnsupportedOperationException if not supported
      */
     public MessageDigest getDigestInstance() {
         MessageDigest proto = getDigestPrototype();
@@ -343,8 +365,8 @@ public enum SigType {
     /**
      * The pristine digest prototype for this type, created on first use.
      *
-     * @throws UnsupportedOperationException if not supported
      * @return the prototype, which callers must not use or modify
+     * @throws UnsupportedOperationException if not supported
      */
     private MessageDigest getDigestPrototype() {
         MessageDigest rv = digestProto;
@@ -359,8 +381,8 @@ public enum SigType {
      * Provider lookup for a digest by name. Called at most once per SigType.
      *
      * @param name the JCA digest name
-     * @throws UnsupportedOperationException if not supported
      * @return a new digest instance
+     * @throws UnsupportedOperationException if not supported
      */
     private static MessageDigest createDigestInstance(String name) {
         if (name.equals("SHA-1")) return SHA1.getInstance();
@@ -376,8 +398,8 @@ public enum SigType {
      * Create a Hash instance for this signature type.
      *
      *
-     * @throws UnsupportedOperationException if not supported
      * @return the hash instance
+     * @throws UnsupportedOperationException if not supported
      * @since 0.9.9
      */
     public SimpleDataStructure getHashInstance() {
@@ -461,6 +483,7 @@ public enum SigType {
     /**
      * Checks if the signature type with the given code is available.
      *
+     * @param code the signature type code to look up
      * @return true if supported in this JVM
      * @since 0.9.15
      */
@@ -496,8 +519,10 @@ public enum SigType {
         }
     }
 
-    /** Signature type by code.
+    /**
+     * Signature type by code.
      *
+     * @param code the signature type code to look up
      * @return Null if not supported.
      */
     public static SigType getByCode(int code) {

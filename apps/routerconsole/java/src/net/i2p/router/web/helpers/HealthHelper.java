@@ -36,7 +36,13 @@ public class HealthHelper extends HelperBase {
      */
     public HealthHelper() {}
 
-    /** @since 0.9.70+ */
+    /**
+     * Whether this router is a floodfill with floodfill enabled.
+     *
+     * @return true if the network database is a floodfill that is currently
+     * publishing, false if there is no context or it is not a floodfill
+     * @since 0.9.70+
+     */
     public boolean isFloodfill() {
         if (_context == null) return false;
         FloodfillNetworkDatabaseFacade ff = (FloodfillNetworkDatabaseFacade) _context.netDb();
@@ -44,7 +50,11 @@ public class HealthHelper extends HelperBase {
     }
 
     /**
-     * @return the health content
+     * Render every health ring - performance, transport, network and, on a floodfill,
+     * floodfill - as one block of HTML.
+     *
+     * @return the rendered HTML, or an empty string if the page has a writer to write
+     *         into or if rendering failed
      */
     public String getHealthContent() {
         try {
@@ -65,7 +75,12 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Render the performance and load rings as HTML.
+     *
+     * @return the rendered HTML, or an empty string if rendering failed
+     * @since 0.9.70+
+     */
     public String getPerfRings() {
         try {
             StringWriter sw = new StringWriter(2048);
@@ -80,7 +95,12 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Render the transport and connectivity rings as HTML.
+     *
+     * @return the rendered HTML, or an empty string if rendering failed
+     * @since 0.9.70+
+     */
     public String getTransportRings() {
         try {
             StringWriter sw = new StringWriter(2048);
@@ -95,7 +115,12 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Render the network and participation rings as HTML.
+     *
+     * @return the rendered HTML, or an empty string if rendering failed
+     * @since 0.9.70+
+     */
     public String getNetworkRings() {
         try {
             StringWriter sw = new StringWriter(2048);
@@ -110,7 +135,12 @@ public class HealthHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Render the floodfill and NetDB rings as HTML.
+     *
+     * @return the rendered HTML, or an empty string if rendering failed
+     * @since 0.9.70+
+     */
     public String getFFRings() {
         try {
             StringWriter sw = new StringWriter(2048);

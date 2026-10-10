@@ -52,6 +52,7 @@ public class Epoch extends JFrame {
         "HH:mm:ss yy-MM-dd"
     };
 
+    /** One lenient parser per entry of supportedFormats, tried in order when parsing input. */
     private final SimpleDateFormat[] parsers = new SimpleDateFormat[supportedFormats.length];
     /** Help text */
     private final String helpText;
@@ -166,7 +167,7 @@ public class Epoch extends JFrame {
     /**
      * Main method which runs this utility.
      *
-     * @param args Not used.
+     * @param args Not used; the timestamp is read from stdin.
      */
     public static void main(String[] args) {
         new Epoch();

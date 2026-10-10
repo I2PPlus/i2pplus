@@ -38,6 +38,8 @@ public final class FormatException extends ReaderException {
   }
 
   /**
+   * Get the shared instance, or a fresh one when stack traces are enabled.
+   *
    * @return the format instance
    */
   public static FormatException getFormatInstance() {
@@ -45,6 +47,9 @@ public final class FormatException extends ReaderException {
   }
 
   /**
+   * Get an instance wrapping the given cause.
+   *
+   * @param cause underlying throwable wrapped by the new exception
    * @return the format instance
    */
   public static FormatException getFormatInstance(Throwable cause) {

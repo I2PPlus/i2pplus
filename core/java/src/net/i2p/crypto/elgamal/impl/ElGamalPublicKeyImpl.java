@@ -205,7 +205,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Y.
+     * The public value y = g^x mod p.
      * @return the y
      */
     @Override
@@ -234,13 +234,22 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
         return y.hashCode() ^ elSpec.getP().hashCode() ^ elSpec.getG().hashCode();
     }
 
-    /** Read object */
+    /**
+     * Read object
+     * @param in the stream to deserialize the y value and the ElGamal parameters from
+     * @throws IOException if the stream cannot be read
+     * @throws ClassNotFoundException if the serialized class is not available to this router
+     */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         this.y = (BigInteger) in.readObject();
         this.elSpec = new ElGamalParameterSpec((BigInteger) in.readObject(), (BigInteger) in.readObject());
     }
 
-    /** Write object */
+    /**
+     * Write object
+     * @param out the stream to serialize the y value and the ElGamal parameters to
+     * @throws IOException if the stream cannot be written
+     */
     private void writeObject(ObjectOutputStream out) throws IOException {
         out.writeObject(this.getY());
         out.writeObject(elSpec.getP());

@@ -27,6 +27,8 @@ class SchedulerPreconnect extends SchedulerImpl {
 
     /**
      * SchedulerPreconnect.
+     * @param ctx the application context whose clock, logging and rate statistics
+                          the inherited scheduler uses for the connect delay timer
      */
     public SchedulerPreconnect(I2PAppContext ctx) {
         super(ctx);

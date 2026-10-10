@@ -62,6 +62,8 @@ public class Question {
     }
 
     /**
+     * Create a question from its components.
+     *
      * @param name the DNS name
      * @param type the record type
      * @param clazz the class
@@ -175,6 +177,8 @@ public class Question {
     }
 
     /**
+     * Wrap this question in a DnsMessage builder.
+     *
      * @return a new DnsMessage builder with this question set
      */
     public DnsMessage.Builder asMessageBuilder() {
@@ -184,6 +188,8 @@ public class Question {
     }
 
     /**
+     * Build a standalone query message holding this question.
+     *
      * @return a new DnsMessage with this question set
      */
     public DnsMessage asQueryMessage() {

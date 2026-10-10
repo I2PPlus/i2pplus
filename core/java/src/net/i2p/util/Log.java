@@ -30,51 +30,61 @@ public class Log {
     private final LogManager _manager;
 
     /**
-     * DEBUG.
+     * Priority of a diagnostic message, for debugging only.
+     * Higher values are more severe; a message is recorded when its priority
+     * is at least the logger's configured minimum.
      */
     public static final int DEBUG = 10;
     /**
-     * INFO.
+     * Priority of an informational message about normal operation.
+     * Higher values are more severe; a message is recorded when its priority
+     * is at least the logger's configured minimum.
      */
     public static final int INFO = 20;
     /**
-     * WARN.
+     * Priority of a message about a condition that may need attention.
+     * Higher values are more severe; a message is recorded when its priority
+     * is at least the logger's configured minimum.
      */
     public static final int WARN = 30;
     /**
-     * ERROR.
+     * Priority of a message about a failure the router recovered from.
+     * Higher values are more severe; a message is recorded when its priority
+     * is at least the logger's configured minimum.
      */
     public static final int ERROR = 40;
     /**
-     * CRIT.
+     * Priority of a message about a failure the router could not recover from.
+     * Higher values are more severe; a message is recorded when its priority
+     * is at least the logger's configured minimum.
      */
     public static final int CRIT = 50;
 
     /**
-     * STR_DEBUG.
+     * Property value selecting DEBUG messages in the config file.
      */
     public static final String STR_DEBUG = "DEBUG";
     /**
-     * STR_INFO.
+     * Property value selecting INFO messages in the config file.
      */
     public static final String STR_INFO = "INFO";
     /**
-     * STR_WARN.
+     * Property value selecting WARN messages in the config file.
      */
     public static final String STR_WARN = "WARN";
     /**
-     * STR_ERROR.
+     * Property value selecting ERROR messages in the config file.
      */
     public static final String STR_ERROR = "ERROR";
     /**
-     * STR_CRIT.
+     * Property value selecting CRIT messages in the config file.
      */
     public static final String STR_CRIT = "CRIT";
 
     /**
      * Integer log level for a string level name.
      *
-     * @param level the level
+     * @param level the level name to convert, matched case-insensitively
      * @return the integer level
      */
     public static int getLevel(String level) {
@@ -108,6 +118,8 @@ public class Log {
     /**
      * Warning - not recommended.
      * Use I2PAppContext.getGlobalContext().logManager().getLog(cls)
+     *
+     * @param cls the class whose name prefixes each line logged through this log
      */
     public Log(Class<?> cls) {
         this(I2PAppContext.getGlobalContext().logManager(), cls, null);
@@ -117,20 +129,41 @@ public class Log {
     /**
      * Warning - not recommended.
      * Use I2PAppContext.getGlobalContext().logManager().getLog(name)
+     *
+     * @param name the log's name, used in place of a class name to prefix each line
      */
     public Log(String name) {
         this(I2PAppContext.getGlobalContext().logManager(), null, name);
         _manager.addLog(this);
     }
 
+    /**
+     * Create a log bound to a class.
+     *
+     * @param manager the manager this log reports to
+     * @param cls the class whose name scopes the log
+     */
     Log(LogManager manager, Class<?> cls) {
         this(manager, cls, null);
     }
 
+    /**
+     * Create a log bound to a name.
+     *
+     * @param manager the manager this log reports to
+     * @param name the name that scopes the log
+     */
     Log(LogManager manager, String name) {
         this(manager, null, name);
     }
 
+    /**
+     * Create a log bound to either a class or a name.
+     *
+     * @param manager the manager this log reports to
+     * @param cls the class whose name scopes the log, or null when scoping by name
+     * @param name the name that scopes the log, or null when scoping by class
+     */
     Log(LogManager manager, Class<?> cls, String name) {
         _manager = manager;
         _class = cls;
@@ -143,8 +176,8 @@ public class Log {
     /**
      * Log a message at the given priority.
      *
-     * @param priority the priority level
-     * @param msg the message
+     * @param priority one of DEBUG, INFO, WARN, ERROR or CRIT
+     * @param msg the message text to record
      */
     public void log(int priority, String msg) {
         if (priority >= _minPriority) {
@@ -155,9 +188,9 @@ public class Log {
     /**
      * Log a message with a throwable at the given priority.
      *
-     * @param priority the priority level
-     * @param msg the message
-     * @param t the throwable
+     * @param priority one of DEBUG, INFO, WARN, ERROR or CRIT
+     * @param msg the message text to record
+     * @param t the throwable whose stack trace is logged alongside the message
      */
     public void log(int priority, String msg, Throwable t) {
         if (priority >= _minPriority) {
@@ -169,7 +202,10 @@ public class Log {
      * Always log this message with the given priority, ignoring current minimum priority level.
      * This allows an INFO message about changing port numbers, for example, to always be logged.
      *
+     * @param priority the level to record the message at (DEBUG, INFO, WARN, ERROR
+     * @param msg the message text, passed to the log manager's record formatter
      * @since 0.8.2
+     *        or CRIT), used regardless of this log's configured minimum level
      */
     public void logAlways(int priority, String msg) {
         _manager.addRecord(new LogRecord(_class, _name, Thread.currentThread().getName(), priority, msg, null));
@@ -195,7 +231,7 @@ public class Log {
      *
      * @param priority the priority level
      * @param key stable identifier for the condition; must not vary per occurrence
-     * @param msg the message
+     * @param msg the message text to record on the first occurrence and then per burst
      * @return true if the message was written, false if it was suppressed
      * @since 0.9.71+
      */
@@ -223,7 +259,7 @@ public class Log {
      * Collapse repeats of a warning. See {@link #throttled}.
      *
      * @param key stable identifier for the condition
-     * @param msg the message
+     * @param msg the message text to record on the first occurrence and then per burst
      * @return true if the message was written
      * @since 0.9.71+
      */
@@ -235,7 +271,7 @@ public class Log {
      * Collapse repeats of an error. See {@link #throttled}.
      *
      * @param key stable identifier for the condition
-     * @param msg the message
+     * @param msg the message text to record on the first occurrence and then per burst
      * @return true if the message was written
      * @since 0.9.71+
      */
@@ -247,7 +283,7 @@ public class Log {
      * Collapse repeats of an info message. See {@link #throttled}.
      *
      * @param key stable identifier for the condition
-     * @param msg the message
+     * @param msg the message text to record on the first occurrence and then per burst
      * @return true if the message was written
      * @since 0.9.71+
      */
@@ -259,7 +295,7 @@ public class Log {
      * Collapse repeats of a debug message. See {@link #throttled}.
      *
      * @param key stable identifier for the condition
-     * @param msg the message
+     * @param msg the message text to record on the first occurrence and then per burst
      * @return true if the message was written
      * @since 0.9.71+
      */
@@ -270,7 +306,7 @@ public class Log {
     /**
      * Log a debug message.
      *
-     * @param msg the message
+     * @param msg the message text to record
      */
     public void debug(String msg) {
         log(DEBUG, msg);
@@ -279,8 +315,8 @@ public class Log {
     /**
      * Log a debug message with a throwable.
      *
-     * @param msg the message
-     * @param t the throwable
+     * @param msg the message text to record
+     * @param t the throwable whose stack trace is logged alongside the message
      */
     public void debug(String msg, Throwable t) {
         log(DEBUG, msg, t);
@@ -289,7 +325,7 @@ public class Log {
     /**
      * Log an info message.
      *
-     * @param msg the message
+     * @param msg the message text to record
      */
     public void info(String msg) {
         log(INFO, msg);
@@ -298,8 +334,8 @@ public class Log {
     /**
      * Log an info message with a throwable.
      *
-     * @param msg the message
-     * @param t the throwable
+     * @param msg the message text to record
+     * @param t the throwable whose stack trace is logged alongside the message
      */
     public void info(String msg, Throwable t) {
         log(INFO, msg, t);
@@ -308,7 +344,7 @@ public class Log {
     /**
      * Log a warning message.
      *
-     * @param msg the message
+     * @param msg the message text to record
      */
     public void warn(String msg) {
         log(WARN, msg);
@@ -317,8 +353,8 @@ public class Log {
     /**
      * Log a warning message with a throwable.
      *
-     * @param msg the message
-     * @param t the throwable
+     * @param msg the message text to record
+     * @param t the throwable whose stack trace is logged alongside the message
      */
     public void warn(String msg, Throwable t) {
         log(WARN, msg, t);
@@ -327,7 +363,7 @@ public class Log {
     /**
      * Log an error message.
      *
-     * @param msg the message
+     * @param msg the message text to record
      */
     public void error(String msg) {
         log(ERROR, msg);
@@ -336,8 +372,8 @@ public class Log {
     /**
      * Log an error message with a throwable.
      *
-     * @param msg the message
-     * @param t the throwable
+     * @param msg the message text to record
+     * @param t the throwable whose stack trace is logged alongside the message
      */
     public void error(String msg, Throwable t) {
         log(ERROR, msg, t);
@@ -374,7 +410,7 @@ public class Log {
     /**
      * Check if DEBUG level logging is enabled.
      *
-     * @return whether debug
+     * @return true if DEBUG messages are recorded, false if the minimum priority excludes them
      * @since 0.9.20
      */
     public boolean shouldDebug() {
@@ -384,7 +420,7 @@ public class Log {
     /**
      * Check if INFO level logging is enabled.
      *
-     * @return whether info
+     * @return true if INFO messages are recorded, false if the minimum priority excludes them
      * @since 0.9.20
      */
     public boolean shouldInfo() {
@@ -394,7 +430,7 @@ public class Log {
     /**
      * Check if WARN level logging is enabled.
      *
-     * @return whether warn
+     * @return true if WARN messages are recorded, false if the minimum priority excludes them
      * @since 0.9.20
      */
     public boolean shouldWarn() {
@@ -404,7 +440,7 @@ public class Log {
     /**
      * Check if ERROR level logging is enabled.
      *
-     * @return whether error
+     * @return true if ERROR messages are recorded, false if the minimum priority excludes them
      * @since 0.9.20
      */
     public boolean shouldError() {
@@ -417,7 +453,7 @@ public class Log {
      * is subject to change or removal w/o notice.
      * NOT a supported API.
      *
-     * @param desc vararg description
+     * @param desc the objects naming the resource whose close() is being called
      * @since 0.9.8
      */
     public void logCloseLoop(Object... desc) {
@@ -430,7 +466,7 @@ public class Log {
      * is subject to change or removal w/o notice.
      * NOT a supported API.
      *
-     * @param desc vararg description of the resource
+     * @param desc the objects naming the resource whose close() is being called
      * @param level level at which to log
      * @since 0.9.8
      */
@@ -458,9 +494,9 @@ public class Log {
     }
 
     /**
-     * Logger name.
+     * Return the name this logger records against.
      *
-     * @return the name
+     * @return the logger class name when one was supplied, otherwise the explicit name
      */
     public String getName() {
         if (_className != null) {
@@ -472,7 +508,7 @@ public class Log {
     /**
      * Returns the LogScope (private class).
      *
-     * @return the LogScope
+     * @return the scope object, whose equals() compares scope strings
      */
     public Object getScope() {
         return _scope;
@@ -481,9 +517,9 @@ public class Log {
     /**
      * Scope string for a name and class.
      *
-     * @param name the logger name
-     * @param cls the class
-     * @return the scope string
+     * @param name the logger name, or null if the class alone identifies it
+     * @param cls the class the logger was created for, or null
+     * @return the scope string identifying this logger
      */
     static String getScope(String name, Class<?> cls) {
         if ((name == null) && (cls == null)) {
@@ -504,8 +540,8 @@ public class Log {
         /**
          * Create the scope, caching the computed string.
          *
-         * @param name the logger name
-         * @param cls the class
+         * @param name the logger name, or null if the class alone identifies it
+         * @param cls the class the logger was created for, or null
          */
         public LogScope(String name, Class<?> cls) {
             _scopeCache = getScope(name, cls);
@@ -513,7 +549,7 @@ public class Log {
 
         /**
          * Based on the scope cache string.
-         * @return whether h code is present
+         * @return the hash code of the cached scope string
          */
         @Override
         public int hashCode() {

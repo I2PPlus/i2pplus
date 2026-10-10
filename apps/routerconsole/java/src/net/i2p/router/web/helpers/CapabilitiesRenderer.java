@@ -12,6 +12,12 @@ import net.i2p.router.web.Messages;
  * @since 0.9.70+
  */
 class CapabilitiesRenderer {
+    /**
+     * Constructor. The letter-to-HTML tables are static and built in the
+     * static initializer, so an instance carries no state of its own.
+     */
+    CapabilitiesRenderer() {}
+
     /** Link HTML for the capability letters used by both views */
     static final Map<Character, String> CAP_REPLACEMENTS;
 

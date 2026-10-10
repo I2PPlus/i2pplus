@@ -12,6 +12,8 @@ public class InvalidDatabaseException extends IOException {
     private static final long serialVersionUID = 6161763462364823003L;
 
     /**
+     * Report that the database could not be read.
+     *
      * @param message A message describing the reason why the exception was thrown.
      */
     public InvalidDatabaseException(String message) {
@@ -19,6 +21,8 @@ public class InvalidDatabaseException extends IOException {
     }
 
     /**
+     * Report that the database could not be read, wrapping the underlying failure.
+     *
      * @param message A message describing the reason why the exception was thrown.
      * @param cause   The cause of the exception.
      */

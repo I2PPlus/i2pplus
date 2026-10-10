@@ -53,6 +53,12 @@ public final class UNKNOWN extends Data {
      */
     /**
      * Parse an unknown record from a stream.
+     *
+     * @param dis the stream positioned at the first byte of the record payload
+     * @param payloadLength the payload size in bytes, read and retained verbatim
+     * @param type the record type the payload was read under
+     * @return the record holding the raw payload bytes
+     * @throws IOException if the stream ends before payloadLength bytes have been read
      */
     public static UNKNOWN parse(DataInputStream dis, int payloadLength, TYPE type) throws IOException {
         return new UNKNOWN(dis, payloadLength, type);

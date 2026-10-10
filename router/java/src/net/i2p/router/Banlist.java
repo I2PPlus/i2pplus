@@ -877,7 +877,7 @@ public class Banlist {
      * Ban a router with default duration.
      *
      * @param peer the router hash to ban
-     * @param reason the reason
+     * @param reason the human-readable cause of the ban, stored in the entry and shown in the console
      * @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer, String reason) {return banlistRouter(peer, reason, null);}
@@ -887,7 +887,7 @@ public class Banlist {
      *
      * @param reasonCode separate code so cause can contain {0} for translation
      * @param peer the router hash to ban
-     * @param reason the reason
+     * @param reason the human-readable cause of the ban, stored in the entry and shown in the console
      * @return true if it WAS previously on the list
      */
     public boolean banlistRouter(String reasonCode, Hash peer, String reason) {
@@ -898,8 +898,8 @@ public class Banlist {
      * Ban a router on a specific transport.
      *
      * @param peer the router hash to ban
-     * @param reason the reason
-     * @param transport the transport
+     * @param reason the human-readable cause of the ban, stored in the entry and shown in the console
+     * @param transport the transport name to restrict the ban to; null bans on every transport
      * @return true if it WAS previously on the list
      */
     public boolean banlistRouter(Hash peer, String reason, String transport) {
@@ -910,7 +910,7 @@ public class Banlist {
      * Permanently ban a router.
      *
      * @param peer the router hash to ban
-     * @param reason the reason
+     * @param reason the human-readable cause of the ban, stored in the entry and shown in the console
      * @return true if it WAS previously on the list
      */
     public boolean banlistRouterForever(Hash peer, String reason) {
@@ -921,7 +921,7 @@ public class Banlist {
      * Permanently ban a router.
      *
      * @param peer the router hash to ban
-     * @param reason the reason
+     * @param reason the human-readable cause of the ban, stored in the entry and shown in the console
      * @param reasonCode separate code so cause can contain {0} for translation
      * @return true if it WAS previously on the list
      */
@@ -933,8 +933,8 @@ public class Banlist {
      * Ban a router with configurable duration and transport.
      *
      * @param peer the router hash to ban
-     * @param reason the reason
-     * @param transport the transport
+     * @param reason the human-readable cause of the ban, stored in the entry and shown in the console
+     * @param transport the transport name to restrict the ban to; null bans on every transport
      * @param forever if true, ban permanently
      * @return true if it WAS previously on the list
      */
@@ -946,9 +946,9 @@ public class Banlist {
      * Ban a router with automatic duration calculation.
      *
      * @param peer the router hash to ban
-     * @param reason the reason
+     * @param reason the human-readable cause of the ban, stored in the entry and shown in the console
      * @param reasonCode separate code so cause can contain {0} for translation (may be null)
-     * @param transport the transport
+     * @param transport the transport name to restrict the ban to; null bans on every transport
      * @param forever if true, ban permanently
      * @return true if it WAS previously on the list
      */
@@ -968,9 +968,9 @@ public class Banlist {
      * Ban a router with a specified expiration time.
      *
      * @param peer the router hash to ban
-     * @param reason the reason
+     * @param reason the human-readable cause of the ban, stored in the entry and shown in the console
      * @param reasonCode separate code so cause can contain {0} for translation (may be null)
-     * @param transport the transport
+     * @param transport the transport name to restrict the ban to; null bans on every transport
      * @param expireOn absolute time when the ban expires, not a duration
      * @return true if it WAS previously on the list
      * @throws IllegalArgumentException if expireOn is before the earliest valid time
@@ -1060,7 +1060,7 @@ public class Banlist {
      * Remove a router from the banlist for a specific transport.
      *
      * @param peer the router hash to remove from banlist
-     * @param transport the transport
+     * @param transport the transport name whose ban to lift; null lifts the ban on every transport
      */
     public void unbanlistRouter(Hash peer, String transport) {unbanlistRouter(peer, true, transport);}
 
@@ -1069,7 +1069,7 @@ public class Banlist {
      *
      * @param peer the router hash to remove from banlist
      * @param realUnbanlist if true, update message history
-     * @param transport the transport
+     * @param transport the transport name whose ban to lift; null lifts the ban on every transport
      */
     private void unbanlistRouter(Hash peer, boolean realUnbanlist, String transport) {
         if (peer == null) return;
@@ -1110,7 +1110,7 @@ public class Banlist {
      * Check if a router is banlisted on a specific transport.
      *
      * @param peer the router hash to check
-     * @param transport the transport
+     * @param transport the transport name to check; null matches a ban on any transport
      * @return true if the router is banlisted on the specified transport
      */
     public boolean isBanlisted(Hash peer, String transport) {

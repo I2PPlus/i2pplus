@@ -35,6 +35,8 @@ public class MLKEMParameters
 
     /**
      * getName.
+     *
+     * @return the standardized name, for example ML-KEM-1024
      */
     public String getName()
     {
@@ -43,6 +45,8 @@ public class MLKEMParameters
 
     /**
      * getEngine.
+     *
+     * @return a new engine sized for this parameter set's K value
      */
     public MLKEMEngine getEngine()
     {
@@ -51,6 +55,8 @@ public class MLKEMParameters
 
     /**
      * getSessionKeySize.
+     *
+     * @return the size of the encapsulated shared secret in bytes
      */
     public int getSessionKeySize()
     {

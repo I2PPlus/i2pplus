@@ -24,6 +24,14 @@ public class
 JProgressBar
 	extends Component
 {
+	/**
+	 * Constructor. The bar starts with determinate state and no visual
+	 * representation, which is all a headless caller needs.
+	 */
+	public JProgressBar()
+	{
+	}
+
 	private boolean indeterminate;
 
 	/**

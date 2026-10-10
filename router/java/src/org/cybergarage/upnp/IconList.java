@@ -48,6 +48,12 @@ public class IconList extends Vector<Icon> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * Get the icon at the given position.
+     *
+     * @param n zero-based position of the wanted icon within the list
+     * @return the icon stored at that position
+     */
     public Icon getIcon(int n) {
         return get(n);
     }

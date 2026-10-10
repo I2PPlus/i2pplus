@@ -101,6 +101,8 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      * Max buffer size, connect timeout, read timeout, and write timeout
      * from properties. Does not set local port or remote port.
+     *
+     * @param opts options properties to read the four settings from
      */
     protected void init(Properties opts) {
         _maxBufferSize = getInt(opts, PROP_BUFFER_SIZE, DEFAULT_BUFFER_SIZE);
@@ -111,6 +113,10 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
 
     /**
      * Parse an integer property value, with a default on failure.
+     *
+     * @param opts properties to read from, null yields the default
+     * @param name the property name to look up
+     * @param defaultVal returned when the property is absent or not an integer
      * @return the int
      */
     protected static int getInt(Properties opts, String name, int defaultVal) {
@@ -129,6 +135,11 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
 
     /**
      * Not part of the API, not for external use.
+     *
+     * @param opts properties to read from, null yields the default
+     * @param name the property name to look up
+     * @param defaultVal returned when the property is absent or not a number
+     * @return the parsed property value, or defaultVal if it cannot be parsed
      */
     static double getDouble(Properties opts, String name, double defaultVal) {
         if (opts == null) return defaultVal;
@@ -274,7 +285,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
     /**
      * The remote port.
      * @param port 0 - 65535
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if port is outside 0 - 65535
      * @since 0.8.9
      */
     @Override
@@ -299,7 +310,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      * Nonzero means you will get traffic ONLY for that port, use with care,
      * as most applications do not specify a remote port.
      * @param port 0 - 65535
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if port is outside 0 - 65535
      * @since 0.8.9
      */
     public void setLocalPort(int port) {

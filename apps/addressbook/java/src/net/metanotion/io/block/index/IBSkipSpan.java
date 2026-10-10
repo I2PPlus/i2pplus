@@ -93,7 +93,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
     /**
      * Must already be seeked to the end of the span header
-         * via loadInit() or seekData()
+     * via loadInit() or seekData()
      */
     private void loadFirstKey() throws IOException {
         if (this.nKeys <= 0)
@@ -135,6 +135,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
     /**
      * Seek to the start of the span and load the data
      * Package private so BSkipIterator can call it
+     * @throws IOException if the span was killed, its magic is wrong, or a record page cannot be read
      */
     void seekAndLoadData() throws IOException {
         seekData();
@@ -308,7 +309,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
     /**
          * Does not call super, we always store first key here
-     */
+         */
     @Override
     public K firstKey() {
         return this.firstKey;

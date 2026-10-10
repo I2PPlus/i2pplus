@@ -372,6 +372,8 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
 
     /**
      * Report progress to the user.
+     *
+     * @param s the progress line to show, already translated
      */
     protected void updateStatus(String s) {_mgr.notifyProgress(this, s);}
 
@@ -382,11 +384,20 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
      */
     protected static String linkify(String url) {return ConsoleUpdateManager.linkify(url);}
 
-    /** translate a string */
+    /**
+     * translate a string
+     *
+     * @param s the message key to look up
+     * @return the translated text, or the key itself if there is no translation
+     */
     protected String _t(String s) {return _mgr._t(s);}
 
     /**
      * translate a string with a parameter
+     *
+     * @param s the message key to look up
+     * @param o substituted for {0} in the message
+     * @return the translated text, or the key itself if there is no translation
      */
     protected String _t(String s, Object o) {return _mgr._t(s, o);}
 

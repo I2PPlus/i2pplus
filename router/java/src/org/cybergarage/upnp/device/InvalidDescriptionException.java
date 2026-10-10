@@ -40,6 +40,8 @@ public class InvalidDescriptionException extends Exception {
 
     /**
      * InvalidDescriptionException.
+     *
+     * @param s the detail message describing why the description is invalid
      */
     public InvalidDescriptionException(String s) {
         super(s);
@@ -47,6 +49,9 @@ public class InvalidDescriptionException extends Exception {
 
     /**
      * InvalidDescriptionException.
+     *
+     * @param s the detail message describing why the description is invalid
+     * @param file the description file whose contents failed to parse, appended to the message
      */
     public InvalidDescriptionException(String s, File file) {
         super(s + " (" + file.toString() + ")");
@@ -54,6 +59,8 @@ public class InvalidDescriptionException extends Exception {
 
     /**
      * InvalidDescriptionException.
+     *
+     * @param e the parse failure whose message is reused as the detail message
      */
     public InvalidDescriptionException(Exception e) {
         super(e.getMessage());

@@ -50,9 +50,10 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     private static final int HARD_MAX = 32768;
 
     /**
-     *  Alice side only
+     * Alice side only
      *
-     *  @param type must be one of the internal types MLKEM*_INT
+     * @param ctx the application context whose log, stat and system info are used
+     * @param type must be one of the internal types MLKEM*_INT
      */
     public MLKEMKeyFactory(I2PAppContext ctx, EncType type) {
         super("MLKEMPrecalc");
@@ -109,6 +110,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Minimum precalc queue size.
      *
+     * @param min the floor on the queue, clamped up to at least 1
      * @since 0.9.70+
      */
     public void setMinSize(int min) { _minSize = Math.max(1, min); }
@@ -124,6 +126,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Maximum precalc queue size.
      *
+     * @param max the ceiling on the queue, raised to the minimum if it is lower
      * @since 0.9.70+
      */
     public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
@@ -260,6 +263,8 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Return an unused key pair
      * to be put back onto the queue for reuse.
+     *
+     * @param kp the pair that was taken from the queue but never used
      */
     public void returnUnused(KeyPair kp) {
         _keys.offer(kp);

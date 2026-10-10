@@ -9,6 +9,12 @@ import java.util.Set;
  * Manages supported API versions and compatibility checks.
  */
 public class I2PControlVersion {
+    /**
+     * Constructor. The version number and the supported API set are filled in by
+     * the static initializer, so an instance holds nothing.
+     */
+    public I2PControlVersion() {}
+
     /** The current version of I2PControl */
     public final static String VERSION = "0.12.0";
 

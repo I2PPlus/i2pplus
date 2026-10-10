@@ -45,9 +45,10 @@ class SAMv2StreamSession extends SAMStreamSession {
      * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH")
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws SAMException
+     * @throws IOException declared on this constructor, but not raised by the body
+     * @throws DataFormatException likewise declared, but not raised by the body
+     * @throws SAMException if dir names no known direction, if i2cp.tcp.port is
+     *                      not a number, or if the I2P session cannot be created
      */
     public SAMv2StreamSession(String dest, String dir, Properties props, SAMStreamReceiver recv)
             throws IOException, DataFormatException, SAMException {
@@ -63,9 +64,10 @@ class SAMv2StreamSession extends SAMStreamSession {
      * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH")
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws SAMException
+     * @throws IOException declared on this constructor, but not raised by the body
+     * @throws DataFormatException likewise declared, but not raised by the body
+     * @throws SAMException if dir names no known direction, if i2cp.tcp.port is
+     *                      not a number, or if the I2P session cannot be created
      */
     public SAMv2StreamSession(InputStream destStream, String dir, Properties props, SAMStreamReceiver recv)
             throws IOException, DataFormatException, SAMException {
@@ -78,11 +80,12 @@ class SAMv2StreamSession extends SAMStreamSession {
      * @param id Unique id for the connection
      * @param dest Base64-encoded Destination to connect to
      * @param props Options to be used for connection
-     *
+     * @return true if the communication with the SAM client is ok
      * @throws DataFormatException if the destination is not valid
      * @throws SAMInvalidDirectionException if trying to connect through a
      *                                      receive-only session
-     * @return true if the communication with the SAM client is ok
+     * @throws SAMInvalidDirectionException if trying to connect through a
+     *                                      receive-only session
      */
     @Override
     public boolean connect(int id, String dest, Properties props)
@@ -179,7 +182,7 @@ class SAMv2StreamSession extends SAMStreamSession {
      * @param s I2PSocket
      * @param id Socket ID
      * @return v2StreamSender
-     * @throws IOException
+     * @throws IOException if the socket's output stream cannot be obtained
      */
     @Override
     protected StreamSender newStreamSender(I2PSocket s, int id) throws IOException {
@@ -398,6 +401,7 @@ class SAMv2StreamSession extends SAMStreamSession {
          *
          * @param s Socket to be handled
          * @param id Unique id assigned to the handler
+         * @throws IOException never thrown here, since the constructor only forwards to the superclass
          */
         public SAMv2StreamSessionSocketReader(I2PSocket s, int id) throws IOException {
             super(s, id);
@@ -405,6 +409,8 @@ class SAMv2StreamSession extends SAMStreamSession {
 
         /**
          * setLimit.
+         * @param limit the number of bytes the reader may take before it blocks
+         * @param nolimit true to drop the byte cap entirely, false to enforce the limit
          */
         public void setLimit(long limit, boolean nolimit) {
             synchronized (runningLock) {

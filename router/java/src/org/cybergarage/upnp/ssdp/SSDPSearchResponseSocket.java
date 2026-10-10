@@ -38,14 +38,17 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     ////////////////////////////////////////////////
 
     /**
-     * SSDPSearchResponseSocket.
+     * Bind a search response socket to the default address and port.
      */
     public SSDPSearchResponseSocket() {
         setControlPoint(null);
     }
 
     /**
-     * SSDPSearchResponseSocket.
+     * Bind a search response socket to the given address and port.
+     *
+     * @param bindAddr the address to bind to
+     * @param port the port to bind to
      */
     public SSDPSearchResponseSocket(String bindAddr, int port) {
         super(bindAddr, port);
@@ -59,14 +62,18 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     private ControlPoint controlPoint = null;
 
     /**
-     * setControlPoint.
+     * Attach the control point this socket reports search results to.
+     *
+     * @param ctrlp the control point, may be null
      */
     public void setControlPoint(ControlPoint ctrlp) {
         this.controlPoint = ctrlp;
     }
 
     /**
-     * getControlPoint.
+     * The control point this socket reports search results to.
+     *
+     * @return the control point, null when none is attached
      */
     public ControlPoint getControlPoint() {
         return controlPoint;
@@ -79,7 +86,7 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     private Thread deviceSearchResponseThread = null;
 
     /**
-     * run.
+     * Watch for inbound search requests and answer them.
      */
     public void run() {
         Thread thisThread = Thread.currentThread();
@@ -95,7 +102,7 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     }
 
     /**
-     * start.
+     * Start the response thread.
      */
     public void start() {
 
@@ -114,7 +121,7 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     }
 
     /**
-     * stop.
+     * Stop the response thread.
      */
     public void stop() {
         deviceSearchResponseThread = null;
@@ -125,7 +132,12 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     ////////////////////////////////////////////////
 
     /**
-     * post.
+     * Send a search response back to the requester.
+     *
+     * @param addr the address to send to
+     * @param port the port to send to
+     * @param res the response to send
+     * @return true if the datagram was sent
      */
     public boolean post(String addr, int port, SSDPSearchResponse res) {
         return post(addr, port, res.getHeader());
@@ -136,7 +148,12 @@ public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     ////////////////////////////////////////////////
 
     /**
-     * post.
+     * Send a search request to the given address.
+     *
+     * @param addr the address to send to
+     * @param port the port to send to
+     * @param req the request to send
+     * @return true if the datagram was sent
      */
     public boolean post(String addr, int port, SSDPSearchRequest req) {
         return post(addr, port, req.toString());

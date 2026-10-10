@@ -26,6 +26,12 @@ import net.i2p.util.Log;
 class CreateSessionJob extends JobImpl {
     private final Log _log;
     private final SessionConfig _config;
+    /**
+     * Create a job to request tunnels and then a LeaseSet for one client session.
+     *
+     * @param context the router context, used for the log and the tunnel facade
+     * @param config the session config naming the destination to build tunnels for
+     */
     public CreateSessionJob(RouterContext context, SessionConfig config) {
         super(context);
         _log = context.logManager().getLog(CreateSessionJob.class);

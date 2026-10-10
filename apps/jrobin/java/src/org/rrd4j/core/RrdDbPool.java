@@ -398,7 +398,7 @@ public class RrdDbPool {
     /**
      * Wait for a empty reference with no usage
      *
-     * @param uri
+     * @param uri the canonical storage URI of the RRD to wait for
      * @return an reference with no usage
      * @throws InterruptedException
      */
@@ -423,7 +423,7 @@ public class RrdDbPool {
      * Got an empty reference, use it only if slots are available But don't hold any lock waiting
      * for it
      *
-     * @param uri
+     * @param uri the canonical storage URI of the RRD to wait for
      * @return an reference with no usage
      * @throws InterruptedException
      */
@@ -431,7 +431,14 @@ public class RrdDbPool {
         return waitEmpty(uri);
     }
 
-    /** Request RRD */
+    /**
+     * Request RRD
+     *
+     * @param uri the canonical storage URI of the RRD to open
+     * @param factory the backend factory that opens the storage
+     * @return the pooled RrdDb, whose use count this call has incremented
+     * @throws IOException if the storage cannot be opened
+     */
     RrdDb requestRrdDb(URI uri, RrdBackendFactory factory) throws IOException {
         uri = factory.getCanonicalUri(uri);
         RrdEntry ref;
@@ -461,7 +468,15 @@ public class RrdDbPool {
         }
     }
 
-    /** Request RRD from definition */
+    /**
+     * Request RRD from definition
+     *
+     * @param rrdDef the definition of the RRD to create, which also supplies
+     *        the canonical URI
+     * @param factory the backend factory that opens the storage
+     * @return the newly created pooled RrdDb, with a use count of one
+     * @throws IOException if the storage cannot be created
+     */
     RrdDb requestRrdDb(RrdDef rrdDef, RrdBackendFactory factory) throws IOException {
         RrdEntry ref = null;
         try {
@@ -510,7 +525,16 @@ public class RrdDbPool {
         }
     }
 
-    /** Request RRD with import */
+    /**
+     * Request RRD with import
+     *
+     * @param uri the canonical storage URI of the RRD to create
+     * @param factory the backend factory that opens the storage
+     * @param importer the data importer run over the new RRD while it is still
+     *        unpooled
+     * @return the newly created pooled RrdDb, with a use count of one
+     * @throws IOException if the storage cannot be created
+     */
     RrdDb requestRrdDb(URI uri, RrdBackendFactory factory, DataImporter importer)
             throws IOException {
         return requestRrdDb(RrdDb.getBuilder().setImporter(importer), uri, factory);

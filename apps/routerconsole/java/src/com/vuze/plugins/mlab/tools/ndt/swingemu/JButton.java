@@ -26,14 +26,22 @@ public class
 JButton
 	extends Component
 {
-	/** @param name button label */
+	/**
+	 * Create a button that ignores its label, maintaining API compatibility.
+	 *
+	 * @param name button label, not stored
+	 */
 	public
 	JButton(
 		String		name )
 	{
 	}
 
-	/** @param l action listener */
+	/**
+	 * Do nothing, as there is no display system to dispatch to.
+	 *
+	 * @param l action listener, not registered
+	 */
 	public void
 	addActionListener(
 		ActionListener	l )

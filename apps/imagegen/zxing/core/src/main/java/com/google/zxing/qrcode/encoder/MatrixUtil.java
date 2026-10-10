@@ -120,12 +120,24 @@ final class MatrixUtil {
     // do nothing
   }
 
-  /** Set all cells to empty (-1) */
+  /**
+   * Set all cells to empty (-1)
+   * @param matrix the matrix to reset, every cell overwritten with the empty value -1
+   */
   static void clearMatrix(ByteMatrix matrix) {
     matrix.clear((byte) -1);
   }
 
-  /** Build the QR code matrix */
+  /**
+   * Build the QR code matrix
+   * @param dataBits the codeword bits to lay down into the data region
+   * @param ecLevel the error correction level whose type information is embedded
+   * @param version the symbol version, deciding whether the version information is embedded
+   * @param maskPattern the data mask 0-7 to apply, or -1 to leave the data unmasked
+   * @param matrix the matrix to populate, sized for the given version
+   * @throws WriterException if the mask pattern is out of range, or the data bits
+   *         do not exactly fill the remaining data region
+   */
   static void buildMatrix(BitArray dataBits,
                           ErrorCorrectionLevel ecLevel,
                           Version version,
@@ -141,7 +153,13 @@ final class MatrixUtil {
     embedDataBits(dataBits, maskPattern, matrix);
   }
 
-  /** Embed position detection, timing, and adjustment patterns */
+  /**
+   * Embed position detection, timing, and adjustment patterns
+   * @param version the symbol version, deciding whether the adjustment patterns appear
+   * @param matrix the matrix to lay the function patterns into
+   * @throws WriterException if a corner cell is already occupied, so the detection
+   *         or separation patterns do not fit
+   */
   static void embedBasicPatterns(Version version, ByteMatrix matrix) throws WriterException {
     // Let's get started with embedding big squares at corners.
     embedPositionDetectionPatternsAndSeparators(matrix);
@@ -154,7 +172,14 @@ final class MatrixUtil {
     embedTimingPatterns(matrix);
   }
 
-  /** Embed type information */
+  /**
+   * Embed type information
+   * @param ecLevel the error correction level encoded into the type information
+   * @param maskPattern the data mask 0-7 in use, also encoded into the type information
+   * @param matrix the matrix to write the two type information copies into
+   * @throws WriterException if the mask pattern is out of range, or the generated
+   *         type information is not the expected 15 bits
+   */
   static void embedTypeInfo(ErrorCorrectionLevel ecLevel, int maskPattern, ByteMatrix matrix)
       throws WriterException {
     BitArray typeInfoBits = new BitArray();
@@ -186,7 +211,13 @@ final class MatrixUtil {
     }
   }
 
-  /** Embed version info if version >= 7 */
+  /**
+   * Embed version info if version &gt;= 7
+   * @param version the symbol version; nothing is written below version 7
+   * @param matrix the matrix to write the two version information copies into
+   * @throws WriterException if the generated version information is not the
+   *         expected 18 bits
+   */
   static void maybeEmbedVersionInfo(Version version, ByteMatrix matrix) throws WriterException {
     if (version.getVersionNumber() < 7) {  // Version info is necessary if version >= 7.
       return;  // Don't need version info.
@@ -208,7 +239,15 @@ final class MatrixUtil {
     }
   }
 
-  /** Embed data bits into matrix */
+  /**
+   * Embed data bits into matrix
+   * @param dataBits the codeword bits to place, in the order they are consumed
+   * @param maskPattern the data mask 0-7 to apply, or -1 to place the bits unmasked
+   * @param matrix the matrix to fill, whose non-empty cells mark the already
+   *        embedded function patterns and are skipped
+   * @throws WriterException if the bits are not all consumed once the data region
+   *         is full, meaning they did not fit the symbol
+   */
   static void embedDataBits(BitArray dataBits, int maskPattern, ByteMatrix matrix)
       throws WriterException {
     int bitIndex = 0;
@@ -256,12 +295,23 @@ final class MatrixUtil {
     }
   }
 
-  /** @param value input value */
+  /**
+   * Find the bit length of a value
+   * @param value input value
+   * @return the position one past the most significant bit set, so 32 for a
+   *         negative value and 0 for zero
+   */
   static int findMSBSet(int value) {
     return 32 - Integer.numberOfLeadingZeros(value);
   }
 
-  /** Calculate BCH code */
+  /**
+   * Calculate BCH code
+   * @param value the data whose error correction code is wanted
+   * @param poly the BCH generator polynomial, whose bit length fixes the code,
+   *        for example 0x537 for type information or 0x1f25 for version information
+   * @return the remainder of dividing value by poly, the BCH error correction code
+   */
   static int calculateBCHCode(int value, int poly) {
     if (poly == 0) {
       throw new IllegalArgumentException("0 polynomial");
@@ -278,7 +328,14 @@ final class MatrixUtil {
     return value;
   }
 
-  /** Make type information bit vector */
+  /**
+   * Make type information bit vector
+   * @param ecLevel the error correction level to encode
+   * @param maskPattern the data mask 0-7 to encode alongside the level
+   * @param bits the vector to append the 15 type information bits to
+   * @throws WriterException if the mask pattern is out of range, or the generated
+   *         type information is not the expected 15 bits
+   */
   static void makeTypeInfoBits(ErrorCorrectionLevel ecLevel, int maskPattern, BitArray bits)
       throws WriterException {
     if (!QRCode.isValidMaskPattern(maskPattern)) {
@@ -299,7 +356,13 @@ final class MatrixUtil {
     }
   }
 
-  /** Make version information bit vector */
+  /**
+   * Make version information bit vector
+   * @param version the symbol version whose number is encoded
+   * @param bits the vector to append the 18 version information bits to
+   * @throws WriterException if the generated version information is not the
+   *         expected 18 bits
+   */
   static void makeVersionInfoBits(Version version, BitArray bits) throws WriterException {
     bits.appendBits(version.getVersionNumber(), 6);
     int bchCode = calculateBCHCode(version.getVersionNumber(), VERSION_INFO_POLY);

@@ -34,7 +34,7 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
     /**
      * Queue the encrypted data for delivery to the next hop.
      *
-     * @param encrypted the encrypted data
+     * @param encrypted the I2P message received on the inbound tunnel
      * @return the message unique ID
      */
     public long receiveEncrypted(byte[] encrypted) {
@@ -43,6 +43,13 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
 
     /**
      * Queue the encrypted data for delivery, with the netDb lookup already done.
+     *
+     * @param encrypted the I2P message received on the inbound tunnel
+     * @param alreadySearched true if the caller has already looked the next hop up in
+     *        the network database, so no further lookup and stat
+     *        accounting is needed here
+     * @return the message unique ID, or -1 if the next hop's RouterInfo is not yet
+     *         known and an asynchronous lookup was started instead
      */
     public long receiveEncrypted(byte[] encrypted, boolean alreadySearched) {
         if (!alreadySearched)

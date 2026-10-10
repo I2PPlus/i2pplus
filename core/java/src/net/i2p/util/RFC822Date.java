@@ -13,6 +13,12 @@ import java.util.TimeZone;
  *  @since 0.8.5; moved from net.i2p.router.util in 0.9.34
  */
 public abstract class RFC822Date {
+    /**
+     * Constructor for subclasses; the formatters in this base class are static.
+     */
+
+    public RFC822Date() {}
+
 
     private static final ThreadLocal<SimpleDateFormat> OUTPUT_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss z", Locale.US));
 
@@ -59,6 +65,8 @@ public abstract class RFC822Date {
     /**
      * Format is "d MMM yyyy HH:mm:ss z"
      *
+     * @param t the time to format, in milliseconds since the epoch
+     * @return the date rendered as an RFC 822 string in the local time zone
      * @since 0.8.2
      */
     public static String to822Date(long t) {
@@ -67,6 +75,8 @@ public abstract class RFC822Date {
 
     /**
      * Parse the argument and print the formatted date, for testing.
+     *
+     * @param args an optional single epoch-seconds value to format, or none for the current time
      */
     public static void main(String[] args) {
         if (args.length == 1) {

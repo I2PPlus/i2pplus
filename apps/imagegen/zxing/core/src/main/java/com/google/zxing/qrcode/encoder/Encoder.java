@@ -216,8 +216,10 @@ public final class Encoder {
   }
 
   /**
-   * @return the code point of the table used in alphanumeric mode or
    * -1 if there is no corresponding code in the table.
+   *
+   * @param code the code point of the single character to look up in the alphanumeric table
+   * @return the code point of the table used in alphanumeric mode or
    */
   static int getAlphanumericCode(int code) {
     if (code < ALPHANUMERIC_TABLE.length) {
@@ -228,6 +230,9 @@ public final class Encoder {
 
   /**
    * chooseMode.
+   *
+   * @param content the text to encode, examined character by character to decide the mode
+   * @return the mode that encodes {@code content} in the fewest bits
    */
   public static Mode chooseMode(String content) {
     return chooseMode(content, null);
@@ -331,6 +336,10 @@ public final class Encoder {
 
   /**
    * Terminate bits as described in 8.4.8 and 8.4.9 of JISX0510:2004 (p.24).
+   *
+   * @param numDataBytes the data section size in bytes, which sets the capacity at 8 bits each
+   * @param bits the bit buffer the terminator and padding bits are appended to
+   * @throws WriterException if {@code bits} already exceeds that capacity, or does not end at it
    */
   static void terminateBits(int numDataBytes, BitArray bits) throws WriterException {
     int capacity = numDataBytes * 8;
@@ -363,6 +372,15 @@ public final class Encoder {
    * Get number of data bytes and number of error correction bytes for block id "blockID". Store
    * the result in "numDataBytesInBlock", and "numECBytesInBlock". See table 12 in 8.5.1 of
    * JISX0510:2004 (p.30)
+   *
+   * @param numTotalBytes the total codeword count for the version and error correction level
+   * @param numDataBytes the codeword count left after the error correction codewords
+   * @param numRSBlocks the number of Reed-Solomon blocks the codewords are split into
+   * @param blockID the zero-based index of the block to compute, below {@code numRSBlocks}
+   * @param numDataBytesInBlock a one-element array receiving the data codeword count
+   * @param numECBytesInBlock a one-element array receiving the error correction codeword count
+   * @throws WriterException if {@code blockID} is out of range, or the block geometry implied by
+   * the other counts is inconsistent
    */
   static void getNumDataBytesAndNumECBytesForBlockID(int numTotalBytes,
                                                      int numDataBytes,
@@ -408,6 +426,14 @@ public final class Encoder {
   /**
    * Interleave "bits" with corresponding error correction bytes. On success, store the result in
    * "result". The interleave rule is complicated. See 8.6 of JISX0510:2004 (p.37) for details.
+   *
+   * @param bits the data codewords, which must hold exactly {@code numDataBytes}
+   * @param numTotalBytes the total codeword count including error correction
+   * @param numDataBytes the data codeword count within {@code numTotalBytes}
+   * @param numRSBlocks the number of Reed-Solomon blocks to split the data across
+   * @return a buffer holding the data and error correction codewords interleaved
+   * @throws WriterException if the supplied counts disagree, or the result is not
+   * {@code numTotalBytes} long
    */
   static BitArray interleaveWithECBytes(BitArray bits,
                                         int numTotalBytes,
@@ -477,7 +503,14 @@ public final class Encoder {
     return result;
   }
 
-  /** @param dataBytes data to encode */
+  /**
+   * Generate the error correction bytes for one block of data, appending them to a copy
+   * of the block and running Reed-Solomon encoding over the result.
+   *
+   * @param dataBytes data to encode
+   * @param numEcBytesInBlock number of parity bytes to produce; must be positive
+   * @return the trailing {@code numEcBytesInBlock} parity bytes computed over the data
+   */
   static byte[] generateECBytes(byte[] dataBytes, int numEcBytesInBlock) {
     int numDataBytes = dataBytes.length;
     int[] toEncode = new int[numDataBytes + numEcBytesInBlock];
@@ -495,6 +528,9 @@ public final class Encoder {
 
   /**
    * Append mode info. On success, store the result in "bits".
+   *
+   * @param mode the encoding mode, whose four-bit indicator is written
+   * @param bits the bit buffer the mode indicator is appended to
    */
   static void appendModeInfo(Mode mode, BitArray bits) {
     bits.appendBits(mode.getBits(), 4);
@@ -502,6 +538,12 @@ public final class Encoder {
 
   /**
    * Append length info. On success, store the result in "bits".
+   *
+   * @param numLetters the character count, which must fit the mode and version's count field
+   * @param version the QR version, which fixes the width of the character count field
+   * @param mode the encoding mode, which fixes that width as well
+   * @param bits the bit buffer the character count is appended to
+   * @throws WriterException if {@code numLetters} does not fit in the character count field
    */
   static void appendLengthInfo(int numLetters, Version version, Mode mode, BitArray bits) throws WriterException {
     int numBits = mode.getCharacterCountBits(version);
@@ -513,6 +555,13 @@ public final class Encoder {
 
   /**
    * Append "bytes" in "mode" mode (encoding) into "bits". On success, store the result in "bits".
+   *
+   * @param content the text whose characters are encoded, read in whatever units the mode needs
+   * @param mode the encoding mode to apply, which selects one of the append methods below
+   * @param bits the bit buffer the encoded characters are appended to
+   * @param encoding the charset name used by the modes that fall back to bytes
+   * @throws WriterException if {@code mode} is not one of the four encodable modes, or the content
+   * cannot be represented in it
    */
   static void appendBytes(String content,
                           Mode mode,
@@ -536,7 +585,12 @@ public final class Encoder {
     }
   }
 
-  /** Append numeric mode bytes */
+  /**
+   * Append numeric mode bytes
+   *
+   * @param content the digits to encode, packed three at a time wherever a run allows it
+   * @param bits the bit buffer the packed digits are appended to
+   */
   static void appendNumericBytes(CharSequence content, BitArray bits) {
     int length = content.length();
     int i = 0;
@@ -561,7 +615,13 @@ public final class Encoder {
     }
   }
 
-  /** Append alphanumeric mode bytes */
+  /**
+   * Append alphanumeric mode bytes
+   *
+   * @param content the alphanumeric characters to encode, packed in pairs where a run allows
+   * @param bits the bit buffer the packed characters are appended to
+   * @throws WriterException if any character has no alphanumeric table entry
+   */
   static void appendAlphanumericBytes(CharSequence content, BitArray bits) throws WriterException {
     int length = content.length();
     int i = 0;
@@ -586,7 +646,14 @@ public final class Encoder {
     }
   }
 
-  /** Append 8-bit byte mode bytes */
+  /**
+   * Append 8-bit byte mode bytes
+   *
+   * @param content the text to encode, first converted using {@code encoding}
+   * @param bits the bit buffer the resulting bytes are appended to
+   * @param encoding the charset name to convert the text with
+   * @throws WriterException if the JVM does not support {@code encoding}
+   */
   static void append8BitBytes(String content, BitArray bits, String encoding)
       throws WriterException {
     byte[] bytes;
@@ -600,7 +667,14 @@ public final class Encoder {
     }
   }
 
-  /** Append Kanji mode bytes */
+  /**
+   * Append Kanji mode bytes
+   *
+   * @param content the Kanji text to encode, read as Shift_JIS
+   * @param bits the bit buffer the encoded characters are appended to
+   * @throws WriterException if the text does not convert to an even number of Shift_JIS bytes, or
+   * a byte pair is outside the two ranges Kanji mode defines
+   */
   static void appendKanjiBytes(String content, BitArray bits) throws WriterException {
     byte[] bytes;
     try {

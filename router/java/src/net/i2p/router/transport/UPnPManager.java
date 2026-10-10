@@ -106,6 +106,9 @@ class UPnPManager {
 
     /**
      * UPnPManager.
+     *
+     * @param context router context supplying properties, logging, and the SSDP/HTTP ports
+     * @param manager transport manager notified of the port mappings UPnP discovers
      */
     public UPnPManager(RouterContext context, TransportManager manager) {
         _context = context;
@@ -301,6 +304,8 @@ class UPnPManager {
      * The transports can call this pretty quickly at startup,
      * which can have multiple UPnP threads running at once, but
      * that should be ok.
+     *
+     * @param ports transport ports to expose, one entry per style such as SSU or NTCP
      */
     public void update(Set<TransportManager.Port> ports) {
         if (_log.shouldDebug())
@@ -427,6 +432,8 @@ class UPnPManager {
     /**
      * Warning - blocking, very slow, queries the active router,
      * will take many seconds if it has vanished.
+     *
+     * @return an HTML fragment describing the mappings UPnP has discovered
      */
     public String renderStatusHTML() {
         if (!_isRunning)

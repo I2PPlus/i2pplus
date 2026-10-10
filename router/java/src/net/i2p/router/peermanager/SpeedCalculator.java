@@ -40,6 +40,9 @@ class SpeedCalculator {
 
     /**
      * Calculate the estimated speed score for the given peer.
+     *
+     * @param profile the peer to score, read for its bandwidth tier, average RTT and peak 1-minute tunnel throughput
+     * @return the score in bytes per second, never negative
      */
     public static double calc(PeerProfile profile) {
         RouterContext context = profile.getContext();

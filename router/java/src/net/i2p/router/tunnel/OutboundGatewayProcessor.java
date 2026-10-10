@@ -16,7 +16,12 @@ class OutboundGatewayProcessor {
     private final I2PAppContext _context;
     private final TunnelCreatorConfig _config;
 
-    /** Binds the router context and tunnel creator config. */
+    /**
+     * Binds the router context and tunnel creator config.
+     *
+     * @param ctx the router context supplying the AES engine used for the crypto
+     * @param cfg the tunnel creator config describing the hops to undo the crypto for
+     */
     public OutboundGatewayProcessor(I2PAppContext ctx, TunnelCreatorConfig cfg) {
         _context = ctx;
         _config = cfg;
@@ -62,6 +67,8 @@ class OutboundGatewayProcessor {
 4 * @param config the config
 4 * @param ctx the ctx
      *               Should always be 1024 bytes.
+     * @param ctx the router context providing the AES engine used for the decryption
+     * @param config the hop config supplying the IV key and the layer key for this hop
      */
     static void decrypt(I2PAppContext ctx, byte[] orig, int offset, int length, HopConfig config) {
         SessionKey ivkey = config.getIVKey();

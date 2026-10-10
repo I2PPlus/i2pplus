@@ -12,6 +12,12 @@ import java.security.spec.AlgorithmParameterSpec;
  * shared secrets between parties.
  */
 public class X25519Spec implements AlgorithmParameterSpec {
+    /**
+     * The spec carries no parameters, so any instance is equivalent; X25519_SPEC is the
+     * shared one callers normally use.
+     */
+    public X25519Spec() {}
+
     /** Singleton instance */
     public static final X25519Spec X25519_SPEC = new X25519Spec();
 }

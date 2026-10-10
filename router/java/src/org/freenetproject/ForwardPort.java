@@ -30,6 +30,11 @@ public class ForwardPort {
 
 	/**
 	 * ForwardPort.
+	 *
+	 * @param name name of the interface the port belongs to, e.g. "opennet"
+	 * @param isIP6 true for an IPv6 port, false for IPv4
+	 * @param protocol IP protocol number, PROTOCOL_UDP_IPV4 or PROTOCOL_TCP_IPV4
+	 * @param portNumber port to forward, on the named interface
 	 */
 	public ForwardPort(String name, boolean isIP6, int protocol, int portNumber) {
 		this.name = name;

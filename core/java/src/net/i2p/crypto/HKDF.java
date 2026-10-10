@@ -34,6 +34,8 @@ public final class HKDF {
     private static final byte[] ONE = new byte[] {1};
 
     /**
+     * Create an instance bound to an application context.
+     *
      * @param context the app context
      */
     public HKDF(I2PAppContext context) {
@@ -88,6 +90,7 @@ public final class HKDF {
      * @param out 32 bytes will be copied to here
      * @param out2 32 bytes will be copied to here, may be the same as out
      * @param off2 offset for copy to out2
+     * @param data the input data the output keys are derived from
      */
     public void calculate(byte[] key, byte[] data, byte[] out, byte[] out2, int off2) {
         calculate(key, data, "", out, out2, off2);
@@ -101,6 +104,7 @@ public final class HKDF {
      * @param out 32 bytes will be copied to here
      * @param out2 32 bytes will be copied to here, may be the same as out
      * @param off2 offset for copy to out2
+     * @param data the input data the output keys are derived from
      */
     public void calculate(byte[] key, byte[] data, String info, byte[] out, byte[] out2, int off2) {
         int ilen = info.length();

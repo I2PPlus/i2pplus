@@ -45,10 +45,18 @@ public class I2PClientImpl implements I2PClient {
 
     private final I2PAppContext _context;
 
+    /**
+     * Construct a client bound to the global application context.
+     */
     public I2PClientImpl() {
         this(I2PAppContext.getGlobalContext());
     }
 
+    /**
+     * Construct a client bound to a specific application context.
+     *
+     * @param ctx the context the sessions created here will belong to
+     */
     public I2PClientImpl(I2PAppContext ctx) {
         _context = ctx;
     }
@@ -186,7 +194,8 @@ public class I2PClientImpl implements I2PClient {
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
      * @param options set of options to configure the router with, if null will use System properties
-     * @return the session
+     * @return the newly created session, not yet logged in
+     * @throws I2PSessionException if the stream does not hold a valid Destination, PrivateKey and SigningPrivateKey
      */
     public I2PSession createSession(I2PAppContext context, InputStream destKeyStream, Properties options) throws I2PSessionException {
         return new I2PSessionMuxedImpl(context, destKeyStream, options); // thread safe and muxed

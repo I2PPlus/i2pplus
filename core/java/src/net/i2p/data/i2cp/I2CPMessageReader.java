@@ -49,6 +49,9 @@ public class I2CPMessageReader {
 
     /**
      * I2CPMessageReader.
+     *
+     * @param stream the stream to read length-prefixed I2CP messages from
+     * @param lsnr the listener notified of messages, errors and disconnects
      */
     public I2CPMessageReader(InputStream stream, I2CPMessageEventListener lsnr) {
         _stream = stream;
@@ -71,6 +74,8 @@ public class I2CPMessageReader {
 
     /**
      * Listener for message events.
+     *
+     * @param lsnr the listener to notify of messages, errors and disconnects
      */
     public final void setListener(I2CPMessageEventListener lsnr) {
         _listener = lsnr;

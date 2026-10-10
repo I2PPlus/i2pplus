@@ -120,9 +120,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     /** Default comma-separated list of blocked countries. */
     private static final String DEFAULT_BLOCK_COUNTRIES = "";
-    /**/
+    /** Lowest peer version that may be selected for a KBucket probe. */
     public static final String MIN_ROUTER_VERSION = "0.9.20";
-    /**/
+    /** Lowest peer version whose LeaseSets we will store and serve. */
     public static final String MIN_VERSION = "0.9.66";
     /** Current minor version identifier for net DB format. */
     public static String CURRENT_VERSION = "0.9.67";
@@ -1891,8 +1891,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *
      * @param key the expected key (destination hash) for this LeaseSet
      * @param leaseSet the LeaseSet instance to validate
-     * @throws UnsupportedCryptoException if the LeaseSet uses an unsupported cryptographic type/signature
      * @return a descriptive reason why the LeaseSet is invalid or expired, or {@code null} if the LeaseSet is valid
+     * @throws UnsupportedCryptoException if the LeaseSet uses an unsupported cryptographic type/signature
      */
     public String validate(Hash key, LeaseSet leaseSet) throws UnsupportedCryptoException {
         String leaseBase32 = leaseSet.getHash().toBase32();
@@ -2070,9 +2070,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param key the hash key
      * @param leaseSet the leaseSet to store
      * @param force always store even if not newer
+     * @return previous entry or null
      * @throws IllegalArgumentException if the leaseSet is not valid
      * @throws UnsupportedCryptoException if that's why it failed.
-     * @return previous entry or null
      */
     public LeaseSet store(Hash key, LeaseSet leaseSet, boolean force) throws IllegalArgumentException {
         if (!_initialized) {return null;}
@@ -2283,8 +2283,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * If the store fails due to unsupported crypto, it will banlist the router hash until restart
      * and then throw UnsupportedCrytpoException.
      *
-     * @throws UnsupportedCryptoException if that's why it failed.
      * @return reason why the entry is not valid, or null if it is valid
+     * @throws UnsupportedCryptoException if that's why it failed.
      */
     private String validate(Hash key, RouterInfo routerInfo) throws IllegalArgumentException {
         if (!key.equals(routerInfo.getIdentity().getHash())) {
@@ -2453,7 +2453,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * The minimum uptime is determined by the property "router.validateRoutersAfter" (in minutes),
      * or defaults to 20 minutes.
      *
-     * @param uptime the uptime
+     * @param uptime how long the router has been up, in milliseconds
      * @return true if the uptime is sufficient, false otherwise
      */
     private boolean isUptimeLongEnough(long uptime) {
@@ -2895,9 +2895,9 @@ return false;
      * @param key the hash key
      * @param routerInfo the router info to store
      * @param persist whether to persist to disk
+     * @return previous entry or null
      * @throws IllegalArgumentException if the routerInfo is not valid
      * @throws UnsupportedCryptoException if that's why it failed.
-     * @return previous entry or null
      */
     RouterInfo store(Hash key, RouterInfo routerInfo, boolean persist) throws IllegalArgumentException {
         if (!_initialized || key == null || routerInfo == null) {return null;}
@@ -3050,7 +3050,7 @@ return false;
     /**
      * Don't use directly - see F.N.D.F. override.
      *
-     * @param peer the peer
+     * @param peer the router hash to drop after the lookup failure
      * @param info the router info
      */
     protected void lookupBeforeDropping(Hash peer, RouterInfo info) {dropAfterLookupFailed(peer);} // bah, humbug.
@@ -3248,7 +3248,7 @@ return false;
     /**
      * The timeout for a peer, based on the profile data, or the default timeout.
      *
-     * @param peer the peer
+     * @param peer the router hash whose profile sets the timeout; must not be null
      * @return the timeout for a peer, based on the profile data, or the default timeout
      */
     public int getPeerTimeout(Hash peer) {

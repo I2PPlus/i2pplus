@@ -514,6 +514,10 @@ public class TransportManager implements TransportEventListener {
      * See CSFI.notifyReplaceAddress().
      * Tell all transports... but don't loop.
      *
+     * @param source where the address came from, so the transport that reported
+     *        it is not told about its own address
+     * @param ip the new external address, 4 bytes for IPv4 or 16 for IPv6
+     * @param port the external port, or 0 when the source did not report one
      */
     void externalAddressReceived(Transport.AddressSource source, byte[] ip, int port) {
         for (Transport t : _transports.values()) {
@@ -528,6 +532,9 @@ public class TransportManager implements TransportEventListener {
      *  See CSFI.notifyRemoveAddress().
      *  Tell all transports... but don't loop.
      *
+     * @param source where the removal came from, so the transport that reported
+     *        it is not told to drop its own address
+     * @param ipv6 true to remove the IPv6 addresses, false for the IPv4 ones
      * @since 0.9.20
      */
     void externalAddressRemoved(Transport.AddressSource source, boolean ipv6) {
@@ -539,8 +546,14 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Callback from UPnP.
+     * Callback from UPnP, reporting whether the port mapping was established.
      *
+     * @param style the transport style the mapping was requested for, e.g. SSU
+     * @param ip the local address the mapping was requested on
+     * @param port the local port the mapping was requested for
+     * @param externalPort the external port the router mapped it to
+     * @param success true if the mapping is now in place, false if it was refused
+     * @param reason the router's explanation, used when success is false
      */
     void forwardPortStatus(String style, byte[] ip, int port, int externalPort, boolean success, String reason) {
         Transport t = getTransport(style);
@@ -641,6 +654,8 @@ public class TransportManager implements TransportEventListener {
     int getTransportCount() { return _transports.size(); }
 
     /**
+     * The registered transports by style, for the console pages that enumerate them.
+     *
      * @return SortedMap of style to Transport (a copy)
      * @since 0.9.31
      */
@@ -668,6 +683,7 @@ public class TransportManager implements TransportEventListener {
     /**
      * How many peers are we currently connected to, that we have
      *  sent a message to or received a message from in the last five minutes.
+     * @return the summed count across every transport
      */
     int countActivePeers() {
         int peers = 0;
@@ -682,6 +698,7 @@ public class TransportManager implements TransportEventListener {
      * Use for throttling in the router.
      *
      * @param pct percent of limit 0-100
+     * @return true if at least one transport is under pct of its outbound limit
      */
     boolean haveOutboundCapacity(int pct) {
         for (Transport t : _transports.values()) {
@@ -695,6 +712,9 @@ public class TransportManager implements TransportEventListener {
     /**
      * Are all transports well below their outbound connection limit
      * Use for throttling in the router.
+     *
+     * @return true if every transport is under {@link #HIGH_CAPACITY_PCT} of its
+     *         outbound limit; false if there are no transports at all
      */
     boolean haveHighOutboundCapacity() {
         if (_transports.isEmpty())
@@ -711,6 +731,8 @@ public class TransportManager implements TransportEventListener {
      * Use for throttling in the router.
      *
      * @param pct percent of limit 0-100
+     * @return true if at least one transport with a current address is under pct
+     *         of its inbound limit
      */
     boolean haveInboundCapacity(int pct) {
         for (Transport t : _transports.values()) {
@@ -725,6 +747,7 @@ public class TransportManager implements TransportEventListener {
      * List composed of Long, each element representing a peer skew in seconds.
      * A positive number means our clock is ahead of theirs.
      * Note: this method returns them in whimsical order.
+     * @return the skews in seconds collected from every transport, never null
      */
     List<Long> getClockSkews() {
         List<Long> skews = new ArrayList<>();
@@ -834,6 +857,7 @@ public class TransportManager implements TransportEventListener {
      * Tell the transports that we may disconnect from this peer.
      * This is advisory only.
      *
+     * @param peer the peer that may be dropped
      * @since 0.9.24
      */
     void mayDisconnect(Hash peer) {
@@ -845,6 +869,7 @@ public class TransportManager implements TransportEventListener {
     /**
      * Tell the transports to disconnect from this peer.
      *
+     * @param peer the peer to disconnect from
      * @since 0.9.38
      */
     void forceDisconnect(Hash peer) {
@@ -867,9 +892,14 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     * Was the peer unreachable (outbound only) on any transport,
+     * Was the peer unreachable (outbound only) on every transport,
      * based on the last time we tried it for each transport?
      * This is NOT reset if the peer contacts us.
+     * A single transport that reached the peer makes this false, and with no
+     * transports registered at all it is vacuously true.
+     *
+     * @param peer the peer to test
+     * @return true only if no transport has reached the peer since its last attempt
      */
     boolean wasUnreachable(Hash peer) {
         for (Transport t : _transports.values()) {
@@ -888,6 +918,7 @@ public class TransportManager implements TransportEventListener {
      * For blocking purposes, etc. it's worth checking both
      * the netDb addresses and this address.
      *
+     * @param peer the peer whose last known address is wanted
      * @return IPv4 or IPv6 or null
      */
     byte[] getIP(Hash peer) {
@@ -896,6 +927,9 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * This forces a rebuild
+     *
+     * @return the addresses every transport currently publishes, after asking
+     *         each to refresh
      */
     List<RouterAddress> getAddresses() {
         List<RouterAddress> rv = new ArrayList<>(4);
@@ -925,6 +959,9 @@ public class TransportManager implements TransportEventListener {
 
         /**
          * IPv4 only
+         *
+         * @param style the transport style the port is for, e.g. SSU or NTCP
+         * @param port the configured port number
          */
         public Port(String style, int port) {
             this.style = style;
@@ -935,6 +972,10 @@ public class TransportManager implements TransportEventListener {
 
         /**
          * IPv6 only
+         *
+         * @param style the transport style the port is for, e.g. SSU or NTCP
+         * @param host the IPv6 address literal the port is bound to
+         * @param port the configured port number
          * @since 0.9.50
          */
         public Port(String style, String host, int port) {
@@ -955,9 +996,10 @@ public class TransportManager implements TransportEventListener {
         }
 
         /**
-         * Whether this port equals the given object.
+         * Whether this port equals the given object: same transport style, same
+         * port number and the same IP, comparing a null IP as equal only to null.
          *
-         * @param o object
+         * @param o the object to compare against, which must be a Port to match
          * @return true if equal
          */
         @Override

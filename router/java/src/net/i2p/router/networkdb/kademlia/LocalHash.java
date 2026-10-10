@@ -31,6 +31,8 @@ class LocalHash extends Hash {
 
     /**
      * LocalHash.
+     *
+     * @param h the hash to copy
      */
     public LocalHash(Hash h) {
         super(h.getData());
@@ -38,6 +40,8 @@ class LocalHash extends Hash {
 
     /**
      * LocalHash.
+     *
+     * @param b the raw hash bytes
      */
     public LocalHash(byte[] b) {
         super(b);
@@ -62,6 +66,8 @@ class LocalHash extends Hash {
      * (1024) entries, and uses an essentially random ejection policy.  Later
      * perhaps go for an LRU or FIFO?
      *
+     * @param key the hash to measure this object's own hash against
+     * @return the XOR distance between the two hashes, never null
      * @throws IllegalStateException if you try to use the cache without first
      *                               preparing this object's cache via .prepareCache()
      */

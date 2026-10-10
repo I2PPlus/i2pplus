@@ -37,7 +37,10 @@ public class Reader {
     /** Tracks how many runner threads are actively processing (not parked). */
     private final AtomicInteger _activeCount = new AtomicInteger();
 
-    /** Reader thread pool for the given context. */
+    /**
+     * Reader thread pool for the given context.
+     * @param ctx the router context supplying the log and the clock
+     */
     public Reader(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
@@ -47,10 +50,16 @@ public class Reader {
         _readAfterLive = new HashSet<>(16);
     }
 
-    /** Reader thread count. */
+    /**
+     * Reader thread count.
+     * @return the target number of reader threads, 2 to 16
+     */
     public static int getThreadCount() { return _threadCount; }
 
-    /** Number of threads currently processing (not parked). */
+    /**
+     * Number of threads currently processing (not parked).
+     * @return the count of runners that are inside the read loop
+     */
     public int getActiveCount() { return _activeCount.get(); }
 
     /**
@@ -63,10 +72,16 @@ public class Reader {
         int size = _runners.size();
         return size > 0 ? (double) _activeCount.get() / size : Double.NaN;
     }
-    /** Reader thread count, bounded by MIN_THREADS-MAX_THREADS */
+    /**
+     * Reader thread count, bounded by MIN_THREADS-MAX_THREADS
+     * @param count the requested target, clamped into the range 2 to 16
+     */
     public static void setThreadCount(int count) { _threadCount = Math.max(MIN_THREADS, Math.min(MAX_THREADS, count)); }
 
-    /** Starts the given number of reader threads. */
+    /**
+     * Starts the given number of reader threads.
+     * @param numReaders how many runners to add to those already started
+     */
     public synchronized void startReading(int numReaders) {
         for (int i = 1; i <= numReaders; i++) {
             startRunner();
@@ -116,7 +131,10 @@ public class Reader {
         }
     }
 
-    /** Registers a connection to be read. High-frequency per-buffer path. */
+    /**
+     * Registers a connection to be read. High-frequency per-buffer path.
+     * @param con the connection with data waiting to be read
+     */
     public void wantsRead(NTCPConnection con) {
         boolean already = false;
         synchronized (_pendingConnections) {
@@ -136,7 +154,10 @@ public class Reader {
             _log.debug("wantsRead: " + con + " already live? " + already);
     }
 
-    /** Removes a closed connection from the queues. */
+    /**
+     * Removes a closed connection from the queues.
+     * @param con the connection to drop from the pending and read-after-live queues
+     */
     public void connectionClosed(NTCPConnection con) {
         synchronized (_pendingConnections) {
             _readAfterLive.remove(con);

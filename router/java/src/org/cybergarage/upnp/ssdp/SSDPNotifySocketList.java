@@ -34,6 +34,8 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     public SSDPNotifySocketList() {}
 
     /**
+     * Create a socket list bound to the given addresses.
+     *
      * @param binds The host to bind the service <code>null</code> means to bind to default.
      * @since 1.8
      */
@@ -47,6 +49,9 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
 
     /**
      * getSSDPNotifySocket.
+     *
+     * @param n the zero-based index of the socket in this list
+     * @return the notify socket bound to that address
      */
     public SSDPNotifySocket getSSDPNotifySocket(int n) {
         return get(n);
@@ -58,6 +63,8 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
 
     /**
      * setControlPoint.
+     *
+     * @param ctrlPoint the control point handed to every socket in this list
      */
     public void setControlPoint(ControlPoint ctrlPoint) {
         int nSockets = size();
@@ -73,6 +80,8 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
 
     /**
      * open.
+     *
+     * @return true once the sockets are opened, even if some bind addresses failed
      */
     public boolean open() {
         InetAddress[] binds = this.binds;

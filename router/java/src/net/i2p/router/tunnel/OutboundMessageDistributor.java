@@ -38,6 +38,7 @@ class OutboundMessageDistributor {
     /**
      * Create a new outbound message distributor.
      *
+     * @param ctx our router context
      * @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
      * OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
      */
@@ -48,6 +49,7 @@ class OutboundMessageDistributor {
     /**
      * Create a new outbound message distributor with bandwidth estimation.
      *
+     * @param ctx our router context
      * @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
      * OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
      * @param bwe null for none
@@ -68,6 +70,9 @@ class OutboundMessageDistributor {
     /**
      * Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
      * and must be converted before handling locally.
+     *
+     * @param msg the message to deliver onward
+     * @param target the router the message is addressed to
      */
     public void distribute(I2NPMessage msg, Hash target) {
         distribute(msg, target, null);
@@ -76,6 +81,10 @@ class OutboundMessageDistributor {
     /**
      * Warning - as of 0.9.63, msg will be an UnknownI2NPMessage,
      * and must be converted before handling locally.
+     *
+     * @param msg the message to deliver onward
+     * @param target the router the message is addressed to
+     * @param tunnel tunnel to wrap the message in, or null to send it bare
      */
     public void distribute(I2NPMessage msg, Hash target, TunnelId tunnel) {
         if (shouldDrop(target)) {

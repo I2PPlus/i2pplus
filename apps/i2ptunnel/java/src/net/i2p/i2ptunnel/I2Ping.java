@@ -51,7 +51,15 @@ public class I2Ping extends I2PTunnelClientBase {
     }
 
     /**
-     * tunnel.getOptions must contain "command".
+     * Construct a ping tunnel client over an existing command.
+     *
+     * <p>The command line to run must be carried in tunnel.getOptions as
+     * "command".
+     *
+     * @param l the logging instance
+     * @param ownDest whether to use an owned destination
+     * @param notifyThis the event dispatcher for notifications
+     * @param tunnel the I2PTunnel instance whose client options carry the command
      * @throws IllegalArgumentException if it doesn't
      */
     public I2Ping(Logging l, boolean ownDest, EventDispatcher notifyThis, I2PTunnel tunnel) {
@@ -95,6 +103,13 @@ public class I2Ping extends I2PTunnelClientBase {
         close(false);
     }
 
+    /**
+     * Parse the command line options, then ping each requested host.
+     *
+     * @param cmd the command line arguments, as a single space-separated string
+     * @throws InterruptedException if the calling thread is interrupted while pinging
+     * @throws IOException if the destination keys cannot be read or a ping cannot be sent
+     */
     public void runCommand(String cmd) throws InterruptedException, IOException {
         long timeout = PING_TIMEOUT;
         int count = PING_COUNT;
@@ -209,6 +224,11 @@ public class I2Ping extends I2PTunnelClientBase {
         t.join();
     }
 
+    /**
+     * Return the command line usage text.
+     *
+     * @return the usage and option list, for display to the user
+     */
     public static String usage() {
         return
             "Usage:\n" +
@@ -225,7 +245,10 @@ public class I2Ping extends I2PTunnelClientBase {
     }
 
     /**
-     * close.
+     * Close the tunnel, warning if pings were still running.
+     *
+     * @param forced true to close without waiting for the pings to finish
+     * @return true if the tunnel was closed or was already closed
      */
     @Override
     public boolean close(boolean forced) {
@@ -256,7 +279,9 @@ public class I2Ping extends I2PTunnelClientBase {
     }
 
     /**
-     * clientConnectionRun.
+     * Handle one accepted connection; a ping tunnel accepts none, so this does nothing.
+     *
+     * @param s the accepted connection
      */
     @Override
     protected void clientConnectionRun(Socket s) { /* no-op */ }
@@ -283,7 +308,7 @@ public class I2Ping extends I2PTunnelClientBase {
         }
 
         /**
-         * run.
+         * Ping the destination once per requested count and report the result.
          */
         @Override
         public void run() {

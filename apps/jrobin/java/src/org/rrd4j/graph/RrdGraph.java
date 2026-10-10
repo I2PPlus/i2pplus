@@ -10,8 +10,11 @@ import org.rrd4j.data.DataProcessor;
 
 /** Class which actually creates Rrd4j graphs (does the hard work). */
 public class RrdGraph implements RrdGraphConstants {
+/** The definition describing what this graph plots. */
     final RrdGraphDef gdef;
+    /** The dimensions and text layout of the rendered image. */
     final ImageParameters im;
+    /** Metadata about the graph, such as its value range and time bounds. */
     private final RrdGraphInfo info;
 
     /**
@@ -27,9 +30,9 @@ public class RrdGraph implements RrdGraphConstants {
     /**
      * Create graph from a custom image worker
      *
-     * @param gdef
-     * @param worker
-     * @throws IOException
+     * @param gdef Graph definition
+     * @param worker the image worker painting the graph, replacing the default one
+     * @throws IOException Thrown in case of I/O error
      */
     public RrdGraph(RrdGraphDef gdef, ImageWorker worker) throws IOException {
         this(gdef, () -> worker);
@@ -45,8 +48,8 @@ public class RrdGraph implements RrdGraphConstants {
      * settings.
      *
      * @param gdef Graph definition
-     * @param writer
-     * @param param
+     * @param writer the ImageWriter that encodes the graph
+     * @param param the encoder settings applied by that writer
      * @throws IOException Thrown in case of I/O error
      * @since 3.5
      */

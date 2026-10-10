@@ -102,11 +102,11 @@ public class GeoIP {
     /** Normalize ISP/org names from ASN database (strip suffixes, abbreviate, title-case) */
     static final String PROP_NORMALIZE_ISP = "routerconsole.enableISPNameNormalization";
     /**
-     * PROP_GEOIP_DIR.
+     * Property: the directory the GeoIP databases are read from.
      */
     public static final String PROP_GEOIP_DIR = "geoip.dir";
     /**
-     * GEOIP_DIR_DEFAULT.
+     * Default GeoIP directory, under the router's base directory.
      */
     public static final String GEOIP_DIR_DEFAULT = "geoip";
     /** Default geoip file name */
@@ -116,17 +116,17 @@ public class GeoIP {
      */
     public static final String GEOIP2_FILE_DEFAULT = "GeoLite2-Country.mmdb";
     /**
-     * ASN_FILE_DEFAULT.
+     * Default MaxMind ASN database file name.
      */
     public static final String ASN_FILE_DEFAULT = "db-ip-asn.mmdb";
     /** Default country names file name */
     static final String COUNTRY_FILE_DEFAULT = "countries.txt";
     /**
-     * PROP_IP_COUNTRY.
+     * Property: the last country an IP was seen in, set for the console.
      */
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
     /**
-     * PROP_DEBIAN_GEOIP.
+     * Property: the Debian-packaged IPv4 GeoIP database path.
      */
     public static final String PROP_DEBIAN_GEOIP = "geoip.dat";
     /**
@@ -138,7 +138,7 @@ public class GeoIP {
     private static final boolean DISABLE_DEBIAN = false;
     private static final boolean ENABLE_DEBIAN = !DISABLE_DEBIAN && !(SystemVersion.isWindows() || SystemVersion.isAndroid());
     /**
-     * PROP_BLOCK_MY_COUNTRY.
+     * Property: whether to refuse tunnels to destinations in our own country.
      */
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
     /** Maxmind API. */
@@ -865,9 +865,11 @@ public class GeoIP {
         Pattern.CASE_INSENSITIVE
     );
 
-    /** China carrier network labels and region designators to drop (China169 backbone,
+    /**
+     * China carrier network labels and region designators to drop (China169 backbone,
      * IP Network, Province, Municipality, Autonomous Region); leftover spaces are
-     * collapsed by the DOUBLE_SPACE step below */
+     * collapsed by the DOUBLE_SPACE step below
+     */
     private static final Pattern CHINA_VERBOSE = Pattern.compile(
         "(?:China169|Backbone|IP Networks?|Province|Municipality|Autonomous Region)",
         Pattern.CASE_INSENSITIVE
@@ -1257,7 +1259,7 @@ public class GeoIP {
      * Strips suffixes, abbreviates verbose words, title-cases with acronym preservation.
      *
      * @param raw original org name from MMDB
-     * @return normalized name
+     * @return the normalized organisation name, or the input if it was null or empty
      * @since 0.9.70+
      */
     public static String normalizeOrgName(String raw) {
@@ -1370,7 +1372,7 @@ public class GeoIP {
      * Country matching is multi-word aware ("Czech Republic", "New Zealand").
      * Non-country Vodafone names (Group, Idea, etc.) pass through unchanged.
      *
-     * @param name normalized name
+     * @param name the already-normalized organisation name
      * @return collapsed name if a known country was matched, else the input
      */
     private static String collapseVodafoneCountry(String name) {
@@ -1461,6 +1463,11 @@ public class GeoIP {
     */
     private static final ThreadLocal<DateFormat> _GEOIP_DATE_FORMAT = ThreadLocal.withInitial(() -> new SimpleDateFormat("MMM d, yyyy", Locale.US));
 
+    /**
+     * Return the country database's build date, size and path, for the console.
+     * @return the HTML build info, or a not-found or error message
+     * @since 0.9.65+
+     */
     public String getGeoIPBuildInfo() {
         File geoFile = getGeoIP2();
         if (geoFile == null) {return "GeoIP Db not found";}
@@ -1478,11 +1485,11 @@ public class GeoIP {
         } catch (Exception e) {return "Unknown GeoIP Db version";}
     }
 
-   /**
-    * Return the current ASN database version
-    * @return the a s n build info
-    * @since 0.9.65+
-    */
+/**
+     * Return the current ASN database version
+     * @return the HTML build info, or a not-found or error message
+     * @since 0.9.65+
+     */
     public String getASNBuildInfo() {
         File asnFile = getASN();
         if (asnFile == null) {return "ASN Db not found";}
@@ -1625,6 +1632,9 @@ public class GeoIP {
     /**
      * Tell the update manager.
      *
+     * @param ctx the application context whose client app manager holds the registered update manager
+     * @param subtype the updater subtype recorded against the GEOIP update type, e.g. "GeoIP"
+     * @param version the version number being reported; anything zero or below is ignored
      * @since 0.9.45
      */
     static void notifyVersion(I2PAppContext ctx, String subtype, long version) {
@@ -1856,7 +1866,7 @@ public class GeoIP {
 
     /**
      * The given IPv4 as a dotted-quad string.
-     * @return e.g. 1.2.3.4
+     * @return the address in dotted-quad form, for example 1.2.3.4
      * @since 0.9.38 for maxmind
      */
     private static String toV4(long ip) {
@@ -1871,7 +1881,7 @@ public class GeoIP {
 
     /**
      * The given IPv6 as a hex string.
-     * @return e.g. aabb:ccdd:eeff:1122::
+     * @return the address in hex form, for example aabb:ccdd:eeff:1122::
      * @since 0.9.26 for maxmind
      */
     private static String toV6(long ip) {

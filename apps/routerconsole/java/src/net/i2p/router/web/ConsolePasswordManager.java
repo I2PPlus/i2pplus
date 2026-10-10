@@ -33,6 +33,12 @@ public class ConsolePasswordManager extends RouterPasswordManager {
     private static final Pattern COLON_SPLIT = Pattern.compile(":");
     private static final SecureRandom _random = new SecureRandom();
 
+    /**
+     * Create a manager over the router's config store, migrating any legacy
+     * plaintext "consolePassword" entry to the salted/hash form on the way in.
+     *
+     * @param ctx the router context whose config store holds the passwords
+     */
     public ConsolePasswordManager(RouterContext ctx) {
         super(ctx);
         migrateConsole();
@@ -42,7 +48,7 @@ public class ConsolePasswordManager extends RouterPasswordManager {
  * Straight MD5. Compatible with Jetty.
  *
  * @param realm e.g. i2cp, routerconsole, etc.
- * @param subrealm the subrealm
+ * @param subrealm the HTTP digest subrealm, hashed between the user and the password
  * @param user null or "" for no user, already trimmed
  * @param pw plain text, already trimmed
  * @return if pw verified

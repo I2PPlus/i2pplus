@@ -86,6 +86,7 @@ public class RandomIterator<E> implements Iterator<E> {
 
     /**
      * RandomIterator.
+     * @param list the list to iterate over, whose size fixes the index range; it is not copied, so later changes to its size are not seen
      */
     public RandomIterator(List<E> list){
         this.list = list;

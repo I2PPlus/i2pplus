@@ -42,6 +42,10 @@ class MimeTypes {
 
     private final Map<String, String> _mimeMap;
 
+    /**
+     * Create an empty table, pre-loaded with the system MIME map on Unix hosts with
+     * at least 100MB of heap; skipped on Windows, macOS and small-heap configurations.
+     */
     public MimeTypes() {
         _mimeMap = new ConcurrentHashMap<>();
         if (!(SystemVersion.isWindows()

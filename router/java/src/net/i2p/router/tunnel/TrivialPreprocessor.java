@@ -65,6 +65,12 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     /**
      * Note preprocessing statistics.
      * No-op - intentionally empty.
+     *
+     * @param messageId the message this fragment carries data for
+     * @param numFragments the fragment number within that message
+     * @param totalLength the total length of the message the fragment belongs to
+     * @param messageIds the message ids of everything coalesced into this fragment
+     * @param msg a description of the flush event, for debugging output
      */
     protected void notePreprocessing(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
         // No-op - intentionally empty
@@ -277,11 +283,11 @@ class TrivialPreprocessor implements TunnelGateway.QueuePreprocessor {
     /**
      * Calculate the size of the instructions for a pending message.
      *
+     * @param msg the pending gateway message
      * @return generally 3 or 35 or 39 for first fragment, 7 for subsequent fragments.
      *
      * Does NOT include 4 for the message ID if the message will be fragmented;
      * call getInstructionAugmentationSize() for that.
-     * @param msg the pending gateway message
      */
     protected static int getInstructionsSize(PendingGatewayMessage msg) {
         if (msg.getFragmentNumber() > 0)

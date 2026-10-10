@@ -138,7 +138,9 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
     /**
      * Match the IP address against subject alternative names.
      *
-     * @param host the IP address
+     * @param host the IP address to look for
+     * @param subjectAlts the certificate's subject alternative names, each a bare IP string
+     * @throws SSLException if no alternative name equals host
      */
     static void matchIPAddress(final String host, final List<String> subjectAlts) throws SSLException {
         for (int i = 0; i < subjectAlts.size(); i++) {
@@ -153,6 +155,10 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /**
      * Match the IPv6 address against subject alternative names.
+     *
+     * @param host the IPv6 address to look for
+     * @param subjectAlts the certificate's subject alternative names, in any IPv6 form
+     * @throws SSLException if no alternative name normalises to host
      */
     static void matchIPv6Address(final String host, final List<String> subjectAlts) throws SSLException {
         final String normalisedHost = normaliseAddress(host);
@@ -169,6 +175,11 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /**
      * Match the DNS name against subject alternative names.
+     *
+     * @param host the DNS name to look for, compared case-insensitively
+     * @param subjectAlts the certificate's subject alternative names
+     * @param publicSuffixMatcher rejects names in a public suffix, null to skip that check
+     * @throws SSLException if no alternative name matches host
      */
     static void matchDNSName(final String host, final List<String> subjectAlts,
                              final PublicSuffixMatcher publicSuffixMatcher) throws SSLException {
@@ -186,6 +197,11 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /**
      * Match the common name against the hostname.
+     *
+     * @param host the DNS name the certificate was presented for
+     * @param cn the common name taken from the certificate subject
+     * @param publicSuffixMatcher rejects names in a public suffix, null to skip that check
+     * @throws SSLException if cn does not match host
      */
     static void matchCN(final String host, final String cn,
                  final PublicSuffixMatcher publicSuffixMatcher) throws SSLException {
@@ -197,6 +213,10 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /**
      * Match the host against a domain root.
+     *
+     * @param host the name being tested
+     * @param domainRoot the suffix to require, or null, which never matches
+     * @return true if host equals domainRoot or ends with it at a label boundary
      */
     static boolean matchDomainRoot(final String host, final String domainRoot) {
         if (domainRoot == null) {
@@ -245,6 +265,11 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /**
      * Match the host against the identity with public suffix matching.
+     *
+     * @param host the name being tested
+     * @param identity the certificate identity, which may hold one wildcard per label
+     * @param publicSuffixMatcher rejects identities in a public suffix, null to skip it
+     * @return true if host matches identity under RFC 2818 rules
      */
     static boolean matchIdentity(final String host, final String identity,
                                  final PublicSuffixMatcher publicSuffixMatcher) {
@@ -253,6 +278,10 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /**
      * Match the host against the identity.
+     *
+     * @param host the name being tested
+     * @param identity the certificate identity, compared case-insensitively
+     * @return true if host equals identity
      */
     static boolean matchIdentity(final String host, final String identity) {
         return matchIdentity(host, identity, null, false);
@@ -260,6 +289,11 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /**
      * Strictly match the host against the identity with public suffix matching.
+     *
+     * @param host the name being tested
+     * @param identity the certificate identity, which may hold one wildcard per label
+     * @param publicSuffixMatcher rejects identities in a public suffix, null to skip it
+     * @return true if host matches identity and any wildcard spans exactly one label
      */
     static boolean matchIdentityStrict(final String host, final String identity,
                                        final PublicSuffixMatcher publicSuffixMatcher) {
@@ -268,6 +302,10 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
 
     /**
      * Strictly match the host against the identity.
+     *
+     * @param host the name being tested
+     * @param identity the certificate identity, compared case-insensitively
+     * @return true if host equals identity
      */
     static boolean matchIdentityStrict(final String host, final String identity) {
         return matchIdentity(host, identity, null, true);

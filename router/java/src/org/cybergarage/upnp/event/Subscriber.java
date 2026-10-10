@@ -51,6 +51,8 @@ public class Subscriber {
 
     /**
      * getSID.
+     *
+     * @return the subscription ID assigned by the service, null until one is set
      */
     public String getSID() {
         return SID;
@@ -58,6 +60,8 @@ public class Subscriber {
 
     /**
      * setSID.
+     *
+     * @param sid the subscription ID the service issued
      */
     public void setSID(String sid) {
         SID = sid;
@@ -71,6 +75,8 @@ public class Subscriber {
 
     /**
      * setInterfaceAddress.
+     *
+     * @param addr the local interface address notifications are sent from
      */
     public void setInterfaceAddress(String addr) {
         ifAddr = addr;
@@ -78,6 +84,8 @@ public class Subscriber {
 
     /**
      * getInterfaceAddress.
+     *
+     * @return the local interface address, empty until one is set
      */
     public String getInterfaceAddress() {
         return ifAddr;
@@ -91,6 +99,8 @@ public class Subscriber {
 
     /**
      * getDeliveryURL.
+     *
+     * @return the callback URL notifications are POSTed to, empty until one is set
      */
     public String getDeliveryURL() {
         return deliveryURL;
@@ -98,6 +108,9 @@ public class Subscriber {
 
     /**
      * setDeliveryURL.
+     *
+     * @param deliveryURL the callback URL to POST to, also split into the cached host, path and
+              port; an unparsable URL leaves those at their defaults
      */
     public void setDeliveryURL(String deliveryURL) {
         this.deliveryURL = deliveryURL;
@@ -117,6 +130,8 @@ public class Subscriber {
 
     /**
      * getDeliveryHost.
+     *
+     * @return the host parsed out of the delivery URL, empty until one is set
      */
     public String getDeliveryHost() {
         return deliveryHost;
@@ -124,6 +139,8 @@ public class Subscriber {
 
     /**
      * getDeliveryPath.
+     *
+     * @return the path parsed out of the delivery URL, empty until one is set
      */
     public String getDeliveryPath() {
         return deliveryPath;
@@ -131,6 +148,8 @@ public class Subscriber {
 
     /**
      * getDeliveryPort.
+     *
+     * @return the port parsed out of the delivery URL, 0 until one is set
      */
     public int getDeliveryPort() {
         return deliveryPort;
@@ -144,6 +163,8 @@ public class Subscriber {
 
     /**
      * getTimeOut.
+     *
+     * @return the subscription duration in seconds, or {@link Subscription#INFINITE_VALUE} for none
      */
     public long getTimeOut() {
         return timeOut;
@@ -151,6 +172,8 @@ public class Subscriber {
 
     /**
      * setTimeOut.
+     *
+     * @param value the duration in seconds from now, or INFINITE_VALUE for no expiry
      */
     public void setTimeOut(long value) {
         timeOut = value;
@@ -158,6 +181,8 @@ public class Subscriber {
 
     /**
      * isExpired.
+     *
+     * @return true once the timeout has elapsed, false if it is infinite or still unexpired
      */
     public boolean isExpired() {
         long currTime = System.currentTimeMillis();
@@ -180,6 +205,8 @@ public class Subscriber {
 
     /**
      * getSubscriptionTime.
+     *
+     * @return when the subscription was last renewed, in milliseconds since the epoch
      */
     public long getSubscriptionTime() {
         return subscriptionTime;
@@ -187,6 +214,8 @@ public class Subscriber {
 
     /**
      * setSubscriptionTime.
+     *
+     * @param time when the subscription starts, in milliseconds since the epoch
      */
     public void setSubscriptionTime(long time) {
         subscriptionTime = time;
@@ -200,6 +229,8 @@ public class Subscriber {
 
     /**
      * getNotifyCount.
+     *
+     * @return the notification count since the last renewal, which wraps to 1 rather than overflow
      */
     public long getNotifyCount() {
         return notifyCount;
@@ -207,6 +238,8 @@ public class Subscriber {
 
     /**
      * setNotifyCount.
+     *
+     * @param cnt the notification count to record, as zeroed again by renew()
      */
     public void setNotifyCount(int cnt) {
         notifyCount = cnt;

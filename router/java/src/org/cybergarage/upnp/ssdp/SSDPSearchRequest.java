@@ -40,6 +40,9 @@ public class SSDPSearchRequest extends SSDPRequest {
 
     /**
      * SSDPSearchRequest.
+     *
+     * @param serachTarget the search target to advertise in the ST header, e.g. a device type
+     * @param mx the MX maximum wait time in seconds advertised to the responders
      */
     public SSDPSearchRequest(String serachTarget, int mx) {
         setMethod(HTTP.M_SEARCH);
@@ -52,6 +55,8 @@ public class SSDPSearchRequest extends SSDPRequest {
 
     /**
      * SSDPSearchRequest.
+     *
+     * @param serachTarget the search target to advertise, using the default MX wait time
      */
     public SSDPSearchRequest(String serachTarget) {
         this(serachTarget, SSDP.DEFAULT_MSEARCH_MX);
@@ -70,6 +75,8 @@ public class SSDPSearchRequest extends SSDPRequest {
 
     /**
      * setLocalAddress.
+     *
+     * @param bindAddr the local address to bind to; an IPv6 address selects the IPv6 group
      */
     public void setLocalAddress(String bindAddr) {
         String ssdpAddr = SSDP.ADDRESS;

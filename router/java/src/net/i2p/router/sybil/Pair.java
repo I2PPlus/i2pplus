@@ -24,6 +24,10 @@ public class Pair implements Comparable<Pair> {
 
     /**
      * Pair.
+     *
+     * @param ri1 the first router of the pair
+     * @param ri2 the second router of the pair
+     * @param distance the Kademlia distance between the two routers
      */
     public Pair(RouterInfo ri1, RouterInfo ri2, BigInteger distance) {
         r1 = ri1; r2 = ri2; dist = distance;

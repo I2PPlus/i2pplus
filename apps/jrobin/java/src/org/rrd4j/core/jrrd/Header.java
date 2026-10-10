@@ -32,6 +32,7 @@ public class Header implements Constants {
      * Constructs a Header from the RRD file.
      *
      * @param file the RRD file to read from
+     * @throws IOException if the RRD file cannot be read
      */
     Header(RRDFile file) throws IOException {
 

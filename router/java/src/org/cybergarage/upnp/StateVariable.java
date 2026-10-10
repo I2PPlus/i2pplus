@@ -53,7 +53,9 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * getService.
+     * Gets the service that owns this state variable.
+     *
+     * @return the owning service, or null if no service node is set
      */
     public Service getService() {
         Node serviceNode = getServiceNode();
@@ -96,7 +98,10 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * isStateVariableNode.
+     * Tests whether a node names a state variable element.
+     *
+     * @param node the XML node to test against the stateVariable element name
+     * @return true if the node is a stateVariable element, false otherwise
      */
     public static boolean isStateVariableNode(Node node) {
         return StateVariable.ELEM_NAME.equals(node.getName());
@@ -133,14 +138,18 @@ public class StateVariable extends NodeData {
     private static final String DATATYPE = "dataType";
 
     /**
-     * setDataType.
+     * Sets the dataType of this state variable.
+     *
+     * @param value the UPnP data type name, for example "string" or "i4"
      */
     public void setDataType(String value) {
         getStateVariableNode().setNode(DATATYPE, value);
     }
 
     /**
-     * getDataType.
+     * Gets the dataType of this state variable.
+     *
+     * @return the UPnP data type name, or null if none is set
      */
     public String getDataType() {
         return getStateVariableNode().getNodeValue(DATATYPE);
@@ -155,7 +164,10 @@ public class StateVariable extends NodeData {
     private static final String SENDEVENTS_NO = "no";
 
     /**
-     * setSendEvents.
+     * Sets the sendEvents attribute of this state variable.
+     *
+     * @param state true to notify subscribers when the value changes, false to
+     *     suppress notification
      */
     public void setSendEvents(boolean state) {
         getStateVariableNode()
@@ -163,7 +175,10 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * isSendEvents.
+     * Reports whether this state variable notifies subscribers on change.
+     *
+     * @return true if the sendEvents attribute reads "yes", false if it reads
+     *     "no" or is absent
      */
     public boolean isSendEvents() {
         String state = getStateVariableNode().getAttributeValue(SENDEVENTS);
@@ -177,7 +192,10 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * set.
+     * Copies the name, value, dataType and sendEvents flag from another state
+     * variable into this one.
+     *
+     * @param stateVar the state variable to copy the definition from
      */
     public void set(StateVariable stateVar) {
         setName(stateVar.getName());
@@ -191,7 +209,10 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * getStateVariableData.
+     * Gets the user data attached to the state variable node, creating it on
+     * first use.
+     *
+     * @return the StateVariableData attached to the node, never null
      */
     public StateVariableData getStateVariableData() {
         Node node = getStateVariableNode();
@@ -209,7 +230,10 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * setValue.
+     * Sets the value of this state variable and, when the variable has an
+     * owning service and event notification is enabled, notifies subscribers.
+     *
+     * @param value the new value, or null to clear it
      */
     public void setValue(String value) {
         // Thnaks for Tho Beisch (11/09/04)
@@ -227,21 +251,27 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * setValue.
+     * Sets the value of this state variable from its decimal string form.
+     *
+     * @param value the value to convert with Integer.toString()
      */
     public void setValue(int value) {
         setValue(Integer.toString(value));
     }
 
     /**
-     * setValue.
+     * Sets the value of this state variable from its decimal string form.
+     *
+     * @param value the value to convert with Long.toString()
      */
     public void setValue(long value) {
         setValue(Long.toString(value));
     }
 
     /**
-     * getValue.
+     * Gets the current value of this state variable.
+     *
+     * @return the value stored in the attached user data, or null if none is set
      */
     public String getValue() {
         return getStateVariableData().getValue();
@@ -252,7 +282,10 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * getAllowedValueList.
+     * Gets the allowed value list of this state variable, wrapped from the
+     * allowedValueList child node.
+     *
+     * @return the allowed values, or null if no allowedValueList node is present
      */
     public AllowedValueList getAllowedValueList() {
         AllowedValueList valueList = new AllowedValueList();
@@ -296,7 +329,9 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * hasAllowedValueList.
+     * Reports whether this state variable carries an allowedValueList node.
+     *
+     * @return true if an allowedValueList is present, false otherwise
      */
     public boolean hasAllowedValueList() {
         AllowedValueList valueList = getAllowedValueList();
@@ -308,7 +343,10 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * getAllowedValueRange.
+     * Gets the allowed value range of this state variable, wrapped from the
+     * allowedValueRange child node.
+     *
+     * @return the allowed range, or null if no allowedValueRange node is present
      */
     public AllowedValueRange getAllowedValueRange() {
         Node valueRangeNode = getStateVariableNode().getNode(AllowedValueRange.ELEM_NAME);
@@ -337,7 +375,9 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * hasAllowedValueRange.
+     * Reports whether this state variable carries an allowedValueRange node.
+     *
+     * @return true if an allowedValueRange is present, false otherwise
      */
     public boolean hasAllowedValueRange() {
         return (getAllowedValueRange() != null) ? true : false;
@@ -348,21 +388,29 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * getQueryListener.
+     * Gets the listener notified when a query for this state variable arrives.
+     *
+     * @return the registered query listener, or null if none is set
      */
     public QueryListener getQueryListener() {
         return getStateVariableData().getQueryListener();
     }
 
     /**
-     * setQueryListener.
+     * Sets the listener notified when a query for this state variable arrives.
+     *
+     * @param listener the listener to invoke, or null to clear it
      */
     public void setQueryListener(QueryListener listener) {
         getStateVariableData().setQueryListener(listener);
     }
 
     /**
-     * performQueryListener.
+     * Runs the query listener against a copy of this variable and posts the
+     * listener's outcome back to the requesting peer.
+     *
+     * @param queryReq the request the response is posted to
+     * @return true if a listener was registered, false if none was
      */
     public boolean performQueryListener(QueryRequest queryReq) {
         QueryListener listener = getQueryListener();
@@ -387,7 +435,9 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * getQueryResponse.
+     * Gets the response from the most recent query posted for this variable.
+     *
+     * @return the last query response, or null if no query has been made
      */
     public QueryResponse getQueryResponse() {
         return getStateVariableData().getQueryResponse();
@@ -398,7 +448,9 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * getQueryStatus.
+     * Gets the UPnP error carried by the most recent query response.
+     *
+     * @return the status of the last query response
      */
     public UPnPStatus getQueryStatus() {
         return getQueryResponse().getUPnPError();
@@ -409,7 +461,10 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * postQuerylAction.
+     * Posts a query for this state variable and stores the reply as both the
+     * query response and the variable's value.
+     *
+     * @return true if the query succeeded, false if it returned a UPnP error
      */
     public boolean postQuerylAction() {
         QueryRequest queryReq = new QueryRequest();
@@ -435,7 +490,10 @@ public class StateVariable extends NodeData {
     private UPnPStatus upnpStatus = new UPnPStatus();
 
     /**
-     * setStatus.
+     * Sets the UPnP status reported alongside this state variable.
+     *
+     * @param code the UPnP error code, for example UPnPStatus.INVALID_VAR (404)
+     * @param descr the human readable text to report with the code
      */
     public void setStatus(int code, String descr) {
         upnpStatus.setCode(code);
@@ -443,14 +501,18 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * setStatus.
+     * Sets the UPnP status code, deriving the description text from the code.
+     *
+     * @param code the UPnP error code, for example UPnPStatus.INVALID_VAR (404)
      */
     public void setStatus(int code) {
         setStatus(code, UPnPStatus.code2String(code));
     }
 
     /**
-     * getStatus.
+     * Gets the UPnP status currently held for this state variable.
+     *
+     * @return the status, which is never null but starts out unset
      */
     public UPnPStatus getStatus() {
         return upnpStatus;
@@ -459,7 +521,11 @@ public class StateVariable extends NodeData {
     private static final String DEFAULT_VALUE = "defaultValue";
 
     ////////////////////////////////////////////////
-    /** Get the value of DefaultValue of this StateVariable */
+    /**
+     * Gets the defaultValue of this StateVariable.
+     *
+     * @return the declared default, or null if none is set
+     */
     public String getDefaultValue() {
         return getStateVariableNode().getNodeValue(DEFAULT_VALUE);
     }
@@ -484,14 +550,19 @@ public class StateVariable extends NodeData {
     private Object userData = null;
 
     /**
-     * setUserData.
+     * Sets the object this variable keeps as application private data,
+     * separate from the UPnP value and query response.
+     *
+     * @param data the object to retain, or null to clear it
      */
     public void setUserData(Object data) {
         userData = data;
     }
 
     /**
-     * getUserData.
+     * Gets the application private data retained by this variable.
+     *
+     * @return the retained object, or null if none has been set
      */
     public Object getUserData() {
         return userData;

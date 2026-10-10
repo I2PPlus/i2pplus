@@ -45,6 +45,8 @@ public class Property {
 
     /**
      * getName.
+     *
+     * @return the UPnP name of this property, never null
      */
     public String getName() {
         return name;
@@ -52,6 +54,8 @@ public class Property {
 
     /**
      * setName.
+     *
+     * @param val the UPnP name to store; null is stored as an empty string
      */
     public void setName(String val) {
         if (val == null) val = "";
@@ -66,6 +70,8 @@ public class Property {
 
     /**
      * getValue.
+     *
+     * @return the current UPnP value of this property, never null
      */
     public String getValue() {
         return value;
@@ -73,6 +79,8 @@ public class Property {
 
     /**
      * setValue.
+     *
+     * @param val the value to store; null is stored as an empty string
      */
     public void setValue(String val) {
         if (val == null) val = "";

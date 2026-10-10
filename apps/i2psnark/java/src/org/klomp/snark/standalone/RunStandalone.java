@@ -117,6 +117,8 @@ public class RunStandalone {
     }
 
     /**
+     * Shut the embedded Jetty server down and exit, if this class has an instance.
+     *
      * @since 0.9.27
      */
     public static synchronized void shutdown() {

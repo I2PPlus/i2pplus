@@ -35,6 +35,11 @@ class SearchMessageSelector implements MessageSelector {
 
     /**
      * SearchMessageSelector.
+     *
+     * @param context the router context supplying the log and the search state
+     * @param peer the router the search replies are expected from
+     * @param expiration the time in milliseconds after which the reply is no longer waited for
+     * @param state the search being run, holding the target key and the remaining peers
      */
     public SearchMessageSelector(RouterContext context, RouterInfo peer, long expiration, SearchState state) {
         _context = context;

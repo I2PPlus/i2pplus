@@ -16,6 +16,8 @@ public class Util {
      * For debugging
      * http://forums.sun.com/thread.jspa?threadID=597652
      *
+     * @param a the non-negative integer whose base-2 logarithm is wanted
+     * @return the base-2 logarithm of a, accurate to the precision of a double
      * @since 0.7.14
      */
     public static double biLog2(BigInteger a) {

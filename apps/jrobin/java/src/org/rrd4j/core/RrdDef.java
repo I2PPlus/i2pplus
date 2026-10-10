@@ -583,7 +583,11 @@ public class RrdDef {
         return dump();
     }
 
-    /** Remove datasource */
+    /**
+     * Remove datasource
+     *
+     * @param dsName the name of the datasource to drop from this definition
+     */
     void removeDatasource(String dsName) {
         for (int i = 0; i < dsDefs.size(); i++) {
             DsDef dsDef = dsDefs.get(i);
@@ -595,12 +599,22 @@ public class RrdDef {
         throw new IllegalArgumentException("Could not find datasource named '" + dsName + "'");
     }
 
-    /** Save single datasource */
+    /**
+     * Save single datasource
+     *
+     * @param dsName the name of the one datasource to keep; every other is
+     *        removed from this definition
+     */
     void saveSingleDatasource(String dsName) {
         dsDefs.removeIf(dsDef -> !dsDef.getDsName().equals(dsName));
     }
 
-    /** Remove archive */
+    /**
+     * Remove archive
+     *
+     * @param consolFun the consolidation function of the archive to remove
+     * @param steps the step count of the archive to remove
+     */
     void removeArchive(ConsolFun consolFun, int steps) {
         ArcDef arcDef = findArchive(consolFun, steps);
         if (!arcDefs.remove(arcDef)) {
@@ -611,6 +625,8 @@ public class RrdDef {
 
     /**
      * Archive.
+     * @param consolFun the consolidation function of the wanted archive
+     * @param steps the step count of the wanted archive
      * @return the archive
      */
     ArcDef findArchive(ConsolFun consolFun, int steps) {
@@ -774,7 +790,16 @@ public class RrdDef {
         return calculateSize(dsCount, arcCount, rowsCount, dsNames);
     }
 
-    /** Calculate estimated storage size */
+    /**
+     * Calculate estimated storage size
+     *
+     * @param dsCount the number of datasources the archive stores
+     * @param arcCount the number of archives defined over the time range
+     * @param rowsCount the total number of rows across those archives
+     * @param dsNames the datasource names, whose length beyond the fixed
+     *        string size adds to the stored payload
+     * @return the estimated size in bytes of the resulting RRD file
+     */
     static long calculateSize(int dsCount, int arcCount, int rowsCount, String[] dsNames) {
         int postStorePayload = 0;
         for (String n : dsNames) {

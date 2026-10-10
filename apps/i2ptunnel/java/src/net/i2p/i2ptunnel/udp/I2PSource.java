@@ -104,6 +104,12 @@ public class I2PSource implements Source {
     protected class Listener implements I2PSessionMuxedListener {
 
         /**
+         * Constructor. The listener reads the source's dissector, sink and log,
+         * all reached through the enclosing instance it is bound to.
+         */
+        protected Listener() {}
+
+        /**
          *  Always throws, since the muxed variant must be used.
          *
          *  @throws IllegalStateException always

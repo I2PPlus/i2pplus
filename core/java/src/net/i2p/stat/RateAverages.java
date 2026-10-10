@@ -73,7 +73,11 @@ public class RateAverages {
         return average;
     }
 
-    /** Stores the weighted average. */
+    /**
+     * Stores the weighted average.
+     *
+     * @param average the combined period average, or the lifetime average if no events were recorded
+     */
     void setAverage(double average) {
         this.average = average;
     }
@@ -88,7 +92,11 @@ public class RateAverages {
         return current;
     }
 
-    /** Stores the current period average. */
+    /**
+     * Stores the current period average.
+     *
+     * @param current the current period's value total divided by its event count
+     */
     void setCurrent(double current) {
         this.current = current;
     }
@@ -103,7 +111,11 @@ public class RateAverages {
         return last;
     }
 
-    /** Stores the last period average. */
+    /**
+     * Stores the last period average.
+     *
+     * @param last the previous period's value total divided by its event count
+     */
     void setLast(double last) {
         this.last = last;
     }
@@ -118,7 +130,11 @@ public class RateAverages {
         return totalEventCount;
     }
 
-    /** Stores the total event count. */
+    /**
+     * Stores the total event count.
+     *
+     * @param totalEventCount the current and previous periods' event counts added together
+     */
     void setTotalEventCount(long totalEventCount) {
         this.totalEventCount = totalEventCount;
     }
@@ -133,7 +149,11 @@ public class RateAverages {
         return totalValues;
     }
 
-    /** Stores the total values sum. */
+    /**
+     * Stores the total values sum.
+     *
+     * @param totalValues the current and previous periods' value totals added together
+     */
     void setTotalValues(double totalValues) {
         this.totalValues = totalValues;
     }

@@ -43,8 +43,11 @@ public final class ElGamalAESEngine {
     public static final int MAX_TAGS_RECEIVED = 200;
     private static final int ELG_CLEARTEXT_LENGTH = 222;
     private static final int ELG_ENCRYPTED_LENGTH = 514;
-    /** Creates engine with given context and initializes crypto frequency stats. */
-
+    /**
+     * Creates engine with given context and initializes crypto frequency stats.
+     *
+     * @param ctx the application context supplying the log and stat managers
+     */
     public ElGamalAESEngine(I2PAppContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(ElGamalAESEngine.class);
@@ -58,6 +61,10 @@ public final class ElGamalAESEngine {
      * Decrypt the message using the given private key using tags from the default key manager,
      * which is the router's key manager. Use extreme care if you aren't the router.
      *
+     * @param data the encrypted data to decrypt, at least 80 bytes
+     * @param targetPrivateKey the ElGamal private key matching the target's public key
+     * @return decrypted data or null on failure
+     * @throws DataFormatException if the payload cannot be parsed once decrypted
      * @deprecated specify the key manager!
      */
     @Deprecated
@@ -75,7 +82,11 @@ public final class ElGamalAESEngine {
      * Clients using I2PAppContext.sessionKeyManager() may be correlated with the router,
      * unless you are careful to use different keys.
      *
+     * @param data the encrypted data to decrypt, at least 80 bytes
+     * @param targetPrivateKey the ElGamal private key matching the target's public key
+     * @param keyManager the session key manager supplying the tags to try
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the payload cannot be parsed once decrypted
      */
     public byte[] decrypt(byte[] data, PrivateKey targetPrivateKey, SessionKeyManager keyManager) throws DataFormatException {
         if (data == null) {
@@ -169,7 +180,11 @@ public final class ElGamalAESEngine {
     /**
      * Tags only. For MuxedEngine use only.
      *
+     * @param data the encrypted data to decrypt, at least 80 bytes
+     * @param targetPrivateKey the ElGamal private key matching the target's public key
+     * @param keyManager the session key manager supplying the tag to look up
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the payload cannot be parsed once decrypted
      * @since 0.9.46
      */
     public byte[] decryptFast(byte[] data, PrivateKey targetPrivateKey,
@@ -217,7 +232,11 @@ public final class ElGamalAESEngine {
     /**
      * Full ElG only. For MuxedEngine use only.
      *
+     * @param data the encrypted data to decrypt, at least 514 bytes
+     * @param targetPrivateKey the ElGamal private key matching the target's public key
+     * @param keyManager the session key manager recording any tags the payload carries
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the payload cannot be parsed once decrypted
      * @since 0.9.46
      */
     public byte[] decryptSlow(byte[] data, PrivateKey targetPrivateKey,
@@ -452,6 +471,7 @@ public final class ElGamalAESEngine {
      * no less than the paddedSize parameter, but may be more.  This method uses the
      * ElGamal+AES algorithm in the data structure spec.
      *
+     * @param data the plaintext to encrypt
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
      * May be null if key and currentTag are non-null.
      *
@@ -464,6 +484,7 @@ public final class ElGamalAESEngine {
      * @param paddedSize minimum size in bytes of the body after padding it (if less than the
      * body's real size, no bytes are appended but the body is not truncated)
      *
+     * @return the encrypted data, at least paddedSize bytes and up to 514 bytes larger
      * @throws IllegalArgumentException on bad target EncType
      *
      * Unused externally, only called by below (i.e. newKey is always null)
@@ -509,6 +530,7 @@ public final class ElGamalAESEngine {
      * or a 514-byte ElGamal block and several 32-byte session tags for a new session.
      * So the returned encrypted data will be at least 32 bytes larger than paddedSize.
      *
+     * @param data the plaintext to encrypt
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
      * May be null if key and currentTag are non-null.
      *
@@ -520,6 +542,7 @@ public final class ElGamalAESEngine {
      * @param paddedSize minimum size in bytes of the body after padding it (if less than the
      * body's real size, no bytes are appended but the body is not truncated)
      *
+     * @return the encrypted data, at least paddedSize bytes and up to 514 bytes larger
      * @throws IllegalArgumentException on bad target EncType
      */
     public byte[] encrypt(byte[] data, PublicKey target, SessionKey key, Set<SessionTag> tagsForDelivery,
@@ -679,8 +702,14 @@ public final class ElGamalAESEngine {
      *
      * Note: package private for ElGamalTest.testAES()
      *
+     * @param data the plaintext to encrypt into the AES area
+     * @param key the AES session key to encrypt with
+     * @param iv the 16 byte AES initialization vector
      * @param tagsForDelivery session tags to be associated with the key or null;
      * 200 max enforced at receiver
+     * @param newKey key to deliver to the target, or null for no new key block
+     * @param paddedSize minimum size in bytes of the AES area after padding
+     * @return the encrypted AES area, or null on encryption failure
      */
     final byte[] encryptAESBlock(byte[] data, SessionKey key, byte[] iv, Set<SessionTag> tagsForDelivery, SessionKey newKey,
                                         long paddedSize) {

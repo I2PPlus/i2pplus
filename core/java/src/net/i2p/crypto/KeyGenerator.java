@@ -90,7 +90,8 @@ public final class KeyGenerator {
         return I2PAppContext.getGlobalContext().keyGenerator();
     }
 
-    /** Generate a private 256 bit session key
+    /**
+     * Generate a private 256 bit session key
      *
      * @return session key
      */
@@ -112,8 +113,8 @@ public final class KeyGenerator {
      * PBE the passphrase with the salt.
      * Warning - SLOW
      *
-     * @param salt the salt
-     * @param passphrase the passphrase
+     * @param salt the random salt; only the first 16 bytes are mixed in
+     * @param passphrase the password bytes stretched into the session key
      * @return the session key
      * @since 0.7.1
      */
@@ -171,7 +172,8 @@ public final class KeyGenerator {
 
     private static final String PROP_LONG_EXPONENT = "crypto.elGamal.useLongKey";
 
-    /** Whether to use a long (2048-bit) ElGamal exponent.
+    /**
+     * Whether to use a long (2048-bit) ElGamal exponent.
      *
      * @return true if using long exponent
      * @since 0.9.8
@@ -180,7 +182,8 @@ public final class KeyGenerator {
         return _context.getProperty(PROP_LONG_EXPONENT, DEFAULT_USE_LONG_EXPONENT);
     }
 
-    /** Size of the ElGamal exponent in bits.
+    /**
+     * Size of the ElGamal exponent in bits.
      *
      * @return the size in bits
      * @since 0.9.8
@@ -303,7 +306,8 @@ public final class KeyGenerator {
         return pub;
     }
 
-    /** Generate a pair of DSA keys, where index 0 is a SigningPublicKey, and
+    /**
+     * Generate a pair of DSA keys, where index 0 is a SigningPublicKey, and
      * index 1 is a SigningPrivateKey.
      * DSA-SHA1 only.
      *
@@ -403,7 +407,8 @@ public final class KeyGenerator {
         return keys;
     }
 
-    /** Convert a SigningPrivateKey to a SigningPublicKey.
+    /**
+     * Convert a SigningPrivateKey to a SigningPublicKey.
      * As of 0.9.16, supports all key types.
      *
      * @param priv a SigningPrivateKey object

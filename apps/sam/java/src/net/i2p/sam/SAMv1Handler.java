@@ -38,39 +38,42 @@ import net.i2p.data.Destination;
 class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramReceiver, SAMStreamReceiver {
 
     /**
-     * rawSession.
+     * The SAM raw and datagram session, held after a successful HELLO.
      */
     protected SAMMessageSess rawSession;
     /**
-     * datagramSession.
+     * The session used for datagram style messages.
      */
     protected SAMMessageSess datagramSession;
     /**
-     * streamSession.
+     * The session used for STREAM CONNECT connections.
      */
     protected SAMStreamSession streamSession;
 
     /**
+     * Return the raw session.
      * @return the raw session
      */
     protected final SAMMessageSess getRawSession() { return rawSession; }
     /**
+     * Return the datagram session.
      * @return the datagram session
      */
     protected final SAMMessageSess getDatagramSession() { return datagramSession; }
     /**
+     * Return the stream session.
      * @return the stream session
      */
     protected final SAMStreamSession getStreamSession() { return streamSession; }
 
     /**
-     * _id.
+     * Identifier of this connection, unique among a router's SAM handlers.
      */
     protected final long _id;
     private static final AtomicLong __id = new AtomicLong();
     private static final int FIRST_READ_TIMEOUT = 60*1000;
     /**
-     * SESSION_ERROR.
+     * Reply sent to a SESSION CREATE whose stream could not be established.
      */
     protected static final String SESSION_ERROR = "SESSION STATUS RESULT=I2P_ERROR";
 
@@ -854,7 +857,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     /**
      * Check whether a size is inside the limits allowed by this protocol.
      *
-     * @param size the size
+     * @param size the payload length in bytes, which must fall between 1 and 32768 inclusive
      * @return true if the size is within stream protocol limits
      */
     private boolean checkSize(int size) {
@@ -864,7 +867,7 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
     /**
      * Check whether a size is inside the limits allowed by this protocol.
      *
-     * @param size the size
+     * @param size the payload length in bytes, which must fall between 1 and 31744 inclusive
      * @return true if the size is within datagram protocol limits
      */
     private boolean checkDatagramSize(int size) {
@@ -977,8 +980,6 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
                 _log.warn("Error closing socket" + "\n* Error: " + e.getMessage());
         }
     }
-
-    // SAMStreamReceiver implementation
 
     /**
      * Notify the SAM client of the result of a stream SEND operation.
@@ -1097,6 +1098,8 @@ class SAMv1Handler extends SAMHandler implements SAMRawReceiver, SAMDatagramRece
      * Writes s + createMessageString(msg) + \n
      *
      * @param s The string, non-null
+     * @param msg the message to escape and append as a MESSAGE= field, or null for no message
+     * @return true if the composed line was written to the client socket
      * @since 0.9.25
      */
     protected boolean writeString(String s, String msg) {

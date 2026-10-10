@@ -34,6 +34,8 @@ public class HostCheckHandler extends GzipHandler
 
     /**
      * MUST call setListenHosts() afterwards.
+     *
+     * @param ctx the context used to resolve console ports, properties and logging
      */
     public HostCheckHandler(I2PAppContext ctx) {
         super();

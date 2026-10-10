@@ -69,7 +69,8 @@ class MailPart {
      * cid.
      */
     public final String cid;
-    /** begin, end, and beginBody are relative to readBuffer.getOffset().
+    /**
+     * begin, end, and beginBody are relative to readBuffer.getOffset().
      * begin is before the headers
      * beginBody is after the headers
      * warning - end is exclusive
@@ -111,12 +112,16 @@ class MailPart {
     private final int intID;
 
     /**
+     * Probably the same as InputStream but a different interface.
+     * were already parsed in Mail. Null otherwise
+     *
+     * @param uidl the IMAP UID of the owning message, kept in the public uidl field
+     * @param id a counter from which this part takes its next sequence number
      * @param readBuffer has zero offset for top-level MailPart.
      * @param in used for reading (NOT readBuffer.getInputStream())
      * @param counter used for counting how much we have read.
-     * Probably the same as InputStream but a different interface.
      * @param hdrlines non-null for top-level MailPart, where they
-     * were already parsed in Mail. Null otherwise
+     * @throws IOException if the header block cannot be read from in
      */
     public MailPart(String uidl, AtomicInteger id, Buffer readBuffer, InputStream in,
                     ReadCounter counter, String[] hdrlines) throws IOException {
@@ -276,6 +281,7 @@ class MailPart {
      * A value unique across all the parts of this Mail,
      * and constant across restarts, so it may be part of a bookmark.
      *
+     * @return this part's sequence number within its message
      * @since 0.9.34
      */
     public int getID() {return intID;}
@@ -322,6 +328,8 @@ class MailPart {
      * Synched because FileBuffer keeps stream open
      *
      * @param offset 2 for sendAttachment, 0 otherwise, probably for \r\n
+     * @param out the buffer the decoded body is written to
+     * @throws IOException if no decoder matches the encoding, or the stream cannot be read
      * @since 0.9.13
      */
     public synchronized void decode(int offset, Buffer out) throws IOException {
@@ -362,6 +370,8 @@ class MailPart {
      * Synched because FileBuffer keeps stream open
      * Caller must close out
      *
+     * @param out where the raw undecoded bytes are copied
+     * @throws IOException if the raw stream cannot be read
      * @since 0.9.35
      */
     public synchronized void outputRaw(OutputStream out) throws IOException {

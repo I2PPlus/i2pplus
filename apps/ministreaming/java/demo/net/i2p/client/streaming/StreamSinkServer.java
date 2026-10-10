@@ -37,6 +37,15 @@ public class StreamSinkServer {
     public StreamSinkServer(String sinkDir, String ourDestFile) {
         this(sinkDir, ourDestFile, null, -1, 3);
     }
+    /**
+     * Create a server that connects through a specific I2CP router.
+     *
+     * @param sinkDir Directory to store received files in
+     * @param ourDestFile filename to write our binary destination to
+     * @param i2cpHost hostname of the I2CP router, or null for the global one
+     * @param i2cpPort I2CP port on that router, ignored when i2cpHost is null
+     * @param handlers number of client handler threads to run
+     */
     public StreamSinkServer(String sinkDir, String ourDestFile, String i2cpHost, int i2cpPort, int handlers) {
         _sinkDir = sinkDir;
         _destFile = ourDestFile;
@@ -78,6 +87,11 @@ public class StreamSinkServer {
         startup(sock);
     }
 
+    /**
+     * Start one handler thread per configured handler, each accepting from the socket.
+     *
+     * @param sock the server socket the handlers accept from
+     */
     public void startup(I2PServerSocket sock) {
         for (int i = 0; i < _handlers; i++) {
             I2PThread t = new I2PThread(new ClientRunner(sock));

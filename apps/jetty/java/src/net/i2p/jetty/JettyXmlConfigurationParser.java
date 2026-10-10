@@ -22,6 +22,14 @@ import org.xml.sax.SAXException;
  */
 public class JettyXmlConfigurationParser
 {
+    /**
+     * Constructor. Each parse call builds its own SAX parser through
+     * initParser(), so an instance carries no state.
+     */
+    public JettyXmlConfigurationParser()
+    {
+    }
+
     private static XmlParser initParser()
     {
         XmlParser parser = new XmlParser();
@@ -51,6 +59,7 @@ public class JettyXmlConfigurationParser
      * Reads and parses the XML configuration file.
      *
      * @param f an XML configuration file
+     * @return the parsed configuration tree, rooted at the document node
      * @throws IOException if the configuration could not be read
      * @throws SAXException if the configuration could not be parsed
      */
@@ -64,8 +73,9 @@ public class JettyXmlConfigurationParser
      *  Recursively go through the entire tree starting at node.
      *  Return the value for the first node with the name set,
      *  e.g. [Set name="name"]value[/Set]
+     *  @param node the node whose descendants are searched for the Set
      *  @param name case insensitive
-     *  @return the value
+     *  @return the text of the first Set node matching name, or null if none
      */
     public static String getValue(Node node, String name) {
         String nameLC = name.toLowerCase(Locale.US);
@@ -91,7 +101,9 @@ public class JettyXmlConfigurationParser
      *  Recursively go through the entire tree starting at node.
      *  Return the value for the first node with the name set,
      *  e.g. [Set name="name"]value[/Set]
+     *  @param node the node whose descendants are searched for the Set
      *  @param name case insensitive
+     *  @param value the text to store as the new content of the matched Set
      *  @return success
      */
     public static boolean setValue(Node node, String name, String value) {
@@ -129,6 +141,9 @@ public class JettyXmlConfigurationParser
      *  Adapted from Node.toString().
      *  That synchronized method caused classpath issues when called from the webapp.
      *  Also add newlines here for readability.
+     *  @param node the node to serialize, written with its tag, attributes and children
+     *  @param out the writer that receives the XML text
+     *  @throws IOException if the writer rejects the data
      */
     public static void write(Node node, Writer out) throws IOException {
         out.write('<');
@@ -169,6 +184,7 @@ public class JettyXmlConfigurationParser
 
     /**
      *  Obfuscate a password for storage in the XML
+     *  @param s the cleartext password, or an already obfuscated value prefixed with "OBF:"
      *  @return a string starting with "OBF:"
      */
     public static String obfuscate(String s) {
@@ -180,6 +196,7 @@ public class JettyXmlConfigurationParser
     /**
      *  De-Obfuscate a password from the XML
      *  @param s a string starting with "OBF:"
+     *  @return the cleartext password, or s itself if it carries no "OBF:" prefix
      */
     public static String deobfuscate(String s) {
         if (!s.startsWith("OBF:"))

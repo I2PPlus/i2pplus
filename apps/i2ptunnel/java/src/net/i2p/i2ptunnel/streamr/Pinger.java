@@ -9,9 +9,12 @@ import net.i2p.util.Log;
  * Connectivity tester that pings streamr destinations at regular intervals to monitor network status.
  */
 public class Pinger implements Source, Runnable {
+    /** the destination that carries the ping messages */
     protected Sink sink;
+    /** the thread running the ping loop */
     protected final Thread thread;
     private final Object waitlock = new Object();
+    /** true while the ping loop should keep running */
     protected volatile boolean running;
     private final Log log;
     private final int fromPort;
@@ -19,6 +22,7 @@ public class Pinger implements Source, Runnable {
     /**
      * Creates a pinger for the given I2CP from port.
      *
+     * @param ctx the application context supplying the router log manager
      * @param fromPort the I2CP from port
      * @since 0.9.53 added ctx and fromPort params
      */

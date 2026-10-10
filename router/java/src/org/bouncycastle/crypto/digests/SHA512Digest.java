@@ -32,6 +32,8 @@ public class SHA512Digest
 
     /**
      * Standard constructor, with purpose
+     *
+     * @param purpose the CryptoServicePurpose to register this digest under.
      */
     public SHA512Digest(CryptoServicePurpose purpose)
     {
@@ -45,6 +47,8 @@ public class SHA512Digest
     /**
      * Copy constructor.  This will copy the state of the provided
      * message digest.
+     *
+     * @param t the digest to copy the purpose and buffered state from.
      */
     public SHA512Digest(SHA512Digest t)
     {

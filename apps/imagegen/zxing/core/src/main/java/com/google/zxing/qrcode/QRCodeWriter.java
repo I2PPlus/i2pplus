@@ -37,6 +37,12 @@ import java.util.Map;
  */
 public final class QRCodeWriter implements Writer {
 
+  /**
+   * A stateless writer: everything it needs arrives with the encode() arguments,
+   * so a bare instance is ready to use.
+   */
+  public QRCodeWriter() {}
+
   private static final int QUIET_ZONE_SIZE = 4;
 
   @Override

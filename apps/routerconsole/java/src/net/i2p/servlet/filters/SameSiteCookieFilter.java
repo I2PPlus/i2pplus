@@ -19,6 +19,12 @@ import net.i2p.util.Log;
 public class SameSiteCookieFilter implements Filter {
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SameSiteCookieFilter.class);
 
+    /**
+     * The filter holds no configuration - init() is a nop and the logger is static - so a
+     * bare instance is ready for the container to call doFilter() on.
+     */
+    public SameSiteCookieFilter() {}
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException { /* nop */ }
 

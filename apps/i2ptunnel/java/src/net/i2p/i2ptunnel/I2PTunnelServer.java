@@ -53,7 +53,8 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 
-/** Base I2P tunnel server for handling incoming connections.
+/**
+ * Base I2P tunnel server for handling incoming connections.
  * <p>
  * I2PTunnelServer is the foundation for all I2P server tunnels that accept
  * incoming I2P connections and forward them to local TCP services. It manages
@@ -90,16 +91,28 @@ import net.i2p.util.Log;
  */
 public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
+    /** Logger for this tunnel server. */
     protected final Log _log;
+    /** Builds the outbound sockets used to reach each configured destination. */
     protected final I2PSocketManager sockMgr;
+    /** The listening server socket, null until the tunnel is started. */
     protected volatile I2PServerSocket i2pss;
 
+    /** Guards the server socket and the running flag across shutdown. */
     private final Object lock = new Object();
+    /** Passed to each I2PTunnelRunner so connection teardown serializes on it. */
     protected final Object slock = new Object();
+    /** Guards lazy creation of _sslFactory. */
     protected final Object sslLock = new Object();
 
+    /** Remote endpoint of the current connection, null for the listening server. */
     protected volatile InetAddress remoteHost;
+    /** Remote port of the current connection, 0 for the listening server. */
     protected volatile int remotePort;
+    /**
+     * Client-visible log channel: every lifecycle notice and warning reported to the
+     * I2P client (bad option values, unresolvable hosts, lingering connections).
+     */
     protected final Logging l;
     private I2PSSLSocketFactory _sslFactory;
     private static final long DEFAULT_READ_TIMEOUT = -1;
@@ -109,10 +122,17 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public static final String PROP_USE_SSL = "useSSL";
     /** Config key to enable unique local address. */
     public static final String PROP_UNIQUE_LOCAL = "enableUniqueLocal";
-    /** @since 0.9.30 */
+    /**
+     * Config key naming an alternate private key file. When set and readable, an
+     * EdDSA_SHA512_Ed25519 subsession is added alongside a DSA_SHA1 primary
+     * session; the primary is left alone if it is already not DSA_SHA1.
+     *
+     * @since 0.9.30
+     */
     public static final String PROP_ALT_PKF = "altPrivKeyFile";
 
-    /** Config key to cap concurrent inbound connections; 0 (default) = unlimited.
+    /**
+     * Config key to cap concurrent inbound connections; 0 (default) = unlimited.
      *  When the cap is reached, new connections are rejected promptly (HTTP: 503) instead of
      *  being queued behind a saturated pool. This is the last-resort governor under duress;
      *  normal operation should not reach it. Key: tunnel.N.option.i2ptunnel.server.maxConnections
@@ -120,14 +140,16 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.server.maxConnections";
 
-    /** Config key to override the socket read timeout in ms; 0 (default) = shut down silent
+    /**
+     * Config key to override the socket read timeout in ms; 0 (default) = shut down silent
      *  connections promptly (HTTP server falls back to SERVER_READ_TIMEOUT_GET).
      *  Key: tunnel.N.option.i2ptunnel.server.readTimeout
      *  @since 0.9.71+
      */
     public static final String PROP_READ_TIMEOUT = "i2ptunnel.server.readTimeout";
 
-    /** Default write timeout for the outbound I2P stream (ms). Without a bounded value,
+    /**
+     * Default write timeout for the outbound I2P stream (ms). Without a bounded value,
      *  a stalled peer (send window not advancing, e.g. under a SYN flood) holds a server
      *  handler thread for the full streaming disconnect timeout (default 120s) inside
      *  MessageOutputStream.flush()/close(). A bounded write timeout fails after no ACK
@@ -140,14 +162,16 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     private static final long DEFAULT_WRITE_TIMEOUT = 60 * 1000L;
 
-    /** Config key to override the outbound write timeout in ms (0 = use the streaming
+    /**
+     * Config key to override the outbound write timeout in ms (0 = use the streaming
      *  default, which can be the full 120s disconnect timeout with no ACK progress).
      *  Key: tunnel.N.option.i2ptunnel.server.writeTimeout
      *  @since 0.9.71+
      */
     public static final String PROP_WRITE_TIMEOUT = "i2ptunnel.server.writeTimeout";
 
-    /** Config key to cap this tunnel's private server handler pool in threads.
+    /**
+     * Config key to cap this tunnel's private server handler pool in threads.
      *  Each server tunnel owns a per-port pool summed under the global
      *  i2ptunnel.serverHandler.threads budget; unset or &lt; 2 follows the
      *  Tuner-managed default (i2ptunnel.server.threads).
@@ -157,21 +181,29 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public static final String PROP_SERVER_THREADS = "i2ptunnel.server.threads";
     private static final long RECONNECT_DELAY_2MIN = 120 * 1000L;
     private static final long RECONNECT_DELAY_10S = 10 * 1000L;
+    /**
+     * Pool running the per-connection client handlers, taken from the
+     * TunnelControllerGroup so server load stays inside its own thread budget.
+     * Created in run(); null until then.
+     */
     protected volatile ThreadPoolExecutor _clientExecutor;
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<>(4);
     private volatile StatefulConnectionFilter _filter;
 
-    /** Concurrent inbound connection cap, 0 = unlimited. Read from PROP_MAX_CONNECTIONS.
+    /**
+     * Concurrent inbound connection cap, 0 = unlimited. Read from PROP_MAX_CONNECTIONS.
      *  @since 0.9.71+
      */
     private volatile int _maxConnections;
 
-    /** Active connection count used by the gate above.
+    /**
+     * Active connection count used by the gate above.
      *  @since 0.9.71+
      */
     private final AtomicInteger _activeConnections = new AtomicInteger();
 
-    /** Per-tunnel server handler pool cap, -1 = Tuner-managed default.
+    /**
+     * Per-tunnel server handler pool cap, -1 = Tuner-managed default.
      *  Read from PROP_SERVER_THREADS; re-applied live in optionsUpdated().
      *  @since 0.9.71+
      */
@@ -190,13 +222,24 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     protected static volatile long serverId = 0;
     private static final int DEFAULT_LOCAL_PORT = 4488;
+    /**
+     * Local port a HTTP bidir subclass hands to its proxy, replacing the
+     * {@link #DEFAULT_LOCAL_PORT} placeholder. Unused by a standard server.
+     */
     protected int localPort = DEFAULT_LOCAL_PORT;
 
     /**
-     * Non-blocking
+     * Non-blocking: the key is decoded and a disconnected socket manager is built
+     * here; the session is only connected, and the server socket only opened, by
+     * startRunning().
      *
+     * @param host server hostname, kept as the remote host and named in the display name
+     * @param port server port, kept as the remote port and named in the display name
      * @param privData Base64-encoded private key data,
      *                 format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
+     * @param l logger receiving the client-visible notices and warnings
+     * @param notifyThis dispatcher notified of this server's events, e.g. openServerResult
+     * @param tunnel owning tunnel, supplying the RouterContext, client options and host
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
      */
@@ -210,11 +253,18 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     * Non-blocking
+     * Non-blocking: the key file is read and a disconnected socket manager built
+     * here; the session is only connected, and the server socket only opened, by
+     * startRunning(). An unreadable file posts openServerResult "error" and throws.
      *
+     * @param host server hostname, kept as the remote host and named in the display name
+     * @param port server port, kept as the remote port and named in the display name
      * @param privkey file containing the private key data,
      *                format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param privkeyname the name of the privKey file, just for logging
+     * @param l logger receiving the client-visible notices and warnings
+     * @param notifyThis dispatcher notified of this server's events, e.g. openServerResult
+     * @param tunnel owning tunnel, supplying the RouterContext, client options and host
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
      */
@@ -234,11 +284,18 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     * Non-blocking
+     * Non-blocking: a disconnected socket manager is built from the already-open
+     * key stream here; the session is only connected, and the server socket only
+     * opened, by startRunning(). The stream is not closed by this constructor.
      *
+     * @param host server hostname, kept as the remote host and named in the display name
+     * @param port server port, kept as the remote port and named in the display name
      * @param privData stream containing the private key data,
      *                 format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param privkeyname the name of the privKey file, just for logging
+     * @param l logger receiving the client-visible notices and warnings
+     * @param notifyThis dispatcher notified of this server's events, e.g. openServerResult
+     * @param tunnel owning tunnel, supplying the RouterContext, client options and host
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      *                                  badly that we cant create a socketManager
      */
@@ -251,9 +308,16 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     /**
-     *  Non-blocking
+     *  Non-blocking: wraps a socket manager the caller has already built and
+     *  connected, and marks the server open, so the caller is responsible for
+     *  the session rather than this constructor.
      *
+     *  @param host server hostname, kept as the remote host and named in the display name
+     *  @param port server port, kept as the remote port and named in the display name
      *  @param sktMgr the existing socket manager
+     *  @param l logger receiving the client-visible notices and warnings
+     *  @param notifyThis dispatcher notified of this server's events, e.g. openServerResult
+     *  @param tunnel owning tunnel, supplying the RouterContext, client options and host
      *  @since 0.8.9
      */
     public I2PTunnelServer(InetAddress host, int port, I2PSocketManager sktMgr,
@@ -509,7 +573,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *
      * Applies only to future connections; calling this does not affect existing connections.
      *
-     * @param ms in ms
+     * @param ms socket read idle timeout in milliseconds; zero or less means no
+     *        timeout, the -1 default
      */
     public void setReadTimeout(long ms) {readTimeout = ms;}
 
@@ -1240,9 +1305,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * <pre>
      * targetForPort.80=localhost:8080
      * targetForPort.443=localhost:8443
- * </pre>
- * <p>
- * <b>Special Ports:</b> Ports 443 and 22 are automatically flagged for non-SSL
+     * </pre>
+     * <p>
+     * <b>Special Ports:</b> Ports 443 and 22 are automatically flagged for non-SSL
      * handling to prevent SSL-over-SSL issues.
      * </p>
      *

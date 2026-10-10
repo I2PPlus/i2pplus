@@ -22,6 +22,7 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     /**
      *  Non-counter mode. getRead() will return 0.
      *  @param match will be copied
+     *  @param in the underlying stream to read until the match is seen
      */
     public EOFOnMatchInputStream(InputStream in, byte[] match) {
         this(in, null, match);
@@ -30,6 +31,8 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     /**
      *  Counter mode. getRead() will the ReadCounter's value, not including the match bytes.
      *  @param match will be copied
+     *  @param in the underlying stream to read until the match is seen
+     *  @param ctr counts the bytes read from the underlying stream, or null for non-counter mode
      */
     public EOFOnMatchInputStream(InputStream in, ReadCounter ctr, byte[] match) {
         super(in, match.length);
@@ -64,7 +67,9 @@ public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCo
     }
 
     /**
-     *  @return true if we returned EOF because we hit the match
+     * Whether the stream stopped because the search pattern matched.
+     *
+     * @return true if we returned EOF because we hit the match
      */
     public boolean wasFound() {
         return pos <= 0;

@@ -43,10 +43,12 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private static final boolean ENABLE_STATUS_LISTEN = true;
     private static final long I2CP_EXPIRATION_ADJUST = Math.min(25, Connection.getMinResendDelay() / 4);
 
-    /** Record every Nth send-size stat sample. Per-packet RateStat updates lock
+    /**
+     * Record every Nth send-size stat sample. Per-packet RateStat updates lock
      * each period's Rate; these size stats are display-only telemetry, so
      * sampling the aggregate (scaling the recorded value by the period)
-     * preserves the graph with a fraction of the monitor traffic. */
+     * preserves the graph with a fraction of the monitor traffic.
+     */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
     /** Sample counters for the per-packet size stats (one per call site). */
     private int _sendMsgSizeCnt;
@@ -54,6 +56,9 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
 
     /**
      * PacketQueue.
+     *
+     * @param context the application context, used for logging
+     * @param timer timer used to schedule removal of expired status entries
      */
     public PacketQueue(I2PAppContext context, SimpleTimer2 timer) {
         _context = context;

@@ -329,9 +329,17 @@ public class MLabRunner {
     public interface ToolRun {
         /** Cancel the test */
         public void cancel();
-        /** Add a listener for test events */
+        /**
+         * Add a listener for test events
+         *
+         * @param l listener to notify when the test is cancelled
+         */
         public void addListener(ToolRunListener l);
-        /** The current status */
+        /**
+         * The current status
+         *
+         * @return the test status, empty when no test has been started
+         */
         public String getStatus();
     }
 
@@ -383,17 +391,33 @@ public class MLabRunner {
     public interface ToolRunListener {
         /** Called when the test is cancelled */
         public void cancelled();
-        /** The current status */
+        /**
+         * The current status
+         *
+         * @return status text for the test this listener is watching
+         */
         public String getStatus();
     }
 
     /** The parameter for runNDT() */
     public interface ToolListener {
-        /** Report a summary message */
+        /**
+         * Report a summary message
+         *
+         * @param str summary line to show the user
+         */
         public void reportSummary(String str);
-        /** Report a detail message */
+        /**
+         * Report a detail message
+         *
+         * @param str detail line to show the user
+         */
         public void reportDetail(String str);
-        /** Called when the test completes */
+        /**
+         * Called when the test completes
+         *
+         * @param results test results keyed by result name, e.g. download speed
+         */
         public void complete(Map<String,Object> results);
     }
 

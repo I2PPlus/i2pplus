@@ -149,7 +149,11 @@ public class RouterConsoleRunner implements RouterApp {
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
     /** Property name for hosts allowed to access the console. */
     static final String PROP_ALLOWED_HOSTS = "routerconsole.allowedHosts";
-    /** @since 0.9.34 */
+    /**
+     * Accepts every .war file in the webapps directory except routerconsole.war,
+     * which is the root context rather than a plugin webapp.
+     * @since 0.9.34
+     */
     static final FileFilter WAR_FILTER = new WarFilenameFilter();
 
     /**
@@ -174,6 +178,8 @@ public class RouterConsoleRunner implements RouterApp {
      *  RouterConsoleRunner 7657 127.0.0.1,::1 -s 7667 127.0.0.1,::1 ./webapps/
      * </pre>
      *
+     * @param ctx the router context
+     * @param mgr the client app manager to register with, or null for a standalone run
      * @param args second arg may be a comma-separated list of bind addresses,
      * for example ::1,127.0.0.1
      * On XP, the other order (127.0.0.1,::1) fails the IPV6 bind,
@@ -224,6 +230,11 @@ public class RouterConsoleRunner implements RouterApp {
         _state = INITIALIZED;
     }
 
+    /**
+     * Start the console against the first running router context.
+     *
+     * @param args the console options, in the order documented on the constructor
+     */
     public static void main(String[] args) {
         List<RouterContext> contexts = RouterContext.listContexts();
         if (contexts == null || contexts.isEmpty())
@@ -326,6 +337,7 @@ public class RouterConsoleRunner implements RouterApp {
      * Warning, this will NOT work during shutdown, because
      * changeState(STOPPING) will unregister us first.
      *
+     * @param ctx the context whose registered console instance to look up
      * @return may be null or stopped perhaps
      * @since 0.9.38
      */
@@ -335,13 +347,19 @@ public class RouterConsoleRunner implements RouterApp {
     }
 
 
-    /** @since 0.8.13, moved from LogsHelper in 0.9.33 */
+    /**
+     * The version string of the Jetty server library the console runs on.
+     * @return the Jetty version, as reported by Jetty itself
+     * @since 0.8.13, moved from LogsHelper in 0.9.33
+     */
     public static String jettyVersion() {
         return Server.getVersion();
     }
 
     /**
      * Package private for ConfigServiceHandler
+     * @param context the context to read the desktopgui.enabled property from
+     * @return true if the desktop GUI tray icon is enabled, false if not or on a headless box
      * @since 0.9.48 pulled out of startTrayApp
      */
     static boolean isSystrayEnabled(I2PAppContext context) {
@@ -984,6 +1002,9 @@ public class RouterConsoleRunner implements RouterApp {
     /**
      * Set up basic security constraints for the webapp.
      * Add all users and passwords.
+     *
+     * @param ctx the router context, supplying the config directory and password store
+     * @param context the Jetty webapp context the constraints are attached to
      */
     static void initialize(RouterContext ctx, WebAppContext context) {
         ConstraintSecurityHandler sec = new ConstraintSecurityHandler();
@@ -1131,6 +1152,8 @@ public class RouterConsoleRunner implements RouterApp {
     /**
      * Webapp enable properties from the router config directory.
      *
+     * @param ctx the context whose config directory holds the webapp config file
+     * @return the webapp enable properties, empty if the file does not exist yet
      * @since 0.9.4
      */
     public static Properties webAppProperties(I2PAppContext ctx) {
@@ -1139,6 +1162,9 @@ public class RouterConsoleRunner implements RouterApp {
 
     /**
      * Webapp enable properties from the given directory.
+     *
+     * @param dir the directory holding the webapp config file
+     * @return the webapp enable properties, empty if the file does not exist or cannot be read
      */
     public static Properties webAppProperties(String dir) {
         Properties rv = new OrderedProperties();
@@ -1156,6 +1182,11 @@ public class RouterConsoleRunner implements RouterApp {
 
     /**
      * Persist the webapp enable properties to the config directory.
+     * A config directory that cannot be written is logged and otherwise ignored,
+     * so the flags are simply re-derived on the next start.
+     *
+     * @param ctx the router context, supplying the config directory to write to
+     * @param props the webapp enable properties to store
      */
     public static void storeWebAppProperties(RouterContext ctx, Properties props) {
         String webappConfigFile = DEFAULT_WEBAPP_CONFIG_FILENAME;

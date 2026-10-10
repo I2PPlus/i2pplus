@@ -17,6 +17,9 @@ public class TunnelPeerCountHelper extends HelperBase {
     public TunnelPeerCountHelper() { /* nop */ }
 
     /**
+     * Renders the "All Tunnels by Peer" table, or returns it as a string when the
+     * helper has no page output stream to write to.
+     *
      * @return the tunnel peer count
      */
     public String getTunnelPeerCount() {

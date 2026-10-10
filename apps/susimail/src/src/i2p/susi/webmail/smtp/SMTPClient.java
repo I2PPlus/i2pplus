@@ -66,14 +66,15 @@ public class SMTPClient {
     }
 
     /**
-     * Wait for response
-     * @param cmd may be null
+     * Writes a command to the server and waits for its reply
+     * @param cmd the command to write, or null to send nothing
      * @return result code or 0 for failure
      */
     private int sendCmd(String cmd) {return sendCmd(cmd, true);}
 
     /**
-     * @param cmd may be null
+     * Writes a command to the server, optionally without waiting for the reply
+     * @param cmd the command to write, or null to send nothing
      * @param shouldWait if false, don't wait for response, and return 100
      * @return result code or 0 for failure
      * @since 0.9.13
@@ -83,7 +84,9 @@ public class SMTPClient {
     }
 
     /**
-     * @param cmd may be null
+     * Writes a command to the server, optionally without waiting for the reply
+     * and optionally masked in the debug log
+     * @param cmd the command to write, or null to send nothing
      * @param shouldWait if false, don't wait for response, and return 100
      * @param mask true to mask the command in debug logs (credentials)
      * @return result code or 0 for failure
@@ -105,7 +108,7 @@ public class SMTPClient {
     /**
      * Does not flush, wait, or read
      *
-     * @param cmd non-null
+     * @param cmd the command to write, never null
      * @since 0.9.13
      */
     private void sendCmdNoWait(String cmd) throws IOException {
@@ -115,7 +118,7 @@ public class SMTPClient {
     /**
      * Does not flush, wait, or read
      *
-     * @param cmd non-null
+     * @param cmd the command to write, never null
      * @param mask true to mask the command in debug logs (credentials)
      * @since 0.9.13
      */
@@ -131,9 +134,10 @@ public class SMTPClient {
     }
 
     /**
-     * Pipeline if supported
+     * Sends the commands back to back if the server supports pipelining,
+     * otherwise one at a time
      *
-     * @param cmds non-null
+     * @param cmds the commands to send in order, never null or empty
      * @return number of successful commands
      * @since 0.9.13
      */
@@ -210,10 +214,18 @@ public class SMTPClient {
     }
 
     /**
+     * Sends one message to an SMTP server, authenticating first when a user name is given.
+     * Any failure is appended to the error field rather than thrown.
+     * @param host the SMTP server to connect to
+     * @param port the SMTP server port to connect to
+     * @param user the AUTH LOGIN user name, base64-encoded on the wire
+     * @param pass the AUTH LOGIN password, base64-encoded on the wire
+     * @param sender the envelope sender, sent as MAIL FROM
+     * @param recipients the envelope recipients, sent as one RCPT TO each
      * @param body headers and body, without the attachments
      * @param attachments may be null
      * @param boundary non-null if attachments is non-null
-     * @return success
+     * @return true if the server accepted the message, false if any step failed
      */
     public boolean sendMail(String host, int port, String user, String pass, String sender,
                             List<String> recipients, StringBuilder body,
@@ -340,9 +352,11 @@ public class SMTPClient {
     /**
      * Caller must close out
      *
+     * @param out the writer that receives the message, left open for the caller
      * @param body headers and body, without the attachments
      * @param attachments may be null
      * @param boundary non-null if attachments is non-null
+     * @throws IOException if the socket write or the attachment encoding fails
      */
     public static void writeMail(Writer out, StringBuilder body,
                                  List<Attachment> attachments, String boundary) throws IOException {
@@ -389,27 +403,33 @@ public class SMTPClient {
      */
     private static class SendExpect {
         /**
-         * send.
+         * The SMTP command to write, without its trailing CRLF.
          */
         public final String send;
         /**
-         * expect.
+         * The reply code the server is expected to answer with.
          */
         public final int expect;
         /**
-         * sensitive, masked in debug logs.
+         * True if the command carries credentials, so it is masked in debug logs.
          */
         public final boolean sensitive;
 
         /**
-         * SendExpect.
+         * Creates a command not carrying credentials.
+         *
+         * @param s the SMTP command to write
+         * @param e the reply code the server is expected to answer with
          */
         public SendExpect(String s, int e) {
             this(s, e, false);
         }
 
         /**
-         * SendExpect.
+         * Creates a command, optionally marked as carrying credentials.
+         *
+         * @param s the SMTP command to write
+         * @param e the reply code the server is expected to answer with
          * @param sen true if the command contains credentials to mask in debug logs
          */
         public SendExpect(String s, int e, boolean sen) {
@@ -425,11 +445,11 @@ public class SMTPClient {
      */
     private static class Result {
         /**
-         * result.
+         * The three-digit reply code parsed from the server's response, or 0 on error.
          */
         public final int result;
         /**
-         * recv.
+         * The full server response, with any multi-line folding removed.
          */
         public final String recv;
 

@@ -25,6 +25,9 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
 
     /**
      * FloodfillRouterInfoFloodJob.
+     *
+     * @param context the router context whose clock, profile organizer and log manager this job uses
+     * @param facade the network database whose local RouterInfo is to be flooded
      */
     public FloodfillRouterInfoFloodJob(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         super(context);

@@ -595,6 +595,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * Receive a retry packet
      *
      * @param packet the UDP packet received
+     * @throws GeneralSecurityException if the packet does not match the pending
+     *         Retry request - wrong address, connection IDs, or an unexpected
+     *         retry token - or carries a bad or zero DateTime block
      */
     public synchronized void receiveRetry(UDPPacket packet) throws GeneralSecurityException {
         try {
@@ -683,6 +686,9 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      * Receive a SessionCreated packet
      *
      * @param packet the UDP packet received
+     * @throws GeneralSecurityException if the packet does not match the pending
+     *         request - wrong address or connection IDs - or is missing its
+     *         DateTime or address block, or exceeds the two minute skew limit
      */
     public synchronized void receiveSessionCreated(UDPPacket packet) throws GeneralSecurityException {
         try {
@@ -870,7 +876,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             sender.initializeKey(d_ab, 0);
             ChaChaPolyCipherState rcvr = new ChaChaPolyCipherState();
             rcvr.initializeKey(d_ba, 0);
-          /****
+          /*
             if (_log.shouldDebug())
                 _log.debug("[SSU] split()\nGenerated Chain key:              " + Base64.encode(ckd) +
                            "\nGenerated split key for A->B:     " + Base64.encode(k_ab) +
@@ -881,7 +887,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
                            "\nIntro key for Bob:                " + Base64.encode(_sendHeaderEncryptKey1) +
                            "\nGenerated header key 2 for A->B:  " + Base64.encode(h_ab) +
                            "\nGenerated header key 2 for B->A:  " + Base64.encode(h_ba));
-            ****/
+            */
             Arrays.fill(ckd, (byte) 0);
             Arrays.fill(k_ab, (byte) 0);
             Arrays.fill(k_ba, (byte) 0);

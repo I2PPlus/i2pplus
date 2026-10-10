@@ -28,6 +28,14 @@ public class SOCKSUDPPort implements Source, Sink {
     private final SOCKSUDPWrapper wrapper;
     private final SOCKSUDPUnwrapper unwrapper;
 
+    /**
+     * Creates a SOCKS UDP port bound to a local address and port, wiring together
+     * the I2P and UDP halves of the encapsulation over a shared header cache.
+     *
+     * @param host the local address to bind the UDP socket to
+     * @param port the local UDP port to bind, or 0 to let the OS choose one
+     * @param replyMap the map from reply port to SOCKSUDPPort, used by the MultiSink for demux
+     */
     public SOCKSUDPPort(InetAddress host, int port, Map<Integer, SOCKSUDPPort> replyMap) {
 
         // this passes the host and port from UDPUnwrapper to UDPWrapper
@@ -91,7 +99,7 @@ public class SOCKSUDPPort implements Source, Sink {
      *  @param from will be passed along
      *  @param fromPort will be passed along
      *  @param toPort will be passed along
-     *  @throws RuntimeException
+     *  @throws RuntimeException if the wrapped sink fails to send the data
      *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {

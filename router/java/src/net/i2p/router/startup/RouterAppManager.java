@@ -32,6 +32,8 @@ public class RouterAppManager extends ClientAppManagerImpl {
 
     /**
      * RouterAppManager.
+     *
+     * @param ctx router context supplying the log manager and shutdown task registration
      */
     public RouterAppManager(RouterContext ctx) {
         super(ctx);
@@ -43,6 +45,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
     /**
      * Add and start a client application.
      *
+     * @param app the client application to track and start
      * @param args the args that were used to instantiate the app, non-null, may be zero-length
      * @return success
      * @throws IllegalArgumentException if already added
@@ -69,6 +72,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      * A client will generally be found only if it is running or transitioning;
      * after it is stopped it will not be tracked by the manager.
      *
+     * @param className fully qualified class name of the client application to find
      * @param args non-null, may be zero-length
      * @return client app or null
      * @since 0.9.6
@@ -220,6 +224,12 @@ public class RouterAppManager extends ClientAppManagerImpl {
      */
     public class Shutdown implements Runnable {
         /**
+         * The enclosing RouterAppManager is what run() shuts down; as an inner class the
+         * outer instance is supplied by the compiler, and this one adds no state of its own.
+         */
+        public Shutdown() {}
+
+        /**
          * Shut down all running router applications.
          */
         @Override
@@ -230,6 +240,9 @@ public class RouterAppManager extends ClientAppManagerImpl {
 
     /**
      * Render debug HTML of the app manager state.
+     *
+     * @param out the writer the debug HTML is appended to
+     * @throws IOException if writing the HTML to the writer fails
      * @since 0.9.6
      */
     public void renderStatusHTML(Writer out) throws IOException {

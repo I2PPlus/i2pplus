@@ -34,6 +34,13 @@ import net.i2p.data.DataHelper;
  * Login servlet for console authentication.
  */
 public class LoginServlet extends HttpServlet {
+
+    /**
+     *  Constructor, used by the servlet container. The container calls init()
+     *  afterwards, which is where the persisted sessions are loaded.
+     */
+    public LoginServlet() {}
+
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(LoginServlet.class);
 
     @Override

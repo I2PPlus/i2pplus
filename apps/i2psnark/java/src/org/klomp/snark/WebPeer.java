@@ -58,6 +58,8 @@ class WebPeer extends Peer implements EepGet.StatusListener {
      *
      * @param uri must be http with .i2p host
      * @param metainfo non-null
+     * @param coord the coordinator that owns this web seed connection
+     * @param peerID the 20-byte peer id this seed publishes
      */
     public WebPeer(PeerCoordinator coord, URI uri, PeerID peerID, MetaInfo metainfo) {
         super(peerID, null, null, metainfo);

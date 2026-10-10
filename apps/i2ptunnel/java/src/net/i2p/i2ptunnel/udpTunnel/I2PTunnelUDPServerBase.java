@@ -43,11 +43,16 @@ import net.i2p.util.Log;
 
 public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sink {
 
+    /** The log this server writes to, distinct from the console-bound {@link #l}. */
     private final Log _log;
 
+    /** Held while shutting down and reconfiguring, so those cannot overlap. */
     private final Object lock = new Object();
+
+    /** Held while a read or write is in flight on the client's socket. */
     protected Object slock = new Object();
 
+    /** The logging facility the owning tunnel reports through. */
     protected Logging l;
 
     private static final long DEFAULT_READ_TIMEOUT = -1;
@@ -63,9 +68,9 @@ public class I2PTunnelUDPServerBase extends I2PTunnelTask implements Source, Sin
      *
      * @param privkey file containing the private key for the destination
      * @param privkeyname name of the private key file
-     * @param l logging facility
+     * @param l the logging facility reporting to the console and logs
      * @param notifyThis event dispatcher for notifications
-     * @param tunnel the tunnel
+     * @param tunnel the owning I2PTunnel, which supplies the client options and context
      * @throws IllegalArgumentException if the I2CP configuration is b0rked so
      * badly that we cant create a socketManager
      */

@@ -20,7 +20,7 @@ public class SimpleTimeLabelFormat implements TimeLabelFormat {
      * Create a new instance using a format string that is either an strftime patter or a simple
      * date format pattern.
      *
-     * @param format
+     * @param format an strftime pattern, or a simple date format pattern if it has no %
      */
     public SimpleTimeLabelFormat(String format) {
         // escape strftime like format string

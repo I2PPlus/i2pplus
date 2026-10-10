@@ -113,6 +113,7 @@ public final class ECIESAEADEngine {
      * Will still work without, will just generate inline.
      *
      * startup() is called from RatchetSKM constructor so it's deferred until we need it.
+     * @param ctx the router context used to obtain the log, stats and sub-engines
      */
     public ECIESAEADEngine(RouterContext ctx) {
         _context = ctx;
@@ -153,9 +154,13 @@ public final class ECIESAEADEngine {
     /**
      * Try to decrypt the message with one or both of the given private keys
      *
+     * @param data the encrypted CloveSet to decrypt
      * @param elgKey must be ElG, non-null
      * @param ecKey must be EC, non-null
+     * @param keyManager holds the session key material and ratchet preference
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the underlying garlic parse fails and cannot be
+     *         recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
         return _muxedEngine.decrypt(data, elgKey, ecKey, keyManager);
@@ -164,9 +169,12 @@ public final class ECIESAEADEngine {
     /**
      * Try to decrypt the message with one or both of the given private keys
      *
+     * @param data the encrypted CloveSet to decrypt
      * @param ecKey must be EC, non-null
      * @param pqKey must be PQ, non-null
+     * @param keyManager holds the session key material and ratchet preference
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the data is malformed
      * @since 0.9.67
      */
     public CloveSet decrypt(byte[] data, PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
@@ -183,7 +191,12 @@ public final class ECIESAEADEngine {
      * Clients using I2PAppContext.sessionKeyManager() may be correlated with the router,
      * unless you are careful to use different keys.
      *
+     * @param data the encrypted CloveSet to decrypt
+     * @param targetPrivateKey private key matching the encryption type of the data
+     * @param keyManager holds the session tags and key material used to decrypt
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the underlying garlic parse fails and cannot be
+     *         recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey targetPrivateKey,
                             RatchetSKM keyManager) throws DataFormatException {
@@ -231,7 +244,11 @@ public final class ECIESAEADEngine {
     /**
      * NSR/ES only. For MuxedEngine use only.
      *
+     * @param data the encrypted CloveSet to decrypt
+     * @param targetPrivateKey private key matching the encryption type of the data
+     * @param keyManager holds the session tags and key material used to decrypt
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the payload cannot be parsed as a garlic clove set
      * @since 0.9.46
      */
     CloveSet decryptFast(byte[] data, PrivateKey targetPrivateKey,
@@ -325,7 +342,11 @@ public final class ECIESAEADEngine {
     /**
      * NS only. For MuxedEngine use only.
      *
+     * @param data the encrypted CloveSet to decrypt
+     * @param targetPrivateKey private key matching the encryption type of the data
+     * @param keyManager holds the session tags and key material used to decrypt
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the payload cannot be parsed as a garlic clove set
      * @since 0.9.46
      */
     CloveSet decryptSlow(byte[] data, PrivateKey targetPrivateKey,
@@ -417,6 +438,7 @@ public final class ECIESAEADEngine {
     /**
      * The hybrid key factory for the given encryption type, or null if not a hybrid type.
      *
+     * @param type the hybrid encryption type to get a key factory for
      * @return the hybrid key factory
      * @since 0.9.67, public since 0.9.69 for transports
      */
@@ -1063,6 +1085,7 @@ public final class ECIESAEADEngine {
      * No new session key
      * This is the one called from GarlicMessageBuilder and is the primary entry point.
      *
+     * @param cloves the cloves to encrypt and send
      * @param target public key to which the data should be encrypted.
      * @param to destination to encrypt for, required when priv is non-null
      * @param priv local private key to encrypt with, from the leaseset
@@ -1400,6 +1423,9 @@ public final class ECIESAEADEngine {
      * - 16 byte MAC
      * </pre>
      *
+     * @param cloves the cloves to encrypt and send
+     * @param key existing session key for the ES scheme
+     * @param tag session tag to prefix the block with, naming the key to the receiver
      * @return encrypted data or null on failure
      * @since 0.9.46
      */
@@ -1420,6 +1446,7 @@ public final class ECIESAEADEngine {
      * for netdb lookups.
      * Called from MessageWrapper.
      *
+     * @param cloves the cloves to encrypt and send
      * @param target public key to which the data should be encrypted.
      * @return encrypted data or null on failure
      * @since 0.9.48
@@ -1452,7 +1479,13 @@ public final class ECIESAEADEngine {
         return enc;
     }
 
-    /** Do d h */
+    /**
+     * Compute the Curve25519 Diffie-Hellman shared secret for the given key pair.
+     *
+     * @param privkey local ECIES_X25519 private key
+     * @param pubkey remote ECIES_X25519 public key
+     * @return the 32 byte shared secret wrapped as an ECIES_X25519 private key
+     */
     static final PrivateKey doDH(PrivateKey privkey, PublicKey pubkey) {
         byte[] dh = new byte[KEYLEN];
         Curve25519.eval(dh, 0, privkey.getData(), pubkey.getData());
@@ -1483,7 +1516,8 @@ public final class ECIESAEADEngine {
         }
 
         /**
-         * ES
+         * Callback for an ES payload, which unlike NS/NSR may carry an ACK to hand
+         * back to the ratchet session key manager.
          *
          * @param keyManager only for ES, otherwise null
          * @param remoteKey only for ES, otherwise null
@@ -1809,6 +1843,15 @@ public final class ECIESAEADEngine {
      * @since 0.9.71+
      */
     static class BlockPool {
+
+        /**
+         * Constructs an empty pool. Every list is initialised inline, so a bare
+         * instance is immediately usable by the acquire methods.
+         *
+         * @since 0.9.71+
+         */
+        BlockPool() {}
+
         private final List<Block> blocks = new ArrayList<>(8);
         private final List<GarlicBlock> cloveBlocks = new ArrayList<>(4);
         private final List<PaddingBlock> paddingBlocks = new ArrayList<>(2);
@@ -1817,12 +1860,22 @@ public final class ECIESAEADEngine {
         private final List<AckBlock> ackBlocks = new ArrayList<>(1);
         private final List<AckRequestBlock> ackReqBlocks = new ArrayList<>(1);
 
-        /** the reusable block list, already cleared */
+        /**
+         * The reusable block list, already cleared.
+         *
+         * @return the empty mutable list the caller fills with this payload's blocks
+         */
         List<Block> getBlocks() {
             blocks.clear();
             return blocks;
         }
 
+        /**
+         * Take a pooled GarlicBlock for this clove, or allocate one
+         *
+         * @param clove the clove to wrap, borrowed for the payload's lifetime
+         * @return a GarlicBlock holding clove, ready to be serialized
+         */
         GarlicBlock acquireClove(GarlicClove clove) {
             if (cloveBlocks.isEmpty())
                 return new GarlicBlock(clove);
@@ -1831,6 +1884,12 @@ public final class ECIESAEADEngine {
             return b;
         }
 
+        /**
+         * Take a pooled PaddingBlock of this size, or allocate one
+         *
+         * @param size the padding length in bytes, 0 or more
+         * @return a PaddingBlock writing that many zero bytes
+         */
         PaddingBlock acquirePadding(int size) {
             if (paddingBlocks.isEmpty())
                 return new PaddingBlock(size);
@@ -1839,6 +1898,12 @@ public final class ECIESAEADEngine {
             return b;
         }
 
+        /**
+         * Take a pooled DateTimeBlock for this expiry, or allocate one
+         *
+         * @param time the expiry in milliseconds since the epoch, as sent on the wire
+         * @return a DateTimeBlock carrying time
+         */
         DateTimeBlock acquireDateTime(long time) {
             if (datetimeBlocks.isEmpty())
                 return new DateTimeBlock(time);
@@ -1847,6 +1912,12 @@ public final class ECIESAEADEngine {
             return b;
         }
 
+        /**
+         * Take a pooled NextKeyBlock for this key, or allocate one
+         *
+         * @param nextKey the next ratchet key to hand to the recipient
+         * @return a NextKeyBlock carrying nextKey
+         */
         NextKeyBlock acquireNextKey(NextSessionKey nextKey) {
             if (nextKeyBlocks.isEmpty())
                 return new NextKeyBlock(nextKey);
@@ -1855,6 +1926,12 @@ public final class ECIESAEADEngine {
             return b;
         }
 
+        /**
+         * Take a pooled AckBlock for these acknowledgements, or allocate one
+         *
+         * @param acks the sequence numbers of the messages being acknowledged
+         * @return an AckBlock listing acks, in the order given
+         */
         AckBlock acquireAck(List<Integer> acks) {
             if (ackBlocks.isEmpty())
                 return new AckBlock(acks);
@@ -1863,13 +1940,22 @@ public final class ECIESAEADEngine {
             return b;
         }
 
+        /**
+         * Take a pooled AckRequestBlock, or allocate one
+         *
+         * @return an empty AckRequestBlock, asking the recipient to acknowledge
+         */
         AckRequestBlock acquireAckReq() {
             if (ackReqBlocks.isEmpty())
                 return new AckRequestBlock();
             return ackReqBlocks.remove(ackReqBlocks.size() - 1);
         }
 
-        /** return all blocks to their pools, clears the list */
+        /**
+         * Return all blocks to their pools and clear the list.
+         *
+         * @param blocks the block list to recycle, emptied by this call
+         */
         void release(List<Block> blocks) {
             for (Block b : blocks) {
                 if (b instanceof GarlicBlock)

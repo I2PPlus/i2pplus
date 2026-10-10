@@ -65,6 +65,9 @@ abstract class MigrateJetty {
     /**
      * For each entry in apps, if the main class is an old Jetty class,
      * migrate it to the new Jetty class, and update the Jetty config files.
+     *
+     * @param ctx router context used to read app configs and save migration flags
+     * @param apps installed client apps whose main class and config may be rewritten
      */
     public static void migrate(RouterContext ctx, List<ClientAppConfig> apps) {
         Log log = ctx.logManager().getLog(MigrateJetty.class);

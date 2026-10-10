@@ -35,6 +35,8 @@ public class SHAKEDigest
 
     /**
      * SHAKEDigest.
+     *
+     * @param purpose the use the digest is declared to serve, which callers must match
      */
     public SHAKEDigest(CryptoServicePurpose purpose)
     {
@@ -139,6 +141,13 @@ public class SHAKEDigest
      */
     /**
      * doFinal.
+     *
+     * @param out the buffer the squeezed output is written to
+     * @param outOff the index in out at which output starts
+     * @param outLen the number of output bytes asked for
+     * @param partialByte the byte holding any bits not yet absorbed
+     * @param partialBits how many low bits of partialByte are data, 0 to 7
+     * @return the number of bytes written to out, always outLen
      */
     protected int doFinal(byte[] out, int outOff, int outLen, byte partialByte, int partialBits)
     {

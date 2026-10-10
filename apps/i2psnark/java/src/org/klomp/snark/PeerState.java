@@ -206,7 +206,12 @@ class PeerState implements DataLoader {
     /**
      * Create the peer state for the torrent.
      *
+     * @param peer the peer this state tracks, whose availability and stats drive the decisions
+     * @param listener the coordinator callback told about choke, interest, haves and requests
+     * @param bwl the bandwidth listener notified of the bytes uploaded to the peer
      * @param metainfo null if in magnet mode
+     * @param in the connection the peer's messages arrive on
+     * @param out the connection requests and control messages are sent on
      */
     PeerState(
             Peer peer,
@@ -242,7 +247,11 @@ class PeerState implements DataLoader {
         if (_log.shouldDebug()) _log.debug("Received keepalive request from [" + peer + "]");
     }
 
-    /** Handle a choke or unchoke message from the peer */
+    /**
+     * Handle a choke or unchoke message from the peer
+     *
+     * @param choke true if the peer is now choking us, false if it has unchoked
+     */
     void chokeMessage(boolean choke) {
         if (_log.shouldDebug()) {
             _log.debug("Received " + (choke ? "" : "un") + "choked status message from [" + peer + "]");
@@ -271,7 +280,11 @@ class PeerState implements DataLoader {
         }
     }
 
-    /** Handle an interested or uninterested message from the peer */
+    /**
+     * Handle an interested or uninterested message from the peer
+     *
+     * @param interest true if the peer is now interested in us, false if not
+     */
     void interestedMessage(boolean interest) {
         if (_log.shouldDebug())
             _log.debug("[" + peer + "] rcv " + (interest ? "" : "un") + "interested");
@@ -279,7 +292,11 @@ class PeerState implements DataLoader {
         listener.gotInterest(peer, interest);
     }
 
-    /** Handle a have message from the peer */
+    /**
+     * Handle a have message from the peer
+     *
+     * @param piece the zero-based index of the piece being acted on
+     */
     void haveMessage(int piece) {
         if (_log.shouldDebug()) _log.debug("[" + peer + "] rcv have(" + piece + ")");
         // Sanity check
@@ -327,7 +344,11 @@ class PeerState implements DataLoader {
         if (listener.gotHave(peer, piece)) setInteresting(true);
     }
 
-    /** Handle a bitfield message from the peer */
+    /**
+     * Handle a bitfield message from the peer
+     *
+     * @param bitmap the peer's have bits as received, highest bit first
+     */
     void bitfieldMessage(byte[] bitmap) {
         bitfieldMessage(bitmap, false);
     }
@@ -425,7 +446,13 @@ class PeerState implements DataLoader {
         }
     }
 
-    /** Handle a request message from the peer */
+    /**
+     * Handle a request message from the peer
+     *
+     * @param piece the zero-based index of the piece being acted on
+     * @param begin the byte offset into the piece where the requested block starts
+     * @param length the size of the requested block in bytes
+     */
     void requestMessage(int piece, int begin, int length) {
         if (_log.shouldDebug())
             _log.debug(
@@ -575,6 +602,8 @@ class PeerState implements DataLoader {
     /**
      * Called when some bytes have left the outgoing connection. XXX - Should indicate whether it
      * was a real piece or overhead.
+     *
+     * @param size the number of bytes just sent to the peer
      */
     void uploaded(int size) {
         peer.uploaded(size);
@@ -608,6 +637,8 @@ class PeerState implements DataLoader {
      * <p>This may block quite a while if it is the last chunk for a piece, as it calls the
      * listener, who stores the piece and then calls havePiece for every peer on the torrent
      * (including us).
+     *
+     * @param req the request satisfied by the block that just arrived
      */
     void pieceMessage(Request req) {
 
@@ -681,6 +712,11 @@ class PeerState implements DataLoader {
      * Called when a piece message is being processed by the incoming connection. That is, when the
      * header of the piece message was received. Returns null when there was no such request. It
      * also requeues/sends requests when it thinks that they must have been lost.
+     *
+     * @param piece the zero-based index of the piece being acted on
+     * @param begin the byte offset into the piece where the received block starts
+     * @param length the size of the received block in bytes
+     * @return the outstanding request matching that chunk, or null if none was sent
      */
     Request getOutstandingRequest(int piece, int begin, int length) {
         if (_log.shouldDebug()) {
@@ -874,7 +910,13 @@ class PeerState implements DataLoader {
         return rv;
     }
 
-    /** Handle a cancel message from the peer */
+    /**
+     * Handle a cancel message from the peer
+     *
+     * @param piece the zero-based index of the piece being acted on
+     * @param begin the byte offset into the piece where the cancelled block starts
+     * @param length the size of the cancelled block in bytes
+     */
     void cancelMessage(int piece, int begin, int length) {
         if (_log.shouldDebug())
             _log.debug("Received cancel message (" + piece + ", " + begin + ", " + length + ")");
@@ -1069,6 +1111,7 @@ class PeerState implements DataLoader {
      * good one to request from it. Request it immediately if we want it and are unchoked. Never
      * recorded as a permanent have, as that would distort availability for the swarm.
      *
+     * @param piece the zero-based index of the piece being suggested
      * @since 0.9.71+
      */
     void suggestMessage(int piece) {
@@ -1130,6 +1173,9 @@ class PeerState implements DataLoader {
     /**
      * BEP 6
      *
+     * @param piece the zero-based index of the piece being acted on
+     * @param begin the byte offset into the piece where the rejected block starts
+     * @param length the size of the rejected block in bytes
      * @since 0.9.21
      */
     void rejectMessage(int piece, int begin, int length) {
@@ -1368,7 +1414,11 @@ class PeerState implements DataLoader {
 
     /////////// end message handlers /////////
 
-    /** We now have this piece. Tell the peer and cancel any requests for the piece. */
+    /**
+     * We now have this piece. Tell the peer and cancel any requests for the piece.
+     *
+     * @param piece the zero-based index of the piece we now hold in full
+     */
     void havePiece(int piece) {
         if (_log.shouldDebug()) _log.debug("Notifying [" + peer + "] havePiece(" + piece + ")");
 
@@ -1388,6 +1438,7 @@ class PeerState implements DataLoader {
      * Tell the other side that we are no longer interested in any of the outstanding requests (if
      * any) for this piece.
      *
+     * @param piece the zero-based index of the piece whose requests are dropped
      * @since 0.8.1
      */
     synchronized void cancelPiece(int piece) {

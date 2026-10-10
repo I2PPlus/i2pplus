@@ -126,7 +126,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException always, as view creation is not supported
      */
     @Override
     public SortedSet<E> headSet(E toElement) {
@@ -134,7 +134,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException always, as view creation is not supported
      */
     @Override
     public SortedSet<E> subSet(E fromElement, E toElement) {
@@ -142,7 +142,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException always, as view creation is not supported
      */
     @Override
     public SortedSet<E> tailSet(E fromElement) {
@@ -150,7 +150,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException if the set has finished initializing;
+     *     before that the call is allowed so the Collection constructor can populate it
      */
     @Override
     public boolean add(E o) {
@@ -160,7 +161,8 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException if the set has finished initializing;
+     *     before that the call is allowed so the Collection constructor can populate it
      */
     @Override
     public void addUnique(E o) {
@@ -170,7 +172,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException always, as the set cannot be emptied
      */
     @Override
     public void clear() {
@@ -178,7 +180,7 @@ public class UnmodifiableSortedSet<E> extends ArraySet<E> implements SortedSet<E
     }
 
     /**
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException always, as no element can be removed
      */
     @Override
     public boolean remove(Object o) {

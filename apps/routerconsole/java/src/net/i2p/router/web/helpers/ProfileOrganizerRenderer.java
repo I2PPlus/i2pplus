@@ -52,7 +52,12 @@ class ProfileOrganizerRenderer {
     /** Emit a data-key (peer hash) per row for worker-side row diffing; fragment renders only, so full pages stay byte-for-byte identical. */
     private final boolean _fragmentKeys;
 
-    /** Creates a new ProfileOrganizerRenderer */
+    /**
+     * Creates a new ProfileOrganizerRenderer
+     *
+     * @param organizer the organizer holding the peer profiles and throttling data to render
+     * @param context the router context supplying console translations
+     */
     public ProfileOrganizerRenderer(ProfileOrganizer organizer, RouterContext context) {
         this(organizer, context, false);
     }
@@ -60,6 +65,8 @@ class ProfileOrganizerRenderer {
     /**
      * Creates a new ProfileOrganizerRenderer
      * @param fragmentKeys when true, rows carry a data-key attribute for the contentonly fragment mode
+     * @param organizer the organizer holding the peer profiles and throttling data to render
+     * @param context the router context supplying console translations
      */
     public ProfileOrganizerRenderer(ProfileOrganizer organizer, RouterContext context, boolean fragmentKeys) {
         _context = context;

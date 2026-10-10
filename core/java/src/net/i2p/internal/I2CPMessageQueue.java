@@ -20,10 +20,17 @@ import java.io.Closeable;
  * @since 0.8.3
  */
 public abstract class I2CPMessageQueue implements Closeable {
+    /**
+     * Constructor for implementations, which configure the queue after construction.
+     */
+
+    public I2CPMessageQueue() {}
+
 
     /**
      * Send a message, nonblocking.
      *
+     * @param msg the message to enqueue for the router to read
      * @return success (false if no space available)
      */
     public abstract boolean offer(I2CPMessage msg);
@@ -31,8 +38,11 @@ public abstract class I2CPMessageQueue implements Closeable {
     /**
      * Send a message, blocking.
      *
+     * @param msg the message to enqueue for the router to read
      * @param timeout how long to wait for space (ms)
      * @return success (false if no space available or if timed out)
+     * @throws InterruptedException if the calling thread is interrupted while
+     *         waiting for space to become available
      * @since 0.9.3
      */
     public abstract boolean offer(I2CPMessage msg, long timeout) throws InterruptedException;
@@ -68,6 +78,10 @@ public abstract class I2CPMessageQueue implements Closeable {
     /**
      * Send a message, blocking until space is available.
      * Unused for now.
+     *
+     * @param msg the message to enqueue for the router to read
+     * @throws InterruptedException if the calling thread is interrupted while
+     *         waiting for space to become available
      */
     public abstract void put(I2CPMessage msg) throws InterruptedException;
 
@@ -75,6 +89,8 @@ public abstract class I2CPMessageQueue implements Closeable {
      * Receive a message, blocking until one is available.
      *
      * @return message
+     * @throws InterruptedException if the calling thread is interrupted while
+     *         waiting for a message to arrive
      */
     public abstract I2CPMessage take() throws InterruptedException;
 

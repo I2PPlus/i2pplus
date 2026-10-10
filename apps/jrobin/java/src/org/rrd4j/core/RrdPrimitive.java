@@ -38,10 +38,25 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     private final long pointer;
     private final boolean cachingAllowed;
 
+    /**
+     * Allocate a single-slot primitive in the updater's backend storage.
+     *
+     * @param updater the updater whose allocator and backend back this primitive
+     * @param type one of the RRD_INT, RRD_LONG, RRD_DOUBLE or RRD_STRING constants, selecting the slot size
+     * @param isConstant true if the value never changes, which permits caching
+     */
     RrdPrimitive(RrdUpdater<U> updater, int type, boolean isConstant) {
         this(updater, type, 1, isConstant);
     }
 
+    /**
+     * Allocate a primitive array of the given length in the updater's backend storage.
+     *
+     * @param updater the updater whose allocator and backend back this primitive
+     * @param type one of the RRD_INT, RRD_LONG, RRD_DOUBLE or RRD_STRING constants, selecting the slot size
+     * @param count the number of consecutive slots to allocate
+     * @param isConstant true if the value never changes, which permits caching
+     */
     RrdPrimitive(RrdUpdater<U> updater, int type, int count, boolean isConstant) {
         this.backend = updater.getRrdBackend();
         this.byteCount = RRD_PRIM_SIZES[type] * count;
@@ -52,6 +67,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * Raw byte array from backend storage.
      * @return raw byte array from backend storage
+     * @throws IOException if the backend storage cannot be read
      */
     final byte[] readBytes() throws IOException {
         byte[] b = new byte[byteCount];
@@ -62,6 +78,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * Byte array to write to backend storage.
      * @param b byte array to write to backend storage
+     * @throws IOException if the backend storage cannot be written
      */
     final void writeBytes(byte[] b) throws IOException {
         assert b.length == byteCount
@@ -72,6 +89,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * Int value from backend storage.
      * @return int value from backend storage
+     * @throws IOException if the backend storage cannot be read
      */
     final int readInt() throws IOException {
         return backend.readInt(pointer);
@@ -80,6 +98,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * Int value to write to backend storage.
      * @param value int value to write to backend storage
+     * @throws IOException if the backend storage cannot be written
      */
     final void writeInt(int value) throws IOException {
         backend.writeInt(pointer, value);
@@ -88,6 +107,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * Long value from backend storage.
      * @return long value from backend storage
+     * @throws IOException if the backend storage cannot be read
      */
     final long readLong() throws IOException {
         return backend.readLong(pointer);
@@ -96,6 +116,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * Long value to write to backend storage.
      * @param value long value to write to backend storage
+     * @throws IOException if the backend storage cannot be written
      */
     final void writeLong(long value) throws IOException {
         backend.writeLong(pointer, value);
@@ -104,6 +125,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * Double value from backend storage.
      * @return double value from backend storage
+     * @throws IOException if the backend storage cannot be read
      */
     final double readDouble() throws IOException {
         return backend.readDouble(pointer);
@@ -111,7 +133,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
 
     /*** Position in the primitive array.
  @param index position in the primitive array
-     *  @return double value at the given array index */
+     *  @return double value at the given array index
+     *  @throws IOException if the backend storage cannot be read */
     final double readDouble(int index) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         return backend.readDouble(offset);
@@ -120,7 +143,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /*** Starting position in the primitive array.
  @param index starting position in the primitive array
      *  @param count number of consecutive doubles to read
-     *  @return array of double values */
+     *  @return array of double values
+     *  @throws IOException if the backend storage cannot be read */
     final double[] readDouble(int index, int count) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         return backend.readDouble(offset, count);
@@ -129,6 +153,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * Double value to write to backend storage.
      * @param value double value to write to backend storage
+     * @throws IOException if the backend storage cannot be written
      */
     final void writeDouble(double value) throws IOException {
         backend.writeDouble(pointer, value);
@@ -136,7 +161,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
 
     /*** Position in the primitive array.
  @param index position in the primitive array
-     *  @param value double value to write */
+     *  @param value double value to write
+     *  @throws IOException if the backend storage cannot be written */
     final void writeDouble(int index, double value) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         backend.writeDouble(offset, value);
@@ -145,7 +171,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /*** Starting position in the primitive array.
  @param index starting position in the primitive array
      *  @param value double value to write
-     *  @param count number of consecutive slots to fill */
+     *  @param count number of consecutive slots to fill
+     *  @throws IOException if the backend storage cannot be written */
     final void writeDouble(int index, double value, int count) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         backend.writeDouble(offset, value, count);
@@ -153,7 +180,8 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
 
     /*** Starting position in the primitive array.
  @param index starting position in the primitive array
-     *  @param values array of doubles to write */
+     *  @param values array of doubles to write
+     *  @throws IOException if the backend storage cannot be written */
     final void writeDouble(int index, double[] values) throws IOException {
         long offset = pointer + index * RRD_PRIM_SIZES[RRD_DOUBLE];
         backend.writeDouble(offset, values);
@@ -162,6 +190,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * String value from backend storage.
      * @return string value from backend storage
+     * @throws IOException if the backend storage cannot be read
      */
     final String readString() throws IOException {
         return backend.readString(pointer);
@@ -170,6 +199,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
     /**
      * String value to write to backend storage.
      * @param value string value to write to backend storage
+     * @throws IOException if the backend storage cannot be written
      */
     final void writeString(String value) throws IOException {
         backend.writeString(pointer, value);
@@ -180,6 +210,7 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
      * @param <E> enum type
      * @param clazz enum class to deserialize
      * @return the enum value, or null if the stored value is empty
+     * @throws IOException if the backend storage cannot be read
      */
     protected final <E extends Enum<E>> E readEnum(Class<E> clazz) throws IOException {
         String value = backend.readString(pointer);
@@ -194,7 +225,13 @@ abstract class RrdPrimitive<U extends RrdUpdater<U>> {
         }
     }
 
-    /** Serialize an enum value to backend storage. */
+    /**
+     * Serialize an enum value to backend storage.
+     *
+     * @param <E> the enum type
+     * @param value the value to store as its enum constant name
+     * @throws IOException if the backend storage cannot be written
+     */
     protected final <E extends Enum<E>> void writeEnum(E value) throws IOException {
         writeString(value.name());
     }

@@ -16,6 +16,12 @@ package org.minidns.util;
 public class Hex {
 
     /**
+     * Constructor. Both conversions are static functions of their byte or
+     * string argument, so an instance carries no state.
+     */
+    public Hex() {}
+
+    /**
      * Converts a byte array to a hexadecimal string representation.
      *
      * @param bytes the byte array to convert

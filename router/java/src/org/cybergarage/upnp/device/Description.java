@@ -30,6 +30,12 @@ package org.cybergarage.upnp.device;
  */
 public class Description {
 
+    /**
+     * Constructor. The error strings are fixed constants, so an instance holds
+     * nothing and the messages are read statically.
+     */
+    public Description() {}
+
     /** Error message when description file cannot be loaded */
     public static final String LOADING_EXCEPTION = "Couldn't load a specified description file ";
     /** Error message when root node is not found */

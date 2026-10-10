@@ -28,6 +28,7 @@ public class Points implements Comparable<Points> {
     /**
      * Create a new Points instance with an initial value.
      *
+     * @param d the point value to start from, positive for a penalty or negative for credit
      * @param reason may not contain '%'
      */
     public Points(double d, String reason) {
@@ -58,6 +59,7 @@ public class Points implements Comparable<Points> {
     /**
      * Add points with a reason.
      *
+     * @param d the point value to add, positive for a penalty or negative for credit
      * @param reason may not contain '%'
      * @since 0.9.38
      */
@@ -106,6 +108,7 @@ public class Points implements Comparable<Points> {
      * decimal point in various locales, or chars in reasons, including HTML links,
      * or special chars in Pattern.
      *
+     * @param buf the buffer to append the total and the '%'-separated reasons to
      * @since 0.9.38
      */
     public void toString(StringBuilder buf) {
@@ -117,6 +120,7 @@ public class Points implements Comparable<Points> {
 
     /**
      * For persistence.
+     * @param s the '%'-separated persistence string: the point total, then one entry per reason
      * @return null on failure
      * @since 0.9.38
      */

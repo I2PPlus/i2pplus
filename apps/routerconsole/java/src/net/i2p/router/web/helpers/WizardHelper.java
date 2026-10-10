@@ -17,6 +17,12 @@ import net.i2p.router.web.HelperBase;
 public class WizardHelper extends HelperBase {
 
     /**
+     * A session-scoped bean with no test run yet: the listener, the runner and the cached
+     * status are all filled in as the bandwidth test runs.
+     */
+    public WizardHelper() {}
+
+    /**
      * PROP_COMPLETE.
      */
     public static final String PROP_COMPLETE = "routerconsole.welcomeWizardComplete";
@@ -46,18 +52,24 @@ public class WizardHelper extends HelperBase {
     }
 
     /**
-     * complete.
+     * Record that the setup wizard has been finished, so it is not shown again.
      */
     public void complete() {_context.router().saveConfig(PROP_COMPLETE, "true");}
     /**
+     * Whether the NDT bandwidth test listener reports the test as finished.
+     *
      * @return whether n d t complete
      */
     public synchronized boolean isNDTComplete() {return _listener != null && _listener.isComplete();}
     /**
+     * Whether the NDT bandwidth test is in progress.
+     *
      * @return whether n d t running
      */
     public synchronized boolean isNDTRunning() {return _listener != null && !_listener.isComplete();}
     /**
+     * Whether the NDT bandwidth test completed and moved any bandwidth in both directions.
+     *
      * @return whether n d t successful
      */
     public synchronized boolean isNDTSuccessful() {return isNDTComplete() && getUpBandwidth() > 0 && getDownBandwidth() > 0;}

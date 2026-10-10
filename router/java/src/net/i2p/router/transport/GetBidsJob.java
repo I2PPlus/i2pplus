@@ -24,7 +24,19 @@ import net.i2p.util.Log;
  */
 class GetBidsJob {
 
-    /** Transport bids for a message and send it if a suitable bid is found */
+    /**
+     * Constructor. Bid collection is driven entirely by the static getBids()
+     * from the context, transport manager and message it is handed, so an
+     * instance carries no state.
+     */
+    GetBidsJob() {}
+
+    /**
+     * Transport bids for a message and send it if a suitable bid is found
+     * @param context the router context, used for stats, banlist and clock lookups
+     * @param tmgr the transport manager asked to collect the bids from every available transport
+     * @param msg the outbound message to bid on, dispatched on the lowest acceptable bid
+     */
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
         if (msg.getFailedTransportCount() > 1) {
             context.statManager().addRateData("transport.bidFailAllTransports", msg.getLifetime());
@@ -99,7 +111,11 @@ class GetBidsJob {
         }
     }
 
-    /** Fail a message and trigger failure callbacks */
+    /**
+     * Fail a message and trigger failure callbacks
+     * @param context the router context, whose job queue receives the failure callbacks
+     * @param msg the outbound message being dropped; it is unregistered from the message registry
+     */
     static void fail(RouterContext context, OutNetMessage msg) {
         if (msg.getOnFailedSendJob() != null) {
             context.jobQueue().addJob(msg.getOnFailedSendJob());

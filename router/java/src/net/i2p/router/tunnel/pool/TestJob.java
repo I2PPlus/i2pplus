@@ -98,7 +98,8 @@ public class TestJob extends JobImpl {
     private int _testId;
     /**
      * Test period for the current round, computed once at send time so the
-     *  reply is judged against the same window used to set the expiration. */
+     * reply is judged against the same window used to set the expiration.
+     */
     private int _testPeriod;
 
     /**
@@ -415,6 +416,13 @@ public class TestJob extends JobImpl {
         }
     }
 
+    /**
+     * The per-context tally of reply partners, holding for each one the number
+     * of rounds it carried and the time it was last blamed.
+     *
+     * @param inbound true for the inbound tally, false for the outbound one
+     * @return the live tally map, which the caller must synchronize on
+     */
     static Map<Hash, long[]> replyPartnerMemory(boolean inbound) {
         return inbound ? _inboundReplyPartnerTally : _outboundReplyPartnerTally;
     }
@@ -619,7 +627,8 @@ public class TestJob extends JobImpl {
      * Hard ceiling on consecutive test failures for server pool tunnels.
      *  Without this, dead server pool tunnels keep their slot indefinitely
      *  because incrementTestFailures() holds them for the LS republish cycle.
-     *  At 10+ failures the tunnel is clearly dead — mark it conclusively. */
+     * At 10+ failures the tunnel is clearly dead — mark it conclusively.
+     */
     private static final int MAX_SERVER_POOL_TEST_FAILURES = 10;
     private static double getPoolCoverageThreshold(RouterContext ctx) {
         refreshTestJobConfig(ctx);
@@ -727,6 +736,12 @@ public class TestJob extends JobImpl {
      */
     private static final int DEFAULT_QUEUED_LIMIT = SystemVersion.isSlow() ? 64 : 96;
 
+    /**
+     * The queue ceiling actually in force. Starts at
+     * {@link #DEFAULT_QUEUED_LIMIT} and is replaced either by the Tuner or by
+     * the i2p.tunnel.testJob.maxQueued property, so read it rather than
+     * assuming either.
+     */
     public static volatile int maxQueuedTests = DEFAULT_QUEUED_LIMIT;
 
     /**
@@ -803,6 +818,12 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     static final class BatchState {
+
+        /**
+         * Holds nothing beyond the field initializers below.
+         */
+        BatchState() {}
+
         /**
          * TestJob instances (queued + running) in this context; the memory
          * bound checked against {@link #getHardLimit(RouterContext)}.
@@ -1855,7 +1876,9 @@ public class TestJob extends JobImpl {
      * A first-test candidate waiting in the batch buffer.
      */
     static final class PendingTest {
+        /** The tunnel build config this candidate will test. */
         final PooledTunnelCreatorConfig cfg;
+        /** The pool that owns the tunnel, captured at offer time. */
         final TunnelPool pool;
         /**
          * Tunnel key captured at offer time.  Held so the buffer can be
@@ -1871,6 +1894,13 @@ public class TestJob extends JobImpl {
          */
         final String poolId;
 
+        /**
+         * Capture the config's key and pool identity now, so the buffer can be
+         * de-duplicated and re-verified at drain time even if the config changes.
+         *
+         * @param cfg the tunnel build config to test
+         * @param pool the pool that owns the tunnel
+         */
         PendingTest(PooledTunnelCreatorConfig cfg, TunnelPool pool) {
             this.cfg = cfg;
             this.pool = pool;
@@ -1974,6 +2004,7 @@ public class TestJob extends JobImpl {
      * @param buf the buffer to claim from, modified in place
      * @param max maximum number of elements to claim
      * @param eligible removal predicate; false leaves the element in place
+     * @param <T> the element type held in the buffer and returned in the claimed list
      * @return the claimed elements in buffer order; never null
      * @since 0.9.71+
      */
@@ -1998,6 +2029,7 @@ public class TestJob extends JobImpl {
      *
      * @param buf the buffer to claim from, modified in place
      * @param max maximum number of elements to claim
+     * @param <T> the element type held in the buffer and returned in the claimed list
      * @return the claimed elements in buffer order; never null
      * @since 0.9.71+
      */
@@ -2018,6 +2050,7 @@ public class TestJob extends JobImpl {
      * @param buf the buffer to append to
      * @param elem the element to append
      * @param bound maximum buffer size after the append; non-positive means unbounded
+     * @param <T> the element type of the buffer, the appended element and the evicted list
      * @return the evicted elements oldest first; empty when nothing was evicted
      * @since 0.9.71+
      */
@@ -2265,6 +2298,11 @@ public class TestJob extends JobImpl {
                         /** True once the running-test registration succeeded. */
         final AtomicBoolean runningHeld = new AtomicBoolean(false);
 
+        /**
+         * Claim a pool's slot, which is held only when the job actually has a pool.
+         *
+         * @param poolId pool identity captured when the claim was taken, or null
+         */
         InstanceClaims(String poolId) {
             this.poolId = poolId;
             this.poolHeld = new AtomicBoolean(poolId != null);
@@ -2360,6 +2398,7 @@ public class TestJob extends JobImpl {
      * @param buf the buffer to insert into, modified in place
      * @param pending candidates in original buffer order, head-most first
      * @param bound maximum buffer size after the insert; non-positive means unbounded
+     * @param <T> the element type of the buffer, the pending batch and the evicted list
      * @return the candidates evicted from the tail; never null
      * @since 0.9.71+
      */
@@ -2627,6 +2666,9 @@ public class TestJob extends JobImpl {
         final AtomicBoolean permitsHeld = new AtomicBoolean(false);
 
         /**
+         * Name this round, so a callback can be matched against the round it
+         * was built for rather than against whatever the instance considers live.
+         *
          * @param generation monotonic round generation
          * @param poolId pool identity captured at creation, or null
          * @param expiration reply deadline in ms
@@ -3736,6 +3778,7 @@ public class TestJob extends JobImpl {
      *  Base removal bar for data-carrying and client/exploratory tunnels.
      *  Under degraded mode (low build success), allow more consecutive failures
      *  before removal so pool churn does not waste scarce build capacity.
+     * @param degraded true while the pool's build success is low, raising the base bar from 3 to 5
      *  @return the base max consecutive failures before removal
      *  @since 0.9.71+
      */
@@ -3914,27 +3957,27 @@ public class TestJob extends JobImpl {
      * @param timeToFail time in milliseconds the test ran before failing
      */
     /**
-      * Record blame evidence when a tunnel test fails and our own next hop has no session.
+     * Record blame evidence when a tunnel test fails and our own next hop has no session.
      *
-      * <p>A tunnel test is an onion: the message traverses every hop and any hop that
-      * cannot forward drops it silently, so the round trip reports only "somewhere
-      * between us and the far end". The single hop we can name is the peer we send
-      * through, and only when we hold no session to it is the fault local rather than
-      * beyond us. Anything else stays unattributed -- blaming a peer for a failure we
-      * cannot place on it is how a good peer ends up ghosted.
+     * <p>A tunnel test is an onion: the message traverses every hop and any hop that
+     * cannot forward drops it silently, so the round trip reports only "somewhere
+     * between us and the far end". The single hop we can name is the peer we send
+     * through, and only when we hold no session to it is the fault local rather than
+     * beyond us. Anything else stays unattributed -- blaming a peer for a failure we
+     * cannot place on it is how a good peer ends up ghosted.
      *
-      * <p>Uses {@link BuildRequestor#getBuildRequestPeer} rather than a fixed index:
-      * the peer we send through is {@code getPeer(0)} inbound but {@code getPeer(1)}
-      * outbound, where {@code getPeer(0)} is the gateway we are trying to reach.
-      * Checking the wrong index would blame a peer we never contacted.
+     * <p>Uses {@link BuildRequestor#getBuildRequestPeer} rather than a fixed index:
+     * the peer we send through is {@code getPeer(0)} inbound but {@code getPeer(1)}
+     * outbound, where {@code getPeer(0)} is the gateway we are trying to reach.
+     * Checking the wrong index would blame a peer we never contacted.
      *
-      * <p>Records the observation only. It does not fail the tunnel early -- the
-      * failure path owns that decision and its threshold -- and it does not penalise
-      * the peer, because one missed session is indistinguishable from a peer
-      * restarting, and a single such event must not remove a peer that is otherwise
-      * serving us.
+     * <p>Records the observation only. It does not fail the tunnel early -- the
+     * failure path owns that decision and its threshold -- and it does not penalise
+     * the peer, because one missed session is indistinguishable from a peer
+     * restarting, and a single such event must not remove a peer that is otherwise
+     * serving us.
      *
-      * @since 0.9.71+
+     * @since 0.9.71+
      */
     private void noteLocalHopAttribution() {
         Hash localHop = BuildRequestor.getBuildRequestPeer(_cfg);

@@ -21,6 +21,10 @@ class UnsignedUpdateRunner extends UpdateRunner {
 
     /**
      * UnsignedUpdateRunner.
+     *
+     * @param ctx the router context the update runs in
+     * @param mgr the manager notified of task progress and failure
+     * @param uris the candidate mirror URIs, the first of which is fetched
      */
     public UnsignedUpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         super(ctx, mgr, ROUTER_UNSIGNED, uris);

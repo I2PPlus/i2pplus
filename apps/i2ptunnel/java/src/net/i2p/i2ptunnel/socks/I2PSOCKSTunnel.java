@@ -46,9 +46,17 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
 
     private final HashMap<String, List<String>> proxies;  // port# + "" or "default" -> hostname list
 
-    /** @since 0.9.57 for storing passwords */
+    /**
+     * The HTTP auth realm presented to clients that authenticate.
+     *
+     * @since 0.9.57 for storing passwords
+     */
     public static final String AUTH_REALM = "I2P SOCKS Proxy";
-    /** @since 0.9.57 */
+    /**
+     * The property naming the outproxy type ("none", "HTTP", "SOCKS", "SOCKS4a").
+     *
+     * @since 0.9.57
+     */
     public static final String PROP_OUTPROXY_TYPE = "outproxyType";
 
     /**
@@ -100,9 +108,11 @@ public class I2PSOCKSTunnel extends I2PTunnelClientBase {
         }
     }
 
-    /** add "default" or port number */
+/** Prefix of the per-port proxy property names. */
     public static final String PROP_PROXY_PREFIX = "i2ptunnel.socks.proxy.";
+    /** The key used for the default (first) proxy. */
     public static final String DEFAULT = "default";
+    /** The full property name of the default proxy. */
     public static final String PROP_PROXY_DEFAULT = PROP_PROXY_PREFIX + DEFAULT;
 
     /**

@@ -34,7 +34,7 @@ public class ObjectCounter<K> implements Serializable {
     private final ConcurrentHashMap<K, AtomicInteger> map;
 
     /**
-     * ObjectCounter.
+     * Start an empty counter; nothing is tracked until something is incremented.
      */
     public ObjectCounter() {
         this.map = new ConcurrentHashMap<>();
@@ -43,6 +43,7 @@ public class ObjectCounter<K> implements Serializable {
     /**
      * Add one.
      *
+     * @param h the object whose occurrence count is to be advanced by one
      * @return count after increment
      */
     public int increment(K h) {
@@ -52,8 +53,9 @@ public class ObjectCounter<K> implements Serializable {
     }
 
     /**
-     * Set a high value
+     * Jump the count straight to a high value instead of incrementing to it.
      *
+     * @param h the object whose count is pinned high so later increments cannot overflow
      * @since 0.9.56
      */
     public void max(K h) {
@@ -61,6 +63,9 @@ public class ObjectCounter<K> implements Serializable {
     }
 
     /**
+     * How many times this object has been counted, without changing the count.
+     *
+     * @param h the object whose count is to be read; 0 if it has never been counted
      * @return current count
      */
     public int count(K h) {
@@ -70,6 +75,9 @@ public class ObjectCounter<K> implements Serializable {
     }
 
     /**
+     * Every object currently held, which is the live key set rather than a copy,
+     * so it reflects later increments and clears as they happen.
+     *
      * @return set of objects with counts &gt; 0
      */
     public Set<K> objects() {
@@ -88,6 +96,7 @@ public class ObjectCounter<K> implements Serializable {
     /**
      * Reset the count for this key to zero
      *
+     * @param h the object to drop, leaving later reads of it at 0
      * @since 0.9.36
      */
     public void clear(K h) {

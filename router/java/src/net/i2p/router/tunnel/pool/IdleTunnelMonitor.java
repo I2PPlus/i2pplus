@@ -46,8 +46,10 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     }
 
     // Configuration
-    /** Five minutes: half of a tunnel's typical lifetime, so genuinely dead
-     * tunnels are still reaped well before expiry */
+    /**
+     * Five minutes: half of a tunnel's typical lifetime, so genuinely dead
+     * tunnels are still reaped well before expiry
+     */
     private static final long DEFAULT_DETECTION_PERIOD = 300 * 1000L;
     /** Floor of 1 drops only zero-message tunnels; higher values re-enable low-traffic culling */
     private static final int DEFAULT_MIN_MESSAGES = 1;
@@ -69,6 +71,8 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
 
     /**
      * Constructor.
+     *
+     * @param ctx the context supplying the timers, dispatcher, log and stat manager
      */
     IdleTunnelMonitor(RouterContext ctx) {
         super(ctx.simpleTimer2());

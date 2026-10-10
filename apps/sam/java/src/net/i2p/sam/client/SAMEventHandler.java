@@ -25,6 +25,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
 
     /**
      * SAMEventHandler.
+     * @param ctx the context whose log manager supplies the logger for this handler
      */
     public SAMEventHandler(I2PAppContext ctx) {
         _log = ctx.logManager().getLog(getClass());

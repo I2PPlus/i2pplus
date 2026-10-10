@@ -22,7 +22,7 @@ public interface NamingServiceListener {
      * Called when a new naming service entry is added.
      *
      * @param ns the naming service
-     * @param hostname the hostname
+     * @param hostname the name the new entry maps, as registered with the service
      * @param dest the destination
      * @param options NamingService-specific, can be null
      */
@@ -32,7 +32,7 @@ public interface NamingServiceListener {
      * Called when a naming service entry changes.
      *
      * @param ns the naming service
-     * @param hostname the hostname
+     * @param hostname the name whose entry changed
      * @param dest null if unchanged
      * @param options NamingService-specific, can be null
      */
@@ -42,7 +42,7 @@ public interface NamingServiceListener {
      * Called when a naming service entry is removed.
      *
      * @param ns the naming service
-     * @param hostname the hostname
+     * @param hostname the name whose entry was removed
      */
     public void entryRemoved(NamingService ns, String hostname);
 }

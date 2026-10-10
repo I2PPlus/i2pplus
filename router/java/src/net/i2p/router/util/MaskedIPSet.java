@@ -29,6 +29,9 @@ import net.i2p.router.RouterContext;
  */
 public class MaskedIPSet extends HashSet<String> {
 
+    /**
+     * Create an empty set.
+     */
     public MaskedIPSet() {
         super();
     }
@@ -52,6 +55,7 @@ public class MaskedIPSet extends HashSet<String> {
      * for efficiency and to avoid deadlocks.
      * Peers are presumed to be validated elsewhere.
      *
+     * @param ctx router context used to look up the peer in the netdb and comm system
      * @param peer non-null
      * @param mask is 1-4 (number of bytes to match)
      */
@@ -78,6 +82,7 @@ public class MaskedIPSet extends HashSet<String> {
      *
      * As of 0.9.24, returned set will include netdb family as well.
      *
+     * @param ctx router context used to look up the peer in the netdb and comm system
      * @param pinfo may be null
      * @param mask is 1-4 (number of bytes to match)
      */
@@ -91,6 +96,8 @@ public class MaskedIPSet extends HashSet<String> {
      *
      * As of 0.9.24, returned set will include netdb family as well.
      *
+     * @param ctx router context supplying the peer's recorded comm system IP
+     * @param peer the peer's router hash, used for the comm system lookup
      * @param pinfo may be null
      * @param mask is 1-4 (number of bytes to match)
      */

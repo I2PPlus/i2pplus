@@ -22,6 +22,12 @@ import net.i2p.util.SecureDirectory;
  */
 class SSLUtil {
 
+    /**
+     * The keystore helpers and socket factories below are static, and the only fields are
+     * property-name constants, so an instance carries nothing.
+     */
+    SSLUtil() {}
+
     private static final String PROP_KEYSTORE_PASSWORD = "sam.keystorePassword";
     private static final String PROP_KEY_PASSWORD = "sam.keyPassword";
     private static final String PROP_KEY_ALIAS = "sam.keyAlias";
@@ -134,8 +140,9 @@ class SSLUtil {
      *  Sets up the SSLContext and sets the socket factory.
      *  No option prefix allowed.
      *
-     * @throws IOException GeneralSecurityExceptions are wrapped in IOE for convenience
+     * @param opts the SAM properties naming the keystore and its passwords
      * @return factory, throws on all errors
+     * @throws IOException GeneralSecurityExceptions are wrapped in IOE for convenience
      */
     public static SSLServerSocketFactory initializeFactory(Properties opts) throws IOException {
         String ksPass = opts.getProperty(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);

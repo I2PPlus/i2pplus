@@ -28,12 +28,21 @@ import net.i2p.util.FileUtil;
  *  @since 0.8.13
  */
 public class FileDumpHelper extends HelperBase {
+    /**
+     * Constructor. The console builds this helper per page render and the jar
+     * scanning below reads its arguments from the request, so a bare instance
+     * is all that is needed.
+     */
+    public FileDumpHelper() {}
+
     private static final Pattern DUMP_DASH = Pattern.compile("-.*? ");
 
     private static final String LINK = "http://git.skank.i2p/i2pplus/I2P.Plus/src/commit/";
     private static final String UPSTREAMLINK = "https://github.com/i2p/i2p.i2p/tree/";
 
     /**
+     * Build the HTML table summarising the jars in this distribution.
+     *
      * @return the file summary
      */
     public String getFileSummary() {
@@ -192,6 +201,7 @@ public class FileDumpHelper extends HelperBase {
     /**
      *  Read the manifest attributes from the given jar file.
      *
+     * @param f the jar whose META-INF/MANIFEST.MF main attributes to read
      * @return null if not found
      * @since pkg private since 0.9.35 for LogsHelper
      */

@@ -86,6 +86,9 @@ public class JSONRPC2Servlet extends HttpServlet {
 
     /**
      * Plugin
+     *
+     * @param ctx the router context, may be null when there is none available
+     * @param secMan the security manager backing the authentication handler
      */
     public JSONRPC2Servlet(RouterContext ctx, SecurityManager secMan) {
         _context = ctx;

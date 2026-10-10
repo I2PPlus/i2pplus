@@ -19,6 +19,8 @@ class HostReplyMessageHandler extends HandlerImpl {
 
     /**
      * Create the handler for I2CP host replies.
+     *
+     * @param ctx application context used to reach the session and log
      */
     public HostReplyMessageHandler(I2PAppContext ctx) {
         super(ctx, HostReplyMessage.MESSAGE_TYPE);
@@ -27,7 +29,7 @@ class HostReplyMessageHandler extends HandlerImpl {
     /**
      * Handle an incoming I2CP message.
      *
-     * @param message the message
+     * @param message the HostReplyMessage from the router
      * @param session the session
      */
     @Override

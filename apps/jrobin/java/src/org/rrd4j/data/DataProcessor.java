@@ -319,12 +319,27 @@ public class DataProcessor implements DataHolder {
      *
      * @param sourceName Datasource name
      * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
-     *     consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL (these string
-     *     constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     * @return a aggregate value as a double calculated from the source.
      * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
      *     if datasource values are not yet calculated (method {@link #processData()} was not
      *     called)
-     * @return a aggregate value as a double calculated from the source.
+     *     called)
+     *     called)
+     *     called)
+     *     constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     *     consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL (these string
+     *     called)
+     *     called)
+     *     called)
+     *     called)
+     *     called)
+     *     called)
+     *     called)
+     *     called)
+     *     called)
+     *     called)
+     *     called)
+     *     called)
      * @deprecated Use {@link Variable} based method instead.
      */
     @Deprecated
@@ -480,6 +495,7 @@ public class DataProcessor implements DataHolder {
     /**
      * Datasource name @return the matching Source.
      * @param sourceName datasource name @return the matching Source
+     * @return the datasource registered under that name
      */
     Source getSource(String sourceName) {
         Source source = sources.get(sourceName);

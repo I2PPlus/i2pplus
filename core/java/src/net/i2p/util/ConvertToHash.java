@@ -25,8 +25,15 @@ import java.util.Locale;
 public class ConvertToHash {
 
     /**
+     *  Constructor. The class holds no state - every conversion is a static
+     *  call - so an instance is meaningful only as a placeholder for those calls.
+     */
+    public ConvertToHash() {}
+
+    /**
      *  Convert any kind of destination String to a hash
      *
+     * @param peer the destination string in any supported form - base64 hash, base64 or base32 hash with an .i2p suffix, base64 destination with or without .i2p, or a hostname resolved via the naming service; any http:// or https:// prefix and a trailing slash are stripped first
      *  @return null on failure
      */
     public static Hash getHash(String peer) {
@@ -93,6 +100,9 @@ public class ConvertToHash {
     }
 
     /**
+     * Print the base64 hash of each argument, or "conversion failed".
+     *
+     * @param args the destination strings to convert, each printed to stdout as base64 or as "conversion failed"
      * @since 0.9.28
      */
     public static void main(String[] args) {

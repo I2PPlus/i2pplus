@@ -23,7 +23,11 @@ public abstract class JobImpl implements Job {
     public final long _id;
     private volatile long _madeReadyOn;
 
-    /** Create a new JobImpl. */
+    /**
+     * Create a new JobImpl.
+     *
+     * @param context the router context that will run this job
+     */
     public JobImpl(RouterContext context) {
         _context = context;
         _timing = new JobTiming(context);

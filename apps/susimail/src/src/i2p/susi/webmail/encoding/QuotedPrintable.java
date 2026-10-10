@@ -15,6 +15,12 @@ import java.io.Writer;
  */
 public class QuotedPrintable extends Encoding {
 
+	/**
+	 * A bare instance is ready to encode or decode; the only inherited state is the
+	 * logger that Encoding's constructor sets up from the global context.
+	 */
+	public QuotedPrintable() {}
+
 	@Override
 	public String getName() {
 		return "quoted-printable";
@@ -38,7 +44,7 @@ public class QuotedPrintable extends Encoding {
 	/**
 	 * More efficient than super
 	 *
-	 * @param in
+	 * @param in the stream of bytes to read and encode
 	 * @see Base64#encode(String)
 	 * @since since 0.9.33
 	 */

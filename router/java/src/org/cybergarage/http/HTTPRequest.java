@@ -26,12 +26,20 @@ public class HTTPRequest extends HTTPPacket {
         setVersion(HTTP.VERSION_10);
     }
 
-    /** Parses an HTTP request from the given input stream. */
+    /**
+     * Parses an HTTP request from the given input stream.
+     *
+     * @param in the stream supplying the raw request bytes
+     */
     public HTTPRequest(InputStream in) {
         super(in);
     }
 
-    /** Creates an HTTP request from the given socket's input stream. */
+    /**
+     * Creates an HTTP request from the given socket's input stream.
+     *
+     * @param httpSock the socket supplying the request bytes, retained on the new request
+     */
     public HTTPRequest(HTTPSocket httpSock) {
         this(httpSock.getInputStream());
         setSocket(httpSock);

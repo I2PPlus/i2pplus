@@ -72,6 +72,8 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
     /**
      * Set the size for each patch and rebuild the patch shapes.
+     *
+     * @param size the edge length in pixels of one patch of the 3x3 grid
      */
     public void setPatchSize(float size) {
         this.patchSize = size;
@@ -112,6 +114,8 @@ public class NineBlockIdenticonRenderer2 implements IdenticonRenderer {
 
     /**
      * Set the background color of the identicon.
+     *
+     * @param backgroundColor the color filled behind the patches
      */
     public void setBackgroundColor(Color backgroundColor) {
         this.backgroundColor = backgroundColor;

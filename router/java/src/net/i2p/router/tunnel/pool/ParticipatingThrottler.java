@@ -224,7 +224,11 @@ public class ParticipatingThrottler {
         return Math.max(lo, Math.min(hi, val));
     }
 
-    /** Participating throttler */
+    /**
+     * Participating throttler
+     * @param ctx the router context supplying properties, rate stats and the ban
+     *            logger that records throttled peers
+     */
     ParticipatingThrottler(RouterContext ctx) {
         this.context = ctx;
         this.counter = new ObjectCounter<>();

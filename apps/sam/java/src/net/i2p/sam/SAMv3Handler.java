@@ -34,6 +34,7 @@ class SAMv3Handler extends SAMv1Handler
     /** I2P session. */
     private Session session;
     // TODO remove singleton, hang off SAMBridge like dgserver
+    /** Global session-id to handler map shared by every SAMv3 bridge. */
     public static final SessionsDB sSessionsHash = new SessionsDB();
     /** Stolen socket. */
     volatile boolean stolenSocket;
@@ -54,6 +55,7 @@ class SAMv3Handler extends SAMv1Handler
      * @param s Socket attached to a SAM client
      * @param verMajor SAM major version to manage (should be 3)
      * @param verMinor SAM minor version to manage
+     * @param parent the bridge owning this handler and the handler pool it came from
      * @throws SAMException if the version is not supported
      * @throws IOException if an I/O error occurs
      */
@@ -70,6 +72,7 @@ class SAMv3Handler extends SAMv1Handler
      * @param verMajor SAM major version to manage (should be 3)
      * @param verMinor SAM minor version to manage
      * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
+     * @param parent the bridge owning this handler and the handler pool it came from
      * @throws SAMException if the version is not supported
      * @throws IOException if an I/O error occurs
      */
@@ -101,6 +104,8 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
+     * Whether a client data stream has been taken over by this handler.
+     *
      * @return true if the handler has an active data stream (stolen or forwarding)
      */
     boolean hasActiveStream() {
@@ -126,6 +131,7 @@ class SAMv3Handler extends SAMv1Handler
 
     /**
      * For SAMv3StreamSession
+     * @return the bridge owning this handler
      * @since 0.9.20
      */
     SAMBridge getBridge() {
@@ -143,6 +149,7 @@ class SAMv3Handler extends SAMv1Handler
 
     /**
      * For subsessions created by MasterSession
+     * @param sess the raw session to route reply traffic to
      * @since 0.9.25
      */
     void setSession(SAMv3RawSession sess) {
@@ -151,6 +158,7 @@ class SAMv3Handler extends SAMv1Handler
 
     /**
      * For subsessions created by MasterSession
+     * @param sess the datagram session to route reply traffic to
      * @since 0.9.25
      */
     void setSession(SAMv3DatagramSession sess) {
@@ -159,6 +167,8 @@ class SAMv3Handler extends SAMv1Handler
 
     /**
      * For subsessions created by MasterSession
+     * @param sess the stream session to route reply traffic to; setting it also
+     *             marks the session ready
      * @since 0.9.25
      */
     void setSession(SAMv3StreamSession sess) {
@@ -736,9 +746,12 @@ class SAMv3Handler extends SAMv1Handler
 
 
     /**
+     * Send a STREAM STATUS RESULT line to the SAM client, unless verbose is false.
+     *
      * @param verbose if false, does nothing
      * @param result non-null
      * @param message may be null
+     * @throws IOException if writing the status line to the SAM client socket fails
      */
     public void notifyStreamResult(boolean verbose, String result, String message) throws IOException {
         if (!verbose) return;
@@ -752,6 +765,10 @@ class SAMv3Handler extends SAMv1Handler
 
     /**
      * notifyStreamIncomingConnection.
+     * @param d the destination of the incoming connection
+     * @param fromPort the remote port the connection arrived on
+     * @param toPort the local port the connection was accepted on
+     * @throws IOException if writing to the SAM client socket fails
      */
     public void notifyStreamIncomingConnection(Destination d, int fromPort, int toPort) throws IOException {
         if (getStreamSession() == null) {
@@ -772,7 +789,7 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Notify the SAM client of an incoming stream connection on a static channel.
      *
-     * @param client the client
+     * @param client the channel to the SAM client the notification is written to
      * @param d the destination of the remote peer
      * @throws IOException if writing to the client socket fails
      */
@@ -785,7 +802,7 @@ class SAMv3Handler extends SAMv1Handler
     /**
      * Notify the SAM client of an incoming stream connection with port information.
      *
-     * @param client the client
+     * @param client the channel to the SAM client the notification is written to
      * @param d the destination of the remote peer
      * @param fromPort the source port
      * @param toPort the destination port

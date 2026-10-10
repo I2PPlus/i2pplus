@@ -197,9 +197,11 @@ class Packet {
      */
     public static final int FLAG_SIGNATURE_OFFLINE = (1 << 11);
 
-    /** DEFAULT_MAX_SIZE. 32768 is the largest value the 2-byte max-size wire
+    /**
+     * DEFAULT_MAX_SIZE. 32768 is the largest value the 2-byte max-size wire
      * field can carry (toLong(buffer, cur, 2, ...)); 128K would silently
-     * truncate to 0. Matches mainline's encodable 32768. */
+     * truncate to 0. Matches mainline's encodable 32768.
+     */
     public static final int DEFAULT_MAX_SIZE = 32*1024;
     /**
      * MAX_DELAY_REQUEST.
@@ -217,15 +219,24 @@ class Packet {
     /**
      * Does no initialization.
      * See readPacket() for inbound packets, and the setters for outbound packets.
+     *
+     * @param session the session this packet is sent or received on, or null
+     *        before one is assigned
      */
     public Packet(I2PSession session) {_session = session;}
 
-    /** @since 0.9.21 */
+    /**
+     * Return the session this packet belongs to.
+     *
+     * @return the session the packet is sent or received on
+     * @since 0.9.21
+     */
     public I2PSession getSession() {return _session;}
 
     private boolean _sendStreamIdSet = false;
 
-    /** Stream we send data to the peer on.
+    /**
+     * Stream we send data to the peer on.
      * @return stream ID we use to send data
      */
     public long getSendStreamId() {return _sendStreamId;}
@@ -264,7 +275,8 @@ class Packet {
         _receiveStreamId = id;
     }
 
-    /** 0-indexed sequence number for this Packet in the sendStream
+    /**
+     * 0-indexed sequence number for this Packet in the sendStream
      * @return 0-indexed sequence number for current Packet in current sendStream
      */
     public long getSequenceNum() {return _sequenceNum;}
@@ -332,6 +344,8 @@ class Packet {
      * Unused.
      * Broken before release 0.7.8
      * See above
+     *
+     * @param numSeconds the resend delay in seconds, ignored by this release
      */
     public void setResendDelay(int numSeconds) {_resendDelay = numSeconds;}
 
@@ -340,7 +354,8 @@ class Packet {
      */
     public static final int MAX_PAYLOAD_SIZE = 32*1024;
 
-    /** Actual payload of the message, may be null.
+    /**
+     * Actual payload of the message, may be null.
      * @return the payload of the message, null if none.
      */
     public ByteArray getPayload() {return _payload;}
@@ -376,7 +391,8 @@ class Packet {
         return _payload;
     }
 
-    /** Is a particular flag set on this packet?
+    /**
+     * Is a particular flag set on this packet?
      * @param flag bitmask of any flag(s)
      * @return true if set, false if not.
      */
@@ -416,13 +432,17 @@ class Packet {
 
     /**
      * This also sets flag FLAG_SIGNATURE_INCLUDED
+     *
+     * @param sig the signature to attach to the packet, or null to clear it and
+     *        drop the flag
      */
     public void setOptionalSignature(Signature sig) {
         setFlag(FLAG_SIGNATURE_INCLUDED, sig != null);
         _optionSignature = sig;
     }
 
-    /** Sender of the packet, only included if the flag for it is set.
+    /**
+     * Sender of the packet, only included if the flag for it is set.
      * @return the sending Destination
      */
     public Destination getOptionalFrom() {return _optionFrom;}
@@ -445,6 +465,9 @@ class Packet {
 
     /**
      * Caller must also call setFlag(FLAG_DELAY_REQUESTED)
+     *
+     * @param delayMs how long the sender should be asked to wait in ms, clamped
+     *        to 0..MAX_DELAY_REQUEST
      */
     public void setOptionalDelay(int delayMs) {
         if (delayMs > MAX_DELAY_REQUEST) {_optionDelay = MAX_DELAY_REQUEST;}
@@ -461,6 +484,9 @@ class Packet {
 
     /**
      * This also sets flag FLAG_MAX_PACKET_SIZE_INCLUDED
+     *
+     * @param numBytes the largest payload the sender should be told it may
+     *        receive, or 0 to unset the flag
      */
     public void setOptionalMaxSize(int numBytes) {
         setFlag(FLAG_MAX_PACKET_SIZE_INCLUDED, numBytes > 0);
@@ -477,6 +503,9 @@ class Packet {
     /**
      * Must be called to change the port, not set by readPacket()
      * as the port is out-of-band in the I2CP header.
+     *
+     * @param port the local port to record, I2PSession.PORT_UNSPECIFIED (0) for
+     *        unspecified or PORT_ANY (0) for any
      * @since 0.8.9
      */
     public void setLocalPort(int port) {_localPort = port;}
@@ -491,6 +520,9 @@ class Packet {
     /**
      * Must be called to change the port, not set by readPacket()
      * as the port is out-of-band in the I2CP header.
+     *
+     * @param port the remote port to record, I2PSession.PORT_UNSPECIFIED (0) for
+     *        unspecified or PORT_ANY (0) for any
      * @since 0.8.9
      */
     public void setRemotePort(int port) {_remotePort = port;}
@@ -1005,6 +1037,9 @@ class Packet {
      * description on INFO meant a WARN or ERROR about a packet logged an empty
      * string - the one thing that makes such a message useless. The bulky
      * parts (the NACK list, offline key material) stay behind shouldDebug().
+     *
+     * @return a buffer holding the human readable form of this packet, ready to
+     *         be appended to a log message
      */
     protected StringBuilder formatAsString() {
         StringBuilder buf = new StringBuilder(64);

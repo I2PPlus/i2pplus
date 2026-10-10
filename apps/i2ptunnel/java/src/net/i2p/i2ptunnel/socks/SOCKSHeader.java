@@ -30,6 +30,9 @@ public class SOCKSHeader {
     private static final byte[] beg = {0,0,0,3,60};
 
     /**
+     * Parse a SOCKS I2P datagram header, copying the header portion out of the
+     * datagram. The remaining payload is ignored.
+     *
      * @param data the whole packet
      * @throws IllegalArgumentException on bad socks format
      */
@@ -63,6 +66,7 @@ public class SOCKSHeader {
      * Make a dummy header from a dest,
      * for those cases where we want to receive unsolicited datagrams.
      * Unused for now.
+     * @param dest the destination whose base32 hash fills the reply address field
      *
      * @param port I2CP port 0-65535
      * @since 0.9.53 add port param
@@ -94,6 +98,8 @@ public class SOCKSHeader {
     }
 
     /**
+     * Extract the I2CP port that follows the address field.
+     *
      * @return 0 - 65535
      * @since 0.9.53
      */
@@ -112,6 +118,8 @@ public class SOCKSHeader {
     }
 
     /**
+     * Resolve the header's hostname through the naming service.
+     *
      * @return destination or null
      */
     public Destination getDestination() {
@@ -123,6 +131,8 @@ public class SOCKSHeader {
     }
 
     /**
+     * Return the header bytes as parsed, for writing back to a datagram.
+     *
      * @return the bytes
      */
     public byte[] getBytes() {

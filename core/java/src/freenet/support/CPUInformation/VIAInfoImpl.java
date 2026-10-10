@@ -6,6 +6,12 @@ package freenet.support.CPUInformation;
  */
 class VIAInfoImpl extends CPUIDCPUInfo implements VIACPUInfo {
 
+    /**
+     * The model string and the C3 and Nano flags are computed once by the static
+     * initialiser, so an instance adds nothing to them.
+     */
+    VIAInfoImpl() {}
+
     private static boolean isC3Compatible;
     private static boolean isNanoCompatible;
 

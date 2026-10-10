@@ -108,6 +108,14 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /** Longest announce interval accepted from a tracker, in seconds. */
     private static final int MAX_INTERVAL = 8 * 60 * 60;
 
+    /**
+     * Create a client bound to one torrent's session, listening on the port just below
+     * {@link TrackerClient#PORT} so it never collides with the HTTP tracker client.
+     *
+     * @param ctx the application context supplying the log and timer services
+     * @param session the torrent's session, used to send datagrams and to derive our own hash
+     * @param util the utility instance supplying the enabled-tracker configuration
+     */
     public UDPTrackerClient(I2PAppContext ctx, I2PSession session, I2PSnarkUtil util) {
         _context = ctx;
         _session = session;
@@ -146,8 +154,15 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      * Announce and get peers for a torrent. Blocking! Caller should run in a thread.
      *
      * @param ih the Info Hash (torrent)
+     * @param peerID the peer ID this client announces itself under
      * @param max maximum number of peers to return
      * @param maxWait the maximum time to wait (ms) must be &gt; 0
+     * @param toHost the tracker hostname
+     * @param toPort the tracker port
+     * @param downloaded bytes downloaded so far for this torrent
+     * @param left bytes still to download for this torrent
+     * @param uploaded bytes uploaded so far for this torrent
+     * @param event one of the EVENT_* codes describing why this announce is being made
      * @param fast if true, don't wait for dest, no retx, ...
      * @return null on fail or if fast is true
      */
@@ -860,7 +875,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Handle a reportAbuse message from the session.
      *
-     * @param session the session
+     * @param session the session that reported the abuse
      * @param severity the abuse severity
      */
     @Override
@@ -869,7 +884,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Handle a session disconnect.
      *
-     * @param session the session
+     * @param session the session that dropped
      */
     @Override
     public void disconnected(I2PSession session) {
@@ -887,7 +902,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Handle a session error.
      *
-     * @param session the session
+     * @param session the session that reported the error
      * @param message the error message
      * @param error the error
      */
@@ -910,7 +925,14 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         private final String error;
         private final Set<Hash> peers;
 
-        /** Success. */
+        /**
+         * Success.
+         *
+         * @param interval seconds the tracker asks us to wait before the next announce
+         * @param seeds number of complete peers the tracker reports in the swarm
+         * @param leeches number of incomplete peers the tracker reports in the swarm
+         * @param peers the peer hashes returned by the tracker
+         */
         public TrackerResponse(int interval, int seeds, int leeches, Set<Hash> peers) {
             this.interval = interval;
             complete = seeds;
@@ -919,7 +941,11 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             error = null;
         }
 
-        /** Failure. */
+        /**
+         * Failure.
+         *
+         * @param errorMsg the tracker supplied reason the announce did not succeed
+         */
         public TrackerResponse(String errorMsg) {
             interval = DEFAULT_INTERVAL;
             complete = 0;
@@ -972,7 +998,11 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
             return error;
         }
 
-        /** In seconds. */
+        /**
+         * In seconds.
+         *
+         * @return seconds to wait before the next announce
+         */
         public int getInterval() {
             return interval;
         }

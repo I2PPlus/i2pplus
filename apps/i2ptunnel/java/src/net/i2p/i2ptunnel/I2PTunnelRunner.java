@@ -65,6 +65,7 @@ import net.i2p.util.SimpleTimer2;
  * @see I2PTunnelServer
  */
 public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
+    /** The runner's logger, from the global context's log manager. */
     protected final Log _log;
     private static final AtomicLong __runnerId = new AtomicLong();
     private final long _runnerId;
@@ -420,9 +421,11 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         }
 
         /**
-         * @param deadlineMs absolute wall-clock deadline for the whole resume
+         * Budget bounded by wall clock, so a stalled tunnel cannot spend the
          * sequence, or {@link #NO_DEADLINE} to rely on the cycle caps
          * alone
+         *
+         * @param deadlineMs absolute wall-clock deadline for the whole resume
          */
         ResumeBudget(long deadlineMs) {
             this(deadlineMs, null);
@@ -439,10 +442,11 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         }
 
         /**
-         * @param deadlineMs absolute wall-clock deadline, or {@link #NO_DEADLINE}
-         * @param clock clock to read, or null to read the system clock only
          * when a deadline is actually set (so the cycle-only path costs
          * no clock lookup at all)
+         *
+         * @param deadlineMs absolute wall-clock deadline, or {@link #NO_DEADLINE}
+         * @param clock clock to read, or null to read the system clock only
          */
         ResumeBudget(long deadlineMs, Clock clock) {
             this.deadlineMs = deadlineMs;
@@ -473,9 +477,17 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
             return _clock != null ? _clock.now() : System.currentTimeMillis();
         }
 
-        /** Stall cycles consumed so far (including the in-flight one). @since 0.9.71+ */
+        /**
+         * Stall cycles consumed so far (including the in-flight one).
+         * @return the number of stall cycles this budget has burned
+         * @since 0.9.71+
+         */
         int getStallCycles() { return stallCycles; }
-        /** Total resume attempts consumed so far. @since 0.9.71+ */
+        /**
+         * Total resume attempts consumed so far.
+         * @return the number of resume attempts this budget has burned
+         * @since 0.9.71+
+         */
         int getTotalCycles() { return totalCycles; }
 
         /**
@@ -498,12 +510,14 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
     /** Plain TCP socket (local or remote endpoint). */
     private final Socket s;
-    /** I2P socket (the tunnel connection). Non-final so an "empty response"
+    /**
+     * I2P socket (the tunnel connection). Non-final so an "empty response"
      * reconnect may replace it with a fresh connection while the local browser
      * socket stays open. Only ever reassigned within {@link #run()} when a
      * {@link ReconnectCallback} is installed and yields a new connection.
      * Volatile so the initial-response watchdog on the timer thread sees the
-     * swap when it fires. */
+     * swap when it fires.
+     */
     private volatile I2PSocket i2ps;
     /** Synchronization lock for socket access. */
     private final Object slock;
@@ -527,16 +541,20 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /** Prevent the no-data failure callback from firing more than once across
      * the synchronous completion block and the exception/finally paths. */
     private boolean _noDataHandled;
-    /** Sliding anchor: epoch-ms of the most recent request-side write upstream.
+    /**
+     * Sliding anchor: epoch-ms of the most recent request-side write upstream.
      * Refreshed by the toI2P forwarder so a slow upload never trips the
-     * initial-response deadline; reset on each empty-response re-send. */
+     * initial-response deadline; reset on each empty-response re-send.
+     */
     private volatile long _lastRequestWriteMs;
     /** Epoch-ms of the first response byte, 0 until one arrives; retires the
      * initial-response watchdog permanently. */
     private volatile long _firstByteMs;
-    /** One-shot latch per request attempt so a fired deadline does not warn
+    /**
+     * One-shot latch per request attempt so a fired deadline does not warn
      * and close again every watchdog tick; cleared when the anchor slides or
-     * a re-send starts a new attempt. */
+     * a re-send starts a new attempt.
+     */
     private volatile boolean _initialDeadlineFired;
     /** Watchdog lifecycle: set on schedule, cleared on cancel, read by the
      * timer thread so a tick racing run()'s finally cannot re-arm. */
@@ -556,7 +574,11 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      */
     public interface FailCallback {
         /**
-         * @param e may be null
+         * Notified when the tunnel ends without delivering any payload beyond
+         * the initial data, so a dead connection stays distinguishable from a
+         * completed one.
+         *
+         * @param e the failure cause, or null for a clean empty transfer
          */
         public void onFail(Exception e);
     }
@@ -585,6 +607,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      */
     public interface ReconnectCallback {
         /**
+         * Supply the connection an empty or truncated response is retried on.
+         *
          * @param cause the cause of the empty or mid-body completion, or null
          * @return a freshly connected I2P socket to retry on, or null to give up
          */
@@ -685,6 +709,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Recommended new constructor. Does NOT start itself. Caller must call start().
      *
+     * @param s the local socket, non-null
+     * @param i2ps the I2P socket carrying the tunnel, non-null
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param initialSocketData may be null
@@ -701,6 +727,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * With keepAlive args. Does NOT start itself. Caller must call start().
      *
+     * @param s the local socket, non-null
+     * @param i2ps the I2P socket carrying the tunnel, non-null
      * @param slock the socket lock, non-null
      * @param initialI2PData may be null
      * @param initialSocketData may be null
@@ -831,6 +859,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Set the executor for submitting forwarder tasks.
      * When null (default), forwarders use a fallback thread.
+     *
+     * @param exec the executor to run forwarders on, or null for the fallback thread
      */
     public void setExecutor(Executor exec) { _runnerExecutor = exec; }
 
@@ -1243,10 +1273,14 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         public final boolean canRangeResume;
 
         /**
-         * @param bodyReceived entity bytes delivered
-         * @param contentLength original Content-Length or -1
-         * @param headerWritten whether browser already has headers
-         * @param canRangeResume whether splice is safe
+         * Capture a snapshot of body-delivery progress.
+         *
+         * @param bodyReceived entity-body bytes already written to the browser
+         * @param contentLength original Content-Length, or -1 if unknown
+         * @param headerWritten whether the first response headers already went
+         * to the browser
+         * @param canRangeResume whether a Content-Length body can be safely
+         * spliced (not gzip, etc.)
          */
         public BodyProgress(long bodyReceived, long contentLength,
                             boolean headerWritten, boolean canRangeResume) {
@@ -1320,9 +1354,17 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * forwarder never loses the head of the response.
      */
     static final class RaceWin {
+        /** the socket that won the race, and so holds the connection the caller must use */
         final I2PSocket sock;
+        /** the winning socket's pushback stream, positioned before the response byte */
         final InputStream in;
 
+        /**
+         * Bind a winning socket to the stream that reads its response.
+         *
+         * @param sock the socket that produced the first response byte
+         * @param in the pushback stream over {@code sock}, holding that byte unread
+         */
         RaceWin(I2PSocket sock, InputStream in) {
             this.sock = sock;
             this.in = in;
@@ -2078,8 +2120,11 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param in may be null
      * @param i2pout may be null
      * @param i2pin may be null
+     * @param s the local socket to close, non-null
+     * @param i2ps the I2P socket to close, non-null
      * @param t1 may be null
      * @param t2 may be null, ignored, we only join t1
+     * @throws InterruptedException if the joining thread is interrupted while waiting on t1
      */
     protected void close(OutputStream out, InputStream in, OutputStream i2pout, InputStream i2pin,
                          Socket s, I2PSocket i2ps, Thread t1, Thread t2) throws InterruptedException {

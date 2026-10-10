@@ -68,6 +68,7 @@ public class PeerHelper extends HelperBase {
     }
     /**
      * setSort.
+     * @param flags the decimal sort order requested by the console page; null or unparseable text falls back to 0, the default ordering
      */
     public void setSort(String flags) {
         if (flags != null) {
@@ -78,13 +79,23 @@ public class PeerHelper extends HelperBase {
 
     /**
      * setUrlBase.
+     * @param base the console URL prefix that the rendered links are built from, ending in a path separator
      */
     public void setUrlBase(String base) {_urlBase = base;}
 
-    /** @since 0.9.38 */
+    /**
+     * Restrict the peer listing to one transport, as chosen by the console's
+     * transport selector.
+     *
+     * @param t the transport name to list peers for, as passed in the query string, or null for all transports
+     * @since 0.9.38
+     */
     public void setTransport(String t) {_transport = t;}
 
     /**
+     * Render the peer summary table into the page being built. The peer page is
+     * written straight to the response, so there is no value to hand back.
+     *
      * @return the peer summary
      */
     public String getPeerSummary() {
@@ -596,7 +607,7 @@ public class PeerHelper extends HelperBase {
     /**
      * Whether an SSU peer is recent enough to render.
      *
-     * @param peer the peer
+     * @param peer the SSU peer state whose last receive time is tested
      * @param peerCount total peers
      * @param now the current time
      * @return true when the peer is rendered

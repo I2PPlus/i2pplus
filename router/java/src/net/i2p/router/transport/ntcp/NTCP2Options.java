@@ -20,7 +20,18 @@ class NTCP2Options {
     private final int _sendDelay;
     private final int _recvDelay;
 
-    /** All params are as named. */
+    /**
+     * All params are as named.
+     *
+     * @param sendMin the lowest padding ratio we will send at, 0.0 to 1.0
+     * @param sendMax the highest padding ratio we will send at, 0.0 to 1.0
+     * @param recvMin the lowest padding ratio we will accept, 0.0 to 1.0
+     * @param recvMax the highest padding ratio we will accept, 0.0 to 1.0
+     * @param sendDummy the dummy data rate we send, in bytes per second
+     * @param recvDummy the dummy data rate we will accept, in bytes per second
+     * @param sendDelay the delay we ask the peer to apply, in milliseconds
+     * @param recvDelay the delay we apply ourselves, in milliseconds
+     */
     public NTCP2Options(float sendMin, float sendMax, float recvMin, float recvMax,
                         int sendDummy, int recvDummy, int sendDelay, int recvDelay) {
         _sendMin = sendMin;
@@ -76,6 +87,8 @@ class NTCP2Options {
 
     /**
      *  Merge our options with the peer's options.
+     * @param his the peer's advertised options, whose send values are clamped
+     *        against our receive values and vice versa
      *  @return new merged options
      */
     public NTCP2Options merge(NTCP2Options his) {
@@ -99,8 +112,11 @@ class NTCP2Options {
     }
 
     /**
-     *  @return null on error
-     *  @since 0.9.37 consolidated from two places
+     * padding bytes per side, two dummy-rate bytes and two delay bytes
+     *
+     * @param options the 12 byte options block from the peer's OBWH, as two
+     * @return null on error
+     * @since 0.9.37 consolidated from two places
      */
     public static NTCP2Options fromByteArray(byte[] options) {
         if (options.length < 12)

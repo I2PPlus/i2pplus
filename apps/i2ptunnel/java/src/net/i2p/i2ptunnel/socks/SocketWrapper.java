@@ -33,6 +33,12 @@ class SocketWrapper implements I2PSocket {
         }
     }
 
+    /**
+     * Wraps a TCP socket obtained from an outproxy so that the tunnel
+     * framework can treat it as an I2P connection.
+     *
+     * @param sock the TCP socket to wrap, obtained from the outproxy
+     */
     public SocketWrapper(Socket sock) {
         socket = sock;
     }
@@ -75,6 +81,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
+     * Returns no socket options, because the outproxy has already configured
+     * the wrapped TCP socket.
      * @return null always
      */
     @Override
@@ -83,7 +91,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     * Does nothing
+     * Discards the options without applying them, because the outproxy has
+     * already configured the wrapped TCP socket.
      */
     @Override
     public void setOptions(I2PSocketOptions options) { /* no-op */ }
@@ -96,7 +105,10 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     * setReadTimeout.
+     * Ignores the requested timeout, because the read timeout belongs to the
+     * wrapped outproxy socket.
+     *
+     * @param ms the requested timeout in milliseconds, discarded
      */
     @Override
     public void setReadTimeout(long ms) { /* no-op */ }
@@ -106,7 +118,7 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     * Just calls close()
+     * Closes the wrapper by closing the wrapped outproxy socket.
      * @since 0.9.30
      */
     @Override
@@ -122,7 +134,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     * The remote port.
+     * Gets the remote port of the wrapped outproxy socket, which the wrapper
+     * always reports as unspecified.
      * @return Default I2PSession.PORT_UNSPECIFIED (0) or PORT_ANY (0)
      */
     public int getPort() {
@@ -135,7 +148,8 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     * The local port.
+     * Gets the local port of the wrapped outproxy socket, which the wrapper
+     * always reports as unspecified.
      * @return 0 always
      */
     public int getLocalPort() {

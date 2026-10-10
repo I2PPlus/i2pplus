@@ -42,6 +42,12 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
 
     /**
      * parse.
+     *
+     * @param dis stream positioned at the start of the SRV record fields
+     * @param data the whole message being parsed, used to resolve names
+     * @return the decoded SRV record
+     * @throws IOException if the stream ends early or the target name cannot
+     *         be read
      */
     public static SRV parse(DataInputStream dis, byte[] data)
         throws IOException {
@@ -54,6 +60,11 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
 
     /**
      * SRV.
+     *
+     * @param priority lower values are tried first among records of equal weight
+     * @param weight relative likelihood of this record among equals
+     * @param port the TCP or UDP port the service listens on
+     * @param target the hostname the service is reached at
      */
     public SRV(int priority, int weight, int port, String target) {
         this(priority, weight, port, DnsName.from(target));
@@ -61,6 +72,11 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
 
     /**
      * SRV.
+     *
+     * @param priority lower values are tried first among records of equal weight
+     * @param weight relative likelihood of this record among equals
+     * @param port the TCP or UDP port the service listens on
+     * @param target the already-parsed hostname the service is reached at
      */
     public SRV(int priority, int weight, int port, DnsName target) {
         super(target);

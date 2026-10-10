@@ -75,6 +75,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Session ID for this message.
+     * @param id the session the client and its destination share
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -90,6 +91,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Endpoint.
+     * @param endpoint the zero-based position in the list, 0 to getEndpoints() - 1
      * @return the endpoint
      */
     public Lease getEndpoint(int endpoint) {
@@ -101,6 +103,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Add a lease endpoint.
+     * @param lease the endpoint to append, which must not be null
      */
     public void addEndpoint(Lease lease) {
         if (lease == null) {

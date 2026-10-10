@@ -178,6 +178,15 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
                + priority + "]";
     }
 
+    /**
+     * Creates a queue and registers the per-priority drop stats and the delay stat under
+     * the given queue name, so the tuning page can graph them per queue.
+     * @param ctx context supplying the stat manager the stats are created in
+     * @param name the queue's short name, used as the stat name prefix
+     * @param initialCapacity the number of entries to size the internal array for
+     * @param target CoDel target delay in ms, the queueing delay the controller aims for
+     * @param interval CoDel interval in ms, how long to sample before deciding to drop
+     */
     public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity, int target, int interval) {
         super(ctx, name, initialCapacity);
         _target = target;

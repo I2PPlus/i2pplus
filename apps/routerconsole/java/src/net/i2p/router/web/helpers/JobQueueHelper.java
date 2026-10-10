@@ -29,6 +29,12 @@ import net.i2p.util.ObjectCounterUnsafe;
  */
 public class JobQueueHelper extends HelperBase {
 
+    /**
+     * Constructor. The console builds this helper per page render and points it at
+     * the request URI through the bean setter, so a bare instance is the starting state.
+     */
+    public JobQueueHelper() {}
+
     private static int MAX_JOBS_DISPLAYED = 30;
     private static final long RECENT_WINDOW_MS = (long) 10 * 1000;
 
@@ -382,7 +388,7 @@ public class JobQueueHelper extends HelperBase {
         /**
          * The time key for the job.
          *
-         * @param job the job
+         * @param job the job whose queueing or running time is measured
          * @return the time key
          * @since 0.9.70+
          */
@@ -609,7 +615,11 @@ public class JobQueueHelper extends HelperBase {
         buf.append("</tr></tfoot>\n</table>\n</div>\n");
     }
 
-    /** @since 0.8.9 */
+    /**
+     * Orders job rows for display by job name, using a locale-aware collator.
+     *
+     * @since 0.8.9
+     */
     private static class JobStatsComparator implements Comparator<JobStats>, Serializable {
         private final Collator coll = Collator.getInstance();
 
@@ -619,7 +629,12 @@ public class JobQueueHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.5 */
+    /**
+     * Orders job names alphabetically with a locale-sensitive collator, so the
+     * console's job list sorts the way the user's locale expects.
+     *
+     * @since 0.9.5
+     */
     private static class JobCountComparator implements Comparator<String>, Serializable {
         private final Collator coll = Collator.getInstance();
 

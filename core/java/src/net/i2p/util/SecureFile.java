@@ -15,6 +15,8 @@ public class SecureFile extends SecureDirectory {
 
     /**
      * SecureFile.
+     *
+     * @param pathname the path of the file to wrap
      */
     public SecureFile(String pathname) {
         super(pathname);
@@ -22,6 +24,9 @@ public class SecureFile extends SecureDirectory {
 
     /**
      * SecureFile.
+     *
+     * @param parent the path of the containing directory
+     * @param child the name of the file within parent
      */
     public SecureFile(String parent, String child) {
         super(parent, child);
@@ -29,6 +34,9 @@ public class SecureFile extends SecureDirectory {
 
     /**
      * SecureFile.
+     *
+     * @param parent the containing directory
+     * @param child the name of the file within parent
      */
     public SecureFile(File parent, String child) {
         super(parent, child);
@@ -46,6 +54,11 @@ public class SecureFile extends SecureDirectory {
 
     /**
      * Tries to set file to mode 600 when the file is created
+     *
+     * @param prefix the prefix of the generated file name
+     * @param suffix the suffix of the generated file name
+     * @return the new file, already set to mode 600
+     * @throws IOException if the file could not be created
      */
     public static File createTempFile(String prefix, String suffix) throws IOException {
         File rv = File.createTempFile(prefix, suffix);
@@ -56,6 +69,12 @@ public class SecureFile extends SecureDirectory {
 
     /**
      * Tries to set file to mode 600 when the file is created
+     *
+     * @param prefix the prefix of the generated file name
+     * @param suffix the suffix of the generated file name
+     * @param directory the directory to create the file in, or null for the default temp directory
+     * @return the new file, already set to mode 600
+     * @throws IOException if the file could not be created
      */
     public static File createTempFile(String prefix, String suffix, File directory) throws IOException {
         File rv = File.createTempFile(prefix, suffix, directory);

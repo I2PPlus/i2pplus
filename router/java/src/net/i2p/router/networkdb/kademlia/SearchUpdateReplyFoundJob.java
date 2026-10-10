@@ -33,6 +33,13 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
 
     /**
      * Create job with no tunnel info
+     *
+     * @param context the router context supplying the log and the network
+     *        database facade
+     * @param peer the peer that returned the matching database reply
+     * @param state the search this job continues
+     * @param facade the network database facade to store the found entry in
+     * @param job the search job to tell when the reply has been handled
      */
     public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
                                      SearchState state, KademliaNetworkDatabaseFacade facade,
@@ -42,6 +49,17 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
 
     /**
      * Create job with tunnel info for reply routing
+     *
+     * @param context the router context supplying the log and the network
+     *        database facade
+     * @param peer the peer that returned the matching database reply
+     * @param state the search this job continues
+     * @param facade the network database facade to store the found entry in
+     * @param job the search job to tell when the reply has been handled
+     * @param outTunnel the tunnel the original search request went out on, used
+     *        to reply over the same path
+     * @param replyTunnel the tunnel to send the reply back over, or null to let
+     *        the job build one from the peer's RouterInfo
      */
     public SearchUpdateReplyFoundJob(RouterContext context, RouterInfo peer,
                                      SearchState state, KademliaNetworkDatabaseFacade facade,

@@ -16,6 +16,12 @@ import java.util.Locale;
  */
 public final class FileUtil {
     /**
+     * Constructor. The loaders and the extension test below are static functions
+     * of their file arguments, so an instance carries no state.
+     */
+    public FileUtil() {}
+
+    /**
      * Loads the entire contents of a file into a byte array.
      *
      * @param fileName the path to the file to load

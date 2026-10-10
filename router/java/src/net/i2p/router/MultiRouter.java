@@ -47,6 +47,12 @@ import net.i2p.data.router.RouterInfo;
  */
 public class MultiRouter {
 
+    /**
+     * The router list, the default context and the output stream are all static and
+     * are set by {@link #main(String[])}, so an instance carries no state.
+     */
+    public MultiRouter() {}
+
     private static final int BASE_PORT = 5000;
 
     private static int nbrRouters;
@@ -55,7 +61,11 @@ public class MultiRouter {
     private static ArrayList<Router> routers = new ArrayList<>(8);
     private static I2PAppContext _defaultContext; // NOSONAR S1450: set in main()
 
-    /** Boot the requested number of routers from the given arguments. */
+    /**
+     * Boot the requested number of routers from the given arguments.
+     *
+     * @param args the command line, whose first element is the number of routers to boot; usage is printed when it is absent or not a positive integer
+     */
     public static void main(String[] args) {
         if ( (args == null) || (args.length < 1) ) {
             usage();
@@ -122,7 +132,8 @@ public class MultiRouter {
         out.println("All routers have been started");
 
         /* Wait for routers to start services and generate keys
-         * before doing the internal reseed. */
+         * before doing the internal reseed.
+         */
         int waitForRouters = (nbrRouters/10)*1000;
         out.println("Waiting " + waitForRouters/1000 +  " seconds for routers to start" +
                      "before doing the internal reseed");
@@ -178,7 +189,8 @@ public class MultiRouter {
         props.setProperty("i2p.dir.app", getBaseDir(id));
 
         /* If MultiRouter is not run from a dir containing lib/, webapps/, docs/, etc.
-         * point i2p.dir.base to a directory containing the above. */
+         * point i2p.dir.base to a directory containing the above.
+         */
         //props.setProperty("i2p.dir.base", getBaseDir(id));
         props.setProperty("i2p.dir.config", getBaseDir(id));
         props.setProperty("i2p.dir.log", getBaseDir(id));

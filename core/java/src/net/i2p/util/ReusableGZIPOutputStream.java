@@ -33,6 +33,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
 
     /**
      * Pull a cached instance
+     * @return a stream from the pool, or a newly allocated one when the pool is empty or caching is disabled
      */
     public static ReusableGZIPOutputStream acquire() {
         ReusableGZIPOutputStream rv = null;
@@ -46,6 +47,7 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
     /**
      * Release an instance back into the cache (this will discard any
      * state)
+     * @param out the stream to return to the pool; it is destroyed instead if the pool is disabled or full
      */
     public static void release(ReusableGZIPOutputStream out) {
         boolean cached;
@@ -79,12 +81,16 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
 
     /**
      * Configure the compression level.
+     * @param level a {@link Deflater} constant from NO_COMPRESSION to BEST_COMPRESSION
      */
     public void setLevel(int level) {
         def.setLevel(level);
     }
 
-    /** Pull the contents of the stream written. */
+    /**
+     * Pull the contents of the stream written.
+     * @return the compressed bytes accumulated since the last reset()
+     */
     public byte[] getData() {
         return _buffer.toByteArray();
     }

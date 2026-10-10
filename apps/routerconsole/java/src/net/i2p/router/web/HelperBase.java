@@ -10,6 +10,12 @@ import net.i2p.util.Log;
  * translation services, and UI helper methods.
  */
 public abstract class HelperBase {
+    /**
+     * Constructor for JSP helper beans; a subclass calls the constructor taking its context and translator.
+     */
+
+    public HelperBase() {}
+
     /** the router context */
     protected RouterContext _context;
     /** the writer for output */
@@ -22,11 +28,13 @@ public abstract class HelperBase {
      * @since 0.9.33
      */
     public static final String PROP_ADVANCED = "routerconsole.advanced";
-    /**  Checked attribute for HTML checkboxes.
+    /**
+     * Checked attribute for HTML checkboxes.
      * @since 0.9.33
      */
     public static final String CHECKED = " checked ";
-    /**  Selected attribute for HTML select options.
+    /**
+     * Selected attribute for HTML select options.
      * @since 0.9.43
      */
     public static final String SELECTED = " selected ";

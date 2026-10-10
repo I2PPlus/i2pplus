@@ -26,13 +26,21 @@ JFrame
 {
 	private Panel content_pane = new Panel();
 
+	/**
+	 * Creates an empty headless frame, with only an empty content pane attached.
+	 */
 	public
 	JFrame()
 	{
 
 	}
 
-	/** Window title. */
+	/**
+	 * Creates a frame carrying the given title, which this headless stub never displays.
+	 *
+	 * @param s the title text this frame is constructed with, which this headless
+	 *        stub never displays
+	 */
 	public
 	JFrame(
 		String	s )
@@ -40,7 +48,12 @@ JFrame
 
 	}
 
-	/** Return the content pane. */
+	/**
+	 * Return the content pane.
+	 *
+	 * @return the single Panel this frame reports as its content, allocated at
+	 *         construction and never replaced
+	 */
 	public Panel
 	getContentPane()
 	{

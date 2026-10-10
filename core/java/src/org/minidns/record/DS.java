@@ -27,7 +27,11 @@ import java.io.IOException;
 public class DS extends DelegatingDnssecRR {
 
     /**
-     * parse.
+     * Read a DS record payload from a wire-format stream.
+     * @param dis the stream positioned at the start of the record payload
+     * @param length the length in bytes of the record payload
+     * @return the parsed DS record
+     * @throws IOException if the payload cannot be read from the stream
      */
     public static DS parse(DataInputStream dis, int length) throws IOException {
         SharedData parsedData = DelegatingDnssecRR.parseSharedData(dis, length);
@@ -35,28 +39,46 @@ public class DS extends DelegatingDnssecRR {
     }
 
     /**
-     * DS.
+     * Create a DS record, keeping the signature and digest algorithms as raw
+     * numbers for use when MiniDNS does not recognize them.
+     *
+     * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
+     * @param algorithm the wire signature algorithm byte
+     * @param digestType the wire digest algorithm byte
+     * @param digest the DNSKEY digest, which must not be null
      */
     public DS(int keyTag, byte algorithm, byte digestType, byte[] digest) {
         super(keyTag, algorithm, digestType, digest);
     }
 
     /**
-     * DS.
+     * Create a DS record with a known signature algorithm but a digest type
+     * that is kept as a raw number.
+     *
+     * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
+     * @param algorithm the signing algorithm, resolved from its wire value
+     * @param digestType the wire digest algorithm byte
+     * @param digest the DNSKEY digest, which must not be null
      */
     public DS(int keyTag, SignatureAlgorithm algorithm, byte digestType, byte[] digest) {
         super(keyTag, algorithm, digestType, digest);
     }
 
     /**
-     * DS.
+     * Create a DS record with both the signature and the digest algorithm
+     * resolved to the constants MiniDNS knows.
+     *
+     * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
+     * @param algorithm the signing algorithm, resolved from its wire value
+     * @param digestType the hashing algorithm the DNSKEY was digested with
+     * @param digest the DNSKEY digest, which must not be null
      */
     public DS(int keyTag, SignatureAlgorithm algorithm, DigestAlgorithm digestType, byte[] digest) {
         super(keyTag, algorithm, digestType, digest);
     }
 
     /**
-     * getType.
+     * Report the RR type constant that identifies this payload as a DS record.
      */
     @Override
     public TYPE getType() {

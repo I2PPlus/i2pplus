@@ -45,6 +45,8 @@ public class SubscriptionResponse extends HTTPResponse {
 
     /**
      * SubscriptionResponse.
+     *
+     * @param httpRes the response received from the subscriber, holding the headers
      */
     public SubscriptionResponse(HTTPResponse httpRes) {
         super(httpRes);
@@ -56,6 +58,8 @@ public class SubscriptionResponse extends HTTPResponse {
 
     /**
      * setResponse.
+     *
+     * @param code the HTTP status code to record, sent with an empty body
      */
     public void setResponse(int code) {
         setStatusCode(code);
@@ -68,6 +72,8 @@ public class SubscriptionResponse extends HTTPResponse {
 
     /**
      * setErrorResponse.
+     *
+     * @param code the HTTP error status code to record, sent with an empty body
      */
     public void setErrorResponse(int code) {
         setStatusCode(code);
@@ -80,6 +86,8 @@ public class SubscriptionResponse extends HTTPResponse {
 
     /**
      * setSID.
+     *
+     * @param id the bare subscription identifier to publish in the SID header
      */
     public void setSID(String id) {
         setHeader(HTTP.SID, Subscription.toSIDHeaderString(id));
@@ -87,6 +95,8 @@ public class SubscriptionResponse extends HTTPResponse {
 
     /**
      * getSID.
+     *
+     * @return the subscription identifier from the SID header, or the empty string when absent
      */
     public String getSID() {
         return Subscription.getSID(getHeaderValue(HTTP.SID));
@@ -98,6 +108,8 @@ public class SubscriptionResponse extends HTTPResponse {
 
     /**
      * setTimeout.
+     *
+     * @param value the subscription lifetime in seconds, or INFINITE_VALUE for unlimited
      */
     public void setTimeout(long value) {
         setHeader(HTTP.TIMEOUT, Subscription.toTimeoutHeaderString(value));
@@ -105,6 +117,9 @@ public class SubscriptionResponse extends HTTPResponse {
 
     /**
      * getTimeout.
+     *
+     * @return the subscription lifetime in seconds from the TIMEOUT header, or INFINITE_VALUE
+     *         when the header is absent or unparseable
      */
     public long getTimeout() {
         return Subscription.getTimeout(getHeaderValue(HTTP.TIMEOUT));

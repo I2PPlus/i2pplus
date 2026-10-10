@@ -16,10 +16,18 @@ import net.i2p.router.web.FormHandler;
  */
 public class WizardHandler extends FormHandler {
 
+    /**
+     * No session-scoped helper is bound yet; setWizardHelper() supplies it before
+     * processForm() runs.
+     */
+    public WizardHandler() {}
+
     private WizardHelper _helper;
 
     /**
      *  Bind the helper (scope session) to this handler (scope request)
+     * @param helper session-scoped WizardHelper holding the wizard state this
+     *        request handler drives
      */
     public void setWizardHelper(WizardHelper helper) {_helper = helper;}
 

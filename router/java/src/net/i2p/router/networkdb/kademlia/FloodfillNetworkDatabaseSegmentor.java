@@ -52,6 +52,7 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
      * New segmentor with the given RouterContext, containing a default,
      * main netDb and prepared to add client netDbs.
      *
+     * @param context the router context supplying the log manager and the client netDb facades this segmentor creates and queries
      * @since 0.9.61
      */
     public FloodfillNetworkDatabaseSegmentor(RouterContext context) {

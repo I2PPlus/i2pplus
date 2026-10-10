@@ -25,30 +25,50 @@ public class
 JTextPane
 	extends Component
 {
+	/**
+	 * Constructor. The pane starts with an empty styled document, which is the
+	 * only thing the headless stub actually keeps.
+	 */
+	public JTextPane()
+	{
+	}
+
 	private StyledDocument sd = new StyledDocument();
 
-	/** Insert a component (no-op). */
+	/**
+	 * Insert a component (no-op).
+	 * @param comp the component that would be inserted, discarded in this headless build
+	 */
 	public void
 	insertComponent(
 		Component	comp )
 	{
 	}
 
-	/** Return the styled document. */
+	/**
+	 * Return the styled document.
+	 * @return the single document made at construction, never null
+	 */
 	public StyledDocument
 	getStyledDocument()
 	{
 		return( sd );
 	}
 
-	/** The selection start (no-op). */
+	/**
+	 * The selection start (no-op).
+	 * @param i the character offset that would start the selection, ignored here
+	 */
 	public void
 	setSelectionStart(
 		int	i )
 	{
 	}
 
-	/** The selection end (no-op). */
+	/**
+	 * The selection end (no-op).
+	 * @param i the character offset that would end the selection, ignored here
+	 */
 	public void
 	setSelectionEnd(
 		int	i )

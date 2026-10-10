@@ -14,6 +14,9 @@ class IntegrationCalculator {
     /**
      * How well integrated the peer is, as a weighted count of recent db introductions
      * plus the integration bonus.
+     *
+     * @param profile the peer whose integration is measured
+     * @return a non-negative score; higher means more useful as a DB peer
      */
     public static double calc(PeerProfile profile) {
         long val = 0;

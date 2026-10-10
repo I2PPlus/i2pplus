@@ -36,6 +36,25 @@ public class DataChunk {
     /** Map datasource name to datasource index */
     private final Map<String, Integer> nameindex;
 
+    /**
+     * Creates an empty chunk of fetched data, allocating the value grid that
+     * {@link Archive#loadData} then fills in with one row per archived time
+     * step and one column per datasource.
+     *
+     * @param nameindex datasource name to column index, used to locate a named
+     *        datasource within the value grid
+     * @param startTime timestamp in seconds since the epoch of the chunk's first
+     *        row, rounded down to a whole number of steps
+     * @param startOffset row number of the first row, relative to the archive's
+     *        current row; negative when the requested range starts before the
+     *        archive's oldest row
+     * @param endOffset row number one past the chunk's last row, relative to the
+     *        archive's current row; negative for a range ending before it
+     * @param step seconds between consecutive rows
+     * @param dsCount number of datasources, which must match the datasource
+     *        count recorded in the RRD file
+     * @param rows number of rows to allocate, one per step spanning the range
+     */
     DataChunk(
             Map<String, Integer> nameindex,
             long startTime,
@@ -82,6 +101,8 @@ public class DataChunk {
 
     /**
      * getStart.
+     *
+     * @return the row number offset of this chunk's first row, relative to the current row
      */
     public int getStart() {
         return startOffset;
@@ -89,6 +110,8 @@ public class DataChunk {
 
     /**
      * getEnd.
+     *
+     * @return the row number offset just past this chunk's last row, relative to the current row
      */
     public int getEnd() {
         return endOffset;
@@ -96,6 +119,8 @@ public class DataChunk {
 
     /**
      * getStep.
+     *
+     * @return the number of seconds between consecutive rows in this chunk
      */
     public long getStep() {
         return step;
@@ -103,6 +128,8 @@ public class DataChunk {
 
     /**
      * getDsCount.
+     *
+     * @return the number of datasources held per row in this chunk
      */
     public int getDsCount() {
         return dsCount;

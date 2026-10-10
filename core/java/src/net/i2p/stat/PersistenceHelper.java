@@ -16,6 +16,12 @@ class PersistenceHelper {
     private static final String NL = System.getProperty("line.separator");
 
     /**
+     * The writers and readers below are static and the class holds only the line
+     * separator, so an instance carries no state.
+     */
+    PersistenceHelper() {}
+
+    /**
      * Append a double value to the buffer.
      *
      * @param buf the buffer to append to

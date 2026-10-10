@@ -23,6 +23,7 @@ import net.i2p.data.i2cp.SessionStatusMessage;
 class SessionStatusMessageHandler extends HandlerImpl {
     /**
      * Create the handler for I2CP session status messages.
+     * @param context the containing application context, used to construct the base handler
      */
     public SessionStatusMessageHandler(I2PAppContext context) {
         super(context, SessionStatusMessage.MESSAGE_TYPE);

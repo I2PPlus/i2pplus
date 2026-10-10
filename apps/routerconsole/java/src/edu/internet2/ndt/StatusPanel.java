@@ -6,7 +6,7 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
  * Class that displays status of tests being run. It also provides methods to
  * set status message, record intention to stop tests, and to fetch the status
  * of whether the test is to be stopped.
- * */
+ */
 
 /**
  * StatusPanel.
@@ -32,6 +32,9 @@ public class StatusPanel extends JPanel {
      */
     /**
      * StatusPanel.
+     *
+     * @param iParamTestsNum total number of tests scheduled to be run
+     * @param sParamEnableMultiple string indicating whether multiple tests have been scheduled
      */
     public StatusPanel(int iParamTestsNum, String sParamEnableMultiple) {}
 

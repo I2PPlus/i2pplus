@@ -16,6 +16,10 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
 
     /**
      * OutboundGatewayMessage.
+     *
+     * @param message the I2NP message to be delivered, whose priority is cached here
+     * @param toRouter the router the message is addressed to
+     * @param toTunnel the tunnel the message is addressed to
      */
     public OutboundGatewayMessage(I2NPMessage message, Hash toRouter, TunnelId toTunnel) {
         super(message, toRouter, toTunnel);

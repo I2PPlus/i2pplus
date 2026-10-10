@@ -145,6 +145,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
     private final File _dhtFile;
     private final File _backupDhtFile;
+    /** True between start() and stop(), so the reply threads know to keep going. */
     protected volatile boolean _isRunning;
     private volatile boolean _hasBootstrapped;
 
@@ -212,7 +213,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Create the DHT instance.
      *
+     * @param ctx the I2P context supplying the log manager and random source
      * @param baseName generally "i2psnark"
+     * @param session the I2P session the DHT messages are sent over
      */
     public KRPC(I2PAppContext ctx, String baseName, I2PSession session) {
         this(ctx, baseName, session, null);
@@ -222,6 +225,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * Create the DHT instance sharing state.
      *
      * @param baseName generally "i2psnark"
+     * @param ctx the I2P context, supplying the log manager, random source and router
+     * @param session the I2P session the DHT messages are sent over
      * @param shared the KRPC instance whose routing table, tracker, and blacklist are shared with
      *            this instance, or null for a standalone instance; a TorrentKRPC passes the main
      *            instance and overrides start() and stop() to run only the message listener
@@ -1476,6 +1481,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * Called for bootstrap or for all nodes in a receiveNodes reply. Package private for
      * PersistDHT.
      *
+     * @param nInfo the node heard about, whose NID timestamp is refreshed when newly added
      * @return non-null nodeInfo from DB if present, otherwise the nInfo parameter is returned
      */
     NodeInfo heardAbout(NodeInfo nInfo) {
@@ -1682,7 +1688,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * nodeinfo to our DHT.
      *
      * @param waiter the reply waiter for the original query
-     * @param response the response data
+     * @param response the bencoded reply fields keyed by method-specific names
      * @throws InvalidBEncodingException if the response is malformed
      */
     private void receiveResponse(ReplyWaiter waiter, Map<String, BEValue> response)
@@ -1903,6 +1909,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
          *
          * @param onReply must be fast, otherwise set to null and wait on this UNUSED
          * @param onTimeout must be fast, otherwise set to null and wait on this UNUSED
+         * @param mID the message ID of the query being awaited
+         * @param nInfo the node the query was sent to, and whose reply is credited
          */
         public ReplyWaiter(MsgID mID, NodeInfo nInfo, Runnable onReply, Runnable onTimeout) {
             super(SimpleTimer2.getInstance(), DEFAULT_QUERY_TIMEOUT);
@@ -1921,7 +1929,11 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
             return sentTo;
         }
 
-        /** Only used for get_peers, to save the Info Hash. */
+        /**
+         * Only used for get_peers, to save the Info Hash.
+         *
+         * @param o the payload remembered alongside the query, read back by getSentObject()
+         */
         public void setSentObject(Object o) {
             sentObject = o;
         }
@@ -1957,6 +1969,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
         /**
          * Will notify this and run onReply. Also removes from _sentQueries and calls heardFrom().
+         * @param code the reply status code, as returned by getReplyCode()
+         * @param o the parsed reply payload, stored in getReplyObject()
          */
         public void gotReply(int code, Object o) {
             cancel();
@@ -2067,7 +2081,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Handle a reportAbuse message from the session.
      *
-     * @param session the session
+     * @param session the I2P session that reported the abuse, used only for context
      * @param severity the abuse severity
      */
     @Override
@@ -2089,7 +2103,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Handle a session error.
      *
-     * @param session the session
+     * @param session the I2P session that reported the error
      * @param message the error message
      * @param error the error
      */

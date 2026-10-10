@@ -51,6 +51,11 @@ class SearchState {
 
     /**
      * SearchState.
+     *
+     * @param context the context supplying the log and the clock this search
+     *        is timed against
+     * @param key the search target that peers are ranked against by XOR
+     *        distance
      */
     public SearchState(RouterContext context, Hash key) {
         _log = context.logManager().getLog(SearchState.class);
@@ -117,6 +122,7 @@ class SearchState {
     /**
      * Up to max attempted peers closest to the target.
      *
+     * @param max the largest number of peers to return
      * @return the closest attempted
      */
     public Set<Hash> getClosestAttempted(int max) {
@@ -139,6 +145,9 @@ class SearchState {
 
     /**
      * Whether the peer was attempted.
+     *
+     * @param peer the peer to look for in the attempted set
+     * @return true if this peer has already been queried for this search
      */
     public boolean wasAttempted(Hash peer) {
         synchronized (_attemptedPeers) {
@@ -188,6 +197,8 @@ class SearchState {
 
     /**
      * Whether the search has completed.
+     *
+     * @return true once a completion time has been recorded
      */
     public boolean completed() {return _completed != -1;}
 
@@ -256,7 +267,11 @@ class SearchState {
         }
         synchronized (_attemptedPeers) {_attemptedPeers.add(peer);}
     }
-    /** We didn't actually want to add this peer as part of the pending list... */
+    /**
+     * We didn't actually want to add this peer as part of the pending list...
+     *
+     * @param peer the peer to take back out of the pending and attempted sets
+     */
     public void removePending(Hash peer) {
         synchronized (_pendingPeers) {
             _pendingPeers.remove(peer);
@@ -265,7 +280,13 @@ class SearchState {
         synchronized (_attemptedPeers) {_attemptedPeers.remove(peer);}
     }
 
-    /** How long it took to get the reply, or -1 if we don't know. */
+    /**
+     * How long it took to get the reply, or -1 if we don't know.
+     *
+     * @param peer the peer that answered with data for this search
+     * @return the milliseconds between request and reply, or -1 if the
+     *        request was never recorded
+     */
     public long dataFound(Hash peer) {
         long rv = -1;
         synchronized (_pendingPeers) {
@@ -277,7 +298,13 @@ class SearchState {
         return rv;
     }
 
-    /** How long it took to get the reply, or -1 if we don't know. */
+    /**
+     * How long it took to get the reply, or -1 if we don't know.
+     *
+     * @param peer the peer that answered this search without data
+     * @return the milliseconds between request and reply, or -1 if the
+     *        request was never recorded
+     */
     public long replyFound(Hash peer) {
         synchronized (_repliedPeers) {_repliedPeers.add(peer);}
         synchronized (_pendingPeers) {

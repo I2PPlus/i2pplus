@@ -35,6 +35,8 @@ public class HashDistance {
      * Compute XOR distance between two hashes.
      * Allocates a BigInteger. For comparison-only use cases,
      * prefer {@link #compare(Hash, Hash, Hash, Hash)}.
+     * @param targetKey one of the two hashes whose XOR distance is wanted
+     * @param routerInQuestion the other of the two hashes
      * @return the distance
      */
     public static BigInteger getDistance(Hash targetKey, Hash routerInQuestion) {
@@ -46,6 +48,12 @@ public class HashDistance {
      * Compare two XOR distances without allocating BigInteger.
      * Returns negative, zero, or positive as dist(a,b) &lt; = &gt; dist(c,d).
      *
+     * @param a the first hash of the left-hand pair
+     * @param b the second hash of the left-hand pair
+     * @param c the first hash of the right-hand pair
+     * @param d the second hash of the right-hand pair
+     * @return the first byte where a XOR b and c XOR d differ, or 0 if they are
+     * identical
      * @since 0.9.70+
      */
     public static int compare(Hash a, Hash b, Hash c, Hash d) {

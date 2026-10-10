@@ -57,6 +57,10 @@ public class EepHead extends EepGet {
     /**
      * CLI entry point: fetch and display HTTP response headers for a URL.
      * Usage: EepHead [-p 127.0.0.1:4444] [-n #retries] url
+     *
+     * @param args the command line arguments, with options set by -p host:port,
+        -n retries, -t seconds, -u user and -x password, followed by
+        the URL whose headers are to be fetched
      */
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";
@@ -401,7 +405,11 @@ public class EepHead extends EepGet {
         return buf.toString();
     }
 
-    /** We don't decrement the variable (unlike in EepGet), so this is valid */
+    /**
+     * We don't decrement the variable (unlike in EepGet), so this is valid
+     *
+     * @return the Content-Length reported by the server, in bytes
+     */
     public long getContentLength() {
         return _bytesRemaining;
     }

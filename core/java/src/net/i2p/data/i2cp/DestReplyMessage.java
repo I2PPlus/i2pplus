@@ -36,6 +36,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
 
     /**
      * DestReplyMessage.
+     * @param d the destination the lookup resolved to, or null if this reply reports a failure
      */
     public DestReplyMessage(Destination d) {
         _dest = d;

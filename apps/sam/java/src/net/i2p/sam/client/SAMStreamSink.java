@@ -81,6 +81,7 @@ public class SAMStreamSink {
 
     /**
      * main.
+     * @param args the command line: getopt flags, then the destination file and sink dir
      */
     public static void main(String[] args) {
         Getopt g = new Getopt("SAM", args, "sxhb:m:p:u:v:w:");
@@ -176,6 +177,11 @@ public class SAMStreamSink {
 
     /**
      * SAMStreamSink.
+     * @param ctx the I2P context
+     * @param samHost the hostname of the SAM bridge
+     * @param samPort the port of the SAM bridge
+     * @param destFile the file naming our own destination
+     * @param sinkDir the directory received streams are written to
      */
     public SAMStreamSink(I2PAppContext ctx, String samHost, String samPort, String destFile, String sinkDir) {
         _context = ctx;
@@ -190,6 +196,12 @@ public class SAMStreamSink {
 
     /**
      * startup.
+     * @param version the SAM protocol version to handshake with, e.g. "3.3"
+     * @param isSSL true to use TLS when connecting to the SAM bridge
+     * @param mode the stream mode constant, optionally plus MASTER
+     * @param user the bridge authentication user name, or null for none
+     * @param password the bridge authentication password, or null for none
+     * @param sessionOpts the comma-separated SAM session options
      */
     public void startup(String version, boolean isSSL, int mode, String user, String password, String sessionOpts) {
         if (_log.shouldDebug())

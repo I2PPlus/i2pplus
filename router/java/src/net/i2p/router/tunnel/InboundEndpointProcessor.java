@@ -20,6 +20,10 @@ class InboundEndpointProcessor {
 
     /**
      * Binds the router context, tunnel creator config, and IV validator.
+     *
+     * @param ctx the router context supplying the log and network database
+     * @param cfg the tunnel creator config describing the inbound tunnel
+     * @param validator the IV validator that authenticates and strips the per-message IV
      */
     public InboundEndpointProcessor(RouterContext ctx, TunnelCreatorConfig cfg, IVValidator validator) {
         _context = ctx;
@@ -49,6 +53,7 @@ class InboundEndpointProcessor {
      * @param offset index into the array where the extra 16 bytes (IV) begins
      * @param length how much of orig can we write to (must be a multiple of 16).
      *               Should always be 1024 bytes.
+     * @param prev the sending peer's hash, matched against the tunnel's second-to-last hop
      * @return true if the data was recovered (and written in place to orig), false
      *         if it was a duplicate or from the wrong peer.
      */

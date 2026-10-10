@@ -127,7 +127,12 @@ public class JobStats {
             }
         }
     }
-/** Time of the last run. */
+    /**
+     * Time of the last run.
+     *
+     * @return the start time of the last run in milliseconds since the epoch,
+     *         or 0 if the job has never run
+     */
     public long getLastRunTime() {return _lastRunTime;}
 
     /**
@@ -226,7 +231,12 @@ public class JobStats {
         if (numRuns > 0) {return _totalPendingTime.get() / (double) numRuns;}
         else {return 0;}
     }
-/** Return the recentStats */
+    /**
+     * Return the recentStats
+     *
+     * @return run counts and time totals restricted to the recent tracking
+     *         window, with -1 for the maxima and minima if no run fell in it
+     */
     public RecentStats getRecentStats() {
         long now = System.currentTimeMillis();
         long cutoff = now - RECENT_WINDOW_MS;
@@ -282,7 +292,17 @@ public class JobStats {
 /** Minimum pending time */
         public final long minPendingTime;
 
-        /** Recent stats */
+        /**
+         * Recent stats
+         *
+         * @param runs the number of runs in the window
+         * @param totalTime the summed run time across those runs, in milliseconds
+         * @param maxTime the longest run in the window, or -1 if none
+         * @param minTime the shortest run in the window, or -1 if none
+         * @param totalPendingTime the summed queue wait across those runs, in milliseconds
+         * @param maxPendingTime the longest queue wait in the window, or -1 if none
+         * @param minPendingTime the shortest queue wait in the window, or -1 if none
+         */
         RecentStats(long runs, long totalTime, long maxTime, long minTime,
                    long totalPendingTime, long maxPendingTime, long minPendingTime) {
             this.runs = runs;
@@ -293,11 +313,19 @@ public class JobStats {
             this.maxPendingTime = maxPendingTime;
             this.minPendingTime = minPendingTime;
         }
-/** Return the avgTime */
+        /**
+         * Return the avgTime
+         *
+         * @return the mean run time in milliseconds, or 0 if no runs were counted
+         */
         public double getAvgTime() {
             return runs > 0 ? totalTime / (double) runs : 0;
         }
-/** Return the avgPendingTime */
+        /**
+         * Return the avgPendingTime
+         *
+         * @return the mean queue wait in milliseconds, or 0 if no runs were counted
+         */
         public double getAvgPendingTime() {
             return runs > 0 ? totalPendingTime / (double) runs : 0;
         }

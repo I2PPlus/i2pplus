@@ -359,6 +359,7 @@ class JobQueueScaler implements Runnable {
     /**
      * Minimum number of runners (floor), dynamic - reads property each time.
      * On router startup, returns more runners to handle startup load.
+     * @return the configured minimum, floored at 1, raised to 8 in the first 3 minutes
      */
     int getMinRunnersDynamic() {
         int baseMin = Math.max(1, _context.getProperty(PROP_MIN_RUNNERS, 4));
@@ -1079,6 +1080,7 @@ class JobQueueScaler implements Runnable {
 
     /**
      * Update the maximum runner limit (called when configuration changes).
+     * @param configuredMax the new limit from configuration, before the RAM cap is applied
      */
     public void updateMaxRunners(int configuredMax) {
         _configuredMaxRunners = configuredMax;

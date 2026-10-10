@@ -42,6 +42,10 @@ class StoreState {
 
     /**
      * StoreState.
+     *
+     * @param ctx the router context supplying the clock used to time the store
+     * @param key the DatabaseEntry hash being stored
+     * @param data the entry that will be sent to each peer that stores it
      */
     public StoreState(RouterContext ctx, Hash key, DatabaseEntry data) {
         this(ctx, key, data, null);
@@ -50,7 +54,9 @@ class StoreState {
     /**
      * New store state tracking pending, attempted, and successful peers.
      *
+     * @param ctx the router context supplying the clock used to time the store
      * @param key the DatabaseEntry hash
+     * @param data the entry that will be sent to each peer that stores it
      * @param toSkip may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53
      */
     public StoreState(RouterContext ctx, Hash key, DatabaseEntry data, Set<Hash> toSkip) {
@@ -141,6 +147,8 @@ class StoreState {
 
     /**
      * Whether the store has completed.
+     *
+     * @return true once complete(true) has recorded a completion time
      */
     public boolean completed() { return _completed != -1; }
     /**
@@ -175,6 +183,9 @@ class StoreState {
     /**
      * Adds a pending message for tracking.
      *
+     * @param peer the peer the message is queued to, which is also counted as
+     *        attempted
+     * @param msg the wrapped message to hand back from getPendingMessage()
      * @since 0.7.10
      */
     public void addPending(Hash peer, MessageWrapper.WrappedMessage msg) {
@@ -185,6 +196,7 @@ class StoreState {
     /**
      * Returns the pending message for the specified peer.
      *
+     * @param peer the peer whose pending message should be taken
      * @return the message or null; will only return the message once, so
      * tags are only acked or failed once.
      * @since 0.7.10
@@ -195,6 +207,8 @@ class StoreState {
 
     /**
      * Increments attempted count
+     *
+     * @param peer the peer now pending a store reply, and counted as attempted
      */
     public void addPending(Hash peer) {
         Long now = Long.valueOf(_context.clock().now());
@@ -208,7 +222,11 @@ class StoreState {
         }
     }
 
-    /** We aren't even going to try to contact this peer. */
+    /**
+     * We aren't even going to try to contact this peer.
+     *
+     * @param peer the peer to count as attempted without being contacted
+     */
     public void addSkipped(Hash peer) {
         synchronized (_attemptedPeers) {
             _attemptedPeers.add(peer);

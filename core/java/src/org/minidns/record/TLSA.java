@@ -184,6 +184,12 @@ public class TLSA extends Data {
 
     /**
      * parse.
+     *
+     * @param dis the stream positioned at the start of the record body
+     * @param length the number of bytes the whole record occupies, of which the
+     *        first three are the usage, selector and matching type
+     * @return the TLSA record read from the stream
+     * @throws IOException if the stream ends before the record does
      */
     public static TLSA parse(DataInputStream dis, int length) throws IOException {
         byte certUsage = dis.readByte();
@@ -194,7 +200,14 @@ public class TLSA extends Data {
         return new TLSA(certUsage, selector, matchingType, certificateAssociation);
     }
 
-    /** Create TLSA */
+    /**
+     * Create TLSA
+     *
+     * @param certUsageByte the raw certificate usage field, looked up in the LUT
+     * @param selectorByte the raw selector field, looked up in the LUT
+     * @param matchingTypeByte the raw matching type field, looked up in the LUT
+     * @param certificateAssociation the certificate association data to match
+     */
     TLSA(byte certUsageByte, byte selectorByte, byte matchingTypeByte, byte[] certificateAssociation) {
         this.certUsageByte = certUsageByte;
         this.certUsage = CERT_USAGE_LUT.get(certUsageByte);
@@ -236,12 +249,23 @@ public class TLSA extends Data {
         return new StringBuilder().append(certUsageByte).append(' ').append(selectorByte).append(' ').append(matchingTypeByte).append(' ').append(new BigInteger(1, certificateAssociation).toString(16)).toString();
     }
 
-    /** @return copy of the certificate association data */
+    /**
+     * The certificate association data held by this record, defensively copied so
+     * the caller cannot modify the record's own bytes.
+     *
+     * @return copy of the certificate association data
+     */
     public byte[] getCertificateAssociation() {
         return certificateAssociation.clone();
     }
 
-    /** @return true if the given data matches the certificate association */
+    /**
+     * Compares the certificate association data this record carries against a
+     * candidate, byte for byte, for DANE verification.
+     *
+     * @param otherCertificateAssociation the association data to compare against
+     * @return true if the given data matches the certificate association
+     */
     public boolean certificateAssociationEquals(byte[] otherCertificateAssociation) {
         return Arrays.equals(certificateAssociation, otherCertificateAssociation);
     }

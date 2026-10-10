@@ -25,6 +25,11 @@ class SessionsDB {
 	 */
 	static class ExistingIdException extends Exception {
 		private static final long serialVersionUID = 0x1;
+
+		/**
+		 * Carries no message; put() knows from its own argument which nickname collided.
+		 */
+		ExistingIdException() {}
 	}
 
 	/**
@@ -33,6 +38,11 @@ class SessionsDB {
 	 */
 	static class ExistingDestException extends Exception {
 		private static final long serialVersionUID = 0x1;
+
+		/**
+		 * Carries no message; put() knows from its own comparison which destination collided.
+		 */
+		ExistingDestException() {}
 	}
 
 	private final HashMap<String, SessionRecord> map;
@@ -48,7 +58,7 @@ class SessionsDB {
 	 * Store a session record. Both the nick and destination must be unique.
 	 *
 	 * @param nick the session nickname
-	 * @param session the session
+	 * @param session the SessionRecord to store under nick, whose destination must also be unique
 	 * @throws ExistingIdException if a session with this nick already exists
 	 * @throws ExistingDestException if a session with this destination already exists
 	 */
@@ -71,7 +81,7 @@ class SessionsDB {
 	 * Only the nick must be unique.
 	 *
 	 * @param nick the session nickname
-	 * @param session the session
+	 * @param session the SessionRecord to store under nick; its destination may repeat
 	 * @throws ExistingIdException if a session with this nick already exists
 	 * @since 0.9.25
 	 */
@@ -123,6 +133,7 @@ class SessionsDB {
 
 	/**
 	 * Get the number of registered sessions.
+	 * @return the count of entries currently held in the session map
 	 * @since 0.9.70+
 	 */
 	public synchronized int size()
@@ -132,6 +143,7 @@ class SessionsDB {
 
 	/**
 	 * Return a snapshot of all entries (nick -> SessionRecord).
+	 * @return a new map holding a copy of every session, keyed by nick
 	 * @since 0.9.70+
 	 */
 	synchronized public Map<String, SessionRecord> getAllEntries() {

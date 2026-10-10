@@ -34,6 +34,14 @@ class FloodfillStoreJob extends StoreJob {
 
     /**
      * Create a new FloodfillStoreJob to send data to floodfills.
+     *
+     * @param context the router context supplying the job queue and database
+     * @param facade the floodfill facade this job stores through
+     * @param key the hash the entry is to be stored under
+     * @param data the entry to store, a RouterInfo or LeaseSet
+     * @param onSuccess job to queue once a floodfill acknowledges the store
+     * @param onFailure job to queue if no floodfill replies before the timeout
+     * @param timeoutMs how long to wait for an acknowledgement, in milliseconds
      */
     public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade,
                              Hash key, DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs) {
@@ -43,6 +51,13 @@ class FloodfillStoreJob extends StoreJob {
     /**
      * Create a new FloodfillStoreJob to send data to floodfills.
      *
+     * @param context the router context supplying the job queue and database
+     * @param facade the floodfill facade this job stores through
+     * @param key the hash the entry is to be stored under
+     * @param data the entry to store, a RouterInfo or LeaseSet
+     * @param onSuccess job to queue once a floodfill acknowledges the store
+     * @param onFailure job to queue if no floodfill replies before the timeout
+     * @param timeoutMs how long to wait for an acknowledgement, in milliseconds
      * @param toSkip set of peer hashes to skip (e.g., already have the data), may be null
      */
     public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade,

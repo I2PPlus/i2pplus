@@ -48,6 +48,9 @@ public class TunnelHistory {
 
     /**
      * TunnelHistory.
+     *
+     * @param context the router context this history is attached to
+     * @param statGroup the statistics group the rate stats are filed under
      */
     public TunnelHistory(RouterContext context, String statGroup) {
         _context = context;
@@ -56,30 +59,88 @@ public class TunnelHistory {
         _failRate = new RateStat("tunnelHistory.failRate", "How often do tunnels this peer accepts fail?", statGroup, RATES);
     }
 
-    /** Total tunnels the peer has agreed to participate in */
+    /**
+     * Total tunnels the peer has agreed to participate in
+     *
+     * @return the count since the last decay, applied every 15 minutes by
+     *     {@link #coalesceStats()}
+     */
     public long getLifetimeAgreedTo() {return _lifetimeAgreedTo.get();}
-    /** Total tunnels the peer has refused to participate in (does not include timeouts) */
+    /**
+     * Total tunnels the peer has refused to participate in (does not include timeouts)
+     *
+     * @return the count since the last decay, applied every 15 minutes by
+     *     {@link #coalesceStats()}
+     */
     public long getLifetimeRejected() {return _lifetimeRejected.get();}
-    /** Total tunnel builds to this peer that timed out without a response */
+    /**
+     * Total tunnel builds to this peer that timed out without a response
+     *
+     * @return the count since the last decay, applied every 15 minutes by
+     *     {@link #coalesceStats()}
+     */
     public long getLifetimeTimedOut() {return _lifetimeTimedOut.get();}
-    /** Total tunnels the peer has agreed to participate in that were later marked as failed prematurely */
+    /**
+     * Total tunnels the peer has agreed to participate in that were later marked as failed prematurely
+     *
+     * @return the count since the last decay, applied every 15 minutes by
+     *     {@link #coalesceStats()}
+     */
     public long getLifetimeFailed() {return _lifetimeFailed.get();}
-    /** When the peer last agreed to participate in a tunnel */
+    /**
+     * When the peer last agreed to participate in a tunnel
+     *
+     * @return milliseconds since the epoch, or 0 if the peer has never agreed
+     */
     public long getLastAgreedTo() {return _lastAgreedTo;}
-    /** When the peer last refused to participate in a tunnel with level of critical */
+    /**
+     * When the peer last refused to participate in a tunnel with level of critical
+     *
+     * @return milliseconds since the epoch, or 0 if the peer has never
+     *     rejected at this severity
+     */
     public long getLastRejectedCritical() {return _lastRejectedCritical;}
-    /** When the peer last refused to participate in a tunnel complaining of bandwidth overload */
+    /**
+     * When the peer last refused to participate in a tunnel complaining of bandwidth overload
+     *
+     * @return milliseconds since the epoch, or 0 if the peer has never
+     *     rejected at this severity
+     */
     public long getLastRejectedBandwidth() {return _lastRejectedBandwidth;}
-    /** When the peer last refused to participate in a tunnel complaining of transient overload */
+    /**
+     * When the peer last refused to participate in a tunnel complaining of transient overload
+     *
+     * @return milliseconds since the epoch, or 0 if the peer has never
+     *     rejected at this severity
+     */
     public long getLastRejectedTransient() {return _lastRejectedTransient;}
-    /** When the peer last refused to participate in a tunnel probabalistically */
+    /**
+     * When the peer last refused to participate in a tunnel probabalistically
+     *
+     * @return milliseconds since the epoch, or 0 if the peer has never
+     *     rejected at this severity
+     */
     public long getLastRejectedProbabalistic() {return _lastRejectedProbabalistic;}
-    /** When the peer last timed out without responding to a tunnel request */
+    /**
+     * When the peer last timed out without responding to a tunnel request
+     *
+     * @return milliseconds since the epoch, or 0 if the peer has never timed out
+     */
     public long getLastTimedOut() {return _lastTimedOut;}
-    /** When the last tunnel the peer participated in failed */
+    /**
+     * When the last tunnel the peer participated in failed
+     *
+     * @return milliseconds since the epoch, or 0 if no participating tunnel
+     *     has failed
+     */
     public long getLastFailed() {return _lastFailed;}
 
-    /** When the peer last passed a tunnel test */
+    /**
+     * When the peer last passed a tunnel test
+     *
+     * @return milliseconds since the epoch, or 0 if the peer has never passed
+     *     a tunnel test
+     */
     public long getLastTestedSuccessfully() {return _lastTestedSuccessfully;}
 
     /**
@@ -110,6 +171,9 @@ public class TunnelHistory {
 
     /**
      * Processed message counter; legacy method, no longer tracked.
+     *
+     * @param processedSuccessfully the number of successfully processed messages, ignored
+     * @param failedProcessing the number of messages that failed to process, ignored
      */
     public void incrementProcessed(int processedSuccessfully, int failedProcessing) {
         // intentionally empty - legacy method from strict speed calculator, no longer tracked
@@ -227,6 +291,9 @@ public class TunnelHistory {
 
     /**
      * Write the tunnel history to the stream, including comments.
+     *
+     * @param out the stream to write the properties-formatted history to
+     * @throws IOException if the stream rejects a write
      */
     public void store(OutputStream out) throws IOException {
         store(out, true);
@@ -235,7 +302,9 @@ public class TunnelHistory {
     /**
      * Write the data from the profile to the stream
      *
+     * @param out the stream to write the properties-formatted history to
      * @param addComments add comment lines to the output
+     * @throws IOException if the stream rejects a write
      * @since 0.9.41
      */
     public void store(OutputStream out, boolean addComments) throws IOException {
@@ -275,6 +344,8 @@ public class TunnelHistory {
 
     /**
      * Restore the tunnel history fields from the given properties.
+     *
+     * @param props the persisted properties previously written by {@link #store(OutputStream, boolean)}
      */
     public void load(Properties props) {
         _lastAgreedTo = getLong(props, "tunnels.lastAgreedTo");

@@ -72,6 +72,9 @@ class OutboundMessageFragments {
 
     /**
      * OutboundMessageFragments.
+     *
+     * @param ctx the router context, whose stat manager registers this transport's send rate stats
+     * @param transport the UDP transport that owns the peer states and the packet pusher
      */
     public OutboundMessageFragments(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -124,6 +127,8 @@ class OutboundMessageFragments {
 
     /**
      * Remove a peer from the active outbound list and drop its pending messages.
+     *
+     * @param peer the peer state to forget, whose queued outbound messages are discarded
      */
     void dropPeer(PeerState peer) {
         if (_log.shouldDebug()) {_log.debug("Dropping peer " + peer.getRemotePeer());}
@@ -133,6 +138,8 @@ class OutboundMessageFragments {
 
     /**
      * Add a new message to the active pool
+     *
+     * @param msg the message to queue; it is ignored when its target has no RouterInfo
      */
     public void add(OutNetMessage msg) {
         RouterInfo target = msg.getTarget();
@@ -153,6 +160,9 @@ class OutboundMessageFragments {
      * complete message reliably.
      * If you have multiple messages, use the list variant,
      * so the messages may be bundled efficiently.
+     *
+     * @param state the message state to queue immediately
+     * @param peer the peer to send it to; null is a programming error
      */
     public void add(OutboundMessageState state, PeerState peer) {
         if (peer == null) {throw new RuntimeException("NULL peer for " + state);}
@@ -163,6 +173,9 @@ class OutboundMessageFragments {
     /**
      * Short circuit the OutNetMessage, letting us send multiple messages
      * reliably and efficiently.
+     *
+     * @param states the message states to queue, in the order they should be sent
+     * @param peer the peer to send them to; null is a programming error
      * @since 0.9.24
      */
     public void add(List<OutboundMessageState> states, PeerState peer) {
@@ -187,6 +200,7 @@ class OutboundMessageFragments {
      * There are larger chances of adding the PeerState "behind" where
      * the iterator is now... but these issues are the same as before concurrentification.
      *
+     * @param peer the peer that now has something queued to transmit
      * @param size the minimum size we can send, or 0 to always notify
      * @since 0.8.9
      */

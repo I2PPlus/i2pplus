@@ -14,6 +14,12 @@ import net.i2p.util.Log;
  * @since 0.8.9
  */
 abstract class IRCFilter {
+     /**
+      * Constructor for subclasses; the line filters in this base class are static.
+      */
+
+     IRCFilter() {}
+
 
     private static final boolean ALLOW_ALL_DCC_IN = false;
     /** does not override DCC handling */
@@ -55,6 +61,8 @@ abstract class IRCFilter {
      *
      * @param helper may be null
      * @return the original or modified line, or null if it should be dropped.
+     * @param s the single inbound line to filter, without its trailing newline
+     * @param expectedPong holds the PONG token a three field PING expects back; reset on use
      */
     public static String inboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
 
@@ -275,6 +283,8 @@ abstract class IRCFilter {
      *
      * Modify or filter a single outbound line.
      *
+     * @param s the single outbound line to filter, without its trailing newline
+     * @param expectedPong cleared, then filled by filterPing with the PONG a 3-field PING expects
      * @param helper may be null
      * @return the original or modified line, or null if it should be dropped.
      */

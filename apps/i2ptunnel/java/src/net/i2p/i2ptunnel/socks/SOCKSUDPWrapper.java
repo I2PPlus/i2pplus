@@ -29,6 +29,12 @@ public class SOCKSUDPWrapper implements Source, Sink {
     private Sink sink;
     private final Map<I2PSocketAddress, SOCKSHeader> cache;
 
+    /**
+     * Create a wrapper sharing an existing per-destination header cache.
+     *
+     * @param cache the header cache to reuse for outgoing datagrams, keyed by
+     *        destination address
+     */
     public SOCKSUDPWrapper(Map<I2PSocketAddress, SOCKSHeader> cache) {
         this.cache = cache;
     }
@@ -55,7 +61,7 @@ public class SOCKSUDPWrapper implements Source, Sink {
      * Use the cached header, which should have the host string and port
      *
      * May throw RuntimeException from underlying sink
-     * @throws RuntimeException
+     * @throws RuntimeException if the wrapped sink fails to send the data
      * @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {

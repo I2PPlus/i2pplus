@@ -296,7 +296,8 @@ final class SSU2Util {
      * Convert a termination reason code to a human-readable string
      *
      * @param code one of the REASON_* constants
-     * @return human-readable description
+     * @return a short phrase naming the termination reason, or a string naming the
+     *     unknown code when it is not one of the REASON_* constants
      */
     public static String terminationCodeToString(int code) {
         switch (code) {
@@ -331,6 +332,11 @@ final class SSU2Util {
 
     /**
      * 32 byte output, ZEROLEN data
+     *
+     * @param ctx the application context, providing the HMAC generator
+     * @param key the input keying material
+     * @param info the ASCII info string identifying this derivation, "" if none
+     * @return a newly allocated 32-byte output array
      */
     public static byte[] hkdf(I2PAppContext ctx, byte[] key, String info) {
         HKDF hkdf = new HKDF(ctx);
@@ -342,10 +348,14 @@ final class SSU2Util {
     /**
      * Make the data for the peer test block
      *
+     * @param ctx the application context, for the clock and DSA service
      * @param h to be included in sig, not included in data
      * @param h2 may be null, to be included in sig, not included in data
      * @param role unused
+     * @param nonce the peer's nonce, written into the signed data
      * @param ip may be null
+     * @param port the peer's UDP port number, written into the data only if ip is non-null
+     * @param spk the signing key
      * @return null on failure
      */
     public static byte[] createPeerTestData(I2PAppContext ctx, Hash h, Hash h2,
@@ -373,9 +383,14 @@ final class SSU2Util {
     /**
      * Make the data for the relay request block
      *
+     * @param ctx the application context, for the clock and DSA service
      * @param h Bob hash to be included in sig, not included in data
      * @param h2 Charlie hash to be included in sig, not included in data
+     * @param nonce the request nonce to echo in the signed data
+     * @param tag the request's per-tunnel tag, written into the signed data
      * @param ip non-null
+     * @param port the OBEP's UDP port number
+     * @param spk the signing key
      * @return null on failure
      * @since 0.9.55
      */
@@ -503,7 +518,7 @@ final class SSU2Util {
      * Parse the 2-byte port out of relay response / peer test data.
      *
      * @param data the data after the signature
-     * @return the port
+     * @return the 16-bit UDP port number decoded from the 2-byte field
      * @since 0.9.71
      */
     public static int getRelayDataPort(byte[] data) {
@@ -528,7 +543,7 @@ final class SSU2Util {
      * Parse the trailing token out of the relay response signed data.
      *
      * @param data the signed data
-     * @return the token
+     * @return the 8-byte relay token value carried in the trailer
      * @throws ArrayIndexOutOfBoundsException if the token is not present
      * @since 0.9.71
      */
@@ -551,9 +566,13 @@ final class SSU2Util {
     /**
      * Make the data for the relay response block
      *
+     * @param ctx the application context, for the clock and DSA service
      * @param h Bob hash to be included in sig, not included in data
+     * @param code the termination code, written into the first payload byte
+     * @param nonce the request nonce to echo in the signed data
      * @param ip may be null
      * @param port the UDP port number if ip is null
+     * @param spk the signing key
      * @param token if nonzero, append it
      * @return null on failure
      * @since 0.9.55
@@ -596,10 +615,13 @@ final class SSU2Util {
      * the prologue and hash as the initial data,
      * and then the provided data.
      *
+     * @param ctx the application context, providing the DSA service
+     * @param prologue the protocol-specific prologue prepended to the signed buffer
      * @param data if desired, leave room at end for sig
      * @param datalen the length of the data to be signed
      * @param h to be included in sig, not included in data
      * @param h2 may be null, to be included in sig, not included in data
+     * @param spk the signing key
      * @return null on failure
      */
     public static Signature sign(I2PAppContext ctx, byte[] prologue, Hash h, Hash h2,
@@ -624,8 +646,13 @@ final class SSU2Util {
      * the prologue and hash as the initial data,
      * and then the provided data which ends with a signature of the specified type.
      *
+     * @param ctx the application context, providing the DSA service
+     * @param prologue the protocol-specific prologue prepended to the verified buffer
+     * @param h Bob hash prepended to the verified buffer; a null value fails validation
      * @param h2 may be null
      * @param data not including relay response token
+     * @param spk the key the appended signature was made with
+     * @return true if the trailing signature of data verifies against the key
      */
     public static boolean validateSig(I2PAppContext ctx, byte[] prologue, Hash h, Hash h2, byte[] data, SigningPublicKey spk) {
         if (h == null) return false;

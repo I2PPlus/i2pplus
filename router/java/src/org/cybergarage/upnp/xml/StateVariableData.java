@@ -44,6 +44,8 @@ public class StateVariableData extends NodeData {
 
     /**
      * getValue.
+     *
+     * @return the current value, empty until a query response supplies one
      */
     public String getValue() {
         return value;
@@ -51,6 +53,8 @@ public class StateVariableData extends NodeData {
 
     /**
      * setValue.
+     *
+     * @param value the value to hold for this variable
      */
     public void setValue(String value) {
         this.value = value;
@@ -64,6 +68,9 @@ public class StateVariableData extends NodeData {
 
     /**
      * getQueryListener.
+     *
+     * @return the listener notified when this variable is queried, or null if
+     * none is registered
      */
     public QueryListener getQueryListener() {
         return queryListener;
@@ -71,6 +78,8 @@ public class StateVariableData extends NodeData {
 
     /**
      * setQueryListener.
+     *
+     * @param queryListener the listener to notify on each query
      */
     public void setQueryListener(QueryListener queryListener) {
         this.queryListener = queryListener;
@@ -84,6 +93,8 @@ public class StateVariableData extends NodeData {
 
     /**
      * getQueryResponse.
+     *
+     * @return the response from the last query, or null if never queried
      */
     public QueryResponse getQueryResponse() {
         return queryRes;
@@ -91,6 +102,8 @@ public class StateVariableData extends NodeData {
 
     /**
      * setQueryResponse.
+     *
+     * @param res the response to retain for this variable
      */
     public void setQueryResponse(QueryResponse res) {
         queryRes = res;

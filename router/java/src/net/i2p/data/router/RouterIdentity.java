@@ -25,6 +25,12 @@ import net.i2p.data.KeysAndCert;
 public class RouterIdentity extends KeysAndCert {
 
     /**
+     * Both keys and the certificate are inherited from KeysAndCert and stay null until
+     * readBytes() or a subclass sets them, so a fresh identity carries no identity yet.
+     */
+    public RouterIdentity() {}
+
+    /**
      * This router specified that they should not be used as a part of a tunnel,
      * nor queried for the netDb, and that disclosure of their contact information
      * should be limited.

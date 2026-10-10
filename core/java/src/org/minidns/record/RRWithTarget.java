@@ -37,6 +37,8 @@ public abstract class RRWithTarget extends Data {
 
     /**
      * RRWithTarget.
+     * @param target the owner name the rdata is anchored to, stored under both
+     *        the current field and the deprecated {@link #name} alias
      */
     protected RRWithTarget(DnsName target) {
         this.target = target;
@@ -51,7 +53,10 @@ public abstract class RRWithTarget extends Data {
         return target + ".";
     }
 
-    /** @return the target domain name */
+    /**
+     * Gets the owner name this record's rdata is anchored to.
+     * @return the target domain name
+     */
     public final DnsName getTarget() {
         return target;
     }

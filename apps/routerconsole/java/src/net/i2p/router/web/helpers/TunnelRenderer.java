@@ -54,7 +54,12 @@ class TunnelRenderer {
     private static final Pattern AMP_T_RUN = Pattern.compile("(?i)&\\s*T\\b.*");
     private final RouterContext _context;
 
-    /** A bounded LRU cache extending LinkedHashMap with computeIfAbsent support. */
+    /**
+     * A bounded LRU cache extending LinkedHashMap with computeIfAbsent support.
+     *
+     * @param <K> the key type of the cached entries
+     * @param <V> the value type stored under each key
+     */
     @SuppressWarnings("java:S2975")
     private static class BoundedCache<K, V> extends LinkedHashMap<K, V> {
         private final int _maxSize;
@@ -167,7 +172,10 @@ class TunnelRenderer {
     }
 
     /**
-     * TunnelRenderer.
+     * Hold the router context every render method reads its pools and
+     * statistics from.
+     *
+     * @param ctx the router context to render from
      */
     public TunnelRenderer(RouterContext ctx) {
         _context = ctx;
@@ -178,7 +186,11 @@ class TunnelRenderer {
     private final BoundedCache<Hash, String> peerToIP = new BoundedCache<>(5000);
 
     /**
-     * renderStatusHTML.
+     * Render the whole tunnel status page: the exploratory, client and
+     * participating pool summaries followed by the pool detail tables.
+     *
+     * @param out the writer to render to
+     * @throws IOException if writing fails
      */
     public void renderStatusHTML(Writer out) throws IOException {
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
@@ -288,7 +300,8 @@ class TunnelRenderer {
     }
 
     /**
-     * renderParticipating.
+     * Render the table of tunnels this router participates in, ordered either
+     * by speed or by how recently they were added.
      *
      * @param out the writer to render to
      * @param bySpeed true for the fastest variety, false for most recent
@@ -517,7 +530,8 @@ class TunnelRenderer {
     }
 
     /**
-     * renderTransitSummary.
+     * Render the transit tunnel summary: the counts of transit tunnels this
+     * router builds, and the peers they are shared with.
      *
      * @param out the writer to render to
      * @throws IOException if writing fails
@@ -711,6 +725,8 @@ class TunnelRenderer {
      * mode (contentonly) renders just the named element so the page can
      * refresh the tbody rows and footer without re-sending the full table.
      *
+     * @param out the writer to render to
+     * @throws IOException if writing fails
      * @since 0.9.70+
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -1072,14 +1088,25 @@ class TunnelRenderer {
         buf.setLength(0);
     }
 
-    /** @since 0.9.33 */
+    /**
+     * Format one tunnel capacity band for display. The bounds are given in
+     * binary (1024) kilobytes per second, as the Router.MIN_BW_* constants are,
+     * and are rescaled to decimal KB/s. The upper bound is printed one short of
+     * its exact value so adjacent bands do not overlap on the page.
+     *
+     * @param f start of the band in binary KB/s, inclusive
+     * @param t end of the band in binary KB/s, exclusive
+     * @return the band as a "first - last KB/s" string
+     * @since 0.9.33
+     */
     static String range(int f, int t) {
         return Math.round(f * 1.024f) + " - " + (Math.round(t * 1.024f) - 1) + " KB/s";
     }
 
     private static class TunnelComparator implements Comparator<HopConfig>, Serializable {
           /**
-           * compare.
+           * Order participating tunnels by expiration, latest first. An
+           * expiration before the epoch is treated as 0.
            */
           @Override
           public int compare(HopConfig l, HopConfig r) {
@@ -1093,10 +1120,16 @@ class TunnelRenderer {
         }
     }
 
-    /** @since 0.9.35 */
+    /**
+     * Order participating tunnels by throughput, fastest first.
+     *
+     * @since 0.9.35
+     */
     private static class TunnelComparatorBySpeed implements Comparator<HopConfig>, Serializable {
           /**
-           * compare.
+           * Rate each tunnel over the time since it was created, capped at 600
+           * seconds so a very old tunnel is not credited with its whole life,
+           * and divide by at least one second.
            */
           @Override
           public int compare(HopConfig l, HopConfig r) {
@@ -1115,7 +1148,7 @@ class TunnelRenderer {
 
     private static class TunnelInfoComparator implements Comparator<TunnelInfo>, Serializable {
           /**
-           * compare.
+           * Order the tunnels of a pool by expiration, latest first.
            */
           @Override
           public int compare(TunnelInfo l, TunnelInfo r) {
@@ -1134,7 +1167,8 @@ class TunnelRenderer {
     private class TPComparator implements Comparator<TunnelPool> {
           private final Collator _comp = Collator.getInstance();
           /**
-           * compare.
+           * Order pools by locale-collated display name, falling back to the
+           * destination base32 and then to the next expiration.
            */
           @Override
           public int compare(TunnelPool l, TunnelPool r) {
@@ -1460,7 +1494,13 @@ class TunnelRenderer {
     }
 
     /**
-     * renderLifetimeBandwidth.
+     * Render the lifetime bandwidth table: bytes sent and received by each
+     * tunnel of the two pools combined, longest-lived tunnel first.
+     *
+     * @param out the writer to render to
+     * @param in inbound pool to list, or null for none
+     * @param outPool outbound pool to list, or null for none
+     * @throws IOException if writing fails
      */
     public void renderLifetimeBandwidth(Writer out, TunnelPool in, TunnelPool outPool) throws IOException {
         Comparator<TunnelInfo> comp = new TunnelInfoComparator();
@@ -1507,7 +1547,13 @@ class TunnelRenderer {
     }
 
     /* duplicate of that in tunnelPoolManager for now */
-    /** @return total number of non-fallback expl. + client tunnels */
+    /**
+     * Tally the exploratory and client tunnels longer than one hop, counting
+     * each of their peers into lc.
+     *
+     * @param lc the counter to fill in, keyed by peer hash
+     * @return total number of non-fallback expl. + client tunnels
+     */
     private int countTunnelsPerPeer(ObjectCounter<Hash> lc) {
         List<TunnelPool> pools = new ArrayList();
         _context.tunnelManager().listPools(pools);
@@ -1526,7 +1572,13 @@ class TunnelRenderer {
         return tunnelCount;
     }
 
-    /** @return total number of part. tunnels */
+    /**
+     * Tally the transit tunnels this router participates in, counting the
+     * receive-from and send-to peer of each into pc.
+     *
+     * @param pc the counter to fill in, keyed by the participating peer hashes
+     * @return total number of part. tunnels
+     */
     private int countParticipatingPerPeer(ObjectCounter<Hash> pc) {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         for (HopConfig cfg : participating) {
@@ -1540,11 +1592,13 @@ class TunnelRenderer {
 
     private static class CountryComparator implements Comparator<Hash> {
         /**
-         * CountryComparator.
+         * Order router hashes by the country code they resolve to, with an
+         * unknown country sorted last.
          */
         public CountryComparator(CommSystemFacade comm) {this.comm = comm;}
         /**
-         * compare.
+         * Compare the two countries as plain strings, substituting "zzzz"
+         * for an unknown one so it sorts after every real code.
          */
         @Override
         public int compare(Hash l, Hash r) {
@@ -1658,7 +1712,14 @@ class TunnelRenderer {
     /** translate a string */
     private String _t(String s) {return Messages.getString(s, _context);}
 
-    /** translate a string */
+    /**
+     * Translate a string and substitute one parameter into it. Single quotes
+     * in s must be doubled for MessageFormat; do not double them in o.
+     *
+     * @param s the string to be translated, containing {0}
+     * @param o the parameter, not translated itself
+     * @return the translated string with {0} replaced by o
+     */
     public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /** Generate a percentage bar for expiry time, appending straight to the row buffer. */

@@ -36,6 +36,7 @@ import net.i2p.util.Log;
  * @since 0.9.11
  */
 public class I2PTunnelOutproxyRunner extends I2PAppThread {
+    /** Class log, also used as the prefix for each runner's per-connection log. */
     protected final Log _log;
 
     private static final AtomicLong __runnerId = new AtomicLong();
@@ -72,7 +73,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     private final AtomicLong totalReceived = new AtomicLong(0);
 
     /**
-     * Constructs the OutproxyRunner
+     * Create a runner that forwards between one external socket and one tunnel.
      *
      * Does not start itself. Caller must call start().
      *
@@ -235,7 +236,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
         }
 
         /**
-         * run.
+         * Pump datagrams between the external socket and the tunnel until either side closes.
          */
         @Override
         public void run() {

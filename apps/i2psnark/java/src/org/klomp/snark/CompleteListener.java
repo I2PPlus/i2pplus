@@ -33,22 +33,34 @@ public interface CompleteListener {
      * We transitioned from magnet mode, we have now initialized our metainfo and storage. The
      * listener should now call getMetaInfo() and save the data to disk.
      *
+     * @param snark the Snark instance that just initialized its metainfo and storage
      * @return the new name for the torrent or null on error
      * @since 0.8.4
      */
     public String gotMetaInfo(Snark snark);
 
     /**
+     * Called when the torrent hits an unrecoverable error and has stopped.
+     *
+     * @param snark the Snark instance that stopped
+     * @param error the description of the failure, already localized for display
      * @since 0.9
      */
     public void fatal(Snark snark, String error);
 
     /**
+     * Called to display a status or error message in the torrent's UI.
+     *
+     * @param snark the Snark instance raising the message
+     * @param message the text to show in the torrent UI, already localized
      * @since 0.9.2
      */
     public void addMessage(Snark snark, String message);
 
     /**
+     * Called each time a single piece is downloaded and verified.
+     *
+     * @param snark the Snark instance that downloaded the piece
      * @since 0.9.4
      */
     public void gotPiece(Snark snark);
@@ -72,6 +84,7 @@ public interface CompleteListener {
     /**
      * The saved uploaded bytes.
      *
+     * @param snark the Snark instance to read the uploaded byte count from
      * @return the saved uploaded
      * @since 0.9.15
      */
@@ -80,12 +93,18 @@ public interface CompleteListener {
     /**
      * The saved comments.
      *
+     * @param snark the Snark instance to read the comment set from
      * @return the saved comments
      * @since 0.9.31
      */
     public CommentSet getSavedComments(Snark snark);
 
     /**
+     * Persist a comment set under the torrent's own lock, so a comment fetched
+     * from a tracker is not written concurrently with the torrenting thread.
+     *
+     * @param snark the Snark instance whose torrent lock is held
+     * @param comments the comment set to write out while the lock is held
      * @since 0.9.31
      */
     public void locked_saveComments(Snark snark, CommentSet comments);

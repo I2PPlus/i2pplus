@@ -10,6 +10,12 @@ import net.i2p.data.DataHelper;
  */
 class InverseCapacityComparator implements Comparator<PeerProfile>, Serializable {
     /**
+     * Constructor. The ordering is read from the two profiles passed to compare()
+     * and is fully determined, so an instance holds no state.
+     */
+    InverseCapacityComparator() {}
+
+    /**
      * Compare the two objects backwards.  The standard comparator returns
      * -1 if lhs is less than rhs, 1 if lhs is greater than rhs, or 0 if they're
      * equal.  To keep a strict ordering, we measure peers with equal capacity

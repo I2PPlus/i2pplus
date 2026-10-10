@@ -56,6 +56,7 @@ public class ConfigClientsHelper extends HelperBase {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
         Pattern.compile("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z2]{2,6}", Pattern.CASE_INSENSITIVE);
 
+    /** Creates a helper; the container calls it with no arguments before rendering the page. */
     public ConfigClientsHelper() {
         // TODO
     }

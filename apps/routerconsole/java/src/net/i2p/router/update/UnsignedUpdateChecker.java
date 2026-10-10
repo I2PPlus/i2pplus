@@ -26,6 +26,12 @@ class UnsignedUpdateChecker extends UpdateRunner {
 
     /**
      * UnsignedUpdateChecker.
+     *
+     * @param ctx the router context, passed to the superclass for fetching
+     * @param mgr the update manager to notify of the check's progress and result
+     * @param uris the update URLs to HEAD, tried in turn
+     * @param lastUpdateTime the time in milliseconds of the currently installed
+     *        version; 0 or less means unknown, and no update is then offered
      */
     public UnsignedUpdateChecker(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris, long lastUpdateTime) {
         super(ctx, mgr, UpdateType.ROUTER_UNSIGNED, uris);

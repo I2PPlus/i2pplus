@@ -10,6 +10,8 @@ public class RrdBackendException extends RrdException {
 
     /**
      * RrdBackendException.
+     *
+     * @param message the detail message describing the backend failure
      */
     public RrdBackendException(String message) {
         super(message);
@@ -17,6 +19,9 @@ public class RrdBackendException extends RrdException {
 
     /**
      * RrdBackendException.
+     *
+     * @param message the detail message describing the backend failure
+     * @param cause the underlying exception that triggered the failure
      */
     public RrdBackendException(String message, Throwable cause) {
         super(message, cause);

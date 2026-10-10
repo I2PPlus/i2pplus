@@ -40,6 +40,8 @@ public class I2PThread extends Thread {
 
     /**
      * I2PThread.
+     *
+     * @param name the thread name shown in logs and thread dumps
      */
     public I2PThread(String name) {
         super(name);
@@ -48,6 +50,8 @@ public class I2PThread extends Thread {
 
     /**
      * I2PThread.
+     *
+     * @param r the body the new thread runs
      */
     public I2PThread(Runnable r) {
         super(r);
@@ -56,6 +60,9 @@ public class I2PThread extends Thread {
 
     /**
      * I2PThread.
+     *
+     * @param r the body the new thread runs
+     * @param name the thread name shown in logs and thread dumps
      */
     public I2PThread(Runnable r, String name) {
         super(r, name);
@@ -64,6 +71,10 @@ public class I2PThread extends Thread {
 
     /**
      * I2PThread.
+     *
+     * @param r the body the new thread runs
+     * @param name the thread name shown in logs and thread dumps
+     * @param isDaemon true lets the JVM exit without waiting for this thread
      */
     public I2PThread(Runnable r, String name, boolean isDaemon) {
         super(r, name);
@@ -73,6 +84,9 @@ public class I2PThread extends Thread {
 
     /**
      * I2PThread.
+     *
+     * @param g the thread group the new thread joins, which decides its default priority
+     * @param r the body the new thread runs
      */
     public I2PThread(ThreadGroup g, Runnable r) {
         super(g, r);
@@ -80,6 +94,11 @@ public class I2PThread extends Thread {
     }
 
     /**
+     * Create a named thread in the given group, at normal priority.
+     *
+     * @param group the thread group the new thread joins
+     * @param r the body the new thread runs
+     * @param name the thread name shown in logs and thread dumps
      * @since 0.9.23
      */
     public I2PThread(ThreadGroup group, Runnable r, String name) {
@@ -128,17 +147,27 @@ public class I2PThread extends Thread {
 
     /**
      * Notify listeners that an OutOfMemoryError occurred.
+     *
+     * @param oom the error passed to every registered listener
      */
     protected void fireOOM(OutOfMemoryError oom) {
         for (OOMEventListener listener : _listeners) listener.outOfMemory(oom);
     }
 
-    /** Register a new component that wants notification of OOM events. */
+    /**
+     * Register a new component that wants notification of OOM events.
+     *
+     * @param lsnr the listener to add, ignored if already registered
+     */
     public static void addOOMEventListener(OOMEventListener lsnr) {
         _listeners.add(lsnr);
     }
 
-    /** Unregister a component that wants notification of OOM events. */
+    /**
+     * Unregister a component that wants notification of OOM events.
+     *
+     * @param lsnr the listener to drop, a no-op if it is not registered
+     */
     public static void removeOOMEventListener(OOMEventListener lsnr) {
         _listeners.remove(lsnr);
     }
@@ -151,6 +180,8 @@ public class I2PThread extends Thread {
     public interface OOMEventListener {
         /**
          * Notify that an OutOfMemoryError occurred.
+         *
+         * @param err the error the thread died of
          */
         public void outOfMemory(OutOfMemoryError err);
     }

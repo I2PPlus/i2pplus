@@ -8,4 +8,10 @@ import net.i2p.I2PException;
  *
  * @since 0.9.34
  */
-public class RouterRestartException extends I2PException {}
+public class RouterRestartException extends I2PException {
+    /**
+     * Carries no message: the reason is the catch clause in
+     * I2PServerSocket.accept(), which reports a router restart, not a text.
+     */
+    public RouterRestartException() {}
+}

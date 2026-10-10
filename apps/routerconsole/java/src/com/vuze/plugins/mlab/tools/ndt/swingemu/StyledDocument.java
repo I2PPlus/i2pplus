@@ -30,17 +30,36 @@ import net.i2p.util.Log;
 public class
 StyledDocument
 {
+	/**
+	 * The emulated document starts as an empty StringBuilder with a logger attached;
+	 * insertString() is what puts text in it.
+	 */
+	public StyledDocument()
+	{
+	}
+
 	private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Tcpbw100.class);
 	private final StringBuilder text = new StringBuilder();
 
-	/** Return the document length. */
+	/**
+	 * Return the document length.
+	 *
+	 * @return the number of characters appended to the document so far
+	 */
 	public int
 	getLength()
 	{
 		return text.length();
 	}
 
-	/** Insert a string at the given offset. */
+	/**
+	 * Insert a string at the given offset.
+	 *
+	 * @param offset position the text is inserted at; not honored by this emulation
+	 * @param s the text to log at the I2P warn level and append to the document
+	 * @param x styling attributes; ignored by this emulation
+	 * @throws BadLocationException never thrown, declared to match the Swing interface
+	 */
 	public void
 	insertString(
 		int		offset,

@@ -74,6 +74,7 @@ class SOCKS5Server extends SOCKSServer {
      * SOCKS VER field has been stripped from the input stream of the
      * client socket.
      *
+     * @param ctx the context to run the tunnel in
      * @param clientSock client socket
      * @param props non-null
      */

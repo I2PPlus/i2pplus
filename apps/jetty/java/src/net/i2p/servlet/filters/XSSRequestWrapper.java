@@ -28,6 +28,8 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
     /**
      * XSSRequestWrapper.
+     *
+     * @param servletRequest the request being wrapped, whose parameters and headers are filtered
      */
     public XSSRequestWrapper(HttpServletRequest servletRequest) {
         super(servletRequest);

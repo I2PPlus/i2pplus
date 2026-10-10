@@ -46,6 +46,11 @@ public class Main implements RouterApp, NotificationService {
     private static final String PROP_SWING = "desktopgui.swing";
 
     /**
+     * Construct the GUI bound to a running router, so it registers with the
+     * given client app manager and gets the router's context directly.
+     *
+     * @param ctx router context supplying the global app context and logging
+     * @param mgr ClientAppManager this GUI registers with, null when launched standalone
      * @since 0.9.26
      */
     public Main(RouterContext ctx, ClientAppManager mgr) {
@@ -56,6 +61,11 @@ public class Main implements RouterApp, NotificationService {
     }
 
     /**
+     * Construct the GUI from the global app context alone, for standalone
+     * launch outside a running router. The router context is left null when
+     * the global context is not a router context, and no client app manager is
+     * available to register with.
+     *
      * @since 0.9.26
      */
     public Main() {

@@ -71,6 +71,9 @@ public class I2PControlController implements RouterApp {
 
     /**
      * RouterApp (new way)
+     *
+     * @param ctx the router context, also adopted as the application context
+     * @param mgr the client app manager to register this service with
      */
     public I2PControlController(RouterContext ctx, ClientAppManager mgr) {
         _appContext = _context = ctx;
@@ -280,7 +283,12 @@ public class I2PControlController implements RouterApp {
         stopServer();
     }
 
-    /** @return plugin directory path */
+    /**
+     * Report the directory the plugin subsystem was started with, where each
+     * plugin's own configuration and data are kept.
+     *
+     * @return plugin directory path
+     */
     public String getPluginDir() {
         return _pluginDir;
     }

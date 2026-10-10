@@ -50,12 +50,20 @@ public final class MatrixToImageConfig {
     this.offColor = offColor;
   }
 
-  /** @return the on color */
+  /**
+   * Get the color that a dark module is drawn in.
+   *
+   * @return the on color, as an ARGB value
+   */
   public int getPixelOnColor() {
     return onColor;
   }
 
-  /** @return the off color */
+  /**
+   * Get the color that a light module is drawn in.
+   *
+   * @return the off color, as an ARGB value
+   */
   public int getPixelOffColor() {
     return offColor;
   }

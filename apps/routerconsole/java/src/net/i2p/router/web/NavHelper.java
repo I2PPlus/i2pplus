@@ -22,6 +22,12 @@ public class NavHelper implements NavService, ClientApp {
     private final Map<String, byte[]> _binary = new ConcurrentHashMap<>(4);
 
     /**
+     * Creates a helper with no registered applications; entries appear only after
+     * {@link #registerApp(String, String, String, String, String)} is called.
+     */
+    public NavHelper() {}
+
+    /**
      * To register a new client application so that it shows up on the router
      * console's nav bar, it should be registered with this singleton.
      *
@@ -65,6 +71,7 @@ public class NavHelper implements NavService, ClientApp {
     /**
      * Store binary icon for a plugin
      * @param name plugin name
+     * @param arr the icon bytes served for that plugin
      * @since 0.9.25
      */
     public void setBinary(String name, byte[] arr){
@@ -147,12 +154,23 @@ public class NavHelper implements NavService, ClientApp {
         return rv;
     }
 
-    /** @since 0.9.56 */
+    /**
+     * Console navigation-bar helper, registered as a client app.
+     *
+     * @return the NavHelper registered with the global context, or null if none is
+     * @since 0.9.56
+     */
     public static NavHelper getInstance() {
         return getInstance(I2PAppContext.getGlobalContext());
     }
 
-    /** @since 0.9.56 */
+    /**
+     * Console navigation-bar helper, registered as a client app.
+     *
+     * @param ctx the app context whose client app manager holds the registration
+     * @return the NavHelper registered with that context, or null if none is
+     * @since 0.9.56
+     */
     public static NavHelper getInstance(I2PAppContext ctx) {
         ClientAppManager cmgr = ctx.clientAppManager();
         if (cmgr != null)

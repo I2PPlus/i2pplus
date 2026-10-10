@@ -171,6 +171,8 @@ public interface DHState extends Destroyable, Cloneable {
 
     /**
      * I2P
+     * @return a copy of this DH state holding the same key material
+     * @throws CloneNotSupportedException if this DH state does not implement Cloneable
      * @since 0.9.44
      */
     public DHState clone() throws CloneNotSupportedException;

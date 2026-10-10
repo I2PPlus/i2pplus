@@ -8,7 +8,18 @@ class Reduce
 {
 
     /**
+     * Both reductions are static and the class holds no fields, so an instance
+     * carries nothing; it exists only to give the helper class a documented entry point.
+     */
+    Reduce()
+    {
+    }
+
+    /**
      * montgomeryReduce.
+     *
+     * @param a the value to reduce, wide enough to hold the intermediate product
+     * @return a scaled down into the Montgomery representation, as a short
      */
     public static short montgomeryReduce(int a)
     {
@@ -24,6 +35,9 @@ class Reduce
 
     /**
      * barretReduce.
+     *
+     * @param a the coefficient to centre into the range -q/2 to q/2
+     * @return the reduced coefficient, as a short
      */
     public static short barretReduce(short a)
     {
@@ -37,6 +51,9 @@ class Reduce
 
     /**
      * conditionalSubQ.
+     *
+     * @param a the coefficient that may need q subtracting to become non-negative
+     * @return a if it was already non-negative, otherwise a plus q, as a short
      */
     public static short conditionalSubQ(short a)
     {

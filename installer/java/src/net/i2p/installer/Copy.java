@@ -11,6 +11,12 @@ import net.i2p.util.FileUtil;
  */
 public class Copy {
     /**
+     * Constructor. The copy is performed by the static main(), so an instance
+     * carries no state and nothing here is configured.
+     */
+    public Copy() {}
+
+    /**
      * Copy the file named by the first argument to the second.
      *
      * @param args [from] [to]

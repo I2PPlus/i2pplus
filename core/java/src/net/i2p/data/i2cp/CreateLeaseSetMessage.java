@@ -43,7 +43,12 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
     /** The private key. */
     protected PrivateKey _privateKey;
 
-    /** @since 0.9.38 */
+    /**
+     * No-arg constructor for I2CP deserialization; the session ID and lease set
+     * are filled in from the wire format by readData().
+     *
+     * @since 0.9.38
+     */
     public CreateLeaseSetMessage() { /* required for I2CP deserialization */ }
 
     /**

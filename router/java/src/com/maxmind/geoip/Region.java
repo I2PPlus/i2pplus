@@ -6,6 +6,12 @@ package com.maxmind.geoip;
 
 public class Region {
 	/**
+	 * Every field is left null; the geoip reader fills in whichever of the country
+	 * and region codes the record carries.
+	 */
+	public Region() {}
+
+	/**
 	 * countryCode.
 	 */
 	public String countryCode;

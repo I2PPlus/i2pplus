@@ -67,6 +67,7 @@ public class WorkingDir {
      * This also redirects stdout and stderr to a wrapper.log file if there is no wrapper present,
      * unless system property I2P_DISABLE_OUTPUT_OVERRIDE is set.
      *
+     * @param envProps the launcher's environment properties, or null to use the system properties
      * @param migrateOldConfig whether to copy all data over from an existing install
      * @return the working dir
      */
@@ -271,7 +272,7 @@ public class WorkingDir {
      * Returns <code>false</code> if a directory is empty, or contains nothing that
      * is usually migrated from the base install.
      * This allows to pre-install plugins before the first router start.
- *
+     *
      * @return true if already set up
      */
     private static boolean isSetup(File dir) {
@@ -400,11 +401,16 @@ public class WorkingDir {
     }
 
     /**
-     *  Copy over the jetty.xml file with modifications
-     *  It was already copied over once in migrate(), throw that out and
-     *  do it again with modifications.
+     * Copy over the jetty.xml file with modifications
+     * It was already copied over once in migrate(), throw that out and
+     * do it again with modifications.
      *
-     *  @return success
+     * @param olddir the directory holding the unmodified copy
+     * @param todir the directory to write the modified copy to
+     * @param filename the name of the file in both directories
+     * @param oldString the text to search for in each line
+     * @param newString the replacement for oldString
+     * @return true if the copy succeeded, false if the file could not be read or written
      */
     static boolean migrateJettyXml(File olddir, File todir, String filename, String oldString, String newString) {
         File oldFile = new File(olddir, filename);
@@ -422,15 +428,17 @@ public class WorkingDir {
     }
 
     /**
-     *  Copy over a XML file with modifications.
-     *  Will overwrite any existing newFile.
+     * Copy over a XML file with modifications.
+     * Will overwrite any existing newFile.
      *
-     *  @param oldString to replace
-     *  @param newString replacement
-     *  @param oldString2 to replace, or null
-     *  @param newString2 replacement, or null
-     *  @throws IOException on all errors
-     *  @since 0.9.66
+     * @param oldFile the source XML file to read
+     * @param newFile the destination file, overwritten if it already exists
+     * @param oldString the literal text to search for on each line
+     * @param newString the text that replaces it
+     * @param oldString2 a second literal text to search for, or null to skip
+     * @param newString2 the text that replaces it, ignored when oldString2 is null
+     * @throws IOException if the source cannot be read or the destination cannot be written
+     * @since 0.9.66
      */
     static void migrateFileXML(File oldFile, File newFile, String oldString, String newString,
                                String oldString2, String newString2) throws IOException {
@@ -499,8 +507,8 @@ public class WorkingDir {
      *
      * @param src not a directory, must exist
      * @param dst not a directory, will be overwritten if existing, will be mode 600
- *            (best effort; on non-POSIX filesystems such as Windows only the
- *            read-only attribute is affected)
+     *            (best effort; on non-POSIX filesystems such as Windows only the
+     *            read-only attribute is affected)
      * @return true if it was copied successfully
      */
     static boolean copyFile(File src, File dst) {
@@ -524,7 +532,7 @@ public class WorkingDir {
      * Recursive touch all files in a dir to a given time
      *
      * @param target the directory or file to touch, must exist
-     * @param time the timestamp
+     * @param time the modification time in milliseconds since the epoch
      * @since 0.8.13
      */
     private static void touchRecursive(File target, long time) {

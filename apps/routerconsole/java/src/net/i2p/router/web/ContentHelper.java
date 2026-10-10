@@ -9,6 +9,14 @@ import net.i2p.util.FileUtil;
  * @since 0.9.35
  */
 public class ContentHelper extends HelperBase {
+
+    /**
+     *  Constructor, used by the console to build the bean before the setters
+     *  below populate it. Nothing is selected until setPage() supplies a file,
+     *  and getContent() has nothing to read before that.
+     */
+    public ContentHelper() {}
+
     /**
      * _page.
      */
@@ -19,10 +27,16 @@ public class ContentHelper extends HelperBase {
 
     /**
      * Caution, use absolute paths only, do not assume files are in CWD
+     *
+     * @param page the absolute path of the content file to include, resolved by
+     *        filename() to a localized variant such as file_lang.ext when one exists
      */
     public void setPage(String page) { _page = page; }
     /**
      * setStartAtBeginning.
+     *
+     * @param moo parsed as a boolean: true keeps the first lines of the file,
+     *        false (the default) keeps the last
      */
     public void setStartAtBeginning(String moo) {
         _startAtBeginning = Boolean.parseBoolean(moo);
@@ -31,6 +45,9 @@ public class ContentHelper extends HelperBase {
      *  Bean property setter, intentionally a no-op. An earlier version
      *  persisted the language here for the desktopgui, but that bypassed the
      *  CSRF nonce check; language is now handled by CSSHelper.
+     *
+     * @param l the requested language, accepted so the bean property keeps
+     *        working but discarded
      */
     public void setLang(String l) {
         // not implemented, see above
@@ -38,6 +55,9 @@ public class ContentHelper extends HelperBase {
 
     /**
      * setMaxLines.
+     *
+     * @param lines the maximum number of lines to keep, parsed as an integer;
+     *        null or any non-numeric value means unlimited
      */
     public void setMaxLines(String lines) {
         if (lines != null) {
@@ -51,6 +71,8 @@ public class ContentHelper extends HelperBase {
         }
     }
     /**
+     * Return the raw text of the resolved page file.
+     *
      * @return the content
      */
     public String getContent() {
@@ -61,6 +83,8 @@ public class ContentHelper extends HelperBase {
             return str;
     }
     /**
+     * Return the page text escaped for HTML and wrapped in a "pre" element.
+     *
      * @return the text content
      */
     public String getTextContent() {

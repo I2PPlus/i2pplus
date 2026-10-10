@@ -11,14 +11,23 @@ public class ExpiredAuthTokenException extends Exception {
     private String expiryTime;
 
     /**
-     * @param str the exception message
-     * @param expiryTime the time when the token expired */
+     * Signals that the authentication token presented with an API request is past
+     * its expiry, so the request was refused.
+     *
+     * @param str message describing why the token was rejected
+     * @param expiryTime when the rejected token expired
+     */
     public ExpiredAuthTokenException(String str, String expiryTime) {
         super(str);
         this.expiryTime = expiryTime;
     }
 
-    /** @return the expiry time */
+    /**
+     * Report when the token presented in the failed request expired, so the
+     * caller can tell the client which token to discard and renew.
+     *
+     * @return the expiry time
+     */
     public String getExpirytime() {
         return expiryTime;
     }

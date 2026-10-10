@@ -113,6 +113,12 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
         /** Error count */
         final AtomicLong errors = new AtomicLong(0);
 
+        /**
+         * All five counters start at zero and are raised only by the register methods
+         * below, so a fresh set describes an idle backend.
+         */
+        Counters() {}
+
         /** Registers a quick lock operation. */
         void registerQuickLock() {
             locks.getAndIncrement();

@@ -45,6 +45,12 @@ import java.io.OutputStream;
 public class Lease2 extends Lease {
 
     /**
+     * Constructor. An empty lease; the gateway, tunnel id and end date are filled
+     * in by readBytes() or by the LeaseSet that owns it.
+     */
+    public Lease2() {}
+
+    /**
      * Length of Lease2 in bytes.
      */
     public static final int LENGTH = 40;

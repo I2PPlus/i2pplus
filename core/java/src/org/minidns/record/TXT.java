@@ -32,7 +32,12 @@ public class TXT extends Data {
     private final byte[] blob;
 
     /**
-     * parse.
+     * Parse a TXT record's wire data, a sequence of length-prefixed strings.
+     *
+     * @param dis the stream positioned at the start of the record data
+     * @param length how many bytes of record data to read
+     * @return a TXT record holding those bytes
+     * @throws IOException if the stream ends before length bytes have been read
      */
     public static TXT parse(DataInputStream dis, int length) throws IOException {
         byte[] blob = new byte[length];
@@ -41,13 +46,19 @@ public class TXT extends Data {
     }
 
     /**
+     * Create a TXT record from its raw wire data.
+     *
      * @param blob the raw TXT record data
      */
     public TXT(byte[] blob) {
         this.blob = blob;
     }
 
-    /** @return copy of the raw blob data */
+    /**
+     * Get the raw wire data of this record.
+     *
+     * @return copy of the raw blob data
+     */
     public byte[] getBlob() {
         return blob.clone();
     }
@@ -55,7 +66,9 @@ public class TXT extends Data {
     private transient String textCache;
 
     /**
-     * getText.
+     * Return the strings joined by " / ", built once and then cached.
+     *
+     * @return the character strings joined by " / ", built once and then cached
      */
     public String getText() {
         if (textCache == null) {
@@ -74,7 +87,11 @@ public class TXT extends Data {
 
     private transient List<String> characterStringsCache;
 
-    /** @return individual character strings as UTF-8 strings */
+    /**
+     * Get the character strings of this record, decoding each as UTF-8.
+     *
+     * @return individual character strings as UTF-8 strings
+     */
     public List<String> getCharacterStrings() {
         if (characterStringsCache == null) {
             List<byte[]> extents = getExtents();
@@ -88,7 +105,11 @@ public class TXT extends Data {
         return characterStringsCache;
     }
 
-    /** @return individual character strings as raw byte arrays */
+    /**
+     * Get the character strings of this record as undecoded byte arrays.
+     *
+     * @return individual character strings as raw byte arrays
+     */
     public List<byte[]> getExtents() {
         ArrayList<byte[]> extents = new ArrayList<>();
         int segLength = 0;
@@ -102,7 +123,7 @@ public class TXT extends Data {
     }
 
     /**
-     * serialize.
+     * Write the raw wire data to a DNS output stream.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -110,7 +131,7 @@ public class TXT extends Data {
     }
 
     /**
-     * getType.
+     * Return the record type of this payload.
      */
     @Override
     public TYPE getType() {
@@ -118,7 +139,7 @@ public class TXT extends Data {
     }
 
     /**
-     * toString.
+     * Return the record's text in quotes, as it appears in a zone file.
      */
     @Override
     public String toString() {

@@ -14,7 +14,9 @@ public interface NodeCache {
     public interface Loader {
         /**
          * Load a node by key on cache miss.
+         * @param key the node key to look up, identifying one node in the database tree
          * @return the loaded value
+         * @throws IOException if the backing store cannot be read to produce the node
          */
         Object load(int key) throws IOException;
     }

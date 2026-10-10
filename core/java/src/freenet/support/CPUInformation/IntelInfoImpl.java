@@ -49,6 +49,12 @@ package freenet.support.CPUInformation;
  */
 class IntelInfoImpl extends CPUIDCPUInfo implements IntelCPUInfo
 {
+    /**
+     * Constructor. The family and model detection below reads the static CPUID
+     * results, so an instance carries no state beyond the base class.
+     */
+    IntelInfoImpl() {}
+
     private static boolean isPentiumCompatible;
     private static boolean isPentiumMMXCompatible;
     private static boolean isPentium2Compatible;

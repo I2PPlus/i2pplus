@@ -294,6 +294,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      * Is the status code a success status code?
      *
+     * @param status one of the STATUS_* constants to classify
      * @return whether successful
      * @since 0.9.5
      */
@@ -311,6 +312,8 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * This is the router's ID for the message
+     *
+     * @param id the router-assigned identifier of the message this status describes
      */
     public void setMessageId(long id) {
         _messageId = id;
@@ -326,6 +329,8 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * Size of the message data.
+     *
+     * @param size the payload size in bytes as counted by the router
      */
     public void setSize(long size) {
         _size = size;
@@ -341,6 +346,8 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * This is the client's ID for the message
+     *
+     * @param nonce the client-chosen identifier the router echoes back in this status
      */
     public void setNonce(long nonce) {
         _nonce = nonce;
@@ -348,6 +355,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * Status string.
+     * @param status the STATUS_* constant to translate
      * @return the status string
      */
     public static final String getStatusString(int status) {
@@ -384,7 +392,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      * Override to reduce mem churn
      *
-     * @throws IOException
+     * @throws IOException if the stream rejects the written fields
      */
     @Override
     public void writeMessage(OutputStream out) throws I2CPMessageException, IOException {

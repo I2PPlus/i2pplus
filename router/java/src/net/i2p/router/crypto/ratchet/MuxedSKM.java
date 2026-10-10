@@ -26,16 +26,29 @@ public class MuxedSKM extends SessionKeyManager {
     // ElG is about this much slower than EC
     private static final int ELG_SLOW_FACTOR = 5;
     private static final int RESTART_COUNTERS = 500;
-    /** Combines ElGamal and ECIES SKMs with adaptive decrypt ordering. */
+    /**
+     * Combines ElGamal and ECIES SKMs with adaptive decrypt ordering.
+     *
+     * @param elg the ElGamal key manager handling legacy transient sessions
+     * @param ec the ratchet key manager handling ECIES-X25519 sessions
+     */
 
     public MuxedSKM(TransientSessionKeyManager elg, RatchetSKM ec) {
         _elg = elg;
         _ec = ec;
     }
-    /** Return the elgSKM */
+    /**
+     * Return the elgSKM
+     *
+     * @return the ElGamal session key manager this instance multiplexes
+     */
 
     public TransientSessionKeyManager getElgSKM() { return _elg; }
-    /** Return the eCSKM */
+    /**
+     * Return the eCSKM
+     *
+     * @return the ratchet session key manager this instance multiplexes
+     */
 
     public RatchetSKM getECSKM() { return _ec; }
 
@@ -44,6 +57,7 @@ public class MuxedSKM extends SessionKeyManager {
      *  Adaptive test based on previous mix of traffic for this SKM,
      *  as reported by reportDecryptResult().
      *
+     *  @return true if the ratchet slow decrypt should be tried before the ElGamal one
      *  @since 0.9.46
      */
     boolean preferRatchet() {
@@ -135,6 +149,9 @@ public class MuxedSKM extends SessionKeyManager {
 
     /**
      *  EC only
+     *
+     *  @param target the destination to take an available session tag from
+     *  @return the oldest unconsumed tag, or null if the target is not an ECIES-X25519 key
      */
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {
         EncType type = target.getType();
@@ -236,6 +253,8 @@ public class MuxedSKM extends SessionKeyManager {
      * EC only
      * One time session
      *
+     * @param key the session the tag was received on
+     * @param tag the one-time tag received
      * @param expire time from now
      * @since 0.9.51
      */

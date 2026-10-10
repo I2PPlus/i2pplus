@@ -21,6 +21,12 @@ import net.i2p.util.EventDispatcher;
  * @since 0.8.9
  */
 public abstract class EventReceiver implements EventDispatcher {
+    /**
+     * Constructor for subclasses that receive events through notifyEvent().
+     */
+
+    public EventReceiver() {}
+
     /** default constructor */
 
     @Override
@@ -48,8 +54,8 @@ public abstract class EventReceiver implements EventDispatcher {
     public abstract void notifyEvent(String eventName, Object args);
 
     /**
-     * @throws UnsupportedOperationException always
      * @return the event value
+     * @throws UnsupportedOperationException always
      */
     @Override
     public Object getEventValue(String name) {
@@ -57,8 +63,8 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     * @throws UnsupportedOperationException always
      * @return the events
+     * @throws UnsupportedOperationException always
      */
     @Override
     public Set<String> getEvents() {

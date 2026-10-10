@@ -21,6 +21,8 @@ class InternalSocketRunner extends I2PAppThread {
 
     /**
      * Does not start the runner, caller must call start()
+     *
+     * @param client the tunnel client that handles each socket accepted internally
      */
     InternalSocketRunner(I2PTunnelClientBase client) {
         super("Internal:" + client.getLocalPort());

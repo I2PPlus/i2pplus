@@ -72,6 +72,9 @@ class IntroductionManager {
 
     /**
      * Creates the introduction manager.
+     *
+     * @param ctx the router context
+     * @param transport the UDP transport it serves
      */
     public IntroductionManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -96,6 +99,8 @@ class IntroductionManager {
 
     /**
      * Register the peer's relay tags.
+     *
+     * @param peer the peer whose tags are being registered
      */
     public void add(PeerState peer) {
         if (peer == null) return;
@@ -114,6 +119,8 @@ class IntroductionManager {
 
     /**
      * Unregister the peer's relay tags.
+     *
+     * @param peer the peer whose tags are being dropped
      */
     public void remove(PeerState peer) {
         if (peer == null) return;
@@ -130,6 +137,7 @@ class IntroductionManager {
      * Is this inbound tag currently valid,
      * i.e. is the peer still connected?
      *
+     * @param tag the relay tag to look up
      * @return whether inbound tag valid
      * @since 0.9.50
      */
@@ -152,8 +160,8 @@ class IntroductionManager {
      * @param current current router address, may be null
      * @param ipv6 what type is the current address we need introducers for?
      * @param ssuOptions out parameter, options are added
+     * @param howMany the most introducers to return
      * @return number of introducers added
-4 * @param howMany the howMany
      */
     public int pickInbound(RouterAddress current, boolean ipv6, Properties ssuOptions, int howMany) {
         if (_log.shouldDebug())
@@ -429,9 +437,10 @@ class IntroductionManager {
      *
      *  SSU 2 only.
      *
+     * @param alice the peer that asked us to relay
+     * @param data the encrypted request, with the timestamp in the first 4 bytes
      *  @since 0.9.55
-4 * @param alice the alice
-4 * @param data the data
+     *
      */
     void receiveRelayRequest(PeerState2 alice, byte[] data) {
         long time = DataHelper.fromLong(data, 8, 4) * 1000;
@@ -683,7 +692,8 @@ class IntroductionManager {
     }
 
     /**
-     * Wait for RI.
+     * Wait for a relay request, then relay the RouterInfo.
+     *
      * @since 0.9.55
      */
     private class DelayIntro extends SimpleTimer2.TimedEvent {
@@ -857,11 +867,12 @@ class IntroductionManager {
      *
      *  SSU 2 only.
      *
+     * @param peer the peer that answered our relay request
+     * @param status the status code the peer replied with
+     * @param data the encrypted response, with the nonce and timestamp first
      *  @since 0.9.55
-4 * @param peer the peer
-4 * @param status the status
-4 * @param data the data
-     */
+     *
+         */
     @SuppressWarnings("UnconditionalIfStatement")
     void receiveRelayResponse(PeerState2 peer, int status, byte[] data) {
         long nonce = DataHelper.fromLong(data, 0, 4);
@@ -935,10 +946,11 @@ class IntroductionManager {
      *
      *  SSU 2 only, out-of-session.
      *
+     * @param charlie the peer we were relaying to
+     * @param data the encrypted response, with the nonce and timestamp first
      *  @since 0.9.55
-4 * @param charlie the charlie
-4 * @param data the data
-     */
+     *
+         */
     void receiveHolePunch(RemoteHostId charlie, byte[] data) {
         // TODO: implement when needed
     }
@@ -958,6 +970,10 @@ class IntroductionManager {
 
     /**
      * Are IP and port valid?
+     *
+     * @param ip the address bytes to check
+     * @param port the port to check
+     * @param allowIPv6 whether a 16-byte IPv6 address is acceptable
      * @return whether valid
      * @since 0.9.50
      */

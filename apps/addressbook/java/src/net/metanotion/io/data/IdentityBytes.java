@@ -14,6 +14,12 @@ import net.metanotion.io.Serializer;
  */
 public class IdentityBytes implements Serializer<byte[]> {
 
+    /**
+     * Constructor. The pass-through holds no state: both methods hand back the
+     * very array they are given.
+     */
+    public IdentityBytes() {}
+
     /** @return byte[] */
     public byte[] getBytes(byte[] o) { return o; }
 

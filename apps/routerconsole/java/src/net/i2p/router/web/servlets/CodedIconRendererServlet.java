@@ -19,6 +19,12 @@ import net.i2p.util.FileUtil;
  */
 public class CodedIconRendererServlet extends HttpServlet {
 
+    /**
+     * Constructor. The container instantiates the servlet reflectively with no
+     * arguments, so the object must stay usable with no configured state.
+     */
+    public CodedIconRendererServlet() {}
+
     private static final long serialVersionUID = 16851750L;
     private static final String base = I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath();
     private static final String slash = String.valueOf(File.separatorChar);

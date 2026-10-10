@@ -27,6 +27,12 @@ import net.i2p.util.Log;
  */
 class SSU2Payload {
 
+    /**
+     * The block writers and parsers below are static, and the only fields are
+     * block-type constants, so an instance carries nothing.
+     */
+    private SSU2Payload() {}
+
     /** SSU2 block type: ACK */
     static final int BLOCK_ACK = 12;
     /** SSU2 block type: ADDRESS */
@@ -81,12 +87,14 @@ class SSU2Payload {
         /**
          * Receive a date/time synchronization block.
          * @param time time in milliseconds since epoch
+         * @throws DataFormatException if the block is malformed
          */
         public void gotDateTime(long time) throws DataFormatException;
 
         /**
          * Receive an I2NP message block.
          * @param msg the parsed I2NP message
+         * @throws I2NPMessageException if the message cannot be handled
          */
         public void gotI2NP(I2NPMessage msg) throws I2NPMessageException;
 
@@ -101,6 +109,7 @@ class SSU2Payload {
          * @param messageID unique message identifier
          * @param frag fragment number (0-based)
          * @param isLast whether this is the last fragment
+         * @throws DataFormatException if the fragment is malformed
          */
         public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast) throws DataFormatException;
 
@@ -116,6 +125,7 @@ class SSU2Payload {
          * Receive a session options block.
          * @param options the option data
          * @param isHandshake true only for message 3 part 2
+         * @throws DataFormatException if the options are malformed
          */
         public void gotOptions(byte[] options, boolean isHandshake) throws DataFormatException;
 
@@ -124,6 +134,7 @@ class SSU2Payload {
          * @param ri will already be validated
          * @param isHandshake true only for message 3 part 2
          * @param flood true if this is a floodfill router
+         * @throws DataFormatException if the RouterInfo block is malformed
          */
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException;
 
@@ -187,7 +198,7 @@ class SSU2Payload {
 
         /**
          * Receive a new session token.
-         * @param token the token value
+         * @param token the session token to attach to the next peer test
          * @param expires token expiration time in milliseconds
          */
         public void gotToken(long token, long expires);
@@ -202,6 +213,7 @@ class SSU2Payload {
         /**
          * Receive a path challenge block.
          * @param from null if unknown
+         * @param data the challenge bytes, which must be copied out
          * @since 0.9.55
          */
         public void gotPathChallenge(RemoteHostId from, byte[] data);
@@ -209,6 +221,7 @@ class SSU2Payload {
         /**
          * Receive a path response block.
          * @param from null if unknown
+         * @param data the response bytes, which must be copied out
          * @since 0.9.55
          */
         public void gotPathResponse(RemoteHostId from, byte[] data);
@@ -217,6 +230,11 @@ class SSU2Payload {
     /**
      * Incoming payload. Calls the callback for each received block.
      *
+     * @param ctx the application context
+     * @param cb called once per received block
+     * @param payload buffer holding the payload
+     * @param off offset in payload of the first byte
+     * @param length number of bytes to read
      * @param isHandshake true for Token Req, Retry, Sess Req, Sess Created; false for Sess Confirmed
      * @param from for path challenge/response only, may be null
      * @return number of blocks processed
@@ -799,7 +817,11 @@ class SSU2Payload {
     }
 
     /**
+     * Serialize a list of blocks into a payload.
+     *
      * @param payload writes to it starting at off
+     * @param off offset in payload to start writing at
+     * @param blocks the blocks to write, in order
      * @return the new offset
      */
     public static int writePayload(byte[] payload, int off, List<Block> blocks) {
@@ -1475,7 +1497,9 @@ class SSU2Payload {
         private final byte[] d;
 
         /**
-         * RelayResponseBlock.
+         * Wrap relay response data as a block.
+         *
+         * @param data the response bytes, which must be copied out
          */
         public RelayResponseBlock(byte[] data) {
             super(BLOCK_RELAYRESP);
@@ -1508,7 +1532,9 @@ class SSU2Payload {
         private final byte[] d;
 
         /**
-         * RelayIntroBlock.
+         * Wrap relay introduction data as a block.
+         *
+         * @param data the introduction bytes, which must be copied out
          */
         public RelayIntroBlock(byte[] data) {
             super(BLOCK_RELAYINTRO);
@@ -1544,7 +1570,12 @@ class SSU2Payload {
         private final byte[] d;
 
         /**
+         * Wrap a peer test as a block.
+         *
+         * @param msgNum the message number the test answers
+         * @param code the test result code
          * @param hash may be null
+         * @param data the test payload bytes
          */
         public PeerTestBlock(int msgNum, int code, Hash hash, byte[] data) {
             super(BLOCK_PEERTEST);
@@ -1590,7 +1621,9 @@ class SSU2Payload {
         private final EstablishmentManager.Token tok;
 
         /**
-         * NewTokenBlock.
+         * Wrap a session token as a block.
+         *
+         * @param token the token to offer the peer
          */
         public NewTokenBlock(EstablishmentManager.Token token) {
             super(BLOCK_NEWTOKEN);
@@ -1625,7 +1658,9 @@ class SSU2Payload {
         private final byte[] d;
 
         /**
-         * PathChallengeBlock.
+         * Wrap path challenge data as a block.
+         *
+         * @param data the challenge bytes
          */
         public PathChallengeBlock(byte[] data) {
             super(BLOCK_PATHCHALLENGE);
@@ -1658,7 +1693,9 @@ class SSU2Payload {
         private final byte[] d;
 
         /**
-         * PathResponseBlock.
+         * Wrap path response data as a block.
+         *
+         * @param data the response bytes
          */
         public PathResponseBlock(byte[] data) {
             super(BLOCK_PATHRESP);

@@ -30,6 +30,8 @@ class MessageReceivedJob extends JobImpl {
     private final boolean _sendDirect;
 
     /**
+     * Create a job that delivers one received message to a client.
+     *
      * @param ctx the router context
      * @param runner the client connection runner
      * @param toDest non-null, required to pick session

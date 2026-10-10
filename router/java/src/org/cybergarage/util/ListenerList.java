@@ -12,6 +12,12 @@ import java.util.Vector;
  * collection that prevents duplicate listener objects from being added.
  */
 public class ListenerList extends Vector<Object> {
+
+    /**
+     * Constructs an empty listener list; every listener is added later through add().
+     */
+    public ListenerList() {}
+
     /**
      * Adds a listener object to the list if it's not already present.
      *

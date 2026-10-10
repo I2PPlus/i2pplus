@@ -255,7 +255,7 @@ class OutboundNTCP2State implements EstablishState {
      * Encrypt X and write X, the options block, and the padding.
      * Save last half of encrypted X as IV for message 2 AES.
      *
-     * @throws IllegalStateException
+     * @throws IllegalStateException if the connection is not in the initial outbound state
      */
     public synchronized void prepareOutbound() {
         if (!(_state == State.OB_INIT)) {
@@ -545,6 +545,8 @@ class OutboundNTCP2State implements EstablishState {
     /**
      * KDF for SipHash
      *
+     * @param ctx the router context, supplying the HKDF implementation
+     * @param state the handshake state whose chaining key and handshake hash are the KDF inputs
      * @return rv[0] is sip_ab, rv[1] is sip_ba
      */
     static byte[][] generateSipHashKeys(RouterContext ctx, HandshakeState state) {
@@ -576,15 +578,21 @@ class OutboundNTCP2State implements EstablishState {
     public synchronized void close(String reason, Exception e) {fail(reason, e);}
     /**
      * Fail the handshake with the given reason.
+     * @param reason failure description
      */
     protected void fail(String reason) {fail(reason, null);}
     /**
      * Fail the handshake with the given reason and exception.
+     * @param reason failure description
+     * @param e the exception cause, may be null
      */
     protected void fail(String reason, Exception e) {fail(reason, e, false);}
 
     /**
      * Fail the handshake, optionally skew-related.
+     * @param reason failure description
+     * @param e the exception cause, may be null
+     * @param bySkew true to suppress the skew stat, as when we caused the skew ourselves
      */
     protected synchronized void fail(String reason, Exception e, boolean bySkew) {
         if (_state == State.CORRUPT || _state == State.VERIFIED) {return;}

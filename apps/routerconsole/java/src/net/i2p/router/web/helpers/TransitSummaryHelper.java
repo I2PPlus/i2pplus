@@ -8,16 +8,22 @@ import net.i2p.util.Log;
 
 /**
  * Helper for transit tunnel summary page rendering and form processing.
+ * The context is supplied by the base class, so there is nothing to do here.
  * @since 0.9.33
  */
 public class TransitSummaryHelper extends HelperBase {
     /**
-     * TransitSummaryHelper.
+     * Nothing to initialize; the router context arrives with the base class.
      */
     public TransitSummaryHelper() { /* nop */ }
 
     /**
-     * @return the transit summary
+     * Render the transit summary page body. The markup goes straight to the
+     * response writer when the helper has one, otherwise it is returned for
+     * the caller to place. A rendering failure is logged, not thrown, and
+     * yields an empty string.
+     *
+     * @return the transit summary, or an empty string on failure
      */
     public String getTransitSummary() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

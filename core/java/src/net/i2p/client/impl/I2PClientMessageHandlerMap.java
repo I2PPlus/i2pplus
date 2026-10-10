@@ -30,13 +30,19 @@ class I2PClientMessageHandlerMap {
     /** Map of message type id--&gt; I2CPMessageHandler */
     protected final I2CPMessageHandler[] _handlers;
 
-    /** For extension by subclasses. */
+    /**
+     * For extension by subclasses.
+     *
+     * @param highest the highest message type id the handler array must cover
+     */
     protected I2PClientMessageHandlerMap(int highest) {
         _handlers = new I2CPMessageHandler[highest + 1];
     }
 
     /**
      * Handler map for all standard I2CP message types.
+     *
+     * @param context the app context passed to each handler that is created
      */
     public I2PClientMessageHandlerMap(I2PAppContext context) {
         // 39 = highest type expected from router
@@ -57,6 +63,7 @@ class I2PClientMessageHandlerMap {
 
     /**
      * Return the handler for the given type.
+     * @param messageTypeId the I2CP message type id to look up
      * @return the handler
      */
     public I2CPMessageHandler getHandler(int messageTypeId) {

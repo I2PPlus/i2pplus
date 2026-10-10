@@ -54,6 +54,8 @@ public enum DataSourceType {
      */
     /**
      * Get the ds type.
+     *
+     * @return the underlying DsType; CDEF throws UnsupportedOperationException instead
      */
     public abstract DsType getDsType();
 }

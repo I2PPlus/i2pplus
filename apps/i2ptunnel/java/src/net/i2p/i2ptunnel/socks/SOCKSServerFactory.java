@@ -35,6 +35,12 @@ import net.i2p.socks.SOCKSException;
  */
 class SOCKSServerFactory {
 
+    /**
+     * createSOCKSServer() is static and the only field is the HTTP-rejection text, so an
+     * instance carries nothing.
+     */
+    SOCKSServerFactory() {}
+
     private final static String ERR_REQUEST_DENIED =
         "HTTP/1.1 403 Access Denied - This is a SOCKS proxy, not a HTTP proxy\r\n" +
         "Content-Type: text/html; charset=iso-8859-1\r\n" +
@@ -50,8 +56,13 @@ class SOCKSServerFactory {
      * version.  This method wil strip the SOCKS VER field from the
      * provided sockets's input stream.
      *
+     * @param ctx the application context handed to the chosen SOCKS server
      * @param s a Socket used to choose the SOCKS server type
      * @param props non-null
+     * @return a server speaking the version named in the socket's VER field
+     * @throws SOCKSException if the version is unsupported, authorization is
+     *                        required for SOCKS 4, an HTTP request arrived,
+     *                        or the socket failed
      */
     public static SOCKSServer createSOCKSServer(I2PAppContext ctx, Socket s, Properties props) throws SOCKSException {
         SOCKSServer serv;

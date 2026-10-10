@@ -35,6 +35,8 @@ class SchedulerConnectedBulk extends SchedulerImpl {
 
     /**
      * SchedulerConnectedBulk.
+     *
+     * @param ctx application context, passed to the SchedulerImpl superclass
      */
     public SchedulerConnectedBulk(I2PAppContext ctx) {
         super(ctx);

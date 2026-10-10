@@ -16,6 +16,12 @@ package net.i2p.router.news;
  */
 public class NewsEntry implements Comparable<NewsEntry> {
     /**
+     * Every field is left at its default - null Strings and a zero update timestamp -
+     * for the Atom parser to fill in as it reads the entry.
+     */
+    public NewsEntry() {}
+
+    /**
      * title.
      */
     public String title;

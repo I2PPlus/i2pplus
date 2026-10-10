@@ -69,7 +69,12 @@ public class KeyStoreProvider {
     private final String _pluginDir;
     private KeyStore _keystore;
 
-    /** @param pluginDir path to the plugin directory for keystore storage */
+    /**
+     * Bind this provider to the plugin directory that holds the shared
+     * keystore, without reading or creating anything yet.
+     *
+     * @param pluginDir path to the plugin directory for keystore storage
+     */
     public KeyStoreProvider(String pluginDir) {
         _pluginDir = pluginDir;
     }
@@ -88,6 +93,11 @@ public class KeyStoreProvider {
     }
 
     /**
+     * Fetch the named certificate and verify it against its own public key,
+     * rejecting a certificate that does not check out.
+     *
+     * @param ks the keystore to read the certificate from
+     * @param certAlias the keystore alias naming the certificate to read
      * @return null on failure
      */
     public static X509Certificate readCert(KeyStore ks, String certAlias) {
@@ -156,7 +166,12 @@ public class KeyStoreProvider {
         return ks;
     }
 
-    /** @return full path to the keystore file */
+    /**
+     * Resolve the absolute path of the keystore file this provider reads and
+     * writes, named after DEFAULT_KEYSTORE_NAME inside the plugin directory.
+     *
+     * @return full path to the keystore file
+     */
     public String getKeyStoreLocation() {
         File keyStoreFile = new File(_pluginDir, DEFAULT_KEYSTORE_NAME);
         return keyStoreFile.getAbsolutePath();

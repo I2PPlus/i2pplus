@@ -14,6 +14,12 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class StatHelper extends HelperBase {
+    /**
+     * No peer selected, no filter, and no export format; the setters below fill those in
+     * from the form parameters before anything is rendered.
+     */
+    public StatHelper() {}
+
     private String _peer;
     private boolean _full;
     private String _statFilter;
@@ -21,6 +27,7 @@ public class StatHelper extends HelperBase {
 
     /**
      * Caller should strip HTML (XSS)
+     * @param peer the base64 hash selecting a single peer to report on, or null to report on all peers
      */
     public void setPeer(String peer) {
         _peer = peer;
@@ -28,6 +35,7 @@ public class StatHelper extends HelperBase {
 
     /**
      * Set full flag for stats generation
+     * @param f any non-empty value to generate the full stat set; null or empty leaves the flag off
      */
     public void setFull(String f) {
         _full = f != null && !f.isEmpty();
@@ -36,6 +44,7 @@ public class StatHelper extends HelperBase {
     /**
      * Optional stat name filter (substring match, case-insensitive).
      * Only stats whose name contains this string will be rendered.
+     * @param filter the case-insensitive substring that stat names must contain to be rendered; null or empty clears the filter
      * @since 0.9.70+
      */
     public void setStatFilter(String filter) {
@@ -45,6 +54,7 @@ public class StatHelper extends HelperBase {
 
     /**
      * Export format (csv or xml).
+     * @param export the requested format, accepted only as "csv" or "xml"; any other value leaves the export unset
      * @since 0.9.70+
      */
     public void setExport(String export) {

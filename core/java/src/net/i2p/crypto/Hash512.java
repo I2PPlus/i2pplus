@@ -38,6 +38,7 @@ public class Hash512 extends SimpleDataStructure {
 
     /**
      * IllegalArgumentException if data is not correct length (null is ok).
+     * @param data the raw 64 bytes of hash data to wrap, or null for an empty structure
      * @throws IllegalArgumentException if data is not correct length (null is ok)
      */
     public Hash512(byte[] data) {

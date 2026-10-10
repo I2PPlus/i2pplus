@@ -14,6 +14,12 @@ import org.json.simple.Jsoner;
 public class JSONUtils {
 
     /**
+     * Constructor. Each helper parses the JSON text it is handed and returns a
+     * value, so an instance carries no state.
+     */
+    public JSONUtils() {}
+
+    /**
      * Function that return value from json object represented by jsontext containing a single message
      * which is assigned to "msg" key.
      * @param jsonTxt {String} JSON object
@@ -74,8 +80,8 @@ public class JSONUtils {
      * Function that return json object represented by jsontext and included
      * single message assigned to "msg" key
      * @param msg {byte[]} message which should be assigned to json object
+     * @param tests the tests
      * @return {byte[]} json object represented by jsontext and encodes into a sequence of bytes
-      * @param tests the tests
      * @since 0.9.45
      */
     public static byte[] createJsonLoginObj(byte[] msg, byte tests) {

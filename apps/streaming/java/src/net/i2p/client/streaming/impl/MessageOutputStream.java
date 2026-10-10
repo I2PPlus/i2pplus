@@ -92,10 +92,20 @@ class MessageOutputStream extends OutputStream {
      */
     private static volatile int defaultPassiveFlushDelay = SystemVersion.isSlow() ? 200 : 100;
 
-    /** @since 0.9.70+ */
+    /**
+     * Read the passive flush delay applied when a caller does not name one.
+     *
+     * @return the flush delay in milliseconds used when none is specified
+     * @since 0.9.70+
+     */
     public static int getDefaultPassiveFlushDelay() { return defaultPassiveFlushDelay; }
 
-    /** @since 0.9.70+ */
+    /**
+     * Set the passive flush delay used when a caller does not name one.
+     *
+     * @param val requested flush delay in milliseconds, clamped to the range 10 - 500
+     * @since 0.9.70+
+     */
     public static void setDefaultPassiveFlushDelay(int val) { defaultPassiveFlushDelay = Math.max(10, Math.min(500, val)); }
 
     /**

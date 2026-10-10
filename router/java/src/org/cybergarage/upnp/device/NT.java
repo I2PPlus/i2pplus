@@ -28,12 +28,23 @@ package org.cybergarage.upnp.device;
  * @since 1.0
  */
 public class NT {
+    /**
+     * The NT constants and the matching test below are all static and the class holds no
+     * fields, so an instance carries nothing.
+     */
+    public NT() {}
+
     /** rootdevice */
     public static final String ROOTDEVICE = "upnp:rootdevice";
     /** event */
     public static final String EVENT = "upnp:event";
 
-    /** method comment */
+    /**
+     * method comment
+     * @param ntValue the NT header value to test, may be null
+     * @return true if ntValue is non-null and begins with upnp:rootdevice,
+     *        false otherwise, including for a null value
+     */
     public static final boolean isRootDevice(String ntValue) {
         if (ntValue == null) return false;
         return ntValue.startsWith(ROOTDEVICE);

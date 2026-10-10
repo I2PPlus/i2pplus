@@ -28,6 +28,11 @@ class PluginUpdateChecker extends UpdateRunner {
     private final String _oldVersion;
 
     /**
+     * Prepare a plugin update check. The first of the update URIs is the one
+     * actually fetched; the rest are kept only for display, and
+     * {@link #update()} fetches just the leading {@code TrustedUpdate.HEADER_BYTES}
+     * to compare versions rather than the whole plugin.
+     *
      * @param ctx the router context
      * @param mgr the update manager
      * @param uris update source URIs
@@ -44,13 +49,16 @@ class PluginUpdateChecker extends UpdateRunner {
     }
 
     /**
+     * Identify this task in the update manager's status lists and logs.
+     *
      * @return the i d
      */
     @Override
     public String getID() { return _appName; }
 
         /**
-         * update.
+         * Start the check: fetch only the plugin's version header over the HTTP
+         * proxy and let the manager report whether anything newer appeared.
          */
         @Override
         protected void update() {
@@ -82,7 +90,8 @@ class PluginUpdateChecker extends UpdateRunner {
         }
 
         /**
-         * bytesTransferred.
+         * Progress callback during the header fetch; the version bytes are not
+         * inspected here, only their arrival is reported.
          */
         @Override
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {
@@ -103,7 +112,8 @@ class PluginUpdateChecker extends UpdateRunner {
         }
 
         /**
-         * transferFailed.
+         * The header fetch failed: drop the partial download and report the
+         * check as unsuccessful rather than as merely up to date.
          */
         @Override
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {

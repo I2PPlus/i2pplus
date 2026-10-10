@@ -30,6 +30,9 @@ import net.i2p.util.SystemVersion;
  */
 public class NetDbHelper extends FormHandler {
 
+    /**
+     * Create the helper; all state arrives per request through the form handlers.
+     */
     public NetDbHelper() {}
 
     private String _routerPrefix;
@@ -63,7 +66,7 @@ public class NetDbHelper extends FormHandler {
     private static final int DEFAULT_LIMIT = SystemVersion.isSlow() ? 100 : 200;
     /**
      * Whether the router is a floodfill router.
-     * @return whether floodfill
+     * @return true if this router is a floodfill
      * @since 0.9.33
      */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
@@ -287,6 +290,7 @@ public class NetDbHelper extends FormHandler {
     /**
      * Set by show= param (alternative to f=N).
      * Overrides _full if present.
+     * @param show the keyword selecting which entries to show, overriding setFull: "all", "all_debug", "sybils", "lookup", "client", "client_debug", "local", "ls_remote", "ls_debug" or "ls_local"; an unrecognized or null value changes nothing
      * @since 0.9.70+
      */
     public void setShow(String show) {
@@ -376,7 +380,7 @@ public class NetDbHelper extends FormHandler {
 
     /**
      * Get a session-bound nonce for forms in this page.
-     * @return the nonce
+     * @return the nonce to embed in this page's forms
      * @since 0.9.38
      */
     private String getNonce() {
@@ -427,14 +431,15 @@ public class NetDbHelper extends FormHandler {
     }
 
     /**
-     * storeWriter() must be called previously
+     * Render the floodfill-filtered netdb summary; storeWriter() must be called previously.
      *
      * @return the netdb summary HTML
      */
     public String getFloodfillNetDbSummary() {return getNetDbSummary();}
 
     /**
-     * Net db summary.
+     * Render the full netdb summary; storeWriter() must be called previously.
+     *
      * @return the net db summary
      */
     public String getNetDbSummary() {

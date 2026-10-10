@@ -27,7 +27,11 @@ class UnsignedUpdateHandler implements Checker, Updater {
     private final ConsoleUpdateManager _mgr;
 
     /**
-     * UnsignedUpdateHandler.
+     * Hold the router context and the update manager that the checker and
+     * runner created here need; no work happens in the constructor.
+     *
+     * @param ctx router context used for config and clock access
+     * @param mgr console update manager that runs the download and shows status
      */
     public UnsignedUpdateHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;
@@ -35,6 +39,10 @@ class UnsignedUpdateHandler implements Checker, Updater {
     }
 
     /**
+     * The single download location for the unsigned update, taken from the
+     * {@code ConfigUpdateHandler} zip URL property. Unlike the signed
+     * sources this list never has more than one entry.
+     *
      * @return null if none
      * @since 0.9.4
      */
@@ -51,6 +59,10 @@ class UnsignedUpdateHandler implements Checker, Updater {
     }
 
     /**
+     * Offer a checker for the unsigned router zip, or nothing at all if this
+     * type or method is not the one being asked about, no source is
+     * configured, or no previous check time has been stamped yet.
+     *
      * @param currentVersion ignored, we use time stored in a property
      */
     @Override

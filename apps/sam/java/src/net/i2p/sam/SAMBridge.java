@@ -82,6 +82,7 @@ public class SAMBridge implements Runnable, ClientApp {
 
     /** Default filename for persistent SAM private key storage. */
     public static final String DEFAULT_SAM_KEYFILE = "sam.keys";
+    /** Default filename for the SAM configuration file. */
     static final String DEFAULT_SAM_CONFIGFILE = "sam.config";
     private static final String PROP_SAM_KEYFILE = "sam.keyfile";
     private static final String PROP_SAM_SSL = "sam.useSSL";
@@ -117,6 +118,7 @@ public class SAMBridge implements Runnable, ClientApp {
      * Does NOT open the listener socket or start threads; caller must call
      * startup()
      *
+     * @param context the client context the bridge runs in, supplying the log
      * @param mgr  may be null
      * @param args non-null
      * @throws Exception on bad args
@@ -150,8 +152,10 @@ public class SAMBridge implements Runnable, ClientApp {
      *
      * @param listenHost hostname to listen for SAM connections on ("0.0.0.0" for all)
      * @param listenPort port number to listen for SAM connections on
+     * @param isSSL true to serve SAM connections over TLS
      * @param i2cpProps set of I2CP properties for finding and communicating with the router
      * @param persistFile location to store/load named keys to/from
+     * @param configFile location of the config file to load settings from
      * @throws RuntimeException if a server socket can't be opened
      */
     public SAMBridge(String listenHost, int listenPort, boolean isSSL, Properties i2cpProps,
@@ -174,9 +178,11 @@ public class SAMBridge implements Runnable, ClientApp {
      * @param listenHost    hostname to listen for SAM connections on ("0.0.0.0" for
      *                      all)
      * @param listenPort    port number to listen for SAM connections on
+     * @param isSSL     true to serve SAM connections over TLS
      * @param i2cpProps     set of I2CP properties for finding and communicating
      *                      with the router
      * @param persistFile   location to store/load named keys to/from
+     * @param configFile    location of the config file to load settings from
      * @param secureSession an instance of a Secure Session to use
      * @throws RuntimeException if a server socket can't be opened
      *
@@ -334,6 +340,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Handlers must call on startup
      *
+     * @param handler the connection handler to add to the set stopped and
+     *        started with this bridge
      * @since 0.9.20
      */
     public void register(Handler handler) {
@@ -347,6 +355,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Handlers must call on stop
      *
+     * @param handler the connection handler to drop from the set of handlers
+     *        started and stopped with this bridge
      * @since 0.9.20
      */
     public void unregister(Handler handler) {
@@ -368,7 +378,10 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
-     * @return number of registered streams from SessionsDB, or 0 if null
+     * Count the named v3 sessions held in the SessionsDB, for the console
+     * status page.
+     *
+     * @return number of registered streams from SessionsDB
      * @since 0.9.70+
      */
     public int getSessionCount() {
@@ -376,6 +389,9 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Count the handlers currently serving a SAM connection, for the console
+     * status page.
+     *
      * @return number of connected handlers
      * @since 0.9.70+
      */
@@ -384,6 +400,9 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Count the handler-pool threads running a command, for the console
+     * status page. Zero until the pool has been started.
+     *
      * @return active pool worker threads, or 0 if pool not started
      * @since 0.9.70+
      */
@@ -393,6 +412,9 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Count every thread in the handler pool, busy or not, for the console
+     * status page. Zero until the pool has been started.
+     *
      * @return total pool worker threads, or 0 if pool not started
      * @since 0.9.70+
      */
@@ -402,6 +424,9 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Count the commands waiting for a free pool thread, for the console
+     * status page. Zero until the pool has been started.
+     *
      * @return commands queued in the pool, or 0 if pool not started
      * @since 0.9.70+
      */
@@ -411,6 +436,9 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Count the handlers registered with the pool, whether or not they are
+     * currently running. Zero until the pool has been started.
+     *
      * @return handlers registered in the pool, or 0 if pool not started
      * @since 0.9.70+
      */
@@ -582,6 +610,8 @@ public class SAMBridge implements Runnable, ClientApp {
     ////// begin ClientApp helpers
 
     /**
+     * Record a state change with no associated error.
+     *
      * @since 0.9.6
      */
     private void changeState(ClientAppState state) {
@@ -589,6 +619,9 @@ public class SAMBridge implements Runnable, ClientApp {
     }
 
     /**
+     * Record the new state and tell the ClientAppManager about it, if there
+     * is one.
+     *
      * @since 0.9.6
      */
     private synchronized void changeState(ClientAppState state, Exception e) {

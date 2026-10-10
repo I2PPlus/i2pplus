@@ -54,115 +54,189 @@ class MLKEMEngine
     private final int sessionKeyLength;
     private final Symmetric symmetric;
 
-    /** @return the symmetric */
+    /**
+     * The symmetric primitives bound to this parameter set.
+     *
+     * @return the symmetric primitive set this engine was built with
+     */
     public Symmetric getSymmetric()
     {
         return symmetric;
     }
-    /** @return KyberEta2 */
+    /**
+     * The eta2 noise parameter.
+     *
+     * @return KyberEta2, the coefficient bound used when sampling messages
+     */
     public static int getKyberEta2()
     {
         return KyberEta2;
     }
 
-    /** @return KyberIndCpaMsgBytes */
+    /**
+     * Message length in bytes that the IND-CPA scheme accepts.
+     *
+     * @return KyberIndCpaMsgBytes, the limit in bytes
+     */
     public static int getKyberIndCpaMsgBytes()
     {
         return KyberIndCpaMsgBytes;
     }
 
-    /** @return CryptoCipherTextBytes */
+    /**
+     * Ciphertext length in bytes at the KEM layer.
+     *
+     * @return CryptoCipherTextBytes, the length in bytes
+     */
     public int getCryptoCipherTextBytes()
     {
         return CryptoCipherTextBytes;
     }
 
-    /** @return CryptoPublicKeyBytes */
+    /**
+     * Public key length in bytes at the KEM layer.
+     *
+     * @return CryptoPublicKeyBytes, the length in bytes
+     */
     public int getCryptoPublicKeyBytes()
     {
         return CryptoPublicKeyBytes;
     }
 
-    /** @return CryptoSecretKeyBytes */
+    /**
+     * Secret key length in bytes at the KEM layer.
+     *
+     * @return CryptoSecretKeyBytes, the length in bytes
+     */
     public int getCryptoSecretKeyBytes()
     {
         return CryptoSecretKeyBytes;
     }
 
-    /** @return CryptoBytes */
+    /**
+     * Total key material length in bytes at the KEM layer.
+     *
+     * @return CryptoBytes, the combined length in bytes
+     */
     public int getCryptoBytes()
     {
         return CryptoBytes;
     }
 
-    /** @return KyberCipherTextBytes */
+    /**
+     * Ciphertext length in bytes produced by the IND-CPA scheme.
+     *
+     * @return KyberCipherTextBytes, the length in bytes
+     */
     public int getKyberCipherTextBytes()
     {
         return KyberCipherTextBytes;
     }
 
-    /** @return KyberSecretKeyBytes */
+    /**
+     * Secret key length in bytes for the IND-CPA scheme.
+     *
+     * @return KyberSecretKeyBytes, the length in bytes
+     */
     public int getKyberSecretKeyBytes()
     {
         return KyberSecretKeyBytes;
     }
 
-    /** @return KyberIndCpaPublicKeyBytes */
+    /**
+     * Public key length in bytes for the IND-CPA scheme.
+     *
+     * @return KyberIndCpaPublicKeyBytes, the length in bytes
+     */
     public int getKyberIndCpaPublicKeyBytes()
     {
         return KyberIndCpaPublicKeyBytes;
     }
 
-    /** @return KyberIndCpaSecretKeyBytes */
+    /**
+     * Secret key length in bytes for the IND-CPA scheme.
+     *
+     * @return KyberIndCpaSecretKeyBytes, the length in bytes
+     */
     public int getKyberIndCpaSecretKeyBytes()
     {
         return KyberIndCpaSecretKeyBytes;
     }
 
-    /** @return KyberIndCpaBytes */
+    /**
+     * Seed length in bytes for the IND-CPA scheme.
+     *
+     * @return KyberIndCpaBytes, the length in bytes
+     */
     public int getKyberIndCpaBytes()
     {
         return KyberIndCpaBytes;
     }
 
-    /** @return KyberPublicKeyBytes */
+    /**
+     * Public key length in bytes before the KEM layer wraps it.
+     *
+     * @return KyberPublicKeyBytes, the length in bytes
+     */
     public int getKyberPublicKeyBytes()
     {
         return KyberPublicKeyBytes;
     }
 
-    /** @return KyberPolyCompressedBytes */
+    /**
+     * Size in bytes of one compressed polynomial.
+     *
+     * @return KyberPolyCompressedBytes, the length in bytes
+     */
     public int getKyberPolyCompressedBytes()
     {
         return KyberPolyCompressedBytes;
     }
 
-    /** @return KyberK */
+    /**
+     * The security parameter: 2, 3 or 4.
+     *
+     * @return KyberK, the level: 2, 3 or 4
+     */
     public int getKyberK()
     {
         return KyberK;
     }
 
-    /** @return KyberPolyVecBytes */
+    /**
+     * Size in bytes of one uncompressed polynomial vector.
+     *
+     * @return KyberPolyVecBytes, the length in bytes
+     */
     public int getKyberPolyVecBytes()
     {
         return KyberPolyVecBytes;
     }
 
-    /** @return KyberPolyVecCompressedBytes */
+    /**
+     * Size in bytes of one compressed polynomial vector.
+     *
+     * @return KyberPolyVecCompressedBytes, the length in bytes
+     */
     public int getKyberPolyVecCompressedBytes()
     {
         return KyberPolyVecCompressedBytes;
     }
 
-    /** @return KyberEta1 */
+    /**
+     * The eta1 noise parameter.
+     *
+     * @return KyberEta1, the coefficient bound used when sampling ciphertext
+     */
     public int getKyberEta1()
     {
         return KyberEta1;
     }
 
     /**
-     * @param k the security parameter (2, 3, or 4)
+     * Build the parameter set for the given security level.
+     *
+     * @param k the security parameter: 2, 3 or 4
      */
     public MLKEMEngine(int k)
     {
@@ -210,13 +284,21 @@ class MLKEMEngine
         this.indCpa = new MLKEMIndCpa(this);
     }
 
-    /** @param random the secure random */
+    /**
+     * Bind the entropy source used for key generation and encapsulation.
+     *
+     * @param random the source to draw randomness from
+     */
     public void init(SecureRandom random)
     {
         this.random = random;
     }
 
-    /** @return key pair as byte array */
+    /**
+     * Generate a KEM key pair, drawing both seeds from the bound entropy source.
+     *
+     * @return the key pair components, laid out as generateKemKeyPairInternal does
+     */
     public byte[][] generateKemKeyPair()
     {
         byte[] d = new byte[KyberSymBytes];
@@ -227,9 +309,14 @@ class MLKEMEngine
         return generateKemKeyPairInternal(d, z);
     }
 
-    /** @param d seed
-     * @param z seed
-     * @return key pair as byte array */
+    /**
+     * Expand the two seeds into the full ML-KEM key pair.
+     *
+     * @param d the seed for the internal IND-CPA key pair
+     * @param z the seed kept for implicit rejection
+     * @return the key pair: encapsulated public key, hashed public key, secret
+     *         key, hashed public key, z, and the concatenated seeds
+     */
     public byte[][] generateKemKeyPairInternal(byte[] d, byte[] z)
     {
         byte[][] indCpaKeyPair = indCpa.generateKeyPair(d);
@@ -255,9 +342,13 @@ class MLKEMEngine
         };
     }
 
-    /** @param publicKeyInput the public key
-     * @param randBytes random bytes
-     * @return ciphertext and shared secret */
+    /**
+     * Encapsulate a shared secret against the recipient's public key.
+     *
+     * @param publicKeyInput the recipient's encapsulated public key
+     * @param randBytes the 32 bytes of randomness the message hiding samples need
+     * @return the ciphertext and the shared secret
+     */
     public byte[][] kemEncryptInternal(byte[] publicKeyInput, byte[] randBytes)
     {
         byte[] outputCipherText;
@@ -286,9 +377,13 @@ class MLKEMEngine
         return outBuf;
     }
 
-    /** @param secretKey the secret key
-     * @param cipherText the ciphertext
-     * @return shared secret */
+    /**
+     * Recover the shared secret from a ciphertext.
+     *
+     * @param secretKey the recipient's secret key
+     * @param cipherText the ciphertext to decapsulate
+     * @return the shared secret
+     */
     public byte[] kemDecryptInternal(byte[] secretKey, byte[] cipherText)
     {
         byte[] buf = new byte[2 * KyberSymBytes],
@@ -319,9 +414,13 @@ class MLKEMEngine
         return Arrays.copyOfRange(kr, 0, sessionKeyLength);
     }
 
-    /** @param publicKeyInput the public key
-     * @param randBytes random bytes
-     * @return ciphertext and shared secret */
+    /**
+     * Encapsulate a shared secret, drawing the randomness from this engine.
+     *
+     * @param publicKeyInput the recipient's encapsulated public key
+     * @param randBytes the 32 bytes of randomness to encapsulate with
+     * @return the ciphertext and the shared secret
+     */
     public byte[][] kemEncrypt(byte[] publicKeyInput, byte[] randBytes)
     {
         //TODO: do input validation elsewhere?
@@ -342,9 +441,13 @@ class MLKEMEngine
 
         return kemEncryptInternal(publicKeyInput, randBytes);
     }
-    /** @param secretKey the secret key
-     * @param cipherText the ciphertext
-     * @return shared secret */
+    /**
+     * Recover the shared secret from a ciphertext.
+     *
+     * @param secretKey the recipient's secret key
+     * @param cipherText the ciphertext to decapsulate
+     * @return the shared secret
+     */
     public byte[] kemDecrypt(byte[] secretKey, byte[] cipherText)
     {
         //TODO: do input validation
@@ -363,7 +466,11 @@ class MLKEMEngine
         }
     }
 
-    /** @param buf the buffer to fill */
+    /**
+     * Fill a buffer with bytes from the bound entropy source.
+     *
+     * @param buf the buffer to fill, sized by the caller
+     */
     public void getRandomBytes(byte[] buf)
     {
         this.random.nextBytes(buf);

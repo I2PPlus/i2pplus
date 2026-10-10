@@ -19,6 +19,12 @@ class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
      public static final RouterInfoComparator _instance = new RouterInfoComparator();
 
      /**
+      * The comparator reads nothing but the two addresses it is handed, so a bare
+      * instance behaves exactly like the _instance singleton.
+      */
+     RouterInfoComparator() {}
+
+     /**
       * Thread safe, no state
       * @return the instance
       */
@@ -42,6 +48,8 @@ class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
       *
       * @param l non-null
       * @param r non-null
+      * @return negative, zero or positive as the first RouterInfo's identity hash sorts
+      *         before, equal to, or after the second
       */
     public static int comp(RouterInfo l, RouterInfo r) {
         Hash lh = l.getIdentity().getHash();

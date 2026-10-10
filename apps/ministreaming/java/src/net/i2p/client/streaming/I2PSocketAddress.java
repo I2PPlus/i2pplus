@@ -53,6 +53,8 @@ public class I2PSocketAddress extends SocketAddress {
 
     /**
      * Does not do a reverse lookup. Host will be null.
+     * @param dest the destination to address, which must not be null
+     * @param port the TCP port on that destination, from 0 to 65535
      * @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public I2PSocketAddress(Destination dest, int port) {
@@ -68,6 +70,8 @@ public class I2PSocketAddress extends SocketAddress {
     /**
      * Does a naming service lookup to resolve the dest.
      * May take several seconds for b32.
+     * @param host the hostname to resolve, e.g. a b32 address or an .i2p name
+     * @param port the TCP port on the resolved destination, from 0 to 65535
      * @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public I2PSocketAddress(String host, int port) {
@@ -80,6 +84,9 @@ public class I2PSocketAddress extends SocketAddress {
 
     /**
      * Creates an unresolved address for the given host and port.
+     * @param host the hostname to record now and resolve on the first getAddress() call
+     * @param port the TCP port on the destination, from 0 to 65535
+     * @return an address holding that host and port, with no destination yet
      * @throws IllegalArgumentException for port &lt; 0 or port &gt; 65535
      */
     public static I2PSocketAddress createUnresolved(String host, int port) {

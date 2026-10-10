@@ -25,17 +25,11 @@ import net.i2p.util.SimpleByteCache;
  * @author jrandom
  */
 public abstract class I2NPMessageImpl implements I2NPMessage {
-    /**
-     * _log.
-     */
+    /** Log for the message class, taken from the context's log manager. */
     protected final Log _log;
-    /**
-     * _context.
-     */
+    /** Application context this message belongs to. */
     protected final I2PAppContext _context;
-    /**
-     * _expiration.
-     */
+    /** Expiration time in milliseconds since the epoch, as an I2P Date. */
     protected long _expiration;
 
     /**
@@ -46,13 +40,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      */
     private final AtomicLong _uniqueId = new AtomicLong(-1);
 
-    /**
-     * DEFAULT_EXPIRATION_MS.
-     */
+    /** Default lifetime of an unsent message, one minute in milliseconds. */
     public final static long DEFAULT_EXPIRATION_MS = (long) 60*1000; // 1 minute by default
-    /**
-     * CHECKSUM_LENGTH.
-     */
+    /** Number of checksum bytes the message header carries. */
     public final static int CHECKSUM_LENGTH = 1; //Hash.HASH_LENGTH;
 
     /** I2NP message header size in bytes. */
@@ -75,12 +65,19 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
 
     /** Interface for extending the types of messages handled - unused. */
     public interface Builder {
-        /** Instantiate a new I2NPMessage to be populated shortly. */
+        /**
+         * Instantiate a new I2NPMessage to be populated shortly.
+         *
+         * @param ctx the application context the message will belong to
+         * @return an empty message of the implementing type
+         */
         public I2NPMessage build(I2PAppContext ctx);
     }
 
     /**
-     * I2NPMessageImpl.
+     * Create an empty message with the default expiration.
+     *
+     * @param context the application context the message belongs to
      */
     public I2NPMessageImpl(I2PAppContext context) {
         _context = context;
@@ -115,9 +112,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * we can use a large buffer but prevent the reader from reading off the end.
      *
      * @param type the message type or -1 if we should read it here
-     * @return total length of the message
      * @param maxLen read no more than this many bytes from data starting at offset, even if it is longer
      * This includes the type byte only if type &lt; 0
+     * @return total length of the message
      * @since 0.8.12
      */
     public int readBytes(byte[] data, int type, int offset, int maxLen) throws I2NPMessageException {
@@ -299,12 +296,20 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
         }
     }
 
-    /** Calculate the message body's length (not including the header and footer). */
+    /**
+     * Calculate the message body's length (not including the header and footer).
+     *
+     * @return the number of bytes the body will occupy once serialized
+     */
     protected abstract int calculateWrittenLength();
 
     /**
      * Write the message body to the output array, starting at the given index.
+     *
+     * @param out the buffer to serialize the body into
+     * @param curIndex the offset into out at which to begin writing; leave room for the signature where the header format calls for one
      * @return the index into the array after the last byte written (NOT the length)
+     * @throws I2NPMessageException if the body cannot be serialized into out, because it is too small or a field is unserializable
      */
     protected abstract int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException;
 
@@ -377,6 +382,15 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * The header consists of a one-byte type and a 4-byte expiration in seconds only.
      * Caller MUST call setUniqueId() on the returned value.
      * Used by SSU2 only!
+     *
+     * @param ctx the application context the resulting message belongs to
+     * @param buffer the serialized message
+     * @param offset the index in buffer at which the 5-byte header starts
+     * @param len the total number of readable bytes in buffer, at least 5
+     * @param handler ignored, may be null
+     * @return the deserialized message, never null; an unrecognized type yields
+     *     an UnknownI2NPMessage
+     * @throws I2NPMessageException if len is under 5, or the body cannot be parsed
      */
     public static I2NPMessage fromRawByteArray(I2PAppContext ctx, byte[] buffer, int offset,
                                                int len, I2NPMessageHandler handler) throws I2NPMessageException {
@@ -405,7 +419,14 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
      * The header consists of a one-byte type, 4-byte ID, and a 4-byte expiration in seconds only.
      * Used by NTCP2 and SSU2 only!
      *
+     * @param ctx the application context the resulting message belongs to
+     * @param buffer the serialized message
+     * @param offset the index in buffer at which the 9-byte header starts
+     * @param len the total number of readable bytes in buffer, at least 9
      * @param handler ignored, may be null
+     * @return the deserialized message, never null; an unrecognized type yields
+     *     an UnknownI2NPMessage
+     * @throws I2NPMessageException if len is under 9, or the body cannot be parsed
      * @since 0.9.35
      */
     public static I2NPMessage fromRawByteArrayNTCP2(I2PAppContext ctx, byte[] buffer, int offset,
@@ -435,6 +456,8 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
     /**
      * Yes, this is fairly ugly, but its the only place it ever happens.
      *
+     * @param context the application context the message will belong to
+     * @param type the I2NP message type byte
      * @return non-null, returns an UnknownI2NPMessage if unknown type
      */
     public static I2NPMessage createMessage(I2PAppContext context, int type) {

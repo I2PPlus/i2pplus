@@ -46,6 +46,8 @@ public class ServiceData extends NodeData {
 
     /**
      * getControlActionListenerList.
+     *
+     * @return the listeners registered to receive this service's control actions
      */
     public ListenerList getControlActionListenerList() {
         return controlActionListenerList;
@@ -59,6 +61,8 @@ public class ServiceData extends NodeData {
 
     /**
      * getSCPDNode.
+     *
+     * @return the parsed service control protocol description node, null if none was set
      */
     public Node getSCPDNode() {
         return scpdNode;
@@ -66,6 +70,8 @@ public class ServiceData extends NodeData {
 
     /**
      * setSCPDNode.
+     *
+     * @param node the parsed service control protocol description to hold
      */
     public void setSCPDNode(Node node) {
         scpdNode = node;
@@ -79,6 +85,8 @@ public class ServiceData extends NodeData {
 
     /**
      * getSubscriberList.
+     *
+     * @return the subscribers currently registered for this service
      */
     public SubscriberList getSubscriberList() {
         return subscriberList;
@@ -92,6 +100,8 @@ public class ServiceData extends NodeData {
 
     /**
      * getDescriptionURL.
+     *
+     * @return the URL of the device description document this service came from
      */
     public String getDescriptionURL() {
         return descriptionURL;
@@ -99,6 +109,8 @@ public class ServiceData extends NodeData {
 
     /**
      * setDescriptionURL.
+     *
+     * @param descriptionURL the URL of the device description document this service came from
      */
     public void setDescriptionURL(String descriptionURL) {
         this.descriptionURL = descriptionURL;
@@ -112,6 +124,8 @@ public class ServiceData extends NodeData {
 
     /**
      * getSID.
+     *
+     * @return the subscription identifier issued for this service
      */
     public String getSID() {
         return sid;
@@ -119,6 +133,8 @@ public class ServiceData extends NodeData {
 
     /**
      * setSID.
+     *
+     * @param id the subscription identifier issued for this service
      */
     public void setSID(String id) {
         sid = id;
@@ -132,6 +148,8 @@ public class ServiceData extends NodeData {
 
     /**
      * getTimeout.
+     *
+     * @return the subscription duration in seconds, 0 when the subscription was never leased
      */
     public long getTimeout() {
         return timeout;
@@ -139,6 +157,8 @@ public class ServiceData extends NodeData {
 
     /**
      * setTimeout.
+     *
+     * @param value the subscription duration in seconds requested at lease time
      */
     public void setTimeout(long value) {
         timeout = value;

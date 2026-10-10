@@ -235,7 +235,8 @@ public class DataHelper {
     private static boolean dateTzSet;
     private static boolean timeTzSet;
 
-    /** Read a mapping from the stream, as defined by the I2P data structure spec,
+    /**
+     * Read a mapping from the stream, as defined by the I2P data structure spec,
      * and store it into a Properties object.
      *
      * A mapping is a set of key / value pairs. It starts with a 2 byte Integer (ala readLong(rawStream, 2))
@@ -251,9 +252,9 @@ public class DataHelper {
      * As of 0.9.18, throws DataFormatException on duplicate key
      *
      * @param rawStream stream to read the mapping from
+     * @return an OrderedProperties
      * @throws DataFormatException if the format is invalid
      * @throws IOException if there is a problem reading the data
-     * @return an OrderedProperties
      */
     public static Properties readProperties(InputStream rawStream) throws DataFormatException, IOException {
         Properties props = new OrderedProperties();
@@ -267,15 +268,15 @@ public class DataHelper {
      * As of 0.9.18, throws DataFormatException on duplicate key
      * Does NOT enforce key ordering.
      *
+     * @param rawStream stream to read the mapping from
      * @param props The Properties to load into.
      * As of 0.9.38, if null, a new OrderedProperties will be created.
      *
-     * @param rawStream stream to read the mapping from
-     * @throws DataFormatException if the format is invalid
-     * @throws IOException if there is a problem reading the data
      * @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
      * and an immutable EmptyProperties if empty.
      *
+     * @throws DataFormatException if the format is invalid
+     * @throws IOException if there is a problem reading the data
      * @since 0.8.13
      */
     public static Properties readProperties(InputStream rawStream, Properties props) throws DataFormatException, IOException {
@@ -287,16 +288,16 @@ public class DataHelper {
      *
      * As of 0.9.18, throws DataFormatException on duplicate key
      *
+     * @param rawStream stream to read the mapping from
      * @param props The Properties to load into.
      * As of 0.9.38, if null, a new OrderedProperties will be created.
      *
-     * @param rawStream stream to read the mapping from
      * @param enforceOrder if true, throw DataFormatException if keys are not ordered
-     * @throws DataFormatException if the format is invalid
-     * @throws IOException if there is a problem reading the data
      * @return the parameter props, or (as of 0.9.38) a new OrderedProperties if props is null,
      * and an immutable EmptyProperties if empty.
      *
+     * @throws DataFormatException if the format is invalid
+     * @throws IOException if there is a problem reading the data
      * @since 0.9.66
      */
     public static Properties readProperties(InputStream rawStream, Properties props, boolean enforceOrder) throws DataFormatException, IOException {
@@ -466,6 +467,8 @@ public class DataHelper {
      * @return new offset
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
      * (not including the two length bytes) is greater than 65535 bytes.
+     * @throws IOException never thrown here; declared because the ByteArrayStream
+     * used to assemble the properties inherits OutputStream.write(int)
      */
     public static int toProperties(byte[] target, int offset, Properties props) throws DataFormatException, IOException {
         if (props != null && !props.isEmpty()) {
@@ -507,7 +510,7 @@ public class DataHelper {
      *
      * As of 0.9.18, throws DataFormatException on duplicate key
      *
-     * @param source source
+     * @param source byte array holding the UTF-8 encoded props, in readProperties() format
      * @param offset starting offset in source
      * @param target returned Properties
      * @return new offset
@@ -850,15 +853,16 @@ public class DataHelper {
         return bv.toByteArray();
     }
 
-    /** Read the stream for an integer as defined by the I2P data structure specification.
+    /**
+     * Read the stream for an integer as defined by the I2P data structure specification.
      * Integers are a fixed number of bytes (numBytes), stored as unsigned integers in network byte order.
      *
      * @param rawStream stream to read from
      * @param numBytes number of bytes to read and format into a number, 1 to 8
+     * @return number
      * @throws DataFormatException if negative (only possible if numBytes = 8) (since 0.8.12)
      * @throws EOFException since 0.8.2, if there aren't enough bytes to read the number
      * @throws IOException if there is an IO error reading the number
-     * @return number
      */
     public static long readLong(InputStream rawStream, int numBytes) throws DataFormatException, IOException {
         if (numBytes > 8) {
@@ -895,7 +899,8 @@ public class DataHelper {
         return rv;
     }
 
-    /** Write an integer as defined by the I2P data structure specification to the stream.
+    /**
+     * Write an integer as defined by the I2P data structure specification to the stream.
      * Integers are a fixed number of bytes (numBytes), stored as unsigned integers in network byte order.
      *
      * @param value value to write out, non-negative
@@ -934,7 +939,7 @@ public class DataHelper {
     /**
      * Big endian.
      *
-     * @param target the target
+     * @param target byte array the numBytes long value is written into
      * @param offset starting offset in target
      * @param numBytes 1-8
      * @param value non-negative
@@ -953,7 +958,7 @@ public class DataHelper {
     /**
      * Little endian, i.e. backwards. Not for use in I2P protocols.
      *
-     * @param target the target
+     * @param target byte array the numBytes long value is written into, backwards
      * @param offset starting offset in target
      * @param numBytes 1-8
      * @param value non-negative
@@ -1051,9 +1056,9 @@ public class DataHelper {
      * Big endian.
      * Same as toLong(target, offset, 8, value) but allows negative value
      *
-     * @param target the target
+     * @param target byte array the 8 byte long value is written into
      * @param offset starting offset in target
-     * @param value the value
+     * @param value may be negative, unlike the toLong variants
      * @throws ArrayIndexOutOfBoundsException if the target array is too short
      * @since 0.9.47 moved from NTCP2Payload
      */
@@ -1064,15 +1069,16 @@ public class DataHelper {
         }
     }
 
-    /** Read in a date from the stream as specified by the I2P data structure spec.
+    /**
+     * Read in a date from the stream as specified by the I2P data structure spec.
      * A date is an 8 byte unsigned integer in network byte order specifying the number of
      * milliseconds since midnight on January 1, 1970 in the GMT timezone. If the number is
      * 0, the date is undefined or null. (yes, this means you can't represent midnight on 1/1/1970)
      *
      * @param in stream to read from
+     * @return date read, or null
      * @throws DataFormatException if the stream doesn't contain a validly formatted date
      * @throws IOException if there is an IO error reading the date
-     * @return date read, or null
      */
     public static Date readDate(InputStream in) throws DataFormatException, IOException {
         long date = readLong(in, DATE_LENGTH);
@@ -1082,7 +1088,8 @@ public class DataHelper {
         return Date.from(Instant.ofEpochMilli(date));
     }
 
-    /** Write out a date to the stream as specified by the I2P data structure spec.
+    /**
+     * Write out a date to the stream as specified by the I2P data structure spec.
      *
      * @param out stream to write to
      * @param date date to write (can be null)
@@ -1115,7 +1122,7 @@ public class DataHelper {
     /**
      * Write a date (8-byte timestamp) to a byte array.
      *
-     * @param target the target
+     * @param target byte array the 8 byte timestamp is written into
      * @param offset the starting offset
      * @param when the time in milliseconds since epoch
      * @throws IllegalArgumentException if the offset is invalid
@@ -1151,14 +1158,15 @@ public class DataHelper {
     /** Number of bytes in a date field (8). */
     public static final int DATE_LENGTH = 8;
 
-    /** Read in a string from the stream as specified by the I2P data structure spec.
+    /**
+     * Read in a string from the stream as specified by the I2P data structure spec.
      * A string is 1 or more bytes where the first byte is the number of bytes (not characters!)
      * in the string and the remaining 0-255 bytes are the non-null terminated UTF-8 encoded character array.
      *
      * @param in stream to read from
+     * @return UTF-8 string
      * @throws EOFException since 0.8.2, if there aren't enough bytes to read the string
      * @throws IOException if there is an IO error reading the string
-     * @return UTF-8 string
      */
     public static String readString(InputStream in) throws IOException {
         int size = in.read();
@@ -1176,7 +1184,8 @@ public class DataHelper {
         return new String(raw, StandardCharsets.UTF_8);
     }
 
-    /** Write out a string to the stream as specified by the I2P data structure spec.  Note that the max
+    /**
+     * Write out a string to the stream as specified by the I2P data structure spec.  Note that the max
      * size for a string allowed by the spec is 255 bytes.
      *
      * WARNING - this method destroys the encoding, and therefore violates
@@ -1204,7 +1213,8 @@ public class DataHelper {
         }
     }
 
-    /** Write out a string to the stream as specified by the I2P data structure spec.  Note that the max
+    /**
+     * Write out a string to the stream as specified by the I2P data structure spec.  Note that the max
      * size for a string allowed by the spec is 255 bytes.
      *
      * This method correctly uses UTF-8
@@ -1595,7 +1605,7 @@ public class DataHelper {
      * As of 0.9.27, throws EOFException if the full length is not read.
      *
      * @param in the input stream
-     * @param target the target
+     * @param target byte array filled with target.length bytes
      * @return target.length
      * @throws EOFException if the full length is not read (since 0.9.27)
      * @throws IOException if an I/O error occurs
@@ -1614,7 +1624,7 @@ public class DataHelper {
      * As of 0.9.27, throws EOFException if the full length is not read.
      *
      * @param in the input stream
-     * @param target the target
+     * @param target byte array the length bytes are read into
      * @param offset starting offset in target
      * @param length number of bytes to read
      * @return the new offset (== old offset + length)
@@ -2175,9 +2185,10 @@ public class DataHelper {
      * which is a good space/speed tradeoff.
      * Prior to that, it used MAX_COMPRESSION.
      *
+     * @param orig the data to compress
+     * @return null if orig is null
      * @throws IllegalArgumentException if input size is over 40KB
      * @throws IllegalStateException on compression failure, as of 0.9.29
-     * @return null if orig is null
      */
     public static byte[] compress(byte[] orig) {
         return compress(orig, 0, orig.length);
@@ -2199,9 +2210,9 @@ public class DataHelper {
      * @param orig the data to compress
      * @param offset the offset into the data
      * @param size the number of bytes to compress
+     * @return null if orig is null
      * @throws IllegalArgumentException if size is over 40KB
      * @throws IllegalStateException on compression failure, as of 0.9.29
-     * @return null if orig is null
      */
     public static byte[] compress(byte[] orig, int offset, int size) {
         return compress(orig, offset, size, MEDIUM_COMPRESSION);
@@ -2216,10 +2227,13 @@ public class DataHelper {
      * for a zero-length input. As of 0.9.29, output is valid for
      * a zero-length input also.
      *
-     * @throws IllegalArgumentException if size is over 40KB
-     * @throws IllegalStateException on compression failure, as of 0.9.29
+     * @param orig the data to compress
+     * @param offset the offset into orig at which to start
+     * @param size the number of bytes to compress
      * @param level the compression level, 0 to 9
      * @return null if orig is null
+     * @throws IllegalArgumentException if size is over 40KB
+     * @throws IllegalStateException on compression failure, as of 0.9.29
      */
     public static byte[] compress(byte[] orig, int offset, int size, int level) {
         if (orig == null) return orig;
@@ -2307,10 +2321,11 @@ public class DataHelper {
     /**
      * Decompress the GZIP compressed data (returning null on error).
      *
+     * @param orig the GZIP compressed data
+     * @return null if orig is null
      * @throws IOException if uncompressed is over 40 KB,
      * or on a decompression error
      *
-     * @return null if orig is null
      */
     public static byte[] decompress(byte[] orig) throws IOException {
         return (orig != null ? decompress(orig, 0, orig.length) : null);
@@ -2319,10 +2334,13 @@ public class DataHelper {
     /**
      * Decompress the GZIP compressed data (returning null on error).
      *
+     * @param orig the GZIP compressed data
+     * @param offset the offset into orig at which the compressed data starts
+     * @param length the number of compressed bytes to decompress
+     * @return null if orig is null
      * @throws IOException if uncompressed is over 40 KB,
      * or on a decompression error
      *
-     * @return null if orig is null
      */
     public static byte[] decompress(byte[] orig, int offset, int length) throws IOException {
         if (orig == null) return orig;
@@ -2412,8 +2430,9 @@ public class DataHelper {
      * Same as orig.getBytes("UTF-8") but throws an unchecked RuntimeException
      * instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
      *
+     * @param orig the string to encode as UTF-8
      * @return null if orig is null
-     * @throws RuntimeException
+     * @throws RuntimeException never thrown - StandardCharsets.UTF_8 is always available
      */
     public static byte[] getUTF8(String orig) {
         if (orig == null) return new byte[0];
@@ -2425,8 +2444,9 @@ public class DataHelper {
      * instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
      * Used by Syndie.
      *
+     * @param orig the UTF-8 bytes to decode into a String
      * @return null if orig is null
-     * @throws RuntimeException
+     * @throws RuntimeException never thrown - StandardCharsets.UTF_8 is always available
      */
     public static String getUTF8(byte[] orig) {
         if (orig == null) {
@@ -2439,8 +2459,11 @@ public class DataHelper {
      * Same as new String(orig, "UTF-8") but throws an unchecked RuntimeException
      * instead of an UnsupportedEncodingException if no UTF-8, for ease of use.
      *
+     * @param orig the UTF-8 bytes to decode into a String
+     * @param offset the offset into orig at which the encoded string starts
+     * @param len the number of bytes to decode
      * @return null if orig is null
-     * @throws RuntimeException
+     * @throws RuntimeException never thrown - StandardCharsets.UTF_8 is always available
      */
     public static String getUTF8(byte[] orig, int offset, int len) {
         if (orig == null) {
@@ -2513,6 +2536,7 @@ public class DataHelper {
      *
      * @param in non-null
      * @param out non-null
+     * @throws IOException if in cannot be read or out cannot be written
      * @since 0.9.29
      */
     public static void copy(InputStream in, OutputStream out) throws IOException {
@@ -2550,6 +2574,7 @@ public class DataHelper {
      * This catches the IAE, retries once, and then returns.
      * If an IAE is thrown twice, this method will return, with the list possibly unsorted.
      *
+     * @param <T> the element type of the list and of the comparator
      * @param list the list to be sorted.
      * @param c the comparator to determine the order of the list. A null value indicates that the elements' natural ordering should be used.
      * @since 0.9.34
@@ -2575,6 +2600,7 @@ public class DataHelper {
      * This catches the IAE, retries once, and then returns.
      * If an IAE is thrown twice, this method will return, with the array possibly unsorted.
      *
+     * @param <T> the element type of the array and of the comparator
      * @param a the array to be sorted.
      * @param c the comparator to determine the order of the array. A null value indicates that the elements' natural ordering should be used.
      * @since 0.9.34

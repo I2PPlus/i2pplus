@@ -106,7 +106,8 @@ public class LeaseSetKeys {
      * @param dest unused
      * @param revocationKey unused, may be null
      * @param decryptionKeys non-null, non-empty
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the list is empty, holds two keys of the same
+     * encryption type, mixes ElGamal with a PQ key, or holds an unrecognized type
      * @since 0.9.44
      */
     public LeaseSetKeys(Destination dest, SigningPrivateKey revocationKey, List<PrivateKey> decryptionKeys) {
@@ -167,6 +168,7 @@ public class LeaseSetKeys {
      * know on what router the destination is connected and as such can't encrypt
      * to that router's normal public key.
      *
+     * @param type encryption type whose matching key is wanted; a PQ type must match the stored key
      * @return key of the specified type or null if the LS does not support that type
      * @since 0.9.44
      */
@@ -191,6 +193,7 @@ public class LeaseSetKeys {
     /**
      * Do we support this type of encryption?
      *
+     * @param type the encryption type to test; true comes back when a key of that type is present
      * @return whether supported
      * @since 0.9.44
      */

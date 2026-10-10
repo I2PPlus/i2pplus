@@ -33,8 +33,11 @@ interface SAMMessageSess extends Closeable {
     /**
      * Send bytes through a SAM message-based session.
      *
-     * @param dest Destination
-     * @param data Bytes to be sent
+     * @param dest the base32 destination or .b32.i2p hostname to send to
+     * @param data the bytes to send
+     * @param proto the I2CP protocol to send under
+     * @param fromPort the I2CP from port, 0 for the default
+     * @param toPort the I2CP to port, 0 for the default
      *
      * @return True if the data was sent, false otherwise
      * @throws DataFormatException on unknown / bad dest
@@ -44,8 +47,21 @@ interface SAMMessageSess extends Closeable {
                              int fromPort, int toPort) throws DataFormatException, I2PSessionException;
 
     /**
-     * Send bytes through a SAM message-based session.
+     * Send bytes through a SAM message-based session, with per-message
+     * extended options.
      *
+     * @param dest the base32 destination or .b32.i2p hostname to send to
+     * @param data the bytes to send
+     * @param proto the I2CP protocol to send under
+     * @param fromPort the I2CP from port, 0 for the default
+     * @param toPort the I2CP to port, 0 for the default
+     * @param sendLeaseSet true to include the LeaseSet in the message
+     * @param sendTags the number of tunnels to include, 0 to leave as default
+     * @param tagThreshold the build success ratio below which no tunnel is sent, 0 for default
+     * @param expiration the lease lifetime in seconds from now, 0 to leave as default
+     * @return True if the data was sent, false otherwise
+     * @throws DataFormatException if dest is not a valid destination
+     * @throws I2PSessionException on serious error, probably session closed
      * @since 0.9.25
      */
     public boolean sendBytes(String dest, byte[] data, int proto,
@@ -72,7 +88,10 @@ interface SAMMessageSess extends Closeable {
      * Lookup a destination through the I2CP session.
      * Blocking.
      *
-     * @return the Destination or null
+     * @param name the base32 hostname, or full destination, to resolve
+     * @return the Destination, or null if it could not be resolved
+     * @throws I2PSessionException if the lookup does not complete within the
+     *         10 second session timeout
      * @since 0.9.69
      */
     public Destination lookupDest(String name) throws I2PSessionException;

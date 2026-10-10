@@ -7,7 +7,11 @@ import java.net.URLEncoder;
  * Class that defines utility methods used by the NDT code
  */
 public class NDTUtils {
-    /** default constructor */
+    /**
+     * Every method here is static and the class holds no fields, so an instance adds
+     * nothing; it exists only to give the utility class a documented entry point.
+     */
+    public NDTUtils() {}
 
     /**
      * Utility method to print double value up to the hundredth place.

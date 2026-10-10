@@ -109,10 +109,12 @@ class Connection {
     private final boolean _isInbound;
     /** Whether share options have been updated. */
     private boolean _updatedShareOpts;
-    /** Packet ID (Long) to PacketLocal for sent but unacked packets.
+    /**
+     * Packet ID (Long) to PacketLocal for sent but unacked packets.
      *  Lazily allocated on the first send so inbound-only connections allocate
      *  no window at all. All access (including reads) happens under
-     *  {@link #_outboundPacketsLock}; null until first write. */
+     * {@link #_outboundPacketsLock}; null until first write.
+     */
     private TreeMap<Long, PacketLocal> _outboundPackets;
     /** Monitor for {@link #_outboundPackets} and the sender window. Exposed via
      *  {@link #getWindowLock()} so ConnectionPacketHandler serializes with us. */
@@ -131,28 +133,34 @@ class Connection {
     private volatile String _connectionError;
     /** Atomic long. */
     private final AtomicLong _disconnectScheduledOn = new AtomicLong();
-    /** Last received on. Written on the receive/notification thread
+    /**
+     * Last received on. Written on the receive/notification thread
      *  (packetReceived), read by the inactivity backstop timer
      *  (remoteSilentTooLong, getLastActivityOn) — volatile for a stable
-     *  reading across threads. */
+     * reading across threads.
+     */
     private volatile long _lastReceivedOn;
     /** Activity timer. */
     private final ActivityTimer _activityTimer;
     /** Last congestion highest unacked. */
     private volatile long _lastCongestionHighestUnacked;
-    /** Consecutive loss events since the last recovery (graduated backoff).
+    /**
+     * Consecutive loss events since the last recovery (graduated backoff).
      *  Reset in ackPackets() once the lost window is fully recovered, and
      *  decayed by one tier in retransmit() when a fresh strike arrives more
      *  than one smoothed RTT after the previous one (see
      *  {@link #decayLossStrikes(int, long, long, long)}).
-     *  Accessed only under the _outboundPacketsLock. */
+     * Accessed only under the _outboundPacketsLock.
+     */
     private int _lossStrikes;
     /** Wall-clock ms of the most recent loss strike, for strike decay.
      *  Same lock discipline as {@link #_lossStrikes}. */
     private long _lastLossStrikeTime;
-    /** Whether the established-connection resume WARN was already logged (once per
+    /**
+      * Whether the established-connection resume WARN was already logged (once per
       *  connection) when a data packet exceeded its retransmit budget. Reset only
-      *  when the connection object is reused. */
+      * when the connection object is reused.
+      */
     private boolean _establishedResumeWarned;
     /**
      *  Whether an immediate retransmit-timer fire has already been granted for the
@@ -278,9 +286,11 @@ class Connection {
     private final RetransmitEvent _retransmitEvent;
     /** Paced event. */
     private final PacedPacketEvent _pacedEvent;
-    /** Paced-send queue, lazy like {@link #_outboundPackets}: null until the
+    /**
+     * Paced-send queue, lazy like {@link #_outboundPackets}: null until the
      *  first paced packet, so connections that never pace allocate nothing.
-     *  All access happens under {@link #_pacedQueueLock}. */
+     * All access happens under {@link #_pacedQueueLock}.
+     */
     private LinkedList<PacketLocal> _pacedQueue;
     /** Monitor for {@link #_pacedQueue}. */
     private final Object _pacedQueueLock = new Object();
@@ -302,16 +312,20 @@ class Connection {
     /** Bandwidth estimator. */
     private final BandwidthEstimator _bwEstimator;
 
-    /** Recompute the per-stream window ceiling at most this often. The ceiling
+    /**
+     * Recompute the per-stream window ceiling at most this often. The ceiling
      *  feathers at the RTT/estimator cadence anyway, so a cached value remains
      *  accurate across the several write attempts an eagerly blocked app will
-     *  issue. */
+     * issue.
+     */
     private static final long BDP_CACHE_MS = 250;
-    /** Headroom (%) applied to the BDP estimate for the per-stream ceiling.
+    /**
+     * Headroom (%) applied to the BDP estimate for the per-stream ceiling.
      *  The Westwood+ sample lags ACK cadence and the 500ms RTT floor
      *  under-measures fast paths, so the raw estimate would park the window
      *  just under the true pipe; loss — not the ceiling — bounds overshoot.
-     *  @since 0.9.71+ */
+     * @since 0.9.71+
+     */
     private static final int WINDOW_CEILING_HEADROOM_PCT = 125;
     /**
      *  Last {@link #getWindowCeiling()} sample, ceiling and timestamp as ONE
@@ -323,14 +337,18 @@ class Connection {
      */
     private volatile WindowCeilingSample _windowCeilingSample;
 
-    /** Record every Nth choke-size stat sample. These fire per packet sent or
+    /**
+     * Record every Nth choke-size stat sample. These fire per packet sent or
      *  released; sampling the aggregate (scaling the value by the period)
-     *  preserves the display stats with a fraction of the Rate lock traffic. */
+     * preserves the display stats with a fraction of the Rate lock traffic.
+     */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
-    /** Sample counters for the choke-size stats (one per call site).
+    /**
+     * Sample counters for the choke-size stats (one per call site).
      *  Monotonic per connection: the emission test is a threshold on the counter,
      *  so a counter that resets can only fire again once it has climbed back to
-     *  the period. */
+     * the period.
+     */
     private int _chokeSizeBeginCnt;
     /** Counts completed releases, driving the stream.chokeSizeEnd sample. */
     private int _chokeSizeEndCnt;
@@ -618,9 +636,11 @@ class Connection {
     private static final int SSTHR_BW_FACTOR = 2;
     /** Minimum slow start threshold after fast retransmit */
     private static final int MIN_SSTHR_FAST_RETX = 16;
-    /** Minimum RTT (ms) used when deriving the bandwidth slow-start threshold anchor.
+    /**
+     * Minimum RTT (ms) used when deriving the bandwidth slow-start threshold anchor.
      *  A raw sub-second min-RTT would shrink the anchor toward the degenerate 16-packet
-     *  floor after the first loss event, locking a healthy pipe at ~10KB/s. */
+     * floor after the first loss event, locking a healthy pipe at ~10KB/s.
+     */
     static final int SS_THRESH_BW_ANCHOR_MIN_RTT = 1000;
 
     /**
@@ -2953,8 +2973,7 @@ class Connection {
      *  In normal operation, this is called when a CLOSE has been received,
      *  AND a CLOSE has been sent, AND EITHER:
      *  received close before sent close AND our CLOSE has been acked
-     *  OR
-     *  received close after sent close.
+     *  OR received close after sent close.
      *
      *  @param cleanDisconnect if true, normal close; if false, send a RESET
      */
@@ -2969,8 +2988,7 @@ class Connection {
      *  In normal operation, this is called when a CLOSE has been received,
      *  AND a CLOSE has been sent, AND EITHER:
      *  received close before sent close AND our CLOSE has been acked
-     *  OR
-     *  received close after sent close.
+     *  OR received close after sent close.
      *
      *  @param cleanDisconnect if true, normal close; if false, send a RESET
      *  @param removeFromConMgr if true, enters TIME-WAIT if necessary.
@@ -3144,7 +3162,8 @@ class Connection {
      */
     AckDupEvent getAckDupEvent() { return _ackDupEvent; }
 
-    /** Destination of the remote peer.
+    /**
+     * Destination of the remote peer.
      * @return peer Destination or null if unset
      */
     public synchronized Destination getRemotePeer() {return _remotePeer;}
@@ -3266,12 +3285,14 @@ class Connection {
         synchronized (_connectLock) {_connectLock.notifyAll();}
     }
 
-    /** When did we last send anything to the peer?
+    /**
+     * When did we last send anything to the peer?
      * @return Last time we sent data
      */
     public long getLastSendTime() {return _lastSendTime;}
 
-    /** What was the last packet Id sent to the peer?
+    /**
+     * What was the last packet Id sent to the peer?
      * @return The last sent packet ID
      */
     public long getLastSendId() {return _lastSendId.get();}
@@ -3310,7 +3331,8 @@ class Connection {
     /**
      * Socket associated with this connection.
      *
-     * @param socket the socket
+     * @param socket the socket the connection will read and write on once it is
+     *        established
      */
     public void setSocket(I2PSocketFull socket) {_socket = socket;}
 
@@ -3592,7 +3614,8 @@ if (!on) {
         return Math.max(1, Math.min(saved, Math.max(1, ceiling)));
     }
 
-    /** How many packets have we sent and the other side has ACKed?
+    /**
+     * How many packets have we sent and the other side has ACKed?
      * @return Count of how many packets ACKed.
      */
     public long getAckedPackets() {return _ackedPackets.get();}
@@ -3637,7 +3660,8 @@ if (!on) {
      */
     public int getUnackedPacketsReceived() {return _unackedPacketsReceived.get();}
 
-    /** How many packets have we sent but not yet received an ACK for?
+    /**
+     * How many packets have we sent but not yet received an ACK for?
      * @return Count of packets in-flight.
      */
     public int getUnackedPacketsSent() {
@@ -4491,7 +4515,7 @@ if (!on) {
             }
         }
     /**
-     * Records a retransmit timer firing and detects stalls.
+         * Records a retransmit timer firing and detects stalls.
          * If ackPackets() was called since the last retransmit, resets the
          * counter. Otherwise increments it; after 2 consecutive firings
          * without ACK progress, signals a tunnel rotation via

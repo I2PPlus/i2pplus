@@ -20,6 +20,12 @@ import javax.servlet.http.Cookie;
  */
 public class SessionCheckServlet extends HttpServlet {
 
+    /**
+     * A stateless endpoint: the password configuration and the session token are read
+     * from each request, so a bare instance is ready to serve.
+     */
+    public SessionCheckServlet() {}
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {

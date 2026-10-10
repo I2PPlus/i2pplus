@@ -26,6 +26,8 @@ public class LoadClientAppsJob extends JobImpl {
 
     /**
      * LoadClientAppsJob.
+     *
+     * @param ctx the router context supplying the client app config and the log
      */
     public LoadClientAppsJob(RouterContext ctx) {
         super(ctx);
@@ -90,13 +92,31 @@ public class LoadClientAppsJob extends JobImpl {
         private final ThreadGroup _threadGroup; // NOSONAR S3014 ThreadGroup used for thread naming, not pool management
         private final ClassLoader _cl;
 
-        /** Caller must call schedule() before this event fires. */
+        /**
+         * Caller must call schedule() before this event fires.
+         *
+         * @param pool the timer this event is scheduled on
+         * @param enclosingContext the router context handed to the client application
+         * @param className the client class to run, which must declare a static main(String[])
+         * @param clientName the name given to the client thread, may be null
+         * @param args the arguments passed to main(), may be null for none
+         */
         public DelayedRunClient(SimpleTimer2 pool, RouterContext enclosingContext, String className,
                                 String clientName, String[] args) {
             this(pool, enclosingContext, className, clientName, args, null, null);
         }
 
-        /** Caller must call schedule() before this event fires. */
+        /**
+         * Caller must call schedule() before this event fires.
+         *
+         * @param pool the timer this event is scheduled on
+         * @param enclosingContext the router context handed to the client application
+         * @param className the client class to run, which must declare a static main(String[])
+         * @param clientName the name given to the client thread, may be null
+         * @param args the arguments passed to main(), may be null for none
+         * @param threadGroup the group the client thread joins, null for the default group
+         * @param cl the loader used to resolve the class, null for the system loader
+         */
         public DelayedRunClient(SimpleTimer2 pool, RouterContext enclosingContext, String className, String clientName,
                                 String[] args, ThreadGroup threadGroup, ClassLoader cl) { // NOSONAR S3014
             super(pool);
@@ -199,7 +219,9 @@ public class LoadClientAppsJob extends JobImpl {
      * to propagate an error back to the user,
      * since runClient() runs in a separate thread.
      *
+     * @param className the client class to check for
      * @param cl can be null
+     * @throws ClassNotFoundException if the loader cannot resolve the class, so the console reports it
      * @since 0.7.13
      */
     public static void testClient(String className, ClassLoader cl) throws ClassNotFoundException {
@@ -212,8 +234,10 @@ public class LoadClientAppsJob extends JobImpl {
      * Run client in this thread.
      * Used for plugin sub-clients only. Does not register with the ClientAppManager.
      *
+     * @param className the client class to run, which must declare a static main(String[])
      * @param clientName can be null
      * @param args can be null
+     * @param log the log the client application writes its startup messages to
      * @throws Exception just about anything, caller would be wise to catch Throwable
      * @since 0.7.13
      */
@@ -225,8 +249,10 @@ public class LoadClientAppsJob extends JobImpl {
      * Run client in this thread.
      * Used for plugin sub-clients only. Does not register with the ClientAppManager.
      *
+     * @param className the client class to run, which must declare a static main(String[])
      * @param clientName can be null
      * @param args can be null
+     * @param log the log the client application writes its startup messages to
      * @param cl can be null
      * @throws Exception just about anything, caller would be wise to catch Throwable
      * @since 0.7.14
@@ -245,8 +271,11 @@ public class LoadClientAppsJob extends JobImpl {
     /**
      * Run client in a new thread.
      *
+     * @param className the client class to run, which must declare a static main(String[])
      * @param clientName can be null
      * @param args can be null
+     * @param ctx the router context passed through to the client application
+     * @param log the log the client application writes its startup messages to
      */
     public static void runClient(String className, String clientName, String[] args, RouterContext ctx, Log log) {
         runClient(className, clientName, args, ctx, log, null, null);
@@ -255,8 +284,11 @@ public class LoadClientAppsJob extends JobImpl {
     /**
      * Run client in a new thread.
      *
+     * @param className the client class to run, which must declare a static main(String[])
      * @param clientName can be null
      * @param args can be null
+     * @param ctx the router context passed through to the client application
+     * @param log the log the client application writes its startup messages to
      * @param threadGroup can be null
      * @param cl can be null
      * @since 0.7.13

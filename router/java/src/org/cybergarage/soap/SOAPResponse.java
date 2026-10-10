@@ -48,6 +48,8 @@ public class SOAPResponse extends HTTPResponse {
 
     /**
      * SOAPResponse.
+     * @param httpRes the response to copy the connection state from; its payload
+     * is discarded and replaced with an empty SOAP envelope
      */
     public SOAPResponse(HTTPResponse httpRes) {
         super(httpRes);
@@ -57,6 +59,8 @@ public class SOAPResponse extends HTTPResponse {
 
     /**
      * SOAPResponse.
+     * @param soapRes the response whose envelope node is adopted, not copied, by
+     * this one
      */
     public SOAPResponse(SOAPResponse soapRes) {
         super(soapRes);

@@ -97,7 +97,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      * For extension by SubSession.
      *
-     * @param primary the primary
+     * @param primary the SubSession this one multiplexes alongside, or null
      * @param destKeyStream stream containing the private key data,
      *                             format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
@@ -167,7 +167,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      * Send an I2CP message, with the protocol and ports unset.
      *
-     * @return success
+     * @return true if the router accepted the message, false if it was refused
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload) throws I2PSessionException {
@@ -177,7 +177,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      * Send an I2CP message.
      *
-     * @return success
+     * @return true if the router accepted the message, false if it was refused
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException {
@@ -369,6 +369,9 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         private static final int POISON_SIZE = -99999;
         private final AtomicBoolean stopping = new AtomicBoolean();
 
+        /**
+         * Create a notifier with an empty pending queue.
+         */
         public MuxedAvailabilityNotifier() {
             _msgs = new LinkedBlockingQueue<>();
         }
@@ -403,6 +406,12 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
         /**
          * Notify that data is available.
+         *
+         * @param msgId the message id the data arrived for
+         * @param size the size of the message in bytes
+         * @param proto the I2CP protocol number the message was received on
+         * @param fromPort the origin port at the remote router that sent it
+         * @param toPort the destination port at this router it was sent to
          */
         public void available(long msgId, int size, int proto, int fromPort, int toPort) {
             try {

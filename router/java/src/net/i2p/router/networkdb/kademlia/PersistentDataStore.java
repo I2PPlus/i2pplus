@@ -236,7 +236,8 @@ public class PersistentDataStore extends TransientDataStore {
         return rv;
     }
 
-    /** How many files to write every 10 minutes. Doesn't make sense to limit it,
+    /**
+     * How many files to write every 10 minutes. Doesn't make sense to limit it,
      * they just back up in the queue hogging memory.
      */
     private static final int WRITE_LIMIT = 10000;
@@ -1218,6 +1219,9 @@ public class PersistentDataStore extends TransientDataStore {
 
     /**
      * Package private for installer BundleRouterInfos
+     *
+     * @param filename the routerinfo filename, including the prefix and suffix added by getRouterInfoFile()
+     * @return the hash encoded in the name, or null if the name is malformed or the key does not decode
      */
     static Hash getRouterInfoHash(String filename) {
         return getHash(filename, ROUTERINFO_PREFIX, ROUTERINFO_SUFFIX);

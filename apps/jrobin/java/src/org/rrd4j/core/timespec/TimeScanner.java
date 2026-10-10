@@ -93,6 +93,10 @@ class TimeScanner {
         new TimeToken("y", TimeToken.YEARS), /* (short generic) */
         new TimeToken(null, 0) /* SENTINEL */
     };
+    /**
+     * Token table the scanner currently matches against, switched between
+     * WORDS and MULTIPLIERS by setContext
+     */
     TimeToken[] specials = WORDS;
 
     /**
@@ -103,7 +107,10 @@ class TimeScanner {
         this.dateString = dateString;
     }
 
-    /** Switch token context between words and multipliers */
+    /**
+     * Switch token context between words and multipliers
+     * @param parsingWords true to look up word tokens, false to look up multipliers
+     */
     void setContext(boolean parsingWords) {
         specials = parsingWords ? WORDS : MULTIPLIERS;
     }
@@ -165,7 +172,11 @@ class TimeScanner {
         }
         return token = new TimeToken(null, TimeToken.EOF);
     }
-    /** Resolve ambiguous MONTHS_MINUTES token to months or minutes. */
+    /**
+     * Resolve ambiguous MONTHS_MINUTES token to months or minutes.
+     * @param newId the MONTHS or MINUTES token id the surrounding context implies
+     * @return the same token value re-tagged with the resolved id
+     */
     TimeToken resolveMonthsMinutes(int newId) {
         assert token.token_id == TimeToken.MONTHS_MINUTES;
         assert newId == TimeToken.MONTHS || newId == TimeToken.MINUTES;
@@ -176,7 +187,10 @@ class TimeScanner {
         token_save = token;
         pos_save = pos;
     }
-    /** Restore previously saved tokenizer position. */
+    /**
+     * Restore previously saved tokenizer position.
+     * @return the token that was current when the state was saved
+     */
     TimeToken restoreState() {
         pos = pos_save;
         return token = token_save;

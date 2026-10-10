@@ -37,6 +37,11 @@ public class Disposer extends ThreadCore {
     //	Constructor
     ////////////////////////////////////////////////
 
+    /**
+     * Creates a disposer that watches the given control point.
+     *
+     * @param ctrlp the control point whose devices and subscriptions are swept
+     */
     public Disposer(ControlPoint ctrlp) {
         setControlPoint(ctrlp);
     }
@@ -52,6 +57,8 @@ public class Disposer extends ThreadCore {
      */
     /**
      * Set the control point.
+     *
+     * @param ctrlp the control point to store for later sweeping
      */
     public void setControlPoint(ControlPoint ctrlp) {
         ctrlPoint = ctrlp;
@@ -59,6 +66,8 @@ public class Disposer extends ThreadCore {
 
     /**
      * Get the control point.
+     *
+     * @return the control point being swept, null until one is set
      */
     public ControlPoint getControlPoint() {
         return ctrlPoint;

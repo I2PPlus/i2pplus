@@ -25,6 +25,8 @@ public class SOCKSException extends IOException {
 
     /**
      * SOCKSException.
+     *
+     * @param s detail message naming the SOCKS reply code or failure reason
      */
     public SOCKSException(String s) {
         super(s);

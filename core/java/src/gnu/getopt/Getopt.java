@@ -657,6 +657,8 @@ public class Getopt extends Object
  *
  * Otherwise, `optind' communicates from one call to the next
  * how much of ARGV has been scanned so far.
+ *
+ * @return the current value of the optind index
  */
     public int
         getOptind()
@@ -706,6 +708,8 @@ public class Getopt extends Object
  * Also, when `ordering' is RETURN_IN_ORDER,
  * each non-option ARGV-element is returned here.
  * No set method is provided because setting this variable has no effect.
+ *
+ * @return the argument of the option just found, or the next non-option element in RETURN_IN_ORDER
  */
     public String
         getOptarg()
@@ -720,6 +724,8 @@ public class Getopt extends Object
  * invalid option is encountered.  This can be suppressed (or re-enabled)
  * by calling this method.  There is no get method for this variable
  * because if you can't remember the state you set this to, why should I?
+ *
+ * @param opterr true to let getopt() report an invalid option on stderr, false to silence it
  */
     public void
         setOpterr(boolean opterr)
@@ -733,6 +739,8 @@ public class Getopt extends Object
  * When getopt() encounters an invalid option, it stores the value of that
  * option in optopt which can be retrieved with this method.  There is
  * no corresponding set method because setting this variable has no effect.
+ *
+ * @return the value of the invalid option that getopt() last encountered
  */
     public int
         getOptopt()
@@ -745,6 +753,8 @@ public class Getopt extends Object
 /**
  * Returns the index into the array of long options (NOT argv) representing
  * the long option that was found.
+ *
+ * @return the index into the long options array, or -1 if no long option was matched
  */
     public int
         getLongind()
@@ -760,6 +770,8 @@ public class Getopt extends Object
  * It leaves the longer segment in the right place overall,
  * but it consists of two parts that need to be swapped next.
  * This method is used by getopt() for argument permutation.
+ *
+ * @param argv the argument vector being permuted in place by this call
  */
     protected void
         exchange(String[] argv)

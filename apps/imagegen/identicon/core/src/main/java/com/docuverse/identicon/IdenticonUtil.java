@@ -16,6 +16,12 @@ import java.security.MessageDigest;
  * @author don
  */
 public class IdenticonUtil {
+	/**
+	 * Constructor. The mask and salt below are static settings shared by every
+	 * caller, so an instance holds no state of its own.
+	 */
+	public IdenticonUtil() {}
+
 	private static final int DEFAULT_IDENTICON_SIZE = 16;
 
 	private static final int MINIMUM_IDENTICON_SIZE = 15;
@@ -40,7 +46,7 @@ public class IdenticonUtil {
 	/**
 	 * Sets current IP address mask. Default is 0xffffffff.
 	 *
-	 * @param inetMask
+	 * @param inetMask bits kept from the 32 bit IP address before hashing, 0xffffffff for all
 	 */
 	public static void setInetMask(int inetMask) {
 		IdenticonUtil.inetMask = inetMask;
@@ -58,7 +64,7 @@ public class IdenticonUtil {
 	/**
 	 * Sets current inetSalt value.
 	 *
-	 * @param inetSalt
+	 * @param inetSalt string mixed into the hashed IP; set it before getIdenticonCode()
 	 */
 	public static void setInetSalt(String inetSalt) {
 		IdenticonUtil.inetSalt = inetSalt;
@@ -76,7 +82,7 @@ public class IdenticonUtil {
 	 * @param inetAddr
 	 *            IP address
 	 * @return identicon code for <code>inetAddr</code>
-	 * @throws Exception
+	 * @throws Exception if inetSalt has not been set yet
 	 */
 	public static int getIdenticonCode(InetAddress inetAddr) throws Exception {
 		if (inetSalt == null)
@@ -135,6 +141,11 @@ public class IdenticonUtil {
 	}
 
 	/**
+	 * Resolve the pixel size of a requested identicon. A supplied value is clamped
+	 * to the 15 to 64 pixel range the renderer supports; a null or unparseable one
+	 * leaves the 16 pixel default in place.
+	 *
+	 * @param param the requested width and height in pixels, clamped to the supported range
 	 * @return the identicon size
 	 */
 	public static int getIdenticonSize(String param) {
@@ -155,6 +166,12 @@ public class IdenticonUtil {
 	}
 
 	/**
+	 * Build the weak validator a client revalidates an identicon against, so the
+	 * rendered image is refetched only when its code, size, or version changes.
+	 *
+	 * @param code the identicon code, rendered as hexadecimal
+	 * @param size the identicon size in pixels, rendered as decimal
+	 * @param version the cache-busting version number, rendered after a 'v'
 	 * @return the identicon e tag
 	 */
 	public static String getIdenticonETag(int code, int size, int version) {

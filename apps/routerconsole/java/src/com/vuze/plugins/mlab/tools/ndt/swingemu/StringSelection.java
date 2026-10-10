@@ -22,7 +22,11 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 	 */
 	public class StringSelection {
 
-	/** String data. */
+	/**
+	 * String data.
+	 * @param s the string contents the selection holds; this stub discards them and exposes no
+             clipboard data
+  */
 	public
 	StringSelection(
 		String		s )

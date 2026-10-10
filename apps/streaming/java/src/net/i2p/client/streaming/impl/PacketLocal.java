@@ -38,7 +38,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     /** Whether this packet has been enqueued for I2CP send. */
     private volatile boolean _enqueued;
 
-    /** Constructor for a packet not bound to a connection. */
+    /**
+     * Constructor for a packet not bound to a connection.
+     *
+     * @param ctx the router context
+     * @param to the remote destination the packet is addressed to
+     * @param session the session used to send the packet
+     */
     public PacketLocal(I2PAppContext ctx, Destination to, I2PSession session) {
         super(session);
         _context = ctx;
@@ -50,7 +56,13 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         _cancelledOn = -1;
     }
 
-    /** Constructor for a packet bound to a connection. */
+    /**
+     * Constructor for a packet bound to a connection.
+     *
+     * @param ctx the router context
+     * @param to the remote destination the packet is addressed to
+     * @param con the connection the packet is sent over
+     */
     public PacketLocal(I2PAppContext ctx, Destination to, Connection con) {
         super(con.getSession());
         _context = ctx;
@@ -99,7 +111,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     }
 
     /**
-     * Creation time.
+     * Read the router clock time at which this packet was created.
      * @return the time this packet was created
      */
     public long getCreatedOn() { return _createdOn; }
@@ -148,6 +160,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     /**
      * Shared outbound payload cache (MAX_PAYLOAD_SIZE buffers).
      * Must match the cache in ConnectionDataReceiver._payloadCache.
+     *
+     * @return the static cache of outbound payload buffers
      */
     static ByteCache getPayloadCache() {
         return _payloadCache;
@@ -168,7 +182,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             _log.debug("Resend cancelled! " + toString());
     }
 
-    /** How long after packet creation was it acked?
+    /**
+     * How long after packet creation was it acked?
      * @return how long after packet creation the packet was ACKed in ms
      */
     public synchronized int getAckTime() {
@@ -252,8 +267,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
     public long getLastSend() { return _lastSend; }
 
     /**
-     * Bound connection.
-     * @return null if not bound
+     * Read the connection this packet is bound to.
+     * @return the bound connection, or null if not bound
      */
     public Connection getConnection() { return _connection; }
 
@@ -603,9 +618,18 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
             }
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Flag this packet as handed to I2CP for sending.
+     *
+     * @since 0.9.70+
+     */
     public void markEnqueued() { _enqueued = true; }
 
-    /** @since 0.9.70+ */
+    /**
+     * Report whether this packet has been queued for I2CP send.
+     *
+     * @return true if this packet has been queued for I2CP send
+     * @since 0.9.70+
+     */
     public boolean isEnqueued() { return _enqueued; }
 }

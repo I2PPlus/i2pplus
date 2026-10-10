@@ -32,6 +32,10 @@ class OutboundTunnelEndpoint {
 
     /**
      * Binds the context, config, and processor, sizing the RED queue to the allocated bandwidth.
+     * @param ctx the router context
+     * @param config the hop configuration, whose allocated bandwidth sizes the RED queue and
+              may be raised to the per-tunnel maximum when it is still at its estimate
+     * @param processor the inbound hop processor, used to decrypt each message before handling
      */
     public OutboundTunnelEndpoint(RouterContext ctx, HopConfig config, HopProcessor processor) {
         _context = ctx;
@@ -59,6 +63,8 @@ class OutboundTunnelEndpoint {
 
     /**
      * Decrypt and honor the instructions of an incoming tunnel data message.
+     * @param msg the tunnel data message, already registered with the message registry
+     * @param recvFrom the hash to blame for a decryption failure, the previous hop
      */
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
         _config.incrementProcessedMessages();

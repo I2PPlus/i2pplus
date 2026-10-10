@@ -23,6 +23,12 @@ import net.i2p.util.SecureDirectory;
  */
 public class SSLClientUtil {
 
+    /**
+     * verifyKeyStore() and the socket factories below are static, and the only fields are
+     * property-name constants, so an instance carries nothing.
+     */
+    public SSLClientUtil() {}
+
     private static final String PROP_KEYSTORE_PASSWORD = "keystorePassword";
     private static final String PROP_KEY_PASSWORD = "keyPassword";
     private static final String PROP_KEY_ALIAS = "keyAlias";
@@ -169,8 +175,10 @@ public class SSLClientUtil {
      * Sets up the SSLContext and sets the socket factory.
      * No option prefix allowed.
      *
-     * @throws IOException GeneralSecurityExceptions are wrapped in IOE for convenience
+     * @param opts tunnel client options, read without a prefix for the keystore name,
      * @return factory, throws on all errors
+     * @throws IOException GeneralSecurityExceptions are wrapped in IOE for convenience
+     *             the key password and the keystore password
      */
     public static SSLServerSocketFactory initializeFactory(Properties opts) throws IOException {
         String ksPass = opts.getProperty(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);

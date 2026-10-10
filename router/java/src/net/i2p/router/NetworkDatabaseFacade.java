@@ -27,10 +27,16 @@ import net.i2p.router.networkdb.reseed.ReseedChecker;
 public abstract class NetworkDatabaseFacade implements Service {
 
     /**
+     * The abstract facade holds no state of its own; subclasses initialize
+     * themselves through their own constructors.
+     */
+    protected NetworkDatabaseFacade() {}
+
+    /**
      * Return the RouterInfo structures for the routers closest to the given key.
      * At most maxNumRouters will be returned
      *
-     * @param key The key
+     * @param key the hash to measure Kademlia distance from, normally our own router hash
      * @param maxNumRouters The maximum number of routers to return
      * @param peersToIgnore Hash of routers not to include
      * @return set of router hashes closest to the key
@@ -40,7 +46,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Lookup a database entry locally.
      *
-     * @param key the key
+     * @param key the hash of the RouterInfo or LeaseSet to look up
      * @return RouterInfo, LeaseSet, or null
      * @since 0.8.3
      */
@@ -49,7 +55,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Not for use without validation
      *
-     * @param key the key
+     * @param key the hash of the RouterInfo or LeaseSet to look up
      * @return RouterInfo, LeaseSet, or null, NOT validated
      * @since 0.9.38
      */
@@ -58,7 +64,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Lookup a LeaseSet in the network database.
      *
-     * @param key the key
+     * @param key the destination hash whose LeaseSet is sought
      * @param onFindJob job to run on success
      * @param onFailedLookupJob job to run on failure
      * @param timeoutMs timeout in milliseconds
@@ -68,6 +74,10 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Lookup using the client's tunnels
      *
+     * @param key the destination hash whose LeaseSet is sought
+     * @param onFindJob job to run on success
+     * @param onFailedLookupJob job to run on failure
+     * @param timeoutMs timeout in milliseconds
      * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      * @since 0.9.10
      */
@@ -76,14 +86,14 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Look up a LeaseSet in the local network database.
      *
-     * @param key the key
+     * @param key the destination hash whose LeaseSet is sought
      * @return the LeaseSet, or null if not found
      */
     public abstract LeaseSet lookupLeaseSetLocally(Hash key);
     /**
      * Look up a RouterInfo in the network database.
      *
-     * @param key the key
+     * @param key the router hash whose RouterInfo is sought
      * @param onFindJob job to run on success
      * @param onFailedLookupJob job to run on failure
      * @param timeoutMs timeout in milliseconds
@@ -92,7 +102,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Look up a RouterInfo in the local network database.
      *
-     * @param key the key
+     * @param key the router hash whose RouterInfo is sought
      * @return the RouterInfo, or null if not found
      */
     public abstract RouterInfo lookupRouterInfoLocally(Hash key);
@@ -102,6 +112,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      * No success or failed jobs, no local lookup, no checks.
      * Use this to refresh a leaseset before expiration.
      *
+     * @param key the destination hash whose LeaseSet is sought
      * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      * @since 0.9.25
      */
@@ -110,9 +121,11 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Unconditionally lookup using the client's tunnels.
      *
-     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @param key the destination hash whose LeaseSet is sought
      * @param onFindJob may be null
      * @param onFailedLookupJob may be null
+     * @param timeoutMs timeout in milliseconds
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      * @since 0.9.47
      */
     public abstract void lookupLeaseSetRemotely(Hash key, Job onFindJob, Job onFailedLookupJob,
@@ -122,6 +135,9 @@ public abstract class NetworkDatabaseFacade implements Service {
      * Lookup using the client's tunnels
      * Succeeds even if LS validation fails due to unsupported sig type
      *
+     * @param key the destination hash whose LeaseSet is sought
+     * @param onFinishedJob job to run on success
+     * @param timeoutMs timeout in milliseconds
      * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      * @since 0.9.16
      */
@@ -131,6 +147,8 @@ public abstract class NetworkDatabaseFacade implements Service {
      * Lookup locally in netDB and in badDest cache
      * Succeeds even if LS validation failed due to unsupported sig type
      *
+     * @param key the destination hash to look up
+     * @return the Destination, or null if it is not known or is cached as bad
      * @since 0.9.16
      */
     public abstract Destination lookupDestinationLocally(Hash key);
@@ -138,7 +156,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Store a LeaseSet in the network database.
      *
-     * @param key the key
+     * @param key the destination hash to file the LeaseSet under
      * @param leaseSet the LeaseSet to store
      * @return the leaseSet if another leaseSet already existed at that key
      *
@@ -150,6 +168,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      * Record access to a LeaseSet for refresh tracking.
      * Only tracks if we have tunnels built AND there's a hostname.
      *
+     * @param key the destination hash of the LeaseSet that was used
      * @since 0.9.67
      */
     public abstract void accessLeaseSet(Hash key);
@@ -158,6 +177,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      * Remove a LeaseSet from refresh tracking.
      * Call this after HostChecker completes to avoid unnecessary refreshes.
      *
+     * @param key the destination hash of the LeaseSet to stop tracking
      * @since 0.9.67
      */
     public abstract void removeLeaseSetFromTracking(Hash key);
@@ -165,7 +185,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Store a RouterInfo in the network database.
      *
-     * @param key the key
+     * @param key the router hash to file the RouterInfo under
      * @param routerInfo the RouterInfo to store
      * @return the routerInfo if another router already existed at that key
      *
@@ -176,7 +196,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Store a DatabaseEntry in the network database.
      *
-     * @param key the key
+     * @param key the hash to file the entry under
      * @param entry the entry to store
      * @return the old entry if it already existed at that key
      * @throws IllegalArgumentException if the data is not valid
@@ -268,7 +288,11 @@ public abstract class NetworkDatabaseFacade implements Service {
      * @return set of LeaseSets, or empty
      */
     public Set<LeaseSet> getLeases() {return Collections.emptySet();}
-    /** Public for NetDbRenderer in routerconsole */
+    /**
+     * Public for NetDbRenderer in routerconsole
+     *
+     * @return the set of known RouterInfos, empty in the base facade
+     */
     public Set<RouterInfo> getRouters() {return Collections.emptySet();}
     /**
      * The known client LeaseSets. Public for NetDbRenderer in routerconsole.
@@ -298,7 +322,12 @@ public abstract class NetworkDatabaseFacade implements Service {
      * @since 0.9.64+
      */
     public Set<LeaseSet> getFloodfillLeases() {return Collections.emptySet();}
-    /** @since 0.9 */
+    /**
+     * The reseed checker; the base facade has none, FNDF overrides this.
+     *
+     * @return the reseed checker, or null in the base facade
+     * @since 0.9
+     */
     public ReseedChecker reseedChecker() {return null;}
 
     /**
@@ -350,6 +379,7 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * For console ConfigKeyringHelper
      *
+     * @param spk the signing key whose blind data is to be dropped
      * @return true if removed
      * @since 0.9.41
      */

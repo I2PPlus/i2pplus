@@ -13,6 +13,7 @@ final class GrowingArrayUtils {
     /**
      * Appends an element to the end of the array, growing the array if there is no more room.
      *
+     * @param <T> the element type held by the array
      * @param array The array to which to append the element. This must NOT be null.
      * @param currentSize The number of elements in the array. Must be less than or equal to
      *                    array.length.
@@ -37,6 +38,11 @@ final class GrowingArrayUtils {
 
     /**
      * Primitive char version of {@link #append(Object[], int, Object)}.
+     *
+     * @param array The array to which to append the element. This must NOT be null.
+     * @param currentSize Number of elements in the array, at most array.length.
+     * @param element The element to append.
+     * @return the array with the element appended, which may be a larger copy
      */
     public static char[] append(char[] array, int currentSize, char element) {
         assert currentSize <= array.length;
@@ -54,10 +60,11 @@ final class GrowingArrayUtils {
      * Inserts an element into the array at the specified index, growing the array if there is no
      * more room.
      *
+     * @param <T> the element type held by the array
      * @param array The array to which to append the element. Must NOT be null.
      * @param currentSize The number of elements in the array. Must be less than or equal to
      *                    array.length.
-     *
+     * @param index Position to insert at, from 0 through currentSize.
      * @param element The element to insert.
      * @return the array to which the element was appended. This may be different than the given
      *         array.
@@ -82,6 +89,12 @@ final class GrowingArrayUtils {
 
     /**
      * Primitive char version of {@link #insert(Object[], int, int, Object)}.
+     *
+     * @param array The array to insert into. This must NOT be null.
+     * @param currentSize Number of elements in the array, at most array.length.
+     * @param index Position to insert at, from 0 through currentSize.
+     * @param element The element to insert.
+     * @return the array with the element inserted, which may be a larger copy
      */
     public static char[] insert(char[] array, int currentSize, int index, char element) {
         assert currentSize <= array.length;
@@ -103,6 +116,9 @@ final class GrowingArrayUtils {
      * Given the current size of an array, returns an ideal size to which the array should grow.
      * This is typically double the given size, but should not be relied upon to do so in the
      * future.
+     *
+     * @param currentSize Number of elements currently held in the array.
+     * @return the new capacity: 8 when currentSize is 4 or less, otherwise twice currentSize
      */
     public static int growSize(int currentSize) {
         return currentSize <= 4 ? 8 : currentSize * 2;

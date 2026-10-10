@@ -194,7 +194,11 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * writeToStream.
+     * Write the binary domain name to the stream, length-prefixing each label and
+     * terminating with the root byte.
+     *
+     * @param os the stream to write the binary domain name to
+     * @throws IOException if the stream rejects or fails the write
      */
     public void writeToStream(OutputStream os) throws IOException {
         setBytesIfRequired();
@@ -212,7 +216,10 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * getRawBytes.
+     * Binary form built from the raw labels rather than the IDN-normalised ones, so
+     * uppercase letters received over the wire are preserved.
+     *
+     * @return a copy of the binary domain name built from the raw labels
      */
     public byte[] getRawBytes() {
         if (rawBytes == null) {
@@ -304,6 +311,8 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * asIdn.
+     *
+     * @return the Unicode form of this name, decoded from its ACE representation
      */
     public String asIdn() {
         if (idn != null) return idn;
@@ -334,6 +343,8 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * getHostpartLabel.
+     *
+     * @return the leftmost label of this name, which is its host part
      */
     public DnsLabel getHostpartLabel() {
         setLabelsIfRequired();
@@ -354,6 +365,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * size.
+     *
+     * @return the length in octets this name occupies in wire format, counting each label's length
+     *         prefix and the terminating root byte
      */
     public int size() {
         if (size < 0) {
@@ -398,6 +412,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * from.
+     *
+     * @param name the domain name in presentation format, which is converted to ACE
+     * @return the DNS name wrapping that presentation form
      */
     public static DnsName from(CharSequence name) {
         return from(name.toString());
@@ -405,6 +422,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * from.
+     *
+     * @param name the domain name in presentation format, which is converted to ACE
+     * @return the DNS name wrapping that presentation form
      */
     public static DnsName from(String name) {
         return new DnsName(name, false);
@@ -434,6 +454,10 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * from.
+     *
+     * @param child the text of the single label to place directly under parent
+     * @param parent the DNS name supplying the labels to the right of the child
+     * @return the DNS name formed by placing child under parent
      */
     public static DnsName from(CharSequence child, DnsName parent) {
         DnsLabel childLabel = DnsLabel.from(child.toString());
@@ -442,6 +466,10 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * from.
+     *
+     * @param child the label to place directly under parent
+     * @param parent the DNS name supplying the labels to the right of the child
+     * @return the DNS name formed by placing child under parent
      */
     public static DnsName from(DnsLabel child, DnsName parent) {
         parent.setLabelsIfRequired();
@@ -454,6 +482,11 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * from.
+     *
+     * @param grandchild the label to place directly under child
+     * @param child the label to place between grandchild and parent
+     * @param parent the DNS name supplying the labels to the right of the child
+     * @return the DNS name formed by placing grandchild under child under parent
      */
     public static DnsName from(DnsLabel grandchild, DnsLabel child, DnsName parent) {
         parent.setBytesIfRequired();
@@ -467,6 +500,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * from.
+     *
+     * @param nameComponents the DNS names to concatenate, ordered leftmost (child) to rightmost (parent)
+     * @return the single DNS name formed by joining the components with a dot
      */
     public static DnsName from(DnsName... nameComponents) {
         int labelCount = 0;
@@ -488,6 +524,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * from.
+     *
+     * @param parts the labels in reverse order, so parts[0] is the top-level domain label
+     * @return the DNS name made of those labels, caching a lowercase variant of each
      */
     public static DnsName from(String[] parts) {
         DnsLabel[] rawLabels = DnsLabel.from(parts);
@@ -529,7 +568,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
      * Parse a domain name starting at the given offset.
      *
      * @param data   The raw data.
-     * @param offset The offset.
+     * @param offset the index into data at which this domain name starts
      * @param jumps  The list of jumps (by now).
      * @return The parsed domain name.
      * @throws IllegalStateException on cycles.
@@ -595,6 +634,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * isDirectChildOf.
+     *
+     * @param parent the candidate ancestor name to compare this name against
+     * @return true if this name carries exactly one label more than parent and shares its remaining labels
      */
     public boolean isDirectChildOf(DnsName parent) {
         setLabelsIfRequired();
@@ -612,6 +654,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * isChildOf.
+     *
+     * @param parent the candidate ancestor name to test this name against
+     * @return true if this name ends with parent's labels at any depth, so it may be a grandchild or further down
      */
     public boolean isChildOf(DnsName parent) {
         setLabelsIfRequired();
@@ -628,6 +673,8 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * getLabelCount.
+     *
+     * @return the number of labels in this name, where the root label on its own counts as zero
      */
     public int getLabelCount() {
         setLabelsIfRequired();
@@ -647,6 +694,9 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * getLabel.
+     *
+     * @param labelNum the index into the reversed label array, so 0 is the top-level domain label
+     * @return the label at that index of the reversed array
      */
     public DnsLabel getLabel(int labelNum) {
         setLabelsIfRequired();
@@ -666,6 +716,10 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * stripToLabels.
+     *
+     * @param labelCount how many of the rightmost labels to keep, from 0 for the root up to {@link #getLabelCount()}
+     * @return a name built from that many labels, this name itself when it is already that short, and the root at 0
+     * @throws IllegalArgumentException if labelCount exceeds this name's label count
      */
     public DnsName stripToLabels(int labelCount) {
         setLabelsIfRequired();
@@ -705,6 +759,8 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * isRootLabel.
+     *
+     * @return true if this name is the root, written either as an empty string or as a lone dot
      */
     public boolean isRootLabel() {
         return ace.isEmpty() || ace.equals(".");

@@ -7,6 +7,9 @@ import java.util.Locale;
  * @since 0.9.62
  */
 class CSPDetector {
+    /**
+     * Create a detector; all methods are static, so no instance state is needed.
+     */
     CSPDetector() {}
 
     /**

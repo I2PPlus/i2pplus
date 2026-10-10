@@ -26,6 +26,13 @@ import java.nio.charset.StandardCharsets;
  */
 public class LogBean extends BaseBean
 {
+
+    /**
+     * Constructs an empty log view; the JSP instantiates it via jsp:useBean and
+     * the log file is only read when a getter asks for the content.
+     */
+    public LogBean() {}
+
     private String logName;
     private String logged;
     private static final String LOG_FILE = "log.txt";

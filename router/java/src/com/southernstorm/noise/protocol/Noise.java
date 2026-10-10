@@ -16,6 +16,14 @@ import net.i2p.crypto.SHA256Generator;
 public final class Noise {
 
     /**
+     * Every member here is static and the class holds no fields, so an instance carries
+     * nothing; it exists only to give the utility class a documented entry point.
+     */
+    public Noise()
+    {
+    }
+
+    /**
      * Maximum length for Noise packets.
      */
     public static final int MAX_PACKET_LEN = 65535;

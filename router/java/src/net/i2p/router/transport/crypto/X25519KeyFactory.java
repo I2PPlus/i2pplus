@@ -53,6 +53,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * X25519KeyFactory.
+     *
+     * @param ctx the context supplying the log, stat manager and RNG for key generation
      */
     public X25519KeyFactory(I2PAppContext ctx) {
         super("XDHPrecalc");
@@ -219,6 +221,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * The minimum precalc queue size.
+     *
+     * @param min the requested floor on queued keys, raised to HARD_MIN if lower
      * @since 0.9.70+
      */
     public void setMinSize(int min) { _minSize = Math.max(HARD_MIN, min); }
@@ -232,6 +236,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * The maximum precalc queue size.
+     *
+     * @param max the requested ceiling on queued keys, raised to the current minimum
      * @since 0.9.70+
      */
     public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
@@ -338,6 +344,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Return an unused DH key builder
      * to be put back onto the queue for reuse.
+     *
+     * @param kp the key pair taken from the pool but never consumed on the wire
      */
     public void returnUnused(KeyPair kp) {
         _keys.offer(kp);

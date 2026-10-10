@@ -25,7 +25,14 @@ class DirectLookupJob extends FloodOnlySearchJob {
     private static final int TIMEOUT = 8*1000;
 
     /**
+     * request is sent to; if null the job fails without sending anything
+     *
      * @param peer for Router Info only
+     * @param ctx the router context
+     * @param facade the floodfill network database facade to report completion to
+     * @param oldRI the RouterInfo whose freshness triggered this lookup, and the address the
+     * @param onFind job to run on a successful find
+     * @param onFail job to run if the peer does not answer before the timeout
      */
     public DirectLookupJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash peer, RouterInfo oldRI, Job onFind, Job onFail) {
         super(ctx, facade, peer, onFind, onFail, TIMEOUT);

@@ -55,6 +55,12 @@ import net.i2p.I2PAppContext;
  */
 public class SidebarHelper extends HelperBase {
 
+    /**
+     * No HTTP session is bound yet, so the summary sections fall back to the
+     * session-less nonce path until storeSession() supplies one.
+     */
+    public SidebarHelper() {}
+
     /** Active HTTP session for nonce-based form validation */
     private HttpSession _session;
 
@@ -92,6 +98,9 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * For form validation and session-bound nonce generation
+     *
+     * @param session the request session to bind, read back when minting CSRF
+     *        nonces and when rendering the config restart status
      * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
@@ -269,6 +278,9 @@ public class SidebarHelper extends HelperBase {
     /**
      * Whether manual reseed should be allowed, based on uptime and known router count
      * or the always-allow property.
+     *
+     * @return true if the network database is up and either reseed is warranted
+     * or it has been force-allowed, else false
      */
     public boolean allowReseed() {
         long uptime = _context.router().getUptime();
@@ -691,6 +703,10 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Should we warn about a possible firewall problem?
+     *
+     * @return true if the network database is ready, the router has been up over two
+     * minutes, and it knows enough routers but has no active peers, which is the
+     * signature of inbound traffic being blocked
      */
     public boolean showFirewallWarning() {
         if (_context == null) { return false; }
@@ -1657,6 +1673,8 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Render the full summary bar HTML to the output writer
+     *
+     * @throws IOException if the underlying writer fails partway through the markup
      */
     public void renderSummaryBar() throws IOException {
         SidebarRenderer renderer = new SidebarRenderer(_context, this);

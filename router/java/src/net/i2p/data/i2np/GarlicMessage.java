@@ -24,6 +24,8 @@ public class GarlicMessage extends FastI2NPMessageImpl {
 
     /**
      * GarlicMessage.
+     * @param context the app context supplying the log, the clock that stamps the
+                             expiry and the random source for message ids
      */
     public GarlicMessage(I2PAppContext context) {
         super(context);
@@ -39,7 +41,9 @@ public class GarlicMessage extends FastI2NPMessageImpl {
 
     /**
      * The raw message data.
+     * @param data the complete garlic payload; settable only once, so the saved
      * @throws IllegalStateException if data previously set, to protect saved checksum
+                           checksum cannot be invalidated
      */
     public void setData(byte[] data) {
         if (_data != null)

@@ -32,12 +32,21 @@ import java.nio.charset.StandardCharsets;
  */
 public class USN {
     /**
+     * The USN constants and the isRootDevice() test below are static, so an instance
+     * carries nothing.
+     */
+    public USN() {}
+
+    /**
      * ROOTDEVICE.
      */
     public static final String ROOTDEVICE = "upnp:rootdevice";
 
     /**
      * isRootDevice.
+     *
+     * @param usnValue a USN string of the form "uuid::upnp:rootdevice"
+     * @return true if the value names the root device, false for a null value or another device type
      */
     public static final boolean isRootDevice(String usnValue) {
         if (usnValue == null) return false;
@@ -46,6 +55,9 @@ public class USN {
 
     /**
      * getUDN.
+     *
+     * @param usnValue a USN string of the form "uuid::&lt;type&gt;"
+     * @return the UDN portion before the "::" separator, or the trimmed whole value when there is none
      */
     public static final String getUDN(String usnValue) {
         if (usnValue == null) return "";

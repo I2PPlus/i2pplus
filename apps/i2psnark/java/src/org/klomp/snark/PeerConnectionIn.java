@@ -44,6 +44,8 @@ class PeerConnectionIn implements Runnable {
 
     /**
      * Create a handler for incoming messages from a peer.
+     * @param peer the remote peer this connection belongs to
+     * @param din the stream positioned at the start of the peer's message stream
      */
     public PeerConnectionIn(Peer peer, DataInputStream din) {
         this.peer = peer;

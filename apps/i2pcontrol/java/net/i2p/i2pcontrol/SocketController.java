@@ -64,6 +64,10 @@ public class SocketController implements RouterApp {
 
     /**
      * RouterApp (new way)
+     *
+     * @param ctx the router context supplying the log manager and config directory
+     * @param mgr the client app manager notified of state changes, or null when run outside the client app framework
+     * @throws IOException declared by the client app instantiation contract, though this constructor body performs no failing I/O
      */
     public SocketController(RouterContext ctx, ClientAppManager mgr) throws IOException {
         _context = ctx;
@@ -154,6 +158,8 @@ public class SocketController implements RouterApp {
      * Does NOT start the server. Must call start() on the returned server.
      *
      * @return Server - A new server built from current configuration.
+     * @throws IOException if the configured listen address cannot be resolved, the configured port is
+     * already bound, or the configuration file cannot be written back
      */
     public ServerSocket buildServer() throws IOException {
         String address = _conf.getConf("i2pcontrol.listen.address", "127.0.0.1");

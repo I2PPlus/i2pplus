@@ -55,6 +55,8 @@ final class SSU2Header {
      * on this thread. It must not be retained.
      *
      * @param packet must be 88 bytes min
+     * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param key2 the 32-byte ChaCha20 key protecting header bytes 8-15
      * @return 64 byte header, null if data too short
      */
     public static Header trialDecryptHandshakeHeader(UDPPacket packet, byte[] key1, byte[] key2) {
@@ -75,6 +77,8 @@ final class SSU2Header {
      * on this thread. It must not be retained.
      *
      * @param packet must be 56 bytes min
+     * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param key2 the 32-byte ChaCha20 key protecting header bytes 8-15
      * @return 32 byte header, null if data too short
      */
     public static Header trialDecryptLongHeader(UDPPacket packet, byte[] key1, byte[] key2) {
@@ -95,6 +99,8 @@ final class SSU2Header {
      * on this thread. It must not be retained.
      *
      * @param packet must be 40 bytes min
+     * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param key2 the 32-byte ChaCha20 key protecting header bytes 8-15
      * @return 16 byte header, null if data too short, must be 40 bytes min
      */
     public static Header trialDecryptShortHeader(UDPPacket packet, byte[] key1, byte[] key2) {
@@ -112,6 +118,7 @@ final class SSU2Header {
      * Packet is unmodified.
      *
      * @param pkt must be 8 bytes min
+     * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7
      * @return the destination connection ID
      * @throws IndexOutOfBoundsException if too short
      */
@@ -130,6 +137,9 @@ final class SSU2Header {
 
     /**
      * Copy the header back to the packet. Cannot be undone.
+     *
+     * @param packet the packet the trial-decrypted header came from
+     * @param header the scratch Header to copy back over the packet's header
      */
     public static void acceptTrialDecrypt(UDPPacket packet, Header header) {
         DatagramPacket pkt = packet.getPacket();
@@ -199,31 +209,74 @@ final class SSU2Header {
 
         /**
          * Create a Header with the given size.
+         *
+         * @param len the number of raw header bytes to allocate, one of the SHORT_HEADER_SIZE, LONG_HEADER_SIZE or SESSION_HEADER_SIZE values
          */
         public Header(int len) { data = new byte[len]; }
 
-        /** Available in all header types. */
+        /**
+         * Available in all header types.
+         *
+         * @return the destination connection ID, 0 if the header is all zeros
+         */
         public long getDestConnID() { return DataHelper.fromLong8(data, 0); }
-        /** Available in all header types. */
+        /**
+         * Available in all header types.
+         *
+         * @return the packet number, for an I2P header sent before data phase it
+         *     may be 0
+         */
         public long getPacketNumber() { return DataHelper.fromLong(data, PKT_NUM_OFFSET, PKT_NUM_LEN); }
-        /** Available in all header types. */
+        /**
+         * Available in all header types.
+         *
+         * @return the message type byte
+         */
         public int getType() { return data[TYPE_OFFSET] & 0xff; }
 
-        /** Short header flags byte, present only in short headers. */
+        /**
+         * Short header flags byte, present only in short headers.
+         *
+         * @return the short header flags byte
+         */
         public int getShortHeaderFlags() { return (int) DataHelper.fromLong(data, SHORT_HEADER_FLAGS_OFFSET, SHORT_HEADER_FLAGS_LEN); }
 
-        /** SSU2 protocol version, present only in long headers. */
+        /**
+         * SSU2 protocol version, present only in long headers.
+         *
+         * @return the protocol version byte
+         */
         public int getVersion() { return data[VERSION_OFFSET] & 0xff; }
-        /** Network ID, present only in long headers. */
+        /**
+         * Network ID, present only in long headers.
+         *
+         * @return the network ID byte
+         */
         public int getNetID() { return data[NETID_OFFSET] & 0xff; }
-        /** Long header flags byte, present only in long headers. */
+        /**
+         * Long header flags byte, present only in long headers.
+         *
+         * @return the long header flags byte
+         */
         public int getHandshakeHeaderFlags() { return data[LONG_HEADER_FLAGS_OFFSET] & 0xff; }
-        /** Source connection ID, present only in long headers. */
+        /**
+         * Source connection ID, present only in long headers.
+         *
+         * @return the source connection ID, 0 if absent
+         */
         public long getSrcConnID() { return DataHelper.fromLong8(data, SRC_CONN_ID_OFFSET); }
-        /** Token, present only in long headers. */
+        /**
+         * Token, present only in long headers.
+         *
+         * @return the 8-byte token as a long, 0 if absent
+         */
         public long getToken() { return DataHelper.fromLong8(data, TOKEN_OFFSET); }
 
-        /** X25519 ephemeral public key, present only in handshake headers. */
+        /**
+         * X25519 ephemeral public key, present only in handshake headers.
+         *
+         * @return a newly allocated copy of the 32-byte ephemeral public key
+         */
         public byte[] getEphemeralKey() {
             byte[] rv = new byte[KEY_LEN];
             System.arraycopy(data, LONG_HEADER_SIZE, rv, 0, KEY_LEN);
@@ -252,6 +305,10 @@ final class SSU2Header {
 
     /**
      * First 64 bytes
+     *
+     * @param packet the outbound packet whose header bytes are encrypted in place
+     * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param key2 the 32-byte ChaCha20 key protecting header bytes 8-63
      */
     public static void encryptHandshakeHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
@@ -263,6 +320,10 @@ final class SSU2Header {
 
     /**
      * First 32 bytes
+     *
+     * @param packet the outbound packet whose header bytes are encrypted in place
+     * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param key2 the 32-byte ChaCha20 key protecting header bytes 8-31
      */
     public static void encryptLongHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();
@@ -277,6 +338,10 @@ final class SSU2Header {
      *
      * First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
      * Next 8 bytes uses key2 and the last 12 bytes as the IV.
+     *
+     * @param packet the outbound packet whose header bytes are encrypted in place
+     * @param key1 the 32-byte ChaCha20 key protecting header bytes 0-7
+     * @param key2 the 32-byte ChaCha20 key protecting header bytes 8-15
      */
     public static void encryptShortHeader(UDPPacket packet, byte[] key1, byte[] key2) {
         DatagramPacket pkt = packet.getPacket();

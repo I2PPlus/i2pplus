@@ -182,6 +182,7 @@ public class ErrorServlet extends HttpServlet {
      * @param errorMsg non-null, may be empty, already HTML-escaped
      * @param errorURI non-null, may be empty, already HTML-escaped
      * @param errorCause may be null
+     * @param out where the HTML is written
      */
     protected void outputMessage(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
         String themePath = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/";
@@ -265,16 +266,39 @@ public class ErrorServlet extends HttpServlet {
         out.print("</p>\n");
     }
 
-    /** translate a string, with webapp bundle */
+    /**
+     * translate a string, with webapp bundle
+     *
+     * @param s the string to translate
+     * @return the translated string
+     */
     protected String _w(String s) {return Translate.getString(s, _context, _defaultBundle);}
 
-    /** translate a string, console bundle */
+    /**
+     * translate a string, console bundle
+     *
+     * @param s the string to translate
+     * @return the translated string
+     */
     protected String _t(String s) {return Translate.getString(s, _context, CONSOLE_BUNDLE_NAME);}
 
-    /** translate a string, console bundle */
+    /**
+     * translate a string, console bundle
+     *
+     * @param s the string to translate
+     * @param o argument substituted into the translation
+     * @return the translated string
+     */
     protected String _t(String s, Object o) {return Translate.getString(s, o, _context, CONSOLE_BUNDLE_NAME);}
 
-    /** translate a string, console bundle */
+    /**
+     * translate a string, console bundle
+     *
+     * @param s the string to translate
+     * @param o argument substituted into the translation
+     * @param o2 second argument substituted into the translation
+     * @return the translated string
+     */
     protected String _t(String s, Object o, Object o2) {return Translate.getString(s, o, o2, _context, CONSOLE_BUNDLE_NAME);}
 
 }

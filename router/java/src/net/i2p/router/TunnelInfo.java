@@ -14,13 +14,18 @@ import net.i2p.data.TunnelId;
  * Defines the information associated with a tunnel
  */
 public interface TunnelInfo {
-    /** How many peers are there in the tunnel (including the creator)? */
+    /**
+     * How many peers are there in the tunnel (including the creator)?
+     *
+     * @return the number of hops, counting ourselves if we are the gateway
+     */
     public int getLength();
 
     /**
      * The tunnelId that the given hop receives messages on.
      * The gateway is hop 0.
      *
+     * @param hop zero-based position in the tunnel, 0 being the gateway
      * @return the receive tunnel id
      */
     public TunnelId getReceiveTunnelId(int hop);
@@ -28,11 +33,17 @@ public interface TunnelInfo {
      * The tunnelId that the given hop sends messages on.
      * The gateway is hop 0.
      *
+     * @param hop zero-based position in the tunnel, 0 being the gateway
      * @return the send tunnel id
      */
     public TunnelId getSendTunnelId(int hop);
 
-    /** The peer at the given hop. The gateway is hop 0. */
+    /**
+     * The peer at the given hop. The gateway is hop 0.
+     *
+     * @param hop zero-based position in the tunnel, 0 being the gateway
+     * @return the router hash at that position
+     */
     public Hash getPeer(int hop);
 
     /**
@@ -59,10 +70,18 @@ public interface TunnelInfo {
      */
     public Hash getFarEnd();
 
-    /** Is this an inbound tunnel? */
+    /**
+     * Is this an inbound tunnel?
+     *
+     * @return true if peers at the far end send to us through this tunnel
+     */
     public boolean isInbound();
 
-    /** If this is a client tunnel, what destination is it for? */
+    /**
+     * If this is a client tunnel, what destination is it for?
+     *
+     * @return the destination hash this tunnel serves, or null for a router tunnel
+     */
     public Hash getDestination();
 
     /**
@@ -86,7 +105,11 @@ public interface TunnelInfo {
      */
     public int getProcessedMessagesCount();
 
-    /** Number of bytes known to have travelled through the tunnel in its lifetime. */
+    /**
+     * Number of bytes known to have travelled through the tunnel in its lifetime.
+     *
+     * @return the verified byte total accumulated over the tunnel's lifetime
+     */
     public long getVerifiedBytesTransferred();
 
     /**
@@ -116,6 +139,7 @@ public interface TunnelInfo {
     /**
      * Did we reuse this tunnel?
      *
+     * @return true if the tunnel came from an existing pool rather than a fresh build
      * @since 0.8.11
      */
     public boolean wasReused();

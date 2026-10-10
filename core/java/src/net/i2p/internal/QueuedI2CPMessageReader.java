@@ -41,6 +41,9 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     /**
      * Creates a new instance of this QueuedMessageReader and registers with the shared dispatcher.
      * Call startReading() to begin.
+     *
+     * @param in the in-JVM queue holding this session's incoming messages
+     * @param lsnr notified with each message as it is dequeued for this session
      */
     public QueuedI2CPMessageReader(I2CPMessageQueue in, I2CPMessageEventListener lsnr) {
         super(lsnr);
@@ -152,7 +155,11 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
      */
     boolean needsService() {return registered && in.pending() > 0;}
 
-    /** Name for diagnostics; identifies the session without depending on its internals. */
+    /**
+     * Name for diagnostics; identifies the session without depending on its internals.
+     *
+     * @return the listener class name (or "none") and this reader's identity hash
+     */
     String describe() {
         String lsnr = _listener == null ? "none" : _listener.getClass().getSimpleName();
         return lsnr + '@' + Integer.toHexString(System.identityHashCode(this));
@@ -161,7 +168,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     /**
      * Shared dispatcher pool that multiplexes all internal I2CP message readers.
      *
-* <p>The ready queue holds readers that have work: one arrives at registration, is handed
+     * <p>The ready queue holds readers that have work: one arrives at registration, is handed
      * back after a pass that filled its budget, and is picked up again by the idle tick if a
      * message turns up for it later. A reader that drained is left out, so on an idle system the
      * queue empties, {@link #IDLE_POLL_MS} actually parks a worker instead of timing out against
@@ -291,10 +298,10 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
      *  Account for a worker leaving, whatever the reason, and uphold the invariant
      *  that a registered reader always has a worker. The check and the restart happen
      *  in one critical section so a concurrent registration cannot be missed.
-         *
-         *  @param alreadyCounted true when the worker reserved its retirement slot in
-         *                       {@link #mayRetire} and so must not be counted again
-         */
+     *
+     *  @param alreadyCounted true when the worker reserved its retirement slot in
+     *                       {@link #mayRetire} and so must not be counted again
+     */
     private synchronized void workerStopped(boolean alreadyCounted) {
         if (!alreadyCounted) {liveThreads--;}
         if (liveThreads >= 1 || readers.isEmpty()) {return;}

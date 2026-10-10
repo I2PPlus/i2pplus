@@ -57,7 +57,7 @@ import java.util.Locale;
 public class LookupService {
 
     /**
-     * Database file.
+     * Random access handle on the database file.
      */
     private RandomAccessFile file;
     private final File databaseFile;
@@ -93,35 +93,35 @@ public class LookupService {
     private static final int STRUCTURE_INFO_MAX_SIZE = 20;
     private static final int DATABASE_INFO_MAX_SIZE = 100;
     /**
-     * GEOIP_STANDARD.
+     * No cache: every node visit is a disk read.
      */
     public static final int GEOIP_STANDARD = 0;
     /**
-     * GEOIP_MEMORY_CACHE.
+     * Cache flag: load the whole database into RAM and read records from it.
      */
     public static final int GEOIP_MEMORY_CACHE = 1;
     /**
-     * GEOIP_CHECK_CACHE.
+     * Cache flag: stat the database file on each lookup and reload it if it changed.
      */
     public static final int GEOIP_CHECK_CACHE = 2;
     /**
-     * GEOIP_INDEX_CACHE.
+     * Cache flag: hold the search index in RAM while still reading records from disk.
      */
     public static final int GEOIP_INDEX_CACHE = 4;
     /**
-     * GEOIP_UNKNOWN_SPEED.
+     * NetSpeed edition: the ISP's connection speed is not classified.
      */
     public static final int GEOIP_UNKNOWN_SPEED = 0;
     /**
-     * GEOIP_DIALUP_SPEED.
+     * NetSpeed edition: the connection is dialup or slower.
      */
     public static final int GEOIP_DIALUP_SPEED = 1;
     /**
-     * GEOIP_CABLEDSL_SPEED.
+     * NetSpeed edition: the connection is cable or DSL.
      */
     public static final int GEOIP_CABLEDSL_SPEED = 2;
     /**
-     * GEOIP_CORPORATE_SPEED.
+     * NetSpeed edition: the connection is corporate or faster.
      */
     public static final int GEOIP_CORPORATE_SPEED = 3;
 
@@ -411,6 +411,9 @@ public class LookupService {
     }
 
     /**
+     * The country names the loaded database can resolve, as a copy of its
+     * internal name table.
+     *
      * @return The list of all known country names
      */
     public List<String> getAllCountryNames() {
@@ -418,6 +421,9 @@ public class LookupService {
     }
 
     /**
+     * The ISO country codes the loaded database can resolve, as a copy of its
+     * internal code table.
+     *
      * @return The list of all known country codes
      */
     public List<String> getAllCountryCodes() {
@@ -513,6 +519,7 @@ public class LookupService {
      *
      * @param country two-letter case-insensitive
      * @param out caller must close
+     * @throws IOException if a range line cannot be written to out
      * @since 0.9.48
      */
     public synchronized void countryToIP(String country, Writer out) throws IOException {
@@ -538,7 +545,7 @@ public class LookupService {
     }
 
     /**
-     * I2P
+     * Walks the search tree once, writing every address that maps to one segment.
      * @since 0.9.48
      */
     private class Walker {
@@ -549,7 +556,7 @@ public class LookupService {
         private final int _dbs0 = databaseSegments[0];
 
         /**
-         * @param country the segment
+         * @param country the segment index of the country's record
          */
         public Walker(int country, Writer out) throws IOException {
             _country = country;
@@ -592,8 +599,9 @@ public class LookupService {
     }
 
     /**
-     * getID.
+     * Looks up the database record ID covering the given IP address.
      *
+     * @param ipAddress the address to look up, as a name or a numeric literal
      * @return the database ID for the given IP
      */
     public int getID(String ipAddress) {
@@ -607,8 +615,9 @@ public class LookupService {
     }
 
     /**
-     * getID.
+     * Looks up the database record ID covering the given IP address.
      *
+     * @param ipAddress the address to look up
      * @return the database ID for the given IP
      */
     public int getID(InetAddress ipAddress) {
@@ -616,8 +625,9 @@ public class LookupService {
     }
 
     /**
-     * getID.
+     * Looks up the database record ID covering the given IP address.
      *
+     * @param ipAddress the IPv4 address in long format, most significant byte first
      * @return the database ID for the given IP
      */
     public synchronized int getID(long ipAddress) {
@@ -628,7 +638,7 @@ public class LookupService {
     }
 
     /**
-     * last_netmask.
+     * Returns the prefix length that the last search stopped at.
      *
      * @return the netmask from the last lookup
      */
@@ -637,7 +647,9 @@ public class LookupService {
     }
 
     /**
-     * netmask.
+     * Sets the prefix length that last_netmask() reports.
+     *
+     * @param nm the prefix length in bits, 0-32 for IPv4 or 0-128 for IPv6
      */
     public void netmask(int nm) {
         last_netmask = nm;
@@ -646,7 +658,8 @@ public class LookupService {
     /**
      * Returns information about the database.
      *
-     * @return database info.
+     * @return the database edition and build epoch, or an empty DatabaseInfo if the
+     *     file carries no trailing info block
      */
     public synchronized DatabaseInfo getDatabaseInfo() {
         if (databaseInfo != null) {
@@ -712,9 +725,13 @@ public class LookupService {
         }
     }
 
-    // for GeoIP City only
     /**
-     * getLocationV6.
+     * Looks up the city record for an IPv6 address.
+     *
+     * Requires the GeoIP City database.
+     *
+     * @param str the address to look up, as a name or a numeric literal
+     * @return the location, or null if str names no address
      */
     public Location getLocationV6(String str) {
         InetAddress addr;
@@ -727,17 +744,25 @@ public class LookupService {
         return getLocationV6(addr);
     }
 
-    // for GeoIP City only
     /**
-     * getLocation.
+     * Looks up the city record for an IPv4 address.
+     *
+     * Requires the GeoIP City database.
+     *
+     * @param addr the address to look up
+     * @return the location, or null if the database holds no city record for it
      */
     public Location getLocation(InetAddress addr) {
         return getLocation(bytesToLong(addr.getAddress()));
     }
 
-    // for GeoIP City only
     /**
-     * getLocation.
+     * Looks up the city record for an IPv4 address.
+     *
+     * Requires the GeoIP City database.
+     *
+     * @param str the address to look up, as a name or a numeric literal
+     * @return the location, or null if str names no address
      */
     public Location getLocation(String str) {
         InetAddress addr;
@@ -751,7 +776,10 @@ public class LookupService {
     }
 
     /**
-     * getRegion.
+     * Looks up the region record for an IPv4 address.
+     *
+     * @param str the address to look up, as a name or a numeric literal
+     * @return the region, or null if str names no address
      */
     public synchronized Region getRegion(String str) {
         InetAddress addr;
@@ -765,14 +793,20 @@ public class LookupService {
     }
 
     /**
-     * getRegion.
+     * Looks up the region record for an IPv4 address.
+     *
+     * @param addr the address to look up
+     * @return the country code, country name and two-letter region code
      */
     public synchronized Region getRegion(InetAddress addr) {
         return getRegion(bytesToLong(addr.getAddress()));
     }
 
     /**
-     * getRegion.
+     * Looks up the region record for an IPv4 address.
+     *
+     * @param ipnum the address in long format, most significant byte first
+     * @return the region, blank if the database is not a region edition
      */
     public synchronized Region getRegion(long ipnum) {
         Region record = new Region();
@@ -822,7 +856,10 @@ public class LookupService {
     }
 
     /**
-     * getLocationV6.
+     * Looks up the city record for an IPv6 address.
+     *
+     * @param addr the address to look up
+     * @return the location, or null if the database holds no city record for it
      */
     public synchronized Location getLocationV6(InetAddress addr) {
         int seek_country;
@@ -836,7 +873,10 @@ public class LookupService {
     }
 
     /**
-     * getLocation.
+     * Looks up the city record for an IPv4 address.
+     *
+     * @param ipnum the address in long format, most significant byte first
+     * @return the location, or null if the database holds no city record for it
      */
     public synchronized Location getLocation(long ipnum) {
         int seek_country;
@@ -939,14 +979,20 @@ public class LookupService {
     }
 
     /**
-     * getOrg.
+     * Looks up the owning organisation for an IPv4 address.
+     *
+     * @param addr the address to look up
+     * @return the organisation name, or null if the database holds no record for it
      */
     public String getOrg(InetAddress addr) {
         return getOrg(bytesToLong(addr.getAddress()));
     }
 
     /**
-     * getOrg.
+     * Looks up the owning organisation for an IPv4 address.
+     *
+     * @param str the address to look up, as a name or a numeric literal
+     * @return the organisation name, or null if str names no address
      */
     public String getOrg(String str) {
         InetAddress addr;
@@ -958,9 +1004,11 @@ public class LookupService {
         return getOrg(addr);
     }
 
-    // GeoIP Organization and ISP Edition methods
     /**
-     * getOrg.
+     * Looks up the owning organisation for an IPv4 address.
+     *
+     * @param ipnum the address in long format, most significant byte first
+     * @return the organisation name, or null if the database holds no record for it
      */
     public synchronized String getOrg(long ipnum) {
         try {
@@ -973,7 +1021,10 @@ public class LookupService {
     }
 
     /**
-     * getOrgV6.
+     * Looks up the owning organisation for an IPv6 address.
+     *
+     * @param str the address to look up, as a name or a numeric literal
+     * @return the organisation name, or null if str names no address
      */
     public String getOrgV6(String str) {
         InetAddress addr;
@@ -985,9 +1036,11 @@ public class LookupService {
         return getOrgV6(addr);
     }
 
-    // GeoIP Organization and ISP Edition methods
     /**
-     * getOrgV6.
+     * Looks up the owning organisation for an IPv6 address.
+     *
+     * @param addr the address to look up
+     * @return the organisation name, or null if the database holds no record for it
      */
     public synchronized String getOrgV6(InetAddress addr) {
           try {

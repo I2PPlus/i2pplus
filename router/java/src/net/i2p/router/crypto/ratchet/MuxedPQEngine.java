@@ -19,6 +19,8 @@ final class MuxedPQEngine {
 
     /**
      * Create the engine for the given router context.
+     *
+     * @param ctx the router context supplying the log manager used by this engine
      */
     public MuxedPQEngine(RouterContext ctx) {
         _context = ctx;

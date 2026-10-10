@@ -49,6 +49,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     private final PeerID peerID;
 
     private final byte[] my_id;
+    /** SHA-1 of this torrent's info dictionary, sent in the handshake and checked against the remote copy. */
     protected final byte[] infohash;
 
     /** Will start out null in magnet mode. */
@@ -109,6 +110,9 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Outgoing connection. Creates a disconnected peer given a PeerID, your own id and the relevant
      * MetaInfo.
      *
+     * @param peerID the remote peer's ID
+     * @param myId our own peer ID, sent during the handshake
+     * @param infohash the info hash of the torrent
      * @param metainfo null if in magnet mode
      */
     public Peer(PeerID peerID, byte[] myId, byte[] infohash, MetaInfo metainfo) {
@@ -126,6 +130,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * done in the calling Thread to get the remote peer id. To completely start the connection call
      * the connect() method.
      *
+     * @param sock the connected socket the handshake runs over
+     * @param in the stream the handshake is read from
+     * @param out the stream the handshake is written to
+     * @param myId our own peer ID, sent during the handshake
+     * @param infohash the info hash of the torrent
      * @param metainfo null if in magnet mode
      * @throws IOException when an error occurred during the handshake.
      */
@@ -207,7 +216,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
         return _dontHave.contains(piece);
     }
 
-    /** Returns the id of the peer. */
+    /**
+     * Returns the id of the peer.
+     *
+     * @return the peer ID this peer was created with
+     */
     public PeerID getPeerID() {
         return peerID;
     }
@@ -292,6 +305,11 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      *
      * <p>If the given BitField is non-null it is send to the peer as first message.
      *
+     * @param util the utility holding this client's connection settings
+     * @param listener notified when the connection is established or ends
+     * @param bwl the bandwidth limiter this peer's traffic is accounted against
+     * @param bitfield the bitfield sent as the first message, or null to send none
+     * @param mState the magnet state recording this peer's piece availability
      * @param uploadOnly if we are complete with skipped files, i.e. a partial seed
      */
     public void runConnection(
@@ -852,6 +870,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Should we request this many bytes?
      *
+     * @param size the number of bytes about to be requested
      * @return whether request
      * @since 0.9.62
      */

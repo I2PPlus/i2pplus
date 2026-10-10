@@ -19,6 +19,12 @@ public class SAMSecureSession implements SAMSecureSessionInterface {
     private final Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMHandlerFactory.class);
 
     /**
+     * The only field is the logger, which the field initialiser takes from the global
+     * context, so a bare instance is ready to authenticate.
+     */
+    public SAMSecureSession() {}
+
+    /**
      * Authenticate based on the i2cp username/password.
      *
      * @param i2cpProps the I2CP session properties

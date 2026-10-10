@@ -12,7 +12,12 @@ public class MLKEMKeyGenerationParameters
 {
     private final MLKEMParameters params;
 
-    /** Create ML-KEM key generation parameters. */
+    /**
+     * Create ML-KEM key generation parameters.
+     *
+     * @param random the entropy source used for key generation
+     * @param mlkemParameters the ML-KEM parameter set selecting the security level
+     */
     public MLKEMKeyGenerationParameters(
         SecureRandom random,
         MLKEMParameters mlkemParameters)
@@ -23,6 +28,8 @@ public class MLKEMKeyGenerationParameters
 
     /**
      * getParameters.
+     *
+     * @return the ML-KEM parameter set these generation parameters were built with
      */
     public MLKEMParameters getParameters()
     {

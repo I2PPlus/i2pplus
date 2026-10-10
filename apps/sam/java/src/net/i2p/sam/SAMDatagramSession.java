@@ -44,9 +44,9 @@ class SAMDatagramSession extends SAMMessageSession {
      * @param dest Base64-encoded destination (private key)
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
+     * @throws IOException declared on this constructor, but not raised by the body
+     * @throws DataFormatException likewise declared, but not raised by the body
+     * @throws I2PSessionException if the I2P session cannot be created from dest
      */
     protected SAMDatagramSession(String dest, Properties props,
                               SAMDatagramReceiver recv) throws IOException,
@@ -64,7 +64,8 @@ class SAMDatagramSession extends SAMMessageSession {
      * @param destStream Input stream containing the destination keys
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws I2PSessionException
+     * @throws I2PSessionException if the I2P session cannot be created from the
+     *                             keys read out of destStream
      */
     public SAMDatagramSession(InputStream destStream, Properties props,
                               SAMDatagramReceiver recv) throws
@@ -78,6 +79,11 @@ class SAMDatagramSession extends SAMMessageSession {
      * Create a new SAM DATAGRAM session on an existing I2P session.
      *
      * @param props unused for now
+     * @param sess the already-established I2P session to run over, which this session does not own
+     * @param listenProtocol the tunnel protocol for the datagram tunnel, normally PROTO_DATAGRAM
+     * @param listenPort the local port the datagram tunnel is published from
+     * @param recv the object handed each datagram that arrives on the session
+     * @throws I2PSessionException not raised here, since the body only wires up the session
      * @since 0.9.25
      */
     protected SAMDatagramSession(I2PSession sess, Properties props, int listenProtocol, int listenPort,

@@ -239,6 +239,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Report the dash length set by {@link #setSeriesDash(float)}, which the renderer
+     * uses to break up each series line.
+     *
      * @return the dash length this graph draws series lines with, zero for a solid line
      * @since 0.9.71
      */
@@ -259,6 +262,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Report the dot spacing set by {@link #setSeriesDashGap(float)}, the second half
+     * of the CSS {@code --graph_plotDash} pair.
+     *
      * @return the stated gap, or zero when the renderer should derive it
      * @since 0.9.71
      */
@@ -1220,6 +1226,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
 
     /**
      * getFont.
+     *
+     * @param tag the font slot to look up
+     * @return the font set for that slot, or the default font if the slot is unset
      */
     public Font getFont(final FontTag tag) {
         return this.fonts[tag.ordinal()] == null
@@ -1367,7 +1376,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * object.
      *
      * @param name Source name.
-     * @param plottable Plottable object.
+     * @param plottable the source each interval's values are read from
      * @since 3.7
      */
     @Override
@@ -1418,7 +1427,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param name Source name.
      * @param defName Other source name.
-     * @param percent The percent value.
+     * @param percent the percentile to report, from 0.0 to 1.0
      * @deprecated Use {@link Variable} based method instead.
      */
     @Deprecated
@@ -1803,6 +1812,10 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Plots requested data as a line, with value shading and stacking both optional.
      *
+     * @param srcName the virtual datasource whose series is plotted
+     * @param color the paint the line is stroked with
+     * @param legend the legend text, added only when non-null
+     * @param width the stroke width in points
      * @param stack true if the line will be stacked
      * @param valueShade bottom-to-top colour stops, or null to draw the line flat
      * @since 0.9.71
@@ -2052,6 +2065,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
+     * Report whether plot lines and areas interpolate between samples rather than
+     * holding each value until the next one.
+     *
      * @return true if plot lines and areas are drawn as smoothed curves
      * @since 0.9.71
      */

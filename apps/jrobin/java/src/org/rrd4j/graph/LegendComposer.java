@@ -52,7 +52,8 @@ class LegendComposer implements RrdGraphConstants {
         boxSpace = generator.getBoxSpace();
     }
     /**
-     * Place comments
+     * Lays out every valid graph comment as one or more legend lines
+     * @return the legend y offset, left just below the block that was placed
      */
 
     int placeComments() {
@@ -80,11 +81,14 @@ class LegendComposer implements RrdGraphConstants {
         private boolean noJustification;
         private final List<CommentText> comments = new ArrayList<>();
 
+        /**
+         * Creates an empty line, holding no comments and no measured width yet.
+         */
         Line() {
             clear();
         }
         /**
-         * Clear
+         * Discards the line's comments and resets its width and marker state
          */
 
         void clear() {
@@ -95,7 +99,9 @@ class LegendComposer implements RrdGraphConstants {
             comments.clear();
         }
         /**
-         * Can accommodate
+         * Reports whether the line has room for the comment and may honour its alignment
+         * @param comment the candidate comment, measured against the unused legend width
+         * @return true if the line can still hold the comment and honour the current alignment
          */
 
         boolean canAccommodate(CommentText comment) {
@@ -120,7 +126,8 @@ class LegendComposer implements RrdGraphConstants {
             return width + commentWidth <= legWidth;
         }
         /**
-         * Add
+         * Appends a comment, widening the line and recording its marker as the new last marker
+         * @param comment the comment to append, whose marker becomes the line's new last marker
          */
 
         void add(CommentText comment) {
@@ -135,7 +142,9 @@ class LegendComposer implements RrdGraphConstants {
             comments.add(comment);
         }
         /**
-         * Layout and advance
+         * Places the line's comments according to the last marker and advances the legend y offset
+         * @param isLastLine true for the legend's closing line, which spreads the comments over the
+                  full legend width even when no \J justification marker was given
          */
 
         void layoutAndAdvance(boolean isLastLine) {
@@ -187,7 +196,7 @@ class LegendComposer implements RrdGraphConstants {
             return commentWidth;
         }
         /**
-         * Place comments
+         * Assigns an x and y coordinate to each of the line's comments
          */
 
         private void placeComments(double xStart, double space) {

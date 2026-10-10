@@ -18,18 +18,20 @@ import net.i2p.util.PortMapper;
 public class ConfigUpdateHelper extends HelperBase {
     private boolean _dontInstall;
     /**
-     * _session.
+     * The web session this helper renders for.
      */
     protected HttpSession _session;
 
     /**
      * For nonce validation and session-bound nonce generation
+     *
+     * @param session the console HTTP session the page is being rendered into
      * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
 
     /**
-     * ConfigUpdateHelper.
+     * Create a helper with no update restrictions.
      */
     public ConfigUpdateHelper() {
         // TODO
@@ -42,29 +44,41 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * canInstall.
+     * Whether an offered update may actually be installed here.
+     *
+     * @return false when the current configuration forbids installing an update
      */
     public boolean canInstall() {return !_dontInstall;}
 
     /**
-     * updateAvailable.
+     * Whether the update check is offered on this page.
+     *
+     * @return true, since the router always offers an update check
      */
     public boolean updateAvailable() {return true;}
 
     /**
-     * @return the news u r l
+     * The URL of the packaged news feed.
+     *
+     * @return the news feed URL
      */
     public String getNewsURL() {return getNewsURL(_context);}
 
     /**
-     * @return the news u r l
+     * The URL of the packaged news feed.
+     *
+     * @param ctx the application context, unused here: the packaged URL is returned
+     * @return the news feed URL
      */
     public static String getNewsURL(I2PAppContext ctx) {
         return ConfigUpdateHandler.DEFAULT_NEWS_URL_SU3;
     }
 
     /**
-     * @return the update u r l
+     * The update URL, from the configured property or the packaged default.
+     *
+     * @return the update URL, with any comma separating alternate hosts replaced
+     *         by a newline
      */
     public String getUpdateURL() {
         String url = _context.getProperty(ConfigUpdateHandler.PROP_UPDATE_URL);
@@ -73,7 +87,10 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * @return the proxy host
+     * The proxy host to use when fetching an update.
+     *
+     * @return the configured host, or a read-only marker when the router is
+     *         already proxying for itself
      */
     public String getProxyHost() {
         if (isInternal()) {return _t("internal") + "\" readonly";}
@@ -81,7 +98,10 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * @return the proxy port
+     * The proxy port to use when fetching an update.
+     *
+     * @return the configured port, or a read-only marker when the router is
+     *         already proxying for itself
      */
     public String getProxyPort() {
         if (isInternal()) {return _t("internal") + "\" readonly";}
@@ -102,7 +122,9 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * @return the update through proxy
+     * The checkbox controlling whether updates are fetched through the proxy.
+     *
+     * @return checkbox markup, checked when updates are proxied
      */
     public String getUpdateThroughProxy() {
         if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY)) {
@@ -112,7 +134,12 @@ public class ConfigUpdateHelper extends HelperBase {
         }
     }
 
-    /** @since 0.9.9 */
+    /**
+     * The checkbox controlling whether news is fetched through the proxy.
+     *
+     * @return checkbox markup, checked when news fetching is proxied
+     * @since 0.9.9
+     */
     public String getNewsThroughProxy() {
         if (_context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS)) {
             return "<input type=checkbox class=\"optbox slider\" value=true name=\"newsThroughProxy\" id=newsThroughProxy checked>";
@@ -122,14 +149,21 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * @return the update unsigned
+     * The checkbox controlling whether an update may be installed unsigned.
+     *
+     * @return checkbox markup reflecting the current setting
      */
     public String getUpdateUnsigned() {
         return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateUnsigned\" id=updateUnsigned " +
                getChecked(ConfigUpdateHandler.PROP_UPDATE_UNSIGNED) + '>';
     }
 
-    /** @since 0.9.20 */
+    /**
+     * The checkbox selecting the development SU3 channel over the signed release.
+     *
+     * @return checkbox markup reflecting the current setting
+     * @since 0.9.20
+     */
     public String getUpdateDevSU3() {
         return "<input type=checkbox class=\"optbox slider\" value=true name=\"updateDevSU3\" id=updateDevSU3 " +
                getChecked(ConfigUpdateHandler.PROP_UPDATE_DEV_SU3) + '>';
@@ -140,7 +174,9 @@ public class ConfigUpdateHelper extends HelperBase {
                                                        3*24*60*60*1000L, 7*24*60*60*1000L, -1L };
 
     /**
-     * @return the refresh frequency select box
+     * The select box offering the update check intervals.
+     *
+     * @return select markup with the configured interval preselected
      */
     public String getRefreshFrequencySelectBox() {
         String freq = _context.getProperty(ConfigUpdateHandler.PROP_REFRESH_FREQUENCY,
@@ -197,24 +233,35 @@ public class ConfigUpdateHelper extends HelperBase {
     }
 
     /**
-     * @return the trusted keys
+     * The signing keys accepted for update verification.
+     *
+     * @return the trusted keys, formatted for display
      */
     public String getTrustedKeys() {return new TrustedUpdate(_context).getTrustedKeysString();}
 
     /**
-     * @return the zip u r l
+     * The URL of the full router zip download.
+     *
+     * @return the configured zip URL, or the packaged default
      */
     public String getZipURL() {
         return _context.getProperty(ConfigUpdateHandler.PROP_ZIP_URL, "http://skank.i2p/i2pupdate.zip");
     }
 
-    /** @since 0.9.20 */
+    /**
+     * The URL of the development SU3 download.
+     *
+     * @return the configured URL, or an empty string when it has not been set
+     * @since 0.9.20
+     */
     public String getDevSU3URL() {
         return _context.getProperty(ConfigUpdateHandler.PROP_DEV_SU3_URL, "");
     }
 
     /**
-     * @return the news status
+     * Whether the last news fetch succeeded, and when it last ran.
+     *
+     * @return the news status, formatted for display
      */
     public String getNewsStatus() {return NewsHelper.status(_context, _session);}
 

@@ -40,6 +40,14 @@ class LookupDestJob extends JobImpl {
     private final BlindData _blindData;
 
     private static final long DEFAULT_TIMEOUT = 15*1000L;
+    /**
+     * Create a lookup job with the default timeout.
+     *
+     * @param context the router context
+     * @param runner the client connection requesting the lookup
+     * @param h the destination hash to look up
+     * @param fromLocalDest the local destination to send the reply to, or null
+     */
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner, Hash h, Hash fromLocalDest) {
         this(context, runner, -1, DEFAULT_TIMEOUT, null, h, null, fromLocalDest);
     }
@@ -53,6 +61,11 @@ class LookupDestJob extends JobImpl {
      * @param reqID must be &gt;= 0 if name != null
      * @param sessID must non-null if reqID &gt;= 0
      * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     * @param context the router context the job runs against
+     * @param runner the connection the resolved LeaseSet is handed to, or null if the caller only wants the lookup performed
+     * @param timeout how long to wait for the LeaseSet or the name lookup, in milliseconds; DEFAULT_TIMEOUT (15000) is used by the short constructor
+     * @param h the destination hash to look up, mutually exclusive with name
+     * @param name the base32 host name to resolve through the naming service, mutually exclusive with h
      * @since 0.9.11
      */
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner,

@@ -63,16 +63,19 @@ public class NSEC3 extends Data {
         }
 
         /**
-         * value.
+         * The IANA registry value of the hash algorithm.
          */
         public final byte value;
         /**
-         * description.
+         * The human-readable name of the hash algorithm.
          */
         public final String description;
 
         /**
-         * forByte.
+         * Look up a hash algorithm by its registry value.
+         *
+         * @param b the hash algorithm byte as it appears in the record
+         * @return the matching algorithm, or null if the byte is not registered
          */
         public static HashAlgorithm forByte(byte b) {
             return HASH_ALGORITHM_LUT.get(b);
@@ -124,7 +127,13 @@ public class NSEC3 extends Data {
     public final List<TYPE> types;
 
     /**
-     * parse.
+     * Parse an NSEC3 record payload from a stream.
+     *
+     * @param dis the stream positioned at the start of the record
+     * @param length the total length of the record in the stream, used to size the type bitmap
+     * @return the parsed record
+     * @throws IOException if the stream ends inside a field or the declared
+     *         lengths do not add up to the record length
      */
     public static NSEC3 parse(DataInputStream dis, int length) throws IOException {
         byte hashAlgorithm = dis.readByte();
@@ -160,21 +169,37 @@ public class NSEC3 extends Data {
     }
 
     /**
-     * NSEC3.
+     * Create an NSEC3 record from its fields.
+     *
+     * @param hashAlgorithm the hash algorithm byte as it appears in the record
+     * @param flags the flag bitmap, see FLAG_OPT_OUT
+     * @param iterations the number of extra hash iterations, 0 to 65535
+     * @param salt the salt prepended to the owner name before hashing
+     * @param nextHashed the next existing owner name in hash order
+     * @param types the RR types present at the original owner name
      */
     public NSEC3(byte hashAlgorithm, byte flags, int iterations, byte[] salt, byte[] nextHashed, List<TYPE> types) {
         this(null, hashAlgorithm, flags, iterations, salt, nextHashed, types);
     }
 
     /**
-     * NSEC3.
+     * Create an NSEC3 record from its fields.
+     *
+     * @param hashAlgorithm the hash algorithm byte as it appears in the record
+     * @param flags the flag bitmap, see FLAG_OPT_OUT
+     * @param iterations the number of extra hash iterations, 0 to 65535
+     * @param salt the salt prepended to the owner name before hashing
+     * @param nextHashed the next existing owner name in hash order
+     * @param types the RR types present at the original owner name
      */
     public NSEC3(byte hashAlgorithm, byte flags, int iterations, byte[] salt, byte[] nextHashed, TYPE... types) {
         this(null, hashAlgorithm, flags, iterations, salt, nextHashed, Arrays.asList(types));
     }
 
     /**
-     * getType.
+     * The DNS RR type of this record, always TYPE.NSEC3.
+     *
+     * @return the NSEC3 record type
      */
     @Override
     public TYPE getType() {
@@ -182,7 +207,10 @@ public class NSEC3 extends Data {
     }
 
     /**
-     * serialize.
+     * Write this record's payload to a stream.
+     *
+     * @param dos the stream to write the record fields to
+     * @throws IOException if the stream rejects the write
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -197,7 +225,9 @@ public class NSEC3 extends Data {
     }
 
     /**
-     * toString.
+     * Render the record in the dig-style presentation format.
+     *
+     * @return the algorithm, flags, iteration count, salt, next hashed name and types
      */
     @Override
     public String toString() {
@@ -215,6 +245,8 @@ public class NSEC3 extends Data {
 
     /**
      * getSalt.
+     *
+     * @return a copy of the salt prepended to the owner name before hashing
      */
     public byte[] getSalt() {
         return salt.clone();
@@ -222,6 +254,8 @@ public class NSEC3 extends Data {
 
     /**
      * getSaltLength.
+     *
+     * @return the number of salt bytes, from 0 to 255
      */
     public int getSaltLength() {
         return salt.length;
@@ -229,6 +263,8 @@ public class NSEC3 extends Data {
 
     /**
      * getNextHashed.
+     *
+     * @return a copy of the next existing owner name in hash order
      */
     public byte[] getNextHashed() {
         return nextHashed.clone();
@@ -238,6 +274,9 @@ public class NSEC3 extends Data {
 
     /**
      * getNextHashedBase32.
+     *
+     * @return the next hashed owner name, Base32 encoded and cached after the
+     *         first call
      */
     public String getNextHashedBase32() {
         if (nextHashedBase32Cache == null) {
@@ -250,6 +289,8 @@ public class NSEC3 extends Data {
 
     /**
      * getNextHashedDnsLabel.
+     *
+     * @return the next hashed owner name as a DNS label, cached after the first call
      */
     public DnsLabel getNextHashedDnsLabel() {
         if (nextHashedDnsLabelCache == null) {
@@ -260,7 +301,10 @@ public class NSEC3 extends Data {
     }
 
     /**
-     * copySaltInto.
+     * Copy the salt into a caller-supplied buffer.
+     *
+     * @param dest buffer that receives the salt bytes
+     * @param destPos offset in dest at which to write the salt
      */
     public void copySaltInto(byte[] dest, int destPos) {
         System.arraycopy(salt, 0, dest, destPos, salt.length);

@@ -24,6 +24,12 @@ package net.i2p.router.peermanager;
  */
 class RouterInfoRefresher {
 
+    /**
+     * A fresh cycle record: no staleness threshold, no tier floors and no deferral
+     * until {@link #beginCycle} supplies them.
+     */
+    RouterInfoRefresher() {}
+
     /** Staleness threshold in force for the current cycle, in ms. */
     private long _refreshAgeMs;
 
@@ -90,24 +96,50 @@ class RouterInfoRefresher {
         _promotedStale++;
     }
 
-    /** @return the staleness threshold in force this cycle, in ms @since 0.9.72 */
+    /**
+     * Get the staleness threshold applied this cycle.
+     *
+     * @return the staleness threshold in force this cycle, in ms
+     * @since 0.9.72
+     */
     long refreshAgeMs() { return _refreshAgeMs; }
 
-    /** @return whether promotions are being held back this cycle @since 0.9.72 */
+    /**
+     * Test whether promotions are being held back this cycle.
+     *
+     * @return whether promotions are being held back this cycle
+     * @since 0.9.72
+     */
     boolean isDeferring() { return _deferring; }
 
-    /** @return fast-tier size at or above which a promotion may be held back @since 0.9.72 */
+    /**
+     * Get the fast-tier size at which promotion may be deferred.
+     *
+     * @return fast-tier size at or above which a promotion may be held back
+     * @since 0.9.72
+     */
     int fastFloor() { return _fastFloor; }
 
-    /** @return high-capacity size at or above which a promotion may be held back @since 0.9.72 */
+    /**
+     * Get the high-capacity size at which promotion may be deferred.
+     *
+     * @return high-capacity size at or above which a promotion may be held back
+     * @since 0.9.72
+     */
     int highCapFloor() { return _highCapFloor; }
 
-    /** @return promotions held back this cycle, counted across both tiers @since 0.9.72 */
+    /**
+     * Get the number of promotions deferred this cycle.
+     *
+     * @return promotions held back this cycle, counted across both tiers
+     * @since 0.9.72
+     */
     int deferredCount() { return _deferred; }
 
     /**
-     * @return promotions let through on a stale RouterInfo this cycle, by the
      * starvation guard
+     *
+     * @return promotions let through on a stale RouterInfo this cycle, by the
      * @since 0.9.72
      */
     int promotedStaleCount() { return _promotedStale; }
@@ -224,10 +256,18 @@ class RouterInfoRefresher {
         return batch;
     }
 
-    /** Peers dropped because the queue or the interval was full. */
+    /**
+     * Peers dropped because the queue or the interval was full.
+     *
+     * @return the count of peers dropped because the queue or the interval was full
+     */
     synchronized int getAddressRefreshDropped() { return _addressRefreshDropped; }
 
-    /** Peers waiting for a lookup. */
+    /**
+     * Peers waiting for a lookup.
+     *
+     * @return the count of peers waiting for a lookup
+     */
     synchronized int getAddressRefreshPending() { return _addressRefreshQueue.size(); }
 
     // ---- profiles loaded with no RouterInfo ---------------------------------
@@ -290,9 +330,17 @@ class RouterInfoRefresher {
         return batch;
     }
 
-    /** Peers dropped because the missing-RouterInfo set was already at its cap. */
+    /**
+     * Peers dropped because the missing-RouterInfo set was already at its cap.
+     *
+     * @return the count of peers dropped because the missing-RouterInfo set was full
+     */
     synchronized int getMissingRouterInfoDropped() { return _missingRouterInfoDropped; }
 
-    /** Peers still waiting for their RouterInfo to be requested. */
+    /**
+     * Peers still waiting for their RouterInfo to be requested.
+     *
+     * @return the count of peers still waiting for their RouterInfo to be requested
+     */
     synchronized int getMissingRouterInfoPending() { return _missingRouterInfo.size(); }
 }

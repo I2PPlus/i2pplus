@@ -35,7 +35,16 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     private static final long COMPLETE_TIMEOUT = 12 * 60 * (long) 60 * 1000;
     private static final long CHECK_INTERVAL = 3 * (long) 60 * 1000;
 
-    /** Update runner */
+    /**
+     * Update runner
+     *
+     * @param ctx the application context, whose log manager supplies the log
+     * @param umgr the update manager, told when the download completes or fails
+     * @param smgr the SnarkManager, which installs and starts the downloaded torrents
+     * @param type the update category to fetch, e.g. NEWS or PLUGIN
+     * @param uris the mirrors to try in turn when none are configured
+     * @param newVersion the version string the downloaded file must report
+     */
     public UpdateRunner(
             I2PAppContext ctx,
             UpdateManager umgr,
@@ -415,7 +424,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * Convert a URL to an HTML link.
      *
-     * @param url the URL
+     * @param url the address to link to, escaped for the href and shown in full if 28 characters or shorter
      * @return the HTML link
      */
     private static String linkify(String url) {

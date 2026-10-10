@@ -21,27 +21,39 @@ package net.i2p;
 public class I2PException extends Exception {
 
     /**
-     * I2PException.
+     * Constructs an exception carrying no detail message.
      */
     public I2PException() {
         super();
     }
 
     /**
-     * I2PException.
+     * Constructs an exception carrying the specified detail message.
+     *
+     * @param msg the detail message describing the failure
      */
     public I2PException(String msg) {
         super(msg);
     }
 
     /**
-     * I2PException.
+     * Constructs an exception carrying the specified detail message and wrapping the
+     * underlying failure.
+     *
+     * @param msg the detail message describing the failure
+     * @param cause the underlying failure that triggered this exception
      */
     public I2PException(String msg, Throwable cause) {
         super(msg, cause);
     }
 
-    /** @since 0.8.2 */
+    /**
+     * Constructs an exception that wraps the underlying failure, deriving the detail
+     * message from it.
+     *
+     * @param cause the underlying failure that triggered this exception
+     * @since 0.8.2
+     */
     public I2PException(Throwable cause) {
         super(cause);
     }

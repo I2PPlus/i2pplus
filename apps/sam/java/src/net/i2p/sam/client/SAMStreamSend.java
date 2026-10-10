@@ -72,6 +72,8 @@ public class SAMStreamSend {
 
     /**
      * main.
+     *
+     * @param args the command line options parsed by {@link Getopt}; the last two name the files
      */
     public static void main(String[] args) {
         Getopt g = new Getopt("SAM", args, "sxhb:m:o:p:u:v:w:");
@@ -167,6 +169,12 @@ public class SAMStreamSend {
 
     /**
      * SAMStreamSend.
+     *
+     * @param ctx the application context supplying the log manager
+     * @param samHost the host name or address of the SAM bridge to connect to
+     * @param samPort the SAM bridge port, as a string because it comes from the command line
+     * @param destFile path to the file holding the destination private key to send from
+     * @param dataFile path to the file whose bytes are streamed over the resulting tunnel
      */
     public SAMStreamSend(I2PAppContext ctx, String samHost, String samPort, String destFile, String dataFile) {
         _context = ctx;
@@ -182,6 +190,14 @@ public class SAMStreamSend {
 
     /**
      * startup.
+     *
+     * @param version the SAM protocol version to negotiate, at least 3.2 for user and password
+     * @param isSSL true to connect to the bridge over TLS rather than plaintext
+     * @param mode the stream connect mode, one of STREAM, PACKET or STREAM_RAW, optionally
+     *        or'ed with MASTER to use a master session
+     * @param user the bridge username, or null when the bridge requires no authentication
+     * @param password the password matching {@code user}, or null for no authentication
+     * @param sessionOpts space separated session options appended to the STREAM CONNECT command
      */
     public void startup(String version, boolean isSSL, int mode, String user, String password, String sessionOpts) {
         if (_log.shouldDebug())

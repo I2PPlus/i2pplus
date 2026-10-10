@@ -379,7 +379,11 @@ public class DecayingBloomFilter {
      */
     public static final int MAX_M = 29;
 
-    /** Unsynchronized; DecayingHashSet also reads this on the add() path. */
+    /**
+     * Unsynchronized; DecayingHashSet also reads this on the add() path.
+     *
+     * @return how many entries are held across both generations of the filter
+     */
     public int getInsertedCount() {
             return _current.size() + _previous.size();
     }

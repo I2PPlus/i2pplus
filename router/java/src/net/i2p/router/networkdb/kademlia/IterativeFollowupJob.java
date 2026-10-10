@@ -23,6 +23,10 @@ class IterativeFollowupJob extends SingleSearchJob {
 
     /**
      * IterativeFollowupJob.
+     * @param ctx the router context the lookup runs against
+     * @param key the hash being looked up, passed to the SingleSearchJob superclass
+     * @param to the peer to query directly for that key, passed to the SingleSearchJob superclass
+     * @param search the parent iterative search, notified of a successful lookup so it can adopt the new peer
      */
     public IterativeFollowupJob(RouterContext ctx, Hash key, Hash to, IterativeSearchJob search) {
         super(ctx, key, to);

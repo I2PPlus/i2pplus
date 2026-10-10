@@ -18,6 +18,8 @@ public class ReservedLdhLabel extends LdhLabel {
 
     /**
      * ReservedLdhLabel.
+     *
+     * @param label the LDH label string, which must carry "--" in its third and fourth characters
      */
     protected ReservedLdhLabel(String label) {
         super(label);
@@ -26,6 +28,11 @@ public class ReservedLdhLabel extends LdhLabel {
 
     /**
      * isReservedLdhLabel.
+     *
+     * @param label the candidate label string, checked for LDH syntax before the reserved
+     *        "--" pattern is tested
+     * @return true if the string is a well-formed LDH label with "--" in its third and fourth
+     *         characters
      */
     public static boolean isReservedLdhLabel(String label) {
         if (!isLdhLabel(label)) {
@@ -36,6 +43,10 @@ public class ReservedLdhLabel extends LdhLabel {
 
     /**
      * isReservedLdhLabelInternal.
+     *
+     * @param label the label string, assumed to be already known to be a well-formed LDH label
+     * @return true if it is at least four characters long and its third and fourth characters
+     *         are both '-'
      */
     static boolean isReservedLdhLabelInternal(String label) {
         return label.length() >= 4 && label.charAt(2) == '-' && label.charAt(3) == '-';

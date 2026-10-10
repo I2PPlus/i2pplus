@@ -38,6 +38,14 @@ public class StreamSinkClient {
     public StreamSinkClient(int sendSize, int writeDelayMs, String serverDestFile) {
         this(null, -1, sendSize, writeDelayMs, serverDestFile);
     }
+    /**
+     * Build the client against a specific I2CP router, but don't fire it up.
+     * @param i2cpHost the I2CP router host to connect through, or null to use the global context
+     * @param i2cpPort the I2CP router port, ignored when i2cpHost is null
+     * @param sendSize how many KB to send
+     * @param writeDelayMs how long to wait between each .write (0 for no delay)
+     * @param serverDestFile file containing the StreamSinkServer's binary Destination
+     */
     public StreamSinkClient(String i2cpHost, int i2cpPort, int sendSize, int writeDelayMs, String serverDestFile) {
         _i2cpHost = i2cpHost;
         _i2cpPort = i2cpPort;
@@ -49,7 +57,6 @@ public class StreamSinkClient {
 
     /**
      * Actually connect and run the client - this call blocks until completion.
-     *
      */
     public void runClient() {
         I2PSocketManager mgr = null;

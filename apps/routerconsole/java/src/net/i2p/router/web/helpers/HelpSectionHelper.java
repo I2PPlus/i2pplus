@@ -17,6 +17,9 @@ import net.i2p.router.web.PluginStarter;
  */
 public class HelpSectionHelper extends HelperBase {
 
+    /**
+     * Create the helper; the superclass constructor sets up the request context.
+     */
     public HelpSectionHelper() { super(); }
 
     /** help-X.jsp */

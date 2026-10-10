@@ -15,6 +15,7 @@ import net.i2p.router.web.FormHandler;
  */
 public class ConfigTunnelsHandler extends FormHandler {
 
+    /** Creates a handler; the container calls it with no arguments before each submission. */
     public ConfigTunnelsHandler() {}
 
     private boolean _shouldSave;

@@ -19,6 +19,13 @@ import java.util.Date;
  * Render a log record according to the log manager's settings
  */
 class LogRecordFormatter {
+
+    /**
+     * Constructor. Every method here is static and reads only its arguments,
+     * so an instance carries no state of its own.
+     */
+    LogRecordFormatter() {}
+
     /** Line separator. */
     static final String NL = System.getProperty("line.separator");
     /** Max length for the source class name column. */
@@ -42,7 +49,12 @@ class LogRecordFormatter {
     }
 
     /**
+     * Render one log record, optionally omitting the date.
+     *
+     * @param manager the log manager whose format configuration drives the layout
+     * @param rec the log record to render, whose throwable is appended as a stack trace
      * @param showDate if false, skip any date in the format (use when writing to wrapper log)
+     * @return the formatted log line, ending in a newline
      * @since 0.8.2
      */
     static String formatRecord(LogManager manager, LogRecord rec, boolean showDate) {
@@ -91,7 +103,10 @@ class LogRecordFormatter {
     /**
      * Format the record timestamp.
      *
+     * @param manager the log manager supplying the date format, shared and therefore
+     * @param logRecord the record whose date field is rendered
      * @return the formatted timestamp string
+     *        not thread-safe
      */
     public static String getWhen(LogManager manager, LogRecord logRecord) {
         SimpleDateFormat fmt = manager.getDateFormat();

@@ -393,8 +393,8 @@ public class NativeBigInteger extends BigInteger {
      * @param modulus
      * big endian twos complement representation of the modulus
      *
-     * @throws ArithmeticException if modulus &lt;= 0 (since libjbigi version 3)
      * @return big endian twos complement representation of (base ^ exponent) % modulus
+     * @throws ArithmeticException if modulus &lt;= 0 (since libjbigi version 3)
      */
     private static native byte[] nativeModPow(byte[] base, byte[] exponent, byte[] modulus);
 
@@ -536,6 +536,11 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Probable prime of given bit length.
+     *
+     * @param bitlen the bit length of the candidate prime to generate
+     * @param certainty the Miller-Rabin rounds to run, so the probability of
+     *        compositeness is at most 2^-certainty
+     * @param rnd the source of the candidate bits and the Miller-Rabin witnesses
      */
     public NativeBigInteger(int bitlen, int certainty, Random rnd) {
         super(bitlen, certainty, rnd);
@@ -543,6 +548,9 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Random non-negative BigInteger.
+     *
+     * @param numbits the minimum bit length of the value to generate
+     * @param rnd the source of the random bits
      */
     public NativeBigInteger(int numbits, Random rnd) {
         super(numbits, rnd);
@@ -550,6 +558,8 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Decimal string representation.
+     *
+     * @param val the decimal digits, optionally signed, to parse
      */
     public NativeBigInteger(String val) {
         super(val);
@@ -557,6 +567,9 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * String representation in the specified radix.
+     *
+     * @param val the digits to parse, optionally signed
+     * @param radix the base the digits are written in, from 2 to 36
      */
     public NativeBigInteger(String val, int radix) {
         super(val, radix);
@@ -564,6 +577,9 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Copy constructor from a BigInteger. Warning, not very efficient.
+     *
+     * @param val the value to copy, whose magnitude is read as a big-endian
+     *        two's complement byte array
      */
     public NativeBigInteger(BigInteger val) {
         // Now, why doesn't sun provide a constructor
@@ -593,6 +609,8 @@ public class NativeBigInteger extends BigInteger {
      *
      * @param exponent must be postive
      * @param m must be postive and odd
+     * @return this value raised to the exponent modulo m, falling back to the
+     *         variable-time computation when constant-time native code is unavailable
      * @throws ArithmeticException if m &lt;= 0 or m is even or exponent &lt;=0
      * @since 0.9.26 and libjbigi version 3 and GMP version 5
      */
@@ -671,6 +689,8 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * Detected CPU type for jbigi optimization.
+     *
+     * @return the detected architecture, or "unrecognized" if it could not be probed
      */
     public static String cpuType() {
         if (sCPUType != null) return sCPUType;
@@ -679,6 +699,8 @@ public class NativeBigInteger extends BigInteger {
 
     /**
      * CPU model string from CPUID.
+     *
+     * @return the model name reported by the CPU, or null if it could not be read
      */
     public static String cpuModel() {
         return _cpuModel;

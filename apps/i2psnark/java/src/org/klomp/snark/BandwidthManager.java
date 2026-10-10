@@ -69,13 +69,21 @@ public class BandwidthManager implements BandwidthListener {
         _req = new SyntheticREDQueue(ctx, down);
     }
 
-    /** Current limit in Bps */
+    /**
+     * Current limit in Bps
+     *
+     * @param upLimit the new upload limit in Bps, truncated to Integer.MAX_VALUE
+     */
     void setUpBWLimit(long upLimit) {
         int limit = (int) Math.min(upLimit, Integer.MAX_VALUE);
         if (limit != getUpBWLimit()) _up = new SyntheticREDQueue(_context, limit);
     }
 
-    /** Current limit in Bps */
+    /**
+     * Current limit in Bps
+     *
+     * @param downLimit the new download limit in Bps, truncated to Integer.MAX_VALUE
+     */
     void setDownBWLimit(long downLimit) {
         int limit = (int) Math.min(downLimit, Integer.MAX_VALUE);
         if (limit != getDownBWLimit()) {
@@ -84,7 +92,11 @@ public class BandwidthManager implements BandwidthListener {
         }
     }
 
-    /** The average rate in Bps */
+    /**
+     * The average rate in Bps
+     *
+     * @return the estimated rate at which peers request data from us, in Bps
+     */
     long getRequestRate() {
         return (long) (1000f * _req.getBandwidthEstimate());
     }

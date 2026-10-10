@@ -10,6 +10,11 @@ import org.rrd4j.data.IPlottable;
 class PDef extends Source {
     private final IPlottable plottable;
 
+    /**
+     * Creates a plottable data definition under the given data source name.
+     * @param name the data source name this definition is registered as
+     * @param plottable the plottable that generates the data source values
+     */
     PDef(String name, IPlottable plottable) {
         super(name);
         this.plottable = plottable;

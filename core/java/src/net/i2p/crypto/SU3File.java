@@ -62,7 +62,7 @@ public class SU3File {
     private File _certFile;
 
     /**
-     * MAGIC.
+     * The magic string every SU3 file starts with.
      */
     public static final String MAGIC = "I2Psu3";
     private static final byte[] MAGIC_BYTES = DataHelper.getASCII(MAGIC);
@@ -76,45 +76,77 @@ public class SU3File {
      */
     public static final int TYPE_ZIP = 0;
 
-    /** @since 0.9.15 */
+    /**
+     * A file whose contents are XML.
+     *
+     * @since 0.9.15
+     */
     public static final int TYPE_XML = 1;
 
-    /** @since 0.9.15 */
+    /**
+     * A file whose contents are HTML.
+     *
+     * @since 0.9.15
+     */
     public static final int TYPE_HTML = 2;
 
-    /** @since 0.9.17 */
+    /**
+     * A gzipped XML file.
+     *
+     * @since 0.9.17
+     */
     public static final int TYPE_XML_GZ = 3;
 
-    /** @since 0.9.28 */
+    /**
+     * A gzipped plain text file.
+     *
+     * @since 0.9.28
+     */
     public static final int TYPE_TXT_GZ = 4;
 
-    /** @since 0.9.51 */
+    /**
+     * A macOS disk image.
+     *
+     * @since 0.9.51
+     */
     public static final int TYPE_DMG = 5;
 
-    /** @since 0.9.51 */
+    /**
+     * A Windows executable.
+     *
+     * @since 0.9.51
+     */
     public static final int TYPE_EXE = 6;
 
     /**
-     * CONTENT_UNKNOWN.
+     * The content type has not been determined.
      */
     public static final int CONTENT_UNKNOWN = 0;
     /**
-     * CONTENT_ROUTER.
+     * The archive holds a router.
      */
     public static final int CONTENT_ROUTER = 1;
     /**
-     * CONTENT_PLUGIN.
+     * The archive holds a plugin.
      */
     public static final int CONTENT_PLUGIN = 2;
     /**
-     * CONTENT_RESEED.
+     * The archive holds reseed data.
      */
     public static final int CONTENT_RESEED = 3;
 
-    /** @since 0.9.15 */
+    /**
+     * The archive holds a news feed.
+     *
+     * @since 0.9.15
+     */
     public static final int CONTENT_NEWS = 4;
 
-    /** @since 0.9.28 */
+    /**
+     * The archive holds a blocklist.
+     *
+     * @since 0.9.28
+     */
     public static final int CONTENT_BLOCKLIST = 5;
 
     /**
@@ -139,16 +171,16 @@ public class SU3File {
         }
 
         /**
-         * Code.
-         * @return the code
+         * The numeric code carried by this content type.
+         * @return the numeric code
          */
         public int getCode() {
             return code;
         }
 
         /**
-         * Name.
-         * @return the name
+         * The wire name of this content type.
+         * @return the wire name
          */
         public String getName() {
             return name;
@@ -176,6 +208,8 @@ public class SU3File {
 
     /**
      * SU3 file from the given path.
+     *
+     * @param file the path to the su3 file
      */
     public SU3File(String file) {
         this(new File(file));
@@ -183,6 +217,8 @@ public class SU3File {
 
     /**
      * SU3 file from the given file.
+     *
+     * @param file the su3 file
      */
     public SU3File(File file) {
         this(I2PAppContext.getGlobalContext(), file);
@@ -190,6 +226,9 @@ public class SU3File {
 
     /**
      * SU3 file from the given file, using the given context.
+     *
+     * @param context the application context
+     * @param file the su3 file
      */
     public SU3File(I2PAppContext context, File file) {
         _context = context;
@@ -197,8 +236,9 @@ public class SU3File {
     }
 
     /**
-     * Should the signature be verified? Default true
+     * Choose whether the signature is verified.
      *
+     * @param shouldVerify true to verify the signature, the default
      * @since 0.9.15
      */
     public void setVerifySignature(boolean shouldVerify) {
@@ -217,7 +257,9 @@ public class SU3File {
     /**
      * This does not check the signature, but it will fail if the signer is unknown,
      * unless setVerifySignature(false) has been called.
+     *
      * @return the version string
+     * @throws IOException if the header cannot be read
      */
     public String getVersionString() throws IOException {
         verifyHeader();
@@ -227,7 +269,9 @@ public class SU3File {
     /**
      * This does not check the signature, but it will fail if the signer is unknown,
      * unless setVerifySignature(false) has been called.
+     *
      * @return the signer string
+     * @throws IOException if the header cannot be read
      */
     public String getSignerString() throws IOException {
         verifyHeader();
@@ -239,6 +283,7 @@ public class SU3File {
      * unless setVerifySignature(false) has been called.
      *
      * @return null if unknown
+     * @throws IOException if the header cannot be read
      * @since 0.9.9
      */
     public SigType getSigType() throws IOException {
@@ -255,6 +300,7 @@ public class SU3File {
      * unless setVerifySignature(false) has been called.
      *
      * @return -1 if unknown
+     * @throws IOException if the header cannot be read
      * @since 0.9.9
      */
     public int getContentType() throws IOException {
@@ -270,6 +316,7 @@ public class SU3File {
      * unless setVerifySignature(false) has been called.
      *
      * @return 0-255 or -1 if unknown
+     * @throws IOException if the header cannot be read
      * @since 0.9.15
      */
     public int getFileType() throws IOException {
@@ -281,7 +328,7 @@ public class SU3File {
      * This does not check the signature, but it will fail if the signer is unknown,
      * unless setVerifySignature(false) has been called.
      *
-     * Throws IOE if verify vails.
+     * @throws IOException if the header cannot be read or the signer is unknown
      */
     public void verifyHeader() throws IOException {
         if (_headerVerified) return;
@@ -393,9 +440,9 @@ public class SU3File {
 
     /**
      * One-pass verify.
-     * Throws IOE on all format errors.
      *
      * @return true if signature is good
+     * @throws IOException on any format error
      * @since 0.9.9
      */
     public boolean verify() throws IOException {
@@ -406,10 +453,10 @@ public class SU3File {
      * One-pass verify and extract the content.
      * Recommend extracting to a temp location as the sig is not checked until
      * after extraction. This will delete the file if the sig does not verify.
-     * Throws IOE on all format errors.
      *
      * @param migrateTo the output file, probably in zip format. Null for verify only.
      * @return true if signature is good
+     * @throws IOException on any format error
      */
     public boolean verifyAndMigrate(File migrateTo) throws IOException {
         FileOutputStream out = null;
@@ -485,13 +532,15 @@ public class SU3File {
     /**
      * One-pass wrap and sign the content.
      * Writes to the file specified in the constructor.
-     * Throws on all errors.
      *
      * @param content the input file, probably in zip format
      * @param fileType 0-255, 0 for zip
      * @param contentType 0-255
      * @param version 1-255 bytes when converted to UTF-8
      * @param signer ID of the public key, 1-255 bytes when converted to UTF-8
+     * @param privkey the signing key, whose public half is the signer ID
+     * @param sigType the digest and signature scheme to sign with
+     * @throws IOException if the content cannot be read or the file cannot be written
      */
     public void write(
             File content,
@@ -724,7 +773,7 @@ public class SU3File {
     }
 
     /**
-     * Number or name.
+     * Resolve a content type from its number or its name.
      * @param ctype number or name
      * @return null if not found
      * @since 0.9.9
@@ -785,7 +834,7 @@ public class SU3File {
     /**
      * Zip, xml, and xml.gz only
      *
-     * @return success
+     * @return true on success
      * @since 0.9.9
      */
     private static final boolean bulkSignCLI(
@@ -852,8 +901,8 @@ public class SU3File {
     }
 
     /**
-     * Success.
-     * @return success
+     * Whether the operation succeeded.
+     * @return true on success
      * @since 0.9.9
      */
     private static final boolean signCLI(
@@ -909,8 +958,8 @@ public class SU3File {
     }
 
     /**
-     * Success.
-     * @return success
+     * Whether the operation succeeded.
+     * @return true on success
      * @since 0.9.9
      */
     private static final boolean signCLI(
@@ -988,7 +1037,7 @@ public class SU3File {
     /**
      * If null, will use a name derived from signedFile.
      * @param outFile if null, will use a name derived from signedFile
-     * @return success
+     * @return true on success
      * @since 0.9.9
      */
     private static final boolean extractCLI(String signedFile, String outFile, boolean verifySig, String pkFile) {
@@ -1052,7 +1101,7 @@ public class SU3File {
     /**
      * May be null; non-null to save.
      * @param crlFile may be null; non-null to save
-     * @return success
+     * @return true on success
      * @since 0.9.9
      */
     private static final boolean genKeysCLI(
@@ -1070,7 +1119,7 @@ public class SU3File {
      * Writes Java-encoded keys (X.509 for public and PKCS#8 for private)
      *
      * @param crlFile may be null; non-null to save
-     * @return success
+     * @return true on success
      * @since 0.9.9
      */
     private static final boolean genKeysCLI(

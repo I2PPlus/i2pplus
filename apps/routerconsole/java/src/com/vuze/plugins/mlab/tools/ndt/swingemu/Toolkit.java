@@ -22,7 +22,19 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 	public class Toolkit {
 
-	/** Return the system clipboard. */
+	/**
+	 * Headless stub; every call builds a fresh empty Clipboard, so an instance
+	 * holds nothing between calls.
+	 */
+	public Toolkit()
+	{
+	}
+
+	/**
+	 * Return the system clipboard.
+	 *
+	 * @return a fresh empty Clipboard stub, as headless mode has none to share
+	 */
 	public Clipboard
 	getSystemClipboard()
 	{

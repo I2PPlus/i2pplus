@@ -25,7 +25,7 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
     /**
      * Get the session nickname.
      *
-     * @return the nickname
+     * @return the nickname this session was registered under
      */
     public String getNick() {
         return nick;
@@ -38,9 +38,10 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
      * Caller MUST call start().
      *
      * @param nick nickname of the session
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
+     * @param dgServer the datagram server this session reports its senders to
+     * @throws IOException if the nickname is not registered; the lookup throws InterruptedIOException
+     * @throws DataFormatException declared on the superclass constructor, but not raised by the body
+     * @throws I2PSessionException if the I2P session cannot be created from the recorded destination
      */
     public SAMv3RawSession(String nick, SAMv3DatagramServer dgServer)
             throws IOException, DataFormatException, I2PSessionException {
@@ -64,8 +65,8 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
      * Look up the registered session record for the given nickname,
      * throwing if it has already disappeared.
      *
+     * @return the registered session record
      * @throws InterruptedIOException if the nickname is not registered
-     * @return the rec
      */
     private static SessionRecord getRec(String nick) throws InterruptedIOException {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
@@ -81,9 +82,15 @@ class SAMv3RawSession extends SAMRawSession implements Session, SAMRawReceiver {
      * Caller MUST call start().
      *
      * @param nick nickname of the session
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
+     * @param props the session properties, read for PORT and HOST
+     * @param handler the SAM handler owning the session record
+     * @param isess the already-running I2P session to wrap, not owned here
+     * @param listenProtocol the I2CP protocol to bind, or I2PSession.PROTO_ANY for all
+     * @param listenPort the local port to bind, or I2PSession.PORT_ANY to let the router choose
+     * @param dgServer the datagram server this session reports its senders to
+     * @throws IOException declared on this constructor, but not raised by the body
+     * @throws DataFormatException likewise declared, but not raised by the body
+     * @throws I2PSessionException if the shared session cannot be attached to
      * @since 0.9.25
      */
     public SAMv3RawSession(

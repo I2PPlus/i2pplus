@@ -10,6 +10,12 @@ package org.cybergarage.upnp.control;
  * SOAP action strings, and element names used in UPnP control messages.
  */
 public class Control {
+    /**
+     * Constructor. Every value here is a fixed constant string, so an instance
+     * holds nothing and the constants are read statically.
+     */
+    public Control() {}
+
     /** Default namespace prefix for UPnP control */
     public static final String NS = "u";
 

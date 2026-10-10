@@ -50,10 +50,15 @@ import net.i2p.util.Log;
  */
 class SAMStreamSession implements SAMMessageSess {
 
+    /** Logger for this session's messages. */
     protected final Log _log;
+    /** Read buffer size for each socket reader. */
     protected final static int SOCKET_HANDLER_BUF_SIZE = 32768;
+    /** The receiver that decodes incoming SAM messages. */
     protected final SAMStreamReceiver recv;
+    /** The server this session belongs to. */
     protected final SAMStreamSessionServer server;
+    /** The socket manager used for outgoing connections. */
     protected final I2PSocketManager socketMgr;
 
     /** stream id → socket reader; Integer key, auto-negative ids for inbound. */
@@ -64,12 +69,13 @@ class SAMStreamSession implements SAMMessageSess {
     /** Counter for auto-generated negative stream ids. */
     private final AtomicInteger lastNegativeId = new AtomicInteger();
 
-    // Can we create outgoing connections?
+    /** Whether this session may create outgoing connections. */
     protected final boolean canCreate;
     /** Listen protocol. */
     private final int listenProtocol;
     /** Listen port. */
     private final int listenPort;
+    /** Whether this is our own session, as opposed to a remote peer's. */
     protected final boolean _isOwnSession;
 
     /**
@@ -78,7 +84,9 @@ class SAMStreamSession implements SAMMessageSess {
      */
     protected final boolean forceFlush;
 
+    /** Config key for flushing on every STREAM SEND. */
     public static final String PROP_FORCE_FLUSH = "sam.forceFlush";
+    /** Default for {@link #PROP_FORCE_FLUSH}. */
     public static final String DEFAULT_FORCE_FLUSH = "false";
 
     /**
@@ -91,7 +99,8 @@ class SAMStreamSession implements SAMMessageSess {
      * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH") or "__v3__" if extended by SAMv3StreamSession
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws SAMException
+     * @throws SAMException if dir names no known direction, if i2cp.tcp.port is
+     *                      not a number, or if the I2P session cannot be created
      */
     public SAMStreamSession(String dest, String dir, Properties props,
                             SAMStreamReceiver recv) throws SAMException {
@@ -108,7 +117,8 @@ class SAMStreamSession implements SAMMessageSess {
      * @param dir Session direction ("RECEIVE", "CREATE" or "BOTH") or "__v3__" if extended by SAMv3StreamSession
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
-     * @throws SAMException
+     * @throws SAMException if dir names no known direction, if i2cp.tcp.port is
+     *                      not a number, or if the I2P session cannot be created
      */
     protected SAMStreamSession(InputStream destStream, String dir,
                                Properties props,  SAMStreamReceiver recv) throws SAMException {
@@ -197,8 +207,10 @@ class SAMStreamSession implements SAMMessageSess {
      * Create a new SAM STREAM session on an existing socket manager.
      * v3 only.
      *
+     * @param mgr the socket manager owning the session's listening sockets
      * @param props Properties to setup the I2P session
      * @param recv Object that will receive incoming data
+     * @param listenport port for the listener, 1-65535 or PORT_ANY (0) for all
      * @since 0.9.25
      */
     protected SAMStreamSession(I2PSocketManager mgr, Properties props, SAMStreamReceiver recv, int listenport)
@@ -253,6 +265,12 @@ class SAMStreamSession implements SAMMessageSess {
 
     /** Closes SAM session when the underlying I2P manager disconnects. */
     protected class DisconnectListener implements I2PSocketManager.DisconnectListener {
+        /**
+         * The enclosing SAMStreamSession is what sessionDisconnected() closes; this inner
+         * class adds no state, and the compiler supplies the outer instance.
+         */
+        protected DisconnectListener() {}
+
         /** I2P manager disconnected — close all handlers and session. */
         public void sessionDisconnected() {
             close();
@@ -283,7 +301,8 @@ class SAMStreamSession implements SAMMessageSess {
      * @throws NoRouteToHostException if the destination can't be reached
      * @throws InterruptedIOException if the connection timeouts
      * @throws I2PException if there's another I2P-related error
-     * @throws IOException
+     * @throws IOException if the connection fails for a reason not covered by
+     *                     the more specific subclasses listed above
      */
     public boolean connect ( int id, String dest, Properties props ) throws I2PException, SAMInvalidDirectionException, IOException {
         if (!canCreate) {
@@ -325,7 +344,8 @@ class SAMStreamSession implements SAMMessageSess {
      * @param in Datastream input
      * @param size Count of bytes to send
      * @return True if the data was queued for sending, false otherwise
-     * @throws IOException
+     * @throws IOException if the bytes cannot be read from in or written to the
+     *                     connection
      */
     public boolean sendBytes(int id, InputStream in, int size) throws IOException {
         StreamSender sender = getSender(id);
@@ -655,13 +675,13 @@ class SAMStreamSession implements SAMMessageSess {
      * SAMStreamSession instance, so it does not need an implicit outer handle.
      *
      */
+    /** Reads bytes off one tunnel socket and pushes them to the SAM client. */
     public static class SAMStreamSessionSocketReader implements Runnable {
 
+        /** The tunnel socket this reader drains. */
         protected final I2PSocket i2pSocket;
 
-        /**
-         * runningLock.
-         */
+        /** Guards the run loop's state against a concurrent stop. */
         protected final Object runningLock = new Object();
 
         /** Guarded by runningLock; cleared on stop. */
@@ -715,8 +735,8 @@ class SAMStreamSession implements SAMMessageSess {
          * Create a new SAM STREAM session socket reader
          *
          * @param s Socket to be handled
-	 * @param id Unique id assigned to the handler
-	 * @throws IOException
+         * @param id Unique id assigned to the handler
+         * @throws IOException if the reader for that socket cannot be created
          */
 
         public SAMv1StreamSessionSocketReader ( I2PSocket s, int id ) throws IOException {
@@ -856,6 +876,11 @@ class SAMStreamSession implements SAMMessageSess {
 
     /**
      * newStreamSender.
+     *
+     * @param s the I2PSocket the sender writes to
+     * @param id the stream id assigned by the client
+     * @return a sender bound to the socket and id
+     * @throws IOException if the socket output stream cannot be obtained
      */
     protected StreamSender newStreamSender ( I2PSocket s, int id ) throws IOException {
       return new V1StreamSender ( s, id );

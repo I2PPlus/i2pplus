@@ -312,7 +312,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * we force some locality in OBEP-IBGW connections to minimize
      * those connections network-wide.
      *
-     * @param closestTo non-null
+     * @param closestTo the hash whose closest gateway the returned tunnel should reach
      * @return null if none
      * @since 0.8.10
      */
@@ -333,7 +333,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * those connections network-wide.
      *
      * @param destination if null, returns inbound exploratory tunnel
-     * @param closestTo non-null
+     * @param closestTo the hash whose closest gateway the returned tunnel should reach
      * @return null if none
      * @since 0.8.10
      */
@@ -353,7 +353,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * we force some locality in OBEP-IBGW connections to minimize
      * those connections network-wide.
      *
-     * @param closestTo non-null
+     * @param closestTo the hash whose closest gateway the returned tunnel should reach
      * @return null if none
      * @since 0.8.10
      */
@@ -374,7 +374,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      * those connections network-wide.
      *
      * @param destination if null, returns outbound exploratory tunnel
-     * @param closestTo non-null
+     * @param closestTo the hash whose closest gateway the returned tunnel should reach
      * @return null if none
      * @since 0.8.10
      */
@@ -514,7 +514,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Check if a tunnel is valid and belongs to the client's pool.
-     * @param client destination hash
+     * @param client the destination hash identifying the client's pool
      * @param tunnel tunnel to validate
      * @return true if the tunnel is valid and belongs to the client's pool
      */
@@ -542,7 +542,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Get settings for a client's inbound tunnel pool.
-     * @param client destination hash
+     * @param client the destination hash identifying the client's pool
      * @return settings or null if not found
      */
     public TunnelPoolSettings getInboundSettings(Hash client) {
@@ -553,7 +553,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Get settings for a client's outbound tunnel pool.
-     * @param client destination hash
+     * @param client the destination hash identifying the client's pool
      * @return settings or null if not found
      */
     public TunnelPoolSettings getOutboundSettings(Hash client) {
@@ -564,7 +564,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Set settings for a client's inbound tunnel pool.
-     * @param client destination hash
+     * @param client the destination hash identifying the client's pool
      */
     public void setInboundSettings(Hash client, TunnelPoolSettings settings) {
         setSettings(_clientInboundPools, client, settings);
@@ -572,7 +572,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Set settings for a client's outbound tunnel pool.
-     * @param client destination hash
+     * @param client the destination hash identifying the client's pool
      */
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings) {
         setSettings(_clientOutboundPools, client, settings);
@@ -645,8 +645,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     /**
      * Add another destination to the same tunnels.
      * Must have same encryption key and a different signing key.
-     * @throws IllegalArgumentException if not
-     * @return success
+     * @return true if the destination was added, false if it already had a pool
+     * @throws IllegalArgumentException if the signing keys match or the encryption keys differ
      * @since 0.9.21
      */
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient) {
@@ -742,7 +742,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         private int attempts;
 
         /**
-         * ConditionalOutboundStartup.
+         * Schedule a startup that is abandoned unless the pools are ready in time.
          */
         public ConditionalOutboundStartup(TunnelPool out, TunnelPool in, TunnelPoolManager mgr,
                                           RouterContext context, Hash dest) {
@@ -799,7 +799,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *
      * Uses delayed cleanup to allow tunnels to continue operating
      * until they naturally expire. Prevents pool collapse when client disconnects.
-     * @param destination the destination
+     * @param destination the hash of the client whose pools are scheduled for removal; a
+     *        {@code null} hash is ignored
      */
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
@@ -838,7 +839,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Force immediate removal of a pool - used for router shutdown.
-     * @param destination the destination
+     * @param destination the hash of the client whose pools are dropped immediately; a
+     *        {@code null} hash is ignored
      * @since 0.9.69+
      */
     public synchronized void forceRemoveTunnels(Hash destination) {
@@ -851,7 +853,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * Actually perform pool removal.
-     * @param destination the destination
+     * @param destination the hash of the client whose inbound and outbound pools are shut down here
      */
     private synchronized void doRemoveTunnels(Hash destination) {
         if (_log.shouldDebug()) {
@@ -883,7 +885,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         private volatile boolean _cancelled = false;
 
         /**
-         * DelayedPoolCleanup.
+         * Remove an unused client pool after the re-registration window expires.
          */
         public DelayedPoolCleanup(Hash dest) {super(_context.simpleTimer2()); _destination = dest;}
 
@@ -914,7 +916,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
-    /** Queue a recurring test job if appropriate. */
+    /**
+     * Queue a recurring test job if appropriate.
+     *
+     * @param cfg the configuration of the tunnel that just built, whose pool the
+     *        test job queues against
+     */
     void buildComplete(PooledTunnelCreatorConfig cfg) {
         if (cfg.getLength() > 1 &&
             !_context.router().gracefulShutdownInProgress() &&
@@ -929,8 +936,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * Tunnel testing status.
-     * @return true if tunnel testing is disabled
+     * Report whether periodic tunnel testing is switched off.
+     * @return true if tunnel testing is disabled by property, false if it is enabled
      */
     public boolean disableTunnelTesting() {
         if (_context.getProperty(PROP_DISABLE_TUNNEL_TESTING) == null) {return false;}
@@ -1083,6 +1090,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             return interval;
         }
 
+        /**
+         * Probe whether fast-tier peers are reachable, shortly after startup.
+         *
+         * @param ctx the router context
+         * @param mgr the pool manager this job reports reachability to
+         */
         FastTierProbeJob(RouterContext ctx, TunnelPoolManager mgr) {
             super(ctx);
             _mgr = mgr;
@@ -1247,8 +1260,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             getTiming().setStartAfter(ctx.clock().now() + 5*1000);
         }
         /**
-         * The name of this job.
-         * @return the name
+         * The name of this job, as it appears in job statistics.
+         * @return the job name
          */
         public String getName() { return "Bootstrap Tunnel Pool"; }
         /**
@@ -1295,8 +1308,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         /**
-         * The name of this job.
-         * @return the name
+         * The name of this job, as it appears in job statistics.
+         * @return the job name
          */
         public String getName() { return "Remove Slow Tunnels Job"; }
 
@@ -1404,8 +1417,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         /**
-         * The name of this job.
-         * @return the name
+         * The name of this job, as it appears in job statistics.
+         * @return the job name
          */
         public String getName() { return "Refresh LeaseSets Job"; }
 
@@ -1660,7 +1673,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * Cannot be restarted
+     * Shut the pool manager down. A shutdown manager cannot be restarted.
      */
     public synchronized void shutdown() {
         _handler.shutdown(_handlerThreads.size());
@@ -1787,12 +1800,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * The build executor.
+     * Return the shared thread pool that runs tunnel builds.
      * @return the build executor
      */
     BuildExecutor getExecutor() { return _executor; }
 
-    /** Remove a tunnel from the expiration queue to prevent memory leak */
+    /**
+     * Remove a tunnel from the expiration queue to prevent memory leak
+     *
+     * @param cfg the tunnel configuration to drop from the expiration queue
+     */
     void removeFromExpiration(PooledTunnelCreatorConfig cfg) {
         ExpireJob.removeFromExpiration(cfg);
     }
@@ -2041,7 +2058,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     /**
-     * Firewall status.
+     * Report whether the router is firewalled on either address family.
      * @return true if the router is firewalled
      */
     public boolean isFirewalled() {
@@ -2066,7 +2083,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * For TunnelRenderer in router console
-     * @return non-null
+     * @return the inbound exploratory pool, never null
      */
     public TunnelPool getInboundExploratoryPool() {
         return _inboundExploratory;
@@ -2074,7 +2091,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
 
     /**
      * For TunnelRenderer in router console
-     * @return non-null
+     * @return the outbound exploratory pool, never null
      */
     public TunnelPool getOutboundExploratoryPool() {
         return _outboundExploratory;

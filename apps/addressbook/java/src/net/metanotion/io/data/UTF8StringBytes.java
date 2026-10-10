@@ -19,6 +19,12 @@ import net.metanotion.io.Serializer;
  * </ul>
  */
 public class UTF8StringBytes implements Serializer<String> {
+    /**
+     * The codec holds no state - UTF-8 is named on every call - so a bare instance is
+     * ready to serialise.
+     */
+    public UTF8StringBytes() {}
+
     public byte[] getBytes(String o) {
         try {
             return o.getBytes("UTF-8");

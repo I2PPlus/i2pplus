@@ -9,6 +9,8 @@ import net.i2p.I2PAppContext;
 class InboundGatewayProcessor extends HopProcessor {
     /**
      * InboundGatewayProcessor.
+     * @param ctx the application context the processor runs under
+     * @param config the hop configuration handed to the superclass
      */
     public InboundGatewayProcessor(I2PAppContext ctx, HopConfig config) {
         super(ctx, config, DummyValidator.getInstance());
@@ -19,6 +21,9 @@ class InboundGatewayProcessor extends HopProcessor {
      * 16 bytes, ignore the 'prev' hop, and encrypt the message like every
      * other participant.
      *
+     * @param orig the buffer holding the message to process
+     * @param offset the index within the buffer where the message starts
+     * @param length the number of bytes to process starting at that offset
      */
     public void process(byte[] orig, int offset, int length) {
         boolean ok = super.process(orig, offset, length, null);

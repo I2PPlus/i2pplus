@@ -29,6 +29,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
 
     /**
      * DestLookupMessage.
+     * @param h the destination hash the router is asked to look up
      */
     public DestLookupMessage(Hash h) {
         _hash = h;

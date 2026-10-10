@@ -10,6 +10,9 @@ public class ServletUtil {
     private ServletUtil() {};
 
     /**
+     * Does the request come from a browser too small for the full
+     * desktop pages, i.e. either a text-mode browser or a mobile one?
+     *
      * @param ua User-Agent string, non-null
      * @return true if a text-mode or mobile browser
      */
@@ -18,6 +21,10 @@ public class ServletUtil {
     }
 
     /**
+     * Does the User-Agent name a text-mode browser? Matched on the
+     * product token at the start of the string: Lynx, w3m, ELinks,
+     * Links, Dillo or Emacs-w3m.
+     *
      * @param ua User-Agent string, non-null
      * @return true if a text-mode browser
      */

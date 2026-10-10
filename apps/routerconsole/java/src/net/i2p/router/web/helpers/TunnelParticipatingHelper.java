@@ -17,6 +17,8 @@ public class TunnelParticipatingHelper extends HelperBase {
     public TunnelParticipatingHelper() { /* nop */ }
 
     /**
+     * Render the list of tunnels this router is participating in.
+     *
      * @return the tunnels participating
      */
     public String getTunnelsParticipating() {

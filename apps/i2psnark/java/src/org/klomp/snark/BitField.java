@@ -26,6 +26,7 @@ import java.util.Arrays;
 public class BitField {
 
     private final byte[] data;
+    /** Number of bits this field spans, one per piece of the torrent. */
     protected final int size;
     private int count;
 
@@ -98,7 +99,7 @@ public class BitField {
     /**
      * Mark the given bit true.
      *
-     * @param bit the bit
+     * @param bit the zero-based piece index to flip, in the range 0 to size-1
      * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      */
     public void set(int bit) {
@@ -116,7 +117,7 @@ public class BitField {
     /**
      * Mark the given bit false.
      *
-     * @param bit the bit
+     * @param bit the zero-based piece index to flip, in the range 0 to size-1
      * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      * @since 0.9.22
      */
@@ -145,7 +146,7 @@ public class BitField {
     /**
      * Returns true if the bit is set or false if it is not.
      *
-     * @param bit the bit
+     * @param bit the zero-based piece index to flip, in the range 0 to size-1
      * @return true if the bit is set, false otherwise
      * @throws IndexOutOfBoundsException if bit is smaller then zero or bigger then or equal to size
      */

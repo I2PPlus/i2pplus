@@ -64,6 +64,9 @@ public class RouterClock extends Clock {
 
     /**
      * Does not start. Caller MUST call start()
+     *
+     * @param context the router context used to create the timestamper and to
+     *        resolve clock settings
      */
     public RouterClock(RouterContext context) {
         super(context);

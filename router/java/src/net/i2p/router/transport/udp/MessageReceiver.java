@@ -45,6 +45,8 @@ class MessageReceiver {
 
     /**
      * MessageReceiver.
+     * @param ctx the router context, used for the log, the rate stats, and peer banning
+     * @param transport the UDP transport that parsed messages are handed back to
      */
     public MessageReceiver(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -106,6 +108,7 @@ class MessageReceiver {
     /**
      * The target thread count. Takes effect immediately — excess threads
      * will exit, new threads will be started if needed.
+     * @param count the requested number of processing threads, clamped into the range 2 to 16
      * @since 0.9.70+
      */
     public static void setThreadCount(int count) {
@@ -199,6 +202,7 @@ class MessageReceiver {
      * This queues the message for processing.
      * Processing will call state.releaseResources(), do not access state after calling this.
      * BLOCKING if queue is full.
+     * @param state the parsed message state; ownership passes to the receiving thread
      */
     public void receiveMessage(InboundMessageState state) {
         if (_alive) {
@@ -211,6 +215,7 @@ class MessageReceiver {
     /**
      * Main processing loop. Pulls completed messages from the queue, parses them
      * into I2NPMessages, and delivers them to the transport.
+     * @param handler the message reader that turns queued bytes into I2NPMessage objects
      */
     void loop(I2NPMessageHandler handler) {
         InboundMessageState message = null;

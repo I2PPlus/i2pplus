@@ -31,6 +31,8 @@ class DevSU3UpdateHandler implements Checker, Updater {
 
     /**
      * DevSU3UpdateHandler.
+     * @param ctx the router context supplying the dev SU3 URL property and the log
+     * @param mgr the update manager that runs the checker and reports its progress
      */
     public DevSU3UpdateHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;
@@ -38,6 +40,9 @@ class DevSU3UpdateHandler implements Checker, Updater {
     }
 
     /**
+     * Returns the dev SU3 download location as a single-element list. The URL comes from the
+     * console property set by the user, so it is null when that property is unset and also when
+     * its value does not parse as a URI, leaving the checker with nothing to fetch.
      * @return null if none
      */
     public List<URI> getUpdateSources() {

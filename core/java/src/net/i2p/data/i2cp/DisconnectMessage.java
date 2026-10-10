@@ -44,6 +44,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
 
     /**
      * Reason for the disconnect.
+     * @param reason the reason the client is closing the session, written into the message body and shown by the router in its session logs; null when no reason is given
      */
     public void setReason(String reason) {
         _reason = reason;

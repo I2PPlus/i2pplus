@@ -71,8 +71,10 @@ public class TranslateReader extends FilterReader {
 
     /**
      * May be null for tagging only.
+     * @param ctx the context the bundle is looked up through
      * @param bundle may be null for tagging only
      * @param in UTF-8
+     * @throws IOException declared but never thrown; the stream is only wrapped here
      */
     public TranslateReader(I2PAppContext ctx, String bundle, InputStream in) throws IOException {
         this(ctx, bundle, new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8)));
@@ -80,7 +82,9 @@ public class TranslateReader extends FilterReader {
 
     /**
      * May be null for tagging only.
+     * @param ctx the context the bundle is looked up through
      * @param bundle may be null for tagging only
+     * @param in the reader the tag text is pulled from
      * @since 0.9.34
      */
     public TranslateReader(I2PAppContext ctx, String bundle, Reader in) {
@@ -384,6 +388,8 @@ public class TranslateReader extends FilterReader {
 
     /**
      * Do not comment out, used to extract tags as a part of the build process.
+     *
+     * @param args the subcommand (test or tag) followed by its file arguments
      */
     public static void main(String[] args) {
         try {

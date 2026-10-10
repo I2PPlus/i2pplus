@@ -234,7 +234,10 @@ public class I2PSSLSocketFactory {
     /**
      * Create a socket factory with the given context and certificate path.
      *
+     * @param context the app context whose config and base dirs hold the certificates
+     * @param loadSystemCerts true to trust the JVM key store in addition to the loaded certs
      * @param relativeCertPath e.g. "certificates/i2cp"; as of 0.9.41, may be absolute
+     * @throws GeneralSecurityException if the key store cannot be loaded or the context cannot be initialized
      * @since 0.9.9 was static
      */
     public I2PSSLSocketFactory(I2PAppContext context, boolean loadSystemCerts, String relativeCertPath)
@@ -252,6 +255,11 @@ public class I2PSSLSocketFactory {
      *
      * Hostname validation is skipped for localhost addresses, but you still
      * must trust the certificate.
+     *
+     * @param host the hostname to validate the certificate against, not an IP literal
+     * @param port the TCP port to connect to
+     * @return an SSL socket with the protocol, ciphers and hostname already checked
+     * @throws IOException if the connection cannot be established
      */
     public Socket createSocket(String host, int port) throws IOException {
         SSLSocket rv = (SSLSocket) _factory.createSocket(host, port);
@@ -270,6 +278,10 @@ public class I2PSSLSocketFactory {
      * Hostname validation is skipped for localhost addresses, but you still
      * must trust the certificate.
      *
+     * @param host the address to connect to, reverse resolved for certificate validation
+     * @param port the TCP port to connect to
+     * @return an SSL socket with the protocol, ciphers and hostname already checked
+     * @throws IOException if the connection cannot be established
      * @since 0.9.9
      */
     public Socket createSocket(InetAddress host, int port) throws IOException {
@@ -289,6 +301,9 @@ public class I2PSSLSocketFactory {
      * ref: http://op-co.de/blog/posts/java_sslsocket_mitm/
      * ref: http://kevinlocke.name/bits/2012/10/03/ssl-certificate-verification-in-dispatch-and-asynchttpclient/
      *
+     * @param ctx the app context supplying the config that can disable verification
+     * @param socket the connected socket whose certificate is checked
+     * @param host the hostname to validate against, without [] around an IPv6 literal
      * @throws SSLException on hostname verification failure
      * @since 0.9.20
      */
@@ -518,6 +533,7 @@ public class I2PSSLSocketFactory {
      *
      * Adapted from Jetty SslContextFactory.java
      *
+     * @param socket the socket whose enabled protocols and cipher suites are narrowed
      * @since 0.9.16
      */
     public static void setProtocolsAndCiphers(SSLSocket socket) {
@@ -533,6 +549,7 @@ public class I2PSSLSocketFactory {
      *
      * Adapted from Jetty SslContextFactory.java
      *
+     * @param socket the server socket whose enabled protocols and cipher suites are narrowed
      * @since 0.9.16
      */
     public static void setProtocolsAndCiphers(SSLServerSocket socket) {

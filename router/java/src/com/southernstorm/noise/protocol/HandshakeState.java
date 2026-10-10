@@ -287,6 +287,8 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
 
     /**
      * Copy constructor for cloning
+     * @param o the state to clone, whose symmetric state and DH key pairs are copied
+     * @throws CloneNotSupportedException if the handshake has already split or completed
      * @since 0.9.44
      */
     protected HandshakeState(HandshakeState o) throws CloneNotSupportedException {
@@ -1137,6 +1139,9 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
 
     /**
      * I2P for mixing in padding in messages 1 and 2
+     * @param data the buffer holding the bytes to mix into the handshake hash
+     * @param offset index into data of the first byte to mix in
+     * @param length count of bytes to mix in starting at offset
      */
     public void mixHash(byte[] data, int offset, int length) {
         symmetric.mixHash(data, offset, length);

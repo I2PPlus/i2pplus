@@ -66,11 +66,11 @@ class PersistentMailCache {
     private static final String DIR_CACHE = "cache";
     private static final String CACHE_PREFIX = "cache-";
     /**
-     * DIR_IMPORT.
+     * Directory beside the cache holding imported .eml files, debug only.
      */
     public static final String DIR_IMPORT = "import"; // Flat with .eml files, debug only for now
     /**
-     * DIR_ATTACHMENTS.
+     * Directory holding draft attachment files, created only by the drafts cache.
      */
     public static final String DIR_ATTACHMENTS = "attachments"; // Flat with draft attachment files
     private static final String DIR_PREFIX = "s";
@@ -84,8 +84,13 @@ class PersistentMailCache {
      *
      * Does NOT load the mails in. Caller MUST call getMails().
      *
+     * @param ctx supplies the log manager and the base directory
+     * @param host IMAP host, part of the directory name
+     * @param port IMAP port, part of the directory name
+     * @param user mail account name, part of the directory name
      * @param pass ignored
      * @param folder e.g. DIR_FOLDER
+     * @throws IOException if the cache directory cannot be created
      */
     public PersistentMailCache(I2PAppContext ctx, String host, int port, String user, String pass, String folder) throws IOException {
         _context = ctx;
@@ -163,6 +168,9 @@ class PersistentMailCache {
         private final boolean _isD;
 
         /**
+         * Take the queues to drain and whether the files are drafts, so the
+         * resulting Mail objects are built the right way.
+         *
          * @param in queue of files to load
          * @param out queue to put loaded mails into
          * @param isDrafts whether these are drafts
@@ -172,9 +180,6 @@ class PersistentMailCache {
             _isD = isDrafts;
         }
 
-        /**
-         * run.
-         */
         @Override
         /**
          * Execute the task.
@@ -189,8 +194,11 @@ class PersistentMailCache {
     }
 
     /**
-     * Fetch any needed data from disk.
+     * Fetch any needed data from disk, filling in the header, or the body if
+     * that is what was asked for and only a header file is on disk.
      *
+     * @param mail the mail to populate, matched on its uidl
+     * @param headerOnly true to load just the header, false to load the body too
      * @return success
      */
     public boolean getMail(Mail mail, boolean headerOnly) {
@@ -236,8 +244,10 @@ class PersistentMailCache {
     }
 
     /**
-     * Save data to disk.
+     * Write the mail to disk as a full message when it has a body, otherwise
+     * as a header-only file. An existing file is left alone.
      *
+     * @param mail the mail to save
      * @return success
      */
     public boolean saveMail(Mail mail) {
@@ -264,14 +274,16 @@ class PersistentMailCache {
     }
 
     /**
+     * Delete both the full-message and the header-only file for this mail.
      *
-     * Delete data from disk.
+     * @param mail the mail to remove
      */
     public void deleteMail(Mail mail) {deleteMail(mail.uidl);}
 
     /**
+     * Delete both the full-message and the header-only file for this uidl.
      *
-     * Delete data from disk.
+     * @param uidl the unique ID of the mail to remove
      */
     public void deleteMail(String uidl) {
         synchronized(_lock) {
@@ -306,10 +318,20 @@ class PersistentMailCache {
         return base;
     }
 
-    /** @return the header-only file for this UIDL */
+    /**
+     * The gzipped header-only file for this uidl. The file need not exist yet.
+     *
+     * @param uidl the unique ID of the mail
+     * @return the header-only file for this UIDL
+     */
     public File getHeaderFile(String uidl) {return getFile(uidl, HDR_SUFFIX);}
 
-    /** @return the full message file for this UIDL */
+    /**
+     * The gzipped full-message file for this uidl. The file need not exist yet.
+     *
+     * @param uidl the unique ID of the mail
+     * @return the full message file for this UIDL
+     */
     public File getFullFile(String uidl) {return getFile(uidl, FULL_SUFFIX);}
 
     /**
@@ -317,11 +339,15 @@ class PersistentMailCache {
      * For writing, caller MUST call writeComplete() on rv.
      * Does not necessarily exist.
      *
+     * @param uidl the unique ID of the mail
+     * @return a new buffer over the full message file
      * @since 0.9.35
      */
     public GzipFileBuffer getFullBuffer(String uidl) {return new GzipFileBuffer(getFile(uidl, FULL_SUFFIX));}
 
     /**
+     * Where draft attachments are stored, which only the drafts cache creates.
+     *
      * @return non-null only for Drafts
      * @since 0.9.35
      */
@@ -370,6 +396,8 @@ class PersistentMailCache {
     }
 
     /**
+     * Wrap a cache file in a decompressing buffer.
+     *
      * @return null on failure
      */
     private static Buffer read(File f) {

@@ -20,6 +20,12 @@ import java.net.IDN;
 public class DefaultIdnaTransformator implements IdnaTransformator {
 
     /**
+     * Constructor. Each transform is a stateless delegation to {@link java.net.IDN},
+     * so a bare instance is usable wherever an IdnaTransformator is required.
+     */
+    public DefaultIdnaTransformator() {}
+
+    /**
      * toASCII.
      */
     @Override

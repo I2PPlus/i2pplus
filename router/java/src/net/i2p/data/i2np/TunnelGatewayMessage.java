@@ -25,18 +25,25 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
     public final static int MESSAGE_TYPE = 19;
     /** If we can't deliver a tunnel message in 10s, forget it. */
     private static final int EXPIRATION_PERIOD = 10*1000;
-    /** Constructor with 10-second message expiration from context clock. */
+    /**
+     * Constructor with 10-second message expiration from context clock.
+     * @param context the router context whose clock timestamps this message's expiration
+     */
 
     public TunnelGatewayMessage(I2PAppContext context) {
         super(context);
         setMessageExpiration(context.clock().now() + EXPIRATION_PERIOD);
     }
-    /** Return the tunnelId */
+    /**
+     * Return the tunnelId
+     * @return the ID of the tunnel to deliver to, null until setTunnelId has been called
+     */
 
     public TunnelId getTunnelId() {return _tunnelId;}
 
     /**
      * Tunnel ID for this message; may only be set once.
+     * @param id the ID of the tunnel that must deliver this message to the far endpoint
      * @throws IllegalStateException if id previously set, to protect saved checksum
      */
     public void setTunnelId(TunnelId id) {
@@ -59,6 +66,7 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
 
     /**
      * Embedded message; may only be set once.
+     * @param msg the message to carry onward through the tunnel, which must not be null
      * @throws IllegalStateException if msg previously set, to protect saved checksum
      */
     public void setMessage(I2NPMessage msg) {

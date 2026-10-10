@@ -79,7 +79,7 @@ public class NTCPConnection implements Closeable {
      */
     private static final int MAX_READ_BUFS = 32;
     /**
-     * true while read interest is cleared because _readBufs is full.
+     * True while read interest is cleared because _readBufs is full.
      *
      * @since 0.9.71+
      */
@@ -143,9 +143,11 @@ public class NTCPConnection implements Closeable {
     private long _lastSendTime;
     private long _lastReceiveTime;
     private long _lastRateUpdated;
-    /** Last time "ntcp.writeBufs.size" was recorded, to throttle the per-frame
+    /**
+     * Last time "ntcp.writeBufs.size" was recorded, to throttle the per-frame
      *  RateStat call on the write path (sample at most once per second).
-     *  Best-effort throttle only; no _writeLock needed. */
+     * Best-effort throttle only; no _writeLock needed.
+     */
     private long _lastWriteBufsStat;
     private final long _created;
     // prevent sending meta before established
@@ -197,7 +199,8 @@ public class NTCPConnection implements Closeable {
     private final long _connID = __connID.incrementAndGet();
     //// NTCP2 things
 
-    /** See spec. Max Noise payload 65535,
+    /**
+     * See spec. Max Noise payload 65535,
      *  minus 16 byte MAC and 3 byte block header.
      *  Includes 9-byte I2NP header.
      */
@@ -312,7 +315,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     * Base constructor in/out.
+     * Base constructor for an inbound or outbound connection.
      *
      * @param ctx the router context
      * @param transport the NTCP transport
@@ -360,13 +363,13 @@ public class NTCPConnection implements Closeable {
 
     /**
      *  Socket channel for this connection.
-     *  @param chan the channel
+     *  @param chan the channel this connection reads and writes through
      */
     public void setChannel(SocketChannel chan) { _chan = chan; }
 
     /**
      * Selection key for this connection.
-     * @param key the key
+     * @param key the selection key registering this connection with the pumper
      */
     public void setKey(SelectionKey key) { _conKey = key; }
 
@@ -395,7 +398,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Remote IP address.
+     *  Return the remote peer's IP address.
      *
      *  @return null if unknown
      *  @since 0.9.53
@@ -410,7 +413,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Remote port.
+     *  Return the remote peer's UDP port.
      *
      *  @return 0 if unknown
      *  @since 2.11.0
@@ -452,7 +455,7 @@ public class NTCPConnection implements Closeable {
 
     /**
      *  A positive number means our clock is ahead of theirs.
-     *  @return seconds
+     *  @return the clock skew in seconds, positive if our clock runs ahead
      */
     public long getClockSkew() { return _clockSkew; }
 
@@ -487,19 +490,19 @@ public class NTCPConnection implements Closeable {
     /**
      *  Messages sent on this connection.
      *
-     *  @return messages sent
+     *  @return how many messages have been written on this connection
      */
     public int getMessagesSent() { return _messagesWritten.get(); }
 
     /**
      *  Messages received on this connection.
      *
-     *  @return messages received
+     *  @return how many messages have been read on this connection
      */
     public int getMessagesReceived() { return _messagesRead.get(); }
 
     /**
-     *  Outbound queue size.
+     *  Return the number of messages waiting to be sent.
      *
      *  @return outbound queue size
      */
@@ -520,7 +523,7 @@ public class NTCPConnection implements Closeable {
 
     /**
      *  Drain any pending outbound messages to a new queue
-     *  @return number drained
+     *  @return how many pending messages were moved into the given queue
      *  @since 0.9.46
      */
     private int drainOutboundTo(Queue<OutNetMessage> to) {
@@ -545,8 +548,8 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Time since last send in milliseconds.
-     * @param now current time
-     * @return milliseconds
+     * @param now the current time in milliseconds since the epoch
+     * @return how many milliseconds have passed since the last send
      * @since 0.9.38
      */
     public long getTimeSinceSend(long now) { return now - _lastSendTime; }
@@ -560,8 +563,8 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Time since last receive in milliseconds.
-     * @param now current time
-     * @return milliseconds
+     * @param now the current time in milliseconds since the epoch
+     * @return how many milliseconds have passed since the last receive
      * @since 0.9.38
      */
     public long getTimeSinceReceive(long now) { return now - _lastReceiveTime; }
@@ -575,8 +578,8 @@ public class NTCPConnection implements Closeable {
 
     /**
      * Time since connection creation in milliseconds.
-     * @param now current time
-     * @return milliseconds
+     * @param now the current time in milliseconds since the epoch
+     * @return how many milliseconds have passed since the connection was created
      * @since 0.9.38
      */
     public long getTimeSinceCreated(long now) { return now -_created; }
@@ -623,7 +626,7 @@ public class NTCPConnection implements Closeable {
     public boolean getMayDisconnect() { return _mayDisconnect; }
 
     /**
-     *  Workaround for EventPumper.
+     *  Reset the zero-read counters the EventPumper uses to spot a stalled peer.
      *  @since 0.8.12
      */
     public void clearZeroRead() {
@@ -665,8 +668,8 @@ public class NTCPConnection implements Closeable {
     public void close() { close(false); }
 
     /**
-     *  Close the connection.
-     *  @param allowRequeue if true, requeue pending messages
+     *  Close the connection, dropping or requeueing whatever is still pending.
+     *  @param allowRequeue if true, requeue pending messages for another tunnel
      */
     public void close(boolean allowRequeue) {
         if (!_closed.compareAndSet(false,true)) {
@@ -907,6 +910,9 @@ public class NTCPConnection implements Closeable {
         /** Unencrypted data buffer */
         final byte[] unencrypted;
 
+        /**
+         * Allocate a buffer large enough for one maximum-sized frame.
+         */
         public PrepBuffer() {
             unencrypted = new byte[BUFFER_SIZE];
         }
@@ -930,7 +936,18 @@ public class NTCPConnection implements Closeable {
         private final List<NTCP2Payload.I2NPBlock> i2npBlocks = new ArrayList<>(4);
         private final List<NTCP2Payload.PaddingBlock> paddingBlocks = new ArrayList<>(4);
 
-        /** Get an I2NP block, reusing a pooled one if available. */
+        /**
+         * A pool with nothing reclaimed yet; all three lists start empty and grow only
+         * through {@link #release(List)}.
+         */
+        BlockPool() {}
+
+        /**
+         * Get an I2NP block, reusing a pooled one if available.
+         *
+         * @param m the message the block will carry on the wire
+         * @return a pooled block rebound to the message, or a newly allocated one
+         */
         NTCP2Payload.I2NPBlock acquireI2NP(I2NPMessage m) {
             if (i2npBlocks.isEmpty())
                 return new NTCP2Payload.I2NPBlock(m);
@@ -939,7 +956,12 @@ public class NTCPConnection implements Closeable {
             return b;
         }
 
-        /** Get a padding block, reusing a pooled one if available. */
+        /**
+         * Get a padding block, reusing a pooled one if available.
+         *
+         * @param size the number of padding bytes the block must hold
+         * @return a pooled block resized to the requested length, or a newly allocated one
+         */
         NTCP2Payload.PaddingBlock acquirePadding(int size) {
             if (paddingBlocks.isEmpty())
                 return new NTCP2Payload.PaddingBlock(size);
@@ -948,7 +970,11 @@ public class NTCPConnection implements Closeable {
             return b;
         }
 
-        /** Return the pooled block types to the pool; other types are dropped. */
+        /**
+         * Return the pooled block types to the pool; other types are dropped.
+         *
+         * @param blocks the blocks written this frame, to be reclaimed for later reuse
+         */
         void release(List<Block> blocks) {
             for (Block b : blocks) {
                 if (b instanceof NTCP2Payload.I2NPBlock)
@@ -2112,7 +2138,7 @@ public class NTCPConnection implements Closeable {
     /**
      * We are Alice or Bob. NTCP2 only.
      *
-     * @param clockSkew see above
+     * @param clockSkew the clock skew in seconds; a positive value means our clock is ahead
      * @param sender use to send
      * @param receiver use to receive
      * @param sip_send 24 bytes to init SipHash out
@@ -2624,8 +2650,8 @@ public class NTCPConnection implements Closeable {
     /**
      *  Atomically updates the write-interest-pending flag.
      *
-     *  @param expected expected value
-     *  @param update new value
+     *  @param expected the flag value currently stored, compared against for equality
+     *  @param update the flag value to store if the comparison succeeds
      *  @return true if CAS succeeded
      */
     public boolean compareAndSetWriteInterestPending(boolean expected, boolean update) {

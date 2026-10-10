@@ -13,6 +13,12 @@ import java.util.Locale;
 class Sorters {
 
     /**
+     * The outer class only groups the sorters below, each of which is a static nested
+     * class, so an instance carries nothing.
+     */
+    Sorters() {}
+
+    /**
      * Base for the various sorters
      *
      * @since 0.9.13
@@ -40,7 +46,13 @@ class Sorters {
             return fallbackCompare(a, b);
         }
 
-        /** Compare two mail objects */
+        /**
+         * Compare two mail objects
+         *
+         * @param a the mail on the left of the comparison
+         * @param b the mail on the right of the comparison
+         * @return negative, zero or positive as the left mail sorts before or after the right
+         */
         protected abstract int compare(Mail a, Mail b);
 
         /** Date-based fallback comparator */
@@ -169,6 +181,8 @@ class Sorters {
          * Use as fallback in other sorters
          * @param a non-null
          * @param b non-null
+         * @return negative, zero or positive as the first mail sorts before, at the same
+         * date as, or after the second; a mail with no date sorts last
          */
         public static int scompare(Mail a, Mail b) {
             return a.date != null ? ( b.date != null ? a.date.compareTo( b.date ) : -1 ) : ( b.date != null ? 1 : 0 );

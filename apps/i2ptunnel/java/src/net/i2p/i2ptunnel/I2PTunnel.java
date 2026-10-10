@@ -108,7 +108,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /** @since 0.9.17 */
     private enum CloseMode { NORMAL, FORCED, DESTROY }
 
-    /** Command-line entry point */
+    /**
+     * Command-line entry point
+     *
+     * @param args the command-line arguments parsed by the I2PTunnel constructor
+     */
     public static void main(String[] args) {
         try {
             new I2PTunnel(args);

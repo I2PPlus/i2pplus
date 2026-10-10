@@ -15,6 +15,8 @@ class Recorder {
     private final Threshold threshold;
 
     /**
+     * Create a recorder writing to the given file.
+     *
      * @param file to record hashes of destinations that breach the threshold
      * @param threshold the threshold that needs to be breached to trigger recording
      */
@@ -23,12 +25,20 @@ class Recorder {
         this.threshold = threshold;
     }
 
-    /** @return the file */
+    /**
+     * Read the file that breaching destinations are recorded to.
+     *
+     * @return the file whose contents are re-read on each filter cycle
+     */
     File getFile() {
         return file;
     }
 
-    /** @return the threshold */
+    /**
+     * Read the threshold that triggers a recording.
+     *
+     * @return the threshold, whose seconds bound how far back the filter looks
+     */
     Threshold getThreshold() {
         return threshold;
     }

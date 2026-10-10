@@ -667,7 +667,12 @@ public class MetaInfo {
         return lo;
     }
 
-    /** Cumulative exclusive end offset of each file; single-file torrents return null. */
+    /**
+     * Cumulative exclusive end offset of each file; single-file torrents return null.
+     *
+     * @return one offset per file, in torrent order, or null when the torrent has no
+     *         per-file length list
+     */
     long[] fileEnds() {
         if (lengths == null) {
             return null;
@@ -737,9 +742,10 @@ public class MetaInfo {
      * Return the length of a piece. All pieces are of equal length except for the last one (<code>
      * getPieces()-1</code>).
      *
+     * @param piece zero-based piece index, from 0 to {@link #getPieces()} - 1
+     * @return the piece length
      * @throws IndexOutOfBoundsException when piece is equal to or greater then the number of pieces
      *     in the torrent.
-     * @return the piece length
      */
     public int getPieceLength(int piece) {
         int pieces = getPieces();
@@ -819,7 +825,11 @@ public class MetaInfo {
         return true;
     }
 
-    /** Returns the total length of the torrent in bytes. This includes any padding files. */
+    /**
+     * Returns the total length of the torrent in bytes. This includes any padding files.
+     *
+     * @return the torrent size in bytes, padding included
+     */
     public long getTotalLength() {
         return length;
     }
@@ -876,6 +886,9 @@ public class MetaInfo {
      * announce-list. Preserves infohash and info map, including any non-standard fields.
      *
      * @param announce may be null
+     * @return the copy, sharing the same infohash and info map
+     * @throws InvalidBEncodingException if the info dictionary built from this torrent is
+     *     missing or malformed
      */
     public MetaInfo reannounce(String announce) throws InvalidBEncodingException {
         Map<String, BEValue> m = new HashMap<>();

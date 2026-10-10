@@ -117,6 +117,9 @@ public final class PublicSuffixMatcher {
 
     /**
      * Test if the given domain is a public suffix, meaning it has no registrable part.
+     *
+     * @param domain the domain name to check, a leading dot is ignored
+     * @return true if the domain is a public suffix, or is null
      */
     public boolean matches(final String domain) {
         if (domain == null) {

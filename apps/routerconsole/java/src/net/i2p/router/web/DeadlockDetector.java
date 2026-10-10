@@ -30,6 +30,8 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
 
     /**
      * DeadlockDetector.
+     *
+     * @param ctx the router context to poll and to report deadlocks in
      */
     public DeadlockDetector(RouterContext ctx) {
         super(ctx.simpleTimer2());
@@ -68,6 +70,9 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
 
     /**
      * detect.
+     *
+     * @param ctx the router context to poll and to report deadlocks in
+     * @return true if a deadlock is found, false if none or if the check failed
      */
     public static boolean detect(RouterContext ctx) {
         if (_isDeadlocked.get())

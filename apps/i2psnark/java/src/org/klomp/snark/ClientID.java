@@ -38,6 +38,12 @@ import net.i2p.data.DataHelper;
  */
 public final class ClientID {
 
+    /**
+     * Constructor. The recognition table and the spoofing profiles are static,
+     * so an instance holds no state and every accessor here is static.
+     */
+    public ClientID() {}
+
     private static final String OS_NAME = System.getProperty("os.name", "");
     private static final String JAVA_VERSION = System.getProperty("java.version", "");
 
@@ -70,7 +76,8 @@ public final class ClientID {
             extV = v;
         }
 
-        /** The profile name, also the accepted i2psnark.clientId token. */
+        /** The profile name, also the accepted i2psnark.clientId token.
+         *  @return the name identifying this profile */
         public String getName() {
             return name;
         }
@@ -103,6 +110,8 @@ public final class ClientID {
         /**
          * The HTTP User-Agent for tracker announces and webseed fetches.
          * Never null.
+         *
+         * @return the base user agent, with ";OS;Java version" appended when this profile requests it
          */
         public String getUserAgent() {
             if (!appendOsJava) {
@@ -113,6 +122,8 @@ public final class ClientID {
 
         /**
          * The BEP 10 extension handshake "v" value. Never null.
+         *
+         * @return the extension protocol version string advertised in the handshake
          */
         public String getExtHandshakeName() {
             return extV;
@@ -127,18 +138,23 @@ public final class ClientID {
     // Version data verified against upstream releases/captures as of 2026-08.
     // Vuze sends brand "Azureus" with OS/Java in the tracker UA but plain
     // "Vuze" in the handshake; the mismatch is authentic.
+    /** Vuze 5.7.7.0: Azureus-branded peer ID and tracker UA, plain "Vuze" handshake. */
     public static final Profile VUZE =
             new Profile("Vuze", "-AZ5770-", "Azureus 5.7.7.0", true, "Vuze 5.7.7.0");
     // BiglyBT sends no OS/Java by default (upstream config default off).
+    /** BiglyBT 4.1.0.0: no OS/Java suffix in either the tracker UA or handshake. */
     public static final Profile BIGLYBT =
             new Profile("BiglyBT", "-BI4100-", "BiglyBT 4.1.0.0", false, "BiglyBT 4.1.0.0");
     // Transmission uses a slash in the UA but a space in the handshake.
+    /** Transmission 4.1.3: slash-separated UA, space-separated handshake string. */
     public static final Profile TRANSMISSION =
             new Profile("Transmission", "-TR4130-", "Transmission/4.1.3", false, "Transmission 4.1.3");
     // Gear-era peer ID digits and handshake string unverified against a capture.
+    /** KTorrent 26.04.3: Gear-era identity, both strings unverified against a capture. */
     public static final Profile KTORRENT =
             new Profile("KTorrent", "-KT2604-", "KTorrent/26.04.3", false, "KTorrent 26.04.3");
     // Deluge's libtorrent part should pair with a plausible bundled libtorrent.
+    /** Deluge 2.2.0 paired with libtorrent 2.0.13, announced in both strings. */
     public static final Profile DELUGE =
             new Profile(
                     "Deluge",
@@ -146,13 +162,16 @@ public final class ClientID {
                     "Deluge/2.2.0 libtorrent/2.0.13",
                     false,
                     "Deluge/2.2.0 libtorrent/2.0.13");
+    /** qBittorrent 5.2.3: mixed-case "-qB5230-" prefix, no OS/Java suffix. */
     public static final Profile QBITTORRENT =
             new Profile("qBittorrent", "-qB5230-", "qBittorrent/5.2.3", false, "qBittorrent/5.2.3");
     // Real libtorrent 2.x uses a lowercase -lt prefix we do not recognize, so
     // this profile pins the last fully-authentic 1.2.x identity instead.
+    /** libtorrent 1.2.19: the last fully-authentic 1.2.x identity. */
     public static final Profile LIBTORRENT =
             new Profile("libtorrent", "-LT1219-", "libtorrent/1.2.19", false, "libtorrent/1.2.19");
     // Tixati peer ID has no dashes; UA and handshake strings unverified.
+    /** Tixati 3.44: dash-free "TIX34" peer ID; both strings unverified. */
     public static final Profile TIXATI =
             new Profile("Tixati", "TIX34", "Tixati/3.44", false, "Tixati 3.44");
 

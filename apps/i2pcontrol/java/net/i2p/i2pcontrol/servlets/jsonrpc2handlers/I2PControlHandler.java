@@ -37,6 +37,9 @@ public class I2PControlHandler implements RequestHandler {
 
     /**
      * I2PControlHandler.
+     *
+     * @param helper the JSON-RPC2 helper used to build responses and check authentication
+     * @param secMan the security manager holding the control interface password hash
      */
     public I2PControlHandler(JSONRPC2Helper helper, SecurityManager secMan) {
         _helper = helper;

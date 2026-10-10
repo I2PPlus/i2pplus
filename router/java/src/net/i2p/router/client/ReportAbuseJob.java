@@ -34,7 +34,15 @@ class ReportAbuseJob extends JobImpl {
     /** Severity level of the abuse report */
     private final int _severity;
 
-    /** Create abuse report */
+    /**
+     * Create abuse report
+     *
+     * @param context the router context, whose log manager supplies this job's logger
+     * @param runner the client connection the report will be sent to
+     * @param dest the destination being reported, used to look up the session to report to
+     * @param reason the human-readable description of the abuse
+     * @param severity the numeric abuse severity level to report, 0-255
+     */
     public ReportAbuseJob(RouterContext context, ClientConnectionRunner runner,
                           Destination dest, String reason, int severity) {
         super(context);

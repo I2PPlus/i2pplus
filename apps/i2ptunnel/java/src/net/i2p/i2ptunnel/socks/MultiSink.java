@@ -15,6 +15,9 @@ public class MultiSink<S extends Sink> implements Source, Sink {
     private final Map<Integer, S> cache;
 
     /**
+     * Wrap the port-to-sink map that the caller keeps up to date, so that each
+     * send can be dispatched to the sink registered for its destination port.
+     *
      * @param cache map of toPort to Sink
      */
     public MultiSink(Map<Integer, S> cache) {
@@ -35,7 +38,7 @@ public class MultiSink<S extends Sink> implements Source, Sink {
      * @param from passed along
      * @param fromPort passed along
      * @param toPort passed along
-     * @throws RuntimeException
+     * @throws RuntimeException if the sink selected by toPort fails to send the data
      * @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination from, int fromPort, int toPort, byte[] data) {

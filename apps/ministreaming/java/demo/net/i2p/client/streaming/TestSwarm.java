@@ -28,6 +28,11 @@ public class TestSwarm {
     private String _conOptions; // unused? used elsewhere?
     private boolean _dead; // unused? used elsewhere?
 
+    /**
+     * Run the swarm against the destinations named on the command line.
+     *
+     * @param args the local destination file, then zero or more peer destination files
+     */
     public static void main(String[] args) {
         if (args.length < 1) {
             System.err.println("Usage: TestSwarm myDestFile [peerDestFile ]*");
@@ -40,6 +45,13 @@ public class TestSwarm {
         swarm.startup();
     }
 
+    /**
+     * Construct a swarm over an existing destination.
+     *
+     * @param ctx the client context the destination and socket manager belong to
+     * @param destFile path to this destination's file, created if it does not exist
+     * @param peerDestFiles paths to the destinations this swarm will talk to
+     */
     public TestSwarm(I2PAppContext ctx, String destFile, String[] peerDestFiles) {
         _context = ctx;
         _log = ctx.logManager().getLog(TestSwarm.class);
@@ -49,6 +61,10 @@ public class TestSwarm {
         _conOptions = "";
     }
 
+    /**
+     * Load the destination, logging and returning on failure, then start the
+     * listener and sender threads.
+     */
     public void startup() {
         _log.debug("Starting up");
         File keys = new File(_destFile);

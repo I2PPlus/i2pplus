@@ -18,11 +18,19 @@ import java.nio.charset.StandardCharsets;
  */
 public class RandomArtServlet extends HttpServlet {
 
+    /**
+     * A fresh servlet on format version 1 with the default 24 hour identicon expiry;
+     * init() may raise the version when a newer format is requested.
+     */
+    public RandomArtServlet() {}
+
     private static final long serialVersionUID = -3507466186902317988L;
     private static final String PARAM_IDENTICON_CODE_SHORT = "c";
     private static final String PARAM_IDENTICON_MODE_SHORT = "m";
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
+    /** Bumped when the rendered output format changes. */
     private int version = 1;
+    /** How long a rendered identicon stays in the cache. */
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
     /**

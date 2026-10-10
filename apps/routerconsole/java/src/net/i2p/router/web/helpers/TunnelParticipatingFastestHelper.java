@@ -9,16 +9,22 @@ import net.i2p.util.Log;
 
 /**
  * Helper for fastest participating tunnels page rendering and form processing.
+ * The context is supplied by the base class, so there is nothing to do here.
  * @since 0.9.33
  */
 public class TunnelParticipatingFastestHelper extends HelperBase {
     /**
-     * TunnelParticipatingFastestHelper.
+     * Nothing to initialize; the router context arrives with the base class.
      */
     public TunnelParticipatingFastestHelper() { /* nop */ }
 
     /**
-     * @return the tunnel participating fastest
+     * Render the list of the fastest participating tunnels. The markup goes
+     * straight to the response writer when the helper has one, otherwise it is
+     * returned for the caller to place. A rendering failure is logged, not
+     * thrown, and yields an empty string.
+     *
+     * @return the tunnel participating fastest, or an empty string on failure
      */
     public String getTunnelParticipatingFastest() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

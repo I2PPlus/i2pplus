@@ -47,6 +47,12 @@ public class DeviceList extends Vector<Device> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * Returns the device stored at the specified position.
+     *
+     * @param n the zero-based index of the wanted device
+     * @return the device at that index, or null if the index is out of range
+     */
     public Device getDevice(int n) {
         return get(n);
     }

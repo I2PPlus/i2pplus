@@ -49,7 +49,11 @@ public class SendMessageDirectJob extends JobImpl {
     /**
      * Send a message directly to a peer.
      *
+     * @param ctx the router context
+     * @param message the message to send
      * @param toPeer may be ourselves
+     * @param timeoutMs milliseconds to wait for delivery; under 5000 is raised to 10000
+     * @param priority the OutNetMessage priority, one of the MessageContext constants
      */
     public SendMessageDirectJob(RouterContext ctx, I2NPMessage message, Hash toPeer, int timeoutMs, int priority) {
         this(ctx, message, toPeer, null, null, null, null, timeoutMs, priority, 0);
@@ -58,7 +62,11 @@ public class SendMessageDirectJob extends JobImpl {
     /**
      * Send a message directly to a peer with an XOR mask.
      *
+     * @param ctx the router context
+     * @param message the message to send
      * @param toPeer may be ourselves
+     * @param timeoutMs milliseconds to wait for delivery; under 5000 is raised to 10000
+     * @param priority the OutNetMessage priority, one of the MessageContext constants
      * @param msgIDBloomXor value to xor the messageID with before passing to the InNetMessagePool, may be 0
      */
     public SendMessageDirectJob(RouterContext ctx, I2NPMessage message, Hash toPeer, int timeoutMs, int priority, long msgIDBloomXor) {
@@ -68,10 +76,14 @@ public class SendMessageDirectJob extends JobImpl {
     /**
      * Send a message directly to a peer with reply handling.
      *
+     * @param ctx the router context
+     * @param message the message to send
      * @param toPeer may be ourselves
      * @param onSuccess may be null
      * @param onFail may be null
-     * @param selector be null
+     * @param selector selects which reply triggers onSuccess, or null to accept any reply
+     * @param timeoutMs milliseconds to wait for delivery; under 5000 is raised to 10000
+     * @param priority the OutNetMessage priority, one of the MessageContext constants
      */
     public SendMessageDirectJob(RouterContext ctx, I2NPMessage message, Hash toPeer, ReplyJob onSuccess,
                                 Job onFail, MessageSelector selector, int timeoutMs, int priority) {
@@ -81,10 +93,14 @@ public class SendMessageDirectJob extends JobImpl {
     /**
      * Send a message directly to a peer with reply handling and XOR mask.
      *
+     * @param ctx the router context
+     * @param message the message to send
      * @param toPeer may be ourselves
      * @param onSuccess may be null
      * @param onFail may be null
-     * @param selector be null
+     * @param selector selects which reply triggers onSuccess, or null to accept any reply
+     * @param timeoutMs milliseconds to wait for delivery; under 5000 is raised to 10000
+     * @param priority the OutNetMessage priority, one of the MessageContext constants
      * @param msgIDBloomXor value to xor the messageID with before passing to the InNetMessagePool, may be 0
      */
     public SendMessageDirectJob(RouterContext ctx, I2NPMessage message, Hash toPeer, ReplyJob onSuccess,
@@ -95,11 +111,15 @@ public class SendMessageDirectJob extends JobImpl {
     /**
      * Send a message directly to a peer with full options.
      *
+     * @param ctx the router context
+     * @param message the message to send
      * @param toPeer may be ourselves
      * @param onSend may be null
      * @param onSuccess may be null
      * @param onFail may be null
-     * @param selector be null
+     * @param selector selects which reply triggers onSuccess, or null to accept any reply
+     * @param timeoutMs milliseconds to wait for delivery; under 5000 is raised to 10000
+     * @param priority the OutNetMessage priority, one of the MessageContext constants
      * @param msgIDBloomXor value to xor the messageID with before passing to the InNetMessagePool, may be 0
      */
     public SendMessageDirectJob(RouterContext ctx, I2NPMessage message, Hash toPeer, Job onSend, ReplyJob onSuccess,

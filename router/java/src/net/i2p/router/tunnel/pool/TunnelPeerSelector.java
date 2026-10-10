@@ -237,6 +237,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      * Format a set of excluded peers for logging, with exclusion reasons when
      * the set is an {@link Excluder} or {@link ExcluderBase}.
+     * @param peers the excluded peer hashes, or null for none
+     * @return a loggable string naming each excluded router by its 6-character base64 hash
      * @since 0.9.71+
      */
     protected static String formatExcludedPeers(Set<Hash> peers) {
@@ -670,7 +672,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * TunnelPeerSelector.
+     * Creates a selector that reads its peer profiles from the router context.
+     * @param context the router context
      */
     protected TunnelPeerSelector(RouterContext context) {
         super(context);
@@ -774,7 +777,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Needs analysis and testing
      *
      * @param settings the tunnel pool settings
-     * @return usually false
+     * @return true on roughly one call in four when the pool names explicit peers,
+     *         false otherwise (always false for an exploratory pool)
      */
     protected boolean shouldSelectExplicit(TunnelPoolSettings settings) {
         if (settings.isExploratory()) return false;
@@ -1372,7 +1376,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *
      * @param isInbound true for inbound tunnels
      * @param toAdd set of peers to initially populate the exclusion set
-     * @return non-null
+     * @return the exclusion set to consult, never null
      * @since 0.9.17
      */
     protected Set<Hash> getClosestHopExclude(boolean isInbound, Set<Hash> toAdd) {
@@ -1706,7 +1710,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         private final long k1;
 
         /**
-         * Not thread safe.
+         * Derives the SipHash sort keys from a session key, holding no state of its own.
          *
          * @param k container for sort keys, not used as a Hash
          */
@@ -1740,7 +1744,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param isInbound true for inbound tunnels
      * @param isExploratory true for exploratory tunnels
      * @param tunnel ENDPOINT FIRST, GATEWAY LAST!!!!, length 2 or greater
-     * @return ok
+     * @return true if the exploratory hop checks passed, false if the OBEP is
+     *         IPv6-only or the IBGW is unreachable, hidden or IPv6-only
      * @since 0.9.34
      */
     protected boolean checkTunnel(boolean isInbound, boolean isExploratory, List<Hash> tunnel) {
@@ -1778,7 +1783,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Check that each hop can connect to the next, including us.
      *
      * @param tunnel ENDPOINT FIRST, GATEWAY LAST!!!!
-     * @return ok
+     * @return true if every hop can reach the next, including us, false on the
+     *         first hop pair that cannot
      * @since 0.9.34
      */
     private boolean checkTunnel(List<Hash> tunnel) {
@@ -1850,6 +1856,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          * Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
          * Fetches the build success ratio once, so the per-peer exclusion
          * checks in {@link #contains(Object)} never re-read router statistics.
+         * @param isInbound true for an inbound pool
+         * @param isExploratory true for an exploratory pool
          */
         public Excluder(boolean isInbound, boolean isExploratory) {
             this(isInbound, isExploratory, getBuildSuccess(ctx));
@@ -1858,6 +1866,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         /**
          * Automatically adds selectPeersInTooManyTunnels(), unless i2np.allowLocal.
          * Uses a build success ratio already fetched by the caller.
+         * @param isInbound true for an inbound pool
+         * @param isExploratory true for an exploratory pool
+         * @param buildSuccess the global build success ratio in [0.0, 1.0]
          */
         public Excluder(boolean isInbound, boolean isExploratory, double buildSuccess) {
             super(ctx.getBooleanProperty("i2np.allowLocal") ? new LinkedHashSet<>()
@@ -1874,6 +1885,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          * Fetches the build success ratio once, so the per-peer exclusion
          * checks in {@link #contains(Object)} never re-read router statistics.
          *
+         * @param isInbound true for an inbound pool
+         * @param isExploratory true for an exploratory pool
          * @param toAdd initial contents, copied
          */
         public Excluder(boolean isInbound, boolean isExploratory, Set<Hash> toAdd) {
@@ -1885,7 +1898,10 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          * Makes a copy of toAdd.  Uses a build success ratio already fetched
          * by the caller.
          *
+         * @param isInbound true for an inbound pool
+         * @param isExploratory true for an exploratory pool
          * @param toAdd initial contents, copied
+         * @param buildSuccess the global build success ratio in [0.0, 1.0]
          */
         public Excluder(boolean isInbound, boolean isExploratory, Set<Hash> toAdd, double buildSuccess) {
             super(new LinkedHashSet<>(toAdd));
@@ -2228,6 +2244,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     static final class KeepAliveTally {
 
         /**
+         * Every counter starts at 0; the cycle fills them in as it selects and acts, and
+         * {@link #describe} reads them back.
+         */
+        KeepAliveTally() {}
+
+        /**
          * Peers the selector asked for, before any filtering.
          *
          * <p>This is the per-tier request doubled for the two tiers, not a count of
@@ -2333,6 +2355,20 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         }
     }
 
+    /**
+     * Send a {@link DatabaseLookupMessage} to a peer so it answers with our
+     * RouterInfo, which forces a full session handshake rather than the empty
+     * {@code DataMessage} that would leave the peer with nothing to reply to.
+     *
+     * <p>The RouterInfo is fetched unvalidated first, and peers with no usable
+     * transport address are skipped here rather than inside {@code establish()},
+     * so a peer with dead addresses cannot trigger a ban.
+     *
+     * @param ctx the router context
+     * @param peer the peer to pre-contact
+     * @return what happened, so the caller can tally why a peer was skipped
+     * @since 0.9.71+
+     */
     protected static PreConnectOutcome preConnectTo(RouterContext ctx, Hash peer) {
         RouterInfo ri = lookupRouterInfoUnvalidated(ctx, peer);
         if (ri == null)
@@ -2609,8 +2645,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *
      * @param fastPeers peers currently classified fast
      * @param startupGrace true while the router is within its startup grace period
-     * @param min floor multiplier
-     * @param max ceiling multiplier
+     * @param min the multiplier returned when fast peers are plentiful
+     * @param max the multiplier returned while the router is short of fast peers,
+     *        or during the startup grace period
      * @return multiplier in [min, max]
      * @since 0.9.71+
      */

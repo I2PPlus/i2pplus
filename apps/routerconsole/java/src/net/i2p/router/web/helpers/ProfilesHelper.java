@@ -9,6 +9,12 @@ import net.i2p.util.Log;
  * @since 0.9.33
  */
 public class ProfilesHelper extends HelperBase {
+    /**
+     * Starts on tab 0, which lists every profile; setFull() or setShow() moves the
+     * helper to a single tier before anything is rendered.
+     */
+    public ProfilesHelper() {}
+
     private int _full;
 
     private static final String[] titles = {
@@ -29,6 +35,8 @@ public class ProfilesHelper extends HelperBase {
 
     /**
      * setFull.
+     *
+     * @param f the profile tier to show, 0 for all, clamped to 0-4 when it parses
      */
     public void setFull(String f) {
         if (f != null) {
@@ -42,6 +50,7 @@ public class ProfilesHelper extends HelperBase {
     /**
      * Set by show=fast|highcap|floodfill|banned param (alternative to f=N).
      * Overrides _full if present.
+     * @param show the tier name to map to the numeric tier, or null to leave _full alone
      * @since 0.9.70+
      */
     public void setShow(String show) {
@@ -67,7 +76,12 @@ public class ProfilesHelper extends HelperBase {
         return "";
     }
 
-    /** @return empty string, writes directly to _out */
+    /**
+     * Renders the profile summary fragment: the per-peer status list in either the
+     * full or the compact form, per {@link #_full}.
+     *
+     * @return empty string, writes directly to _out
+     */
     public String getProfileSummary() {
         try {
             ProfileOrganizerRenderer rend = new ProfileOrganizerRenderer(_context.profileOrganizer(), _context);
@@ -76,7 +90,12 @@ public class ProfilesHelper extends HelperBase {
         return "";
     }
 
-    /** @return empty string, writes directly to _out */
+    /**
+     * Renders the compact banlist fragment: every blocked router and the reason,
+     * in the condensed one-line-per-entry layout.
+     *
+     * @return empty string, writes directly to _out
+     */
     public String getBanlistCompact() {
         try {
             BanlistRenderer rend = new BanlistRenderer(_context);

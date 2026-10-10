@@ -57,6 +57,10 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      * For writing
      *
+     * @param sessID the session the message is sent under
+     * @param dest the destination the message is addressed to
+     * @param payload the message payload to send
+     * @param nonce the transaction nonce the reply must echo
      * @since 0.9.54
      */
     public SendMessageExpiresMessage(SessionId sessID, Destination dest, Payload payload, long nonce) {
@@ -67,6 +71,11 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      * For writing
      *
+     * @param sessID the session the message is sent under
+     * @param dest the destination the message is addressed to
+     * @param payload the message payload to send
+     * @param nonce the transaction nonce the reply must echo
+     * @param options the DateAndFlags wrapping the expiration timestamp and the message flags
      * @since 0.9.54
      */
     public SendMessageExpiresMessage(SessionId sessID, Destination dest, Payload payload, long nonce, DateAndFlags options) {
@@ -95,6 +104,8 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
 
     /**
      * Expiration time of the message.
+     *
+     * @param d the absolute expiration date, replacing any previously set one
      */
     public void setExpiration(Date d) {
         _daf.setDate(d);
@@ -103,6 +114,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      * Message expiration time in ms.
      *
+     * @param d milliseconds since the epoch, replacing any previously set expiration
      * @since 0.8.4
      */
     public void setExpiration(long d) {
@@ -122,6 +134,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      * Message flags.
      *
+     * @param f the flag bitmask to store, replacing any previously set flags
      * @since 0.8.4
      */
     public void setFlags(int f) {

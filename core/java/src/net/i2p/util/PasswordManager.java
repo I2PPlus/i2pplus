@@ -44,6 +44,8 @@ public class PasswordManager {
 
     /**
      * PasswordManager.
+     *
+     * @param ctx the app context supplying the property store that holds the passwords
      */
     public PasswordManager(I2PAppContext ctx) {
         _context = ctx;
@@ -62,6 +64,8 @@ public class PasswordManager {
     }
 
     /**
+     * Checks a password stored in plaintext.
+     *
      * @param realm e.g. i2cp, routerconsole, etc.
      * @param user null or "" for no user, already trimmed
      * @param pw plain text, already trimmed
@@ -77,6 +81,8 @@ public class PasswordManager {
     }
 
     /**
+     * Checks a password stored base64-encoded.
+     *
      * @param realm e.g. i2cp, routerconsole, etc.
      * @param user null or "" for no user, already trimmed
      * @param pw plain text, already trimmed
@@ -160,6 +166,8 @@ public class PasswordManager {
     }
 
     /**
+     * Retrieve the plaintext-stored password.
+     *
      * @param realm e.g. i2cp, routerconsole, etc.
      * @param user null or "" for no user, already trimmed
      * @return the pw or null
@@ -171,6 +179,8 @@ public class PasswordManager {
     }
 
     /**
+     * Retrieve the base64-stored password.
+     *
      * @param realm e.g. i2cp, routerconsole, etc.
      * @param user null or "" for no user, already trimmed
      * @return the decoded pw or null

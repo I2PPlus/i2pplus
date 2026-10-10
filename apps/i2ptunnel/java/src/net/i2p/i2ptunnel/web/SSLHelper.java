@@ -11,6 +11,12 @@ import java.util.List;
 public class SSLHelper {
 
     /**
+     * parseArgs() is the only method and the class holds no fields, so an instance
+     * carries nothing.
+     */
+    public SSLHelper() {}
+
+    /**
      * Parses a space-separated argument string, respecting single and double quotes.
      * Adapted from LoadClientAppsJob.
      *

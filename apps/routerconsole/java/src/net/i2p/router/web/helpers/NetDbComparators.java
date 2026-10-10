@@ -27,8 +27,14 @@ final class NetDbComparators {
      *  Prioritizes published, nicknamed, named, client, and meta leasesets.
      */
     static class LeaseSetComparator implements Comparator<LeaseSet> {
+        /** The router context used to look up lease and country data. */
         private final RouterContext _context;
 
+        /**
+         * Create a comparator for the console's leaseset listing.
+         *
+         * @param ctx the router context
+         */
         public LeaseSetComparator(RouterContext ctx) {_context = ctx;}
 
         @Override
@@ -68,8 +74,14 @@ final class NetDbComparators {
      */
     static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
         private static final long serialVersionUID = 1L;
+        /** The destination whose routing key entries are being ordered. */
         private final transient Hash _us;
 
+        /**
+         * Create a comparator ordering leases by their routing key entry.
+         *
+         * @param us the destination the keys belong to
+         */
         public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
 
         @Override
@@ -82,9 +94,16 @@ final class NetDbComparators {
      *  Comparator for countries by translated name.
      */
     static class CountryComparator implements Comparator<String> {
+        /** The router context used to read the display language. */
         private final RouterContext _context;
+        /** Locale-sensitive collator, so country names sort in the user's language. */
         private final Collator coll;
 
+        /**
+         * Create a comparator ordering country names in the console's language.
+         *
+         * @param ctx the router context
+         */
         public CountryComparator(RouterContext ctx) {
             _context = ctx;
             coll = Collator.getInstance(new Locale(Messages.getLanguage(_context)));
@@ -106,6 +125,12 @@ final class NetDbComparators {
      */
     static class RAComparator implements Comparator<RouterAddress>, Serializable {
         private static final long serialVersionUID = 1L;
+
+        /**
+         * A stateless comparator, so a bare instance is enough: compare() reads
+         * nothing but the two addresses it is handed.
+         */
+        RAComparator() {}
 
         @Override
         public int compare(RouterAddress l, RouterAddress r) {

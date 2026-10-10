@@ -28,6 +28,12 @@ import java.nio.charset.StandardCharsets;
  * Bean for managing address book subscription sources and updates.
  */
 public class SubscriptionsBean extends BaseBean {
+    /**
+     * No subscription file has been resolved yet; getFileName() and loadConfig() fill
+     * fileName and content in from disk on first use.
+     */
+    public SubscriptionsBean() {}
+
     private String fileName;
     private String content;
     private static final String SUBS_FILE = "subscriptions.txt";

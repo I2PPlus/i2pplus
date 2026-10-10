@@ -93,6 +93,10 @@ public class SSLEepGet extends EepGet {
 
     /**
      * A new SSLEepGet with a new SSLState
+     *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param outputStream stream to write the response body to; takes precedence over outputFile
+     * @param url the https URL to fetch; redirects back to http are not followed
      */
     public SSLEepGet(I2PAppContext ctx, OutputStream outputStream, String url) {
         this(ctx, outputStream, url, null);
@@ -101,6 +105,9 @@ public class SSLEepGet extends EepGet {
     /**
      * Create an SSLEepGet that writes to a stream, using an existing SSL state.
      *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param outputStream stream to write the response body to; takes precedence over outputFile
+     * @param url the https URL to fetch; redirects back to http are not followed
      * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      * This makes repeated fetches from the same host MUCH faster,
      * and prevents repeated key store loads even for different hosts.
@@ -115,6 +122,9 @@ public class SSLEepGet extends EepGet {
      * Create an SSLEepGet that writes to a stream, using an existing SSL state,
      * limited to a maximum response size.
      *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param outputStream stream to write the response body to; takes precedence over outputFile
+     * @param url the https URL to fetch; redirects back to http are not followed
      * @param maxSize The maximum size of the response
      * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      * This makes repeated fetches from the same host MUCH faster,
@@ -129,6 +139,9 @@ public class SSLEepGet extends EepGet {
     /**
      * A new SSLEepGet with a new SSLState
      *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param outputFile path of the file to write the response body to; takes precedence over outputStream
+     * @param url the https URL to fetch; redirects back to http are not followed
      * @since 0.9.9
      */
     public SSLEepGet(I2PAppContext ctx, String outputFile, String url) {
@@ -138,6 +151,9 @@ public class SSLEepGet extends EepGet {
     /**
      * Create an SSLEepGet that writes to a file, using an existing SSL state.
      *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param outputFile path of the file to write the response body to; takes precedence over outputStream
+     * @param url the https URL to fetch; redirects back to http are not followed
      * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      * This makes repeated fetches from the same host MUCH faster,
      * and prevents repeated key store loads even for different hosts.
@@ -151,12 +167,16 @@ public class SSLEepGet extends EepGet {
     /**
      * Use a proxy.
      *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param type proxy scheme used to reach the origin, or NONE for a direct connection
      * @param proxyHost Must be valid hostname or literal IPv4/v6.
      * If type is INTERNAL, set to "localhost".
      *
      * @param proxyPort Must be valid, -1 disallowed, no default.
      * If type is INTERNAL, set to 4444.
      *
+     * @param outputStream stream to write the response body to; takes precedence over outputFile
+     * @param url the https URL to fetch; redirects back to http are not followed
      * @since 0.9.33
      */
     public SSLEepGet(
@@ -167,12 +187,16 @@ public class SSLEepGet extends EepGet {
     /**
      * Use a proxy.
      *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param type proxy scheme used to reach the origin, or NONE for a direct connection
      * @param proxyHost Must be valid hostname or literal IPv4/v6.
      * If type is INTERNAL, set to "localhost".
      *
      * @param proxyPort Must be valid, -1 disallowed, no default.
      * If type is INTERNAL, set to 4444.
      *
+     * @param outputStream stream to write the response body to; takes precedence over outputFile
+     * @param url the https URL to fetch; redirects back to http are not followed
      * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      * This makes repeated fetches from the same host MUCH faster,
      * and prevents repeated key store loads even for different hosts.
@@ -202,12 +226,16 @@ public class SSLEepGet extends EepGet {
     /**
      * Use a proxy.
      *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param type proxy scheme used to reach the origin, or NONE for a direct connection
      * @param proxyHost Must be valid hostname or literal IPv4/v6.
      * If type is INTERNAL, set to "localhost".
      *
      * @param proxyPort Must be valid, -1 disallowed, no default.
      * If type is INTERNAL, set to 4444.
      *
+     * @param outputFile path of the file to write the response body to; takes precedence over outputStream
+     * @param url the https URL to fetch; redirects back to http are not followed
      * @since 0.9.33
      */
     public SSLEepGet(
@@ -218,12 +246,16 @@ public class SSLEepGet extends EepGet {
     /**
      * Use a proxy.
      *
+     * @param ctx the router context supplying config, logging, and the cert directories
+     * @param type proxy scheme used to reach the origin, or NONE for a direct connection
      * @param proxyHost Must be valid hostname or literal IPv4/v6.
      * If type is INTERNAL, set to "localhost".
      *
      * @param proxyPort Must be valid, -1 disallowed, no default.
      * If type is INTERNAL, set to 4444.
      *
+     * @param outputFile path of the file to write the response body to; takes precedence over outputStream
+     * @param url the https URL to fetch; redirects back to http are not followed
      * @param state an SSLState retrieved from a previous SSLEepGet with getSSLState(), or null.
      * This makes repeated fetches from the same host MUCH faster,
      * and prevents repeated key store loads even for different hosts.
@@ -437,6 +469,7 @@ public class SSLEepGet extends EepGet {
      * Override the config setting, force DNSoverHTTPS on or off
      * Call before the fetch.
      *
+     * @param on true to force DoH on, false to force it off, overriding eepget.useDNSOverHTTPS
      * @since 0.9.49
      */
     public void forceDNSOverHTTPS(boolean on) {
@@ -447,6 +480,7 @@ public class SSLEepGet extends EepGet {
      * Override the config setting, force DNSoverHTTPS on or off
      * Call before the fetch.
      *
+     * @param on true to force DoH on, false to force it off, overriding eepget.useDNSOverHTTPS
      * @param forceIPv6 use IPv6 for BOTH the connection to the DoH server
      * AND for the queried address. on must be true.
      *

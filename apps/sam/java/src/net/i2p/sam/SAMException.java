@@ -25,12 +25,19 @@ public class SAMException extends Exception {
 
     /**
      * SAMException.
+     * @param s the detail message naming the SAM call that failed, shown to the SAM client
      */
     public SAMException(String s) {
         super(s);
     }
 
-    /** @since 0.9.14 */
+    /**
+     * Wrap a protocol or bridge failure that aborts the SAM call.
+     *
+     * @param s the detail message naming the SAM call that failed, shown to the SAM client
+     * @param cause the underlying failure that triggered the rejection, kept as the exception cause
+     * @since 0.9.14
+     */
     public SAMException(String s, Throwable cause) {
         super(s, cause);
     }

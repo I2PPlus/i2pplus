@@ -45,7 +45,8 @@ public class PublishLocalRouterInfoJob extends JobImpl {
      */
     private static final long PUBLISH_DELAY = 43L*60*1000;
 
-    /** This needs to be long enough to give us time to start up,
+    /**
+     * This needs to be long enough to give us time to start up,
      * but less than 20m (when we start accepting tunnels and could be a IBGW)
      * Actually no, we need this soon if we are a new router or
      * other routers have forgotten about us, else
@@ -58,6 +59,8 @@ public class PublishLocalRouterInfoJob extends JobImpl {
 
     /**
      * PublishLocalRouterInfoJob.
+     *
+     * @param ctx the router context whose log manager supplies the job logger
      */
     public PublishLocalRouterInfoJob(RouterContext ctx) {
         super(ctx);

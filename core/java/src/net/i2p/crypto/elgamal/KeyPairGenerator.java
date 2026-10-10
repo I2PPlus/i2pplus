@@ -27,6 +27,12 @@ import java.security.spec.AlgorithmParameterSpec;
  * @since 0.9.25
  */
 public final class KeyPairGenerator extends KeyPairGeneratorSpi {
+    /**
+     * Constructor. The JCA framework calls initialize() with the strength, so the
+     * instance starts uninitialized with no parameters set.
+     */
+    public KeyPairGenerator() {}
+
     // always long, don't use short key
     private static final int DEFAULT_STRENGTH = 2048;
     private ElGamalParameterSpec elgParams;

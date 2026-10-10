@@ -43,6 +43,8 @@ public class AuthenticateHandler implements RequestHandler {
 
     /**
      * AuthenticateHandler.
+     * @param helper resolves the localized strings and version data used in the reply
+     * @param secMan issues and tracks the authentication tokens
      */
     public AuthenticateHandler(JSONRPC2Helper helper, SecurityManager secMan) {
         _helper = helper;

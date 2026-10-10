@@ -229,6 +229,8 @@ public class HostTxtParser {
 
     /**
      * Usage: HostTxtParser [-q] validate example.i2p=b64dest[#!key1=val1#key2=val2]
+     * @param args optionally "-q" to suppress the diagnostic output, then the "validate" verb and the entry to check
+     * @throws Exception if parsing or checking the entry fails; the stack trace is printed and the exit status is nonzero
      */
     public static void main(String[] args) throws Exception {
         boolean quiet = false;

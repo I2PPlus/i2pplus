@@ -12,6 +12,12 @@ package org.cybergarage.util;
  */
 public final class StringUtil {
     /**
+     * Every validator, converter and trimmer below is static, so an instance carries
+     * nothing.
+     */
+    public StringUtil() {}
+
+    /**
      * Checks if a string contains valid data (not null and not empty).
      *
      * @param value the string to check

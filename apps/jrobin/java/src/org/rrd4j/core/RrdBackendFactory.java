@@ -385,6 +385,9 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
+     * The URI scheme that selects this backend, used to build every RRD URI the
+     * factory hands out.
+     *
      * @return the scheme name for URI, default to getName().toLowerCase()
      */
     public String getScheme() {
@@ -393,6 +396,9 @@ public abstract class RrdBackendFactory implements Closeable {
 
     /**
      * getRootUri.
+     *
+     * @return the root URI formed from this factory's scheme, or an exception if
+     *         the scheme is not a legal URI scheme
      */
     protected URI getRootUri() {
         try {
@@ -404,6 +410,9 @@ public abstract class RrdBackendFactory implements Closeable {
 
     /**
      * canStore.
+     *
+     * @param uri the candidate storage URI to test against this factory
+     * @return false unless a subclass overrides this to recognise its own URIs
      */
     public boolean canStore(URI uri) {
         return false;
@@ -520,12 +529,20 @@ public abstract class RrdBackendFactory implements Closeable {
 
     /**
      * open.
+     *
+     * @param path the storage path, relative to this factory's root URI
+     * @param readOnly true to open the storage for reading only, false to allow
+     *        writes
+     * @return the backend that performs all I/O for the given storage path
+     * @throws java.io.IOException if the storage cannot be opened
      */
     protected abstract RrdBackend open(String path, boolean readOnly) throws IOException;
 
     /**
      * Creates RrdBackend object for the given storage path.
      *
+     * @param rrdDb the pool database the backend is registered against, so it can
+     *        be told when the backend is closed
      * @param path Storage path
      * @param readOnly True, if the storage should be accessed in read/only mode. False otherwise.
      * @return Backend object which handles all I/O operations for the given storage path
@@ -541,7 +558,8 @@ public abstract class RrdBackendFactory implements Closeable {
     /**
      * Creates RrdBackend object for the given storage path.
      *
-     * @param rrdDb
+     * @param rrdDb the pool database the backend is registered against, so it
+     *        can be told when the backend is closed
      * @param uri Storage uri
      * @param readOnly True, if the storage should be accessed in read/only mode. False otherwise.
      * @return Backend object which handles all I/O operations for the given storage path
@@ -558,8 +576,8 @@ public abstract class RrdBackendFactory implements Closeable {
      * Determines if a storage with the given path already exists.
      *
      * @param path Storage path
-     * @throws java.io.IOException in case of I/O error.
      * @return a boolean.
+     * @throws java.io.IOException in case of I/O error.
      */
     protected abstract boolean exists(String path) throws IOException;
 
@@ -567,8 +585,8 @@ public abstract class RrdBackendFactory implements Closeable {
      * Determines if a storage with the given URI already exists.
      *
      * @param uri Storage URI.
-     * @throws java.io.IOException in case of I/O error.
      * @return a boolean.
+     * @throws java.io.IOException in case of I/O error.
      */
     protected boolean exists(URI uri) throws IOException {
         return exists(getPath(uri));

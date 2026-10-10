@@ -33,8 +33,15 @@ public class ObjectCounterUnsafe<K> {
     private final HashMap<K, Int> map = new HashMap<>();
 
     /**
+     * A counter holding no entries; the backing map starts empty and is filled only
+     * by {@link #increment(Object)} and {@link #add(Object, int)}.
+     */
+    public ObjectCounterUnsafe() {}
+
+    /**
      * Add one.
      *
+     * @param h the object whose count is raised by one
      * @return count after increment
      */
     public int increment(K h) {
@@ -49,6 +56,8 @@ public class ObjectCounterUnsafe<K> {
     /**
      * Add a value
      *
+     * @param h the object whose count is raised
+     * @param val the number to add, which may be negative
      * @return count after adding
      */
     public int add(K h, int val) {
@@ -62,6 +71,9 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
+     * Look up the current count for one key.
+     *
+     * @param h the object whose count is looked up
      * @return current count
      */
     public int count(K h) {
@@ -71,6 +83,8 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
+     * The tracked keys, in no particular order.
+     *
      * @return set of objects with counts &gt; 0
      */
     public Set<K> objects() {
@@ -78,6 +92,8 @@ public class ObjectCounterUnsafe<K> {
     }
 
     /**
+     * The tracked keys ordered by descending count, so the most-used come first.
+     *
      * @return list of objects reverse sorted by count, highest to lowest
      */
     public List<K> sortedObjects() {
@@ -95,6 +111,7 @@ public class ObjectCounterUnsafe<K> {
 
     /**
      * Reset the count for this key to zero
+     * @param h the object to drop from the map
      */
     public void clear(K h) {
         map.remove(h);

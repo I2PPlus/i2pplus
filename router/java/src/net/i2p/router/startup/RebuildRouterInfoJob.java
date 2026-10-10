@@ -40,6 +40,8 @@ class RebuildRouterInfoJob extends JobImpl {
 
     /**
      * RebuildRouterInfoJob.
+     *
+     * @param context router context, handed to the JobImpl superclass and used for the log
      */
     public RebuildRouterInfoJob(RouterContext context) {
         super(context);

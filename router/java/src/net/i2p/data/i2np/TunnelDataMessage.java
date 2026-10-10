@@ -54,24 +54,38 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
 
     /** For use-after-free checks. Always false if PIPELINED_CACHE is false. */
     private boolean _hadCache;
-    /** Constructor with 10-second message expiration from context clock. */
+    /**
+     * Constructor with 10-second message expiration from context clock.
+     *
+     * @param context the context whose clock supplies the expiration stamp
+     */
 
     public TunnelDataMessage(I2PAppContext context) {
         super(context);
         setMessageExpiration(context.clock().now() + EXPIRATION_PERIOD);
     }
-    /** Return the tunnelId */
+    /**
+     * Return the tunnelId
+     *
+     * @return the tunnel this data message is addressed to
+     */
 
     public long getTunnelId() {return _tunnelId;}
 
     /**
      * (correctly) Invalidates stored checksum
+     *
+     * @param id the tunnel to address; assigning it invalidates the cached checksum
      */
     public void setTunnelId(long id) {
         _hasChecksum = false;
         _tunnelId = id;
     }
-    /** Return the tunnelIdObj */
+    /**
+     * Return the tunnelIdObj
+     *
+     * @return the cached TunnelId object for this message's tunnel
+     */
 
     public TunnelId getTunnelIdObj() {
         if (_tunnelIdObj == null) {_tunnelIdObj = new TunnelId(_tunnelId);} // not thread safe, but immutable, so who cares
@@ -80,13 +94,19 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
 
     /**
      * (correctly) Invalidates stored checksum
+     *
+     * @param id the tunnel to address; assigning it invalidates the cached checksum
      */
     public void setTunnelId(TunnelId id) {
         _hasChecksum = false;
         _tunnelIdObj = id;
         _tunnelId = id.getTunnelId();
     }
-    /** Return the data */
+    /**
+     * Return the data
+     *
+     * @return the tunnel payload bytes
+     */
 
     public byte[] getData() {
         if (_hadCache && _dataBuf == null) {
@@ -99,6 +119,8 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
 
     /**
      * Tunnel payload; may only be set once.
+     *
+     * @param data the payload to carry; must be non-empty and may only be assigned once
      * @throws IllegalStateException if data previously set, to protect saved checksum
      */
     public void setData(byte[] data) {

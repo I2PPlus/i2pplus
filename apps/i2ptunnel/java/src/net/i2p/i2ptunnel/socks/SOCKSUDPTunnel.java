@@ -45,6 +45,9 @@ public class SOCKSUDPTunnel extends I2PTunnelUDPClientBase {
     /**
      * Set up a tunnel with no UDP side yet.
      * Use add() for each port.
+     *
+     * @param tunnel the parent tunnel supplying the logging facility, event
+     *        dispatcher, I2CP session and client options for the UDP association
      */
     public SOCKSUDPTunnel(I2PTunnel tunnel) {
         super(null, tunnel, tunnel, tunnel);

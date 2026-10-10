@@ -21,38 +21,24 @@ public class KeccakDigest
         0x000000008000808bL, 0x800000000000008bL, 0x8000000000008089L, 0x8000000000008003L, 0x8000000000008002L,
         0x8000000000000080L, 0x000000000000800aL, 0x800000008000000aL, 0x8000000080008081L, 0x8000000000008080L,
         0x0000000080000001L, 0x8000000080008008L };
-    /**
-     * purpose.
-     */
+    /** Crypto service purpose this digest instance was created for. */
     protected final CryptoServicePurpose purpose;
 
-    /**
-     * state.
-     */
+    /** The sponge state, 25 lanes of 64 bits each. */
     protected long[] state = new long[25];
-    /**
-     * dataQueue.
-     */
+    /** Buffer holding message bits not yet absorbed into the state. */
     protected byte[] dataQueue = new byte[192];
-    /**
-     * rate.
-     */
+    /** Sponge rate in bits, the number of message bits absorbed per permutation. */
     protected int rate;
-    /**
-     * bitsInQueue.
-     */
+    /** Number of message bits currently held in dataQueue. */
     protected int bitsInQueue;
-    /**
-     * fixedOutputLength.
-     */
+    /** Digest capacity in bits, twice the output length. */
     protected int fixedOutputLength;
-    /**
-     * squeezing.
-     */
+    /** True once padding has been applied and output is being squeezed. */
     protected boolean squeezing;
 
     /**
-     * KeccakDigest.
+     * Create a Keccak-288 digest for any crypto service purpose.
      */
     public KeccakDigest()
     {
@@ -60,7 +46,9 @@ public class KeccakDigest
     }
 
     /**
-     * KeccakDigest.
+     * Create a Keccak-288 digest for the given crypto service purpose.
+     *
+     * @param purpose the crypto service purpose to register the digest under
      */
     public KeccakDigest(CryptoServicePurpose purpose)
     {
@@ -68,7 +56,9 @@ public class KeccakDigest
     }
 
     /**
-     * KeccakDigest.
+     * Create a digest of the given capacity, for any crypto service purpose.
+     *
+     * @param bitLength the capacity in bits, i.e. twice the digest length
      */
     public KeccakDigest(int bitLength)
     {
@@ -76,7 +66,10 @@ public class KeccakDigest
     }
 
     /**
-     * KeccakDigest.
+     * Create a digest of the given capacity and crypto service purpose.
+     *
+     * @param bitLength the capacity in bits, i.e. twice the digest length
+     * @param purpose the crypto service purpose to register the digest under
      */
     public KeccakDigest(int bitLength, CryptoServicePurpose purpose)
     {
@@ -87,7 +80,9 @@ public class KeccakDigest
     }
 
     /**
-     * KeccakDigest.
+     * Copy the state of an existing digest, including any partially absorbed data.
+     *
+     * @param source the digest to copy the state and rate from
      */
     public KeccakDigest(KeccakDigest source)
     {
@@ -103,7 +98,9 @@ public class KeccakDigest
     }
 
     /**
-     * getAlgorithmName.
+     * Get the JCA name of this algorithm.
+     *
+     * @return the digest length in bits, prefixed with "Keccak-"
      */
     public String getAlgorithmName()
     {
@@ -111,7 +108,9 @@ public class KeccakDigest
     }
 
     /**
-     * getDigestSize.
+     * Get the size of the digest this class produces.
+     *
+     * @return the digest length in bytes
      */
     public int getDigestSize()
     {
@@ -119,7 +118,9 @@ public class KeccakDigest
     }
 
     /**
-     * update.
+     * Absorb one more byte of message.
+     *
+     * @param in the byte to add to the message
      */
     public void update(byte in)
     {
@@ -127,7 +128,11 @@ public class KeccakDigest
     }
 
     /**
-     * update.
+     * Absorb more message bytes.
+     *
+     * @param in the buffer holding the message
+     * @param inOff the offset into in of the first byte to absorb
+     * @param len the number of bytes to absorb
      */
     public void update(byte[] in, int inOff, int len)
     {
@@ -135,7 +140,11 @@ public class KeccakDigest
     }
 
     /**
-     * doFinal.
+     * Finish the digest, write it out and reset this instance.
+     *
+     * @param out the buffer to write the digest into
+     * @param outOff the offset into out at which to write the digest
+     * @return the number of bytes written to out
      */
     public int doFinal(byte[] out, int outOff)
     {
@@ -150,7 +159,13 @@ public class KeccakDigest
      * TODO Possible API change to support partial-byte suffixes.
      */
     /**
-     * doFinal.
+     * Finish the digest, first absorbing the trailing bits of a partial byte.
+     *
+     * @param out the buffer to write the digest into
+     * @param outOff the offset into out at which to write the digest
+     * @param partialByte a byte holding the final 1-7 bits of the message
+     * @param partialBits how many bits of partialByte are message, 1 to 7, or 0 if none
+     * @return the number of bytes written to out
      */
     protected int doFinal(byte[] out, int outOff, byte partialByte, int partialBits)
     {
@@ -167,7 +182,8 @@ public class KeccakDigest
     }
 
     /**
-     * reset.
+     * Clear all absorbed message and output state, making the instance ready
+     * for a fresh message at its existing capacity.
      */
     public void reset()
     {
@@ -220,7 +236,9 @@ public class KeccakDigest
     }
 
     /**
-     * absorb.
+     * Absorb one byte into the sponge, permuting once the rate is reached.
+     *
+     * @param data the byte to absorb
      */
     protected void absorb(byte data)
     {
@@ -242,7 +260,11 @@ public class KeccakDigest
     }
 
     /**
-     * absorb.
+     * Absorb a byte range into the sponge, permuting once per rate-sized block.
+     *
+     * @param data the buffer holding the message
+     * @param off the offset into data of the first byte to absorb
+     * @param len the number of bytes to absorb
      */
     protected void absorb(byte[] data, int off, int len)
     {
@@ -286,7 +308,11 @@ public class KeccakDigest
     }
 
     /**
-     * absorbBits.
+     * Absorb the trailing 1-7 bits of a message, leaving the queue not a
+     * multiple of 8 so that no further absorbing is possible.
+     *
+     * @param data the value holding the final bits, of which only the low ones count
+     * @param bits how many low bits of data are message, 1 to 7
      */
     protected void absorbBits(int data, int bits)
     {
@@ -342,7 +368,12 @@ public class KeccakDigest
     }
 
     /**
-     * squeeze.
+     * Squeeze outputLength bits out of the sponge, padding first if the
+     * message has not been finished.
+     *
+     * @param output the buffer to write the output into
+     * @param offset the offset into output at which to write
+     * @param outputLength the number of bits to squeeze, a multiple of 8
      */
     protected void squeeze(byte[] output, int offset, long outputLength)
     {
@@ -506,7 +537,9 @@ public class KeccakDigest
     }
 
     /**
-     * cryptoServiceProperties.
+     * Describe this digest's properties for the crypto services registrar.
+     *
+     * @return the digest's service properties, or null if it declares none
      */
     protected CryptoServiceProperties cryptoServiceProperties()
     {

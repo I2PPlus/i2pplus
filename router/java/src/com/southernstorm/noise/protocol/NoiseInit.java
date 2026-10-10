@@ -167,45 +167,62 @@ public class NoiseInit {
 
             /**
              * getPrefix.
+             * @return the noise protocol family prefix, "Noise" or "NoisePSK"
              */
             public String getPrefix() { return prefix; }
             /**
              * getPatternID.
+             * @return the pattern name as it appeared in the protocol name, e.g. "XX" or "XK"
              */
             public String getPatternID() { return patternId; }
             /**
              * getProtocolName.
+             * @return the full underscore-separated protocol name, e.g. "Noise_XKaes2gcm"
              */
             public String getProtocolName() { return protoName; }
             /**
              * getDH.
+             * @return the Diffie-Hellman method named by the protocol name, e.g. "25519" or "MLKEM768"
              */
             public String getDH() { return dh; }
             /**
              * getCipher.
+             * @return the AEAD cipher named by the protocol name, e.g. "chacha20poly1305"
              */
             public String getCipher() { return scipher; }
             /**
              * getHash.
+             * @return the hash function named by the protocol name, e.g. "SHA256" or "SHA512"
              */
             public String getHash() { return shash; }
             /**
              * getPattern.
+             * @return the message and flag tokens making up the handshake pattern
              */
             public short[] getPattern() { return pattern; }
 
             /**
-             *  @return a copy
+             * The chaining key every handshake of this pattern starts from, made by
+             * hashing the protocol name. Returned as a copy so a restarted handshake
+             * cannot corrupt the state this pattern holds for the next one.
+             *
+             * @return a copy
              */
             public byte[] getInitialCK() { return Arrays.copyOf(ck, ck.length); }
 
             /**
-             *  @return a copy
+             * The hash of the initial chaining key: the value the handshake's hash
+             * chain starts from, before any handshake message is mixed in. Returned
+             * as a copy so a restarted handshake cannot corrupt this pattern's state.
+             *
+             * @return a copy
              */
             public byte[] getInitialH() { return Arrays.copyOf(h, h.length); }
 
             /**
              *  Lookup PatternID by string pattern ID
+             *  @param pid the pattern name to look up, e.g. "XK"
+             *  @return the enum constant whose pattern name equals pid
              *  @throws IllegalArgumentException if not found
              */
             public static PatternID byPatternId(String pid) {

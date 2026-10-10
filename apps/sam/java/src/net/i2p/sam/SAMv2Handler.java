@@ -31,6 +31,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @param s Socket attached to a SAM client
 		 * @param verMajor SAM major version to manage (should be 2)
 		 * @param verMinor SAM minor version to manage
+		 * @param parent bridge holding the shared SAM server state this handler joins
 		 * @throws SAMException if the version is not supported
 		 * @throws IOException if an I/O error occurs
 		 */
@@ -49,6 +50,7 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 		 * @param verMajor SAM major version to manage (should be 2)
 		 * @param verMinor SAM minor version to manage
 		 * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
+		 * @param parent bridge holding the shared SAM server state this handler joins
 		 * @throws SAMException if the version is not supported
 		 * @throws IOException if an I/O error occurs
 		 */
@@ -70,7 +72,17 @@ class SAMv2Handler extends SAMv1Handler implements SAMRawReceiver, SAMDatagramRe
 			return (verMajor == 2);
 		}
 
-		/** New SAMv2 stream session. */
+		/**
+		 * New SAMv2 stream session.
+		 *
+		 * @param destKeystream the destination and private key stream of the peer
+		 * @param direction the STREAM connection direction, "INBOUND" or "OUTBOUND"
+		 * @param props the parsed STREAM message properties, including the port and options
+		 * @return the newly created STREAM session
+		 * @throws IOException if the destination cannot be read from the keystream
+		 * @throws DataFormatException if the keystream is not in the expected key file format
+		 * @throws SAMException if a session with this nickname is already registered
+		 */
 		SAMStreamSession newSAMv2StreamSession(String destKeystream, String direction, Properties props )
 				throws IOException, DataFormatException, SAMException
 		{

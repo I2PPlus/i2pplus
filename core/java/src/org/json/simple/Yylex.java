@@ -279,7 +279,11 @@ class Yylex {
   /* user code: */
 private StringBuilder sb=new StringBuilder();
 
-/** @return current character position */
+/**
+ * Get the position of the next character to be read.
+ *
+ * @return current character position
+ */
 int getPosition(){
 	return yychar;
 }
@@ -381,6 +385,8 @@ int getPosition(){
 
   /**
    * Closes the input stream.
+   *
+   * @throws java.io.IOException if the underlying reader cannot be closed
    */
   public final void yyclose() throws java.io.IOException {
     zzAtEOF = true;            /* indicate end of file */
@@ -415,6 +421,9 @@ int getPosition(){
 
   /**
    * Returns the current lexical state.
+   *
+   * @return the current lexical state, one of the ZZ_ or YY* constants that
+   *         the generated rules switch on
    */
   public final int yystate() {
     return zzLexicalState;
@@ -433,6 +442,8 @@ int getPosition(){
 
   /**
    * Returns the text matched by the current regular expression.
+   *
+   * @return the text matched by the current regular expression
    */
   public final String yytext() {
     return new String( zzBuffer, zzStartRead, zzMarkedPos-zzStartRead );
@@ -457,6 +468,8 @@ int getPosition(){
 
   /**
    * Returns the length of the matched text region.
+   *
+   * @return the number of characters in the matched text region
    */
   public final int yylength() {
     return zzMarkedPos-zzStartRead;
@@ -512,6 +525,8 @@ int getPosition(){
    *
    * @return      the next token
    * @exception   java.io.IOException  if any I/O-Error occurs
+   * @throws      DeserializationException if the token does not match any rule,
+   *                i.e. the input is not valid JSON
    */
   public Yytoken yylex() throws java.io.IOException, DeserializationException {
     int zzInput;

@@ -7,12 +7,13 @@ package org.bouncycastle.pqc.crypto.mlkem;
 class Ntt
 {
     /**
-     * Default constructor.
+     * Create an instance. Every operation in this class is static, so the
+     * instance carries no state.
      */
     public Ntt() {}
 
     /**
-     * Ntt zetas.
+     * Zeta multipliers for the forward transform, one per butterfly stage.
      */
     public static final short[] nttZetas = new short[]{
         2285, 2571, 2970, 1812, 1493, 1422, 287, 202, 3158, 622, 1577, 182, 962,
@@ -27,18 +28,12 @@ class Ntt
         478, 3221, 3021, 996, 991, 958, 1869, 1522, 1628};
 
     /**
-     * The value.
-     */
-    /**
-     * Ntt zetas inv.
+     * Zeta multipliers for the inverse transform, in the reverse of the forward order.
      */
     public static final short[] nttZetasInv = new short[]{
         1701, 1807, 1460, 2371, 2338, 2333, 308, 108, 2851, 870, 854, 1510, 2535,
         1278, 1530, 1185, 1659, 1187, 3109, 874, 1335, 2111, 136, 1215, 2945, 1465,
         1285, 2007, 2719, 2726, 2232, 2512, 75, 156, 3000, 2911, 2980, 872, 2685,
-        /**
-         * The value.
-         */
         1590, 2210, 602, 1846, 777, 147, 2170, 2551, 246, 1676, 1755, 460, 291, 235,
         3152, 2742, 2907, 3224, 1779, 2458, 1251, 2486, 2774, 2899, 1103, 1275, 2652,
         1065, 2881, 725, 1508, 2368, 398, 951, 247, 1421, 3222, 2499, 271, 90, 853,
@@ -48,7 +43,9 @@ class Ntt
         3127, 3042, 1907, 1836, 1517, 359, 758, 1441};
 
     /**
-     * ntt.
+     * Apply the forward number theoretic transform to a degree-254 polynomial.
+     * @param inp the 256 coefficients to transform in place
+     * @return a new array holding the forward number theoretic transform of inp
      */
     public static short[] ntt(short[] inp)
     {
@@ -75,7 +72,9 @@ class Ntt
     }
 
     /**
-     * inv ntt.
+     * Apply the inverse number theoretic transform to a transformed polynomial.
+     * @param inp the 256 coefficients to transform back
+     * @return a new array holding the inverse number theoretic transform of inp
      */
     public static short[] invNtt(short[] inp)
     {
@@ -100,12 +99,6 @@ class Ntt
             }
         }
 
-        /**
-         * The value.
-         */
-        /**
-         * for.
-         */
         for (j = 0; j < 256; ++j)
         {
             r[j] = factorQMulMont(r[j], Ntt.nttZetasInv[127]);
@@ -114,7 +107,10 @@ class Ntt
     }
 
     /**
-     * factor q mul mont.
+     * Multiply two coefficients modulo q, in Montgomery form.
+     * @param a the first multiplicand, a signed short coefficient
+     * @param b the second multiplicand, a signed short coefficient
+     * @return the Montgomery reduction of the product of a and b, modulo q
      */
     public static short factorQMulMont(short a, short b)
     {
@@ -122,7 +118,14 @@ class Ntt
     }
 
     /**
-     * base mult.
+     * Multiply two degree-1 polynomials, scaling the leading product by a stage zeta.
+     * @param outPoly the polynomial receiving the two computed coefficients
+     * @param outIndex the index in outPoly at which to store them
+     * @param a0 the first coefficient of the left operand polynomial
+     * @param a1 the second coefficient of the left operand polynomial
+     * @param b0 the first coefficient of the right operand polynomial
+     * @param b1 the second coefficient of the right operand polynomial
+     * @param zeta the root of unity supplied by the caller for this butterfly stage
      */
     public static void baseMult(Poly outPoly, int outIndex, short a0, short a1, short b0, short b1, short zeta)
     {

@@ -186,7 +186,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
      * after a longer delay, confirm a different floodfill got the flood.
      *
      * @param ctx the router context
-     * @param key the key
+     * @param key the hash of the store entry being verified
      * @param client generally the same as key, unless encrypted LS2; non-null
      * @param published getDate() for RI or LS1, getPublished() for LS2
      * @param type the database entry type

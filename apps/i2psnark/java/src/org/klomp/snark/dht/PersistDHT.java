@@ -22,6 +22,12 @@ import net.i2p.util.SecureFileOutputStream;
  * @since 0.9.2
  */
 abstract class PersistDHT {
+     /**
+      * Constructor for subclasses; the load and save helpers in this base class are static.
+      */
+
+     PersistDHT() {}
+
 
     private static final long MAX_AGE = 60 * (long) 60 * 1000;
 

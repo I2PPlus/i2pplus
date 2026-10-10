@@ -27,8 +27,12 @@ import net.i2p.util.Translate;
  */
 public abstract class CommSystemFacade implements Service {
 
-    /** @since 0.9.45 */
+    /**
+     * Bundle holding the translatable messages this subsystem logs.
+     * @since 0.9.45
+     */
     protected static final String ROUTER_BUNDLE_NAME = "net.i2p.router.util.messages";
+    /** Not instantiable; a RouterContext subclass supplies the implementation. */
     protected CommSystemFacade() {}
 
     /**
@@ -55,12 +59,18 @@ public abstract class CommSystemFacade implements Service {
      */
     public void renderStatusHTML(Writer out) throws IOException { renderStatusHTML(out, null, 0); }
 
-    /** Create the list of RouterAddress structures based on the router's config */
+    /**
+     * Create the list of RouterAddress structures based on the router's config
+     *
+     * @return the published addresses, empty when none are configured
+     */
     public List<RouterAddress> createAddresses() { return Collections.emptyList(); }
 
     /**
      * How many peers are we currently connected to, that we have
      * sent a message to or received a message from in the last five minutes.
+     *
+     * @return the number of active peers
      */
     public abstract int countActivePeers();
 
@@ -128,21 +138,21 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Check whether the given peer has excessive pending outbound messages.
      *
-     * @param peer the peer
+     * @param peer the router to test, identified by its router identity hash
      * @return true if the peer is backlogged
      */
     public boolean isBacklogged(Hash peer) { return false; }
     /**
      * Check whether the given peer was recently unreachable.
      *
-     * @param peer the peer
+     * @param peer the router to test, identified by its router identity hash
      * @return true if the peer was unreachable
      */
     public boolean wasUnreachable(Hash peer) { return false; }
     /**
      * Check whether a transport connection exists with the given peer.
      *
-     * @param peer the peer
+     * @param peer the router to test, identified by its router identity hash
      * @return true if a connection is established
      */
     public abstract boolean isEstablished(Hash peer);
@@ -174,6 +184,7 @@ public abstract class CommSystemFacade implements Service {
      * Tell the comm system that we may disconnect from this peer.
      * This is advisory only.
      *
+     * @param peer the peer we may drop
      * @since 0.9.24
      */
     public void mayDisconnect(Hash peer) {}
@@ -181,6 +192,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Tell the comm system to disconnect from this peer.
      *
+     * @param peer the peer to disconnect from
      * @since 0.9.38
      */
     public void forceDisconnect(Hash peer) {}
@@ -188,7 +200,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Tell the comm system to disconnect from this peer with a reason.
      *
-     * @param peer the peer
+     * @param peer the router to disconnect from, identified by its router identity hash
      * @param reason reason for disconnection (for logging), may be null
      * @since 0.9.38
      */
@@ -231,7 +243,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Get the two-letter country code for the given peer's IP address.
      *
-     * @param peer the peer
+     * @param peer the router whose current IP address is looked up
      * @return two-letter country code or null if unknown
      */
     public String getCountry(Hash peer) { return null; }
@@ -263,7 +275,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Render an HTML snippet identifying the given peer, optionally with extended details.
      *
-     * @param peer the peer
+     * @param peer the router to describe, identified by its router identity hash
      * @param extended if true include extended information
      * @return HTML string
      */
@@ -274,7 +286,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Render the country flag for the given peer as HTML.
      *
-     * @param peer the peer
+     * @param peer the router whose country is shown, identified by its router identity hash
      * @return HTML string for the flag
      */
     public String renderPeerFlag(Hash peer) {
@@ -284,7 +296,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Render the peer's capabilities as HTML, optionally inline.
      *
-     * @param peer the peer
+     * @param peer the router whose capabilities are shown, identified by its router identity hash
      * @param inline if true render inline
      * @return HTML string
      */
@@ -317,6 +329,7 @@ public abstract class CommSystemFacade implements Service {
      * Returns cached result if available, otherwise does a local ASN lookup.
      * Queues background async RDNS if enabled, updating the cache on success.
      *
+     * @param ipAddress the address to resolve, as text
      * @return hostname from cache, ASN org name, or null if not resolvable
      * @since 0.9.70+
      */
@@ -365,18 +378,22 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Whether the comm system is fully initialized and running.
      *
+     * @return true when the comm system is running
      * @since 0.9.53
      */
     public boolean isRunning() { return true; }
 
     /**
      * Tell other transports our address changed
+     *
+     * @param address the address that replaced the previous one
      */
     public void notifyReplaceAddress(RouterAddress address) {}
 
     /**
      * Tell other transports our address changed
      *
+     * @param address the address that was removed
      * @since 0.9.20
      */
     public void notifyRemoveAddress(RouterAddress address) {}
@@ -384,6 +401,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Tell other transports our address changed
      *
+     * @param ipv6 true to remove the IPv6 address, false for IPv4
      * @since 0.9.20
      */
     public void notifyRemoveAddress(boolean ipv6) {}
@@ -391,6 +409,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Register a transport for use by the comm system.
      *
+     * @param t the transport to register
      * @since 0.9.16
      */
     public void registerTransport(Transport t) {}
@@ -398,6 +417,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Unregister a transport from the comm system.
      *
+     * @param t the transport to unregister
      * @since 0.9.16
      */
     public void unregisterTransport(Transport t) {}
@@ -420,6 +440,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Exempt this router hash from any incoming throttles or rejections
      *
+     * @param peer the router to exempt
      * @since 0.9.58
      */
     public void exemptIncoming(Hash peer) {}
@@ -427,6 +448,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Is this IP exempt from any incoming throttles or rejections
      *
+     * @param ip the address to test
      * @return whether exempt incoming
      * @since 0.9.58
      */
@@ -435,6 +457,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Remove this IP from the exemptions
      *
+     * @param ip the address to remove from the exemptions
      * @since 0.9.58
      */
     public void removeExemption(String ip) {}
@@ -925,6 +948,8 @@ public abstract class CommSystemFacade implements Service {
 
         /**
          * Readable status, not translated
+         *
+         * @return the status as a human readable string
          */
         public String toStatusString() {
             return status;

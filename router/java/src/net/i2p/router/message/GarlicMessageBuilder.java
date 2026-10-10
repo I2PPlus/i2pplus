@@ -51,6 +51,9 @@ public class GarlicMessageBuilder {
      *
      *  @param local non-null; do not use this method for the router's SessionKeyManager
      *  @param minTagOverride 0 for no override, &gt; 0 to override SKM's settings
+     * @param ctx scope
+     * @param key the ElGamal 2048 recipient key the tags are decided for
+     * @return true if the current session key should be accompanied by tags
      */
     static boolean needsTags(RouterContext ctx, PublicKey key, Hash local, int minTagOverride) {
         if (LeaseSetKeys.SET_EC_PQ_ALL.contains(key.getType()))
@@ -73,11 +76,11 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
- *
+     *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
      *                       If non-empty on return you must call skm.tagsDelivered() when sent
      *                       and then call skm.tagsAcked() or skm.failTags() later.
- *
+     *
      * @param skm non-null
      * @return null if expired
      * @throws IllegalArgumentException on error
@@ -95,7 +98,7 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
- *
+     *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
                           If non-empty on return you must call skm.tagsDelivered() when sent
                           and then call skm.tagsAcked() or skm.failTags() later.
@@ -119,7 +122,7 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
- *
+     *
      * @param wrappedTags Output parameter that will be filled with the sessionTags used.
                           If non-empty on return you must call skm.tagsDelivered() when sent
                           and then call skm.tagsAcked() or skm.failTags() later.
@@ -183,10 +186,10 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param wrappedTags New tags to be sent along with the message.
      *                    200 max enforced at receiver; null OK
- *
+     *
      * @param target public key of the location being garlic routed to (may be null if we
      *               know the encryptKey and encryptTag)
- *
+     *
      * @param encryptKey sessionKey used to encrypt the current message, non-null
      * @param encryptTag sessionTag used to encrypt the current message, null to force ElG
      * @return null if expired
@@ -234,6 +237,7 @@ public class GarlicMessageBuilder {
      * @param config how/what to wrap
      * @param encryptKey sessionKey used to encrypt the current message, non-null
      * @param encryptTag sessionTag used to encrypt the current message, non-null
+     * @return the encrypted GarlicMessage, or null if the ECIES encrypt failed
      * @since 0.9.46
      */
     public static GarlicMessage buildMessage(RouterContext ctx, GarlicConfig config,
@@ -257,6 +261,10 @@ public class GarlicMessageBuilder {
      *
      * @param ctx scope
      * @param config how/what to wrap, must have key set with setRecipientPublicKey()
+     * @param from the local destination whose LeaseSet keys supply the private key
+     * @param to the remote destination the message is addressed to, whose keys
+     *        select the ratchet session
+     * @param skm the session key manager holding that ratchet session
      * @param callback may be null
      * @return null if expired or on other errors
      * @throws IllegalArgumentException on error
@@ -324,6 +332,7 @@ public class GarlicMessageBuilder {
      *
      * @param ctx scope
      * @param config how/what to wrap, must have key set with setRecipientPublicKey()
+     * @return the encrypted GarlicMessage, or null if the ECIES encrypt failed
      * @throws IllegalArgumentException on error
      * @since 0.9.48
      */

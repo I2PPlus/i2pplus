@@ -53,6 +53,7 @@ public interface KBucket<T extends SimpleDataStructure> {
     /**
      * Add the peer to the bucket
      *
+     * @param key the key to store, rejected when the bucket is full
      * @return true if added
      */
     public boolean add(T key);
@@ -60,6 +61,7 @@ public interface KBucket<T extends SimpleDataStructure> {
     /**
      * Remove the key from the bucket
      *
+     * @param key the key to evict from this bucket
      * @return true if the key existed in the bucket before removing it, else false
      */
     public boolean remove(T key);

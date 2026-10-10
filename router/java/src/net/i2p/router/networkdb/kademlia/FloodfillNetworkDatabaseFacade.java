@@ -37,8 +37,8 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * The network database
- */
+     * The Kademlia network database, using floodfill participants as the only storage tier.
+     */
 public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacade {
     /** Floodfill capability flag. */
     public static final char CAPABILITY_FLOODFILL = 'f';
@@ -136,6 +136,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /**
      * Main DB
+     * @param context the router context
      */
     public FloodfillNetworkDatabaseFacade(RouterContext context) {
         this(context, FloodfillNetworkDatabaseSegmentor.MAIN_DBID);
@@ -144,6 +145,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * Sub DBs
      *
+     * @param context the router context
      * @param dbid null for main DB
      * @since 0.9.61
      */
@@ -233,7 +235,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Instead of creating individual IterativeTimeoutJob for each peer,
      * we register here and a single BatchedSearchTimeoutJob processes all at once.
      *
-     * @param peer the peer
+     * @param peer the target key whose search timeout is being registered
      * @param search the search term
      * @param timeoutMs the absolute time when the timeout expires
      */
@@ -587,6 +589,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * Increments and tests.
      *
+     * @param key the key being flooded, tested against the per-key flood allowance
      * @return true if the flood should be throttled for this key
      * @since 0.7.11
      */
@@ -614,6 +617,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * Increments and tests.
      *
+     * @param from the peer hash that sent the lookup
+     * @param id the tunnel ID the lookup arrived on
      * @return true if the lookup should be throttled for this peer/tunnel
      * @since 0.7.11
      */
@@ -626,6 +631,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * If we are floodfill AND the key is not throttled,
      * flood it, otherwise don't.
      *
+     * @param ds the entry to flood, which must be a LeaseSet for the store to accept it
      * @return if we did
      * @since 0.9.36 for NTCP2
      */
@@ -647,6 +653,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Send to a subset of all floodfill peers.
      * We do this to implement Kademlia within the floodfills, i.e.
      * we flood to those closest to the key.
+     *
+     * @param ds the entry to store and flood to the closest floodfill participants
      */
     public void flood(DatabaseEntry ds) {
         Hash key = ds.getHash();
@@ -761,7 +769,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
          * Record a failed store for the given peer.
          *
          * @param ctx router context
-         * @param peer the peer
+         * @param peer the floodfill peer whose flood failed, whose profile is penalized
          */
         public FloodFailedJob(RouterContext ctx, Hash peer) {
             super(ctx);
@@ -800,6 +808,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Public, called from console. This wakes up the floodfill monitor,
      * which will rebuild the RI and log in the event log,
      * and call setFloodfillEnabledFromMonitor which really sets it.
+     * @param yes true to become floodfill, false to stop
      */
     public synchronized void setFloodfillEnabled(boolean yes) {
         if ((yes != _floodfillEnabled) && (_ffMonitor != null)) {
@@ -811,6 +820,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /**
      * Package private, called from FloodfillMonitorJob. This does not wake up the floodfill monitor.
+     * @param yes true to become floodfill, false to stop; true also creates the throttler and HFDSMJ stats
      * @since 0.9.34
      */
     synchronized void setFloodfillEnabledFromMonitor(boolean yes) {
@@ -838,7 +848,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Checks if a RouterInfo has floodfill capability.
      *
      * @param peer may be null, returns false if null
-     * @return whether floodfill
+     * @return true if the RouterInfo advertises the 'f' floodfill capability
      */
     public static boolean isFloodfill(RouterInfo peer) {
         if (peer == null) {return false;}
@@ -871,7 +881,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * will fire the appropriate jobs on success or timeout (or if the kademlia search completes
      * without any match)
      *
-     * @return null always
+     * @return always null; the caller is notified through onFindJob or onFailedLookupJob
      */
     @Override
     SearchJob search(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs, boolean isLease) {
@@ -993,6 +1003,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     /**
      * Must be called by the search job queued by search() on success or failure
+     * @param key the key whose pending search is being retired
      */
     void complete(Hash key) {
         _activeFloodQueries.remove(key);
@@ -1003,7 +1014,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * from them).  The ContactDrivenRefreshJob will consider refreshing their RouterInfo
      * if it is stale.
      *
-     * @param peer the peer
+     * @param peer the peer hash we heard from or about
      * @since 0.9.70+
      */
     public void contactHeardFrom(Hash peer) {
@@ -1016,6 +1027,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      * Fire a DirectLookupJob for a stale peer, deduplicated via _activeFloodQueries.
      * Caller should already have verified the peer is stale and not recently probed.
      *
+     * @param peer the stale peer's router hash, which keys the deduplication map
+     * @param ri the peer's RouterInfo, used by the job to verify the entry
      * @since 0.9.70
      */
     void probeStalePeer(Hash peer, RouterInfo ri) {
@@ -1045,6 +1058,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * Checks if verification is in progress for the specified hash.
      *
+     * @param h the key whose verifying floodfill is being tested
+     * @return true if a FloodfillVerifyStoreJob for this key is still running
      * @since 0.7.10
      */
     boolean isVerifyInProgress(Hash h) {return _verifiesInProgress.contains(h);}
@@ -1052,6 +1067,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * Marks verification as started for the specified hash.
      *
+     * @param h the key being verified by a FloodfillVerifyStoreJob
      * @since 0.7.10
      */
     void verifyStarted(Hash h) {_verifiesInProgress.add(h);}
@@ -1059,6 +1075,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     /**
      * Marks verification as finished for the specified hash.
      *
+     * @param h the key whose verifying floodfill has just completed
      * @since 0.7.10
      */
     void verifyFinished(Hash h) {_verifiesInProgress.remove(h);}
@@ -1264,7 +1281,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
          * Job to drop the peer after a lookup timeout.
          *
          * @param ctx router context
-         * @param peer the peer
+         * @param peer the floodfill peer that timed out responding to a lookup
          * @param _info unused
          */
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo _info) {
@@ -1295,7 +1312,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
          * Job to verify a failing peer after a successful lookup.
          *
          * @param ctx router context
-         * @param peer the peer
+         * @param peer the floodfill peer that returned the same RouterInfo we already had
          * @param info the stored RouterInfo for comparison
          */
         public DropLookupFoundJob(RouterContext ctx, Hash peer, RouterInfo info) {
@@ -1321,7 +1338,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
-    /** Look up the tunnel pool nickname for a destination. */
+    /**
+     * Look up the tunnel pool nickname for a destination.
+     * @param d the destination whose inbound, else outbound, pool nickname is wanted
+     * @return the configured nickname, or the empty string if neither pool has one
+     */
     public String getTunnelName(Destination d) {
         TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(d.calculateHash());
         String name = (in != null ? in.getDestinationNickname() : null);

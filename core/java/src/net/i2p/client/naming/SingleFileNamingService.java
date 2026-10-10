@@ -288,6 +288,7 @@ public class SingleFileNamingService extends NamingService {
      *
      * @param options non-null
      * @param out the writer to write to
+     * @throws IOException if the writer rejects the property data
      * @since 0.9.26, package private since 0.9.30, public since 0.9.31
      */
     public static void writeOptions(Properties options, Writer out) throws IOException {

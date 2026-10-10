@@ -57,6 +57,9 @@ class PacketHandler {
 
     /**
      * PacketHandler.
+     *
+     * @param ctx the app context used for logging, properties and packet verification
+     * @param mgr the connection manager whose connections dispatch inbound packets
      */
     public PacketHandler(I2PAppContext ctx, ConnectionManager mgr) {
         this.manager = mgr;
@@ -208,7 +211,7 @@ class PacketHandler {
      * Process a packet that matches a known connection.
      *
      * @param con    the connection this packet belongs to
-     * @param packet the packet
+     * @param packet the incoming packet, matched to an established connection
      */
     private void receiveKnownConnection(Connection con, Packet packet) {
         if (I2PSocketManagerFull.pcapWriter != null &&
@@ -324,7 +327,7 @@ class PacketHandler {
     /**
      * Sends a reset packet back to the sender if the incoming packet is verified.
      *
-     * @param packet the packet
+     * @param packet the received packet to answer, whose FROM option names the peer
      */
     private void sendReset(Packet packet) {
         if (packet == null) {return;}
@@ -347,7 +350,7 @@ class PacketHandler {
      * Sends a reset packet back to the sender without verifying the packet signature.
      * Packet MUST have a FROM option.
      *
-     * @param packet the packet
+     * @param packet the received packet to answer; must carry a FROM option
      * @since 0.9.39, public since 0.9.71 for ConnectionManager
      */
     public void sendResetUnverified(Packet packet) {

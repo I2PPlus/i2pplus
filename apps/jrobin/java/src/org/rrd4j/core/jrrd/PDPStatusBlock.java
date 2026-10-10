@@ -23,7 +23,9 @@ public class PDPStatusBlock {
     }
 
     /**
-     *  @param file the RRD file to read from
+     * Reads a PDPStatusBlock from the header of an RRD file.
+     *
+     * @param file the RRD file to read from
      */
     PDPStatusBlock(RRDFile file) {
 

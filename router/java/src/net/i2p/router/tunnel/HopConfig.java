@@ -72,7 +72,11 @@ public class HopConfig {
      */
     public void setReceiveTunnelId(long id) { _receiveTunnel = new TunnelId(id); }
 
-    /** What is the previous peer in the tunnel (null if gateway)? */
+    /**
+     * What is the previous peer in the tunnel (null if gateway)?
+     *
+     * @return the hash of the peer we receive from, or null at the gateway
+     */
     public Hash getReceiveFrom() { return _receiveFrom; }
 
     /**
@@ -117,7 +121,11 @@ public class HopConfig {
      */
     public void setSendTunnelId(long id) { _sendTunnel = new TunnelId(id); }
 
-    /** What is the next peer in the tunnel (null if endpoint)? */
+    /**
+     * What is the next peer in the tunnel (null if endpoint)?
+     *
+     * @return the hash of the peer we send to, or null at the endpoint
+     */
     public Hash getSendTo() { return _sendTo; }
 
     /**
@@ -127,24 +135,56 @@ public class HopConfig {
      */
     public void setSendTo(Hash to) { _sendTo = to; }
 
-    /** What key encrypts the layer before passing it on? */
+    /**
+     * What key encrypts the layer before passing it on?
+     *
+     * @return the layer session key, or null if this hop does not relay layers
+     */
     public SessionKey getLayerKey() { return _layerKey; }
-    /** The key to encrypt the layer with before passing it on. */
+    /**
+     * The key to encrypt the layer with before passing it on.
+     *
+     * @param key the layer session key applied to relayed layer messages
+     */
     public void setLayerKey(SessionKey key) { _layerKey = key; }
 
-    /** What key encrypts the preIV before passing it on? */
+    /**
+     * What key encrypts the preIV before passing it on?
+     *
+     * @return the IV session key, or null if this hop does not relay IVs
+     */
     public SessionKey getIVKey() { return _ivKey; }
-    /** The key to encrypt the IV with before passing it on. */
+    /**
+     * The key to encrypt the IV with before passing it on.
+     *
+     * @param key the IV session key applied to relayed pre-IV messages
+     */
     public void setIVKey(SessionKey key) { _ivKey = key; }
 
-    /** When does this tunnel expire (in ms since the epoch)? */
+    /**
+     * When does this tunnel expire (in ms since the epoch)?
+     *
+     * @return the expiration time in milliseconds since the epoch
+     */
     public long getExpiration() { return _expiration; }
-    /** The tunnel expiration time, in ms since the epoch. */
+    /**
+     * The tunnel expiration time, in ms since the epoch.
+     *
+     * @param when the expiration time in milliseconds since the epoch
+     */
     public void setExpiration(long when) { _expiration = when; }
 
-    /** When was this tunnel created (in ms since the epoch)? */
+    /**
+     * When was this tunnel created (in ms since the epoch)?
+     *
+     * @return the creation time in milliseconds since the epoch
+     */
     public long getCreation() { return _creation; }
-    /** The tunnel creation time, in ms since the epoch. */
+    /**
+     * The tunnel creation time, in ms since the epoch.
+     *
+     * @param when the creation time in milliseconds since the epoch
+     */
     public void setCreation(long when) { _creation = when; }
 
     /**

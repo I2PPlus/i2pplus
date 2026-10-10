@@ -26,11 +26,16 @@ import java.io.OutputStream;
 public class MessageId {
     private long _messageId;
 
+    /**
+     * Create an unset message ID, stored as -1.
+     */
     public MessageId() {
         _messageId = -1;
     }
 
     /**
+     * Create a message ID wrapping the given value.
+     *
      * @param id the message ID
      */
     public MessageId(long id) {
@@ -38,6 +43,8 @@ public class MessageId {
     }
 
     /**
+     * Read the wrapped message ID.
+     *
      * @return the message ID
      */
     public long getMessageId() {

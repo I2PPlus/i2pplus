@@ -19,7 +19,13 @@ public final class RrdLog {
 
     /** Sink for rrd4j diagnostics. */
     public interface Delegate {
-        /** @param severity one of "debug", "warn", "error" */
+        /**
+         * Hand one diagnostic to the installed sink.
+         *
+         * @param severity one of "debug", "warn", "error"
+         * @param message the diagnostic text handed to the sink
+         * @param cause the exception behind the diagnostic, or null if there is none
+         */
         void log(String severity, String message, Throwable cause);
     }
 
@@ -36,22 +42,40 @@ public final class RrdLog {
         _delegate = delegate;
     }
 
-    /** @return the installed sink, or null if none */
+    /**
+     * Return the currently installed sink.
+     *
+     * @return the installed sink, or null if none
+     */
     public static Delegate getDelegate() {
         return _delegate;
     }
 
-    /** Log at debug severity. */
+    /**
+     * Log at debug severity.
+     *
+     * @param message the debug text passed to the installed delegate
+     */
     public static void debug(String message) {
         log("debug", message, null);
     }
 
-    /** Log at warning severity. */
+    /**
+     * Log at warning severity.
+     *
+     * @param message the warning text passed to the installed delegate
+     * @param cause the exception being warned about, or null if there is none
+     */
     public static void warn(String message, Throwable cause) {
         log("warn", message, cause);
     }
 
-    /** Log at error severity. */
+    /**
+     * Log at error severity.
+     *
+     * @param message the error text passed to the installed delegate
+     * @param cause the exception being reported, or null if there is none
+     */
     public static void error(String message, Throwable cause) {
         log("error", message, cause);
     }

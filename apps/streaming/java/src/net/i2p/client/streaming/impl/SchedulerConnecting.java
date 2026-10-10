@@ -32,6 +32,8 @@ class SchedulerConnecting extends SchedulerImpl {
 
     /**
      * SchedulerConnecting.
+     *
+     * @param ctx the I2P app context supplying the clock and logger
      */
     public SchedulerConnecting(I2PAppContext ctx) {
         super(ctx);

@@ -15,6 +15,12 @@ import java.util.regex.Pattern;
  * @since 0.10.0
  */
 public class HttpHeaderFormatter {
+    /**
+     * Constructor. Formatting is a static function of the header map passed to
+     * it, so an instance carries no state.
+     */
+    public HttpHeaderFormatter() {}
+
     private static final Pattern NEWLINE_SPLIT = Pattern.compile("\r\n");
 
     /**

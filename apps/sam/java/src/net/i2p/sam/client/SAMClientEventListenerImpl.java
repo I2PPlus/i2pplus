@@ -6,6 +6,12 @@ import java.util.Properties;
  * Basic noop client event listener
  */
 public class SAMClientEventListenerImpl implements SAMReader.SAMClientEventListener {
+    /**
+     * A listener that discards every event; the methods below are no-ops and there is
+     * no field to set, so a bare instance is the whole implementation.
+     */
+    public SAMClientEventListenerImpl() {}
+
     public void destReplyReceived(String publicKey, String privateKey) { /* no-op */ }
     public void helloReplyReceived(boolean ok, String version) { /* no-op */ }
     public void namingReplyReceived(String name, String result, String value, String message) { /* no-op */ }

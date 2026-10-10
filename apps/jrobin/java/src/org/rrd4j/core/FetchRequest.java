@@ -24,6 +24,8 @@ public class FetchRequest {
     private String[] filter;
 
     /**
+     * Create a fetch request covering the given time range.
+     *
      * @param parentDb the parent RrdDb
      * @param consolFun the consolidation function
      * @param fetchStart the start timestamp
@@ -157,7 +159,11 @@ public class FetchRequest {
                 + (resolution > 1 ? " --resolution " + resolution : "");
     }
 
-    /** @return the rrdtool command string */
+    /**
+     * Render this request as the equivalent rrdtool fetch command.
+     *
+     * @return the rrdtool command string
+     */
     String getRrdToolCommand() {
         return dump();
     }

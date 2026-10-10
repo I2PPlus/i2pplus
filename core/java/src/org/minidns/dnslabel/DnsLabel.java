@@ -53,6 +53,8 @@ private static final boolean VALIDATE = true;
 
     /**
      * DnsLabel.
+     *
+     * @param label presentation-format text of one label, checked against the 63-octet limit
      */
     protected DnsLabel(String label) {
         this.label = label;

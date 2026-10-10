@@ -18,6 +18,8 @@ public class FileSuffixFilter implements FileFilter {
     /**
      * A filter that accepts regular files that
      * end with suffix, case-insensitive.
+     *
+     * @param suffix the ending filename suffix to require, matched case-insensitively
      */
     public FileSuffixFilter(String suffix) {
         begin = null;
@@ -28,6 +30,9 @@ public class FileSuffixFilter implements FileFilter {
      * A filter that accepts regular files that
      * start with prefix and
      * end with suffix, case-insensitive.
+     *
+     * @param prefix the starting filename prefix to require, matched case-insensitively
+     * @param suffix the ending filename suffix to require, matched case-insensitively
      */
     public FileSuffixFilter(String prefix, String suffix) {
         begin = prefix.toLowerCase(Locale.US);

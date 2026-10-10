@@ -97,7 +97,11 @@ public final class SHA256Generator {
      * Use this if you only need the data, not a Hash object.
      * Does not cache.
      *
+     * @param source what to hash
+     * @param start the starting offset
+     * @param len the length to hash
      * @param out needs 32 bytes starting at outOffset
+     * @param outOffset where in the output array to store the 32-byte digest
      */
     public final void calculateHash(byte[] source, int start, int len, byte[] out, int outOffset) {
         MessageDigest digest = acquire();
@@ -165,6 +169,8 @@ public final class SHA256Generator {
 
     /**
      * Hash the first argument and print the base64 result.
+     *
+     * @param args a single element holding the UTF-8 text to hash
      */
     public static void main(String[] args) {
         if (args.length != 1) {

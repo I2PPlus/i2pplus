@@ -41,6 +41,14 @@ public class Header implements RrdUpdater<Header> {
     private final RrdInt<Header> arcCount;
     private final RrdLong<Header> lastUpdateTime;
 
+    /**
+     * Construct a header from a definition, taking the version, step, arc and archive
+     * counts and start time from it. A null definition leaves the fields unset.
+     *
+     * @param parentDb the database this header belongs to
+     * @param rrdDef the definition supplying the initial values, or null to leave them unset
+     * @throws IOException never thrown, declared for signature compatibility
+     */
     Header(RrdDb parentDb, RrdDef rrdDef) throws IOException {
         this.parentDb = parentDb;
 
@@ -67,6 +75,15 @@ public class Header implements RrdUpdater<Header> {
         }
     }
 
+    /**
+     * Construct a header from an imported RRDtool file, mapping its version string
+     * onto the RRD4J version number.
+     *
+     * @param parentDb the database this header belongs to
+     * @param reader the importer positioned at the header of a foreign RRD file
+     * @throws IllegalArgumentException if the imported version is not one this reader supports
+     * @throws IOException if the underlying backend cannot be read
+     */
     Header(RrdDb parentDb, DataImporter reader) throws IOException {
         this(parentDb, (RrdDef) null);
         String importVersion = reader.getVersion();
@@ -91,8 +108,8 @@ public class Header implements RrdUpdater<Header> {
      * Returns RRD signature. Initially, the returned string will be of the form <b><i>Rrd4j,
      * version x.x</i></b>.
      *
-     * @return RRD signature
-     * @throws java.io.IOException Thrown in case of I/O error
+     * @return the RRD signature, identifying the file as RRD4J and its version
+     * @throws java.io.IOException if the signature cannot be read from the backend
      */
     public String getSignature() throws IOException {
         return signature.get();
@@ -226,8 +243,8 @@ public class Header implements RrdUpdater<Header> {
     /**
      * Return the RRD version.
      *
-     * @return RRD version
-     * @throws java.io.IOException if any.
+     * @return the RRD version number, 1 or 2
+     * @throws java.io.IOException if the signature cannot be read from the backend to determine it
      */
     public int getVersion() throws IOException {
         if (version < 0) {
@@ -270,7 +287,7 @@ public class Header implements RrdUpdater<Header> {
     /**
      * Required to implement RrdUpdater interface. You should never call this method directly.
      *
-     * @return Allocator object
+     * @return the allocator owning the canonical numeric representation of this header's values
      */
     public RrdAllocator getRrdAllocator() {
         return parentDb.getRrdAllocator();

@@ -43,7 +43,12 @@ public class SecurityManager {
     private final I2PAppContext _context;
 
     /**
-     * @param ksp may be null (if webapp)
+     * Create the security manager and start the sweeper that expires auth
+     * tokens; no token store is loaded here.
+     *
+     * @param ksp may be null (if webapp); currently unused, kept for the API
+     * @param ctx the application context supplying the logger, random source and SHA-256 generator
+     * @param conf the configuration manager holding the persisted salt and password hash
      */
     public SecurityManager(I2PAppContext ctx, KeyStoreProvider ksp, ConfigurationManager conf) {
         _context = ctx;
@@ -64,7 +69,8 @@ public class SecurityManager {
 
     /**
      * Hash pwd with using BCrypt with the default salt.
-     * @param pwd
+     * @param pwd the plaintext password to hash; it is combined with the
+               persisted BCrypt salt, never stored in the clear
      * @return BCrypt hash of salt and input string
      */
     public String getPasswdHash(String pwd) {
@@ -99,7 +105,7 @@ public class SecurityManager {
 
     /**
      * Hash input one time with SHA-256, return Base64 encdoded string.
-     * @param string
+     * @param string the value to hash, read as UTF-8 bytes before hashing
      * @return Base64 encoded string
      */
     public String getHash(String string) {
@@ -111,6 +117,7 @@ public class SecurityManager {
 
     /**
      * Is this password correct?
+     * @param pwd the plaintext password to compare against the stored BCrypt hash
      * @return true if password is valid.
      */
     public boolean isValid(String pwd) {
@@ -131,6 +138,7 @@ public class SecurityManager {
     /**
      * Add a Authentication Token if the provided password is valid.
      * The token will be valid for one day.
+     * @param pwd the plaintext password to check; if it matches, a one-day token is issued
      * @return AuthToken if password is valid. If password is invalid null will be returned.
      */
     public AuthToken validatePasswd(String pwd) {
@@ -147,7 +155,8 @@ public class SecurityManager {
 
     /**
      * Set new password. Old tokens will NOT remain valid, to encourage the new password being tested.
-     * @param newPasswd
+     * @param newPasswd the replacement plaintext password, hashed and stored
+                    through the same BCrypt path as the existing one
      * @return Returns true if a new password was set.
      */
     public boolean setPasswd(String newPasswd) {
@@ -168,8 +177,9 @@ public class SecurityManager {
     /**
      * Checks whether the AuthToken with the given ID exists and if it does whether is has expired.
      * @param tokenID - The token to validate
-     * @throws InvalidAuthTokenException
-     * @throws ExpiredAuthTokenException
+     * @throws InvalidAuthTokenException if no token with that ID is known
+     * @throws ExpiredAuthTokenException if the token is known but past its
+     * expiry, in which case it is also removed from the store
      */
     public void verifyToken(String tokenID) throws InvalidAuthTokenException, ExpiredAuthTokenException {
         synchronized (authTokens) {

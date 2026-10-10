@@ -42,7 +42,11 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     private static final int DEFAULT_DH_PRECALC_DELAY = 25;
     private static final int HARD_MAX = 65536;
     private final boolean RETURN_UNUSED_TO_XDH;
-    /** Creates factory and starts background key precomputation thread. */
+    /**
+     * Creates factory and starts background key precomputation thread.
+     *
+     * @param ctx the router context supplying the log, statistics and precomputation thread
+     */
 
     public Elg2KeyFactory(RouterContext ctx) {
         super("EDH Precalc");
@@ -95,6 +99,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Minimum precalc queue size.
      *
+     * @param min the requested floor, raised to 1 if less than that is passed
      * @since 0.9.70+
      */
     public void setMinSize(int min) { _minSize = Math.max(1, min); }
@@ -110,6 +115,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Maximum precalc queue size.
      *
+     * @param max the requested ceiling, raised to the current minimum if it is lower
      * @since 0.9.70+
      */
     public void setMaxSize(int max) { _maxSize = Math.max(_minSize, max); }
@@ -245,6 +251,8 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * Unused DH key builder; keys are discarded, not pooled.
+     *
+     * @param kp the key pair to discard; currently unused, as nothing is returned to the pool
      */
     public void returnUnused(Elg2KeyPair kp) {
         // intentionally empty - unused keys are discarded, not pooled

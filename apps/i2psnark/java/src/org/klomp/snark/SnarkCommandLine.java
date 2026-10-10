@@ -25,8 +25,14 @@ public class SnarkCommandLine extends CommandLine {
                         "org.klomp.snark.bencode.BDecoder",
                     });
 
+    /** Not instantiable: the class is a namespace for {@link #main(String[])}. */
     protected SnarkCommandLine() {}
 
+    /**
+     * Run one command against the snark utility classes, or print the usage when none is given.
+     *
+     * @param args the command name followed by its arguments; empty prints the usage and exits 1
+     */
     public static void main(String[] args) {
         List<String> classes = new ArrayList<>(SCLASSES.size() + CLASSES.size());
         classes.addAll(SCLASSES);

@@ -19,6 +19,10 @@ class LogLimit {
 
     /**
      * LogLimit.
+     *
+     * @param name the root log name this override applies to, matched by class hierarchy
+     * @param limit the minimum priority level, from {@link Log#toLevelString}, that
+     * logs under this root name will emit
      */
     public LogLimit(String name, int limit) {
         _rootName = name;
@@ -45,6 +49,8 @@ class LogLimit {
 
     /**
      * Configure the priority limit.
+     *
+     * @param limit the minimum priority level that logs under this root name emit
      */
     public void setLimit(int limit) {
         _limit = limit;
@@ -52,6 +58,10 @@ class LogLimit {
 
     /**
      * Whether the log matches this limit, by name or class hierarchy.
+     *
+     * @param log the log to test, whose class name is compared against the root name
+     * @return true if this limit applies to that log, false if the name is absent or
+     * is a different log entirely
      */
     public boolean matches(Log log) {
         String name = log.getName();

@@ -38,6 +38,12 @@ import java.util.Map;
  */
 public class KeyPairGenerator extends KeyPairGeneratorSpi {
     /**
+     * Constructor. The JCA framework calls initialize() with the strength and
+     * randomness source, so the instance starts uninitialized and empty.
+     */
+    public KeyPairGenerator() {}
+
+    /**
      * DEFAULT_KEYSIZE.
      */
     protected static final int DEFAULT_KEYSIZE = 256;

@@ -52,6 +52,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getDescriptionFile.
+     *
+     * @return the local file backing the description, or null if this device was not registered from a file
      */
     public File getDescriptionFile() {
         return descriptionFile;
@@ -59,6 +61,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getDescriptionURI.
+     *
+     * @return the URL the description was fetched from, or null if it was parsed from a file
      */
     public String getDescriptionURI() {
         return descriptionURI;
@@ -66,6 +70,8 @@ public class DeviceData extends NodeData {
 
     /**
      * setDescriptionFile.
+     *
+     * @param descriptionFile the local file this description was parsed from, or null when it was fetched over the network
      */
     public void setDescriptionFile(File descriptionFile) {
         this.descriptionFile = descriptionFile;
@@ -73,6 +79,8 @@ public class DeviceData extends NodeData {
 
     /**
      * setDescriptionURI.
+     *
+     * @param descriptionURI the URL this description was fetched from, or null when it was parsed from a file
      */
     public void setDescriptionURI(String descriptionURI) {
         this.descriptionURI = descriptionURI;
@@ -87,6 +95,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getLocation.
+     *
+     * @return the control URL of this device, preferring the IPv4 form
      */
     public String getLocation() {
         return getLocation(false);
@@ -111,6 +121,8 @@ public class DeviceData extends NodeData {
 
     /**
      * setLocation.
+     *
+     * @param location the control URL to advertise; a host in brackets is filed as the IPv6 location, and a malformed URL is rejected with a warning
      */
     public void setLocation(String location) {
         if (location != null) {
@@ -137,6 +149,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getLeaseTime.
+     *
+     * @return the advertised lease duration in seconds
      */
     public int getLeaseTime() {
         return leaseTime;
@@ -144,6 +158,8 @@ public class DeviceData extends NodeData {
 
     /**
      * setLeaseTime.
+     *
+     * @param val the advertised lease duration in seconds
      */
     public void setLeaseTime(int val) {
         leaseTime = val;
@@ -157,6 +173,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getHTTPServerList.
+     *
+     * @return the HTTP server list, lazily created on first use from the bind addresses and port
      */
     public HTTPServerList getHTTPServerList() {
         if (this.httpServerList == null) {
@@ -169,6 +187,8 @@ public class DeviceData extends NodeData {
 
     /**
      * setHTTPBindAddress.
+     *
+     * @param inets the addresses the embedded HTTP server binds to, or null for the default behaviour
      */
     public void setHTTPBindAddress(InetAddress[] inets) {
         this.httpBinds = inets;
@@ -176,6 +196,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getHTTPBindAddress.
+     *
+     * @return the addresses the embedded HTTP server binds to, or null when the default behaviour applies
      */
     public InetAddress[] getHTTPBindAddress() {
         return this.httpBinds;
@@ -189,6 +211,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getHTTPPort.
+     *
+     * @return the port the embedded HTTP server listens on
      */
     public int getHTTPPort() {
         return httpPort;
@@ -196,6 +220,8 @@ public class DeviceData extends NodeData {
 
     /**
      * setHTTPPort.
+     *
+     * @param port the port the embedded HTTP server should listen on
      */
     public void setHTTPPort(int port) {
         httpPort = port;
@@ -209,6 +235,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getControlActionListenerList.
+     *
+     * @return the list notified when a control action message arrives
      */
     public ListenerList getControlActionListenerList() {
         return controlActionListenerList;
@@ -232,6 +260,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getSSDPSearchSocketList.
+     *
+     * @return the SSDP search socket list, lazily created on first use from the bind addresses, port and multicast addresses
      */
     public SSDPSearchSocketList getSSDPSearchSocketList() {
         if (this.ssdpSearchSocketList == null) {
@@ -336,6 +366,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getSSDPPacket.
+     *
+     * @return the packet describing this device, preferring the IPv4 form
      */
     public SSDPPacket getSSDPPacket() {
         return getSSDPPacket(false);
@@ -360,6 +392,8 @@ public class DeviceData extends NodeData {
 
     /**
      * setSSDPPacket.
+     *
+     * @param packet the packet to advertise; a bracketed host in its location is filed as the IPv6 packet, and a malformed URL is rejected with a warning
      */
     public void setSSDPPacket(SSDPPacket packet) {
         String location = packet.getLocation();
@@ -387,6 +421,8 @@ public class DeviceData extends NodeData {
 
     /**
      * setAdvertiser.
+     *
+     * @param adv the advertiser to schedule this device's SSDP announcements with
      */
     public void setAdvertiser(Advertiser adv) {
         advertiser = adv;
@@ -394,6 +430,8 @@ public class DeviceData extends NodeData {
 
     /**
      * getAdvertiser.
+     *
+     * @return the advertiser scheduling this device's SSDP announcements, or null when none has been set
      */
     public Advertiser getAdvertiser() {
         return advertiser;

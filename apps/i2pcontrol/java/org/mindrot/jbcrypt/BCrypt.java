@@ -61,6 +61,12 @@ import java.security.SecureRandom;
  * @version 0.2
  */
 public class BCrypt {
+	/**
+	 * Constructor. The instance holds only the per-hash key schedule,
+	 * which init_key() copies from the constant P_orig and S_orig tables.
+	 */
+	public BCrypt() {}
+
 	// BCrypt parameters
 	private static final int GENSALT_DEFAULT_LOG2_ROUNDS = 10;
 	private static final int BCRYPT_SALT_LEN = 16;

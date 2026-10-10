@@ -96,7 +96,8 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
         IB_STATE_RETRY_SENT,
    }
 
-    /** Basic delay before backoff
+    /**
+     * Basic delay before backoff
      *  Transmissions at 0, 1, 3, 7 sec.
      *  This should be a little shorter than for outbound.
      */
@@ -112,6 +113,9 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     /**
      *  For SSU2
      *
+     *  @param ctx router context, used for the clock and the log
+     *  @param addr the remote address the session request arrived from, which becomes
+     *             the peer's address and remote host id
      *  @since 0.9.54
      */
     protected InboundEstablishState(RouterContext ctx, InetSocketAddress addr) {
@@ -159,6 +163,7 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     /**
      *  Queue a message to be sent after the session is established.
      *  This will only happen if we decide to send something during establishment
+     *  @param msg the message to send once the session is established
      *  @since 0.9.2
      */
     public void addMessage(OutNetMessage msg) {

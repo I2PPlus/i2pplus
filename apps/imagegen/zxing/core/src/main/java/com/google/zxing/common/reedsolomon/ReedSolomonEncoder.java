@@ -32,6 +32,8 @@ public final class ReedSolomonEncoder {
 
   /**
    * ReedSolomonEncoder.
+   *
+   * @param field the Galois field over which the parity symbols are computed
    */
   public ReedSolomonEncoder(GenericGF field) {
     this.field = field;
@@ -54,6 +56,9 @@ public final class ReedSolomonEncoder {
 
   /**
    * encode.
+   *
+   * @param toEncode the message block to encode, with room for the appended parity bytes
+   * @param ecBytes the number of error correction bytes to append, greater than zero
    */
   public void encode(int[] toEncode, int ecBytes) {
     if (ecBytes == 0) {

@@ -20,6 +20,12 @@ import org.klomp.snark.TorrentDest;
  */
 class Sorters {
 
+    /**
+     * The outer class only groups the comparators below and holds their static patterns,
+     * so an instance carries nothing.
+     */
+    Sorters() {}
+
     /** See below */
     private static final Pattern PATTERN_DE;
     private static final Pattern PATTERN_EN;
@@ -30,7 +36,7 @@ class Sorters {
     private static final Pattern PATTERN_PT;
 
     /**
-     * Negative is reverse
+     * Build the comparator that orders the torrent list by a details-page column.
      *
      * <ul>
      *   <li>0, 1: Name
@@ -48,8 +54,12 @@ class Sorters {
      *   <li>13: Pool, then status
      * </ul>
      *
+     * @param type the column to sort by, negative to reverse the order, as
+     *        listed in the tag table above
+     * @param lang the locale used to collate torrent names
      * @param servlet for file type callback only
-     * @return the comparator
+     * @return a comparator implementing the requested column ordering, falling
+     *         back to name ordering for an unlisted column
      */
     public static Comparator<Snark> getComparator(int type, String lang, I2PSnarkServlet servlet) {
         boolean rev = type < 0;
@@ -194,7 +204,7 @@ class Sorters {
      * (accents distinct, case not), the default locale when null.
      *
      * @param lang may be null
-     * @return the collator
+     * @return a collator for that locale, or for the default locale when lang is null
      */
     private static Collator getCollator(String lang) {
         Collator c = lang != null ? Collator.getInstance(Locale.forLanguageTag(lang)) : Collator.getInstance();
@@ -226,7 +236,11 @@ class Sorters {
         }
 
         /**
-         * Compare two torrents.
+         * Compare two torrents on the subclass's column, falling back to name order.
+         *
+         * @param l the left-hand torrent to compare
+         * @param r the right-hand torrent to compare
+         * @return negative, zero or positive as l sorts before, with or after r
          */
         protected abstract int compareIt(Snark l, Snark r);
 
@@ -366,7 +380,7 @@ class Sorters {
          * The pool number of a torrent's shared destination, Long.MAX_VALUE when
          * the torrent has no destination.
          *
-         * @param snark the torrent
+         * @param snark the torrent whose shared destination is looked up
          * @return the pool number, or Long.MAX_VALUE when there is none
          */
         private static long pool(Snark snark) {
@@ -593,17 +607,25 @@ class Sorters {
 
     /** Class to precompute and efficiently sort data on a torrent file entry. */
     public static class FileAndIndex {
+        /** The file or directory this entry describes. */
         public final File file;
+        /** True if the entry is a directory rather than a file held in storage. */
         public final boolean isDirectory;
+        /** Size in bytes, or 0 for a directory. */
         public final long length;
+        /** Bytes still needed for this file, or -1 when it is not in storage. */
         public final long remaining;
+        /** Bytes of the file already in the preview, or 0 when none was computed. */
         public final long preview;
+        /** Storage priority of the file, or -999 to sort an unstored entry last. */
         public final int priority;
+        /** Index of the file in storage, or -1 when it was not found. */
         public final int index;
 
         /**
          * Create a file/index entry.
          *
+         * @param file the file or directory the entry describes
          * @param storage may be null
          * @param remainingArray precomputed, non-null iff storage is non-null
          */
@@ -614,8 +636,11 @@ class Sorters {
         /**
          * Create a file/index entry with preview lengths.
          *
+         * @param file the file or directory the entry describes
          * @param storage may be null
          * @param remainingArray precomputed, non-null iff storage is non-null
+         * @param previewArray precomputed preview lengths indexed the same way,
+         *        or null when no previews have been computed
          */
         public FileAndIndex(
                 File file, Storage storage, long[] remainingArray, long[] previewArray) {
@@ -637,7 +662,7 @@ class Sorters {
     }
 
     /**
-     * Negative is reverse
+     * Build the comparator that orders a torrent's file entries by a details-page column.
      *
      * <ul>
      *   <li>0, 1: Name
@@ -647,8 +672,11 @@ class Sorters {
      *   <li>13: Priority
      * </ul>
      *
+     * @param type the column to sort by, negative to reverse the order, as
+     *        listed in the tag table above
      * @param servlet for file type callback only
-     * @return the file comparator
+     * @return a comparator implementing the requested column ordering, falling
+     *         back to name ordering for an unlisted column
      */
     public static Comparator<FileAndIndex> getFileComparator(int type, I2PSnarkServlet servlet) {
         boolean rev = type < 0;

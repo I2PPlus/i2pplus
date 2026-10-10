@@ -58,7 +58,12 @@ public class NewsManager implements ClientApp {
     private static final String BUNDLE_NAME = "net.i2p.router.news.messages";
 
     /**
+     * Create a news manager and mark it initialized; no news is fetched until
+     * the client app is started.
+     *
      * @param args ignored
+     * @param ctx the application context supplying the log manager and config
+     * @param listener the client app manager to notify when a new news bundle arrives
      */
     public NewsManager(I2PAppContext ctx, ClientAppManager listener, String[] args) {
         _context = ctx;
@@ -68,6 +73,7 @@ public class NewsManager implements ClientApp {
     }
 
     /**
+     * Return the current news entries, loading them from disk on first call.
      *
      * @return non-null, sorted by updated date, newest first
      */
@@ -100,6 +106,9 @@ public class NewsManager implements ClientApp {
     /**
      * Add or replace each entry in the list.
      * Does NOT store them to disk.
+     *
+     * @param entries the entries to add or replace, matched against existing entries
+     *        by id, or by title for entries parsed from the old news.xml
      */
     public synchronized void addEntries(List<NewsEntry> entries) {
         for (NewsEntry e : entries) {

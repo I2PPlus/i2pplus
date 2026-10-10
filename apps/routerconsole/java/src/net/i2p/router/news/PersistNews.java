@@ -38,6 +38,9 @@ import java.nio.charset.StandardCharsets;
  * @since 0.9.23
  */
 class PersistNews {
+    /**
+     * Never instantiated; every operation on this class is static.
+     */
     PersistNews() {}
 
     private static final String DIR = "docs/feed/news";

@@ -36,6 +36,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
     /**
      * Message with the given type, unknown to the router.
      *
+     * @param context the app context for the message
      * @param type 0-255
      */
     public UnknownI2NPMessage(I2PAppContext context, int type) {
@@ -87,6 +88,7 @@ public class UnknownI2NPMessage extends FastI2NPMessageImpl {
      *
      * Used by TunnelGatewayZeroHop.
      *
+     * @return the message as its known subclass, verified against the saved checksum
      * @throws I2NPMessageException if the conversion fails
      * @since 0.8.12
      */

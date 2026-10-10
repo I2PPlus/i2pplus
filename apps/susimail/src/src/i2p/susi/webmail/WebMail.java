@@ -76,6 +76,12 @@ import java.nio.charset.StandardCharsets;
  * Main webmail application class providing email functionality for I2P.
  */
 public class WebMail extends HttpServlet {
+    /**
+     * A fresh servlet: the logger is built by the field initialiser and every other
+     * setting is static, so init() and the requests do the rest.
+     */
+    public WebMail() {}
+
     /**  log */
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(WebMail.class);
     private static final long serialVersionUID = 1L;
@@ -418,6 +424,11 @@ public class WebMail extends HttpServlet {
 
     /**
      * safeEquals.
+     *
+     * @param a one of the two strings to compare, may be null
+     * @param b the string compared against a, may be null
+     * @return true if both are null or both non-null and equal, so a null
+     * operand never throws
      */
     public static boolean safeEquals(String a, String b) {
         return a == null ? b == null : a.equals(b);
@@ -2570,6 +2581,9 @@ public class WebMail extends HttpServlet {
 
     /**
      * Determine if a user-provided override.css file is active
+     *
+     * @return true if an override.css exists in the current theme's
+     * susimail directory
      * @since 0.9.65+
      */
     public boolean isOverrideCssActive() {

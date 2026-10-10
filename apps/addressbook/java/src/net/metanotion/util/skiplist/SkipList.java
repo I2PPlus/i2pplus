@@ -52,6 +52,8 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 
     /**
      * Return the number of items.
+     *
+     * @return the number of entries currently held in the list
      */
     public int size() { return size; }
 
@@ -69,15 +71,19 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     }
 
     /**
-     *  @return 4 since we don't track span count here any more - see override
-     *  Fix if for some reason you want a huge in-memory skiplist.
+     * Fix if for some reason you want a huge in-memory skiplist.
+     *
+     * @return 4 since we don't track span count here any more - see override
      */
     public int maxLevels() {
         return MIN_SLOTS;
     }
 
     /**
-     *  @return 0..maxLevels(), each successive one with probability 1 / P
+     * Choose the column height for a newly inserted node, using the geometric
+     * distribution that keeps the list's search cost logarithmic.
+     *
+     * @return 0..maxLevels(), each successive one with probability 1 / P
      */
     public int generateColHeight() {
         int bits = rng.nextInt();
@@ -93,8 +99,8 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     /**
      * Insert or update a key-value pair in the skip list.
      *
-     * @param key the key
-     * @param val the value
+     * @param key the key to insert, or whose existing entry is to be replaced
+     * @param val the value stored under that key
      */
     @SuppressWarnings("unchecked")
     public void put(K key, V val)   {
@@ -120,7 +126,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     /**
      * Remove a key-value pair from the skip list.
      *
-     * @param key the key
+     * @param key the key whose entry is to be removed
      * @return the previous value, or null if not found
      */
     @SuppressWarnings("unchecked")
@@ -146,7 +152,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     /**
      * Get the value for a key.
      *
-     * @param key the key
+     * @param key the key whose stored value is wanted
      * @return the value, or null if not found
      */
     public V get(K key) {
@@ -159,7 +165,13 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
      */
     public SkipIterator<K, V> iterator() { return new SkipIterator<>(first, 0); }
 
-    /** @return an iterator where nextKey() is the first one greater than or equal to 'key' */
+    /**
+     * Look up the first stored key greater than or equal to the one given,
+     * returning an iterator already positioned there.
+     *
+     * @param key the key to position the iterator at
+     * @return an iterator where nextKey() is the first one greater than or equal to 'key'
+     */
     public SkipIterator<K, V> find(K key) {
         int[] search = new int[1];
         SkipSpan<K, V> ss = stack.getSpan(stack.levels.length - 1, key, search);

@@ -151,9 +151,11 @@ public class Storage implements Closeable {
      * scaled to the CPU count, at least 4. Override with the i2psnark.verifyThreads property. */
     private static final int DEFAULT_VERIFY_THREADS = Math.max(SystemVersion.getCores() / 4, 4);
 
-    /** Cap on simultaneous storage checks across all torrents; prevents a disk I/O storm when many
+    /**
+     * Cap on simultaneous storage checks across all torrents; prevents a disk I/O storm when many
      * torrents start or are rechecked at the same time. Override with the
-     * i2psnark.maxConcurrentChecks property (read once at class load; restart to change). */
+     * i2psnark.maxConcurrentChecks property (read once at class load; restart to change).
+     */
     private static final int MAX_CONCURRENT_CHECKS = Math.max(1,
             I2PAppContext.getGlobalContext().getProperty("i2psnark.maxConcurrentChecks", 4));
 
@@ -174,7 +176,10 @@ public class Storage implements Closeable {
      * <p>Does not check storage. Caller MUST call check(), which will try to create and/or check
      * all needed files in the MetaInfo.
      *
+     * @param util the wrapper for general configuration and torrent filtering
      * @param baseFile the torrent data file or dir
+     * @param metainfo the parsed metainfo describing the torrent's pieces and files
+     * @param listener notified of storage events such as completion, may be null
      * @param preserveFileNames if true, do not remap names to a 'safe' charset
      */
     public Storage(
@@ -205,9 +210,14 @@ public class Storage implements Closeable {
      *
      * <p>Creates the metainfo, this may take a LONG time. BLOCKING.
      *
-     * @param announce may be null
-     * @param listener may be null
-     * @param created_by may be null
+     * @param util the wrapper for general configuration and torrent filtering
+     * @param baseFile the torrent data file or dir
+     * @param announce the announce URL to record in the metainfo, may be null
+     * @param announce_list additional announce URLs, may be null
+     * @param created_by the metainfo's "created by" string, may be null
+     * @param privateTorrent if true, set the metainfo private flag
+     * @param listener notified of storage events such as completion, may be null
+     * @param filters the filters selecting which files are stored, may be null
      * @throws IOException when creating and/or checking files fails.
      */
     public Storage(
@@ -239,11 +249,16 @@ public class Storage implements Closeable {
      *
      * <p>Creates the metainfo, this may take a LONG time. BLOCKING.
      *
-     * @param announce may be null
-     * @param listener may be null
-     * @param created_by may be null
-     * @param url_list may be null
-     * @param comment may be null
+     * @param util the wrapper for general configuration and torrent filtering
+     * @param baseFile the torrent data file or dir
+     * @param announce the announce URL to record in the metainfo, may be null
+     * @param announce_list additional announce URLs, may be null
+     * @param created_by the metainfo's "created by" string, may be null
+     * @param privateTorrent if true, set the metainfo private flag
+     * @param url_list web seed URLs, may be null
+     * @param comment the metainfo comment, may be null
+     * @param listener notified of storage events such as completion, may be null
+     * @param filters the filters selecting which files are stored, may be null
      * @throws IOException when creating and/or checking files fails.
      * @since 0.9.48
      */
@@ -526,6 +541,7 @@ public class Storage implements Closeable {
     /**
      * The excluded files.
      *
+     * @param base the torrent data dir the excluded paths are reported relative to
      * @return the excluded files
      * @since 0.9.62+
      */
@@ -689,17 +705,29 @@ public class Storage implements Closeable {
         }
     }
 
-    /** Returns the MetaInfo associated with this Storage. */
+    /**
+     * Returns the MetaInfo associated with this Storage.
+     *
+     * @return the metainfo describing this torrent
+     */
     public MetaInfo getMetaInfo() {
         return metainfo;
     }
 
-    /** How many pieces are still missing from this storage. */
+    /**
+     * How many pieces are still missing from this storage.
+     *
+     * @return the count of pieces not yet present on disk
+     */
     public int needed() {
         return needed;
     }
 
-    /** Whether or not this storage contains all pieces if the MetaInfo. */
+    /**
+     * Whether or not this storage contains all pieces if the MetaInfo.
+     *
+     * @return true if no pieces are still needed
+     */
     public boolean complete() {
         return needed == 0;
     }
@@ -1053,6 +1081,7 @@ public class Storage implements Closeable {
      * after the constructor with the metainfo. Use recheck() to check again later.
      *
      * @throws IllegalStateException if called more than once
+     * @throws IOException if a required file or directory cannot be created or deleted
      */
     public void check() throws IOException {
         check(0, null);
@@ -1063,7 +1092,11 @@ public class Storage implements Closeable {
      * timestamp from the metadata file. Only call this once, and only after the constructor with the
      * metainfo. Use recheck() to check again later.
      *
+     * @param savedTime the creation time of the metadata file in milliseconds, or 0 to ignore
+     * @param savedBitField the completion state loaded from the metadata file, or null to ignore
      * @throws IllegalStateException if called more than once
+     * @throws IOException if a required file or directory cannot be created or deleted, or the
+     *     on-disk file lengths do not sum to the length in the metainfo
      */
     public void check(long savedTime, BitField savedBitField) throws IOException {
         boolean areFilesPublic = _util.getFilesPublic();
@@ -1466,6 +1499,9 @@ public class Storage implements Closeable {
      *
      * <p>TODO: If multiple files in the same torrent map to the same filter name, the whole torrent
      * will blow up. Check at torrent creation?
+     *
+     * @param name the file name as listed in the torrent's metainfo
+     * @return the name with suspicious characters replaced by underscores
      */
     public static String filterName(String name) {
         String rv = _filterNameCache.get(name);
@@ -1623,6 +1659,7 @@ public class Storage implements Closeable {
      * downloading, or null when the staging feature is disabled. Paths
      * inside it mirror the data-directory layout of the torrent.
      *
+     * @return the staging base directory, or null when staging is disabled
      * @since 0.9.71+
      */
     public File getStagingDir() {
@@ -1742,6 +1779,7 @@ public class Storage implements Closeable {
      * listener.setWantedPieces() on completion if anything changed.
      *
      * @return true if anything changed, false otherwise
+     * @throws IOException if the recheck cannot read or create the torrent's files
      * @since 0.9.23
      */
     public boolean recheck() throws IOException {
@@ -1766,8 +1804,13 @@ public class Storage implements Closeable {
         return checkCreateFiles(recheck, null);
     }
 
-    /** Worker threads for a parallel piece verification: the i2psnark.verifyThreads property
-     * when set, otherwise scaled to the CPU count (at least 4). */
+    /**
+     * Worker threads for a parallel piece verification: the i2psnark.verifyThreads property
+     * when set, otherwise scaled to the CPU count (at least 4).
+     *
+     * @param ctx the context supplying the i2psnark.verifyThreads property
+     * @return the configured thread count, or the CPU-derived default when the property is unset
+     */
     static int getVerifyThreads(I2PAppContext ctx) {
         int configured = ctx.getProperty("i2psnark.verifyThreads", 0);
         return configured > 0 ? configured : DEFAULT_VERIFY_THREADS;
@@ -2097,7 +2140,12 @@ public class Storage implements Closeable {
     /**
      * Returns a byte array containing a portion of the requested piece or null if the storage
      * doesn't contain the piece yet.
+     *
+     * @param piece the zero-based index of the piece
+     * @param off the offset within the piece where the returned data starts, in bytes
+     * @param len the number of piece bytes to return
      * @return the piece
+     * @throws IOException if the piece cannot be read from storage
      */
     public ByteArray getPiece(int piece, int off, int len) throws IOException {
         if (!bitfield.get(piece)) {
@@ -2220,6 +2268,7 @@ public class Storage implements Closeable {
      * Put the piece in the Storage if it is correct. Warning - takes a LONG time if complete as it
      * does the recheck here. TODO thread the recheck?
      *
+     * @param pp the received piece data, which is hashed against the metainfo to verify it
      * @return true if the piece was correct (sha metainfo hash matches), otherwise false.
      * @throws IOException when some storage related error occurs.
      */
@@ -3023,6 +3072,7 @@ public class Storage implements Closeable {
     /**
      * Create a metainfo. Used in the installer build process; do not comment out.
      *
+     * @param args the command line, with -a announce, -c created-by, -m comment and -w web seed options
      * @since 0.9.4
      */
     public static void main(String[] args) {

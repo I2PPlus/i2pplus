@@ -66,6 +66,8 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Session ID for this message.
+     *
+     * @param id the session identifier to attach to this message
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -81,6 +83,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Router.
+     * @param endpoint index into the endpoint list; out of range returns null
      * @return the router
      */
     public Hash getRouter(int endpoint) {
@@ -92,6 +95,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Tunnel id.
+     * @param endpoint index into the endpoint list; out of range returns null
      * @return the tunnel id
      */
     public TunnelId getTunnelId(int endpoint) {
@@ -103,6 +107,9 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Add a router and tunnel endpoint.
+     *
+     * @param router the router hash to add, must not be null
+     * @param tunnel the tunnel used to reach that router, must not be null
      */
     public void addEndpoint(Hash router, TunnelId tunnel) {
         if (router == null) {
@@ -124,6 +131,8 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * End date of the lease set.
+     *
+     * @param end the expiry date requested for the lease set
      */
     public void setEndDate(Date end) {
         _end = end;

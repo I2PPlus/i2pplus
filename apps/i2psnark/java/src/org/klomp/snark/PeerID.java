@@ -77,7 +77,9 @@ public class PeerID implements Comparable<PeerID> {
     /**
      * Creates a PeerID from a destHash
      *
+     * @param destHashParam the destination hash, which must be exactly 32 bytes
      * @param util for eventual destination lookup
+     * @throws InvalidBEncodingException if destHashParam is not 32 bytes long
      * @since 0.8.1
      */
     public PeerID(byte[] destHashParam, I2PSnarkUtil util) throws InvalidBEncodingException {
@@ -154,6 +156,9 @@ public class PeerID implements Comparable<PeerID> {
 
     /**
      * Returns true if and only if this peerID and the given peerID have the same destination hash
+     *
+     * @param pid the peer to compare destination hashes with
+     * @return true if both peers hash to the same destination
      */
     public boolean sameID(PeerID pid) {
         return DataHelper.eq(destHash, pid.getDestHash());
@@ -217,7 +222,12 @@ public class PeerID implements Comparable<PeerID> {
         return 0;
     }
 
-    /** Encode an id as a hex encoded string and remove leading zeros. */
+    /**
+     * Encode an id as a hex encoded string and remove leading zeros.
+     *
+     * @param bs the peer id bytes, each rendered as two hex digits
+     * @return the hex digits with any leading zero bytes omitted
+     */
     public static String idencode(byte[] bs) {
         boolean leadingZeros = true;
 

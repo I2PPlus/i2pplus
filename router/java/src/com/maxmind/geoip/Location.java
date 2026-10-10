@@ -4,6 +4,13 @@ package com.maxmind.geoip;
  * Represents geographical location data including coordinates and address information.
  */
 public class Location {
+
+    /**
+     * Constructs an empty record; LookupService fills the public fields directly
+     * from the database bytes, so the defaults are only a starting point.
+     */
+    public Location() {}
+
     /**
      * countryCode.
      */
@@ -49,7 +56,12 @@ public class Location {
     private final static double PI = 3.14159265;
     private final static double RAD_CONVERT = PI / 180;
 
-    /** @return approximate great-circle distance in km */
+    /**
+     * great-circle distance is measured between
+     *
+     * @param loc the other endpoint, supplying the latitude and longitude the
+     * @return approximate great-circle distance in km
+     */
     public double distance(Location loc) {
         double delta_lat, delta_lon;
         double temp;

@@ -26,6 +26,12 @@ package org.cybergarage.xml;
  */
 public class XML {
     /**
+     * The escape and encode helpers below and the content-type constants are all static,
+     * so an instance carries nothing.
+     */
+    public XML() {}
+
+    /**
      * DEFAULT_CONTENT_TYPE.
      */
     public static final String DEFAULT_CONTENT_TYPE = "text/xml; charset=\"utf-8\"";

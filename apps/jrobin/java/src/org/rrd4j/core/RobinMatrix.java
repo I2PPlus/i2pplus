@@ -22,7 +22,13 @@ class RobinMatrix implements Robin {
     private final int rows;
     private final int column;
 
-    /** Create robin matrix */
+    /**
+     * Create robin matrix
+     * @param parentArc the archive this matrix is bound to, holding the rows to be consolidated
+     * @param values the backend matrix of archived values, whose row count sets the number of slots
+     * @param pointer the shared rotating index of the slot to overwrite with the next stored value
+     * @param column the zero-based datasource column this matrix reads and writes
+     */
     RobinMatrix(
             Archive parentArc,
             RrdDoubleMatrix<Archive> values,

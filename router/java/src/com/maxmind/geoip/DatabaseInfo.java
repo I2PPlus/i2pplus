@@ -74,13 +74,19 @@ public class DatabaseInfo {
     /**
      * Creates a new DatabaseInfo object given the database info String.
      *
-     * @param info
+     * @param info raw database info string, holding the type code, build date and FREE marker
      */
     public DatabaseInfo(String info) {
         this.info = info;
     }
 
-    /** @return the database type code */
+    /**
+     * Returns the edition code for the loaded database, one of the
+     * COUNTRY_EDITION, REGION_EDITION_* or CITY_EDITION_* constants declared
+     * in this class. An empty or missing info string reads as COUNTRY_EDITION.
+     *
+     * @return the database type code
+     */
     public int getType() {
         if (info == null || info.length() == 0) {
             return COUNTRY_EDITION;

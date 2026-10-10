@@ -46,6 +46,12 @@ import java.util.*;
  * GettextResource Extends ResourceBundle.
  */
 public abstract class GettextResource extends ResourceBundle {
+    /**
+     * Constructor for ResourceBundle subclasses that hold translated strings.
+     */
+
+    public GettextResource() {}
+
 
     /**
      * verbose.
@@ -74,6 +80,8 @@ public abstract class GettextResource extends ResourceBundle {
    */
     /**
      * Look up a translated string.
+     * @param catalog the ResourceBundle holding the translated message catalogs
+     * @param msgid the untranslated key, echoed back when no translation exists
      * @return the text
      */
     public static String gettext (ResourceBundle catalog, String msgid) {
@@ -207,6 +215,7 @@ public abstract class GettextResource extends ResourceBundle {
    * @param catalog a ResourceBundle
    * @param msgid the key string to be translated, an ASCII string
    * @param msgid_plural its English plural form
+   * @param n the item count that selects the singular or the plural form
    * @return the translation of <VAR>msgid</VAR> depending on <VAR>n</VAR>,
    *         or <VAR>msgid</VAR> or <VAR>msgid_plural</VAR> if none is found
    */
@@ -244,6 +253,7 @@ public abstract class GettextResource extends ResourceBundle {
    * @param msgctxt the context for the key string, an ASCII string
    * @param msgid the key string to be translated, an ASCII string
    * @param msgid_plural its English plural form
+   * @param n the item count that selects the singular or the plural form
    * @return the translation of <VAR>msgid</VAR> depending on <VAR>n</VAR>,
    *         or <VAR>msgid</VAR> or <VAR>msgid_plural</VAR> if none is found
    */

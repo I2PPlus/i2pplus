@@ -10,6 +10,12 @@ import java.io.IOException;
 public class RrdRandomAccessFileBackendFactory extends RrdFileBackendFactory {
 
     /**
+     * A stateless factory: open() builds a fresh RrdRandomAccessFileBackend per call,
+     * so a bare instance is ready to use.
+     */
+    public RrdRandomAccessFileBackendFactory() {}
+
+    /**
      * {@inheritDoc}
      *
      * <p>Creates RrdFileBackend object for the given file path.

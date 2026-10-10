@@ -355,12 +355,14 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static volatile int _maxRouterInfoLookupTime = 5*1000;
 
     /**
+     * The RouterInfo lookup deadline cap in effect, adjusted live by the Tuner.
      * @return the current RouterInfo lookup deadline cap in ms
      * @since 0.9.70+
      */
     public static int getMaxRouterInfoLookupTime() { return _maxRouterInfoLookupTime; }
 
     /**
+     * Set the RouterInfo lookup deadline cap, normally called by the Tuner.
      * @param val RouterInfo lookup deadline cap in ms, clamped to [5000, max search time]
      * @since 0.9.70+
      */
@@ -369,12 +371,14 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
+     * The LeaseSet lookup deadline cap in effect, adjusted live by the Tuner.
      * @return the current LeaseSet lookup deadline cap in ms
      * @since 0.9.70+
      */
     public static int getMaxLeaseSetLookupTime() { return _maxLeaseSetLookupTime; }
 
     /**
+     * Set the LeaseSet lookup deadline cap, normally called by the Tuner.
      * @param val LeaseSet lookup deadline cap in ms, clamped to [3000, max search time]
      * @since 0.9.70+
      */
@@ -392,6 +396,13 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      * Lookup using exploratory tunnels
+     * @param ctx the router context
+     * @param facade the network database the key is looked up in
+     * @param key the hash to search for, a RouterInfo or LeaseSet hash
+     * @param onFind run when the search returns a result
+     * @param onFailed run when the search fails or the timeout expires
+     * @param timeoutMs milliseconds to search for, before the per-type deadline caps are applied
+     * @param isLease true to search for a LeaseSet, false for a RouterInfo
      */
     public IterativeSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key,
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease) {
@@ -442,6 +453,13 @@ public class IterativeSearchJob extends FloodSearchJob {
      * Lookup using the client's tunnels.
      * Do not use for RI lookups down client tunnels,
      * as the response will be dropped in InboundMessageDistributor.
+     * @param ctx the router context
+     * @param facade the network database the key is looked up in
+     * @param key the hash to search for, a RouterInfo or LeaseSet hash
+     * @param onFind run when the search returns a result
+     * @param onFailed run when the search fails or the timeout expires
+     * @param timeoutMs milliseconds to search for, before the per-type deadline caps are applied
+     * @param isLease true to search for a LeaseSet, false for a RouterInfo
      * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      * @since 0.9.10
      */
@@ -1032,7 +1050,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      * Did we send a request to this peer?
-     * @param peer the peer
+     * @param peer the peer hash to check
      * @return true if a query was sent to this peer
      * @since 0.9.13
      */
@@ -1043,7 +1061,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Was this peer recently queried (within grace period)?
      * Used to avoid false positive bans for late but legitimate replies.
-     * @param peer the peer
+     * @param peer the peer hash to check
      * @return true if the peer was queried recently and is in the grace period
      * @since 0.9.67
      */
@@ -1054,7 +1072,7 @@ public class IterativeSearchJob extends FloodSearchJob {
 
     /**
      * Clear peer from grace period cache (received their response).
-     * @param peer the peer
+     * @param peer the peer hash to forget
      * @since 0.9.67
      */
     public static void clearRecentlyQueried(Hash peer) {

@@ -20,6 +20,9 @@ class SessionKeyAndNonce extends SessionKey {
 
     /**
      * For outbound Existing Session
+     *
+     * @param data the AEAD session key, handed to the superclass
+     * @param nonce message nonce, 0 to 65535
      */
     public SessionKeyAndNonce(byte[] data, int nonce) {
         this(data, 0, nonce, null);
@@ -28,6 +31,10 @@ class SessionKeyAndNonce extends SessionKey {
     /**
      * For inbound Existing Session
      *
+     * @param data the AEAD session key, handed to the superclass
+     * @param id index of the session within the inbound tag set
+     * @param nonce message nonce, 0 to 65535
+     * @param remoteKey the sender's static public key
      * @since 0.9.46
      */
     public SessionKeyAndNonce(byte[] data, int id, int nonce, PublicKey remoteKey) {
@@ -40,6 +47,8 @@ class SessionKeyAndNonce extends SessionKey {
 
     /**
      * For New Session Replies
+     *
+     * @param state the noise handshake state carried over into the new session
      */
     public SessionKeyAndNonce(HandshakeState state) {
         super();

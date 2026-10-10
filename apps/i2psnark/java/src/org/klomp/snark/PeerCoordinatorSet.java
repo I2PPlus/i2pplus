@@ -47,7 +47,7 @@ class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
     /**
      * Register a coordinator for its torrent's info hash.
      *
-     * @param coordinator the coordinator
+     * @param coordinator the peer coordinator, filed under its torrent's info hash
      */
     public void add(PeerCoordinator coordinator) {
         _coordinators.put(new SHA1Hash(coordinator.getInfoHash()), coordinator);
@@ -56,7 +56,7 @@ class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
     /**
      * Unregister a coordinator.
      *
-     * @param coordinator the coordinator
+     * @param coordinator the peer coordinator to unregister, matched on its torrent's info hash
      */
     public void remove(PeerCoordinator coordinator) {
         _coordinators.remove(new SHA1Hash(coordinator.getInfoHash()));
@@ -84,6 +84,10 @@ class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
     }
 
     /**
+     * Look up the coordinator handling a torrent.
+     *
+     * @param infoHash the 20-byte info hash to look up
+     * @return the coordinator running that torrent, or null if there is none
      * @since 0.9.2
      */
     public PeerCoordinator get(byte[] infoHash) {

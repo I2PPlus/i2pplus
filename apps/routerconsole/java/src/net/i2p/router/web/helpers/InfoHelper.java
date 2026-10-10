@@ -28,17 +28,22 @@ public class InfoHelper extends HelperBase {
     private boolean _full;
 
     /**
-     * InfoHelper.
+     * Create a helper for the router information page.
      */
     public InfoHelper() { /* nop */ }
 
     /**
-     * setFull.
+     * Record whether the page renders in full rather than as a summary.
+     *
+     * @param f the flag; any non-null, non-empty value counts as true
      */
     public void setFull(String f) {_full = f != null && !f.isEmpty();}
 
     /**
-     * @return the console
+     * Render the router status page, or write it to the output stream.
+     *
+     * @return the console as HTML, or an empty string when it was written
+     *         directly to the output stream instead
      */
     public String getConsole() {
         try {
@@ -58,7 +63,9 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * @return the stats
+     * Render the bandwidth and peer statistics section.
+     *
+     * @return the stats as HTML
      */
     public String getStats() {
         StatsGenerator gen = new StatsGenerator(_context);
@@ -78,7 +85,11 @@ public class InfoHelper extends HelperBase {
         } catch (IOException ioe) {return "<b>" + _t("Error displaying the info page.") + "</b>";}
     }
 
-    /** @return host or "unknown" */
+    /**
+     * The host part of the address the transport is published under.
+     *
+     * @return host or "unknown"
+     */
     public String getUdpIP() {
         String rv = _context.getProperty(UDPTransport.PROP_IP);
         if (rv != null) {return rv;}
@@ -96,36 +107,52 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * lastCountry.
+     * The country code of the last tunnel or peer this router saw.
+     *
+     * @return the country code, or null when none has been recorded
      */
     public String lastCountry() {return _context.getProperty("i2np.lastCountry");}
     /**
+     * The port the UDP transport is published under.
+     *
      * @return the udp port
      */
     public String getUdpPort() {return _context.getProperty("i2np.udp.port");}
     /**
-     * firstInstalled.
+     * When this router was first installed.
+     *
+     * @return the date, or null when it has never been recorded
      */
     public String firstInstalled() {return _context.getProperty("router.firstInstalled");}
     /**
-     * firstVersion.
+     * The version running when this router was first installed.
+     *
+     * @return the version, or null when it has never been recorded
      */
     public String firstVersion() {return _context.getProperty("router.firstVersion");}
     /**
-     * lastUpdated.
+     * When an update was last installed.
+     *
+     * @return the date, or null when no update has been installed
      */
     public String lastUpdated() {return _context.getProperty("router.updateLastInstalled");}
     /**
-     * updatePolicy.
+     * The update policy in force.
+     *
+     * @return the policy, or null when none has been set
      */
     public String updatePolicy() {return _context.getProperty("router.updatePolicy");}
     /**
-     * updateDevSU3.
+     * Whether development SU3 updates are offered.
+     *
+     * @return the stored setting, or null when it has never been set
      */
     public String updateDevSU3() {return _context.getProperty("router.updateDevSU3");}
 
     /**
-     * updateUnsigned.
+     * Whether updates may be installed without a signature.
+     *
+     * @return the stored setting, or "true" when it has never been set
      */
     public String updateUnsigned() {
         if (_context.getProperty("router.updateUnsigned") != null) {
@@ -134,6 +161,8 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
+     * Whether this machine is too slow to run a router well.
+     *
      * @return whether router slow
      */
     public boolean isRouterSlow() {
@@ -141,12 +170,16 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
+     * The number of processor cores available to the router.
+     *
      * @return the core count
      */
     public String getCoreCount() {return Integer.toString(SystemVersion.getCores());}
 
     /**
-     * bwIn.
+     * The inbound bandwidth limit in force.
+     *
+     * @return the limit in KB/s, or the built-in default when unset
      */
     public String bwIn() {
         String in = _context.getProperty("i2np.bandwidth.inboundKBytesPerSecond");
@@ -155,7 +188,9 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * bwOut.
+     * The outbound bandwidth limit in force.
+     *
+     * @return the limit in KB/s, or the built-in default when unset
      */
     public String bwOut() {
         String out = _context.getProperty("i2np.bandwidth.outboundKBytesPerSecond");
@@ -164,7 +199,9 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * bwShare.
+     * The share of total bandwidth offered to other routers.
+     *
+     * @return the share percentage, or the built-in default when unset
      */
     public String bwShare() {
         String share = _context.getProperty("router.sharePercentage");
@@ -173,7 +210,9 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * codelInterval.
+     * The CoDel queue target interval in force.
+     *
+     * @return the interval in ms, or the built-in default when unset
      */
     public String codelInterval() {
         String interval = _context.getProperty("router.codelInterval");
@@ -182,7 +221,9 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * codelTarget.
+     * The CoDel queue delay target in force.
+     *
+     * @return the target in ms, or the built-in default when unset
      */
     public String codelTarget() {
         String target = _context.getProperty("router.codelTarget");
@@ -191,7 +232,9 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
-     * @return the family
+     * The address family this router publishes, as set in its RouterInfo.
+     *
+     * @return the family name, or null when the RouterInfo omits it
      */
     public String getFamily() {
         RouterInfo ri = _context.router().getRouterInfo();
@@ -201,6 +244,8 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
+     * The build date of the GeoIP database in use.
+     *
      * @return the geo i p build info
      */
     public String getGeoIPBuildInfo() {
@@ -209,6 +254,8 @@ public class InfoHelper extends HelperBase {
     }
 
     /**
+     * The build date of the ASN database in use.
+     *
      * @return the a s n build info
      */
     public String getASNBuildInfo() {

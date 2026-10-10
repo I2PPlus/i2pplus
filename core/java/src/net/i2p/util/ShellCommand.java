@@ -28,6 +28,12 @@ import java.util.Arrays;
 @SuppressWarnings("PMD.CloseResource")
 public class ShellCommand {
 
+    /**
+     * No command is running; each execute* call starts its own CommandThread and waits
+     * for it, so nothing is pending at construction.
+     */
+    public ShellCommand() {}
+
     /** @since 0.9.3 */
     private static class Result {
         public volatile boolean commandSuccessful;
@@ -195,6 +201,8 @@ public class ShellCommand {
 
     /**
      * Just does exec, this is NOT a test of ShellCommand.
+     * @param args the command to run as an exec() argument array; ignored when empty,
+                which prints the usage line instead
      */
     public static void main(String[] args) {
         if (args.length <= 0) {

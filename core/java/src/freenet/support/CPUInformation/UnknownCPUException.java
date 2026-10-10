@@ -25,6 +25,7 @@ public class UnknownCPUException extends RuntimeException {
 
     /**
      * UnknownCPUException.
+     * @param message human readable reason the CPU type could not be determined
      */
     public UnknownCPUException(String message) {
         super(message);

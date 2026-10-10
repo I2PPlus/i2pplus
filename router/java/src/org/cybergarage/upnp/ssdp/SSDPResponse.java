@@ -46,6 +46,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * SSDPResponse.
+     *
+     * @param in the response stream to parse the headers from
      */
     public SSDPResponse(InputStream in) {
         super(in);
@@ -57,6 +59,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * setST.
+     *
+     * @param value the search target, identifying which service answered
      */
     public void setST(String value) {
         setHeader(HTTP.ST, value);
@@ -64,6 +68,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * getST.
+     *
+     * @return the ST header, or null if this response carries none
      */
     public String getST() {
         return getHeaderValue(HTTP.ST);
@@ -75,6 +81,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * setLocation.
+     *
+     * @param value the URL of the device description document that was searched
      */
     public void setLocation(String value) {
         setHeader(HTTP.LOCATION, value);
@@ -82,6 +90,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * getLocation.
+     *
+     * @return the Location header, or null if this response carries none
      */
     public String getLocation() {
         return getHeaderValue(HTTP.LOCATION);
@@ -93,6 +103,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * setUSN.
+     *
+     * @param value the unique service name identifying the answering device
      */
     public void setUSN(String value) {
         setHeader(HTTP.USN, value);
@@ -100,6 +112,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * getUSN.
+     *
+     * @return the USN header, or null if this response carries none
      */
     public String getUSN() {
         return getHeaderValue(HTTP.USN);
@@ -111,6 +125,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * setMYNAME.
+     *
+     * @param value the friendly device name, for Intel's MYNAME extension
      */
     public void setMYNAME(String value) {
         setHeader(HTTP.MYNAME, value);
@@ -118,6 +134,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * getMYNAME.
+     *
+     * @return the MYNAME header, or null if this response carries none
      */
     public String getMYNAME() {
         return getHeaderValue(HTTP.MYNAME);
@@ -129,6 +147,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * setLeaseTime.
+     *
+     * @param len the advertisement lifetime in seconds, advertised as max-age
      */
     public void setLeaseTime(int len) {
         setHeader(HTTP.CACHE_CONTROL, "max-age=" + Integer.toString(len));
@@ -136,6 +156,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * getLeaseTime.
+     *
+     * @return the max-age value in seconds, 0 if the header is absent or unparsable
      */
     public int getLeaseTime() {
         String cacheCtrl = getHeaderValue(HTTP.CACHE_CONTROL);
@@ -148,6 +170,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * setBootId.
+     *
+     * @param bootId the device's boot identifier, bumped on each reboot
      */
     public void setBootId(int bootId) {
         setHeader(HTTP.BOOTID_UPNP_ORG, bootId);
@@ -155,6 +179,8 @@ public class SSDPResponse extends HTTPResponse {
 
     /**
      * getBootId.
+     *
+     * @return the BOOTID.UPNP.ORG value, 0 if this response carries none
      */
     public int getBootId() {
         return getIntegerHeaderValue(HTTP.BOOTID_UPNP_ORG);

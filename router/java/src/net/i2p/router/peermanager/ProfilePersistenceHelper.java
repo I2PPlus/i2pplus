@@ -58,11 +58,11 @@ class ProfilePersistenceHelper {
     static final long STALE_PROFILE_AGE_MS = 7 * 24 * 60 * 60 * 1000L;
 
     /**
-     * PROP_PEER_PROFILE_DIR.
+     * Config property naming the base directory that peer profiles are stored under.
      */
     public static final String PROP_PEER_PROFILE_DIR = "router.profileDir";
     /**
-     * DEFAULT_PEER_PROFILE_DIR.
+     * Default peer profile directory name, relative to the router directory.
      */
     public static final String DEFAULT_PEER_PROFILE_DIR = "peerProfiles";
     private static final String NL = System.getProperty("line.separator");
@@ -114,7 +114,9 @@ class ProfilePersistenceHelper {
     public int getStoredProfileCount() {return _storedProfileCount;}
 
     /**
-     * ProfilePersistenceHelper.
+     * Construct a helper that reads and writes peer profiles under the router directory.
+     *
+     * @param ctx the router context, whose router directory holds the profile files
      */
     public ProfilePersistenceHelper(RouterContext ctx) {
         _context = ctx;
@@ -132,6 +134,8 @@ class ProfilePersistenceHelper {
 
     /**
      * Store the local router identity hash for filtering out the router's own profile.
+     *
+     * @param routerIdentHash this router's identity hash, or null to stop filtering it out
      */
     public void setUs(Hash routerIdentHash) {_us = routerIdentHash;}
 
@@ -146,7 +150,8 @@ class ProfilePersistenceHelper {
      * anything else is a race or a genuine store problem and is worth a WARN
      * without a stacktrace, not an ERROR.
      *
-     * @return success
+     * @param profile the profile to serialize
+     * @return true if the profile was written, false if it could not be stored
      */
     public boolean writeProfile(PeerProfile profile) {
         File f = pickFile(profile);
@@ -174,13 +179,20 @@ class ProfilePersistenceHelper {
     /**
      * Write the data from the profile to the stream
      * includes comments
+     *
+     * @param profile the profile to serialize
+     * @param out the stream to write the serialized profile to, not closed by this method
+     * @throws IOException if the stream cannot be written
      */
     public void writeProfile(PeerProfile profile, OutputStream out) throws IOException {writeProfile(profile, out, true);}
 
     /**
      * Write the data from the profile to the stream
      *
+     * @param profile the profile to serialize
+     * @param out the stream to write the serialized profile to, not closed by this method
      * @param addComments add comment lines to the output
+     * @throws IOException if the stream cannot be written
      * @since 0.9.41
      */
     @SuppressWarnings("deprecation")
@@ -310,6 +322,8 @@ class ProfilePersistenceHelper {
 
     /**
      * Load all existing profiles from the profile directory.
+     *
+     * @return the profiles read, most recently modified first, capped at the store limit
      */
     public List<PeerProfile> readProfiles() {
         long start = System.currentTimeMillis();
@@ -412,7 +426,8 @@ class ProfilePersistenceHelper {
     /**
      * Delete profile files with timestamps older than 'age' ago
      *
-     * @return number deleted
+     * @param age how far back in milliseconds a profile must predate to be deleted
+     * @return the number of profile files removed
      * @since 0.9.28
      */
     public int deleteOldProfiles(long age) {
@@ -436,7 +451,9 @@ class ProfilePersistenceHelper {
     /**
      * Read and parse a single stored profile.
      *
+     * @param file the profile file to read
      * @param cutoff delete and return null if older than this (absolute time)
+     * @return the parsed profile, or null if the file was deleted as stale or malformed
      */
     @SuppressWarnings("deprecation")
     public PeerProfile readProfile(File file, long cutoff) {
@@ -608,6 +625,8 @@ class ProfilePersistenceHelper {
     /**
      * Parse a long value from the properties, or 0 if missing or invalid.
      *
+     * @param props the parsed profile properties
+     * @param key the property name to read
      * @return the long value or 0
      */
     static long getLong(Properties props, String key) {

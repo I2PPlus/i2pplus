@@ -52,6 +52,8 @@ public class OutboundMessageRegistry {
 
     /**
      * OutboundMessageRegistry.
+     *
+     * @param context router context, retained for later message creation
      */
     public OutboundMessageRegistry(RouterContext context) {
         _context = context;
@@ -78,6 +80,9 @@ public class OutboundMessageRegistry {
     }
 
     /**
+     * Clears the registry, for a transport that is restarting: nothing that was
+     * awaiting a reply can still be answered, so the pending messages are dropped.
+     *
      * @since 0.8.8
      */
     public void restart() {
@@ -225,6 +230,10 @@ public class OutboundMessageRegistry {
     }
 
     /**
+     * Removes a message that is no longer waiting for a reply, so a later reply
+     * that still arrives is not handed to a cancelled request. A message whose
+     * selector still carries other waiters stays registered.
+     *
      * @param msg may be be null, if non-null should have a non-null selector
      */
     @SuppressWarnings("unchecked")

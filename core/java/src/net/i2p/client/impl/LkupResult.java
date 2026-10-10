@@ -10,7 +10,12 @@ public class LkupResult implements LookupResult {
     private final Destination _dest;
     private final int _nonce;
 
-    /** Lkup result */
+    /**
+     * Lkup result
+     *
+     * @param code the LookupResult result code: zero on success, nonzero on failure
+     * @param dest the destination the lookup resolved to, null when it failed
+     */
     LkupResult(int code, Destination dest) {
         this(code, dest, 0);
     }

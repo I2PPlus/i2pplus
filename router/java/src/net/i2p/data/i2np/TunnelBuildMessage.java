@@ -8,18 +8,25 @@ import net.i2p.I2PAppContext;
 public class TunnelBuildMessage extends TunnelBuildMessageBase {
 
     /**
-     * MESSAGE_TYPE.
+     * The I2NP message type number for a tunnel build message.
      */
     public static final int MESSAGE_TYPE = 21;
 
     /**
-     * TunnelBuildMessage.
+     * Creates a build message with the default record count.
+     *
+     * @param context the application context the message is read and written under
      */
     public TunnelBuildMessage(I2PAppContext context) {
         super(context, MAX_RECORD_COUNT);
     }
 
-    /** @since 0.7.12 */
+    /**
+     * Creates a build message carrying the given number of build records.
+     * @param context the application context the message is read and written under
+     * @param records the number of build records this message carries
+     * @since 0.7.12
+     */
     protected TunnelBuildMessage(I2PAppContext context, int records) {
         super(context, records);
     }

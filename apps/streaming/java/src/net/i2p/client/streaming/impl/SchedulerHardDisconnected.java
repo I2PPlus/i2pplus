@@ -30,6 +30,8 @@ class SchedulerHardDisconnected extends SchedulerImpl {
 
     /**
      * SchedulerHardDisconnected.
+     *
+     * @param ctx application context the connection scheduler runs under
      */
     public SchedulerHardDisconnected(I2PAppContext ctx) {
         super(ctx);

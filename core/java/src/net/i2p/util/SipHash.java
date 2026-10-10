@@ -8,19 +8,32 @@ import net.i2p.crypto.SipHashInline;
  *  @since 0.9.5
  */
 public abstract class SipHash {
-
     private static final long K0 = RandomSource.getInstance().nextLong();
     private static final long K1 = RandomSource.getInstance().nextLong();
 
     /**
-     *  @param data non-null
+     * Constructor for subclasses that hash with their own key rather than the per-JVM key.
+     */
+    public SipHash() {}
+
+
+    /**
+     * Hash a whole array.
+     *
+     * @param data non-null
+     * @return the 64-bit SipHash-2-4 digest of the array under this JVM's random keys
      */
     public static long digest(byte[] data) {
         return SipHashInline.hash24(K0, K1, data);
     }
 
     /**
-     *  @param data non-null
+     * Hash a region of an array.
+     *
+     * @param data non-null
+     * @param off the index in data at which the hashed region begins
+     *  @param len the number of bytes to hash, counting from off
+     *  @return the 64-bit SipHash-2-4 digest of that region under this JVM's random keys
      */
     public static long digest(byte[] data, int off, int len) {
         return SipHashInline.hash24(K0, K1, data, off, len);

@@ -50,7 +50,7 @@ public class MultiSource implements Source, Sink {
 
     /**
      *  May throw RuntimeException from underlying sinks
-     *  @throws RuntimeException
+     *  @throws RuntimeException if one of the registered sinks fails to send the data
      *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination ignoredFrom, int ignoredFromPort, int ignoredToPort, byte[] data) {
@@ -68,14 +68,20 @@ public class MultiSource implements Source, Sink {
     }
 
     /**
-     *  @since 0.9.53 changed to MSink parameter
+     * range that receive each copy of the data
+     *
+     * @param ms the subscriber to deliver to, naming the destination and the port
+     * @since 0.9.53 changed to MSink parameter
      */
     public void add(MSink ms) {
         sinks.add(ms);
     }
 
     /**
-     *  @since 0.9.53 changed to MSink parameter
+     * object identity
+     *
+     * @param ms the subscriber to drop; matched against the registered sinks by
+     * @since 0.9.53 changed to MSink parameter
      */
     public void remove(MSink ms) {
         sinks.remove(ms);
@@ -86,10 +92,20 @@ public class MultiSource implements Source, Sink {
      *  @since 0.9.53
      */
     static class MSink {
+        /** Destination the message is forwarded to. */
         public final Destination dest;
+        /** Local port the stream arrived on. */
         public final int fromPort;
+        /** Local port the stream should be forwarded from. */
         public final int toPort;
 
+        /**
+         * Create a forwarding entry for one destination.
+         *
+         * @param dest the destination to forward to
+         * @param fromPort the local port the stream arrived on
+         * @param toPort the local port to forward it from
+         */
         public MSink(Destination dest, int fromPort, int toPort) {
             this.dest = dest; this.fromPort = fromPort; this.toPort = toPort;
         }

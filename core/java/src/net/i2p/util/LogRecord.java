@@ -22,6 +22,13 @@ class LogRecord {
 
     /**
      * LogRecord.
+     *
+     * @param src the class the entry was logged from
+     * @param name the display name of the logger that wrote the entry
+     * @param threadName the name of the thread that logged it
+     * @param priority the message priority, one of the Log.WARN-style constants
+     * @param msg the unformatted message text
+     * @param t the associated exception, or null if the entry carries none
      */
     public LogRecord(Class<?> src, String name, String threadName, int priority, String msg, Throwable t) {
         _date = Clock.getInstance().now();

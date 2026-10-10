@@ -79,6 +79,7 @@ public class HexDump {
      * @param off  Offset from the beginning of <code>data</code>
      * @param len  Number of bytes of <code>data</code> to be dumped
      * @param out  Output stream
+     * @throws IOException if the output stream rejects any of the writes making up the dump
      */
     public static void dump(byte[] data, int off, int len, OutputStream out) throws IOException {
         String hexoff;

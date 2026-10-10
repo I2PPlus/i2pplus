@@ -17,6 +17,9 @@ import java.io.InputStream;
  */
 public class HTML extends Encoding {
 
+  /** Constructor. Escaping is stateless over the string it is given. */
+  public HTML() {}
+
   @Override
   public String getName() {return "HTML";}
 

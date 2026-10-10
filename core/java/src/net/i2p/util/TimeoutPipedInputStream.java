@@ -24,6 +24,8 @@ class TimeoutPipedInputStream extends PipedInputStream {
 
     /**
      * TimeoutPipedInputStream.
+     *
+     * @param pipeSize the pipe buffer size in bytes, as passed to the superclass
      */
     public TimeoutPipedInputStream(int pipeSize) {
         super(pipeSize);

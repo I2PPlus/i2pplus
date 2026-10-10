@@ -25,6 +25,7 @@ class SAMInvalidDirectionException extends Exception {
 
     /**
      * SAMInvalidDirectionException.
+     * @param s the detail message naming the direction the session cannot be used in
      */
     public SAMInvalidDirectionException(String s) {
 	super(s);

@@ -19,8 +19,9 @@ public class X25519DH {
     private X25519DH() {}
 
     /**
-     * DH
+     * Curve25519 Diffie-Hellman: computes the shared secret for a private/public key pair.
      *
+     * @param priv the local ECIES_X25519 private key, the scalar of the Curve25519 op
      * @param pub MUST have MSB high bit cleared, i.e. pub.getData()[31] &amp; 0x80 == 0
      * @return ECIES_X25519
      * @throws IllegalArgumentException if not ECIES_X25519 or on low-order input see RFC 7748

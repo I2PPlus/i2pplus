@@ -18,6 +18,12 @@ import net.metanotion.io.Serializer;
  * </ul>
  */
 public class IntBytes implements Serializer<Integer> {
+    /**
+     * Constructor. The conversion is a pure function of the value or the four
+     * bytes handed to it, so an instance carries no state.
+     */
+    public IntBytes() {}
+
     public byte[] getBytes(Integer o) {
         byte[] b = new byte[4];
         int v = o.intValue();

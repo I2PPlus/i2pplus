@@ -23,6 +23,9 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  *
  */
 public class MouseAdapter {
+/**
+ * Create an adapter with no listeners attached.
+ */
     public MouseAdapter() {}
 
 }

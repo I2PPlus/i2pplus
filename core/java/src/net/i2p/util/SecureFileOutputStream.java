@@ -26,6 +26,8 @@ public class SecureFileOutputStream extends FileOutputStream {
 
     /**
      * Tries to set output file to mode 600
+     * @param file the path to open for writing, truncating any existing file
+     * @throws FileNotFoundException if the file cannot be opened for writing
      */
     public SecureFileOutputStream(String file) throws FileNotFoundException {
         super(file);
@@ -34,6 +36,9 @@ public class SecureFileOutputStream extends FileOutputStream {
 
     /**
      * Tries to set output file to mode 600 whether append = true or false
+     * @param file the path to open for writing
+     * @param append true to write at the end of an existing file, false to truncate
+     * @throws FileNotFoundException if the file cannot be opened for writing
      */
     public SecureFileOutputStream(String file, boolean append) throws FileNotFoundException {
         super(file, append);
@@ -42,6 +47,8 @@ public class SecureFileOutputStream extends FileOutputStream {
 
     /**
      * Tries to set output file to mode 600
+     * @param file the file to open for writing, truncating any existing content
+     * @throws FileNotFoundException if the file cannot be opened for writing
      */
     public SecureFileOutputStream(File file) throws FileNotFoundException {
         super(file);
@@ -49,15 +56,24 @@ public class SecureFileOutputStream extends FileOutputStream {
     }
 
     /**
-     * Tries to set output file to mode 600 only if append = false
-     * (otherwise it is presumed to be 600 already)
+     * Tries to set output file to mode 600 whether append = true or false
+     * @param file the file to open for writing
+     * @param append true to write at the end of an existing file, false to truncate
+     * @throws FileNotFoundException if the file cannot be opened for writing
      */
     public SecureFileOutputStream(File file, boolean append) throws FileNotFoundException {
         super(file, append);
         setPerms(file);
     }
 
-    /** @since 0.8.2 */
+    /**
+     * Whether it is worth trying to tighten the mode of a file this class opens.
+     * False on a pre-1.6 JVM, and false when the router is configured with
+     * i2p.insecureFiles, since the setting is then left alone.
+     *
+     * @return true if the permissions should be set, false to skip
+     * @since 0.8.2
+     */
     static boolean canSetPerms() {
         if (!oneDotSix) return false;
         I2PAppContext ctx = I2PAppContext.getCurrentContext();
@@ -68,6 +84,8 @@ public class SecureFileOutputStream extends FileOutputStream {
     /**
      * Tries to set the permissions to 600,
      * ignores errors
+     *
+     * @param f the file to make readable and writable by the owner only
      */
     public static void setPerms(File f) {
         if (!canSetPerms()) return;
@@ -87,6 +105,7 @@ public class SecureFileOutputStream extends FileOutputStream {
      * ignores errors, including on filesystems without POSIX
      * permission support (e.g. Windows). Uses the PosixFilePermission API.
      *
+     * @param f the file to make readable and writable by owner and group
      * @since 0.9.70+
      */
     public static void setGroupPerms(File f) {

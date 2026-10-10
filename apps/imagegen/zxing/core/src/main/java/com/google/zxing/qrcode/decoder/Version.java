@@ -48,7 +48,9 @@ public final class Version {
   private final int totalCodewords;
 
   /**
-   * @param versionNumber version number
+   * Encapsulates the data for one symbol version.
+   *
+   * @param versionNumber the symbol version, from 1 through 40
    * @param alignmentPatternCenters alignment pattern coordinates
    * @param ecBlocks error correction blocks
    */
@@ -68,6 +70,8 @@ public final class Version {
   }
 
   /**
+   * Gets the version number.
+   *
    * @return the version number
    */
   public int getVersionNumber() {
@@ -75,6 +79,8 @@ public final class Version {
   }
 
   /**
+   * Gets the alignment pattern centers.
+   *
    * @return the alignment pattern centers
    */
   public int[] getAlignmentPatternCenters() {
@@ -82,6 +88,8 @@ public final class Version {
   }
 
   /**
+   * Gets the total codewords.
+   *
    * @return the total codewords
    */
   public int getTotalCodewords() {
@@ -89,6 +97,8 @@ public final class Version {
   }
 
   /**
+   * Gets the dimension for the version.
+   *
    * @return the dimension for version
    */
   public int getDimensionForVersion() {
@@ -96,6 +106,9 @@ public final class Version {
   }
 
   /**
+   * Gets the EC blocks for the error correction level.
+   *
+   * @param ecLevel the error correction level whose block layout to look up
    * @return the e c blocks for level
    */
   public ECBlocks getECBlocksForLevel(ErrorCorrectionLevel ecLevel) {
@@ -121,6 +134,9 @@ public final class Version {
   }
 
   /**
+   * Gets the version for the version number.
+   *
+   * @param versionNumber the symbol version to look up, from 1 through 40
    * @return the version for number
    */
   public static Version getVersionForNumber(int versionNumber) {
@@ -130,7 +146,12 @@ public final class Version {
     return VERSIONS[versionNumber - 1];
   }
 
-  /** @param versionBits raw version bits */
+  /**
+   * Decodes the version information from the raw version bits.
+   *
+   * @param versionBits raw version bits
+   * @return the version they encode, or null if none is within 3 bits of them
+   */
   static Version decodeVersionInformation(int versionBits) {
     int bestDifference = Integer.MAX_VALUE;
     int bestVersion = 0;
@@ -159,6 +180,9 @@ public final class Version {
 
   /**
    * See ISO 18004:2006 Annex E
+   *
+   * @return a matrix of this version's dimension with the finder, separator, alignment,
+   *         timing and version information patterns marked
    */
   BitMatrix buildFunctionPattern() {
     int dimension = getDimensionForVersion();
@@ -208,13 +232,20 @@ public final class Version {
     private final int ecCodewordsPerBlock;
     private final ECB[] ecBlocks;
 
-    /** @param ecCodewordsPerBlock EC codewords per block */
+    /**
+     * Creates the block layout for one error correction level of this version.
+     *
+     * @param ecCodewordsPerBlock EC codewords per block
+     * @param ecBlocks the groups of equal-sized blocks this version splits its codewords into
+     */
     ECBlocks(int ecCodewordsPerBlock, ECB... ecBlocks) {
       this.ecCodewordsPerBlock = ecCodewordsPerBlock;
       this.ecBlocks = ecBlocks;
     }
 
     /**
+     * Gets the EC codewords per block.
+     *
      * @return the e c codewords per block
      */
     public int getECCodewordsPerBlock() {
@@ -222,6 +253,8 @@ public final class Version {
     }
 
     /**
+     * Gets the number of blocks across all groups.
+     *
      * @return the num blocks
      */
     public int getNumBlocks() {
@@ -233,6 +266,8 @@ public final class Version {
     }
 
     /**
+     * Gets the total EC codewords across every block.
+     *
      * @return the total e c codewords
      */
     public int getTotalECCodewords() {
@@ -240,6 +275,8 @@ public final class Version {
     }
 
     /**
+     * Gets the EC block groups.
+     *
      * @return the e c blocks
      */
     public ECB[] getECBlocks() {
@@ -256,20 +293,29 @@ public final class Version {
     private final int count;
     private final int dataCodewords;
 
-    /** @param count block count */
+    /**
+     * Creates one group of identically sized error correction blocks.
+     *
+     * @param count the number of identically sized blocks in this group
+     * @param dataCodewords the number of data codewords carried by each of those blocks
+     */
     ECB(int count, int dataCodewords) {
       this.count = count;
       this.dataCodewords = dataCodewords;
     }
 
     /**
-     * @return the count
+     * Gets the number of blocks in this group.
+     *
+     * @return the number of blocks in this group
      */
     public int getCount() {
       return count;
     }
 
     /**
+     * Gets the data codewords carried by each block in this group.
+     *
      * @return the data codewords
      */
     public int getDataCodewords() {
@@ -278,7 +324,7 @@ public final class Version {
   }
 
   /**
-   * toString.
+   * Return the symbol version number in decimal.
    */
   @Override
   public String toString() {

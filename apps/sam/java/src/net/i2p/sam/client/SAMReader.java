@@ -26,6 +26,10 @@ public class SAMReader {
 
     /**
      * SAMReader.
+     *
+     * @param context the router context used to obtain the class log
+     * @param samIn the stream positioned at the start of a SAM protocol stream
+     * @param listener notified of each SAM message parsed off samIn
      */
     public SAMReader(I2PAppContext context, InputStream samIn, SAMClientEventListener listener) {
         _log = context.logManager().getLog(SAMReader.class);
@@ -136,55 +140,108 @@ public class SAMReader {
 
         /**
          * version).
+         *
+         * @param ok whether the SAM bridge accepted our HELLO greeting
+         * @param version the bridge version string it reported, null if none was sent
          */
         public void helloReplyReceived(boolean ok, String version);
         /**
          * message).
+         *
+         * @param result the session status, one of the SESSION_STATUS_* constants
+         * @param destination the base64 destination the status refers to
+         * @param message the human-readable explanation supplied by the bridge
          */
         public void sessionStatusReceived(String result, String destination, String message);
         /**
          * message).
+         *
+         * @param result the stream status, one of the STREAM_STATUS_* constants
+         * @param id the stream ID from the reply, null under SAM v3
+         * @param message the human-readable explanation supplied by the bridge
          */
         public void streamStatusReceived(String result, String id, String message);
         /**
          * id).
+         *
+         * @param remoteDestination the base64 destination the stream is connected to
+         * @param id the stream ID assigned by the SAM bridge
          */
         public void streamConnectedReceived(String remoteDestination, String id);
         /**
          * message).
+         *
+         * @param result the close status, one of the STREAM_CLOSED_* constants
+         * @param id the stream ID of the stream that was closed
+         * @param message the human-readable explanation supplied by the bridge
          */
         public void streamClosedReceived(String result, String id, String message);
         /**
          * length).
+         *
+         * @param id the stream ID the data arrived on
+         * @param data the buffer holding the payload
+         * @param offset the index within data where the payload starts
+         * @param length the number of payload bytes valid from offset
          */
         public void streamDataReceived(String id, byte[] data, int offset, int length);
         /**
          * message).
+         *
+         * @param name the requested host name or service string
+         * @param result the reply status, one of the NAMING_REPLY_* constants
+         * @param value the resolved value, null when the lookup failed
+         * @param message the human-readable explanation supplied by the bridge
          */
         public void namingReplyReceived(String name, String result, String value, String message);
         /**
          * privateKey).
+         *
+         * @param publicKey the base64 destination the bridge generated for us
+         * @param privateKey the base64 private key matching that destination
          */
         public void destReplyReceived(String publicKey, String privateKey);
         /**
          * toPort).
+         *
+         * @param dest the base64 destination that sent the datagram
+         * @param data the buffer holding the datagram body
+         * @param offset the index within data where the body starts
+         * @param length the number of body bytes valid from offset
+         * @param fromPort the source port in host byte order
+         * @param toPort the destination port in host byte order
          */
         public void datagramReceived(String dest, byte[] data, int offset, int length, int fromPort, int toPort);
         /**
          * protocol).
+         *
+         * @param data the buffer holding the raw datagram body
+         * @param offset the index within data where the body starts
+         * @param length the number of body bytes valid from offset
+         * @param fromPort the source port in host byte order
+         * @param toPort the destination port in host byte order
+         * @param protocol the IP protocol number, or I2PSession.PROTO_DATAGRAM_RAW when unreported
          */
         public void rawReceived(byte[] data, int offset, int length, int fromPort, int toPort, int protocol);
         /**
          * data).
+         *
+         * @param data the payload echoed back, limited to the first token of the line
          */
         public void pingReceived(String data);
         /**
          * data).
+         *
+         * @param data the payload echoed back, limited to the first token of the line
          */
         public void pongReceived(String data);
 
         /**
          * params).
+         *
+         * @param major the first token of the SAM message, naming the command family
+         * @param minor the second token, naming the specific command within that family
+         * @param params the remaining name=value pairs of the line, quotes stripped
          */
         public void unknownMessageReceived(String major, String minor, Properties params);
     }

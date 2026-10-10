@@ -32,6 +32,7 @@ import org.klomp.snark.MagnetHandler;
  */
 public final class BrowserApiInstaller {
 
+    /** Base name of the generated XDG .desktop file, also the MIME cache entry key. */
     public static final String DESKTOP_ID = "i2psnark-browserapi.desktop";
     private static final String MAGNET_MIME = "x-scheme-handler/magnet";
     private static final String TORRENT_MIME = "application/x-bittorrent";

@@ -55,12 +55,25 @@ abstract class SOCKSServer {
      */
     protected int addressType;
 
+    /**
+     * The application context, used for the log manager and property lookups
+     */
     protected final I2PAppContext _context;
+    /** the connected socket back to the local SOCKS client */
     protected final Socket clientSock;
+    /** the tunnel configuration, holding the IP to domain mappings */
     protected final Properties props;
+    /** the logger for this class */
     protected final Log _log;
 
-    /** @since 0.9.27 */
+    /**
+     * Create a handler for one accepted SOCKS connection.
+     *
+     * @param ctx the application context, used for the log manager and property lookups
+     * @param clientSock the connected socket back to the local SOCKS client
+     * @param props the tunnel configuration, holding the IP to domain mappings
+     * @since 0.9.27
+     */
     protected SOCKSServer(I2PAppContext ctx, Socket clientSock, Properties props) {
         _context = ctx;
         this.clientSock = clientSock;
@@ -85,6 +98,8 @@ abstract class SOCKSServer {
     /**
      * Perform server initialization (expecially regarding protected
      * variables).
+     *
+     * @throws SOCKSException if the client's request cannot be read off the socket
      */
     protected abstract void setupServer() throws SOCKSException;
 
@@ -93,11 +108,14 @@ abstract class SOCKSServer {
      * to/from the client.
      *
      * @return a Socket connected with the client
+     * @throws SOCKSException if the initial handshake fails before the socket can be returned
      */
     public abstract Socket getClientSocket() throws SOCKSException;
 
     /**
      * Confirm to the client that the connection has succeeded
+     *
+     * @throws SOCKSException if the success reply cannot be written back to the client
      */
     protected abstract void confirmConnection() throws SOCKSException;
 
@@ -105,12 +123,17 @@ abstract class SOCKSServer {
      * Get an I2PSocket that can be used to send/receive 8-bit clean data
      * to/from the destination of the SOCKS connection.
      *
+     * @param t the streaming tunnel to build the destination socket over
      * @return an I2PSocket connected with the destination
+     * @throws SOCKSException if the requested host name or port was never established
      */
     public abstract I2PSocket getDestinationI2PSocket(I2PSOCKSTunnel t) throws SOCKSException;
 
     /**
-     * @return whether use outproxy plugin
+     * Checks whether the i2ptunnel is configured to route through an outproxy plugin.
+     *
+     * @return true if an outproxy plugin should handle the connection, false to route
+     * it directly; defaults to true when the property is unset
      * @since 0.9.27
      */
     private boolean shouldUseOutproxyPlugin() {
@@ -118,6 +141,8 @@ abstract class SOCKSServer {
     }
 
     /**
+     * Looks up the registered outproxy plugin to route through, if any.
+     *
      * @return null if disabled or not installed
      * @since 0.9.27
      */
@@ -139,7 +164,11 @@ abstract class SOCKSServer {
      * Act as a SOCKS 5 client to connect to an outproxy
      * Caller must send success or error to local socks client.
      *
+     * @param tun the streaming tunnel to build the outproxy socket over
+     * @param proxy the outproxy to connect to, as "name" or "name:port"
      * @return open socket or throws error
+     * @throws IOException if the outproxy name does not resolve or the handshake cannot complete
+     * @throws I2PException if the streaming library cannot create the socket to the outproxy
      * @since 0.8.2
      */
     protected I2PSocket outproxyConnect(I2PSOCKSTunnel tun, String proxy) throws IOException, I2PException {
@@ -205,8 +234,9 @@ abstract class SOCKSServer {
      * @param pout output stream to the proxy
      * @param connHostName hostname or IP for the proxy to connect to
      * @param connPort port for the proxy to connect to
-     * @param configUser username unsupported
-     * @param configPW password unsupported
+     * @param configUser unused; HTTP proxy basic auth is not supported
+     * @param configPW unused; HTTP proxy basic auth is not supported
+     * @throws IOException if the proxy's reply cannot be read, or reports a non-200 status
      * @since 0.9.57
      */
     public void httpsConnect(I2PSocket destSock, OutputStream pout, String connHostName,

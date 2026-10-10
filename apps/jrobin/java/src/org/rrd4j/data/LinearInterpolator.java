@@ -20,25 +20,25 @@ import org.rrd4j.core.Util;
 public class LinearInterpolator extends Plottable {
 
     /**
-     * constant used to specify LEFT interpolation. See {@link #setInterpolationMethod(int)
+     * Constant used to specify LEFT interpolation. See {@link #setInterpolationMethod(int)
      * setInterpolationMethod()} for explanation.
      */
     public static final int INTERPOLATE_LEFT = 0;
 
     /**
-     * constant used to specify RIGHT interpolation. See {@link #setInterpolationMethod(int)
+     * Constant used to specify RIGHT interpolation. See {@link #setInterpolationMethod(int)
      * setInterpolationMethod()} for explanation.
      */
     public static final int INTERPOLATE_RIGHT = 1;
 
     /**
-     * constant used to specify LINEAR interpolation (default interpolation method). See {@link
+     * Constant used to specify LINEAR interpolation (default interpolation method). See {@link
      * #setInterpolationMethod(int) setInterpolationMethod()} for explanation.
      */
     public static final int INTERPOLATE_LINEAR = 2;
 
     /**
-     * constant used to specify LINEAR REGRESSION as interpolation method. See {@link
+     * Constant used to specify LINEAR REGRESSION as interpolation method. See {@link
      * #setInterpolationMethod(int) setInterpolationMethod()} for explanation.
      */
     public static final int INTERPOLATE_REGRESSION = 3;
@@ -69,7 +69,9 @@ public class LinearInterpolator extends Plottable {
     private final double[] values;
 
     // used only if INTERPOLATE_BESTFIT is specified
+    /** Intercept of the best-fit line, or NaN when regression has not been computed. */
     double b0 = Double.NaN;
+    /** Slope of the best-fit line, or NaN when regression has not been computed. */
     double b1 = Double.NaN;
 
     /**

@@ -12,6 +12,12 @@ import net.i2p.data.DataHelper;
  */
 public class EightBit extends Encoding {
 
+	/**
+	 * Constructor. Decoding reads the whole stream and needs no configuration,
+	 * so a bare instance is ready to use.
+	 */
+	public EightBit() {}
+
 	@Override
 	public String getName() {
 		return "8bit";

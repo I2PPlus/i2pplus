@@ -20,7 +20,11 @@ public class TryCache<T> {
      * @since 0.9.35
      */
     public interface ObjectFactory<T> {
-        /** Create instance */
+        /**
+         * Create instance
+         *
+         * @return a newly created instance of the cached type
+         */
         T newInstance();
     }
 
@@ -35,6 +39,9 @@ public class TryCache<T> {
 
     /**
      * TryCache.
+     *
+     * @param factory the source of instances to create when the cache is empty
+     * @param capacity the greatest number of instances to retain; negatives clamp to 0
      */
     public TryCache(ObjectFactory<T> factory, int capacity) {
         this.factory = factory;

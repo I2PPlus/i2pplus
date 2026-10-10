@@ -99,6 +99,8 @@ public class DatabaseReader implements Closeable {
         NodeCache cache = NoCache.getInstance();
 
         /**
+         * Build a reader that reads the database from the stream.
+         *
          * @param stream the stream containing the GeoIP2 database to use.
          */
         public Builder(InputStream stream) {
@@ -107,6 +109,8 @@ public class DatabaseReader implements Closeable {
         }
 
         /**
+         * Build a reader that memory-maps the database file.
+         *
          * @param database the GeoIP2 database file to use.
          */
         public Builder(File database) {
@@ -115,8 +119,9 @@ public class DatabaseReader implements Closeable {
         }
 
         /**
-         * @param val List of locale codes to use in name property from most
          * preferred to least preferred.
+         *
+         * @param val List of locale codes to use in name property from most
          * @return Builder object
          */
         public Builder locales(List<String> val) {
@@ -125,6 +130,8 @@ public class DatabaseReader implements Closeable {
         }
 
         /**
+         * Set the node cache used to hold decoded search-tree nodes.
+         *
          * @param cache backing cache instance
          * @return Builder object
          */
@@ -134,11 +141,12 @@ public class DatabaseReader implements Closeable {
         }
 
         /**
+         * {@link FileMode#MEMORY}, but you provided a different
+         * FileMode to this method.
+         *
          * @param val The file mode used to open the GeoIP2 database
          * @return Builder object
          * @throws java.lang.IllegalArgumentException if you initialized the Builder with a URL, which uses
-         * {@link FileMode#MEMORY}, but you provided a different
-         * FileMode to this method.
          */
         public Builder fileMode(FileMode val) {
             if (this.stream != null && FileMode.MEMORY != val) {
@@ -150,8 +158,9 @@ public class DatabaseReader implements Closeable {
         }
 
         /**
-         * @return an instance of {@code DatabaseReader} created from the
          * fields set on this builder.
+         *
+         * @return an instance of {@code DatabaseReader} created from the
          * @throws IOException if there is an error reading the database
          */
         public DatabaseReader build() throws IOException {
@@ -221,6 +230,8 @@ public class DatabaseReader implements Closeable {
      * country.
      *
      * @param ipAddress IPv4 or IPv6 address
+     * @return the two-letter ISO country code, or null if the address has no country record
+     * @throws IOException if the address cannot be resolved or the database cannot be read
      */
     public String country(String ipAddress) throws IOException {
         InetAddress ia = InetAddress.getByName(ipAddress);
@@ -245,6 +256,7 @@ public class DatabaseReader implements Closeable {
      *
      * @param country two-letter case-insensitive
      * @param out caller must close
+     * @throws IOException if the database cannot be read or the write to out fails
      * @since 0.9.48
      */
     public void countryToIP(String country, Writer out) throws IOException {
@@ -252,6 +264,9 @@ public class DatabaseReader implements Closeable {
     }
 
     /**
+     * Get the metadata recorded in the database, including its build epoch
+     * and the node count of the search tree.
+     *
      * @return the metadata for the open MaxMind DB file.
      */
     public Metadata getMetadata() {

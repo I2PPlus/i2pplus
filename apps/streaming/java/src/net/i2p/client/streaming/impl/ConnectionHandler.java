@@ -69,10 +69,12 @@ class ConnectionHandler {
     static final double SYN_STRESS_THRESHOLD = 0.40;
     /** Minimum SYN accept-queue timeout (ms) kept even on a genuinely stressed, fast fabric. */
     static final int SYN_STRESS_MIN_TIMEOUT = 10 * 1000;
-    /** Default RTT scale factor: the adaptive SYN floor is {@code scale * recentRTT} (capped at the
-     * configured timeout) whenever a positive stall is detected.  4 keeps a handshake alive through
+    /**
+     * Default RTT scale factor: the adaptive SYN floor is {@code scale * recentRTT} (capped at the
+     * configured timeout) whenever a positive stall is detected. 4 keeps a handshake alive through
      * roughly four round-trips of server/queue latency, matching live 3-10s-RTT fabrics while still
-     * failing fast on genuinely dead fast tunnels. Tunable via {@link I2PSocketManagerFull#setRttSynTimeoutScale}. */
+     * failing fast on genuinely dead fast tunnels. Tunable via {@link I2PSocketManagerFull#setRttSynTimeoutScale}.
+     */
     static final int SYN_RTT_SCALE_DEFAULT = 4;
     /** Baseline recent-SYN expire rate (percent) that must be exceeded, along with low
      * build success, before the clamp is armed. 100 disables the clamp. */
@@ -177,10 +179,12 @@ class ConnectionHandler {
 
     /** Router-clock time of the last tunnel-stress sample. */
     private volatile long _lastStressSampleAt;
-    /** Router-clock time of the last SYN expire-rate sample. Kept separate from
+    /**
+     * Router-clock time of the last SYN expire-rate sample. Kept separate from
      * {@link #_lastStressSampleAt} because each sampler has its own window and
      * one must not refresh the other's (that would starve this window's
-     * rollover: {@link #getSynExpireRatePct} would never publish). */
+     * rollover: {@link #getSynExpireRatePct} would never publish).
+     */
     private volatile long _lastSynExpireSampleAt;
     /** Cached tunnel build success fraction; NaN when unavailable. */
     private volatile double _tunnelBuildSuccess;
@@ -191,12 +195,14 @@ class ConnectionHandler {
     /** Most recently observed SYN accept-queue residence time (ms), i.e. how long a fresh SYN
      * waited in the queue before being accepted. 0 until the first acceptance. */
     private volatile int _synQueueResidenceMs;
-    /** Enqueue records for packets currently in (or just polled from) the accept queue,
+    /**
+     * Enqueue records for packets currently in (or just polled from) the accept queue,
      * keyed by packet identity. Value holds the enqueue clock-time and the accept
      * timeout snapshot taken at that moment; a worker that polls a SYN refreshes the
      * entry so the expiry matches the timeout the client was quoted.
      * Swept by {@code SynReaper}; re-arming is O(1) per SYN instead of the
-     * two per-packet timer events of the old {@code TimeoutSyn} design. */
+     * two per-packet timer events of the old {@code TimeoutSyn} design.
+     */
     private final ConcurrentHashMap<Packet, SynEntry> _synEnqueueTimes =
             new ConcurrentHashMap<Packet, SynEntry>();
 
@@ -367,7 +373,13 @@ class ConnectionHandler {
         _synQueueResidenceMs = (prev + residence) / 2;
     }
 
-    /** Creates a new instance of ConnectionHandler */
+    /**
+     * Creates a new instance of ConnectionHandler
+     *
+     * @param context the application context supplying the clock and logging
+     * @param mgr the connection manager owning this handler and its queues
+     * @param timer the shared timer used to schedule SYN expiry sweeps
+     */
     public ConnectionHandler(I2PAppContext context, ConnectionManager mgr, SimpleTimer2 timer) {
         _context = context;
         _log = context.logManager().getLog(ConnectionHandler.class);
@@ -549,6 +561,7 @@ class ConnectionHandler {
      * Use a bounded queue to limit the damage from SYN floods,
      * router overload, or a slow client
      *
+     * @param packet the incoming connection attempt, null to do nothing
      * @author zzz modded to use concurrent and bound queue size
      * @since 0.9.71+ modified to use worker threads
      */
@@ -777,6 +790,8 @@ class ConnectionHandler {
      * to {@code out} let the same formatting be reused for other SYN expiry
      * reports (e.g. DEBUG-level summaries) without duplicating the format.
      *
+     * @param syn the expired SYN, described as "null SYN" when null
+     * @param out the buffer receiving the packet description
      * @since 0.9.71+
      */
     static void synExpirySummary(Packet syn, StringBuilder out) {
@@ -797,6 +812,11 @@ class ConnectionHandler {
      * detail and the queue/timeout pressure that caused the expiry, so the whole
      * picture lands on one log line instead of a bare trailing colon.
      *
+     * @param syn the expired SYN, described as "null SYN" when null
+     * @param queueDepth the accept queue depth at expiry, as the count of unaccepted SYNs
+     * @param maxQueueSize the configured queue cap, 0 when uncapped
+     * @param timeoutMs the accept window in ms that elapsed before this SYN expired
+     * @return the complete single-line WARN message
      * @since 0.9.71+
      */
     static String synExpiryMessage(Packet syn, int queueDepth, int maxQueueSize, int timeoutMs) {
@@ -823,12 +843,23 @@ class ConnectionHandler {
      * tracking the most recent quote.
      */
     static class SynEntry {
+        /** Clock time, in ms since the epoch, when this SYN was enqueued. */
         final long enqueuedMs;
+        /** Accept window, in ms, snapshotted from the adaptive timeout at enqueue time. */
         final int timeoutMs;
 
+        /**
+         * Records one enqueued SYN against the accept window that was quoted to the client.
+         * @param enqueuedMs clock time, in ms since the epoch, when the SYN was enqueued
+         * @param timeoutMs accept window in ms, snapshotted from the adaptive timeout
+         */
         SynEntry(long enqueuedMs, int timeoutMs) {this.enqueuedMs = enqueuedMs; this.timeoutMs = timeoutMs;}
 
-        /** true once the accept window has fully elapsed */
+        /**
+         * Tests whether this SYN has waited out its accept window.
+         * @param now current clock time in ms since the epoch
+         * @return true once the accept window has fully elapsed
+         */
         boolean expired(long now) {return now - enqueuedMs >= timeoutMs;}
     }
 

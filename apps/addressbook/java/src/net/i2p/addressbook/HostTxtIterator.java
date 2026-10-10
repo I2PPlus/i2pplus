@@ -43,6 +43,9 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
 
     /**
      * An iterator over the key/value pairs in the file.
+     *
+     * @param file the hosts.txt or subscription file to read, opened as UTF-8
+     * @throws IOException if the file cannot be opened or read
      */
     public HostTxtIterator(File file) throws IOException {
             FileInputStream fileStream = new FileInputStream(file);

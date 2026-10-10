@@ -52,6 +52,12 @@ public class LogSuppressor {
         /** Occurrences collapsed since the previous write; zero when none. */
         public final long suppressed;
 
+        /**
+         * Record what the caller should do with one occurrence.
+         *
+         * @param log true if this occurrence should be written
+         * @param suppressed how many repeats this write stands in for, 0 for the first
+         */
         Decision(boolean log, long suppressed) {
             this.log = log;
             this.suppressed = suppressed;
@@ -76,14 +82,21 @@ public class LogSuppressor {
     private final int _burst;
     private final long _windowMs;
 
-    /** Create a suppressor with the default burst and window. */
+    /**
+     * Create a suppressor with the default burst and window.
+     *
+     * A suppressor allows {@code _burst} messages through before suppressing for
+     * {@code _windowMs}, so a repeated error is logged without flooding the log.
+     */
     public LogSuppressor() {
         this(DEFAULT_BURST, DEFAULT_WINDOW_MS);
     }
 
     /**
-     * @param burst repeats to accumulate before writing again
-     * @param windowMs longest a repeat may stay hidden
+     * Construct a suppressor with an explicit burst size and window.
+     *
+     * @param burst repeats to accumulate before writing again, forced to at least 1
+     * @param windowMs longest a repeat may stay hidden, in ms, forced to at least 1
      */
     public LogSuppressor(int burst, long windowMs) {
         _burst = Math.max(1, burst);
@@ -184,7 +197,7 @@ public class LogSuppressor {
     }
 
     /**
-     * Forget all bookkeeping.
+     * Forget all bookkeeping, so every key starts counting from scratch again.
      *
      * @since 0.9.71+
      */

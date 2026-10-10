@@ -67,6 +67,8 @@ public class CountryLookup {
     private final ConcurrentHashMap<Hash, Long> countryCacheTimestamps = new ConcurrentHashMap<>(MAX_COUNTRY_CACHE_SIZE);
 
     /**
+     * Create a lookup over the netDb's router IPs, backed by the GeoIP database.
+     *
      * @param ctx non-null
      * @param geoIP non-null
      * @since 0.9.71
@@ -337,6 +339,9 @@ public class CountryLookup {
 
     /**
      * Full name for a country code, or the code if we don't know the name.
+     *
+     * @param c the two letter country code to resolve
+     * @return the untranslated country name, or the code itself when geoIP data is unavailable
      */
     public String getCountryName(String c) {
         if (_geoIP == null) {return c;}
@@ -362,6 +367,7 @@ public class CountryLookup {
      * Multi-part TLDs (co.uk, com.au, ...) are recognized so the registrable
      * domain is returned rather than a bare second-level label.
      *
+     * @param hostname the reverse DNS host name to reduce to its registrable domain
      * @return domain name only from reverse dns hostname lookups
      * @since 0.9.58+
      */
@@ -432,6 +438,7 @@ public class CountryLookup {
      *
      * As of 0.9.32, works only for literal IPs, returns null for host names.
      *
+     * @param ri the RouterInfo whose addresses are scanned for a literal IP
      * @return IP or null
      */
     static byte[] getIP(RouterInfo ri) {
@@ -453,6 +460,7 @@ public class CountryLookup {
      *
      * As of 0.9.32, works only for literal IPs, returns null for host names.
      *
+     * @param ri the RouterInfo whose addresses are scanned for a publicly routable IP
      * @return IP or null
      * @since 0.9.18
      */
@@ -509,6 +517,8 @@ public class CountryLookup {
 
     /**
      * First valid IP of the specified type (IPv4 or IPv6).
+     * @param ri the RouterInfo whose addresses are scanned
+     * @param wantIPv6 true to accept a 16 byte address, false to accept a 4 byte one
      * @return the first valid i p of type
      */
     static byte[] getFirstValidIPOfType(RouterInfo ri, boolean wantIPv6) {
@@ -525,6 +535,9 @@ public class CountryLookup {
 
     /**
      * Check if we support outbound IPv4 connections.
+     *
+     * @param ctx the router context supplying the transport enablement properties
+     * @return true when NTCP or UDP is enabled, so an outbound IPv4 connection is possible
      */
     static boolean supportsIPv4(RouterContext ctx) {
         boolean ntcpEnabled = TransportManager.isNTCPEnabled(ctx);
@@ -534,6 +547,9 @@ public class CountryLookup {
 
     /**
      * Check if we support outbound IPv6 connections.
+     *
+     * @param ctx the router context supplying the transport enablement properties
+     * @return true when neither NTCP nor UDP has IPv6 explicitly disabled
      */
     static boolean supportsIPv6(RouterContext ctx) {
         TransportUtil.IPv6Config ntcp6 = TransportUtil.getIPv6Config(ctx, "NTCP");
@@ -606,6 +622,8 @@ public class CountryLookup {
 
     /**
      * True when the cache stores an unresolved-country marker ("xx").
+     * @param code the cached country name to test
+     * @return true for the unresolved "xx" marker, and for a null code
      * @since 0.9.71
      */
     static boolean isUnknownCountryCode(String code) {return code != null && code.equals("xx");}

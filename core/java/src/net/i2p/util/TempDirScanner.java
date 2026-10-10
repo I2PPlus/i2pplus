@@ -29,6 +29,8 @@ public class TempDirScanner extends SimpleTimer2.TimedEvent {
 
     /**
      * Schedules itself
+     *
+     * @param context the app context whose temp dir is kept alive and whose timer scans it
      */
     public TempDirScanner(I2PAppContext context) {
         super(context.simpleTimer2());

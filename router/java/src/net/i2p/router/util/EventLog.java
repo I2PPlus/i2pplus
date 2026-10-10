@@ -162,6 +162,7 @@ public class EventLog {
      * Event log for the given file, which should be absolute.
      *
      * @param file should be absolute
+     * @param ctx router context, supplying the clock used to timestamp each event
      */
     public EventLog(I2PAppContext ctx, File file) {
         _context = ctx;

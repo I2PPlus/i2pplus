@@ -9,6 +9,12 @@ import java.util.HashMap;
  */
 public class HostCheckerBridge {
 
+    /**
+     * Constructor. The checker is held in a static field set by Daemon, so an
+     * instance carries no state of its own.
+     */
+    public HostCheckerBridge() {}
+
     private static HostChecker hostChecker;
     private static final Object lock = new Object();
 
@@ -25,6 +31,8 @@ public class HostCheckerBridge {
 
     /**
      * Set HostChecker instance (should be called by Daemon.java)
+     *
+     * @param checker the shared HostChecker that addressbook calls will ping through
      */
     public static void setInstance(HostChecker checker) {
         synchronized (lock) {

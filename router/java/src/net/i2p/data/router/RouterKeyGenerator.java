@@ -43,8 +43,10 @@ import net.i2p.util.Log;
 public class RouterKeyGenerator extends RoutingKeyGenerator {
     private final Log _log;
     private final I2PAppContext _context;
-    /** Constructor that initializes GMT date formatter and generates current routing key modifier data. */
-
+    /**
+     * Constructor that initializes GMT date formatter and generates current routing key modifier data.
+     * @param context the application context supplying the log and clock
+     */
     public RouterKeyGenerator(I2PAppContext context) {
         _log = context.logManager().getLog(RoutingKeyGenerator.class);
         _context = context;
@@ -170,8 +172,8 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * This makes Sybil's job a lot harder, as she needs to essentially take over the
      * whole keyspace.
      *
-     * @throws IllegalArgumentException if origKey is null
      * @return the routing key
+     * @throws IllegalArgumentException if origKey is null
      */
     @Override
     public Hash getRoutingKey(Hash origKey) {
@@ -181,6 +183,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     /**
      * Routing key using tomorrow's modData, not today's
      *
+     * @param origKey the key to be modified into a routing key
      * @return the next routing key
      * @since 0.9.10
      */
@@ -192,6 +195,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * Routing key for the specified date, not today's
      *
      * @param time Java time
+     * @param origKey the key to be modified into a routing key
      * @return the routing key
      * @since 0.9.28
      */
@@ -210,8 +214,8 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * Generate a modified (yet consistent) hash from the origKey by generating the
      * SHA256 of the targetKey with the specified modData appended to it
      *
-     * @throws IllegalArgumentException if origKey is null
      * @return the key
+     * @throws IllegalArgumentException if origKey is null
      */
     private static Hash getKey(Hash origKey, byte[] modData) {
         if (origKey == null) throw new IllegalArgumentException("Original key is null");
@@ -222,6 +226,10 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     }
 
     /**
+     * Command-line entry point: converts routing keys to their -offset and
+     * +offset day forms, reading a hash, hostname or destination per argument.
+     *
+     * @param args the routing keys to convert, optionally preceded by an offset in days
      * @since 0.9.29
      */
     public static void main(String[] args) {

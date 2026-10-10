@@ -41,6 +41,8 @@ public class PeerHTMLRenderer {
     private final Map<Hash, String> capacityCache = Collections.synchronizedMap(new LHMCache<>(5000));
 
     /**
+     * Create a renderer.
+     *
      * @param ctx non-null
      * @param countryLookup non-null
      * @param rdns non-null
@@ -108,6 +110,10 @@ public class PeerHTMLRenderer {
 
     /**
      * Render the HTML flag image for the given peer.
+     *
+     * @param peer the hash of the peer whose country and flag image are rendered
+     * @return an HTML span holding the flag image, titled with the country name
+     *         and resolved host when those are known, else a placeholder
      */
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);

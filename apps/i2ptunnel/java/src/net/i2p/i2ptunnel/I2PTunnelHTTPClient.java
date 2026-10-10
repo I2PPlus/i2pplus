@@ -102,6 +102,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /** how long to wait for another request on the same socket */
     static final int BROWSER_KEEPALIVE_TIMEOUT = 2*60*1000;
     private static final boolean DEFAULT_KEEPALIVE_BROWSER = true;
+    /** Total connect attempts before the client stops retrying and fails the request. */
     static final int I2P_CONNECT_MAX_RETRIES = 6;
     /** Backoff floor and per-attempt multiply base for I2P connect retries. */
     static final long I2P_CONNECT_RETRY_BASE_DELAY = 1000;
@@ -335,6 +336,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * or open the local socket. You MUST call startRunning() for that.
      *
      * @param sockMgr the existing socket manager
+     * @param localPort the local port to bind to
+     * @param l logging instance
+     * @param tunnel the parent I2PTunnel instance
+     * @param notifyThis event dispatcher for notifications
+     * @param clientId the client identifier
      */
     public I2PTunnelHTTPClient(int localPort, Logging l, I2PSocketManager sockMgr, I2PTunnel tunnel, EventDispatcher notifyThis, long clientId) {
         super(localPort, l, sockMgr, tunnel, notifyThis, clientId);
@@ -347,6 +353,13 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
+     * @param localPort the local port to bind to
+     * @param l logging instance
+     * @param ownDest whether to use our own destination
+     * @param wwwProxy comma-separated list of outproxy URLs to forward through,
+     *                 or null for no outproxying
+     * @param notifyThis event dispatcher for notifications
+     * @param tunnel the parent I2PTunnel instance
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      * valid config to contact the router
      */
@@ -482,11 +495,26 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     public static final String PROP_JUMP_SERVERS = "i2ptunnel.httpclient.jumpServers";
     /** Config key to disable address helper. */
     public static final String PROP_DISABLE_HELPER = "i2ptunnel.httpclient.disableAddressHelper";
-    /** @since 0.9.14 */
+    /**
+     * Config key: false, the default, replaces the browser's Accept header with a
+     * generic value for the content types it names; true forwards it unchanged.
+     *
+     * @since 0.9.14
+     */
     public static final String PROP_ACCEPT = "i2ptunnel.httpclient.sendAccept";
-    /** @since 0.9.14, overridden to true as of 0.9.35 unlesss PROP_SSL_SET is set */
+    /**
+     * Config key: false denies SSL to I2P destinations, but only once PROP_SSL_SET
+     * shows the user configured SSL by hand. Defaults to true (allow) either way.
+     *
+     * @since 0.9.14, overridden to true as of 0.9.35 unless PROP_SSL_SET is set
+     */
     public static final String PROP_INTERNAL_SSL = "i2ptunnel.httpclient.allowInternalSSL";
-    /** @since 0.9.35 */
+    /**
+     * Config key: set when the user configures SSL by hand. Its presence is the
+     * gate that lets PROP_INTERNAL_SSL deny internal SSL.
+     *
+     * @since 0.9.35
+     */
     public static final String PROP_SSL_SET = "sslManuallySet";
 
     /**
@@ -1999,8 +2027,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         private State _state = State.OPEN;
 
         /**
-         * @param releaser callback that returns a permit to the pool; invoked
          * at most once per permit the slot has held
+         *
+         * @param releaser callback that returns a permit to the pool; invoked
          */
         WarmSlot(Consumer<Hash> releaser) {
             _releaser = releaser;
@@ -2144,8 +2173,11 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         * @return true when the slot is open with no attempt in flight and
-         * no installed socket, i.e. free to start a warm connect
+         * Whether the slot is free to start a warm connect: still OPEN, with no
+         * attempt in flight and no socket installed.
+         *
+         * @return true when the slot is OPEN, no attempt is in flight, and no
+         * installed socket is held
          * @since 0.9.71+
          */
         boolean isIdle() {
@@ -2155,7 +2187,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         * @return the current lifecycle state (for tests and diagnostics)
+         * The slot's lifecycle state, for tests and diagnostics.
+         *
+         * @return the current lifecycle state
          * @since 0.9.71+
          */
         State getState() {
@@ -2165,7 +2199,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
 
         /**
-         * @return the last issued attempt generation (0 before any open)
+         * The generation of the most recent warm-connect attempt, which is how a
+         * late completion is matched against the attempt that is still current.
+         *
+         * @return the last issued attempt generation, or 0 before any open
          * @since 0.9.71+
          */
         long getGeneration() {

@@ -41,9 +41,10 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     /**
      * Constructor.
      *
-     * @param file the block file
-     * @param startPage starting page number
-     * @throws IOException on I/O error
+     * @param file the backing store holding this block's disk page
+     * @param startPage the disk page on which this block is stored
+     * @throws IOException if the page's magic number or recorded free count is
+     *     corrupt, or if the free page references cannot be read
      */
     public FreeListBlock(RandomAccessInterface file, int startPage) throws IOException {
         this.file = file;
@@ -73,7 +74,11 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
         }
     }
 
-    /** Write this block's data to disk. */
+    /**
+     * Write this block's data to disk.
+     *
+     * @throws IOException if the seek or write to this block's page fails
+     */
     public void writeBlock() throws IOException {
         BlockFile.pageSeek(file, page);
         file.writeLong(MAGIC);
@@ -92,7 +97,9 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
-     * @return the next page
+     * Get the page number of the next block in the free list chain.
+     *
+     * @return the disk page of the next block, or 0 when this is the last one
      */
     public int getNextPage() {
         return nextPage;
@@ -100,6 +107,9 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 
     /**
      * Set and write the next page only
+     *
+     * @param nxt the disk page of the next block in the free list chain, 0 to end the chain
+     * @throws IOException if the seek or write to this block's page fails
      */
     public void setNextPage(int nxt) throws IOException {
         nextPage = nxt;
@@ -121,14 +131,21 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
-     * @return whether empty
+     * Report whether this block has no free page references left.
+     *
+     * @return true when no free page references remain, so the block holds no
+     *     space that could be handed out by takePage()
      */
     public boolean isEmpty() {
         return len <= 0;
     }
 
     /**
-     * @return whether full
+     * Report whether this block already holds as many free page references as
+     * fit on one disk page.
+     *
+     * @return true once the free page references fill the block's share of the
+     *     disk page, which makes addPage() reject the next page
      */
     public boolean isFull() {
         return len >= MAX_SIZE;
@@ -136,7 +153,11 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 
     /**
      * Adds free page and writes new len to disk
-     * @throws IllegalStateException if full
+     *
+     * @param freePage the disk page to add to this block's free list
+     * @throws IOException if the page cannot be marked free, or if the updated
+     *     count cannot be written back
+     * @throws IllegalStateException if the block is already full
      */
     public void addPage(int freePage) throws IOException {
         if (len >= MAX_SIZE)
@@ -153,7 +174,12 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
 
     /**
      * Takes next page and writes new len to disk
-     * @throws IllegalStateException if empty
+     *
+     * @return the disk page at the head of this block's free list, released for
+     *     the caller to allocate
+     * @throws IOException if the page taken is not marked free, which means the
+     *     on-disk free list is corrupt
+     * @throws IllegalStateException if the block holds no free page references
      */
     public int takePage() throws IOException {
         if (len <= 0)
@@ -182,7 +208,13 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
         return magic;
     }
 
-    /** Initialize a new free list block page with default values. */
+    /**
+     * Initialize a new free list block page with default values.
+     *
+     * @param file the backing store to initialize in
+     * @param page the disk page to initialize as an empty free list block
+     * @throws IOException if the seek or write to the page fails
+     */
     public static void initPage(RandomAccessInterface file, int page) throws IOException {
         BlockFile.pageSeek(file, page);
         file.writeLong(MAGIC);
@@ -191,6 +223,13 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
+     * Log this block and then, following the next-page chain, every block
+     * after it in the free list. Used for diagnostics; it never repairs
+     * anything and always reports success.
+     *
+     * @param fix passed down the chain but unused; nothing is repaired
+     * @return always true
+     * @throws IOException if a following block in the chain cannot be read
      * @since 0.9.7
      */
     public boolean flbck(boolean fix) throws IOException {
@@ -202,7 +241,10 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     }
 
     /**
-     * @return a string representation of this block
+     * Summarise this block for log and diagnostic output.
+     *
+     * @return the block identity, its free page count against the block
+     *     capacity, its disk page and the next block in the chain
      */
     @Override
     public String toString() {

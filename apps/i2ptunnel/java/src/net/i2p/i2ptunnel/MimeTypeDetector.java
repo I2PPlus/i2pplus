@@ -21,6 +21,12 @@ import java.util.Set;
  */
 public class MimeTypeDetector {
 
+    /**
+     * Every lookup table and every method here is static, so an instance holds
+     * no state of its own; the class is meant to be used through its static methods.
+     */
+    public MimeTypeDetector() {}
+
     /** MIME types that require security headers (Referrer-Policy, Allow) */
     private static final Set<String> CUSTOM_WHITELIST_SET = new HashSet<>();
 

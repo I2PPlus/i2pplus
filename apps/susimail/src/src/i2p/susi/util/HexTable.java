@@ -6,6 +6,12 @@ package i2p.susi.util;
  */
 public class HexTable {
     /**
+     *  Constructor. The lookup table is built once in the static initializer,
+     *  so an instance holds nothing.
+     */
+    public HexTable() {}
+
+    /**
      *  Three character strings, upper case, e.g. "=0A"
      *  WARNING: This array is public for backward compatibility but should be treated as immutable
      */

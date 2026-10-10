@@ -15,6 +15,12 @@ import net.i2p.CoreVersion;
  *
  */
 public class RouterVersion {
+    /**
+     * The version constants are static and the only method is main(), so an instance
+     * carries nothing.
+     */
+    public RouterVersion() {}
+
     /** Deprecated, do not use. */
     public static final String ID = "Git";
     /** The router version number. */

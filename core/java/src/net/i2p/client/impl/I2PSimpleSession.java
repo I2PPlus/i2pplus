@@ -47,6 +47,8 @@ public class I2PSimpleSession extends I2PSessionImpl2 {
     /**
      * Create a new session for doing naming and bandwidth queries only. Do not create a destination.
      *
+     * @param context the application context the session and its message handlers are built around
+     * @param options set of options to configure the router with, if null will use System properties
      * @throws I2PSessionException if there is a problem
      */
     public I2PSimpleSession(I2PAppContext context, Properties options) throws I2PSessionException {

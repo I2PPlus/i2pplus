@@ -16,7 +16,8 @@ public class SOCKS5Constants {
     private SOCKS5Constants() {}
 
     /**
-     * SOCKS_VERSION_5.
+     * The version number this implementation puts at the head of a SOCKS5
+     * greeting.
      */
     public static final int SOCKS_VERSION_5 = 0x05;
 
@@ -30,15 +31,19 @@ public class SOCKS5Constants {
      */
     public static class Method {
         /**
-         * NO_AUTH_REQUIRED.
+         * Names the constant list itself; it holds no per-instance state.
+         */
+        public Method() {}
+        /**
+         * The client offers no authentication.
          */
         public static final int NO_AUTH_REQUIRED = 0x00;
         /**
-         * USERNAME_PASSWORD.
+         * The client offers RFC 1929 username and password authentication.
          */
         public static final int USERNAME_PASSWORD = 0x02;
         /**
-         * NO_ACCEPTABLE_METHODS.
+         * None of the methods the client listed is acceptable to the server.
          */
         public static final int NO_ACCEPTABLE_METHODS = 0xff;
     }
@@ -50,15 +55,19 @@ public class SOCKS5Constants {
      */
     public static class AddressType {
         /**
-         * IPV4.
+         * Names the constant list itself; it holds no per-instance state.
+         */
+        public AddressType() {}
+        /**
+         * A four-byte IPv4 address follows.
          */
         public static final int IPV4 = 0x01;
         /**
-         * DOMAINNAME.
+         * A one-byte length and that many bytes of domain name follow.
          */
         public static final int DOMAINNAME = 0x03;
         /**
-         * IPV6.
+         * A sixteen-byte IPv6 address follows.
          */
         public static final int IPV6 = 0x04;
     }
@@ -70,28 +79,44 @@ public class SOCKS5Constants {
      */
     public static class Command {
         /**
-         * CONNECT.
+         * Names the constant list itself; it holds no per-instance state.
+         */
+        public Command() {}
+        /**
+         * Open a relayed TCP connection to the requested destination.
          */
         public static final int CONNECT = 0x01;
         /**
-         * BIND.
+         * Listen on a TCP port and wait for one inbound connection.
          */
         public static final int BIND = 0x02;
         /**
-         * UDP_ASSOCIATE.
+         * Associate a UDP port to relay datagrams.
          */
         public static final int UDP_ASSOCIATE = 0x03;
 
         /**
+         * Tor extension: resolve the destination through the SOCKS proxy
+         * instead of connecting to it.
          * @see <a href="https://github.com/torproject/torspec/blob/main/socks-extensions.txt">Tor SOCKS extensions</a>
          * @since 0.9.57
          */
         public static final int TOR_RESOLVE = 0xf0;
 
-        /** @since 0.9.57 */
+        /**
+         * Tor extension: reverse-resolve an address to a hostname. This
+         * server rejects the command.
+         *
+         * @since 0.9.57
+         */
         public static final int TOR_RESOLVE_PTR = 0xf1;
 
-        /** @since 0.9.57 */
+        /**
+         * Tor extension: open a connection to a directory authority. This
+         * server rejects the command.
+         *
+         * @since 0.9.57
+         */
         public static final int TOR_CONNECT_DIR = 0xf2;
     }
 
@@ -102,53 +127,57 @@ public class SOCKS5Constants {
      */
     public static class Reply {
         /**
-         * SUCCEEDED.
+         * Names the constant list itself; it holds no per-instance state.
+         */
+        public Reply() {}
+        /**
+         * The request succeeded.
          */
         public static final int SUCCEEDED = 0x00;
         /**
-         * GENERAL_SOCKS_SERVER_FAILURE.
+         * A failure not covered by one of the more specific codes.
          */
         public static final int GENERAL_SOCKS_SERVER_FAILURE = 0x01;
         /**
-         * CONNECTION_NOT_ALLOWED_BY_RULESET.
+         * A policy rejected the connection.
          */
         public static final int CONNECTION_NOT_ALLOWED_BY_RULESET = 0x02;
         /**
-         * NETWORK_UNREACHABLE.
+         * The network could not be reached.
          */
         public static final int NETWORK_UNREACHABLE = 0x03;
         /**
-         * HOST_UNREACHABLE.
+         * The host could not be reached.
          */
         public static final int HOST_UNREACHABLE = 0x04;
         /**
-         * CONNECTION_REFUSED.
+         * The host refused the connection.
          */
         public static final int CONNECTION_REFUSED = 0x05;
         /**
-         * TTL_EXPIRED.
+         * The relayed connection expired before it could be established.
          */
         public static final int TTL_EXPIRED = 0x06;
         /**
-         * COMMAND_NOT_SUPPORTED.
+         * The requested command is not supported by this server.
          */
         public static final int COMMAND_NOT_SUPPORTED = 0x07;
         /**
-         * ADDRESS_TYPE_NOT_SUPPORTED.
+         * The requested address type is not supported by this server.
          */
         public static final int ADDRESS_TYPE_NOT_SUPPORTED = 0x08;
     }
 
     /**
-     * AUTH_VERSION.
+     * Version byte of the username/password subnegotiation, as defined in RFC 1929.
      */
     public static final int AUTH_VERSION = 1;
     /**
-     * AUTH_SUCCESS.
+     * The username and password were accepted.
      */
     public static final int AUTH_SUCCESS = 0;
     /**
-     * AUTH_FAILURE.
+     * The username or password was rejected.
      */
     public static final int AUTH_FAILURE = 1;
 }

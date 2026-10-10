@@ -49,6 +49,11 @@ public class VMCommSystem extends CommSystemFacade {
      * Mapping from Hash to VMCommSystem for all routers hooked together
      */
     private static Map<Hash, VMCommSystem> _commSystemFacades = Collections.synchronizedMap(new HashMap<>(16));
+    /**
+     * Create a comm system.
+     *
+     * @param context the router context
+     */
     public VMCommSystem(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(VMCommSystem.class);
@@ -69,7 +74,10 @@ public class VMCommSystem extends CommSystemFacade {
     public X25519KeyFactory getXDHFactory() { return _xdhThread; }
     /** Return the count of active peers */
     public int countActivePeers() { return Math.max(_commSystemFacades.size() - 1, 0); }
-    /** Return the count of active send peers */
+    /**
+     * Return the count of active send peers
+     * @return the number of peers in the map other than this router
+     */
     public int countActiveSendPeers()  { return Math.max(_commSystemFacades.size() - 1, 0); }
     /** Return whether established */
     public boolean isEstablished(Hash peer) { return _commSystemFacades.containsKey(peer); }
@@ -158,6 +166,8 @@ public class VMCommSystem extends CommSystemFacade {
      * We send messages between comms as bytes so that we strip any router-local
      * info.  For example, a router tags the # attempts to send through a
      * leaseSet, what type of tunnel a tunnelId is bound to, etc.
+     * @param message the serialized I2NP message bytes to hand to the receive job
+     * @param fromPeer the hash of the peer the bytes came from, used for profile accounting
      */
     public void receive(byte[] message, Hash fromPeer) {
         _context.jobQueue().addJob(new ReceiveJob(fromPeer, message, _context));

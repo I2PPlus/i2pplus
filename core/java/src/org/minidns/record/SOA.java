@@ -62,7 +62,11 @@ public class SOA extends Data {
     public final long /* unsigned int */ minimum;
 
     /**
-     * parse.
+     * Parse an SOA record payload from a DNS message.
+     * @param dis the stream positioned at the start of the SOA record payload
+     * @param data the raw DNS message data, needed to resolve compressed names
+     * @return the parsed SOA record
+     * @throws IOException on parse error
      */
     public static SOA parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName mname = DnsName.parse(dis, data);
@@ -76,14 +80,28 @@ public class SOA extends Data {
     }
 
     /**
-     * SOA.
+     * Create an SOA record from names in presentation form.
+     * @param mname the primary nameserver for the zone, in presentation form
+     * @param rname the mailbox of the zone administrator, in presentation form
+     * @param serial the unsigned 32 bit version number of the zone copy
+     * @param refresh seconds to wait before the zone should be refreshed
+     * @param retry seconds to wait before a failed refresh is retried
+     * @param expire seconds after which the zone is no longer authoritative
+     * @param minimum the unsigned 32 bit minimum TTL exported with any RR from the zone
      */
     public SOA(String mname, String rname, long serial, int refresh, int retry, int expire, long minimum) {
         this(DnsName.from(mname), DnsName.from(rname), serial, refresh, retry, expire, minimum);
     }
 
     /**
-     * SOA.
+     * Create an SOA record from already parsed names.
+     * @param mname the primary nameserver for the zone
+     * @param rname the mailbox of the zone administrator
+     * @param serial the unsigned 32 bit version number of the zone copy
+     * @param refresh seconds to wait before the zone should be refreshed
+     * @param retry seconds to wait before a failed refresh is retried
+     * @param expire seconds after which the zone is no longer authoritative
+     * @param minimum the unsigned 32 bit minimum TTL exported with any RR from the zone
      */
     public SOA(DnsName mname, DnsName rname, long serial, int refresh, int retry, int expire, long minimum) {
         this.mname = mname;
@@ -96,7 +114,7 @@ public class SOA extends Data {
     }
 
     /**
-     * getType.
+     * Return the record type of this payload.
      */
     @Override
     public TYPE getType() {
@@ -104,7 +122,7 @@ public class SOA extends Data {
     }
 
     /**
-     * serialize.
+     * Write the seven authority fields to a DNS output stream.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -118,7 +136,7 @@ public class SOA extends Data {
     }
 
     /**
-     * toString.
+     * Return the zone's authority data in presentation format.
      */
     @Override
     public String toString() {

@@ -35,6 +35,7 @@ public class TransportBid {
     public int getLatencyMs() {return _latencyMs;}
     /**
      * The latency bid value in milliseconds.
+     * @param milliseconds the delivery cost this transport is bidding, in milliseconds; lower is better, and negative means no bid was made
      */
     public void setLatencyMs(int milliseconds) {_latencyMs = milliseconds;}
 
@@ -45,6 +46,7 @@ public class TransportBid {
     public Transport getTransport() {return _transport;}
     /**
      * The transport that offered this bid.
+     * @param transport the transport making the bid, recorded so the cost can be attributed when the message is assigned
      */
     public void setTransport(Transport transport) {_transport = transport;}
 }

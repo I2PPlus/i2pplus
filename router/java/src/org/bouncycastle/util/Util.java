@@ -10,7 +10,17 @@ import net.i2p.data.DataHelper;
 public class Util
 {
     /**
+     * Every helper below is static, so an instance carries nothing.
+     */
+    public Util()
+    {
+    }
+
+    /**
      * clone.
+     *
+     * @param a the array to copy
+     * @return an independent copy of the array
      */
     public static byte[] clone(byte[] a)
     {
@@ -19,6 +29,9 @@ public class Util
 
     /**
      * concatenate.
+     *
+     * @param arrays the arrays to join, in order
+     * @return a new array holding every input array back to back
      */
     public static byte[] concatenate(byte[][] arrays)
     {
@@ -42,6 +55,10 @@ public class Util
 
     /**
      * concatenate.
+     *
+     * @param a the array placed first
+     * @param b the array placed second
+     * @return a new array holding a followed by b
      */
     public static byte[] concatenate(byte[] a, byte[] b)
     {
@@ -52,6 +69,10 @@ public class Util
 
     /**
      * append.
+     *
+     * @param a the array to extend
+     * @param b the byte to place in the new last position
+     * @return a new array holding a followed by b
      */
     public static byte[] append(byte[] a, byte b)
     {
@@ -62,6 +83,10 @@ public class Util
 
     /**
      * constantTimeAreEqual.
+     *
+     * @param a the first array to compare
+     * @param b the second array to compare
+     * @return true if the two arrays hold the same bytes in the same order; arrays of different lengths are never equal
      */
     public static boolean constantTimeAreEqual(byte[] a, byte[] b)
     {

@@ -50,6 +50,8 @@ public class NotifyRequest extends SOAPRequest {
 
     /**
      * NotifyRequest.
+     *
+     * @param httpReq the received NOTIFY request supplying the headers to parse
      */
     public NotifyRequest(HTTPRequest httpReq) {
         set(httpReq);
@@ -61,6 +63,8 @@ public class NotifyRequest extends SOAPRequest {
 
     /**
      * setNT.
+     *
+     * @param value the event notification type to send, normally {@link NT#EVENT}
      */
     public void setNT(String value) {
         setHeader(HTTP.NT, value);
@@ -72,6 +76,9 @@ public class NotifyRequest extends SOAPRequest {
 
     /**
      * setNTS.
+     *
+     * @param value the notification sub-type to send, {@link NTS#PROPCHANGE} for a
+              property change and {@link NTS#ALIVE} or {@link NTS#BYEBYE} for an advertisement
      */
     public void setNTS(String value) {
         setHeader(HTTP.NTS, value);
@@ -83,6 +90,9 @@ public class NotifyRequest extends SOAPRequest {
 
     /**
      * setSID.
+     *
+     * @param id the subscription identifier to send, wrapped in the
+              {@code uuid:} prefix the SID header requires
      */
     public void setSID(String id) {
         setHeader(HTTP.SID, Subscription.toSIDHeaderString(id));
@@ -90,6 +100,9 @@ public class NotifyRequest extends SOAPRequest {
 
     /**
      * getSID.
+     *
+     * @return the bare subscription identifier with the {@code uuid:} prefix
+     *              stripped, or "" when the request carries no SID header
      */
     public String getSID() {
         return Subscription.getSID(getHeaderValue(HTTP.SID));
@@ -101,6 +114,9 @@ public class NotifyRequest extends SOAPRequest {
 
     /**
      * setSEQ.
+     *
+     * @param value the event sequence number to send, which wraps
+              at 32 bits as the GENA specification requires
      */
     public void setSEQ(long value) {
         setHeader(HTTP.SEQ, Long.toString(value));
@@ -108,6 +124,9 @@ public class NotifyRequest extends SOAPRequest {
 
     /**
      * getSEQ.
+     *
+     * @return the event sequence number from the header, or 0 when absent or
+     *              not parseable as a decimal integer
      */
     public long getSEQ() {
         return getLongHeaderValue(HTTP.SEQ);
@@ -119,6 +138,13 @@ public class NotifyRequest extends SOAPRequest {
 
     /**
      * setRequest.
+     *
+     * @param sub the subscriber to notify, supplying the delivery URL,
+              host, port, path, subscription identifier and event counter
+     * @param varName the name of the state variable that changed
+     * @param value the new value of that state variable
+     * @return true once the NOTIFY method, URI, headers and property set
+     *              body have been filled in
      */
     public boolean setRequest(Subscriber sub, String varName, String value) {
         String callback = sub.getDeliveryURL();
@@ -185,6 +211,9 @@ public class NotifyRequest extends SOAPRequest {
     // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/08/03)
     /**
      * getPropertyList.
+     *
+     * @return the changed variables carried in the body, or an empty list when
+     *              the request has no envelope or no properties to report
      */
     public PropertyList getPropertyList() {
         PropertyList properties = new PropertyList();

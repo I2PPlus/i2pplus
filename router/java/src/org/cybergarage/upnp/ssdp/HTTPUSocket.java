@@ -45,7 +45,9 @@ public class HTTPUSocket {
     // private MulticastSocket ssdpUniSock = null;
 
     /**
-     * getDatagramSocket.
+     * Open a datagram socket on an ephemeral port, for SSDP unicast traffic.
+     *
+     * @return the socket SSDP datagrams are sent and received on, null if none is open
      */
     public DatagramSocket getDatagramSocket() {
         return ssdpUniSock;
@@ -56,28 +58,33 @@ public class HTTPUSocket {
     ////////////////////////////////////////////////
 
     /**
-     * HTTPUSocket.
+     * Open a socket bound to any free local port.
      */
     public HTTPUSocket() {
         open();
     }
 
     /**
-     * HTTPUSocket.
+     * Open a socket bound to a given local address and port.
+     *
+     * @param bindAddr the local address to bind the socket to, resolved by name
+     * @param bindPort the local UDP port to bind, 0 for any free port
      */
     public HTTPUSocket(String bindAddr, int bindPort) {
         open(bindAddr, bindPort);
     }
 
     /**
-     * HTTPUSocket.
+     * Open a socket bound to a given local port on any address.
+     *
+     * @param bindPort the local UDP port to bind, 0 for any free port
      */
     public HTTPUSocket(int bindPort) {
         open(bindPort);
     }
 
     /**
-     * finalize.
+     * Close the socket when the object is garbage collected.
      */
     protected void finalize() {
         close();
@@ -90,14 +97,18 @@ public class HTTPUSocket {
     private String localAddr = "";
 
     /**
-     * setLocalAddress.
+     * Override the address this socket reports as its own.
+     *
+     * @param addr the address to report for this socket instead of the one it bound to
      */
     public void setLocalAddress(String addr) {
         localAddr = addr;
     }
 
     /**
-     * @return {@link DatagramSocket} open for receieving packets
+     * Return the underlying datagram socket, for callers that need it directly.
+     *
+     * @return the open {@link DatagramSocket}, or null if the socket is closed
      * @since 1.8
      */
     public DatagramSocket getUDPSocket() {
@@ -105,7 +116,9 @@ public class HTTPUSocket {
     }
 
     /**
-     * getLocalAddress.
+     * Return the local address this socket reports.
+     *
+     * @return the address set by setLocalAddress(), else the bound address, or "" if closed
      */
     public String getLocalAddress() {
         if (0 < localAddr.length()) return localAddr;
@@ -119,7 +132,9 @@ public class HTTPUSocket {
     ////////////////////////////////////////////////
 
     /**
-     * open.
+     * Open a datagram socket on an ephemeral port, replacing any open socket.
+     *
+     * @return true if the socket was created, false if the bind failed
      */
     public boolean open() {
         close();
@@ -135,7 +150,11 @@ public class HTTPUSocket {
     }
 
     /**
-     * open.
+     * Open a datagram socket bound to a local address and port.
+     *
+     * @param bindAddr the local address to bind the socket to, resolved by name
+     * @param bindPort the local UDP port to bind, 0 for any free port
+     * @return true if the socket bound to the address and port, false if either failed
      */
     public boolean open(String bindAddr, int bindPort) {
         close();
@@ -171,7 +190,10 @@ public class HTTPUSocket {
     }
 
     /**
-     * open.
+     * Open a datagram socket bound to a local port with address reuse allowed.
+     *
+     * @param bindPort the local UDP port to bind, 0 for any free port
+     * @return true if the socket bound with address reuse, false if the bind failed
      */
     public boolean open(int bindPort) {
         close();
@@ -194,7 +216,9 @@ public class HTTPUSocket {
     ////////////////////////////////////////////////
 
     /**
-     * close.
+     * Close the socket and clear the reference to it.
+     *
+     * @return true if the socket is now closed, false if closing it failed
      */
     public boolean close() {
         if (ssdpUniSock == null) return true;
@@ -215,7 +239,12 @@ public class HTTPUSocket {
     ////////////////////////////////////////////////
 
     /**
-     * post.
+     * Send one SSDP message as a UDP datagram.
+     *
+     * @param addr the address to send to, resolved by name
+     * @param port the UDP port to send to
+     * @param msg the SSDP message to send, encoded as UTF-8
+     * @return true if the datagram was sent, false if the send failed
      */
     public boolean post(String addr, int port, String msg) {
         try {
@@ -242,7 +271,9 @@ public class HTTPUSocket {
     ////////////////////////////////////////////////
 
     /**
-     * receive.
+     * Block until one datagram arrives, then wrap it as an SSDP packet.
+     *
+     * @return the packet that arrived, or null if the receive failed
      */
     public SSDPPacket receive() {
         byte[] ssdvRecvBuf = new byte[SSDP.RECV_MESSAGE_BUFSIZE];
@@ -297,7 +328,11 @@ public class HTTPUSocket {
     	 }
     */
 
-    /** I2P */
+    /**
+     * Return the local address this socket reports.
+     *
+     * @return the address set by setLocalAddress(), which is empty when unset
+     */
     @Override
     public String toString() {
         return localAddr;

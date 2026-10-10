@@ -31,6 +31,12 @@ import net.i2p.data.DataHelper;
  */
 public class RandomArt {
 
+    /**
+     * The field geometry, the glyph strings and the render() entry points are all
+     * static, so an instance carries no state of its own.
+     */
+    public RandomArt() {}
+
     /*
      * Field sizes for the random art.  Have to be odd, so the starting point
      * can be in the exact middle of the picture, and FLDBASE should be >=8 .
@@ -69,10 +75,15 @@ public class RandomArt {
     private static final char U_BOX_BR = '\u0020';
 
     /**
+     * Render a digest as the dr randomness "random art" block.
+     *
      * @param dgst_raw the data to be visualized, recommend 64 bytes or less
      * @param key_type output in the first line, recommend 6 chars or less
      * @param key_size output in the first line
      * @param prefix if non-null, prepend to every line
+     * @param unicode true to draw with Unicode box characters, not ASCII ones
+     * @param html true to emit coloured div/pre HTML with a span per cell
+     * @return the rendered random art, HTML when html is true, else plain text
      */
     public static String gnutls_key_fingerprint_randomart(final byte[] dgst_raw,
                     final String key_type,
@@ -215,7 +226,9 @@ public class RandomArt {
         }
 
         /**
-         * main.
+         * Print a sample random art rendering, as an HTML page.
+         *
+         * @param args ignored; the sample digest is fixed in the body
          */
         public static void main(String[] args) {
             try {

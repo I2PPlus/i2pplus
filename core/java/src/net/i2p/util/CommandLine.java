@@ -53,6 +53,7 @@ public class CommandLine {
         "net.i2p.util.ZipFileComment"
     }));
 
+    /** Not instantiable; this class only serves the static main() entry point. */
     protected CommandLine() {}
 
     /**

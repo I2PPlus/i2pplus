@@ -28,6 +28,13 @@ package org.cybergarage.upnp.device;
  * @since 1.0
  */
 public class MAN {
+
+    /**
+     * Constructs an instance; the class is a constant holder, so an instance
+     * carries no state beyond what the static DISCOVER token already holds.
+     */
+    public MAN() {}
+
     /**
      * DISCOVER.
      */
@@ -35,6 +42,8 @@ public class MAN {
 
     /**
      * isDiscover.
+     * @param value MAN header value, compared bare or wrapped in double quotes
+     * @return true if the value carries the SSDP discover token
      */
     public static final boolean isDiscover(String value) {
         if (value == null) return false;

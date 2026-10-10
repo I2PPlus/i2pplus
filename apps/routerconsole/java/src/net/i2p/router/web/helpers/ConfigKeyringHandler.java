@@ -18,6 +18,12 @@ import net.i2p.util.ConvertToHash;
  * Accepts destinations in base64, base32 .b32.i2p, or .i2p hostname form.
  */
 public class ConfigKeyringHandler extends FormHandler {
+    /**
+     * Constructor. The console builds this bean reflectively and fills it through
+     * the property setters, so every field starts null or zero.
+     */
+    public ConfigKeyringHandler() {}
+
     private String _peer;
     private String _key;
     private String _secret;

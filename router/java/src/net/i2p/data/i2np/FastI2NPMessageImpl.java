@@ -39,6 +39,12 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
     /** Whether the message includes a checksum. */
     protected boolean _hasChecksum;
 
+    /**
+     * Create a message that will carry the one-byte checksum of the fast
+     * (5 byte header) format.
+     *
+     * @param context the app context the parent uses for its RNG and properties
+     */
     public FastI2NPMessageImpl(I2PAppContext context) {
         super(context);
     }
@@ -100,6 +106,9 @@ public abstract class FastI2NPMessageImpl extends I2NPMessageImpl {
 
     /**
      * Use a previously-computed checksum for speed
+     *
+     * @param buffer the destination array, must be at least {@link #HEADER_LENGTH} bytes long
+     * @return the number of bytes written into buffer
      */
     protected int toByteArrayWithSavedChecksum(byte[] buffer) {
         try {

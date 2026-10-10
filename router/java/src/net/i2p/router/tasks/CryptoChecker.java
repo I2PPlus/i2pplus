@@ -38,6 +38,12 @@ import net.i2p.util.SystemVersion;
  */
 public class CryptoChecker {
 
+    /**
+     * Constructor. The scan reads the JVM's registered algorithms and writes
+     * straight to the logs, so an instance carries no state.
+     */
+    public CryptoChecker() {}
+
     private static String JRE6 = "http://www.oracle.com/technetwork/java/javase/downloads/index.html";
 
     /**

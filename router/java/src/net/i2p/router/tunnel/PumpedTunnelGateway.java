@@ -89,11 +89,18 @@ class PumpedTunnelGateway extends TunnelGateway {
         }
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * The cap the pump applies to outbound messages, read once per pump pass so a
+     * single busy iteration cannot monopolise the thread.
+     *
+     * @return the cap on outbound messages handled in one pump iteration, 8 to 1024
+     * @since 0.9.70+
+     */
     public static int getMaxObMsgsPerPump() { return _maxObMsgsPerPump; }
 
     /**
      * The maximum outbound messages per pump.
+     * @param val the requested cap, clamped into the range 8 to 1024
      * @since 0.9.70+
      */
     public static void setMaxObMsgsPerPump(int val) { _maxObMsgsPerPump = Math.max(8, Math.min(1024, val)); }
@@ -107,6 +114,7 @@ class PumpedTunnelGateway extends TunnelGateway {
 
     /**
      * The maximum inbound messages per pump.
+     * @param val the requested cap, clamped into the range 8 to 1024
      * @since 0.9.70+
      */
     public static void setMaxIbMsgsPerPump(int val) { _maxIbMsgsPerPump = Math.max(8, Math.min(1024, val)); }

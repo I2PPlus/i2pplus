@@ -29,6 +29,12 @@ public class LocaleWebAppHandler extends HandlerWrapper
 
     /**
      *  Create handler for localized JSP resolution and Jetty integration.
+     *
+     *  @param ctx app context supplying the routerconsole.lang property
+     *  @param path context path the console is served under
+     *  @param warPath filesystem location of the console WAR
+     *  @param tmpdir directory Jetty unpacks the WAR into
+     *  @param servletHandler handler holding the console servlets
      */
     public LocaleWebAppHandler(I2PAppContext ctx, String path, String warPath,
                                 File tmpdir, ServletHandler servletHandler) {
@@ -124,6 +130,9 @@ public class LocaleWebAppHandler extends HandlerWrapper
 
     /**
      *  Copy init params from map to WebAppContext.
+     *
+     *  @param context the web app context the parameters are copied into
+     *  @param params the init parameter map to copy from
      *  @since Jetty 7
      */
     public static void setInitParams(WebAppContext context, Map<?,?> params) {

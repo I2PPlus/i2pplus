@@ -61,6 +61,12 @@ public class EepPost extends EepGet {
      * For large String content, consider the post(File) method.
      *
      * Note: param field values must be String or File.
+     *
+     * @param fields the field names and values to submit, each value a String or a File
+     * @param headerTimeout milliseconds to wait for the response headers of each attempt, &lt;= 0 for none
+     * @param totalTimeout milliseconds for the whole post including retries, &lt;= 0 for none
+     * @param inactivityTimeout milliseconds to wait between body bytes, &lt;= 0 for the default
+     * @return true if the post succeeded
      */
     public boolean post(Map<String, Object> fields, long headerTimeout, long totalTimeout, long inactivityTimeout) {
         if (fields.isEmpty()) throw new IllegalArgumentException();
@@ -126,6 +132,13 @@ public class EepPost extends EepGet {
 
     /**
      * In-memory, not for large POSTs
+     *
+     * @param contentType the value for the Content-Type header
+     * @param data the post body, must not be empty
+     * @param headerTimeout milliseconds to wait for the response headers of each attempt, &lt;= 0 for none
+     * @param totalTimeout milliseconds for the whole post including retries, &lt;= 0 for none
+     * @param inactivityTimeout milliseconds to wait between body bytes, &lt;= 0 for the default
+     * @return true if the post succeeded
      */
     public boolean post(
             String contentType, String data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
@@ -136,6 +149,13 @@ public class EepPost extends EepGet {
 
     /**
      * In-memory, not for large POSTs
+     *
+     * @param contentType the value for the Content-Type header
+     * @param data the post body, must not be empty
+     * @param headerTimeout milliseconds to wait for the response headers of each attempt, &lt;= 0 for none
+     * @param totalTimeout milliseconds for the whole post including retries, &lt;= 0 for none
+     * @param inactivityTimeout milliseconds to wait between body bytes, &lt;= 0 for the default
+     * @return true if the post succeeded
      */
     public boolean post(
             String contentType, byte[] data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
@@ -146,6 +166,13 @@ public class EepPost extends EepGet {
 
     /**
      * For large POSTs
+     *
+     * @param contentType the value for the Content-Type header
+     * @param data the post body, must be a regular file and not empty
+     * @param headerTimeout milliseconds to wait for the response headers of each attempt, &lt;= 0 for none
+     * @param totalTimeout milliseconds for the whole post including retries, &lt;= 0 for none
+     * @param inactivityTimeout milliseconds to wait between body bytes, &lt;= 0 for the default
+     * @return true if the post succeeded
      */
     public boolean post(String contentType, File data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
         if (!data.isFile() || data.length() == 0) throw new IllegalArgumentException();
@@ -259,7 +286,7 @@ public class EepPost extends EepGet {
 
     /**
      * Adapted from old jrandom EepPost
-     * @return the separator
+     * @return a fresh random multipart boundary, base32 encoded
      */
     private String getSeparator() {
         byte[] separator = new byte[32];
@@ -277,7 +304,7 @@ public class EepPost extends EepGet {
      * are in seconds: -t is the inactivity timeout, -v the header timeout, and
      * -w the total timeout, which is unlimited by default.
      *
-     * @param args command-line arguments
+     * @param args the options and URL as described by {@link #usage()}
      */
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";

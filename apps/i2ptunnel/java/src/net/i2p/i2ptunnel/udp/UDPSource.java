@@ -11,9 +11,13 @@ import net.i2p.util.Log;
  * UDP source implementation for streaming data.
  */
 public class UDPSource implements Source, Runnable {
+    /** The socket datagrams are read from. */
     protected final DatagramSocket sock;
+    /** The consumer each received datagram is passed to. */
     protected Sink sink;
+    /** The thread that reads from the socket and forwards to the sink. */
     protected final Thread thread;
+    /** The local port this source is bound to. */
     private final int port;
     /** Maximum UDP packet size. */
     public static final int MAX_SIZE = 15360;

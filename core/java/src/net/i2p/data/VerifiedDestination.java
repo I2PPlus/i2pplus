@@ -29,6 +29,7 @@ public class VerifiedDestination extends Destination {
      * Alternative constructor which takes a base64 string representation
      *
      * @param s a Base64 representation of the destination, as (eg) is used in hosts.txt
+     * @throws DataFormatException if the string does not decode to a full-length destination
      */
     public VerifiedDestination(String s) throws DataFormatException {
         this();
@@ -39,6 +40,7 @@ public class VerifiedDestination extends Destination {
      * Create from an existing Dest
      *
      * @param d must be non-null
+     * @throws DataFormatException if the source destination's base64 form cannot be parsed
      */
     public VerifiedDestination(Destination d) throws DataFormatException {
         this(d.toBase64());

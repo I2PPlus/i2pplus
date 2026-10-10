@@ -32,7 +32,7 @@ import net.i2p.util.SystemVersion;
 /**
 * Data structure representing a single email message for folder display and sorting.
 *
- */
+*/
 class Mail {
 
     /** Default unknown date string */
@@ -105,8 +105,10 @@ class Mail {
     private final Log _log;
 
     /**
-     *  @param uidl unique ID for this mail
-     */
+     * Create an empty message placeholder for one UIDL.
+     *
+     * @param uidl unique ID for this mail
+    */
     public Mail(String uidl) {
         this.uidl = uidl;
         subject = "";
@@ -127,8 +129,10 @@ class Mail {
     public synchronized Buffer getHeader() {return header;}
 
     /**
+     * Record the header bytes fetched from the server.
+     *
      * @param rb buffer containing header data
-     */
+    */
     public synchronized void setHeader(Buffer rb) {
         try {setHeader(rb, rb.getInputStream(), true);}
         catch (IOException ioe) { // TODO...
@@ -153,8 +157,10 @@ class Mail {
     }
 
     /**
-      *  @return if false, nothing has been loaded yet for this UIDL
-      */
+     * Whether the header has been fetched for this UIDL.
+     *
+     * @return if false, nothing has been loaded yet for this UIDL
+    */
     public synchronized boolean hasHeader() {return header != null;}
 
     /**
@@ -166,6 +172,7 @@ class Mail {
     /**
      * Delete the backing file of a body buffer if it is a susimail-new-* temp file.
      * The disk cache files (GzipFileBuffer) are never deleted here.
+     * @param rb the buffer whose backing file should be removed when it is a susimail-new-* temp file; any other buffer, and every disk cache file, is left alone
      * @since 0.9.71+
      */
     static void deleteTempBodyFile(Buffer rb) {
@@ -176,8 +183,10 @@ class Mail {
     }
 
     /**
+     * Record the body bytes fetched from the server.
+     *
      * @param rb buffer containing body data
-     */
+    */
     public synchronized void setBody(Buffer rb) {
         if (rb == null) {return;}
         if (body != rb) {deleteTempBodyFile(body);}
@@ -230,13 +239,17 @@ class Mail {
     public synchronized boolean hasPart() {return part != null;}
 
     /**
-    *  @return 0 if unknown
+     * The size the server reported for this message.
+     *
+     * @return 0 if unknown
     */
     public synchronized long getSize() {return size;}
 
     /**
+     * Record the size the server reported.
+     *
      * @param size the message size
-     */
+    */
     public synchronized void setSize(long size) {
         if (body != null) {return;}
         this.size = size;
@@ -257,8 +270,10 @@ class Mail {
     public synchronized boolean isNew() {return isNew;}
 
     /**
+     * Mark this message read or unread.
+     *
      * @param isNew the new/unread flag
-     */
+    */
     public synchronized void setNew(boolean isNew) {this.isNew = isNew;}
 
     /**
@@ -289,9 +304,11 @@ class Mail {
     }
 
     /**
-    *
-    * @param address E-mail address to be validated
-    * @return Is the e-mail address valid?
+     * Check an address for the shape a mail server will accept.
+     *
+     *
+     * @param address E-mail address to be validated
+     * @return Is the e-mail address valid?
     */
     public static boolean validateAddress(String address) {
         if (address == null || address.isEmpty()) {return false;}
@@ -307,10 +324,11 @@ class Mail {
     }
 
     /**
-    * Returns the first email address portion, enclosed by &lt;&gt;
-    * @param address the address
-    * @return the address enclosed in angle brackets, or null
-    */
+     * Pull the first e-mail address out of a header line.
+     *
+     * @param address the header text to scan
+     * @return the address enclosed in angle brackets, or null
+     */
     public static String getAddress(String address) {
         String[] tokens = DataHelper.split(address, "[ \t]+");
 
@@ -326,7 +344,7 @@ class Mail {
     * line in text to the recipients list.
     *
     * @param text comma-separated
-    * @param recipients out param
+    * @param recipients collects the addresses parsed from text
     * @param ok will be returned
     * @return true if ALL e-mail addresses are valid AND the in parameter was true
     */
@@ -342,7 +360,7 @@ class Mail {
     * A little misnamed. Adds all addresses from the elements
     * in text to the recipients list.
     *
-    * @param recipients out param
+    * @param recipients collects the addresses parsed from text
     * @param ccs the Cc addresses
     * @param ok will be returned
     * @return true if ALL e-mail addresses are valid AND the in parameter was true
@@ -364,13 +382,14 @@ class Mail {
     }
 
     /**
-    * Adds all items from the list
-    * to the builder, separated by tabs.
-    * This is for SMTP/POP.
-    *
-    * @param buf out param
-    * @param prefix prepended to the addresses
-    */
+     * Adds all items from the list
+     * to the builder, separated by tabs.
+     * This is for SMTP/POP.
+     *
+     * @param buf receives the formatted addresses
+     * @param prefix prepended to the addresses
+     * @param recipients the addresses to write out, each followed by a comma except the last
+     */
     public static void appendRecipients(StringBuilder buf, ArrayList<String> recipients, String prefix) {
         for (int i = 0; i < recipients.size(); i++) {
             buf.append(prefix);
@@ -382,13 +401,15 @@ class Mail {
     }
 
     /**
-    * Adds all items from the array
-    * to the builder, separated by commas
-    * This is for display of a forwarded email.
-    *
-    * @param prefix prepended to the addresses, includes trailing ": "
-    * @since 0.9.35
-    */
+     * Adds all items from the array
+     * to the builder, separated by commas
+     * This is for display of a forwarded email.
+     *
+     * @param prefix prepended to the addresses, includes trailing ": "
+     * @param out the writer the folded recipient lines are printed to, one println() per 75-character line
+     * @param recipients the addresses to write out, separated by commas and folded at 75 characters
+     * @since 0.9.35
+     */
     public static void appendRecipients(PrintWriter out, String[] recipients, String prefix) {
         StringBuilder buf = new StringBuilder(120);
         buf.append(prefix);
@@ -425,7 +446,7 @@ class Mail {
     /**
      * Sets the date from a long value.
      *
-     * @param dateLong non-negative
+     * @param dateLong milliseconds since the epoch, never negative
      * @since 0.9.34 pulled from parseHeaders()
      */
     private synchronized void setDate(long dateLong) {

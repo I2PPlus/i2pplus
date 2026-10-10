@@ -334,6 +334,9 @@ public class TunnelPool {
     }
 
     /**
+     * This pool's rolling average of completed test durations, used to adapt the
+     * test timeout multiplier.
+     *
      * @return this pool's rolling average test duration, 0 if none recorded
      * @since 0.9.71+
      */
@@ -567,7 +570,8 @@ public class TunnelPool {
     /**
      * Lease end is set this long before the tunnel expires, so peers re-fetch
      * the new LeaseSet while the gateway still routes instead of racing
-     * tunnel death. */
+     * tunnel death.
+     */
     private static final long LEASE_SAFETY_MARGIN = 60L * 1000;
     /**
      * Hard ceiling on {@link #getTunnelLifetime}: the standard 10m lifetime plus
@@ -769,7 +773,14 @@ public class TunnelPool {
         return ctx.getProperty("i2p.tunnel.leaseMaxDuration", 10L * 60 * 1000);
     }
 
-            /** Tunnel pool */
+    /**
+     * Tunnel pool.
+     *
+     * @param ctx the router context
+     * @param mgr the pool manager owning this pool
+     * @param settings the pool's tunnel quantity, direction and exploratory flags
+     * @param sel the peer selector used to choose tunnel build participants
+     */
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
         _context = ctx;
         _log = ctx.logManager().getLog(TunnelPool.class);
@@ -1257,7 +1268,20 @@ public class TunnelPool {
     static final class PoolState {
                         /** All counts zero -- the pool really was empty. */
         static final PoolState EMPTY = new PoolState(0, 0, 0, 0);
+        /**
+         * Tunnels counted in the pool, those passing the selection gates, those held
+         * back for last-resort use, and those whose next peer is backlogged. All
+         * four are counts, not flags: a bucket is zero or more.
+         */
         final int pooled, usable, lastResort, backlogged;
+        /**
+         * Records the four counts verbatim; the caller decides what each means.
+         *
+         * @param pooled tunnels in the pool at classification time
+         * @param usable of those, the ones clearing the scan gates and not set aside
+         * @param lastResort of those, the ones held back for last-resort use only
+         * @param backlogged of those, the ones whose next peer is backlogged
+         */
         PoolState(int pooled, int usable, int lastResort, int backlogged) {
             this.pooled = pooled;
             this.usable = usable;
@@ -1707,8 +1731,8 @@ public class TunnelPool {
     }
 
 /**
-      * Whether this tunnel's local path is unusable because we hold no transport
-      * session to the peer we actually send through.
+     * Whether this tunnel's local path is unusable because we hold no transport
+     * session to the peer we actually send through.
      *
      * <p>A tunnel is a crypto path above the transport, and it resolves its hop
      * per message. So when a transport session dies the {@code TunnelInfo} and its
@@ -1842,7 +1866,10 @@ public class TunnelPool {
         }
     }
 
-            /** The advertiseable count an in-force surge needs, or 0 when none is. */
+    /**
+     * The advertiseable count an in-force surge needs, or 0 when none is.
+     * @return the number of additional tunnels the surge should build
+     */
     int getLeaseSurgeNeed() {return _leaseSurgeNeed;}
 
     /**
@@ -1921,7 +1948,12 @@ public class TunnelPool {
         return _alive && (_settings.isExploratory() || _context.clientManager().isLocal(_settings.getDestination()));
     }
 
-            /** @return the number of tunnels in the pool */
+    /**
+     * Count every tunnel in the pool, including failed and expired ones awaiting
+     * cleanup.
+     *
+     * @return the number of tunnels in the pool
+     */
     public int size() {
         _tunnelsLock.lock();
         try {return _tunnels.size();} finally {_tunnelsLock.unlock();}
@@ -3259,21 +3291,6 @@ public class TunnelPool {
     }
 
     /**
-     * Assemble the Lease objects for the selected tunnels: the single
-     *  zero-hop lease (if any), then the quality-sorted GOOD tunnels.
-     */
-    /**
-     * Assemble the LeaseSet from the tunnels that qualify for it.
-     *
-     * <p>Package-visible so the assembly can be exercised directly: the guarantee that matters
-     *  here is that every tunnel offered yields a lease, and that is a property of this method
-     *  rather than of the tunnels the router happened to build when the test ran.
-     *
-     * @param goodTunnels the tunnels to advertise, best first
-     * @param zeroHopTunnel the zero-hop tunnel if one is in use, else null
-     * @return the leases, ordered by the pool's lease comparator
-     */
-    /**
      * The identity a lease for this tunnel is keyed on: its receive tunnel id.
      *
      * <p>Two tunnels sharing a receive tunnel id are the same lease, so this is what decides
@@ -3287,6 +3304,18 @@ public class TunnelPool {
         return inId == null ? -1L : inId.getTunnelId();
     }
 
+    /**
+     * Assemble the Lease objects for the selected tunnels: the single zero-hop
+     * lease (if any), then the quality-sorted GOOD tunnels.
+     *
+     * <p>Package-visible so the assembly can be exercised directly: the guarantee that matters
+     *  here is that every tunnel offered yields a lease, and that is a property of this method
+     *  rather than of the tunnels the router happened to build when the test ran.
+     *
+     * @param goodTunnels the tunnels to advertise, best first
+     * @param zeroHopTunnel the zero-hop tunnel if one is in use, else null
+     * @return the leases, ordered by the pool's lease comparator
+     */
     TreeSet<Lease> buildLeases(List<TunnelInfo> goodTunnels, TunnelInfo zeroHopTunnel) {
         TreeSet<Lease> leases = new TreeSet<>(new LeaseComparator());
         if (zeroHopTunnel != null) {
@@ -4455,6 +4484,13 @@ public class TunnelPool {
      */
     static class LeaseComparator implements Comparator<Lease>, Serializable {
         private static final long serialVersionUID = 1L;
+
+        /**
+         * A stateless comparator: it reads nothing but the two leases, so a bare instance
+         * behaves exactly like any other.
+         */
+        LeaseComparator() {}
+
         /**
          * Order leases by end time, breaking ties on tunnel identity.
          *
@@ -5749,6 +5785,12 @@ public class TunnelPool {
     /**
      * Compatibility overload: callers that only have a single usable count
      *  (no soft-degraded split) treat it as both healthy and safe.
+     * @param now current router time (ms)
+     * @param lastBuild last deficit-build timestamp (ms), 0 if never
+     * @param safeActive all safe tunnels including soft-degraded
+     * @param inProgress builds currently in flight
+     * @param incompleteLeaseSet true when the pool cannot publish a full LeaseSet
+     * @return true if the deficit build should be skipped this cycle
      * @since 0.9.71+
      */
     static boolean isDeficitThrottled(long now, long lastBuild, int safeActive,

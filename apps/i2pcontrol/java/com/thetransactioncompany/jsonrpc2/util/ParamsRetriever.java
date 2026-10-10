@@ -7,6 +7,12 @@ package com.thetransactioncompany.jsonrpc2.util;
  * @author Vladimir Dzhuvinov
  */
 public abstract class ParamsRetriever {
+    /**
+     * Constructor for subclasses; a retriever holds no state of its own.
+     */
+
+    public ParamsRetriever() {}
+
 
 
 	/**
@@ -21,12 +27,10 @@ public abstract class ParamsRetriever {
 	 * Matches a string against an array of acceptable values.
 	 *
 	 * @param input       The string to match.
-	 * @param enumStrings The acceptable string values. Must not be
-	 *                    {@code null}.
+	 * @param enumStrings The acceptable string values. Must not be {@code null}.
 	 * @param ignoreCase  {@code true} for a case insensitive match.
 	 *
-	 * @return The matching string value, {@code null} if no match was
-	 *         found.
+	 * @return The matching string value, {@code null} if no match was found.
 	 */
 	protected static String getEnumStringMatch(final String input,
 		                                   final String[] enumStrings,
@@ -53,11 +57,9 @@ public abstract class ParamsRetriever {
 	 *
 	 * @param input      The string to match.
 	 * @param enumClass  The enumeration class specifying the acceptable
-	 *                   string values. Must not be {@code null}.
 	 * @param ignoreCase {@code true} for a case insensitive match.
-	 *
-	 * @return The matching enumeration constant, {@code null} if no match
-	 *         was found.
+	 * @param <T> the element type of enumClass, whose constants are compared against input
+	 * @return The matching enumeration constant, {@code null} if no match was found.
 	 */
 	protected static <T extends Enum<T>> T getEnumStringMatch(final String input,
 		                                                  final Class<T> enumClass,

@@ -20,7 +20,9 @@ public class HTTPServerList extends Vector<HTTPServer> {
     //  Constructor
     ////////////////////////////////////////////////
 
+    /** Local addresses the servers are opened on, or null to bind all interfaces. */
     private InetAddress[] binds = null;
+    /** Port each server is opened on. */
     private int port = Device.HTTP_DEFAULT_PORT;
 
     /** Creates a new empty HTTPServerList. */

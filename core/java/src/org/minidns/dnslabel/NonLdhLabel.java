@@ -18,6 +18,8 @@ public abstract class NonLdhLabel extends DnsLabel {
 
     /**
      * NonLdhLabel.
+     *
+     * @param label the label text this instance represents, checked against the IDN rules
      */
     protected NonLdhLabel(String label) {
         super(label);
@@ -25,6 +27,9 @@ public abstract class NonLdhLabel extends DnsLabel {
 
     /**
      * fromInternal.
+     *
+     * @param label the internal label form to classify
+     * @return the UnderscoreLabel, LeadingOrTrailingHyphenLabel or OtherNonLdhLabel for that text
      */
     protected static DnsLabel fromInternal(String label) {
         if (UnderscoreLabel.isUnderscoreLabelInternal(label)) {

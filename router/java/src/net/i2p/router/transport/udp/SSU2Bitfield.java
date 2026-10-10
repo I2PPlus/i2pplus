@@ -46,6 +46,9 @@ class SSU2Bitfield {
 
     /**
      * Creates a new SSU2Bitfield that represents <code>size</code> unset bits.
+     *
+     * @param size the bitfield width in bits, rounded up to a multiple of 256
+     * @param offset the message number the first bit represents, non-negative
      */
     public SSU2Bitfield(int size, long offset) {
         if (size <= 0 || offset < 0) {throw new IllegalArgumentException("size " + size + " offset " + offset);}
@@ -59,6 +62,8 @@ class SSU2Bitfield {
 
     /**
      * The size in bits.
+     *
+     * @return the bitfield width in bits
      */
     public int size() {return size;}
 
@@ -74,9 +79,10 @@ class SSU2Bitfield {
      * When a bit higher than the current size + offset is set,
      * the offset shifts up and the lowest set bits are lost.
      *
+     * @param bit the absolute message number to set, non-negative
+     * @return previous value, true if previously set or unknown
      * @throws IndexOutOfBoundsException if bit is smaller then zero
      * OR if the shift is too big
-     * @return previous value, true if previously set or unknown
      */
     public boolean set(long bit) throws IndexOutOfBoundsException {
         if (bit < 0) {throw new IndexOutOfBoundsException(Long.toString(bit));}
@@ -119,6 +125,8 @@ class SSU2Bitfield {
     /**
      * Return true if the bit is set or false if it is not.
      *
+     * @param bit the absolute message number to test, non-negative
+     * @return true if the bit is set, false if unset or already shifted out
      * @throws IndexOutOfBoundsException if bit is smaller then zero
      */
     public synchronized boolean get(long bit) {
@@ -140,6 +148,9 @@ class SSU2Bitfield {
     }
 
     /**
+     * Render the set bits as an ACK block, collapsing the top acnt bits into
+     * the ACK count and the rest into at most maxRanges ranges.
+     *
      * @param maxRanges may be 0
      * @return null if nothing is set
      */
@@ -205,9 +216,17 @@ class SSU2Bitfield {
     }
 
     /**
+     * Rebuild a bitfield from a received ACK block, rejecting a block whose
+     * implied span would push the offset below zero or exceed
+     * {@link #MAX_ACK_SPAN}.
+     *
+     * @param thru the highest acked message number
+     * @param acnt number of contiguous acks below thru, 0-255
      * @param ranges may be null
+     * @param rangeCount number of (nack, ack) range pairs
+     * @return a bitfield covering every message the block acks
      * @throws IllegalArgumentException if the ranges describe a span larger than
-     * {@link #MAX_ACK_SPAN}, or the offset would be negative
+     * {@link #MAX_ACK_SPAN}
      */
     public static SSU2Bitfield fromACKBlock(long thru, int acnt, byte[] ranges, int rangeCount) {
         int t = (int) thru;
@@ -244,7 +263,11 @@ class SSU2Bitfield {
      * Called when a bit is set in the bitfield.
      */
     public interface Callback {
-        /** Called when a bit is set */
+        /**
+         * Called when a bit is set
+         *
+         * @param bit the absolute message number that was newly set
+         */
         public void bitSet(long bit);
     }
 
@@ -261,6 +284,9 @@ class SSU2Bitfield {
      *
      * Usage: this is the received acks, bf2 is previously acked,
      * callback for each newly acked.
+     *
+     * @param bf2 the previously acknowledged bitfield, updated in place
+     * @param cb called once per message newly acked by this bitfield
      */
     public synchronized void forEachAndNot(SSU2Bitfield bf2, Callback cb) {
         synchronized(bf2) {
@@ -286,7 +312,11 @@ class SSU2Bitfield {
     /**
      * Pretty print an ACK block
      *
+     * @param thru the highest acked message number
+     * @param acnt number of contiguous acks below thru, 0-255
      * @param ranges may be null
+     * @param rangeCount number of (nack, ack) range pairs
+     * @return the block as "ACK 1234-1200 NACK 1199 ACK 1198-1190" style text
      */
     public static String toString(long thru, int acnt, byte[] ranges, int rangeCount) {
         StringBuilder sb = new StringBuilder();

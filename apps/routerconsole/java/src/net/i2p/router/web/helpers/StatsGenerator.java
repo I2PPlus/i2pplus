@@ -26,11 +26,17 @@ public class StatsGenerator {
 
     /**
      * StatsGenerator.
+     *
+     * @param context the router context whose StatManager supplies the stats
      */
     public StatsGenerator(RouterContext context) {_context = context;}
 
     /**
      *  Generate CSV export of all stats (optionally filtered by name).
+     *  @param out where the CSV text is written and flushed
+     *  @param filter optional case-insensitive stat name substring, null or empty
+     *         for every stat
+     *  @throws IOException if the writer fails partway through the export
      *  @since 0.9.70+
      */
     public void generateCSV(Writer out, String filter) throws IOException {
@@ -98,7 +104,11 @@ public class StatsGenerator {
 
     /**
      * generateStatsPage.
+     * @param out where the HTML is written
+     * @param showAll true to include the saturation and per-period extremes that
+     *        are hidden in the default view
      * @param filter optional stat name substring filter (case-insensitive), null for all
+     * @throws IOException if the writer fails partway through the page
      * @since 0.9.70+
      */
     public void generateStatsPage(Writer out, boolean showAll, String filter) throws IOException {

@@ -108,8 +108,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private byte[] _pathChallengeData;
     private long _pathChallengeSendCount;
     private RemoteHostId _pendingRemoteHostId;
+    /** Path challenge retransmissions before the migration is declared expired. */
     static final int MAX_PATH_CHALLENGE_SENDS = 4;
+    /** Total time a path challenge may span, in ms, before it is declared expired. */
     static final long MAX_PATH_CHALLENGE_TIME = 30*1000L;
+    /** Base interval between path challenge sends in ms, doubled per retransmission. */
     static final long PATH_CHALLENGE_DELAY = 5*1000L;
 
     // As SSU
@@ -185,9 +188,25 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
-     * If inbound, caller MUST immediately call setWeRelayToThemAs() (if nonzero) and sendAck0().
+     * A session with a remote peer over SSU2: the connection ids, the four
+     * cipher states and the header encryption keys are all fixed here, so the
+     * transport can build one without a separate handshake step.
      *
+     * <p>If inbound, caller MUST immediately call setWeRelayToThemAs() (if nonzero) and sendAck0().
+     *
+     * @param ctx the router context
+     * @param transport the UDP transport this session runs on
+     * @param remoteAddress the peer's address, which may change on migration
+     * @param remotePeer the peer's router hash
+     * @param isInbound true if the peer opened the session, false if we did
      * @param rtt from the EstablishState, or 0 if not available
+     * @param sendCha the outbound cipher state for payload blocks
+     * @param rcvCha the inbound cipher state for payload blocks
+     * @param sendID the connection id we send in every block header
+     * @param rcvID the connection id the peer sends in every block header
+     * @param sendHdrKey1 the first outbound header encryption key
+     * @param sendHdrKey2 the second outbound header encryption key
+     * @param rcvHdrKey2 the second inbound header encryption key
      */
     public PeerState2(RouterContext ctx, UDPTransport transport,
                      InetSocketAddress remoteAddress, Hash remotePeer, boolean isInbound, int rtt,
@@ -530,12 +549,18 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     int getDestroyReason() {return _destroyReason;}
 
     /**
+     * The inbound cipher state, paired with the peer's first header key.
+     *
+     * @return the inbound payload cipher state
      * @since 0.9.57 for PeerStateDestroyed
      */
     CipherState getRcvCipher() {return _rcvCha;}
 
     /**
      * For initialization by IES2/OES2 only.
+     *
+     * @param ip our address as the peer will see it, 4 or 16 bytes
+     * @param port our port as the peer will see it
      */
     void setOurAddress(byte[] ip, int port) {_ourIP = ip; _ourPort = port;}
 
@@ -545,6 +570,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * Unvalidated.
      * Also, if a transient IPv6 address, may be deprecated and not match
      * our current non-deprecated IPv6 address.
+     *
+     * @return our address as the peer sees it, 4 or 16 bytes, or null if unset
      */
     byte[] getOurIP() {return _ourIP;}
 
@@ -553,6 +580,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * As received in the Address Block in the handshake,
      * or subsequently in the data phase.
      * Unvalidated.
+     *
+     * @return our port as the peer sees it, or 0 if unset
      */
     int getOurPort() {return _ourPort;}
 
@@ -1318,6 +1347,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     /**
      * Caller should sync; UDPTransport must remove and add to peersByRemoteHost map
+     *
+     * @param id the new remote host id, carrying both the address and the port
      * @since 0.9.56
      */
     void changeAddress(RemoteHostId id) {
@@ -1423,6 +1454,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * and save them for retransmission.
      * This is only called the first time.
      * For retransmit see allocateSend() above.
+     *
+     * @param data the SessionConfirmed packet bodies, retained only if this is
+     *        the first send so a retransmission can resend the same bytes
      */
     synchronized void confirmedPacketsSent(byte[][] data) {
         if (_sessConfForReTX == null) {_sessConfForReTX = data;}
@@ -1464,6 +1498,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public byte getFlags() {return shouldRequestImmediateAck() ? (byte) 0x01 : 0;}
 
     /**
+     * Whether a SessionDestroy has been sent or received on this session, so the
+     * transport can drop the session without a second teardown exchange.
+     *
+     * @return true once the session has been destroyed
      * @since 0.9.57
      */
     boolean isDead() {return _dead;}
@@ -1471,7 +1509,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * Number of pending sent-but-unacked packet entries.
      *
-     * @return number of pending sent-but-unacked packet entries
+     * @return the number of packet entries awaiting an ACK, not a byte count
      * @since 0.9.70+
      */
     public int sentMessagesSize() { return _sentMessages.size(); }

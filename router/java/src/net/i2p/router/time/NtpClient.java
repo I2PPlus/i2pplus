@@ -38,6 +38,12 @@ import net.i2p.util.Log;
  * @since 0.9.1 moved from net.i2p.time
  */
 public class NtpClient {
+    /**
+     * The offsets, the KoD map and every query method are static and shared, so an
+     * instance carries no state of its own.
+     */
+    public NtpClient() {}
+
     /** Difference between the Unix epoch and Jan 1 1900, the epoch used by NTP. */
     static final double SECONDS_1900_TO_EPOCH = 2208988800.0;
     private static final int NTP_PORT = 123;
@@ -58,6 +64,9 @@ public class NtpClient {
      * Query the ntp servers, returning the current time from first one we find
      * Hack to return time and stratum
      *
+     * @param serverNames the NTP servers to query, tried in random order
+     * @param perServerTimeout how long to wait for each server's reply, in milliseconds
+     * @param preferIPv6 if true, query the server's IPv6 address first
      * @param log may be null
      * @return time in rv[0] and stratum in rv[1]
      * @throws IllegalArgumentException if none of the servers are reachable

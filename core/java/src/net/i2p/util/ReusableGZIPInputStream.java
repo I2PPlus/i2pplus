@@ -20,6 +20,7 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
 
     /**
      * Pull a cached instance
+     * @return a pooled instance if one is free, otherwise a newly constructed one
      */
     public static ReusableGZIPInputStream acquire() {
         ReusableGZIPInputStream rv = null;
@@ -34,6 +35,8 @@ public class ReusableGZIPInputStream extends ResettableGZIPInputStream {
     /**
      * Release an instance back into the cache (this will reset the
      * state)
+     * @param released the instance being handed back; destroyed instead when the
+                               pool is full or caching is disabled
      */
     public static void release(ReusableGZIPInputStream released) {
         boolean cached;

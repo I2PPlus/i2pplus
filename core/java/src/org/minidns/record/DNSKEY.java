@@ -84,7 +84,12 @@ public class DNSKEY extends Data {
     private transient Integer keyTag;
 
     /**
-     * parse.
+     * Parse a DNSKEY record from the wire format.
+     *
+     * @param dis the stream positioned at the start of the record payload
+     * @param length the size of the record in bytes, including the 4 byte flags, protocol and algorithm preamble
+     * @return the parsed record
+     * @throws IOException if length is under 4, or the stream ends before the key material is complete
      */
     public static DNSKEY parse(DataInputStream dis, int length) throws IOException {
         if (length < 4) {
@@ -110,21 +115,33 @@ public class DNSKEY extends Data {
     }
 
     /**
-     * DNSKEY.
+     * Create a record from the raw algorithm number rather than a SignatureAlgorithm.
+     *
+     * @param flags the DNSKEY flags bitmap
+     * @param protocol must be {@link #PROTOCOL_RFC4034}
+     * @param algorithm the algorithm number as it appears on the wire
+     * @param key the public key material, formatted per the algorithm
      */
     public DNSKEY(short flags, byte protocol, byte algorithm, byte[] key) {
         this(flags, protocol, SignatureAlgorithm.forByte(algorithm), algorithm, key);
     }
 
     /**
-     * DNSKEY.
+     * Create a record from a SignatureAlgorithm.
+     *
+     * @param flags the DNSKEY flags bitmap
+     * @param protocol must be {@link #PROTOCOL_RFC4034}
+     * @param algorithm the public key's cryptographic algorithm
+     * @param key the public key material, formatted per the algorithm
      */
     public DNSKEY(short flags, byte protocol, SignatureAlgorithm algorithm, byte[] key) {
         this(flags, protocol, algorithm, algorithm.number, key);
     }
 
     /**
-     * getType.
+     * Record type of this record.
+     *
+     * @return {@link TYPE#DNSKEY}
      */
     @Override
     public TYPE getType() {
@@ -154,7 +171,10 @@ public class DNSKEY extends Data {
     }
 
     /**
-     * serialize.
+     * Write the flags, protocol, algorithm number and key to the stream.
+     *
+     * @param dos the stream to write the wire format to
+     * @throws IOException if the stream rejects the write
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -165,7 +185,9 @@ public class DNSKEY extends Data {
     }
 
     /**
-     * toString.
+     * Diagnostic form of the record.
+     *
+     * @return the flags, protocol, algorithm and base64 key, separated by spaces
      */
     @Override
     public String toString() {
@@ -174,21 +196,27 @@ public class DNSKEY extends Data {
     }
 
     /**
-     * getKeyLength.
+     * Length of the public key material.
+     *
+     * @return the number of bytes in the public key
      */
     public int getKeyLength() {
         return key.length;
     }
 
     /**
-     * getKey.
+     * Copy of the public key material.
+     *
+     * @return a copy of the key bytes, so callers cannot alter this record
      */
     public byte[] getKey() {
         return key.clone();
     }
 
     /**
-     * getKeyAsDataInputStream.
+     * Wrap the public key material in a stream.
+     *
+     * @return a stream reading over the key bytes
      */
     public DataInputStream getKeyAsDataInputStream() {
         return new DataInputStream(new ByteArrayInputStream(key));
@@ -197,7 +225,9 @@ public class DNSKEY extends Data {
     private transient String keyBase64Cache;
 
     /**
-     * getKeyBase64.
+     * Base64 encoding of the public key material, cached after the first call.
+     *
+     * @return the key encoded as base64
      */
     public String getKeyBase64() {
         if (keyBase64Cache == null) {
@@ -209,7 +239,9 @@ public class DNSKEY extends Data {
     private transient BigInteger keyBigIntegerCache;
 
     /**
-     * getKeyBigInteger.
+     * The public key material as a big-endian integer, cached after the first call.
+     *
+     * @return the key as a BigInteger
      */
     public BigInteger getKeyBigInteger() {
         if (keyBigIntegerCache == null) {
@@ -219,14 +251,19 @@ public class DNSKEY extends Data {
     }
 
     /**
-     * keyEquals.
+     * Compare this record's key material against another key.
+     *
+     * @param otherKey the key bytes to compare against
+     * @return true if both keys are byte for byte identical
      */
     public boolean keyEquals(byte[] otherKey) {
         return Arrays.equals(key, otherKey);
     }
 
     /**
-     * isSecureEntryPoint.
+     * Whether the secure entry point flag is set.
+     *
+     * @return true if this is a secure entry point key
      */
     public boolean isSecureEntryPoint() {
         return (flags & FLAG_SECURE_ENTRY_POINT) == 1;

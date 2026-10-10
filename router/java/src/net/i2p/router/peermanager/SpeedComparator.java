@@ -10,6 +10,12 @@ import net.i2p.data.DataHelper;
  */
 class SpeedComparator implements Comparator<PeerProfile> {
 
+    /**
+     * The comparator reads nothing but the two profiles it is handed, so a bare instance
+     * behaves exactly like any other.
+     */
+    SpeedComparator() {}
+
     @Override
     public int compare(PeerProfile left, PeerProfile right) {
 

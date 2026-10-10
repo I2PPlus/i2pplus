@@ -65,7 +65,12 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     /** {@link #decideQuantity} return value meaning the session should be left alone. */
     static final int NO_CHANGE = -1;
 
-    /** Caller must schedule */
+    /**
+     * Caller must schedule
+     *
+     * @param mgr the SnarkManager providing the util and owning this timer
+     * @param pcs the peer set whose connectivity state decides whether tunnels may be released
+     */
     public IdleChecker(SnarkManager mgr, PeerCoordinatorSet pcs) {
         super(mgr.util().getContext().simpleTimer2());
         _util = mgr.util();

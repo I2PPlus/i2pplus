@@ -46,6 +46,7 @@ interface SSU2Sender {
      * Next packet number to use.
      *
      * @return next packet number
+     * @throws IOException if the peer is already dead and cannot send
      */
     long getNextPacketNumber() throws IOException;
     /**

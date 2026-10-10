@@ -21,6 +21,10 @@ class DevSU3UpdateRunner extends UpdateRunner {
 
     /**
      * DevSU3UpdateRunner.
+     *
+     * @param ctx router context supplying the clock, config and logging
+     * @param mgr console update manager notified of progress and completion
+     * @param uris candidate .su3 URLs, the first of which is fetched
      */
     public DevSU3UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         super(ctx, mgr, ROUTER_DEV_SU3, uris);

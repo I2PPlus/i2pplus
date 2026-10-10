@@ -46,6 +46,7 @@ public class SessionKeyManager {
      * or null if a new session key should be generated.
      *
      * Warning - don't generate a new session if this returns null, it's racy, use getCurrentOrNewKey()
+     * @param target the destination whose current session key is wanted
      * @return the current key
      */
     public SessionKey getCurrentKey(PublicKey target) {
@@ -56,6 +57,7 @@ public class SessionKeyManager {
      * Retrieve the session key currently associated with encryption to the target.
      * Generates a new session and session key if not previously exising.
      *
+     * @param target the destination to start or continue a session with
      * @return non-null
      */
     public SessionKey getCurrentOrNewKey(PublicKey target) {
@@ -68,6 +70,9 @@ public class SessionKeyManager {
      *
      * Racy if called after getCurrentKey() to check for a current session;
      * use getCurrentOrNewKey() in that case.
+     *
+     * @param target the destination the session is established with
+     * @param key the session key to associate, whose expiry metrics start at this call
      */
     public void createSession(PublicKey target, SessionKey key) { // nop
     }
@@ -78,6 +83,7 @@ public class SessionKeyManager {
      * Racy if called after getCurrentKey() to check for a current session;
      * use getCurrentOrNewKey() in that case.
      *
+     * @param target the destination to establish a freshly generated session with
      * @return the session key
      */
     public SessionKey createSession(PublicKey target) {
@@ -92,6 +98,8 @@ public class SessionKeyManager {
      * available so ElG should be used with the given key (a new sessionKey should
      * NOT be used)
      *
+     * @param target the destination the tag was sent to
+     * @param key the session key whose use the tag identifies
      * @return the next available tag, or null
      */
     public SessionTag consumeNextAvailableTag(PublicKey target, SessionKey key) {
@@ -117,7 +125,7 @@ public class SessionKeyManager {
     /**
      * Determine if tags should be sent to the target.
      *
-     * @param target the target
+     * @param target the destination whose tags are being considered
      * @param key the session key
      * @return true if we have less than the threshold or what we have is about to expire
      * @since 0.9.2
@@ -129,7 +137,7 @@ public class SessionKeyManager {
     /**
      * Determine if tags should be sent to the target with the specified threshold.
      *
-     * @param target the target
+     * @param target the destination whose tags are being considered
      * @param key the session key
      * @param lowThreshold the low threshold
      * @return true if we have less than the threshold or what we have is about to expire
@@ -141,6 +149,8 @@ public class SessionKeyManager {
      * Determine (approximately) how many available session tags for the current target
      * have been confirmed and are available
      *
+     * @param target the destination the tags were sent to
+     * @param key the session key those tags were issued under
      * @return the available tags
      */
     public int getAvailableTags(PublicKey target, SessionKey key) {
@@ -150,6 +160,8 @@ public class SessionKeyManager {
     /**
      * Determine how long the available tags will be available for before expiring, in
      * milliseconds
+     * @param target the destination the tags were sent to
+     * @param key the session key those tags were issued under
      * @return the available time left
      */
     public long getAvailableTimeLeft(PublicKey target, SessionKey key) {
@@ -161,6 +173,9 @@ public class SessionKeyManager {
      * encryption to the target have definitely been received at the target (aka call this
      * method after receiving an ack to a message delivering them)
      *
+     * @param target the destination that acknowledged the tags
+     * @param key the session key the acknowledged tags were issued under
+     * @param sessionTags modifiable; NOT copied
      * @return the tag set handle
      */
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) { // nop
@@ -171,6 +186,8 @@ public class SessionKeyManager {
      * Mark all of the tags delivered to the target up to this point as invalid, since the peer
      * has failed to respond when they should have.  This call essentially lets the system recover
      * from corrupted tag sets and crashes
+     *
+     * @param target the destination whose delivered tags are being invalidated
      */
     public void failTags(PublicKey target) { // nop
     }
@@ -178,6 +195,9 @@ public class SessionKeyManager {
     /**
      * Accept the given tags and associate them with the given key for decryption,
      * with the default expiration.
+     *
+     * @param key the session key the tags were received for
+     * @param sessionTags modifiable; NOT copied
      */
     public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags) { // nop
     }
@@ -186,6 +206,7 @@ public class SessionKeyManager {
      * Accept the given tags and associate them with the given key for decryption,
      * with specified expiration.
      *
+     * @param key the session key the tags were received for
      * @param sessionTags modifiable; NOT copied
      * @param expire time from now
      * @since 0.9.7
@@ -199,6 +220,7 @@ public class SessionKeyManager {
      * key it was received with (via tagsReceived(...)).  returns null if no session key
      * matches
      *
+     * @param tag the session tag whose delivered key is consumed
      * @return the session key, or null
      */
     public SessionKey consumeTag(SessionTag tag) {
@@ -224,7 +246,7 @@ public class SessionKeyManager {
     /**
      * Fail tags for the given target, key, and tag set handle.
      *
-     * @param target the target
+     * @param target the destination whose tags are being considered
      * @param key the session key
      * @param ts the tag set handle
      */
@@ -234,7 +256,7 @@ public class SessionKeyManager {
     /**
      * Acknowledge tags for the given target, key, and tag set handle.
      *
-     * @param target the target
+     * @param target the destination whose tags are being considered
      * @param key the session key
      * @param ts the tag set handle
      */

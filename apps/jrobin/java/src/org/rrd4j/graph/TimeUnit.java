@@ -66,9 +66,15 @@ public enum TimeUnit {
         }
     };
 
-    /** @return label format pattern for this time unit */
+    /**
+     * Get the label format pattern for this time unit.
+     *
+     * @return the date format pattern for this unit's axis labels
+     */
     public abstract String getLabel();
     /**
+     * Map a {@link Calendar} field constant to the matching time unit.
+     *
      * @param unitKey Calendar constant (SECOND, MINUTE, HOUR, DAY, WEEK, MONTH, YEAR)
      * @return matching TimeUnit enum value
      */

@@ -32,18 +32,29 @@ public final class SipHashInline {
     private SipHashInline() {}
 
     /**
+     * Hash the whole of {@code data} with SipHash-2-4 under a 16 byte key split
+     * across two longs.
+     *
      * @param k0 the first 8 bytes of the key
      * @param k1 the last 8 bytes of the key
-     * @return whether h24 is present
+     * @param data the bytes to hash
+     * @return the 64-bit SipHash-2-4 output
      */
     public static long hash24(long k0, long k1, byte[] data) {
         return hash24(k0, k1, data, 0, data.length);
     }
 
     /**
+     * Hash a slice of {@code data} with SipHash-2-4 under a 16 byte key split
+     * across two longs. Bytes outside the slice are ignored, so a message may be
+     * hashed in place without copying it.
+     *
      * @param k0 the first 8 bytes of the key
      * @param k1 the last 8 bytes of the key
-     * @return whether h24 is present
+     * @param data the buffer holding the message
+     * @param off index of the first message byte to absorb
+     * @param len number of message bytes to absorb starting at off
+     * @return the 64-bit SipHash-2-4 output
      */
     public static long hash24(long k0, long k1, byte[] data, int off, int len) {
         long v0 = 0x736f6d6570736575L ^ k0;

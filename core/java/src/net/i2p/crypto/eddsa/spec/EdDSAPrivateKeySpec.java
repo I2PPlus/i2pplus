@@ -85,6 +85,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
      *
      * @param a must be "clamped" (for Ed) or reduced mod l (for Red)
      * @param aPoint if null, will be derived from a.
+     * @param spec the domain parameters naming the curve and cofactor this key belongs to
      * @throws IllegalArgumentException if a not clamped or reduced
      * @since 0.9.39
      */
@@ -99,6 +100,7 @@ public class EdDSAPrivateKeySpec implements KeySpec {
      * @param h may be null
      * @param a must be "clamped" (for Ed) or reduced mod l (for Red)
      * @param aPoint if null, will be derived from a.
+     * @param spec the domain parameters naming the curve and cofactor this key belongs to
      * @throws IllegalArgumentException if a not clamped or reduced
      */
     public EdDSAPrivateKeySpec(byte[] seed, byte[] h, byte[] a, GroupElement aPoint, EdDSAParameterSpec spec) {

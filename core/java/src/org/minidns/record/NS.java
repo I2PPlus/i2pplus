@@ -24,6 +24,11 @@ public class NS extends RRWithTarget {
 
     /**
      * parse.
+     *
+     * @param dis stream positioned at the start of the NS record data
+     * @param data full message data, used to resolve compressed target names
+     * @return the parsed NS record
+     * @throws IOException if the target name cannot be read from the stream
      */
     public static NS parse(DataInputStream dis, byte[] data) throws IOException {
         DnsName target = DnsName.parse(dis, data);
@@ -32,6 +37,8 @@ public class NS extends RRWithTarget {
 
     /**
      * NS.
+     *
+     * @param name the authoritative name server this record delegates the zone to
      */
     public NS(DnsName name) {
         super(name);

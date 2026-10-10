@@ -136,6 +136,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * UPnP.
+     *
+     * @param context the application context supplying the log and the property manager
+     * @param ssdpPort the local port to run SSDP discovery on
+     * @param httpPort the local port to run the UPnP control HTTP service on
+     * @param binds the local addresses to bind the SSDP and HTTP sockets to
      */
     public UPnP(I2PAppContext context, int ssdpPort, int httpPort, InetAddress[] binds) {
         super(ssdpPort, httpPort, binds);
@@ -1214,7 +1219,11 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         sb.append("</ul>\n");
     }
 
-    /** Warning: slow. */
+    /**
+     * Warning: slow.
+     *
+     * @return an HTML fragment describing the discovered devices and the forwarded ports
+     */
     public String renderStatusHTML() {
         final StringBuilder sb = new StringBuilder();
         sb.append("<h3 id=upnp>").append(_t("UPnP Status")).append("</h3><div id=upnpscan>");
@@ -1990,6 +1999,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         /**
          * Port forwarding entry for the given IPv6 address.
          *
+         * @param name the tunnel description to show in the UPnP device's port mapping
+         * @param protocol the IP protocol number to forward
+         * @param port the port number to forward
          * @param ip the IPv6 address being forwarded, non-null
          */
         public IPv6ForwardPort(String name, int protocol, int port, String ip) {
@@ -2064,6 +2076,9 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Dumps out device info in semi-HTML format
+     *
+     * @param args ignored; this diagnostic entry point takes no options
+     * @throws Exception if the control point cannot be started or the search fails
      */
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();

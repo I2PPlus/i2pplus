@@ -121,6 +121,7 @@ public enum ConsolidationFunctionType {
 
     /**
      * getConsolFun().
+     * @return the I2P JRobin ConsolFun this type stands for, or an implementation that throws UnsupportedOperationException for types JRobin does not support
      */
     public abstract ConsolFun getConsolFun();
 }

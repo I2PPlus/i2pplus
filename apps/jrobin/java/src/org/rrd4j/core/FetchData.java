@@ -47,6 +47,13 @@ public class FetchData {
     private final long arcStep;
     private final long arcEndTime;
 
+    /**
+     * Bind the request to the archive that will satisfy it.
+     *
+     * @param matchingArchive the archive selected for this request
+     * @param request the fetch request, whose DS filter names the columns to read
+     * @throws IOException if the archive's data sources cannot be listed
+     */
     FetchData(Archive matchingArchive, FetchRequest request) throws IOException {
         this.matchingArchive = matchingArchive;
         this.arcStep = matchingArchive.getArcStep();
@@ -120,7 +127,7 @@ public class FetchData {
      * Returns all archived values for a single datasource. Returned values correspond to timestamps
      * returned with {@link #getTimestamps() getTimestamps()} method.
      *
-     * @param dsIndex Datasource index.
+     * @param dsIndex Datasource index, from 0 to {@link #getColumnCount()} - 1
      * @return Array of single datasource values.
      */
     public double[] getValues(int dsIndex) {
@@ -141,7 +148,7 @@ public class FetchData {
      * Returns all archived values for a single datasource. Returned values correspond to timestamps
      * returned with {@link #getTimestamps() getTimestamps()} method.
      *
-     * @param dsName Datasource name.
+     * @param dsName Datasource name, as it appears in the RRD
      * @return Array of single datasource values.
      */
     public double[] getValues(String dsName) {
@@ -161,7 +168,7 @@ public class FetchData {
      * <p><code>getRpnValues("x,y,+,2,/");</code>
      *
      * @param rpnExpression RRDTool-like RPN expression
-     * @return Calculated values
+     * @return Calculated values, one per timestamp this fetch returned
      * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
      */
     public double[] getRpnValues(String rpnExpression) {
@@ -201,7 +208,7 @@ public class FetchData {
      * in the fetch request. All datasource values are obtained from round robin archives belonging
      * to this archive.
      *
-     * @return Matching archive.
+     * @return Matching archive, the one the datasource values were read from
      */
     public Archive getMatchingArchive() {
         return matchingArchive;
@@ -293,15 +300,15 @@ public class FetchData {
     /**
      * Returns single aggregated value from the fetched data for a single datasource.
      *
-     * @param dsName Datasource name
+     * @param dsName Datasource name to consolidate, which must appear in the fetched data
      * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
-     *     consolidation functions are "MIN", "MAX", "LAST", "FIRST", "AVERAGE" and "TOTAL" (these
-     *     string constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     * @return the consolidated value as a double
      * @throws java.lang.IllegalArgumentException Thrown if the given datasource name cannot be
      *     found in fetched data.
-     * @return a double.
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
      *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     *     string constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     *     consolidation functions are "MIN", "MAX", "LAST", "FIRST", "AVERAGE" and "TOTAL" (these
+     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
      */
     @Deprecated
     public double getAggregate(String dsName, ConsolFun consolFun) {
@@ -319,7 +326,7 @@ public class FetchData {
      *
      * @param rpnExpression RRDTool-like RPN expression
      * @param consolFun Consolidation function (MIN, MAX, LAST, FIRST, AVERAGE or TOTAL)
-     * @return Aggregated value
+     * @return Aggregated value for the expression under the named consolidation function
      * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
      * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
      *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
@@ -344,7 +351,7 @@ public class FetchData {
      * or<br>
      * <a href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
      *
-     * @param dsName Datasource name
+     * @param dsName Datasource name to take the percentile of
      * @return 95th percentile of fetched source values
      * @throws java.lang.IllegalArgumentException Thrown if invalid source name is supplied
      * @deprecated This method is deprecated. Uses instance of {@link
@@ -362,7 +369,7 @@ public class FetchData {
      * RPN expression.
      *
      * @param rpnExpression RRDTool-like RPN expression
-     * @return 95-percentile
+     * @return 95-percentile of the values the expression produced
      * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
      * @deprecated This method is deprecated. Uses instance of {@link
      *     org.rrd4j.data.Variable.PERCENTILE}, used with {@link
@@ -388,7 +395,10 @@ public class FetchData {
     }
 
     /**
-     * exportXml.
+     * Write this fetch result as a fetch_data element tree.
+     *
+     * @param writer the XML writer that receives the fetch_data element tree; it is
+                            flushed but never closed, so the caller may append to it
      */
     public void exportXml(XmlWriter writer) {
         writer.startTag("fetch_data");

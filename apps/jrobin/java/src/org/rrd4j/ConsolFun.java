@@ -76,6 +76,7 @@ public enum ConsolFun {
 
     /**
      * getVariable().
+     * @return the Variable implementation that applies this consolidation function
      */
     public abstract Variable getVariable();
 }

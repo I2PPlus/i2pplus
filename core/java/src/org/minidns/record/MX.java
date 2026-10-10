@@ -56,6 +56,8 @@ public class MX extends Data {
 
     /**
      * MX.
+     * @param priority the MX preference, lower values being tried first
+     * @param name the mail exchanger, converted from presentation form
      */
     public MX(int priority, String name) {
         this(priority, DnsName.from(name));
@@ -63,6 +65,8 @@ public class MX extends Data {
 
     /**
      * MX.
+     * @param priority the MX preference, lower values being tried first
+     * @param name the mail exchanger that receives the mail
      */
     public MX(int priority, DnsName name) {
         this.priority = priority;

@@ -27,16 +27,26 @@ public class MuxedPQSKM extends SessionKeyManager {
     // PQ is about this much slower than EC
     private static final int PQ_SLOW_FACTOR = 2;
     private static final int RESTART_COUNTERS = 500;
-    /** Combines ECIES and PQ SKMs with adaptive decrypt ordering. */
+    /**
+     * Combines ECIES and PQ SKMs with adaptive decrypt ordering.
+     * @param ec the ECIES ratchet key manager
+     * @param pq the post-quantum ratchet key manager
+     */
 
     public MuxedPQSKM(RatchetSKM ec, RatchetSKM pq) {
         _ec = ec;
         _pq = pq;
     }
-    /** Return the eCSKM */
+    /**
+     * Return the eCSKM
+     * @return the ECIES ratchet key manager
+     */
 
     public RatchetSKM getECSKM() { return _ec; }
-    /** Return the pQSKM */
+    /**
+     * Return the pQSKM
+     * @return the post-quantum ratchet key manager
+     */
 
     public RatchetSKM getPQSKM() { return _pq; }
 
@@ -44,6 +54,8 @@ public class MuxedPQSKM extends SessionKeyManager {
      *  Should we try the Ratchet slow decrypt before PQ slow decrypt?
      *  Adaptive test based on previous mix of traffic for this SKM,
      *  as reported by reportDecryptResult().
+     *
+     * @return true if the Ratchet decrypt is tried first, false for PQ
      */
     boolean preferRatchet() {
         int ec = _ecCounter.get();
@@ -144,6 +156,9 @@ public class MuxedPQSKM extends SessionKeyManager {
 
     /**
      *  EC/PQ
+     *
+     * @param target the target peer's ephemeral key; its type picks the SKM
+     * @return the next available tag, or null
      */
     public RatchetEntry consumeNextAvailableTag(PublicKey target) {
         EncType type = target.getType();
@@ -236,6 +251,8 @@ public class MuxedPQSKM extends SessionKeyManager {
      * One time session
      * We do not support PQ one-time sessions on MuxedPQSKM.
      *
+     * @param key the session key the tag was received under
+     * @param tag the ratchet session tag to store for the session
      * @param expire time from now
      */
     public void tagsReceived(SessionKey key, RatchetSessionTag tag, long expire) {

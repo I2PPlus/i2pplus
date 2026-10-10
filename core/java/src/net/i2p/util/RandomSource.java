@@ -36,6 +36,8 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      * good one (Fortuna). Use getInstance() or
      * I2PAppContext.getGlobalContext().random() to get the FortunaRandomSource
      * instance.
+     *
+     * @param context the application context this source is bound to
      */
     public RandomSource(I2PAppContext context) {
         super();
@@ -100,6 +102,9 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
      *
      * This code unused, see FortunaRandomSource override
      *
+     * @param buf the array to fill with random bytes
+     * @param offset where in the array to start writing
+     * @param length how many bytes to write at offset
      * @since 0.8.12
      */
     public void nextBytes(byte[] buf, int offset, int length) {
@@ -115,6 +120,8 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     /**
      * This random source as an entropy harvester.
+     *
+     * @return this source, since a PRNG is its own harvester
      */
     public EntropyHarvester harvester() {
         return this;
@@ -161,6 +168,8 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     /**
      * Write the seed to the seed file.
+     *
+     * @param buf the seed bytes to store; a failure to write is ignored
      */
     public static final void writeSeed(byte[] buf) {
         File f = new File(I2PAppContext.getGlobalContext().getConfigDir(), SEEDFILE);
@@ -173,6 +182,9 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     /**
      * May block up to 10 seconds
+     *
+     * @param buf the buffer to receive the merged seed; its size bounds the amount read
+     * @return true if any entropy source contributed, false if the buffer is still all zeros
      */
     public final boolean initSeed(byte[] buf) {
         boolean ok = false;

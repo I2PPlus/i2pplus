@@ -114,6 +114,8 @@ public class SigningPublicKey extends SimpleDataStructure {
      * Pull from cache or return new.
      * Deprecated - used only by deprecated Destination.readBytes(data, off)
      *
+     * @param data the buffer holding the encoded key
+     * @param off the index in data at which the key starts
      * @return the cached or new key
      * @since 0.8.3
      */
@@ -124,7 +126,9 @@ public class SigningPublicKey extends SimpleDataStructure {
     /**
      * Pull from cache or return new
      *
+     * @param in the stream to read the encoded key from
      * @return the cached or new key
+     * @throws IOException if the key cannot be read from the stream
      * @since 0.8.3
      */
     public static SigningPublicKey create(InputStream in) throws IOException {
@@ -146,7 +150,12 @@ public class SigningPublicKey extends SimpleDataStructure {
         _type = type;
     }
 
-    /** Creates a new SigningPublicKey from byte data with default type. */
+    /**
+     * Creates a new SigningPublicKey from byte data with default type.
+     *
+     * @param data the raw key material, which must match the length of the default DSA-SHA1
+     *        type or be null for a key whose data is set later
+     */
     public SigningPublicKey(byte[] data) {
         this(DEF_TYPE, data);
     }
@@ -172,6 +181,8 @@ public class SigningPublicKey extends SimpleDataStructure {
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
      * on a prior instance of SigningPublicKey
+     * @throws DataFormatException if the base64 cannot be decoded or the decoded bytes are not
+     *         a key of the length the signature type requires
      */
     public SigningPublicKey(String base64Data) throws DataFormatException {
         this();
@@ -287,6 +298,9 @@ public class SigningPublicKey extends SimpleDataStructure {
      * Write the data up to a max of 128 bytes.
      * If longer, the rest will be written in the KeyCertificate.
      *
+     * @param out the stream the truncated key bytes are written to
+     * @throws DataFormatException if the key holds no data at all
+     * @throws IOException if the stream rejects the key bytes
      * @since 0.9.12 (changed from public to package private in 0.9.66, not for external use)
      */
     void writeTruncatedBytes(OutputStream out) throws DataFormatException, IOException {

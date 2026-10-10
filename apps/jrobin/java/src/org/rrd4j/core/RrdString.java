@@ -11,12 +11,24 @@ import java.io.IOException;
  * @param <U> The type of RrdUpdater this primitive belongs to
  */
 class RrdString<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
+/** The last value read, when caching is enabled. */
     private String cache;
 
+    /**
+     * Create a string-valued primitive.
+     *
+     * @param updater the source of values
+     * @param isConstant true to read a constant rather than a varying value
+     */
     RrdString(RrdUpdater<U> updater, boolean isConstant) {
         super(updater, RrdPrimitive.RRD_STRING, isConstant);
     }
 
+    /**
+     * Create a varying string-valued primitive.
+     *
+     * @param updater the source of values
+     */
     RrdString(RrdUpdater<U> updater) {
         this(updater, false);
     }

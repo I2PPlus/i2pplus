@@ -61,6 +61,10 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      * For extension by SimpleSession (no dest)
+     *
+     * @param context the app context whose router client the session sends through
+     * @param options router connection options, or null to use the System properties
+     * @param handlerMap the map the session registers its incoming-message handlers in
      */
     protected I2PSessionImpl2(I2PAppContext context, Properties options,
                               I2PClientMessageHandlerMap handlerMap) {
@@ -75,6 +79,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
      * from the destKeyStream, and using the specified options to connect to the router
      *
+     * @param ctx the app context whose router client the session sends through
      * @param destKeyStream stream containing the private key data, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
      * @throws I2PSessionException if there is a problem loading the private keys
@@ -93,8 +98,10 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Create a new session, reading the Destination, PrivateKey, and SigningPrivateKey
      * from the destKeyStream, and using the specified options to connect to the router
      *
+     * @param primary the muxed session whose context, handlers and producer are shared
      * @param destKeyStream stream containing the private key data, format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
+     * @throws I2PSessionException if the destination key stream cannot be read or parsed
      * @since 0.9.21
      */
     protected I2PSessionImpl2(I2PSessionImpl primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
@@ -146,7 +153,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     }
 
     /**
-     * Return the timeout value.
+     * Wait this long for the router to accept a sent message, in ms.
      * @return the timeout
      */
     protected long getTimeout() {return SEND_TIMEOUT;}
@@ -178,6 +185,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      * Return whether compression should be used.
+     *
+     * @param size the uncompressed message size in bytes, compared to 66
      * @return whether compress
      */
     protected boolean shouldCompress(int size) {
@@ -410,11 +419,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Send a message with best effort delivery.
      *
      * @param dest the destination
-     * @param payload the payload
+     * @param payload the message bytes to deliver
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
      * @param expires expiration time
      * @return success
+     * @throws I2PSessionException if the wait for the router's status update is interrupted
      */
     protected boolean sendBestEffort(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires) throws I2PSessionException {
         return sendBestEffort(dest, payload, expires, 0);
@@ -425,10 +435,11 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * But for now just use sendNoEffort() instead.
      *
      * @param dest the destination
-     * @param payload the payload
+     * @param payload the message bytes to deliver
      * @param expires expiration time
      * @param flags to be passed to the router
      * @return success
+     * @throws I2PSessionException if the wait for the router's status update is interrupted
      * @since 0.8.4
      */
     protected boolean sendBestEffort(Destination dest, byte[] payload, long expires, int flags) throws I2PSessionException {
@@ -473,7 +484,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * not for accepted, or success, or failure.
      * So we don't create a MessageState and save it on the _sendingStates HashSet
      *
+     * @param dest the remote destination to send to
+     * @param payload the message bytes
+     * @param expires expiration time in ms since the epoch, 0 for the router default
+     * @param flags to be passed to the router
      * @return true always
+     * @throws I2PSessionException if the router rejects the send
      * @since 0.8.1
      */
     protected boolean sendNoEffort(Destination dest, byte[] payload, long expires, int flags) throws I2PSessionException {
@@ -703,6 +719,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Notify all tunnel status listeners of a tunnel failure.
      *
+     * @param poolName the pool the failed tunnel belonged to
+     * @param isInbound true if the tunnel was an inbound one
      * @since 0.9.69
      */
     protected void notifyTunnelFailed(String poolName, boolean isInbound) {
@@ -719,6 +737,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Notify all tunnel status listeners of a tunnel removal.
      *
+     * @param event identifies the removed tunnel, its pool, direction and the reason
      * @since 0.9.69+
      */
     protected void notifyTunnelRemoved(TunnelRemovalEvent event) {
@@ -735,6 +754,8 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Notify all tunnel status listeners of pool shutdown.
      *
+     * @param poolName the pool being shut down
+     * @param isInbound true if the pool builds inbound tunnels
      * @since 0.9.69+
      */
     protected void notifyPoolShuttingDown(String poolName, boolean isInbound) {

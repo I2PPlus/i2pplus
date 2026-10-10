@@ -22,14 +22,20 @@ package org.klomp.snark;
  */
 public class Tracker {
 
+    /** The tracker's host name, also used to infer whether it serves scrape details. */
     public final String name;
+    /** The URL a client posts its infohash to for peer discovery. */
     public final String announceURL;
+    /** The tracker's web site, shown as a link in the config page; null when it has none. */
     public final String baseURL;
+    /** True for the hosts known to serve a per-torrent details page. */
     public final boolean supportsDetails;
 
     /**
      * Create a tracker.
      *
+     * @param name the tracker's host name, also used to infer whether it serves scrape details
+     * @param announceURL the URL a client posts its infohash to for peer discovery
      * @param baseURL The web site, may be null
      */
     public Tracker(String name, String announceURL, String baseURL) {

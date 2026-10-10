@@ -307,6 +307,11 @@ public class HostChecker {
 
         /**
          * Create a new PingResult without LeaseSet types.
+         *
+         * @param reachable true if the host answered the reachability test
+         * @param timestamp when the test ran, in milliseconds since the epoch
+         * @param responseTime how long the reply took in milliseconds, or -1 if not measured
+         * @param category the host's category from categories.txt, or null if unclassified
          */
         public PingResult(boolean reachable, long timestamp, long responseTime, String category) {
             this(reachable, timestamp, responseTime, category, null);
@@ -314,6 +319,10 @@ public class HostChecker {
 
         /**
          * Create a new PingResult with minimal fields.
+         *
+         * @param reachable true if the host answered the reachability test
+         * @param timestamp when the test ran, in milliseconds since the epoch
+         * @param responseTime how long the reply took in milliseconds, or -1 if not measured
          */
         public PingResult(boolean reachable, long timestamp, long responseTime) {
             this(reachable, timestamp, responseTime, null, null);
@@ -1630,6 +1639,7 @@ public class HostChecker {
 
     /**
      * Get category for a hostname
+     * @param hostname the host to look up, as spelled in the categories file
      * @return the category
      */
     public String getCategory(String hostname) {
@@ -2345,6 +2355,9 @@ public class HostChecker {
 
     /**
      * Test method
+     *
+     * @param args ignored
+     * @throws Exception if the test run cannot be started or stopped
      */
     public static void main(String[] args) throws Exception {
         // Use default naming service (blockfile format)

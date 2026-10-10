@@ -91,7 +91,11 @@ public class Signature extends SimpleDataStructure {
         _type = type;
     }
 
-    /** Creates a new Signature from byte data with default type. */
+    /**
+     * Creates a new Signature from byte data with default type.
+     *
+     * @param data the signature bytes, in the encoded form used by the default signature type
+     */
     public Signature(byte[] data) {
         this(DEF_TYPE, data);
     }

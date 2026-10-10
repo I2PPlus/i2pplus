@@ -10,7 +10,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * fortuna instance that tries to avoid blocking if at all possible by using separate
+ * Fortuna instance that tries to avoid blocking if at all possible by using separate
  * filled buffer segments rather than one buffer (and blocking when that buffer's data
  * has been eaten)
  *
@@ -23,16 +23,25 @@ import net.i2p.util.SystemVersion;
 public class AsyncFortunaStandalone extends FortunaStandalone implements Runnable {
     private static final int DEFAULT_BUFFERS = 2;
     private static final int DEFAULT_BUFSIZE = SystemVersion.isAndroid() ? 64*1024 : 256*1024;
+    /** how many buffers are cycled through, never less than 2 */
     private final int _bufferCount;
+    /** the size in bytes of each buffer, never less than 16384 */
     private final int _bufferSize;
     /** the lock */
     private final Object asyncBuffers = new Object();
+    /** the app context */
     private final I2PAppContext _context;
+    /** the logger for this class */
     private final Log _log;
+    /** true until shutdown() is called, which stops the refill thread */
     private volatile boolean _isRunning;
+    /** the thread that refills empty buffers in the background */
     private Thread _refillThread;
+    /** buffers holding freshly generated output, waiting to be consumed */
     private final LinkedBlockingQueue<AsyncBuffer> _fullBuffers;
+    /** consumed buffers waiting to be refilled */
     private final LinkedBlockingQueue<AsyncBuffer> _emptyBuffers;
+    /** the buffer the PRNG is currently handing out bytes from */
     private AsyncBuffer _currentBuffer;
 
     /**
@@ -94,7 +103,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
     }
 
     /**
-     * make the next available filled buffer current, scheduling any unfilled
+     * Make the next available filled buffer current, scheduling any unfilled
      * buffers for refill, and blocking until at least one buffer is ready
      */
     protected void rotateBuffer() {

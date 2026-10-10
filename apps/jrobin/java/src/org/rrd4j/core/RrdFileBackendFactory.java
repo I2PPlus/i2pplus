@@ -14,6 +14,12 @@ import java.nio.file.Paths;
  * are done in the code for instanceof.
  */
 public abstract class RrdFileBackendFactory extends RrdBackendFactory {
+    /**
+     * Constructor for subclasses that build a backend storing RRD data in ordinary files.
+     */
+
+    public RrdFileBackendFactory() {}
+
 
     /**
      * {@inheritDoc}

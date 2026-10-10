@@ -37,6 +37,8 @@ public class PTR extends RRWithTarget {
     }
 
     /**
+     * Create a PTR record pointing at a domain name given in text form.
+     *
      * @param name the domain name
      */
     PTR(String name) {
@@ -44,6 +46,8 @@ public class PTR extends RRWithTarget {
     }
 
     /**
+     * Create a PTR record pointing at an already parsed domain name.
+     *
      * @param name the domain name
      */
     PTR(DnsName name) {

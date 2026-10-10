@@ -41,8 +41,8 @@ class ValueAxis extends Axis {
     /**
      * Used for tests
      *
-     * @param rrdGraph
-     * @param worker
+     * @param rrdGraph the graph whose image and definition set up this axis
+     * @param worker the image worker painting the graph
      */
     ValueAxis(RrdGraph rrdGraph, ImageWorker worker) {
         this.im = rrdGraph.im;
@@ -51,6 +51,11 @@ class ValueAxis extends Axis {
         this.mapper = new Mapper(this.gdef, this.im);
     }
 
+    /**
+     * Create a value axis for the given generator's graph.
+     *
+     * @param generator the generator whose definition and image parameters to use
+     */
     ValueAxis(RrdGraphGenerator generator) {
         this.im = generator.im;
         this.gdef = generator.gdef;
@@ -311,6 +316,15 @@ class ValueAxis extends Axis {
         /** The label factors */
         final int[] labelFacts;
 
+        /**
+         * Create a y-axis label placement.
+         *
+         * @param grid the value of the gridline this label sits on
+         * @param lfac1 label factor for the first label row
+         * @param lfac2 label factor for the second label row
+         * @param lfac3 label factor for the third label row
+         * @param lfac4 label factor for the fourth label row
+         */
         YLabel(double grid, int lfac1, int lfac2, int lfac3, int lfac4) {
             this.grid = grid;
             labelFacts = new int[] {lfac1, lfac2, lfac3, lfac4};

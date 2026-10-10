@@ -26,10 +26,17 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
-/** Helper for the logs page.
+/**
+ * Helper for the logs page.
  * @since 0.9.33
  */
 public class LogsHelper extends HelperBase {
+
+    /**
+     *  Constructor, used by the console when it builds this bean. The rewrite
+     *  tables below are static, so a bare instance needs no initialization.
+     */
+    public LogsHelper() {}
 
     private static final Pattern LOG_LEVEL_PATTERN = Pattern.compile("\\|\\s*(DEBUG|INFO|WARN|ERROR|CRIT)\\s");
     private static final Pattern BRACKET_CLEANUP_PATTERN = Pattern.compile("\\[\\[(&#10004;|&#10008;)\\]\\]");
@@ -147,16 +154,32 @@ public class LogsHelper extends HelperBase {
         {"| I2P+ update downloaded", "| INFO | I2P+ update downloaded"}
     };
 
+    /**
+     * Sets the router context whose log manager this helper reads from
+     *
+     * @param context the context injected by the servlet container before any log call
+     */
     public void setContext(RouterContext context) {this._context = context;}
     private static final String _jstlVersion = jstlVersion();
     private static final int MAX_WRAPPER_LINES = 320;
     private static final String PROP_LAST_WRAPPER = "routerconsole.lastWrapperLogEntry";
     private final StringBuilder _msgBuf = new StringBuilder(12*1024);
 
-    /** @since 0.8.12 */
+    /**
+     * Return the Jetty version the console is running under.
+     *
+     * @return the Jetty version string, or "n/a" if it cannot be determined
+     * @since 0.8.12
+     */
     public String getJettyVersion() {return RouterConsoleRunner.jettyVersion();}
 
-    /** @since 0.9.15 */
+    /**
+     * Return a table row for each signature type this router cannot use.
+     *
+     * @return the table rows listing each unavailable signature type, empty if
+     *         every type is available
+     * @since 0.9.15
+     */
     public String getUnavailableCrypto() {
         StringBuilder buf = new StringBuilder(128);
         for (SigType t : SigType.values()) {
@@ -194,8 +217,9 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
+     * Return HTML rendering of the most recent log messages.
      * Does not call logManager.flush(); call getCriticalLogs() first to flush
-     * @return the logs
+     * @return the formatted log messages, wrapped in a link to the log file
      */
     public String getLogs() {
         String str = formatMessages(_context.logManager().getBuffer().getMostRecentMessages());
@@ -227,6 +251,7 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
+     * Returns the ID of the most recent log message, for clearThrough().
      * Call before getLogs()
      *
      * @return -1 if none
@@ -257,7 +282,14 @@ public class LogsHelper extends HelperBase {
      *
      * @param n -1 for none
      * @param crit -1 for none
-     * @param consoleNonce must match
+     * @param wn last line number of the wrapper log already shown, or -1 for none
+     * @param wts timestamp in ms of the wrapper log line already shown, or -1
+     *        for none
+     * @param wf filename of the wrapper log already shown, or null for none
+     * @param session the console session holding the nonce, or null to fall back
+     *        to the process-wide nonce
+     * @param consoleNonce the submitted anti-CSRF token, which must equal the
+     *        session's nonce, or the process-wide one if no session was given
      * @since 0.9.46
      */
     public void clearThrough(int n, int crit, long wn, long wts, String wf, HttpSession session, String consoleNonce) {
@@ -282,8 +314,9 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     * last line number -1 on error
-     * @param obuf out parameter
+     * Return HTML rendering of the tail of the wrapper (service) log, with the
+     * modification time, last line number and filename of the log file.
+     * @param obuf out parameter receiving the HTML location and content block
      * @return Long timestamp, Long last line number, String filename (escaped)
      */
 
@@ -422,7 +455,8 @@ public class LogsHelper extends HelperBase {
     /**
      * Return the build revision and date from the routerconsole.war manifest.
      *
-     * @return the revision
+     * @return the Base-Revision attribute, linked to the commit when built by z3d,
+     *         or an empty string when the manifest carries no usable attributes
      * @since 0.9.50+
      */
     public String getRevision() {
@@ -560,7 +594,7 @@ public class LogsHelper extends HelperBase {
      * @param utf8 true for utf-8, false for system locale
      * @param maxNumLines max number of lines (greater than zero)
      * @param skipLines number of lines to skip, or zero
-     * @param buf out parameter
+     * @param buf out parameter receiving the trailing lines, each terminated by '\n'
      * @return -1 on failure, or number of lines in the file. Does not throw IOException.
      * @since 0.9.11 modded from FileUtil.readTextFile()
      */
@@ -602,7 +636,7 @@ public class LogsHelper extends HelperBase {
     private static final String CORE_BUNDLE_NAME = "net.i2p.util.messages";
 
     /**
-     * translate a string from the core bundle
+     * Translate a string from the core bundle.
      * @since 0.9.45
      */
     private String _c(String s) {
@@ -610,7 +644,8 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
-     * @return whether advanced
+     * Reports whether advanced mode is enabled for this console.
+     * @return true if the advanced-mode property is set, false otherwise
      */
     public boolean isAdvanced() {
         return _context.getBooleanProperty(PROP_ADVANCED);

@@ -4,11 +4,22 @@ package net.i2p.client.streaming;
  * Usage: StreamSinkTest [(old|new) [#hops [#kb]]]
  */
 public class StreamSinkTestStandalone {
+    /**
+     * The host, port, hop and block-size settings are static and are set from main()'s
+     * arguments, so an instance carries nothing.
+     */
+    public StreamSinkTestStandalone() {}
+
     private static String HOST1 = "localhost";
     private static String HOST2 = "localhost";
     private static String PORT1 = "10001";
     private static String PORT2 = "11001";
 
+    /**
+     * Start a local StreamSink server and client, then exit after the test window.
+     *
+     * @param args optional tunnel hop count and block size in KB
+     */
     public static void main(String[] args) {
         int hops = 0;
         int kb = 32*1024;

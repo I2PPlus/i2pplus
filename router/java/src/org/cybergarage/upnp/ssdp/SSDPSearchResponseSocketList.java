@@ -32,6 +32,8 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     public SSDPSearchResponseSocketList() {}
 
     /**
+     * Create a socket list bound to the given addresses.
+     *
      * @param binds The host to bind.Use <code>null</code> for the default behavior
      */
     public SSDPSearchResponseSocketList(InetAddress[] binds) {
@@ -47,6 +49,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 
     /**
      * setControlPoint.
+     * @param ctrlPoint the control point every socket in the list reports to
      */
     public void setControlPoint(ControlPoint ctrlPoint) {
         int nSockets = size();
@@ -62,6 +65,8 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 
     /**
      * getSSDPSearchResponseSocket.
+     * @param n the zero-based position in the list
+     * @return the response socket at that position
      */
     public SSDPSearchResponseSocket getSSDPSearchResponseSocket(int n) {
         return get(n);
@@ -73,6 +78,8 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 
     /**
      * open.
+     * @param port the port every response socket is opened on
+     * @return false if a socket could not be opened, after closing and clearing the list
      */
     public boolean open(int port) {
         InetAddress[] binds = this.binds;
@@ -106,6 +113,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
 
     /**
      * open.
+     * @return false if a socket could not be opened, after closing and clearing the list
      */
     public boolean open() {
         return open(SSDP.PORT);

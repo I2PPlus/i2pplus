@@ -91,12 +91,12 @@ public class ConfigUpdateHandler extends FormHandler {
     public static final String PROP_UPDATE_URL = "router.updateURL";
 
     /**
-     *  default false
+     *  If true, offer development SU3 builds; default false
      *  @since 0.9.20
      */
     public static final String PROP_UPDATE_DEV_SU3 = "router.updateDevSU3";
     /**
-     *  no default
+     *  If true, the development SU3 URL; no default
      *  @since 0.9.20
      */
     public static final String PROP_DEV_SU3_URL = "router.updateDevSU3URL";
@@ -277,28 +277,68 @@ public class ConfigUpdateHandler extends FormHandler {
         _context.router().saveConfig(changes, null);
     }
 
-    /** @param url the news URL */
+    /**
+     * Record the news URL to fetch.
+     *
+     * @param url the news URL
+     */
     public void setNewsURL(String url) {_newsURL = url;}
-    /** @param freq the refresh frequency in milliseconds */
+    /**
+     * Record the interval between update checks.
+     *
+     * @param freq the interval in milliseconds; unparseable input is ignored
+     */
     public void setRefreshFrequency(String freq) {
         try {_refreshFrequency = Long.parseLong(freq);}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
-    /** @param url the update URL */
+    /**
+     * Record the update URL to fetch.
+     *
+     * @param url the update URL
+     */
     public void setUpdateURL(String url) {_updateURL = url;}
-    /** @param policy the update policy */
+    /**
+     * Record the policy to apply when an update is offered.
+     *
+     * @param policy the update policy
+     */
     public void setUpdatePolicy(String policy) {_updatePolicy = policy;}
-    /** @param keys the trusted keys */
+    /**
+     * Record the signing keys accepted for update verification.
+     *
+     * @param keys the trusted keys
+     */
     public void setTrustedKeys(String keys) {_trustedKeys = keys;}
-    /** @param foo ignored */
+    /**
+     * Enable update proxying.
+     *
+     * @param foo ignored; this setter only ever turns the option on
+     */
     public void setUpdateThroughProxy(String foo) {_updateThroughProxy = true;}
-    /** @param host the proxy host */
+    /**
+     * Record the proxy host to fetch through.
+     *
+     * @param host the proxy host
+     */
     public void setProxyHost(String host) {_proxyHost = host;}
-    /** @param port the proxy port */
+    /**
+     * Record the proxy port to fetch through.
+     *
+     * @param port the proxy port
+     */
     public void setProxyPort(String port) {_proxyPort = port;}
-    /** @param foo ignored */
+    /**
+     * Allow updates to be installed without a signature.
+     *
+     * @param foo ignored; this setter only ever turns the option on
+     */
     public void setUpdateUnsigned(String foo) {_updateUnsigned = true;}
-    /** @param url the unsigned zip URL */
+    /**
+     * Record the zip download URL used for unsigned updates.
+     *
+     * @param url the zip URL to download
+     */
     public void setZipURL(String url) {_zipURL = url;}
     /**
      *  Set whether to fetch news through proxy.
@@ -314,7 +354,7 @@ public class ConfigUpdateHandler extends FormHandler {
     public void setUpdateDevSU3(String foo) {_updateDevSU3  = true;}
     /**
      *  Set the development SU3 URL.
-     *  @param url the URL
+     *  @param url the development SU3 zip URL to download
      *  @since 0.9.20
      */
     public void setDevSU3URL(String url) {_devSU3URL = url;}

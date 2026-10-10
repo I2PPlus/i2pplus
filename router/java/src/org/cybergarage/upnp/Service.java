@@ -33,7 +33,8 @@ import org.cybergarage.xml.Parser;
 import org.cybergarage.xml.ParserException;
 
 /**
- * Service.
+ * An UPnP service, described by an SCPD document and reached through its
+ * containing device.
  */
 public class Service {
     ////////////////////////////////////////////////
@@ -619,7 +620,9 @@ public class Service {
     ////////////////////////////////////////////////
 
     /**
-     * getServiceStateTable.
+     * Builds the state variable table for this service from its SCPD document.
+     *
+     * @return the state table, empty if the SCPD document declares none
      */
     public ServiceStateTable getServiceStateTable() {
         ServiceStateTable stateTable = new ServiceStateTable();
@@ -637,7 +640,10 @@ public class Service {
     }
 
     /**
-     * getStateVariable.
+     * Looks up a state variable in this service's state table.
+     *
+     * @param name the state variable name, matched exactly
+     * @return the state variable, or null if the service declares no such name
      */
     public StateVariable getStateVariable(String name) {
         ServiceStateTable stateTable = getServiceStateTable();
@@ -652,7 +658,10 @@ public class Service {
     }
 
     /**
-     * hasStateVariable.
+     * Test whether this service publishes the named state variable.
+     *
+     * @param name the state variable name to look for
+     * @return true if the service declares a state variable with that name
      */
     public boolean hasStateVariable(String name) {
         return (getStateVariable(name) != null) ? true : false;
@@ -663,7 +672,11 @@ public class Service {
     ////////////////////////////////////////////////
 
     /**
-     * isService.
+     * Test whether the given name identifies this service, either by its
+     * service type or by its service ID.
+     *
+     * @param name the service type or service ID to match; a null value returns false
+     * @return true if name ends with this service's type or its service ID
      */
     public boolean isService(String name) {
         if (name == null) return false;
@@ -736,7 +749,9 @@ public class Service {
     }
 
     /**
-     * byebye.
+     * Announces this service as gone to the network using SSDP.
+     *
+     * @param bindAddr bind address to send the announcement from
      */
     public void byebye(String bindAddr) {
         // uuid:device-UUID::urn:schemas-upnp-org:service:serviceType:v
@@ -760,7 +775,11 @@ public class Service {
     }
 
     /**
-     * serviceSearchResponse.
+     * Answer an SSDP M-SEARCH that names this service.
+     *
+     * @param ssdpPacket the search request, whose ST header selects the target
+     * @return false if the request carries no ST header, true once any matching
+     *     search response has been queued
      */
     public boolean serviceSearchResponse(SSDPPacket ssdpPacket) {
         String ssdpST = ssdpPacket.getST();
@@ -788,7 +807,10 @@ public class Service {
     ////////////////////////////////////////////////
 
     /**
-     * setQueryListener.
+     * Register the listener invoked when any of this service's state
+     * variables is queried.
+     *
+     * @param queryListener the listener to attach to every state variable
      */
     public void setQueryListener(QueryListener queryListener) {
         ServiceStateTable stateTable = getServiceStateTable();
@@ -804,28 +826,37 @@ public class Service {
     ////////////////////////////////////////////////
 
     /**
-     * getSubscriberList.
+     * Get the subscribers registered for this service.
+     *
+     * @return the service's subscriber list, empty if it has no subscribers
      */
     public SubscriberList getSubscriberList() {
         return getServiceData().getSubscriberList();
     }
 
     /**
-     * addSubscriber.
+     * Register a subscriber to receive event notifications for this service.
+     *
+     * @param sub the subscriber to add to the service's subscriber list
      */
     public void addSubscriber(Subscriber sub) {
         getSubscriberList().add(sub);
     }
 
     /**
-     * removeSubscriber.
+     * Deregister a subscriber so it stops receiving event notifications.
+     *
+     * @param sub the subscriber to remove from the service's subscriber list
      */
     public void removeSubscriber(Subscriber sub) {
         getSubscriberList().remove(sub);
     }
 
     /**
-     * getSubscriber.
+     * Look up a subscriber by its subscription ID.
+     *
+     * @param name the subscription ID to match
+     * @return the matching subscriber, or null if no subscriber carries that SID
      */
     public Subscriber getSubscriber(String name) {
         SubscriberList subList = getSubscriberList();
@@ -859,7 +890,10 @@ public class Service {
     }
 
     /**
-     * notify.
+     * Send an event for one state variable to every current subscriber,
+     * dropping any that have expired first.
+     *
+     * @param stateVar the state variable whose name and value are announced
      */
     public void notify(StateVariable stateVar) {
         SubscriberList subList = getSubscriberList();
@@ -892,7 +926,7 @@ public class Service {
     }
 
     /**
-     * notifyAllStateVariables.
+     * Send an event for every state variable that is flagged to send events.
      */
     public void notifyAllStateVariables() {
         ServiceStateTable stateTable = getServiceStateTable();
@@ -908,21 +942,26 @@ public class Service {
     ////////////////////////////////////////////////
 
     /**
-     * getSID.
+     * Get this service's subscription ID.
+     *
+     * @return the subscription ID assigned to this service's subscriber
      */
     public String getSID() {
         return getServiceData().getSID();
     }
 
     /**
-     * setSID.
+     * Set this service's subscription ID.
+     *
+     * @param id the subscription ID to record
      */
     public void setSID(String id) {
         getServiceData().setSID(id);
     }
 
     /**
-     * clearSID.
+     * Discard the subscription ID and zero the timeout, marking the service
+     * as no longer subscribed.
      */
     public void clearSID() {
         setSID("");
@@ -930,14 +969,18 @@ public class Service {
     }
 
     /**
-     * hasSID.
+     * Test whether a subscription ID is currently recorded for this service.
+     *
+     * @return true if a non-empty subscription ID is set
      */
     public boolean hasSID() {
         return StringUtil.hasData(getSID());
     }
 
     /**
-     * isSubscribed.
+     * Test whether this service currently holds a subscription.
+     *
+     * @return true if a subscription ID is set
      */
     public boolean isSubscribed() {
         return hasSID();
@@ -948,14 +991,18 @@ public class Service {
     ////////////////////////////////////////////////
 
     /**
-     * getTimeout.
+     * Get the subscription timeout in seconds.
+     *
+     * @return the number of seconds this service's subscription remains valid
      */
     public long getTimeout() {
         return getServiceData().getTimeout();
     }
 
     /**
-     * setTimeout.
+     * Set the subscription timeout.
+     *
+     * @param value the subscription lifetime in seconds; 0 expires it at once
      */
     public void setTimeout(long value) {
         getServiceData().setTimeout(value);
@@ -966,7 +1013,9 @@ public class Service {
     ////////////////////////////////////////////////
 
     /**
-     * setActionListener.
+     * Register the listener invoked when one of this service's actions is invoked.
+     *
+     * @param listener the listener to attach to every action in the service
      */
     public void setActionListener(ActionListener listener) {
         ActionList actionList = getActionList();
@@ -1009,14 +1058,18 @@ public class Service {
     private Object userData = null;
 
     /**
-     * setUserData.
+     * Attach an application object to this service, for retrieval by getUserData.
+     *
+     * @param data the object to record; may be null
      */
     public void setUserData(Object data) {
         userData = data;
     }
 
     /**
-     * getUserData.
+     * Get the application object attached to this service.
+     *
+     * @return the object passed to setUserData, or null if none has been set
      */
     public Object getUserData() {
         return userData;

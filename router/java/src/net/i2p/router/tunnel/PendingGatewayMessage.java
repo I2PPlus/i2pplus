@@ -36,6 +36,10 @@ class PendingGatewayMessage implements CDQEntry {
 
     /**
      * Stores the message data, destination, and expiration for a pending send.
+     *
+     * @param message the I2NP message to deliver, serialized and tracked until sent
+     * @param toRouter the hash of the next-hop router the message is addressed to
+     * @param toTunnel the tunnel the message will be injected into at that router
      */
     public PendingGatewayMessage(I2NPMessage message, Hash toRouter, TunnelId toTunnel) {
         _toRouter = toRouter;

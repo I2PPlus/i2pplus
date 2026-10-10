@@ -107,7 +107,8 @@ public class RouterInfo extends DatabaseEntry {
      */
     public static final int MAX_UNCOMPRESSED_SIZE = 4*1024;
 
-    /** Public string of chars which serve as bandwidth capacity markers
+    /**
+     * Public string of chars which serve as bandwidth capacity markers
      * NOTE: individual chars defined in Router.java
      */
     public static final String BW_CAPABILITY_CHARS = "" +
@@ -120,7 +121,8 @@ public class RouterInfo extends DatabaseEntry {
         Router.CAPABILITY_BW32 +
         Router.CAPABILITY_BW12;
 
-    /** Public string of chars which serve as bandwidth congestion markers
+    /**
+     * Public string of chars which serve as bandwidth congestion markers
      * NOTE: individual chars defined in Router.java
      *
      * @since 0.9.63+
@@ -140,6 +142,8 @@ public class RouterInfo extends DatabaseEntry {
      * Used only by Router and PublishLocalRouterInfoJob.
      * Copies ONLY the identity and peers.
      * Does not copy published, addresses, options, or signature.
+     *
+     * @param old the RouterInfo to copy the identity and peer set from
      */
     public RouterInfo(RouterInfo old) {
         this();
@@ -165,7 +169,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Retrieve the identity of the router represented
      *
-     * @return the identity
+     * @return the RouterIdentity holding the public key and certificate
      */
     public RouterIdentity getIdentity() {
         return _identity;
@@ -174,6 +178,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Configure the identity of the router represented
      *
+     * @param ident the RouterIdentity whose public key and certificate describe this router
      * @throws IllegalStateException if RouterInfo is already signed
      */
     public void setIdentity(RouterIdentity ident) {
@@ -192,7 +197,7 @@ public class RouterInfo extends DatabaseEntry {
      * essentially a version number for the RouterInfo.
      * This should be used to expire old RouterInfo structures.
      *
-     * @return the published
+     * @return the publication date in milliseconds since the epoch
      */
     public long getPublished() {
         return _published;
@@ -201,6 +206,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Date on which it was published, in milliseconds since Midnight GMT on Jan 01, 1970
      *
+     * @param published the publication time in milliseconds since the epoch
      * @throws IllegalStateException if RouterInfo is already signed
      */
     public void setPublished(long published) {
@@ -250,7 +256,7 @@ public class RouterInfo extends DatabaseEntry {
      * Retrieve a set of SHA-256 hashes of RouterIdentities from routers
      * this router can be reached through.
      * Obsolete — peer set is typically empty.
-     * @return the peers
+     * @return an unmodifiable set of the peer hashes, empty if there are none
      */
     public Set<Hash> getPeers() {
         if (_peers == null)
@@ -263,6 +269,7 @@ public class RouterInfo extends DatabaseEntry {
      * this router can be reached through.
      * Obsolete — peer set is typically empty.
      *
+     * @param peers SHA-256 hashes of the peers this router can be reached through; null or empty clears the set
      * @throws IllegalStateException if RouterInfo is already signed
      */
     public void setPeers(Set<Hash> peers) {
@@ -297,7 +304,12 @@ public class RouterInfo extends DatabaseEntry {
     public Map<Object, Object> getOptionsMap() {
         return Collections.unmodifiableMap(_options);
     }
-    /** Return the option */
+    /**
+     * Return the value of a single option.
+     *
+     * @param opt the name of the option to look up
+     * @return the option's value, or null if that option is not set
+     */
 
     public String getOption(String opt) {return _options.getProperty(opt);}
 
@@ -332,8 +344,8 @@ public class RouterInfo extends DatabaseEntry {
      * Write out the raw payload of the routerInfo, excluding the signature.  This
      * caches the data in memory if possible.
      *
+     * @return the serialized payload excluding the signature
      * @throws DataFormatException if the data is somehow b0rked (missing props, etc)
-     * @return the bytes
      */
     protected byte[] getBytes() throws DataFormatException {
         if (_byteified != null) return _byteified;
@@ -389,7 +401,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Determine whether this router info is authorized with a valid signature
      *
-     * @return whether valid
+     * @return true if the signature verifies, false otherwise
      */
     public boolean isValid() {
         if (!_validated) doValidate();
@@ -397,7 +409,7 @@ public class RouterInfo extends DatabaseEntry {
     }
 
     /**
-     * Same as isValid()
+     * Return true if the signature is valid, as {@link #isValid()} does.
      */
     @Override
     public boolean verifySignature() {
@@ -500,7 +512,8 @@ public class RouterInfo extends DatabaseEntry {
      * Pull the first workable target address for the given transport.
      * Use to check for any address. For all addresses, use getTargetAddresses(),
      * which you probably want if you care about IPv6.
-     * @return the target address
+     * @param transportStyle the transport style to match, e.g. NTCP2 or SSU2
+     * @return the target address, or null if this router advertises none for that style
      */
     public RouterAddress getTargetAddress(String transportStyle) {
         for (RouterAddress addr : _addresses) {
@@ -512,7 +525,8 @@ public class RouterInfo extends DatabaseEntry {
 
     /**
      * For multiple addresses per-transport (IPv4 or IPv6)
-     * @return non-null
+     * @param transportStyle the transport style to match, e.g. NTCP2 or SSU2
+     * @return a mutable list of the advertised addresses in that style, never null
      * @since 0.7.11
      */
     public List<RouterAddress> getTargetAddresses(String transportStyle) {
@@ -528,7 +542,9 @@ public class RouterInfo extends DatabaseEntry {
      * For multiple addresses per-transport (IPv4 or IPv6)
      * Return addresses matching either of two styles
      *
-     * @return non-null
+     * @param transportStyle1 the first transport style to match, e.g. NTCP2
+     * @param transportStyle2 the second transport style to match, e.g. SSU2
+     * @return a mutable list of the advertised addresses in either style, never null
      * @since 0.9.35
      */
     public List<RouterAddress> getTargetAddresses(String transportStyle1, String transportStyle2) {
@@ -572,7 +588,12 @@ public class RouterInfo extends DatabaseEntry {
      * and throws a DataFormatException if the sig is invalid.
      * This is faster than reserializing to validate later.
      *
+     * @param in the stream to read the RouterInfo from
+     * @param verifySig if true, validate the signature as the bytes are read
+     * @throws DataFormatException if the data cannot be parsed, or if verifySig is
+     * true and the signature does not validate
      * @throws IllegalStateException if RouterInfo was already read in
+     * @throws IOException if the stream cannot be read
      */
     public void readBytes(InputStream in, boolean verifySig) throws DataFormatException, IOException {
         if (_signature != null) {throw new IllegalStateException();}

@@ -19,13 +19,19 @@ public class I2NPMessageHandler {
     private final I2PAppContext _context;
     private I2NPMessage _lastRead;
 
-    /** Message handler for reading and writing I2NP messages. */
+    /**
+     * Message handler for reading and writing I2NP messages.
+     * @param context router context supplying the app context and this handler's Log
+     */
     public I2NPMessageHandler(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(I2NPMessageHandler.class);
     }
 
-    /** Clear the last message read from a byte array with an offset. */
+    /**
+     * Clear the last message read from a byte array with an offset.
+     * @return the last I2NP message read, or null if none is pending; the call clears it
+     */
     public I2NPMessage lastRead() {
         I2NPMessage rv = _lastRead;
         _lastRead = null;

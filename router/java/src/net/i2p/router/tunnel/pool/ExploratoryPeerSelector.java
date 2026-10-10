@@ -87,6 +87,8 @@ import net.i2p.util.SystemVersion;
 
     /**
      * ExploratoryPeerSelector.
+     *
+     * @param context the router context supplying peers and network state
      */
     public ExploratoryPeerSelector(RouterContext context) {
         super(context);

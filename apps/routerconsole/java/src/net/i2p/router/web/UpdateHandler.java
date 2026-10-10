@@ -36,6 +36,8 @@ public class UpdateHandler {
 
     /**
      * For form validation
+     *
+     * @param session the console HTTP session the nonce is validated against
      * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
@@ -47,6 +49,8 @@ public class UpdateHandler {
 
     /**
      * UpdateHandler.
+     *
+     * @param ctx router context whose log manager backs this handler
      */
     public UpdateHandler(RouterContext ctx) {
         _context = ctx;
@@ -54,6 +58,9 @@ public class UpdateHandler {
     }
 
     /**
+     * Fetch the update manager that the update pages write to, without starting it.
+     *
+     * @param ctx router context whose client app manager holds the update manager
      * @return null if not found
      * @since 0.9.12
      */
@@ -76,7 +83,11 @@ public class UpdateHandler {
         } catch (Throwable t) {_log.error("Error updating", t);}
     }
 
-    /** These two can be set in either order, so call checkUpdateAction() twice */
+    /**
+     * These two can be set in either order, so call checkUpdateAction() twice
+     *
+     * @param val the update action name submitted by the form
+     */
     public void setUpdateAction(String val) {
         _action = val;
         checkUpdateAction();
@@ -84,6 +95,8 @@ public class UpdateHandler {
 
     /**
      * setUpdateNonce.
+     *
+     * @param nonce the nonce submitted by the form, checked against the issued one
      */
     public void setUpdateNonce(String nonce) {
         _nonce = nonce;
@@ -92,6 +105,8 @@ public class UpdateHandler {
 
     /**
      * Alias for setUpdateNonce for session-based nonce support
+     *
+     * @param nonce the nonce submitted by the form, checked against the session
      * @since 0.9.69
      */
     public void setConsoleNonce(String nonce) {

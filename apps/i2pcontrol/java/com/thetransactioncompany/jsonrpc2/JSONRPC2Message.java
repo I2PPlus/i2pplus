@@ -52,6 +52,12 @@ import org.json.simple.JsonObject;
  * @author Vladimir Dzhuvinov
  */
 public abstract class JSONRPC2Message {
+    /**
+     * Constructor for subclasses; a message holds only the fields its own subclass sets.
+     */
+
+    public JSONRPC2Message() {}
+
 
 
 	/**

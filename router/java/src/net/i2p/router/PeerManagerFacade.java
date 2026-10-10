@@ -35,6 +35,7 @@ public interface PeerManagerFacade extends Service {
  * The capabilities for a peer.
  *
  * @param peer the peer
+ * @param caps the peer's capabilities, a case-insensitive string of PeerCapability chars
  */
     public void setCapabilities(Hash peer, String caps);
     /**

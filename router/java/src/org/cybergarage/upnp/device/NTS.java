@@ -38,13 +38,21 @@ public class NTS {
     /** Property change notification */
     public static final String PROPCHANGE = "upnp:propchange";
 
-    /** @param ntsValue the NTS value to check */
+    /**
+     * Test whether an NTS header names an ssdp:alive notification.
+     * @param ntsValue the NTS value to check
+     * @return true if the value is non-null and begins with the "ssdp:alive" prefix
+     */
     public static final boolean isAlive(String ntsValue) {
         if (ntsValue == null) return false;
         return ntsValue.startsWith(NTS.ALIVE);
     }
 
-    /** @param ntsValue the NTS value to check */
+    /**
+     * Test whether an NTS header names an ssdp:byebye notification.
+     * @param ntsValue the NTS value to check
+     * @return true if the value is non-null and begins with the "ssdp:byebye" prefix
+     */
     public static final boolean isByeBye(String ntsValue) {
         if (ntsValue == null) return false;
         return ntsValue.startsWith(NTS.BYEBYE);

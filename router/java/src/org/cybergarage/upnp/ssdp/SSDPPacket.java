@@ -41,6 +41,9 @@ public class SSDPPacket {
 
     /**
      * SSDPPacket.
+     *
+     * @param buf the buffer holding the received datagram, wrapped rather than copied
+     * @param length how many bytes of buf this packet spans, in bytes
      */
     public SSDPPacket(byte[] buf, int length) {
         dgmPacket = new DatagramPacket(buf, length);
@@ -54,6 +57,8 @@ public class SSDPPacket {
 
     /**
      * getDatagramPacket.
+     *
+     * @return the wrapped DatagramPacket carrying this SSDP message
      */
     public DatagramPacket getDatagramPacket() {
         return dgmPacket;
@@ -67,6 +72,8 @@ public class SSDPPacket {
 
     /**
      * setLocalAddress.
+     *
+     * @param addr the local IP address that received the datagram
      */
     public void setLocalAddress(String addr) {
         localAddr = addr;
@@ -74,6 +81,8 @@ public class SSDPPacket {
 
     /**
      * getLocalAddress.
+     *
+     * @return the local IP address that received this datagram
      */
     public String getLocalAddress() {
         return localAddr;
@@ -87,6 +96,8 @@ public class SSDPPacket {
 
     /**
      * setTimeStamp.
+     *
+     * @param value the receipt time in milliseconds since the epoch
      */
     public void setTimeStamp(long value) {
         timeStamp = value;
@@ -94,6 +105,8 @@ public class SSDPPacket {
 
     /**
      * getTimeStamp.
+     *
+     * @return when this datagram was received, in milliseconds since the epoch, or 0
      */
     public long getTimeStamp() {
         return timeStamp;
@@ -105,6 +118,8 @@ public class SSDPPacket {
 
     /**
      * getRemoteInetAddress.
+     *
+     * @return the InetAddress this datagram was sent from
      */
     public InetAddress getRemoteInetAddress() {
         return getDatagramPacket().getAddress();
@@ -112,6 +127,8 @@ public class SSDPPacket {
 
     /**
      * getRemoteAddress.
+     *
+     * @return the IP address string this datagram was sent from
      */
     public String getRemoteAddress() {
         // Thanks for Theo Beisch (11/09/04)
@@ -120,6 +137,8 @@ public class SSDPPacket {
 
     /**
      * getRemotePort.
+     *
+     * @return the UDP port number this datagram was sent from
      */
     public int getRemotePort() {
         return getDatagramPacket().getPort();
@@ -136,6 +155,8 @@ public class SSDPPacket {
 
     /**
      * getData.
+     *
+     * @return the UTF-8 message bytes of this datagram, cached in packetBytes once read
      */
     public byte[] getData() {
         if (packetBytes != null) return packetBytes;
@@ -154,6 +175,8 @@ public class SSDPPacket {
 
     /**
      * getHost.
+     *
+     * @return the HOST header value, or an empty string if the message carries none
      */
     public String getHost() {
         return HTTPHeader.getValue(getData(), HTTP.HOST);
@@ -161,6 +184,9 @@ public class SSDPPacket {
 
     /**
      * getCacheControl.
+     *
+     * @return the CACHE-CONTROL header value, or an empty string if the message
+     * carries none
      */
     public String getCacheControl() {
         return HTTPHeader.getValue(getData(), HTTP.CACHE_CONTROL);
@@ -168,6 +194,8 @@ public class SSDPPacket {
 
     /**
      * getLocation.
+     *
+     * @return the LOCATION header value, or an empty string if the message carries none
      */
     public String getLocation() {
         return HTTPHeader.getValue(getData(), HTTP.LOCATION);
@@ -175,6 +203,8 @@ public class SSDPPacket {
 
     /**
      * getMAN.
+     *
+     * @return the MAN header value, or an empty string if the message carries none
      */
     public String getMAN() {
         return HTTPHeader.getValue(getData(), HTTP.MAN);
@@ -182,6 +212,8 @@ public class SSDPPacket {
 
     /**
      * getST.
+     *
+     * @return the ST header value, or an empty string if the message carries none
      */
     public String getST() {
         return HTTPHeader.getValue(getData(), HTTP.ST);
@@ -189,6 +221,8 @@ public class SSDPPacket {
 
     /**
      * getNT.
+     *
+     * @return the NT header value, or an empty string if the message carries none
      */
     public String getNT() {
         return HTTPHeader.getValue(getData(), HTTP.NT);
@@ -196,6 +230,8 @@ public class SSDPPacket {
 
     /**
      * getNTS.
+     *
+     * @return the NTS header value, or an empty string if the message carries none
      */
     public String getNTS() {
         return HTTPHeader.getValue(getData(), HTTP.NTS);
@@ -203,6 +239,8 @@ public class SSDPPacket {
 
     /**
      * getServer.
+     *
+     * @return the SERVER header value, or an empty string if the message carries none
      */
     public String getServer() {
         return HTTPHeader.getValue(getData(), HTTP.SERVER);
@@ -210,6 +248,8 @@ public class SSDPPacket {
 
     /**
      * getUSN.
+     *
+     * @return the USN header value, or an empty string if the message carries none
      */
     public String getUSN() {
         return HTTPHeader.getValue(getData(), HTTP.USN);
@@ -217,6 +257,8 @@ public class SSDPPacket {
 
     /**
      * getMX.
+     *
+     * @return the MX header in seconds, or 0 if it is missing or unparseable
      */
     public int getMX() {
         return HTTPHeader.getIntegerValue(getData(), HTTP.MX);
@@ -228,6 +270,9 @@ public class SSDPPacket {
 
     /**
      * getHostInetAddress.
+     *
+     * @return the InetAddress named in the HOST header, or the loopback address if
+     * that header carries no port
      */
     public InetAddress getHostInetAddress() {
         String addrStr = "127.0.0.1";
@@ -249,6 +294,8 @@ public class SSDPPacket {
 
     /**
      * isRootDevice.
+     *
+     * @return true if the NT, ST or USN header identifies this as the root device
      */
     public boolean isRootDevice() {
         if (NT.isRootDevice(getNT()) == true) return true;
@@ -259,6 +306,8 @@ public class SSDPPacket {
 
     /**
      * isDiscover.
+     *
+     * @return true if the MAN header carries the discover advertisement
      */
     public boolean isDiscover() {
         return MAN.isDiscover(getMAN());
@@ -266,6 +315,8 @@ public class SSDPPacket {
 
     /**
      * isAlive.
+     *
+     * @return true if the NTS header is ssdp:alive
      */
     public boolean isAlive() {
         return NTS.isAlive(getNTS());
@@ -273,6 +324,8 @@ public class SSDPPacket {
 
     /**
      * isByeBye.
+     *
+     * @return true if the NTS header is ssdp:byebye
      */
     public boolean isByeBye() {
         return NTS.isByeBye(getNTS());
@@ -280,6 +333,9 @@ public class SSDPPacket {
 
     /**
      * getLeaseTime.
+     *
+     * @return the lease time in seconds, or 0 if the CACHE-CONTROL header carries no
+     * usable max-age
      */
     public int getLeaseTime() {
         return SSDP.getLeaseTime(getCacheControl());

@@ -541,6 +541,9 @@ public abstract class FormHandler {
 
         /**
          * Message.
+         *
+         * @param text the message text shown to the user
+         * @param canClose whether the user is allowed to dismiss it
          */
         public Message(String text, boolean canClose) {
             this.text = text;

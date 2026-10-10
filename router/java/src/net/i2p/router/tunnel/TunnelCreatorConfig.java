@@ -228,7 +228,10 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * For exploratory only (null destination)
+     *
+     * @param ctx the router context
      * @param length 1 minimum (0 hop is length 1)
+     * @param isInbound true to build an inbound tunnel
      */
     public TunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound) {
         this(ctx, length, isInbound, null);
@@ -236,6 +239,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Optional display nickname for this tunnel (e.g. pool name like I2PSnark)
+     *
+     * @param name the nickname to show in logs
      * @since 0.9.70+
      */
     public void setDestinationNickname(String name) { _destinationNickname = name; }
@@ -250,7 +255,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Allocates the hop configs and peer arrays for the given length.
      *
+     * @param ctx the router context
      * @param length 1 minimum (0 hop is length 1)
+     * @param isInbound true to build an inbound tunnel
      * @param destination null for exploratory
      */
     public TunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound, Hash destination) {
@@ -283,6 +290,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Retrieve the config for the given hop.  the gateway is
      * hop 0.
+     *
+     * @param hop the hop number, gateway is 0
      * @return the config
      */
     public HopConfig getConfig(int hop) {return _config[hop];}
@@ -303,10 +312,18 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      */
     public TunnelId getSendTunnelId(int hop) {return _config[hop].getSendTunnel();}
 
-    /** Retrieve the peer at the given hop (the gateway is hop 0). */
+    /**
+     * Retrieve the peer at the given hop (the gateway is hop 0).
+     *
+     * @param hop the hop number, gateway is 0
+     * @return the peer at that hop
+     */
     public Hash getPeer(int hop) {return _peers[hop];}
     /**
      * The peer at the given hop.
+     *
+     * @param hop the hop number, gateway is 0
+     * @param peer the peer to use at that hop
      */
     public void setPeer(int hop, Hash peer) {_peers[hop] = peer;}
 
@@ -366,17 +383,29 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
         _localHopSessionEstablished = established;
     }
 
-    /** Component ordering in the new style request. */
+    /**
+     * Component ordering in the new style request.
+     *
+     * @return the component ordering, never null
+     */
     public List<Integer> getReplyOrder() {return _order;}
     /**
      * The component ordering for the new style request.
+     *
+     * @param order the components in the order they should be requested
      */
     public void setReplyOrder(List<Integer> order) {_order = order;}
 
-    /** The message ID for the new style reply. */
+    /**
+     * The message ID for the new style reply.
+     *
+     * @return the reply message ID, 0 when none has been set
+     */
     public long getReplyMessageId() {return _replyMessageId;}
     /**
      * The message ID for the new style reply.
+     *
+     * @param id the message ID to return to the client
      */
     public void setReplyMessageId(long id) {_replyMessageId = id;}
 
@@ -956,6 +985,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * Key and IV to encrypt the reply sent for the tunnel creation crypto.
      *
+     * @param hop the hop number, gateway is 0
+     * @param key the key to encrypt the reply with
+     * @param iv the 16 byte IV
      * @throws IllegalArgumentException if iv not 16 bytes
      * @since 0.9.48 moved from HopConfig
      */
@@ -969,6 +1001,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * Key to encrypt the reply sent for the tunnel creation crypto.
      * Null for short build record.
      *
+     * @param hop the hop number, gateway is 0
      * @return key or null
      * @throws IllegalArgumentException if iv not 16 bytes
      * @since 0.9.48 moved from HopConfig
@@ -979,6 +1012,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * IV used to encrypt the reply sent for the tunnel creation crypto.
      * Null for short build record.
      *
+     * @param hop the hop number, gateway is 0
      * @return 16 bytes or null
      * @since 0.9.48 moved from HopConfig
      */
@@ -993,6 +1027,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Checksum for blank record
+     *
+     * @param h the hash to use for a blank record
      * @since 0.9.48
      */
     public void setBlankHash(Hash h) {_blankHash = h;}
@@ -1214,6 +1250,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * When the last-chance admission was granted (ms), or 0 if never.
+     *
+     * @return the admission time in ms, 0 when never admitted
      * @since 0.9.71+
      */
     public long getLastChanceAdmission() {return _lastChanceAdmission;}
@@ -1239,6 +1277,10 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * The ECIES reply key and associated data for the given hop.
+     *
+     * @param hop the hop number, gateway is 0
+     * @param key the reply key
+     * @param ad the associated data
      * @since 0.9.48
      */
     public void setChaChaReplyKeys(int hop, SessionKey key, byte[] ad) {
@@ -1252,6 +1294,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * Is it an ECIES hop?
+     *
+     * @param hop the hop number, gateway is 0
      * @return whether e c
      * @since 0.9.48
      */
@@ -1262,6 +1306,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * The ECIES reply key for the given hop, or null.
+     *
+     * @param hop the hop number, gateway is 0
      * @return the cha cha reply key
      * @since 0.9.48
      */
@@ -1272,6 +1318,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * The ECIES reply associated data for the given hop, or null.
+     *
+     * @param hop the hop number, gateway is 0
      * @return the cha cha reply a d
      * @since 0.9.48
      */
@@ -1282,6 +1330,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     /**
      * ECIES short OBEP record only.
+     *
+     * @param keys the one time session carrying the short reply keys
      * @since 0.9.51
      */
     public void setGarlicReplyKeys(OneTimeSession keys) {_garlicReplyKeys = keys;}
@@ -1344,6 +1394,9 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     }
 
     /**
+     * Render every hop, its peer, and its tunnel IDs, for a full description.
+     *
+     * @return the multi-line description, never null
      * @since 0.9.51
      */
     public String toStringFull() {

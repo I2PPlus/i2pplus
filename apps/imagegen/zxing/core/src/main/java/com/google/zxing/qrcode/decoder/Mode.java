@@ -55,6 +55,7 @@ public enum Mode {
   }
 
   /**
+   * Look up the data mode a four-bit type field encodes.
    * @param bits four bits encoding a QR Code data mode
    * @return Mode encoded by these bits
    * @throws IllegalArgumentException if bits do not correspond to a known mode
@@ -88,9 +89,10 @@ public enum Mode {
   }
 
   /**
+   * Return how many bits the character count field occupies for a version.
+   *
    * @param version version in question
    * @return number of bits used, in this QR Code symbol {@link Version}, to encode the
-   *         count of characters that will follow encoded in this Mode
    */
   public int getCharacterCountBits(Version version) {
     int number = version.getVersionNumber();
@@ -106,7 +108,8 @@ public enum Mode {
   }
 
   /**
-   * @return the bits
+   * Return the four-bit type field value for this mode.
+   * @return the four-bit type field value that encodes this mode
    */
   public int getBits() {
     return bits;

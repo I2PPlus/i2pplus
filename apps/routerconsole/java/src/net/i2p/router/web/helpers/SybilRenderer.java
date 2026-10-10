@@ -67,6 +67,8 @@ public class SybilRenderer {
 
     /**
      * SybilRenderer.
+     *
+     * @param ctx the router context supplying the analysis data and logging
      */
     public SybilRenderer(RouterContext ctx) {
         _context = ctx;
@@ -76,9 +78,12 @@ public class SybilRenderer {
     /**
      * Entry point
      *
+     * @param out the writer receiving the rendered HTML
+     * @param nonce the CSP nonce the emitted markup references
      * @param mode what tab to show
      * @param date only for mode = 12
      * @return the net db summary
+     * @throws IOException if the HTML cannot be written to the output
      */
     public String getNetDbSummary(Writer out, String nonce, int mode, long date) throws IOException {
         renderRouterInfoHTML(out, nonce, mode, date);
@@ -1264,6 +1269,11 @@ public class SybilRenderer {
     /**
      * Called from NetDbRenderer
      *
+     * @param out the writer receiving the rendered HTML
+     * @param ctx the router context supplying the key generator and clock
+     * @param sybils the hashes to compare, sorted in place by XOR distance
+     * @param victim the base64 hash to measure from instead of our own, or null
+     * @throws IOException if the HTML cannot be written to the output
      * @since 0.9.28
      */
     public static void renderSybilHTML(Writer out, RouterContext ctx, List<Hash> sybils, String victim) throws IOException {

@@ -35,6 +35,15 @@ public final class MagnetHandler {
 
     private MagnetHandler() {}
 
+    /**
+     * Command line entry point: POST each magnet link, torrent URL, info hash
+     * or torrent file path given on the command line to the running i2psnark
+     * console's browser API, and exit non-zero if any was rejected or the
+     * arguments were unusable.
+     *
+     * @param args an optional --url followed by the console base URL, then one
+     *             or more magnets, URLs, info hashes or torrent file paths
+     */
     public static void main(String[] args) {
         String base = DEFAULT_BASE_URL;
         int rc = 0;

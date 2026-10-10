@@ -24,9 +24,21 @@ public class
 JComboBox
 	extends Component
 {
+	/**
+	 * Constructor. The selection index defaults to the stub's unset state and the
+	 * dropdown methods are no-ops, so a bare instance is usable immediately.
+	 */
+	public JComboBox()
+	{
+	}
+
 	private int index;
 
-	/** Selected index. */
+	/**
+	 * Selected index.
+	 *
+	 * @param i the zero-based item index to record as the current selection
+	 */
 	public void
 	setSelectedIndex(
 		int	i )
@@ -34,14 +46,22 @@ JComboBox
 		index = i;
 	}
 
-	/** Return the selected index. */
+	/**
+	 * Return the selected index.
+	 *
+	 * @return the index last passed to setSelectedIndex(), or 0 if none was
+	 */
 	public int
 	getSelectedIndex()
 	{
 		return( index );
 	}
 
-	/** Add an item (no-op). */
+	/**
+	 * Add an item (no-op).
+	 *
+	 * @param str the item to add, ignored because items cannot be added here
+	 */
 	public void
 	addItem(
 		String	str )

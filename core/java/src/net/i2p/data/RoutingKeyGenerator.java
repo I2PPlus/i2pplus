@@ -39,6 +39,12 @@ import net.i2p.I2PAppContext;
  * @since 0.9.16 moved from net.i2p.data.RoutingKeyGenerator
  */
 public abstract class RoutingKeyGenerator {
+    /**
+     * Constructor for implementations that map a hash to the key it is stored under.
+     */
+
+    public RoutingKeyGenerator() {}
+
 
     /**
      * Generator for this context.

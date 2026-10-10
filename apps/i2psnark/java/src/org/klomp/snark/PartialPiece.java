@@ -205,6 +205,8 @@ class PartialPiece implements Comparable<PartialPiece> {
      * piece never changes, so the sub-block mask is computed once on first use.
      *
      * @param subBlock zero-based sub-block index
+     * @return true if the whole sub-block falls inside the padded range of the
+     *         file, false if it carries real data
      */
     synchronized boolean isPaddingSubBlock(int subBlock) {
         if (_meta == null) {

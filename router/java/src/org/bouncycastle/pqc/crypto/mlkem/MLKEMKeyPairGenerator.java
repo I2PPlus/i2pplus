@@ -8,11 +8,16 @@ import org.bouncycastle.crypto.KeyGenerationParameters;
  * Generator for ML-KEM (Module-Lattice Key Encapsulation Mechanism) key pairs.
  * Creates public/private key pairs for post-quantum cryptographic operations.
  */
-/**
- * Creates a new MLKEMKeyPairGenerator instance.
- */
 public class MLKEMKeyPairGenerator
 {
+    /**
+     * Constructs an uninitialised generator; call {@link #init(KeyGenerationParameters)}
+     * before {@link #generateKeyPair()}, which reads the parameters that init() stores.
+     */
+    public MLKEMKeyPairGenerator()
+    {
+    }
+
     private MLKEMParameters mlkemParams;
 
     private SecureRandom random;

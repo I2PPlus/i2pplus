@@ -14,6 +14,12 @@ class SingleTagSet extends RatchetTagSet {
 
     /**
      *  For outbound Existing Session
+     *
+     *  @param lsnr the listener that hands the tag back to the owning tunnel
+     *  @param key the session key the tag's inbound messages will be decrypted with
+     *  @param tag the single pre-generated tag to be sent with the Existing Session message
+     *  @param date creation time of the tag, in milliseconds since the epoch
+     *  @param timeout milliseconds after date at which the tag expires
      */
     public SingleTagSet(SessionTagListener lsnr, SessionKey key, RatchetSessionTag tag, long date, long timeout) {
         super(lsnr, key, date, timeout);

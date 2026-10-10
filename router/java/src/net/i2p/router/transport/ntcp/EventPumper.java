@@ -250,7 +250,11 @@ class EventPumper implements Runnable {
     private static final long[] RATES = { 60*1000L, 10*60*1000L };
 
     /**
-     * EventPumper.
+     * Create the pump for a transport, registering the rate stats it writes.
+     * No thread is started until {@link #startPumping()}.
+     *
+     * @param ctx the router context, used for configuration, logging and stats
+     * @param transport the NTCP transport whose connections this pump drives
      */
     public EventPumper(RouterContext ctx, NTCPTransport transport) {
         _context = ctx;
@@ -312,6 +316,8 @@ class EventPumper implements Runnable {
      * Register the acceptor.
      * This is only called from NTCPTransport.bindAddress(), so it isn't clear
      * why this needs a queue.
+     *
+     * @param chan the listening channel to add to the selector
      */
     public void register(ServerSocketChannel chan) {
         if (_log.shouldDebug())
@@ -322,6 +328,8 @@ class EventPumper implements Runnable {
 
     /**
      * Outbound connection registration with optional retry backoff.
+     *
+     * @param con the finished outbound connection to add to the selector
      */
     public void registerConnect(NTCPConnection con) {
         if (_log.shouldDebug()) {
@@ -750,6 +758,8 @@ class EventPumper implements Runnable {
     /**
      * Called by the connection when it has data ready to write (after bw allocation).
      * Only wakeup if new.
+     *
+     * @param con the connection with buffered data
      */
     public void wantsWrite(NTCPConnection con) {
         if (con.isClosed()) return;
@@ -762,6 +772,8 @@ class EventPumper implements Runnable {
      * This is only called from NTCPConnection.complete()
      * if there is more data, which is rare (never?)
      * so we don't need to check for dups or make _wantsRead a Set.
+     *
+     * @param con the connection with data to read
      */
     public void wantsRead(NTCPConnection con) {
         if (con.isClosed()) return;
@@ -771,6 +783,8 @@ class EventPumper implements Runnable {
 
     /**
      * High-frequency path in thread.
+     *
+     * @return a cleared buffer of BUF_SIZE capacity, direct or heap as configured
      */
     public static ByteBuffer acquireBuf() {
         ByteBuffer buf = _bufferCache.acquire();
@@ -784,6 +798,8 @@ class EventPumper implements Runnable {
      * Read buffer returned to the pool.
      * These buffers must be from acquireBuf(), i.e. capacity() == BUF_SIZE.
      * High-frequency path in thread.
+     *
+     * @param buf the buffer to give back, null and undersized buffers are ignored
      */
     public static void releaseBuf(ByteBuffer buf) {
         if (buf == null) return;
@@ -1041,6 +1057,9 @@ class EventPumper implements Runnable {
         private final int _currentConnectionsPerMinute;
 
         /**
+         * Freeze one accept decision: whether to drop, the nominal
+         * rejection chance to render, and the counts it was projected from.
+         *
          * @param drop true to reject the connection
          * @param percent nominal rejection chance, 0-100 (0 renders as "1%")
          * @param lastConnections baseline connections in the previous period
@@ -1054,16 +1073,20 @@ class EventPumper implements Runnable {
             _currentConnectionsPerMinute = currentConnectionsPerMinute;
         }
 
-        /** @return true if the connection should be rejected */
+        /** Whether to refuse the connection, per the flood decision.
+         * @return true if the connection should be rejected */
         boolean isDrop() { return _drop; }
 
-        /** @return nominal rejection chance percent (0 renders as "1%") */
+        /** The nominal share of inbound connections to refuse.
+         * @return nominal rejection chance percent (0 renders as "1%") */
         int getPercent() { return _percent; }
 
-        /** @return baseline connections in the previous full rate period */
+        /** The accept count the rate was measured against.
+         * @return baseline connections in the previous full rate period */
         int getLastConnections() { return _lastConnections; }
 
-        /** @return projected current accept rate in connections per minute */
+        /** The accept rate the decision was projected from.
+         * @return projected current accept rate in connections per minute */
         int getCurrentConnectionsPerMinute() { return _currentConnectionsPerMinute; }
     }
 
@@ -1698,6 +1721,8 @@ class EventPumper implements Runnable {
 
     /**
      * Record the given IP as blocked.
+     *
+     * @param ip the 4 or 16 byte address to count as blocked, null is ignored
      */
     public void blockIP(byte[] ip) {
         if (ip == null) return;
@@ -1739,6 +1764,8 @@ class EventPumper implements Runnable {
 
     /**
      * Track failed inbound handshake (IP only, no hash).
+     *
+     * @param ip the 4 or 16 byte source address, null is ignored
      */
     public void trackFailedInboundHandshake(byte[] ip) {
         trackFailedInboundHandshake(ip, null);
@@ -1757,16 +1784,26 @@ class EventPumper implements Runnable {
         return _expireIdleWriteTime;
     }
 
-    /** Selector loop delay in milliseconds. */
+    /**
+     * Selector loop delay in milliseconds.
+     *
+     * @return the base delay the pumper relaxes toward
+     */
     public static long getSelectorLoopDelay() { return _selectorLoopDelay; }
 
-    /** Max idle loop rate in loops per second. */
+    /**
+     * Max idle loop rate in loops per second.
+     *
+     * @return the ceiling on idle selector iterations per second
+     */
     public static int getMaxIdleLps() { return _maxIdleLps; }
 
     /**
      * Max idle loop rate in loops per second, bounded 1-5000.
      * The pumper enforces this as a minimum idle iteration time (1e9 / rate),
      * capping idle busy-spin even when selector wakeups defeat the timeout.
+     *
+     * @param lps the requested idle loop rate, clamped to 1-5000
      */
     public static void setMaxIdleLps(int lps) {
         _maxIdleLps = Math.max(MIN_MAX_IDLE_LPS, Math.min(MAX_MAX_IDLE_LPS, lps));
@@ -1777,6 +1814,8 @@ class EventPumper implements Runnable {
      * Updates the base delay the pumper relaxes toward and raises the live
      * delay immediately so Tuner-driven increases take effect without waiting
      * for the pumper's own 60s ramp.
+     *
+     * @param ms the requested base delay, clamped to 1-SELECTOR_MAX_DELAY ms
      */
     public static void setSelectorLoopDelay(long ms) {
         long v = Math.max(1, Math.min(SELECTOR_MAX_DELAY, ms));
@@ -1785,13 +1824,26 @@ class EventPumper implements Runnable {
             _currentDelay = v;
     }
 
-    /** Failsafe iteration frequency in milliseconds. */
+    /**
+     * Failsafe iteration frequency in milliseconds.
+     *
+     * @return how often the failsafe iteration runs
+     */
     public static long getFailsafeIterationFreq() { return _failsafeIterationFreq; }
 
-    /** Failsafe iteration frequency, bounded by MIN-MAX. */
+    /**
+     * Failsafe iteration frequency, bounded by MIN-MAX.
+     *
+     * @param ms the requested interval, clamped to the supported range
+     */
     public static void setFailsafeIterationFreq(long ms) { _failsafeIterationFreq = Math.max(MIN_FAILSAFE_FREQ, Math.min(MAX_FAILSAFE_FREQ, ms)); }
 
-    /** Interest operations on the given selection key. */
+    /**
+     * Interest operations on the given selection key.
+     *
+     * @param key the selector key to add the interest to, ignored if invalid
+     * @param op the SelectionKey interest operations to add
+     */
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
         if (key == null || !key.isValid()) return;
         synchronized (key) {
@@ -1803,6 +1855,9 @@ class EventPumper implements Runnable {
 
     /**
      * Clear the given interest operation on the selection key.
+     *
+     * @param key the selector key to remove the interest from, ignored if invalid
+     * @param op the SelectionKey interest operations to remove
      */
     public static void clearInterest(SelectionKey key, int op) throws CancelledKeyException {
         if (key == null || !key.isValid()) return;

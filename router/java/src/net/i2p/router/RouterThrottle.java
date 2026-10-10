@@ -10,6 +10,7 @@ public interface RouterThrottle {
      * Should we accept any more data from the network for any sort of message,
      * taking into account our current load, or should we simply slow down?
      *
+     * @return true to take more network traffic, false to hold off for a while
      */
     public boolean acceptNetworkMessage();
     /**
@@ -19,9 +20,17 @@ public interface RouterThrottle {
      * @return 0 if it should be accepted, higher values for more severe rejection
      */
     public int acceptTunnelRequest();
-    /** How backed up we are at the moment processing messages (in milliseconds) */
+    /**
+     * How backed up we are at the moment processing messages (in milliseconds)
+     *
+     * @return how far behind schedule message processing is, in milliseconds
+     */
     public long getMessageDelay();
-    /** How backed up our tunnels are at the moment (in milliseconds) */
+    /**
+     * How backed up our tunnels are at the moment (in milliseconds)
+     *
+     * @return how far behind schedule tunnel management is, in milliseconds
+     */
     public long getTunnelLag();
 
     /**
@@ -31,6 +40,8 @@ public interface RouterThrottle {
     public String getTunnelStatus();
     /**
      * Update the tunnel acceptance status message.
+     *
+     * @param msg the text to show on the console in place of the default status
      */
     public void setTunnelStatus(String msg);
 
@@ -42,9 +53,17 @@ public interface RouterThrottle {
      */
     public String getLocalizedTunnelStatus();
 
-    /** @since 0.8.12 */
+    /**
+     * Mark that the router is shutting down, so the console reports that state.
+     *
+     * @since 0.8.12
+     */
     public void setShutdownStatus();
 
-    /** @since 0.8.12 */
+    /**
+     * Cancel a shutdown previously announced with {@link #setShutdownStatus()}.
+     *
+     * @since 0.8.12
+     */
     public void cancelShutdownStatus();
 }

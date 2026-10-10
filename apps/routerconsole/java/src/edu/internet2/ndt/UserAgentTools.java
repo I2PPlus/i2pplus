@@ -17,7 +17,18 @@ package edu.internet2.ndt;
 public class UserAgentTools {
 
     /**
-     * getArray.
+     * The parsers below are static and hold no configuration, so an instance carries
+     * nothing.
+     */
+    public UserAgentTools() {}
+
+    /**
+     * Bundle three parsed fields into the fixed-shape result array callers expect.
+     *
+     * @param a the browser name, or "?" when it could not be determined
+     * @param b the browser version, or "?" when it could not be determined
+     * @param c the operating system name, or "?" when it could not be determined
+     * @return a new three-element array holding a, b and c in that order
      */
     public static String[] getArray(String a, String b, String c) {
         String[] res = new String[3];
@@ -28,7 +39,12 @@ public class UserAgentTools {
     }
 
     /**
-     * getBrowser.
+     * Extract the browser and OS fields from a User-Agent header.
+     *
+     * @param userAgent the raw header value, which is ignored here because NDT
+     *        reports unknown for every field it does not recognize
+     * @return a three-element array of browser name, browser version and OS name,
+     * each "?" when the value is not one NDT knows
      */
     public static String[] getBrowser(String userAgent) {return getArray("?", "?", "?");}
 }

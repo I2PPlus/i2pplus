@@ -233,7 +233,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         /**
          * Internal method used to memorize the pool, without generating a loop
          *
-         * @param pool
+         * @param pool the pool the database will belong to; the pool-use flag is left off
          * @return the Builder
          */
         Builder setPoolInternal(RrdDbPool pool) {
@@ -929,7 +929,11 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         }
     }
 
-    /** Internal close */
+    /**
+     * Internal close
+     *
+     * @throws java.io.IOException if the backend fails to release the RRD file
+     */
     void internalClose() throws IOException {
         if (!closed) {
             closed = true;
@@ -1057,7 +1061,12 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         return createFetchRequest(consolFun, fetchStart, fetchEnd, 1);
     }
 
-    /** Store sample */
+    /**
+     * Store sample
+     *
+     * @param sample the populated sample, whose timestamp must be at least one step after the last update
+     * @throws java.io.IOException if a datasource fails to write the processed value
+     */
     final synchronized void store(Sample sample) throws IOException {
         if (closed) {
             throw new IllegalStateException("RRD already closed, cannot store this sample");
@@ -1080,7 +1089,13 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         header.setLastUpdateTime(newTime);
     }
 
-    /** Fetch data */
+    /**
+     * Fetch data
+     *
+     * @param request the fetch request naming the consolidation function, time range and resolution
+     * @return the data consolidated from the archive that best matches the request
+     * @throws java.io.IOException if the matching archive fails to read the RRD file
+     */
     synchronized FetchData fetchData(FetchRequest request) throws IOException {
         if (closed) {
             throw new IllegalStateException("RRD already closed, cannot fetch data");
@@ -1203,7 +1218,15 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
         return buffer.toString();
     }
 
-    /** Archive value */
+    /**
+     * Archive value
+     *
+     * @param datasource the datasource being updated, whose name resolves to the archive slot index
+     * @param value the current reading, archived into the AVERAGE consolidation archives
+     * @param lastValue the previous reading, archived into every other consolidation archive
+     * @param numUpdates how many accumulated updates are still pending in the current RRD step
+     * @throws java.io.IOException if an archive fails to write the value
+     */
     final void archive(Datasource datasource, double value, double lastValue, long numUpdates)
             throws IOException {
         int dsIndex = getDsIndex(datasource.getName());

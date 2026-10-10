@@ -21,10 +21,27 @@ class Line extends SourcedPlotElement {
      */
     final Color[] valueShade;
 
+    /**
+     * Create an unshaded line.
+     *
+     * @param srcName the name of the data source this line plots
+     * @param color the stroke colour
+     * @param stroke the stroke used to draw the line
+     * @param parent the plot element this line belongs to
+     */
     Line(String srcName, Paint color, BasicStroke stroke, SourcedPlotElement parent) {
         this(srcName, color, stroke, parent, null);
     }
 
+    /**
+     * Create a line, optionally shaded by its value.
+     *
+     * @param srcName the name of the data source this line plots
+     * @param color the stroke colour
+     * @param stroke the stroke used to draw the line
+     * @param parent the plot element this line belongs to
+     * @param valueShade the bottom-to-top colour stops, or null for a flat line
+     */
     Line(String srcName, Paint color, BasicStroke stroke, SourcedPlotElement parent,
          Color[] valueShade) {
         super(srcName, color, parent);

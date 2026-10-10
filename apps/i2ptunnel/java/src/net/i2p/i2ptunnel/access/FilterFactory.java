@@ -19,11 +19,20 @@ import net.i2p.client.streaming.StatefulConnectionFilter;
 public class FilterFactory {
 
     /**
+     * Constructor. Filters are always built by the static createFilter() from a
+     * definition file, so an instance carries no state.
+     */
+    public FilterFactory() {}
+
+    /**
      * Creates an instance of IncomingConnectionFilter based on the definition
      * contained in the given file.
      *
-     * @param context the context
+     * @param context the app context whose service references the created filter consults
      * @param definition file containing the filter definition
+     * @return the filter built from the parsed definition, ready to filter connections
+     * @throws IOException if the definition file cannot be read
+     * @throws InvalidDefinitionException if the file does not parse as a filter definition
      */
     public static StatefulConnectionFilter createFilter(I2PAppContext context,
                                                         File definition)

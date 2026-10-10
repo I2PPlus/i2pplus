@@ -76,6 +76,8 @@ public class ReceiveMessageEndMessage extends I2CPMessageImpl {
 
     /**
      * New message identifier.
+     *
+     * @param id identifier tying this end message to its Begin message
      */
     public void setMessageId(long id) {
         _messageId = id;

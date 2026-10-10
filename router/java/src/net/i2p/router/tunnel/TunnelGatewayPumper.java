@@ -112,6 +112,7 @@ class TunnelGatewayPumper implements Runnable {
     /**
      * The pumper queue capacity. Does not resize existing queue;
      * call {@link #resizeQueue} to apply to running instance.
+     * @param capacity the requested queue capacity, clamped to the range 64 to 4096
      * @since 0.9.70+
      */
     public static void setQueueCapacity(int capacity) { _queueCapacity = Math.max(64, Math.min(4096, capacity)); }
@@ -125,6 +126,7 @@ class TunnelGatewayPumper implements Runnable {
 
     /**
      * The max pumper threads.
+     * @param max the requested pump thread count, clamped to the range 2 to 16
      * @since 0.9.70+
      */
     public static void setMaxPumpers(int max) { _maxPumpers = Math.max(2, Math.min(16, max)); }
@@ -168,10 +170,20 @@ class TunnelGatewayPumper implements Runnable {
         if (instance != null) instance.adjustThreads(newCount);
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * How long a message waits in the reschedule queue before it is tried again.
+     *
+     * @return the delay before a requeued message is tried again, in milliseconds
+     * @since 0.9.70+
+     */
     public static long getRequeueTime() { return _requeueTime; }
 
-    /** @since 0.9.70+ */
+    /**
+     * Change the reschedule delay, holding it inside the supported range.
+     *
+     * @param ms the requested retry delay in milliseconds, clamped to the range 10 to 200
+     * @since 0.9.70+
+     */
     public static void setRequeueTime(long ms) { _requeueTime = Math.max(10, Math.min(200, ms)); }
 
     /**

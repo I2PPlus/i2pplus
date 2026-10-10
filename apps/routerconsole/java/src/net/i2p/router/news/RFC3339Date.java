@@ -26,6 +26,12 @@ import net.i2p.util.SystemVersion;
  * @since 0.9.17
  */
 public abstract class RFC3339Date {
+    /**
+     * Constructor for subclasses; the parser and formatter in this base class are static.
+     */
+
+    public RFC3339Date() {}
+
 
     private static final String TZF1;
     private static final String TZF2;
@@ -99,6 +105,8 @@ public abstract class RFC3339Date {
 
     /**
      * Format is "yyyy-MM-ddTHH:mm:ssZ"
+     * @param t milliseconds since the epoch to render, always formatted in GMT
+     * @return the instant rendered as yyyy-MM-ddTHH:mm:ssZ with a literal Z
      */
     public static String to3339Date(long t) {
         try {

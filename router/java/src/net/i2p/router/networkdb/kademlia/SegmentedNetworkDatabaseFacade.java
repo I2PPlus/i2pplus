@@ -40,6 +40,12 @@ import net.i2p.router.NetworkDatabaseFacade;
  * @since 0.9.61
  */
 public abstract class SegmentedNetworkDatabaseFacade {
+    /**
+     * Constructor for segmented NetDb implementations, which supply their segments after construction.
+     */
+
+    public SegmentedNetworkDatabaseFacade() {}
+
 
     /**
      * The main netDb, the one which is used if we're a floodfill.
@@ -53,6 +59,7 @@ public abstract class SegmentedNetworkDatabaseFacade {
      * A client netDb for a given client Hash identifier. Will never
      * return the mainNetDB.
      *
+     * @param dbid the destination hash naming which client sub-database to use
      * @return may be null if the client netDb does not exist
      * @since 0.9.61
      */

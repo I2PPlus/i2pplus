@@ -17,7 +17,8 @@ public class DeserializationException extends Exception {
     public enum Problems {
         /** A disallowed token was found in the input. */
         DISALLOWED_TOKEN,
-        /** @since 2.3.0 to consolidate exceptions that occur during deserialization. */
+        /** An I/O failure while reading the JSON source.
+         * @since 2.3.0 to consolidate exceptions that occur during deserialization. */
         IOEXCEPTION,
         /** An unexpected character was found in the input. */
         UNEXPECTED_CHARACTER,
@@ -35,10 +36,12 @@ public class DeserializationException extends Exception {
     /** Unexpected object */
     private final Object unexpectedObject;
 
-    /** Instantiates a DeserializationException without assumptions.
+    /**
+     * Instantiates a DeserializationException without assumptions.
      * @param position where the exception occurred.
      * @param problemType how the exception occurred.
-     * @param unexpectedObject what caused the exception. */
+     * @param unexpectedObject what caused the exception.
+     */
     public DeserializationException(final int position, final Problems problemType, final Object unexpectedObject) {
         this.position = position;
         this.problemType = problemType;

@@ -33,6 +33,8 @@ public class JSONRPC2Helper {
 
     /**
      * JSONRPC2Helper.
+     *
+     * @param secMan SecurityManager consulted when a request carries an authentication token
      */
     public JSONRPC2Helper(SecurityManager secMan) {
         _secMan = secMan;

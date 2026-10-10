@@ -17,6 +17,12 @@ import net.i2p.data.DateAndFlags;
  */
 public class SendMessageOptions extends DateAndFlags {
 
+    /**
+     * A message carrying default options: gzip is left at GzipOption.DEFAULT and the
+     * inherited date and flag fields are unset.
+     */
+    public SendMessageOptions() {}
+
     /** Gzip compression option for this message. */
     private GzipOption _gzip = GzipOption.DEFAULT;
 
@@ -66,18 +72,29 @@ public class SendMessageOptions extends DateAndFlags {
     /** Mask for "first packet of a new connection" (streaming SYN first send). */
     private static final int FRESH_CONNECTION_MASK = 0x0800;
 
-    /** Send the lease set with the message; defaults to true. */
+    /**
+     * Send the lease set with the message; defaults to true.
+     * @param yes true to include the lease set, false to suppress it
+     */
     public void setSendLeaseSet(boolean yes) {
         if (yes) _flags &= ~LS_MASK;
         else _flags |= LS_MASK;
     }
 
-    /** Whether the lease set is sent with the message; defaults to true. */
+    /**
+     * Whether the lease set is sent with the message; defaults to true.
+     * @return true unless the flag suppressing the lease set has been set
+     */
     public boolean getSendLeaseSet() {
         return getSendLeaseSet(_flags);
     }
 
-    /** Whether the lease set is sent with the message; defaults to true. */
+    /**
+     * Whether the lease set is sent with the message; defaults to true.
+     *
+     * @param flags the packed flags word
+     * @return true unless the flag suppressing the lease set has been set
+     */
     public static boolean getSendLeaseSet(int flags) {
         return (flags & LS_MASK) == 0;
     }
@@ -107,6 +124,7 @@ public class SendMessageOptions extends DateAndFlags {
     /**
      * If we are low on tags, send this many.
      *
+     * @param flags the packed flags word
      * @return default 0, meaning unset, use the SKM config (default 40)
      */
     public static int getTagsToSend(int flags) {
@@ -139,6 +157,7 @@ public class SendMessageOptions extends DateAndFlags {
     /**
      * Low tag threshold. If less than this many, send more.
      *
+     * @param flags the packed flags word
      * @return default 0, meaning unset, use the SKM config (default 30)
      */
     public static int getTagThreshold(int flags) {
@@ -201,6 +220,7 @@ public class SendMessageOptions extends DateAndFlags {
      * previous connection.  Only meaningful when set by an in-process sender
      * (e.g. apps/streaming PacketQueue); see the class javadoc.
      *
+     * @param yes true to mark the message as the first packet of a brand-new connection
      * @since 0.9.71+
      */
     public void setFreshConnection(boolean yes) {
@@ -210,6 +230,8 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      * Whether this message is the first packet of a new connection.
+     *
+     * @return true if this message opens a new connection
      * @since 0.9.71+
      */
     public boolean getFreshConnection() {
@@ -218,6 +240,9 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      * Decode the fresh-connection marker from the raw flags field (router side).
+     *
+     * @param flags the raw flags field from the I2CP message header
+     * @return true if the message opens a new connection
      * @since 0.9.71+
      */
     public static boolean getFreshConnection(int flags) {
@@ -226,6 +251,8 @@ public class SendMessageOptions extends DateAndFlags {
 
     /**
      * Message delivery reliability from raw flags.
+     *
+     * @param flags the raw flags field from the I2CP message header
      * @return reliability (default DEFAULT)
      */
     public static Reliability getReliability(int flags) {

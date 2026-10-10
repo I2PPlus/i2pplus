@@ -103,21 +103,26 @@ import net.i2p.util.SystemVersion;
  */
 public class CPUID {
 
+    /**
+     *  Constructs an instance that carries no per-instance state: every
+     *  detection method here is static and reads process-global CPUID state.
+     */
+    public CPUID() {}
+
     /** did we load the native lib correctly? */
     private static boolean _nativeOk = false;
     private static int _jcpuidVersion;
 
     /**
-     * do we want to dump some basic success/failure info to stderr during
-     * initialization?  this would otherwise use the Log component, but this makes
-     * it easier for other systems to reuse this class
+     * Should basic success and failure info be dumped to stderr during initialization?
+     * This would otherwise use the Log component, but this makes it easier for other
+     * systems to reuse this class.
      *
      * Well, we really want to use Log so if you are one of those "other systems"
      * then comment out the I2PAppContext usage below.
      *
      * Set to false if not in router context, so scripts using TrustedUpdate
      * don't spew log messages. main() below overrides to true.
-     * @return the property
      */
     private static boolean _doLog = System.getProperty("jcpuid.dontLog") == null &&
                                     I2PAppContext.getGlobalContext().isRouterContext();
@@ -166,10 +171,14 @@ public class CPUID {
         final int ECX;
         /** EDX register value */
         final int EDX;
-        /**  @param EAX EAX register value
+        /**
+         * Holds the four register values returned by one CPUID instruction.
+         *
+         * @param EAX EAX register value
          * @param EBX EBX register value
          * @param ECX ECX register value
-         * @param EDX EDX register value */
+         * @param EDX EDX register value
+         */
         CPUIDResult(int EAX,int EBX,int ECX, int EDX) {
             this.EAX = EAX;
             this.EBX = EBX;
@@ -225,7 +234,7 @@ public class CPUID {
 
     /**
      * Returns cached CPUID leaf 1 result, performing the native call only once.
-     * @return the leaf1
+     * @return the cached leaf 1 result
      */
     private static CPUIDResult getLeaf1() {
         CPUIDResult c = _leaf1Cache;
@@ -320,7 +329,11 @@ public class CPUID {
         return (getLeaf1().EAX >> 16) & 0xf;
     }
 
-    /**  @return 0-15 */
+    /**
+     * Returns the Type field from CPUID leaf 1, EAX bits 15:12.
+     *
+     * @return the Type field, 0 through 15
+     */
     static int getCPUType() {
         return (getLeaf1().EAX >> 12) & 0xf;
     }
@@ -341,34 +354,58 @@ public class CPUID {
         return (getLeaf1().EAX >> 20) & 0xff;
     }
 
-    /**  @return 0-15 */
+    /**
+     * Returns the Stepping ID from CPUID leaf 1, EAX bits 3:0.
+     *
+     * @return the Stepping ID, 0 through 15
+     */
     static int getCPUStepping() {
         return getLeaf1().EAX & 0xf;
     }
 
-    /** Return the EDX feature flags */
+    /**
+     * Return the EDX feature flags
+     *
+     * @return the raw 32 bit feature flags from CPUID leaf 1, EDX
+     */
     static int getEDXCPUFlags() {
         return getLeaf1().EDX;
     }
 
-    /** Return the ECX feature flags */
+    /**
+     * Return the ECX feature flags
+     *
+     * @return the raw 32 bit feature flags from CPUID leaf 1, ECX
+     */
     static int getECXCPUFlags() {
         return getLeaf1().ECX;
     }
 
-    /** Return the extended ECX feature flags */
+    /**
+     * Return the extended ECX feature flags
+     *
+     * @return the raw 32 bit feature flags from CPUID leaf 0x80000001, ECX
+     */
     static int getExtendedECXCPUFlags() {
         CPUIDResult c = doCPUID(0x80000001);
         return c.ECX;
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Return the extended EDX feature flags from CPUID leaf 0x80000001.
+     *
+     * @return the raw 32 bit feature flags from CPUID leaf 0x80000001, EDX
+     * @since 0.8.7
+     */
     static int getExtendedEDXCPUFlags() {
         CPUIDResult c = doCPUID(0x80000001);
         return c.EDX;
     }
 
     /**
+     * Return the EBX feature flags from CPUID leaf 7.
+     *
+     * @return the raw 32 bit feature flags from CPUID leaf 7, EBX
      * @since 0.9.26
      */
     static int getExtendedEBXFeatureFlags() {
@@ -381,6 +418,8 @@ public class CPUID {
 
     /**
      * There's almost nothing in here.
+     *
+     * @return the raw 32 bit feature flags from CPUID leaf 7, ECX
      * @since 0.9.26
      */
     static int getExtendedECXFeatureFlags() {
@@ -432,7 +471,7 @@ public class CPUID {
      * Stops at the first null byte (CPUID strings are null-terminated).
      *
      * @param reg 32-bit register value (little-endian byte order)
-     * @param buf destination buffer
+     * @param buf the buffer the four decoded characters are appended to
      */
     private static void extractReg(int reg, StringBuilder buf) {
         for (int j = 0; j < 4; j++) {
@@ -444,7 +483,7 @@ public class CPUID {
     }
 
     /**
-     * Returns a {@link CPUInfo} instance for the current CPU.
+     * Return a {@link CPUInfo} instance for the current CPU.
      *
      * <p>Detects the CPU vendor via CPUID leaf 0, then returns the appropriate
      * implementation:</p>
@@ -456,10 +495,6 @@ public class CPUID {
      *
      * @return CPUInfo for the detected CPU type
      * @throws UnknownCPUException if native library not loaded, not x86, or unknown vendor
-     */
-    /**
-     * Return information.
-     * @return the info
      */
     public static CPUInfo getInfo() throws UnknownCPUException {
         if (!_nativeOk) {
@@ -478,7 +513,9 @@ public class CPUID {
     }
 
     /**
-     * main.
+     * Print the detected CPU details to stdout, for scripts and diagnostics.
+     *
+     * @param args currently unused; the CPU details come from the native library
      */
     public static void main(String[] args) {
         _doLog = true; // this is too late to log anything from above

@@ -50,6 +50,9 @@ class ExpireLeasesJob extends JobImpl {
 
     /**
      * ExpireLeasesJob.
+     *
+     * @param ctx the router context supplying the clock, log manager and job queue
+     * @param facade the network database whose leasesets this job expires and refreshes
      */
     public ExpireLeasesJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
@@ -225,6 +228,7 @@ class ExpireLeasesJob extends JobImpl {
     /**
      * Tunnel nickname for the given destination, if it has inbound tunnels.
      *
+     * @param d the destination to name the tunnel pool for, or null for the empty name
      * @return the tunnel name
      */
     public String getTunnelName(Destination d) {

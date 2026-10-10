@@ -31,6 +31,12 @@ package org.cybergarage.upnp.device;
  */
 public class ST {
     /**
+     * The search-target constants and the matching tests below are all static, so an
+     * instance carries nothing.
+     */
+    public ST() {}
+
+    /**
      * ALL_DEVICE.
      */
     public static final String ALL_DEVICE = "ssdp:all";
@@ -53,6 +59,9 @@ public class ST {
 
     /**
      * isAllDevice.
+     *
+     * @param value the UPnP search target to test, quoted or unquoted
+     * @return true if the target matches the all-device search target
      */
     public static final boolean isAllDevice(String value) {
         if (value == null) return false;
@@ -62,6 +71,9 @@ public class ST {
 
     /**
      * isRootDevice.
+     *
+     * @param value the UPnP search target to test, quoted or unquoted
+     * @return true if the target matches the root-device search target
      */
     public static final boolean isRootDevice(String value) {
         if (value == null) return false;
@@ -71,6 +83,9 @@ public class ST {
 
     /**
      * isUUIDDevice.
+     *
+     * @param value the UPnP search target to test, quoted or unquoted
+     * @return true if the target begins with the UUID-device search target
      */
     public static final boolean isUUIDDevice(String value) {
         if (value == null) return false;
@@ -80,6 +95,9 @@ public class ST {
 
     /**
      * isURNDevice.
+     *
+     * @param value the UPnP search target to test, quoted or unquoted
+     * @return true if the target begins with the device URN prefix
      */
     public static final boolean isURNDevice(String value) {
         if (value == null) return false;
@@ -89,6 +107,9 @@ public class ST {
 
     /**
      * isURNService.
+     *
+     * @param value the UPnP search target to test, quoted or unquoted
+     * @return true if the target begins with the service URN prefix
      */
     public static final boolean isURNService(String value) {
         if (value == null) return false;

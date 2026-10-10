@@ -37,6 +37,7 @@ public class Hash384 extends SimpleDataStructure {
 
     /**
      * IllegalArgumentException if data is not correct length (null is ok).
+     * @param data the 48-byte digest to store, or null for an uninitialized hash
      * @throws IllegalArgumentException if data is not correct length (null is ok)
      */
     public Hash384(byte[] data) {

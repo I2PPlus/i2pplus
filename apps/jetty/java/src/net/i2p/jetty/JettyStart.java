@@ -57,6 +57,9 @@ public class JettyStart implements ClientApp {
      *
      * @param context may be null
      * @param mgr may be null e.g. for use in plugins
+     * @param args the XML configuration file names to load, one per entry
+     * @throws Exception if an argument is not a readable Jetty XML
+     *         configuration file
      */
     public JettyStart(I2PAppContext context, ClientAppManager mgr, String[] args) throws Exception {
         _state = UNINITIALIZED;

@@ -20,35 +20,36 @@ import org.xml.sax.InputSource;
 public abstract class XmlTemplate {
     private static final String PATTERN_STRING = "\\$\\{(\\w+)\\}";
     private static final Pattern PATTERN = Pattern.compile(PATTERN_STRING);
+    /** the parsed root element of the template */
     protected Element root;
     private final HashMap<String, Object> valueMap = new HashMap<>();
     private final HashSet<Node> validatedNodes = new HashSet<>();
 
     /**
-     * Constructor for XmlTemplate.
+     * Parse an XML template from a source.
      *
-     * @param xmlSource a {@link org.xml.sax.InputSource} object.
-     * @throws java.io.IOException if any.
+     * @param xmlSource the source to read the template from
+     * @throws java.io.IOException if the source cannot be read or is not well-formed XML
      */
     protected XmlTemplate(InputSource xmlSource) throws IOException {
         root = Util.Xml.getRootElement(xmlSource);
     }
 
     /**
-     * Constructor for XmlTemplate.
+     * Parse an XML template from a string.
      *
-     * @param xmlString a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @param xmlString the template text to parse
+     * @throws java.io.IOException if the text is not well-formed XML
      */
     protected XmlTemplate(String xmlString) throws IOException {
         root = Util.Xml.getRootElement(xmlString);
     }
 
     /**
-     * Constructor for XmlTemplate.
+     * Parse an XML template from a file.
      *
-     * @param xmlFile a {@link java.io.File} object.
-     * @throws java.io.IOException if any.
+     * @param xmlFile the file to read the template from
+     * @throws java.io.IOException if the file cannot be read or does not hold well-formed XML
      */
     protected XmlTemplate(File xmlFile) throws IOException {
         root = Util.Xml.getRootElement(xmlFile);
@@ -64,8 +65,8 @@ public abstract class XmlTemplate {
      * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
      * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name variable name
-     * @param value value to be set in the XML template
+     * @param name the placeholder name, without the leading '${' or trailing '}'
+     * @param value the text substituted for the placeholder
      */
     public void setVariable(String name, String value) {
         valueMap.put(name, value);
@@ -76,8 +77,8 @@ public abstract class XmlTemplate {
      * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
      * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name variable name
-     * @param value value to be set in the XML template
+     * @param name the placeholder name, without the leading '${' or trailing '}'
+     * @param value the text substituted for the placeholder
      */
     public void setVariable(String name, int value) {
         valueMap.put(name, value);
@@ -88,8 +89,8 @@ public abstract class XmlTemplate {
      * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
      * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name variable name
-     * @param value value to be set in the XML template
+     * @param name the placeholder name, without the leading '${' or trailing '}'
+     * @param value the text substituted for the placeholder
      */
     public void setVariable(String name, long value) {
         valueMap.put(name, value);
@@ -100,8 +101,8 @@ public abstract class XmlTemplate {
      * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
      * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name variable name
-     * @param value value to be set in the XML template
+     * @param name the placeholder name, without the leading '${' or trailing '}'
+     * @param value the text substituted for the placeholder
      */
     public void setVariable(String name, double value) {
         valueMap.put(name, value);
@@ -112,8 +113,8 @@ public abstract class XmlTemplate {
      * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
      * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name variable name
-     * @param value value to be set in the XML template
+     * @param name the placeholder name, without the leading '${' or trailing '}'
+     * @param value the text substituted for the placeholder
      */
     public void setVariable(String name, Color value) {
         String r = byteToHex(value.getRed());
@@ -123,9 +124,10 @@ public abstract class XmlTemplate {
         valueMap.put(name, "#" + r + g + b + a);
     }
     /**
-     * Byte to hex
+     * Format one channel of a colour as two lowercase hex digits.
+     *
+     * @return the two-digit hex form of a colour channel, 0 to 255
      */
-
     private String byteToHex(int i) {
         StringBuilder s = new StringBuilder(Integer.toHexString(i));
         while (s.length() < 2) {
@@ -139,8 +141,8 @@ public abstract class XmlTemplate {
      * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
      * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name variable name
-     * @param value value to be set in the XML template
+     * @param name the placeholder name, without the leading '${' or trailing '}'
+     * @param value the text substituted for the placeholder
      */
     public void setVariable(String name, Date value) {
         setVariable(name, Util.getTimestamp(value));
@@ -151,8 +153,8 @@ public abstract class XmlTemplate {
      * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
      * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name variable name
-     * @param value value to be set in the XML template
+     * @param name the placeholder name, without the leading '${' or trailing '}'
+     * @param value the text substituted for the placeholder
      */
     public void setVariable(String name, Calendar value) {
         setVariable(name, Util.getTimestamp(value));
@@ -163,8 +165,8 @@ public abstract class XmlTemplate {
      * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
      * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name variable name
-     * @param value value to be set in the XML template
+     * @param name the placeholder name, without the leading '${' or trailing '}'
+     * @param value the text substituted for the placeholder
      */
     public void setVariable(String name, boolean value) {
         valueMap.put(name, Boolean.toString(value));
@@ -199,103 +201,100 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getChildNodes.
+     * Find the child nodes of the given name.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @return an array of {@link org.w3c.dom.Node} objects.
+     * @param parentNode the node whose children to search
+     * @param childName the element name to match
+     * @return an array of the matching child nodes, empty if there are none
      */
     protected static Node[] getChildNodes(Node parentNode, String childName) {
         return Util.Xml.getChildNodes(parentNode, childName);
     }
 
     /**
-     * getChildNodes.
+     * Find every child node of the given node.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @return an array of {@link org.w3c.dom.Node} objects.
+     * @param parentNode the node whose children to return
+     * @return an array of all child nodes, empty if there are none
      */
     protected static Node[] getChildNodes(Node parentNode) {
         return Util.Xml.getChildNodes(parentNode, null);
     }
 
     /**
-     * getFirstChildNode.
+     * Find the first child node of the given name.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @return a {@link org.w3c.dom.Node} object.
+     * @param parentNode the node whose children to search
+     * @param childName the element name to match
+     * @return the first matching child node, or null if there is none
      */
     protected static Node getFirstChildNode(Node parentNode, String childName) {
         return Util.Xml.getFirstChildNode(parentNode, childName);
     }
 
     /**
-     * hasChildNode.
+     * Test whether a node has a child of the given name.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @return a boolean.
+     * @param parentNode the node whose children to search
+     * @param childName the element name to match
+     * @return true if a matching child exists, false otherwise
      */
     protected boolean hasChildNode(Node parentNode, String childName) {
         return Util.Xml.hasChildNode(parentNode, childName);
     }
 
     /**
-     * getChildValue.
+     * Read a named child element's text with its placeholders resolved.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @return a {@link java.lang.String} object.
+     * @param parentNode the node whose child to read
+     * @param childName the element name to match
+     * @return the resolved text, or null if no such child exists
      */
     protected String getChildValue(Node parentNode, String childName) {
         return getChildValue(parentNode, childName, true);
     }
 
     /**
-     * getChildValue.
+     * Read a named child element's text with its placeholders resolved.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @param trim a boolean.
-     * @return a {@link java.lang.String} object.
+     * @param parentNode the node whose child to read
+     * @param childName the element name to match
+     * @param trim when true, strip leading and trailing whitespace from the text
+     * @return the resolved text, or null if no such child exists
      */
     protected String getChildValue(Node parentNode, String childName, boolean trim) {
         String value = Util.Xml.getChildValue(parentNode, childName, trim);
-        /**
-         * Resolve mappings
-         */
         return resolveMappings(value);
     }
 
     /**
-     * getValue.
+     * Read a node's own text with its placeholders resolved.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @return a {@link java.lang.String} object.
+     * @param parentNode the node whose text to read
+     * @return the resolved text, or null if the node has none
      */
     protected String getValue(Node parentNode) {
         return getValue(parentNode, true);
     }
 
     /**
-     * getValue.
+     * Read a node's own text with its placeholders resolved.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param trim a boolean.
-     * @return a {@link java.lang.String} object.
+     * @param parentNode the node whose text to read
+     * @param trim when true, strip leading and trailing whitespace from the text
+     * @return the resolved text, or null if the node has none
      */
     protected String getValue(Node parentNode, boolean trim) {
         String value = Util.Xml.getValue(parentNode, trim);
-        /**
-         * Resolve mappings
-         */
         return resolveMappings(value);
     }
-    /**
-     * Resolve mappings
-     */
 
+    /**
+     * Substitute every ${name} placeholder in a value from the recorded mappings.
+     *
+     * @param templateValue the raw text to resolve, or null
+     * @return the resolved text, or null if templateValue was null
+     */
     private String resolveMappings(String templateValue) {
         if (templateValue == null) {
             return null;
@@ -322,11 +321,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getChildValueAsInt.
+     * Read a named child element's text as an int.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @return a int.
+     * @param parentNode the node whose child to read
+     * @param childName the element name to match
+     * @return the parsed integer
      */
     protected int getChildValueAsInt(Node parentNode, String childName) {
         String valueStr = getChildValue(parentNode, childName);
@@ -334,10 +333,10 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getValueAsInt.
+     * Read a node's own text as an int.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @return a int.
+     * @param parentNode the node whose text to read
+     * @return the parsed integer
      */
     protected int getValueAsInt(Node parentNode) {
         String valueStr = getValue(parentNode);
@@ -345,11 +344,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getChildValueAsLong.
+     * Read a named child element's text as a long.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @return a long.
+     * @param parentNode the node whose child to read
+     * @param childName the element name to match
+     * @return the parsed long
      */
     protected long getChildValueAsLong(Node parentNode, String childName) {
         String valueStr = getChildValue(parentNode, childName);
@@ -357,10 +356,10 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getValueAsLong.
+     * Read a node's own text as a long.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @return a long.
+     * @param parentNode the node whose text to read
+     * @return the parsed long
      */
     protected long getValueAsLong(Node parentNode) {
         String valueStr = getValue(parentNode);
@@ -368,11 +367,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getChildValueAsDouble.
+     * Read a named child element's text as a double.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @return a double.
+     * @param parentNode the node whose child to read
+     * @param childName the element name to match
+     * @return the parsed double
      */
     protected double getChildValueAsDouble(Node parentNode, String childName) {
         String valueStr = getChildValue(parentNode, childName);
@@ -380,10 +379,10 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getValueAsDouble.
+     * Read a node's own text as a double.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @return a double.
+     * @param parentNode the node whose text to read
+     * @return the parsed double
      */
     protected double getValueAsDouble(Node parentNode) {
         String valueStr = getValue(parentNode);
@@ -391,11 +390,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getChildValueAsBoolean.
+     * Read a named child element's text as a boolean.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param childName a {@link java.lang.String} object.
-     * @return a boolean.
+     * @param parentNode the node whose child to read
+     * @param childName the element name to match
+     * @return the parsed boolean
      */
     protected boolean getChildValueAsBoolean(Node parentNode, String childName) {
         String valueStr = getChildValue(parentNode, childName);
@@ -403,10 +402,10 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getValueAsBoolean.
+     * Read a node's own text as a boolean.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @return a boolean.
+     * @param parentNode the node whose text to read
+     * @return the parsed boolean
      */
     protected boolean getValueAsBoolean(Node parentNode) {
         String valueStr = getValue(parentNode);
@@ -414,10 +413,10 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * getValueAsColor.
+     * Read a node's own text as a colour.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @return a {@link java.awt.Paint} object.
+     * @param parentNode the node whose text to read
+     * @return the parsed colour, or null if the text does not name one
      */
     protected Paint getValueAsColor(Node parentNode) {
         String rgbStr = getValue(parentNode);
@@ -425,10 +424,10 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * isEmptyNode.
+     * Test whether a node carries no renderable content.
      *
-     * @param node a {@link org.w3c.dom.Node} object.
-     * @return a boolean.
+     * @param node the node to test
+     * @return true if the node is a comment or is whitespace-only text, false otherwise
      */
     protected boolean isEmptyNode(Node node) {
         // comment node or empty text node
@@ -437,10 +436,10 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * validateTagsOnlyOnce.
+     * Reject any child element not named in the allowed list, once per node.
      *
-     * @param parentNode a {@link org.w3c.dom.Node} object.
-     * @param allowedChildNames an array of {@link java.lang.String} objects.
+     * @param parentNode the node whose children to check
+     * @param allowedChildNames the permitted element names; a name suffixed with "*" permits repeats, and the array is consumed as names are matched
      */
     protected void validateTagsOnlyOnce(Node parentNode, String[] allowedChildNames) {
         // validate node only once

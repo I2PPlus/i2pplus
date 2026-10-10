@@ -68,10 +68,10 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Does not connect. Caller must call connectToServer() if desired.
      *
-     * @param host
-     * @param port
-     * @param user
-     * @param pass
+     * @param host hostname of the POP3 server to connect to
+     * @param port TCP port of the POP3 server
+     * @param user account name to log in with
+     * @param pass password for the account, sent in plaintext unless TLS is used
      */
     public POP3MailBox(String host, int port, String user, String pass) {
         _log = I2PAppContext.getGlobalContext().logManager().getLog(POP3MailBox.class);
@@ -92,7 +92,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Fetch the header. Does not cache.
      *
-     * @param uidl
+     * @param uidl the server-side unique message id to retrieve the header of
      * @return Byte buffer containing header data or null
      */
     public Buffer getHeader(String uidl) {
@@ -135,7 +135,8 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Fetch the body. Does not cache.
      *
-     * @param uidl
+     * @param uidl the server-side unique message id to retrieve the body of
+     * @param buffer the buffer the body data is read into
      * @return the buffer containing body data or null
      */
     public Buffer getBody(String uidl, Buffer buffer) {
@@ -156,6 +157,7 @@ public class POP3MailBox implements NewMailListener {
      * ReadBuffer objects are inserted into the requests.
      * No total time limit.
      *
+     * @param requests one FetchRequest per message, each holding the ReadBuffer to fill
      * @since 0.9.13
      */
     public void getBodies(Collection<FetchRequest> requests) {
@@ -226,6 +228,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Queue for later deletion. Non-blocking.
      *
+     * @param uidls the server-side unique ids of the mails to queue
      * @since 0.9.13
      */
     public void queueForDeletion(Collection<String> uidls) {
@@ -235,6 +238,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Queue for later deletion. Non-blocking.
      *
+     * @param uidl the server-side unique id of the mail to queue
      * @since 0.9.13
      */
     public void queueForDeletion(String uidl) {
@@ -281,7 +285,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Get cached size of a message (via previous LIST command).
      *
-     * @param uidl
+     * @param uidl the server-side unique message id whose cached size is wanted
      * @return Message size in bytes or 0 if not found
      */
     public int getSize(String uidl) {
@@ -346,8 +350,9 @@ public class POP3MailBox implements NewMailListener {
     private void updateActivity() {lastActive.set(System.currentTimeMillis());}
 
     /**
-     * Timestamp.
+     * Timestamp of the last activity on the POP3 connection.
      *
+     * @return milliseconds since the epoch
      * @since 0.9.13
      */
     long getLastActivity() {return lastActive.get();}
@@ -355,11 +360,13 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Timestamp. When we last successfully got the UIDL list.
      *
+     * @return milliseconds since the epoch
      * @since 0.9.13
      */
     long getLastChecked() {return lastChecked.get();}
 
     /**
+     * Count the messages the server reports in the scan listing.
      *
      * @param response line starting with +OK
      */
@@ -456,6 +463,7 @@ public class POP3MailBox implements NewMailListener {
      * getHeader(), getBody(), and getBodies().
      * Failure info is available via lastError().
      *
+     * @param nml notified once the listing is retrieved, or never on a connect or scan failure
      * @return true if nml will be called back, false on failure and nml will NOT be called back
      * @since 0.9.13
      */
@@ -1054,6 +1062,8 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
+     * The last error the server or the client reported, stripped of its "-ERR" prefix.
+     *
      * @return The most recent error message. Probably not terminated with a newline.
      */
     public String lastError() {
@@ -1072,6 +1082,7 @@ public class POP3MailBox implements NewMailListener {
      * which relays to MailCache, which will fetch the mail from us
      * in a big circle
      *
+     * @param nml the session-side listener that new-mail notifications are relayed to
      * @since 0.9.13
      */
     public void setNewMailListener(NewMailListener nml) {newMailListener = nml;}
@@ -1103,12 +1114,14 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * For helper threads to lock
+     * @return the monitor serializing all command and connection activity
      * @since 0.9.13
      */
     Object getLock() {return synchronizer;}
 
     /**
      * Do we have UIDLs to delete?
+     * @return true if at least one UIDL is waiting to be deleted from the server
      * @since 0.9.13
      */
     boolean hasQueuedDeletions() {return !delayedDeleter.getQueued().isEmpty();}
@@ -1122,6 +1135,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Close and optionally wait for response.
      * Deletes all queued deletions.
+     * @param shouldWait true to send QUIT and block until the server acknowledges
      * @since 0.9.13
      */
     void close(boolean shouldWait) {
@@ -1155,7 +1169,7 @@ public class POP3MailBox implements NewMailListener {
      * returns number of message with given UIDL
      * Caller must sync.
      *
-     * @param uidl
+     * @param uidl the server-side unique message id to map to a message number
      * @return Message number or -1
      */
     private int getIDfromUIDL(String uidl) {
@@ -1225,15 +1239,32 @@ public class POP3MailBox implements NewMailListener {
      * Request for fetching email data with UIDL and header options.
      */
     public interface FetchRequest {
-        /** @return the UIDL */
+        /**
+         * The message this request is for.
+         * @return the server-side unique id of the message to fetch
+         */
         public String getUIDL();
-        /** @return true if headers-only */
+        /**
+         * Whether headers alone are wanted.
+         * @return true if only the headers are wanted, false to retrieve the whole message
+         */
         public boolean getHeaderOnly();
-        /** @since 0.9.34 */
+        /**
+         * The buffer the fetched data is read into.
+         * @return the buffer the fetched data is read into, never null
+         */
         public Buffer getBuffer();
-        /** @since 0.9.34 */
+        /**
+         * Record the outcome of the fetch back to the requesting session.
+         *
+         * @param success whether the server returned the message without error
+         */
         public void setSuccess(boolean success);
-        /** @since 0.9.34 */
+        /**
+         * Downgrade a request from a full message to headers only, used when the
+         * server does not support the TOP command.
+         * @param headerOnly true to request headers only
+         */
         public void setHeaderOnly(boolean headerOnly);
     }
 

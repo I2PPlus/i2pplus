@@ -27,6 +27,12 @@ import net.i2p.util.SystemVersion;
  * @author Ragnarok
  */
 public class Daemon {
+    /**
+     * Constructor. The subscription sources are static defaults, so a bare
+     * instance is what DaemonThread runs; the loop is driven by start().
+     */
+    public Daemon() {}
+
     /** Version string. */
     public static final String VERSION = "2.0.4";
     private volatile boolean _running;
@@ -36,7 +42,14 @@ public class Daemon {
     private static final String DEFAULT_SUB = "http://stats.i2p/cgi-bin/newhosts.txt" + "\n" +
                                               "http://skank.i2p/hosts.txt" + "\n" +
                                               "http://notbob.i2p/hosts.txt";
-    /** @since 0.9.12 */
+    /**
+     * The single-host subscription that releases before 0.9.12 used to ship as
+     * the hardcoded default. It is retained only so ConfigParser can recognize
+     * and drop the entry when migrating an old config file to the multi-host
+     * DEFAULT_SUB list.
+     *
+     * @since 0.9.12
+     */
     static final String OLD_DEFAULT_SUB = "http://www.i2p2.i2p/hosts.txt";
     /**
      * Any properties we receive from the subscription, we store to the
@@ -784,7 +797,15 @@ public class Daemon {
     }
 
     /**
-     * @param args may be null
+     * Start the addressbook daemon: resolve the home directory, load or create
+     * config.txt there, and run the update loop until shutdown. Called on its own
+     * thread by DaemonThread.
+     *
+     * @param args
+     * the command line arguments; when non-empty, args[0] names the addressbook
+     * home directory, resolved against the router directory if not an absolute
+     * path. May be null or empty, in which case the current working directory
+     * is used.
      */
     public void run(String[] args) {
         _running = true;

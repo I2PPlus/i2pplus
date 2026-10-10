@@ -96,7 +96,7 @@ public class XmlWriter implements AutoCloseable {
      * Return a new {@link XmlWriter} that will format time stamp as ISO 8601 with this explicit
      * time zone {@link ZoneId}
      *
-     * @param zid
+     * @param zid the time zone the returned writer renders time stamps in
      * @return the XmlWriter
      */
     public XmlWriter withTimeZone(ZoneId zid) {
@@ -110,7 +110,7 @@ public class XmlWriter implements AutoCloseable {
     /**
      * Return a new {@link XmlWriter} that will format time stamp using this {@link ZoneId}
      *
-     * @param doubleFormatter
+     * @param doubleFormatter the formatter the returned writer renders DS values with
      * @return the XmlWriter
      */
     public XmlWriter withDoubleFormatter(DoubleFormater doubleFormatter) {

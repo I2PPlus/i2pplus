@@ -32,6 +32,8 @@ class SchedulerClosing extends SchedulerImpl {
 
     /**
      * SchedulerClosing.
+     *
+     * @param ctx application context supplying the transport and clock
      */
     public SchedulerClosing(I2PAppContext ctx) {
         super(ctx);

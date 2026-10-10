@@ -105,6 +105,9 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
 
     /**
      * RequestLeaseSetMessageHandler.
+     *
+     * @param context the client context the handler runs in, passed to the
+     *        superclass for logging and session lookup
      */
     public RequestLeaseSetMessageHandler(I2PAppContext context) {
         this(context, RequestLeaseSetMessage.MESSAGE_TYPE);
@@ -113,6 +116,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     /**
      * For extension
      *
+     * @param context the client context the handler runs in, passed to the
+     *        superclass for logging and session lookup
+     * @param messageType the I2CP message type to register for, so subclasses
+     *        can claim a different request message
      * @since 0.9.7
      */
     protected RequestLeaseSetMessageHandler(I2PAppContext context, int messageType) {
@@ -127,6 +134,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      *
      * Side effect: sets _ls2Type
      *
+     * @param session the session whose LeaseSet2 preference is consulted, and
+     *        which is torn down when that preference cannot be parsed
      * @return true if LS2 should be used
      * @since 0.9.38
      */
@@ -155,8 +164,10 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     /**
      * Handle an incoming I2CP message.
      *
-     * @param message the message
-     * @param session the session
+     * @param message the inbound I2CP request naming the destination whose LeaseSet
+     *        should be published
+     * @param session the session that sent the request and that the resulting
+     *        LeaseSet is published for
      */
     @Override
     public void handleMessage(I2CPMessage message, I2PSessionImpl session) {
@@ -796,6 +807,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
      * Called on session destroy to prevent unbounded map growth
      * and timely release of private key material.
      *
+     * @param dest the destination whose cached lease info and private keys are
+     *        to be dropped
      * @since 0.9.70+
      */
     public void removeLeaseSet(Destination dest) {

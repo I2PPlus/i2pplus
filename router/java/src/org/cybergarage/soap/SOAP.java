@@ -29,6 +29,12 @@ import org.cybergarage.xml.Parser;
  */
 public class SOAP {
     /**
+     * The envelope builders below and the element constants are all static, so an
+     * instance carries nothing.
+     */
+    public SOAP() {}
+
+    /**
      * ENVELOPE.
      */
     public static final String ENVELOPE = "Envelope";
@@ -116,6 +122,9 @@ public class SOAP {
 
     /**
      * createEnvelopeBodyNode.
+     *
+     * @return the SOAP Envelope element, carrying an empty Body child, ready to
+     *         have a SOAP Action element added to it
      */
     public static final Node createEnvelopeBodyNode() {
         // <Envelope>
@@ -138,6 +147,9 @@ public class SOAP {
 
     /**
      * setXMLParser.
+     *
+     * @param parser the parser to install as the shared XML parser used by this
+     *        class when it has to parse a SOAP message itself
      */
     public static final void setXMLParser(Parser parser) {
         xmlParser = parser;
@@ -145,6 +157,9 @@ public class SOAP {
 
     /**
      * getXMLParser.
+     *
+     * @return the shared XML parser installed by setXMLParser, or null if none
+     *         has been set
      */
     public static final Parser getXMLParser() {
         return xmlParser;

@@ -115,15 +115,15 @@ public class Reseeder {
     public static final String PROP_PROXY_HOST = "router.reseedProxyHost";
     /** Port for the HTTP proxy used during reseed. */
     public static final String PROP_PROXY_PORT = "router.reseedProxyPort";
-    /** @since 0.8.2 */
+    /** If true, route reseed fetches through the HTTP proxy. */
     public static final String PROP_PROXY_ENABLE = "router.reseedProxyEnable";
-    /** @since 0.8.2 */
+    /** If true, do not attempt SSL when fetching a reseed URL. */
     public static final String PROP_SSL_DISABLE = "router.reseedSSLDisable";
-    /** @since 0.8.2 */
+    /** If true, only fetch reseed URLs over SSL. */
     public static final String PROP_SSL_REQUIRED = "router.reseedSSLRequired";
-    /** @since 0.8.3 */
+    /** Comma-separated list of reseed URLs to try in order. */
     public static final String PROP_RESEED_URL = "i2p.reseedURL";
-    /** @since 0.8.9 */
+    /** Username for HTTP proxy authentication. */
     public static final String PROP_PROXY_USERNAME = "router.reseedProxy.username";
     /** Password for HTTP proxy authentication. */
     public static final String PROP_PROXY_PASSWORD = "router.reseedProxy.password";
@@ -141,9 +141,9 @@ public class Reseeder {
     public static final String PROP_SPROXY_PASSWORD = "router.reseedSSLProxy.password";
     /** If true, enable SSL proxy authentication. */
     public static final String PROP_SPROXY_AUTH_ENABLE = "router.reseedSSLProxy.authEnable";
-    /** @since 0.9.33 */
+    /** Type of SSL proxy to use, e.g. HTTP or SOCKS. */
     public static final String PROP_SPROXY_TYPE = "router.reseedSSLProxyType";
-    /** @since 0.9 */
+    /** If true, skip reseeding entirely. */
     public static final String PROP_DISABLE = "router.reseedDisable";
 
     // From PersistentDataStore
@@ -181,6 +181,7 @@ public class Reseeder {
      * Start a reseed from a single zip or su3 URL only.
      * Threaded, nonblocking.
      *
+     * @param url the zip or su3 resource to fetch; must end with .zip or .su3
      * @throws IllegalArgumentException if it doesn't end with zip or su3
      * @since 0.9.19
      */
@@ -196,6 +197,7 @@ public class Reseeder {
      * Blocking, inline. Should be fast.
      * This will close the stream.
      *
+     * @param in the stream to read the zip or su3 data from; it is closed by this call
      * @return number of valid routerinfos imported
      * @throws IOException on most errors
      * @since 0.9.19
@@ -403,7 +405,8 @@ public class Reseeder {
             // TODO _context.bandwidthLimiter().....
         }
 
-        /** Log and report a failed reseed attempt.
+        /**
+         * Log and report a failed reseed attempt.
          * readURL() runs an EepGet with 0 retries, so errors arrive here
          * with the failure cause (unlike transferFailed()).
          * @param url the full URL that failed
@@ -918,7 +921,7 @@ public class Reseeder {
          * Untranslated, for logs only.
          *
          * @param url if null, returns ""
-         * @return non-null
+         * @return the untranslated display string, or "" if url is null
          * @since 0.9.33
          */
         private String getDisplayString(URI url) {
@@ -931,7 +934,7 @@ public class Reseeder {
          * Untranslated, for logs only.
          *
          * @param url if null, returns ""
-         * @return non-null
+         * @return the untranslated display string, or "" if url is null
          * @since 0.9.33
          */
         private String getDisplayString(String url) {

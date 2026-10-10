@@ -32,10 +32,17 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
 
     /**
      * Create with the default number of records.
+     * @param context the application context the message is read and written under
      */
     public TunnelBuildMessageBase(I2PAppContext context) {this(context, MAX_RECORD_COUNT);}
 
-    /** @since 0.7.12 */
+    /**
+     * leaves the count to be set by readMessage()
+     *
+     * @param context the application context the message is read and written under
+     * @param records the number of records to preallocate, up to MAX_RECORD_COUNT; zero
+     * @since 0.7.12
+     */
     protected TunnelBuildMessageBase(I2PAppContext context, int records) {
         super(context);
         if (records > 0) {
@@ -48,18 +55,24 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
     /**
      * Store a build record.
      * @param record may be null
-     * @param index the index
+     * @param index the zero-based position of the record in the record array
      */
     public void setRecord(int index, EncryptedBuildRecord record) {_records[index] = record;}
 
     /**
      * Build record at the given index, may be null.
-     * @param index the index
+     * @param index the zero-based position of the record in the record array
      * @return may be null
      */
     public EncryptedBuildRecord getRecord(int index) {return _records[index];}
 
-    /** @since 0.7.12 */
+    /**
+     * How many encrypted build records this message carries, which sets both the
+     * length of every hop record array and the tunnel's depth.
+     *
+     * @return the number of records, from 0 to MAX_RECORD_COUNT
+     * @since 0.7.12
+     */
     public int getRecordCount() {return RECORD_COUNT;}
 
     /**

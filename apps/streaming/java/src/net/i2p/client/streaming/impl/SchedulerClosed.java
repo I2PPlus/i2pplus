@@ -29,6 +29,8 @@ import net.i2p.I2PAppContext;
 class SchedulerClosed extends SchedulerImpl {
     /**
      * SchedulerClosed.
+     *
+     * @param ctx the context supplying the router, client and clock services
      */
     public SchedulerClosed(I2PAppContext ctx) {
         super(ctx);

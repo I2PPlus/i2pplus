@@ -32,6 +32,8 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
 
     /**
      * DatabaseSearchReplyMessage.
+     *
+     * @param context the context to use for the message
      */
     public DatabaseSearchReplyMessage(I2PAppContext context) {
         super(context);
@@ -48,6 +50,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     /**
      * Assigns the key being searched for.
      *
+     * @param key the hash being searched for; it may only be assigned once
      * @throws IllegalStateException if key previously set, to protect saved checksum
      */
     public void setSearchKey(Hash key) {
@@ -65,11 +68,14 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     /**
      * The peer hash at the given index.
      *
+     * @param index the position of the wanted peer hash in the reply list
      * @return the reply
      */
     public Hash getReply(int index) { return _peerHashes.get(index); }
     /**
      * Adds a peer hash to the reply.
+     *
+     * @param peer the hash of the router answering the search, appended to the reply list
      */
     public void addReply(Hash peer) { _peerHashes.add(peer); }
     //public void addReplies(Collection replies) { _peerHashes.addAll(replies); }
@@ -82,6 +88,8 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     public Hash getFromHash() { return _from; }
     /**
      * Assigns the router that sent this reply.
+     *
+     * @param from the hash of the router whose database was searched
      */
     public void setFromHash(Hash from) { _from = from; }
 

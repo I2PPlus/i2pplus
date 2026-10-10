@@ -11,6 +11,12 @@ import java.io.Serializable;
  *
  */
 public abstract class Encoding implements Serializable {
+    /**
+     * Constructor for field encoding implementations.
+     */
+
+    public Encoding() {}
+
     /** The field */
     protected Field f;
 

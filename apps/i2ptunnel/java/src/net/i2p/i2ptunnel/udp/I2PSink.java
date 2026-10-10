@@ -14,11 +14,17 @@ import net.i2p.data.Destination;
  */
 public class I2PSink implements Sink {
 
+    /** true to send data unwrapped, false to wrap it in a repliable datagram. */
     protected final boolean raw;
+    /** Session the datagrams are sent out on. */
     protected final I2PSession sess;
+    /** Destination every datagram is addressed to, fixed at construction. */
     protected final Destination dest;
+    /** Repliable datagram wrapper, null when raw. */
     protected final I2PDatagramMaker maker;
     /**
+     * I2CP destination port sent with every datagram.
+     *
      * @since 0.9.53
      */
     protected final int toPort;

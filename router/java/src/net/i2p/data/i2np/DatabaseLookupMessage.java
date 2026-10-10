@@ -94,6 +94,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
 
     /**
      * DatabaseLookupMessage.
+     * @param context the application context the message is created for
      */
     public DatabaseLookupMessage(I2PAppContext context) {
         this(context, false);
@@ -102,6 +103,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      *  Lookup message for the given context.
      *
+     *  @param context the application context the message is created for
      *  @param locallyCreated ignored
      */
     public DatabaseLookupMessage(I2PAppContext context, boolean locallyCreated) {
@@ -118,6 +120,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      * Assigns the key being searched for.
      *
+     * @param key the key to look up, which may be set only once
      * @throws IllegalStateException if key previously set, to protect saved checksum
      */
     public void setSearchKey(Hash key) {
@@ -160,6 +163,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      * Assigns the router who requested this lookup.
      *
+     * @param from the requesting router, recorded once so a reply can be routed back to it
      * @throws IllegalStateException if from previously set, to protect saved checksum
      */
     public void setFrom(Hash from) {
@@ -178,6 +182,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      * Assigns the tunnel a reply should be sent to.
      *
+     * @param replyTunnel the tunnel any reply to this lookup should be sent through
      * @throws IllegalStateException if tunnel previously set, to protect saved checksum
      */
     public void setReplyTunnel(TunnelId replyTunnel) {
@@ -190,6 +195,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  Does this router support encrypted replies?
      *
      *  @param to null OK returns true as of 0.9.69
+     *  @return true if the router is new enough and its public key type can encrypt replies
      *  @since 0.9.7
      */
     public static boolean supportsEncryptedReplies(RouterInfo to) {
@@ -209,6 +215,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  Does this router support ratchet replies?
      *
      *  @param to null OK returns true as of 0.9.69
+     *  @return true if the router is new enough and its public key type supports ratchets
      *  @since 0.9.46
      */
     public static boolean supportsRatchetReplies(RouterInfo to) {
@@ -246,9 +253,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      *  Only worthwhile if sending reply via tunnel
      *
-     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
      *  @param encryptKey non-null
      *  @param encryptTag non-null
+     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
      *  @since 0.9.7
      */
     public void setReplySession(SessionKey encryptKey, SessionTag encryptTag) {
@@ -270,9 +277,9 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      *  Ratchet
      *
-     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
      *  @param encryptKey non-null
      *  @param encryptTag non-null
+     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
      *  @since 0.9.46
      */
     public void setReplySession(SessionKey encryptKey, RatchetSessionTag encryptTag) {
@@ -296,8 +303,8 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  Ratchet.
      *  Preliminary, not fully supported, see proposal 154.
      *
-     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
      *  @param pubKey non-null
+     *  @throws IllegalStateException if key or tag previously set, to protect saved checksum
      *  @since 0.9.46
      */
     public void setReplySession(PublicKey pubKey) {

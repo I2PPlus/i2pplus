@@ -37,6 +37,8 @@ class InboundMessageState implements CDQEntry {
     /**
      * Creates a new InboundMessageState with no fragments.
      * @param ctx the ctx
+     * @param messageId the ID of the message the fragments belong to
+     * @param from the peer the fragments arrive from
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from) {
         _context = ctx;
@@ -52,8 +54,16 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Creates an InboundMessageState and stores the first received fragment.
-     * @throws DataFormatException if fragment is invalid
      * @param ctx the ctx
+     * @param messageId the ID of the message the fragments belong to
+     * @param from the peer the fragments arrive from
+     * @param data buffer holding the fragment payload
+     * @param off index in data at which this fragment starts
+     * @param len number of fragment bytes to copy out of data
+     * @param fragmentNum zero-based position of this fragment in the message
+     * @param isLast true if this fragment completes the message, so its total
+     *        size is now known
+     * @throws DataFormatException if fragment is invalid
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from,
                                byte[] data, int off, int len, int fragmentNum, boolean isLast)
@@ -80,8 +90,12 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Receives and stores a fragment.
-     *  @return true if successful, false if corrupt or invalid
      *  @param data the data
+     *  @param off index in data at which this fragment starts
+     *  @param len number of fragment bytes to copy out of data
+     *  @param fragmentNum zero-based position of this fragment in the message
+     *  @param isLast true if this fragment completes the message
+     *  @return true if successful, false if corrupt or invalid
      */
     public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) {
         synchronized(lock) {
@@ -143,7 +157,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns true if all fragments up to last have been received.
-      * @return whether complete
+     * @return whether complete
      */
     public boolean isComplete() {
         synchronized(lock) {
@@ -155,7 +169,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns true if message has expired (received more than 10s ago).
-      * @return whether expired
+     * @return whether expired
      */
     public boolean isExpired() {
         return _context.clock().now() > _receiveBegin + MAX_RECEIVE_TIME;
@@ -163,7 +177,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns the message lifetime in milliseconds.
-      * @return the lifetime
+     * @return the lifetime
      */
     public long getLifetime() {
         return _context.clock().now() - _receiveBegin;
@@ -209,8 +223,8 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * The total size of the complete message in bytes.
-     * @throws IllegalStateException if message incomplete or released
      * @return the complete size
+     * @throws IllegalStateException if message incomplete or released
      */
     public int getCompleteSize() {
         synchronized(lock) {

@@ -12,6 +12,9 @@ import org.rrd4j.graph.DownSampler;
 public class LargestTriangleThreeBuckets extends DownSampleImpl {
 
     /**
+     * Create a downsampler that reduces a series to at most this many points,
+     * choosing each point by the largest-triangle-three-buckets rule.
+     *
      * @param threshold the number of buckets to downsample to
      */
     public LargestTriangleThreeBuckets(int threshold) {

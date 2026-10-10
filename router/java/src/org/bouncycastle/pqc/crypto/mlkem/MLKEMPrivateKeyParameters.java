@@ -25,6 +25,13 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * MLKEMPrivateKeyParameters.
+     *
+     * @param params the ML-KEM parameter set this key belongs to
+     * @param s the secret vector
+     * @param hpk the hash of the corresponding public key
+     * @param nonce the 32-byte nonce carried alongside the key material
+     * @param t the public key t component
+     * @param rho the public key rho component
      */
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] s, byte[] hpk, byte[] nonce, byte[] t, byte[] rho)
     {
@@ -33,6 +40,14 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * MLKEMPrivateKeyParameters.
+     *
+     * @param params the ML-KEM parameter set this key belongs to
+     * @param s the secret vector
+     * @param hpk the hash of the corresponding public key
+     * @param nonce the 32-byte nonce carried alongside the key material
+     * @param t the public key t component
+     * @param rho the public key rho component
+     * @param seed the optional seed permitting deterministic regeneration of the key, or null when the key was not generated from one
      */
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] s, byte[] hpk, byte[] nonce, byte[] t, byte[] rho, byte[] seed)
     {
@@ -48,6 +63,9 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * MLKEMPrivateKeyParameters.
+     *
+     * @param params the ML-KEM parameter set this key belongs to
+     * @param encoding the private key in either the seed-based or the expanded packed form
      */
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] encoding)
     {
@@ -84,6 +102,9 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * Encoded.
+     *
+     * @return the concatenation of s, t, rho, hpk and nonce, the expanded form
+     *     accepted by the two-argument constructor
      */
     public byte[] getEncoded()
     {
@@ -92,6 +113,8 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * HPK.
+     *
+     * @return a copy of the hash of the corresponding public key
      */
     public byte[] getHPK()
     {
@@ -100,6 +123,8 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * Nonce.
+     *
+     * @return a copy of the nonce value
      */
     public byte[] getNonce()
     {
@@ -108,6 +133,8 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * Public key.
+     *
+     * @return the encoded public key matching this private key
      */
     public byte[] getPublicKey()
     {
@@ -116,6 +143,8 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * Public key parameters.
+     *
+     * @return the public key parameters matching this private key
      */
     public MLKEMPublicKeyParameters getPublicKeyParameters()
     {
@@ -124,6 +153,8 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * Rho.
+     *
+     * @return a copy of the public key rho component
      */
     public byte[] getRho()
     {
@@ -132,6 +163,8 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * S.
+     *
+     * @return a copy of the secret vector
      */
     public byte[] getS()
     {
@@ -140,6 +173,8 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * T.
+     *
+     * @return a copy of the public key t component
      */
     public byte[] getT()
     {
@@ -148,6 +183,9 @@ public class MLKEMPrivateKeyParameters
 
     /**
      * Seed.
+     *
+     * @return a copy of the deterministic key generation seed, or null when
+     *     this key was not generated from one
      */
     public byte[] getSeed()
     {

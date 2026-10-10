@@ -9,6 +9,7 @@ public class InvalidAuthTokenException extends Exception {
 
     /**
      * Construct a new instance.
+     * @param str the detail message describing why the token was rejected, passed to the Exception superclass
      */
     public InvalidAuthTokenException(String str) {
         super(str);

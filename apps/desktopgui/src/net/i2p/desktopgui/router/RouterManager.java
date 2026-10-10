@@ -14,6 +14,12 @@ import net.i2p.util.Log;
  */
 public class RouterManager {
 
+    /**
+     * The router is reached through the global I2PAppContext rather than through a
+     * field, so an instance holds nothing and start() is the only entry point.
+     */
+    public RouterManager() {}
+
     /** @return non-null */
     private static I2PAppContext getAppContext() {
         return I2PAppContext.getGlobalContext();

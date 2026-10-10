@@ -9,6 +9,12 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
 public class ResultsTextPane extends JTextPane {
 
     /**
+     * The pane starts empty; text arrives through append() and insert(), so nothing
+     * is configured at construction.
+     */
+    public ResultsTextPane() {}
+
+    /**
      * Compiler auto-generate value not directly related to class functionality
      */
     private static final long serialVersionUID = -2224271202004876654L;
@@ -18,7 +24,7 @@ public class ResultsTextPane extends JTextPane {
      *
      * @param paramTextStr
      * String to be inserted into the document
-     * */
+     */
     public void append(String paramTextStr) {
         try {
             getStyledDocument().insertString(getStyledDocument().getLength(),paramTextStr, null);

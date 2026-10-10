@@ -10,11 +10,14 @@ package net.metanotion.io;
 public interface Serializer<T> {
     /**
      * o).
+     * @param o the object to serialize
      * @return the bytes
      */
     public byte[] getBytes(T o);
     /**
      * b).
+     * @param b the serialized bytes to read back
+     * @return the deserialized object
      */
     public T construct(byte[] b);
 }

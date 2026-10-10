@@ -29,6 +29,8 @@ class SchedulerDead extends SchedulerImpl {
 
     /**
      * SchedulerDead.
+     *
+     * @param ctx the application context passed to the superclass
      */
     public SchedulerDead(I2PAppContext ctx) {
         super(ctx);

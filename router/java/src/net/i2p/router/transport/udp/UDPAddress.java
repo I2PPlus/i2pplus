@@ -91,7 +91,11 @@ class UDPAddress {
         }
     }
 
-    /** Parse and cache router address data. */
+    /**
+     * Parse and cache router address data.
+     *
+     * @param addr the address to parse, null for an invalid address
+     */
     public UDPAddress(RouterAddress addr) {
         if (addr == null) {
             _host = null;
@@ -305,7 +309,11 @@ class UDPAddress {
         _introHashes = cintroHashes;
     }
 
-    /** Host string from the router address. */
+    /**
+     * Host string from the router address.
+     *
+     * @return the host, null when the address is invalid
+     */
     public String getHost() { return _host; }
 
     /**
@@ -319,20 +327,31 @@ class UDPAddress {
         return _hostAddress;
     }
 
-    /** Port number from the router address. */
+    /**
+     * Port number from the router address.
+     *
+     * @return the port, 0 when the address is invalid
+     */
     public int getPort() { return _port; }
 
     /**
+     * The key this address is introduced under.
+     *
      * @return shouldn't be null but will be if invalid
      */
     byte[] getIntroKey() { return _introKey; }
 
-    /** Introducer count */
+    /**
+     * How many introducers this address carries.
+     *
+     * @return the introducer count, 0 when there are none
+     */
     int getIntroducerCount() { return (_introTags == null ? 0 : _introTags.length); }
 
     /**
      * As of 0.9.32, will NOT resolve hostnames.
      *
+     * @param i the introducer index, from 0
      * @return null if invalid or for SSU2
      */
     InetAddress getIntroducerHost(int i) {
@@ -348,6 +367,7 @@ class UDPAddress {
     /**
      * Port number for the given introducer.
      *
+     * @param i the introducer index, from 0
      * @return greater than zero or zero for SSU2
      */
     int getIntroducerPort(int i) {
@@ -359,6 +379,7 @@ class UDPAddress {
     /**
      * Introducer key for the given introducer.
      *
+     * @param i the introducer index, from 0
      * @return null if no keys or for SSU2
      */
     byte[] getIntroducerKey(int i) {
@@ -370,6 +391,7 @@ class UDPAddress {
     /**
      * Introducer tag for the given introducer.
      *
+     * @param i the introducer index, from 0
      * @return greater than zero
      */
     long getIntroducerTag(int i) {
@@ -381,6 +403,7 @@ class UDPAddress {
     /**
      * Expiration for the given introducer.
      *
+     * @param i the introducer index, from 0
      * @return ms since epoch, zero if unset
      * @since 0.9.30
      */
@@ -393,6 +416,8 @@ class UDPAddress {
     /**
      * Introducer hash for the given introducer.
      *
+     * @param i the introducer index, from 0
+     * @return the introducer hash, null when unset or out of range
      * @since 0.9.55
      */
     Hash getIntroducerHash(int i) {
@@ -402,16 +427,24 @@ class UDPAddress {
     }
 
     /**
+     * Whether this address is IPv4.
+     *
+     * @return true when the address is IPv4
      * @since 0.9.55
      */
     boolean isIPv4() { return _isIPv4; }
 
     /**
+     * Whether this address is IPv6.
+     *
+     * @return true when the address is IPv6
      * @since 0.9.55
      */
     boolean isIPv6() { return _isIPv6; }
 
     /**
+     * The MTU to use for this address.
+     *
      * @return 0 if unset or invalid; recitified via MTU.rectify()
      * @since 0.9.2
      */

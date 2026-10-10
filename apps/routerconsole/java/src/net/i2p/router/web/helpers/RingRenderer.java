@@ -10,6 +10,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RingRenderer {
 
+    /**
+     * Every renderRing() entry point and every arc and colour constant is static, so an
+     * instance carries nothing.
+     */
+    public RingRenderer() {}
+
     private static final int RING_SIZE = 90;
     private static final int RING_STROKE = 8;
     private static final int RING_RADIUS = (RING_SIZE - RING_STROKE) / 2;
@@ -109,7 +115,14 @@ public class RingRenderer {
      * instead of the score-derived class (used by MODE_ANOMALY, where color reflects
      * deviation from baseline rather than the raw fill level).
      *
+     * @param score    0.0–1.0 fill level, or &lt; 0 for "collecting" (gray)
+     * @param label    short label displayed below the percentage
+     * @param value    value string displayed in the center
+     * @param mode     color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param history  recent data points for sparkline, or null to omit
+     * @param plotType PLOT_BARS or PLOT_LINE (defaults to PLOT_LINE when null)
      * @param forcedColor explicit CSS class ("green"/"yellow"/"red"/"gray"), or null
+     * @return inline SVG markup
      * @since 0.9.70+
      */
     public static String renderRing(double score, String label, String value, String mode, double[] history,
@@ -315,7 +328,14 @@ public class RingRenderer {
      * When {@code forcedColor} is non-null it is used for the arc/text/plot color
      * instead of the score-derived class (used by MODE_ANOMALY).
      *
+     * @param score   0.0–1.0 fill level
+     * @param label   short label
+     * @param value   value string in the center
+     * @param details tooltip lines, or null/empty for no tooltip
+     * @param mode    color mode (MODE_HEALTH, MODE_ACTIVITY, MODE_LATENCY)
+     * @param history recent data points for sparkline, or null to omit
      * @param forcedColor explicit CSS class ("green"/"yellow"/"red"/"gray"), or null
+     * @return HTML for the ring-cell div
      * @since 0.9.70+
      */
     public static String renderRingCell(double score, String label, String value, String[] details, String mode,
@@ -349,6 +369,10 @@ public class RingRenderer {
 
         /**
          * RingSection.
+         *
+         * @param value the proportion of the ring this arc covers, normalized with
+         *        the other sections to sum to 1.0 at render time
+         * @param cssClass the CSS color class naming this section's arc
          */
         public RingSection(double value, String cssClass) {
             this.value = value;

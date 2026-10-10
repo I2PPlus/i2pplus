@@ -24,19 +24,29 @@ import net.i2p.router.web.TuningFormHandler;
  */
 public class TuningHelper extends HelperBase {
 
+    /**
+     * No CSRF nonce set yet, so the rendered form would carry an empty hidden field
+     * until setNonce() is called.
+     */
+    public TuningHelper() {}
+
     private static final int SPARK_W = 140;
     private static final int SPARK_H = 36;
     private String _nonce;
 
     /**
      * setNonce.
+     * @param nonce the console CSRF nonce to embed in the hidden field of the
+     *        rendered tuning form
      */
     public void setNonce(String nonce) { _nonce = nonce; }
 
     // human-readable labels for raw param names
-    /** Param name to human label. Package-private so the conformance test can
+    /**
+     * Param name to human label. Package-private so the conformance test can
      * verify the two maps stay in step; see {@code TuningHelperParamConformanceTest},
-     * which lives in the test tree and so is not on the javadoc classpath. */
+     * which lives in the test tree and so is not on the javadoc classpath.
+     */
     static final Map<String, String> DISPLAY_NAMES = new HashMap<>();
     static {
         DISPLAY_NAMES.put("ACK_FREQUENCY", _x("Acknowledgement Frequency"));
@@ -186,8 +196,10 @@ public class TuningHelper extends HelperBase {
     }
 
     // brief purpose descriptions (<=120 chars)
-    /** Param name to console description. Package-visible for the same reason as
-     * {@link #DISPLAY_NAMES}. */
+    /**
+     * Param name to console description. Package-visible for the same reason as
+     * {@link #DISPLAY_NAMES}.
+     */
     static final Map<String, String> PARAM_DESCRIPTIONS = new HashMap<>();
     static {
         PARAM_DESCRIPTIONS.put("ACK_FREQUENCY", _x("Data packets between each ACK."));

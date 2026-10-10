@@ -21,11 +21,15 @@ class DontHaveMemo {
     private final long _memoTime;
     private final Map<Integer, Long> _dontHave = new HashMap<>(8);
 
+    /** Create a memo using the default five minute suppression window. */
     DontHaveMemo() {
         this(DEFAULT_MEMO_TIME);
     }
 
     /**
+     * Create a memo with a caller-chosen suppression window, for tests and
+     * for tuning the expiry.
+     *
      * @param memoTime how long a dont_have suppresses requests, milliseconds
      */
     DontHaveMemo(long memoTime) {

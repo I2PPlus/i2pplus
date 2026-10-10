@@ -18,6 +18,9 @@ import net.i2p.util.SystemVersion;
  *  @since 0.9.23
  */
 public class NewsFeedHelper extends HelperBase {
+    /**
+     * Create the helper; the superclass constructor sets up the request context.
+     */
     public NewsFeedHelper() {super();}
 
     private int _start;

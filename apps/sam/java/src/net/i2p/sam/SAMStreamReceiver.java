@@ -22,14 +22,14 @@ interface SAMStreamReceiver {
      * @param id Stream ID
      * @param result information
      * @param bufferState state of the buffer
-     * @throws IOException
+     * @throws IOException if writing to the client socket fails
      */
     public void streamSendAnswer( int id, String result, String bufferState ) throws IOException;
 
     /**
      * Notifies that the outwards buffer is free for writing
      * @param id stream ID
-     * @throws IOException
+     * @throws IOException if writing to the client socket fails
      */
     public void notifyStreamSendBufferFree( int id ) throws IOException;
 
@@ -38,7 +38,7 @@ interface SAMStreamReceiver {
      *
      * @param id New connection id
      * @param dest Destination
-     * @throws IOException
+     * @throws IOException if writing to the client socket fails
      */
     public void notifyStreamIncomingConnection ( int id, Destination dest ) throws IOException;
 
@@ -48,7 +48,7 @@ interface SAMStreamReceiver {
      * @param id New connection id
      * @param result message result
      * @param msg Message
-     * @throws IOException
+     * @throws IOException if writing to the client socket fails
      */
     public void notifyStreamOutgoingConnection(int id, String result, String msg) throws IOException;
 
@@ -57,7 +57,7 @@ interface SAMStreamReceiver {
      *
      * @param id Connection id
      * @param data Byte array to be received
-     * @throws IOException
+     * @throws IOException if writing to the client socket fails
      */
     public void receiveStreamBytes(int id, ByteBuffer data) throws IOException;
 
@@ -68,7 +68,7 @@ interface SAMStreamReceiver {
      * @param id Connection id
      * @param result Disconnection reason ("OK" or something else)
      * @param msg Error message, if any
-     * @throws IOException
+     * @throws IOException if writing to the client socket fails
      */
     public void notifyStreamDisconnection(int id, String result, String msg) throws IOException;
 

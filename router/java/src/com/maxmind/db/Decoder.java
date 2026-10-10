@@ -23,8 +23,10 @@ final class Decoder {
 
     private static final int[] POINTER_VALUE_OFFSETS = { 0, 0, 1 << 11, (1 << 19) + ((1) << 11), 0 };
 
-    // XXX - This is only for unit testings. We should possibly make a
-    // constructor to set this
+    /**
+     * Set by the unit tests to exercise pointer decoding; false in normal use.
+     * Not settable through a constructor.
+     */
     boolean POINTER_TEST_HACK = false;
 
     private final NodeCache cache;
@@ -72,12 +74,17 @@ final class Decoder {
         /** Float type */
         FLOAT;
 
-        // Java clones the array when you call values(). Caching it increased
-        // the speed by about 5000 requests per second on my machine.
+        /**
+         * Cached copy of Type.values(), to avoid the array clone on every lookup.
+         * Worth about 5000 requests per second on the original author's machine.
+         */
         final static Type[] values = Type.values();
 
         /**
-         * get.
+         * Return the data type stored at an index in this enum's declaration order.
+         *
+         * @param i the zero-based index into the Type values array
+         * @return the Type constant at that index
          */
         public static Type get(int i) {
             return Type.values[i];
@@ -89,7 +96,10 @@ final class Decoder {
         }
 
         /**
-         * fromControlByte.
+         * Determine the data type encoded in the leading bits of a control byte.
+         *
+         * @param b the control byte, whose top 3 bits encode the data type
+         * @return the type encoded in the top 3 bits of b
          */
         public static Type fromControlByte(int b) {
             // The type is encoded in the first 3 bits of the byte.
@@ -97,7 +107,13 @@ final class Decoder {
         }
     }
 
-    /** Create Decoder */
+    /**
+     * Construct a decoder over the data section of a MaxMind DB file.
+     *
+     * @param cache the node cache that pointer indirections resolve through
+     * @param buffer the database data section, positioned by the caller
+     * @param pointerBase the base offset that stored pointer values are relative to
+     */
     Decoder(NodeCache cache, ByteBuffer buffer, long pointerBase) {
         this.cache = cache;
         this.pointerBase = pointerBase;
@@ -106,7 +122,7 @@ final class Decoder {
 
     private final NodeCache.Loader cacheLoader = new NodeCache.Loader() {
         /**
-         * load.
+         * Decode the value stored at an offset in the data section.
          */
         @Override
         public Object load(int key) throws IOException {
@@ -114,7 +130,13 @@ final class Decoder {
         }
     };
 
-    /** Decode at offset */
+    /**
+     * Decode the value stored at an offset in the data section.
+     *
+     * @param offset the position in the data section to decode from
+     * @return the decoded value, of the type named by the control byte at that position
+     * @throws IOException if the offset is past the end of the data section, or the data at it is corrupt
+     */
     Object decode(int offset) throws IOException {
         if (offset >= this.buffer.capacity()) {
             throw new InvalidDatabaseException(
@@ -126,7 +148,12 @@ final class Decoder {
         return decode();
     }
 
-    /** Decode from buffer */
+    /**
+     * Decode the value stored at the buffer's current position.
+     *
+     * @return the decoded value, of the type named by the control byte at the current position
+     * @throws IOException if the data at the current position is corrupt
+     */
     Object decode() throws IOException {
         int ctrlByte = 0xFF & this.buffer.get();
 
@@ -256,7 +283,14 @@ final class Decoder {
         return Decoder.decodeInteger(this.buffer, base, size);
     }
 
-    /** Decode integer */
+    /**
+     * Assemble a big-endian integer from size bytes of the buffer.
+     *
+     * @param buffer the buffer the bytes are read from, left advanced past them
+     * @param base the starting value that the bytes are shifted in on top of
+     * @param size the number of bytes to read
+     * @return the assembled integer
+     */
     static int decodeInteger(ByteBuffer buffer, int base, int size) {
         int integer = base;
         for (int i = 0; i < size; i++) {

@@ -16,7 +16,10 @@ package org.minidns.dnslabel;
  */
 public final class NonReservedLdhLabel extends LdhLabel {
 
-    /** Create label */
+    /**
+     * Create label
+     * @param label the LDH label text to wrap, already checked against the non-reserved position rules
+     */
     NonReservedLdhLabel(String label) {
         super(label);
         assert isNonReservedLdhLabelInternal(label);
@@ -24,6 +27,8 @@ public final class NonReservedLdhLabel extends LdhLabel {
 
     /**
      * isNonReservedLdhLabel.
+     * @param label the LDH label text to test
+     * @return true if label is non-reserved
      */
     public static boolean isNonReservedLdhLabel(String label) {
         if (!isLdhLabel(label)) {
@@ -32,7 +37,13 @@ public final class NonReservedLdhLabel extends LdhLabel {
         return isNonReservedLdhLabelInternal(label);
     }
 
-    /** @return true if label is non-reserved */
+    /**
+     * Does this text satisfy the non-reserved rule, having already been
+     * checked as an LDH label?
+     *
+     * @param label the already-validated LDH label text to test
+     * @return true if label is non-reserved
+     */
     static boolean isNonReservedLdhLabelInternal(String label) {
         return !ReservedLdhLabel.isReservedLdhLabelInternal(label);
     }

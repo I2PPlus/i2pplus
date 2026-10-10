@@ -14,6 +14,12 @@ import java.io.IOException;
 class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
     private final int length;
 
+    /**
+     * Create a varying array-valued primitive.
+     *
+     * @param updater the source of values
+     * @param length the number of slots in the array
+     */
     RrdDoubleArray(RrdUpdater<U> updater, int length) {
         super(updater, RrdPrimitive.RRD_DOUBLE, length, false);
         this.length = length;
@@ -30,6 +36,14 @@ class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
         set(index, value, 1);
     }
 
+    /**
+     * Store one or more values starting at the given index.
+     *
+     * @param index the slot to write at
+     * @param value the value to write
+     * @param count how many consecutive slots to fill
+     * @throws IOException if the underlying store cannot be written
+     */
     void set(int index, double value, int count) throws IOException {
         // rollovers not allowed!
         assert index + count <= length
@@ -56,7 +70,10 @@ class RrdDoubleArray<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
 
     /**
      * Array of count double values starting at index.
+     * @param index the index of the first value to read
+     * @param count how many consecutive values to read, bounded by the array length
      * @return array of count double values starting at index
+     * @throws java.io.IOException if the backing store cannot be read
      */
     double[] get(int index, int count) throws IOException {
         assert index + count <= length

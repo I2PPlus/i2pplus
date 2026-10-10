@@ -30,6 +30,7 @@ public class Cursor {
     public static final Cursor HAND_CURSOR = null;
     /**
      * Construct a new instance.
+     * @param c the cursor whose form this instance takes over
      */
     public Cursor(Cursor c) {}
 }

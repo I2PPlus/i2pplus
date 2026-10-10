@@ -106,8 +106,8 @@ public class Payload extends DataStructureImpl {
      * Deprecated.
      * Unless you are doing encryption, use setEncryptedData() instead.
      *
+     * @param data the plaintext message body, at most 64KB
      * @throws IllegalArgumentException if bigger than 64KB
-     * @param data the data
      */
     public void setUnencryptedData(byte[] data) {
         if (data.length > MAX_LENGTH) throw new IllegalArgumentException();
@@ -125,7 +125,7 @@ public class Payload extends DataStructureImpl {
      /**
       * The encrypted data.
       *
-      * @param data the data
+      * @param data the encrypted message body, at most 64KB
       * @throws IllegalArgumentException if bigger than 64KB
       */
     public void setEncryptedData(byte[] data) {
@@ -164,9 +164,9 @@ public class Payload extends DataStructureImpl {
     /**
      * Writes the encrypted payload to the target array.
      *
+     * @param target the array to write the 4-byte length prefix and encrypted body into
+     * @param offset the index in target where the 4-byte length prefix is written
      * @return the written length (NOT the new offset)
-     * @param target the target
-     * @param offset the offset
      */
     public int writeBytes(byte[] target, int offset) {
         if (_encryptedData == null) throw new IllegalStateException("Not yet encrypted.  Please set the encrypted data");

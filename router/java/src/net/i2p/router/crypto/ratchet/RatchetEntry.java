@@ -24,12 +24,30 @@ class RatchetEntry {
     /** ACKs queued for delivery with this entry, or null. */
     public final List<Integer> acksToSend;
 
-    /** Outbound-calculated key. */
+    /**
+     * Outbound-calculated key.
+     *
+     * @param tag the session tag identifying the key being used
+     * @param key the session key and nonce to encrypt with
+     * @param keyID the key identifier recorded in the message
+     * @param pn the length of the previous ratchet chain
+     */
     public RatchetEntry(RatchetSessionTag tag, SessionKeyAndNonce key, int keyID, int pn) {
         this(tag, key, keyID, pn, null, null, null);
     }
 
-    /** Full constructor with optional next keys and pending ACKs. */
+    /**
+     * Full constructor with optional next keys and pending ACKs.
+     *
+     * @param tag the session tag identifying the key being used
+     * @param key the session key and nonce to encrypt with
+     * @param keyID the key identifier recorded in the message
+     * @param pn the length of the previous ratchet chain
+     * @param nextFwdKey the next forward chain key, or null if none was derived
+     * @param nextRevKey the next reverse chain key, or null if none was derived
+     * @param acksToSend the ACK sequence numbers queued for delivery with this
+              entry, or null when none are pending
+     */
     public RatchetEntry(RatchetSessionTag tag, SessionKeyAndNonce key, int keyID, int pn,
                         NextSessionKey nextFwdKey, NextSessionKey nextRevKey, List<Integer> acksToSend) {
         this.tag = tag;

@@ -10,7 +10,20 @@ import net.i2p.router.RouterContext;
  */
 public class ContextHelper {
 
-    /** @throws IllegalStateException if no context available */
+    /**
+     * Constructor. The only lookup is the static getContext(), which reads the
+     * live context list, so an instance carries no state.
+     */
+    public ContextHelper() {}
+
+    /**
+     * to take the first context in the list
+     * first context in the list
+     *
+     * @param contextId base64 prefix of the target router hash, or null or blank
+     * @return the context whose router hash starts with contextId, otherwise the
+     * @throws IllegalStateException if no context available
+     */
     public static RouterContext getContext(String contextId) {
         List<RouterContext> contexts = RouterContext.listContexts();
         if ( (contexts == null) || (contexts.isEmpty()) )

@@ -459,13 +459,24 @@ public class BuildHandler implements Runnable {
         }
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Gets the current cap on the build message queue.
+     * @return the cap on queued build messages
+     * @since 0.9.70+
+     */
     public static int getMaxQueue() { return _maxQueue; }
-    /** @since 0.9.70+ */
+    /**
+     * Sets the cap on the build message queue.
+     * @param val the requested cap, clamped to the range 16 to 2048
+     * @since 0.9.70+
+     */
     public static void setMaxQueue(int val) { _maxQueue = Math.max(16, Math.min(2048, val)); }
 
     /**
      * BuildHandler.
+     * @param ctx the router context supplying properties, logging and statistics
+     * @param manager the pool manager this handler reports build failures and successes to
+     * @param exec the executor that runs the build passes this handler queues work for
      */
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
         _context = ctx;
@@ -564,6 +575,7 @@ public class BuildHandler implements Runnable {
         }
     }
 
+    /** Drops any queued inbound build messages left over from before the restart. */
     public void restart() {_inboundBuildMessages.clear();}
 
     /**

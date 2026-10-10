@@ -211,7 +211,13 @@ class PeerAcceptor {
             super(s);
         }
 
-        /** @since 0.9.71 */
+        /**
+         * Create an acceptor exception that carries the protocol failure as its cause.
+         *
+         * @param s the detail message describing why the connection was rejected
+         * @param t the cause of the protocol failure, when one is available
+         * @since 0.9.71
+         */
         public ProtocolException(String s, Throwable t) {
             super(s, t);
         }

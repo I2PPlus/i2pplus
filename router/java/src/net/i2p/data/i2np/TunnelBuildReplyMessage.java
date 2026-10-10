@@ -14,6 +14,8 @@ public class TunnelBuildReplyMessage extends TunnelBuildMessageBase {
 
     /**
      * TunnelBuildReplyMessage.
+     *
+     * @param context the I2P app context, used for message ID generation
      */
     public TunnelBuildReplyMessage(I2PAppContext context) {
         super(context, MAX_RECORD_COUNT);

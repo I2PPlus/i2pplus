@@ -34,7 +34,14 @@ class UDPReceiver {
     /** How long to sleep between throttle checks while inbound is throttled */
     private static final int THROTTLE_WAIT_MS = 10;
 
-    /** Constructor name parameter. */
+    /**
+     * Constructor name parameter.
+     * @param ctx the router context supplying the log and rate statistics
+     * @param transport the transport whose PacketHandler queue receives the inbound packets
+     * @param socket the bound datagram socket the receiver thread reads from
+     * @param name the thread name to give the receiver thread
+     * @param lsnr the socket listener that owns this receiver and supplies the endpoint
+     */
     public UDPReceiver(RouterContext ctx, UDPTransport transport, DatagramSocket socket, String name,
                        SocketListener lsnr) {
         _context = ctx;

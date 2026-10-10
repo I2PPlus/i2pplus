@@ -24,7 +24,7 @@ interface SAMDatagramReceiver {
      * @param proto I2CP protocol
      * @param fromPort I2CP from port
      * @param toPort I2CP to port
-     * @throws IOException
+     * @throws IOException if the datagram cannot be written to the client socket
      */
     public void receiveDatagramBytes(Destination sender, byte[] data, int proto, int fromPort, int toPort) throws IOException;
 

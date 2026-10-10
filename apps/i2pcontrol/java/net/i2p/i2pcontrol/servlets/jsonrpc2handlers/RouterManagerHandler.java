@@ -47,6 +47,9 @@ public class RouterManagerHandler implements RequestHandler {
 
     /**
      * RouterManagerHandler.
+     *
+     * @param ctx the router context whose services the managed operations act on
+     * @param helper the JSON-RPC2 helper used to build responses and check authentication
      */
     public RouterManagerHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;
@@ -236,6 +239,8 @@ public class RouterManagerHandler implements RequestHandler {
         private int _exitCode;
         /**
          * UpdateWrapperManagerTask.
+         *
+         * @param exitCode the status the wrapper manager should see on the next restart
          */
         public UpdateWrapperManagerTask(int exitCode) {
             _exitCode = exitCode;

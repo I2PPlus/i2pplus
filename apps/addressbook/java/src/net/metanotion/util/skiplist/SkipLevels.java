@@ -125,7 +125,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      * Get the span containing or following the given key.
      *
      * @param start the starting level
-     * @param key the key
+     * @param key the key to locate, compared with compareTo() against each level's key
      * @param search search parameters and results
      * @return the SkipSpan containing the key
      */
@@ -149,7 +149,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      * Get the value associated with the given key.
      *
      * @param start the starting level
-     * @param key the key
+     * @param key the key whose associated value is wanted
      * @return the value, or null if not found
      */
     public V get(int start, K key) {
@@ -165,7 +165,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      * Remove a key-value pair from the skip list.
      *
      * @param start the starting level
-     * @param key the key
+     * @param key the key of the entry to remove
      * @param sl the SkipList
      * @return An array of two objects or null.
      * rv[0] is the removed object.
@@ -260,7 +260,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      * Put a key-value pair into the skip list.
      *
      * @param start the starting level
-     * @param key the key
+     * @param key the key to map to the value, replacing any existing entry
      * @param val the value
      * @param sl the SkipList
      * @return the new level if it caused a split and we made a new level,

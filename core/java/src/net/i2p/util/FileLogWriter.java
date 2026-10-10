@@ -42,6 +42,8 @@ class FileLogWriter extends LogWriter {
 
     /**
      * FileLogWriter.
+     * @param manager the LogManager this writer drains records from; its
+     *        configuration supplies the log directory and rotation settings
      */
     public FileLogWriter(LogManager manager) {
         super(manager);

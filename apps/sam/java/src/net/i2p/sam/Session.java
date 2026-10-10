@@ -6,7 +6,12 @@ package net.i2p.sam;
  * @since 0.9.25 moved from SAMv3Handler
  */
 interface Session extends SAMMessageSess {
-	/** @return session nickname */
+	/**
+	 * The nickname the client registered this session under, which is the key
+	 * it is filed and removed by in the SessionsDB.
+	 *
+	 * @return the registered nickname
+	 */
 	String getNick();
 }
 

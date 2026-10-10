@@ -27,6 +27,7 @@ import net.i2p.util.Log;
  * Redirects to login page if not authenticated.
  */
 public class AuthFilter implements Filter {
+    /** Create an instance; the servlet container calls this with no arguments. */
     public AuthFilter() {}
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(AuthFilter.class);
     private static final String PROP_AUTH_TYPE = "routerconsole.auth.type";

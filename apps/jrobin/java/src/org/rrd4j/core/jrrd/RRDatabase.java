@@ -173,7 +173,7 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * getArchive.
+     * Look up an archive by its name.
      *
      * @param name a {@link java.lang.String} object.
      * @return a {@link org.rrd4j.core.jrrd.Archive} object.
@@ -210,6 +210,12 @@ public class RRDatabase implements Closeable {
         return getArchiveList(type).iterator();
     }
 
+    /**
+     * Collect the archives consolidated with the given function, in definition order.
+     *
+     * @param type the consolidation function whose archives to collect
+     * @return the matching archives, empty if the database holds none
+     */
     ArrayList<Archive> getArchiveList(ConsolidationFunctionType type) {
 
         ArrayList<Archive> subset = new ArrayList<>();
@@ -271,13 +277,13 @@ public class RRDatabase implements Closeable {
      * Returns data from the database corresponding to the given consolidation function.
      *
      * @param type the consolidation function that should have been applied to the data.
+     * @param startDate a {@link java.util.Date} object.
+     * @param endDate a {@link java.util.Date} object.
      * @param step the step size to use.
      * @return the raw data.
      * @throws java.lang.IllegalArgumentException if there was a problem locating a data archive
      *     with the requested consolidation function.
      * @throws java.io.IOException if there was a problem reading data from the database.
-     * @param startDate a {@link java.util.Date} object.
-     * @param endDate a {@link java.util.Date} object.
      */
     public DataChunk getData(
             ConsolidationFunctionType type, Date startDate, Date endDate, long step)
@@ -288,14 +294,14 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * getData.
+     * Read consolidated data over a time range at a given step.
      *
      * @param type a {@link org.rrd4j.core.jrrd.ConsolidationFunctionType} object.
      * @param startTime seconds since epoch
      * @param endTime seconds since epoch
-     * @param stepSeconds in seconds
+     * @param stepSeconds resolution of the returned data, in seconds
      * @return a {@link org.rrd4j.core.jrrd.DataChunk} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the archive cannot be read
      */
     public DataChunk getData(
             ConsolidationFunctionType type, long startTime, long endTime, long stepSeconds)

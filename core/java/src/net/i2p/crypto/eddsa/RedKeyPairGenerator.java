@@ -13,6 +13,12 @@ import java.security.KeyPair;
  */
 public final class RedKeyPairGenerator extends KeyPairGenerator {
 
+    /**
+     * An uninitialised generator; generateKeyPair() falls back to the default key
+     * size and the global RandomSource if the caller has not called initialize().
+     */
+    public RedKeyPairGenerator() {}
+
     @Override
     public KeyPair generateKeyPair() {
         if (!initialized) initialize(DEFAULT_KEYSIZE, RandomSource.getInstance());

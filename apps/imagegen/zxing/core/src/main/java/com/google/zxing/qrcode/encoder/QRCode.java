@@ -28,7 +28,7 @@ import com.google.zxing.qrcode.decoder.Version;
 public final class QRCode {
 
   /**
-   * NUM_MASK_PATTERNS.
+   * Number of mask patterns defined by the QR Code model.
    */
   public static final int NUM_MASK_PATTERNS = 8;
 
@@ -39,20 +39,22 @@ public final class QRCode {
   private ByteMatrix matrix;
 
   /**
-   * QRCode.
+   * Construct an empty QR Code, with no mask pattern selected yet.
    */
   public QRCode() {
     maskPattern = -1;
   }
 
   /**
-   * @return the mode
+   * Return the encoding mode.
+   * @return the encoding mode, null until setMode() has been called
    */
   public Mode getMode() {
     return mode;
   }
 
   /**
+   * Return the error correction level.
    * @return the e c level
    */
   public ErrorCorrectionLevel getECLevel() {
@@ -60,13 +62,15 @@ public final class QRCode {
   }
 
   /**
-   * @return the version
+   * Return the symbol version.
+   * @return the version, null until setVersion() has been called
    */
   public Version getVersion() {
     return version;
   }
 
   /**
+   * Return the index of the mask applied to the symbol.
    * @return the mask pattern
    */
   public int getMaskPattern() {
@@ -74,14 +78,17 @@ public final class QRCode {
   }
 
   /**
-   * @return the matrix
+   * Return the encoded module matrix.
+   * @return the matrix, null until setMatrix() has been called
    */
   public ByteMatrix getMatrix() {
     return matrix;
   }
 
   /**
-   * toString.
+   * Render the mode, correction level, version, mask and matrix as text.
+   *
+   * @return the QR Code rendered for debugging
    */
   @Override
   public String toString() {
@@ -106,42 +113,48 @@ public final class QRCode {
   }
 
   /**
-   * setMode.
+   * Record the encoding mode.
+   * @param value the encoding mode for the data being encoded
    */
   public void setMode(Mode value) {
     mode = value;
   }
 
   /**
-   * setECLevel.
+   * Record the error correction level.
+   * @param value the error correction level to encode the symbol with
    */
   public void setECLevel(ErrorCorrectionLevel value) {
     ecLevel = value;
   }
 
   /**
-   * setVersion.
+   * Record the symbol version.
+   * @param version the symbol version, which fixes the matrix size
    */
   public void setVersion(Version version) {
     this.version = version;
   }
 
   /**
-   * setMaskPattern.
+   * Record the index of the mask to apply.
+   * @param value the index of the mask to apply, 0 to NUM_MASK_PATTERNS - 1
    */
   public void setMaskPattern(int value) {
     maskPattern = value;
   }
 
   /**
-   * setMatrix.
+   * Record the encoded module matrix.
+   * @param value the encoded module matrix to emit
    */
   public void setMatrix(ByteMatrix value) {
     matrix = value;
   }
 
-  // Check if "mask_pattern" is valid.
   /**
+   * Test whether a mask index is one of the eight the model defines.
+   * @param maskPattern the mask index to test, in range only from 0 to NUM_MASK_PATTERNS - 1
    * @return whether valid mask pattern
    */
   public static boolean isValidMaskPattern(int maskPattern) {

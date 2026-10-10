@@ -69,9 +69,9 @@ public interface DataStore {
     /**
      * Unconditionally store, bypass all newer/older checks.
      *
-     * @return success
      * @param key non-null
      * @param data non-null
+     * @return success
      * @since 0.9.64
      */
     public boolean forcePut(Hash key, DatabaseEntry data);
@@ -128,6 +128,8 @@ public interface DataStore {
     public int countLeaseSets();
 
     /**
+     * Total number of entries in the store, RouterInfos and LeaseSets together.
+     *
      * @return total size (RI and LS)
      * @since 0.8.8
      */

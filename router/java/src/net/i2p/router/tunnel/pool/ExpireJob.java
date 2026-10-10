@@ -29,8 +29,10 @@ class ExpireJob extends JobImpl {
     private static final long BATCH_WINDOW = 5 * 1000L;
     private static final long OB_EARLY_EXPIRE = 30*1000L;
     private static final long IB_EARLY_EXPIRE = OB_EARLY_EXPIRE + 7500;
-    /** Keep tunnels alive for 10 minutes after LeaseSet refresh so clients
-     * with cached (stale) LeaseSets can still connect using old tunnel IDs. */
+    /**
+     * Keep tunnels alive for 10 minutes after LeaseSet refresh so clients
+     * with cached (stale) LeaseSets can still connect using old tunnel IDs.
+     */
     private static final long LEASESET_GRACE_PERIOD = 10 * 60 * 1000L;
     // Must be greater than tunnel lifetime (11 min) + LEASESET_GRACE_PERIOD (10 min)
     // to allow Phase 2 (dispatcher removal) to fire.  With early expiration,
@@ -136,6 +138,7 @@ class ExpireJob extends JobImpl {
      * Get the unique key for this tunnel config.
      * Uses tunnel IDs when available; falls back to identity hash for
      * partially cleaned-up or zero-ID configs.
+     * @param cfg the tunnel config whose expiration key is wanted; may be null
      * @return key or null
      * @since 0.9.69+
      */

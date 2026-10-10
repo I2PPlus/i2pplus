@@ -40,6 +40,8 @@ class SubSession extends I2PSessionMuxedImpl {
      * @param primary must be a I2PSessionMuxedImpl
      * @param destKeyStream location from which to read keys
      * @param options session options
+     * @throws I2PSessionException if the generated signing key is identical to the
+     *         primary session's
      */
     public SubSession(I2PSession primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
         super((I2PSessionMuxedImpl) primary, destKeyStream, options);

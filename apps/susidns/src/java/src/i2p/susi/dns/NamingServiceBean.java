@@ -44,7 +44,12 @@ import net.i2p.util.Log;
  * @since 0.8.7
  */
 public class NamingServiceBean extends AddressbookBean {
-    /** default constructor */
+    /**
+     * A fresh bean: the display range is initialised by {@link AddressbookBean} and the
+     * cached load and book-size entries below are empty, so the first query repopulates them.
+     */
+    public NamingServiceBean() {}
+
     private static final Log _log = new Log(NamingServiceBean.class);
     private static final String DEFAULT_NS = "BlockfileNamingService";
     private String detail;
@@ -971,7 +976,7 @@ public class NamingServiceBean extends AddressbookBean {
     /**
      * Style a message for display in the UI.
      *
-     * @param message the message
+     * @param message the text for the messages paragraph, inserted verbatim and not escaped
      * @param fail true if the message indicates a failure
      * @return the styled HTML message
      * @since 0.9.40

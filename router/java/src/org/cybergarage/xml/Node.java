@@ -646,6 +646,8 @@ public class Node {
      * Inovoke {@link #getIndentLevelString(int, String)} with <code>"   "</code> as String
      *
      * @see #getIndentLevelString(int, String)
+     * @param nIndentLevel how many times the three space indent is repeated
+     * @return the indent String, built from three spaces repeated nIndentLevel times
      */
     public String getIndentLevelString(int nIndentLevel) {
         return getIndentLevelString(nIndentLevel, "   ");
@@ -655,8 +657,8 @@ public class Node {
      * Get the indent level string.
      * @param nIndentLevel the level of indentation to produce
      * @param space the String to use for the intendation
-     * @since 1.8.0
      * @return an indentation String
+     * @since 1.8.0
      */
     public String getIndentLevelString(int nIndentLevel, String space) {
         StringBuffer indentString = new StringBuffer(nIndentLevel * space.length());

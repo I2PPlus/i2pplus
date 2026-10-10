@@ -16,6 +16,11 @@ final class MuxedEngine {
     private final RouterContext _context;
     private final Log _log;
 
+    /**
+     * Create the ratchet engine.
+     *
+     * @param ctx the router context
+     */
     public MuxedEngine(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(MuxedEngine.class);
@@ -26,7 +31,11 @@ final class MuxedEngine {
      *
      * @param elgKey must be ElG, non-null
      * @param ecKey must be EC, non-null
+     * @param data the encrypted CloveSet to decrypt
+     * @param keyManager holds the session key material and ratchet preference
      * @return decrypted data or null on failure
+     * @throws DataFormatException if the underlying garlic parse fails and cannot be
+     *         recovered by trying the remaining crypto schemes
      */
     public CloveSet decrypt(byte[] data, PrivateKey elgKey, PrivateKey ecKey, MuxedSKM keyManager) throws DataFormatException {
         if (elgKey.getType() != EncType.ELGAMAL_2048 ||

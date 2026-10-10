@@ -32,6 +32,12 @@ import org.cybergarage.upnp.*;
  */
 public class Subscription {
     /**
+     * The header constants and the timeout parsers below are all static, so an instance
+     * carries nothing.
+     */
+    public Subscription() {}
+
+    /**
      * XMLNS.
      */
     public static final String XMLNS = "urn:schemas-upnp-org:event-1-0";
@@ -66,6 +72,9 @@ public class Subscription {
 
     /**
      * toTimeoutHeaderString.
+     *
+     * @param time the subscription lifetime in seconds, or INFINITE_VALUE for unlimited
+     * @return the TIMEOUT header value, "infinite" when time is INFINITE_VALUE
      */
     public static final String toTimeoutHeaderString(long time) {
         if (time == Subscription.INFINITE_VALUE) return Subscription.INFINITE_STRING;
@@ -74,6 +83,9 @@ public class Subscription {
 
     /**
      * getTimeout.
+     *
+     * @param headerValue the TIMEOUT header contents, whose seconds follow a '-'
+     * @return the lifetime in seconds, or INFINITE_VALUE if absent or unparseable
      */
     public static final long getTimeout(String headerValue) {
         int minusIdx = headerValue.indexOf('-');
@@ -93,6 +105,8 @@ public class Subscription {
 
     /**
      * createSID.
+     *
+     * @return a freshly generated UUID to serve as a subscription identifier
      */
     public static final String createSID() {
         return UPnP.createUUID();
@@ -100,6 +114,9 @@ public class Subscription {
 
     /**
      * toSIDHeaderString.
+     *
+     * @param id the bare subscription identifier, without the uuid: prefix
+     * @return the SID header value, the identifier with the uuid: prefix prepended
      */
     public static final String toSIDHeaderString(String id) {
         return Subscription.UUID + id;
@@ -107,6 +124,9 @@ public class Subscription {
 
     /**
      * getSID.
+     *
+     * @param headerValue the SID header contents to strip the prefix from
+     * @return the bare identifier, unchanged without the uuid: prefix, or "" when absent
      */
     public static final String getSID(String headerValue) {
         if (headerValue == null) return "";

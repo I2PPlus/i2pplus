@@ -24,12 +24,19 @@ import java.util.Locale;
  */
 public enum StorageError {
 
+    /** fatal: ENOSPC, the device has no free blocks left */
     NO_SPACE("No space left on device", true),
+    /** fatal: EACCES or EPERM, the torrent's paths are not writable */
     PERMISSION("Permission denied", true),
+    /** fatal: EROFS, the filesystem holding the torrent is mounted read-only */
     READ_ONLY("Read-only file system", true),
+    /** fatal: EDQUOT, the user's block quota on the filesystem is exhausted */
     QUOTA("Disk quota exceeded", true),
+    /** fatal: EIO, the device reported an unrecoverable error */
     IO_ERROR("Input/output error", true),
+    /** fatal: EISDIR, a path that must name a file is a directory */
     IS_DIRECTORY("Path is a directory", true),
+    /** fatal: ENAMETOOLONG, a path component exceeds the filesystem limit */
     NAME_TOO_LONG("File name too long", true),
     /** transient: fd exhaustion, retry */
     TOO_MANY_OPEN("Too many open files", false),
@@ -59,6 +66,9 @@ public enum StorageError {
     /**
      * Whether a torrent should stop on this failure rather than drop the
      * request and retry.
+     *
+     * @return true if the torrent must stop, false if the failed request may be
+     * dropped and retried
      */
     public boolean isFatal() {
         return fatal;

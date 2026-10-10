@@ -22,6 +22,7 @@ class SymmetricState implements Destroyable, Cloneable {
     /**
      * Constructs a new symmetric state object.
      *
+     * @param patternId the handshake pattern naming the cipher, hash and initial chaining key to use
      * @throws NoSuchAlgorithmException The cipher or hash algorithm in the
      * protocol name is not supported.
      */
@@ -37,6 +38,9 @@ class SymmetricState implements Destroyable, Cloneable {
 
     /**
      * Copy constructor for cloning
+     *
+     * @param o the state whose cipher, hash, chaining key and handshake hash are copied
+     * @throws CloneNotSupportedException if the cipher state cannot be cloned
      * @since 0.9.44
      */
     protected SymmetricState(SymmetricState o) throws CloneNotSupportedException {
@@ -179,6 +183,14 @@ class SymmetricState implements Destroyable, Cloneable {
 
     /**
      * I2P - Same as encryptAndHash() but without the post-mixHash(), for N only.
+     *
+     * @param plaintext The buffer containing the plaintext to encrypt.
+     * @param plaintextOffset The offset within the plaintext buffer of the first byte of plaintext data.
+     * @param ciphertext The buffer to place the ciphertext in, which may be the plaintext buffer.
+     * @param ciphertextOffset The offset within the ciphertext buffer of the first byte written.
+     * @param length The length of the plaintext.
+     * @return The length of the ciphertext written, including the MAC tag.
+     * @throws ShortBufferException There is not enough space in the ciphertext buffer for the encrypted data plus MAC value.
      * @since 0.9.49
      */
     public int encryptOnly(byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) throws ShortBufferException
@@ -219,6 +231,15 @@ class SymmetricState implements Destroyable, Cloneable {
 
     /**
      * I2P - Same as decryptAndHash() but without the post-mixHash(), for N only.
+     *
+     * @param ciphertext The buffer containing the ciphertext and MAC tag to decrypt.
+     * @param ciphertextOffset The offset within the ciphertext buffer of the first byte of ciphertext data.
+     * @param plaintext The buffer to place the plaintext in, which may be the ciphertext buffer.
+     * @param plaintextOffset The offset within the plaintext buffer of the first byte written.
+     * @param length The length of the incoming ciphertext plus the MAC tag.
+     * @return The length of the plaintext written, with the MAC tag stripped off.
+     * @throws ShortBufferException There is not enough space in the plaintext buffer for the decrypted data.
+     * @throws BadPaddingException The MAC value failed to verify.
      * @since 0.9.49
      */
     public int decryptOnly(byte[] ciphertext, int ciphertextOffset, byte[] plaintext, int plaintextOffset, int length) throws ShortBufferException, BadPaddingException

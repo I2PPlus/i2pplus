@@ -386,6 +386,8 @@ public class StatManager {
      * Update the given rate statistic, taking note that the given data point was received (and recalculating all rates).
      * Zero duration.
      *
+     * @param name the stat name
+     * @param data the data point value
      * @since 0.8.10
      */
     public void addRateData(String name, long data) {
@@ -515,6 +517,8 @@ public class StatManager {
 
     /**
      * Misnamed, as it returns a FrequencyStat, not a Frequency.
+     *
+     * @param name the stat name
      * @return the frequency
      */
     public FrequencyStat getFrequency(String name) {
@@ -523,6 +527,8 @@ public class StatManager {
 
     /**
      * Misnamed, as it returns a RateStat, not a Rate.
+     *
+     * @param name the stat name
      * @return the rate
      */
     public RateStat getRate(String name) {
@@ -547,12 +553,22 @@ public class StatManager {
         return new HashSet<>(_rateStats.keySet());
     }
 
-    /** Whether the given stat is a monitored rate. */
+    /**
+     * Whether the given stat is a monitored rate.
+     *
+     * @param statName the stat name
+     * @return true if a RateStat is registered under that name
+     */
     public boolean isRate(String statName) {
         return _rateStats.containsKey(statName);
     }
 
-    /** Whether the given stat is a monitored frequency. */
+    /**
+     * Whether the given stat is a monitored frequency.
+     *
+     * @param statName the stat name
+     * @return true if a FrequencyStat is registered under that name
+     */
     public boolean isFrequency(String statName) {
         return _frequencyStats.containsKey(statName);
     }

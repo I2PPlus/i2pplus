@@ -214,8 +214,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Create a peer coordinator for the torrent.
      *
+     * @param util the context wrapper supplying the I2P app context, random source and clocks
+     * @param id the 20 byte torrent hash the peers are matched against
+     * @param infohash the torrent hash used for magnet and peer exchange lookups
      * @param metainfo null if in magnet mode
      * @param storage null if in magnet mode
+     * @param listener notified as peers are added, dropped and completed
+     * @param torrent the torrent this coordinator drives
+     * @param bwl receives the byte totals reported by every peer connection
      */
     public PeerCoordinator(
             I2PSnarkUtil util,
@@ -548,6 +554,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * The initial total of uploaded bytes of all peers, from a saved status.
      *
+     * @param up the byte count to seed the uploaded total with
      * @since 0.9.15
      */
     public void setUploaded(long up) {
@@ -694,7 +701,12 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return getRate(uploaded_old);
     }
 
-    /** Returns the rate in Bps over last complete CHECK_PERIOD seconds */
+    /**
+     * Returns the rate in Bps over last complete CHECK_PERIOD seconds.
+     *
+     * @return the upload rate in bytes per second over the most recent complete
+     *     CHECK_PERIOD, or 0 when halted or before the first sample is recorded
+     */
     public long getCurrentUploadRate() {
         if (halted) {
             return 0;
@@ -707,7 +719,14 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         return (r * 1000) / CHECK_PERIOD;
     }
 
-    /** The download or upload rate, per the param. */
+    /**
+     * The download or upload rate, per the param.
+     *
+     * @param array rolling byte-count samples, most recent entry first, ending at a negative value
+     * @return the weighted average rate in bytes per second, weighting each
+     *     sample more heavily the more recent it is, or 0 when the ring holds
+     *     no complete sample
+     */
     static long getRate(long[] array) {
         long rate = 0;
         int i = 0;
@@ -802,6 +821,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Inbound. Not halted, peers &lt; max.
      *
+     * @return true while the coordinator is running and holds fewer than the
+     *     configured maximum peer connections, so another inbound may be accepted
      * @since 0.9.1
      */
     public boolean needPeers() {
@@ -811,6 +832,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Outbound. Not halted, peers &lt; max, and need pieces.
      *
+     * @return true while the coordinator is running, holds at least two
+     *     connections below the maximum so new peers can displace stale ones,
+     *     and either pieces are still wanted or a comment request is due
      * @since 0.9.1
      */
     public boolean needOutboundPeers() {
@@ -1047,6 +1071,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Add peer (inbound or outbound)
      *
+     * @param peer the connection to take over; disconnected rather than tracked if halted or full
      * @return true if actual attempt to add peer occurs
      */
     public boolean addPeer(final Peer peer) {
@@ -1748,7 +1773,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Called when a choke message is received. This does nothing but logging.
      *
-     * @param peer the peer
+     * @param peer the peer that sent the choke or unchoke
      * @param choke true for choke, false for unchoke
      */
     @Override
@@ -1761,7 +1786,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Called when an interested message is received.
      *
-     * @param peer the peer
+     * @param peer the peer that sent the interested or uninterested message
      * @param interest true for interested, false for uninterested
      */
     @Override
@@ -2235,6 +2260,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Send a PEX message to the peer, if he supports PEX. This sends everybody we have connected to
      * since the last time we sent PEX to him.
      *
+     * @param peer the connection to advertise peers to; needs the PEX extension, non-private torrent
      * @since 0.8.4
      */
     void sendPeers(Peer peer) {
@@ -2297,6 +2323,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Send a commment request message to the peer, if he supports it.
      *
+     * @param peer the connection to ask for comments; needs the comment extension advertised
      * @since 0.9.31
      */
     void sendCommentReq(Peer peer) {
@@ -2349,6 +2376,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Store the storage after transition out of magnet mode. Snark calls this after we call
      * gotMetaInfo().
      *
+     * @param stg storage built from the metainfo that just arrived; wanted pieces recomputed
      * @since 0.8.4
      */
     public void setStorage(Storage stg) {
@@ -2460,6 +2488,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Return number of allowed uploaders for this torrent. * Check with Snark to see if we are over
      * the total upload limit.
+     *
+     * @return the current uploader count plus one, capped at MAX_UPLOADERS, or one
+     *     less than the current count while Snark reports the total upload limit exceeded
      */
     public int allowedUploaders() {
         int up = uploaders.get();
@@ -2535,6 +2566,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Decrement the uploaders and (if set) the interestedUploaders counts
      *
+     * @param isInterested true to also decrement the interested uploader count
      * @since 0.9.28
      */
     public void decrementUploaders(boolean isInterested) {
@@ -2561,6 +2593,10 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
+     * Shift the interested-and-choking count by a delta, as the checker drops peers
+     * without a full recount.
+     *
+     * @param toAdd the number of peers just removed from the interested set
      * @since 0.9.28
      */
     public void addInterestedAndChoking(int toAdd) {
@@ -2581,7 +2617,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Ban a web peer for this torrent, for while or permanently.
      *
-     * @param host the hostname
+     * @param host the hostname to ban
+     * @param isPermanent true to ban until restart, false to ban for {@link #WEBPEER_BAN_TIME}
      * @since 0.9.49
      */
     public synchronized void banWebPeer(String host, boolean isPermanent) {

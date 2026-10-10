@@ -23,6 +23,12 @@ import net.i2p.I2PAppContext;
  */
 public class Servlet extends HttpServlet {
 
+    /**
+     * A servlet with no addressbook thread yet; init() starts the daemon, so construction
+     * alone leaves nothing running.
+     */
+    public Servlet() {}
+
     private static final long serialVersionUID = 1L;
     private transient Thread thread;
 

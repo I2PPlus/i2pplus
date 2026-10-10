@@ -9,10 +9,15 @@ import java.util.function.Supplier;
  * {@link org.rrd4j.graph.RrdGraph#getRrdGraphInfo()}.
  */
 public class RrdGraphInfo {
+    /** Path of the backing RRD file, or '-' when the graph was never written to disk. */
     String filename;
+    /** Rendered image size in pixels, as requested from the graph definition. */
     int width, height;
+    /** Supplies the rendered image bytes; throws IllegalStateException when unavailable. */
     Supplier<byte[]> bytesSource;
+    /** Supplies the rendered image size in bytes; throws IllegalStateException when unavailable. */
     Supplier<Integer> bytesCount;
+    /** The image information comment carried through from the graph definition. */
     String imgInfo;
     private final List<String> printLines = new ArrayList<>();
     private RrdGraphMeta meta;
@@ -43,7 +48,8 @@ public class RrdGraphInfo {
         return meta;
     }
     /**
-     * Add print line
+     * Record a formatted PRINT line, in the order added.
+     * @param printLine the already formatted line to record in the order added
      */
 
     void addPrintLine(String printLine) {
@@ -78,9 +84,9 @@ public class RrdGraphInfo {
     }
 
     /**
-     * Returns graph bytes
+     * Returns the rendered image bytes.
      *
-     * @return Graph bytes
+     * @return the graph image bytes, in the format the graph definition selected
      * @throws IllegalStateException if the images bytes are unavailable or can't be read
      */
     public byte[] getBytes() {
@@ -101,7 +107,8 @@ public class RrdGraphInfo {
      * Returns image information requested by {@link
      * org.rrd4j.graph.RrdGraphDef#setImageInfo(String)} method
      *
-     * @return Image information
+     * @return the formatted image information comment, or null when the graph
+     *         definition set no imageInfo template
      */
     public String getImgInfo() {
         return imgInfo;

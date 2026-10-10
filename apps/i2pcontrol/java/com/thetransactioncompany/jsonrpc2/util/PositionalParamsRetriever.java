@@ -305,6 +305,7 @@ public class PositionalParamsRetriever
 	 * <p>You may use this method to fire the proper JSON-RPC 2.0 error
 	 * on a missing or badly-typed mandatory parameter.
 	 *
+	 * @param <T>      The type the parameter value must map to.
 	 * @param position The parameter position.
 	 * @param clazz    The corresponding Java class that the parameter
 	 *                 should map to (any one of the return types of the
@@ -341,6 +342,7 @@ public class PositionalParamsRetriever
 	 * <p>You may use this method to fire the proper JSON-RPC 2.0 error
 	 * on a missing or badly-typed mandatory parameter.
 	 *
+	 * @param <T>       The type the parameter value must map to.
 	 * @param position  The parameter position.
 	 * @param clazz     The corresponding Java class that the parameter
 	 *                  should map to (any one of the return types of the
@@ -415,6 +417,7 @@ public class PositionalParamsRetriever
 	 * Retrieves the specified parameter which must map to the provided
 	 * class (use the appropriate wrapper class for primitive types).
 	 *
+	 * @param <T>      The type the parameter value is expected to map to.
 	 * @param position The parameter position.
 	 * @param clazz    The corresponding Java class that the parameter
 	 *                 should map to (any one of the return types of the
@@ -438,6 +441,7 @@ public class PositionalParamsRetriever
 	 * Retrieves the specified parameter which must map to the provided
 	 * class (use the appropriate wrapper class for primitive types).
 	 *
+	 * @param <T>       The type the parameter value is expected to map to.
 	 * @param position  The parameter position.
 	 * @param clazz     The corresponding Java class that the parameter
 	 *                  should map to (any one of the return types of the
@@ -474,6 +478,7 @@ public class PositionalParamsRetriever
 	 * types). If the parameter doesn't exist the method returns the
 	 * specified default value.
 	 *
+	 * @param <T>          The type the parameter value is expected to map to.
 	 * @param position     The parameter position.
 	 * @param clazz        The corresponding Java class that the parameter
 	 *                     should map to (any one of the return types of
@@ -501,6 +506,7 @@ public class PositionalParamsRetriever
 	 * types). If the parameter doesn't exist the method returns the
 	 * specified default value.
 	 *
+	 * @param <T>          The type the parameter value is expected to map to.
 	 * @param position     The parameter position.
 	 * @param clazz        The corresponding Java class that the parameter
 	 *                     should map to (any one of the return types of
@@ -731,6 +737,7 @@ public class PositionalParamsRetriever
 	 * Retrieves the specified enumerated parameter (from a JSON string
 	 * that has a predefined set of possible values).
 	 *
+	 * @param <T>       The enumeration type that the constant names are resolved in.
 	 * @param position  The parameter position.
 	 * @param enumClass An enumeration type with constant names
 	 *                  representing the acceptable string values. Must not
@@ -754,6 +761,7 @@ public class PositionalParamsRetriever
 	 * that has a predefined set of possible values), allowing for a case
 	 * insensitive match.
 	 *
+	 * @param <T>        The enumeration type that the constant names are resolved in.
 	 * @param position   The parameter position.
 	 * @param enumClass  An enumeration type with constant names
 	 *                   representing the acceptable string values. Must
@@ -788,6 +796,7 @@ public class PositionalParamsRetriever
 	 * string that has a predefined set of possible values). If it doesn't
 	 * exist the method will return the specified default value.
 	 *
+	 * @param <T>          The enumeration type that the constant names are resolved in.
 	 * @param position     The parameter position.
 	 * @param enumClass    An enumeration type with constant names
 	 *                     representing the acceptable string values. Must
@@ -815,6 +824,7 @@ public class PositionalParamsRetriever
 	 * case insenstive match. If it doesn't exist the method will return
 	 * the specified default value.
 	 *
+	 * @param <T>          The enumeration type that the constant names are resolved in.
 	 * @param position     The parameter position.
 	 * @param enumClass    An enumeration type with constant names
 	 *                     representing the acceptable string values. Must

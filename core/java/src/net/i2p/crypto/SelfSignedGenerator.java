@@ -52,6 +52,12 @@ import net.i2p.util.RandomSource;
  */
 public final class SelfSignedGenerator {
 
+    /**
+     * The key and certificate generators below are static, and the only state is a
+     * thread-local date format, so an instance carries nothing.
+     */
+    public SelfSignedGenerator() {}
+
     private static final boolean DEBUG = false;
 
     private static final ThreadLocal<SimpleDateFormat> _DATE_FMT = ThreadLocal.withInitial(() -> {
@@ -113,12 +119,17 @@ public final class SelfSignedGenerator {
      * @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param validDays how many days from now the certificate stays valid
+     * @param type the signature algorithm the certificate is signed with
      *
      * @return length 4 array:
      * rv[0] is a Java PublicKey
      * rv[1] is a Java PrivateKey
      * rv[2] is a Java X509Certificate
      * rv[3] is a Java X509CRL
+     *
+     * @throws GeneralSecurityException if the keypair cannot be generated or
+     *         the certificate cannot be signed
      */
     public static Object[] generate(
             String cname, String ou, String o, String l, String st, String c, int validDays, SigType type)
@@ -138,6 +149,8 @@ public final class SelfSignedGenerator {
      * @param l The L (city or locality) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param st The ST (state or province) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
      * @param c The C (country) in the distinguished name, non-null before 0.9.28, may be null as of 0.9.28
+     * @param validDays how long the certificate stays valid
+     * @param type the signature type to generate the keypair for
      *
      * @return length 4 array:
      * rv[0] is a Java PublicKey
@@ -145,6 +158,7 @@ public final class SelfSignedGenerator {
      * rv[2] is a Java X509Certificate
      * rv[3] is a Java X509CRL
      *
+     * @throws GeneralSecurityException if the keypair cannot be generated or signed
      * @since 0.9.34 added altNames param
      */
     public static Object[] generate(
@@ -175,7 +189,10 @@ public final class SelfSignedGenerator {
      * Create a self-signed certificate for the existing private key.
      *
      * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     * @return self-signed certificate
+     * @param priv the key to sign the new certificate with
+     * @param validDays how long the certificate stays valid
+     * @return the X509Certificate signed by priv, valid for validDays from now
+     * @throws GeneralSecurityException if the certificate cannot be built or signed
      * @since 0.9.46
      */
     public static X509Certificate generate(SigningPrivateKey priv, String cname, int validDays)
@@ -322,12 +339,14 @@ public final class SelfSignedGenerator {
      * @param cert the old cert to be replaced
      * @param jpriv the private key
      *
+     * @param validDays how long the renewed certificate stays valid
      * @return length 4 array:
      * rv[0] is a Java PublicKey, from cert as passed in
      * rv[1] is a Java PrivateKey, jpriv as passed in
      * rv[2] is a Java X509Certificate, new one
      * rv[3] is a Java X509CRL, new one
      *
+     * @throws GeneralSecurityException if the renewed certificate cannot be signed
      * @since 0.9.34 added altNames param
      */
     public static Object[] renew(X509Certificate cert, PrivateKey jpriv, int validDays)
@@ -662,7 +681,7 @@ public final class SelfSignedGenerator {
      *
      * Ref: RFC 5280
      *
-     * @param pubbytes bit string
+     * @param pubbytes the DER-encoded public key bit string the extension identifier is derived from
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      * cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
@@ -965,8 +984,10 @@ public final class SelfSignedGenerator {
     /**
      * 0x06 len encodedbytes...
      *
+     * @param oid the dotted object identifier, e.g. 1.2.840.113549.1.1.1
      * @return ASN.1 encoded object
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if the identifier has fewer than two components, a component is
+     *         out of range, or the encoding exceeds 127 bytes
      */
     private static byte[] getEncodedOID(String oid) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream(64);
@@ -991,6 +1012,9 @@ public final class SelfSignedGenerator {
 
     /**
      * Note: For CLI testing, use java -jar i2p.jar su3file keygen pubkey.crt keystore.ks commonName
+     *
+     * @param args the command line, starting with the subcommand
+     * @throws Exception if the subcommand fails
      */
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {

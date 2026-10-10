@@ -154,7 +154,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.maxConnections";
     /** Default socket open timeout in ms, after which close() will proceed even with active sockets */
     public static final long DEFAULT_SOCKET_OPEN_TIMEOUT = 30000;
-    /** Default cap on concurrently handled client connections.
+    /**
+     * Default cap on concurrently handled client connections.
      * <p>
      * The accept/connect path runs on an unbounded {@link I2PTunnelClientBase.BlockingRunner} pool, so a flood of
      * inbound peer connections (e.g. tracker announces/scrapes) can spawn unlimited parallel
@@ -1160,8 +1161,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
+     * for timeout wording
+     *
+     * @param e the throwable whose cause chain, up to eight links deep, is scanned
      * @return true if the cause chain looks like a connect/read timeout
-     * (streaming SYN give-up wrapped as NoRouteToHostException)
      * @since 0.9.71+
      */
     static boolean isConnectTimeout(Throwable e) {
@@ -1181,8 +1184,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * @return true if the client outbound tunnel pool provably has no tunnels
      * and none are being built, so further connect retries cannot succeed
+     *
+     * @return true if the client outbound tunnel pool provably has no tunnels
      * @since 0.9.71+
      */
     protected boolean poolIsDefinitivelyDown() {
@@ -1645,6 +1649,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     /**
      * Returns the socket open timeout in ms; close() will proceed after this
      * even with active sockets.
+     *
+     * @return the socket open timeout in milliseconds
      * @since 0.9.71+
      */
     public long getSocketOpenTimeout() { return _socketOpenTimeout; }

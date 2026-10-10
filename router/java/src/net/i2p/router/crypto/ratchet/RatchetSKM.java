@@ -192,8 +192,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
      * @return the current key
+     * @throws UnsupportedOperationException always
      */
     @Override
     public SessionKey getCurrentKey(PublicKey target) {
@@ -203,8 +203,8 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
      * @return the current or new key
+     * @throws UnsupportedOperationException always
      */
     @Override
     public SessionKey getCurrentOrNewKey(PublicKey target) {
@@ -242,6 +242,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * @param d null if unknown
      * @param state the handshake state
      * @param callback null for inbound, may be null for outbound
+     * @return true if the session was added, false if one for this target already existed
      */
     boolean createSession(PublicKey target, Destination d, HandshakeState state, ReplyCallback callback) {
         EncType type = target.getType();

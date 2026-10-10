@@ -54,6 +54,8 @@ public class TorrentDest {
     /**
      * Assign a torrent to this destination.
      *
+     * @param ctx the application context supplying the logging and timing services
+                          this destination and its DHT and tracker clients need
      * @param key Base64 encoding of the first torrent's info hash
      * @param poolIndex the shared pool index, or -1 for a dedicated destination
      * @param poolNum the sequential pool number for the nickname, -1 when dedicated
@@ -128,10 +130,20 @@ public class TorrentDest {
         _appliedTunnelQuantity = qty;
     }
 
+    /**
+     * The socket manager of the transient destination this pool's traffic uses.
+     *
+     * @return the socket manager, never null
+     */
     public I2PSocketManager getSocketManager() {
         return _mgr;
     }
 
+    /**
+     * The inbound server socket for this destination.
+     *
+     * @return the server socket, or null when the destination has none
+     */
     public I2PServerSocket getServerSocket() {
         return _serverSocket;
     }

@@ -16,13 +16,21 @@ class Normalizer {
     /** Time step in seconds between data points */
     final long step;
 
-    /** @param timestamps timestamps defining the target grid */
+    /**
+     * Derives the target sample count and step from the grid timestamps.
+     * @param timestamps timestamps defining the target grid
+     */
     Normalizer(long[] timestamps) {
         this.timestamps = timestamps;
         this.step = timestamps[1] - timestamps[0];
         this.count = timestamps.length;
     }
-    /** Normalize timestamps and values to the target interval */
+    /**
+     * Normalize timestamps and values to the target interval
+     * @param rawTimestamps the source sample times in seconds, evenly spaced at their own step
+     * @param rawValues the source sample values, one per entry of rawTimestamps
+     * @return the source values resampled onto this grid, NaN where no source sample overlaps
+     */
     double[] normalize(long[] rawTimestamps, double[] rawValues) {
         int rawCount = rawTimestamps.length;
         long rawStep = rawTimestamps[1] - rawTimestamps[0];

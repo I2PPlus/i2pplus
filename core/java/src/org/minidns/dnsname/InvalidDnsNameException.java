@@ -23,6 +23,8 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
     protected final String ace;
 
     /**
+     * Remember the offending name so the message can quote it.
+     *
      * @param ace the ASCII-encoded domain name
      */
     protected InvalidDnsNameException(String ace) {
@@ -36,6 +38,7 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
     public static class LabelTooLongException extends InvalidDnsNameException {
         private static final long serialVersionUID = 1L;
 
+        /** The specific label that exceeds the maximum length */
         private final String label;
 
         /**
@@ -50,7 +53,8 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
         }
 
         /**
-         * getMessage.
+         * The specific label that was too long, with the ACE-encoded name and
+         * the maximum length in octets.
          */
         @Override
         public String getMessage() {
@@ -81,7 +85,8 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
         }
 
         /**
-         * getMessage.
+         * The ACE-encoded name and its octet length against the maximum name
+         * length.
          */
         @Override
         public String getMessage() {

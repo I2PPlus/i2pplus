@@ -125,9 +125,9 @@ class ConnThrottler {
      * <ul>
      *   <li>Individual: If max connections exceeded in checkPeriod, throttle for throttlePeriod</li>
      *   <li>Total: If total connections exceeded, throttle all for totalThrottlePeriod</li>
- * </ul>
- *
- * @param h the peer's destination hash to check
+     * </ul>
+     *
+     * @param h the peer's destination hash to check
      * @return true if the peer should be throttled (request denied), false otherwise
      */
     public synchronized boolean shouldThrottle(Hash h) {

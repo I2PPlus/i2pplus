@@ -35,7 +35,11 @@ public class StandardSocket extends Socket {
     private volatile boolean _outputShutdown;
     private volatile boolean _closed;
 
-    /** Wraps an I2PSocket in a java.net.Socket. */
+    /**
+     * Wraps an I2PSocket in a java.net.Socket.
+     *
+     * @param socket the I2PSocket that all traffic is delegated to
+     */
     StandardSocket(I2PSocket socket) {
         _socket = socket;
     }

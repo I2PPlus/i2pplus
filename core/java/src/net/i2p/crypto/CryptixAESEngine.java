@@ -106,6 +106,12 @@ public final class CryptixAESEngine extends AESEngine {
         }
     }
 
+    /**
+     * Create the engine, allocating the cipher cache only when the system AES-NI
+     * provider is in use.
+     *
+     * @param context the app context supplying the provider and the RNG
+     */
     public CryptixAESEngine(I2PAppContext context) {
         super(context);
         _ciphers = USE_SYSTEM_AES ? new LinkedBlockingQueue<>(CACHE_SIZE) : null;
@@ -235,7 +241,8 @@ public final class CryptixAESEngine extends AESEngine {
         SimpleByteCache.release(cur);
     }
 
-    /** Encrypt exactly 16 bytes using the session key.
+    /**
+     * Encrypt exactly 16 bytes using the session key.
      *
      * @param payload plaintext data, 16 bytes starting at inIndex
      * @param sessionKey private session key
@@ -257,7 +264,8 @@ public final class CryptixAESEngine extends AESEngine {
         CryptixRijndael_Algorithm.blockEncrypt(payload, out, inIndex, outIndex, pkey);
     }
 
-    /** Decrypt exactly 16 bytes of data with the session key provided.
+    /**
+     * Decrypt exactly 16 bytes of data with the session key provided.
      *
      * @param payload encrypted data, 16 bytes starting at inIndex
      * @param sessionKey private session key

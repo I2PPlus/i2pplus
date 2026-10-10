@@ -17,7 +17,12 @@ class Threshold {
     private final int connections;
     private final int seconds;
 
-    /** Threshold */
+    /**
+     * Threshold
+     *
+     * @param connections the number of accesses allowed in the window, not negative
+     * @param seconds the length of the sliding window, at least 1
+     */
     Threshold(int connections, int seconds) {
         if (seconds < 1)
             throw new IllegalArgumentException("Threshold must be defined over at least 1 second");
@@ -27,12 +32,20 @@ class Threshold {
         this.seconds = seconds;
     }
 
-    /** @return the max connections */
+    /**
+     * The connection count that defines a breach of this threshold.
+     *
+     * @return the maximum connections permitted within the window
+     */
     int getConnections() {
         return connections;
     }
 
-    /** @return the time window seconds */
+    /**
+     * The sliding window over which connecting attempts are counted.
+     *
+     * @return the window length in seconds, always at least 1
+     */
     int getSeconds() {
         return seconds;
     }

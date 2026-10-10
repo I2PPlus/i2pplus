@@ -32,13 +32,16 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
     private static final MessageOutputStream.WriteStatus _dummyStatus = new DummyStatus();
     /** Payload cache. */
     private static final ByteCache _payloadCache = ByteCache.getInstance(128, Packet.MAX_PAYLOAD_SIZE);
-    /** Reusable empty payload -- avoids per-packet ByteArray allocation for ACK-only packets.
-     * Shared across all instances via _dataLock in MessageOutputStream. */
+    /**
+     * Reusable empty payload -- avoids per-packet ByteArray allocation for ACK-only packets.
+     * Shared across all instances via _dataLock in MessageOutputStream.
+     */
     private static final ByteArray EMPTY_PAYLOAD = new ByteArray(new byte[0]);
 
     /**
      * Create a data receiver for the given connection.
      * @param con non-null
+     * @param ctx application context, used to look up this class's logger
      */
     public ConnectionDataReceiver(I2PAppContext ctx, Connection con) {
         _context = ctx;

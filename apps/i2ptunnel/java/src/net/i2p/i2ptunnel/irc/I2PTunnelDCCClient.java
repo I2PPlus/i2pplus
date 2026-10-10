@@ -43,6 +43,12 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
      *
      * @param dest the target, presumably b32
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
+     * @param remotePort port on the remote IRC side that the transfer will use
+     * @param l logging implementation, passed to the superclass for this client
+     * @param sktMgr socket manager used to open the I2P socket and send on it
+     * @param notifyThis dispatcher notified of the connect and stop events
+     * @param tunnel the owning tunnel, supplying the router context and clock
+     * @param clientId id handed to the superclass to tag jobs and log messages
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      * valid config to contact the router
      */

@@ -61,6 +61,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
 
     /**
      * Add a private key.
+     * @param key the key to add; the first becomes the primary key and later ones accumulate into the list
      */
     public void addPrivateKey(PrivateKey key) {
         PrivateKey pk = getPrivateKey();

@@ -21,7 +21,11 @@ import net.i2p.data.SigningPrivateKey;
  * @since 0.9.16
  */
 public class RouterPrivateKeyFile extends PrivateKeyFile {
-    /** Constructor with the router private key file path. */
+    /**
+     * Constructor with the router private key file path.
+     *
+     * @param file the router private key file to read the identity from
+     */
 
     public RouterPrivateKeyFile(File file) {
         super(file);
@@ -31,6 +35,9 @@ public class RouterPrivateKeyFile extends PrivateKeyFile {
      *  Read it in from the file.
      *  Also sets the local privKey and signingPrivKey.
      * @return the router identity
+     * @throws IOException if the file cannot be opened or its bytes cannot be read
+     * @throws DataFormatException if the identity or either key declares an unknown
+                                      type, or a key cannot be decoded
      */
     public RouterIdentity getRouterIdentity() throws IOException, DataFormatException {
         InputStream in = null;

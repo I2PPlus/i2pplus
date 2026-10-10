@@ -53,6 +53,8 @@ public class SOAPRequest extends HTTPRequest {
 
     /**
      * SOAPRequest.
+     *
+     * @param httpReq the HTTP request whose headers and body this SOAP request copies
      */
     public SOAPRequest(HTTPRequest httpReq) {
         set(httpReq);

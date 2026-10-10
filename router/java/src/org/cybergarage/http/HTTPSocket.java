@@ -53,6 +53,8 @@ public class HTTPSocket {
 
     /**
      * getSocket.
+     *
+     * @return the wrapped java.net.Socket
      */
     public Socket getSocket() {
         return socket;

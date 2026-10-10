@@ -99,6 +99,8 @@ public class LeaseSet2 extends LeaseSet {
      * Will be rounded to nearest second.
      * If not called, will be set on write.
      *
+     * @param now the publication time in milliseconds since the epoch, rounded
+     *        to the nearest second before being stored
      * @since 0.9.64
      */
     public void setPublished(long now) {
@@ -224,6 +226,9 @@ public class LeaseSet2 extends LeaseSet {
      * Add an encryption key.
      *
      * Encryption keys should be added in order of server preference, most-preferred first.
+     *
+     * @param key the key to append; the first one added becomes the key returned
+     *        by getEncryptionKey()
      */
     public void addEncryptionKey(PublicKey key) {
         if (_encryptionKey == null) {setEncryptionKey(key);}
@@ -364,6 +369,9 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      * Blinded hash, if known at creation.
+     *
+     * @param bh the blinded hash of this leaseset's destination, as computed at
+     *        creation time for an encrypted LeaseSet2
      */
     public void setBlindedHash(Hash bh) {_blindedHash = bh;}
 
@@ -492,6 +500,10 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      * Without sig. This does NOT validate the signature
+     *
+     * @param out the stream to write the header and body to
+     * @throws DataFormatException if the destination or encryption key is unset
+     * @throws IOException if the stream cannot be written
      */
     protected void writeBytesWithoutSig(OutputStream out) throws DataFormatException, IOException {
         if (_destination == null || _encryptionKey == null) {
@@ -503,6 +515,10 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      * Without sig. This does NOT validate the signature
+     *
+     * @param out the stream to write the properties, encryption keys and leases to
+     * @throws DataFormatException if the leases or a key cannot be serialized
+     * @throws IOException if the stream cannot be written
      */
     protected void writeBody(OutputStream out) throws DataFormatException, IOException {
         if (_options != null && !_options.isEmpty()) {

@@ -111,6 +111,7 @@ class I2CPMessageProducer {
     /**
      * Update bandwidth limits from session options.
      *
+     * @param session the session whose PROP_MAX_BW option supplies the new limit
      * @since 0.8.4
      */
     public void updateBandwidth(I2PSessionImpl session) {
@@ -158,6 +159,10 @@ class I2CPMessageProducer {
     /**
      * Send all the messages that a client needs to send to a router to establish
      * a new session.
+     *
+     * @param session the session to create the CreateSessionMessage for
+     * @throws I2PSessionException if the session's offline signature has expired,
+     *         if the session config cannot be signed, or if the message cannot be queued
      */
     public void connect(I2PSessionImpl session) throws I2PSessionException {
         updateBandwidth(session);
@@ -189,6 +194,9 @@ class I2CPMessageProducer {
     /**
      * Send a message to the router destroying the session, which could be a subsession.
      * This does NOT close the socket.
+     *
+     * @param session the session or subsession to destroy, ignored if already closed
+     * @throws I2PSessionException if the message cannot be queued to the router
      */
     public void disconnect(I2PSessionImpl session) throws I2PSessionException {
         if (session.isClosed()) return;
@@ -207,11 +215,16 @@ class I2CPMessageProducer {
     /**
      * Package up and send the payload to the router for delivery
      *
+     * @param session the session to send the message on
+     * @param dest the destination to deliver the message to
      * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
+     * @param payload the unencrypted message data
      * @param tag unused - no end-to-end crypto
      * @param tags unused - no end-to-end crypto
      * @param key unused - no end-to-end crypto
      * @param newKey unused - no end-to-end crypto
+     * @param expires message expiration in milliseconds since the epoch, 0 for none
+     * @throws I2PSessionException if the payload is null or the message cannot be queued
      */
     public void sendMessage(
             I2PSessionImpl session,
@@ -230,7 +243,13 @@ class I2CPMessageProducer {
     /**
      * Package up and send the payload to the router for delivery
      *
+     * @param session the session to send the message on
+     * @param dest the destination to deliver the message to
      * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
+     * @param payload the unencrypted message data
+     * @param expires message expiration in milliseconds since the epoch, 0 for none
+     * @param flags the raw flag bitmask to pass to the router, 0 for the defaults
+     * @throws I2PSessionException if the payload is null or the message cannot be queued
      * @since 0.8.4
      */
     public void sendMessage(
@@ -261,7 +280,12 @@ class I2CPMessageProducer {
     /**
      * Package up and send the payload to the router for delivery
      *
+     * @param session the session to send the message on
+     * @param dest the destination to deliver the message to
      * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
+     * @param payload the unencrypted message data
+     * @param options the expiration, flags, tags and reliability to send with the message
+     * @throws I2PSessionException if the payload is null or the message cannot be queued
      * @since 0.9.2
      */
     public void sendMessage(
@@ -311,7 +335,7 @@ class I2CPMessageProducer {
      * imposed by the router for the leaseset, tags, encryption,
      * and fixed-size tunnel messages.
      *
-     * @param len the length
+     * @param len the size of the message in bytes, counted against the throttle
      * @param expires if $gt; 0, an expiration date
      * @return true if we should send the message, false to drop it
      */
@@ -385,7 +409,7 @@ class I2CPMessageProducer {
      * Create a new payload.
      * No more end-to-end encryption, just set the "encrypted" data to the payload.
      *
-     * @return the payload
+     * @return a Payload wrapping a copy of the supplied data, unencrypted
      */
     private static Payload createPayload(byte[] payload) throws I2PSessionException {
         if (payload == null) throw new I2PSessionException("No payload specified");
@@ -396,6 +420,11 @@ class I2CPMessageProducer {
 
     /**
      * Send an abuse message to the router
+     *
+     * @param session the session on whose behalf the abuse is reported
+     * @param msgId the message ID the abuse refers to
+     * @param severity the abuse severity level, larger numbers being more severe
+     * @throws I2PSessionException if the message cannot be queued to the router
      */
     public void reportAbuse(I2PSessionImpl session, int msgId, int severity) throws I2PSessionException {
         ReportAbuseMessage msg = new ReportAbuseMessage();
@@ -418,6 +447,11 @@ class I2CPMessageProducer {
      * the caller does that.
      *
      * @param signingPriv unused for LS2 lease sets
+     * @param session the session on whose behalf the LeaseSet is created
+     * @param leaseSet the LeaseSet to send, of type 0, 1 or 3
+     * @param privs the private keys to encrypt the LeaseSet with, the first
+     *        entry being the signing key for type 0 and 1 LeaseSets
+     * @throws I2PSessionException if the session is closed
      */
     public void createLeaseSet(
             I2PSessionImpl session, LeaseSet leaseSet, SigningPrivateKey signingPriv, List<PrivateKey> privs)
@@ -449,6 +483,8 @@ class I2CPMessageProducer {
      * Update number of tunnels
      *
      * @param tunnels 0 for original configured number
+     * @param session the session to reconfigure
+     * @throws I2PSessionException if the session configuration cannot be signed
      */
     public void updateTunnels(I2PSessionImpl session, int tunnels) throws I2PSessionException {
         ReconfigureSessionMessage msg = new ReconfigureSessionMessage();

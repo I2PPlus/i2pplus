@@ -23,6 +23,11 @@ class NetDbRouterCache {
 
     private final RouterContext _context;
 
+    /**
+     * Create an empty cache.
+     *
+     * @param ctx the router context
+     */
     public NetDbRouterCache(RouterContext ctx) {
         _context = ctx;
     }
@@ -30,6 +35,9 @@ class NetDbRouterCache {
     /**
      * Snapshot of the network database sorted by RouterInfoComparator,
      * cached for the /netdb auto-refresh period.
+     *
+     * @return every known RouterInfo in comparator order; never null, but may be
+     *         empty before the router has learned about any peers
      */
     public List<RouterInfo> getSortedRouters() {
         long now = _context.clock().now();

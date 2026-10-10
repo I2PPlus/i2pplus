@@ -264,6 +264,7 @@ abstract class TrayManager {
     /**
      *  Send a notification to the user.
      *
+     *  @param priority severity of the message, tested against the Log level constants to pick the tray balloon type
      *  @param title for the popup, translated
      *  @param message translated
      *  @param path unsupported
@@ -294,6 +295,7 @@ abstract class TrayManager {
     /**
      *  Does not save. See InternalTrayManager.
      *
+     *  @param enable true to display notifications, false to suppress them
      *  @since 0.9.58 moved up from InternalTrayManager
      */
     protected void configureNotifications(boolean enable) {

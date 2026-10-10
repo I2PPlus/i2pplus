@@ -48,7 +48,16 @@ import net.i2p.util.SimpleTimer2;
     /** Property to disable peer test. */
     private static final String PROP_DISABLE_PEER_TEST = "i2np.udp.disablePeerTest";
 
-    /** Peer test event. */
+    /**
+     * Peer test event.
+     *
+     * @param ctx the router context supplying the clock and the timer this
+     *        event is scheduled on
+     * @param udp the transport supplying Bob peer candidates and the
+     *        configured firewalled state
+     * @param ptmgr the manager that runs the reachability test against the
+     *        chosen peer
+     */
     PeerTestEvent(RouterContext ctx, UDPTransport udp, PeerTestManager ptmgr) {
         super(ctx.simpleTimer2());
         _context = ctx;
@@ -136,6 +145,7 @@ import net.i2p.util.SimpleTimer2;
 
     /**
      * Run within the next 45 seconds at the latest
+     * @param isIPv6 true to test IPv6 reachability, false to test IPv4
      * @since 0.9.13
      */
     public synchronized void forceRunSoon(boolean isIPv6) {
@@ -144,6 +154,9 @@ import net.i2p.util.SimpleTimer2;
 
     /**
      * Run within the specified time at the latest
+     * @param isIPv6 true to test IPv6 reachability, false to test IPv4
+     * @param delay milliseconds to wait before the test runs, at most
+     *        MIN_TEST_FREQUENCY
      * @since 0.9.39
      */
     public synchronized void forceRunSoon(boolean isIPv6, long delay) {
@@ -157,6 +170,7 @@ import net.i2p.util.SimpleTimer2;
 
     /**
      * Run within the next 5 seconds at the latest
+     * @param isIPv6 true to test IPv6 reachability, false to test IPv4
      * @since 0.9.13
      */
     public synchronized void forceRunImmediately(boolean isIPv6) {
@@ -166,6 +180,8 @@ import net.i2p.util.SimpleTimer2;
     /**
      * Caller MUST also call schedule(), reschedule(),
      * forceRunSoon(), or forceRunImmediately()
+     * @param isAlive true keeps the event scheduled for later tests, false
+     *        cancels it
      */
     public synchronized void setIsAlive(boolean isAlive) {
         _alive = isAlive;
@@ -175,6 +191,7 @@ import net.i2p.util.SimpleTimer2;
 
     /**
      * Set the last-tested timer to now
+     * @param isIPv6 true stamps the IPv6 timer, false stamps the IPv4 timer
      * @since 0.9.13
      */
     public void setLastTested(boolean isIPv6) {

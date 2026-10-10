@@ -31,12 +31,27 @@ public class GarlicMessageHandler implements HandlerJobBuilder {
     private final long _msgIDBloomXorLocal;
     private final long _msgIDBloomXorRouter;
     private final long _msgIDBloomXorTunnel;
+    /**
+     * Create a handler that draws a fresh random message-ID XOR mask for each
+     * of the local, router and tunnel scopes.
+     *
+     * @param context the router context the built jobs run against
+     */
     public GarlicMessageHandler(RouterContext context) {
         _context = context;
         _msgIDBloomXorLocal = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
         _msgIDBloomXorRouter = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
         _msgIDBloomXorTunnel = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
     }
+    /**
+     * Create a handler using fixed message-ID XOR masks, so the bloom filters
+     * can be primed identically across restarts.
+     *
+     * @param context the router context the built jobs run against
+     * @param msgIDBloomXorLocal mask applied to message IDs in the local scope
+     * @param msgIDBloomXorRouter mask applied to message IDs in the router scope
+     * @param msgIDBloomXorTunnel mask applied to message IDs in the tunnel scope
+     */
     public GarlicMessageHandler(RouterContext context, long msgIDBloomXorLocal, long msgIDBloomXorRouter, long msgIDBloomXorTunnel) {
         _context = context;
         _msgIDBloomXorLocal = msgIDBloomXorLocal;

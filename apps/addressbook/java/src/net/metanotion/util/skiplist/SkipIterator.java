@@ -4,7 +4,8 @@ package net.metanotion.util.skiplist;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-/** A basic iterator for a skip list.
+/**
+ * A basic iterator for a skip list.
     This is not a complete ListIterator, in particular, since the
     skip list is a map and is therefore indexed by Comparable objects instead
     of int's, nextIndex and previousIndex methods are not really relevant.
@@ -47,7 +48,7 @@ public boolean hasNext() {
 
     /**
      * @return the next value, and advances the index
-     * @throws NoSuchElementException
+     * @throws NoSuchElementException if the iterator is past the last value
      */
     public V next() {
         V o;
@@ -69,9 +70,9 @@ public boolean hasNext() {
     }
 
     /**
-         * The key. Does NOT advance the index.
+     * The key. Does NOT advance the index.
      * @return the key for which the value will be returned in the subsequent call to next()
-     * @throws NoSuchElementException
+     * @throws NoSuchElementException if the iterator is past the last key
      */
     public K nextKey() {
         if(index < ss.nKeys) { return ss.keys[index]; }
@@ -87,7 +88,7 @@ public boolean hasPrevious() {
 
     /**
      * @return the previous value, and decrements the index
-     * @throws NoSuchElementException
+     * @throws NoSuchElementException if the iterator is before the first value
      */
     public V previous() {
         if(index > 0) {

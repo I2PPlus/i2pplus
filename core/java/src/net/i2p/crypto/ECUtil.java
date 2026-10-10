@@ -27,12 +27,21 @@ import java.security.spec.EllipticCurve;
  */
 final class ECUtil {
 
+    /**
+     * Constructor. Every operation below is a static function of its curve
+     * arguments, so an instance holds nothing.
+     */
+    ECUtil() {}
+
     private static final BigInteger TWO = new BigInteger("2");
     private static final BigInteger THREE = new BigInteger("3");
 
     /**
      * Scalar multiplication on the curve.
      *
+     * @param p the point to multiply; may be {@link ECPoint#POINT_INFINITY} to get the identity back
+     * @param kin the scalar, reduced modulo the field prime before use
+     * @param curve the prime field curve both points and the intermediate results belong to
      * @return the resulting ECPoint
      */
     public static ECPoint scalarMult(ECPoint p, BigInteger kin, EllipticCurve curve) {

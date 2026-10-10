@@ -88,6 +88,7 @@ public class UrlLauncher implements ClientApp {
      *
      * @param mgr null OK
      * @param args URL in args[0] or null args for router console
+     * @param context the router context supplying the console URL used when args is empty
      * @since 0.9.18
      */
     public UrlLauncher(I2PAppContext context, ClientAppManager mgr, String[] args) {
@@ -408,7 +409,6 @@ public class UrlLauncher implements ClientApp {
      * Adapted from i2ptunnel SSLHelper.
      *
      * @return param args non-null
-     * @return non-null
      * @since 0.9.38
      */
     private static String[] parseArgs(String args, String url) {

@@ -33,6 +33,13 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.37
  */
 public class JspC {
+    /**
+     * Constructor. The build script drives compilation through main(), reading
+     * every option from the system properties and arguments, so an instance
+     * carries no state.
+     */
+    public JspC() {}
+
     // First Tomcat version to support multiple threads and -threadCount arg
     private static final String THREADS_VERSION_8 = "8.5.33";
     private static final String THREADS_VERSION_9 = "9.0.11";
@@ -45,7 +52,11 @@ public class JspC {
     private static final String JASPER_JAR = System.getProperty("jasper.jar");
 
     /**
-     * @throws IllegalArgumentException
+     * rewrites them when build.reproducible is set
+     *
+     * @param args arguments forwarded to org.apache.jasper.JspC, after fixupArgs()
+     * @throws IllegalArgumentException if -webapp is repeated, has no value, or does
+     *         not name an existing directory; fixupArgs() runs outside the try below
      */
     public static void main(String[] args) {
        if (REPRODUCIBLE)

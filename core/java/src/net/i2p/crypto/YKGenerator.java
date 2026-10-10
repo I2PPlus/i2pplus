@@ -73,6 +73,8 @@ final class YKGenerator {
     /**
      * Caller must also call start() to start the background precalc thread.
      * Unit tests will still work without calling start().
+     *
+     * @param context application context, source of the precalc pool size and delay properties
      */
     public YKGenerator(I2PAppContext context) {
         ctx = context;
@@ -134,7 +136,8 @@ final class YKGenerator {
         return true;
     }
 
-    /** Next precomputed YK value.
+    /**
+     * Next precomputed YK value.
      *
      * @return rv[0] = Y; rv[1] = K
      */

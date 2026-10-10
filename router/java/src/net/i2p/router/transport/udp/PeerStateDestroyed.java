@@ -67,6 +67,8 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
      * This must be called after the first termination or termination ack
      * was sent from PeerState2, so the next packet number is correct.
      *
+     * @param ctx the router context
+     * @param transport the UDP transport
      * @param peer that just sent (or received and sent) a termination
      */
     public PeerStateDestroyed(RouterContext ctx, UDPTransport transport, PeerState2 peer) {
@@ -98,6 +100,18 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /**
      * Direct from IES2, there was never a PS2.
      * Caller must send termination after creating.
+     *
+     * @param ctx the router context
+     * @param transport the UDP transport
+     * @param id the remote host identifier
+     * @param sendID the next outbound session ID
+     * @param rcvID the next inbound session ID
+     * @param sendCha outbound cipher state
+     * @param rcvCha inbound cipher state
+     * @param sendKey1 first half of the outbound key
+     * @param sendKey2 second half of the outbound key
+     * @param rcvKey2 second half of the inbound key
+     * @param reason the termination reason code
      */
     public PeerStateDestroyed(RouterContext ctx, UDPTransport transport, RemoteHostId id,
                               long sendID, long rcvID, CipherState sendCha, CipherState rcvCha,
@@ -239,6 +253,11 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     /// end SSU2Sender interface ///
 
+    /**
+     * The inbound connection ID for this session.
+     *
+     * @return the connection ID
+     */
     long getRcvConnID() { return _rcvConnID; }
 
     private synchronized void messagePartiallyReceived() {
@@ -252,6 +271,8 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
+     * Handle one packet received from the peer.
+     *
      * @param packet fully encrypted, header and body decryption will be done here
      */
     void receivePacket(UDPPacket packet) {
@@ -259,6 +280,8 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     }
 
     /**
+     * Handle one packet received from the given source address.
+     *
      * @param from source address
      * @param packet fully encrypted, header and body decryption will be done here
      * @since 0.9.55

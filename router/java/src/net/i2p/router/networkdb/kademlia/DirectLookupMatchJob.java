@@ -14,6 +14,8 @@ class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
 
     /**
      * DirectLookupMatchJob.
+     * @param ctx the router context the job runs in
+     * @param job the flood search job this match reports the store message to
      */
     public DirectLookupMatchJob(RouterContext ctx, FloodSearchJob job) {
         super(ctx, job);

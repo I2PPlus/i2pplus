@@ -35,16 +35,20 @@ public class StreamHelper extends HelperBase {
     private String _direction;
 
     /**
-     * StreamHelper.
+     * Creates a helper that renders active streaming connections to the
+     * /streams page.
      */
     public StreamHelper() { /* nop */ }
 
     /**
+     * Gets the direction filter applied to the streams table.
      * @return the direction
      */
     public String getDirection() { return _direction != null ? _direction : ""; }
     /**
-     * setDirection.
+     * Sets the direction filter applied to the streams table.
+     *
+     * @param d the direction filter to apply: "inbound" or "outbound" restricts the table to one side, and null or empty renders the combined table
      */
     public void setDirection(String d) { _direction = d; }
 

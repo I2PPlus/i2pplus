@@ -49,6 +49,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
 
     /**
      * Warning - blocking!
+     *
+     * @param compressedStream the GZIP member to decompress, read from on demand
+     * @throws IOException if the GZIP header cannot be read or does not carry the
+     * magic bytes, compression method and flags this decoder requires
      */
     public ResettableGZIPInputStream(InputStream compressedStream) throws IOException {
         this();
@@ -58,6 +62,10 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      * Blocking call to initialize this stream with the data from the given
      * compressed stream.
+     *
+     * @param compressedStream the GZIP member to decompress, read from on demand
+     * @throws IOException if the stream ends inside the GZIP header, or the header
+     * carries the wrong magic bytes, compression method or extended flags
      */
     public final void initialize(InputStream compressedStream) throws IOException {
         len = 0;
@@ -177,6 +185,7 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      * Calls super.close(). May not be reused after this.
      *
+     * @throws IOException if the underlying inflater cannot be shut down
      * @since 0.9.40
      */
     public void destroy() throws IOException {

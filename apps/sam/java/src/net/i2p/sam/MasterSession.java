@@ -60,8 +60,14 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * Caller MUST call start().
      *
      * @param nick nickname of the session
-     * @throws IOException
-     * @throws DataFormatException
+     * @param dgServer the datagram server that raw and datagram subsessions register with
+     * @param handler the SAMv3 handler this session answers commands from
+     * @param props the MASTER session options, which may not include any of the
+     *        subsession-only keys such as PORT or PROTOCOL
+     * @throws IOException declared by the SAMv3StreamSession constructor called
+     *                     here, but not raised by this body
+     * @throws DataFormatException likewise declared but not raised by this body
+     * @throws SAMException if props names an option that only a subsession may set
      */
     public MasterSession(String nick, SAMv3DatagramServer dgServer, SAMv3Handler handler, Properties props)
             throws IOException, DataFormatException, SAMException {
@@ -334,7 +340,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         /**
          * Called when an I2P error occurs.
          *
-         * @param session the session
+         * @param session the session that reported the error
          * @param message error description
          * @param error the exception, if any
          */
@@ -348,7 +354,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         /**
          * Called when a message is available (unmuxed).
          *
-         * @param session the session
+         * @param session the session the message arrived on
          * @param msgId the message ID
          * @param size the message size
          */
@@ -360,7 +366,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         /**
          * Called when a muxed message is available.
          *
-         * @param session the session
+         * @param session the session the muxed message arrived on
          * @param msgId the message ID
          * @param size the message size
          * @param proto the protocol number
@@ -384,7 +390,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
         /**
          * Called when abuse is reported on the session.
          *
-         * @param session the session
+         * @param session the session the abuse was reported on
          * @param severity the abuse severity level
          */
         public void reportAbuse(I2PSession session, int severity) {

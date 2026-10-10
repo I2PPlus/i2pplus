@@ -16,6 +16,9 @@ class ExplicitFilterDefinitionElement extends FilterDefinitionElement {
     private final Hash hash;
 
     /**
+     * Create an element for the single destination named by the address, and
+     * decode it to the hash used as the tracker's key.
+     *
      * @param b32 A string with the .b32 representation of the remote destination
      * @param threshold threshold to apply to that destination
      * @throws InvalidDefinitionException if the b32 string is not valid b32

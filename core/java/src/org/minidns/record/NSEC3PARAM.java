@@ -55,6 +55,11 @@ public class NSEC3PARAM extends Data {
 
     /**
      * parse.
+     *
+     * @param dis the stream positioned at the start of the NSEC3PARAM record body
+     * @return the NSEC3PARAM record read from the stream
+     * @throws IOException if the stream ends before the salt, or the declared salt
+     *         length is not delivered in full
      */
     public static NSEC3PARAM parse(DataInputStream dis) throws IOException {
         byte hashAlgorithm = dis.readByte();
@@ -76,7 +81,14 @@ public class NSEC3PARAM extends Data {
         this.salt = salt;
     }
 
-    /** Create NSEC3PARAM */
+    /**
+     * Create NSEC3PARAM
+     *
+     * @param hashAlgorithm the raw hash algorithm byte, mapped to a HashAlgorithm on the way in
+     * @param flags the raw flags byte, whose reserved bits must be zero per RFC 5155
+     * @param iterations the number of extra times the hash is applied to the next owner name
+     * @param salt the salt prepended to the owner name before each hash
+     */
     NSEC3PARAM(byte hashAlgorithm, byte flags, int iterations, byte[] salt) {
         this(null, hashAlgorithm, flags, iterations, salt);
     }
@@ -116,6 +128,8 @@ public class NSEC3PARAM extends Data {
 
     /**
      * getSaltLength.
+     *
+     * @return the salt length in bytes, 0 meaning no salt
      */
     public int getSaltLength() {
         return salt.length;

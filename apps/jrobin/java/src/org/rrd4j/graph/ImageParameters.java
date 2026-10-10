@@ -7,6 +7,12 @@ import java.util.function.DoubleUnaryOperator;
  * factors, and other rendering configuration.
  */
 class ImageParameters {
+    /**
+     * Constructor. A blank parameter set, ready for the image renderer to fill
+     * in the time range, value bounds and unit scaling before drawing.
+     */
+    ImageParameters() {}
+
     /** Start and end timestamps for graph range */
     long start, end;
 

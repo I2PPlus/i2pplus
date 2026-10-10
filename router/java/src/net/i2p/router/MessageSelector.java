@@ -27,6 +27,7 @@ public interface MessageSelector {
      * inside a lock and can lead to deadlocks if the selector does too much in isMatch().
      * Until the lock is removed, take care to keep it simple.
      *
+     * @param message the received message to test against this selector
      * @return whether match
      */
     public boolean isMatch(I2NPMessage message);
@@ -35,6 +36,8 @@ public interface MessageSelector {
      * Returns true if the selector should still keep searching for further matches.
      * This is called only if isMatch() returns true.
      * If this returns true, isMatch() will not be called again.
+     *
+     * @return true to keep searching for further matches, false to stop searching
      */
     public boolean continueMatching();
 

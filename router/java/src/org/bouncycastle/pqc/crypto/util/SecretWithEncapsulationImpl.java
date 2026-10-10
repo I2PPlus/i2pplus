@@ -19,7 +19,9 @@ public class SecretWithEncapsulationImpl
     private final byte[] cipher_text;
 
     /**
-     * SecretWithEncapsulationImpl.
+     * Stores the shared key and the encapsulated key.
+     * @param sessionKey the shared key agreed by the KEM, zeroed by destroy() and copied on every read
+     * @param cipher_text the encapsulated key produced by the encapsulator, zeroed by destroy() and copied on every read
      */
     public SecretWithEncapsulationImpl(byte[] sessionKey, byte[] cipher_text)
     {
@@ -28,7 +30,9 @@ public class SecretWithEncapsulationImpl
     }
 
     /**
-     * getSecret.
+     * Returns a copy of the KEM session key.
+     * @return a copy of the KEM session key
+     * @throws IllegalStateException if the secret has already been destroyed
      */
     public byte[] getSecret()
     {
@@ -40,7 +44,9 @@ public class SecretWithEncapsulationImpl
     }
 
     /**
-     * getEncapsulation.
+     * Returns a copy of the encapsulated key.
+     * @return a copy of the encapsulated key
+     * @throws IllegalStateException if the secret has already been destroyed
      */
     public byte[] getEncapsulation()
     {
@@ -52,7 +58,7 @@ public class SecretWithEncapsulationImpl
     }
 
     /**
-     * destroy.
+     * Zeroes the session key and encapsulated key.
      */
     public void destroy()
         throws DestroyFailedException
@@ -65,13 +71,17 @@ public class SecretWithEncapsulationImpl
     }
 
     /**
-     * isDestroyed.
+     * Reports whether destroy() has already run.
+     * @return true if the secret has been destroyed
      */
     public boolean isDestroyed()
     {
         return hasBeenDestroyed.get();
     }
 
+    /**
+     * Throws if the secret has already been destroyed.
+     */
     void checkDestroyed()
     {
         if (isDestroyed())

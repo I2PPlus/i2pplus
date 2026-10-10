@@ -95,7 +95,8 @@ public class Lease extends DataStructureImpl {
     /** Required for deserialization. */
     public Lease() { /* required for deserialization */ }
 
-    /** Retrieve the router at which the destination can be contacted
+    /**
+     * Retrieve the router at which the destination can be contacted
      *
      * @return identity of the router acting as a gateway
      */
@@ -103,7 +104,8 @@ public class Lease extends DataStructureImpl {
         return _gateway;
     }
 
-    /** Configure the router at which the destination can be contacted
+    /**
+     * Configure the router at which the destination can be contacted
      *
      * @param ident router acting as the gateway
      */
@@ -111,7 +113,8 @@ public class Lease extends DataStructureImpl {
         _gateway = ident;
     }
 
-    /** Tunnel on the gateway to communicate with
+    /**
+     * Tunnel on the gateway to communicate with
      *
      * @return tunnel ID
      */
@@ -119,7 +122,8 @@ public class Lease extends DataStructureImpl {
         return _tunnelId;
     }
 
-    /** Configure the tunnel on the gateway to communicate with
+    /**
+     * Configure the tunnel on the gateway to communicate with
      *
      * @param id tunnel ID
      */
@@ -158,6 +162,7 @@ public class Lease extends DataStructureImpl {
     /**
      * Sets the lease end date.
      *
+     * @param date end time in milliseconds since the epoch, replacing any prior value
      * @since 0.9.48
      */
     public void setEndDate(long date) {

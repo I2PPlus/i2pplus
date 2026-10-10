@@ -11,8 +11,11 @@ import net.i2p.data.Destination;
  */
 public class UDPSink implements Sink {
 
+    /** The socket datagrams are written to. */
     protected final DatagramSocket sock;
+    /** The address datagrams are sent to. */
     protected final InetAddress remoteHost;
+    /** The port datagrams are sent to. */
     protected final int remotePort;
 
     /**
@@ -36,7 +39,7 @@ public class UDPSink implements Sink {
     /**
      *  Sends datagrams through the given socket to the specified host and port.
      *
-     *  @param socket existing socket
+     *  @param socket the socket to send through, owned by the caller
      *  @param host where to send
      *  @param port where to send
      *  @since 0.9.53
@@ -50,9 +53,9 @@ public class UDPSink implements Sink {
     /**
      *  Sends the data to the configured remote host and port.
      *
-     *  @param src ignored
-     *  @param fromPort ignored
-     *  @param toPort ignored
+     *  @param src unused; a datagram carries no source address
+     *  @param fromPort unused; the local port is fixed at construction
+     *  @param toPort unused; the remote port is fixed at construction
      *  @throws RuntimeException on DatagramSocket IOException
      *  @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry
      */
@@ -81,7 +84,7 @@ public class UDPSink implements Sink {
     /**
      *  Returns the underlying DatagramSocket for use by UDPSource constructor.
      *
-     *  @return the DatagramSocket
+     *  @return the DatagramSocket to hand to the matching UDPSource
      *  @since 0.9.53
      */
     public DatagramSocket getSocket() {

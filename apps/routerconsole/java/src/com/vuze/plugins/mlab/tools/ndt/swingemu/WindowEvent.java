@@ -23,4 +23,10 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class WindowEvent {
 
+    /**
+     * Headless stand-in for an AWT window event; the stub carries no event data, so an
+     * instance needs nothing beyond construction.
+     */
+    public WindowEvent() {}
+
 }

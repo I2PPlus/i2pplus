@@ -32,6 +32,16 @@ public class Datasource implements RrdUpdater<Datasource> {
     private final RrdLong<Datasource> nanSeconds;
     private final RrdDouble<Datasource> accumValue;
 
+    /**
+     * Binds this datasource's storage slots in the RRD and, when a definition is supplied, fills
+     * them with it. Passing a null definition leaves every slot holding the zero value, which is how
+     * a datasource is opened for reading from an existing file; the other constructor then copies
+     * the stored values in.
+     *
+     * @param parentDb the RRD this datasource belongs to, whose backend allocates the storage
+     * @param dsDef definition to initialize the slots from, or null to leave them unset
+     * @throws java.io.IOException if the storage cannot be allocated or written
+     */
     Datasource(RrdDb parentDb, DsDef dsDef) throws IOException {
         boolean shouldInitialize = dsDef != null;
         this.parentDb = parentDb;
@@ -57,6 +67,15 @@ public class Datasource implements RrdUpdater<Datasource> {
         }
     }
 
+    /**
+     * Loads an existing datasource from another RRD, copying the definition and the state variables
+     * (last value, accumulated value and NaN seconds) from the indexed datasource of the importer.
+     *
+     * @param parentDb the RRD this datasource belongs to, whose backend allocates the storage
+     * @param reader the RRD to copy the datasource from
+     * @param dsIndex position of the datasource to copy within the reader's datasource list
+     * @throws java.io.IOException if the source datasource cannot be read or the storage written
+     */
     Datasource(RrdDb parentDb, DataImporter reader, int dsIndex) throws IOException {
         this(parentDb, null);
         dsName.set(reader.getDsName(dsIndex));
@@ -176,6 +195,16 @@ public class Datasource implements RrdUpdater<Datasource> {
         return nanSeconds.get();
     }
 
+    /**
+     * Feeds one sample into the current primary data point, accumulating the rate over the interval
+     * since the last sample. Once the sample crosses a step boundary the interval is closed out and
+     * written to this datasource's archive, after which accumulation restarts at the boundary.
+     *
+     * @param newTime sample time in seconds since the epoch
+     * @param newValue sample value; samples further apart than the heartbeat are ignored, as are
+     *        rates that fall outside the configured min/max
+     * @throws java.io.IOException if the datasource state cannot be read, updated or archived
+     */
     final void process(long newTime, double newValue) throws IOException {
         Header header = parentDb.getHeader();
         long step = header.getStep();
@@ -294,6 +323,14 @@ public class Datasource implements RrdUpdater<Datasource> {
         return totalValue;
     }
 
+    /**
+     * Writes the datasource as a <code>&lt;ds&gt;</code> element of the XML dump, including the
+     * definition fields and the PDP status fields holding the last, accumulated and unknown-second
+     * counts. An unknown last value is written as <code>UNKN</code>.
+     *
+     * @param writer the XML writer positioned at the point the <code>ds</code> element starts
+     * @throws java.io.IOException if a datasource value cannot be read from storage
+     */
     void appendXml(XmlWriter writer) throws IOException {
         writer.startTag("ds");
         writer.writeTag("name", dsName.get());

@@ -41,7 +41,11 @@ public enum ErrorCorrectionLevel {
     this.bits = bits;
   }
 
-  /** @return the bits */
+  /**
+   * Get the two-bit value that encodes this level in a QR Code format field.
+   *
+   * @return the two error correction bits for this level
+   */
   public int getBits() {
     return bits;
   }

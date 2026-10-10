@@ -30,6 +30,11 @@ public class SOCKS4Constants {
      */
     public static class Command {
         /**
+         * The command codes are static, so an instance carries nothing.
+         */
+        public Command() {}
+
+        /**
          * CONNECT.
          */
         public static final int CONNECT = 0x01;
@@ -45,6 +50,11 @@ public class SOCKS4Constants {
      * @since 0.9.33
      */
     public static class Reply {
+        /**
+         * The reply codes are static, so an instance carries nothing.
+         */
+        public Reply() {}
+
         /**
          * SUCCEEDED.
          */

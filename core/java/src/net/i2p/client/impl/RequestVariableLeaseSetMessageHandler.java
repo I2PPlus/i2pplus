@@ -35,6 +35,8 @@ class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandle
 
     /**
      * RequestVariableLeaseSetMessageHandler.
+     *
+     * @param context application context shared with the rest of the I2CP handler chain
      */
     public RequestVariableLeaseSetMessageHandler(I2PAppContext context) {
         super(context, RequestVariableLeaseSetMessage.MESSAGE_TYPE);

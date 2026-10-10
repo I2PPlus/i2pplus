@@ -20,6 +20,9 @@ public class I2CPMessageException extends I2PException {
 
     /**
      * I2CPMessageException.
+     *
+     * @param message description of the failure
+     * @param parent underlying cause, usually a DataFormatException
      */
     public I2CPMessageException(String message, Throwable parent) {
         super(message, parent);
@@ -27,6 +30,8 @@ public class I2CPMessageException extends I2PException {
 
     /**
      * I2CPMessageException.
+     *
+     * @param message description of the failure
      */
     public I2CPMessageException(String message) {
         super(message);

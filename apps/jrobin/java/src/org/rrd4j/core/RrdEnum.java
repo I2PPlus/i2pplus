@@ -14,14 +14,29 @@ import java.io.IOException;
  */
 class RrdEnum<U extends RrdUpdater<U>, E extends Enum<E>> extends RrdPrimitive<U> {
 
+/** The last value read, when caching is enabled. */
     private E cache;
+    /** The enum type this instance reads and writes. */
     private final Class<E> clazz;
 
+    /**
+     * Create an enum-valued primitive.
+     *
+     * @param updater the source of values
+     * @param isConstant true to read a constant rather than a varying value
+     * @param clazz the enum type to read and write
+     */
     RrdEnum(RrdUpdater<U> updater, boolean isConstant, Class<E> clazz) {
         super(updater, RrdPrimitive.RRD_STRING, isConstant);
         this.clazz = clazz;
     }
 
+    /**
+     * Create a varying enum-valued primitive.
+     *
+     * @param updater the source of values
+     * @param clazz the enum type to read and write
+     */
     RrdEnum(RrdUpdater<U> updater, Class<E> clazz) {
         this(updater, false, clazz);
     }

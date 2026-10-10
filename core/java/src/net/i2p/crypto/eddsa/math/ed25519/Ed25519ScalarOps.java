@@ -16,6 +16,12 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
 public class Ed25519ScalarOps implements ScalarOps {
 
     /**
+     * Constructor. The reduction and fused multiply-add are pure arithmetic
+     * over their arguments, so an instance carries no state.
+     */
+    public Ed25519ScalarOps() {}
+
+    /**
      * Reduction modulo the group order $q$.
      * <p>
      * Input:

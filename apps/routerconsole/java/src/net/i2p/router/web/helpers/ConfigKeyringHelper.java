@@ -20,6 +20,7 @@ import net.i2p.router.web.HelperBase;
  * @since 0.9.33
  */
 public class ConfigKeyringHelper extends HelperBase {
+    /** Creates a helper; the container calls it with no arguments before rendering the page. */
     public ConfigKeyringHelper() { /* nop */ }
 
     /**

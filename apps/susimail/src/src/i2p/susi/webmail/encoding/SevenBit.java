@@ -12,6 +12,12 @@ import net.i2p.data.DataHelper;
  */
 public class SevenBit extends Encoding {
 
+	/**
+	 * A bare instance is ready to decode; the only inherited state is the logger that
+	 * Encoding's constructor sets up from the global context. encode() always rejects.
+	 */
+	public SevenBit() {}
+
 	@Override
 	public String getName() {
 		return "7bit";

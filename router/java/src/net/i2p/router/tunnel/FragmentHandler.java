@@ -132,6 +132,9 @@ class FragmentHandler {
 
     /**
      * For unit tests only, others use 3-arg constructor
+     *
+     * @param context the router context
+     * @param receiver callback that receives each fully reassembled message
      */
     public FragmentHandler(RouterContext context, DefragmentedReceiver receiver) {
         this(context, receiver, true);
@@ -160,9 +163,9 @@ class FragmentHandler {
      * sending the resulting I2NPMessages where necessary.  The received
      * fragments are all verified.
      *
-     * @param preprocessed the preprocessed data
-     * @param offset the offset
-     * @param length the length
+     * @param preprocessed the preprocessed message as read from the transport
+     * @param offset index in the buffer at which the message starts
+     * @param length number of bytes of the message to process
      * @return ok (false if corrupt)
      */
     public boolean receiveTunnelMessage(byte[] preprocessed, int offset, int length) {

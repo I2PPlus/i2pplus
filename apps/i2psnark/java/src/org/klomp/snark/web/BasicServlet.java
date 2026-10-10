@@ -69,7 +69,9 @@ import org.klomp.snark.URIUtil;
  */
 class BasicServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    /** The global application context, transient so the servlet stays serializable. */
     protected final transient I2PAppContext _context;
+    /** Log for this servlet's class, transient so the servlet stays serializable. */
     protected final transient Log _log;
     /**
      * Base directory for serving static files. Effectively immutable after startup; volatile so
@@ -88,6 +90,7 @@ class BasicServlet extends HttpServlet {
     private static final int WAR_CACHE_CONTROL_SECS = 7 * 24 * 60 * 60;
     private static final int FILE_CACHE_CONTROL_SECS = 30 * 24 * 60 * 60;
 
+    /** Bind to the global context and build a fresh MIME table. */
     public BasicServlet() {
         super();
         _context = I2PAppContext.getGlobalContext();
@@ -300,7 +303,7 @@ class BasicServlet extends HttpServlet {
      *
      * @param request the HTTP request
      * @param response the HTTP response
-     * @param content the content
+     * @param content the body to be served, queried for type, length and modification time
      * @return true to keep going, false if handled here
      * @throws IOException if an I/O error occurs
      */
@@ -335,7 +338,7 @@ class BasicServlet extends HttpServlet {
      *
      * @param request the HTTP request
      * @param response the HTTP response
-     * @param content the content
+     * @param content the body to be served, whose stream the caller must not reuse
      * @throws IOException if an I/O error occurs
      */
     protected void sendData(
@@ -409,7 +412,7 @@ class BasicServlet extends HttpServlet {
      * Write response headers for the content.
      *
      * @param response the HTTP response
-     * @param content the content
+     * @param content the body being served, consulted for type and cache lifetime
      * @param count the content length
      * @throws IOException if an I/O error occurs
      */
@@ -462,19 +465,40 @@ class BasicServlet extends HttpServlet {
 
     /** From Jetty HttpContent.java. */
     public interface HttpContent {
-        /** Content type. */
+        /**
+         * Content type.
+         *
+         * @return the MIME type of the content, as sent in the Content-Type header
+         */
         String getContentType();
 
-        /** Last modified. */
+        /**
+         * Last modified.
+         *
+         * @return the last modification time in milliseconds since the epoch
+         */
         long getLastModified();
 
-        /** In seconds. */
+        /**
+         * In seconds.
+         *
+         * @return how long the content may be cached, in seconds
+         */
         int getCacheTime();
 
-        /** Content length. */
+        /**
+         * Content length.
+         *
+         * @return the size of the content in bytes
+         */
         long getContentLength();
 
-        /** Input stream. */
+        /**
+         * Input stream.
+         *
+         * @return a fresh stream over the content, which the caller must close
+         * @throws IOException if the content cannot be opened for reading
+         */
         InputStream getInputStream() throws IOException;
     }
 
@@ -549,7 +573,7 @@ class BasicServlet extends HttpServlet {
         /**
          * Create a content provider for the file, limited to the given byte count.
          *
-         * @param file the file
+         * @param file the file to serve, read only from its start
          * @param limit max bytes to serve
          */
         public LimitFileContent(File file, long limit) {
@@ -696,7 +720,8 @@ class BasicServlet extends HttpServlet {
         return rv;
     }
 
-    /** Simple version of URIUtil.decodePath().
+    /**
+     * Simple version of URIUtil.decodePath().
      * @param path the path to decode
      * @return the decoded path
      * @throws MalformedURLException if the path contains invalid escape sequences
@@ -714,7 +739,8 @@ class BasicServlet extends HttpServlet {
         }
     }
 
-    /** Simple version of URIUtil.encodePath().
+    /**
+     * Simple version of URIUtil.encodePath().
      * @param path the path to encode
      * @return the encoded path
      */

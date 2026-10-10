@@ -298,12 +298,19 @@ class AccessFilter implements StatefulConnectionFilter {
      * @since 0.9.71+
      */
     static final class RecorderFileState {
+        /** whether the file was a real file when the state was captured */
         final boolean valid;
+        /** the file's lastModified() in milliseconds since the epoch, or 0 if not valid */
         final long modified;
+        /** the file's length in bytes, or 0 if not valid */
         final long length;
+        /** the recorded destination base32 strings, one per line, empty if not valid */
         final Set<String> breached;
 
         /**
+         * Captures the recorder file's content and the on-disk signature it was
+         * read or written under.
+         *
          * @param valid true if the file was a real file when read
          * @param modified the file's lastModified() value
          * @param length the file's length() value

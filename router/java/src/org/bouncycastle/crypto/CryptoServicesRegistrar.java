@@ -11,7 +11,11 @@ public class CryptoServicesRegistrar {
     /** default constructor */
     public CryptoServicesRegistrar() {}
 
-    /** @param csp the service properties */
+    /**
+     * Check a service's algorithm strength and key size constraints.
+     *
+     * @param csp the service properties
+     */
     public static void checkConstraints(CryptoServiceProperties csp) {}
 
     private static final SecureRandom sr = new SecureRandom();

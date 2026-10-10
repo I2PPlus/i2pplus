@@ -33,26 +33,50 @@ public class ConfigLoggingHandler extends FormHandler {
         }
     }
 
-    /** Whether to save the configuration. */
+    /**
+     * Whether to save the configuration.
+     *
+     * @param moo submitted form value; only its presence matters, the text is ignored
+     */
     public void setShouldsave(String moo) { _shouldSave = true; }
 
-    /** The log levels configuration string. */
+    /**
+     * The log levels configuration string.
+     *
+     * @param levels submitted level string, trimmed, null if the field was empty
+     */
     public void setLevels(String levels) {
         _levels = (levels != null ? levels.trim() : null);
     }
-    /** The default log level. */
+    /**
+     * The default log level.
+     *
+     * @param level submitted default level, trimmed, null if the field was empty
+     */
     public void setDefaultloglevel(String level) {
         _defaultLevel = (level != null ? level.trim() : null);
     }
-    /** The log record format. */
+    /**
+     * The log record format.
+     *
+     * @param format submitted record format pattern, trimmed, null if the field was empty
+     */
     public void setLogformat(String format) {
         _recordFormat = (format != null ? format.trim() : null);
     }
-    /** The log date format pattern. */
+    /**
+     * The log date format pattern.
+     *
+     * @param format submitted date format pattern, trimmed, null if the field was empty
+     */
     public void setLogdateformat(String format) {
         _dateFormat = (format != null ? format.trim() : null);
     }
-    /** The log file size limit. */
+    /**
+     * The log file size limit.
+     *
+     * @param size submitted file size limit, trimmed, null if the field was empty
+     */
     public void setLogfilesize(String size) {
         _fileSize = (size != null ? size.trim() : null);
     }

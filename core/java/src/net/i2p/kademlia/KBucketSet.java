@@ -850,6 +850,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      * For Collections.binarySearch.
      * Returns equal for any overlap.
+     *
+     * @param <T> type of SimpleDataStructure objects being ordered
      */
     private static class BucketComparator<T extends SimpleDataStructure> implements Comparator<KBucket<T>>, Serializable {
         @Override

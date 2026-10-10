@@ -32,9 +32,14 @@ class UDPEndpoint implements SocketListener {
     private static final int MIN_SOCKET_BUFFER = 256*1024;
 
     /**
-     *  @param transport may be null for unit testing ONLY
-     *  @param listenPort -1 or the requested port, may not be honored
-     *  @param bindAddress null ok
+     * Record the settings a later {@link #startup} binds the UDP socket with. No
+     * socket is opened here, so the address family flags are decided from
+     * {@code bindAddress} alone; a null address means a dual-stack wildcard.
+     *
+     * @param ctx router context
+     * @param transport may be null for unit testing ONLY
+     * @param listenPort -1 or the requested port, may not be honored
+     * @param bindAddress null ok
      */
     public UDPEndpoint(RouterContext ctx, UDPTransport transport, int listenPort, InetAddress bindAddress) {
         _context = ctx;
@@ -50,6 +55,8 @@ class UDPEndpoint implements SocketListener {
      *  Caller should call getListenPort() after this to get the actual bound port and determine success .
      *
      *  Can be restarted.
+     *
+     *  @throws SocketException if no port could be bound to _bindAddress
      */
     public synchronized void startup() throws SocketException {
         if (_log.shouldDebug())
@@ -84,6 +91,8 @@ class UDPEndpoint implements SocketListener {
 
     /**
      * The listen port for the next socket bind.
+     *
+     * @param newPort the port to request at the next bind, or below 1 to pick randomly
      */
     public void setListenPort(int newPort) { _listenPort = newPort; }
     private static final int MAX_PORT_RETRIES = 20;
@@ -140,7 +149,11 @@ class UDPEndpoint implements SocketListener {
     }
 
 
-    /** Call after startup() to get the actual port, or -1 on startup failure. */
+    /**
+     * Call after startup() to get the actual port, or -1 on startup failure.
+     *
+     * @return the port the socket was actually bound to, or -1 if no bind succeeded
+     */
     public int getListenPort() { return _listenPort; }
     /**
      * The UDP sender.
@@ -153,6 +166,8 @@ class UDPEndpoint implements SocketListener {
      * Add the packet to the outobund queue to be sent ASAP (as allowed by
      * the bandwidth limiter)
      * BLOCKING if queue is full.
+     *
+     * @param packet the packet to hand to the sender thread for transmission
      */
     public void send(UDPPacket packet) {
         _sender.add(packet);
@@ -187,16 +202,20 @@ class UDPEndpoint implements SocketListener {
     }
 
     /**
-     *  @return true for wildcard too
-     *  @since IPv6
+     * Whether this endpoint was configured for IPv4.
+     *
+     * @return true for wildcard too
+     * @since IPv6
      */
     public boolean isIPv4() {
         return _isIPv4;
     }
 
     /**
-     *  @return true for wildcard too
-     *  @since IPv6
+     * Whether this endpoint was configured for IPv6.
+     *
+     * @return true for wildcard too
+     * @since IPv6
      */
     public boolean isIPv6() {
         return _isIPv6;

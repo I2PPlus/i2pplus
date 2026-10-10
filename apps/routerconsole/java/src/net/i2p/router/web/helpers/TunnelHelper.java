@@ -15,12 +15,15 @@ import net.i2p.util.Log;
  */
 public class TunnelHelper extends HelperBase {
     /**
-     * TunnelHelper.
+     * Create the helper; the superclass constructor sets up the request context.
      */
     public TunnelHelper() { /* nop */ }
 
     /**
-     * @return the tunnel summary
+     * Write the tunnel status and guide HTML into the response.
+     *
+     * @return the rendered tunnel status and guide, or an empty string when the
+     *         rendering failed
      */
     public String getTunnelSummary() {
         TunnelRenderer renderer = new TunnelRenderer(_context);
@@ -42,6 +45,8 @@ public class TunnelHelper extends HelperBase {
     }
 
     /**
+     * Report whether the console is in advanced mode.
+     *
      * @return whether advanced
      */
     @Override

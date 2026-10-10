@@ -38,6 +38,8 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
 
     /**
      * InternetAddressRR.
+     *
+     * @param ip raw address bytes, in the record's A/AAAA family order
      */
     protected InternetAddressRR(byte[] ip) {
         this.ip = ip;
@@ -45,6 +47,8 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
 
     /**
      * InternetAddressRR.
+     *
+     * @param inetAddress resolved address whose cached form this record returns
      */
     protected InternetAddressRR(IA inetAddress) {
         this(inetAddress.getAddress());

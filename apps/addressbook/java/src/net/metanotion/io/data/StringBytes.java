@@ -16,6 +16,12 @@ import net.metanotion.io.Serializer;
  * <p>If string contains characters outside US-ASCII range, an Error is thrown.</p>
  */
 public class StringBytes implements Serializer<String> {
+    /**
+     * The codec holds no state - the US-ASCII charset is named on every call - so a bare
+     * instance is ready to serialise.
+     */
+    public StringBytes() {}
+
     public byte[] getBytes(String o) {
         try {
             return o.getBytes("US-ASCII");

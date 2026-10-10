@@ -294,10 +294,12 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * For extension by SubSession via I2PSessionMuxedImpl and I2PSessionImpl2
      *
-     * @param primary the primary
+     * @param primary the muxed session sharing this session's context, handlers and producer
      * @param destKeyStream stream containing the private key data,
      * format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param options set of options to configure the router with, if null will use System properties
+     * @throws I2PSessionException if the destination key stream cannot be read
+     *         or is not in the expected format
      * @since 0.9.21
      */
     protected I2PSessionImpl(I2PSessionImpl primary, InputStream destKeyStream, Properties options) throws I2PSessionException {
@@ -375,12 +377,12 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Router must be connected or was connected... for now.
      *
-     * @return a new subsession, non-null
      * @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
-     * and different signing keys
-     *
      * @param opts subsession options if any, may be null
+     * @return a new subsession, non-null
      * @since 0.9.21
+     *
+     *
      */
     @Override
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException {
@@ -624,7 +626,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     public boolean supportsLS2() {return _routerSupportsLS2;}
 
-    /** Lease set published by this session. */
+    /**
+     * Lease set published by this session.
+     *
+     * @param ls the lease set to publish, or null to withdraw the current one
+     */
     void setLeaseSet(LeaseSet ls) {
         _leaseSet = ls;
         if (ls != null) {
@@ -649,7 +655,11 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     public LeaseSet getLeaseSet() {return _leaseSet;}
 
-    /** Change the session state */
+    /**
+     * Change the session state
+     *
+     * @param state the new state to move to, waking any waiter blocked on a state change
+     */
     protected void changeState(State state) {
         if (_log.shouldInfo()) {_log.info(getPrefix() + " -> Changing state to " + state);}
         synchronized (_stateLock) {
@@ -981,7 +991,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Receive a message status update
      *
      * @param msgId the message ID
-     * @param nonce the nonce
+     * @param nonce router-assigned value identifying the request the update belongs to
      * @param status the status
      */
     public abstract void receiveStatus(int msgId, long nonce, int status);
@@ -1054,6 +1064,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         private final List<Integer> _pendingSizes;
         private volatile boolean _alive;
 
+        /**
+         * Creates the notifier with its pending queues empty; ids and sizes are
+         * queued by available() and drained by the run loop.
+         */
         public AvailabilityNotifier() {
             _pendingIds = new ArrayList<>(2);
             _pendingSizes = new ArrayList<>(2);
@@ -1792,7 +1806,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
             callback = null;
         }
 
-        /** Dummy, completed
+        /**
+         * Dummy, completed
          *
          * @since 0.9.43
          */

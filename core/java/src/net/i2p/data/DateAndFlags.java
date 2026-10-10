@@ -35,6 +35,10 @@ public class DateAndFlags extends DataStructureImpl {
     /** Date in milliseconds since epoch. */
     private long _date;
 
+    /**
+     * Create an empty date and zeroed flags; callers must call readDate()
+     * or set the fields before writing.
+     */
     public DateAndFlags() {}
 
     /**
@@ -50,7 +54,7 @@ public class DateAndFlags extends DataStructureImpl {
 
     /**
      * Date.
-     * @param date the date
+     * @param date the date, truncated to the six wire bytes by writeDate()
      * @param flags 0 - 65535
      */
     public DateAndFlags(Date date, int flags) {

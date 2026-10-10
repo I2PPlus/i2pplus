@@ -48,6 +48,12 @@ public class ServiceStateTable extends Vector<StateVariable> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * Get the state variable at the given position.
+     *
+     * @param n the zero-based position of the state variable within this table
+     * @return the StateVariable stored at that position in the table
+     */
     public StateVariable getStateVariable(int n) {
         return get(n);
     }

@@ -53,6 +53,7 @@ public final class PublicSuffixListParser {
      * use the correct encoding (the original list is in UTF-8).
      *
      * @param reader the data reader. The caller is responsible for closing the reader.
+     * @return the parsed suffix rules and exceptions, ready for {@link PublicSuffixList}
      * @throws java.io.IOException on error while reading from list
      */
     public PublicSuffixList parse(final Reader reader) throws IOException {

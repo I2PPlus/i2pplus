@@ -63,6 +63,8 @@ public class Rate {
         public final long period;
 
         /**
+         * One period's totals as captured by a coalesce.
+         *
          * @param timestampMs wall-clock ms stamped at coalesce
          * @param totalValue total value accrued over the period
          * @param eventCount number of events in the period
@@ -335,27 +337,47 @@ public class Rate {
         return _currentEventCount;
     }
 
-    /** In current (partial) period, how much of the time has been spent doing the events? */
+    /**
+     * In current (partial) period, how much of the time has been spent doing the events?
+     *
+     * @return accumulated event time in ms for the current period
+     */
     public long getCurrentTotalEventTime() {
         return _currentTotalEventTime;
     }
 
-    /** In the last full period, what was the total value acrued through all events? */
+    /**
+     * In the last full period, what was the total value acrued through all events?
+     *
+     * @return the total value accrued in the last full period
+     */
     public double getLastTotalValue() {
         return _lastTotalValue;
     }
 
-    /** In the last full period, how many events occurred? */
+    /**
+     * In the last full period, how many events occurred?
+     *
+     * @return the last period's event count
+     */
     public long getLastEventCount() {
         return _lastEventCount;
     }
 
-    /** In the last full period, how much of the time was spent doing the events? */
+    /**
+     * In the last full period, how much of the time was spent doing the events?
+     *
+     * @return accumulated event time in ms for the last full period
+     */
     public long getLastTotalEventTime() {
         return _lastTotalEventTime;
     }
 
-    /** What was the max total value acrued in any period? */
+    /**
+     * What was the max total value acrued in any period?
+     *
+     * @return the extreme total value
+     */
     public double getExtremeTotalValue() {
         return _extremeTotalValue;
     }
@@ -369,7 +391,11 @@ public class Rate {
         return _extremeEventCount;
     }
 
-    /** When the max(totalValue) was achieved, how much of the time was spent doing the events? */
+    /**
+     * When the max(totalValue) was achieved, how much of the time was spent doing the events?
+     *
+     * @return accumulated event time in ms for the extreme period
+     */
     public long getExtremeTotalEventTime() {
         return _extremeTotalEventTime;
     }
@@ -392,7 +418,11 @@ public class Rate {
         return _lifetimeEventCount;
     }
 
-    /** Since rate creation, how much of the time was spent doing the events? */
+    /**
+     * Since rate creation, how much of the time was spent doing the events?
+     *
+     * @return accumulated event time in ms over the rate's lifetime
+     */
     public long getLifetimeTotalEventTime() {
         return _lifetimeTotalEventTime;
     }
@@ -409,7 +439,11 @@ public class Rate {
         return _lastCoalesceDate;
     }
 
-    /** When was this rate created? */
+    /**
+     * When was this rate created?
+     *
+     * @return the creation timestamp in ms
+     */
     public long getCreationDate() {
         return _creationDate;
     }
@@ -425,7 +459,11 @@ public class Rate {
         return _lastCoalesceNow;
     }
 
-    /** How large should this rate's cycle be? */
+    /**
+     * How large should this rate's cycle be?
+     *
+     * @return the coalescing period in ms
+     */
     public long getPeriod() {
         return _period;
     }
@@ -471,6 +509,7 @@ public class Rate {
      * as "profile.dbIntroduction.60m.lifetimeEventCount").  The data can be exported
      * through store(outputStream, "profile.dbIntroduction.60m").
      *
+     * @param props the properties previously written by store()
      * @param prefix prefix to the property entries (should NOT end with a period)
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has
      * elapsed since it was written out, but if it is false, we'll
@@ -488,6 +527,8 @@ public class Rate {
      * If value is always a constant, you should be using Frequency instead.
      * If you always use this call, eventDuration is always zero,
      * and the various get*Saturation*() and get*EventTime() methods will return zero.
+     *
+     * @param value the amount to accrue into the current and lifetime totals
      */
     public synchronized void addData(long value) {
         _currentTotalValue += value;
@@ -808,7 +849,11 @@ public class Rate {
         return 0.0D;
     }
 
-    /** How many periods have we already completed? */
+    /**
+     * How many periods have we already completed?
+     *
+     * @return the number of whole periods elapsed since creation
+     */
     public synchronized long getLifetimePeriods() {
         long lifetime = now() - _creationDate;
         double periods = lifetime / (double) _period;
@@ -920,6 +965,9 @@ public class Rate {
     /**
      * Stores the rate data to a string builder.
      * Includes comment lines
+     *
+     * @param prefix prefix to the property entries (should NOT end with a period)
+     * @param buf the builder the properties are appended to
      */
     public synchronized void store(String prefix, StringBuilder buf) {
         store(prefix, buf, true);
@@ -928,6 +976,8 @@ public class Rate {
     /**
      * Stores the rate data to a string builder.
      *
+     * @param prefix prefix to the property entries (should NOT end with a period)
+     * @param buf the builder the properties are appended to
      * @param addComments add comment lines to the output
      * @since 0.9.41
      */
@@ -963,6 +1013,7 @@ public class Rate {
     /**
      * Load this rate from the properties, taking data from the data points underneath the given prefix.
      *
+     * @param props the properties previously written by store()
      * @param prefix prefix to the property entries (should NOT end with a period)
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has elapsed since it was
      * written out, but if it is false, we'll treat the data with as much freshness

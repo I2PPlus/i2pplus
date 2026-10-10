@@ -63,6 +63,8 @@ class PluginUpdateRunner extends UpdateRunner {
     private static final String PROP_ALLOW_NEW_KEYS = "routerconsole.allowUntrustedPlugins";
 
     /**
+     * Set up a single-URI plugin update; the first entry of uris is the only one used.
+     *
      * @param ctx the router context
      * @param mgr the update manager
      * @param uris update source URIs

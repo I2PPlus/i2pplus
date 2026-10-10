@@ -78,7 +78,11 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
     /** With DevRandom disabled. */
     public FortunaStandalone() {this(false);}
 
-    /** @param useDevRandom if true, use DevRandom instead of the Fortuna Generator */
+    /**
+     * Create a Fortuna instance backed either by the /dev/random device or by
+     * the built-in generator with its 32 SHA-256 entropy pools.
+     * @param useDevRandom if true, use DevRandom instead of the Fortuna Generator
+     */
     public FortunaStandalone(boolean useDevRandom) {
         super("Fortuna i2p");
         generator = useDevRandom ? new DevRandom() : new Generator();
@@ -91,7 +95,10 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
         }
     }
 
-  /** Unused, see AsyncFortunaStandalone. @param val the seed data (unused) */
+  /**
+   * Unused, see AsyncFortunaStandalone.
+   * @param val the seed data (unused)
+   */
     public void seed(byte[] val) {
         throw new UnsupportedOperationException("use override");
     }
@@ -141,14 +148,22 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
     }
 
     // Reading and writing this object is equivalent to storing and retrieving the seed.
-    /** Write object */
+    /**
+     * Write object
+     * @param out the stream the SEED_FILE_SIZE bytes of generator state are written to
+     * @throws IOException if the stream rejects the seed bytes or the write fails
+     */
     private void writeObject(ObjectOutputStream out) throws IOException {
         byte[] seed = new byte[SEED_FILE_SIZE];
         generator.nextBytes(seed);
         out.write(seed);
     }
 
-    /** Read object */
+    /**
+     * Read object
+     * @param in the stream holding the previously written SEED_FILE_SIZE bytes of generator state
+     * @throws IOException if the stream ends early or the read fails
+     */
     private void readObject(ObjectInputStream in) throws IOException {
         byte[] seed = new byte[SEED_FILE_SIZE];
         in.readFully(seed);

@@ -27,6 +27,10 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
 
     /**
      * InboundMessageFragments.
+     *
+     * @param ctx our router context
+     * @param outbound the outbound fragment pool to hand completed messages to
+     * @param transport the UDP transport this receiver belongs to
      */
     public InboundMessageFragments(RouterContext ctx, OutboundMessageFragments outbound, UDPTransport transport) {
         _context = ctx;
@@ -74,18 +78,24 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
 
     /**
      * Returns the current queue depth of the message receiver.
+     *
+     * @return the number of messages currently queued for processing
      * @since 0.9.70+
      */
     int getReceiverQueueSize() { return _messageReceiver.getQueueSize(); }
 
     /**
      * Returns the maximum capacity of the message receiver queue.
+     *
+     * @return the queue size at which incoming messages are dropped
      * @since 0.9.70+
      */
     int getReceiverQueueCapacity() { return _messageReceiver.getQueueCapacity(); }
 
     /**
      * Message receiver pool utilization as a ratio (0.0-1.0).
+     *
+     * @return queued messages as a fraction of the queue capacity
      * @since 0.9.70+
      */
     double getMessageReceiverUtilization() { return _messageReceiver.getUtilization(); }
@@ -94,6 +104,8 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      * This message was received - SSU 2 only.
      * No stats updated here, caller should handle stats.
      *
+     * @param messageID message identifier added to the recently-completed
+     *        bloom filter
      * @return true if this message was a duplicate
      * @since 0.9.54
      */
@@ -108,6 +120,8 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
      * Was this message recently received? SSU 2 only.
      * No stats updated here, caller should handle stats.
      *
+     * @param messageID message identifier tested against the
+     *        recently-completed bloom filter
      * @return true if this message was recently received.
      * @since 0.9.54
      */
@@ -129,6 +143,8 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
         public long value;
         /**
          * ModifiableLong.
+         *
+         * @param val the starting count or timestamp this wrapper holds
          */
         public ModifiableLong(long val) { value = val; }
     }

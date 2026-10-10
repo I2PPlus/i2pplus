@@ -28,6 +28,9 @@ class FloodOnlyLookupSelector implements MessageSelector {
 
     /**
      * FloodOnlyLookupSelector.
+     *
+     * @param ctx the router context whose netDb and job queue the search drives
+     * @param search the flood-only search whose replies this selector matches
      */
     public FloodOnlyLookupSelector(RouterContext ctx, FloodOnlySearchJob search) {
         _context = ctx;

@@ -10,10 +10,15 @@ package net.i2p.crypto.eddsa;
  */
 public class Utils {
     /**
+     * Every helper below is static, so an instance carries nothing.
+     */
+    public Utils() {}
+
+    /**
      * Constant-time byte comparison.
      *
-     * @param b a byte
-     * @param c a byte
+     * @param b the first value; only its low 8 bits, which carry the byte, are compared
+     * @param c the second value; only its low 8 bits, which carry the byte, are compared
      * @return 1 if b and c are equal, 0 otherwise.
      */
     public static int equal(int b, int c) {

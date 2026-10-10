@@ -53,6 +53,8 @@ public class DestroySessionMessage extends I2CPMessageImpl {
 
     /**
      * Session ID for this message.
+     *
+     * @param id the session to terminate, which this message will be sent on
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;

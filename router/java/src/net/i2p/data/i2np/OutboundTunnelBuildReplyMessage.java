@@ -22,13 +22,20 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
      */
     public static final int SHORT_RECORD_SIZE = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
-    /** Zero record count, will be set with readMessage(). */
+    /**
+     * Zero record count, will be set with readMessage().
+     *
+     * @param context the I2P app context used to read and write the message
+     */
     public OutboundTunnelBuildReplyMessage(I2PAppContext context) {
         super(context, 0);
     }
 
     /**
      * OutboundTunnelBuildReplyMessage.
+     *
+     * @param context the I2P app context
+     * @param records the number of encrypted records to allocate
      */
     public OutboundTunnelBuildReplyMessage(I2PAppContext context, int records) {
         super(context, records);

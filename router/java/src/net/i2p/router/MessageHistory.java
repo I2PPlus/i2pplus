@@ -81,7 +81,11 @@ public class MessageHistory {
      */
     public boolean getDoLog() { return _doLog; }
 
-    /** History file name. */
+    /**
+     * History file name.
+     *
+     * @return the path of the history log file
+     */
     String getFilename() { return _historyFile; }
 
     private void updateSettings() {
@@ -283,6 +287,8 @@ public class MessageHistory {
      * The peer did not accept the tunnel join for the given reason (this may be because
      * of a timeout or an explicit refusal).
      *
+     * @param peer the peer we tried to build the tunnel with
+     * @param tunnel the tunnel the peer refused to join
      */
     public void tunnelRequestTimedOut(Hash peer, TunnelId tunnel) {
         if (!_doLog) return;
@@ -295,6 +301,8 @@ public class MessageHistory {
      * given router
      *
      * @param id tunnel ID we received a message for
+     * @param msgId the ID of the dropped message
+     * @param expiration the absolute time the dropped message was due to expire
      * @param from peer that sent us this message (if known)
      */
     public void droppedTunnelMessage(TunnelId id, long msgId, Date expiration, Hash from) {
@@ -304,6 +312,9 @@ public class MessageHistory {
 
     /**
      * We received another message we weren't waiting for and don't know how to handle
+     *
+     * @param message the unexpected message that arrived
+     * @param from the peer that sent it, or null if the sender is unknown
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void droppedOtherMessage(I2NPMessage message, Hash from) {
@@ -368,6 +379,9 @@ public class MessageHistory {
 
     /**
      * We banlisted the peer
+     *
+     * @param peer the peer added to the banlist
+     * @param reason the ban reason recorded alongside the peer
      */
     public void banlist(Hash peer, String reason) {
         if (!_doLog) return;
@@ -377,6 +391,8 @@ public class MessageHistory {
 
     /**
      * We unbanlisted the peer
+     *
+     * @param peer the peer removed from the banlist
      */
     public void unbanlist(Hash peer) {
         if (!_doLog) return;
@@ -394,6 +410,7 @@ public class MessageHistory {
      * @param expiration the expiration for the message sent
      * @param peer router that the message was sent to
      * @param sentOk whether the message was sent successfully
+     * @param info extra detail appended to the log line
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void sendMessage(String messageType, long messageId, long expiration, Hash peer, boolean sentOk, String info) {
@@ -463,6 +480,7 @@ public class MessageHistory {
     /**
      * Receive a payload message to distribute to a client
      *
+     * @param messageId the ID of the payload message received
      */
     public void receivePayloadMessage(long messageId) {
         if (!_doLog) return;

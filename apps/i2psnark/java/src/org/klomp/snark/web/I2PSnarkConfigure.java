@@ -33,6 +33,11 @@ class I2PSnarkConfigure {
 
     private final I2PSnarkServlet srv;
 
+    /**
+     * Bind to the servlet whose protected helpers and settings this renderer calls.
+     *
+     * @param srv the owning servlet, reached for its manager, context path and translation
+     */
     I2PSnarkConfigure(I2PSnarkServlet srv) {this.srv = srv;}
 
     private static final int[] times = { 5, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
@@ -810,7 +815,7 @@ class I2PSnarkConfigure {
     private static final String DUMMY1 = "1 ";
 
     /**
-     * Generates HTML for a dropdown selection menu.
+    * Generates HTML for a dropdown selection menu.
     *
     * @param min the minimum value for the dropdown options
     * @param max the maximum value for the dropdown options

@@ -39,6 +39,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
     /**
      * Create a new inbound message distributor.
      *
+     *  @param ctx the router context
      *  @param client null for router tunnel
      */
     public InboundMessageDistributor(RouterContext ctx, Hash client) {
@@ -69,6 +70,9 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
 
     /**
      * Distribute the message to the target, with no tunnel ID.
+     *
+     *  @param msg the message unwrapped from the garlic clove
+     *  @param target the router or client destination hash named by the delivery instructions
      */
     public void distribute(I2NPMessage msg, Hash target) {
         distribute(msg, target, null);
@@ -76,6 +80,10 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
 
     /**
      * Distribute the message to the target, giving the tunnel ID for remote delivery.
+     *
+     *  @param msg the message unwrapped from the garlic clove
+     *  @param target the router or client destination hash named by the delivery instructions
+     *  @param tunnel the tunnel to deliver down, or null for local delivery at this router
      */
     public void distribute(I2NPMessage msg, Hash target, TunnelId tunnel) {
         if (_log.shouldDebug()) {

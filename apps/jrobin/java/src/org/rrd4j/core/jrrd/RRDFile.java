@@ -89,12 +89,21 @@ class RRDFile implements Constants {
 
     private ByteOrder order;
 
-    /** Open RRD file */
+    /**
+     * Open RRD file
+     * @param name the filesystem path of the RRD to memory-map
+     * @throws IOException if the file cannot be opened or mapped
+     */
     RRDFile(String name) throws IOException {
         this(new File(name));
     }
 
-    /** Open RRD file */
+    /**
+     * Open RRD file
+     * @param file the RRD to memory-map read-only
+     * @throws IOException if the file cannot be opened or mapped, or if it is
+     *         larger than 2**31 bytes, which a ByteBuffer cannot address
+     */
     RRDFile(File file) throws IOException {
         long len = file.length();
         if (len > Integer.MAX_VALUE) {
@@ -195,7 +204,7 @@ class RRDFile implements Constants {
 
     /**
      * Int.
-     * @return the int
+     * @return the next 4-byte integer at the read position
      */
     int readInt() {
         return mappedByteBuffer.getInt();
@@ -215,7 +224,8 @@ class RRDFile implements Constants {
 
     /**
      * String.
-     * @return the string
+     * @param maxLength the fixed field width to read, NUL padding included
+     * @return the next fixed-width field decoded as UTF-8, with the NUL padding trimmed
      */
     String readString(int maxLength) {
         byte[] array = new byte[maxLength];
@@ -224,13 +234,17 @@ class RRDFile implements Constants {
         return new String(array, 0, maxLength, StandardCharsets.UTF_8).trim();
     }
 
-    /** Skip bytes */
+    /**
+     * Skip bytes
+     * @param n the number of bytes to advance the read position by
+     */
     void skipBytes(int n) {
         mappedByteBuffer.position(mappedByteBuffer.position() + n);
     }
 
     /**
      * Skip count.
+     * @param boundary the alignment boundary in bytes to advance to
      * @return the skip count
      */
     int align(int boundary) {
@@ -291,7 +305,10 @@ class RRDFile implements Constants {
         }
     }
 
-    /** Close the file */
+    /**
+     * Close the file
+     * @throws IOException if the underlying stream cannot be closed
+     */
     void close() throws IOException {
         unmapFile();
         if (underlying != null) {
@@ -299,7 +316,10 @@ class RRDFile implements Constants {
         }
     }
 
-    /** Read bytes */
+    /**
+     * Read bytes
+     * @param bb the buffer to fill from the current read position
+     */
     void read(ByteBuffer bb) {
         int count = bb.remaining();
         bb.put(
@@ -310,6 +330,7 @@ class RRDFile implements Constants {
 
     /**
      * Unival array.
+     * @param size the number of elements the array holds
      * @return the unival array
      */
     UnivalArray getUnivalArray(int size) {
@@ -326,6 +347,7 @@ class RRDFile implements Constants {
 
     /**
      * seek.
+     * @param position the absolute byte offset to read from next
      */
     public void seek(long position) {
         mappedByteBuffer.position((int) position);

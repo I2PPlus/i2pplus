@@ -99,7 +99,7 @@ public abstract class TransportImpl implements Transport {
     // Only used by NTCP. SSU does not use. See send() below.
     private volatile PrioritySendPool _sendPool;
     /**
-     * _context.
+     * The router context, which every subclass reads its configuration from.
      */
     protected final RouterContext _context;
             /** Map from routerIdentHash to timestamp (Long) when the peer was last unreachable. */
@@ -119,17 +119,25 @@ public abstract class TransportImpl implements Transport {
     private final long WAS_UNREACHABLE_PERIOD;
     private volatile CleanupUnreachable _cleanupJob;
 
-            /** @since 0.9.50 */
+/** Advertised reachability value for a working IPv4 address. @since 0.9.50 */
     public static final String CAP_IPV4 = "4";
-            /** @since 0.9.50 */
+    /** Advertised reachability value for a working IPv6 address. @since 0.9.50 */
     public static final String CAP_IPV6 = "6";
-            /** @since 0.9.50 */
+    /** Advertised reachability value for both address families. @since 0.9.50 */
     public static final String CAP_IPV4_IPV6 = CAP_IPV4 + CAP_IPV6;
 
-            /** @since 0.9.44 */
+    /**
+     * Property recording the result of the last IPv6 firewall test.
+     *
+     * @since 0.9.44
+     */
     protected static final String PROP_IPV6_FIREWALLED = "i2np.lastIPv6Firewalled";
 
-            /** @since 0.9.64+ */
+    /**
+     * Property allowing a transport to lift its connection limit.
+     *
+     * @since 0.9.64+
+     */
     protected static final String PROP_BOOST_CONNECTION_LIMITS = "i2np.boostConnectionLimits";
 
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
@@ -165,7 +173,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * The NTCP send pool capacity (called by Tuner).
      * Resizes the pool on NTCP transports, draining old messages.
-     * @param capacity the capacity
+     * @param capacity the number of messages the pool should hold
      * @since 0.9.70+
      */
     public static void setSendPoolCapacity(int capacity) {
@@ -179,7 +187,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * Initialize the new transport
      *
-     * @param context the context
+     * @param context the router context supplying the log, statistics and comm system
      */
     public TransportImpl(RouterContext context) {
         _context = context;
@@ -246,11 +254,16 @@ public abstract class TransportImpl implements Transport {
     /**
      * How many peers are we currently connected to, that we have
      * sent a message to or received a message from in the last five minutes.
-     * @return the value
+     * @return the number of such peers
      */
     public abstract int countActivePeers();
 
-            /** Per-transport connection limit */
+    /**
+     * Per-transport connection limit
+     *
+     * @return the maximum concurrent peer connections for this transport,
+     * 0 when the comm system is a test dummy
+     */
     public int getMaxConnections() {
         if (_context.commSystem().isDummy()) {return 0;} // testing
 
@@ -311,7 +324,10 @@ public abstract class TransportImpl implements Transport {
 
     /**
      * The transport max connections for the given context and style.
-     * @return the transport max connections
+     *
+     * @param ctx the router context to read the configuration from
+     * @param style the transport style, e.g. "SSU" or "NTCP"
+     * @return the transport max connections, 0 when the comm system is a test dummy
      */
     public static int getTransportMaxConnections(RouterContext ctx, String style) {
         if (ctx.commSystem().isDummy()) {return 0;} // testing
@@ -622,7 +638,8 @@ public abstract class TransportImpl implements Transport {
      *  @param inMsg non-null
      *  @param remoteIdent may be null
      *  @param remoteIdentHash may be null, calculated from remoteIdent if null
-     *  @param msToReceive the msToReceive
+     *  @param msToReceive milliseconds the read took, for the debug log
+     *  @param bytesReceived how many bytes of the message arrived, for the debug log
      */
     public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
         int level = Log.DEBUG;
@@ -795,7 +812,7 @@ public abstract class TransportImpl implements Transport {
      * To remove all IPv4 or IPv6 addresses, use removeAddress(boolean).
      * To remove all IPv4 and IPv6 addresses, use replaceAddress(null).
      *
-     * @param address the address
+     * @param address the address to remove from the transport's advertised list
      * @since 0.9.20
      */
     protected void removeAddress(RouterAddress address) {
@@ -845,7 +862,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * Save a local address we were notified about before we started.
      *
-     * @param address the address
+     * @param address the local address we were notified about
      * @since IPv6
      */
     protected void saveLocalAddress(InetAddress address) {
@@ -867,8 +884,8 @@ public abstract class TransportImpl implements Transport {
     /**
      *  All available addresses we can use, shuffled and then sorted by cost/preference.
      *  Lowest cost (most preferred) first.
+     *  @param target the RouterInfo whose addresses are wanted
      *  @return non-null, possibly empty
-     *  @param target the target
      *  @since IPv6, public since 0.9.50, was protected
      */
     public List<RouterAddress> getTargetAddresses(RouterInfo target) {
@@ -914,7 +931,10 @@ public abstract class TransportImpl implements Transport {
     private static class AddrComparator implements Comparator<RouterAddress>, Serializable {
         private final int adj;
         /**
-         * AddrComparator.
+         * Sort addresses by published cost, biased by the configured IPv6
+         * preference.
+         *
+         * @param ipv6Adjustment cost added to every IPv6 address
          */
         public AddrComparator(int ipv6Adjustment) {adj = ipv6Adjustment;}
         /**
@@ -994,7 +1014,12 @@ public abstract class TransportImpl implements Transport {
 
             /** Who to notify on message availability */
     public void setListener(TransportEventListener listener) {_listener = listener;}
-            /** Make this stuff pretty */
+    /**
+     * Make this stuff pretty
+     *
+     * @param out the writer to render to
+     * @throws IOException if writing fails
+     */
     public void renderStatusHTML(Writer out) throws IOException { /* no-op */ }
     /**
      * Render the transport status HTML to the given writer.
@@ -1077,7 +1102,11 @@ public abstract class TransportImpl implements Transport {
         return rv;
     }
 
-            /** Called when we can't reach a peer. */
+    /**
+     * Called when we can't reach a peer.
+     *
+     * @param peer the router hash that did not answer
+     */
     public void markUnreachable(Hash peer) {
         Status status = _context.commSystem().getStatus();
         if (status == Status.DISCONNECTED || status == Status.HOSED) {return;}
@@ -1087,7 +1116,12 @@ public abstract class TransportImpl implements Transport {
         markWasUnreachable(peer, true); // This is not cleared when they contact us
     }
 
-            /** Called when we establish a peer connection (outbound or inbound). */
+    /**
+     * Called when we establish a peer connection (outbound or inbound).
+     *
+     * @param peer the router hash that just connected
+     * @param isInbound true if we accepted the connection, false if we dialled out
+     */
     public void markReachable(Hash peer, boolean isInbound) {
         /**
          * The legacy treatment for the peer has been to unban them because if any transport
@@ -1117,7 +1151,7 @@ public abstract class TransportImpl implements Transport {
 
     private class CleanupUnreachable extends SimpleTimer2.TimedEvent {
         /**
-         * CleanupUnreachable.
+         * Start the recurring cleanup of stale unreachable entries.
          */
         public CleanupUnreachable() { super(_context.simpleTimer2()); }
         /**
@@ -1143,7 +1177,11 @@ public abstract class TransportImpl implements Transport {
         }
     }
 
-            /** @since 0.9.70+ */
+    /**
+     * Cancel the unreachable-entry cleanup, if one is scheduled.
+     *
+     * @since 0.9.70+
+     */
     public void stopCleanupJob() {
         if (_cleanupJob != null) {
             _cleanupJob.cancel();
@@ -1183,7 +1221,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * Are we allowed to connect to local addresses?
      *
-     * @return the value
+     * @return true if i2np.allowLocal is set, false otherwise
      * @since 0.9.28 moved from UDPTransport
      */
     public boolean allowLocal() {return _context.getBooleanProperty("i2np.allowLocal");}
@@ -1192,7 +1230,7 @@ public abstract class TransportImpl implements Transport {
      *  IP of the peer from the last connection (in or out, any transport).
      *
      *  @param ip IPv4 or IPv6, non-null
-     *  @param peer the peer
+     *  @param peer the router hash the address was last seen for
      */
     public void setIP(Hash peer, byte[] ip) {
         byte[] old;
@@ -1203,8 +1241,8 @@ public abstract class TransportImpl implements Transport {
     /**
      *  IP of the peer from the last connection (in or out, any transport).
      *
+     *  @param peer the router hash to look the IP up for
      *  @return IPv4 or IPv6 or null
-     *  @param peer the peer
      */
     public static byte[] getIP(Hash peer) {
         synchronized (_IPMap) {return _IPMap.get(peer);}
@@ -1285,7 +1323,10 @@ public abstract class TransportImpl implements Transport {
     public String getAltStyle() {return null;}
 
     /**
-     *  @since 0.9.3
+     * Drop the cached router-hash to IP mapping, so the next lookup reads it
+     * again from the network database.
+     *
+     * @since 0.9.3
      */
     static void clearCaches() {
         synchronized(_IPMap) {_IPMap.clear();}
@@ -1317,18 +1358,27 @@ public abstract class TransportImpl implements Transport {
 
     /**
      *  Translate
+     *  @param s the string to be translated
+     *  @return the translated string, or s itself when there is no translation
      *  @since 0.9.8 moved from transports
      */
     protected String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}
 
     /**
-     *  Translate
+     *  Translate and substitute one parameter
+     *  @param s the string to be translated, containing {0}
+     *  @param o the parameter, not translated itself
+     *  @return the translated string with {0} replaced by o
      *  @since 0.9.8 moved from transports
      */
     protected String _t(String s, Object o) {return Translate.getString(s, o, _context, BUNDLE_NAME);}
 
     /**
-     *  Translate
+     *  Translate, choosing between the singular and the plural form
+     *  @param s the singular string, may contain {0} for the count
+     *  @param p the plural string, may contain {0} for the count
+     *  @param n the count, used to choose between s and p
+     *  @return the translated string for that count
      *  @since 0.9.8
      */
     protected String ngettext(String s, String p, int n) {return Translate.getString(n, s, p, _context, BUNDLE_NAME);}

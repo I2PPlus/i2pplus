@@ -29,11 +29,24 @@ import java.nio.charset.StandardCharsets;
  */
 public abstract class SystemVersion {
 
-    /*
+    /**
+     * The host environment the router runs on, as reported by the OS and JVM
+     * properties probed below. No state is held per instance; the probes are
+     * static and cache their own results.
+     */
+    protected SystemVersion() {}
+
+    /**
+     * The account name a packaged Linux service runs the router under.
+     *
      * @since 0.9.28
      */
     public static final String DAEMON_USER = "i2psvc";
-    /*
+
+    /**
+     * The account name the Gentoo package runs the router service under, which
+     * differs from the one the other distributions use.
+     *
      * @since 0.9.29
      */
     public static final String GENTOO_USER = "i2p";
@@ -127,7 +140,14 @@ public abstract class SystemVersion {
     private static final boolean _twentyFour; // NOSONAR S1068
     private static final int _androidSDK;
 
-    /** @since 0.9.55+ */
+    /**
+     * Set to true to drop the single-core, low-memory term from {@link #isSlow()},
+     * so a small router can still be treated as fast. It gates only that term: the
+     * Android, ARM, GNU and Zero tests, the non-native BigInteger test, and the
+     * under-4-cores 32-bit test still apply.
+     *
+     * @since 0.9.55+
+     */
     public static final String PROP_OVERRIDE_IS_SLOW = "router.overrideIsSlow";
 
     /**
@@ -247,7 +267,8 @@ public abstract class SystemVersion {
         if (isAndroid()) {
             return "Android";
         }
-        /** Everybody else knows if they're on a Windows machine or a
+        /**
+         * Everybody else knows if they're on a Windows machine or a
          * Mac, so for now, assume linux here.
          */
         return "Linux";
@@ -733,9 +754,14 @@ public abstract class SystemVersion {
         }
     }
 
-    /** Calculate how many (virtual) cores should be actually used by a thread pool. */
+    /**
+     * Calculate how many (virtual) cores should be actually used by a thread pool.
+     *
+     * @return 1 on Windows and macOS, or 3/4 of the logical cores on x86
+     */
     public static int usableCores() {
-        /** On these OSes we want our threads to occupy the CPU as long as possible
+        /**
+         * On these OSes we want our threads to occupy the CPU as long as possible
          * instead of being put to sleep by the power saving features
          */
         if (_isWin || _isMac) {
@@ -745,7 +771,8 @@ public abstract class SystemVersion {
         int dividend = 1;
         int divisor = 1;
 
-        /** Reflect CPU unavailable through hyperthreading.
+        /**
+         * Reflect CPU unavailable through hyperthreading.
          * 4 virtual cores = 3 threads
          * 8 virtual cores = 6 threads
          * 12 virtual cores = 9 threads
@@ -777,7 +804,9 @@ public abstract class SystemVersion {
      * It saves the old default in the context properties where we can get it.
      * Use this to format a time in local time zone with DateFormat.setTimeZone().
      *
-     * @return non-null
+     * @param ctx the application context whose properties hold the saved system
+     *        time zone ID
+     * @return the saved system time zone, or the JVM default if none was saved
      * @since 0.9.24
      */
     public static TimeZone getSystemTimeZone(I2PAppContext ctx) {
@@ -789,6 +818,10 @@ public abstract class SystemVersion {
     }
 
     /**
+     * Print the Java version and VM this router is running under, for diagnosing a
+     * user-reported problem from the console output.
+     *
+     * @param args ignored, no arguments are parsed
      * @since 0.9.24
      */
     public static void main(String[] args) {

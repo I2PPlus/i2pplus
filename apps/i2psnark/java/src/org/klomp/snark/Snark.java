@@ -757,6 +757,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Wait, capped at ms, for this torrent's unannounces to dispatch.
      *
+     * @param ms the time in milliseconds to wait before giving up, 0 to return immediately
      * @since 0.9.71+
      */
     void awaitUnannounces(long ms) {
@@ -1498,6 +1499,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Call after editing torrent. Caller must ensure infohash, files, etc. did not change.
      *
+     * @param metainfo the replacement metainfo describing the same torrent under new
+     *        parameters such as trackers and comment metadata
      * @since 0.9.53
      */
     public void replaceMetaInfo(MetaInfo metainfo) {
@@ -1704,6 +1707,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Add to the current comment set for this torrent, creating it if it didn't previously exist.
      *
+     * @param comments the comments to add, becoming the entire set if none existed yet
      * @return true if the set changed
      * @since 0.9.31
      */

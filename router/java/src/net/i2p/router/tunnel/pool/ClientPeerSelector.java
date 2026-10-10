@@ -96,14 +96,18 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /** Cross-pool diversity: when fast tier exceeds this count, exclude peers in ANY
      * active tunnel across ALL pools to force each pool to use different fast peers. */
     static final int CROSS_POOL_DIVERSITY_THRESHOLD = 300;
-    /** Cross-pool diversity is only active when build success is above this threshold.
+    /**
+     * Cross-pool diversity is only active when build success is above this threshold.
      * Higher than {@link TunnelPeerSelector#ATTACK_THRESHOLD} because cross-pool
      * exclusion is far more aggressive (excludes ALL active peers across ALL pools)
-     * and can starve builds when most fast peers are in active tunnels. */
+     * and can starve builds when most fast peers are in active tunnels.
+     */
     static final double CROSS_POOL_BUILD_SUCCESS_MIN = 0.60;
-    /** Cross-pool exclusion may not consume more than this fraction of the fast tier.
+    /**
+     * Cross-pool exclusion may not consume more than this fraction of the fast tier.
      * When most fast peers are in active tunnels, natural pool-local diversity
-     * already provides enough variability — explicit exclusion risks starvation. */
+     * already provides enough variability — explicit exclusion risks starvation.
+     */
     static final double CROSS_POOL_EXCLUSION_RATIO = 0.50;
 
 
@@ -1329,7 +1333,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         return ctx.clock().now() - lastConnected < PRECONNECT_COOLDOWN_MS;
     }
 
-    /** Records that preConnectTo was called for the peer at the given time. */
+    /**
+     * Records that preConnectTo was called for the peer at the given time.
+     * @param peer the peer that was pre-connected
+     * @param time the router clock value to store as the peer's last pre-connect
+     */
     static void recordPreConnect(Hash peer, long time) {
         _lastPreConnect.put(peer, time);
     }
@@ -1689,6 +1697,12 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Insert self, ghost-filter, strategy post-processing, duplicate re-check,
      * and cooldowns.  Quality-sorts the non-self hops for inbound selections
      * only (see below).
+     *
+     * @param settings the pool settings for the tunnel being built
+     * @param rv the selected peers, reordered and filtered in place
+     * @param isInbound true for a client pool tunnel, false for the exploratory pool
+     * @return the finalized peer list with this router inserted at the inbound or
+     * outbound end, or an empty list if the tunnel check failed
      */
     List<Hash> finalizeSelection(TunnelPoolSettings settings, List<Hash> rv, boolean isInbound) {
         if (isInbound) {rv.add(0, ctx.routerHash());}
@@ -2075,6 +2089,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * @param exclude peers to deprioritize, or null
      * @param now current time from the router clock
      * @param thirtyMinutes activity window in ms
+     * @return a comparator that orders peers best-first through the quality cascade
      * @since 0.9.70+
      */
     Comparator<Hash> peerQualityComparator(Set<Hash> exclude, long now, long thirtyMinutes) {
@@ -2349,14 +2364,16 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      */
     private class IBGWExcluder extends ExcluderBase {
 
-        /** Local cache of peers that passed the IBGW check.  These are NOT
+        /**
+         * Local cache of peers that passed the IBGW check.  These are NOT
          * added to the exclusion set {@code s} (they are allowed), but
          * caching them here avoids re-calling allowAsIBGW on every
          * contains() check.  The check is delegated to TunnelPeerSelector's
          * endpoint cache (300s TTL, banlist always live) on miss, so
          * entries here are valid for the lifetime of this excluder
          * instance (one selectSingleHop call).
-         * @since 0.9.71+ */
+         * @since 0.9.71+
+         */
         private final Set<Hash> _allowed = new HashSet<>();
 
         /**
@@ -2404,9 +2421,11 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      */
     private class OBEPExcluder extends ExcluderBase {
 
-        /** Local cache of peers that passed the OBEP check — same lifecycle
+        /**
+         * Local cache of peers that passed the OBEP check — same lifecycle
          * and rationale as {@link IBGWExcluder#_allowed}.
-         * @since 0.9.71+ */
+         * @since 0.9.71+
+         */
         private final Set<Hash> _allowed = new HashSet<>();
 
         /**

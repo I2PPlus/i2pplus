@@ -31,7 +31,10 @@ public final class Metadata {
 
     private final int searchTreeSize;
 
-    /** Create Metadata from decoded map */
+    /**
+     * Create Metadata from decoded map
+     * @param metadata the decoded metadata map keyed by field name, for example "build_epoch"
+     */
     @SuppressWarnings("unchecked")
     Metadata(Map metadata) {
         this.binaryFormatMajorVersion = getInt(metadata,
@@ -71,6 +74,8 @@ public final class Metadata {
     }
 
     /**
+     * Gets the major version of the database's binary format.
+     *
      * @return the major version number for the database's binary format.
      */
     public int getBinaryFormatMajorVersion() {
@@ -78,6 +83,8 @@ public final class Metadata {
     }
 
     /**
+     * Gets the minor version of the database's binary format.
+     *
      * @return the minor version number for the database's binary format.
      */
     public int getBinaryFormatMinorVersion() {
@@ -85,6 +92,8 @@ public final class Metadata {
     }
 
     /**
+     * Gets the date the database was built.
+     *
      * @return the date of the database build.
      */
     public Date getBuildDate() {
@@ -92,15 +101,18 @@ public final class Metadata {
     }
 
     /**
+     * Gets the structure of the data records associated with an IP address.
+     * The actual definition of these structures is left up to the database creator.
+     *
      * @return a string that indicates the structure of each data record
-     * associated with an IP address. The actual definition of these
-     * structures is left up to the database creator.
      */
     public String getDatabaseType() {
         return this.databaseType;
     }
 
     /**
+     * Gets the database description in each supported language.
+     *
      * @return map from language code to description in that language.
      */
     public Map<String, String> getDescription() {
@@ -108,6 +120,8 @@ public final class Metadata {
     }
 
     /**
+     * Gets the IP version the database holds address data for.
+     *
      * @return whether the database contains IPv4 or IPv6 address data. The only
      * possible values are 4 and 6.
      */
@@ -116,6 +130,8 @@ public final class Metadata {
     }
 
     /**
+     * Gets the languages the database carries localized names in.
+     *
      * @return list of languages supported by the database.
      */
     public List<String> getLanguages() {
@@ -123,13 +139,17 @@ public final class Metadata {
     }
 
     /**
-     * @return the nodeByteSize
+     * Gets the size in bytes of one search tree node.
+     *
+     * @return the size in bytes of a single search tree node
      */
     int getNodeByteSize() {
         return this.nodeByteSize;
     }
 
     /**
+     * Gets the number of nodes in the search tree.
+     *
      * @return the number of nodes in the search tree.
      */
     int getNodeCount() {
@@ -137,6 +157,9 @@ public final class Metadata {
     }
 
     /**
+     * Gets the number of bits in one search tree record.
+     * Note that each node consists of two records.
+     *
      * @return the number of bits in a record in the search tree. Note that each
      * node consists of two records.
      */
@@ -145,7 +168,9 @@ public final class Metadata {
     }
 
     /**
-     * @return the searchTreeSize
+     * Gets the total size in bytes of the search tree.
+     *
+     * @return the size in bytes of the whole search tree
      */
     int getSearchTreeSize() {
         return this.searchTreeSize;
@@ -157,7 +182,7 @@ public final class Metadata {
      * @see java.lang.Object#toString()
      */
     /**
-     * toString.
+     * Return a description of the database metadata, for diagnostics.
      */
     @Override
     public String toString() {

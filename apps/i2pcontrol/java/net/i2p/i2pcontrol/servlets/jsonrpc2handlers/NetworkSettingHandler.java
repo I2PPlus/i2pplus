@@ -45,6 +45,9 @@ public class NetworkSettingHandler implements RequestHandler {
 
     /**
      * NetworkSettingHandler.
+     *
+     * @param ctx the router context supplying the network configuration to manage
+     * @param helper the shared helper used to build JSONRPC2 responses and access settings
      */
     public NetworkSettingHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;

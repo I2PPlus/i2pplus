@@ -757,7 +757,7 @@ public class EepGet {
          * @param alreadyTransferred total bytes transferred
          * @param bytesTransferred total incl headers
          * @param bytesRemaining remaining bytes
-         * @param url the URL
+         * @param url the address the transfer was reading
          * @param outputFile null if unknown (output stream constructor)
          * @param notModified whether 304
          */
@@ -766,7 +766,7 @@ public class EepGet {
          * Attempt failed notification.
          *
          * @see #bytesTransferred
-         * @param url the URL
+         * @param url the address whose fetch attempt failed
          * @param bytesTransferred total transferred
          * @param bytesRemaining remaining
          * @param currentAttempt attempt index
@@ -778,7 +778,7 @@ public class EepGet {
          * Transfer failed notification.
          *
          * @see #bytesTransferred
-         * @param url the URL
+         * @param url the address whose transfer failed
          * @param bytesTransferred total transferred
          * @param bytesRemaining remaining
          * @param currentAttempt attempt index
@@ -790,7 +790,7 @@ public class EepGet {
          * unless setWriteErrorToOutput() is called before fetch().
          * To be changed?
          *
-         * @param url the URL
+         * @param url the address the header arrived on
          * @param currentAttempt attempt index
          * @param key header key
          * @param val header value
@@ -1033,13 +1033,15 @@ public class EepGet {
         @Override
         public void attempting(String url) {
             // TODO
-        }        /**
+        }
+        /**
          * Called when a response header has been parsed.
          */
         @Override
         public void headerReceived(String url, int currentAttempt, String key, String val) {
             // TODO
-        }    }
+        }
+    }
 
     /**
      * Add a status listener.
@@ -1996,6 +1998,8 @@ public class EepGet {
         final long total;
 
         /**
+         * Build a range from the three numbers parsed out of a Content-Range header.
+         *
          * @param start first byte, or -1 if unknown
          * @param end last byte, or -1 if unknown
          * @param total total length, or -1 if unknown
@@ -3191,7 +3195,11 @@ public class EepGet {
         /**
          * Build the Authorization header for the given request.
          *
+         * @param method the HTTP method of the request being authorized
+         * @param uri the request target, needed for the digest A2 hash
          * @return the auth header
+         * @throws IOException if the digest challenge is missing or unusable, or if the proxy
+         * asked for an authentication mode this client does not implement
          */
         public String getAuthHeader(String method, String uri) throws IOException {
             switch (authMode) {
@@ -3224,6 +3232,10 @@ public class EepGet {
          * Generate the digest authentication parameters
          * Ref: RFC 2617
          *
+         * @param method the HTTP method of the request being authorized
+         * @param uri the request target, hashed into the A2 value
+         * @return the digest parameter names mapped to their already-quoted values
+         * @throws IOException if the challenge carried no realm or no nonce
          * @since 0.9.12 modified from I2PTunnelHTTPClientBase.validateDigest()
          */
         public Map<String, String> generateAuthArgs(String method, String uri) throws IOException {
@@ -3280,10 +3292,23 @@ public class EepGet {
             return rv;
         }
 
-        /** @since 0.9.33 */
+        /**
+         * Get the username these credentials were built with, as supplied to
+         * {@link #AuthState(String, String)} or the -u command line option.
+         *
+         * @return the username the proxy credentials were parsed from
+         * @since 0.9.33
+         */
         public String getUsername() { return username; }
 
-        /** @since 0.9.33 */
+        /**
+         * Get the password these credentials were built with. It is retained in
+         * clear here because the digest response has to be recomputed on every
+         * 407 challenge, and is never written to the log.
+         *
+         * @return the password the proxy credentials were parsed from
+         * @since 0.9.33
+         */
         public String getPassword() { return password; }
     }
 

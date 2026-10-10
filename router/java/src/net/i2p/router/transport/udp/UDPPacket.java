@@ -96,7 +96,13 @@ class UDPPacket implements CDPQEntry {
     /** Largest payload type value. */
     public static final int MAX_PAYLOAD_TYPE = PAYLOAD_TYPE_SESSION_DESTROY;
 
-    /** Packet type enumeration. */
+    /**
+     * Packet type enumeration.
+     *
+     * @param type one of the PAYLOAD_TYPE_* constants
+     * @return the human-readable name for the type, or a string naming the
+     *         unrecognised value if it is not a known payload type
+     */
     public static String payloadTypeToString(int type) {
         switch (type) {
             case PAYLOAD_TYPE_SESSION_REQUEST:    return "Session Request";
@@ -168,7 +174,12 @@ class UDPPacket implements CDPQEntry {
         return _seqNum;
     }
 
-    /** Underlying packet. */
+    /**
+     * Underlying packet.
+     *
+     * @return the datagram carrying the payload, reflecting the buffer and
+     *         length currently in use
+     */
     public DatagramPacket getPacket() {
         verifyNotReleased();
         return _packet;
@@ -179,18 +190,31 @@ class UDPPacket implements CDPQEntry {
         return _priority;
     }
 
-    /** Priority level. */
+    /**
+     * Priority level.
+     *
+     * @param pri the send priority on the OutNetMessage scale of 100 to 1000,
+     *        where a larger value means a more urgent packet
+     */
     public void setPriority(int pri) {
         _priority = pri;
     }
 
-    /** Initialization time. */
+    /**
+     * Initialization time.
+     *
+     * @return the router clock time at which this packet was created or reset
+     */
     public long getBegin() {
         verifyNotReleased();
         return _initializeTime;
     }
 
-    /** Packet lifetime. */
+    /**
+     * Packet lifetime.
+     *
+     * @return milliseconds elapsed on the router clock since initialization
+     */
     public long getLifetime() {
         return _context.clock().now() - _initializeTime;
     }
@@ -200,34 +224,62 @@ class UDPPacket implements CDPQEntry {
         _initializeTime = _context.clock().now();
     }
 
-    /** Mark type. */
+    /**
+     * Mark type.
+     *
+     * @param type 1 to flag the packet as an ack, which lets the sender record
+     *        ack send timings separately; any other value is simply stored
+     */
     public void markType(int type) {
         verifyNotReleased();
         _markedType = type;
     }
 
-    /** Marked type. */
+    /**
+     * Marked type.
+     *
+     * @return the mark set by markType(), or -1 if this packet has not been marked
+     */
     public int getMarkedType() {
         verifyNotReleased();
         return _markedType;
     }
 
-    /** Message type */
+    /**
+     * Message type
+     *
+     * @return the SSU2 message type this packet carries, or -1 when none has
+     *         been set yet
+     */
     int getMessageType() {
         return _messageType;
     }
 
-    /** Message type */
+    /**
+     * Message type
+     *
+     * @param type the SSU2 message type being carried, recorded for debug logging
+     */
     void setMessageType(int type) {
         _messageType = type;
     }
 
-    /** Fragment count */
+    /**
+     * Fragment count
+     *
+     * @return the number of data fragments this packet carries, or -1 when it is
+     *         an ack rather than a data fragment
+     */
     int getFragmentCount() {
         return _fragmentCount;
     }
 
-    /** Fragment count */
+    /**
+     * Fragment count
+     *
+     * @param count the number of data fragments this packet carries, or -1 to
+     *        mark it as an ack with no fragment data
+     */
     void setFragmentCount(int count) {
         _fragmentCount = count;
     }
@@ -292,7 +344,12 @@ class UDPPacket implements CDPQEntry {
         _bandwidthRequest.set(req);
     }
 
-    /** Bandwidth request. */
+    /**
+     * Bandwidth request.
+     *
+     * @return the limiter request recorded by requestOutboundBandwidth(), or
+     *         null if no bandwidth has been requested for this packet yet
+     */
     public FIFOBandwidthLimiter.Request getBandwidthRequest() {
         verifyNotReleased();
         return _bandwidthRequest.get();
@@ -386,7 +443,14 @@ class UDPPacket implements CDPQEntry {
         return buf.toString();
     }
 
-    /** Inbound flag. */
+    /**
+     * Inbound flag.
+     *
+     * @param ctx the context whose clock and packet cache the packet uses
+     * @param inbound true if the packet is being prepared to be received
+     * @return a pooled packet with its state initialized for ctx, ready to be
+     *         filled in and sent or received
+     */
     public static UDPPacket acquire(RouterContext ctx, boolean inbound) {
         UDPPacket rv;
         if (CACHE) {

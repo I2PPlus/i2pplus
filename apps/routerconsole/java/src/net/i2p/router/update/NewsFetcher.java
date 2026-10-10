@@ -89,15 +89,23 @@ class NewsFetcher extends UpdateRunner {
 
     /**
      * NewsFetcher.
+     *
+     * @param ctx the router context, supplying the router and temp directories
+     * @param mgr the manager notified of progress, failure and completion
+     * @param uris the news source URIs, tried in turn until one succeeds
      */
     public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris) {
         this(ctx, mgr, uris, DEFAULT_TIMEOUT);
     }
 
     /**
-     *  @param timeout if less than 60 seconds, we assume this was manually initiated,
-     *                 and we will log status to the sidebar
-     *  @since 0.9.62
+     * and we will log status to the sidebar
+     *
+     * @param ctx the router context, supplying the router and temp directories
+     * @param mgr the manager notified of progress, failure and completion
+     * @param uris the news source URIs, tried in turn until one succeeds
+     * @param timeout if less than 60 seconds, we assume this was manually initiated,
+     * @since 0.9.62
      */
     public NewsFetcher(RouterContext ctx, ConsoleUpdateManager mgr, List<URI> uris, long timeout) {
         super(ctx, mgr, NEWS, uris);

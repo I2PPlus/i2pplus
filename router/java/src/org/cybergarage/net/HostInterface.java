@@ -39,6 +39,12 @@ import org.cybergarage.util.Debug;
  * @since 1.0
  */
 public class HostInterface {
+    /**
+     * Constructor. The interface list is read from the static NetworkInterface
+     * and InetAddress helpers below, so an instance carries no state.
+     */
+    public HostInterface() {}
+
     ////////////////////////////////////////////////
     //	Constants
     ////////////////////////////////////////////////
@@ -76,6 +82,8 @@ public class HostInterface {
 
     /**
      * setInterface.
+     *
+     * @param ifaddr the address of the single interface to report, empty for all
      */
     public static final void setInterface(String ifaddr) {
         ifAddress = ifaddr;
@@ -83,6 +91,8 @@ public class HostInterface {
 
     /**
      * getInterface.
+     *
+     * @return the assigned interface address, or an empty string if none was assigned
      */
     public static final String getInterface() {
         return ifAddress;
@@ -113,6 +123,9 @@ public class HostInterface {
 
     /**
      * getNHostAddresses.
+     *
+     * @return the number of usable host addresses across the network interfaces, or 1
+     * when a single interface has been assigned
      */
     public static final int getNHostAddresses() {
         if (hasAssignedInterface() == true) return 1;
@@ -137,8 +150,11 @@ public class HostInterface {
     }
 
     /**
-     * @param ipfilter
-     * @param interfaces
+     * Collects the addresses of the selected network interfaces.
+     *
+     * @param ipfilter bitmask of IPV4_BITMASK, IPV6_BITMASK and LOCAL_BITMASK; with
+     *        LOCAL_BITMASK clear, loopback addresses are skipped
+     * @param interfaces names of the network interfaces to inspect, or null for all
      * @return InetAddress[]
      * @since 1.8.0
      */
@@ -183,6 +199,9 @@ public class HostInterface {
 
     /**
      * getHostAddress.
+     *
+     * @param n the zero-based index into the enumerated usable host addresses
+     * @return the address at that index, or an empty string if there are not that many
      */
     public static final String getHostAddress(int n) {
         if (hasAssignedInterface() == true) return getInterface();
@@ -217,6 +236,9 @@ public class HostInterface {
 
     /**
      * isIPv6Address.
+     *
+     * @param host the host name or address literal to resolve
+     * @return true if host resolves to an IPv6 address
      */
     public static final boolean isIPv6Address(String host) {
         try {
@@ -229,6 +251,9 @@ public class HostInterface {
 
     /**
      * isIPv4Address.
+     *
+     * @param host the host name or address literal to resolve
+     * @return true if host resolves to an IPv4 address
      */
     public static final boolean isIPv4Address(String host) {
         try {
@@ -245,6 +270,8 @@ public class HostInterface {
 
     /**
      * hasIPv4Addresses.
+     *
+     * @return true if any usable host address is IPv4
      */
     public static final boolean hasIPv4Addresses() {
         int addrCnt = getNHostAddresses();
@@ -257,6 +284,8 @@ public class HostInterface {
 
     /**
      * hasIPv6Addresses.
+     *
+     * @return true if any usable host address is IPv6
      */
     public static final boolean hasIPv6Addresses() {
         int addrCnt = getNHostAddresses();
@@ -273,6 +302,9 @@ public class HostInterface {
 
     /**
      * getIPv4Address.
+     *
+     * @return the first usable host address that is IPv4, or an empty string if
+     * there is none
      */
     public static final String getIPv4Address() {
         int addrCnt = getNHostAddresses();
@@ -285,6 +317,9 @@ public class HostInterface {
 
     /**
      * getIPv6Address.
+     *
+     * @return the first usable host address that is IPv6, or an empty string if
+     * there is none
      */
     public static final String getIPv6Address() {
         int addrCnt = getNHostAddresses();
@@ -301,6 +336,12 @@ public class HostInterface {
 
     /**
      * getHostURL.
+     *
+     * @param host the host name or address literal to place in the URL
+     * @param port the TCP port number to place in the URL
+     * @param uri the path and query to append, beginning with a slash
+     * @return the absolute http URL naming that host, port and uri, with an IPv6
+     * address literal bracketed
      */
     public static final String getHostURL(String host, int port, String uri) {
         String hostAddr = host;

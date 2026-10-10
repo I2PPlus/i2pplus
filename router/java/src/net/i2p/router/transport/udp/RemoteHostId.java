@@ -16,12 +16,19 @@ final class RemoteHostId {
     private final Hash _peerHash;
     private final int _hashCode;
 
-    /** Direct (IP + port). */
+    /**
+     * Direct (IP + port).
+     * @param ip the peer's address bytes, 4 or 16 long
+     * @param port the UDP port the peer is reachable on
+     */
     public RemoteHostId(byte[] ip, int port) {
         this(ip, port, null);
     }
 
-    /** Indirect (hash only). */
+    /**
+     * Indirect (hash only).
+     * @param peerHash the hash of the peer's RouterIdentity
+     */
     public RemoteHostId(Hash peerHash) {
         this(null, 0, peerHash);
     }
@@ -33,13 +40,22 @@ final class RemoteHostId {
         _hashCode = DataHelper.hashCode(_ip) ^ DataHelper.hashCode(_peerHash) ^ _port;
     }
 
-    /** The IP address, or null if indirect. */
+    /**
+     * The IP address, or null if indirect.
+     * @return the raw address bytes, or null for a hash-only id
+     */
     public byte[] getIP() { return _ip; }
 
-    /** The port, or 0 if indirect. */
+    /**
+     * The port, or 0 if indirect.
+     * @return the peer's UDP port, or 0 for a hash-only id
+     */
     public int getPort() { return _port; }
 
-    /** The peer hash, or null if direct. */
+    /**
+     * The peer hash, or null if direct.
+     * @return the hash of the peer's RouterIdentity, or null for a direct id
+     */
     public Hash getPeerHash() { return _peerHash; }
 
     @Override

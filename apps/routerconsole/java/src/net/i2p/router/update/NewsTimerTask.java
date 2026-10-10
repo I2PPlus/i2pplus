@@ -31,6 +31,8 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
 
     /**
      * NewsTimerTask.
+     * @param ctx the router context, whose simple timer and random source schedule the recurring check
+     * @param mgr the update manager consulted to decide whether a fetch or an install is warranted
      */
     public NewsTimerTask(RouterContext ctx, ConsoleUpdateManager mgr) {
         super(ctx.simpleTimer2());

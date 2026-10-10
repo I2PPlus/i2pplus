@@ -21,6 +21,12 @@ import java.nio.file.Paths;
  */
 public abstract class ImageWorker {
 
+    /**
+     * Create a worker with no graphics context attached; a subclass calls
+     * {@link #setG2d} with the context it draws into before use.
+     */
+    public ImageWorker() {}
+
     private static final String DUMMY_TEXT = "Dummy";
     //    private static final int IMG_BUFFER_CAPACITY = 10000; // bytes
     private static final int IMG_BUFFER_CAPACITY = 40 * 1024; // bytes
@@ -70,18 +76,18 @@ public abstract class ImageWorker {
     /**
      * Resize the image to the given dimensions.
      *
-     * @param width the new width
-     * @param height the new height
+     * @param width the width of the rectangle, in image pixels
+     * @param height the height of the rectangle, in image pixels
      */
     abstract void resize(int width, int height);
 
     /**
      * Set the clipping region for drawing operations.
      *
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param width the width
-     * @param height the height
+     * @param x the x coordinate of the region's left edge
+     * @param y the y coordinate of the region's top edge
+     * @param width the width of the region, in image pixels
+     * @param height the height of the region, in image pixels
      */
     void clip(int x, int y, int width, int height) {
         g2d.setClip(x, y, width, height);
@@ -116,9 +122,9 @@ public abstract class ImageWorker {
      *
      * @param x the x coordinate
      * @param y the y coordinate
-     * @param width the width
-     * @param height the height
-     * @param paint the paint to fill with
+     * @param width the width of the rectangle, in image pixels
+     * @param height the height of the rectangle, in image pixels
+     * @param paint the fill to apply inside the rectangle
      */
     void fillRect(int x, int y, int width, int height, Paint paint) {
         g2d.setPaint(paint);
@@ -301,8 +307,8 @@ public abstract class ImageWorker {
      * @param y1 the starting y coordinate
      * @param x2 the ending x coordinate
      * @param y2 the ending y coordinate
-     * @param paint the paint
-     * @param stroke the stroke
+     * @param paint the color or gradient the line is drawn in
+     * @param stroke the line thickness and end decoration to draw with
      */
     void drawLine(int x1, int y1, int x2, int y2, Paint paint, Stroke stroke) {
         if (stroke != lastStroke) {
@@ -320,9 +326,9 @@ public abstract class ImageWorker {
      * Draw a polyline with the given paint and stroke.
      *
      * @param x the x coordinates
-     * @param y the y coordinates
-     * @param paint the paint
-     * @param stroke the stroke
+     * @param y the y coordinates, one per vertex
+     * @param paint the color or gradient the polyline is drawn in
+     * @param stroke the line thickness and end decoration to draw with
      */
     void drawPolyline(double[] x, double[] y, Paint paint, Stroke stroke) {
         g2d.setPaint(paint);
@@ -351,6 +357,8 @@ public abstract class ImageWorker {
     }
 
     /**
+     * Reports whether plots are drawn as bezier curves rather than as steps.
+     *
      * @return true if plots are drawn as bezier curves
      * @since 0.9.71
      */
@@ -375,9 +383,9 @@ public abstract class ImageWorker {
      * and is never bridged.
      *
      * @param x the x coordinates
-     * @param y the y coordinates
-     * @param paint the paint
-     * @param stroke the stroke
+     * @param y the y coordinates, one per vertex
+     * @param paint the color or gradient the curve is drawn in
+     * @param stroke the line thickness and end decoration to draw with
      * @since 0.9.71
      */
     void drawPolylineSmooth(double[] x, double[] y, Paint paint, Stroke stroke) {
@@ -507,8 +515,8 @@ public abstract class ImageWorker {
      * @param text the text to draw
      * @param x the x coordinate
      * @param y the y coordinate
-     * @param font the font
-     * @param paint the paint
+     * @param font the font to render the string in
+     * @param paint the color or gradient the glyphs are filled with
      */
     void drawString(String text, int x, int y, Font font, Paint paint) {
         if (font != lastFont) {
@@ -525,7 +533,7 @@ public abstract class ImageWorker {
     /**
      * Get the ascent of the given font.
      *
-     * @param font the font
+     * @param font the font whose metrics are measured
      * @return the font ascent
      */
     double getFontAscent(Font font) {
@@ -536,7 +544,7 @@ public abstract class ImageWorker {
     /**
      * Get the total height of the given font.
      *
-     * @param font the font
+     * @param font the font whose metrics are measured
      * @return the font height (ascent + descent)
      */
     double getFontHeight(Font font) {
@@ -547,8 +555,8 @@ public abstract class ImageWorker {
     /**
      * Get the width of the given text in the specified font.
      *
-     * @param text the text
-     * @param font the font
+     * @param text the string to measure
+     * @param font the font to measure it in
      * @return the string width
      */
     double getStringWidth(String text, Font font) {

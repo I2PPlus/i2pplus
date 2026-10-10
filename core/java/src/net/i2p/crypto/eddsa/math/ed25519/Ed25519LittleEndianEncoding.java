@@ -9,6 +9,12 @@ import net.i2p.crypto.eddsa.math.*;
  */
 public class Ed25519LittleEndianEncoding extends Encoding {
     /**
+     * Constructor. The field this encoding belongs to is attached afterwards
+     * by setField(), so a bare instance is the expected starting state.
+     */
+    public Ed25519LittleEndianEncoding() {}
+
+    /**
      * Encodes a given field element in its 32 byte representation. This is done in two steps:
      * <ol>
      * <li>Reduce the value of the field element modulo $p$.
@@ -174,7 +180,12 @@ public class Ed25519LittleEndianEncoding extends Encoding {
         return s;
     }
 
-    /** Load 3 bytes from input */
+    /**
+     * Load 3 bytes from input
+     * @param in The byte array holding the little-endian value.
+     * @param offset The index of the first of the three bytes to read.
+     * @return The three bytes as a zero-extended 24-bit value.
+     */
     static int load_3(byte[] in, int offset) {
         int result = in[offset++] & 0xff;
         result |= (in[offset++] & 0xff) << 8;
@@ -182,7 +193,12 @@ public class Ed25519LittleEndianEncoding extends Encoding {
         return result;
     }
 
-    /** Load 4 bytes from input */
+    /**
+     * Load 4 bytes from input
+     * @param in The byte array holding the little-endian value.
+     * @param offset The index of the first of the four bytes to read.
+     * @return The four bytes as an unsigned 32-bit value in the low bits.
+     */
     static long load_4(byte[] in, int offset) {
         int result = in[offset++] & 0xff;
         result |= (in[offset++] & 0xff) << 8;

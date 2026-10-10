@@ -35,9 +35,11 @@ JTextArea
 	private final StringBuilder text = new StringBuilder();
 
 	/**
+	 * Append the initial text to the log at construction.
+	 *
 	 * @param str the initial text
-	 * @param a ignored
-	 * @param b ignored
+	 * @param a ignored, present only to match the JTextArea constructor signature
+	 * @param b ignored, present only to match the JTextArea constructor signature
 	 */
 	public
 	JTextArea(
@@ -48,7 +50,11 @@ JTextArea
 		text.append(str);
 	}
 
-	/** @param str the text to append */
+	/**
+	 * Log the text at WARN and append it to the accumulated text.
+	 *
+	 * @param str the text to append
+	 */
 	public void
 	append(
 		String		str )
@@ -58,7 +64,11 @@ JTextArea
 		text.append(str);
 	}
 
-	/** @return the text */
+	/**
+	 * Read everything appended so far.
+	 *
+	 * @return the accumulated text
+	 */
 	public String
 	getText()
 	{

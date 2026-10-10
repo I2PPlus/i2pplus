@@ -24,11 +24,14 @@ class Draft extends Mail {
 	private long size;
 	private static final String HDR_ATTACH = "X-I2P-Attachment: ";
 	/**
-	 * HDR_BCC.
+	 * Header line carrying the blind-copy recipients of a draft, which a draft
+	 * otherwise has no way to express in the body.
 	 */
 	public static final String HDR_BCC = "Bcc: ";
 
 	/**
+	 * Start an empty draft with no attachments.
+	 *
 	 * @param uidl unique ID for this draft
 	 */
 	public Draft(String uidl) {
@@ -97,12 +100,17 @@ class Draft extends Mail {
 	}
 
 	/**
+	 * Does nothing: a draft computes its own size from the body and its
+	 * attachments, so there is no server-reported size to record.
+	 *
 	 * @since 0.9.62
 	 */
 	@Override
 	public synchronized void setSize(long size) { /* no-op */ }
 
 	/**
+	 * Is any file attached to this draft?
+	 *
 	 * @return whether attachment is present
 	 */
 	@Override
@@ -111,6 +119,9 @@ class Draft extends Mail {
 	}
 
 	/**
+	 * The blind-copy recipients found in the draft's Bcc header, with no
+	 * header meaning none were entered.
+	 *
 	 * @return may be null
 	 */
 	public synchronized String[] getBcc() {
@@ -118,6 +129,8 @@ class Draft extends Mail {
 	}
 
 	/**
+	 * The live attachment list, so callers can add or drop entries directly.
+	 *
 	 * @return non-null, not a copy
 	 */
 	public synchronized List<Attachment> getAttachments() {

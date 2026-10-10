@@ -31,6 +31,8 @@ public class RouterInfoHandler implements RequestHandler {
 
     /**
      * RouterInfoHandler.
+     * @param ctx router context the handler reads version, uptime and transport state from
+     * @param helper resolves the localized strings and version data used in the reply
      */
     public RouterInfoHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;

@@ -36,6 +36,12 @@ import net.i2p.util.Log;
 public class I2PSocketManagerFactory {
 
     /**
+     * Constructor. Managers are always built by the static createManager()
+     * family below, so an instance carries no state.
+     */
+    public I2PSocketManagerFactory() {}
+
+    /**
      * The one and only manager.
      */
     public static final String DEFAULT_MANAGER = "net.i2p.client.streaming.impl.I2PSocketManagerFull";
@@ -361,6 +367,8 @@ public class I2PSocketManagerFactory {
      * @param i2cpPort I2CP port &lt;= 0 to use default, ignored if in router context
      * @param opts Streaming and I2CP options, may be null
      * @return the newly created socket manager, non-null (throws on error)
+     * @throws I2PSessionException if the manager could not be created, including failure to
+     * generate a transient destination or to establish the session with the router
      * @since 0.9.8
      */
     public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream, String i2cpHost,
@@ -389,6 +397,8 @@ public class I2PSocketManagerFactory {
      * @param opts Streaming and I2CP options, may be null
      * @param filter the incoming connection filter providing allow/deny decisions
      * @return the newly created socket manager, non-null (throws on error)
+     * @throws I2PSessionException if the keys for a transient destination could not be
+     * generated, or the manager could not be created with the given connection filter
      * @since 0.9.40
      */
     public static I2PSocketManager createDisconnectedManager(InputStream myPrivateKeyStream,

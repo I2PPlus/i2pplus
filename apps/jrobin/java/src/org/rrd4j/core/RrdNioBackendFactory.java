@@ -168,6 +168,7 @@ public class RrdNioBackendFactory extends RrdFileBackendFactory {
     }
 
     /**
+     * Return the pool that periodically flushes dirty buffers to disk.
      * @return The {@link RrdSyncThreadPool} or null if syncing is disabled
      */
     public RrdSyncThreadPool getSyncThreadPool() {

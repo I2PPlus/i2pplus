@@ -124,7 +124,8 @@ class PeerConnectionOut implements Runnable {
     /**
      * Creates a new outgoing connection handler.
      *
-     * @param peer the peer
+     * @param peer the remote peer this connection sends to, whose state and
+     *        preferences drive the message queue
      * @param dout the output stream to send messages on
      */
     public PeerConnectionOut(Peer peer, DataOutputStream dout) {
@@ -587,6 +588,11 @@ class PeerConnectionOut implements Runnable {
     /**
      * Queue a piece message with a callback to load the data from disk when required.
      *
+     * @param piece the zero-based index of the piece requested
+     * @param begin the offset within that piece where the wanted bytes start
+     * @param length the number of bytes wanted from that offset
+     * @param loader the callback that reads the wanted bytes from storage when
+     *        the message is actually sent
      * @since 0.8.2
      */
     void sendPiece(int piece, int begin, int length, DataLoader loader) {
@@ -728,13 +734,22 @@ class PeerConnectionOut implements Runnable {
         }
     }
 
-    /** Queue an extension message. */
+    /**
+     * Queue an extension message.
+     *
+     * @param id the extension message id from the BEP 10 handshake
+     * @param bytes the extension payload, queued by reference and not copied
+     */
     void sendExtension(int id, byte[] bytes) {
         Message m = new Message(id, bytes);
         addMessage(m);
     }
 
-    /** Queue a port message. */
+    /**
+     * Queue a port message.
+     *
+     * @param port the port the peer is listening on for incoming connections
+     */
     void sendPort(int port) {
         Message m = new Message(Message.PORT, port);
         addMessage(m);
@@ -752,13 +767,24 @@ class PeerConnectionOut implements Runnable {
         addMessage(m);
     }
 
-    /** Queue a reject message. */
+    /**
+     * Queue a reject message.
+     *
+     * @param piece the zero-based index of the rejected piece
+     * @param begin the offset within that piece that was rejected
+     * @param length the number of bytes rejected from that offset
+     */
     void sendReject(int piece, int begin, int length) {
         Message m = new Message(Message.REJECT, piece, begin, length);
         addMessage(m);
     }
 
-    /** Queue an allowed fast message (BEP 6). */
+    /**
+     * Queue an allowed fast message (BEP 6).
+     *
+     * @param piece the zero-based index of the piece the peer may request
+     *        without asking
+     */
     void sendAllowedFast(int piece) {
         Message m = new Message(Message.ALLOWED_FAST, piece);
         addMessage(m);

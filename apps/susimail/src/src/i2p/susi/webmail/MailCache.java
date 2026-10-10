@@ -61,7 +61,8 @@ class MailCache {
     private final boolean _isDrafts;
     private final Log _log;
 
-    /** Includes header, headers are generally 1KB to 1.5 KB,
+    /**
+     * Includes header, headers are generally 1KB to 1.5 KB,
      * and bodies will compress well.
      */
     private static final int FETCH_ALL_SIZE = 32*1024;
@@ -71,6 +72,13 @@ class MailCache {
      * Does NOT load the mails in. Caller MUST call loadFromDisk().
      *
      * @param mailbox non-null for DIR_FOLDER; null otherwise
+     * @param ctx the application context supplying the logger and the disk cache
+     * @param folderName the folder this cache holds, one of the WebMail.DIR_ names
+     * @param host POP3 host, passed through to the disk cache for reconnects
+     * @param port POP3 port, passed through to the disk cache for reconnects
+     * @param user POP3 account name, passed through to the disk cache
+     * @param pass POP3 password, passed through to the disk cache
+     * @throws IOException if the persistent cache directory cannot be created
      */
     MailCache(I2PAppContext ctx, POP3MailBox mailbox, String folderName,
           String host, int port, String user, String pass) throws IOException {
@@ -97,6 +105,8 @@ class MailCache {
     }
 
     /**
+     * The folder key this cache was created under.
+     *
      * @return as passed in
      * @since 0.9.35
      */
@@ -105,6 +115,8 @@ class MailCache {
     }
 
     /**
+     * The folder name after message-bundle translation, "Inbox" for the inbox folder.
+     *
      * @return translation of name passed in
      * @since 0.9.35
      */
@@ -114,6 +126,8 @@ class MailCache {
     }
 
     /**
+     * The sortable view of the UIDLs held in this cache.
+     *
      * @return non-null
      * @since 0.9.35
      */
@@ -125,6 +139,7 @@ class MailCache {
      * For writing a new full mail (NOT headers only)
      * Caller must close.
      * Caller must hold the write lock (see getWriteLock()) for the whole write.
+     * @param uidl the UIDL identifying the mail being written
      * @return the full write buffer
      * @since 0.9.35
      */
@@ -134,8 +149,9 @@ class MailCache {
     }
 
     /**
-     * Lock held while writing a new full mail, serializing draft/sent
-     * writes against each other.
+     * The monitor callers must hold across a full-mail write.
+     *
+     * @return the write lock serializing draft and sent folder writes
      * @since 0.9.71+
      */
     public Object getWriteLock() {return _writeLock;}
@@ -143,6 +159,8 @@ class MailCache {
     /**
      * For writing a new full mail
      * @param buffer as received from getFullBuffer
+     * @param uidl the UIDL identifying the mail that was written
+     * @param success whether the write finished without error; on false the mail is not added
      * @since 0.9.35
      */
     public void writeComplete(String uidl, Buffer buffer, boolean success) {
@@ -162,6 +180,8 @@ class MailCache {
     }
 
     /**
+     * Where attachments for a newly composed draft are written.
+     *
      * @return non-null only for Drafts
      * @since 0.9.35
      */
@@ -171,6 +191,8 @@ class MailCache {
 
     /**
      * Move a mail to another MailCache, neither may be DIR_DRAFTS
+     * @param uidl the UIDL of the mail to move
+     * @param toMC the cache receiving the mail
      * @return success
      * @since 0.9.35
      */
@@ -240,6 +262,7 @@ class MailCache {
      * Threaded. Returns immediately.
      * This will not access the mailbox. Mailbox need not be ready.
      *
+     * @param nml notified when the background load completes; not called if a load is already in progress or already finished
      * @return success false if in progress already and nml will NOT be called back, true if nml will be called back
      * @since 0.9.13
      */
@@ -573,6 +596,7 @@ class MailCache {
      * No success/failure indication is returned.
      * Does not delete from folder.
      *
+     * @param uidl the UIDL of the mail to delete
      * @since 0.9.13
      */
     public void delete(String uidl) {
@@ -585,6 +609,7 @@ class MailCache {
      * No success/failure indication is returned.
      * Does not delete from folder.
      *
+     * @param uidls the UIDLs of the mails to delete
      * @since 0.9.13
      */
     public void delete(Collection<String> uidls) {

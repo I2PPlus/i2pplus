@@ -49,7 +49,7 @@ public final class DSAEngine {
     /**
      * Create a DSA engine for the given context.
      *
-     * @param context the context
+     * @param context the application context, supplying the log, clock and random source
      */
     public DSAEngine(I2PAppContext context) {
         _log = context.logManager().getLog(DSAEngine.class);
@@ -80,6 +80,11 @@ public final class DSAEngine {
     /**
      * Verify using any sig type as of 0.9.12 (DSA only prior to that)
      *
+     * @param signature the signature to verify
+     * @param signedData the data that was signed
+     * @param offset index within signedData of the first signed byte
+     * @param size number of signed bytes to verify, starting at offset
+     * @param verifyingKey the public key to verify with
      * @return true if valid, false otherwise
      */
     public boolean verifySignature(Signature signature, byte[] signedData, int offset, int size, SigningPublicKey verifyingKey) {
@@ -114,6 +119,9 @@ public final class DSAEngine {
     /**
      * Verify using DSA-SHA1 ONLY
      *
+     * @param signature the signature to verify
+     * @param in the data to hash and verify, read to EOF but not closed
+     * @param verifyingKey the public key to verify with
      * @return true if valid, false otherwise
      */
     public boolean verifySignature(Signature signature, InputStream in, SigningPublicKey verifyingKey) {
@@ -123,7 +131,9 @@ public final class DSAEngine {
     /**
      * Verify using DSA-SHA1 ONLY
      *
+     * @param signature the signature to verify
      * @param hash SHA-1 hash, NOT a SHA-256 hash
+     * @param verifyingKey the public key to verify with
      * @return true if valid, false otherwise
      */
     public boolean verifySignature(Signature signature, SHA1Hash hash, SigningPublicKey verifyingKey) {
@@ -134,6 +144,9 @@ public final class DSAEngine {
      * Nonstandard.
      * Used by Syndie.
      *
+     * @param signature the signature to verify
+     * @param hash the pre-computed hash, of the length required by the key's type
+     * @param verifyingKey the public key to verify with
      * @return true if valid, false otherwise
      * @since 0.8.3 (restored, was removed in 0.8.1 and 0.8.2)
      */
@@ -146,7 +159,9 @@ public final class DSAEngine {
      *
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
+     * @param signature the signature to verify
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
+     * @param verifyingKey the public key to verify with
      * @return true if valid, false otherwise
      * @since 0.9.9
      */
@@ -171,6 +186,7 @@ public final class DSAEngine {
      *
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
+     * @param signature the signature to verify
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
      * @param pubKey Java key
      * @return true if valid, false otherwise
@@ -243,6 +259,8 @@ public final class DSAEngine {
      * Sign using any key type.
      * Uses TheCrypto code unless configured to use the java.security libraries.
      *
+     * @param data the data to sign
+     * @param signingKey the private key matching the signature type
      * @return null on error
      */
     public Signature sign(byte[] data, SigningPrivateKey signingKey) {
@@ -252,6 +270,10 @@ public final class DSAEngine {
     /**
      * Sign using any key type as of 0.9.12 (DSA-SHA1 only prior to that)
      *
+     * @param data the data to sign
+     * @param offset index within data of the first byte to sign
+     * @param length number of bytes to sign, starting at offset
+     * @param signingKey the private key matching the signature type
      * @return null on error
      */
     public Signature sign(byte[] data, int offset, int length, SigningPrivateKey signingKey) {
@@ -281,6 +303,8 @@ public final class DSAEngine {
      * Sign using DSA-SHA1 ONLY.
      * Reads the stream until EOF. Does not close the stream.
      *
+     * @param in the data to hash and sign, read to EOF but not closed
+     * @param signingKey the private key matching the signature type
      * @return null on error
      */
     public Signature sign(InputStream in, SigningPrivateKey signingKey) {
@@ -293,6 +317,7 @@ public final class DSAEngine {
      * Sign using DSA-SHA1 ONLY.
      *
      * @param hash SHA-1 hash, NOT a SHA-256 hash
+     * @param signingKey the private key matching the signature type
      * @return null on error
      */
     public Signature sign(SHA1Hash hash, SigningPrivateKey signingKey) {
@@ -304,6 +329,8 @@ public final class DSAEngine {
      * Nonstandard.
      * Used by Syndie.
      *
+     * @param hash the pre-computed hash, of the length required by the key's type
+     * @param signingKey the private key matching the signature type
      * @return null on error
      * @since 0.8.3 (restored, was removed in 0.8.1 and 0.8.2)
      */
@@ -318,6 +345,7 @@ public final class DSAEngine {
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
+     * @param signingKey the private key matching the signature type
      * @return null on error
      * @since 0.9.9
      */
@@ -433,6 +461,7 @@ public final class DSAEngine {
      * Reads the stream until EOF. Does not close the stream.
      * Prefer calculateHash(byte[], int, int) for byte array inputs.
      *
+     * @param in the stream to read to EOF, not closed here
      * @return hash SHA-1 hash, NOT a SHA-256 hash
      */
     public SHA1Hash calculateHash(InputStream in) {
@@ -454,7 +483,7 @@ public final class DSAEngine {
     /**
      * Calculate a SHA-1 hash of the source data.
      *
-     * @param source the source
+     * @param source the data to hash
      * @param offset the offset in the source data
      * @param len the length of data to hash
      * @return the SHA-1 hash
@@ -521,9 +550,9 @@ public final class DSAEngine {
      *
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
+     * @param verifyingKey Java key
      * @return true if valid, false otherwise
      * @throws GeneralSecurityException if algorithm unvailable or on other errors
-     * @param verifyingKey Java key
      * @since 0.9.9
      */
     private boolean altVerifySigRaw(Signature signature, SimpleDataStructure hash, PublicKey pubKey) throws GeneralSecurityException {
@@ -608,7 +637,7 @@ public final class DSAEngine {
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
-     * @return the Signature
+     * @return the signature over the hash, of the private key's type
      * @throws GeneralSecurityException if algorithm unvailable or on other errors
      * @since 0.9.9
      */
@@ -626,7 +655,7 @@ public final class DSAEngine {
      *
      * @param hash SHA1Hash, Hash, Hash384, or Hash512
      * @param type returns a Signature of this type
-     * @return the Signature
+     * @return the signature over the hash, of the type named by algo
      * @throws GeneralSecurityException if algorithm unvailable or on other errors
      * @since 0.9.9
      */
@@ -675,7 +704,7 @@ public final class DSAEngine {
     }
 
     /**
-     * Algorithm name string.
+     * Map a signature type to the raw (prehashed) JCA algorithm name.
      * @return the algorithm name string
      * @since 0.9.9
      */
@@ -690,7 +719,7 @@ public final class DSAEngine {
     }
 
     /**
-     * Algorithm name string.
+     * Map a Java key to the raw (prehashed) JCA algorithm name.
      * @return the algorithm name string
      * @since 0.9.9
      */

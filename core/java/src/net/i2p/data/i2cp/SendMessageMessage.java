@@ -54,6 +54,10 @@ public class SendMessageMessage extends I2CPMessageImpl {
     /**
      * For writing
      *
+     * @param sessID the session the message is to be sent over
+     * @param dest the destination to address the payload to
+     * @param payload the data to deliver to that destination
+     * @param nonce the client's replay nonce, echoed back in the RejectMessage
      * @since 0.9.54
      */
     public SendMessageMessage(SessionId sessID, Destination dest, Payload payload, long nonce) {

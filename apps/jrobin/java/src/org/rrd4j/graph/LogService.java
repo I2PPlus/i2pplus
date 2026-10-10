@@ -9,6 +9,9 @@ import java.util.function.DoubleUnaryOperator;
 class LogService {
     /**
      * Resolve the appropriate logarithmic function for the data range
+     *
+     * @param im the image parameters whose minimum and maximum define the data range
+     * @return the operator mapping a value to its log-scaled y-axis position
      */
 
     static DoubleUnaryOperator resolve(ImageParameters im) {

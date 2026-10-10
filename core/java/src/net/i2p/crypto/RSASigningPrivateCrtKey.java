@@ -35,6 +35,8 @@ final class RSASigningPrivateCrtKey extends SigningPrivateKey {
      * @param pk the Java private CRT key
      * @return the I2P signing private key
      * @throws IllegalArgumentException if data is not correct length
+     * @throws GeneralSecurityException if the modulus bit length matches none of the
+     *         known RSA key sizes
      */
     public static RSASigningPrivateCrtKey fromJavaKey(RSAPrivateCrtKey pk) throws GeneralSecurityException {
         int sz = pk.getModulus().bitLength();

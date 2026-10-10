@@ -278,6 +278,8 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * through 2^numBits-1
      *
      * Caller must synchronize!
+     * @param numBits how many random bits to return, at least 1
+     * @return a value in the range 0 through 2^numBits - 1
      */
     protected int nextBits(int numBits) {
         long rv = 0;

@@ -120,9 +120,9 @@ class RatchetPayload {
  *
  * @param ctx the I2P app context
  * @param cb the payload callback
- * @param payload the payload data
+ * @param payload the frame holding the encoded blocks, read from off for length bytes
  * @param off the offset into the payload
- * @param length the length
+ * @param length the number of payload bytes to scan, from off to the end of the frame
  * @param isHandshake true for handshake messages
  * @return the number of blocks processed
  * @throws IOException on I/O error
@@ -254,7 +254,7 @@ class RatchetPayload {
      *
      * @param payload writes to it starting at off
      * @param off the starting offset
-     * @param blocks the blocks
+     * @param blocks the blocks to write, in order, each with its own header
      * @return the new offset
      */
     public static int writePayload(byte[] payload, int off, List<Block> blocks) {
@@ -283,6 +283,8 @@ class RatchetPayload {
         /**
          * Writes the block header and data to the target.
          *
+         * @param tgt the buffer the 3 byte header and the block data are written into
+         * @param off the offset in tgt where the header starts
          * @return new offset
          */
         public int write(byte[] tgt, int off) {
@@ -533,7 +535,12 @@ class RatchetPayload {
      */
     public static class AckBlock extends Block {
         private byte[] data;
-        /** Builds an ACK block for a single key ID and count. */
+        /**
+         * Builds an ACK block for a single key ID and count.
+         *
+         * @param keyID the ratchet key ID being acknowledged
+         * @param n the message count acknowledged for that key
+         */
         public AckBlock(int keyID, int n) {
             super(BLOCK_ACK);
             data = new byte[4];
@@ -640,7 +647,11 @@ class RatchetPayload {
      */
     public static class PNBlock extends Block {
         private final int pn;
-        /** Builds a packet number block. */
+        /**
+         * Builds a packet number block.
+         *
+         * @param pn the message sequence number this block reports
+         */
         public PNBlock(int pn) {
             super(BLOCK_MSGNUM);
             this.pn = pn;
@@ -660,9 +671,9 @@ class RatchetPayload {
      * Big endian.
      * Same as DataHelper.toLong(target, offset, 4, value) but allows negative value
      *
-     * @param target the target
-     * @param offset the offset
-     * @param value the value
+     * @param target the buffer the 4 big endian bytes are written into
+     * @param offset the index of the first of the 4 bytes in target
+     * @param value the value to encode, negative values included
      * @throws ArrayIndexOutOfBoundsException
      * @since 0.9.46
      */

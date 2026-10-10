@@ -13,6 +13,11 @@ import java.security.spec.RSAKeyGenParameterSpec;
 final class RSAConstants {
 
     /**
+     * Every key spec and constant below is static, so an instance carries nothing.
+     */
+    RSAConstants() {}
+
+    /**
      * Parameter spec.
      * @return the parameter spec
      */

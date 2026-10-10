@@ -18,6 +18,12 @@ import net.i2p.data.DataHelper;
  * @since 0.9.26
  */
 public class CRLEntry {
+    /**
+     * Constructor. An empty entry, ready for the fields to be filled in by the
+     * XML parser or by the caller; the fields are public and may stay null.
+     */
+    public CRLEntry() {}
+
     /** The data payload */
     public String data;
     /** The identifier */

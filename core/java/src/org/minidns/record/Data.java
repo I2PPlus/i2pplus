@@ -24,6 +24,12 @@ import java.util.Arrays;
  * data representation and parsing logic.
  */
 public abstract class Data {
+    /**
+     * Constructor for record types; each subclass sets its own fields.
+     */
+
+    public Data() {}
+
 
     /**
      * The payload type.
@@ -55,7 +61,12 @@ public abstract class Data {
         bytes = baos.toByteArray();
     }
 
-    /** @return the length of the binary representation */
+    /**
+     * Serialize this record, if that has not been done already, and report the
+     * resulting wire size.
+     *
+     * @return the number of bytes this record serializes to
+     */
     public final int length() {
         setBytes();
         return bytes.length;
@@ -83,7 +94,12 @@ public abstract class Data {
         dos.write(bytes);
     }
 
-    /** @return the binary representation as a byte array */
+    /**
+     * Serialize this record, if that has not been done already, and return a copy
+     * of the result so callers cannot mutate the cached bytes.
+     *
+     * @return the binary representation as a byte array
+     */
     public final byte[] toByteArray() {
         setBytes();
         return bytes.clone();

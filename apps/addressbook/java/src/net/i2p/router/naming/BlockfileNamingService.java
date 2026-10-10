@@ -149,6 +149,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * unless the property i2p.naming.blockfile.writeInAppContext is true.
      * Not designed for multiple instantiations or simultaneous use by multiple JVMs.
      *
+     * @param context the application context whose router directory holds hostsdb.blockfile
      * @throws RuntimeException on fatal error
      */
     public BlockfileNamingService(I2PAppContext context) {
@@ -1856,23 +1857,27 @@ public class BlockfileNamingService extends DummyNamingService {
      * and is serialized in that order.
      */
     private static class DestEntry {
-        /** May be null.
+        /**
+         * May be null.
          * If more than one dest, contains the first props.
          */
         public Properties props;
 
-        /** May not be null.
+        /**
+         * May not be null.
          * If more than one dest, contains the first dest.
          */
         public Destination dest;
 
-        /** May be null - v4 only - same size as destList - may contain null entries
+        /**
+         * May be null - v4 only - same size as destList - may contain null entries
          * Only non-null if more than one dest.
          * First entry always equal to props.
          */
         public List<Properties> propsList;
 
-        /** May be null - v4 only - same size as propsList
+        /**
+         * May be null - v4 only - same size as propsList
          * Only non-null if more than one dest.
          * First entry always equal to dest.
          */
@@ -2049,9 +2054,9 @@ public class BlockfileNamingService extends DummyNamingService {
      * Throws DataFormatException on duplicate key
      *
      * @param in stream to read the mapping from
+     * @return a Properties
      * @throws DataFormatException if the format is invalid
      * @throws IOException if there is a problem reading the data
-     * @return a Properties
      * @since 0.9.26
      */
     public static Properties readProperties(ByteArrayInputStream in)
@@ -2113,10 +2118,10 @@ public class BlockfileNamingService extends DummyNamingService {
      * Format is: one-byte length + data, or 0xff + two-byte length + data
      *
      * @param in stream to read from
+     * @return UTF-8 string
      * @throws DataFormatException if the stream doesn't contain a validly formatted string
      * @throws EOFException if there aren't enough bytes to read the string
      * @throws IOException if there is an IO error reading the string
-     * @return UTF-8 string
      */
     private static String readLongString(ByteArrayInputStream in) throws DataFormatException, IOException {
         int size = in.read();
@@ -2156,6 +2161,8 @@ public class BlockfileNamingService extends DummyNamingService {
     /**
      * BlockfileNamingService [force]
      * force = force writable
+     *
+     * @param args when the first element is "force" the database is opened writable
      */
     public static void main(String[] args) {
         Properties ctxProps = new Properties();

@@ -48,8 +48,17 @@ abstract class FloodSearchJob extends JobImpl {
     protected boolean _success;
 
     /**
+     * Prepares a flood search for one key: records the target, the callbacks and the lease-set
+     * flag, then derives the deadline from the requested timeout. The timeout is halved for the
+     * flood phase so an iterative search can still start after it; a timeout of 0 or 1 ms divides
+     * down to zero and is left alone rather than being shortened to nothing.
+     * @param ctx router context supplying the clock and log manager
+     * @param facade floodfill database the key is looked up in
+     * @param key the hash being searched for
      * @param onFind may be null
      * @param onFailed may be null
+     * @param timeoutMs search timeout in ms, halved for a flood lookup
+     * @param isLease true to search for a lease set rather than a router info
      */
     public FloodSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key, Job onFind, Job onFailed, int timeoutMs, boolean isLease) {
         super(ctx);
@@ -68,7 +77,11 @@ abstract class FloodSearchJob extends JobImpl {
         _created = System.currentTimeMillis();
     }
 
-    /** System time, NOT context time */
+    /**
+     * System time, NOT context time
+     *
+     * @return wall-clock creation time in milliseconds, used for statistics only
+     */
     public long getCreated() { return _created; }
 
     /**
@@ -97,7 +110,11 @@ abstract class FloodSearchJob extends JobImpl {
             getContext().jobQueue().addJob(onFailed);
     }
 
-    /** Expiration time from the context clock. */
+    /**
+     * Expiration time from the context clock.
+     *
+     * @return context-clock time in ms at which this search times out
+     */
     public long getExpiration() { return _expiration; }
     /** Max simultaneous flood lookups before fallback. */
     protected static final int CONCURRENT_SEARCHES = SystemVersion.isSlow() ? 3 : 5;

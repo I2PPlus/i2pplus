@@ -9,7 +9,7 @@ import java.net.Socket;
  * Class aggregating operations that can be performed for
  * sending/receiving/reading Protocol messages
  *
- * */
+ */
 
 public class Protocol {
     private final InputStream _ctlInStream;
@@ -170,7 +170,12 @@ public class Protocol {
         } catch (IOException e) { /* ignored */ }
     }
 
-    /** @param jsonSupport whether to enable JSON support */
+    /**
+     * Choose whether parameter maps are sent as JSON objects or as
+     * length-prefixed base64 blobs. Defaults to true.
+     *
+     * @param jsonSupport whether to enable JSON support
+     */
     public void setJsonSupport(boolean jsonSupport) {this.jsonSupport = jsonSupport;}
 
 }

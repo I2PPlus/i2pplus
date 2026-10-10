@@ -28,6 +28,11 @@ import net.i2p.router.RouterContext;
 public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     private final Map<Hash, RouterInfo> _routers;
     private final RouterContext _context;
+    /**
+     * Create an empty in-memory database; nothing is read from disk.
+     *
+     * @param ctx the router context, kept for callers that need the log or config
+     */
     public DummyNetworkDatabaseFacade(RouterContext ctx) {
         _routers = Collections.synchronizedMap(new HashMap<>());
         _context = ctx;

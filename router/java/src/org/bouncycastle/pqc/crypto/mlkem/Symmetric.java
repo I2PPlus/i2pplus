@@ -10,27 +10,66 @@ import org.bouncycastle.crypto.digests.SHAKEDigest;
 abstract class Symmetric
 {
 
+    /** Bytes produced per call to the XOF squeeze, i.e. the SHAKE rate. */
     final int xofBlockBytes;
 
-    /** Hash h operation. */
+    /**
+     * Hash h operation, the spec's H applied to a 64-byte input.
+     *
+     * @param out the buffer to write the 32-byte hash into
+     * @param in the 64 bytes to hash
+     * @param outOffset the offset into out at which to write the hash
+     */
     abstract void hash_h(byte[] out, byte[] in, int outOffset);
 
-    /** Hash g operation. */
+    /**
+     * Hash g operation, the spec's G applied to a 128-byte input.
+     *
+     * @param out the buffer to write the 64-byte hash into
+     * @param in the 128 bytes to hash
+     */
     abstract void hash_g(byte[] out, byte[] in);
 
-    /** XOF absorb operation. */
+    /**
+     * XOF absorb operation, seeding the extendable output function.
+     *
+     * @param seed the 32-byte seed to absorb
+     * @param x the low public-sample byte to absorb after the seed
+     * @param y the high public-sample byte to absorb after x
+     */
     abstract void xofAbsorb(byte[] seed, byte x, byte y);
 
-    /** XOF squeeze operation. */
+    /**
+     * XOF squeeze operation, emitting whole rate-sized blocks at a time.
+     *
+     * @param out the buffer to write the expanded bytes into
+     * @param outOffset the offset into out at which to write
+     * @param outLen the number of bytes to write, a multiple of xofBlockBytes
+     */
     abstract void xofSqueezeBlocks(byte[] out, int outOffset, int outLen);
 
-    /** PRF operation. */
+    /**
+     * PRF operation, producing out.length bytes keyed by key and nonce.
+     *
+     * @param out the buffer to write the pseudorandom bytes into
+     * @param key the 32-byte pseudorandom key
+     * @param nonce the single-byte nonce distinguishing one output from another
+     */
     abstract void prf(byte[] out, byte[] key, byte nonce);
 
-    /** KDF operation. */
+    /**
+     * KDF operation, deriving out.length bytes from in.
+     *
+     * @param out the buffer to write the derived bytes into
+     * @param in the input keying material
+     */
     abstract void kdf(byte[] out, byte[] in);
 
-    /** Create symmetric. */
+    /**
+     * Create a symmetric primitive set with the given XOF rate.
+     *
+     * @param blockBytes the XOF rate in bytes, the granularity of each squeeze
+     */
     Symmetric(int blockBytes)
     {
         this.xofBlockBytes = blockBytes;

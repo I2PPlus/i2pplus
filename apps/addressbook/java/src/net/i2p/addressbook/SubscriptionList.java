@@ -38,6 +38,10 @@ class SubscriptionList implements Iterable<AddressBook> {
      * @param lastModifiedFile
      *            A file containg the last-modified headers used for conditional
      *            GET. The file is in the format "url=leastmodified".
+     * @param lastFetchedFile
+     *            A file containing the last-fetched timestamps used to enforce the
+     *            minimum delay between fetches. The file is in the format
+     *            "url=lastfetched".
      * @param delay the minimum delay since last fetched for the iterator to actually fetch
      * @param defaultSubs default subscription file
      * @param proxyHost proxy hostname

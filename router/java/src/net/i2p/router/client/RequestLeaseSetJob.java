@@ -64,6 +64,13 @@ class RequestLeaseSetJob extends JobImpl {
      * @since 0.9.71+
      */
     static final long DEFAULT_SEND_WAIT = 1000;
+    /**
+     * Create the job.
+     *
+     * @param ctx the router context
+     * @param runner the client connection to answer
+     * @param state the leases the client asked for
+     */
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
         _log = ctx.logManager().getLog(RequestLeaseSetJob.class);

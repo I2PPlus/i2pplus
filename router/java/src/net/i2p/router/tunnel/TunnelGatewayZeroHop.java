@@ -20,6 +20,8 @@ class TunnelGatewayZeroHop extends TunnelGateway {
 
     /**
      * Create a zero-hop gateway for the specified tunnel.
+     * @param context the router context passed to the superclass and to the message distributor
+     * @param config the tunnel's configuration, which determines the direction and destination
      */
     public TunnelGatewayZeroHop(RouterContext context, TunnelCreatorConfig config) {
         super(context, null, null, null);

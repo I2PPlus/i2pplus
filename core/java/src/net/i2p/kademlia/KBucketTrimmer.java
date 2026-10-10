@@ -17,6 +17,7 @@ public interface KBucketTrimmer<K extends SimpleDataStructure> {
      * To always discard a newer entry, always return false.
      *
      * @param kbucket the kbucket that is now too big
+     * @param toAdd the entry the bucket is about to accept
      * @return true to actually add the entry.
      */
     public boolean trim(KBucket<K> kbucket, K toAdd);

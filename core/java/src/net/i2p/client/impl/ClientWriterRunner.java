@@ -32,6 +32,8 @@ class ClientWriterRunner implements Runnable {
 
     /**
      *  As of 0.9.11 does not start the thread, caller must call startWriting()
+     * @param out stream the I2CP messages are written to, buffered internally
+     * @param session session to poll for closure and to report write failures to
      */
     public ClientWriterRunner(OutputStream out, I2PSessionImpl session) {
         _out = new BufferedOutputStream(out);
@@ -40,6 +42,7 @@ class ClientWriterRunner implements Runnable {
     }
 
     /**
+     *  Starts the daemon thread that drains the queue and writes to the session's output stream.
      *  @since 0.9.11
      */
     public void startWriting() {
@@ -51,6 +54,7 @@ class ClientWriterRunner implements Runnable {
      * Add this message to the writer's queue.
      * Blocking if queue is full.
      *
+     * @param msg the message to queue for writing to the session's output stream
      * @throws I2PSessionException if we wait too long or are interrupted
      */
     public void addMessage(I2CPMessage msg) throws I2PSessionException {

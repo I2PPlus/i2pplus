@@ -47,9 +47,11 @@ import net.i2p.util.Log;
  */
 class RateSampleDelivery {
 
-    /** Pending samples retained before the oldest is evicted. Sized to cover a
+    /**
+     * Pending samples retained before the oldest is evicted. Sized to cover a
      * few coalesce cycles of the whole rate table at once; the graph listeners
-     * are the only consumers in practice. */
+     * are the only consumers in practice.
+     */
     static final int DEFAULT_CAPACITY = 4096;
 
     /** How long {@link #shutdown()} waits for the consumer before abandoning
@@ -97,6 +99,8 @@ class RateSampleDelivery {
     private final Thread _thread;
 
     /**
+     * Create a delivery with the default pending-sample capacity.
+     *
      * @param context router context, used for the logger; may be null
      */
     RateSampleDelivery(I2PAppContext context) {
@@ -104,6 +108,8 @@ class RateSampleDelivery {
     }
 
     /**
+     * Create a delivery that retains at most the given number of pending samples.
+     *
      * @param context router context, used for the logger; may be null
      * @param capacity pending samples to retain before the oldest is evicted
      */
@@ -229,12 +235,20 @@ class RateSampleDelivery {
         return _superseded.get();
     }
 
-    /** Samples handed to a listener. */
+    /**
+     * Samples handed to a listener.
+     *
+     * @return the running count of samples passed to the listener so far
+     */
     long getDelivered() {
         return _delivered.get();
     }
 
-    /** Samples waiting to be delivered. */
+    /**
+     * Samples waiting to be delivered.
+     *
+     * @return the number of samples queued for the consumer to deliver next
+     */
     int getPending() {
         return _queue.size();
     }
@@ -261,7 +275,12 @@ class RateSampleDelivery {
         return age > 0 ? age : 0;
     }
 
-    /** True once {@link #shutdown()} has been called. */
+    /**
+     * True once {@link #shutdown()} has been called.
+     *
+     * @return true after {@link #shutdown()} has begun tearing the consumer down,
+     *         false while the delivery thread is still accepting samples
+     */
     boolean isStopped() {
         return !_running.get();
     }

@@ -52,6 +52,10 @@ public final class ElGamalEngine {
      * appropriate application context itself.
      *
      * Starts the YK precalc thread if context is RouterContext or Android.
+     *
+     * @param context application context supplying the log manager and the YK
+                   generator; a RouterContext or Android context also starts
+                   the YK precalc thread
      */
     public ElGamalEngine(I2PAppContext context) {
         _context = context;
@@ -85,8 +89,11 @@ public final class ElGamalEngine {
         return _ykgen.getNextYK();
     }
 
-    /** Encrypt the data to the public key.
+    /**
+     * Encrypt the data to the public key.
      *
+     * @param data data to encrypt, must be 222 bytes or less
+     * @param publicKey public key encrypt to
      * @return encrypted data, will be exactly 514 bytes long
      * Contains the two-part encrypted data starting at bytes 0 and 257.
      * If the encrypted parts are smaller than 257 bytes, they will be
@@ -94,11 +101,24 @@ public final class ElGamalEngine {
      * The parts appear to always be 256 bytes or less, in other words,
      * bytes 0 and 257 are always zero.
      *
-     * @param data data to encrypt, must be 222 bytes or less
-     * @param publicKey public key encrypt to
-     * As the encrypted data may contain a substantial number of zeros if the
      * cleartext is smaller than 222 bytes, it is recommended that the caller pad
      * the cleartext to 222 bytes with random data.
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     * As the encrypted data may contain a substantial number of zeros if the
      */
     public byte[] encrypt(byte[] data, PublicKey publicKey) {
         if ((data == null) || (data.length > ELG_CLEARTEXT_LENGTH)) throw new IllegalArgumentException("Data to encrypt must be <= 222 bytes");
@@ -156,7 +176,8 @@ public final class ElGamalEngine {
         return out;
     }
 
-    /** Decrypt the data
+    /**
+     * Decrypt the data
      *
      * @param encrypted encrypted data, must be exactly 514 bytes
      * Contains the two-part encrypted data starting at bytes 0 and 257.

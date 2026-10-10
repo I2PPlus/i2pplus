@@ -43,6 +43,9 @@ class RefreshRoutersJob extends JobImpl {
 
     /**
      * RefreshRoutersJob.
+     *
+     * @param ctx the router context
+     * @param facade the network database the job refetches router infos through
      */
     public RefreshRoutersJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);

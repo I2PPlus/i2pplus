@@ -21,6 +21,9 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     /**
      * ShortTunnelBuildReplyMessage.
+     *
+     * @param context the context owning the reply's random source and clock
+     * @param records number of short build records to preallocate slots for
      */
     public ShortTunnelBuildReplyMessage(I2PAppContext context, int records) {
         super(context, records);

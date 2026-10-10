@@ -26,6 +26,9 @@ public class
 JLabel
 	extends Component
 {
+	/**
+	 * Create an empty label, maintaining API compatibility.
+	 */
 	public
 	JLabel()
 	{

@@ -14,10 +14,21 @@ class RrdLong<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
     private long cache;
     private boolean cached = false;
 
+    /**
+     * Create a long primitive, optionally flagged as constant.
+     *
+     * @param updater the updater that owns this primitive
+     * @param isConstant true to mark the value as constant, so the backend may skip storing it
+     */
     RrdLong(RrdUpdater<U> updater, boolean isConstant) {
         super(updater, RrdPrimitive.RRD_LONG, isConstant);
     }
 
+    /**
+     * Create a long primitive that is not flagged as constant.
+     *
+     * @param updater the updater that owns this primitive
+     */
     RrdLong(RrdUpdater<U> updater) {
         this(updater, false);
     }

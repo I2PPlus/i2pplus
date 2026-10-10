@@ -20,6 +20,12 @@ import java.io.InputStream;
  */
 public class I2CPMessageHandler {
     /**
+     * Constructor. Messages are read and written by the static helpers below
+     * against a stream they are handed, so an instance carries no state.
+     */
+    public I2CPMessageHandler() {}
+
+    /**
      * This is huge. Mainly to catch a completly bogus response, possibly not an I2CP socket.
      *
      * @since 0.9.11

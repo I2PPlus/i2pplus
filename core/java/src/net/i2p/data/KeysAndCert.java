@@ -72,6 +72,12 @@ import java.util.Arrays;
  * @since 0.8.2
  */
 public class KeysAndCert extends DataStructureImpl {
+    /**
+     * Constructor. An empty key and certificate set, ready for readBytes() or for
+     * the subclasses to populate field by field.
+     */
+    public KeysAndCert() {}
+
     /** Public encryption key. */
     protected PublicKey _publicKey;
     /** Public signing key. */
@@ -119,6 +125,7 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Certificate to set.
      *
+     * @param cert the certificate to store, which also supplies the signature and encryption types
      * @throws IllegalStateException if was already set
      */
     public void setCertificate(Certificate cert) {
@@ -189,6 +196,7 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Public key to set.
      *
+     * @param key the public key to store
      * @throws IllegalStateException if was already set
      */
     public void setPublicKey(PublicKey key) {
@@ -208,6 +216,7 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Signing public key to set.
      *
+     * @param key the signing public key to store
      * @throws IllegalStateException if was already set
      */
     public void setSigningPublicKey(SigningPublicKey key) {
@@ -235,6 +244,7 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Padding bytes to set.
      *
+     * @param padding the padding to store, whose length must be 32 or a multiple of 32 for {@link #isCompressible()} to become true
      * @throws IllegalStateException if was already set
      * @since 0.9.12
      */
@@ -287,6 +297,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Combines two padding arrays.
      *
+     * @param pad1 the first padding array, whose bytes lead the result
+     * @param pad2 the second padding array, whose bytes follow those of pad1
      * @return null if both are null
      * @since 0.9.42
      */
@@ -326,6 +338,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * For Destination.writeBytes()
      *
+     * @param target the buffer receiving the padding
+     * @param off the offset in target at which to start writing
      * @return the new offset
      * @since 0.9.62
      */
@@ -439,8 +453,8 @@ public class KeysAndCert extends DataStructureImpl {
      * Throws IllegalStateException if keys and cert are not initialized,
      * as of 0.9.12. Prior to that, returned null.
      *
-     * @throws IllegalStateException if keys and cert are not initialized
      * @return the hash
+     * @throws IllegalStateException if keys and cert are not initialized
      */
     public Hash getHash() {
         if (__calculatedHash != null) return __calculatedHash;

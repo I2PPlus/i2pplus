@@ -22,7 +22,7 @@ import java.util.Properties;
  */
 public class HostReplyMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * The I2CP message type number for this message.
      */
     public static final int MESSAGE_TYPE = 39;
 
@@ -33,7 +33,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     private Properties _options;
 
     /**
-     * RESULT_SUCCESS.
+     * The reply succeeded and the destination was accepted.
      */
     public static final int RESULT_SUCCESS = 0;
 
@@ -67,15 +67,23 @@ public class HostReplyMessage extends I2CPMessageImpl {
      * @since 0.9.41
      */
     public static final int RESULT_DECRYPTION_FAILURE = 5;
-    /** @since 0.9.69 proposal 167 */
+    /**
+     * LeaseSet lookup failure result code.
+     *
+     * @since 0.9.69 proposal 167
+     */
     public static final int RESULT_LEASESET_LOOKUP_FAILURE = 6;
-    /** @since 0.9.69 proposal 167 */
+    /**
+     * Unsupported lookup type result code.
+     *
+     * @since 0.9.69 proposal 167
+     */
     public static final int RESULT_LOOKUP_TYPE_UNSUPPORTED = 7;
 
     private static final long MAX_INT = (1L << 32) - 1;
 
     /**
-     * HostReplyMessage.
+     * Create an empty reply to be filled in by the reader.
      */
     public HostReplyMessage() {}
 
@@ -142,7 +150,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Gets the request ID.
+     * The ID of the request this message answers.
      *
      * @return 0 to 2**32 - 1
      */
@@ -151,7 +159,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Gets the result code.
+     * Why the host accepted or rejected the request.
      *
      * @return 0 on success, 1-255 on failure
      */
@@ -160,7 +168,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Gets the destination.
+     * The destination the host accepted, which the client now owns.
      *
      * @return non-null only if result code is zero
      */

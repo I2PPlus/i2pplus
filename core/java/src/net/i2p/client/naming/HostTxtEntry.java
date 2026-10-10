@@ -120,7 +120,7 @@ public class HostTxtEntry {
     }
 
     /**
-     * Return the hostname.
+     * The hostname mapped by this entry, or null for a 'remove' entry.
      *
      * @return the hostname
      */
@@ -407,6 +407,9 @@ public class HostTxtEntry {
     /**
      * Sign and set the "sig" property
      * Must have been constructed with non-null properties.
+     *
+     * @param spk the signing key the entry's destination is signed with, so a
+     *        receiver can tell the entry was issued by the destination itself
      */
     public void sign(SigningPrivateKey spk) {
         signIt(spk, PROP_SIG);
@@ -415,6 +418,10 @@ public class HostTxtEntry {
     /**
      * Sign and set the "oldsig" property
      * Must have been constructed with non-null properties.
+     *
+     * @param spk the signing key used for the "oldsig" signature, which covers
+     *        the entry as previously published and lets the server tell an
+     *        unchanged entry from one that has since been replaced
      */
     public void signInner(SigningPrivateKey spk) {
         signIt(spk, PROP_OLDSIG);
@@ -423,6 +430,9 @@ public class HostTxtEntry {
     /**
      * Sign as a "remove" line #!dest=dest#name=name#k1=v1#sig=sig...]
      * Must have been constructed with non-null properties.
+     *
+     * @param spk the signing key the removal line is signed with, identifying
+     *        the key that published the entry being withdrawn
      */
     public void signRemove(SigningPrivateKey spk) {
         if (props == null) throw new IllegalStateException();

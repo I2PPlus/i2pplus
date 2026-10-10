@@ -29,6 +29,8 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
 
     /**
      * Create a delivery status message
+     * @param context the app context supplying the log, the clock that stamps the
+                             expiry, and the random source that mints message ids
      */
     public DeliveryStatusMessage(I2PAppContext context) {
         super(context);

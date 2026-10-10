@@ -24,6 +24,12 @@ import java.util.regex.Pattern;
 public class InetAddressUtil {
 
     /**
+     * Constructor. Each helper below parses or formats the address it is handed,
+     * so an instance carries no state.
+     */
+    public InetAddressUtil() {}
+
+    /**
      * Creates an Inet4Address from the given CharSequence.
      *
      * @param cs the CharSequence containing the IPv4 address

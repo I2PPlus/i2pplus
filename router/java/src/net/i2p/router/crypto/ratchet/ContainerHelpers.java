@@ -8,7 +8,14 @@ class ContainerHelpers {
 
     private ContainerHelpers() {}
 
-    /** This is Arrays.binarySearch(), but doesn't do any argument validation. */
+    /**
+     * This is Arrays.binarySearch(), but doesn't do any argument validation.
+     *
+     * @param array the sorted array; only the first size entries are examined
+     * @param size how many leading elements of array are sorted and searchable
+     * @param value the character to look for
+     * @return the index of value, or -(insertion point) - 1 when it is absent
+     */
     static int binarySearch(char[] array, int size, char value) {
         int lo = 0;
         int hi = size - 1;

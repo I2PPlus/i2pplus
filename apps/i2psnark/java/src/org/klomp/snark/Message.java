@@ -134,6 +134,7 @@ class Message {
     /**
      * For types KEEP_ALIVE, CHOKE, UNCHOKE, INTERESTED, UNINTERESTED, HAVE_ALL, HAVE_NONE
      *
+     * @param type the message type
      * @since 0.9.32
      */
     Message(byte type) {
@@ -143,6 +144,8 @@ class Message {
     /**
      * For types HAVE, PORT, SUGGEST, ALLOWED_FAST
      *
+     * @param type the message type
+     * @param piece the zero-based index of the piece the message refers to
      * @since 0.9.32
      */
     Message(byte type, int piece) {
@@ -152,6 +155,10 @@ class Message {
     /**
      * For types REQUEST, REJECT, CANCEL
      *
+     * @param type the message type
+     * @param piece the zero-based index of the piece requested, rejected or cancelled
+     * @param begin the offset within the piece, in bytes
+     * @param length the number of bytes requested, rejected or cancelled
      * @since 0.9.32
      */
     Message(byte type, int piece, int begin, int length) {
@@ -161,6 +168,7 @@ class Message {
     /**
      * For type BITFIELD
      *
+     * @param data the encoded bitfield, sent as the message payload
      * @since 0.9.32
      */
     Message(byte[] data) {
@@ -170,6 +178,8 @@ class Message {
     /**
      * For type EXTENSION
      *
+     * @param id the extended message id carried in the extension header
+     * @param data the extension payload
      * @since 0.9.32
      */
     Message(int id, byte[] data) {
@@ -179,6 +189,10 @@ class Message {
     /**
      * For type PIECE with deferred data
      *
+     * @param piece the zero-based index of the piece being sent
+     * @param begin the offset within the piece where the data starts, in bytes
+     * @param length the number of bytes of piece data to send
+     * @param loader the loader that supplies the piece data when it is sent
      * @since 0.9.32
      */
     Message(int piece, int begin, int length, DataLoader loader) {

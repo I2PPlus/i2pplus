@@ -22,7 +22,9 @@ public abstract class LimitOutputStream extends FilterOutputStream {
 
     /** Single-byte buffer for the write(int) method. */
     private final byte[] _buf1;
+    /** Invoked once by setDone() when the subclass has finished writing. */
     protected final DoneCallback _callback;
+    /** True once setDone() has run, so the callback cannot fire twice. */
     protected boolean _isDone;
 
     /** Callback interface for notification when a limited output stream completes */
@@ -32,6 +34,8 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     }
 
     /**
+     * Creates a limiting stream wrapping the given target stream.
+     * @param out the stream writes are forwarded to
      * @param done non-null
      */
     public LimitOutputStream(OutputStream out, DoneCallback done) {
@@ -60,12 +64,15 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     }
 
     /**
+     * Whether setDone() has already run, so the done callback cannot fire twice.
      * @return whether done
      */
     protected boolean isDone() { return _isDone; }
 
     /**
      * flush(), call the callback, and set _isDone
+     *
+     * @throws IOException if the wrapped stream cannot be flushed
      */
     protected void setDone() throws IOException {
         if (_isDone)

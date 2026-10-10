@@ -88,6 +88,8 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      * SessionConfig.
+     *
+     * @param dest the destination this session connects to, or null if not chosen yet
      */
     public SessionConfig(Destination dest) {
         _destination = dest;
@@ -115,6 +117,8 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      * Creation date for this session.
+     *
+     * @param date the time this session was authorized, used to reject replays
      */
     public void setCreationDate(Date date) {
         _creationDate = date;
@@ -155,6 +159,8 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      * Signature for this session authorization.
+     *
+     * @param sig the signature authenticating this session authorization
      */
     public void setSignature(Signature sig) {
         _signature = sig;
@@ -166,6 +172,9 @@ public class SessionConfig extends DataStructureImpl {
      * Must be called AFTER setOptions(). Will throw ISE otherwise.
      * Side effect - modifies options.
      *
+     * @param expires expiration of the offline signature, in milliseconds since the epoch
+     * @param transientSPK the transient signing key the offline signature covers
+     * @param offlineSig the signature over the offline signing data
      * @throws IllegalStateException if options are not set
      * @since 0.9.38
      */

@@ -54,7 +54,8 @@ public class MetaNamingService extends DummyNamingService {
     /**
      * Create a new meta naming service with the specified services.
      *
-     * @param context context
+     * @param context the app context every wrapped naming service reads its
+     *        configuration from
      * @param services if non-null, services to be added. If null, this will only handle b32 and b64,
      * until addNamingService() is called later.
      *

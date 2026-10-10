@@ -64,7 +64,8 @@ public abstract class NamingService {
     /**
      * Look up a hostname.
      *
-     * @param hostname the hostname
+     * @param hostname the host name to resolve, which may be a hostname,
+                   an IPv4 address, or a Base 32 address
      * @return the Destination for this hostname, or
      * <code>null</code> if name is unknown.
      */
@@ -401,7 +402,7 @@ public abstract class NamingService {
      * Overwrites old entry if it exists.
      * See also putIfAbsent() and update().
      *
-     * @param hostname the hostname
+     * @param hostname the host name to map to the destination, overwriting any existing entry
      * @param d the destination for the hostname
      * @return success
      * @since 0.8.7
@@ -415,7 +416,7 @@ public abstract class NamingService {
      * Overwrites old entry if it exists.
      * See also putIfAbsent() and update().
      *
-     * @param hostname the hostname
+     * @param hostname the host name to map to the destination, overwriting any existing entry
      * @param d the destination for the hostname
      * @param options NamingService-specific, can be null
      * @return success
@@ -430,7 +431,7 @@ public abstract class NamingService {
      * Fails if entry previously exists.
      * See also put() and update().
      *
-     * @param hostname the hostname
+     * @param hostname the host name to map to the destination, which must not already be present
      * @param d the destination for the hostname
      * @return success
      * @since 0.8.7
@@ -444,7 +445,7 @@ public abstract class NamingService {
      * Fails if entry previously exists.
      * See also put() and update().
      *
-     * @param hostname the hostname
+     * @param hostname the host name to map to the destination, which must not already be present
      * @param d the destination for the hostname
      * @param options NamingService-specific, can be null
      * @return success
@@ -459,7 +460,7 @@ public abstract class NamingService {
      * This implementation calls put() for each entry.
      * Subclasses may override if a more efficient implementation is available.
      *
-     * @param entries the entries
+     * @param entries host name to Destination mappings to add, one put() per entry
      * @param options NamingService-specific, can be null
      * @return total success, or false if any put failed
      * @since 0.8.7
@@ -477,7 +478,7 @@ public abstract class NamingService {
      * Warning - unimplemented in any subclass.
      * This implementation returns false.
      *
-     * @param hostname the hostname
+     * @param hostname the host name whose existing entry is to be updated
      * @param d may be null if only options are changing
      * @param options NamingService-specific, can be null
      * @return success
@@ -490,7 +491,7 @@ public abstract class NamingService {
     /**
      * Delete the entry.
      *
-     * @param hostname the hostname
+     * @param hostname the host name whose entry is to be deleted
      * @return true if removed successfully, false on error or if it did not exist
      * @since 0.8.7
      */
@@ -501,7 +502,7 @@ public abstract class NamingService {
     /**
      * Delete the entry.
      *
-     * @param hostname the hostname
+     * @param hostname the host name whose entry is to be deleted
      * @param options NamingService-specific, can be null
      * @return true if removed successfully, false on error or if it did not exist
      * @since 0.8.7
@@ -567,7 +568,8 @@ public abstract class NamingService {
      * Note that whether this (and lookup(hostname)) resolve Base 32 addresses
      * in the form {52 chars}.b32.i2p is NamingService-specific.
      *
-     * @param hostname the hostname
+     * @param hostname the host name to resolve, which may be a hostname,
+                   an IPv4 address, or a Base 32 address
      * @param lookupOptions input parameter, NamingService-specific, can be null
      * @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
      * @return dest or null
@@ -650,7 +652,7 @@ public abstract class NamingService {
      * whether this does resolve Base 32 addresses
      * in the form {52 chars}.b32.i2p is NamingService-specific.
      *
-     * @param hostname the hostname
+     * @param hostname the host name to resolve, for which every known destination is returned
      * @return non-empty List of Destinations, or null if nothing found
      * @since 0.9.26
      */
@@ -678,7 +680,7 @@ public abstract class NamingService {
      * This implementation simply calls lookup().
      * Subclasses implementing multiple destinations per hostname should override.
      *
-     * @param hostname the hostname
+     * @param hostname the host name to resolve, for which every known destination is returned
      * @param lookupOptions input parameter, NamingService-specific, may be null
      * @param storedOptions output parameter, NamingService-specific, any stored properties will be added if non-null
      * @return non-empty List of Destinations, or null if nothing found
@@ -700,7 +702,7 @@ public abstract class NamingService {
     /**
      * Add a Destination to an existing hostname's entry in the addressbook.
      *
-     * @param hostname the hostname
+     * @param hostname the host name whose existing entry is to be extended
      * @param d the destination to add
      * @return success
      * @since 0.9.26
@@ -714,7 +716,7 @@ public abstract class NamingService {
      * This implementation simply calls putIfAbsent().
      * Subclasses implementing multiple destinations per hostname should override.
      *
-     * @param hostname the hostname
+     * @param hostname the host name whose existing entry is to be extended
      * @param d the destination to add
      * @param options NamingService-specific, may be null
      * @return success
@@ -731,7 +733,7 @@ public abstract class NamingService {
      * If aditional Destinations remain, it only removes the
      * specified Destination from the entry.
      *
-     * @param hostname the hostname
+     * @param hostname the host name whose entry holds the destination to remove
      * @param d the destination that must be present
      * @return true if entry containing d was successfully removed.
      * @since 0.9.26
@@ -752,7 +754,7 @@ public abstract class NamingService {
      * or with more efficient implementations, should override.
      * Fails if entry previously exists.
      *
-     * @param hostname the hostname
+     * @param hostname the host name whose entry holds the destination to remove
      * @param d the destination that must be present
      * @param options NamingService-specific, may be null
      * @return true if entry containing d was successfully removed.

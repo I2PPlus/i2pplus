@@ -24,6 +24,14 @@ import java.net.URL;
  */
 public class JApplet extends JFrame{
 
+	/**
+	 * Constructor. Every method below is a stub returning null or doing nothing,
+	 * so a bare instance is already a complete headless applet.
+	 */
+	public JApplet()
+	{
+	}
+
     /**
      * Code base.
      * @return the code base

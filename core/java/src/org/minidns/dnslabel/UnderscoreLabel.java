@@ -16,12 +16,22 @@ package org.minidns.dnslabel;
  */
 public final class UnderscoreLabel extends NonLdhLabel {
 
-    /** Create label */
+    /**
+     * Create label
+     *
+     * @param label the label text, which must start with an underscore
+     */
     UnderscoreLabel(String label) {
         super(label);
     }
 
-    /** @return true if label starts with underscore */
+    /**
+     * Test for the DNS label form service records use (for example _tcp, _sip and
+     * _xmpp-client), which is any label whose first character is an underscore.
+     *
+     * @param label the label to test
+     * @return true if label starts with underscore
+     */
     static boolean isUnderscoreLabelInternal(String label) {
         return label.charAt(0) == '_';
     }

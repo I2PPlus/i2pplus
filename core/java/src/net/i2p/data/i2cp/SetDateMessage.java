@@ -60,6 +60,8 @@ public class SetDateMessage extends I2CPMessageImpl {
 
     /**
      * Current router date.
+     *
+     * @param date the router's current date, carried in milliseconds since the epoch
      */
     public void setDate(Date date) {
         _date = date;

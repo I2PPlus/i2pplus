@@ -16,6 +16,9 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
     private final Map<I2PSocketAddress, SOCKSHeader> cache;
 
     /**
+     * Hold the header cache that maps each unwrapped destination back to the
+     * SOCKS header its returning datagrams must be re-encased with.
+     *
      * @param cache put headers here to pass to SOCKSUDPWrapper
      */
     public SOCKSUDPUnwrapper(Map<I2PSocketAddress, SOCKSHeader> cache) {
@@ -47,7 +50,7 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
      *  @param ignoredFrom ignored
      *  @param fromPort will be passed along
      *  @param toPort ignored
-     *  @throws RuntimeException
+     *  @throws RuntimeException if the downstream sink fails to send the unwrapped data
      *  @since 0.9.53 added fromPort and toPort parameters
      */
     public void send(Destination ignoredFrom, int fromPort, int toPort, byte[] data) {

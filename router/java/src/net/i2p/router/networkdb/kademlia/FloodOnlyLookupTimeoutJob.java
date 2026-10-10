@@ -22,6 +22,9 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
 
     /**
      * FloodOnlyLookupTimeoutJob.
+     *
+     * @param ctx router context, passed to the JobImpl superclass
+     * @param job flood search to fail when the overall lookup timeout expires
      */
     public FloodOnlyLookupTimeoutJob(RouterContext ctx, FloodSearchJob job) {
         super(ctx);

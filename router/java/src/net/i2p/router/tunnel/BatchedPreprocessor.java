@@ -98,7 +98,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      */
     private static final int FORCE_BATCH_FLUSH = 5;
 
-    /** If we have this much allocated, flush anyway.
+    /**
+     * If we have this much allocated, flush anyway.
      * Tune this to trade off padding vs. fragmentation.
      * The lower the value, the more we are willing to send off
      * a tunnel msg that isn't full so the next message can start
@@ -171,7 +172,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * split out so the per-flush stat batches are flushed on every return path.
      *
      * @param pending the list of pending messages
-     * @param sender the sender
+     * @param sender the gateway callback that encrypts and forwards the preprocessed data
      * @param rec the receiver for preprocessed data
      * @return true if messages remain queued for a later flush
      */
@@ -443,7 +444,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * @param startAt first index in pending to send (inclusive)
      * @param sendThrough last index in pending to send (inclusive)
      * @param pending the list of pending messages
-     * @param sender the sender
+     * @param sender the gateway callback that encrypts and forwards the preprocessed data
      * @param rec the receiver for preprocessed data
      */
     protected void send(List<PendingGatewayMessage> pending, int startAt, int sendThrough, TunnelGateway.Sender sender, TunnelGateway.Receiver rec) {

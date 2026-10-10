@@ -92,43 +92,67 @@ public class HashRange {
 
     // accessors
 
-    /** @return true if the minimum value is zero */
+    /**
+     * Checks whether this range starts at zero.
+     * @return true if the minimum value is zero
+     */
     public boolean isZeroBased() {
         return minimum.signum() == 0;
     }
 
-    /** @return true if the range fits within int bounds */
+    /**
+     * Checks whether both endpoints fit within the range of an int.
+     * @return true if the range fits within int bounds
+     */
     public boolean isIntBounded() {
         return intBounded;
     }
 
-    /** @return true if the range fits within long bounds */
+    /**
+     * Checks whether both endpoints fit within the range of a long.
+     * @return true if the range fits within long bounds
+     */
     public boolean isLongBounded() {
         return longBounded;
     }
 
-    /** @return the minimum value */
+    /**
+     * The lower bound of this range, inclusive.
+     * @return the minimum value
+     */
     public BigInteger getMinimum() {
         return minimum;
     }
 
-    /** @return the maximum value */
+    /**
+     * The upper bound of this range, inclusive.
+     * @return the maximum value
+     */
     public BigInteger getMaximum() {
         return maximum;
     }
 
-    /** @return the size of the range */
+    /**
+     * The number of values this range spans, the maximum less the minimum plus one.
+     * @return the size of the range
+     */
     public BigInteger getSize() {
         return size == null ? size = maximum.subtract(minimum).add(BigInteger.ONE) : size;
     }
 
-    /** @return true if the size fits within int range */
+    /**
+     * Checks whether the size of this range fits within an int.
+     * @return true if the size fits within int range
+     */
     public boolean isIntSized() {
         if (intSized == null) intSized = getSize().compareTo(INT_MAXIMUM) <= 0;
         return intSized;
     }
 
-    /** @return true if the size fits within long range */
+    /**
+     * Checks whether the size of this range fits within a long.
+     * @return true if the size fits within long range
+     */
     public boolean isLongSized() {
         if (longSized == null) longSized = getSize().compareTo(LONG_MAXIMUM) <= 0;
         return longSized;
@@ -136,7 +160,10 @@ public class HashRange {
 
     // methods
 
-    /** @return a zero-based version of this range */
+    /**
+     * Creates an equivalent range whose minimum is zero.
+     * @return a zero-based version of this range
+     */
     public HashRange zeroBased() {
         return isZeroBased() ? this : new HashRange(BigInteger.ZERO, maximum.subtract(minimum));
     }

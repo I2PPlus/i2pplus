@@ -24,10 +24,10 @@ public class LogConsoleBuffer {
     }
 
     /**
-     * @param limit max size of each buffer
      * In theory the limit is configurable, but it isn't in the UI,
      * so set it at construction.
      *
+     * @param limit max size of each buffer
      * @since 0.8.8
      */
     public LogConsoleBuffer(int limit) {
@@ -38,13 +38,19 @@ public class LogConsoleBuffer {
         _critBuffer = new UIMessages(lim + 4);
     }
 
-    /** Add a message to the buffer. */
+    /**
+     * Add a message to the buffer.
+     *
+     * @param msg the already-formatted log line, added without escaping
+     */
     void add(String msg) {
         _buffer.addMessageNoEscape(msg);
     }
 
     /**
      * Only adds to the critical buffer, not to both.
+     *
+     * @param msg the already-formatted log line, added without escaping
      */
     void addCritical(String msg) {
         _critBuffer.addMessageNoEscape(msg);

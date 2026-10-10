@@ -5,6 +5,17 @@ package net.i2p.client.streaming;
  * opens one stream and reports bytes per second until the server closes it.
  */
 public class StreamSinkTestClient {
+    /**
+     * The probe is driven entirely from main(); the field overrides it sets there are
+     * process-wide, so an instance starts nothing.
+     */
+    public StreamSinkTestClient() {}
+
+    /**
+     * Sends each named file through a stream and waits for the receiver to finish
+     *
+     * @param args the files to send; when empty a hard-coded library file is sent instead
+     */
     public static void main(String[] args) {
         //System.setProperty(I2PClient.PROP_TCP_HOST, "dev.i2p.net");
         //System.setProperty(I2PClient.PROP_TCP_PORT, "4501");

@@ -17,6 +17,12 @@ import net.i2p.crypto.eddsa.math.ed25519.Ed25519ScalarOps;
  *
  */
 public class EdDSANamedCurveTable {
+    /**
+     * Constructor. The curve specs are built into static fields, so an instance
+     * holds nothing and lookups are static.
+     */
+    public EdDSANamedCurveTable() {}
+
     /** RFC 8032 */
     public static final String ED_25519 = "Ed25519";
     /** Old name for the Ed25519 curve. */
@@ -60,7 +66,12 @@ public class EdDSANamedCurveTable {
         putCurve(curve.getName().toLowerCase(Locale.ENGLISH), curve);
     }
 
-    /** Define an alias for a curve */
+    /**
+     * Define an alias for a curve
+     *
+     * @param name the existing curve name to alias, matched case-insensitively
+     * @param alias the additional name to file the curve under, matched case-insensitively
+     */
     static void defineCurveAlias(String name, String alias) {
         EdDSANamedCurveSpec curve = curves.get(name.toLowerCase(Locale.ENGLISH));
         if (curve == null) {

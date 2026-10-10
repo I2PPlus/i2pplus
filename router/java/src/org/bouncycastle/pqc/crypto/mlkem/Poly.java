@@ -16,6 +16,7 @@ class Poly
 
     /**
      * Poly.
+     * @param engine the engine supplying the Kyber parameters, RNG and symmetric primitives
      */
     public Poly(MLKEMEngine engine)
     {
@@ -29,6 +30,8 @@ class Poly
 
     /**
      * getCoeffIndex.
+     * @param i the coefficient index, 0 to KyberN-1
+     * @return the coefficient at that index
      */
     public short getCoeffIndex(int i)
     {
@@ -37,6 +40,7 @@ class Poly
 
     /**
      * getCoeffs.
+     * @return the backing coefficient array, shared rather than copied
      */
     public short[] getCoeffs()
     {
@@ -45,6 +49,8 @@ class Poly
 
     /**
      * setCoeffIndex.
+     * @param i the coefficient index, 0 to KyberN-1
+     * @param val the replacement coefficient
      */
     public void setCoeffIndex(int i, short val)
     {
@@ -53,6 +59,7 @@ class Poly
 
     /**
      * setCoeffs.
+     * @param coeffs the new backing array, adopted by reference and not copied
      */
     public void setCoeffs(short[] coeffs)
     {
@@ -90,6 +97,9 @@ class Poly
 
     /**
      * baseMultMontgomery.
+     * @param r the polynomial receiving the product, in Montgomery form
+     * @param a the first multiplicand, in the number-theoretic transform domain
+     * @param b the second multiplicand, in the number-theoretic transform domain
      */
     public static void baseMultMontgomery(Poly r, Poly a, Poly b)
     {
@@ -109,6 +119,7 @@ class Poly
 
     /**
      * addCoeffs.
+     * @param b the polynomial added coefficient-wise to this one
      */
     public void addCoeffs(Poly b)
     {
@@ -134,6 +145,7 @@ class Poly
 
     /**
      * compressPoly.
+     * @return the lossy compressed encoding, polyCompressedBytes long
      */
     public byte[] compressPoly()
     {
@@ -222,6 +234,7 @@ class Poly
 
     /**
      * decompressPoly.
+     * @param compressedPolyCipherText the compressed encoding to decode into this polynomial
      */
     public void decompressPoly(byte[] compressedPolyCipherText)
     {
@@ -266,6 +279,7 @@ class Poly
 
     /**
      * toBytes.
+     * @return the coefficients packed little-endian into KyberPolyBytes bytes
      */
     public byte[] toBytes()
     {
@@ -287,6 +301,7 @@ class Poly
 
     /**
      * fromBytes.
+     * @param inpBytes the packed coefficients to load, low 12 bits of each 2-byte group
      */
     public void fromBytes(byte[] inpBytes)
     {
@@ -310,6 +325,7 @@ class Poly
 
     /**
      * toMsg.
+     * @return the coefficients packed as one bit each, KyberN/8 bytes long
      */
     public byte[] toMsg()
     {
@@ -339,6 +355,7 @@ class Poly
 
     /**
      * fromMsg.
+     * @param msg the one-bit-per-coefficient message, exactly KyberN/8 bytes
      */
     public void fromMsg(byte[] msg)
     {
@@ -372,6 +389,8 @@ class Poly
 
     /**
      * getEta1Noise.
+     * @param seed the 32-byte noise seed fed to the PRF
+     * @param nonce the single-byte domain separator
      */
     public void getEta1Noise(byte[] seed, byte nonce)
     {
@@ -382,6 +401,8 @@ class Poly
 
     /**
      * getEta2Noise.
+     * @param seed the 32-byte noise seed fed to the PRF
+     * @param nonce the single-byte domain separator
      */
     public void getEta2Noise(byte[] seed, byte nonce)
     {
@@ -392,6 +413,7 @@ class Poly
 
     /**
      * polySubtract.
+     * @param b the polynomial subtracted coefficient-wise from this one
      */
     public void polySubtract(Poly b)
     {

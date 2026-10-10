@@ -54,6 +54,8 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
 
     /**
      * Session ID for this message.
+     *
+     * @param id session to which this reconfiguration applies
      */
     public void setSessionId(SessionId id) {
         _sessionId = id;
@@ -69,6 +71,8 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
 
     /**
      * Session config for this message.
+     *
+     * @param config new settings to apply to the client session
      */
     public void setSessionConfig(SessionConfig config) {
         _sessionConfig = config;

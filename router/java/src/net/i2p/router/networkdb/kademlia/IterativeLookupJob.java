@@ -35,6 +35,9 @@ class IterativeLookupJob extends JobImpl {
     /**
      * Chase the hashes from the received DatabaseSearchReplyMessage,
      * starting a followup search for each.
+     * @param ctx the router context, used for logging and for scheduling the followup jobs
+     * @param dsrm the search reply being chased, supplying the hashes to look up
+     * @param search the running search, whose wasQueried() check suppresses chasing a hash it just asked about
      */
     public IterativeLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm, IterativeSearchJob search) {
         super(ctx);

@@ -9,6 +9,12 @@ import net.i2p.util.Translate;
  */
 public class DesktopguiTranslator {
 
+    /**
+     * Constructor. The bundle name is a constant and translation is always
+     * requested statically, so an instance carries no state.
+     */
+    public DesktopguiTranslator() {}
+
     private static final String BUNDLE_NAME = "net.i2p.desktopgui.messages";
 
     /**

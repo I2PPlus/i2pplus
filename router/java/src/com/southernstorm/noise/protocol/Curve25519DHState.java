@@ -19,6 +19,8 @@ class Curve25519DHState implements DHState, Cloneable {
 
     /**
      * Constructs a new Diffie-Hellman object for Curve25519.
+     *
+     * @param xdh the key factory that supplies the Curve25519 key pair
      */
     public Curve25519DHState(KeyFactory xdh)
     {

@@ -94,6 +94,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     /**
      * Update the reply token.
      *
+     * @param token message ID to correlate a DeliveryStatusMessage with, 0 if no reply is needed
      * @throws IllegalArgumentException if the token is out of range (min=0, max=I2NPMessage.MAX_ID_VALUE)
      */
     public void setReplyToken(long token) throws IllegalArgumentException {

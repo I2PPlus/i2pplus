@@ -191,6 +191,7 @@ abstract class SAMHandler implements Runnable, Handler {
      * @param verMajor SAM major version to manage
      * @param verMinor SAM minor version to manage
      * @param i2cpProps properties to configure the I2CP connection (host, port, etc)
+     * @param parent owning SAM bridge, which registers this handler as a live client on connect
      */
     protected SAMHandler(SocketChannel s, int verMajor, int verMinor,
                          Properties i2cpProps, SAMBridge parent) {
@@ -233,7 +234,7 @@ abstract class SAMHandler implements Runnable, Handler {
      * you're doing.
      *
      * @param data A byte array to be written
-     * @throws IOException
+     * @throws IOException if the client socket refuses or fails the write
      */
     protected final void writeBytes(ByteBuffer data) throws IOException {
         synchronized (socketWLock) {
@@ -298,7 +299,7 @@ abstract class SAMHandler implements Runnable, Handler {
     /**
      * Close the socket connected to the SAM client.
      *
-     * @throws IOException
+     * @throws IOException if the client socket cannot be closed
      */
     protected final void closeClientSocket() throws IOException {
             socket.close();

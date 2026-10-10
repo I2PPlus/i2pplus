@@ -24,6 +24,14 @@ public class
 JSpinner
 	extends Component
 {
+	/**
+	 * Constructor. A bare instance holds a number model with no bounds and no UI,
+	 * which is what the headless NDT tool relies on.
+	 */
+	public JSpinner()
+	{
+	}
+
 	private SpinnerNumberModel		model;
 
 	/**

@@ -49,13 +49,16 @@ public class JobQueue {
     private final BlockingQueue<Job> _readyJobs;
     /** List of high priority jobs that should run before others */
     private final BlockingQueue<Job> _highPriorityJobs;
-    /** SortedSet of jobs that are scheduled for running in the future, earliest first.
+    /**
+     * SortedSet of jobs that are scheduled for running in the future, earliest first.
      * Typed as the concrete skip list because the pumper reads {@code first()}
-     * as the minimum start time rather than re-deriving one per pass. */
+     * as the minimum start time rather than re-deriving one per pass.
+     */
     private final ConcurrentSkipListSet<Job> _timedJobs;
     /** Queue of timed jobs that are ready to run (moved from _timedJobs when ready) */
     private final BlockingQueue<Job> _timedJobsReady;
-    /** Membership index over the three ready queues, so duplicate detection is O(1).
+    /**
+     * Membership index over the three ready queues, so duplicate detection is O(1).
      * Maintained exclusively through {@link #offerReady}, {@link #removeReady},
      * {@link #takeReady}, {@link #addTimed} and {@link #removeTimed} so that no
      * queue mutation can leave it stale.
@@ -113,15 +116,19 @@ public class JobQueue {
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
     private static final int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
-    /** Resolved once from {@link #PROP_MAX_WAITING_JOBS} at construction.
+    /**
+     * Resolved once from {@link #PROP_MAX_WAITING_JOBS} at construction.
      * shouldDrop() read it per addJob() that could exceed the cap.  A
-     * non-positive value disables dropping. */
+     * non-positive value disables dropping.
+     */
     private final int _maxWaitingJobs;
-    /** Minimum lag (ms) before the drop policy activates.
+    /**
+     * Minimum lag (ms) before the drop policy activates.
      * Must be high enough to avoid drops during normal processing jitter;
      * low enough to shed load before queue saturation causes cascading failure.
      * 500ms means the drop gate is meaningful: with 48+ queued jobs AND
-     * a half-second of observed lag, the scaler has failed to keep up. */
+     * a half-second of observed lag, the scaler has failed to keep up.
+     */
     private static final long MIN_LAG_TO_DROP = 500;
 
     /**
@@ -145,6 +152,8 @@ public class JobQueue {
 
     /**
      * Does not start the pumper. Caller MUST call startup.
+     *
+     * @param context the router context supplying properties, logs and stat manager
      */
     public JobQueue(RouterContext context) {
         _context = context;
@@ -671,7 +680,12 @@ public class JobQueue {
         return j;
     }
 
-    /** Next job in queue. */
+    /**
+     * Next job in queue.
+     *
+     * @return the next runnable job in priority order, or null once the queue
+     * has been shut down
+     */
     Job getNext() {
         while (_alive) {
             try {
@@ -1006,7 +1020,14 @@ public class JobQueue {
         }
     }
 
-    /** Update stats */
+    /**
+     * Update stats
+     *
+     * @param job the job that just finished a run, used for its name and timing
+     * @param doStart the millisecond timestamp when the job actually began
+     * @param origStartAfter the previously recorded scheduled start time
+     * @param duration the wall-clock milliseconds the run consumed, never negative
+     */
     void updateStats(Job job, long doStart, long origStartAfter, long duration) {
         if (_context.router() == null) return;
         String key = job.getName();

@@ -23,9 +23,19 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
 public class
 SpinnerNumberModel
 {
+	/**
+	 * The emulated spinner starts at 0; setValue() is the only thing that moves it.
+	 */
+	public SpinnerNumberModel()
+	{
+	}
+
 	private int		value;
 
-	/** The value. */
+	/**
+	 * The value.
+	 * @param i the number to store, which getValue returns and an emulated spinner would display
+	 */
 	public void
 	setValue(
 		int	 i )
@@ -33,14 +43,20 @@ SpinnerNumberModel
 		value	= i;
 	}
 
-	/** Return the value. */
+	/**
+	 * Return the value.
+	 * @return the number most recently passed to setValue
+	 */
 	public int
 	getValue()
 	{
 		return( value );
 	}
 
-	/** The minimum (no-op). */
+	/**
+	 * The minimum (no-op).
+	 * @param i the lower bound an emulated spinner would refuse to go below, which this stub ignores
+	 */
 	public void
 	setMinimum(
 		int	i )

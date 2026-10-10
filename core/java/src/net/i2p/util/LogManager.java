@@ -354,7 +354,7 @@ public class LogManager implements Flushable {
     /**
      * Log with the given name.
      *
-     * @param name the name
+     * @param name the scope suffix distinguishing this log from other logs in the same manager
      * @return the log
      */
     public final Log getLog(String name) {
@@ -365,7 +365,7 @@ public class LogManager implements Flushable {
      * Log for the given class and name, creating it if necessary.
      *
      * @param cls the class (may be null)
-     * @param name the name
+     * @param name the scope suffix, or null to scope the log by class name alone
      * @return the log
      */
     public final Log getLog(Class<?> cls, String name) {
@@ -730,6 +730,7 @@ public class LogManager implements Flushable {
 
     /**
      * Update the log file size limit
+     * @param numBytes the requested limit in bytes, raised to the 16 KiB minimum; zero or negative is ignored
      */
     public void setFileSize(int numBytes) {
         if (numBytes > 0) {
@@ -776,6 +777,7 @@ public class LogManager implements Flushable {
      * Spaces between the number and letter is are allowed.
      * The number may be in floating point.
      * 16K min, 2 GB max (returns int)
+     * @param size the formatted size to parse, such as "5m", "60g" or "100k"
      * @return the file size
      */
     public static int getFileSize(String size) {
@@ -980,6 +982,7 @@ public class LogManager implements Flushable {
      * Zero-copy.
      * For the LogWriter
      *
+     * @return the live bounded record queue the LogWriter drains, handed over without copying
      * @since 0.8.2
      */
     Queue<LogRecord> getQueue() {
@@ -1082,6 +1085,7 @@ public class LogManager implements Flushable {
     /**
      * Convenience method for LogRecordFormatter
      *
+     * @return the router context this LogManager was created in
      * @since 0.7.14
      */
     I2PAppContext getContext() {

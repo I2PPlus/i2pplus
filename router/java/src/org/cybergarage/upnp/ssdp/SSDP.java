@@ -16,6 +16,12 @@ import org.cybergarage.util.Debug;
  * @version 1.8
  */
 public class SSDP {
+    /**
+     * Every multicast constant and the cache-control parsers below are static, so an
+     * instance carries nothing.
+     */
+    public SSDP() {}
+
     ////////////////////////////////////////////////
     //	Constants
     ////////////////////////////////////////////////

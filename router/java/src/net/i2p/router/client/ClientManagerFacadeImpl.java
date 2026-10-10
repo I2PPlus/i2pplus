@@ -49,6 +49,10 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     public static final String PROP_CLIENT_HOST = "i2cp.hostname";
     /** Default host */
     public static final String DEFAULT_HOST = "127.0.0.1";
+    /**
+     * Creates the facade without starting anything; call startup() to listen for I2CP connections.
+     * @param context the router context this facade and the manager it creates are scoped to
+     */
     public ClientManagerFacadeImpl(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(ClientManagerFacadeImpl.class);
@@ -378,10 +382,18 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
 
     // ==================== Tuner delegation ====================
 
-    /** @since 0.9.70+ */
+    /**
+     * Gets the cap on the client writer's outgoing message queue.
+     * @return the current client writer queue limit, in messages
+     * @since 0.9.70+
+     */
     public static int getWriterQueueSize() { return ClientWriterRunner.getQueueSize(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * Sets the cap on the client writer's outgoing message queue.
+     * @param val the requested queue limit in messages, clamped to 32..2048
+     * @since 0.9.70+
+     */
     public static void setWriterQueueSize(int val) { ClientWriterRunner.setQueueSize(val); }
 
 }

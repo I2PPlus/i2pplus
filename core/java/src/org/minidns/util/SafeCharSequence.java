@@ -20,6 +20,12 @@ package org.minidns.util;
 public class SafeCharSequence implements CharSequence {
 
     /**
+     * A sequence with no fields of its own: subclasses supply the text through
+     * toSafeString(), so construction needs no arguments.
+     */
+    public SafeCharSequence() {}
+
+    /**
      * length.
      */
     @Override

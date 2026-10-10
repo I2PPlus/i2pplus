@@ -54,6 +54,8 @@ public final class PrioritySendPool {
 
     /**
      * PrioritySendPool.
+     *
+     * @param capacity the maximum number of live messages, clamped up to a minimum of 1
      */
     public PrioritySendPool(int capacity) {
         _capacity = Math.max(1, capacity);
@@ -98,6 +100,8 @@ public final class PrioritySendPool {
     /**
      * Return the highest-priority message, or null if empty.
      * Highest priority first, FIFO within same priority.
+     *
+     * @return the head of the live region, or null if the pool holds nothing
      */
     public OutNetMessage poll() {
         synchronized (_lock) {
@@ -137,6 +141,8 @@ public final class PrioritySendPool {
 
     /**
      * Drain all messages into the target list (for resize).
+     *
+     * @param target the list that receives the live messages; the pool is left empty afterwards
      */
     public void drainTo(ArrayList<OutNetMessage> target) {
         synchronized (_lock) {
@@ -148,6 +154,8 @@ public final class PrioritySendPool {
 
     /**
      * Number of messages currently in the pool.
+     *
+     * @return the live count, excluding the dequeued-but-not-yet-compacted prefix
      */
     public int size() {
         synchronized (_lock) {
@@ -157,6 +165,8 @@ public final class PrioritySendPool {
 
     /**
      * Free capacity remaining in the pool.
+     *
+     * @return how many further messages fit before offers start evicting
      */
     public int remainingCapacity() {
         synchronized (_lock) {
@@ -176,6 +186,8 @@ public final class PrioritySendPool {
      * Resize the pool. New capacity takes effect immediately;
      * if the pool currently exceeds the new capacity, excess
      * low-priority messages are evicted on the next offer().
+     *
+     * @param newCapacity the new maximum live depth, clamped up to a minimum of 1
      */
     public void setCapacity(int newCapacity) {
         _capacity = Math.max(1, newCapacity);

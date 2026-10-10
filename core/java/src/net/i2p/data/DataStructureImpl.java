@@ -25,6 +25,12 @@ import java.io.Serializable;
  * @author jrandom
  */
 public abstract class DataStructureImpl implements DataStructure, Serializable {
+    /**
+     * Constructor for data structure implementations that serialize themselves to a stream.
+     */
+
+    public DataStructureImpl() {}
+
 
     @Override
     public String toBase64() {

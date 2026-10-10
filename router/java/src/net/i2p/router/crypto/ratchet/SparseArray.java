@@ -76,6 +76,8 @@ class SparseArray<E> implements Cloneable {
      * number of mappings.  If you supply an initial capacity of 0, the
      * sparse array will be initialized with a light-weight representation
      * not requiring any additional array allocations.
+     *
+     * @param initialCapacity mappings to preallocate backing arrays for; 0 allocates none
      */
     public SparseArray(int initialCapacity) {
         if (initialCapacity == 0) {
@@ -121,6 +123,9 @@ class SparseArray<E> implements Cloneable {
     /**
      * Object mapped from the specified key, or <code>null</code>
      * if no such mapping has been made.
+     *
+     * @param key 0 MIN, 65535 MAX
+     * @return the value stored for key, or null if the key is not mapped
      */
     public E get(int key) {
         return get(key, null);
@@ -131,6 +136,8 @@ class SparseArray<E> implements Cloneable {
      * if no such mapping has been made.
      *
      * @param key 0 MIN, 65535 MAX
+     * @param valueIfKeyNotFound returned in place of null when the key is not mapped
+     * @return the value stored for key, or valueIfKeyNotFound if the key is not mapped
      */
     @SuppressWarnings("unchecked")
     public E get(int key, E valueIfKeyNotFound) {
@@ -165,6 +172,7 @@ class SparseArray<E> implements Cloneable {
      * Removes the mapping from the specified key, if there was any, returning the old value.
      *
      * @param key 0 MIN, 65535 MAX
+     * @return the value removed from the array, or null if the key was not mapped
      */
     @SuppressWarnings("unchecked")
     public E removeReturnOld(int key) {
@@ -183,6 +191,8 @@ class SparseArray<E> implements Cloneable {
 
     /**
      * Alias for {@link #delete(int)}.
+     *
+     * @param key 0 MIN, 65535 MAX
      */
     public void remove(int key) {
         delete(key);
@@ -194,6 +204,8 @@ class SparseArray<E> implements Cloneable {
      * <p>For indices outside of the range <code>0...size()-1</code>,
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
+     *
+     * @param index position of the mapping to drop, 0 to size()-1
      */
     public void removeAt(int index) {
         if (index >= mSize) {
@@ -257,6 +269,7 @@ class SparseArray<E> implements Cloneable {
      * was one.
      *
      * @param key 0 MIN, 65535 MAX
+     * @param value the element to store, replacing any existing mapping for key
      */
     public void put(int key, E value) {
         if (key < 0 || key > 65535)
@@ -290,6 +303,8 @@ class SparseArray<E> implements Cloneable {
     /**
      * Returns the number of key-value mappings that this SparseArray
      * currently stores.
+     *
+     * @return the number of live mappings, 0 for an empty array
      */
     public int size() {
         if (mGarbage) {
@@ -312,6 +327,9 @@ class SparseArray<E> implements Cloneable {
      * <p>For indices outside of the range <code>0...size()-1</code>,
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
+     *
+     * @param index position of the mapping, 0 to size()-1
+     * @return the key at that position, in ascending key order
      */
     public int keyAt(int index) {
         if (index >= mSize) {
@@ -340,6 +358,9 @@ class SparseArray<E> implements Cloneable {
      * <p>For indices outside of the range <code>0...size()-1</code>,
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
+     *
+     * @param index position of the mapping, 0 to size()-1
+     * @return the element stored at that position
      */
     @SuppressWarnings("unchecked")
     public E valueAt(int index) {
@@ -363,6 +384,9 @@ class SparseArray<E> implements Cloneable {
      * <p>For indices outside of the range <code>0...size()-1</code>,
      * a {@link ArrayIndexOutOfBoundsException} is thrown.
      * </p>
+     *
+     * @param index position of the mapping, 0 to size()-1
+     * @param value the element to store there, leaving the key unchanged
      */
     public void setValueAt(int index, E value) {
         if (index >= mSize) {
@@ -383,6 +407,7 @@ class SparseArray<E> implements Cloneable {
      * key is not mapped.
      *
      * @param key 0 MIN, 65535 MAX
+     * @return the position of the mapping, or a negative value if key is not mapped
      */
     public int indexOfKey(int key) {
         if (key < 0 || key > 65535)
@@ -403,6 +428,9 @@ class SparseArray<E> implements Cloneable {
      * find only one of them.
      * <p>Note also that unlike most collections' {@code indexOf} methods,
      * this method compares values using {@code ==} rather than {@code equals}.
+     *
+     * @param value the element to look for, compared by reference
+     * @return the position of one mapping holding it, or -1 if none does
      */
     public int indexOfValue(E value) {
         if (mGarbage) {
@@ -426,6 +454,9 @@ class SparseArray<E> implements Cloneable {
      * and that multiple keys can map to the same value and this will
      * find only one of them.
      * <p>Note also that this method uses {@code equals} unlike {@code indexOfValue}.
+     *
+     * @param value the element to look for, compared with equals()
+     * @return the position of one mapping equal to it, or -1 if none is
      */
     public int indexOfValueByValue(E value) {
         if (mGarbage) {
@@ -466,6 +497,7 @@ class SparseArray<E> implements Cloneable {
      * the key is greater than all existing keys in the array.
      *
      * @param key 0 MIN, 65535 MAX
+     * @param value the element to store, replacing any existing mapping for key
      */
     public void append(int key, E value) {
         if (key < 0 || key > 65535)

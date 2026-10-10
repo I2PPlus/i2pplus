@@ -28,6 +28,8 @@ class UpdateHandler implements Updater {
 
     /**
      * UpdateHandler.
+     * @param ctx router context used to read the proxy setting and to run the download
+     * @param mgr update manager that owns the runner and receives progress notifications
      */
     public UpdateHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;

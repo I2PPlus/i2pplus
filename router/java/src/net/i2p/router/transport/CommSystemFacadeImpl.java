@@ -106,6 +106,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * CommSystemFacadeImpl.
+     *
+     * @param context the router context, used to build the transport manager,
+     *        GeoIP database and rDNS/country lookup services
      */
     public CommSystemFacadeImpl(RouterContext context) {
         _context = context;
@@ -121,12 +124,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * The rDNS executor core pool size.
+     * @return the number of threads currently in the rDNS core pool
      * @since 0.9.70+
      */
     public static int getRdnsCorePoolSize() { return ReverseDnsLookup.getCorePoolSize(); }
 
     /**
      * The rDNS executor core pool size, bounded 2-8.
+     * @param size the requested core pool size, clamped by rDNS to 2-8
      * @since 0.9.70+
      */
     public static void setRdnsCorePoolSize(int size) {
@@ -135,12 +140,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * The rDNS executor max pool size.
+     * @return the upper bound on rDNS executor threads
      * @since 0.9.70+
      */
     public static int getRdnsMaxPoolSize() { return ReverseDnsLookup.getMaxPoolSize(); }
 
     /**
      * The rDNS executor max pool size, bounded 2-8.
+     * @param size the requested maximum pool size, clamped by rDNS to 2-8
      * @since 0.9.70+
      */
     public static void setRdnsMaxPoolSize(int size) {
@@ -149,11 +156,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * The size of the rDNS cache file, in KB.
+     * @return the on-disk size of the rDNS cache, in kilobytes
      */
     public static String rdnsCacheSize() { return ReverseDnsLookup.rdnsCacheSize(); }
 
     /**
      * The number of entries in the rDNS cache.
+     * @return how many hostnames are currently held in the rDNS cache
      */
     public static int countRdnsCacheEntries() { return ReverseDnsLookup.countRdnsCacheEntries(); }
 
@@ -882,6 +891,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Domain name from a reverse DNS hostname
+     * @param hostname the reverse DNS hostname, whose leading labels are
+     *        stripped down to the registrable domain
      * @return domain name only from reverse dns hostname lookups
      * @since 0.9.58+
      */
@@ -889,6 +900,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Return first valid IP (v4 or v6) we find, any transport.
+     * @param ri RouterInfo whose addresses are examined in order until one
+     *        parses as a valid address
      * @return IP or null
      * @since 0.9.18
      */

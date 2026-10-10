@@ -92,6 +92,7 @@ public class FIFOBandwidthLimiter {
 
     /**
      * Current time in milliseconds from the System clock.
+     * @return milliseconds since the epoch, from System.currentTimeMillis()
      */
     public /* static */ long now() {
         // Don't use the clock().now(), since that may jump
@@ -99,7 +100,8 @@ public class FIFOBandwidthLimiter {
     }
 
     /**
-     * FIFOBandwidthLimiter.
+     * Creates a limiter with empty queues and starts the background refiller.
+     * @param context the router context, used for the clock, logging, statistics and the refiller
      */
     public FIFOBandwidthLimiter(RouterContext context) {
         _context = context;
@@ -221,7 +223,7 @@ public class FIFOBandwidthLimiter {
      * Returns true if the message can be sent within the current
      * share bandwidth limits, or false if it should be dropped.
      *
-     * @param size bytes
+     * @param size the size of the participating message in bytes
      * @param factor multiplier of size for the drop calculation, 1 for no adjustment
      * @return true for accepted, false for drop
      * @since 0.8.12
@@ -233,7 +235,7 @@ public class FIFOBandwidthLimiter {
     /**
      * Check if we should accept an inbound participating message.
      *
-     * @param size bytes
+     * @param size the size of the participating message in bytes
      * @param factor multiplier of size for the drop calculation, 1 for no adjustment
      * @return true for accepted, false for drop
      */
@@ -271,6 +273,9 @@ public class FIFOBandwidthLimiter {
 
     /**
      * Request some bytes. Does not block.
+     * @param bytesIn the number of bytes requested
+     * @param purpose the purpose of the request, for logging
+     * @return the request to use; never null
      */
     public Request requestInbound(int bytesIn, String purpose) {
         // try to satisfy without grabbing the global lock
@@ -365,6 +370,10 @@ public class FIFOBandwidthLimiter {
 
     /**
      * Request some bytes. Does not block.
+     * @param bytesOut the number of bytes requested
+     * @param priority 0 for now
+     * @param purpose the purpose of the request, for logging
+     * @return the request to use; never null
      */
     public Request requestOutbound(int bytesOut, int priority, String purpose) {
         // try to satisfy without grabbing the global lock
@@ -449,11 +458,17 @@ public class FIFOBandwidthLimiter {
             _context.statManager().addRateData("bwLimiter.pendingOutboundRequests", pending);
     }
 
-    /** Inbound burst rate in KBps. */
+    /**
+     * Inbound burst rate in KBps.
+     * @param kbytesPerSecond the new inbound burst rate in KBps, stored internally in bytes
+     */
     void setInboundBurstKBps(int kbytesPerSecond) {
         _maxInbound = kbytesPerSecond * 1024;
     }
-    /** Outbound burst rate in KBps. */
+    /**
+     * Outbound burst rate in KBps.
+     * @param kbytesPerSecond the new outbound burst rate in KBps, stored internally in bytes
+     */
     void setOutboundBurstKBps(int kbytesPerSecond) {
         _maxOutbound = kbytesPerSecond * 1024;
     }
@@ -467,12 +482,21 @@ public class FIFOBandwidthLimiter {
      * @return the outbound burst bytes
      */
     public int getOutboundBurstBytes() { return _maxOutboundBurst; }
-    /** Inbound burst maximum, in bytes. */
+    /**
+     * Inbound burst maximum, in bytes.
+     * @param bytes the new inbound burst maximum, in bytes per second
+     */
     void setInboundBurstBytes(int bytes) { _maxInboundBurst = bytes; }
-    /** Outbound burst maximum, in bytes. */
+    /**
+     * Outbound burst maximum, in bytes.
+     * @param bytes the new outbound burst maximum, in bytes per second
+     */
     void setOutboundBurstBytes(int bytes) { _maxOutboundBurst = bytes; }
 
-    /** The current status string. */
+    /**
+     * The current status string.
+     * @return the available, max, burst and burst-max rates for both directions
+     */
     StringBuilder getStatus() {
         StringBuilder rv = new StringBuilder(128);
         rv.append("Available: ").append(_availableInbound).append('/').append(_availableOutbound).append("; ");
@@ -515,6 +539,8 @@ public class FIFOBandwidthLimiter {
      * we can
      *
      * @param buf contains satisfied outbound requests, really just to avoid object thrash, not really used
+     * @param bytesInbound allowance to add to the inbound queue, in bytes, for the elapsed period
+     * @param bytesOutbound allowance to add to the outbound queue, in bytes, for the elapsed period
      * @param maxBurstIn allow up to this many bytes in from the burst section for this time period (may be negative)
      * @param maxBurstOut allow up to this many bytes in from the burst section for this time period (may be negative)
      */
@@ -884,7 +910,7 @@ public class FIFOBandwidthLimiter {
      * and driving the available counter below zero
      *
      * @param requested number of bytes
-     * @return satisfaction
+     * @return true if the request was satisfied outright, false if it was queued
      * @since 0.7.13
      */
     private boolean shortcutSatisfyInboundRequest(int requested) {
@@ -904,7 +930,7 @@ public class FIFOBandwidthLimiter {
      * and driving the available counter below zero
      *
      * @param requested number of bytes
-     * @return satisfaction
+     * @return true if the request was satisfied outright, false if it was queued
      * @since 0.7.13
      */
     private boolean shortcutSatisfyOutboundRequest(int requested) {
@@ -979,12 +1005,12 @@ public class FIFOBandwidthLimiter {
         public int getTotalRequested() { return _total; }
         /**
          * The number of requested bytes not yet allocated.
-         * @return the pending requested
+         * @return the outstanding allocation in bytes, 0 when fully allocated
          */
         public synchronized int getPendingRequested() { return _total - _allocated; }
         /**
          * Whether this request has been aborted.
-         * @return the aborted
+         * @return true if abort() was called, so no more bytes will be allocated
          */
         public boolean getAborted() { return _aborted; }
         /**
@@ -1082,15 +1108,15 @@ public class FIFOBandwidthLimiter {
          */
         public Object attachment() { return _attachment; }
 
-        // PQEntry methods
         /**
-         * The request priority.
-         * @return the priority
+         * The request priority, as required by the PQEntry interface.
+         * @return the priority passed to the request constructor
          */
         public int getPriority() { return _priority; }
-        // uncomment for switch to PBQ
         /**
          * Sequence number assigned to this request.
+         * Currently a no-op - the assignment is commented out, uncomment it when
+         * switching to PBQ.
          */
         public void setSeqNum(long num) { /** _requestId = num; */ }
         public long getSeqNum() { return _requestId; }
@@ -1109,11 +1135,20 @@ public class FIFOBandwidthLimiter {
      * A bandwidth request, either inbound or outbound.
      */
     public interface Request extends PQEntry {
-        /** When the request was made. */
+        /**
+         * When the request was made.
+         * @return the creation time in milliseconds from the System clock
+         */
         public long getRequestTime();
-        /** How many bytes were requested. */
+        /**
+         * How many bytes were requested.
+         * @return the size of the request in bytes
+         */
         public int getTotalRequested();
-        /** How many bytes were requested and haven't yet been allocated. */
+        /**
+         * How many bytes were requested and haven't yet been allocated.
+         * @return the outstanding allocation in bytes, 0 when fully allocated
+         */
         public int getPendingRequested();
         /**
          * Block until we are allocated some more bytes.
@@ -1123,16 +1158,24 @@ public class FIFOBandwidthLimiter {
         public void waitForNextAllocation();
         /** We no longer want the data requested (the connection closed). */
         public void abort();
-        /** Whether this request was aborted. */
+        /**
+         * Whether this request was aborted.
+         * @return true if abort() has been called, so no more bytes will be allocated
+         */
         public boolean getAborted();
         /**
          * The listener notified when the request is complete.
+         * @param lsnr notified once fully allocated; null clears any previously set listener
          */
         public void setCompleteListener(CompleteListener lsnr);
-        /** Only supported if the request is not satisfied. */
+        /**
+         * Only supported if the request is not satisfied.
+         * @param obj the caller's own state, returned by attachment()
+         */
         public void attach(Object obj);
         /**
          * The attached object, or null.
+         * @return the object passed to attach(), or null if none was attached
          */
         public Object attachment();
         /**
@@ -1148,6 +1191,7 @@ public class FIFOBandwidthLimiter {
     public interface CompleteListener {
         /**
          * Notify the listener that the request completed.
+         * @param req the request that has now been fully allocated
          */
         public void complete(Request req);
     }
@@ -1163,12 +1207,12 @@ public class FIFOBandwidthLimiter {
         }
         /**
          * Whether this request was aborted; always false.
-         * @return the aborted
+         * @return always false, a no-op request is never aborted
          */
         public boolean getAborted() { return false; }
         /**
          * The pending requested bytes; always 0.
-         * @return the pending requested
+         * @return always 0, a no-op request never has anything outstanding
          */
         public int getPendingRequested() { return 0; }
         /**
@@ -1213,10 +1257,9 @@ public class FIFOBandwidthLimiter {
          * The attached object; always null.
          */
         public Object attachment() { return null; }
-        // PQEntry methods
         /**
-         * The request priority; always 0.
-         * @return the priority
+         * The request priority; always 0, as required by the PQEntry interface.
+         * @return always 0, a no-op request carries no priority
          */
         public int getPriority() { return 0; }
         /**
@@ -1227,7 +1270,7 @@ public class FIFOBandwidthLimiter {
         }
         /**
          * The sequence number; always 0.
-         * @return the seq num
+         * @return always 0, a no-op request is never sequenced
          */
         public long getSeqNum() { return 0; }
     }

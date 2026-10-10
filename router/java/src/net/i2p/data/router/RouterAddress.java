@@ -59,6 +59,9 @@ public class RouterAddress extends DataStructureImpl {
     /** Property key for port */
     public static final String PROP_PORT = "port";
     private static final byte[] NOT_LOOKED_UP = new byte[0];
+    /**
+     * Create an address with empty options.
+     */
     public RouterAddress() {
         _options = new OrderedProperties();
     }
@@ -67,6 +70,7 @@ public class RouterAddress extends DataStructureImpl {
      * Creates an address with a copy of the given options, so the caller
      * may reuse or modify them after construction.
      *
+     * @param style transport style naming the protocol to use for this address
      * @param options may be null
      * @param cost 0-255
      */
@@ -101,6 +105,8 @@ public class RouterAddress extends DataStructureImpl {
      * Rarely used, use 3-arg constructor.
      *
      * NTCP is set to 10 and SSU to 5 by default, unused before 0.7.12
+     *
+     * @param cost 0-255, where 0 is free and 255 is most expensive
      */
     public void setCost(int cost) {
         if (cost < 0 || cost > 255)
@@ -129,6 +135,7 @@ public class RouterAddress extends DataStructureImpl {
 
     /**
      * Transport option value for the given key.
+     * @param opt the transport option name to look up, such as "host" or "port"
      * @return the option
      * @since 0.8.13
      */
@@ -255,6 +262,7 @@ public class RouterAddress extends DataStructureImpl {
     /**
      * Everything, including Transport, host, port, options, and cost
      * @param addr may be null
+     * @return true only if every field of both addresses matches
      */
     public boolean deepEquals(RouterAddress addr) {
         return

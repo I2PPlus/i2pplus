@@ -87,6 +87,8 @@ public class EventLogHelper extends FormHandler {
 
     /**
      * Set the from.
+     *
+     * @param s the age of the events to list, in seconds; anything unparsable or zero shows all
      */
     public void setFrom(String s) {
         try {
@@ -104,6 +106,8 @@ public class EventLogHelper extends FormHandler {
 
     /**
      * Set the type.
+     *
+     * @param s the event category to list, or the all-categories value to show every type
      */
     public void setType(String s) {
         _event = s;

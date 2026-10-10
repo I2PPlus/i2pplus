@@ -17,7 +17,14 @@ import net.i2p.client.impl.I2PClientImpl;
  * @author jrandom
  */
 public class I2PClientFactory {
-    /** Create a new instance of the appropriate I2PClient with a specific context
+    /**
+     * Constructor. Clients are always built by the static createClient() for a
+     * given context, so an instance carries no state.
+     */
+    public I2PClientFactory() {}
+
+    /**
+     * Create a new instance of the appropriate I2PClient with a specific context
      *
      * @param context the I2PAppContext to use
      * @return client implementation
@@ -29,7 +36,8 @@ public class I2PClientFactory {
         return new I2PClientImpl(context);
     }
 
-    /** Create a new instance of the appropriate I2PClient
+    /**
+     * Create a new instance of the appropriate I2PClient
      *
      * @return client implementation
      */

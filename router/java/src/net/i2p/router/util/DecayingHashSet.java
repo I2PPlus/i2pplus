@@ -107,6 +107,7 @@ public class DecayingHashSet extends DecayingBloomFilter {
     /**
      * Create a double-buffered hash set that will decay its entries over time.
      *
+     * @param context the app context supplying the log and the clock
      * @param durationMs entries last for at least this long, but no more than twice this long
      * @param entryBytes how large are the entries to be added?  1 to 32 bytes
      * @throws IllegalArgumentException if entryBytes is not 1-32
@@ -118,7 +119,10 @@ public class DecayingHashSet extends DecayingBloomFilter {
     /**
      * Decaying hash set with a custom name.
      *
-     * @param name just for logging / debugging / stats
+     * @param context the app context supplying the log and the clock
+     * @param durationMs entries last for at least this long, but no more than twice this long
+     * @param entryBytes how large are the entries to be added?  1 to 32 bytes
+     * @param name the instance name, used only in log messages and stats
      * @throws IllegalArgumentException if entryBytes is not 1-32
      */
     public DecayingHashSet(I2PAppContext context, int durationMs, int entryBytes, String name) {
@@ -129,6 +133,10 @@ public class DecayingHashSet extends DecayingBloomFilter {
      * As above, with an explicit cap. Only for tests, which need to cross the
      * over-cap path without inserting the full {@link #DEFAULT_MAX_ENTRIES} entries.
      *
+     * @param context the app context supplying the log and the clock
+     * @param durationMs entries last for at least this long, but no more than twice this long
+     * @param entryBytes how large are the entries to be added?  1 to 32 bytes
+     * @param name the instance name, used only in log messages and stats
      * @param maxEntries hard cap on entries across both buffers
      * @since 0.9.71+
      */

@@ -25,11 +25,24 @@ public class
 JOptionPane
 {
 	/**
+	 * Constructor. The dialog methods below are all no-ops that discard their
+	 * arguments, so an instance is only needed to sit behind a static call.
+	 */
+	public JOptionPane()
+	{
+	}
+
+	/**
 	 * INFORMATION_MESSAGE.
 	 */
 	public static final int INFORMATION_MESSAGE = 0;
 
-	/** Show a message dialog (no-op). */
+	/**
+	 * Show a message dialog (no-op).
+	 *
+	 * @param wha the parent component the dialog would be centred on; unused
+	 * @param str the message text; unused
+	 */
 	public static void
 	showMessageDialog(
 		Object	wha,
@@ -37,7 +50,14 @@ JOptionPane
 	{
 	}
 
-	/** Show a message dialog with title and type (no-op). */
+	/**
+	 * Show a message dialog with title and type (no-op).
+	 *
+	 * @param wha the parent component the dialog would be centred on; unused
+	 * @param str1 the message text; unused
+	 * @param str2 the dialog title; unused
+	 * @param a the message type, one of the constants declared here; unused
+	 */
 	public static void
 	showMessageDialog(
 		Object	wha,

@@ -61,8 +61,8 @@ class TimeAxis extends Axis {
     /**
      * Used for tests
      *
-     * @param rrdGraph
-     * @param worker
+     * @param rrdGraph the graph whose image and definition set up this axis
+     * @param worker the image worker painting the graph
      */
     TimeAxis(RrdGraph rrdGraph, ImageWorker worker) {
         this.im = rrdGraph.im;
@@ -74,6 +74,12 @@ class TimeAxis extends Axis {
         this.calendar.setFirstDayOfWeek(gdef.firstDayOfWeek);
     }
 
+    /**
+     * Sets up this axis from an in-progress generator, reusing the image parameters,
+     * worker, graph definition and mapper the generator has already built.
+     *
+     * @param generator the graph generator that is painting the graph this axis belongs to
+     */
     TimeAxis(RrdGraphGenerator generator) {
         this.im = generator.im;
         this.worker = generator.worker;

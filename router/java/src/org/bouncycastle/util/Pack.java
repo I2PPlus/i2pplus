@@ -6,6 +6,11 @@ package org.bouncycastle.util;
 public abstract class Pack
 {
     /**
+     * Constructor for subclasses; the packing helpers in this base class are static.
+     */
+
+     public Pack() {}
+    /**
      * Convert a big-endian byte array to a short.
      *
      * @param bs the byte array

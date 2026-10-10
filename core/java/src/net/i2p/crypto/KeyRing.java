@@ -21,8 +21,12 @@ public interface KeyRing {
      * Get a key.
      * Throws on all errors.
      *
+     * @param keyName the algorithm the key belongs to, such as ElGamal or ECDSA
      * @param scope a domain identifier, indicating router update, reseed, etc.
+     * @param type the signature type the key is stored for
      * @return null if none
+     * @throws GeneralSecurityException if the stored key cannot be decoded
+     * @throws IOException if the backing store cannot be read
      */
     public PublicKey getKey(String keyName, String scope, SigType type) throws GeneralSecurityException, IOException;
 
@@ -30,7 +34,11 @@ public interface KeyRing {
      * Store a key.
      * Throws on all errors.
      *
+     * @param keyName the algorithm the key belongs to, such as ElGamal or ECDSA
      * @param scope a domain identifier, indicating router update, reseed, etc.
+     * @param key the key to persist in this scope
+     * @throws GeneralSecurityException if the key cannot be encoded
+     * @throws IOException if the backing store cannot be written
      */
     public void setKey(String keyName, String scope, PublicKey key) throws GeneralSecurityException, IOException;
 }

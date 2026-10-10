@@ -21,20 +21,27 @@ public class ReseedHandler extends HelperBase {
     }
     /**
      * ReseedHandler.
+     *
+     * @param ctx the router context whose reseed checker this handler triggers
      */
     public ReseedHandler(RouterContext ctx) {
         _context = ctx;
     }
 
     /**
-     *  For form validation
-     *  @since 0.9.69
+     * For form validation
+     *
+     * @param session the console session holding the nonce to validate later
+     * @since 0.9.69
      */
     public void storeSession(HttpSession session) { _session = session; }
 
     /**
-     *  storeSession MUST be called first
-     *  @since 0.9.69
+     * storeSession MUST be called first
+     *
+     * @param nonce the submitted nonce, matched against the session and then the
+     *        system property; a null value is ignored
+     * @since 0.9.69
      */
     public void setReseedNonce(String nonce) {
         if (nonce == null) return;

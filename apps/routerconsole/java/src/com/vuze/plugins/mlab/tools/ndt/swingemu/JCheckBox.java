@@ -26,6 +26,7 @@ public class
 JCheckBox
     extends Component
 {
+    /** True when the checkbox is checked; no visual component renders this state */
     boolean selected;
 
     /**

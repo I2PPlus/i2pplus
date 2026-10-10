@@ -171,7 +171,8 @@ public final class SimpleByteCache {
      * Next available array, either from the cache or a brand new one.
      *
      * @param size how large should the object be?
-     * @return the array
+     * @return a byte array of exactly that length, taken from the cache when one
+     *         of that size is free and allocated otherwise; never null
      */
     public static byte[] acquire(int size) {
         return getInstance(size).acquire();
@@ -186,6 +187,7 @@ public final class SimpleByteCache {
 
     /**
      * Put this array back onto the available cache for reuse
+     * @param entry the array to recycle; ignored if null, or if no cache exists for its length
      */
     public static void release(byte[] entry) {
         if (entry == null) return;

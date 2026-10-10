@@ -51,6 +51,12 @@ import net.i2p.util.Log;
  * </ul>
  */
 public abstract class TransportUtil {
+    /**
+     * Constructor for subclasses; the operations in this base class are static.
+     */
+
+    public TransportUtil() {}
+
 
     /**
      * NTCP_IPV6_CONFIG.
@@ -64,8 +70,9 @@ public abstract class TransportUtil {
      * PROP_IPV4_FIREWALLED.
      */
     public static final String PROP_IPV4_FIREWALLED = "i2np.ipv4.firewalled";
-    /** @since 0.9.28 */
+    /** If true, this router believes its IPv6 address is firewalled. */
     public static final String PROP_IPV6_FIREWALLED = "i2np.ipv6.firewalled";
+    /** @since 0.9.28 */
     private static final String PROP_PORT_PFX = "i2np.";
     private static final String PROP_MIN_PORT_SFX = ".minPort";
     private static final String PROP_MAX_PORT_SFX = ".maxPort";
@@ -112,6 +119,8 @@ public abstract class TransportUtil {
 
         /**
          * The config string for this option.
+         *
+         * @return the config string this option serialises to
          */
         public String toConfigString() {
             return cfgstr;
@@ -135,6 +144,9 @@ public abstract class TransportUtil {
 
     /**
      * The IPv6 config for the given transport style.
+     *
+     * @param ctx the router context
+     * @param transportStyle the transport to read the config for, NTCP or SSU
      * @return the IPv6 config
      */
     public static IPv6Config getIPv6Config(RouterContext ctx, String transportStyle) {
@@ -150,6 +162,8 @@ public abstract class TransportUtil {
 
     /**
      * The IPv6 config for the given config string.
+     *
+     * @param cfg the config string to look up
      * @return the IPv6 config
      */
     public static IPv6Config getIPv6Config(String cfg) {
@@ -164,6 +178,7 @@ public abstract class TransportUtil {
     /**
      * This returns true if the force-firewalled setting is configured, false otherwise.
      *
+     * @param ctx the router context
      * @return whether i pv4 firewalled
      * @since 0.9.20
      */
@@ -174,6 +189,7 @@ public abstract class TransportUtil {
     /**
      * This returns true if the force-firewalled setting is configured, false otherwise.
      *
+     * @param ctx the router context
      * @return whether i pv6 firewalled
      * @since 0.9.27, implemented in 0.9.28
      */
@@ -257,6 +273,7 @@ public abstract class TransportUtil {
 
     /**
      * Whether the address is an in-network Yggdrasil address.
+     * @param addr the address to classify
      * @return whether yggdrasil
      * @since 0.9.49
      */
@@ -269,6 +286,7 @@ public abstract class TransportUtil {
     /**
      * Address type of the given RouterAddress.
      *
+     * @param addr the address to classify
      * @return null if unknown
      * @since 0.9.54
      */
@@ -280,6 +298,7 @@ public abstract class TransportUtil {
     /**
      * Address type of the given host string.
      *
+     * @param host the host string to classify
      * @return null if unknown
      * @since 0.9.54
      */
@@ -299,6 +318,7 @@ public abstract class TransportUtil {
     /**
      * Address type of the given IP address.
      *
+     * @param ip the raw 4 or 16 byte address to classify
      * @return null if unknown
      * @since 0.9.54
      */
@@ -319,6 +339,7 @@ public abstract class TransportUtil {
      * Whether the address is publicly routable, optionally allowing IPv6.
      *
      * @param addr non-null
+     * @param allowIPv6 true to treat global IPv6 addresses as routable
      * @return whether publicly routable
      */
     public static boolean isPubliclyRoutable(byte[] addr, boolean allowIPv6) {
@@ -329,6 +350,8 @@ public abstract class TransportUtil {
      * Ref: RFC 5735
      *
      * @param addr non-null
+     * @param allowIPv4 true to treat global IPv4 addresses as routable
+     * @param allowIPv6 true to treat global IPv6 addresses as routable
      * @return whether publicly routable
      */
     public static boolean isPubliclyRoutable(byte[] addr, boolean allowIPv4, boolean allowIPv6) {
@@ -419,6 +442,7 @@ public abstract class TransportUtil {
      * ref: http://i2p-projekt.i2p/en/docs/ports
      * ref: https://cs.chromium.org/chromium/src/net/base/port_util.cc
      *
+     * @param port the port to test
      * @return whether valid port
      * @since 0.9.17 moved from logic in individual transports
      */
@@ -456,6 +480,10 @@ public abstract class TransportUtil {
 
     /**
      * Logs an error for an invalid port.
+     *
+     * @param log the logger to write to
+     * @param transportStyle the transport that was configured
+     * @param port the rejected port
      * @since 0.9.39 pulled out of UDPEndpoint
      */
     public static void logInvalidPort(Log log, String transportStyle, int port) {
@@ -465,6 +493,10 @@ public abstract class TransportUtil {
 
     /**
      * Pick a random port between the configured boundaries
+     *
+     * @param ctx the router context
+     * @param transportStyle the transport the port is for, NTCP or SSU
+     * @return the port chosen
      */
     public static int selectRandomPort(RouterContext ctx, String transportStyle) {
         if (transportStyle.equals("SSU"))

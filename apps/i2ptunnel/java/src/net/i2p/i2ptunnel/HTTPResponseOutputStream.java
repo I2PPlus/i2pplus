@@ -31,12 +31,17 @@ import net.i2p.util.Log;
  */
 class HTTPResponseOutputStream extends FilterOutputStream {
     private final Log _log;
+    /** pooled buffer holding the response header block while it is parsed, null once emitted */
     protected ByteArray _headerBuffer;
     private volatile boolean _headerWritten;
     private final byte[] _buf1;
+    /** set when the response carries Content-Encoding: x-i2p-gzip, so the body is gunzipped */
     protected volatile boolean _gzip;
+    /** Content-Length of the body in bytes, -1 if unknown or chunked, 0 for a bodyless response */
     protected volatile long _dataExpected = -1;
+    /** true if the outproxy (I2P) side connection may be reused after this response */
     protected volatile boolean _keepAliveIn;
+    /** true if the browser side socket may be reused after this response */
     protected volatile boolean _keepAliveOut;
     /** response-scoped, set during header parsing */
     private boolean _chunked;
@@ -57,8 +62,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private int _statusCode;
     /** Body bytes to drop from the next response before forwarding (200 after Range). */
     private long _resumeSkipBytes;
-    /** True when a transient status (408/502/503/504) aborted a Range resume —
-     * next attempt must re-request from byte 0 without Range. */
+    /**
+     * True when a transient status (408/502/503/504) aborted a Range resume —
+     * next attempt must re-request from byte 0 without Range.
+     */
     private volatile boolean _transientResumeFailure;
 
     private static final int CACHE_SIZE = 16*1024;
@@ -70,6 +77,11 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     private static final byte[] CONNECTION_CLOSE = DataHelper.getASCII("Connection: close\r\n");
     private static final byte[] CRLF = DataHelper.getASCII("\r\n");
 
+    /**
+     * Construct a response filter with no callback and no keepalive.
+     *
+     * @param raw the stream the filtered response is written to
+     */
     public HTTPResponseOutputStream(OutputStream raw) {
         this(raw, null);
     }
@@ -92,6 +104,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     /**
      * Optionally keep sockets alive and call callback when we're done.
      *
+     * @param raw the socket stream that the response headers and body are written to
      * @param allowKeepAliveIn We may, but are not required to, keep the input socket alive.
      * This is the server on the server side and I2P on the client side.
      * @param allowKeepAliveOut We may, but are not required to, keep the output socket alive.
@@ -212,7 +225,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     /**
-     * write.
+     * Write a single byte, buffering it until the header block is complete.
      */
     @Override
     public void write(int c) throws IOException {
@@ -221,7 +234,13 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     /**
-     * write.
+     * Buffer bytes into the header block until the blank line arrives, then write
+     * the header out and forward the remaining bytes as the entity body.
+     *
+     * @param buf source buffer holding header bytes, then body bytes
+     * @param off index in buf of the first byte to write
+     * @param len number of bytes to write from buf
+     * @throws IOException if the header exceeds the size limit or the underlying write fails
      */
     @Override
     public void write(byte[] buf, int off, int len) throws IOException {
@@ -252,9 +271,9 @@ class HTTPResponseOutputStream extends FilterOutputStream {
      * Forward entity-body bytes, applying any Range-resume skip of a
      * full-body (200) re-send that duplicates an already-delivered prefix.
      *
-     * @param buf source buffer
-     * @param off first body byte index
-     * @param len number of body bytes
+     * @param buf buffer holding the bytes already read from the peer
+     * @param off index of the first body byte within buf
+     * @param len number of body bytes available in buf from off
      * @throws IOException if the browser write fails
      */
     private void writeBody(byte[] buf, int off, int len) throws IOException {
@@ -271,7 +290,8 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     /**
-     * grow (and free) the buffer as necessary
+     * Grow (and free) the header buffer as necessary.
+     *
      * @throws IOException if the headers are too big
      */
     private void ensureCapacity() throws IOException {
@@ -608,16 +628,23 @@ class HTTPResponseOutputStream extends FilterOutputStream {
     }
 
     /**
-     * @return whether compress
+     * Whether the response body should be compressed before it is forwarded.
+     *
+     * @return true if the body should be compressed
      */
     protected boolean shouldCompress() { return _gzip; }
 
+    /**
+     * Terminate the header block by writing the blank line that ends it.
+     *
+     * @throws IOException if the underlying stream cannot be written
+     */
     protected void finishHeaders() throws IOException {
         out.write(CRLF); // end of the headers
     }
 
     /**
-     * close.
+     * Release the pooled header buffer and close the underlying stream.
      */
     @Override
     public void close() throws IOException {
@@ -637,6 +664,11 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         }
     }
 
+    /**
+     * Start decoding the body, wrapping the output so x-i2p-gzip data is gunzipped.
+     *
+     * @throws IOException if the gunzip wrapper cannot be created
+     */
     protected void beginProcessing() throws IOException {
         OutputStream po = new GunzipOutputStream(out, _callback);
         synchronized(this) {

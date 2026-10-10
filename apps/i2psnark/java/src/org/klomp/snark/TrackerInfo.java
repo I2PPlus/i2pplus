@@ -39,7 +39,13 @@ class TrackerInfo {
     /**
      * Create tracker info for the metainfo.
      *
+     * @param in the bencoded tracker response to parse
+     * @param my_id our 20-byte peer ID, used to tell our own entry from the others
+     * @param infohash the torrent infohash, needed to build peers in magnet mode
      * @param metainfo may be null
+     * @param util supplies the router context the peer IDs are resolved in
+     * @throws IOException if the response stream cannot be read
+     * @throws Throwable if the bencoded map is malformed, including InvalidBEncodingException
      */
     public TrackerInfo(
             InputStream in, byte[] my_id, byte[] infohash, MetaInfo metainfo, I2PSnarkUtil util)
@@ -124,8 +130,15 @@ class TrackerInfo {
      * To convert returned UDPTracker data to the standard structure
      *
      * @param hashes may be null
+     * @param interval seconds to wait before re-announcing, from the tracker's response
+     * @param complete the seeding count, 0 if the tracker did not report one
+     * @param incomplete the downloading count, 0 if the tracker did not report one
      * @param downloaders the active downloader count, 0 if unknown (BEP 21)
      * @param error may be null
+     * @param my_id our 20-byte peer ID, used to tell our own entry from the others
+     * @param infohash the torrent infohash, needed to build peers in magnet mode
+     * @param metainfo may be null
+     * @param util supplies the router context the peer IDs are resolved in
      * @since 0.9.14
      */
     public TrackerInfo(
@@ -292,12 +305,20 @@ class TrackerInfo {
         return Math.max(0, incomplete - downloaders);
     }
 
-    /** Not HTML escaped. */
+    /**
+     * Not HTML escaped.
+     *
+     * @return the tracker's failure reason, or null if the announce succeeded
+     */
     public String getFailureReason() {
         return failure_reason;
     }
 
-    /** Interval in seconds. */
+    /**
+     * Interval in seconds.
+     *
+     * @return the re-announce interval in seconds, -1 after a failure response
+     */
     public int getInterval() {
         return interval;
     }

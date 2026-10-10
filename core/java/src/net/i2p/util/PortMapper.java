@@ -37,7 +37,8 @@ public class PortMapper {
     /** Eepsite service */
     public static final String SVC_EEPSITE = "eepsite";
 
-    /** HTTPS eepsite service name.
+    /**
+     * HTTPS eepsite service name.
      *
      * @since 0.9.34
      */
@@ -56,13 +57,15 @@ public class PortMapper {
     /** SAM service */
     public static final String SVC_SAM = "SAM";
 
-    /** SAM-UDP service name.
+    /**
+     * SAM-UDP service name.
      *
      * @since 0.9.24
      */
     public static final String SVC_SAM_UDP = "SAM-UDP";
 
-    /** SAM-SSL service name.
+    /**
+     * SAM-SSL service name.
      *
      * @since 0.9.24
      */
@@ -74,19 +77,22 @@ public class PortMapper {
     /** Not necessary, already in config? */
     public static final String SVC_I2CP = "I2CP";
 
-    /** I2CP-SSL service name.
+    /**
+     * I2CP-SSL service name.
      *
      * @since 0.9.23
      */
     public static final String SVC_I2CP_SSL = "I2CP-SSL";
 
-    /** HTTP I2PControl service name.
+    /**
+     * HTTP I2PControl service name.
      *
      * @since 0.9.34
      */
     public static final String SVC_HTTP_I2PCONTROL = "http_i2pcontrol";
 
-    /** HTTPS I2PControl service name.
+    /**
+     * HTTPS I2PControl service name.
      *
      * @since 0.9.34
      */
@@ -143,19 +149,22 @@ public class PortMapper {
      */
     public static final String SVC_JSONRPC = "jsonrpc";
 
-    /** Default HTTP console port.
+    /**
+     * Default HTTP console port.
      *
      * @since 0.9.34
      */
     public static final int DEFAULT_CONSOLE_PORT = 7657;
 
-    /** Default HTTPS console port.
+    /**
+     * Default HTTPS console port.
      *
      * @since 0.9.34
      */
     public static final int DEFAULT_HTTPS_CONSOLE_PORT = 7667;
 
-    /** Default host for local services.
+    /**
+     * Default host for local services.
      *
      * @since 0.9.34
      */
@@ -269,6 +278,7 @@ public class PortMapper {
      * The registered host for a service.
      * Will return "127.0.0.1" if the service was registered without a host.
      *
+     * @param service the registered service name to look up
      * @param def default
      * @return def if not registered
      * @since 0.9.21
@@ -287,6 +297,7 @@ public class PortMapper {
      * else a local IP if we have one, else def.
      * If it was not registered with a wildcard address, it will return the registered host.
      *
+     * @param service the registered service name to look up
      * @param def default
      * @return def if not registered
      * @since 0.9.24
@@ -359,8 +370,10 @@ public class PortMapper {
      * If preferHTTPS is false,
      * return http URL unless console is https only. Default http://127.0.0.1:7657/
      *
+     * @param preferHTTPS if true, start from the https console URL, which still
      * @return the console u r l
      * @since 0.9.34
+     *        downgrades to http when the console is not https-enabled
      */
     public String getConsoleURL(boolean preferHTTPS) {
         return preferHTTPS ? getHTTPSConsoleURL() : getHTTPConsoleURL();
@@ -437,6 +450,8 @@ public class PortMapper {
     /**
      * For debugging only
      *
+     * @param out the writer to render the debug table to
+     * @throws IOException if the writer rejects any of the table's write calls
      * @since 0.9.20
      */
     public void renderStatusHTML(Writer out) throws IOException {

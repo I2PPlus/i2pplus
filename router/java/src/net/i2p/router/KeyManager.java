@@ -55,6 +55,11 @@ public class KeyManager {
     public static final String KEYFILE_PRIVATE_SIGNING = "privateSigning.key";
     /** Path to the public signing key file */
     public static final String KEYFILE_PUBLIC_SIGNING = "publicSigning.key";
+    /**
+     * Create a key manager.
+     *
+     * @param context the router context
+     */
     public KeyManager(RouterContext context) {
         _context = context;
         _log = _context.logManager().getLog(KeyManager.class);
@@ -64,6 +69,10 @@ public class KeyManager {
     /**
      * Configure the router's keys.
      *
+     * @param key1 the router's public encryption key, published to peers and clients
+     * @param key2 the router's private encryption key
+     * @param key3 the router's signing public key, which certifies the router's identity
+     * @param key4 the router's signing private key
      * @since 0.9.4 replace individual setters
      */
     public void setKeys(PublicKey key1, PrivateKey key2, SigningPublicKey key3, SigningPrivateKey key4) {
@@ -107,7 +116,9 @@ public class KeyManager {
     /**
      * Client with a single key
      *
+     * @param dest the destination these keys belong to
      * @param leaseRevocationPrivateKey unused, may be null
+     * @param endpointDecryptionKey the key that decrypts transport messages to the destination
      */
     public void registerKeys(Destination dest, SigningPrivateKey leaseRevocationPrivateKey, PrivateKey endpointDecryptionKey) {
         if (_log.shouldInfo())
@@ -119,7 +130,9 @@ public class KeyManager {
     /**
      * Client with multiple keys
      *
+     * @param dest the destination these keys belong to
      * @param leaseRevocationPrivateKey unused, may be null
+     * @param endpointDecryptionKeys the keys that decrypt transport messages to the destination
      * @since 0.9.44
      */
     public void registerKeys(Destination dest, SigningPrivateKey leaseRevocationPrivateKey, List<PrivateKey> endpointDecryptionKeys) {
@@ -160,7 +173,12 @@ public class KeyManager {
         return getKeys(dest.calculateHash());
     }
 
-    /** Client session lease set keys. */
+    /**
+     * Client session lease set keys.
+     *
+     * @param dest the hash of the destination to look up
+     * @return the LeaseSetKeys registered for the destination, or null if there are none
+     */
     public LeaseSetKeys getKeys(Hash dest) {
             return _leaseSetKeys.get(dest);
     }

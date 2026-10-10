@@ -44,9 +44,12 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     ////////////////////////////////////////////////
 
     /**
+     * Binds the search socket for SSDP multicast traffic.
+     *
      * @param bindAddr The address to bind the service
      * @param port The port used for accepting message
      * @param multicast The multicast address to use as destination
+     * @throws IOException if the socket cannot be bound to bindAddr
      * @since 1.8
      */
     public SSDPSearchSocket(String bindAddr, int port, String multicast) throws IOException {
@@ -55,7 +58,10 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
+     * Binds the search socket to an IPv4 or IPv6 local address.
+     *
      * @param bindAddr the binding address for sending multicast packet
+     * @throws IOException if the socket cannot be bound to bindAddr
      * @since 1.8
      */
     public SSDPSearchSocket(InetAddress bindAddr) throws IOException {
@@ -73,6 +79,9 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     ////////////////////////////////////////////////
     /**
      * open.
+     *
+     * @param bindAddr the IPv4 local address to send multicast packets from
+     * @return true if and only if it open the socket
      */
     public boolean open(Inet4Address bindAddr) {
         useIPv6Address = false;
@@ -81,6 +90,9 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
 
     /**
      * open.
+     *
+     * @param bindAddr the IPv6 local address to send multicast packets from
+     * @return true if and only if it open the socket
      */
     public boolean open(Inet6Address bindAddr) {
         useIPv6Address = true;
@@ -89,6 +101,10 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
 
     /**
      * open.
+     *
+     * @param bind the local address or hostname to send multicast packets from
+     * @param multicast the destination multicast address, which must be of the same IP version as bind
+     * @return true if and only if it open the socket
      */
     public boolean open(String bind, String multicast) {
         if ((HostInterface.isIPv6Address(bind)) && (HostInterface.isIPv6Address(multicast))) {
@@ -103,6 +119,8 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
+     * open.
+     *
      * @param bindAddr the hostname of the interface to use for sending multicast packet
      * @return true if and only if it open the socket
      * @see org.cybergarage.upnp.ssdp for default multicast and port destination of the packets
@@ -125,6 +143,8 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
 
     /**
      * addSearchListener.
+     *
+     * @param listener the listener notified for every received search request
      */
     public void addSearchListener(SearchListener listener) {
         deviceSearchListenerList.add(listener);
@@ -132,6 +152,8 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
 
     /**
      * removeSearchListener.
+     *
+     * @param listener the listener to stop notifying
      */
     public void removeSearchListener(SearchListener listener) {
         deviceSearchListenerList.remove(listener);
@@ -139,6 +161,8 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
 
     /**
      * performSearchListener.
+     *
+     * @param ssdpPacket the received search request to hand to every registered listener
      */
     public void performSearchListener(SSDPPacket ssdpPacket) {
         int listenerSize = deviceSearchListenerList.size();

@@ -17,6 +17,12 @@ package org.minidns.idna;
  */
 public class MiniDnsIdna {
 
+    /**
+     * The transformator is a single static instance shared by every caller, so an
+     * object here carries no per-instance state.
+     */
+    public MiniDnsIdna() {}
+
     /** The active IDNA transformator implementation */
     private static IdnaTransformator idnaTransformator = new DefaultIdnaTransformator();
 

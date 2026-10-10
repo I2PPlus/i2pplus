@@ -71,7 +71,10 @@ public class SessionId {
     /**
      * Read the session ID from a stream.
      *
+     * @param in the stream positioned at the two byte big-endian session id
      * @throws IllegalStateException if already set
+     * @throws DataFormatException if the two bytes read are not a usable value
+     * @throws IOException if the stream ends before two bytes are available
      */
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         if (_sessionId >= 0) {
@@ -80,7 +83,13 @@ public class SessionId {
         _sessionId = (int) DataHelper.readLong(in, 2);
     }
 
-    /** Writes the session ID to a stream. */
+    /**
+     * Writes the session ID to a stream.
+     *
+     * @param out the stream to write the two byte big-endian session id to
+     * @throws DataFormatException if the session id has not been set
+     * @throws IOException if the stream cannot be written
+     */
     public void writeBytes(OutputStream out) throws DataFormatException, IOException {
         if (_sessionId < 0) {
             throw new DataFormatException("Invalid Session ID: " + _sessionId);

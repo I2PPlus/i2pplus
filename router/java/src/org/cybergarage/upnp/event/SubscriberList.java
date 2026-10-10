@@ -41,6 +41,12 @@ public class SubscriberList extends Vector<Subscriber> {
     //	Methods
     ////////////////////////////////////////////////
 
+    /**
+     * Gets the subscriber at the specified index, swallowing list failures.
+     *
+     * @param n the zero-based index into the subscription list
+     * @return the subscriber at that index, or null if the lookup fails
+     */
     public Subscriber getSubscriber(int n) {
         Object obj = null;
         try {

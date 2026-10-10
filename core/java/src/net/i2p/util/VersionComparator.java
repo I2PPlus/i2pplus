@@ -13,6 +13,12 @@ import java.util.Comparator;
  */
 public class VersionComparator implements Comparator<String>, Serializable {
 
+    /**
+     * A stateless comparator - compare() just delegates to comp() - so a bare instance
+     * behaves exactly like any other.
+     */
+    public VersionComparator() {}
+
     @Override
     public int compare(String l, String r) {
         return comp(l, r);
@@ -21,6 +27,9 @@ public class VersionComparator implements Comparator<String>, Serializable {
     /**
      *  To avoid churning comparators
      *
+     * @param l the left-hand version string, the one being ordered
+     * @param r the right-hand version string, the one being ordered against
+     * @return negative if l sorts older than r, positive if newer, 0 if equivalent
      *  @since 0.9.7
      */
     public static int comp(String l, String r) {

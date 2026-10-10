@@ -17,6 +17,8 @@ class DummyHandler implements Checker, Updater {
 
     /**
      * DummyHandler.
+     * @param ctx router context handed to the runner as the runner's owner
+     * @param mgr update manager notified when the dummy run finishes or fails
      */
     public DummyHandler(RouterContext ctx, ConsoleUpdateManager mgr) {
         _context = ctx;

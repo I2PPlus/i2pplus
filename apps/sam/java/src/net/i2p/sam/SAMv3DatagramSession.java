@@ -38,9 +38,12 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
      * Caller MUST call start().
      *
      * @param nick nickname of the session
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
+     * @param dgServer the datagram server that dispatches datagrams to this session
+     * @throws IOException declared on this constructor, but not raised by the body
+     * @throws DataFormatException likewise declared, but not raised by the body
+     * @throws I2PSessionException if the session registered under nick cannot
+     *                            be rebuilt from the record's destination
+     * @throws SAMException if the nickname is no longer registered
      */
     public SAMv3DatagramSession(String nick, SAMv3DatagramServer dgServer)
             throws IOException, DataFormatException, I2PSessionException, SAMException {
@@ -64,8 +67,8 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
      * Look up the registered session record for the given nickname,
      * throwing if it has already disappeared.
      *
-     * @throws SAMException if the nickname is not registered
      * @return the rec
+     * @throws SAMException if the nickname is not registered
      */
     private static SessionRecord getRec(String nick) throws SAMException {
         SessionRecord rec = SAMv3Handler.sSessionsHash.get(nick);
@@ -81,9 +84,16 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
      * Caller MUST call start().
      *
      * @param nick nickname of the session
-     * @throws IOException
-     * @throws DataFormatException
-     * @throws I2PSessionException
+     * @param props session properties read from the SESSION CREATE command
+     * @param handler handler used to send DATAGRAM replies back to the client
+     * @param isess the existing I2P session this datagram session runs over
+     * @param listenProtocol datagram protocol number to listen for, 0 for any
+     * @param listenPort local port to listen on, 0 for any
+     * @param dgServer the datagram server that dispatches datagrams to this session
+     * @throws IOException declared on this constructor, but not raised by the body
+     * @throws DataFormatException likewise declared, but not raised by the body
+     * @throws I2PSessionException declared on this constructor, but not raised
+     *                            by the body
      * @since 0.9.25
      */
     public SAMv3DatagramSession(
@@ -106,7 +116,7 @@ class SAMv3DatagramSession extends SAMDatagramSession implements Session, SAMDat
     /**
      * Receive a datagram from I2P and forward to the SAM client.
      *
-     * @param sender the sender
+     * @param sender the destination that sent the datagram
      * @param data the datagram payload
      * @param proto the I2CP protocol
      * @param fromPort the I2CP from port

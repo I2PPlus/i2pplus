@@ -33,6 +33,9 @@ class SingleLookupJob extends JobImpl {
 
     /**
      * SingleLookupJob.
+     *
+     * @param ctx the router context
+     * @param dsrm the search reply naming the router hashes to follow up on
      */
     public SingleLookupJob(RouterContext ctx, DatabaseSearchReplyMessage dsrm) {
         super(ctx);

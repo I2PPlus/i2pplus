@@ -29,6 +29,8 @@ public class HostCheckHandler extends HandlerWrapper
 
     /**
      * MUST call setListenHosts() afterwards.
+     *
+     * @param ctx application context, used to obtain the log for rejected Host headers
      */
     public HostCheckHandler(I2PAppContext ctx) {
         super();

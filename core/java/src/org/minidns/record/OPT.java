@@ -43,6 +43,8 @@ public class OPT extends Data {
 
     /**
      * OPT.
+     *
+     * @param variablePart the EDNS options this record carries, stored unmodifiable
      */
     public OPT(List<EdnsOption> variablePart) {
         this.variablePart = Collections.unmodifiableList(variablePart);
@@ -50,6 +52,11 @@ public class OPT extends Data {
 
     /**
      * parse.
+     *
+     * @param dis the stream to read the option payload from
+     * @param payloadLength the number of option payload bytes the record declares, which bounds the reads
+     * @return an OPT record holding the options decoded from the stream
+     * @throws IOException if the stream cannot be read, or an option's declared length runs past the payload
      */
     public static OPT parse(DataInputStream dis, int payloadLength) throws IOException {
         List<EdnsOption> variablePart;

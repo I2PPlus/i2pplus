@@ -29,6 +29,9 @@ class OutboundReceiver implements TunnelGateway.Receiver {
 
     /**
      * Binds the context and tunnel config, caching the first hop router info.
+     *
+     * @param ctx router context, used for the log, the netdb lookup and the failure job
+     * @param cfg tunnel configuration supplying the first hop, priority and send tunnel
      */
     public OutboundReceiver(RouterContext ctx, TunnelCreatorConfig cfg) {
         _context = ctx;

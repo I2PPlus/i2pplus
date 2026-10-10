@@ -35,6 +35,12 @@ import java.nio.charset.StandardCharsets;
  */
 public class QRServlet extends HttpServlet {
 
+    /**
+     * A servlet with no init parameters applied yet; the container calls init()
+     * before the first request, so construction alone configures nothing.
+     */
+    public QRServlet() {}
+
     private static final long serialVersionUID = -3507466186902317988L;
     private static final String INIT_PARAM_VERSION = "version";
     private static final String INIT_PARAM_CACHE_PROVIDER = "cacheProvider";
@@ -48,8 +54,11 @@ public class QRServlet extends HttpServlet {
     private static final long DEFAULT_IDENTICON_EXPIRES_IN_MILLIS = 24 * 60 * (long) 60 * 1000;
     private static final String DEFAULT_FONT_NAME = SystemVersion.isWindows() ?
                                                     "Lucida Sans Typewriter" : Font.MONOSPACED;
+    /** Bumped when the rendered output format changes. */
     private int version = 1;
+    /** Cache of rendered identicons, keyed by seed. */
     private IdenticonCache cache;
+    /** How long a rendered identicon stays in the cache. */
     private long identiconExpiresInMillis = DEFAULT_IDENTICON_EXPIRES_IN_MILLIS;
 
     /** Check if client accepts SVG */

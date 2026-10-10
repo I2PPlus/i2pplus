@@ -27,11 +27,11 @@ public class SessionManager {
     private static final int MAX_FAILED_ATTEMPTS = 5;
     private static final long FAILURE_WINDOW_MS = 5 * (long) 60 * 1000; // 5 minutes
     /**
-     * SESSION_COOKIE_NAME.
+     * Name of the cookie carrying the session token to the console.
      */
     public static final String SESSION_COOKIE_NAME = "I2P+AUTH";
     /**
-     * SESSION_ATTR_USER.
+     * Session attribute under which the console stores the logged-in username.
      */
     public static final String SESSION_ATTR_USER = "user";
 
@@ -52,7 +52,8 @@ public class SessionManager {
     }
 
     /**
-     * @return the instance
+     * Returns the single session manager, creating it on first use.
+     * @return the singleton instance holding the live session table
      */
     public static SessionManager getInstance() {
         return INSTANCE;
@@ -60,7 +61,8 @@ public class SessionManager {
 
     /**
      * Create a new session for a user with default 30 min expiry.
-     * @return session token
+     * @param username the user the session is issued to, returned by validateSession()
+     * @return the 64-character hex session token to hand to the client
      */
     public String createSession(String username) {
         return createSession(username, SESSION_TIMEOUT_MS);
@@ -68,9 +70,9 @@ public class SessionManager {
 
     /**
      * Create a new session for a user with custom expiry.
-     * @param username the username
+     * @param username the user the session is issued to, returned by validateSession()
      * @param expiryMs expiry time in milliseconds, or -1 for no expiry (forever)
-     * @return session token
+     * @return the 64-character hex session token to hand to the client
      */
     public String createSession(String username, long expiryMs) {
         String token = generateToken();
@@ -82,6 +84,7 @@ public class SessionManager {
 
     /**
      * Validate a session token.
+     * @param token the token to look up; null is treated as invalid
      * @return username if valid, null if invalid/expired
      */
     public String validateSession(String token) {
@@ -99,7 +102,7 @@ public class SessionManager {
      * Restore a persisted session with its original token.
      * Used on router restart to maintain login sessions.
      * @param token the original session token from persistence
-     * @param username the username
+     * @param username the user the restored session belongs to, returned by validateSession()
      * @param expiresAt absolute expiry time, or -1 for no expiry
      */
     public void restoreSession(String token, String username, long expiresAt) {
@@ -108,7 +111,9 @@ public class SessionManager {
     }
 
     /**
-     * Invalidate a session.
+     * Drops a session token, so validateSession() stops accepting it.
+     *
+     * @param token the token to drop from the session table; null is ignored
      */
     public void invalidateSession(String token) {
         if (token != null) {
@@ -143,7 +148,7 @@ public class SessionManager {
     }
 
     /**
-     * shutdown.
+     * Stops the cleanup scheduler, ending periodic session expiry.
      */
     public void shutdown() {
         _cleanup.shutdownNow();
@@ -151,6 +156,8 @@ public class SessionManager {
 
     /**
      * Record a failed login attempt from an IP address.
+     *
+     * @param ip the client address the attempt came from, used as the counter key
      */
     public void recordFailedLogin(String ip) {
         long now = System.currentTimeMillis();
@@ -167,6 +174,7 @@ public class SessionManager {
 
     /**
      * Check if IP is blocked due to too many failed attempts.
+     * @param ip the client address to test against the recent-failure counters
      * @return true if blocked
      */
     public boolean isBlocked(String ip) {
@@ -182,6 +190,8 @@ public class SessionManager {
 
     /**
      * Clear failed login attempts for an IP after successful login.
+     *
+     * @param ip the client address whose failure counter is discarded
      */
     public void clearFailedLogins(String ip) {
         _failedLogins.remove(ip);

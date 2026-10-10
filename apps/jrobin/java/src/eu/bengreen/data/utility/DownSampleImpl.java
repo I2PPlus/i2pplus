@@ -22,7 +22,14 @@ public abstract class DownSampleImpl implements DownSampler {
         this.threshold = threshold;
     }
 
-    /** Populate a single element in the downsampled data set. */
+    /**
+     * Populate a single element in the downsampled data set.
+     *
+     * @param sampled the data set receiving the timestamp and value at this rank
+     * @param rank the position within the downsampled data set to write
+     * @param timestamp the source timestamp, in seconds since the epoch
+     * @param value the source value retained for this rank
+     */
     protected void setDataSetLine(
             DownSampler.DataSet sampled, int rank, long timestamp, double value) {
         sampled.timestamps[rank] = timestamp;
@@ -50,5 +57,18 @@ public abstract class DownSampleImpl implements DownSampler {
         }
     }
 
+    /**
+     * Reduces the source series into the pre-allocated output set. Implementations pick the
+     * ranks to keep, write them one slot at a time with {@link #setDataSetLine}, and return
+     * that same set; {@link #downsize} has already rejected inputs shorter than the output
+     * and mismatched array lengths.
+     *
+     * @param sampled the empty output set allocated by downsize(), holding exactly
+     *        threshold timestamp and value slots to fill
+     * @param timestamps the full source timestamps in seconds since the epoch, more than
+     *        threshold in number
+     * @param values the full source values, the same length as timestamps
+     * @return the same sampled set, with the threshold chosen ranks written into it
+     */
     protected abstract DataSet downsizeImpl(DataSet sampled, long[] timestamps, double[] values);
 }

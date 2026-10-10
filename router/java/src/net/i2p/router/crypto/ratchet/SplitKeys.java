@@ -18,7 +18,12 @@ class SplitKeys {
     public final SessionKey k_ab;
     /** The session key for direction {B to A} */
     public final SessionKey k_ba;
-    /** Derives ck, k_ab, k_ba from Noise handshake split stage. */
+    /**
+     * Derives ck, k_ab, k_ba from Noise handshake split stage.
+     *
+     * @param state the handshake state supplying the chaining key to be expanded
+     * @param hkdf the HKDF expanding that key into the two directional session keys
+     */
 
     public SplitKeys(HandshakeState state, HKDF hkdf) {
         byte[] ckd = state.getChainingKey();

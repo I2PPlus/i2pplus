@@ -36,6 +36,8 @@ interface CoordinatorListener {
     /**
      * Called when the PeerCoordinator got the MetaInfo via magnet.
      *
+     * @param coordinator the PeerCoordinator that retrieved the metadata
+     * @param metainfo the torrent metadata parsed out of the magnet URI
      * @since 0.8.4
      */
     void gotMetaInfo(PeerCoordinator coordinator, MetaInfo metainfo);

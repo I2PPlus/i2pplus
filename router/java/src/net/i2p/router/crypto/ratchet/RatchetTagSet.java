@@ -438,6 +438,8 @@ class RatchetTagSet implements TagSetHandle {
     /**
      * Inbound only.
      *
+     * @param tag the message tag presented by the inbound message, looked up in the
+     *        set and removed once found
      * @return associated SessionKey or null if not found.
      */
     public SessionKeyAndNonce consume(RatchetSessionTag tag) {
@@ -555,6 +557,7 @@ class RatchetTagSet implements TagSetHandle {
      * Return the set of tags registered in the SKM's _inboundTagSets map.
      * Used for O(tags_in_set) removal in RatchetSKM.consumeTag().
      *
+     * @return every tag this set has registered with the session key manager
      * @since 0.9.70
      */
     Set<RatchetSessionTag> getRegisteredTags() {

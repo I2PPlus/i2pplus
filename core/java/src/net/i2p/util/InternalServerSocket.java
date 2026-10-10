@@ -37,7 +37,11 @@ public class InternalServerSocket extends ServerSocket {
     // private static Log _log = I2PAppContext.getGlobalContext().logManager().getLog(InternalServerSocket.class);
 
     /**
+     * Claim an internal port for this router. The claim is tracked in a static map,
+     * so the same port cannot be taken twice even across routers in one JVM.
+     *
      * @param port &gt; 0
+     * @throws IOException if the port is not positive, or another server socket already holds it
      */
     public InternalServerSocket(int port) throws IOException {
         if (port <= 0) throw new IOException("Bad port: " + port);
@@ -87,6 +91,8 @@ public class InternalServerSocket extends ServerSocket {
      * This is how the client connects.
      *
      * @param port &gt; 0
+     * @param clientSock the client socket to wire the paired piped streams onto
+     * @throws IOException if no server socket is listening on that port, or it has been closed
      */
     static void internalConnect(int port, InternalSocket clientSock) throws IOException {
         InternalServerSocket iss = _sockets.get(Integer.valueOf(port));
@@ -156,6 +162,8 @@ public class InternalServerSocket extends ServerSocket {
     /**
      * For debugging only
      *
+     * @param out the writer to render the table of open ports into
+     * @throws IOException if the writer rejects the HTML fragment
      * @since 0.9.33
      */
     public static void renderStatusHTML(Writer out) throws IOException {

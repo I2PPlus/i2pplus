@@ -37,6 +37,13 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     private static final String PROP_KEY_PASSWORD = "i2cp.keyPassword";
     private static final String KEY_ALIAS = "i2cp";
     private static final String ASCII_KEYFILE = "i2cp.local.crt";
+    /**
+     * Creates an SSL listener on the given port, opening the client manager.
+     *
+     * @param context the router context
+     * @param manager the client manager to attach to the listener
+     * @param port the SSL port to listen on
+     */
     public SSLClientListenerRunner(RouterContext context, ClientManager manager, int port) {
         super(context, manager, port);
     }
@@ -76,7 +83,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
      * libs or using proprietary Sun libs, and it's a huge mess.
      * If successful, stores the keystore password and key password in router.config.
      *
-     * @return success
+     * @return true if the keystore was created and its passwords saved
      */
     private boolean createKeyStore(File ks) {
         // make a random 48 character password (30 * 8 / 5)
@@ -126,7 +133,7 @@ class SSLClientListenerRunner extends ClientListenerRunner {
     /**
      * The SSLContext and socket factory set up from the given keystore.
      *
-     * @return success
+     * @return true if the factory was built and stored, false if the keystore could not be read
      */
     private boolean initializeFactory(File ks) {
         String ksPass = _context.getProperty(PROP_KEYSTORE_PASSWORD, KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD);

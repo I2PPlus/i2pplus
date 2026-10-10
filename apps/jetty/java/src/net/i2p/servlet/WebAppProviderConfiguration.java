@@ -18,8 +18,15 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class WebAppProviderConfiguration {
 
     /**
+     * configure() takes the provider it configures as an argument, so a bare instance is
+     * how jetty.xml invokes it.
+     */
+    public WebAppProviderConfiguration() {}
+
+    /**
      * Modified from routerconsole WebAppStarter.
      * MUST be called from jetty.xml after the WebAppProvider is created.
+     * @param wap the provider whose configuration class list is extended with WAPConfiguration and whose temp dir is redirected to the router's
      */
     public static void configure(WebAppProvider wap) {
         String[] classNames = WebAppContext.getDefaultConfigurationClasses();
@@ -37,6 +44,12 @@ public class WebAppProviderConfiguration {
      * @since 0.9.41
      */
     public static class WAPConfiguration implements Configuration {
+
+        /**
+         * A Jetty configuration class whose methods are all driven by the context Jetty
+         * passes in, so a bare instance is how Jetty instantiates it.
+         */
+        public WAPConfiguration() {}
 
         public void deconfigure(WebAppContext context) {
             // no-op

@@ -21,6 +21,12 @@ import net.i2p.util.VersionComparator;
  * @since 0.9.17
  */
 public class NewsMetadata {
+    /**
+     * Every field is left null or zero; the Atom parser fills them in as it reads
+     * the feed element.
+     */
+    public NewsMetadata() {}
+
     /** Standard Atom feed metadata */
     public String feedTitle;
     /** Standard Atom feed metadata */
@@ -47,6 +53,12 @@ public class NewsMetadata {
      * @since 0.9.17
      */
     public static class Release implements Comparable<Release> {
+        /**
+         * Every field is left null or zero; the Atom parser fills them in as it reads
+         * the release element.
+         */
+        public Release() {}
+
         /** The release date */
         public long date;
         /** The minimum I2P version required */
@@ -104,6 +116,12 @@ public class NewsMetadata {
      * @since 0.9.52
      */
     public static class Update implements Comparable<Update> {
+        /**
+         * Every field is left null; the Atom parser fills in whichever of the source
+         * URLs the update element actually carries.
+         */
+        public Update() {}
+
         /** The update type (su3, su2, etc.) */
         public String type;
         /** The torrent source URL */

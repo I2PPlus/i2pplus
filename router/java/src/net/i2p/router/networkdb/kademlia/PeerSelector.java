@@ -27,15 +27,35 @@ abstract class PeerSelector {
     /** _context. / */
     protected final RouterContext _context;
 
-    /** PeerSelector. / */
+    /**
+     * PeerSelector. /
+     *
+     * @param ctx the router context whose log and profile organizer this selector uses
+     */
     public PeerSelector(RouterContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
     }
 
-    /** Peers nearest to the key in routing space. */
+    /**
+     * Peers nearest to the key in routing space.
+     *
+     * @param key the routing key to search for
+     * @param maxNumRouters the most hashes to return, zero or less meaning no limit
+     * @param peersToIgnore hashes already chosen or excluded from this selection
+     * @param kbuckets the routing table to select from
+     * @return the nearest peers in ascending Kademlia distance
+     */
     abstract List<Hash> selectNearest(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
-    /** Peers nearest to the key, floodfills first, then sorted by Kademlia distance. */
+    /**
+     * Peers nearest to the key, floodfills first, then sorted by Kademlia distance.
+     *
+     * @param key the routing key to search for
+     * @param maxNumRouters the most hashes to return, zero or less meaning no limit
+     * @param peersToIgnore hashes already chosen or excluded from this selection
+     * @param kbuckets the routing table to select from
+     * @return the floodfill peers nearest the key, then the other peers by distance
+     */
     abstract List<Hash> selectNearestExplicit(Hash key, int maxNumRouters, Set<Hash> peersToIgnore, KBucketSet<Hash> kbuckets);
 
 }

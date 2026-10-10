@@ -76,17 +76,24 @@ final class FormatInformation {
     dataMask = (byte) (formatInfo & 0x07);
   }
 
-  /** @return number of differing bits */
+  /**
+   * Counts the bits that differ between the two format info bit patterns.
+   *
+   * @param a first of the two format info bit patterns to compare
+   * @param b second of the two format info bit patterns to compare
+   * @return number of differing bits
+   */
   static int numBitsDiffering(int a, int b) {
     return Integer.bitCount(a ^ b);
   }
 
   /**
+   * to establish best match
+   * if doesn't seem to match any known pattern
+   *
    * @param maskedFormatInfo1 format info indicator, with mask still applied
    * @param maskedFormatInfo2 second copy of same info; both are checked at the same time
-   * to establish best match
    * @return information about the format it specifies, or {@code null}
-   * if doesn't seem to match any known pattern
    */
   static FormatInformation decodeFormatInformation(int maskedFormatInfo1, int maskedFormatInfo2) {
     FormatInformation formatInfo = doDecodeFormatInformation(maskedFormatInfo1, maskedFormatInfo2);
@@ -133,12 +140,18 @@ final class FormatInformation {
     return null;
   }
 
-  /** Error correction level decoded from format info bits. */
+  /**
+   * Error correction level decoded from format info bits.
+   * @return the level selected by bits 3 and 4 of the format information
+   */
   ErrorCorrectionLevel getErrorCorrectionLevel() {
     return errorCorrectionLevel;
   }
 
-  /** Data mask reference decoded from format info bits. */
+  /**
+   * Data mask reference decoded from format info bits.
+   * @return the 0-7 mask pattern reference taken from the bottom three bits
+   */
   byte getDataMask() {
     return dataMask;
   }

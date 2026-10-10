@@ -48,6 +48,8 @@ public class ReseedBundler {
 
     /**
      * ReseedBundler.
+     *
+     * @param ctx the router context used to reach netDb, commSystem, and the temp directory
      */
     public ReseedBundler(RouterContext ctx) {
         _context = ctx;
@@ -61,6 +63,11 @@ public class ReseedBundler {
      * introduced routers, and those from bad countries.
      *
      * The file will be in the temp directory. Caller must move or delete.
+     *
+     * @param count how many router infos to bundle; at least MINIMUM are required unless fewer qualify
+     * @return the freshly written zip in the router temp directory, which the caller must move or delete
+     * @throws IOException if no eligible router infos were found, if fewer than the requested count qualified,
+     * or if the temp file could not be written
      */
     @SuppressWarnings("PMD.AvoidThrowingNewInstanceOfSameException")
     public File createZip(int count) throws IOException {

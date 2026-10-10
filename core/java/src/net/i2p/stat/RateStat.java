@@ -167,9 +167,9 @@ public void addData(long value, long eventDuration) {
      * Update all of the rates for the various periods with the given value.
      * Zero duration.
      *
- * @param value the value
- * @since 0.8.10
- */
+     * @param value the sample value added to every period's rate
+     * @since 0.8.10
+     */
 public void addData(long value) {
         for (Rate r : _rates) r.addData(value);
     }
@@ -348,6 +348,7 @@ public void addData(long value) {
     /**
      * Whether the other stat shares name, group, and description.
      * @param rs the other RateStat
+     * @return true if both stats carry the same group name, description and stat name
      */
     boolean nameGroupDescEquals(RateStat rs) {
         return DataHelper.eq(getGroupName(), rs.getGroupName()) && DataHelper.eq(getDescription(), rs.getDescription()) && DataHelper.eq(getName(), rs.getName());

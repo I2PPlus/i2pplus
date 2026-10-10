@@ -84,7 +84,10 @@ public class NewsXMLParser {
         ALLOW_ALL
     }
 
-    /** Creates a new NewsXMLParser with the given context */
+    /**
+     * Creates a new NewsXMLParser with the given context
+     * @param ctx the application context supplying the log manager and property lookups
+     */
     public NewsXMLParser(I2PAppContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(NewsXMLParser.class);
@@ -503,7 +506,7 @@ public class NewsXMLParser {
      * Helper to get all Nodes matching the name
      *
      * @param node the parent node to search
-     * @param name the name
+     * @param name the element name a child node must carry to be returned
      * @return non-null
      */
     public static List<Node> getNodes(Node node, String name) {
@@ -518,8 +521,8 @@ public class NewsXMLParser {
     }
 
     /**
-     * @throws I2PParserException if any node not in whitelist (depends on mode)
      * @return true if node was removed from parent (only for REMOVE_ELEMENT mode)
+     * @throws I2PParserException if any node not in whitelist (depends on mode)
      */
     private boolean validate(Node node) throws I2PParserException {
         String name = node.getName();
@@ -588,7 +591,10 @@ public class NewsXMLParser {
         }
     }
 
-    /** Command-line entry point for testing */
+    /**
+     * Command-line entry point for testing
+     * @param args the feed file to parse, optionally followed by an XHTMLMode name
+     */
     public static void main(String[] args) {
         if (args.length <= 0 || args.length > 2) {
             System.err.println("Usage: NewsXMLParser file.xml [parserMode]");

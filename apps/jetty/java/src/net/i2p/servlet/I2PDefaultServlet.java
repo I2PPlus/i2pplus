@@ -31,6 +31,12 @@ import java.nio.charset.StandardCharsets;
  * @since 0.9.31
  */
 public class I2PDefaultServlet extends DefaultServlet {
+    /**
+     * Constructor. Jetty instantiates the servlet itself and init() picks up the
+     * context handler and resource base, so a bare instance is the starting state.
+     */
+    public I2PDefaultServlet() {}
+
     // shadows of private fields in super
     /** The context handler */
     private ContextHandler _contextHandler;

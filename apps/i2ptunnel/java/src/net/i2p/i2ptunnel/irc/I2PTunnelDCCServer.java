@@ -69,6 +69,9 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
      * so there's no server host or port parameters.
      *
      * @param sktMgr an existing socket manager
+     * @param l the logging system the base class reports through
+     * @param notifyThis the dispatcher notified of connection and transfer events
+     * @param tunnel the owning I2PTunnel supplying the router context and configuration
      * @throws IllegalArgumentException if the I2PTunnel does not contain
      * valid config to contact the router
      */

@@ -69,6 +69,12 @@ import java.security.spec.X509EncodedKeySpec;
 public final class KeyFactory extends KeyFactorySpi {
 
     /**
+     * Constructor. Key specifications are converted on each call and nothing is
+     * retained between calls, so a bare instance is a complete factory.
+     */
+    public KeyFactory() {}
+
+    /**
      * Generates an EdDSA private key from the provided key specification.
      *
      * This method converts various key specification formats into EdDSA private keys,

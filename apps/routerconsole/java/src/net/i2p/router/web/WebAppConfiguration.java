@@ -36,6 +36,12 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class WebAppConfiguration implements Configuration {
 
+    /**
+     * configure() takes the WebAppContext it is configuring as an argument, so a bare
+     * instance is how Jetty creates it.
+     */
+    public WebAppConfiguration() {}
+
     private static final String CLASSPATH = ".classpath";
 
     /**

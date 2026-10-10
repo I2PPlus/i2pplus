@@ -22,6 +22,8 @@ public class ProfileManagerImpl implements ProfileManager {
 
     /**
      * ProfileManagerImpl.
+     *
+     * @param context the router context whose log manager supplies our logger
      */
     public ProfileManagerImpl(RouterContext context) {
         _context = context;

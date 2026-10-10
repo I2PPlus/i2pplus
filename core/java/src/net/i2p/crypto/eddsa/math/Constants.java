@@ -4,6 +4,12 @@ import net.i2p.crypto.eddsa.Utils;
 
 /** Mathematical constants for EdDSA operations */
 final class Constants {
+    /**
+     * Constructor. The field elements are compile-time constants, so an instance
+     * holds nothing and only the constants below are ever read.
+     */
+    Constants() {}
+
     /** The field element 0, little-endian. */
     public static final byte[] ZERO = Utils.hexToBytes("0000000000000000000000000000000000000000000000000000000000000000");
     /** The field element 1, little-endian. */

@@ -76,7 +76,7 @@ public final class GenericGF {
    * @param primitive irreducible polynomial whose coefficients are represented by
    * the bits of an int, where the least-significant bit represents the constant
    * coefficient
-   * @param size the size
+   * @param size the number of elements in the field, a power of two
    * @param b the factor b in the generator polynomial can be 0- or 1-based
    * (g(x) = (x+a^b)(x+a^(b+1))...(x+a^(b+2t-1))).
    * In most cases it should be 1, but for QR code it is 0.
@@ -105,18 +105,31 @@ public final class GenericGF {
     one = new GenericGFPoly(this, new int[]{1});
   }
 
-  /** Additive identity (zero polynomial). */
+  /**
+   * Get the additive identity of this field.
+   *
+   * @return the zero polynomial, the additive identity in GF(size)
+   */
   GenericGFPoly getZero() {
     return zero;
   }
 
-  /** Multiplicative identity (one polynomial). */
+  /**
+   * Get the multiplicative identity of this field.
+   *
+   * @return the one polynomial, the multiplicative identity in GF(size)
+   */
   GenericGFPoly getOne() {
     return one;
   }
 
   /**
-   * @return the monomial representing coefficient * x^degree
+   * Build the monomial coefficient * x^degree.
+   *
+   * @param degree the exponent of x, not negative
+   * @param coefficient the leading coefficient, whose field value is in [0, size)
+   * @return the monomial, or the zero polynomial if coefficient is 0
+   * @throws IllegalArgumentException if degree is negative
    */
   GenericGFPoly buildMonomial(int degree, int coefficient) {
     if (degree < 0) {
@@ -133,6 +146,8 @@ public final class GenericGF {
   /**
    * Implements both addition and subtraction -- they are the same in GF(size).
    *
+   * @param a the first operand, whose field value is in [0, size)
+   * @param b the second operand, whose field value is in [0, size)
    * @return sum/difference of a and b
    */
   static int addOrSubtract(int a, int b) {
@@ -140,6 +155,9 @@ public final class GenericGF {
   }
 
   /**
+   * Get a field element's antilog.
+   *
+   * @param a the exponent, in [0, size)
    * @return 2 to the power of a in GF(size)
    */
   int exp(int a) {
@@ -147,7 +165,11 @@ public final class GenericGF {
   }
 
   /**
+   * Get a field element's log.
+   *
+   * @param a a nonzero field value in [1, size)
    * @return base 2 log of a in GF(size)
+   * @throws IllegalArgumentException if a is 0, whose log is undefined
    */
   int log(int a) {
     if (a == 0) {
@@ -157,7 +179,11 @@ public final class GenericGF {
   }
 
   /**
-   * @return multiplicative inverse of a
+   * Get the multiplicative inverse of a field element.
+   *
+   * @param a a nonzero field value in [1, size)
+   * @return multiplicative inverse of a, that is a such that a * result is 1
+   * @throws ArithmeticException if a is 0, which has no inverse
    */
   int inverse(int a) {
     if (a == 0) {
@@ -167,7 +193,11 @@ public final class GenericGF {
   }
 
   /**
-   * @return product of a and b in GF(size)
+   * Multiply two field elements.
+   *
+   * @param a the first factor, whose field value is in [0, size)
+   * @param b the second factor, whose field value is in [0, size)
+   * @return product of a and b in GF(size), 0 if either factor is 0
    */
   int multiply(int a, int b) {
     if (a == 0 || b == 0) {
@@ -177,13 +207,17 @@ public final class GenericGF {
   }
 
   /**
-   * @return the size
+   * Get the field's cardinality.
+   *
+   * @return the number of elements in this field
    */
   public int getSize() {
     return size;
   }
 
   /**
+   * Get the integer the Reed-Solomon generator polynomial is built over.
+   *
    * @return the generator base
    */
   public int getGeneratorBase() {

@@ -152,12 +152,18 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * The session key manager should only be constructed and accessed through the
      * application context.  This constructor should only be used by the
      * appropriate application context itself.
+     *
+     * @param context the application context this manager is a service of, whose
+              log manager supplies the logger
      */
     public TransientSessionKeyManager(I2PAppContext context) {
         this(context, DEFAULT_TAGS, LOW_THRESHOLD);
     }
 
     /**
+     * log manager supplies the logger
+     *
+     * @param context the application context this manager is a service of, whose
      * @param tagsToSend how many to send at a time, may be lower or higher than lowThreshold. 1-128
      * @param lowThreshold below this, send more. 1-128
      * @since 0.9.2
@@ -246,8 +252,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
      * Generates a new session and session key if not previously exising.
      *
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
-     * @throws IllegalArgumentException on bad target EncType
      * @return non-null
+     * @throws IllegalArgumentException on bad target EncType
      */
     @Override
     public SessionKey getCurrentOrNewKey(PublicKey target) {

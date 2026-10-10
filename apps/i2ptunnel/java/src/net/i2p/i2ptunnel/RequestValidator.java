@@ -281,6 +281,12 @@ public class RequestValidator {
         /** Whether the request is valid */
         public boolean isValid = true;
 
+        /**
+         * A result that starts valid, not flagged as an exploit, and carrying no error
+         * response; the validator overwrites whichever fields it needs to report.
+         */
+        public ValidationResult() {}
+
         /** Whether this appears to be an exploit attempt */
         public boolean isPossibleExploit = false;
 
