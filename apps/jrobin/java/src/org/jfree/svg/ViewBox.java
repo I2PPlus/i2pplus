@@ -20,8 +20,8 @@ public class ViewBox {
      *
      * @param minX the x coordinate.
      * @param minY the y coordinate.
-     * @param width the width.
-     * @param height the height.
+     * @param width the width of the viewBox
+     * @param height the height of the viewBox
      */
     public ViewBox(int minX, int minY, int width, int height) {
         this.minX = minX;

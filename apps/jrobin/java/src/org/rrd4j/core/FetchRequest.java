@@ -30,7 +30,7 @@ public class FetchRequest {
      * @param consolFun the consolidation function
      * @param fetchStart the start timestamp
      * @param fetchEnd the end timestamp
-     * @param resolution the resolution
+     * @param resolution the archive resolution to fetch from
      */
     FetchRequest(
             RrdDb parentDb, ConsolFun consolFun, long fetchStart, long fetchEnd, long resolution) {

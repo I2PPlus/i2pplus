@@ -108,8 +108,8 @@ public class SVGGraphicsConfiguration extends GraphicsConfiguration {
      * Creates a compatible image. This override is only here to provide support for Java 6 because
      * from Java 7 onwards the super class has a non-abstract implementation for this method.
      *
-     * @param width the width.
-     * @param height the height.
+     * @param width the width of the device
+     * @param height the height of the device
      * @return A compatible image.
      */
     @Override
@@ -129,7 +129,7 @@ public class SVGGraphicsConfiguration extends GraphicsConfiguration {
      * @param width the image width.
      * @param height the image height.
      * @param caps the image capabilities.
-     * @param transparency the transparency.
+     * @param transparency the transparency of the device
      * @return The volatile image.
      * @throws AWTException if there is a problem creating the image.
      */

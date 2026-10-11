@@ -41,7 +41,7 @@ public class ArgumentData extends NodeData {
     /**
      * Get the argument value.
      *
-     * @return the value
+     * @return the argument value, empty when none was set
      */
     public String getValue() {
         return value;

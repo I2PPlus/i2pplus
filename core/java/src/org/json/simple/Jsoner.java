@@ -84,7 +84,8 @@ public class Jsoner {
      * @return either a boolean, null, Number, String, JsonObject, or JsonArray that best represents the deserializable.
      * @throws DeserializationException if an unexpected token is encountered in the deserializable. To recover from a
      *                                  DeserializationException: fix the deserializable
-     *         to no longer have an unexpected token and try again. */
+     *                                  to no longer have an unexpected token and try again.
+     */
     public static Object deserialize(final Reader readableDeserializable) throws DeserializationException {
         return Jsoner.deserialize(readableDeserializable, EnumSet.of(DeserializationOptions.ALLOW_JSON_ARRAYS, DeserializationOptions.ALLOW_JSON_OBJECTS, DeserializationOptions.ALLOW_JSON_DATA)).get(0);
     }
@@ -95,7 +96,8 @@ public class Jsoner {
      * @return the allowable object best represented by the deserializable.
      * @throws DeserializationException if a disallowed or unexpected token is encountered in the deserializable. To
      *                                  recover from a DeserializationException: fix the
-     *         deserializable to no longer have a disallowed or unexpected token and try again. */
+     *                                  deserializable to no longer have a disallowed or unexpected token and try again.
+     */
     private static JsonArray deserialize(final Reader deserializable, final Set<DeserializationOptions> flags) throws DeserializationException {
         final Yylex lexer = new Yylex(deserializable);
         Yytoken token;
@@ -334,7 +336,8 @@ public class Jsoner {
      *         either a boolean, null, Number, String, JsonArray, or JsonObject that best represents the concatenated
      *         content inside deserializable.
      * @throws DeserializationException if an unexpected token is encountered in the deserializable. To recover from a
-     *         DeserializationException: fix the deserializable to no longer have an unexpected token and try again. */
+     *                                  DeserializationException: fix the deserializable to no longer have an unexpected token and try again.
+     */
     public static JsonArray deserializeMany(final Reader deserializable) throws DeserializationException {
         return Jsoner.deserialize(deserializable, EnumSet.of(DeserializationOptions.ALLOW_JSON_ARRAYS, DeserializationOptions.ALLOW_JSON_OBJECTS, DeserializationOptions.ALLOW_JSON_DATA, DeserializationOptions.ALLOW_CONCATENATED_JSON_VALUES));
     }

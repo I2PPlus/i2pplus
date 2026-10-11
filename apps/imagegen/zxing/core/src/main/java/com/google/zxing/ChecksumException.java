@@ -49,7 +49,7 @@ public final class ChecksumException extends ReaderException {
   /**
    * Returns a ChecksumException instance with the specified cause.
    *
-   * @param cause the cause
+   * @param cause the underlying exception that made the checksum fail
    * @return a ChecksumException instance
    */
   public static ChecksumException getChecksumInstance(Throwable cause) {

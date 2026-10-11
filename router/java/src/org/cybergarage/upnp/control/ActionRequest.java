@@ -114,9 +114,9 @@ public class ActionRequest extends ControlRequest {
     ////////////////////////////////////////////////
 
     /**
-     * @param service the service
-     * @param action the action
-     * @param argList the argument list
+     * @param service the service the action belongs to, supplying the service type
+     * @param action the action to describe, supplying the action name
+     * @param argList the argument list, each argument becoming a child node
      * @return the created content node
      */
     private Node createContentNode(Service service, Action action, ArgumentList argList) {

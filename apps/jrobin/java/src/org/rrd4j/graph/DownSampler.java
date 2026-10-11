@@ -22,8 +22,8 @@ public interface DownSampler {
         /**
          * Create a new DataSet.
          *
-         * @param timestamps the timestamps
-         * @param values the values
+         * @param timestamps the timestamps, parallel to values
+         * @param values the sampled values, parallel to timestamps
          */
         public DataSet(long[] timestamps, double[] values) {
             this.timestamps = timestamps;
@@ -43,8 +43,8 @@ public interface DownSampler {
     /**
      * Downsample the given data.
      *
-     * @param timestamps the timestamps
-     * @param values the values
+     * @param timestamps the timestamps, parallel to values
+     * @param values the values, parallel to timestamps
      * @return the downsampled data set
      */
     DataSet downsize(long[] timestamps, double[] values);

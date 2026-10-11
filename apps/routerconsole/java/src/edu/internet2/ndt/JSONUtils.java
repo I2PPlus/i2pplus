@@ -80,7 +80,7 @@ public class JSONUtils {
      * Function that return json object represented by jsontext and included
      * single message assigned to "msg" key
      * @param msg {byte[]} message which should be assigned to json object
-     * @param tests the tests
+     * @param tests the test IDs whose results should be included
      * @return {byte[]} json object represented by jsontext and encodes into a sequence of bytes
      * @since 0.9.45
      */

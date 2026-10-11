@@ -44,7 +44,7 @@ SpinnerNumberModel
 	}
 
 	/**
-	 * Return the value.
+	 * Get the number most recently passed to setValue.
 	 * @return the number most recently passed to setValue
 	 */
 	public int

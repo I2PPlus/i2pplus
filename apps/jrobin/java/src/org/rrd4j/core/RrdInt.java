@@ -14,7 +14,7 @@ class RrdInt<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
     /**
      * Creates a new RRD integer primitive.
      *
-     * @param updater the updater
+     * @param updater called with the new value whenever the primitive changes
      * @param isConstant whether this is a constant value
      */
     RrdInt(RrdUpdater<U> updater, boolean isConstant) {
@@ -24,7 +24,7 @@ class RrdInt<U extends RrdUpdater<U>> extends RrdPrimitive<U> {
     /**
      * Creates a new RRD integer primitive.
      *
-     * @param updater the updater
+     * @param updater called with the new value whenever the primitive changes
      */
     RrdInt(RrdUpdater<U> updater) {
         this(updater, false);

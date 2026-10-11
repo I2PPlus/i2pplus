@@ -970,7 +970,7 @@ public class TunnelControllerGroup implements ClientApp {
      * happened based on the platform and installation type. Does not tell
      * whether a migration has actually occurred.
      *
-     * @returns true if a migration is relevant to the platform, false if not
+     * @return true if a migration is relevant to the platform, false if not
      * @since 0.9.42
      */
     private boolean shouldMigrate() {
