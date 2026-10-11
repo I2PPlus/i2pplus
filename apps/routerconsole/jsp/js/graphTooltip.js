@@ -117,7 +117,7 @@ export function ensureOverlay(container) {
   readout.appendChild(valuesRow);
   readout.appendChild(timeRow);
   const parts = {container, crosshair, readout, valuesRow, timeRow, items: [],
-                 marks: [], levels: [], host: container};
+                 marks: [], levels: [], host: container, img: null};
   // `hidden` is the single show/hide mechanism: it is semantic, and a theme can back it with a
   // [hidden] rule. Inline styles carry only what layout needs.
   for (const el of [crosshair, readout]) { attach(el, container); }
@@ -167,6 +167,46 @@ function setVisible(parts, visible) {
 }
 
 /**
+ * Swaps the graph's cursor for a crosshair while a readout is on screen.
+ *
+ * The theme puts a magnifier on graph hover, which promises a zoom this module
+ * never performs: it reads values out of an image it does not rescale. The
+ * crosshair describes what actually happens, so it is claimed only once a
+ * readout is genuinely showing — over the plot, with a hit — and not merely
+ * because the pointer is somewhere on the image.
+ *
+ * The cursor is taken inline, which outranks the theme's `:hover` rule without
+ * touching any stylesheet, and is dropped again by {@link releaseCursor}.
+ *
+ * @param {Object} parts - the overlay parts
+ * @param {HTMLImageElement} img - the graph being read
+ * @returns {void}
+ */
+function claimCursor(parts, img) {
+  if (!img || parts.img === img) { return; }
+  releaseCursor(parts);
+  parts.img = img;
+  img.style.cursor = "crosshair";
+}
+
+/**
+ * Hands the cursor back to the theme.
+ *
+ * Clearing the inline style rather than restoring a remembered value is what
+ * makes the theme's own rule apply again: a stylesheet the script never read is
+ * the one that decides, so a theme change needs no cooperation from here.
+ *
+ * @param {Object} parts - the overlay parts
+ * @returns {void}
+ */
+function releaseCursor(parts) {
+  const img = parts.img;
+  if (!img) { return; }
+  img.style.cursor = "";
+  parts.img = null;
+}
+
+/**
  * Hides an overlay, by default the one on screen.
  *
  * Taking the parts explicitly matters for scroll and resize, where every overlay has to be
@@ -178,6 +218,9 @@ function setVisible(parts, visible) {
 export function hideOverlay(parts) {
   const target = parts || activeOverlay;
   setVisible(target, false);
+  // The cursor follows the readout: leaving the graph, scrolling, and a resize
+  // all end the interaction, and each has to give the magnifier back.
+  releaseCursor(target);
   if (target === activeOverlay) { activeOverlay = null; }
 }
 
@@ -360,6 +403,24 @@ function measure(img) {
 }
 
 /**
+ * Clamps a value into a range that may be empty.
+ *
+ * A range goes empty when the box being fitted is thicker than the space it has
+ * to fit in — a plot one pixel tall against a two-pixel line. Returning the low
+ * bound in that case keeps the box anchored at the axis rather than flinging it
+ * to the far side of the plot.
+ *
+ * @param {number} value - the value to clamp
+ * @param {number} low - the lower bound
+ * @param {number} high - the upper bound, may be below low
+ * @returns {number} the clamped value
+ */
+function clamp(value, low, high) {
+  if (high < low) { return low; }
+  return Math.min(Math.max(value, low), high);
+}
+
+/**
  * Places the crosshair, the marks and the readout.
  *
  * Everything moves by transform alone: no layout, and nothing writes to the image subtree, so
@@ -378,16 +439,29 @@ export function placeOverlay(parts, img, meta, hit) {
 
   // Image pixels to container pixels. The container's padding box is the origin, so the
   // crosshair and the marks land on the graph rather than a few pixels off.
+  const plotX = m.rect.left - m.originX + left * m.scaleX;
+  const plotY = m.rect.top - m.originY + top * m.scaleY;
+  const plotWidth = width * m.scaleX;
+  const plotHeight = height * m.scaleY;
   const anchorX = m.rect.left - m.originX + hit.x * m.scaleX;
   const plotTop = m.rect.top - m.originY + top * m.scaleY;
-  const plotHeight = height * m.scaleY;
 
+  // The overlay parts are boxes positioned by their leading edge, so a value sitting exactly
+  // on an axis would put the box's body on the far side of it: a level line whose top edge is
+  // the axis paints itself below the plot, which on a larger graph reads as the readout
+  // disagreeing with the axis it is meant to be measuring. Each line is therefore fitted
+  // inside the plot, and its thickness is read off the element rather than assumed, because
+  // the thickness belongs to the theme. Read once per container: the read is a layout, and
+  // the answer cannot change without a reload that rebuilds the overlay anyway.
   if (parts.crosshair) {
     parts.crosshair.hidden = false;
     // translate3d keeps the move on the compositor: no layout, no repaint of the graph.
     parts.crosshair.style.height = Math.round(plotHeight) + "px";
+    if (!parts.crosshairWidth) { parts.crosshairWidth = parts.crosshair.offsetWidth || 1; }
     parts.crosshair.style.transform =
-      "translate3d(" + Math.round(anchorX) + "px," + Math.round(plotTop) + "px,0)";
+      "translate3d(" + clamp(Math.round(anchorX), Math.round(plotX),
+                             Math.round(plotX + plotWidth) - parts.crosshairWidth) +
+      "px," + Math.round(plotTop) + "px,0)";
   }
 
   // One mark and one level line per series, in the same order as the values in the readout, so
@@ -404,8 +478,6 @@ export function placeOverlay(parts, img, meta, hit) {
     attach(level, parts.host);
     parts.levels.push(level);
   }
-  const plotX = m.rect.left - m.originX + left * m.scaleX;
-  const plotWidth = width * m.scaleX;
   for (let i = 0; i < parts.marks.length; i++) {
     const mark = parts.marks[i];
     const level = parts.levels[i];
@@ -423,9 +495,17 @@ export function placeOverlay(parts, img, meta, hit) {
     // cursor sweeps sideways, and only the value moves it.
     level.hidden = false;
     level.style.width = Math.round(plotWidth) + "px";
+    if (!parts.levelHeight) { parts.levelHeight = level.offsetHeight || 1; }
     level.style.transform =
-      "translate3d(" + Math.round(plotX) + "px," + Math.round(y) + "px,0)";
+      "translate3d(" + Math.round(plotX) + "px," +
+      clamp(Math.round(y), Math.round(plotTop),
+            Math.round(plotTop + plotHeight) - parts.levelHeight) + "px,0)";
   }
+
+  // A readout on screen means the pointer is on the plot, which is the one state the theme's
+  // magnifier gets wrong. Claiming here rather than on hover keeps the swap tied to the
+  // overlay: over the image but outside the plot there is no readout and no crosshair.
+  claimCursor(parts, img);
 
   parts.readout.hidden = false;
   syncValueRows(parts, hit.snapped.length, meta, hit);
@@ -601,7 +681,10 @@ function handleMove(position) {
     const hit = invert(meta, position.offsetX, position.offsetY);
     if (!hit) { hideOverlay(); return; }
     const parts = ensureOverlay(containerFor(img));
-    if (activeOverlay && activeOverlay !== parts) { setVisible(activeOverlay, false); }
+    // Through hideOverlay, not setVisible: the outgoing overlay's cursor has to be
+    // handed back too, or a graph keeps the crosshair after the pointer has moved
+    // on to the next one.
+    if (activeOverlay && activeOverlay !== parts) { hideOverlay(activeOverlay); }
     activeOverlay = parts;
     placeOverlay(parts, img, meta, hit);
   });
