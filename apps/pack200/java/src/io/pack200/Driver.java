@@ -58,6 +58,10 @@ import java.util.zip.GZIPOutputStream;
  */
 
 class Driver {
+    /**
+     * Creates a command line driver.
+     */
+    Driver() {}
     private static final ResourceBundle RESOURCE =
         ResourceBundle.getBundle("io.pack200.DriverResource");
 

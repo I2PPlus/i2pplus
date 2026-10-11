@@ -342,6 +342,10 @@ class Attribute implements Comparable<Attribute> {
      */
     public abstract static
     class Holder {
+        /**
+         * Creates a holder with no flags or attributes set.
+         */
+        Holder() {}
 
         // We need this abstract method to interpret embedded CP refs.
         protected abstract Entry[] getCPMap();
@@ -461,6 +465,10 @@ class Attribute implements Comparable<Attribute> {
     // Also used for testing.
     public abstract static
     class ValueStream {
+        /**
+         * Creates a stream; the read and write methods must be overridden.
+         */
+        ValueStream() {}
         public int getInt(int bandIndex) { throw undef(); }
         public void putInt(int bandIndex, int value) { throw undef(); }
         public Entry getRef(int bandIndex) { throw undef(); }

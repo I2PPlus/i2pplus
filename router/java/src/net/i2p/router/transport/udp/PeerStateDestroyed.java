@@ -283,7 +283,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /**
      * Handle one packet received from the given source address.
      *
-     * @param from source address
+     * @param from the address the packet was received from
      * @param packet fully encrypted, header and body decryption will be done here
      * @since 0.9.55
      */

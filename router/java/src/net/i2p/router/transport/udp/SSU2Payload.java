@@ -152,7 +152,7 @@ class SSU2Payload {
         /**
          * Receive an address block.
          * @param ip IP address bytes
-         * @param port port number
+         * @param port the port number to send
          */
         public void gotAddress(byte[] ip, int port);
 
@@ -849,7 +849,7 @@ class SSU2Payload {
         /**
          * The block type.
          *
-         * @return block type
+         * @return the block type code this block was parsed from
          * @since 0.9.55
          */
         public int getType() { return type; }
@@ -1300,7 +1300,7 @@ class SSU2Payload {
          * Create an acknowledgment block.
          * @param thru highest contiguous sequence number
          * @param acnt number of additional acks (max 255)
-         * @param ranges nack/ack/nack/ack ranges
+         * @param ranges the ack ranges, two bytes per range, alternating ack and nack
          * @param rangeCount number of range pairs (ranges length / 2)
          */
         public AckBlock(long thru, int acnt, byte[] ranges, int rangeCount) {

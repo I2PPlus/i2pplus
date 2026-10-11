@@ -65,7 +65,7 @@ public class Advertiser extends ThreadCore {
     /**
      * Gets the device being advertised.
      *
-     * @return current device
+     * @return the device being advertised
      */
     public Device getDevice() {
         return device;

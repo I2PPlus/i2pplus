@@ -263,7 +263,7 @@ public class BuildHandler implements Runnable {
      *
      * @param numTunnels current participating (transit) tunnel count
      * @param minLimit configured floor for the proportional formula
-     * @param maxLimit configured ceiling
+     * @param maxLimit configured ceiling for the proportional formula
      * @param percentLimit percent of participating count usable as slots
      * @param uptimeMs router uptime in ms
      * @return the concurrent lookup limit, never below minLimit
@@ -2102,7 +2102,7 @@ public class BuildHandler implements Runnable {
      * Mark a string for extraction by xgettext and translation.
      * Use this only in static initializers.
      * It does not translate!
-     * @return s
+     * @return s unchanged; marking happens by side effect only
      */
     private static final String _x(String s) {return s;}
 }

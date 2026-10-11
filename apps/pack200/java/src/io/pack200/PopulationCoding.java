@@ -42,6 +42,10 @@ import java.util.Set;
  */
 // This tactic alone reduces the final zipped rt.jar by about a percent.
 class PopulationCoding implements CodingMethod {
+    /**
+     * Creates a coding method with no favoured values yet.
+     */
+    PopulationCoding() {}
     Histogram vHist;   // histogram of all values
     int[]     fValues; // list of favored values
     int       fVlen;   // inclusive max index

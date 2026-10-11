@@ -240,7 +240,6 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     * @return success
      * @since 0.9.15
      */
     private void processSUD(File f, File appDir, String url) {

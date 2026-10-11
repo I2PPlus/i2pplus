@@ -7,6 +7,11 @@ package dummy;
  * Obviously, do not compile this.
  */
 class Dummy {
+    /**
+     * Creates this holder so the translation calls below are reachable.
+     */
+    Dummy() {}
+
     void dummy() {
         // wars for ConfigClientsHelper
         _t("addressbook");

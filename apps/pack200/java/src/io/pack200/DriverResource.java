@@ -27,6 +27,10 @@ package io.pack200;
 import java.util.ListResourceBundle;
 
 public class DriverResource extends ListResourceBundle {
+    /**
+     * Creates an empty resource bundle; the entries are supplied by the parent bundle.
+     */
+    public DriverResource() {}
 
     public static final String VERSION = "VERSION";
     public static final String BAD_ARGUMENT = "BAD_ARGUMENT";

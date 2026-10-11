@@ -974,7 +974,7 @@ class IntroductionManager {
      * @param ip the address bytes to check
      * @param port the port to check
      * @param allowIPv6 whether a 16-byte IPv6 address is acceptable
-     * @return whether valid
+     * @return true if the address and port form an acceptable introduction target
      * @since 0.9.50
      */
     private boolean isValid(byte[] ip, int port, boolean allowIPv6) {

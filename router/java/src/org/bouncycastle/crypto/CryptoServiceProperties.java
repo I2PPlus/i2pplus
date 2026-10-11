@@ -27,7 +27,7 @@ public interface CryptoServiceProperties
 
     /**
      * Return the parameters for the cryptographic service.
-     * @return service parameters
+     * @return the service properties that describe this algorithm
      */
     Object getParams();
 }

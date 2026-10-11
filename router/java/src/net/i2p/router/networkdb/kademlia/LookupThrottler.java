@@ -75,7 +75,7 @@ class LookupThrottler {
      * Throttle with configurable lookup limits.
      *
      * @param facade floodfill network database facade
-     * @param maxlookups when floodfill
+     * @param maxlookups the concurrent lookup limit while floodfill
      * @param maxnonfflookups when not floodfill
      * @param cleanTime milliseconds between throttling table cleanups
      */

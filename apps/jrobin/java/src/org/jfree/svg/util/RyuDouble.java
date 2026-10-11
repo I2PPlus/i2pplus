@@ -21,6 +21,10 @@ import java.math.BigInteger;
 
 /** An implementation of Ryu for double. */
 public final class RyuDouble {
+    /**
+     * Creates a Ryu instance.
+     */
+    public RyuDouble() {}
     private static final int DOUBLE_MANTISSA_BITS = 52;
     private static final long DOUBLE_MANTISSA_MASK = (1L << DOUBLE_MANTISSA_BITS) - 1;
 

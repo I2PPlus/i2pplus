@@ -36,7 +36,7 @@ public class Argument {
     /**
      * Gets the argument node containing argument definition.
      *
-     * @return argument node
+     * @return the node holding this argument's definition
      */
     public Node getArgumentNode() {
         return argumentNode;
@@ -45,7 +45,7 @@ public class Argument {
     /**
      * Gets the service node this argument belongs to.
      *
-     * @return service node
+     * @return the node of the service this argument belongs to
      */
     private Node getServiceNode() {
         return serviceNode;

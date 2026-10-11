@@ -75,7 +75,7 @@ public class BloomFilterIVValidator implements IVValidator {
      * small, and it is replaced by a filter as soon as the budget allows.
      *
      * @param ctx the router context
-     * @param KBps share bandwidth
+     * @param KBps the share bandwidth in KBps
      */
     public BloomFilterIVValidator(RouterContext ctx, int KBps) {
         _context = ctx;

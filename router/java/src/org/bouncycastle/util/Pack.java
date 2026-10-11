@@ -289,8 +289,8 @@ public abstract class Pack
     }
 
     /**
-     * @param value The number
-     * @param bs    The target.
+     * @param value the number to convert to big endian
+     * @param bs    the target byte array to write into
      * @param off   Position in target to start.
      * @param bytes number of bytes to write.
      * @deprecated Will be removed

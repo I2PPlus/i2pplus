@@ -190,7 +190,7 @@ public class HopConfig {
     /**
      * The bandwidth allocated for this hop.
      *
-     * @return Bps
+     * @return the bandwidth in Bps
      * @since 0.9.66
      */
     public int getAllocatedBW() {
@@ -199,7 +199,7 @@ public class HopConfig {
     /**
      * The bandwidth allocated for this hop.
      *
-     * @param bw Bps
+     * @param bw the bandwidth in Bps
      * @since 0.9.66
      */
     public void setAllocatedBW(int bw) {

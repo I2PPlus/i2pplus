@@ -1262,6 +1262,10 @@ class ConstantPool {
     /** Coherent group of constant pool indexes. */
     public static
     class IndexGroup {
+        /**
+         * Creates an empty index group with no tag groups built.
+         */
+        IndexGroup() {}
         private Index[] indexByTag = new Index[CONSTANT_Limit];
         private Index[] indexByTagGroup;
         private int[]   untypedFirstIndexByTag;

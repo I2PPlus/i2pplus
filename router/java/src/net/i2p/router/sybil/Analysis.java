@@ -311,7 +311,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
     /**
      * Display name for this application.
      *
-     * @return "Sybil Analyzer"
+     * @return the display name {@code "Sybil Analyzer"}
      */
     public String getDisplayName() {
         return "Sybil Analyzer";

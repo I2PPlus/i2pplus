@@ -238,13 +238,13 @@ class FragmentHandler {
     /**
      *  Fragments received and complete.
      *
-     *  @return complete count
+     *  @return the number of fragments that completed
      */
     public int getCompleteCount() { return _completed.get(); }
     /**
      *  Fragments that failed.
      *
-     *  @return failed count
+     *  @return the number of fragments that failed
      */
     public int getFailedCount() { return _failed.get(); }
 
@@ -676,7 +676,7 @@ class FragmentHandler {
         /**
          * Receive a fully formed I2NPMessage out of the tunnel
          *
-         * @param msg message received
+         * @param msg the reassembled I2NP message
          * @param toRouter where we are told to send the message (null means locally)
          * @param toTunnel where we are told to send the message (null means locally or to the specified router)
          */

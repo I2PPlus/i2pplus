@@ -45,7 +45,7 @@ public class HeaderLine extends Encoding {
 	 * This will split multibyte chars across lines,
 	 * see 4th ref above
 	 *
-	 * @throws UnsupportedOperationException always
+	 * @throws UnsupportedOperationException always, since this byte[] overload is not implemented; use encode(String)
 	 */
 	public String encode(byte[] in) throws EncodingException {
 		throw new UnsupportedOperationException("use encode(String)");
