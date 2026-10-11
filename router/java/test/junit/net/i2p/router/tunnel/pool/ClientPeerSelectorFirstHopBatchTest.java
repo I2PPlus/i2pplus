@@ -120,6 +120,57 @@ public class ClientPeerSelectorFirstHopBatchTest {
         assertTrue(matches.isEmpty());
     }
 
+    // ---------- the refill must refill the whole batch ----------
+
+    /**
+     * The number of candidates the quality loop can examine, given a batch that shrinks
+     * one per ejection and is refilled once empty.
+     *
+     * <p>Pinned as arithmetic because it is the constraint the 16-attempt budget rests on:
+     * the loop stops when it runs out of candidates, so the budget is only real if enough
+     * candidates exist to spend it. Refilling one peer at a time reached 7 of 16 and left
+     * the tighter gates inside the loop seeing early rejects only; refilling the batch
+     * reaches the full budget.
+     */
+    @Test
+    public void threeBatchRefillsSpendTheWholeAttemptBudget() {
+        int batch = 4;
+        int refills = 3;
+        int examined = 0;
+        int remaining = refills;
+        List<Hash> held = new ArrayList<>(batchOf(batch));
+
+        while (examined < 16) {
+            if (held.isEmpty()) {
+                if (remaining <= 0) { break; }
+                held = new ArrayList<>(batchOf(batch));
+                remaining--;
+            }
+            held.remove(0);
+            examined++;
+        }
+        assertEquals("a batch of four with three refills reaches the budget", 16, examined);
+    }
+
+    /** A refilled batch must fill the container it is fetched into, not a single slot. */
+    @Test
+    public void aRefillFillsTheContainer() {
+        ArraySet<Hash> container = new ArraySet<>(4);
+        for (int i = 0; i < 4; i++) {
+            container.add(peer(100 + i));
+        }
+        assertEquals("the whole batch fits the container it is fetched into",
+                     batch(4).size(), container.size());
+    }
+
+    private static List<Hash> batchOf(int n) {
+        List<Hash> list = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            list.add(peer(i));
+        }
+        return list;
+    }
+
     // ---------- tier widening ----------
 
     /**

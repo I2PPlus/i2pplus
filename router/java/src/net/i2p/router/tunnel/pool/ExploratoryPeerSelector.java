@@ -86,7 +86,7 @@ import net.i2p.util.SystemVersion;
     private final ThreadLocal<Set<Hash>> _lastAllGhostSelection = new ThreadLocal<Set<Hash>>();
 
     /**
-     * ExploratoryPeerSelector.
+     * Creates the selector over the given router context.
      *
      * @param context the router context supplying peers and network state
      */
@@ -414,7 +414,7 @@ import net.i2p.util.SystemVersion;
                 if (matches.size() < length && ClientPeerSelector.shouldWidenBothTiers(
                         ctx.profileOrganizer().getTunnelBuildSuccess(),
                         ctx.profileOrganizer().getFastPeerCount())) {
-                    ctx.profileOrganizer().selectFastPeers(length - matches.size(), exclude,
+                    ctx.profileOrganizer().selectFastPeers(length, exclude,
                                                           matches, ipRestriction, ipSet);
                 }
             } else {

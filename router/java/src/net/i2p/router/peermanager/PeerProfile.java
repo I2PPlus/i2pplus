@@ -368,7 +368,7 @@ public class PeerProfile {
      * of already-connected peers.
      *
      * @param period must be one of the periods in the RateStat constructors below
-     * (5*60*1000 or 60*60*1000)
+     *               (5*60*1000 or 60*60*1000)
      * @param now current time
      * @return true if active
      * @since 0.9.58
@@ -488,11 +488,41 @@ public class PeerProfile {
     static final long LOW_LATENCY_FLOOR_MS = 100L;
 
     /**
+     * The one smoothing applied to every latency measurement, whatever measured it.
+     *
+     * <p>Peer latency reaches the profile from three directions — a peer test's
+     * whole-tunnel round trip, the direct-link RTT a transport has measured for a
+     * live session, and an SSU/NTCP handshake. They are different quantities, but
+     * they are averaged the same way so that any one of them can be compared with
+     * any other: a value damped 25% per sample behaves the same whether the sample
+     * came from a tunnel round trip or a handshake.
+     *
+     * <p>An unknown or zero current value is replaced rather than averaged. A
+     * measurement is evidence; the absence of one is not, and damping toward zero
+     * would manufacture latency out of missing data.
+     *
+     * @param current the stored average in ms, or 0/negative when unknown
+     * @param sample the new measurement in ms
+     * @return the new average in ms
+     * @since 0.9.71+
+     */
+    static float dampLatency(float current, float sample) {
+        if (current <= 0f) {return sample;}
+        return 0.75f * current + 0.25f * sample;
+    }
+
+    /**
      * Record the transport's measured round trip time to this peer.
      *
      * <p>This is the direct link cost, which is what first-hop selection needs.
      * A value of 0 means the session has not measured yet and is stored as
      * unknown rather than as zero latency.
+     *
+     * <p>Damped through {@link #dampLatency(float, float)}, the same smoothing the
+     * peer-test average uses, so a single session's noisy sample cannot set the
+     * value on its own. A value that has already gone stale is replaced rather
+     * than damped: {@link #getFirstHopRtt} has declared it unknown, so averaging
+     * toward it would let expired evidence drag a fresh measurement back.
      *
      * @param rtt   measured round trip time in ms, 0 if unmeasured
      * @param when  timestamp of the measurement
@@ -500,7 +530,9 @@ public class PeerProfile {
      */
     public void setFirstHopRtt(int rtt, long when) {
         if (rtt <= 0) {return;}
-        _firstHopRtt = rtt;
+        boolean stale = _firstHopRtt > 0 && _firstHopRttTime > 0 &&
+                        when - _firstHopRttTime >= FIRST_HOP_RTT_VALIDITY_MS;
+        _firstHopRtt = (int) (stale ? rtt : dampLatency(_firstHopRtt, rtt));
         _firstHopRttTime = when;
     }
 
@@ -533,6 +565,11 @@ public class PeerProfile {
 
     /**
      * Whether this peer counts as low latency, judged on its direct link.
+     *
+     * <p>The single low-latency decision: {@link #recalculateLowLatency()} is a thin
+     * wrapper over this, so the flag is derived one way everywhere. Two
+     * implementations of the same comparison is how the flag ends up disagreeing
+     * with itself depending on which pass happened to run last.
      *
      * <p>Two drivers, both required, because either alone is misleading:
      * <ul>
@@ -918,13 +955,16 @@ public class PeerProfile {
     void setPeerTestTimeAverage(float testAvg) {_peerTestResponseTimeAvg = testAvg;}
 
     /**
-     * Update peer test time average.
+     * Update the peer test time average from a new measurement.
+     *
+     * <p>Damped through {@link #dampLatency(float, float)}, the same smoothing every
+     * other latency writer uses, so a test result and a transport RTT and a
+     * handshake all accumulate into a comparable average.
      *
      * @param ms the new measurement in ms
      */
     void updatePeerTestTimeAverage(float ms) {
-        if (_peerTestResponseTimeAvg <= 0) {_peerTestResponseTimeAvg = ms;}
-        else {_peerTestResponseTimeAvg = 0.75f * _peerTestResponseTimeAvg + .25f * ms;}
+        _peerTestResponseTimeAvg = dampLatency(_peerTestResponseTimeAvg, ms);
         if (_log.shouldInfo()) {
             _log.info("Timed peer test average for [" + _peer.toBase64().substring(0,6) +
                       "] updated to " + (_peerTestResponseTimeAvg) + "ms");
@@ -942,28 +982,28 @@ public class PeerProfile {
     public boolean hasBeenTested() {return _peerTestResponseTimeAvg > 0;}
 
     /**
-     * Recalculate the low-latency flag from the accumulated peer test time average.
-     * Low latency is defined as an average response time under 3x the peer test timeout
-     * (default 750ms, so 2250ms threshold), matching the same threshold used in BuildExecutor.
-     * Called periodically to keep _lowLatency in sync with measured data.
+     * Recalculate the low-latency flag from the measured direct-link RTT.
+     *
+     * <p>The only low-latency decision in the codebase: both callers — the
+     * reorganize sampling pass and the recorder that runs when a measurement
+     * arrives — come through here, so the flag cannot be derived two different
+     * ways from the same field.
+     *
+     * <p>Judged on the direct link to this peer, not on how long a test through a
+     * multi-hop tunnel took. {@link #getPeerTestTimeAverage()} is the round trip
+     * across every hop of that tunnel, so using it here measured the latency of
+     * hops the peer was merely a member of.
+     *
+     * <p>An unmeasured peer keeps whatever was persisted: absent evidence is not
+     * evidence of high latency.
      *
      * @since 0.9.70
      */
     void recalculateLowLatency() {
-        // Judged on the direct link to this peer, not on how long a test through
-        // a multi-hop tunnel took. _peerTestResponseTimeAvg is the round trip
-        // across every hop of that tunnel, so using it here measured the latency
-        // of hops the peer was merely a member of.
-        long now = _context.clock().now();
-        int firstHop = getFirstHopRtt(now);
-        // Unmeasured peers keep whatever was persisted; absent evidence is not
-        // evidence of high latency.
-        if (firstHop < 0)
-            return;
-        // Absolute floor decides, so the bar no longer tracks the mean of a
-        // sample that shrinks as RTTs age out. See LOW_LATENCY_FLOOR_MS.
-        long cap = Math.min(LOW_LATENCY_FLOOR_MS, LOW_LATENCY_CEILING_MS);
-        _lowLatency = firstHop <= cap;
+        Boolean low = getLowLatencyForFirstHopRtt(_context.clock().now(),
+                                                  LOW_LATENCY_CEILING_MS);
+        if (low == null) {return;}
+        _lowLatency = low.booleanValue();
     }
 
     /**
@@ -993,7 +1033,7 @@ public class PeerProfile {
      * Record data pushed through this peer.
      *
      * @param size the number of bytes pushed; long because the running total is
-     * a long and a per-period sum can exceed Integer.MAX_VALUE
+     *             a long and a per-period sum can exceed Integer.MAX_VALUE
      */
     void dataPushed(long size) {_peakThroughputCurrentTotal.addAndGet(size);}
 
@@ -1045,7 +1085,7 @@ public class PeerProfile {
      * The tunnel pushed that much data in a 1 minute period.
      *
      * @param size the number of bytes in that minute, normalized; comparisons
-     * against the float ring widen, so the stored KBps average is unaffected
+     *             against the float ring widen, so the stored KBps average is unaffected
      */
     void dataPushed1m(long size) {
         _lastThroughputUpdate = _context.clock().now();
@@ -1084,9 +1124,9 @@ public class PeerProfile {
      * This is the speed value
      *
      * @return the average of the three fastest one-minute data transfers, on a per-tunnel basis,
-     * through this peer. Ever. Peaks are never decayed; only a higher
-     * measurement can raise them, and a lower one is ignored. Freshness
-     * is judged by the selection gates, not by eroding these values.
+     *         through this peer. Ever. Peaks are never decayed; only a higher
+     *         measurement can raise them, and a lower one is ignored. Freshness
+     *         is judged by the selection gates, not by eroding these values.
      */
     public float getPeakTunnel1mThroughputKBps() {
         float rv = 0;

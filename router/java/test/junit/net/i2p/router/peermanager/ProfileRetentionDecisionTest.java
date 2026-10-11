@@ -139,10 +139,10 @@ public class ProfileRetentionDecisionTest {
      */
     @Test
     public void diskRetentionIsIndependentOfTheMemoryCeiling() {
-        assertEquals(5000, FLOOR);
-        assertEquals(8000, ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
-        assertTrue("floor must be below the memory ceiling",
-                   FLOOR < ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
+        assertEquals(10000, FLOOR);
+        assertEquals(10000, ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
+        assertTrue("floor must not exceed the memory ceiling",
+                   FLOOR <= ProfileOrganizer.ABSOLUTE_MAX_PROFILES);
     }
 
     /**

@@ -421,7 +421,7 @@ public class ProfileOrganizer {
      * have never participated in a real tunnel are excluded.
      * @since 0.9.71+
      */
-    private static final int MIN_FAST_QUALITY_COUNT = 300;
+    private static final int MIN_FAST_QUALITY_COUNT = 500;
 
     /** Config property for the loss ratio above which a peer is demoted from fast/high-cap tiers. */
     public static final String PROP_LOSSY_THRESHOLD = "profileOrganizer.lossyThreshold";
@@ -550,7 +550,7 @@ public class ProfileOrganizer {
      * router use more of its persisted knowledge does not shorten the retention of
      * that knowledge across a restart.
      */
-    public static final int ABSOLUTE_MAX_PROFILES = 8000;
+    public static final int ABSOLUTE_MAX_PROFILES = 10000;
     /**
      * Profile files retained on disk before surplus ones are trimmed.
      *
@@ -566,7 +566,7 @@ public class ProfileOrganizer {
      *
      * @since 0.9.71+
      */
-    public static final int MAX_STORED_PROFILE_FILES = 5000;
+    public static final int MAX_STORED_PROFILE_FILES = 10000;
     /**
      * Floor for the in-memory profile cap, in profiles.
      *
@@ -1002,6 +1002,48 @@ public class ProfileOrganizer {
     }
 
     /**
+     * How many slots are still free in a cascade's destination set.
+     *
+     * <p>Every tier selector takes {@code howMany} as the <em>total</em> the caller wants
+     * held in {@code matches} when the cascade returns, and every tier — the first one
+     * included — asks for only the shortfall this reports. That single convention is what
+     * keeps the arithmetic in one place: a call site that pre-subtracts
+     * {@code matches.size()} itself is a second copy of this computation, and the two
+     * copies disagree the moment one of them drifts.
+     *
+     * <p>The failure mode that makes it worth centralising: a caller that sized an
+     * {@link net.i2p.util.ArraySet} to exactly {@code howMany} has already filled part of
+     * it by the time a later tier runs, so a tier that wrote {@code howMany} again would
+     * overflow it and {@link net.i2p.util.ArraySet} would throw {@code SetFullException} — surfaced as
+     * {@code pickLowestPriority} crashing, which names the symptom rather than the
+     * cascade arithmetic behind it.
+     *
+     * @param howMany total peers the caller wants held in matches across the whole cascade
+     * @param matches peers picked so far, by the caller and by the tiers that already ran
+     * @return slots still needed, never negative
+     * @since 0.9.71+
+     */
+    static int remainingToSelect(int howMany, Set<Hash> matches) {
+        return Math.max(0, howMany - matches.size());
+    }
+
+    /**
+     * Whether a cascade still has slots left to fill.
+     *
+     * <p>A guard, not a computation the callers should repeat: every tier-selector
+     * shortfall branch needs the same {@code remaining > 0} question, and writing it as
+     * {@code matches.size() < howMany} in ten places is what let one site drift.
+     *
+     * @param howMany peers the caller asked for in total
+     * @param matches peers picked by the tiers that ran before this one
+     * @return true if the set still needs more peers
+     * @since 0.9.71+
+     */
+    static boolean stillSelecting(int howMany, Set<Hash> matches) {
+        return remainingToSelect(howMany, matches) > 0;
+    }
+
+    /**
      * Select up to howMany fast-tier peers, filling shortfalls from high-capacity.
      *
      * @param howMany target number of peers
@@ -1025,14 +1067,14 @@ public class ProfileOrganizer {
     public void selectFastPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
         double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
-        try {lockedSelectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess));}
+        try {lockedSelectPeers(_fastPeers, remainingToSelect(howMany, matches), exclude, matches, mask, ipSet, buildSuccess, computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess));}
         finally {releaseReadLock(); flushSelectionCounters();}
-        if (matches.size() < howMany) {
+        if (stillSelecting(howMany, matches)) {
             if (_log.shouldDebug()) {
                 _log.debug("Need " + howMany + " Fast peers in tier -> " + matches.size() +
                            " found, selecting remainder from High Capacity tier...");
             }
-            selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
+            selectHighCapacityPeers(remainingToSelect(howMany, matches), exclude, matches, mask, ipSet);
         }
     }
 
@@ -1055,15 +1097,15 @@ public class ProfileOrganizer {
         try {
             long rttCeiling = computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess);
             if (subTierMode != Slice.SLICE_ALL)
-                lockedSelectPeers(_fastPeers, howMany, exclude, matches, randomKey, subTierMode, mask, ipSet, buildSuccess, rttCeiling);
+                lockedSelectPeers(_fastPeers, remainingToSelect(howMany, matches), exclude, matches, randomKey, subTierMode, mask, ipSet, buildSuccess, rttCeiling);
             else
-                lockedSelectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, rttCeiling);
+                lockedSelectPeers(_fastPeers, remainingToSelect(howMany, matches), exclude, matches, mask, ipSet, buildSuccess, rttCeiling);
         } finally {releaseReadLock();}
-        if (matches.size() < howMany) {
+        if (stillSelecting(howMany, matches)) {
             if (_log.shouldDebug())
                 _log.debug("Need " + howMany + " Fast peers in tier -> " + matches.size() +
                            " found, selecting remainder from High Capacity tier...");
-            selectHighCapacityPeers(howMany, exclude, matches, mask, ipSet);
+            selectHighCapacityPeers(remainingToSelect(howMany, matches), exclude, matches, mask, ipSet);
         }
     }
 
@@ -1136,14 +1178,14 @@ public class ProfileOrganizer {
              // they typically have higher latency than fast-tier peers.
              long cap = computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess) * 2;
              long rttCeiling = Math.min(cap, AUTO_RTT_CAP_MS);
-             lockedSelectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, rttCeiling);
+             lockedSelectPeers(_highCapacityPeers, remainingToSelect(howMany, matches), exclude, matches, mask, ipSet, buildSuccess, rttCeiling);
          } finally {releaseReadLock(); flushSelectionCounters();}
-        if (matches.size() < howMany) {
+        if (stillSelecting(howMany, matches)) {
             if (_log.shouldDebug()) {
                 _log.debug("Need " + (howMany > 1 ? "High Capacity peers" : "High Capacity peer") +
                            " in tier -> " + matches.size() + " found, selecting from non-failing peers...");
             }
-            selectNotFailingPeers(howMany, exclude, matches, mask, ipSet);
+            selectNotFailingPeers(remainingToSelect(howMany, matches), exclude, matches, mask, ipSet);
         }
     }
 
@@ -1212,8 +1254,8 @@ public class ProfileOrganizer {
      */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                     int mask, MaskedIPSet ipSet, boolean preferUnproven) {
-        if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, ipSet,
+        if (stillSelecting(howMany, matches)) {
+            selectAllNotFailingPeers(remainingToSelect(howMany, matches), exclude, matches, onlyNotFailing, mask, ipSet,
                                      getTunnelBuildSuccess(), preferUnproven);
         }
     }
@@ -1239,12 +1281,12 @@ public class ProfileOrganizer {
      * @param ipSet mutable set tracking already-selected subnets
      */
     public void selectActiveNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, int mask, MaskedIPSet ipSet) {
-        if (matches.size() < howMany) {
+        if (stillSelecting(howMany, matches)) {
             List<Hash> connected = _context.commSystem().getEstablished();
             if (connected != null && !connected.isEmpty()) {
                 double buildSuccess = getTunnelBuildSuccess();
                 getReadLock();
-                try {lockedSelectActive(connected, howMany, exclude, matches, mask, ipSet, buildSuccess);}
+                try {lockedSelectActive(connected, remainingToSelect(howMany, matches), exclude, matches, mask, ipSet, buildSuccess);}
                 finally {releaseReadLock(); flushSelectionCounters();}
             }
         }
@@ -1269,16 +1311,16 @@ public class ProfileOrganizer {
         try {
             double buildSuccess = getTunnelBuildSuccess();
             long rttCeiling = computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess);
-            lockedSelectPeers(_fastPeers, howMany, exclude, matches, 0, null, buildSuccess, rttCeiling);
-            if (matches.size() < howMany) {
+            lockedSelectPeers(_fastPeers, remainingToSelect(howMany, matches), exclude, matches, 0, null, buildSuccess, rttCeiling);
+            if (stillSelecting(howMany, matches)) {
                 long cap = rttCeiling * 2;
                 long hcRtt = Math.min(cap, AUTO_RTT_CAP_MS);
-                lockedSelectPeers(_highCapacityPeers, howMany, exclude, matches, 0, null, buildSuccess, hcRtt);
+                lockedSelectPeers(_highCapacityPeers, remainingToSelect(howMany, matches), exclude, matches, 0, null, buildSuccess, hcRtt);
             }
-            if (matches.size() < howMany) {
+            if (stillSelecting(howMany, matches)) {
                 List<Hash> connected = _context.commSystem().getEstablished();
                 if (connected != null && !connected.isEmpty()) {
-                    lockedSelectActive(connected, howMany, exclude, matches, 0, null, buildSuccess);
+                    lockedSelectActive(connected, remainingToSelect(howMany, matches), exclude, matches, 0, null, buildSuccess);
                 }
             }
             return true;
@@ -1309,8 +1351,8 @@ public class ProfileOrganizer {
      */
     public void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches,
                                          boolean onlyNotFailing, int mask, MaskedIPSet ipSet) {
-        if (matches.size() < howMany) {
-            selectHighBandwidthPeers(howMany, exclude, matches, onlyNotFailing, mask, ipSet,
+        if (stillSelecting(howMany, matches)) {
+            selectHighBandwidthPeers(remainingToSelect(howMany, matches), exclude, matches, onlyNotFailing, mask, ipSet,
                                      getTunnelBuildSuccess());
         }
     }
@@ -1327,8 +1369,8 @@ public class ProfileOrganizer {
      */
     private void selectHighBandwidthPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                           int mask, MaskedIPSet ipSet, double buildSuccess) {
-        if (matches.size() < howMany) {
-            int needed = howMany - matches.size();
+        int needed = remainingToSelect(howMany, matches);
+        if (needed > 0) {
             List<Hash> selected = new ArrayList<>(needed);
             long now = _context.clock().now();
             getReadLock();
@@ -1362,8 +1404,9 @@ public class ProfileOrganizer {
             }
             matches.addAll(selected);
         }
-        if (matches.size() < howMany) {
-            selectAllNotFailingPeers(howMany, exclude, matches, onlyNotFailing, mask, ipSet, buildSuccess, false);
+        if (stillSelecting(howMany, matches)) {
+            selectAllNotFailingPeers(remainingToSelect(howMany, matches), exclude, matches, onlyNotFailing, mask, ipSet,
+                                     buildSuccess, false);
         }
     }
 
@@ -1440,8 +1483,8 @@ public class ProfileOrganizer {
      */
      private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                       int mask, MaskedIPSet ipSet, double buildSuccess, boolean preferUnproven) {
-        if (matches.size() < howMany) {
-            int needed = howMany - matches.size();
+        int needed = remainingToSelect(howMany, matches);
+        if (needed > 0) {
             List<Hash> selected = new ArrayList<>(needed);
             long now = _context.clock().now();
             getReadLock();
@@ -1497,8 +1540,8 @@ public class ProfileOrganizer {
             matches.addAll(selected);
         }
 
-        if (matches.size() < howMany) {
-            selectRemainderFromAllPeers(howMany, exclude, matches, buildSuccess);
+        if (stillSelecting(howMany, matches)) {
+            selectRemainderFromAllPeers(remainingToSelect(howMany, matches), exclude, matches, buildSuccess);
         }
     }
 
@@ -1751,8 +1794,11 @@ public class ProfileOrganizer {
             if (rtt > best) {best = rtt;}
         }
         if (best <= 0) {return 0;}
-        profile.setFirstHopRtt(best, now);
-        profile.recalculateLowLatency();
+        // Through the single recorder, so the sampling pass and the pre-connect
+        // path damp and re-derive identically. The stat is deliberately not added
+        // here: the caller reports one cycle aggregate rather than one sample per
+        // peer, and adding both would count the same measurement twice.
+        recordFirstHopRtt(profile, best, now);
         return best;
     }
 
@@ -3398,7 +3444,12 @@ public class ProfileOrganizer {
             candidates.add(entry);
         }
 
-        if (candidates.isEmpty() && howMany > 0 && examined > 0 && skipExcluded + skipGated + skipIp + skipRtt > 0) {
+        // Every reason the logger reports must be able to trigger it. Omitting one
+        // here means the tier starved by exactly that cause stays silent — which is
+        // how sub-tier slicing came to be reported by warnTierStarved but never
+        // able to call it.
+        if (tierScanStarved(candidates.size(), howMany, examined,
+                            skipExcluded, skipGated, skipSliced, skipIp, skipRtt)) {
             warnTierStarved(peers, examined, skipExcluded, skipGated, skipSliced, skipIp, skipRtt);
         }
 
@@ -3437,6 +3488,51 @@ public class ProfileOrganizer {
                       " examined (excluded=" + skipExcluded + " gated=" + skipGated +
                       " subtier=" + skipSliced + " ip=" + skipIp + " rtt=" + skipRtt + ")");
         }
+    }
+
+    /**
+     * Which profile a promotion pass should act on: the live one when the map has
+     * it, the caller's otherwise.
+     *
+     * <p>The TreeSet's copy may be stale, so the live profile decides. Making the
+     * choice a named decision is what lets the promotion and its log reach the same
+     * object — they used to decide separately, so the log printed the copy's
+     * capacity while the promotion ran on the live one.
+     *
+     * @param live the profile from {@code _notFailingPeers}, may be null
+     * @param fallback the profile the caller already holds
+     * @return the profile to act on, never null
+     * @since 0.9.71+
+     */
+    static PeerProfile profileToPromote(PeerProfile live, PeerProfile fallback) {
+        return live != null ? live : fallback;
+    }
+
+    /**
+     * Whether a tier scan starved badly enough to be worth reporting.
+     *
+     * <p>All five skip reasons participate. The guard used to sum only four of the
+     * five it was about to pass to the logger, so a tier emptied purely by sub-tier
+     * slicing produced no warning — the one starvation cause with a dedicated counter
+     * was the one that stayed silent. Extracting the sum is what makes "every reason
+     * counts" checkable.
+     *
+     * @param candidates how many candidates the scan produced
+     * @param howMany peers the caller asked for
+     * @param examined entries walked before giving up
+     * @param skipExcluded rejected by the live exclusion set
+     * @param skipGated rejected by a hard gate
+     * @param skipSliced rejected by the sub-tier slice
+     * @param skipIp rejected by IP diversity
+     * @param skipRtt above the adaptive RTT ceiling
+     * @return true when the scan found nothing and something specific caused it
+     * @since 0.9.71+
+     */
+    static boolean tierScanStarved(int candidates, int howMany, int examined,
+                                   int skipExcluded, int skipGated, int skipSliced,
+                                   int skipIp, int skipRtt) {
+        if (candidates > 0 || howMany <= 0 || examined <= 0) {return false;}
+        return skipExcluded + skipGated + skipSliced + skipIp + skipRtt > 0;
     }
 
     /**
@@ -4060,6 +4156,9 @@ public class ProfileOrganizer {
                                                int minHighCap, int maxFast, int maxHighCap) {
         Hash peer = profile.getPeer();
         PeerProfile notFailingProfile = _notFailingPeers.get(peer);
+        // One read for the whole evaluation: the skip gate, the staleness test and
+        // the debug line all judge the same instant.
+        long now = _context.clock().now();
 
         // Ghost peers are excluded from promotion: a peer that consistently fails
         // to respond to tunnel builds must not re-enter fast/high-cap tiers even
@@ -4078,12 +4177,12 @@ public class ProfileOrganizer {
 
         boolean recentFailures = hasRecentTunnelFailures(profile);
 
-        if (skipsPromotion(profile, peer, buildSuccess)) {
+        String skipReason = promotionSkipReason(profile, peer, buildSuccess, now);
+        if (skipReason != null) {
             if (_log.shouldDebug()) {
                 _log.debug("Skipping peer [" + peer.toBase32().substring(0, 6) +
-                           "] from promotion: notPeerSelectable=" + !passesBasicGates(peer) +
-                           " excessiveFailures=" + hasExcessiveLifetimeFailures(peer) +
-                           " sameObj=" + (profile == notFailingProfile));
+                           "] from promotion: " + skipReason +
+                           " staleProfile=" + (profile != notFailingProfile));
             }
             return false;
         }
@@ -4095,7 +4194,6 @@ public class ProfileOrganizer {
         // Only the peers that clear every gate above reach this line, so the
         // staleness test costs one netDb map lookup for a candidate that was
         // actually going to be promoted.
-        long now = _context.clock().now();
         boolean staleRouterInfo = promotionNeedsRouterInfoRefresh(profile, now);
 
         // A peer whose RouterInfo has no usable address left cannot be selected for a
@@ -4359,17 +4457,45 @@ public class ProfileOrganizer {
      * @return whether promotion should be skipped
      * @since 0.9.71+
      */
-     boolean skipsPromotion(PeerProfile profile, Hash peer, double buildSuccess) {
-         long now = _context.clock().now();
-         boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
-         // Use basic gates instead of isSelectable to avoid stale RouterInfo
-         // proof-of-life filtering peers that were already vetted at tier entry.
-         boolean isPeerSelectable = passesBasicGates(peer) && !isExcessiveLifetimeFailure(profile);
-         boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess, now);
-         boolean congested = isCongestedPeer(peer);
-         boolean highLoss = inLossProbation(profile, now);
-         return !isPeerSelectable || isStrictCountry || lowTunnelAcceptance || congested || highLoss;
-     }
+    boolean skipsPromotion(PeerProfile profile, Hash peer, double buildSuccess) {
+        return promotionSkipReason(profile, peer, buildSuccess, _context.clock().now()) != null;
+    }
+
+    /**
+     * Why {@link #skipsPromotion} would skip this profile, or null when it would not.
+     *
+     * <p>The one place the decision is made. The caller used to re-derive two of the
+     * five gates so it could log them, which meant a peer held back by congestion,
+     * loss probation, a strict country or low tunnel acceptance printed
+     * {@code notPeerSelectable=false excessiveFailures=false} — a line reading "the
+     * gates passed" while the peer was in fact skipped. Returning the reason from the
+     * decision itself is what stops the log from guessing, and stops the two from
+     * drifting apart again.
+     *
+     * <p>Short-circuits on the first gate that fires, in the order the original
+     * disjunction evaluated them. The boolean result is unchanged, because the
+     * original was a pure OR over the same five conditions.
+     *
+     * @param profile the profile under consideration
+     * @param peer the peer hash
+     * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
+     * @param now current time in ms
+     * @return a short reason, or null when promotion may proceed
+     * @since 0.9.71+
+     */
+    String promotionSkipReason(PeerProfile profile, Hash peer, double buildSuccess, long now) {
+        // Basic gates rather than isSelectable, to avoid stale RouterInfo
+        // proof-of-life filtering peers that were already vetted at tier entry.
+        if (!passesBasicGates(peer)) {return "notPeerSelectable";}
+        if (isExcessiveLifetimeFailure(profile)) {return "excessiveFailures";}
+        boolean isStrictCountry = _context.commSystem() != null &&
+                                  _context.commSystem().isInStrictCountry(peer);
+        if (isStrictCountry) {return "strictCountry";}
+        if (isLowTunnelAcceptance(profile, buildSuccess, now)) {return "lowTunnelAcceptance";}
+        if (isCongestedPeer(peer)) {return "congested";}
+        if (inLossProbation(profile, now)) {return "lossProbation";}
+        return null;
+    }
 
     /**
      * After a demotion vacates slots in fast/high-cap tiers, scan the
@@ -4426,24 +4552,26 @@ public class ProfileOrganizer {
             // Use live profile from _notFailingPeers, which has current
             // capacityBonus, capacityValue, etc. — the TreeSet's copy may be stale
             PeerProfile liveProfile = _notFailingPeers.get(peer);
-            boolean held = (liveProfile != null)
-                ? lockedPromoteProfileToTiers(liveProfile, buildSuccess,
-                                             minHighCap, fastTarget, highCapTarget)
-                : lockedPromoteProfileToTiers(profile, buildSuccess,
-                                             minHighCap, fastTarget, highCapTarget);
+            // One choice, used by both the promotion and the log below. They used to
+            // decide separately: the promotion ran on liveProfile while the log
+            // printed the TreeSet copy's capacity, so whenever the two differed —
+            // the case the sameObj field exists to report — the numbers described
+            // the object that was not promoted.
+            PeerProfile promoted = profileToPromote(liveProfile, profile);
+            boolean held = lockedPromoteProfileToTiers(promoted, buildSuccess,
+                                                       minHighCap, fastTarget, highCapTarget);
             if (held) { heldNoAddress++; }
 
             if (_log.shouldInfo()) {
                 boolean nowFast = _fastPeers.containsKey(peer);
                 boolean nowHighCap = _highCapacityPeers.containsKey(peer);
                 if (nowFast != wasFast || nowHighCap != wasHighCap) {
-                    PeerProfile nfProfile = _notFailingPeers.get(peer);
                     _log.info("Promoted peer [" + peer.toBase32().substring(0, 6) +
                               "] fast=" + wasFast + "->" + nowFast +
                               " highCap=" + wasHighCap + "->" + nowHighCap +
-                              " capBonus=" + profile.getCapacityBonus() +
-                              " raw=" + profile.getCapacityBonusRaw() +
-                              " sameObj=" + (profile == nfProfile));
+                              " capBonus=" + promoted.getCapacityBonus() +
+                              " raw=" + promoted.getCapacityBonusRaw() +
+                              " liveProfile=" + (promoted == liveProfile));
                 }
             }
         }
@@ -4638,12 +4766,35 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     /**
-     * Record a measured direct-link RTT against a peer.
+     * The single recorder for a measured direct-link RTT.
+     *
+     * <p>Every path that holds a transport measurement — the reorganize sampling
+     * pass, the pre-connect warm-up, a handshake — funnels through here, so the
+     * field is written one way and re-derived one way. Callers that only need the
+     * write (no stat, because they report a cycle aggregate instead) call
+     * {@link #recordFirstHopRtt}; callers that hold a peer hash instead of a
+     * profile call {@link #noteFirstHopRtt}.
      *
      * <p>Owns the profile write so callers holding a transport measurement do
      * not have to know how the value is stored or aged out. The value decays
      * on the existing Active tier window, so a first-hop latency never
      * outlives the evidence class it belongs to.
+     *
+     * @param profile the profile to record against
+     * @param rtt the measured round trip time in ms
+     * @param when timestamp of the measurement
+     * @since 0.9.71+
+     */
+    private void recordFirstHopRtt(PeerProfile profile, int rtt, long when) {
+        if (rtt <= 0) {return;}
+        profile.setFirstHopRtt(rtt, when);
+        // The one low-latency decision lives in PeerProfile; this only propagates
+        // its answer to the field the tiers read.
+        profile.recalculateLowLatency();
+    }
+
+    /**
+     * Record a measured direct-link RTT against a peer, by hash.
      *
      * @param peer the measured peer
      * @param rtt the measured round trip time in ms
@@ -4654,22 +4805,8 @@ public class ProfileOrganizer {
         if (rtt <= 0) {return;}
         PeerProfile profile = getProfile(peer);
         if (profile == null) {return;}
-        profile.setFirstHopRtt(rtt, when);
+        recordFirstHopRtt(profile, rtt, when);
         _context.statManager().addRateData("tunnel.firstHopRtt", rtt);
-        refreshLowLatencyFromFirstHop(profile);
-    }
-
-
-
-    private void refreshLowLatencyFromFirstHop(PeerProfile profile) {
-        // The floor is absolute, so no population average and no minimum sample
-        // count is consulted: the bar does not move as RTTs age out of the
-        // measured set. See PeerProfile.LOW_LATENCY_FLOOR_MS.
-        Boolean low = profile.getLowLatencyForFirstHopRtt(_context.clock().now(),
-                                                            PeerProfile.LOW_LATENCY_CEILING_MS);
-        if (low == null) {return;}
-        if (profile.isLowLatency() == low.booleanValue()) {return;}
-        profile.setLowLatency(low.booleanValue());
     }
 
     /**

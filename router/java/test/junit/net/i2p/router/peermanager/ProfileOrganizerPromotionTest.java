@@ -102,6 +102,15 @@ public class ProfileOrganizerPromotionTest {
         return _org.skipsPromotion(profile, profile.getPeer(), 0.5);
     }
 
+    /**
+     * Give a profile a clean acceptance record, so the acceptance gate is not the
+     * reason a peer built to fail some *other* gate reports.
+     */
+    private static void acceptAll(PeerProfile profile) {
+        TunnelHistory th = profile.getTunnelHistory();
+        for (int i = 0; i < 50; i++) { th.incrementAgreedTo(); }
+    }
+
     @Test
     public void testCleanPeerNotSkipped() throws Exception {
         PeerProfile profile = seedProfile(1, "fO");
@@ -204,5 +213,104 @@ public class ProfileOrganizerPromotionTest {
             th.incrementRejected(TunnelHistory.TUNNEL_REJECT_CRIT);
         }
         assertTrue(skips(profile));
+    }
+
+    // ---- the reason must name the gate that actually fired ----
+
+    /**
+     * Every gate that skips promotion must be nameable by the reason.
+     *
+     * <p>Promotion previously logged two recomputed gates, so a peer held back by
+     * congestion, loss probation or low tunnel acceptance printed
+     * {@code notPeerSelectable=false excessiveFailures=false} — reading "the gates
+     * passed" while the peer was in fact skipped. The three below are exactly the
+     * cases that were silently misattributed, plus the one that was reported from
+     * the wrong object.
+     */
+    @Test
+    public void everyGateNamesItsOwnReason() throws Exception {
+        long now = _ctx.clock().now();
+
+        // A peer can fail several gates at once. The reason names the first in a
+        // fixed order, so each case below is built to fail exactly one — the
+        // tunnel history keeps the acceptance gate out of the way.
+
+        // Congestion capability — was reported as "notPeerSelectable=false".
+        PeerProfile congested = seedProfile(4, "fOD");
+        acceptAll(congested);
+        assertEquals("congested",
+                     _org.promotionSkipReason(congested, congested.getPeer(), 0.5, now));
+        assertTrue(skips(congested));
+
+        // Loss probation — same misattribution.
+        PeerProfile lossy = seedProfile(5, "fO");
+        acceptAll(lossy);
+        lossy.setLossySince(now);
+        assertEquals("lossProbation",
+                     _org.promotionSkipReason(lossy, lossy.getPeer(), 0.5, now));
+        assertTrue(skips(lossy));
+
+        // Low tunnel acceptance — same misattribution.
+        PeerProfile lowAcc = seedProfile(6, "fO");
+        TunnelHistory ath = lowAcc.getTunnelHistory();
+        for (int i = 0; i < 30; i++) {
+            ath.incrementRejected(TunnelHistory.TUNNEL_REJECT_CRIT);
+        }
+        assertEquals("lowTunnelAcceptance",
+                     _org.promotionSkipReason(lowAcc, lowAcc.getPeer(), 0.5, now));
+        assertTrue(skips(lowAcc));
+
+        // Excessive lifetime failures — reported, but from a re-probe of the map
+        // rather than the profile the caller already held.
+        PeerProfile failed = seedProfile(11, "fO");
+        TunnelHistory fth = failed.getTunnelHistory();
+        for (int i = 0; i < 5; i++) { fth.incrementAgreedTo(); }
+        for (int i = 0; i < 51; i++) { fth.incrementFailed(50); }
+        assertEquals("excessiveFailures",
+                     _org.promotionSkipReason(failed, failed.getPeer(), 0.5, now));
+        assertTrue(skips(failed));
+    }
+
+    /**
+     * A peer that clears every gate has no reason to report, and
+     * {@link #skipsPromotion} agrees with the reason: it is null exactly when the
+     * boolean is false, so the two cannot drift.
+     */
+    @Test
+    public void reasonIsNullExactlyWhenNotSkipped() throws Exception {
+        long now = _ctx.clock().now();
+        PeerProfile clean = seedProfile(1, "fO");
+        TunnelHistory th = clean.getTunnelHistory();
+        for (int i = 0; i < 50; i++) { th.incrementAgreedTo(); }
+
+        assertNull(_org.promotionSkipReason(clean, clean.getPeer(), 0.5, now));
+        assertFalse("the reason and the boolean must agree", skips(clean));
+
+        PeerProfile bad = seedProfile(4, "fOD");
+        assertNotNull(_org.promotionSkipReason(bad, bad.getPeer(), 0.5, now));
+        assertTrue("the reason and the boolean must agree", skips(bad));
+    }
+
+    /**
+     * {@link #skipsPromotion} and {@link #promotionSkipReason} are the same
+     * decision, not two implementations. Swept over the profiles the other tests
+     * build so a divergence at any combination fails here.
+     */
+    @Test
+    public void skipsPromotionIsTheReasonDecision() throws Exception {
+        long now = _ctx.clock().now();
+        PeerProfile[] profiles = {
+            seedProfile(1, "fO"), seedProfile(4, "fOD"), seedProfile(5, "fO"),
+            seedProfile(6, "fO"),
+        };
+        for (int i = 0; i < profiles.length; i++) {
+            for (double bs : new double[] {0.1, 0.5, 0.9}) {
+                String reason = _org.promotionSkipReason(profiles[i], profiles[i].getPeer(), bs, now);
+                boolean skipped = _org.skipsPromotion(profiles[i], profiles[i].getPeer(), bs);
+                assertEquals("profile " + i + " buildSuccess " + bs +
+                             ": reason and boolean disagree",
+                             reason != null, skipped);
+            }
+        }
     }
 }

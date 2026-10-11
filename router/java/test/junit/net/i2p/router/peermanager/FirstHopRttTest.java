@@ -1,6 +1,7 @@
 package net.i2p.router.peermanager;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -145,15 +146,53 @@ public class FirstHopRttTest {
         assertEquals("a negative reading is not evidence of anything", -1, profile.getFirstHopRtt(NOW));
     }
 
-    /** A later measurement replaces the previous one rather than averaging it in. */
+    /**
+     * A later measurement is damped in, not swapped for the old one.
+     *
+     * <p>Every latency writer uses {@link PeerProfile#dampLatency}, so a single
+     * noisy sample — one congested moment on one session — cannot move the value
+     * on its own. The first measurement always lands whole: an absent value is
+     * missing evidence, not zero latency, and damping toward it would
+     * manufacture latency out of no data.
+     */
     @Test
-    public void newerMeasurementReplacesOlder() {
+    public void newerMeasurementIsDampedIn() {
         RouterContext ctx = RouterTestHelper.getContext();
         org.junit.Assume.assumeTrue("no RouterContext available", ctx != null);
         PeerProfile profile = new PeerProfile(ctx, hash(5));
         profile.setFirstHopRtt(9000, NOW);
+        // 0.75 * 9000 + 0.25 * 200 = 6800, so one low sample barely moves it.
         profile.setFirstHopRtt(200, NOW + 1000);
-        assertEquals(200, profile.getFirstHopRtt(NOW + 1000));
+        assertEquals(6800, profile.getFirstHopRtt(NOW + 1000));
+    }
+
+    /**
+     * A stale value is replaced rather than damped toward.
+     *
+     * <p>{@link PeerProfile#getFirstHopRtt} has already declared a value older
+     * than the retention window unknown, so averaging a fresh measurement
+     * against it would let expired evidence drag the new one back.
+     */
+    @Test
+    public void staleValueIsReplacedNotDamped() {
+        RouterContext ctx = RouterTestHelper.getContext();
+        org.junit.Assume.assumeTrue("no RouterContext available", ctx != null);
+        PeerProfile profile = new PeerProfile(ctx, hash(6));
+        profile.setFirstHopRtt(9000, NOW);
+        // Four hours and a second later the old value is stale evidence.
+        profile.setFirstHopRtt(200, NOW + PeerProfile.FIRST_HOP_RTT_VALIDITY_MS + 1000);
+        assertEquals(200, profile.getFirstHopRtt(NOW + PeerProfile.FIRST_HOP_RTT_VALIDITY_MS + 1000));
+    }
+
+    /** The first measurement always lands whole, whatever it is. */
+    @Test
+    public void firstMeasurementLandsWhole() {
+        RouterContext ctx = RouterTestHelper.getContext();
+        org.junit.Assume.assumeTrue("no RouterContext available", ctx != null);
+        PeerProfile profile = new PeerProfile(ctx, hash(7));
+        profile.setFirstHopRtt(250, NOW);
+        assertEquals("the first sample is the value, not a damped average",
+                     250, profile.getFirstHopRtt(NOW));
     }
 
     // ---- the two-driver low-latency rule ----
@@ -272,5 +311,61 @@ public class FirstHopRttTest {
     public void retentionIsFourHours() {
         assertEquals("4h retention",
                      4 * 60 * 60 * 1000L, PeerProfile.FIRST_HOP_RTT_VALIDITY_MS);
+    }
+
+    // ---- one damping, one decision ----
+
+    /**
+     * The shared smoothing primitive is the only one.
+     *
+     * <p>Peer latency arrives from a peer test, from a transport session, and from
+     * a handshake. They measure different paths, but they must accumulate the same
+     * way, or a value averaged 25% per sample cannot be compared with one that
+     * replaces itself. Pinned as arithmetic so the primitive cannot drift from
+     * either of the writers that use it.
+     */
+    @Test
+    public void dampLatencyIsTheOnlySmoothing() {
+        assertEquals("an unknown value takes the sample whole",
+                     120f, PeerProfile.dampLatency(0f, 120f), 0.001f);
+        assertEquals("a negative value is unknown, not zero",
+                     120f, PeerProfile.dampLatency(-1f, 120f), 0.001f);
+        assertEquals("a known value damps 25% per sample",
+                     0.75f * 200f + 0.25f * 40f, PeerProfile.dampLatency(200f, 40f), 0.001f);
+        // Converges rather than reaching: repeated identical samples approach it.
+        float v = 0f;
+        for (int i = 0; i < 100; i++) { v = PeerProfile.dampLatency(v, 100f); }
+        assertEquals("100 identical samples reach the value", 100f, v, 0.001f);
+    }
+
+    /**
+     * The low-latency decision has one implementation, reached by both callers.
+     *
+     * <p>{@link PeerProfile#recalculateLowLatency()} is a wrapper over
+     * {@link PeerProfile#getLowLatencyForFirstHopRtt(long, long)}, so the flag
+     * cannot be derived two different ways depending on which pass ran last.
+     */
+    @Test
+    public void lowLatencyHasOneDecisionPath() {
+        RouterContext ctx = RouterTestHelper.getContext();
+        org.junit.Assume.assumeTrue("no RouterContext available", ctx != null);
+        PeerProfile profile = new PeerProfile(ctx, hash(8));
+        // Unmeasured: the decision declines to judge and leaves the flag alone.
+        assertNull(profile.getLowLatencyForFirstHopRtt(NOW, PeerProfile.LOW_LATENCY_CEILING_MS));
+
+        profile.setFirstHopRtt(50, NOW);
+        assertTrue(Boolean.TRUE.equals(
+            profile.getLowLatencyForFirstHopRtt(NOW, PeerProfile.LOW_LATENCY_CEILING_MS)));
+
+        profile.setFirstHopRtt(500, NOW);
+        assertTrue(Boolean.FALSE.equals(
+            profile.getLowLatencyForFirstHopRtt(NOW, PeerProfile.LOW_LATENCY_CEILING_MS)));
+
+        // recalculateLowLatency propagates that same answer, having consulted the
+        // same method: two paths, one decision.
+        profile.setFirstHopRtt(50, NOW);
+        profile.recalculateLowLatency();
+        profile.setFirstHopRtt(500, NOW + 1);
+        assertFalse("the wrapper propagates the method's FALSE", profile.isLowLatency());
     }
 }

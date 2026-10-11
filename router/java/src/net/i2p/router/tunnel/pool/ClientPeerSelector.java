@@ -135,7 +135,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     private static final String STRATEGY_DIVERSITY = "diversity";
 
     /**
-     * Constructor.
+     * Creates the selector over the given router context.
      *
      * @param context the router context
      */
@@ -850,24 +850,24 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (params.useHighCapPrimary) {
             ctx.profileOrganizer().selectHighCapacityPeers(middleCount, ex.exclude, matches, params.ipRestriction, params.ipSet);
             if (matches.size() < middleCount) {
-                ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, params.ipRestriction, params.ipSet);
+                ctx.profileOrganizer().selectFastPeers(middleCount, ex.exclude, matches, params.ipRestriction, params.ipSet);
             }
             if (matches.size() < middleCount) {
-                ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, 0, null);
+                ctx.profileOrganizer().selectFastPeers(middleCount, ex.exclude, matches, 0, null);
             }
         } else {
             ctx.profileOrganizer().selectFastPeers(middleCount, ex.exclude, matches, params.ipRestriction, params.ipSet);
             // IP-restricted pass may not find enough; escalate to
             // unrestricted pass below.
             if (matches.size() < middleCount) {
-                ctx.profileOrganizer().selectFastPeers(middleCount - matches.size(), ex.exclude, matches, 0, null);
+                ctx.profileOrganizer().selectFastPeers(middleCount, ex.exclude, matches, 0, null);
             }
             if (matches.size() < middleCount) {
-                ctx.profileOrganizer().selectNotFailingPeers(middleCount - matches.size(), ex.exclude, matches, false, 0, null);
+                ctx.profileOrganizer().selectNotFailingPeers(middleCount, ex.exclude, matches, false, 0, null);
             }
         }
         if (matches.size() < middleCount) {
-            ctx.profileOrganizer().selectHighBandwidthPeers(middleCount - matches.size(), ex.exclude, matches, false, 0, null);
+            ctx.profileOrganizer().selectHighBandwidthPeers(middleCount, ex.exclude, matches, false, 0, null);
         }
         if (matches.size() < middleCount && ctx.getBooleanProperty(PROP_LEGACY_SELECTION)) {
             ctx.profileOrganizer().selectFastPeers(middleCount, ex.exclude, matches, 0, null);
@@ -1201,55 +1201,59 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Add Fast-tier candidates until the batch is full, used when the first hop is widening
      * past the HighCapacity tier it started from.
      *
-     * <p>Requests only the shortfall so the batch stays at
-     * {@link #FIRST_HOP_CANDIDATES} in total rather than doubling.
+     * <p>Passes the batch's full size and lets the selector compute the shortfall — the
+     * same accounting {@link ProfileOrganizer#remainingToSelect} does for every other
+     * caller, so the top-up cannot drift from the tiers beneath it.
      */
     private void topUpFromFastTier(SelectionParams params, Set<Hash> exclude, ArraySet<Hash> matches) {
-        int need = FIRST_HOP_CANDIDATES - matches.size();
-        if (need > 0) {
-            ctx.profileOrganizer().selectFastPeers(need, exclude, matches, params.ipRestriction, params.ipSet);
-        }
+        ctx.profileOrganizer().selectFastPeers(FIRST_HOP_CANDIDATES, exclude, matches, params.ipRestriction, params.ipSet);
     }
 
     /** Add HighCapacity-tier candidates until the batch is full. See {@link #topUpFromFastTier}. */
     private void topUpFromHighCapacityTier(SelectionParams params, Set<Hash> exclude, ArraySet<Hash> matches) {
-        int need = FIRST_HOP_CANDIDATES - matches.size();
-        if (need > 0) {
-            ctx.profileOrganizer().selectHighCapacityPeers(need, exclude, matches, params.ipRestriction, params.ipSet);
-        }
+        ctx.profileOrganizer().selectHighCapacityPeers(FIRST_HOP_CANDIDATES, exclude, matches, params.ipRestriction, params.ipSet);
     }
 
     /**
-     * Refill the first-hop candidate after a quality-loop ejection.
+     * Refill the first-hop candidate batch after a quality-loop ejection.
      * Tries the same tier cascade as selectFirstHop (HighCap → Fast →
      * Active → NotFailing) with the ejected peer excluded, so the slot
      * isn't wasted.  At most 3 refills per build cycle.
      *
+     * <p>Refills the whole {@link #FIRST_HOP_CANDIDATES} batch rather than a
+     * single peer. The quality loop is budgeted for 16 attempts, and a batch
+     * that shrinks by one per ejection reaches that budget by draining rather
+     * than by exhausting it: with a batch of 4 and three refills of one, only
+     * seven candidates are ever examined and the remaining nine attempts —
+     * plus the degraded-candidate fallback behind them — never run.
+     *
      * @param params selection parameters
      * @param randomKey random key for Fast tier sub-tiering
      * @param ex exclusion set (ejected peer added by caller)
-     * @param matches singleton set to populate with replacement
+     * @param matches empty set to populate with a fresh batch
      * @param inStartup true if still in startup grace period
      * @since 0.9.71+
      */
     private void refillFirstHop(SelectionParams params, SessionKey randomKey,
                                 SelectionExclusions ex, ArraySet<Hash> matches,
                                 boolean inStartup) {
-        if (matches.isEmpty()) {
-            if (params.useHighCapPrimary) {
-                ctx.profileOrganizer().selectHighCapacityPeers(1, ex.exclude, matches, params.ipRestriction, params.ipSet);
-                if (matches.isEmpty()) {
-                    ctx.profileOrganizer().selectNotFailingPeers(1, ex.exclude, matches, false, 0, null);
-                }
-            } else {
-                ctx.profileOrganizer().selectFastPeers(1, ex.exclude, matches, params.ipRestriction, params.ipSet);
+        if (!matches.isEmpty()) { return; }
+        if (params.useHighCapPrimary) {
+            ctx.profileOrganizer().selectHighCapacityPeers(FIRST_HOP_CANDIDATES, ex.exclude, matches,
+                                                           params.ipRestriction, params.ipSet);
+            if (matches.isEmpty()) {
+                ctx.profileOrganizer().selectNotFailingPeers(FIRST_HOP_CANDIDATES, ex.exclude, matches,
+                                                             false, 0, null);
             }
+        } else {
+            ctx.profileOrganizer().selectFastPeers(FIRST_HOP_CANDIDATES, ex.exclude, matches,
+                                                   params.ipRestriction, params.ipSet);
         }
         if (matches.isEmpty()) {
-            ctx.profileOrganizer().selectActiveNotFailingPeers(1, ex.exclude, matches, 0, null);
+            ctx.profileOrganizer().selectActiveNotFailingPeers(FIRST_HOP_CANDIDATES, ex.exclude, matches, 0, null);
         }
         if (matches.isEmpty()) {
-            ctx.profileOrganizer().selectNotFailingPeers(1, ex.exclude, matches, false, 0, null);
+            ctx.profileOrganizer().selectNotFailingPeers(FIRST_HOP_CANDIDATES, ex.exclude, matches, false, 0, null);
         }
     }
 
