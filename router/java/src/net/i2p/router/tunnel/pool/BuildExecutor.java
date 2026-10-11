@@ -1438,21 +1438,37 @@ public class BuildExecutor implements Runnable {
      */
     private void noteExpiredHopAttribution(TunnelCreatorConfig cfg) {
         int length = cfg.getLength();
-        int gatewayHop = gatewayHopIndex(cfg, length);
-        CommSystemFacade commSystem = _context.commSystem();
-        Hash us = _context.routerHash();
         for (int hop = 0; hop < length; hop++) {
-            Hash peer = cfg.getPeer(hop);
-            boolean assigned = (peer != null);
-            boolean isUs = assigned && us != null && us.equals(peer);
-            String classification = classifyExpiredHop(assigned, isUs, hop == gatewayHop,
-                assigned && !isUs && commSystem.wasUnreachable(peer),
-                assigned && !isUs && commSystem.isEstablished(peer),
-                assigned && !isUs && commSystem.isConnecting(peer));
+            String classification = classifyHopAt(cfg, hop);
             if (!BuildHopAttribution.isPeerFailure(hop, classification)) {continue;}
             _context.statManager().addRateData(
                 BuildHopAttribution.statName(hop, classification), 1);
         }
+    }
+
+    /**
+     * Classify one hop of an expired build, from that hop's current transport
+     * state.  Shared by the per-hop stat in {@link
+     * #noteExpiredHopAttribution(TunnelCreatorConfig)} and by the ghost-charge
+     * decision in {@link #shouldChargeGhostMark(PooledTunnelCreatorConfig, Hash)}
+     * so the two can never disagree about which builds are attributable.
+     *
+     * @param cfg the expired build config
+     * @param hop zero-based hop position
+     * @return one of the {@code HOP_*} constants, never null
+     * @since 0.9.71+
+     */
+    private String classifyHopAt(TunnelCreatorConfig cfg, int hop) {
+        CommSystemFacade commSystem = _context.commSystem();
+        Hash us = _context.routerHash();
+        Hash peer = cfg.getPeer(hop);
+        boolean assigned = (peer != null);
+        boolean isUs = assigned && us != null && us.equals(peer);
+        boolean remote = assigned && !isUs;
+        return classifyExpiredHop(assigned, isUs, hop == gatewayHopIndex(cfg, cfg.getLength()),
+            remote && commSystem.wasUnreachable(peer),
+            remote && commSystem.isEstablished(peer),
+            remote && commSystem.isConnecting(peer));
     }
 
     /**
@@ -1812,8 +1828,17 @@ public class BuildExecutor implements Runnable {
             if (peer.equals(contacted)) {
                 didNotReply(cfg.getReplyMessageId(), peer);
                 _context.profileManager().tunnelTimedOut(peer);
-                // Record timeout for ghost peer detection
-                if (_ghostPeerManager != null) {
+                // Record timeout for ghost peer detection, but only when the
+                // contacted hop's state actually indicts it.  A hop that is
+                // established yet silent accepted our connection and then went
+                // quiet: the request may have been dropped inside the peer, or
+                // the reply may have been lost on the return path.  Neither is
+                // evidence against the peer, and this bucket is the largest
+                // single cause of expired builds (Hop1.establishedSilent,
+                // ~27.7/min against ~4.3/min unreachable), so charging it was
+                // excluding good peers at scale and feeding the exclusion back
+                // into selection.  See shouldChargeGhostMark.
+                if (_ghostPeerManager != null && shouldChargeGhostMark(cfg, contacted)) {
                     _ghostPeerManager.recordTimeout(peer);
                 }
                 // Immediate tier eviction.  The contacted hop is the gateway:
@@ -1836,6 +1861,60 @@ public class BuildExecutor implements Runnable {
                 _context.statManager().addRateData("tunnel.firstHopUnreachableDemoted", 1);
             }
         }
+    }
+
+    /**
+     * Whether an expired build's contacted hop should be charged a ghost mark.
+     *
+     * <p>A ghost mark is a peer exclusion, so it should rest on evidence that
+     * indicts the peer.  When the contacted hop is
+     * {@link #HOP_ESTABLISHED_SILENT established but silent} it is not: the
+     * hop accepted the connection, so the peer was reachable, and the missing
+     * reply is equally consistent with the request being dropped inside the
+     * peer, the reply being lost on the return path, or our own path being the
+     * problem.  Charging that case excludes peers for a fault they may not own.
+     *
+     * <p>It is also the dominant bucket.  On a live router under stress the
+     * contacted-hop expiries split roughly 27.7/min established-silent against
+     * 4.3/min unreachable and 4.7/min merely reachable, so this single decision
+     * governed the majority of all ghost marks taken.  Suppressing it stops
+     * the exclusion set growing faster than {@code ghostMarksCleared} can
+     * retire it — the observed 82/min in against 15/min out — which was
+     * steadily shrinking the pool selection draws from.
+     *
+     * <p>Every other classification still charges: unreachable, handshake
+     * unfinished and plain reachable all leave the peer as the best available
+     * explanation for the expiry.  The selection-scope cooldown from
+     * {@link #cooldownFailedPeers(PooledTunnelCreatorConfig)} still applies
+     * either way, so an ambiguous peer is still not retried immediately.
+     *
+     * @param cfg the expired build config
+     * @param contacted the hop the request was dispatched to
+     * @return true if the contacted hop should be charged a ghost mark
+     * @since 0.9.71+
+     */
+    boolean shouldChargeGhostMark(PooledTunnelCreatorConfig cfg, Hash contacted) {
+        if (cfg == null || contacted == null) {return false;}
+        int hopIndex = indexOfPeer(cfg, contacted);
+        if (hopIndex < 0) {return true;}
+        String classification = classifyHopAt(cfg, hopIndex);
+        return !BuildHopAttribution.isEstablishedSilent(classification);
+    }
+
+    /**
+     * Zero-based position of {@code peer} in the build path, or -1 when absent.
+     *
+     * @param cfg the build config
+     * @param peer the hash to locate
+     * @return the hop index, or -1
+     * @since 0.9.71+
+     */
+    private static int indexOfPeer(PooledTunnelCreatorConfig cfg, Hash peer) {
+        int length = cfg.getLength();
+        for (int i = 0; i < length; i++) {
+            if (peer.equals(cfg.getPeer(i))) {return i;}
+        }
+        return -1;
     }
 
     /**
