@@ -133,7 +133,7 @@ class UDPSorters {
         IdleInComparator() {}
 
         /**
-         * compare.
+         * Orders peers by idle time since the last inbound message.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -152,7 +152,7 @@ class UDPSorters {
         IdleOutComparator() {}
 
         /**
-         * compare.
+         * Orders peers by idle time since the last outbound message.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -173,7 +173,7 @@ class UDPSorters {
         RateInComparator() {}
 
         /**
-         * compare.
+         * Orders peers by inbound rate over the sampled minute.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -194,7 +194,7 @@ class UDPSorters {
         RateOutComparator() {}
 
         /**
-         * compare.
+         * Orders peers by outbound rate over the sampled minute.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -213,7 +213,7 @@ class UDPSorters {
         UptimeComparator() {}
 
         /**
-         * compare.
+         * Orders peers by how long the session has been established.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -232,7 +232,7 @@ class UDPSorters {
         SkewComparator() {}
 
         /**
-         * compare.
+         * Orders peers by measured clock skew.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -251,7 +251,7 @@ class UDPSorters {
         CwndComparator() {}
 
         /**
-         * compare.
+         * Orders peers by send window size.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -270,7 +270,7 @@ class UDPSorters {
         SsthreshComparator() {}
 
         /**
-         * compare.
+         * Orders peers by slow start threshold.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -289,7 +289,7 @@ class UDPSorters {
         RTTComparator() {}
 
         /**
-         * compare.
+         * Orders peers by round trip time.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -308,7 +308,7 @@ class UDPSorters {
         RTOComparator() {}
 
         /**
-         * compare.
+         * Orders peers by retransmission timeout.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -327,7 +327,7 @@ class UDPSorters {
         MTUComparator() {}
 
         /**
-         * compare.
+         * Orders peers by transmit MTU, falling back to receive MTU.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -349,7 +349,7 @@ class UDPSorters {
         SendCountComparator() {}
 
         /**
-         * compare.
+         * Orders peers by messages sent.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -368,7 +368,7 @@ class UDPSorters {
         RecvCountComparator() {}
 
         /**
-         * compare.
+         * Orders peers by messages received.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -387,7 +387,7 @@ class UDPSorters {
         ResendComparator() {}
 
         /**
-         * compare.
+         * Orders peers by retransmitted packets.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -406,7 +406,7 @@ class UDPSorters {
         DupComparator() {}
 
         /**
-         * compare.
+         * Orders peers by duplicate packets received.
          */
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -425,7 +425,7 @@ class UDPSorters {
         PeerComparator() {}
 
         /**
-         * compare.
+         * Orders peers by peer hash, giving the subclass comparisons a tiebreak.
          */
         @Override
         public int compare(PeerState l, PeerState r) {

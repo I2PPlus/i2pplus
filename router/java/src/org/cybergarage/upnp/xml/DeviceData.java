@@ -51,7 +51,7 @@ public class DeviceData extends NodeData {
     private File descriptionFile = null;
 
     /**
-     * getDescriptionFile.
+     * Fetches the file this description was parsed from.
      *
      * @return the local file backing the description, or null if this device was not registered from a file
      */
@@ -60,7 +60,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * getDescriptionURI.
+     * Fetches the URL this description was fetched from.
      *
      * @return the URL the description was fetched from, or null if it was parsed from a file
      */
@@ -69,7 +69,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * setDescriptionFile.
+     * Records the file this description was parsed from.
      *
      * @param descriptionFile the local file this description was parsed from, or null when it was fetched over the network
      */
@@ -78,7 +78,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * setDescriptionURI.
+     * Records the URL this description was fetched from.
      *
      * @param descriptionURI the URL this description was fetched from, or null when it was parsed from a file
      */
@@ -94,7 +94,7 @@ public class DeviceData extends NodeData {
     private String location_ipv6 = "";
 
     /**
-     * getLocation.
+     * Fetches the control URL this device advertises.
      *
      * @return the control URL of this device, preferring the IPv4 form
      */
@@ -120,7 +120,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * setLocation.
+     * Records the control URL, filing a bracketed host as the IPv6 location.
      *
      * @param location the control URL to advertise; a host in brackets is filed as the IPv6 location, and a malformed URL is rejected with a warning
      */
@@ -148,7 +148,7 @@ public class DeviceData extends NodeData {
     private int leaseTime = Device.DEFAULT_LEASE_TIME;
 
     /**
-     * getLeaseTime.
+     * Fetches the advertised lease duration in seconds.
      *
      * @return the advertised lease duration in seconds
      */
@@ -157,7 +157,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * setLeaseTime.
+     * Records the lease duration advertised in seconds.
      *
      * @param val the advertised lease duration in seconds
      */
@@ -172,7 +172,7 @@ public class DeviceData extends NodeData {
     private HTTPServerList httpServerList = null;
 
     /**
-     * getHTTPServerList.
+     * Fetches the HTTP server list, building it on first use.
      *
      * @return the HTTP server list, lazily created on first use from the bind addresses and port
      */
@@ -186,7 +186,7 @@ public class DeviceData extends NodeData {
     private InetAddress[] httpBinds = null;
 
     /**
-     * setHTTPBindAddress.
+     * Records which addresses the embedded HTTP server binds to.
      *
      * @param inets the addresses the embedded HTTP server binds to, or null for the default behaviour
      */
@@ -195,7 +195,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * getHTTPBindAddress.
+     * Fetches the addresses the embedded HTTP server binds to.
      *
      * @return the addresses the embedded HTTP server binds to, or null when the default behaviour applies
      */
@@ -210,7 +210,7 @@ public class DeviceData extends NodeData {
     private int httpPort = Device.HTTP_DEFAULT_PORT;
 
     /**
-     * getHTTPPort.
+     * Fetches the port the embedded HTTP server listens on.
      *
      * @return the port the embedded HTTP server listens on
      */
@@ -219,7 +219,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * setHTTPPort.
+     * Records the port the embedded HTTP server should listen on.
      *
      * @param port the port the embedded HTTP server should listen on
      */
@@ -234,7 +234,7 @@ public class DeviceData extends NodeData {
     private ListenerList controlActionListenerList = new ListenerList();
 
     /**
-     * getControlActionListenerList.
+     * Fetches the listeners notified when a control action arrives.
      *
      * @return the list notified when a control action message arrives
      */
@@ -259,7 +259,7 @@ public class DeviceData extends NodeData {
     private InetAddress[] ssdpBinds = null;
 
     /**
-     * getSSDPSearchSocketList.
+     * Fetches the SSDP search sockets, building them on first use.
      *
      * @return the SSDP search socket list, lazily created on first use from the bind addresses, port and multicast addresses
      */
@@ -296,8 +296,8 @@ public class DeviceData extends NodeData {
     /**
      * Sets the SSDP bind addresses.
      *
-     * @param inets The <code>InetAddress</code> that will be binded for listing this service. Use
-     *              <code>null</code> for the default behaviur.
+     * @param inets The <code>InetAddress</code> that will be bound for listing this service. Use
+     *              <code>null</code> for the default behavior.
      * @see org.cybergarage.upnp.ssdp
      * @see org.cybergarage.upnp
      * @see org.cybergarage.net.HostInterface
@@ -310,8 +310,8 @@ public class DeviceData extends NodeData {
     /**
      * Returns the SSDP bind addresses.
      *
-     * @return The <code>InetAddress</code> that will be binded for this service <code>null
-     *         </code> means that defulat behaviur will be used
+     * @return The <code>InetAddress</code> that will be bound for this service <code>null
+     *         </code> means that default behavior will be used
      * @since 1.8
      */
     public InetAddress[] getSSDPBindAddress() {
@@ -321,7 +321,7 @@ public class DeviceData extends NodeData {
     /**
      * Sets the IPv4 multicast address.
      *
-     * @param ip The IPv4 address used as destination address for Multicast comunication
+     * @param ip The IPv4 address used as destination address for Multicast communication
      * @since 1.8
      */
     public void setMulticastIPv4Address(String ip) {
@@ -331,7 +331,7 @@ public class DeviceData extends NodeData {
     /**
      * Returns the IPv4 multicast address.
      *
-     * @return The IPv4 address used for Multicast comunication
+     * @return The IPv4 address used for Multicast communication
      */
     public String getMulticastIPv4Address() {
         return this.ssdpMulticastIPv4;
@@ -340,7 +340,7 @@ public class DeviceData extends NodeData {
     /**
      * Sets the IPv6 multicast address.
      *
-     * @param ip The IPv6 address used as destination address for Multicast comunication
+     * @param ip The IPv6 address used as destination address for Multicast communication
      * @since 1.8
      */
     public void setMulticastIPv6Address(String ip) {
@@ -350,7 +350,7 @@ public class DeviceData extends NodeData {
     /**
      * Returns the IPv6 multicast address.
      *
-     * @return The IPv6 address used as destination address for Multicast comunication
+     * @return The IPv6 address used as destination address for Multicast communication
      * @since 1.8
      */
     public String getMulticastIPv6Address() {
@@ -365,7 +365,7 @@ public class DeviceData extends NodeData {
     private SSDPPacket ssdpPacket_ipv6 = null;
 
     /**
-     * getSSDPPacket.
+     * Fetches the packet advertising this device.
      *
      * @return the packet describing this device, preferring the IPv4 form
      */
@@ -391,7 +391,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * setSSDPPacket.
+     * Records the advertisement packet, filing a bracketed host as the IPv6 one.
      *
      * @param packet the packet to advertise; a bracketed host in its location is filed as the IPv6 packet, and a malformed URL is rejected with a warning
      */
@@ -420,7 +420,7 @@ public class DeviceData extends NodeData {
     private Advertiser advertiser = null;
 
     /**
-     * setAdvertiser.
+     * Records the advertiser that schedules this device's announcements.
      *
      * @param adv the advertiser to schedule this device's SSDP announcements with
      */
@@ -429,7 +429,7 @@ public class DeviceData extends NodeData {
     }
 
     /**
-     * getAdvertiser.
+     * Fetches the advertiser scheduling this device's announcements.
      *
      * @return the advertiser scheduling this device's SSDP announcements, or null when none has been set
      */

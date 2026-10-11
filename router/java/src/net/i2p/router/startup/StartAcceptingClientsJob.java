@@ -14,7 +14,7 @@ import net.i2p.router.RouterContext;
 class StartAcceptingClientsJob extends JobImpl {
 
     /**
-     * StartAcceptingClientsJob.
+     * Hands the router context to the superclass.
      *
      * @param context the router context this job runs in, passed to the superclass
      */

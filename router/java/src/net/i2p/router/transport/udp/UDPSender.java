@@ -50,16 +50,16 @@ public class UDPSender {
     /** CoDel algorithm target delay in milliseconds and interval to control pacing. */
     public static final int CODEL_TARGET = 20;
     /**
-     * CODEL_INTERVAL.
+     * CoDel interval in milliseconds between checks for a packet entering the queue.
      */
     public static final int CODEL_INTERVAL = 100;
 
     /**
-     * PROP_CODEL_TARGET.
+     * Property name overriding the CoDel target delay.
      */
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     /**
-     * PROP_CODEL_INTERVAL.
+     * Property name overriding the CoDel check interval.
      */
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 

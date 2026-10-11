@@ -544,7 +544,7 @@ public interface RrdGraphConstants {
          */
         WATERMARK;
         /**
-         * Set
+         * Records the font for this tag in the per-tag array.
          * @param f the font to record for this tag, replacing any earlier entry
          * @param fonts the per-tag font array, indexed by each tag's ordinal
          */
@@ -553,7 +553,7 @@ public interface RrdGraphConstants {
             fonts[this.ordinal()] = f;
         }
         /**
-         * Get
+         * Reads back the font recorded for this tag.
          * @param f unused, accepted only to mirror {@link #set(Font, Font[])}
          * @param fonts the per-tag font array, indexed by each tag's ordinal
          * @return the font recorded for this tag, or null if none was set

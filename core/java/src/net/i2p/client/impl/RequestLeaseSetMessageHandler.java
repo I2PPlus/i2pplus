@@ -104,7 +104,7 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     static final long TRANSIENT_SIGN_RETRY_DELAY_MS = 1000L;
 
     /**
-     * RequestLeaseSetMessageHandler.
+     * Registers the handler for the standard request-lease-set message type.
      *
      * @param context the client context the handler runs in, passed to the
      *                superclass for logging and session lookup

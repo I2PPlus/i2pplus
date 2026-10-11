@@ -1,4 +1,4 @@
-/* PeerAcceptor - Accepts incomming connections from peers.
+/* PeerAcceptor - Accepts incoming connections from peers.
    Copyright (C) 2003 Mark J. Wielaard
    This file is part of Snark.
    Licensed under the GPL version 2 or later.
@@ -20,8 +20,8 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
 /**
- * Accepts incomming connections from peers. The ConnectionAcceptor will call the connection()
- * method when it detects an incomming BT protocol connection. The PeerAcceptor will then create a
+ * Accepts incoming connections from peers. The ConnectionAcceptor will call the connection()
+ * method when it detects an incoming BT protocol connection. The PeerAcceptor will then create a
  * new peer if the PeerCoordinator wants more peers.
  */
 class PeerAcceptor {

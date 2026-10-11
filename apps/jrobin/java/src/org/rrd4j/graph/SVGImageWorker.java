@@ -92,7 +92,7 @@ public class SVGImageWorker extends ImageWorker {
         setG2d(g2d);
     }
     /**
-     * Resize
+     * Reinitializes the drawing surface when the requested size has changed.
      */
 
     void resize(int width, int height) {

@@ -478,7 +478,7 @@ public abstract class Addresses {
     }
 
     /**
-     * Internal
+     * Does the RFC 5952 substitution and drops a redundant leading zero group
      *
      * @param host non-null
      * @since 0.9.57

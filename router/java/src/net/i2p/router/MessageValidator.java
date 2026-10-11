@@ -19,7 +19,7 @@ public class MessageValidator {
 
 
     /**
-     * MessageValidator.
+     * Registers the duplicate and expiry rate stats the validator reports into.
      *
      * @param context the router context supplying the log, clock and stats used
      *                to validate messages

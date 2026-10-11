@@ -251,8 +251,10 @@ public class EepGet {
      * Creates a new EepGet instance with proxy support, defaulting to allow caching.
      *
      * @param ctx I2P app context
-     * @param proxyHost proxy hostname
-     * @param proxyPort proxy port
+     * @param proxyHost hostname of the HTTP proxy, reached over an
+     *                  {@link InternalSocket}; null or empty disables proxying
+     * @param proxyPort the proxy's listening port; must be positive for proxying
+     *                  to be enabled
      * @param numRetries number of retries
      * @param outputFile output file path
      * @param url URL to fetch
@@ -265,8 +267,10 @@ public class EepGet {
      * Creates a new EepGet instance with proxy support and configurable caching.
      *
      * @param ctx I2P app context
-     * @param proxyHost proxy hostname
-     * @param proxyPort proxy port
+     * @param proxyHost hostname of the HTTP proxy, reached over an
+     *                  {@link InternalSocket}; null or empty disables proxying
+     * @param proxyPort the proxy's listening port; must be positive for proxying
+     *                  to be enabled
      * @param numRetries number of retries
      * @param outputFile output file path
      * @param url URL to fetch
@@ -306,8 +310,10 @@ public class EepGet {
      *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
-     * @param proxyHost proxy hostname
-     * @param proxyPort proxy port
+     * @param proxyHost hostname of the HTTP proxy, reached over an
+     *                  {@link InternalSocket}; null or empty disables proxying
+     * @param proxyPort the proxy's listening port; must be positive for proxying
+     *                  to be enabled
      * @param numRetries number of retries
      * @param outputFile output file path
      * @param url URL to fetch
@@ -322,8 +328,10 @@ public class EepGet {
      *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
-     * @param proxyHost proxy hostname
-     * @param proxyPort proxy port
+     * @param proxyHost hostname of the HTTP proxy, reached over an
+     *                  {@link InternalSocket}; null or empty disables proxying
+     * @param proxyPort the proxy's listening port; must be positive for proxying
+     *                  to be enabled
      * @param numRetries number of retries
      * @param outputFile output file path
      * @param url URL to fetch
@@ -339,8 +347,10 @@ public class EepGet {
      *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
-     * @param proxyHost proxy hostname
-     * @param proxyPort proxy port
+     * @param proxyHost hostname of the HTTP proxy, reached over an
+     *                  {@link InternalSocket}; null or empty disables proxying
+     * @param proxyPort the proxy's listening port; must be positive for proxying
+     *                  to be enabled
      * @param numRetries number of retries
      * @param outputFile output file path
      * @param url URL to fetch
@@ -357,8 +367,10 @@ public class EepGet {
      *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
-     * @param proxyHost proxy hostname
-     * @param proxyPort proxy port
+     * @param proxyHost hostname of the HTTP proxy, reached over an
+     *                  {@link InternalSocket}; null or empty disables proxying
+     * @param proxyPort the proxy's listening port; must be positive for proxying
+     *                  to be enabled
      * @param numRetries number of retries
      * @param outputFile output file path
      * @param url URL to fetch
@@ -376,8 +388,10 @@ public class EepGet {
      *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
-     * @param proxyHost proxy hostname
-     * @param proxyPort proxy port
+     * @param proxyHost hostname of the HTTP proxy, reached over an
+     *                  {@link InternalSocket}; null or empty disables proxying
+     * @param proxyPort the proxy's listening port; must be positive for proxying
+     *                  to be enabled
      * @param numRetries number of retries
      * @param minSize minimum acceptable response size, -1 for unlimited
      * @param maxSize maximum acceptable response size, -1 for unlimited
@@ -399,8 +413,10 @@ public class EepGet {
      *
      * @param ctx I2P app context
      * @param shouldProxy whether to use a proxy
-     * @param proxyHost proxy hostname
-     * @param proxyPort proxy port
+     * @param proxyHost hostname of the HTTP proxy, reached over an
+     *                  {@link InternalSocket}; null or empty disables proxying
+     * @param proxyPort the proxy's listening port; must be positive for proxying
+     *                  to be enabled
      * @param numRetries number of retries
      * @param minSize minimum acceptable response size, -1 for unlimited
      * @param maxSize maximum acceptable response size, -1 for unlimited
@@ -756,7 +772,8 @@ public class EepGet {
          * @see #bytesTransferred
          * @param alreadyTransferred total bytes transferred
          * @param bytesTransferred total incl headers
-         * @param bytesRemaining remaining bytes
+         * @param bytesRemaining bytes still owed by the server, or -1 if chunked
+         *                       encoding or no Content-Length was returned
          * @param url the address the transfer was reading
          * @param outputFile null if unknown (output stream constructor)
          * @param notModified whether 304
@@ -767,11 +784,12 @@ public class EepGet {
          *
          * @see #bytesTransferred
          * @param url the address whose fetch attempt failed
-         * @param bytesTransferred total transferred
-         * @param bytesRemaining remaining
-         * @param currentAttempt attempt index
-         * @param numRetries retry limit
-         * @param cause failure cause
+         * @param bytesTransferred bytes received so far, counted across every
+         *                       attempt and including response headers
+         * @param bytesRemaining bytes still owed, or -1 if unknown
+         * @param currentAttempt zero-based index of the attempt that failed
+         * @param numRetries total attempts this fetch is allowed
+         * @param cause the exception that ended the attempt
          */
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause);
         /**
@@ -779,9 +797,10 @@ public class EepGet {
          *
          * @see #bytesTransferred
          * @param url the address whose transfer failed
-         * @param bytesTransferred total transferred
-         * @param bytesRemaining remaining
-         * @param currentAttempt attempt index
+         * @param bytesTransferred bytes received so far, counted across every
+         *                       attempt and including response headers
+         * @param bytesRemaining bytes still owed, or -1 if unknown
+         * @param currentAttempt zero-based index of the attempt that failed
          */
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt);
 
@@ -791,7 +810,7 @@ public class EepGet {
          * To be changed?
          *
          * @param url the address the header arrived on
-         * @param currentAttempt attempt index
+         * @param currentAttempt zero-based index of the attempt the header arrived on
          * @param key header key
          * @param val header value
          */
@@ -805,7 +824,8 @@ public class EepGet {
     }
 
     /**
-     * CLIStatusListener.
+     * Reports fetch progress to the command line, one mark per markSize bytes
+     * and a summary line every lineSize marks.
      */
     protected class CLIStatusListener implements StatusListener {
         private final int _markSize;
@@ -1064,7 +1084,7 @@ public class EepGet {
      * timeout to none, and the inactivity timeout to
      * {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes).
      *
-     * @return success
+     * @return whether the URL was retrieved; false if every attempt failed
      */
     public boolean fetch() { return fetch(_fetchHeaderTimeout); }
 
@@ -1077,7 +1097,7 @@ public class EepGet {
      * {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes).
      *
      * @param fetchHeaderTimeout timeout in ms
-     * @return success
+     * @return whether the URL was retrieved; false if every attempt failed
      */
     public boolean fetch(long fetchHeaderTimeout) {
         return fetch(fetchHeaderTimeout, -1, -1);
@@ -1096,7 +1116,7 @@ public class EepGet {
      * @param totalTimeout operation-wide deadline for the whole fetch, including retries and
      *                     backoff between attempts; &lt;= 0 for default none
      * @param inactivityTimeout &lt;= 0 for default {@link #DEFAULT_INACTIVITY_TIMEOUT} (5 minutes)
-     * @return success
+     * @return whether the URL was retrieved; false if every attempt failed
      */
     @SuppressWarnings("PMD.AvoidInstanceofChecksInCatchClause")
     public boolean fetch(long fetchHeaderTimeout, long totalTimeout, long inactivityTimeout) {
@@ -2705,7 +2725,7 @@ public class EepGet {
      * After fetch, the received value from the server, or null if none.
      * Before fetch, and after some errors, may be the value passed in the constructor.
      *
-     * @return the etag
+     * @return the ETag from the server's response, or null if none was sent
      */
     public String getEtag() {
         return _etag;
@@ -2741,7 +2761,7 @@ public class EepGet {
     /**
      * Show the Server field
      *
-     * @return the server
+     * @return the Server header from the response, or null if none was sent
      * @since 0.9.47
      */
     public String getServer() {
@@ -2814,7 +2834,7 @@ public class EepGet {
     /**
      * Show the Set-Cookie field
      *
-     * @return the cookie
+     * @return the Set-Cookie header from the response, or null if none was sent
      * @since 0.9.47
      */
     public String getCookie() {
@@ -2964,8 +2984,8 @@ public class EepGet {
      * Only added if the request is going through a proxy.
      * Must be called before fetch().
      *
-     * @param userName proxy username
-     * @param password proxy password
+     * @param userName username offered in the proxy's Basic or Digest challenge
+     * @param password the matching password, or null if the challenge offers none
      */
     public void addAuthorization(String userName, String password) {
         if (_shouldProxy) {
@@ -2984,7 +3004,7 @@ public class EepGet {
      * Must be called before fetch().
      *
      * @param contentType Content-Type header value
-     * @param data POST body
+     * @param data the request body, sent verbatim after the headers
      * @throws IllegalStateException if already set
      */
     protected void setPostData(String contentType, String data) {
@@ -3137,8 +3157,8 @@ public class EepGet {
         /**
          * Create the auth state with the given credentials.
          *
-         * @param user username
-         * @param pw password
+         * @param user the username from the proxy's 407 challenge
+         * @param pw the matching password from that challenge
          */
         public AuthState(String user, String pw) {
             username = user;
@@ -3341,7 +3361,7 @@ public class EepGet {
          * Wrap the raw compressed input and the decompressed output.
          *
          * @param in raw (compressed) input
-         * @param out decompressed output
+         * @param out where the inflated bytes are written
          */
         public Gunzipper(InputStream in, OutputStream out) {
             _inRaw = in;

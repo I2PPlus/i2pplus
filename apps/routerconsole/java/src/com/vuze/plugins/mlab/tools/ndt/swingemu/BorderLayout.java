@@ -24,9 +24,6 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  */
 public class BorderLayout {
 
-	/**
-	 * BorderLayout.
-	 */
 	/** Default constructor. All region constants are no-ops. */
 	public BorderLayout() {}
 

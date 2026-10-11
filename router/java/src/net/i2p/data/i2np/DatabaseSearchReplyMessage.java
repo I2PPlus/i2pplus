@@ -23,7 +23,7 @@ import net.i2p.data.Hash;
  */
 public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2NP message type ID written to the wire header.
      */
     public final static int MESSAGE_TYPE = 3;
     private Hash _key;
@@ -31,7 +31,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     private Hash _from;
 
     /**
-     * DatabaseSearchReplyMessage.
+     * Builds a reply carrying no peers yet, with the list ready to fill.
      *
      * @param context the context to use for the message
      */

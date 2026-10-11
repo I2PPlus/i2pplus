@@ -27,7 +27,8 @@ public class SimpleTimeLabelFormat implements TimeLabelFormat {
         this.format = format.replaceAll("%([^%])", "%1\\$t$1");
     }
     /**
-     * Format
+     * Renders a calendar with the strftime pattern, or with a simple date format
+     * when the pattern has no {@code %}.
      */
 
     @Override

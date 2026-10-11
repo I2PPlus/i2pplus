@@ -1220,7 +1220,6 @@ public class BuildExecutor implements Runnable {
      *  meaningful through the live implementation, which is what
      *  {@code _context.commSystem()} returns.
      *
-     * @param cfg the expired build's config
      * @since 0.9.71+
      */
     /** Interval between emitted build-expiry reports. */

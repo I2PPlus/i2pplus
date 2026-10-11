@@ -29,7 +29,8 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     private static final boolean ENABLE_PEER_TEST = true;
 
     /**
-     * PeerManagerFacadeImpl.
+     * Opens this facade's log and builds the profile persistence helper and
+     * peer tester.
      * @param ctx the router context whose log manager, profile persistence
      *            store and peer tester this facade will use
      */

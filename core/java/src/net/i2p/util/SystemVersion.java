@@ -151,7 +151,7 @@ public abstract class SystemVersion {
     public static final String PROP_OVERRIDE_IS_SLOW = "router.overrideIsSlow";
 
     /**
-     * DEFAULT_OVERRIDE_IS_SLOW.
+     * With no override configured, slow platforms are still detected automatically.
      */
     public static final boolean DEFAULT_OVERRIDE_IS_SLOW = false;
     private static final Pattern COMMA_SPLIT = Pattern.compile(",");

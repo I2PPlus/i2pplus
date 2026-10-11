@@ -643,7 +643,7 @@ public class Node {
     ////////////////////////////////////////////////
 
     /**
-     * Inovoke {@link #getIndentLevelString(int, String)} with <code>"   "</code> as String
+     * Invoke {@link #getIndentLevelString(int, String)} with <code>"   "</code> as String
      *
      * @see #getIndentLevelString(int, String)
      * @param nIndentLevel how many times the three space indent is repeated

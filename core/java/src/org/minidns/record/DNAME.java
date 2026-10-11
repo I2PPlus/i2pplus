@@ -26,7 +26,7 @@ import java.io.IOException;
 public class DNAME extends RRWithTarget {
 
     /**
-     * parse.
+     * Read a DNAME record's payload off the wire.
      *
      * @param dis the stream positioned at the wire-format name starting this record's rdata
      * @param data the whole message, needed to resolve compression pointers in the name
@@ -39,7 +39,7 @@ public class DNAME extends RRWithTarget {
     }
 
     /**
-     * DNAME.
+     * Create a record redirecting a subtree, naming the target in presentation form.
      *
      * @param target the redirected subtree in presentation form, e.g. "example.com"
      */
@@ -48,7 +48,7 @@ public class DNAME extends RRWithTarget {
     }
 
     /**
-     * DNAME.
+     * Create a record redirecting a subtree from an already parsed name.
      *
      * @param target the redirected subtree, already parsed into its label form
      */
@@ -57,7 +57,7 @@ public class DNAME extends RRWithTarget {
     }
 
     /**
-     * getType.
+     * Identifies this record as a DNAME in the answer.
      */
     @Override
     public TYPE getType() {

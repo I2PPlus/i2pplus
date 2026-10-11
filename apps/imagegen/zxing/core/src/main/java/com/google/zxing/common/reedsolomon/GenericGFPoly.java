@@ -166,7 +166,7 @@ final class GenericGFPoly {
   }
 
   /**
-   * multiply.
+   * Multiplies by another polynomial over the same field.
    * @param other the polynomial to multiply by, which must be over the same field
    * @return a new polynomial holding the product
    */
@@ -196,7 +196,7 @@ final class GenericGFPoly {
   }
 
   /**
-   * multiply.
+   * Multiplies every coefficient by a field element.
    * @param scalar the field element to multiply every coefficient by
    * @return a new polynomial holding the scaled coefficients
    */
@@ -237,7 +237,7 @@ final class GenericGFPoly {
   }
 
   /**
-   * divide.
+   * Divides by another polynomial, yielding quotient and remainder.
    * @param other the polynomial to divide by, which must be non-zero and over the same field
    * @return a two-element array holding the quotient and the remainder
    */

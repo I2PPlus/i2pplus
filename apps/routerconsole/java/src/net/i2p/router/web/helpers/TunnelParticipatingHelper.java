@@ -12,7 +12,7 @@ import net.i2p.util.Log;
  */
 public class TunnelParticipatingHelper extends HelperBase {
     /**
-     * TunnelParticipatingHelper.
+     * Does nothing itself; the superclass constructor sets the helper up.
      */
     public TunnelParticipatingHelper() { /* nop */ }
 

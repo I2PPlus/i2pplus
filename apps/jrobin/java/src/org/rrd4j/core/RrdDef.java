@@ -624,7 +624,7 @@ public class RrdDef {
     }
 
     /**
-     * Archive.
+     * Searches the archive definitions for a matching consolidation and step count.
      * @param consolFun the consolidation function of the wanted archive
      * @param steps the step count of the wanted archive
      * @return the archive
@@ -879,7 +879,7 @@ public class RrdDef {
     }
 
     /**
-     * hashCode.
+     * Hashes the archive definitions, data source definitions and step.
      */
     @Override
     public int hashCode() {
@@ -892,7 +892,7 @@ public class RrdDef {
     }
 
     /**
-     * hasDatasources.
+     * Tests whether any data source is defined.
      *
      * @return a boolean.
      */
@@ -901,7 +901,7 @@ public class RrdDef {
     }
 
     /**
-     * hasArchives.
+     * Tests whether any archive is defined.
      *
      * @return a boolean.
      */

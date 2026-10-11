@@ -31,7 +31,7 @@ import java.io.InputStream;
  */
 public class CreateLeaseSetMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * The I2CP message type number for a CreateLeaseSet request.
      */
     public static final int MESSAGE_TYPE = 4;
     /** The session ID. */
@@ -267,7 +267,7 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Returns the I2CP message type number for this message.
      * @return the type
      */
     @Override

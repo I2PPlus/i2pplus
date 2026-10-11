@@ -27,7 +27,7 @@ import net.i2p.util.VersionComparator;
 class DevSU3UpdateChecker extends UpdateRunner {
 
     /**
-     * Constructor.
+     * Registers the check as a partial dev SU3 update and adopts the first URI.
      * @param ctx the router context
      * @param mgr the update manager
      * @param uris list of update URIs

@@ -28,7 +28,7 @@ import net.i2p.I2PAppContext;
 class SchedulerDead extends SchedulerImpl {
 
     /**
-     * SchedulerDead.
+     * Sets up the scheduler for connections that are finished and awaiting cleanup.
      *
      * @param ctx the application context passed to the superclass
      */

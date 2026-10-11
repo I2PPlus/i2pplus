@@ -54,7 +54,7 @@ public class DeserializationException extends Exception {
     }
 
     /**
-     * getMessage.
+     * Builds the recovery advice for the problem type, naming the position.
      */
     @Override
     public String getMessage() {

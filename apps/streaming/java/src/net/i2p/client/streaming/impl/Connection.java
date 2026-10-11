@@ -157,10 +157,10 @@ class Connection {
      *  Same lock discipline as {@link #_lossStrikes}. */
     private long _lastLossStrikeTime;
     /**
-      * Whether the established-connection resume WARN was already logged (once per
-      *  connection) when a data packet exceeded its retransmit budget. Reset only
-      * when the connection object is reused.
-      */
+     * Whether the established-connection resume WARN was already logged (once per
+     *  connection) when a data packet exceeded its retransmit budget. Reset only
+     *  when the connection object is reused.
+     */
     private boolean _establishedResumeWarned;
     /**
      *  Whether an immediate retransmit-timer fire has already been granted for the
@@ -719,7 +719,7 @@ class Connection {
         return _highestAckedThrough.get() >= 0;
     }
 
-            /**
+    /**
      *  Decide whether the retransmit timer has gone long enough without forward ACK
      *  progress to call it a stall.
      *
@@ -3846,7 +3846,7 @@ if (!on) {
     /** Activity timer. */
     private class ActivityTimer extends SimpleTimer2.TimedEvent {
         /**
-         * ActivityTimer.
+         * Registers the inactivity event on the connection timer with a 5 second fuzz.
          */
         public ActivityTimer() {
             super(_timer);
@@ -4514,7 +4514,7 @@ if (!on) {
                 windowAdjusted();
             }
         }
-    /**
+        /**
          * Records a retransmit timer firing and detects stalls.
          * If ackPackets() was called since the last retransmit, resets the
          * counter. Otherwise increments it; after 2 consecutive firings

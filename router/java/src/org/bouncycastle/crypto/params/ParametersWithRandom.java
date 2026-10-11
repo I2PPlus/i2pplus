@@ -39,7 +39,7 @@ public class ParametersWithRandom
     }
 
     /**
-     * getRandom.
+     * Supplies the secure random source for operations needing one.
      * @return the secure random source carried by these parameters, never null
      */
     public SecureRandom getRandom()
@@ -48,7 +48,7 @@ public class ParametersWithRandom
     }
 
     /**
-     * getParameters.
+     * Unwraps the cipher parameters passed to the constructor.
      * @return the wrapped cipher parameters, exactly the instance supplied to the constructor
      */
     public CipherParameters getParameters()

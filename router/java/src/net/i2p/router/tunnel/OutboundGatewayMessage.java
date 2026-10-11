@@ -15,7 +15,7 @@ class OutboundGatewayMessage extends PendingGatewayMessage implements CDPQEntry 
     private final int _priority;
 
     /**
-     * OutboundGatewayMessage.
+     * Caches the message priority, which the fragmenter queue orders by.
      *
      * @param message the I2NP message to be delivered, whose priority is cached here
      * @param toRouter the router the message is addressed to

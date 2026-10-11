@@ -27,7 +27,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
 
     private static final long serialVersionUID = 1L;
     /**
-     * _context.
+     * The context this generator was created for.
      */
     protected final transient I2PAppContext _context;
 
@@ -227,7 +227,7 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
         private static final int SZ = 64;
 
         /**
-         * SecureRandomInit.
+         * Wraps the buffer that the background secure random seed is written into.
          */
         public SecureRandomInit(byte[] buf) {
             this.buf = buf;

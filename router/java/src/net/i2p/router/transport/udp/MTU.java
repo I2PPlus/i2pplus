@@ -36,7 +36,7 @@ public class MTU {
      *
      * Note that we don't return the value for the default interface if
      * we can't find the address. Finding the default interface is hard,
-     * altough we could perhaps just look for the first non-loopback address.
+     * although we could perhaps just look for the first non-loopback address.
      * But the MTU of the default route probably isn't relevant.
      *
      * For SSU2 MTU, values lower than PeerState2.MIN_MTU may be returned,

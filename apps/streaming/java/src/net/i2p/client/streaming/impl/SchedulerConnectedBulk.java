@@ -34,7 +34,7 @@ import net.i2p.I2PAppContext;
 class SchedulerConnectedBulk extends SchedulerImpl {
 
     /**
-     * SchedulerConnectedBulk.
+     * Sets up the scheduler for established bulk-profile connections.
      *
      * @param ctx application context, passed to the SchedulerImpl superclass
      */

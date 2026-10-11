@@ -22,7 +22,7 @@ import java.util.Properties;
  * Define the standard means of interacting with the I2P system
  *
  * An I2PClient contains no state, it is just a facility for creating private key files
- * and generating sesssions from existing private key files.
+ * and generating sessions from existing private key files.
  *
  * @author jrandom
  */

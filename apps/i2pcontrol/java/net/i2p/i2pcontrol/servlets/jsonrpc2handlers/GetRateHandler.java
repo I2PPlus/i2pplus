@@ -38,7 +38,7 @@ public class GetRateHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
 
     /**
-     * GetRateHandler.
+     * Retains the shared request helper.
      * @param helper the shared helper that validates the named parameters of an incoming request
      */
     public GetRateHandler(JSONRPC2Helper helper) {

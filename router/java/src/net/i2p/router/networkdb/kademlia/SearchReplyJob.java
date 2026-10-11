@@ -42,7 +42,7 @@ class SearchReplyJob extends JobImpl {
     private final SearchJob _searchJob;
 
     /**
-     * SearchReplyJob.
+     * Opens a log and clamps a non-positive duration to zero.
      *
      * @param enclosingContext the router context this job runs in
      * @param job the search job that requested the reply, credited with any peers found

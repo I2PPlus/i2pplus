@@ -19,7 +19,7 @@ class HashComparator implements Comparator<Hash>, Serializable {
     HashComparator() {}
 
     /**
-     * _instance.
+     * Shared stateless instance of the comparator.
      */
     public static final HashComparator _instance = new HashComparator();
 
@@ -30,7 +30,7 @@ class HashComparator implements Comparator<Hash>, Serializable {
     public static HashComparator getInstance() { return _instance; }
 
     /**
-     * compare.
+     * Orders two hashes by their raw data bytes.
      */
     @Override
     public int compare(Hash l, Hash r) {
@@ -38,7 +38,7 @@ class HashComparator implements Comparator<Hash>, Serializable {
     }
 
     /**
-     * comp.
+     * Orders two hashes by their raw data bytes, statically.
      * @param l left-hand Hash, compared through its raw data bytes
      * @param r right-hand Hash, compared through its raw data bytes
      * @return negative, zero or positive as l's bytes are less than, equal to, or greater than r's

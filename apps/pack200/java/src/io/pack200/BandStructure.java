@@ -329,7 +329,7 @@ class BandStructure {
     /** The packed file is divided up into a number of segments.
      * Most segments are typed as ValueBand, strongly-typed sequences
      * of integer values, all interpreted in a single way.
-     * A few segments are ByteBands, which hetergeneous sequences
+     * A few segments are ByteBands, which heterogeneous sequences
      * of bytes.
      *
      * The two phases for writing a packed file are COLLECT and WRITE.

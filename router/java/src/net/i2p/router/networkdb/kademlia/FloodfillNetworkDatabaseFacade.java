@@ -37,8 +37,8 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
-     * The Kademlia network database, using floodfill participants as the only storage tier.
-     */
+ * The Kademlia network database, using floodfill participants as the only storage tier.
+ */
 public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacade {
     /** Floodfill capability flag. */
     public static final char CAPABILITY_FLOODFILL = 'f';

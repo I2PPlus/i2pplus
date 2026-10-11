@@ -26,7 +26,7 @@ public class SHAKEDigest
     }
 
     /**
-     * SHAKEDigest.
+     * Creates a SHAKE digest with 128 bits of security strength.
      */
     public SHAKEDigest()
     {
@@ -34,7 +34,7 @@ public class SHAKEDigest
     }
 
     /**
-     * SHAKEDigest.
+     * Creates a 128-bit SHAKE digest bound to a declared purpose.
      *
      * @param purpose the use the digest is declared to serve, which callers must match
      */
@@ -75,7 +75,7 @@ public class SHAKEDigest
     }
 
     /**
-     * getAlgorithmName.
+     * Names the algorithm as SHAKE followed by its bit strength.
      */
     public String getAlgorithmName()
     {
@@ -83,7 +83,7 @@ public class SHAKEDigest
     }
 
     /**
-     * getDigestSize.
+     * Gets the default output size in bytes, a quarter of the bit strength.
      */
     public int getDigestSize()
     {
@@ -91,7 +91,7 @@ public class SHAKEDigest
     }
 
     /**
-     * doFinal.
+     * Squeezes the default digest size and resets the sponge.
      */
     public int doFinal(byte[] out, int outOff)
     {
@@ -99,7 +99,7 @@ public class SHAKEDigest
     }
 
     /**
-     * doFinal.
+     * Squeezes outLen bytes, then resets the sponge.
      */
     public int doFinal(byte[] out, int outOff, int outLen)
     {
@@ -111,7 +111,7 @@ public class SHAKEDigest
     }
 
     /**
-     * doOutput.
+     * Squeezes outLen bytes without resetting, so output can be streamed.
      */
     public int doOutput(byte[] out, int outOff, int outLen)
     {
@@ -129,7 +129,7 @@ public class SHAKEDigest
      * TODO Possible API change to support partial-byte suffixes.
      */
     /**
-     * doFinal.
+     * Squeezes the default digest size after a partial trailing byte.
      */
     protected int doFinal(byte[] out, int outOff, byte partialByte, int partialBits)
     {
@@ -140,7 +140,7 @@ public class SHAKEDigest
      * TODO Possible API change to support partial-byte suffixes.
      */
     /**
-     * doFinal.
+     * Squeezes outLen bytes after a partial trailing byte.
      *
      * @param out the buffer the squeezed output is written to
      * @param outOff the index in out at which output starts
@@ -179,7 +179,7 @@ public class SHAKEDigest
     }
 
     /**
-     * cryptoServiceProperties.
+     * Returns null, as SHAKE declares no crypto service properties.
      */
     protected CryptoServiceProperties cryptoServiceProperties()
     {

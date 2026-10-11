@@ -11,7 +11,7 @@ import java.net.Socket;
 public interface Outproxy {
 
     /**
-     * NAME.
+     * Outproxy identifier used when registering implementations.
      */
     public static final String NAME = "outproxy";
 

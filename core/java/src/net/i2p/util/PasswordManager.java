@@ -21,7 +21,7 @@ public class PasswordManager {
     private final I2PAppContext _context;
 
     /**
-     * SALT_LENGTH.
+     * Length of the random salt prefixed to each stored hash, in bytes.
      */
     protected static final int SALT_LENGTH = 16;
 
@@ -43,7 +43,7 @@ public class PasswordManager {
     protected static final String PROP_SHASH = ".shash";
 
     /**
-     * PasswordManager.
+     * Remember the app context so lookups reach the property store.
      *
      * @param ctx the app context supplying the property store that holds the passwords
      */

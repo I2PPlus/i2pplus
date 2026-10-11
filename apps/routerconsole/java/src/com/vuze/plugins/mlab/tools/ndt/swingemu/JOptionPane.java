@@ -33,7 +33,7 @@ JOptionPane
 	}
 
 	/**
-	 * INFORMATION_MESSAGE.
+	 * Option pane message type: an unadorned informational dialog.
 	 */
 	public static final int INFORMATION_MESSAGE = 0;
 

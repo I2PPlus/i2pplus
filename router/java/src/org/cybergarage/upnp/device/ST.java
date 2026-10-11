@@ -37,28 +37,28 @@ public class ST {
     public ST() {}
 
     /**
-     * ALL_DEVICE.
+     * Search target matching every device on the network.
      */
     public static final String ALL_DEVICE = "ssdp:all";
     /**
-     * ROOT_DEVICE.
+     * Search target matching the root device only.
      */
     public static final String ROOT_DEVICE = "upnp:rootdevice";
     /**
-     * UUID_DEVICE.
+     * Prefix of search targets naming a device by UUID.
      */
     public static final String UUID_DEVICE = "uuid";
     /**
-     * URN_DEVICE.
+     * Prefix of device type URNs, up to the device's type.
      */
     public static final String URN_DEVICE = "urn:schemas-upnp-org:device:";
     /**
-     * URN_SERVICE.
+     * Prefix of service type URNs, up to the service's type.
      */
     public static final String URN_SERVICE = "urn:schemas-upnp-org:service:";
 
     /**
-     * isAllDevice.
+     * Returns whether the search target matches every device.
      *
      * @param value the UPnP search target to test, quoted or unquoted
      * @return true if the target matches the all-device search target
@@ -70,7 +70,7 @@ public class ST {
     }
 
     /**
-     * isRootDevice.
+     * Returns whether the search target names the root device.
      *
      * @param value the UPnP search target to test, quoted or unquoted
      * @return true if the target matches the root-device search target
@@ -82,7 +82,7 @@ public class ST {
     }
 
     /**
-     * isUUIDDevice.
+     * Returns whether the search target names a device by UUID.
      *
      * @param value the UPnP search target to test, quoted or unquoted
      * @return true if the target begins with the UUID-device search target
@@ -94,7 +94,7 @@ public class ST {
     }
 
     /**
-     * isURNDevice.
+     * Returns whether the search target is a device type URN.
      *
      * @param value the UPnP search target to test, quoted or unquoted
      * @return true if the target begins with the device URN prefix
@@ -106,7 +106,7 @@ public class ST {
     }
 
     /**
-     * isURNService.
+     * Returns whether the search target is a service type URN.
      *
      * @param value the UPnP search target to test, quoted or unquoted
      * @return true if the target begins with the service URN prefix

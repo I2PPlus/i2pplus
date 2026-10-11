@@ -29,7 +29,7 @@ public class HeaderLine extends Encoding {
 	public HeaderLine() {}
 
 	/**
-	 * NAME.
+	 * Identifier this encoding is registered under, returned by getName().
 	 */
 	public static final String NAME = "HEADERLINE";
 

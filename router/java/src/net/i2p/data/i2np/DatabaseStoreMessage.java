@@ -33,7 +33,7 @@ import net.i2p.data.router.RouterInfo;
  */
 public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2NP message type ID for a database store request.
      */
     public final static int MESSAGE_TYPE = 1;
     private Hash _key;

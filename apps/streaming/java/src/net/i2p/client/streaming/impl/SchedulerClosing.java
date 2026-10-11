@@ -31,7 +31,7 @@ import net.i2p.I2PAppContext;
 class SchedulerClosing extends SchedulerImpl {
 
     /**
-     * SchedulerClosing.
+     * Creates the closing-connection scheduler for the given application context.
      *
      * @param ctx application context supplying the transport and clock
      */

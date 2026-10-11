@@ -30,9 +30,9 @@ import net.i2p.util.RFC822Date;
 import net.i2p.util.SystemVersion;
 
 /**
-* Data structure representing a single email message for folder display and sorting.
-*
-*/
+ * Data structure representing a single email message for folder display and sorting.
+ *
+ */
 class Mail {
 
     /** Default unknown date string */
@@ -123,9 +123,9 @@ class Mail {
     }
 
     /**
-    *  This may or may not contain the body also.
-    *  @return if null, nothing has been loaded yet for this UIDL
-    */
+     *  This may or may not contain the body also.
+     *  @return if null, nothing has been loaded yet for this UIDL
+     */
     public synchronized Buffer getHeader() {return header;}
 
     /**
@@ -164,9 +164,9 @@ class Mail {
     public synchronized boolean hasHeader() {return header != null;}
 
     /**
-        *  This contains the header also.
-        *  @return may be null
-        */
+     *  This contains the header also.
+     *  @return may be null
+     */
     public synchronized Buffer getBody() {return body;}
 
     /**
@@ -340,14 +340,14 @@ class Mail {
     }
 
     /**
-    * A little misnamed. Adds all addresses from the comma-separated
-    * line in text to the recipients list.
-    *
-    * @param text comma-separated
-    * @param recipients collects the addresses parsed from text
-    * @param ok will be returned
-    * @return true if ALL e-mail addresses are valid AND the in parameter was true
-    */
+     * A little misnamed. Adds all addresses from the comma-separated
+     * line in text to the recipients list.
+     *
+     * @param recipients collects the addresses parsed from text
+     * @param text comma-separated
+     * @param ok will be returned
+     * @return true if ALL e-mail addresses are valid AND the in parameter was true
+     */
     public static boolean getRecipientsFromList(ArrayList<String> recipients, String text, boolean ok) {
         if (text != null && !text.isEmpty()) {
             String[] ccs = DataHelper.split(text, ",");
@@ -357,15 +357,15 @@ class Mail {
     }
 
     /**
-    * A little misnamed. Adds all addresses from the elements
-    * in text to the recipients list.
-    *
-    * @param recipients collects the addresses parsed from text
-    * @param ccs the Cc addresses
-    * @param ok will be returned
-    * @return true if ALL e-mail addresses are valid AND the in parameter was true
-    * @since 0.9.35
-    */
+     * A little misnamed. Adds all addresses from the elements
+     * in text to the recipients list.
+     *
+     * @param recipients collects the addresses parsed from text
+     * @param ccs the Cc addresses
+     * @param ok will be returned
+     * @return true if ALL e-mail addresses are valid AND the in parameter was true
+     * @since 0.9.35
+     */
     public static boolean getRecipientsFromList(ArrayList<String> recipients, String[] ccs, boolean ok) {
         if (ccs != null && ccs.length > 0) {
             for (int i = 0; i < ccs.length; i++) {
@@ -387,8 +387,8 @@ class Mail {
      * This is for SMTP/POP.
      *
      * @param buf receives the formatted addresses
-     * @param prefix prepended to the addresses
      * @param recipients the addresses to write out, each followed by a comma except the last
+     * @param prefix prepended to the addresses
      */
     public static void appendRecipients(StringBuilder buf, ArrayList<String> recipients, String prefix) {
         for (int i = 0; i < recipients.size(); i++) {
@@ -405,9 +405,9 @@ class Mail {
      * to the builder, separated by commas
      * This is for display of a forwarded email.
      *
-     * @param prefix prepended to the addresses, includes trailing ": "
      * @param out the writer the folded recipient lines are printed to, one println() per 75-character line
      * @param recipients the addresses to write out, separated by commas and folded at 75 characters
+     * @param prefix prepended to the addresses, includes trailing ": "
      * @since 0.9.35
      */
     public static void appendRecipients(PrintWriter out, String[] recipients, String prefix) {
@@ -458,8 +458,8 @@ class Mail {
     }
 
     /**
-    * @return all headers, to pass to MailPart, or null on error
-    */
+     * @return all headers, to pass to MailPart, or null on error
+     */
     private String[] parseHeaders(InputStream in) {
         String[] headerLines = null;
         error = "";

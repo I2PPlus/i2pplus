@@ -18,7 +18,7 @@ public class PersistentKeyRing extends KeyRing {
     private static final String PROP_PFX = "router.keyring.key.";
 
     /**
-     * PersistentKeyRing.
+     * Retains the context and loads any keys already persisted in the router config.
      *
      * @param ctx the router context, retained so keys can reach router.config
      */

@@ -71,7 +71,7 @@ public class SAMStreamSend {
                                         "       multiple -o session options are allowed";
 
     /**
-     * main.
+     * Streams a file over a SAM stream connect, for testing the bridge.
      *
      * @param args the command line options parsed by {@link Getopt}; the last two name the files
      */
@@ -168,7 +168,7 @@ public class SAMStreamSend {
     }
 
     /**
-     * SAMStreamSend.
+     * Holds the command line arguments for one stream send.
      *
      * @param ctx the application context supplying the log manager
      * @param samHost the host name or address of the SAM bridge to connect to
@@ -189,7 +189,7 @@ public class SAMStreamSend {
     }
 
     /**
-     * startup.
+     * Negotiates a SAM session and connects it to the destination stream.
      *
      * @param version the SAM protocol version to negotiate, at least 3.2 for user and password
      * @param isSSL true to connect to the bridge over TLS rather than plaintext
@@ -247,12 +247,12 @@ public class SAMStreamSend {
 
     private class SendEventHandler extends SAMEventHandler {
         /**
-         * SendEventHandler.
+         * Creates the handler that tracks stream closes reported by the bridge.
          */
         public SendEventHandler(I2PAppContext ctx) { super(ctx); }
 
         /**
-         * streamClosedReceived.
+         * Drops the sender the bridge has just reported closed.
          */
         @Override
         public void streamClosedReceived(String result, String id, String message) {
@@ -435,7 +435,7 @@ public class SAMStreamSend {
         private final InetSocketAddress _dgSAM;
 
         /**
-         * Sender.
+         * Registers a sender with the stream, opening a datagram socket for datagram modes.
          */
         public Sender(OutputStream samOut, SAMEventHandler eventHandler, int mode) throws IOException {
             _samOut = samOut;
@@ -459,7 +459,7 @@ public class SAMStreamSend {
         }
 
         /**
-         * openConnection.
+         * Reads the destination key from disk and issues STREAM CONNECT.
          */
         public boolean openConnection() {
             InputStream fin = null;
@@ -516,7 +516,7 @@ public class SAMStreamSend {
         public String getDestination() { return _remoteDestination; }
 
         /**
-         * closed.
+         * Closes the stream once and records its lifetime in the statistics.
          */
         public void closed() {
             if (_closed) return;
@@ -527,7 +527,7 @@ public class SAMStreamSend {
         }
 
         /**
-         * run.
+         * Sends the data file over the stream in chunks until it ends or closes.
          */
         public void run() {
             _started = _context.clock().now();

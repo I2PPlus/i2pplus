@@ -188,8 +188,8 @@ public final class SelfSignedGenerator {
     /**
      * Create a self-signed certificate for the existing private key.
      *
-     * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param priv the key to sign the new certificate with
+     * @param cname the common name, non-null. Must be a hostname or email address. IP addresses will not be correctly encoded.
      * @param validDays how long the certificate stays valid
      * @return the X509Certificate signed by priv, valid for validDays from now
      * @throws GeneralSecurityException if the certificate cannot be built or signed

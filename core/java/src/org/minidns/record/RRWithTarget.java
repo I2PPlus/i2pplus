@@ -36,7 +36,7 @@ public abstract class RRWithTarget extends Data {
     }
 
     /**
-     * RRWithTarget.
+     * Anchors this record's rdata to the given owner name.
      * @param target the owner name the rdata is anchored to, stored under both
      *               the current field and the deprecated {@link #name} alias
      */
@@ -46,7 +46,7 @@ public abstract class RRWithTarget extends Data {
     }
 
     /**
-     * toString.
+     * Renders the target name in presentation format with a trailing dot.
      */
     @Override
     public String toString() {

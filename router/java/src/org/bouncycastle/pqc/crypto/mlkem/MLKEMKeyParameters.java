@@ -12,7 +12,7 @@ public class MLKEMKeyParameters
     private MLKEMParameters params;
 
     /**
-     * MLKEMKeyParameters.
+     * Wraps the ML-KEM parameter set alongside the public/private flag.
      * @param isPrivate passed to the AsymmetricKeyParameter superclass to mark the key private (true) or public (false)
      * @param params the ML-KEM parameter set carrying the scheme's degree and key sizes
      */
@@ -25,7 +25,7 @@ public class MLKEMKeyParameters
     }
 
     /**
-     * getParameters.
+     * Returns the ML-KEM parameter set this key was created with.
      * @return the parameter set supplied to the constructor, never null
      */
     public MLKEMParameters getParameters()

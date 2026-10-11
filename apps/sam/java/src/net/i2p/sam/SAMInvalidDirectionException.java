@@ -17,14 +17,14 @@ class SAMInvalidDirectionException extends Exception {
     private static final long serialVersionUID = 1;
 
     /**
-     * SAMInvalidDirectionException.
+     * Signals that the session's direction forbids the requested operation.
      */
     public SAMInvalidDirectionException() {
 	super();
     }
 
     /**
-     * SAMInvalidDirectionException.
+     * Signals a direction violation, naming the forbidden direction in the message.
      * @param s the detail message naming the direction the session cannot be used in
      */
     public SAMInvalidDirectionException(String s) {

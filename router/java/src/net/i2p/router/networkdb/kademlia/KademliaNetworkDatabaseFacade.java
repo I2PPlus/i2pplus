@@ -3267,9 +3267,9 @@ return false;
      * See implementation in FNDF
      *
      * @param key the DatabaseEntry hash
+     * @param ds the database entry
      * @param onSuccess may be null; called on reply-based store success (not used for wide-flood-only RI path)
      * @param onFailure may be null; called when no floodfill peers are available or reply-based store fails
-     * @param ds the database entry
      * @param sendTimeout timeout in ms for the reply-based FloodfillStoreJob path
      * @param toIgnore may be null, if non-null, all attempted and skipped targets will be added as of 0.9.53;
      *                 passed through to FloodfillStoreJob (unused for wide-flood-only RI path)

@@ -29,11 +29,11 @@ public class CSSHelper extends HelperBase {
 
     private static final Map<String, Boolean> _UACache = new ConcurrentHashMap<>();
     /**
-     * PROP_UNIVERSAL_THEMING.
+     * Property key selecting the universal (theme-independent) colour scheme.
      */
     public static final String PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
     /**
-     * PROP_THEME_NAME.
+     * Property key naming the console theme in use.
      */
     public static final String PROP_THEME_NAME = "routerconsole.theme";
     /**
@@ -42,33 +42,33 @@ public class CSSHelper extends HelperBase {
      */
     public static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
     /**
-     * DEFAULT_THEME.
+     * Theme applied when none is configured.
      */
     public static final String DEFAULT_THEME = "dark";
     /**
-     * BASE_THEME_PATH.
+     * Console-relative path each theme's directory is served under.
      */
     public static final String BASE_THEME_PATH = "/themes/console/";
     private static final String FORCE = "classic";
     /**
-     * PROP_REFRESH.
+     * Property key holding the summary page refresh interval in seconds.
      */
     public static final String PROP_REFRESH = "routerconsole.summaryRefresh";
     /**
-     * DEFAULT_REFRESH.
+     * Refresh interval in seconds used when none is configured.
      */
     public static final String DEFAULT_REFRESH = "3";
     /**
-     * MIN_REFRESH.
+     * Lowest refresh interval accepted, disabling automatic refresh when zero.
      */
     public static final int MIN_REFRESH = 0;
     /**
-     * PROP_DISABLE_REFRESH.
+     * Property key that suppresses the summary page's automatic refresh.
      */
     public static final String PROP_DISABLE_REFRESH = "routerconsole.summaryDisableRefresh";
     private static final String PROP_XFRAME = "routerconsole.disableXFrame";
     /**
-     * PROP_FORCE_MOBILE_CONSOLE.
+     * Property key forcing the narrow mobile console on wide screens.
      */
     public static final String PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
     /** Whether apps open inside a console IFrame instead of replacing the console
@@ -78,7 +78,7 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.59+ */
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     /**
-     * DEFAULT_ENABLE_SORA_FONT.
+     * Whether the Sora display font is used when no preference is configured.
      */
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
     /** Rotating nonce for CSRF protection, rotates every 5 minutes */
@@ -90,14 +90,14 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     /**
-     * DEFAULT_UNIFIED_SIDEBAR.
+     * Whether the sidebar is merged into the main content column by default.
      */
     public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
     /** Whether a sidebar shorter than the viewport sticks to the top while scrolling
      * @since 0.9.68+ */
     public static final String PROP_STICKY_SIDEBAR = "routerconsole.stickySidebar";
     /**
-     * DEFAULT_STICKY_SIDEBAR.
+     * Whether a short sidebar sticks to the top while the page scrolls.
      */
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
     /** true = legacy RRD4J minigraph renderer; false = dual-baseline canvas
@@ -167,8 +167,8 @@ public class CSSHelper extends HelperBase {
 
     /**
      * Session-bound nonce validation - replaces static nonce validation
-     * @param nonce returns false if null
      * @param session returns false if null
+     * @param nonce returns false if null
      * @return true if valid
      * @since 0.9.69
      */
@@ -178,8 +178,8 @@ public class CSSHelper extends HelperBase {
 
     /**
      * Session-bound nonce validation with preserve option
-     * @param nonce returns false if null
      * @param session returns false if null
+     * @param nonce returns false if null
      * @param preserve if true, do not delete the nonce. Use for early checks in jsps.
      * @return true if valid
      * @since 0.9.69
@@ -532,7 +532,7 @@ public class CSSHelper extends HelperBase {
         public StringFormatter() {}
 
         /**
-         * capitalizeWord.
+         * Capitalizes the first letter of every whitespace-separated word.
          * @param str the words to capitalize
          * @return the string with an upper case first letter in every word
          */

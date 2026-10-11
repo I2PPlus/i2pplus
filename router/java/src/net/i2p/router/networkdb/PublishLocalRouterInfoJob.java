@@ -58,7 +58,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     private final AtomicInteger _runCount = new AtomicInteger();
 
     /**
-     * PublishLocalRouterInfoJob.
+     * Sets up the job and its logger from the given router context.
      *
      * @param ctx the router context whose log manager supplies the job logger
      */

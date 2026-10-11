@@ -14,12 +14,12 @@ import java.io.InputStream;
  */
 public class PoisonI2CPMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP type number reserved for the never-to-be-sent poison marker.
      */
     public static final int MESSAGE_TYPE = 999999;
 
     /**
-     * PoisonI2CPMessage.
+     * Creates the marker used to terminate a queue.
      */
     public PoisonI2CPMessage() {
         super();

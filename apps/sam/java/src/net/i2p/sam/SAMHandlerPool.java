@@ -60,7 +60,7 @@ class SAMHandlerPool {
     private static class NamedThreadFactory implements java.util.concurrent.ThreadFactory {
         private final AtomicInteger _count = new AtomicInteger();
         /**
-         * newThread.
+         * Starts a named daemon thread for the password-authentication worker.
          */
         public Thread newThread(Runnable r) {
             Thread t = new Thread(r, "SAM-PWkr." + _count.incrementAndGet());
@@ -114,7 +114,7 @@ class SAMHandlerPool {
             new java.util.concurrent.ThreadFactory() {
                 private final AtomicInteger _count = new AtomicInteger();
                 /**
-                 * newThread.
+                 * Starts a named daemon thread for a client connection.
                  */
                 public Thread newThread(Runnable r) {
                     Thread t = new Thread(r, "SAM-Conn." + _count.incrementAndGet());
@@ -252,7 +252,7 @@ class SAMHandlerPool {
      */
     private class SelectorRunnable implements Runnable {
         /**
-         * run.
+         * Selects over registered channels and dispatches their lines.
          */
         public void run() {
             while (_running) {
@@ -364,7 +364,7 @@ class SAMHandlerPool {
             try {
                 _workers.execute(new Runnable() {
                     /**
-                     * run.
+                     * Hands one complete SAM command line to its handler.
                      */
                     @Override
                     public void run() {

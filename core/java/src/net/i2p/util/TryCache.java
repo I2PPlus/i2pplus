@@ -38,7 +38,7 @@ public class TryCache<T> {
     private volatile long _discardCount;
 
     /**
-     * TryCache.
+     * Stores the factory and clamps a negative capacity to zero.
      *
      * @param factory the source of instances to create when the cache is empty
      * @param capacity the greatest number of instances to retain; negatives clamp to 0

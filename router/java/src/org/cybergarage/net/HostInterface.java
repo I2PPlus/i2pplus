@@ -50,7 +50,7 @@ public class HostInterface {
     ////////////////////////////////////////////////
 
     /**
-     * USE_LOOPBACK_ADDR.
+     * Whether the loopback address is treated as usable.
      */
     public static boolean USE_LOOPBACK_ADDR = false;
     /**
@@ -76,12 +76,12 @@ public class HostInterface {
      */
     public static final int IPV6_BITMASK = 0x0010;
     /**
-     * LOCAL_BITMASK.
+     * Bit selecting addresses that belong to a local network interface.
      */
     public static final int LOCAL_BITMASK = 0x0100;
 
     /**
-     * setInterface.
+     * Restricts interface enumeration to a single address.
      *
      * @param ifaddr the address of the single interface to report, empty for all
      */
@@ -90,7 +90,7 @@ public class HostInterface {
     }
 
     /**
-     * getInterface.
+     * Gets the address interface enumeration has been restricted to.
      *
      * @return the assigned interface address, or an empty string if none was assigned
      */
@@ -122,7 +122,7 @@ public class HostInterface {
     }
 
     /**
-     * getNHostAddresses.
+     * Counts the usable host addresses the machine has.
      *
      * @return the number of usable host addresses across the network interfaces, or 1
      *         when a single interface has been assigned
@@ -198,7 +198,7 @@ public class HostInterface {
     }
 
     /**
-     * getHostAddress.
+     * Gets the usable host address at a position in the enumeration.
      *
      * @param n the zero-based index into the enumerated usable host addresses
      * @return the address at that index, or an empty string if there are not that many
@@ -335,7 +335,7 @@ public class HostInterface {
     ////////////////////////////////////////////////
 
     /**
-     * getHostURL.
+     * Builds an absolute http URL for a host, port and path.
      *
      * @param host the host name or address literal to place in the URL
      * @param port the TCP port number to place in the URL

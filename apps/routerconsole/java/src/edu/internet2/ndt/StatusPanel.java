@@ -9,7 +9,8 @@ import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
  */
 
 /**
- * StatusPanel.
+ * Swing-free status panel; the display methods are no-ops and only the
+ * stop flag is tracked.
  */
 public class StatusPanel extends JPanel {
     /**
@@ -31,7 +32,7 @@ public class StatusPanel extends JPanel {
      *                              have been scheduled
      */
     /**
-     * StatusPanel.
+     * Explicit no-arg body; the parameters are unused in this swing-free build.
      *
      * @param iParamTestsNum total number of tests scheduled to be run
      * @param sParamEnableMultiple string indicating whether multiple tests have been scheduled

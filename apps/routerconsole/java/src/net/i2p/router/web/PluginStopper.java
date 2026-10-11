@@ -16,7 +16,7 @@ class PluginStopper extends PluginStarter {
     private final Server _server;
 
     /**
-     * PluginStopper.
+     * Remembers the jetty server whose plugins are to be stopped.
      *
      * @param ctx the router context the plugin starter works against
      * @param server the jetty server whose running plugins are to be stopped
@@ -27,7 +27,7 @@ class PluginStopper extends PluginStarter {
     }
 
     /**
-     * run.
+     * Stops every running plugin.
      */
     @Override
     public void run() {

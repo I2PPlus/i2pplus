@@ -52,7 +52,7 @@ public class I2NPMessageHandler {
     }
 
     /**
-     * Result is retreived with lastRead()
+     * Result is retrieved with lastRead()
      *
      * @param data the buffer holding the serialized message
      * @param offset the index in data at which the message starts
@@ -67,7 +67,7 @@ public class I2NPMessageHandler {
      * Limit the max to read from the data buffer, so that
      * we can use a large buffer but prevent the reader from reading off the end.
      *
-     * Result is retreived with lastRead()
+     * Result is retrieved with lastRead()
      *
      * @param data the buffer holding the serialized message
      * @param offset the index in data at which the message starts

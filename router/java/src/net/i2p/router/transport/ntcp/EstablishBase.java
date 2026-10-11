@@ -20,31 +20,31 @@ import net.i2p.util.SimpleByteCache;
 abstract class EstablishBase implements EstablishState {
 
     /**
-     * VERIFIED.
+     * Shared instance marking a handshake that completed and verified successfully.
      */
     public static final VerifiedEstablishState VERIFIED = new VerifiedEstablishState();
     /**
-     * FAILED.
+     * Shared instance marking a handshake that ended in corruption.
      */
     public static final FailedEstablishState FAILED = new FailedEstablishState();
 
     /**
-     * _context.
+     * Router context, supplied to the subclass that constructs this.
      */
     protected final RouterContext _context;
     /**
-     * _log.
+     * Log scoped to the subclass that constructs this.
      */
     protected final Log _log;
 
     // bob receives (and alice sends)
     /**
-     * _X.
+     * Key block Bob receives and Alice sends, doubled as padding on inbound handshakes.
      */
     protected final byte[] _X;
     // alice receives (and bob sends)
     /**
-     * _Y.
+     * Key block Alice receives and Bob sends, null on outbound handshakes.
      */
     protected final byte[] _Y;
     /**
@@ -60,31 +60,31 @@ abstract class EstablishBase implements EstablishState {
     protected int _received;
 
     /**
-     * _transport.
+     * NTCP transport running this handshake.
      */
     protected final NTCPTransport _transport;
     /**
-     * _con.
+     * Connection being established by this handshake.
      */
     protected final NTCPConnection _con;
 
     /**
-     * AES_SIZE.
+     * AES block and key size in bytes.
      */
     protected static final int AES_SIZE = 16;
 
     /**
-     * _stateLock.
+     * Monitor serialising every handshake state change.
      */
     protected final Object _stateLock = new Object();
     /**
-     * _state.
+     * Current handshake state, replaced under the state lock.
      */
     protected volatile State _state;
     private final AtomicBoolean _isCorrupt = new AtomicBoolean();
     private final AtomicBoolean _isComplete = new AtomicBoolean();
     /**
-     * _failReason.
+     * Why the handshake failed, or null while it is still viable.
      */
     protected String _failReason;
 
@@ -147,7 +147,7 @@ abstract class EstablishBase implements EstablishState {
     }
 
     /**
-     * STATES_DONE.
+     * The two terminal states, VERIFIED and CORRUPT.
      */
     protected static final Set<State> STATES_DONE = EnumSet.of(State.VERIFIED, State.CORRUPT);
 
@@ -161,7 +161,7 @@ abstract class EstablishBase implements EstablishState {
     }
 
     /**
-     * EstablishBase.
+     * Binds the context, transport and connection, sizing the padding buffer.
      * @param ctx the router context, supplying the log manager
      * @param transport the NTCP transport this handshake runs under
      * @param con the connection being established, whose inbound flag sizes the padding buffer
@@ -358,7 +358,7 @@ abstract class EstablishBase implements EstablishState {
     private static class VerifiedEstablishState extends EstablishBase {
 
         /**
-         * VerifiedEstablishState.
+         * Starts in the verified state, for a handshake that already succeeded.
          */
         public VerifiedEstablishState() {
             super();
@@ -404,7 +404,7 @@ abstract class EstablishBase implements EstablishState {
     private static class FailedEstablishState extends EstablishBase {
 
         /**
-         * FailedEstablishState.
+         * Starts in the corrupt state, for a handshake that already failed.
          */
         public FailedEstablishState() {
             super();

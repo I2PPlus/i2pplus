@@ -299,7 +299,7 @@ class SubSession extends I2PSessionMuxedImpl {
     }
 
     /**
-     * Blocking.
+     * Looks up a Destination, blocking up to the given wait for the answer.
      *
      * @param maxWait ms
      * @return null on failure

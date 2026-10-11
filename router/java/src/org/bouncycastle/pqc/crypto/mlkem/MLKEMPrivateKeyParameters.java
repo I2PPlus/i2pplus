@@ -24,7 +24,7 @@ public class MLKEMPrivateKeyParameters
     final byte[] seed;
 
     /**
-     * MLKEMPrivateKeyParameters.
+     * Builds a private key from its already separated components.
      *
      * @param params the ML-KEM parameter set this key belongs to
      * @param s the secret vector
@@ -39,7 +39,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * MLKEMPrivateKeyParameters.
+     * Builds a private key from its components and regeneration seed.
      *
      * @param params the ML-KEM parameter set this key belongs to
      * @param s the secret vector
@@ -62,7 +62,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * MLKEMPrivateKeyParameters.
+     * Rebuilds a private key from a seed-based or expanded encoding.
      *
      * @param params the ML-KEM parameter set this key belongs to
      * @param encoding the private key in either the seed-based or the expanded packed form
@@ -101,7 +101,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * Encoded.
+     * Returns the expanded encoding of this key.
      *
      * @return the concatenation of s, t, rho, hpk and nonce, the expanded form
      *         accepted by the two-argument constructor
@@ -112,7 +112,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * HPK.
+     * Returns a copy of the public key hash.
      *
      * @return a copy of the hash of the corresponding public key
      */
@@ -122,7 +122,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * Nonce.
+     * Returns a copy of the nonce.
      *
      * @return a copy of the nonce value
      */
@@ -152,7 +152,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * Rho.
+     * Returns a copy of the public key rho component.
      *
      * @return a copy of the public key rho component
      */
@@ -162,7 +162,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * S.
+     * Returns a copy of the secret vector.
      *
      * @return a copy of the secret vector
      */
@@ -172,7 +172,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * T.
+     * Returns a copy of the public key t component.
      *
      * @return a copy of the public key t component
      */
@@ -182,7 +182,7 @@ public class MLKEMPrivateKeyParameters
     }
 
     /**
-     * Seed.
+     * Returns a copy of the deterministic key generation seed.
      *
      * @return a copy of the deterministic key generation seed, or null when
      *         this key was not generated from one

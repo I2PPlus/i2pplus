@@ -2002,7 +2002,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      */
     public interface ConnectionEventListener {
         /**
-         * routerDisconnected().
+         * Notified when the connection to the router is lost.
          */
         public void routerDisconnected();
     }

@@ -68,7 +68,8 @@ public class JSONRPC2Servlet extends HttpServlet {
     private boolean _isHTTPS;
 
     /**
-     * Webapp
+     * Webapp form: requires a router context and builds its own config and
+     * security managers.
      */
     public JSONRPC2Servlet() {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
@@ -85,7 +86,8 @@ public class JSONRPC2Servlet extends HttpServlet {
     }
 
     /**
-     * Plugin
+     * Plugin form: takes the host application's context and security manager,
+     * and creates no config file.
      *
      * @param ctx the router context, may be null when there is none available
      * @param secMan the security manager backing the authentication handler

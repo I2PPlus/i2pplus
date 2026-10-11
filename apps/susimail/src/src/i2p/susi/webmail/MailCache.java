@@ -71,8 +71,8 @@ class MailCache {
     /**
      * Does NOT load the mails in. Caller MUST call loadFromDisk().
      *
-     * @param mailbox non-null for DIR_FOLDER; null otherwise
      * @param ctx the application context supplying the logger and the disk cache
+     * @param mailbox non-null for DIR_FOLDER; null otherwise
      * @param folderName the folder this cache holds, one of the WebMail.DIR_ names
      * @param host POP3 host, passed through to the disk cache for reconnects
      * @param port POP3 port, passed through to the disk cache for reconnects
@@ -158,8 +158,8 @@ class MailCache {
 
     /**
      * For writing a new full mail
-     * @param buffer as received from getFullBuffer
      * @param uidl the UIDL identifying the mail that was written
+     * @param buffer as received from getFullBuffer
      * @param success whether the write finished without error; on false the mail is not added
      * @since 0.9.35
      */
@@ -293,7 +293,7 @@ class MailCache {
         }
 
         /**
-         * run.
+         * Loads the folder from disk, then reports whether any mail was found.
          */
         @Override
         public void run() {
@@ -639,13 +639,13 @@ class MailCache {
      */
     private static class POP3Request implements FetchRequest {
         /**
-         * mail.
+         * The message this request fetches.
          */
         public final Mail mail;
         private boolean headerOnly;
         private boolean success;
         /**
-         * buf.
+         * The buffer the fetched message is written into.
          */
         public final Buffer buf;
 

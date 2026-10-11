@@ -23,7 +23,7 @@ import java.io.OutputStream;
  */
 public class MessagePayloadMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type code for a payload message.
      */
     public static final int MESSAGE_TYPE = 31;
     private int _sessionId;

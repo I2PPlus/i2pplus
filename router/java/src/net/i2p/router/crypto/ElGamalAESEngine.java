@@ -284,8 +284,8 @@ public final class ElGamalAESEngine {
      * the decryptAESBlock method & structure.
      *
      * @param foundTags set which is filled with any sessionTags found during decryption
-     * @param foundKey  out parameter. Data must be unset when called; may be filled with a new sessionKey found during decryption
      * @param usedKey out parameter. Data must be unset when called; usedKey.setData() will be called by this method on success.
+     * @param foundKey  out parameter. Data must be unset when called; may be filled with a new sessionKey found during decryption
      *
      * @return null if decryption fails
      */
@@ -342,8 +342,8 @@ public final class ElGamalAESEngine {
      * If anything doesn't match up in decryption, it falls back to decryptNewSession
      *
      * @param foundTags set which is filled with any sessionTags found during decryption
-     * @param foundKey  out parameter. Data must be unset when called; may be filled with a new sessionKey found during decryption
      * @param usedKey out parameter. Data must be unset when called; usedKey.setData() will be called by this method on success.
+     * @param foundKey  out parameter. Data must be unset when called; may be filled with a new sessionKey found during decryption
      *
      * @return decrypted data or null on failure
      */
@@ -600,7 +600,7 @@ public final class ElGamalAESEngine {
      * </pre>
      *
      * @param tagsForDelivery session tags to be associated with the key or null;
-     * 200 max enforced at receiver
+     *                        200 max enforced at receiver
      */
     private byte[] encryptNewSession(byte[] data, PublicKey target, SessionKey key, Set<SessionTag> tagsForDelivery,
                                     SessionKey newKey, long paddedSize) {
@@ -650,7 +650,7 @@ public final class ElGamalAESEngine {
      * </pre>
      *
      * @param tagsForDelivery session tags to be associated with the key or null;
-     * 200 max enforced at receiver
+     *                        200 max enforced at receiver
      */
     private byte[] encryptExistingSession(byte[] data, SessionKey key, Set<SessionTag> tagsForDelivery,
                                          SessionTag currentTag, SessionKey newKey, long paddedSize) {
@@ -706,7 +706,7 @@ public final class ElGamalAESEngine {
      * @param key the AES session key to encrypt with
      * @param iv the 16 byte AES initialization vector
      * @param tagsForDelivery session tags to be associated with the key or null;
-     * 200 max enforced at receiver
+     *                        200 max enforced at receiver
      * @param newKey key to deliver to the target, or null for no new key block
      * @param paddedSize minimum size in bytes of the AES area after padding
      * @return the encrypted AES area, or null on encryption failure

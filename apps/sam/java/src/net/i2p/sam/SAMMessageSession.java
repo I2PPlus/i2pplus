@@ -32,12 +32,12 @@ import net.i2p.util.Log;
 abstract class SAMMessageSession implements SAMMessageSess {
 
     /**
-     * _log.
+     * Logger for this session's messages.
      */
     protected final Log _log;
     private final I2PSession session;
     /**
-     * _isOwnSession.
+     * True for a session we opened, false for a remote peer's.
      */
     protected final boolean _isOwnSession;
     private final SAMMessageSessionHandler handler;
@@ -343,7 +343,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         }
 
         /**
-         * run.
+         * Serves the session's listener thread until the session stops.
          */
         public void run() {
 
@@ -380,7 +380,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         }
 
         /**
-         * disconnected.
+         * Stops the session when the underlying I2P session drops.
          */
         public void disconnected(I2PSession session) {
             if (_log.shouldDebug())
@@ -396,7 +396,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         }
 
         /**
-         * messageAvailable.
+         * Fetches the named message with unspecified protocol and ports.
          */
         public void messageAvailable(I2PSession session, int msgId, long size) {
             messageAvailable(session, msgId, size, I2PSession.PROTO_UNSPECIFIED,
@@ -423,7 +423,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
         }
 
         /**
-         * reportAbuse.
+         * Logs the abuse report and stops the session.
          */
         public void reportAbuse(I2PSession session, int severity) {
             _log.warn("Abuse reported (severity: " + severity + ")");

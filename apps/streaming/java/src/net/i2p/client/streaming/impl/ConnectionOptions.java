@@ -1483,7 +1483,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public Set<Hash> getAccessList() {return _accessList;}
     /**
-     * Blacklist.
+     * Destinations refused outright, consulted when blacklisting is enabled.
      * @return the blacklist
      */
     public Set<Hash> getBlacklist() {return _blackList;}

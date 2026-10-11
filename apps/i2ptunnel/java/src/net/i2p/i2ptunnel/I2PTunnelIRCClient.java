@@ -146,7 +146,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * clientConnectionRun.
+     * Relays a new local connection to a configured IRC destination, retrying failures.
      */
     @Override
     protected void clientConnectionRun(Socket s) {
@@ -427,7 +427,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * startRunning.
+     * Registers the IRC port with the port mapper when the tunnel is open.
      */
     @Override
     public void startRunning() {
@@ -437,7 +437,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * close.
+     * Unregisters the IRC port mapping, then closes the DCC server and client.
      */
     @Override
     public boolean close(boolean forced) {
@@ -498,7 +498,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * newOutgoing.
+     * Starts the DCC server if needed and relays an outgoing request.
      */
     @Override
     public int newOutgoing(byte[] ip, int port, String type) {
@@ -521,7 +521,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * newIncoming.
+     * Starts the DCC client manager if needed and relays an incoming request.
      */
     @Override
     public int newIncoming(String b32, int port, String type) {
@@ -542,7 +542,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * resumeOutgoing.
+     * Forwards the resume request to the DCC client manager, or -1 if not started.
      */
     @Override
     public int resumeOutgoing(int port) {

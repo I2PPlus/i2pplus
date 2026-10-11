@@ -6,8 +6,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * FloodfillNetworkDatabaseSegmentor
- *
  * Default implementation of the SegmentedNetworkDatabaseFacade.
  *
  * This is a datastructure which manages (3+Clients) "sub-netDbs" on behalf of an
@@ -43,7 +41,8 @@ public class FloodfillNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseF
     private final Log _log;
     private final RouterContext _context;
     /**
-     * MAIN_DBID.
+     * Database id of the special main netDb, deliberately null so it is never
+     * confused with a client's hash-keyed id.
      */
     public static final Hash MAIN_DBID = null;
     private final FloodfillNetworkDatabaseFacade _mainDbid;

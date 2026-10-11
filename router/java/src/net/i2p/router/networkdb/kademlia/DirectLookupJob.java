@@ -27,9 +27,9 @@ class DirectLookupJob extends FloodOnlySearchJob {
     /**
      * request is sent to; if null the job fails without sending anything
      *
-     * @param peer for Router Info only
      * @param ctx the router context
      * @param facade the floodfill network database facade to report completion to
+     * @param peer for Router Info only
      * @param oldRI the RouterInfo whose freshness triggered this lookup, and the address the
      * @param onFind job to run on a successful find
      * @param onFail job to run if the peer does not answer before the timeout

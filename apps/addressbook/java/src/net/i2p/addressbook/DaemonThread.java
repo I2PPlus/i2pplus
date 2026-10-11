@@ -19,7 +19,7 @@ public class DaemonThread extends I2PAppThread implements NamingServiceUpdater {
     /**
      * Construct a DaemonThread with the command line arguments args.
      * @param args
-     * A String array to pass to Daemon.main().
+     *              A String array to pass to Daemon.main().
      */
     public DaemonThread(String[] args) {
         this.args = args;

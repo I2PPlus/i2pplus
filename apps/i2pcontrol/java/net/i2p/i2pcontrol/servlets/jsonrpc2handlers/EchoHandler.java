@@ -18,7 +18,7 @@ public class EchoHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
 
     /**
-     * EchoHandler.
+     * Retains the shared helper used to validate Echo request parameters.
      *
      * @param helper shared I2PControl helper used to validate request parameters
      */

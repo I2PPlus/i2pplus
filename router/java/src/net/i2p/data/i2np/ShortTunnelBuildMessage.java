@@ -10,11 +10,11 @@ import net.i2p.I2PAppContext;
  */
 public class ShortTunnelBuildMessage extends TunnelBuildMessage {
     /**
-     * MESSAGE_TYPE.
+     * I2NP message type ID for a short tunnel build request.
      */
     public static final int MESSAGE_TYPE = 25;
     /**
-     * SHORT_RECORD_SIZE.
+     * Maximum build record size in bytes for this message type.
      */
     public static final int SHORT_RECORD_SIZE = 218;
 

@@ -23,7 +23,7 @@ class TimeoutPipedInputStream extends PipedInputStream {
     private volatile boolean _closedByReader;
 
     /**
-     * TimeoutPipedInputStream.
+     * Creates the pipe with the requested buffer size.
      *
      * @param pipeSize the pipe buffer size in bytes, as passed to the superclass
      */

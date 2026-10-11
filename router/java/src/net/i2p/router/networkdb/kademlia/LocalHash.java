@@ -30,7 +30,7 @@ class LocalHash extends Hash {
     private static final int MAX_CACHED_XOR = 1024;
 
     /**
-     * LocalHash.
+     * Builds a local hash from the data of an existing hash.
      *
      * @param h the hash to copy
      */
@@ -39,7 +39,7 @@ class LocalHash extends Hash {
     }
 
     /**
-     * LocalHash.
+     * Builds a local hash around raw hash bytes.
      *
      * @param b the raw hash bytes
      */

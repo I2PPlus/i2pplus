@@ -44,18 +44,19 @@ import net.i2p.util.Log;
  */
 class TransientDataStore implements DataStore {
     /**
-     * _log.
+     * Logger for this data store.
      */
     protected final Log _log;
     private final ConcurrentHashMap<Hash, DatabaseEntry> _data;
     /**
-     * _context.
+     * Router context this store was constructed with.
      */
     protected final RouterContext _context;
     private final BanLogger _banLogger;
 
     /**
-     * TransientDataStore.
+     * Build an empty volatile store, pre-sizing the entry map and the ban logger.
+     *
      * @param ctx router context supplying the log manager and initializing the ban logger
      */
     public TransientDataStore(RouterContext ctx) {

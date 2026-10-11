@@ -41,7 +41,7 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
     public final int port;
 
     /**
-     * parse.
+     * Reads an SRV record body from the stream.
      *
      * @param dis stream positioned at the start of the SRV record fields
      * @param data the whole message being parsed, used to resolve names
@@ -59,7 +59,7 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
     }
 
     /**
-     * SRV.
+     * Builds an SRV record from a textual target hostname.
      *
      * @param priority lower values are tried first among records of equal weight
      * @param weight relative likelihood of this record among equals
@@ -71,7 +71,7 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
     }
 
     /**
-     * SRV.
+     * Builds an SRV record from an already-parsed target hostname.
      *
      * @param priority lower values are tried first among records of equal weight
      * @param weight relative likelihood of this record among equals
@@ -99,7 +99,7 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
     }
 
     /**
-     * serialize.
+     * Writes the priority, weight, port and target name.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -110,7 +110,7 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
     }
 
     /**
-     * toString.
+     * Renders the priority, weight, port and target.
      */
     @Override
     public String toString() {
@@ -118,7 +118,7 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
     }
 
     /**
-     * getType.
+     * Returns the DNS record type of this record.
      */
     @Override
     public TYPE getType() {
@@ -126,7 +126,7 @@ public class SRV extends RRWithTarget implements Comparable<SRV> {
     }
 
     /**
-     * compareTo.
+     * Orders by priority first, then by weight, per RFC 2782.
      */
     @Override
     public int compareTo(SRV other) {

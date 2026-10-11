@@ -119,7 +119,7 @@ public class MultiSource implements Source, Sink {
         }
 
         /**
-         * equals.
+         * Two sinks are equal when their destination and both ports match.
          */
         @Override
         public boolean equals(Object o) {
@@ -130,7 +130,7 @@ public class MultiSource implements Source, Sink {
         }
 
         /**
-         * toString.
+         * Returns the source port, destination and destination port as text.
          */
         @Override
         public String toString() {

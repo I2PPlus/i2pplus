@@ -86,9 +86,9 @@ public class UrlLauncher implements ClientApp {
     /**
      * ClientApp constructor used from clients.config
      *
+     * @param context the router context supplying the console URL used when args is empty
      * @param mgr null OK
      * @param args URL in args[0] or null args for router console
-     * @param context the router context supplying the console URL used when args is empty
      * @since 0.9.18
      */
     public UrlLauncher(I2PAppContext context, ClientAppManager mgr, String[] args) {
@@ -271,7 +271,7 @@ public class UrlLauncher implements ClientApp {
      * HKEY_CLASSES_ROOT\%ProgId%\shell\open\command, which holds the value of the command
      * which we need to run to launch the default browser.
      *
-     * @param hkeyquery
+     * @param progid
      * @return the command required to run the application referenced in hkeyquery, or null
      */
     private String followProgIdToCommand(String progid) {

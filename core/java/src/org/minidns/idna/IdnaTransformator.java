@@ -11,7 +11,7 @@
 package org.minidns.idna;
 
 /**
- * IdnaTransformator.
+ * Converts domain names between Unicode and ASCII Compatible Encoding.
  */
 public interface IdnaTransformator {
 

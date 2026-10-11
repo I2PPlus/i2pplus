@@ -25,7 +25,7 @@ class UnsignedUpdateChecker extends UpdateRunner {
     private boolean _unsignedUpdateAvailable;
 
     /**
-     * UnsignedUpdateChecker.
+     * Records the installed version time used to decide if an update is newer.
      *
      * @param ctx the router context, passed to the superclass for fetching
      * @param mgr the update manager to notify of the check's progress and result
@@ -39,7 +39,7 @@ class UnsignedUpdateChecker extends UpdateRunner {
     }
 
     /**
-     * run.
+     * Checks for a newer unsigned update and reports the outcome to the manager.
      */
     @Override
     public void run() {

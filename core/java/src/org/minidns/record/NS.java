@@ -23,7 +23,7 @@ import java.io.IOException;
 public class NS extends RRWithTarget {
 
     /**
-     * parse.
+     * Parses an NS record from the stream.
      *
      * @param dis stream positioned at the start of the NS record data
      * @param data full message data, used to resolve compressed target names
@@ -36,7 +36,7 @@ public class NS extends RRWithTarget {
     }
 
     /**
-     * NS.
+     * Creates a record delegating the zone to one name server.
      *
      * @param name the authoritative name server this record delegates the zone to
      */
@@ -45,7 +45,7 @@ public class NS extends RRWithTarget {
     }
 
     /**
-     * getType.
+     * Returns TYPE.NS, the type constant for this record.
      */
     @Override
     public TYPE getType() {

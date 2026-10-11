@@ -24,7 +24,7 @@ public class NewsHelper extends ContentHelper {
     public NewsHelper() {}
 
     /**
-     * PROP_LAST_UPDATE_TIME.
+     * Router config property recording when news was last downloaded, in milliseconds.
      */
     public static final String PROP_LAST_UPDATE_TIME = "router.updateLastDownloaded";
     /** @since 0.8.12 */
@@ -57,7 +57,7 @@ public class NewsHelper extends ContentHelper {
      */
     public static final String PROP_TRANSLATE = "routerconsole.newsTranslate";
     /**
-     * NEWS_FILE.
+     * Bundled news XML the console fetches and parses.
      */
     public static final String NEWS_FILE = "docs/news.xml";
 

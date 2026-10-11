@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class KeyRing extends ConcurrentHashMap<Hash, SessionKey> {
     /**
-     * KeyRing.
+     * Creates an empty ring with no initial capacity reserved.
      */
     public KeyRing() {
         super(0);

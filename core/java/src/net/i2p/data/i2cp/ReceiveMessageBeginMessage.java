@@ -22,7 +22,7 @@ import net.i2p.data.DataHelper;
  */
 public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type number identifying the start of an incoming message.
      */
     public final static int MESSAGE_TYPE = 6;
     /** The session ID. */
@@ -122,7 +122,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Reports this message's I2CP type number.
      * @return the type
      */
     @Override

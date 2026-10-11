@@ -18,31 +18,31 @@ import net.i2p.crypto.KeyStoreUtil;
  */
 public class KeyStoreProvider {
     /**
-     * DEFAULT_CERTIFICATE_ALGORITHM_STRING.
+     * Key algorithm used for a generated I2PControl certificate.
      */
     public static final String DEFAULT_CERTIFICATE_ALGORITHM_STRING = "RSA";
     /**
-     * DEFAULT_CERTIFICATE_KEY_LENGTH.
+     * Key length in bits for a generated certificate key.
      */
     public static final int DEFAULT_CERTIFICATE_KEY_LENGTH = 4096;
     /**
-     * DEFAULT_CERTIFICATE_VALIDITY.
+     * Lifetime in days of a generated certificate, ten years.
      */
     public static final int DEFAULT_CERTIFICATE_VALIDITY = 365 * 10;
     /**
-     * DEFAULT_CERTIFICATE_DOMAIN.
+     * Subject domain a generated certificate is issued for.
      */
     public final static String DEFAULT_CERTIFICATE_DOMAIN = "localhost";
     /**
-     * DEFAULT_CERTIFICATE_ALIAS.
+     * Alias the generated certificate is stored under in the key store.
      */
     public final static String DEFAULT_CERTIFICATE_ALIAS = "I2PControl CA";
     /**
-     * DEFAULT_KEYSTORE_NAME.
+     * File name of the key store holding the I2PControl certificate.
      */
     public static final String DEFAULT_KEYSTORE_NAME = "i2pcontrol.ks";
     /**
-     * DEFAULT_KEYSTORE_PASSWORD.
+     * Password protecting the I2PControl key store.
      */
     public static final String DEFAULT_KEYSTORE_PASSWORD = KeyStoreUtil.DEFAULT_KEYSTORE_PASSWORD;
     private static final Log _log = new Log(KeyStoreProvider.class);

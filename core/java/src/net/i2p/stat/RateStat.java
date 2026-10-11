@@ -85,7 +85,7 @@ public class RateStat {
         for (Rate r : _rates) r.setRateStat(this);
     }
 
-/**
+    /**
      * Route coalesced samples for every rate in this stat through {@code delivery}
      * instead of calling the summary listener inline.
      *
@@ -402,7 +402,7 @@ public void addData(long value) {
      * underneath it.  The comes from the given prefix (e.g. if we are given the prefix
      * "profile.dbIntroduction", a series of rates may be found underneath
      * "profile.dbIntroduction.60s", "profile.dbIntroduction.60m", and "profile.dbIntroduction.24h").
-     * This RateStat must already be created, with the specified rate entries constructued - this
+     * This RateStat must already be created, with the specified rate entries constructed - this
      * merely loads them with data.
      *
      * @param props the properties

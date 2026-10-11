@@ -32,7 +32,7 @@ public class RouterClock extends Clock {
      */
     private static final long MAX_SLEW = 25;
     /**
-     * DEFAULT_STRATUM.
+     * NTP stratum assumed before any external time source is known.
      */
     public static final int DEFAULT_STRATUM = 8;
     private static final int WORST_STRATUM = 16;

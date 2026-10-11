@@ -105,14 +105,14 @@ public interface I2PSession {
      * @param dest location to send the message
      * @param payload body of the message to be sent (unencrypted)
      * @param keyUsed UNUSED, IGNORED. Session key delivered to the destination for association with the tags sent.  This is essentially
-     * an output parameter - keyUsed.getData() is ignored during this call, but after the call completes,
-     * it will be filled with the bytes of the session key delivered.  Typically the key delivered is the
-     * same one as the key encrypted with, but not always.  If this is null then the key data will not be
-     * exposed.
+     *                an output parameter - keyUsed.getData() is ignored during this call, but after the call completes,
+     *                it will be filled with the bytes of the session key delivered.  Typically the key delivered is the
+     *                same one as the key encrypted with, but not always.  If this is null then the key data will not be
+     *                exposed.
      *
      * @param tagsSent UNUSED, IGNORED. Set of tags delivered to the peer and associated with the keyUsed.  This is also an output parameter -
-     * the contents of the set is ignored during the call, but afterwards it contains a set of SessionTag
-     * objects that were sent along side the given keyUsed.
+     *                 the contents of the set is ignored during the call, but afterwards it contains a set of SessionTag
+     *                 objects that were sent along side the given keyUsed.
      *
      * @return success
      * @throws I2PSessionException on error

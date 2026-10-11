@@ -47,7 +47,7 @@ public class TunnelHistory {
     public static final int TUNNEL_REJECT_STREAMING_NACK = 100;
 
     /**
-     * TunnelHistory.
+     * Creates the per-peer reject and fail rate stats.
      *
      * @param context the router context this history is attached to
      * @param statGroup the statistics group the rate stats are filed under

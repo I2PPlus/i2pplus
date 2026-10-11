@@ -8,7 +8,7 @@ import net.i2p.I2PAppContext;
  */
 class InboundGatewayProcessor extends HopProcessor {
     /**
-     * InboundGatewayProcessor.
+     * Passes the config on with a validator that accepts every message.
      * @param ctx the application context the processor runs under
      * @param config the hop configuration handed to the superclass
      */

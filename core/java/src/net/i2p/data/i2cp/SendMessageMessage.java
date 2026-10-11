@@ -25,23 +25,23 @@ import java.io.OutputStream;
  */
 public class SendMessageMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type ID written to the wire header.
      */
     public static final int MESSAGE_TYPE = 5;
     /**
-     * _sessionId.
+     * Session the payload is being sent over.
      */
     protected SessionId _sessionId;
     /**
-     * _destination.
+     * Destination the payload is addressed to.
      */
     protected Destination _destination;
     /**
-     * _payload.
+     * Data to deliver to that destination.
      */
     protected Payload _payload;
     /**
-     * _nonce.
+     * Client replay nonce, echoed back in the RejectMessage.
      */
     protected long _nonce;
 

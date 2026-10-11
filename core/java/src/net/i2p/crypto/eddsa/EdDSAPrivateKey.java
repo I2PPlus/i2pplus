@@ -45,7 +45,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     private static final int IDLEN_BYTE = 6;
 
     /**
-     * EdDSAPrivateKey.
+     * Unpacks a private key specification, encoding the public point as Abyte.
      *
      * @param spec the private key specification
      */

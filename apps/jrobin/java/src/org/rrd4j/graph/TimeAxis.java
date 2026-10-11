@@ -90,7 +90,8 @@ class TimeAxis extends Axis {
         this.calendar.setFirstDayOfWeek(gdef.firstDayOfWeek);
     }
     /**
-     * Draw
+     * Paints ticks, grids and labels along the time axis, returning false if no
+     * tick settings could be chosen.
      */
 
     boolean draw() {

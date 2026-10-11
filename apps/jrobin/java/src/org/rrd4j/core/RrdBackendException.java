@@ -9,7 +9,7 @@ package org.rrd4j.core;
 public class RrdBackendException extends RrdException {
 
     /**
-     * RrdBackendException.
+     * Reports a backend failure described only by a detail message.
      *
      * @param message the detail message describing the backend failure
      */
@@ -18,7 +18,7 @@ public class RrdBackendException extends RrdException {
     }
 
     /**
-     * RrdBackendException.
+     * Reports a backend failure together with the exception that caused it.
      *
      * @param message the detail message describing the backend failure
      * @param cause the underlying exception that triggered the failure

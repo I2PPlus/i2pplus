@@ -7,7 +7,7 @@
 package org.klomp.snark;
 
 /**
- * Main snark startup class for staticly linking with gcj. It references somee necessary classes
+ * Main snark startup class for staticly linking with gcj. It references some necessary classes
  * that are normally loaded through reflection.
  */
 public class StaticSnark {

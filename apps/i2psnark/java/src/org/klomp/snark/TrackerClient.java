@@ -326,10 +326,10 @@ public class TrackerClient implements Runnable {
     /**
      * Call start() to start it.
      *
+     * @param util the I2PSnarkUtil instance shared with the rest of the client
      * @param meta null if in magnet mode
      * @param additionalTrackerURL may be null, from the ?tr= param in magnet mode, otherwise
      *                             ignored
-     * @param util the I2PSnarkUtil instance shared with the rest of the client
      * @param coordinator the peer coordinator supplying completion state and
      *                    requesting outbound peers
      * @param snark the Snark for this torrent, supplying the info hash and peer ID

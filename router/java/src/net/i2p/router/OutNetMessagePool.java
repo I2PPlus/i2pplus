@@ -19,7 +19,7 @@ public class OutNetMessagePool {
     private final RouterContext _context;
 
     /**
-     * Constructor.
+     * Retains the context and opens the pool's log.
      *
      * @param context the router context whose transport and log manager are used
      */

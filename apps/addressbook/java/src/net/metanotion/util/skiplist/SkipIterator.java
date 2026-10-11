@@ -28,7 +28,7 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
     }
 
     /**
-     * Constructor.
+     * Rejects a null span, then starts iterating at the given index.
      *
      * @param ss the span to iterate over
      * @param index starting position

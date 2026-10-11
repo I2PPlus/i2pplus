@@ -17,14 +17,14 @@ public class SAMException extends Exception {
     private static final long serialVersionUID = 1;
 
     /**
-     * SAMException.
+     * Creates an exception with no detail message.
      */
     public SAMException() {
         super();
     }
 
     /**
-     * SAMException.
+     * Creates an exception carrying the message shown to the SAM client.
      * @param s the detail message naming the SAM call that failed, shown to the SAM client
      */
     public SAMException(String s) {

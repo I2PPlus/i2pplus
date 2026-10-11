@@ -81,7 +81,7 @@ class RobinArray implements Robin {
     }
 
     /**
-     * update.
+     * Writes a full row of values into the archive.
      *
      * @param newValues an array of double.
      * @throws java.io.IOException if any.
@@ -118,7 +118,7 @@ class RobinArray implements Robin {
     }
 
     /**
-     * dump.
+     * Renders the current row and values as text.
      *
      * @return a {@link java.lang.String} object.
      * @throws java.io.IOException if any.
@@ -170,7 +170,7 @@ class RobinArray implements Robin {
     }
 
     /**
-     * getParent.
+     * Fetches the archive this array belongs to.
      *
      * @return a {@link org.rrd4j.core.Archive} object.
      */
@@ -179,7 +179,7 @@ class RobinArray implements Robin {
     }
 
     /**
-     * getSize.
+     * Counts the rows this array stores.
      *
      * @return a int.
      */
@@ -210,7 +210,7 @@ class RobinArray implements Robin {
     }
 
     /**
-     * getRrdBackend.
+     * Fetches the parent archive's backend.
      *
      * @return a {@link org.rrd4j.core.RrdBackend} object.
      */
@@ -219,7 +219,7 @@ class RobinArray implements Robin {
     }
 
     /**
-     * getRrdAllocator.
+     * Fetches the parent archive's allocator.
      *
      * @return a {@link org.rrd4j.core.RrdAllocator} object.
      */

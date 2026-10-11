@@ -65,9 +65,9 @@ class MessageState {
      *  @param nonce the transaction nonce this message was sent under
      *  @param session the session the message was sent through, also used
      *                 as the log prefix
+     *  @param expires absolute time (not interval)
      *  @param listener notified on each state change while the message has
      *                  not yet expired
-     *  @param expires absolute time (not interval)
      *  @since 0.9.14
      */
     public MessageState(I2PAppContext ctx, long nonce, I2PSession session, long expires, SendMessageStatusListener listener) {

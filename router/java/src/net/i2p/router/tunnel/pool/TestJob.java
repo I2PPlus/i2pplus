@@ -4528,7 +4528,7 @@ public class TestJob extends JobImpl {
         private final RoundToken _token;
 
         /**
-         * ReplySelector.
+         * Remembers which message id and round this selector is waiting on.
          * @param id the message id being waited on
          * @param token the round this selector belongs to
          */

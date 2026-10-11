@@ -28,7 +28,7 @@ import org.minidns.record.Record.TYPE;
 
 import java.nio.charset.StandardCharsets;
 /**
- * Simple implemetation of DNS over HTTPS.
+ * Simple implementation of DNS over HTTPS.
  * Also sets the local clock from the received date header.
  *
  * Warning - not thread-safe. Create new instances as necessary.

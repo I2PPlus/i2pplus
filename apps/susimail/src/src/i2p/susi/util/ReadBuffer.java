@@ -14,15 +14,15 @@ import net.i2p.data.DataHelper;
 public class ReadBuffer implements Buffer {
 
     /**
-     * content.
+     * The backing byte array the window is read from.
      */
     public final byte[] content;
     /**
-     * length.
+     * The number of readable bytes in the window.
      */
     public final int length;
     /**
-     * offset.
+     * The index within the backing array where the window starts.
      */
     public final int offset;
 
@@ -49,8 +49,8 @@ public class ReadBuffer implements Buffer {
     }
 
     /**
-     * @throws IllegalStateException always
      * @return the output stream
+     * @throws IllegalStateException always
      * @since 0.9.34
      */
     @Override
@@ -88,7 +88,7 @@ public class ReadBuffer implements Buffer {
     }
 
     /**
-     * toString.
+     * Decodes the window as UTF-8, or returns an empty string when there is no backing array.
      */
     @Override
     public String toString()

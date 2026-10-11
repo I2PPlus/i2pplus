@@ -34,7 +34,7 @@ import org.cybergarage.xml.*;
  */
 public class ServiceData extends NodeData {
     /**
-     * ServiceData.
+     * Creates an empty service data record.
      */
     public ServiceData() {}
 
@@ -45,7 +45,7 @@ public class ServiceData extends NodeData {
     private ListenerList controlActionListenerList = new ListenerList();
 
     /**
-     * getControlActionListenerList.
+     * Returns the control action listener list.
      *
      * @return the listeners registered to receive this service's control actions
      */
@@ -60,7 +60,7 @@ public class ServiceData extends NodeData {
     private Node scpdNode = null;
 
     /**
-     * getSCPDNode.
+     * Returns the service control protocol description node.
      *
      * @return the parsed service control protocol description node, null if none was set
      */
@@ -69,7 +69,7 @@ public class ServiceData extends NodeData {
     }
 
     /**
-     * setSCPDNode.
+     * Records the service control protocol description.
      *
      * @param node the parsed service control protocol description to hold
      */
@@ -84,7 +84,7 @@ public class ServiceData extends NodeData {
     private SubscriberList subscriberList = new SubscriberList();
 
     /**
-     * getSubscriberList.
+     * Returns the subscribers registered for this service.
      *
      * @return the subscribers currently registered for this service
      */
@@ -99,7 +99,7 @@ public class ServiceData extends NodeData {
     private String descriptionURL = "";
 
     /**
-     * getDescriptionURL.
+     * Returns the URL of the device description document.
      *
      * @return the URL of the device description document this service came from
      */
@@ -108,7 +108,7 @@ public class ServiceData extends NodeData {
     }
 
     /**
-     * setDescriptionURL.
+     * Records the URL of the device description document.
      *
      * @param descriptionURL the URL of the device description document this service came from
      */
@@ -123,7 +123,7 @@ public class ServiceData extends NodeData {
     private String sid = "";
 
     /**
-     * getSID.
+     * Returns the subscription identifier for this service.
      *
      * @return the subscription identifier issued for this service
      */
@@ -132,7 +132,7 @@ public class ServiceData extends NodeData {
     }
 
     /**
-     * setSID.
+     * Records the subscription identifier for this service.
      *
      * @param id the subscription identifier issued for this service
      */
@@ -147,7 +147,7 @@ public class ServiceData extends NodeData {
     private long timeout = 0;
 
     /**
-     * getTimeout.
+     * Returns the requested subscription duration.
      *
      * @return the subscription duration in seconds, 0 when the subscription was never leased
      */
@@ -156,7 +156,7 @@ public class ServiceData extends NodeData {
     }
 
     /**
-     * setTimeout.
+     * Records the requested subscription duration.
      *
      * @param value the subscription duration in seconds requested at lease time
      */

@@ -27,7 +27,7 @@ class FloodOnlyLookupSelector implements MessageSelector {
     private final Log _log;
 
     /**
-     * FloodOnlyLookupSelector.
+     * Binds the selector to the search whose replies it matches.
      *
      * @param ctx the router context whose netDb and job queue the search drives
      * @param search the flood-only search whose replies this selector matches

@@ -205,8 +205,8 @@ public final class CryptixRijndael_Algorithm {
      * session key, assuming Rijndael's default block size (128-bit).
      *
      * @param k The 128/192/256-bit user-key to use.
-     * @throws  InvalidKeyException  If the key is invalid.
      * @return an array of two int[][] containing { Ke, Kd }
+     * @throws  InvalidKeyException  If the key is invalid.
      */
     public static final Object makeKey(byte[] k) throws InvalidKeyException {
         return makeKey(k, _BLOCK_SIZE);
@@ -364,9 +364,9 @@ public final class CryptixRijndael_Algorithm {
      *
      * @param k          The 128/192/256-bit user-key to use.
      * @param blockSize  The block size in bytes of this Rijndael, must be 16, 24, or 32.
-     * @throws  InvalidKeyException  If the key is invalid.
      * @return a CryptixAESKeyCache.KeyCacheEntry containing { Ke, Kd }.
      *         The actual return type is opaque, changed in 0.9.31, and is subject to change again.
+     * @throws  InvalidKeyException  If the key is invalid.
      */
     public static final Object makeKey(byte[] k, int blockSize) throws InvalidKeyException {
         return makeKey(k, blockSize, null);
@@ -379,10 +379,10 @@ public final class CryptixRijndael_Algorithm {
      * @param k          The 128/192/256-bit user-key to use.
      * @param blockSize  The block size in bytes of this Rijndael, must be 16, 24, or 32.
      * @param keyData a cached data structure to fill in, or null.
-     * @throws  InvalidKeyException  If the key is invalid.
      * @return a CryptixAESKeyCache.KeyCacheEntry containing { Ke, Kd }.
      *         If keyData is non-null, this is keyData.
      *         If keyData is null, this is newly allocated.
+     * @throws  InvalidKeyException  If the key is invalid.
      */
     public static final Object makeKey(byte[] k, int blockSize, CryptixAESKeyCache.KeyCacheEntry keyData) throws InvalidKeyException {
         if (k == null) throw new InvalidKeyException("Empty key");

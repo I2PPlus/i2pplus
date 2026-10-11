@@ -25,7 +25,7 @@ import net.i2p.util.Log;
  * The local clock offset calculation is implemented according to the SNTP
  * algorithm specified in RFC 2030.
  *
- * Note that on windows platforms, the curent time-of-day timestamp is limited
+ * Note that on windows platforms, the current time-of-day timestamp is limited
  * to an resolution of 10ms and adversely affects the accuracy of the results.
  *
  * Public only for main(), not a public API, not for external use.

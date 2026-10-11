@@ -26,14 +26,14 @@ import java.util.Date;
  */
 public class SetDateMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type code for a peer clock synchronization request.
      */
     public static final int MESSAGE_TYPE = 33;
     private Date _date;
     private String _version;
 
     /**
-     * SetDateMessage.
+     * Creates a request stamped with the current time and the configured version string.
      */
     public SetDateMessage() {
         super();
@@ -51,7 +51,7 @@ public class SetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Date.
+     * Returns the sender's clock reading carried by this message.
      * @return the date
      */
     public Date getDate() {
@@ -113,7 +113,7 @@ public class SetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Returns the I2CP message type code for this message.
      * @return the type
      */
     @Override

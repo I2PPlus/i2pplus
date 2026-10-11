@@ -28,7 +28,7 @@ public interface CPUInfo
      * Gets the CPU model description.
      * @return A string detailing what type of CPU that is present in the machine. I.e. 'Pentium IV' etc.
      * @throws UnknownCPUException If for any reason the retrieval of the requested information
-     *                             failed. The message encapsulated in the execption indicates the
+     *                             failed. The message encapsulated in the exception indicates the
      *                             cause of the failure.
      */
     public String getCPUModelString() throws UnknownCPUException;

@@ -66,7 +66,7 @@ public class SybilRenderer {
     private static final int[] DAYS = { 2, 7, 30, 90, 365, 0 };
 
     /**
-     * SybilRenderer.
+     * Renders the Sybil analysis tables for the console.
      *
      * @param ctx the router context supplying the analysis data and logging
      */
@@ -94,13 +94,13 @@ public class SybilRenderer {
          private final transient Map<Hash, Points> _points;
 
          /**
-          * PointsComparator.
+          * Orders hashes by sybil score, most points first.
           */
          public PointsComparator(Map<Hash, Points> points) {
              _points = points;
          }
           /**
-           * compare.
+           * Orders two hashes by their points, highest score first.
            */
           @Override
           public int compare(Hash l, Hash r) {
@@ -115,7 +115,7 @@ public class SybilRenderer {
      */
     private static class ReasonComparator implements Comparator<String>, Serializable {
           /**
-           * compare.
+           * Orders two reason strings by their point count.
            */
           @Override
           public int compare(String l, String r) {
@@ -712,11 +712,11 @@ public class SybilRenderer {
     private static class FooComparator<K extends Comparable> implements Comparator<K>, Serializable {
          private final Map<K, List<RouterInfo>> _o;
          /**
-          * FooComparator.
+          * Orders keys by how many routers share each, most first.
           */
          public FooComparator(Map<K, List<RouterInfo>> o) { _o = o;}
           /**
-           * compare.
+           * Orders two keys by shared-router count, then naturally.
            */
          @SuppressWarnings("unchecked")
           @Override
@@ -734,11 +734,11 @@ public class SybilRenderer {
          private final Map<String, List<RouterInfo>> _o;
          private final Collator _comp = Collator.getInstance();
          /**
-          * FoofComparator.
+          * Orders names by how many routers share each, most first.
           */
          public FoofComparator(Map<String, List<RouterInfo>> o) { _o = o;}
           /**
-           * compare.
+           * Orders two names by shared-router count, then by collation.
            */
           @Override
           public int compare(String l, String r) {
@@ -983,8 +983,8 @@ public class SybilRenderer {
 
     /**
      * Render routers closer than MIN_CLOSE up to MAX routers
+     * @param us HTML escaped
      * @param ris sorted, closest first
-     * @param usName HTML escaped
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderRouterInfoHTML(Writer out, StringBuilder buf, Hash us, double avgMinDist,

@@ -42,7 +42,7 @@ public class AuthenticateHandler implements RequestHandler {
     private final SecurityManager _secMan;
 
     /**
-     * AuthenticateHandler.
+     * Binds the reply helper and the token-issuing security manager.
      * @param helper resolves the localized strings and version data used in the reply
      * @param secMan issues and tracks the authentication tokens
      */

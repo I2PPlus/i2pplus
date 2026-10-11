@@ -29,7 +29,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
     private static final AtomicBoolean _isDeadlocked = new AtomicBoolean();
 
     /**
-     * DeadlockDetector.
+     * Start the periodic deadlock poll, scheduled only when enabled.
      *
      * @param ctx the router context to poll and to report deadlocks in
      */
@@ -48,7 +48,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * timeReached.
+     * Poll for deadlocks, rescheduling only when none were found.
      */
     public void timeReached() {
         long start = System.currentTimeMillis();
@@ -69,7 +69,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * detect.
+     * Check this detector's router context for deadlocked threads.
      *
      * @param ctx the router context to poll and to report deadlocks in
      * @return true if a deadlock is found, false if none or if the check failed

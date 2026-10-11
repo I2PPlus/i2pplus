@@ -53,7 +53,7 @@ public class SearchHelper extends HelperBase {
         "";
 
     /**
-     * setEngine.
+     * Selects the search engine, saving a non-default choice as the new default.
      * @param s search engine name to select; a non-default value is saved as the new default
      */
     public void setEngine(String s) {
@@ -65,7 +65,7 @@ public class SearchHelper extends HelperBase {
     }
 
     /**
-     * setQuery.
+     * Stores the search string to hand to the selected engine.
      * @param s the search string to hand to the selected engine
      */
     public void setQuery(String s) {_query = s;}
@@ -83,7 +83,7 @@ public class SearchHelper extends HelperBase {
     }
 
     /**
-     * Selector.
+     * Builds the HTML select element listing configured engines, or a notice if none.
      * @return the selector
      */
     public String getSelector() {

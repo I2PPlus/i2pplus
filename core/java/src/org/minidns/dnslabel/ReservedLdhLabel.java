@@ -17,7 +17,7 @@ package org.minidns.dnslabel;
 public class ReservedLdhLabel extends LdhLabel {
 
     /**
-     * ReservedLdhLabel.
+     * Wrap a label already known to carry the reserved "--" pattern.
      *
      * @param label the LDH label string, which must carry "--" in its third and fourth characters
      */
@@ -27,7 +27,7 @@ public class ReservedLdhLabel extends LdhLabel {
     }
 
     /**
-     * isReservedLdhLabel.
+     * Test whether a label is both well-formed LDH and reserved.
      *
      * @param label the candidate label string, checked for LDH syntax before the reserved
      *              "--" pattern is tested
@@ -42,7 +42,7 @@ public class ReservedLdhLabel extends LdhLabel {
     }
 
     /**
-     * isReservedLdhLabelInternal.
+     * Test for the reserved "--" pattern, skipping the LDH syntax check.
      *
      * @param label the label string, assumed to be already known to be a well-formed LDH label
      * @return true if it is at least four characters long and its third and fourth characters

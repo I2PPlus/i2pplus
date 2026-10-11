@@ -37,7 +37,7 @@ import net.i2p.util.VersionComparator;
 public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private final static Log _log = new Log(DatabaseLookupMessage.class);
     /**
-     * MESSAGE_TYPE.
+     * The I2NP message type number identifying a database lookup.
      */
     public final static int MESSAGE_TYPE = 2;
     private Hash _key;
@@ -52,7 +52,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private Type _type;
 
     /**
-     * USE_ECIES_FF.
+     * Whether a reply session may use ECIES X25519 keys, not just ElGamal.
      */
     public static final boolean USE_ECIES_FF = true;
 
@@ -93,7 +93,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     private static final String MIN_RATCHET_VERSION = "0.9.46";
 
     /**
-     * DatabaseLookupMessage.
+     * Creates a database lookup message for the given context.
      * @param context the application context the message is created for
      */
     public DatabaseLookupMessage(I2PAppContext context) {
@@ -275,7 +275,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public RatchetSessionTag getRatchetReplyTag() { return _ratchetReplyTag; }
 
     /**
-     *  Ratchet
+     *  Sets the reply session for ratchet encryption; only once per message.
      *
      *  @param encryptKey non-null
      *  @param encryptTag non-null
@@ -300,7 +300,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     public PublicKey getRatchetPublicKey() { return _ratchetPubKey; }
 
     /**
-     *  Ratchet.
+     *  Sets the reply session's ratchet public key.
      *  Preliminary, not fully supported, see proposal 154.
      *
      *  @param pubKey non-null

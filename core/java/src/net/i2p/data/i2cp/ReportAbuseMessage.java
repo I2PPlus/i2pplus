@@ -23,7 +23,7 @@ import java.io.InputStream;
  */
 public class ReportAbuseMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type number identifying an abuse report.
      */
     public static final int MESSAGE_TYPE = 29;
     private SessionId _sessionId;
@@ -32,7 +32,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     private MessageId _messageId;
 
     /**
-     * ReportAbuseMessage.
+     * Creates an empty report, for I2CP deserialization.
      */
     public ReportAbuseMessage() { /* required for I2CP deserialization */ }
 
@@ -64,7 +64,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Severity.
+     * Reports how serious the abuse was judged to be.
      * @return the severity
      */
     public AbuseSeverity getSeverity() {
@@ -81,7 +81,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Reason.
+     * Reports which category of misbehaviour was observed.
      * @return the reason
      */
     public AbuseReason getReason() {
@@ -159,7 +159,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Reports this message's I2CP type number.
      * @return the type
      */
     @Override

@@ -45,12 +45,12 @@ public class XMLParser extends JaxpParser {
     private final Log _log;
 
     /**
-     * TEXT_NAME.
+     * DOM node name the parser uses for character data.
      */
     public static final String TEXT_NAME = "#text";
 
     /**
-     * XMLParser.
+     * Creates a parser that logs under its own class.
      *
      * @param ctx the context supplying the log manager for this parser
      */

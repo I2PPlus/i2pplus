@@ -46,7 +46,7 @@ public class RouterManagerHandler implements RequestHandler {
 
 
     /**
-     * RouterManagerHandler.
+     * Retains the router context and response helper used to serve the requests.
      *
      * @param ctx the router context whose services the managed operations act on
      * @param helper the JSON-RPC2 helper used to build responses and check authentication
@@ -238,7 +238,7 @@ public class RouterManagerHandler implements RequestHandler {
     public static class UpdateWrapperManagerTask implements Runnable {
         private int _exitCode;
         /**
-         * UpdateWrapperManagerTask.
+         * Holds the exit code to report to the wrapper manager when run.
          *
          * @param exitCode the status the wrapper manager should see on the next restart
          */

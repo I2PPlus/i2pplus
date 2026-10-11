@@ -108,7 +108,7 @@ public abstract class FormHandler {
     }
 
     /**
-     * FormHandler.
+     * Starts a valid handler with no errors or notices.
      */
     public FormHandler() {
         _errors = new ArrayList<>();
@@ -540,7 +540,7 @@ public abstract class FormHandler {
         private boolean canClose;
 
         /**
-         * Message.
+         * Holds a message and whether the user may dismiss it.
          *
          * @param text the message text shown to the user
          * @param canClose whether the user is allowed to dismiss it
@@ -551,7 +551,7 @@ public abstract class FormHandler {
         }
 
         /**
-         * Text.
+         * Returns the message text.
          * @return the text
          */
         public String getText() {

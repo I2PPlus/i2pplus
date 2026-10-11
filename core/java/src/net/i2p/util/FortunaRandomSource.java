@@ -93,7 +93,7 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
      * nextInt(n) should return a number between 0 and n (including 0 and excluding n).  However, their pseudocode,
      * as well as sun's, kaffe's, and classpath's implementation INCLUDES NEGATIVE VALUES.
      * Ok, so we're going to have it return between 0 and n (including 0, excluding n), since
-     * thats what it has been used for.
+     * that's what it has been used for.
      *
      * Unlike Java's Random, which throws IAE, this returns 0 if n is 0.
      *

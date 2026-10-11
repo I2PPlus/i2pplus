@@ -142,15 +142,15 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public static final int DEFAULT_SSU_IPV6_MTU = MIN_SSU_IPV6_MTU; // should always be published
     // As SSU2
     /**
-     * MIN_MTU.
+     * Smallest MTU we will advertise to SSU2 peers, in bytes.
      */
     public static final int MIN_MTU = 1280;
     /**
-     * MAX_MTU.
+     * Largest MTU we will advertise to SSU2 peers, in bytes.
      */
     public static final int MAX_MTU = 1500;
     /**
-     * DEFAULT_MTU.
+     * MTU advertised unless the profile overrides it.
      */
     public static final int DEFAULT_MTU = MAX_MTU;
     /**

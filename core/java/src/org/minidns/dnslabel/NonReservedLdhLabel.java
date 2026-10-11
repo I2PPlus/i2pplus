@@ -26,7 +26,7 @@ public final class NonReservedLdhLabel extends LdhLabel {
     }
 
     /**
-     * isNonReservedLdhLabel.
+     * Tests whether the label is a valid LDH label that is not on the reserved list.
      * @param label the LDH label text to test
      * @return true if label is non-reserved
      */

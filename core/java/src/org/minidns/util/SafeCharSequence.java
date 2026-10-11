@@ -11,7 +11,7 @@
 package org.minidns.util;
 
 /**
- * SafeCharSequence.
+ * Exposes a CharSequence whose string form is safe to hand out.
  */
 /**
  * A CharSequence whose toString() output is guaranteed safe to expose.
@@ -26,7 +26,7 @@ public class SafeCharSequence implements CharSequence {
     public SafeCharSequence() {}
 
     /**
-     * length.
+     * Counts the characters of the safe string form.
      */
     @Override
     public final int length() {
@@ -34,7 +34,7 @@ public class SafeCharSequence implements CharSequence {
     }
 
     /**
-     * charAt.
+     * Returns one character of the safe string form.
      */
     @Override
     public final char charAt(int index) {
@@ -42,7 +42,7 @@ public class SafeCharSequence implements CharSequence {
     }
 
     /**
-     * subSequence.
+     * Returns a safe substring of the safe string form.
      */
     @Override
     public final CharSequence subSequence(int start, int end) {

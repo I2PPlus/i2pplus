@@ -15,12 +15,12 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
      */
     public static final int MESSAGE_TYPE = 999;
     /**
-     * SHORT_RECORD_SIZE.
+     * Byte length every short build record in this reply must have.
      */
     public static final int SHORT_RECORD_SIZE = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
     /**
-     * ShortTunnelBuildReplyMessage.
+     * Creates a reply with preallocated slots for the given number of records.
      *
      * @param context the context owning the reply's random source and clock
      * @param records number of short build records to preallocate slots for

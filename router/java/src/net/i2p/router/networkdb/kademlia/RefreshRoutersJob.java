@@ -42,7 +42,7 @@ class RefreshRoutersJob extends JobImpl {
     private static final Random _random = new Random();
 
     /**
-     * RefreshRoutersJob.
+     * Stores the network database and the log the refresh runs under.
      *
      * @param ctx the router context
      * @param facade the network database the job refetches router infos through

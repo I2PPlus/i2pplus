@@ -599,7 +599,7 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     * Helper
+     * Retrieves the application context the group was created with.
      * @return the context
      * @since 0.9.49
      */
@@ -703,7 +703,7 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Warning - destroys the singleton!
      * Caller must root a new context before calling instance() or main() again.
-     * Agressively kill and null everything to reduce memory usage in the JVM
+     * Aggressively kill and null everything to reduce memory usage in the JVM
      * after stopping, and to recognize what must be reinitialized on restart (Android)
      *
      * @param waitForDelayed true to wait for shutdown-delayed tunnels, false for immediate

@@ -20,7 +20,7 @@ import net.i2p.util.RandomSource;
  * stored as doubles (as opposed to the NTP unsigned 64-bit fixed point
  * format).
  *
- * However, the contructor NtpMessage(byte[]) and the method toByteArray()
+ * However, the constructor NtpMessage(byte[]) and the method toByteArray()
  * allow the import and export of the raw NTP message format.
  *
  *
@@ -50,7 +50,7 @@ import net.i2p.util.RandomSource;
  * As of 0.9.50, this supports years 1968-2104 and is year-2036 compliant.
  * All double timestamps are the actual seconds since 1900.
  * We use a "pivot" of January 1968.
- * NTP-format dates before 1968 are coverted to 2036+.
+ * NTP-format dates before 1968 are converted to 2036+.
  * So this code handles the last half of era 0 and the first half of era 1,
  * i.e. 1968-2104.
  * All math and comparisons on timestamps must be on the double values,

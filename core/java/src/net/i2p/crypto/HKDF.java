@@ -87,10 +87,10 @@ public final class HKDF {
      * Two outputs, no info.
      *
      * @param key first 32 bytes used as the key
+     * @param data the input data the output keys are derived from
      * @param out 32 bytes will be copied to here
      * @param out2 32 bytes will be copied to here, may be the same as out
      * @param off2 offset for copy to out2
-     * @param data the input data the output keys are derived from
      */
     public void calculate(byte[] key, byte[] data, byte[] out, byte[] out2, int off2) {
         calculate(key, data, "", out, out2, off2);
@@ -100,11 +100,11 @@ public final class HKDF {
      * Two outputs with info.
      *
      * @param key first 32 bytes used as the key
+     * @param data the input data the output keys are derived from
      * @param info non-null ASCII, "" if none
      * @param out 32 bytes will be copied to here
      * @param out2 32 bytes will be copied to here, may be the same as out
      * @param off2 offset for copy to out2
-     * @param data the input data the output keys are derived from
      */
     public void calculate(byte[] key, byte[] data, String info, byte[] out, byte[] out2, int off2) {
         int ilen = info.length();

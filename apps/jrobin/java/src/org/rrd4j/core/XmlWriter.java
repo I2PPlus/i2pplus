@@ -300,7 +300,7 @@ public class XmlWriter implements AutoCloseable {
         return s.replace("<", "&lt;").replace(">", "&gt;");
     }
     /**
-     * Close
+     * Flushes the underlying writer, then closes it.
      */
 
     @Override

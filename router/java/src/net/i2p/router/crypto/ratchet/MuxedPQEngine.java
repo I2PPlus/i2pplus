@@ -63,9 +63,9 @@ final class MuxedPQEngine {
     /**
      * Decrypt the message with the given private keys
      *
+     * @param data the data to decrypt
      * @param ecKey must be EC, non-null
      * @param pqKey must be PQ, non-null
-     * @param data the data to decrypt
      * @param keyManager the key manager
      * @return decrypted data or null on failure
      * @throws net.i2p.data.DataFormatException if the data is malformed

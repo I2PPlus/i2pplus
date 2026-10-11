@@ -387,7 +387,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     }
 
     /**
-     * PROP_ENCRYPT_RI.
+     * Property toggling encryption of the RouterInfo sent in a lookup.
      */
     public static final String PROP_ENCRYPT_RI = "router.encryptRouterLookups";
 

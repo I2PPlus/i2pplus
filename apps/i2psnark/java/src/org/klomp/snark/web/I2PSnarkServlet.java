@@ -1905,16 +1905,6 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param out          the PrintWriter to write HTML output to
      * @param buf          a reusable StringBuilder used for generating icon HTML snippets
-     * @param stats        a long array of cumulative stats: [downloaded, uploaded, download rate, upload rate, peers, total size]
-     * @param totalETA     total estimated download time for all torrents, seconds
-     * @param total        total number of torrents
-     * @param isConnected  whether the system is connected
-     * @param noSnarks     true if no torrents are loaded (empty list)
-     * @param hasPeers     true if there are any connected peers
-     * @param isUploading  true if there is active uploading
-     * @param dht          the DHT instance providing additional peer info (may be null)
-     * @param isStandalone true if running in standalone mode (tunnel info omitted if standalone)
-     * @param peerParam    the peer parameter from the request query, affects debug mode toggle links
      * @throws IOException if writing to the output stream fails
      */
     private void appendSnarkFooter(PrintWriter out, StringBuilder buf, FooterContext fc) throws IOException {
@@ -4225,7 +4215,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param buf destination buffer for the row HTML
      * @param action action suffix appended to the request parameter name
-     * @param b64 base64 info hash forming the parameter name with the action
+     * @param token base64 info hash forming the parameter name with the action
      * @param snark the torrent the button acts on
      * @param title tooltip text describing what will be removed or deleted
      * @since 0.9.71+

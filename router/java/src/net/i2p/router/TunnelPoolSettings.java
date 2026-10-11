@@ -201,7 +201,7 @@ public class TunnelPoolSettings {
     public void setBackupQuantity(int quantity) { _backupQuantity = quantity; }
 
     /**
-     * Convenience
+     * Adds the primary and backup quantities into one target total.
      *
      * @return getQuantity() + getBackupQuantity()
      * @since 0.8.11

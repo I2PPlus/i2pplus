@@ -46,7 +46,7 @@ class LoadRouterInfoJob extends JobImpl {
     private static final int REKEY_PROBABILITY = 1;
 
     /**
-     * LoadRouterInfoJob.
+     * Opens the job's log and initializes the ban logger.
      * @param ctx the router context supplying the log and the ban logger
      */
     public LoadRouterInfoJob(RouterContext ctx) {
@@ -287,7 +287,7 @@ class LoadRouterInfoJob extends JobImpl {
         public final SigningPrivateKey signingPrivateKey;
 
         /**
-         * KeyData.
+         * Pairs a router identity with the private keys that match it.
          * @param ri the identity whose public keys these private keys belong to
          * @param pk the private key matching the identity's encryption public key
          * @param spk the signing private key matching the identity's signing public key
@@ -304,7 +304,7 @@ class LoadRouterInfoJob extends JobImpl {
      *
      * @param rkf1 in router.keys format, tried second
      * @param rkf2 in eepPriv.dat format, tried first
-     * @return non-null, throws IOE if neither exisits
+     * @return non-null, throws IOE if neither exists
      * @throws DataFormatException if the stored key pairs do not validate against each other
      * @throws IOException if a key file exists but cannot be opened or read
      * @since 0.9.16

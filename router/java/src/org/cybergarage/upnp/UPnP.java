@@ -317,7 +317,7 @@ public class UPnP {
      * - Second by a fall-back technique, it tries to load the XMLParser from one<br>
      * of the following classes: {@link JaxpParser}, {@link kXML2Parser}, {@link XercesParser}
      *
-     * @return {@link Parser} which has been loaded successuflly or null otherwise
+     * @return {@link Parser} which has been loaded successfully or null otherwise
      * @since 1.8.0
      */
     private static Parser loadDefaultXMLParser() {

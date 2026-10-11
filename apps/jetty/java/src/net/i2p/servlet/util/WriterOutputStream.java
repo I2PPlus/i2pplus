@@ -15,13 +15,13 @@ public class WriterOutputStream extends OutputStream {
     private final Writer _writer;
 
     /**
-     * WriterOutputStream.
+     * Wraps the writer so it can be used as the destination stream.
      * @param writer the writer this stream writes into, letting a PrintWriter serve as an OutputStream
      */
     public WriterOutputStream(Writer writer) { _writer = writer; }
 
     /**
-     * write.
+     * Writes the low byte of the argument to the wrapped writer.
      */
     public void write(int b) throws IOException { _writer.write(b); }
 }

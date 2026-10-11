@@ -4,8 +4,6 @@ import net.i2p.data.Hash;
 import net.i2p.router.NetworkDatabaseFacade;
 
 /**
- * SegmentedNetworkDatabaseFacade
- *
  * This class implements an interface for managing many netDbs as part of a
  * single I2P instance, each representing its own view of the network. This
  * allows the I2P clients to operate agnostic of what information the other

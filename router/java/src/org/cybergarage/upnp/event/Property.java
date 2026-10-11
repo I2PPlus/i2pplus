@@ -33,7 +33,7 @@ public class Property {
     ////////////////////////////////////////////////
 
     /**
-     * Property.
+     * Creates a property with empty name and value.
      */
     public Property() {}
 
@@ -44,7 +44,7 @@ public class Property {
     private String name = "";
 
     /**
-     * getName.
+     * Gets the UPnP name of this property.
      *
      * @return the UPnP name of this property, never null
      */
@@ -53,7 +53,7 @@ public class Property {
     }
 
     /**
-     * setName.
+     * Sets the UPnP name of this property, mapping null to an empty string.
      *
      * @param val the UPnP name to store; null is stored as an empty string
      */
@@ -69,7 +69,7 @@ public class Property {
     private String value = "";
 
     /**
-     * getValue.
+     * Gets the current UPnP value of this property.
      *
      * @return the current UPnP value of this property, never null
      */
@@ -78,7 +78,7 @@ public class Property {
     }
 
     /**
-     * setValue.
+     * Sets the current UPnP value, mapping null to an empty string.
      *
      * @param val the value to store; null is stored as an empty string
      */

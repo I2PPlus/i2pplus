@@ -13,14 +13,14 @@ import java.io.IOException;
  */
 interface RrdUpdater<T extends RrdUpdater<T>> {
     /**
-     * getRrdBackend.
+     * Returns the backend store this updater reads and writes through.
      *
      * @return a {@link org.rrd4j.core.RrdBackend} object.
      */
     RrdBackend getRrdBackend();
 
     /**
-     * copyStateTo.
+     * Copies this updater's state into the given one.
      *
      * @param updater a {@link org.rrd4j.core.RrdUpdater} object.
      * @throws java.io.IOException if any.
@@ -28,7 +28,7 @@ interface RrdUpdater<T extends RrdUpdater<T>> {
     void copyStateTo(T updater) throws IOException;
 
     /**
-     * getRrdAllocator.
+     * Returns the allocator used for this updater's memory allocation.
      *
      * @return a {@link org.rrd4j.core.RrdAllocator} object.
      */

@@ -70,11 +70,11 @@ class SSU2Payload {
     /** SSU2 block type: ROUTERINFO */
     static final int BLOCK_ROUTERINFO = 2;
     /**
-     * BLOCK_HEADER_SIZE.
+     * Bytes of type-and-length prefix that precede the data of every block.
      */
     public static final int BLOCK_HEADER_SIZE = 3;
     /**
-     * BLOCK_TERMINATION.
+     * SSU2 block type: TERMINATION
      */
     public static final int BLOCK_TERMINATION = 6;
 

@@ -3364,7 +3364,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Unmodifiable
+     * Snapshot of the loaded torrents as an unmodifiable collection.
      *
      * @return the torrents
      * @since 0.9.4
@@ -3476,8 +3476,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param filename the absolute path to save the metainfo to, generally ending in ".torrent"
      * @param baseFile may be null, if so look in dataDir
      * @param dontAutoStart must be false, AND running=true or null in metadata, to start
-     * @throws RuntimeException via Snark.fatal()
      * @return success
+     * @throws RuntimeException via Snark.fatal()
      */
     private boolean addTorrent(String filename, File baseFile, boolean dontAutoStart) {
         return addTorrent(filename, baseFile, dontAutoStart, null);
@@ -3490,8 +3490,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param baseFile may be null, if so look in dataDir
      * @param dontAutoStart must be false, AND running=true or null in metadata, to start
      * @param dataDir must exist, or null to default to snark data directory
-     * @throws RuntimeException via Snark.fatal()
      * @return success
+     * @throws RuntimeException via Snark.fatal()
      * @since 0.9.17
      */
     private boolean addTorrent(
@@ -4488,10 +4488,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *                 generate a name from the metainfo.
      * @param baseFile may be null, if so look in rootDataDir
      * @param dontAutoStart true to add the torrent without starting it
+     * @return success
      * @throws RuntimeException via Snark.fatal()
      * @throws IOException declared for API compatibility; a write failure is reported
      *                     as a queued message and a false return
-     * @return success
      * @since 0.8.4
      */
     public boolean addTorrent(
@@ -4576,10 +4576,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param filename the absolute path to save the metainfo to, generally ending in ".torrent",
      *                 which is also the name of the torrent Must be a filesystem-safe name.
      * @param dataDir must exist, or null to default to snark data directory
+     * @return success
      * @throws RuntimeException via Snark.fatal()
      * @throws IOException declared for API compatibility; a copy failure is reported
      *                     as a queued message and a false return
-     * @return success
      * @since 0.8.4
      */
     public boolean copyAndAddTorrent(File fromfile, String filename, File dataDir)
@@ -6363,7 +6363,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Inline
+     * Starts every stopped torrent, staggering the tunnel builds when pools share a destination.
      *
      * @since 0.9.1
      */

@@ -24,7 +24,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     private volatile E _elem;
 
     /**
-     * RemovableSingletonSet.
+     * Rejects a null element, then holds it as the set's only member.
      *
      * @param element the sole element to hold, may not be null
      */

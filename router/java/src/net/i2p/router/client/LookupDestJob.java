@@ -58,14 +58,14 @@ class LookupDestJob extends JobImpl {
      * For hash or b32 name, the dest will be returned if the LS can be found,
      * even if the dest uses unsupported crypto.
      *
-     * @param reqID must be &gt;= 0 if name != null
-     * @param sessID must non-null if reqID &gt;= 0
-     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      * @param context the router context the job runs against
      * @param runner the connection the resolved LeaseSet is handed to, or null if the caller only wants the lookup performed
+     * @param reqID must be &gt;= 0 if name != null
      * @param timeout how long to wait for the LeaseSet or the name lookup, in milliseconds; DEFAULT_TIMEOUT (15000) is used by the short constructor
+     * @param sessID must non-null if reqID &gt;= 0
      * @param h the destination hash to look up, mutually exclusive with name
      * @param name the base32 host name to resolve through the naming service, mutually exclusive with h
+     * @param fromLocalDest use these tunnels for the lookup, or null for exploratory
      * @since 0.9.11
      */
     public LookupDestJob(RouterContext context, ClientConnectionRunner runner,

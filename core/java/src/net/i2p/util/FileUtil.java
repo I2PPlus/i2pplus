@@ -325,10 +325,10 @@ public class FileUtil {
      * Warning - inefficient if startAtBeginning is false, see console LogsHelper for better version
      *
      * @param filename the path of the newline-delimited text file to read
+     * @param maxNumLines max number of lines (or -1 for unlimited)
      * @param startAtBeginning if true, read the first maxNumLines, otherwise read
      *                         the last maxNumLines
      *
-     * @param maxNumLines max number of lines (or -1 for unlimited)
      * @return string or null; does not throw IOException.
      */
     public static String readTextFile(String filename, int maxNumLines, boolean startAtBeginning) {

@@ -20,7 +20,7 @@ class Yylex {
   /** lexical states */
   public static final int YYINITIAL = 0;
   /**
-   * STRING_BEGIN.
+   * Lexical state entered once a string literal's opening quote is matched
    */
   public static final int STRING_BEGIN = 2;
 
@@ -477,7 +477,7 @@ int getPosition(){
 
 
   /**
-   * Reports an error that occured while scanning.
+   * Reports an error that occurred while scanning.
    *
    * In a wellformed scanner (no or only correct usage of
    * yypushback(int) and a match-all fallback rule) this method

@@ -39,8 +39,8 @@ public class MagnetURI {
     /**
      * Parse a magnet or maggot URI.
      *
-     * @param url non-null
      * @param util supplies the localized "Magnet" prefix used to name the torrent
+     * @param url non-null
      */
     public MagnetURI(I2PSnarkUtil util, String url) throws IllegalArgumentException {
         String ihash;

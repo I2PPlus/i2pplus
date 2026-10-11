@@ -41,7 +41,7 @@ class FileLogWriter extends LogWriter {
     private int _diskFullMessageCount;
 
     /**
-     * FileLogWriter.
+     * Creates a writer that drains log records to rotating files on disk.
      * @param manager the LogManager this writer drains records from; its
      *                configuration supplies the log directory and rotation settings
      */
@@ -309,7 +309,7 @@ class FileLogWriter extends LogWriter {
         private final boolean _groupReadable;
 
         /**
-         * Gzipper.
+         * Creates a background thread that gzips one rotated log file.
          *
          * @param groupReadable apply 660 perms to the compressed file
          */

@@ -162,7 +162,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     }
 
     /**
-     * Reset athen initialize the digest context.
+     * Reset and then initialize the digest context.
      *
      * Overrides the protected abstract method of
      * <code>java.security.MessageDigestSpi</code>.

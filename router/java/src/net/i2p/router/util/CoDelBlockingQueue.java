@@ -113,11 +113,11 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     }
 
     /**
-     * PROP_CODEL_TARGET.
+     * Property overriding the CoDel target delay in ms.
      */
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     /**
-     * PROP_CODEL_INTERVAL.
+     * Property overriding the interval in ms between CoDel drop decisions.
      */
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 

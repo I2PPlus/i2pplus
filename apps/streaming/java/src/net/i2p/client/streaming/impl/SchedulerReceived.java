@@ -9,7 +9,7 @@ import net.i2p.I2PAppContext;
 class SchedulerReceived extends SchedulerImpl {
 
     /**
-     * SchedulerReceived.
+     * Sets up the scheduler for connections awaiting our own SYN.
      * @param ctx the application context supplying the clock and log used by
      *            the scheduler
      */

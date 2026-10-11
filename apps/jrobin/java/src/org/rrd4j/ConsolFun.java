@@ -11,7 +11,7 @@ public enum ConsolFun {
     /** The average of the data points is stored. */
     AVERAGE {
         /**
-         * getVariable.
+         * Creates the variable that averages the data points.
          */
         @Override
         public Variable getVariable() {
@@ -22,7 +22,7 @@ public enum ConsolFun {
     /** The smallest of the data points is stored. */
     MIN {
         /**
-         * getVariable.
+         * Creates the variable that keeps the smallest data point.
          */
         @Override
         public Variable getVariable() {
@@ -33,7 +33,7 @@ public enum ConsolFun {
     /** The largest of the data points is stored. */
     MAX {
         /**
-         * getVariable.
+         * Creates the variable that keeps the largest data point.
          */
         @Override
         public Variable getVariable() {
@@ -44,7 +44,7 @@ public enum ConsolFun {
     /** The last data point is used. */
     LAST {
         /**
-         * getVariable.
+         * Creates the variable that keeps the last data point.
          */
         @Override
         public Variable getVariable() {
@@ -55,7 +55,7 @@ public enum ConsolFun {
     /** The fist data point is used. */
     FIRST {
         /**
-         * getVariable.
+         * Creates the variable that keeps the first data point.
          */
         @Override
         public Variable getVariable() {
@@ -66,7 +66,7 @@ public enum ConsolFun {
     /** The total of the data points is stored. */
     TOTAL {
         /**
-         * getVariable.
+         * Creates the variable that sums the data points.
          */
         @Override
         public Variable getVariable() {
@@ -75,7 +75,7 @@ public enum ConsolFun {
     };
 
     /**
-     * getVariable().
+     * Creates the variable that applies this consolidation function.
      * @return the Variable implementation that applies this consolidation function
      */
     public abstract Variable getVariable();

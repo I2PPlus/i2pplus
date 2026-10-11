@@ -730,7 +730,7 @@ public abstract class NamingService {
      * Remove a hostname's entry only if it contains the Destination d.
      * If the NamingService supports multiple Destinations per hostname,
      * and this is the only Destination, removes the entire entry.
-     * If aditional Destinations remain, it only removes the
+     * If additional Destinations remain, it only removes the
      * specified Destination from the entry.
      *
      * @param hostname the host name whose entry holds the destination to remove
@@ -746,7 +746,7 @@ public abstract class NamingService {
      * Remove a hostname's entry only if it contains the Destination d.
      * If the NamingService supports multiple Destinations per hostname,
      * and this is the only Destination, removes the entire entry.
-     * If aditional Destinations remain, it only removes the
+     * If additional Destinations remain, it only removes the
      * specified Destination from the entry.
      *
      * This implementation simply calls lookup() and remove().

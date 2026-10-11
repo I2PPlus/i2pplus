@@ -66,7 +66,7 @@ public abstract class LongDigest
     }
 
     /**
-     * copyIn.
+     * Takes over another digest's buffer and byte counts.
      *
      * @param t the digest to copy state from
      */
@@ -92,7 +92,7 @@ public abstract class LongDigest
     }
 
     /**
-     * populateState.
+     * Writes this digest's buffer, counts and chaining values into a byte array.
      *
      * @param state the encoded state to populate from
      */
@@ -119,7 +119,7 @@ public abstract class LongDigest
     }
 
     /**
-     * restoreState.
+     * Reads back a state previously written by {@link #populateState}.
      *
      * @param encodedState the encoded state to restore from
      */
@@ -213,7 +213,7 @@ public abstract class LongDigest
     }
 
     /**
-     * finish.
+     * Pads the message to a block boundary and compresses the final block.
      */
     public void finish()
     {
@@ -238,7 +238,7 @@ public abstract class LongDigest
     }
 
     /**
-     * reset.
+     * Clears the buffer, counts and chaining values to the initial state.
      */
     public void reset()
     {
@@ -259,7 +259,7 @@ public abstract class LongDigest
     }
 
     /**
-     * getByteLength.
+     * Gets the digest length in bytes, 128 for a SHA-512 family digest.
      */
     public int getByteLength()
     {
@@ -317,7 +317,7 @@ public abstract class LongDigest
     }
 
     /**
-     * processBlock.
+     * Expands and mixes the 80-word schedule, then updates the chaining values.
      */
     protected void processBlock()
     {

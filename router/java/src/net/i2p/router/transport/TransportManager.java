@@ -1294,7 +1294,7 @@ public class TransportManager implements TransportEventListener {
      */
     private class UpdatePorts extends SimpleTimer2.TimedEvent {
         /**
-         * UpdatePorts.
+         * Creates a timer on the shared simple timer pool.
          */
         public UpdatePorts() { super(_context.simpleTimer2()); }
         /**
@@ -1319,7 +1319,7 @@ public class TransportManager implements TransportEventListener {
      */
     private class UPnPRefresher extends SimpleTimer2.TimedEvent {
         /**
-         * UPnPRefresher.
+         * Creates a timer on the shared simple timer pool.
          */
         public UPnPRefresher() { super(_context.simpleTimer2()); }
 
@@ -1388,7 +1388,7 @@ public class TransportManager implements TransportEventListener {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     * Translate
+     * Looks up a localised string in the console bundle.
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);
@@ -1408,7 +1408,7 @@ public class TransportManager implements TransportEventListener {
      */
     private class OutboundMaintainerEvent extends SimpleTimer2.TimedEvent {
         /**
-         * OutboundMaintainerEvent.
+         * Creates a timer on the shared simple timer pool.
          */
         public OutboundMaintainerEvent() {
             super(_context.simpleTimer2());

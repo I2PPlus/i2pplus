@@ -197,7 +197,7 @@ public class Banlist {
     private static final long BANLIST_FOREVER_THRESHOLD = 24*60*60*1000L;
 
     /**
-     * Constructor.
+     * Seeds the entry maps, bans the known invalid hashes, and reads the config.
      *
      * @param context the router context
      */

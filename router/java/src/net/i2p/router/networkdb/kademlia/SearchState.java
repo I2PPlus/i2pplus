@@ -50,7 +50,8 @@ class SearchState {
     private volatile long _storedLeaseDate;
 
     /**
-     * SearchState.
+     * Opens the search's log, records the start time and initializes the
+     * peer-tracking sets.
      *
      * @param context the context supplying the log and the clock this search
      *                is timed against

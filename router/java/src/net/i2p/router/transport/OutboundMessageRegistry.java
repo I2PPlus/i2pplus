@@ -51,7 +51,7 @@ public class OutboundMessageRegistry {
     private final RouterContext _context;
 
     /**
-     * OutboundMessageRegistry.
+     * Builds the empty selector tables and creates the expiry cleanup task.
      *
      * @param context router context, retained for later message creation
      */
@@ -262,7 +262,7 @@ public class OutboundMessageRegistry {
         private long _nextExpire;
 
         /**
-         * CleanupTask.
+         * Registers with the router's SimpleTimer2 and primes the next-expiry cursor.
          */
         public CleanupTask() {
             super(_context.simpleTimer2());

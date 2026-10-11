@@ -229,7 +229,7 @@ public final class Encoder {
   }
 
   /**
-   * chooseMode.
+   * Selects the mode that encodes the given text in the fewest bits.
    *
    * @param content the text to encode, examined character by character to decide the mode
    * @return the mode that encodes {@code content} in the fewest bits

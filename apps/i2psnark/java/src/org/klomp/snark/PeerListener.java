@@ -15,7 +15,7 @@ import org.klomp.snark.comments.Comment;
 /** Listener for Peer events. */
 interface PeerListener {
     /**
-     * Called when the connection to the peer has started and the handshake was successfull.
+     * Called when the connection to the peer has started and the handshake was successful.
      *
      * @param peer the Peer that just got connected.
      */
@@ -178,7 +178,7 @@ interface PeerListener {
     void gotPeers(Peer peer, List<PeerID> pIDList);
 
     /**
-     * Convenience
+     * Retrieves the shared torrent utility.
      *
      * @return the util
      * @since 0.9.2

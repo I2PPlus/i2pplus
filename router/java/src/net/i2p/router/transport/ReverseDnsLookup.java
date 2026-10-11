@@ -494,7 +494,7 @@ public class ReverseDnsLookup {
         private final long timestamp; // epoch millis when entry was cached
 
         /**
-         * CacheEntry.
+         * Creates an entry cached at the current time.
          *
          * @param ipAddress the IP address the entry describes
          * @param hostname the resolved host name, stored as "unknown" when null
@@ -504,7 +504,7 @@ public class ReverseDnsLookup {
         }
 
         /**
-         * CacheEntry.
+         * Creates an entry with the given cache timestamp.
          *
          * @param ipAddress the IP address the entry describes
          * @param hostname the resolved host name, stored as "unknown" when null
@@ -654,7 +654,7 @@ public class ReverseDnsLookup {
 
     private static class RDNSCacheFileWriter extends TimerTask {
         /**
-         * RDNSCacheFileWriter.
+         * Creates a writer task for flushing the cache to disk.
          */
         public RDNSCacheFileWriter() {
             // Intentionally empty - default constructor

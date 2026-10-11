@@ -45,7 +45,7 @@ public final class PublicSuffixList {
     private final List<String> exceptions;
 
     /**
-     * PublicSuffixList.
+     * Wraps the supplied rules and exceptions as unmodifiable lists.
      * @param rules the domain suffix rules, must not be null
      * @param exceptions the exception rules, must not be null
      */

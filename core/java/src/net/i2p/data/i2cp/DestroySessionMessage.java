@@ -23,13 +23,13 @@ import java.io.InputStream;
  */
 public class DestroySessionMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type code for a session teardown request.
      */
     public static final int MESSAGE_TYPE = 3;
     private SessionId _sessionId;
 
     /**
-     * DestroySessionMessage.
+     * Creates an empty message, needed by I2CP deserialization.
      */
     public DestroySessionMessage() { /* required for I2CP deserialization */ }
 
@@ -90,7 +90,7 @@ public class DestroySessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Returns the I2CP message type code for this message.
      * @return the type
      */
     @Override

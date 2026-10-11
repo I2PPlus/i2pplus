@@ -80,7 +80,7 @@ public class TLSA extends Data {
        ;
 
         /**
-         * byteValue.
+         * The wire value of this certificate usage.
          */
         public final byte byteValue;
 
@@ -93,7 +93,7 @@ public class TLSA extends Data {
     private static final Map<Byte, Selector> SELECTOR_LUT = new HashMap<>();
 
     /**
-     * Selector.
+     * Which part of the server certificate the association data covers.
      */
     public enum Selector {
         /** Full certificate */
@@ -103,7 +103,7 @@ public class TLSA extends Data {
        ;
 
         /**
-         * byteValue.
+         * The wire value of this selector.
          */
         public final byte byteValue;
 
@@ -116,7 +116,7 @@ public class TLSA extends Data {
     private static final Map<Byte, MatchingType> MATCHING_TYPE_LUT = new HashMap<>();
 
     /**
-     * MatchingType.
+     * How the certificate association data is hashed before comparison.
      */
     public enum MatchingType {
         /** No hash */
@@ -128,7 +128,7 @@ public class TLSA extends Data {
        ;
 
         /**
-         * byteValue.
+         * The wire value of this matching type.
          */
         public final byte byteValue;
 
@@ -152,7 +152,7 @@ public class TLSA extends Data {
     public final byte certUsageByte;
 
     /**
-     * certUsage.
+     * The certificate usage this field names.
      */
     public final CertUsage certUsage;
 
@@ -163,7 +163,7 @@ public class TLSA extends Data {
     public final byte selectorByte;
 
     /**
-     * selector.
+     * The certificate selector this field names.
      */
     public final Selector selector;
 
@@ -173,7 +173,7 @@ public class TLSA extends Data {
     public final byte matchingTypeByte;
 
     /**
-     * matchingType.
+     * The matching type this field names.
      */
     public final MatchingType matchingType;
 
@@ -183,7 +183,7 @@ public class TLSA extends Data {
     private final byte[] certificateAssociation;
 
     /**
-     * parse.
+     * Reads the TLSA record body from the stream.
      *
      * @param dis the stream positioned at the start of the record body
      * @param length the number of bytes the whole record occupies, of which the
@@ -222,7 +222,7 @@ public class TLSA extends Data {
     }
 
     /**
-     * getType.
+     * Returns the DNS record type of this record.
      */
     @Override
     public Record.TYPE getType() {
@@ -230,7 +230,7 @@ public class TLSA extends Data {
     }
 
     /**
-     * serialize.
+     * Writes the three header bytes followed by the association data.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -241,7 +241,7 @@ public class TLSA extends Data {
     }
 
     /**
-     * toString.
+     * Renders the fields and the association data in hexadecimal.
      */
     @Override
     @SuppressWarnings("UnnecessaryStringBuilder")

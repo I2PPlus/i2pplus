@@ -40,8 +40,8 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
 
     /**
      * Create a data receiver for the given connection.
-     * @param con non-null
      * @param ctx application context, used to look up this class's logger
+     * @param con non-null
      */
     public ConnectionDataReceiver(I2PAppContext ctx, Connection con) {
         _context = ctx;
@@ -137,7 +137,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
         private final IOException _error;
 
         /**
-         * FailedWriteStatus.
+         * Holds the I/O error to rethrow from the wait methods.
          */
         public FailedWriteStatus(IOException error) {
             _error = error;

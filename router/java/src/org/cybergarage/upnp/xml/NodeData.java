@@ -33,7 +33,7 @@ import org.cybergarage.xml.*;
  */
 public class NodeData {
     /**
-     * NodeData.
+     * Creates the container with no XML node attached.
      */
     public NodeData() {
         setNode(null);

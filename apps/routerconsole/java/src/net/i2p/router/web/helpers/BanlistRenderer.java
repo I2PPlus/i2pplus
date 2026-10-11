@@ -61,7 +61,7 @@ class BanlistRenderer {
     private static final int KEY_LEN = 16;
 
     /**
-     * Constructor.
+     * Stores the router context used to reach the banlist and network database.
      *
      * @param context the router context
      */

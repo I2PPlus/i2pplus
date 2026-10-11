@@ -601,7 +601,6 @@ class FloodfillVerifyStoreJob extends JobImpl {
      * Ban a peer that returned an entry with a bad signature, then fail.
      *
      * @param delayMs reply latency for stats
-     * @return always (control does not continue after a ban)
      */
     private void banBadEntry(long delayMs) {
         if (_log.shouldWarn()) {

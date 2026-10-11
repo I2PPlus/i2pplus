@@ -36,7 +36,7 @@ public interface Hash<T> {
 
     /**
      * The hash value as a {@link BigInteger}. This method may be useful in circumstances where the
-     * generated hash is too large to be accomodated in a single primitive value, eg. if
+     * generated hash is too large to be accommodated in a single primitive value, eg. if
      * cryptographic hashes are being used.
      *
      * @param value the object to be hashed

@@ -29,7 +29,8 @@ class SSLUtil {
     SSLUtil() {}
 
     /**
-     * DEFAULT_SAMCLIENT_CONFIGFILE.
+     * Name of the config file in the I2P config dir holding the samclient
+     * certificate and key settings.
      */
     public static final String DEFAULT_SAMCLIENT_CONFIGFILE = "samclient.config";
     private static final String PROP_KEYSTORE_PASSWORD = "samclient.keystorePassword";

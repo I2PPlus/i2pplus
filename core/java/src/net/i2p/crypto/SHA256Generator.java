@@ -54,13 +54,13 @@ public final class SHA256Generator {
     private final AtomicInteger _pooled = new AtomicInteger();
 
     /**
-     * Unused.
+     * Accept and ignore the context, for construction compatibility.
      * @param context unused
      */
     public SHA256Generator(I2PAppContext context) {}
 
     /**
-     * Instance.
+     * Return the global SHA-256 generator.
      * @return the instance
      */
     public static final SHA256Generator getInstance() {

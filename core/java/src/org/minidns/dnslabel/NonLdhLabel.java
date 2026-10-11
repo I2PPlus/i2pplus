@@ -17,7 +17,7 @@ package org.minidns.dnslabel;
 public abstract class NonLdhLabel extends DnsLabel {
 
     /**
-     * NonLdhLabel.
+     * Creates a label of this flavour, validating the text against the IDN rules.
      *
      * @param label the label text this instance represents, checked against the IDN rules
      */
@@ -26,7 +26,7 @@ public abstract class NonLdhLabel extends DnsLabel {
     }
 
     /**
-     * fromInternal.
+     * Chooses the concrete label class matching a non-LDH label's flavour.
      *
      * @param label the internal label form to classify
      * @return the UnderscoreLabel, LeadingOrTrailingHyphenLabel or OtherNonLdhLabel for that text

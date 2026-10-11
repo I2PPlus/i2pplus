@@ -27,7 +27,7 @@ import net.i2p.util.SystemVersion;
 public class StartupJob extends JobImpl {
 
     /**
-     * StartupJob.
+     * Passes the router context on to the JobImpl superclass.
      * @param context the router context the job runs against, passed to the JobImpl superclass
      */
     public StartupJob(RouterContext context) {

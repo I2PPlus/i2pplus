@@ -49,10 +49,10 @@ public class GarlicMessageBuilder {
     /**
      *  ELGAMAL_2048 only; returns false for others
      *
+     *  @param ctx scope
+     *  @param key the ElGamal 2048 recipient key the tags are decided for
      *  @param local non-null; do not use this method for the router's SessionKeyManager
      *  @param minTagOverride 0 for no override, &gt; 0 to override SKM's settings
-     * @param ctx scope
-     * @param key the ElGamal 2048 recipient key the tags are decided for
      * @return true if the current session key should be accompanied by tags
      */
     static boolean needsTags(RouterContext ctx, PublicKey key, Hash local, int minTagOverride) {

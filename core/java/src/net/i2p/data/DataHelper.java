@@ -903,9 +903,9 @@ public class DataHelper {
      * Write an integer as defined by the I2P data structure specification to the stream.
      * Integers are a fixed number of bytes (numBytes), stored as unsigned integers in network byte order.
      *
-     * @param value value to write out, non-negative
      * @param rawStream stream to write to
      * @param numBytes number of bytes to write the number into, 1-8 (padding as necessary)
+     * @param value value to write out, non-negative
      * @throws DataFormatException if value is negative or if numBytes not 1-8
      * @throws IOException if there is an IO error writing to the stream
      */

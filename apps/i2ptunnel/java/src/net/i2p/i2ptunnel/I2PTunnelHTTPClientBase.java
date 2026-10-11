@@ -115,7 +115,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     static final int SHED_READ_TIMEOUT_MS = 500;
 
     /**
-     * Failsafe
+     * Socket read timeout for a browser fetch, four hours as a failsafe.
      */
     protected static final int BROWSER_READ_TIMEOUT = 4*60*60*1000;
 
@@ -1645,7 +1645,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     * Flushes.
+     * Write the closing HTML footer and flush it down the stream.
      *
      * Public only for LocalHTTPServer, not for general use
      * @param out the output stream to write to
@@ -1657,7 +1657,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     * Flushes.
+     * Write the closing HTML footer and flush it down the writer.
      *
      * Public only for LocalHTTPServer, not for general use
      * @param out the writer to write to
@@ -1675,7 +1675,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
-     * Translate
+     * Look up a translation key in this class's resource bundle.
      *
      * @param key the translation key
      * @return the translated string

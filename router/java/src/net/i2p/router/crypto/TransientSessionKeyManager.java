@@ -49,9 +49,9 @@ import net.i2p.util.SimpleTimer2;
  * ideal 1956 size by ~2KB and causes excessive fragmentation and padding. As the tags are not
  * seen by the streaming lib, they aren't accounted for in the window size, and one or more of a
  * series of large messages is likely to be dropped, either due to high fragmentation or drop
- * priorites at the tunnel OBEP.
+ * priorities at the tunnel OBEP.
  *
- * For this to work, the minimum tag threshold and tag delivery quanitity defined in
+ * For this to work, the minimum tag threshold and tag delivery quantity defined in
  * GarlicMessageBuilder must be chosen with streaming lib windows sizes in mind.
  * If a single TagSet is not delivered, there will be no stall as long as the current window
  * size is smaller than the minimum tag threshold. Additional TagSets will be sent before the
@@ -183,7 +183,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
     }
 
     /**
-     * Shutdown.
+     * Marks the manager dead and drops every tracked session and tag set.
      */
     @Override
     public void shutdown() {
@@ -249,7 +249,7 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
     /**
      * Retrieve the session key currently associated with encryption to the target.
-     * Generates a new session and session key if not previously exising.
+     * Generates a new session and session key if not previously existing.
      *
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
      * @return non-null

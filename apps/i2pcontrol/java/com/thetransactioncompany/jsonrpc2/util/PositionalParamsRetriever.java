@@ -643,7 +643,7 @@ public class PositionalParamsRetriever
 
 	/**
 	 * Retrieves the specified enumerated string parameter, allowing for a
-	 * case insenstive match.
+	 * case insensitive match.
 	 *
 	 * @param position    The parameter position.
 	 * @param enumStrings The acceptable string values. Must not be
@@ -698,7 +698,7 @@ public class PositionalParamsRetriever
 
 	/**
 	 * Retrieves the specified optional enumerated string parameter,
-	 * allowing for a case insenstive match. If it doesn't exist the method
+	 * allowing for a case insensitive match. If it doesn't exist the method
 	 * will return the specified default value.
 	 *
 	 * @param position     The parameter position.
@@ -821,7 +821,7 @@ public class PositionalParamsRetriever
 	/**
 	 * Retrieves the specified optional enumerated parameter (from a JSON
 	 * string that has a predefined set of possible values), allowing for a
-	 * case insenstive match. If it doesn't exist the method will return
+	 * case insensitive match. If it doesn't exist the method will return
 	 * the specified default value.
 	 *
 	 * @param <T>          The enumeration type that the constant names are resolved in.

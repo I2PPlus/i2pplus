@@ -44,7 +44,7 @@ class MessageReceiver {
     private static final AtomicInteger _threadNum = new AtomicInteger();
 
     /**
-     * MessageReceiver.
+     * Creates the completed-message queue, sized from available memory, and registers its rate stats.
      * @param ctx the router context, used for the log, the rate stats, and peer banning
      * @param transport the UDP transport that parsed messages are handed back to
      */

@@ -30,7 +30,7 @@ import net.i2p.util.SystemVersion;
  * An idea for the future...
  *
  * If we are in the middle of a tunnel msg and starting a new i2np msg, and this one won't
- * fit, let's look to see if we have somthing that would fit instead by reordering:
+ * fit, let's look to see if we have something that would fit instead by reordering:
  * if (allocated &gt; 0 &amp;&amp; msg.getFragment == 0) {
  * for (j = i+1, j &lt; pending.size(); j++) {
  * if it will fit and it is fragment 0 {
@@ -441,9 +441,9 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * through sendThrough (though only part of the last one may be fully
      * sent), delivering them through the sender/receiver.
      *
+     * @param pending the list of pending messages
      * @param startAt first index in pending to send (inclusive)
      * @param sendThrough last index in pending to send (inclusive)
-     * @param pending the list of pending messages
      * @param sender the gateway callback that encrypts and forwards the preprocessed data
      * @param rec the receiver for preprocessed data
      */

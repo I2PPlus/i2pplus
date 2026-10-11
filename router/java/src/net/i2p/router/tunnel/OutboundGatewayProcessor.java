@@ -61,13 +61,11 @@ class OutboundGatewayProcessor {
      * by both the outbound gateway (preemptively undoing the crypto peers will add)
      * and by the inbound endpoint.
      *
+     * @param ctx the router context providing the AES engine used for the decryption
      * @param orig original data with an extra 16 byte IV prepended.
      * @param offset index into the array where the extra 16 bytes (IV) begins
      * @param length how much of orig can we write to (must be a multiple of 16).
-4 * @param config the config
-4 * @param ctx the ctx
      *               Should always be 1024 bytes.
-     * @param ctx the router context providing the AES engine used for the decryption
      * @param config the hop config supplying the IV key and the layer key for this hop
      */
     static void decrypt(I2PAppContext ctx, byte[] orig, int offset, int length, HopConfig config) {

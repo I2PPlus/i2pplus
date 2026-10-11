@@ -47,7 +47,7 @@ public class NSEC extends Data {
     public final List<TYPE> types;
 
     /**
-     * parse.
+     * Reads a record from the wire, deriving the type bitmap length from the payload.
      *
      * @param dis the stream positioned at the start of the record payload
      * @param data the buffer backing the whole record, used to parse the next owner name
@@ -68,7 +68,7 @@ public class NSEC extends Data {
     }
 
     /**
-     * NSEC.
+     * Builds a record from a textual next owner name and its type list.
      *
      * @param next the next owner name, as a textual DNS name
      * @param types the RR types present at the owner name
@@ -78,7 +78,7 @@ public class NSEC extends Data {
     }
 
     /**
-     * NSEC.
+     * Builds a record from a textual next owner name and its types.
      *
      * @param next the next owner name, as a textual DNS name
      * @param types the RR types present at the owner name
@@ -88,7 +88,7 @@ public class NSEC extends Data {
     }
 
     /**
-     * NSEC.
+     * Builds a record from a next owner name and its type list.
      *
      * @param next the next owner name
      * @param types the RR types present at the owner name
@@ -100,7 +100,7 @@ public class NSEC extends Data {
     }
 
     /**
-     * getType.
+     * Reports the NSEC record type.
      */
     @Override
     public TYPE getType() {
@@ -108,7 +108,7 @@ public class NSEC extends Data {
     }
 
     /**
-     * serialize.
+     * Writes the next owner name and type bitmap to the stream.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -117,7 +117,7 @@ public class NSEC extends Data {
     }
 
     /**
-     * toString.
+     * Renders the next owner name followed by its type list.
      */
     @Override
     public String toString() {

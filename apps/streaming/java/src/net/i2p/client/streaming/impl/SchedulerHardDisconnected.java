@@ -29,7 +29,7 @@ import net.i2p.I2PAppContext;
 class SchedulerHardDisconnected extends SchedulerImpl {
 
     /**
-     * SchedulerHardDisconnected.
+     * Hands the application context to the superclass.
      *
      * @param ctx application context the connection scheduler runs under
      */

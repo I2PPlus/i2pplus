@@ -244,11 +244,11 @@ public class Folder<O extends Object> {
 
 	/**
 	 * Returns an iterator containing the elements on the current page.
-         * This iterator is over a copy of the current page, and so
-         * is thread safe w.r.t. other operations on this folder,
-         * but will not reflect subsequent changes, and iter.remove()
-         * will not change the folder.
-         *
+	 * This iterator is over a copy of the current page, and so
+	 * is thread safe w.r.t. other operations on this folder,
+	 * but will not reflect subsequent changes, and iter.remove()
+	 * will not change the folder.
+	 *
 	 * @return Iterator containing the elements on the current page.
 	 */
 	public synchronized Iterator<O> currentPageIterator()

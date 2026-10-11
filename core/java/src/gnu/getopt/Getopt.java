@@ -116,7 +116,7 @@ import java.util.ResourceBundle;
  * are simply incomplete.
  * <p>
  * In the traditional Unix getopt(), -1 is returned when the first non-option
- * charcter is encountered.  In GNU getopt(), the default behavior is to
+ * character is encountered.  In GNU getopt(), the default behavior is to
  * allow options to appear anywhere on the command line.  The getopt()
  * method permutes the argument to make it appear to the caller that all
  * options were at the beginning of the command line, and all non-options
@@ -126,7 +126,7 @@ import java.util.ResourceBundle;
  * "foo" and "bar", just as if the user had typed "-a -d foo bar".
  * <p>
  * The user can force getopt() to stop scanning the command line with
- * the special argument "--" by itself.  Any elements occuring before the
+ * the special argument "--" by itself.  Any elements occurring before the
  * "--" are scanned and permuted as normal.  Any elements after the "--"
  * are returned as is as non-option argv elements.  For example,
  * "foo -a -- bar -d" would return  option 'a' then -1.  optind would point
@@ -139,7 +139,7 @@ import java.util.ResourceBundle;
  * encountered.  (Thus "-a foo bar -d" would return 'a' as an option and
  * have "foo", "bar", and "-d" as non-option elements).  The second is to
  * allow options anywhere, but to return all elements in the order they
- * occur on the command line.  When a non-option element is ecountered,
+ * occur on the command line.  When a non-option element is encountered,
  * an integer 1 is returned and the value of the non-option element is
  * stored in optarg is if it were the argument to that option.  For
  * example, "-a foo -d", returns first 'a', then 1 (with optarg set to
@@ -164,7 +164,7 @@ import java.util.ResourceBundle;
  * argument is missing.
  * <p>
  * In addition to traditional single character options, GNU Getopt also
- * supports long options.  These are preceeded by a "--" sequence and
+ * supports long options.  These are preceded by a "--" sequence and
  * can be as long as desired.  Long options provide a more user-friendly
  * way of entering command line options.  For example, in addition to a
  * "-h" for help, a program could support also "--help".
@@ -206,7 +206,7 @@ import java.util.ResourceBundle;
  * be used to identify the incorrect option the user entered.
  * <p>
  * Long options are defined by LongOpt objects.  These objects are created
- * with a contructor that takes four params: a String representing the
+ * with a constructor that takes four params: a String representing the
  * object name, a integer specifying what arguments the option takes
  * (the value is one of LongOpt.NO_ARGUMENT, LongOpt.REQUIRED_ARGUMENT,
  * or LongOpt.OPTIONAL_ARGUMENT), a StringBuilder flag object (described
@@ -222,7 +222,7 @@ import java.util.ResourceBundle;
  * representing the long option is non-null, then the integer value field
  * is stored there and an integer 0 is returned to the caller.  The val
  * field can then be retrieved from the flag field.  Note that since the
- * flag field is a StringBuilder, the appropriate String to integer converions
+ * flag field is a StringBuilder, the appropriate String to integer conversions
  * must be performed in order to get the actual int value stored there.
  * If the flag field in the LongOpt object is null, then the value field
  * of the LongOpt is returned.  This can be the character of a short option.
@@ -454,7 +454,7 @@ public class Getopt extends Object
     protected String optstring;
 
 /**
- * This is an array of LongOpt objects which describ the valid long
+ * This is an array of LongOpt objects which describe the valid long
  * options.
  */
     protected LongOpt[] long_options;
@@ -629,7 +629,7 @@ public class Getopt extends Object
  */
 
 /**
- * In GNU getopt, it is possible to change the string containg valid options
+ * In GNU getopt, it is possible to change the string containing valid options
  * on the fly because it is passed as an argument to getopt() each time.  In
  * this version we do not pass the string on every call.  In order to allow
  * dynamic option string changing, this method is provided.

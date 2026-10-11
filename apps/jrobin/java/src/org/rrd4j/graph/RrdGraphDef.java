@@ -35,7 +35,7 @@ import org.rrd4j.data.Variable;
  * object of this class should be passed to the constructor of the {@link org.rrd4j.graph.RrdGraph}
  * class which will actually create the graph.
  *
- * <p>The text printed below the actual graph can be formated by appending special escaped
+ * <p>The text printed below the actual graph can be formatted by appending special escaped
  * characters at the end of a text. When ever such a character occurs, all pending text is pushed
  * onto the graph according to the character specified.
  *
@@ -50,7 +50,7 @@ import org.rrd4j.data.Variable;
  * <p>A special case is COMMENT:\s this inserts some additional vertical space before placing the
  * next row of legends.
  *
- * <p>When text has to be formated without special instructions from your side, RRDTool will
+ * <p>When text has to be formatted without special instructions from your side, RRDTool will
  * automatically justify the text as soon as one string goes over the right edge. If you want to
  * prevent the justification without forcing a newline, you can use the special tag \J at the end of
  * the string to disable the auto justification.
@@ -86,7 +86,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
             this.imagesource = new File(imagesource);
         }
         /**
-         * Apply
+         * Decode the image file into a BufferedImage.
          */
 
         public BufferedImage apply(int w, int h) throws IOException {
@@ -104,7 +104,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
             this.imagesource = imagesource;
         }
         /**
-         * Apply
+         * Decode the image at the URL into a BufferedImage.
          */
 
         public BufferedImage apply(int w, int h) throws IOException {
@@ -328,7 +328,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Creates RrdGraphDef object and sets default time span (default ending time is 'now', default
      * starting time is 'end-1day'.
      *
-     * @deprecated Uses default value that will be probably overriden.
+     * @deprecated Uses default value that will be probably overridden.
      */
     @Deprecated
     public RrdGraphDef() {
@@ -353,9 +353,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
 
     /**
      * Creates new DataProcessor object for the given time duration. The given duration will be
-     * substracted from current time.
+     * subtracted from current time.
      *
-     * @param d duration to substract.
+     * @param d duration to subtract.
      * @since 3.7
      */
     public RrdGraphDef(TemporalAmount d) {
@@ -502,9 +502,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * @param minorUnitCount Number of minor grid units between minor grid lines.
      * @param majorUnit Major grid unit.
      * @param majorUnitCount Number of major grid units between major grid lines.
-     * @param labelUnit Label unit.
+     * @param labelUnit Interval between axis labels.
      * @param labelUnitCount Number of label units between labels.
-     * @param labelSpan Label precision
+     * @param labelSpan Label span in seconds; 86400 puts a daily "Monday" label at noon.
      * @param simpleDateFormat Date format (SimpleDateFormat pattern of strftime-like pattern)
      */
     public void setTimeAxis(
@@ -898,7 +898,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Sets unit to be displayed on y axis. It is wise to use only short units on graph, however.
      *
-     * @param unit Unit description
+     * @param unit Unit description appended to the y-axis label format; null omits it.
      */
     public void setUnit(String unit) {
         this.unit = unit;
@@ -1050,7 +1050,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Defines a title to be written into the graph.
      *
-     * @param title Graph title.
+     * @param title Graph title; leading and trailing whitespace is trimmed.
      */
     public void setTitle(String title) {
         this.title = title.trim();
@@ -1225,7 +1225,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     }
 
     /**
-     * getFont.
+     * Fetch the font for a graph slot, falling back to the default font.
      *
      * @param tag the font slot to look up
      * @return the font set for that slot, or the default font if the slot is unset
@@ -1332,7 +1332,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Polish Notation (RPN).
      *
      * @param name Source name
-     * @param rpnExpression RPN expression.
+     * @param rpnExpression Comma-separated RPN tokens naming sources, PREV(x) or numbers.
      */
     @Override
     public void datasource(String name, String rpnExpression) {
@@ -1596,7 +1596,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Comment to be printed on the graph.
      *
-     * @param text Comment text
+     * @param text Text to print; a trailing alignment marker sets its position.
      */
     public void comment(String text) {
         comments.add(new CommentText(text));
@@ -1606,7 +1606,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Draws a horizontal rule into the graph.
      *
      * @param value Position of the rule
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} for the rule line and its legend.
      */
     public void hrule(double value, Paint color) {
         hrule(value, color, null, 1.0F);
@@ -1616,7 +1616,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Draws a horizontal rule into the graph and optionally adds a legend.
      *
      * @param value Position of the rule
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} for the rule line and its legend.
      * @param legend Legend text. If null, legend text will be omitted.
      */
     public void hrule(double value, Paint color, String legend) {
@@ -1627,9 +1627,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Draws a horizontal rule into the graph and optionally adds a legend.
      *
      * @param value Position of the rule
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} for the rule line and its legend.
      * @param legend Legend text. If null, legend text will be omitted.
-     * @param width Rule width
+     * @param width Line thickness used to build the {@link java.awt.BasicStroke}.
      */
     public void hrule(double value, Paint color, String legend, float width) {
         hrule(value, color, legend, new BasicStroke(width));
@@ -1639,9 +1639,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Draws a horizontal rule into the graph and optionally adds a legend.
      *
      * @param value Position of the rule
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} for the rule line and its legend.
      * @param legend Legend text. If null, legend text will be omitted.
-     * @param stroke Rule stroke
+     * @param stroke {@link java.awt.BasicStroke} used to draw the rule line.
      */
     public void hrule(double value, Paint color, String legend, BasicStroke stroke) {
         LegendText legendText = new LegendText(color, legend);
@@ -1653,7 +1653,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Draws a vertical rule into the graph.
      *
      * @param timestamp Position of the rule (seconds since epoch)
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} for the rule line and its legend.
      */
     public void vrule(long timestamp, Paint color) {
         vrule(timestamp, color, null, 1.0F);
@@ -1663,7 +1663,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Draws a vertical rule into the graph and optionally adds a legend
      *
      * @param timestamp Position of the rule (seconds since epoch)
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} for the rule line and its legend.
      * @param legend Legend text. Use null to omit the text.
      */
     public void vrule(long timestamp, Paint color, String legend) {
@@ -1674,9 +1674,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Draws a vertical rule into the graph and optionally adds a legend
      *
      * @param timestamp Position of the rule (seconds since epoch)
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} for the rule line and its legend.
      * @param legend Legend text. Use null to omit the text.
-     * @param width Rule width
+     * @param width Line thickness used to build the {@link java.awt.BasicStroke}.
      */
     public void vrule(long timestamp, Paint color, String legend, float width) {
         vrule(timestamp, color, legend, new BasicStroke(width));
@@ -1686,9 +1686,9 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Draws a vertical rule into the graph and optionally adds a legend
      *
      * @param timestamp Position of the rule (seconds since epoch)
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} for the rule line and its legend.
      * @param legend Legend text. Use null to omit the text.
-     * @param stroke Rule stroke
+     * @param stroke {@link java.awt.BasicStroke} used to draw the rule line.
      */
     public void vrule(long timestamp, Paint color, String legend, BasicStroke stroke) {
         LegendText legendText = new LegendText(color, legend);
@@ -1701,7 +1701,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param start Starting value of the span
      * @param end Ending value of the span
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} filling the span and tinting its legend.
      */
     public void hspan(double start, double end, Paint color) {
         hspan(start, end, color, null);
@@ -1712,7 +1712,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param start Starting value of the span
      * @param end Ending value of the span
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} filling the span and tinting its legend.
      * @param legend Legend text. Use null to omit the text.
      */
     public void hspan(double start, double end, Paint color, String legend) {
@@ -1726,7 +1726,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param start Start time for the span (seconds since epoch)
      * @param end End time for the span (seconds since epoch)
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} filling the span and tinting its legend.
      */
     public void vspan(long start, long end, Paint color) {
         vspan(start, end, color, null);
@@ -1737,7 +1737,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param start Start time for the span (seconds since epoch)
      * @param end End time for the span (seconds since epoch)
-     * @param color Rule color
+     * @param color {@link java.awt.Paint} filling the span and tinting its legend.
      * @param legend Legend text. Use null to omit the text.
      */
     public void vspan(long start, long end, Paint color, String legend) {
@@ -1750,7 +1750,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Plots requested data as a line, using the color specified. Line width is assumed to be 1.0F.
      *
      * @param srcName Virtual source name
-     * @param color Line color
+     * @param color {@link java.awt.Paint} for the line and its legend.
      */
     public void line(String srcName, Paint color) {
         line(srcName, color, null, 1F, false);
@@ -1760,8 +1760,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Plots requested data as a line, using the color specified. Line width is assumed to be 1.0F.
      *
      * @param srcName Virtual source name
-     * @param color Line color
-     * @param legend Legend text
+     * @param color {@link java.awt.Paint} for the line and its legend.
+     * @param legend Legend text; null omits the legend entry.
      */
     public void line(String srcName, Paint color, String legend) {
         line(srcName, color, legend, 1F, false);
@@ -1771,7 +1771,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Plots requested data as a line, using the color and the line width specified.
      *
      * @param srcName Virtual source name
-     * @param color Line color
+     * @param color {@link java.awt.Paint} for the line and its legend.
      * @param width Line width (default: 1.0F)
      */
     public void line(String srcName, Paint color, float width) {
@@ -1782,8 +1782,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Plots requested data as a line, using the color and the line width specified.
      *
      * @param srcName Virtual source name
-     * @param color Line color
-     * @param legend Legend text
+     * @param color {@link java.awt.Paint} for the line and its legend.
+     * @param legend Legend text; null omits the legend entry.
      * @param width Line width (default: 1.0F)
      */
     public void line(String srcName, Paint color, String legend, float width) {
@@ -1799,8 +1799,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param srcName Virtual source name
      * @param color Line colour, used for the legend and wherever shading does not apply
-     * @param legend Legend text
-     * @param width Line width
+     * @param legend Legend text; null omits the legend entry.
+     * @param width Line thickness used to build the {@link java.awt.BasicStroke}.
      * @param valueShade bottom-to-top colour stops, or null to draw the line flat
      * @since 0.9.71
      */
@@ -1833,8 +1833,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Plots requested data as a line, using the color and the line width specified.
      *
      * @param srcName Virtual source name
-     * @param color Line color.
-     * @param legend Legend text.
+     * @param color {@link java.awt.Paint} for the line and its legend.
+     * @param legend Legend text; null omits the legend entry.
      * @param width Line width (default: 1.0F).
      * @param stack true if it will be stacked.
      */
@@ -1851,8 +1851,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * specified.
      *
      * @param srcName Virtual source name
-     * @param color Line color.
-     * @param legend Legend text.
+     * @param color {@link java.awt.Paint} for the line and its legend.
+     * @param legend Legend text; null omits the legend entry.
      * @param stroke Line stroke to use.
      * @param stack true if it will be stacked.
      */
@@ -1868,8 +1868,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Define a line like any other but with constant value, it can be stacked
      *
-     * @param value Line position.
-     * @param color Line color.
+     * @param value Constant y value the line is drawn at.
+     * @param color {@link java.awt.Paint} used to draw the line.
      * @param width Line width (default: 1.0F).
      * @param stack true if it will be stacked.
      */
@@ -1881,8 +1881,8 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Define a line like any other but with constant value, it can be stacked
      *
-     * @param value Line position.
-     * @param color Line color.
+     * @param value Constant y value the line is drawn at.
+     * @param color {@link java.awt.Paint} used to draw the line.
      * @param stroke Line stroke to use.
      * @param stack true if it will be stacked.
      */
@@ -1908,7 +1908,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param srcName Virtual source name.
      * @param color Color of the filled area.
-     * @param legend Legend text.
+     * @param legend Legend text; null omits the legend entry.
      */
     public void area(String srcName, Paint color, String legend) {
         area(srcName, color, legend, false);
@@ -1920,7 +1920,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param srcName Virtual source name.
      * @param color Color of the filled area.
-     * @param legend Legend text.
+     * @param legend Legend text; null omits the legend entry.
      * @param stack true if it will be stacked.
      */
     public void area(String srcName, Paint color, String legend, boolean stack) {
@@ -1934,7 +1934,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Add a area like any other but with a constant value, it can be stacked like any other area
      *
-     * @param value Area position
+     * @param value Constant y value the filled area is drawn at.
      * @param color Color of the filled area.
      * @param stack true if it will be stacked.
      */
@@ -1970,7 +1970,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      *
      * @param srcName Virtual source name
      * @param color Stacked graph color
-     * @param legend Legend text
+     * @param legend Legend text; null omits the legend entry.
      * @throws java.lang.IllegalArgumentException Thrown if this STACK has no previously defined
      *                                            AREA, STACK or LINE graph bellow it.
      */
@@ -2122,7 +2122,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Set the locale used for the legend.
      *
-     * <p>It overides the firstDayOfWeek
+     * <p>It overrides the firstDayOfWeek
      *
      * @param locale the locale to set
      */

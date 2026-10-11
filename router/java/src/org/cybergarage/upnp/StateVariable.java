@@ -15,7 +15,7 @@ import org.cybergarage.util.Debug;
 import org.cybergarage.xml.Node;
 
 /**
- * StateVariable.
+ * Holds a UPnP state variable definition and the value currently set on it.
  */
 public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
@@ -23,7 +23,7 @@ public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
 
     /**
-     * ELEM_NAME.
+     * XML element name of a state variable definition.
      */
     public static final String ELEM_NAME = "stateVariable";
 
@@ -302,14 +302,14 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * This method ovverride the value of the AllowedValueList Node<br>
+     * This method override the value of the AllowedValueList Node<br>
      * of this object. <br>
      * <br>
      * Note: This method should be used to create a dynamic<br>
-     * Device withtout writing any XML that describe the device<br>
+     * Device without writing any XML that describe the device<br>
      * . <br>
      * Note2: The enforce the constraint of the SCPD rule the<br>
-     * AllowedValueList and AllowedValueRange are mutal exclusive<br>
+     * AllowedValueList and AllowedValueRange are mutual exclusive<br>
      * the last set will be the only present<br>
      *
      * @param avl The new AllowedValueList
@@ -355,14 +355,14 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * This method ovverride the value of the AllowedValueRange Node<br>
+     * This method override the value of the AllowedValueRange Node<br>
      * of this object. <br>
      * <br>
      * Note: This method should be used to create a dynamic<br>
-     * Device withtout writing any XML that describe the device<br>
+     * Device without writing any XML that describe the device<br>
      * . <br>
      * Note2: The enforce the constraint of the SCPD rule the<br>
-     * AllowedValueList and AllowedValueRange are mutal exclusive<br>
+     * AllowedValueList and AllowedValueRange are mutual exclusive<br>
      * the last set will be the only present<br>
      *
      * @param avr The new AllowedValueRange
@@ -531,10 +531,10 @@ public class StateVariable extends NodeData {
     }
 
     /**
-     * This method ovverride the value of the DefaultValue of this object. <br>
+     * This method override the value of the DefaultValue of this object. <br>
      * <br>
      * Note: This method should be used to create a dynamic<br>
-     * Device withtout writing any XML that describe the device<br>
+     * Device without writing any XML that describe the device<br>
      * .
      *
      * @param value The new String value

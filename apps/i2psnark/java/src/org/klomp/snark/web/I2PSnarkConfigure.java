@@ -815,17 +815,17 @@ class I2PSnarkConfigure {
     private static final String DUMMY1 = "1 ";
 
     /**
-    * Generates HTML for a dropdown selection menu.
-    *
-    * @param min the minimum value for the dropdown options
-    * @param max the maximum value for the dropdown options
-    * @param dflt the default value for the dropdown
-    * @param strNow the string representation of the current selected option
-    * @param selName the name attribute for the select element
-    * @param name the base name of the option to be displayed in the dropdown
-    * @return a string representing the HTML for the dropdown selection menu
-    * @since 0.7.14 Modified from ConfigTunnelsHelper
-    */
+     * Generates HTML for a dropdown selection menu.
+     *
+     * @param min the minimum value for the dropdown options
+     * @param max the maximum value for the dropdown options
+     * @param dflt the default value for the dropdown
+     * @param strNow the string representation of the current selected option
+     * @param selName the name attribute for the select element
+     * @param name the base name of the option to be displayed in the dropdown
+     * @return a string representing the HTML for the dropdown selection menu
+     * @since 0.7.14 Modified from ConfigTunnelsHelper
+     */
     private String renderOptions(int min, int max, int dflt, String strNow, String selName, String name) {
         int now = I2PSnarkUtil.parseInt(strNow, dflt);
         StringBuilder buf = new StringBuilder(128);
@@ -847,7 +847,7 @@ class I2PSnarkConfigure {
         buf.append("</select>\n");
         return buf.toString();
     }
-     /**
+    /**
      * Parses the configuration form POST parameters and applies them via
      * SnarkManager.
      *

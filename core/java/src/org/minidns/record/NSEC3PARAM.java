@@ -39,7 +39,7 @@ public class NSEC3PARAM extends Data {
     public final byte hashAlgorithmByte;
 
     /**
-     * flags.
+     * Reserved flags byte; RFC 5155 requires every bit here to be zero.
      */
     public final byte flags;
 
@@ -54,7 +54,7 @@ public class NSEC3PARAM extends Data {
     private final byte[] salt;
 
     /**
-     * parse.
+     * Reads an NSEC3PARAM record from a stream positioned at the start of its body.
      *
      * @param dis the stream positioned at the start of the NSEC3PARAM record body
      * @return the NSEC3PARAM record read from the stream
@@ -94,7 +94,7 @@ public class NSEC3PARAM extends Data {
     }
 
     /**
-     * getType.
+     * Returns the record type this payload belongs to.
      */
     @Override
     public TYPE getType() {
@@ -102,7 +102,7 @@ public class NSEC3PARAM extends Data {
     }
 
     /**
-     * serialize.
+     * Writes algorithm, flags, iterations and salt to the stream in wire order.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -114,7 +114,7 @@ public class NSEC3PARAM extends Data {
     }
 
     /**
-     * toString.
+     * Renders the four parameters as one space-separated line, with a dash for an empty salt.
      */
     @Override
     public String toString() {
@@ -127,7 +127,7 @@ public class NSEC3PARAM extends Data {
     }
 
     /**
-     * getSaltLength.
+     * Returns the length of the salt in bytes.
      *
      * @return the salt length in bytes, 0 meaning no salt
      */

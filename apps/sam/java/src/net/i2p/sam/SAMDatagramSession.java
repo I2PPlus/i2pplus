@@ -26,13 +26,13 @@ import net.i2p.data.Destination;
 class SAMDatagramSession extends SAMMessageSession {
 
     /**
-     * DGRAM_SIZE_MAX.
+     * Largest datagram payload accepted in either direction, in bytes.
      */
     public static final int DGRAM_SIZE_MAX = 31*1024;
 
     // FIXME make final after fixing SAMv3DatagramSession override
     /**
-     * recv.
+     * Receiver this session hands assembled incoming datagrams to.
      */
     protected SAMDatagramReceiver recv;
     private final I2PDatagramMaker dgramMaker;
@@ -78,8 +78,8 @@ class SAMDatagramSession extends SAMMessageSession {
     /**
      * Create a new SAM DATAGRAM session on an existing I2P session.
      *
-     * @param props unused for now
      * @param sess the already-established I2P session to run over, which this session does not own
+     * @param props unused for now
      * @param listenProtocol the tunnel protocol for the datagram tunnel, normally PROTO_DATAGRAM
      * @param listenPort the local port the datagram tunnel is published from
      * @param recv the object handed each datagram that arrives on the session

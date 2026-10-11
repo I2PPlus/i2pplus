@@ -86,7 +86,7 @@ import org.freenetproject.ForwardPortStatus;
  * Public for CommandLine main()
  */
 /**
- * UPnP.
+ * Discovers UPnP internet gateways and forwards local ports through them.
  */
 public class UPnP extends ControlPoint implements DeviceChangeListener, EventListener {
     private final Log _log;
@@ -106,7 +106,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     private static final String WAN_IPV6_CONNECTION = "urn:schemas-upnp-org:service:WANIPv6FirewallControl:1";
 
     /**
-     * LEASE_TIME_SECONDS.
+     * Port mapping lease requested from the gateway, in seconds.
      */
     public static final int LEASE_TIME_SECONDS = 3*60*60;
 
@@ -135,7 +135,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     private static final boolean ALLOW_SAME_HOST = false;
 
     /**
-     * UPnP.
+     * Starts SSDP discovery and the control HTTP service on the given ports and addresses.
      *
      * @param context the application context supplying the log and the property manager
      * @param ssdpPort the local port to run SSDP discovery on
@@ -251,7 +251,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * DeviceChangeListener
+     * Examines a newly discovered device and maps ports when it is a gateway.
      */
     public void deviceAdded(Device dev) {
         if (!dev.hasUDN()) {
@@ -568,7 +568,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * DeviceChangeListener
+     * Drops a departed device and un-maps every port it had held.
      */
     public void deviceRemoved(Device dev ){
         if (!dev.hasUDN())
@@ -902,7 +902,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * Blocking.
+     * Queries the external IPv4 address, blocking on the control action.
      *
      * @param service non-null
      * @return the external IPv4 address the NAT thinks we have.  Null if we can't find it.
@@ -1590,7 +1590,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      *
      * So return the address of ours that is closest to his.
      *
-     * @return our adddress or deflt on failure
+     * @return our address or deflt on failure
      * @since 0.8.8
      */
     private String getOurAddress(String deflt) {
@@ -1633,7 +1633,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     }
 
     /**
-     * Blocking
+     * Removes a mapping through the matching NAT service, blocking on the action.
      * @return success
      */
     private boolean removeMapping(String protocol, int port, ForwardPort fp, boolean noLog) {
@@ -1966,7 +1966,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         private final Set<ForwardPort> portsToForwardNow;
 
         /**
-         * UnregisterPortsThread.
+         * Collects the ports this thread is to un-forward.
          */
         public UnregisterPortsThread(Set<ForwardPort> ports) {
             portsToForwardNow = ports;
@@ -2140,21 +2140,21 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     * Translate
+     * Looks up a localised string in the console bundle.
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);
     }
 
     /**
-     * Translate
+     * Looks up a localised string and substitutes one argument.
      */
     private final String _t(String s, Object o) {
         return Translate.getString(s, o, _context, BUNDLE_NAME);
     }
 
     /**
-     * Translate
+     * Looks up a localised string and substitutes two arguments.
      */
     private final String _t(String s, Object o, Object o2) {
         return Translate.getString(s, o, o2, _context, BUNDLE_NAME);

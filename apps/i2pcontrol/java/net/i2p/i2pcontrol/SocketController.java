@@ -173,12 +173,12 @@ public class SocketController implements RouterApp {
         private final Socket s;
 
         /**
-         * Handler.
+         * Wraps one accepted socket, whose stream this handler drains.
          */
         public Handler(Socket skt) { s = skt; }
 
         /**
-         * run.
+         * Reads and discards input from the socket until it closes, then deregisters it.
          */
         @Override
         public void run() {

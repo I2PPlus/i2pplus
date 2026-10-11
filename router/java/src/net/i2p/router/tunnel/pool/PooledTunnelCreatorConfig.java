@@ -41,11 +41,11 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     /**
      * Creates a new instance of PooledTunnelCreatorConfig
      *
-     * @param destination may be null
-     * @param pool the owning pool, never null
      * @param ctx the router context supplying the transport and profile lookups
      * @param length the tunnel length in hops, 1 minimum (a 0-hop tunnel is length 1)
      * @param isInbound true for a client inbound tunnel, false for an outbound one
+     * @param destination may be null
+     * @param pool the owning pool, never null
      */
     public PooledTunnelCreatorConfig(RouterContext ctx, int length, boolean isInbound, Hash destination, TunnelPool pool) {
         super(ctx, length, isInbound, destination);

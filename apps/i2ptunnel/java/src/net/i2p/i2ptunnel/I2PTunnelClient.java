@@ -56,8 +56,8 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router,
      * or open the local socket. You MUST call startRunning() for that.
      *
-     * @param destinations peers we target, comma- or space-separated. Since 0.9.9, each dest may be appended with :port
      * @param localPort if 0, use any port, get actual port selected with getLocalPort()
+     * @param destinations peers we target, comma- or space-separated. Since 0.9.9, each dest may be appended with :port
      * @param l the logging instance
      * @param ownDest whether to use an owned destination
      * @param notifyThis the event dispatcher for notifications

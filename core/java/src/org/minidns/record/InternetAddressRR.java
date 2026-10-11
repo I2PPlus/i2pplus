@@ -37,7 +37,7 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
     private transient IA inetAddress;
 
     /**
-     * InternetAddressRR.
+     * Holds the raw address bytes of an address record.
      *
      * @param ip raw address bytes, in the record's A/AAAA family order
      */
@@ -46,7 +46,7 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
     }
 
     /**
-     * InternetAddressRR.
+     * Holds the raw address bytes and caches the resolved form.
      *
      * @param inetAddress resolved address whose cached form this record returns
      */
@@ -56,7 +56,7 @@ public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
     }
 
     /**
-     * serialize.
+     * Writes the raw address bytes to the stream.
      */
     @Override
     public final void serialize(DataOutputStream dos) throws IOException {

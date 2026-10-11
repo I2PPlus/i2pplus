@@ -68,7 +68,7 @@ public abstract class DelegatingDnssecRR extends Data {
     protected final byte[] digest;
 
     /**
-     * parseSharedData.
+     * Reads the key tag, algorithm bytes and digest that DNSSEC records share.
      *
      * @param dis positioned after the fixed fields: a key tag, two algorithm bytes, then the digest
      * @param length the record's total length in bytes, of which the first four are fixed fields
@@ -85,7 +85,7 @@ public abstract class DelegatingDnssecRR extends Data {
     }
 
     /**
-     * SharedData.
+     * The fixed fields read out of a delegation record, before it is interpreted.
      */
     protected static final class SharedData {
         /** the key tag */
@@ -106,7 +106,7 @@ public abstract class DelegatingDnssecRR extends Data {
     }
 
     /**
-     * DelegatingDnssecRR.
+     * Creates a record from the algorithm enums and the wire bytes they must match.
      *
      * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
      * @param algorithm the signature algorithm, or null to derive it from {@code algorithmByte}
@@ -131,7 +131,7 @@ public abstract class DelegatingDnssecRR extends Data {
     }
 
     /**
-     * DelegatingDnssecRR.
+     * Creates a record from wire algorithm bytes, looking up the matching enums.
      *
      * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
      * @param algorithm the raw signature algorithm byte, looked up as {@link SignatureAlgorithm}
@@ -143,7 +143,7 @@ public abstract class DelegatingDnssecRR extends Data {
     }
 
     /**
-     * DelegatingDnssecRR.
+     * Creates a record from algorithm enums, taking the wire bytes from them.
      *
      * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
      * @param algorithm the signature algorithm, whose number supplies the on-the-wire byte
@@ -155,7 +155,7 @@ public abstract class DelegatingDnssecRR extends Data {
     }
 
     /**
-     * DelegatingDnssecRR.
+     * Creates a record from a signature enum and a raw digest algorithm byte.
      *
      * @param keyTag the key tag of the DNSKEY RR that validates this delegation's signature
      * @param algorithm the signature algorithm, whose number supplies the on-the-wire byte
@@ -167,7 +167,7 @@ public abstract class DelegatingDnssecRR extends Data {
     }
 
     /**
-     * serialize.
+     * Writes the key tag, algorithm bytes and digest to the wire.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -178,7 +178,7 @@ public abstract class DelegatingDnssecRR extends Data {
     }
 
     /**
-     * toString.
+     * Renders the delegation as key tag, algorithms and digest.
      */
     @Override
     public String toString() {
@@ -193,7 +193,7 @@ public abstract class DelegatingDnssecRR extends Data {
     private transient BigInteger digestBigIntCache;
 
     /**
-     * getDigestBigInteger.
+     * Gets the DNSKEY digest as an unsigned big-endian integer.
      *
      * @return the DNSKEY digest as an unsigned big-endian integer, built once and then cached
      */
@@ -207,7 +207,7 @@ public abstract class DelegatingDnssecRR extends Data {
     private transient String digestHexCache;
 
     /**
-     * getDigestHex.
+     * Gets the DNSKEY digest as upper-case hexadecimal.
      *
      * @return the DNSKEY digest as upper-case hexadecimal without a {@code 0x} prefix or leading
      *         zeroes, built once and then cached
@@ -220,7 +220,7 @@ public abstract class DelegatingDnssecRR extends Data {
     }
 
     /**
-     * digestEquals.
+     * Compares this record's DNSKEY digest with another byte by byte.
      *
      * @param otherDigest the digest to compare with, element by element, so a null yields false
      * @return true if both digests hold the same bytes in the same order

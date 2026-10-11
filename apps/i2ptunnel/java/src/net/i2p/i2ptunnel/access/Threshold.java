@@ -18,7 +18,8 @@ class Threshold {
     private final int seconds;
 
     /**
-     * Threshold
+     * Pairs an access count with the sliding window it is measured over,
+     * rejecting a negative count or a window under one second.
      *
      * @param connections the number of accesses allowed in the window, not negative
      * @param seconds the length of the sliding window, at least 1

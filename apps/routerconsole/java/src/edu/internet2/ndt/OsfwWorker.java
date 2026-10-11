@@ -29,7 +29,7 @@ public class OsfwWorker implements Runnable {
     private final Tcpbw100 _localTcpAppObj;
 
     /**
-     * Constructor
+     * Stores the socket and test duration, leaving the applet reference null.
      *
      * @param srvSocketParam Socket used to transmit protocol messages
      *

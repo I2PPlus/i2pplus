@@ -13,7 +13,7 @@ import net.i2p.router.RouterContext;
 class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
 
     /**
-     * DirectLookupMatchJob.
+     * Passes the context and search job up to the flood-only match job.
      * @param ctx the router context the job runs in
      * @param job the flood search job this match reports the store message to
      */

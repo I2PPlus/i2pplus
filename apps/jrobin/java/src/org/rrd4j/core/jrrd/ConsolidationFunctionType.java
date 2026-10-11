@@ -12,7 +12,7 @@ public enum ConsolidationFunctionType {
     /** Average consolidation function. */
     AVERAGE {
         /**
-         * getConsolFun.
+         * Returns the averaging consolidation function.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -23,7 +23,7 @@ public enum ConsolidationFunctionType {
     /** Minimum consolidation function. */
     MIN {
         /**
-         * getConsolFun.
+         * Returns the minimum consolidation function.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -34,7 +34,7 @@ public enum ConsolidationFunctionType {
     /** Maximum consolidation function. */
     MAX {
         /**
-         * getConsolFun.
+         * Returns the maximum consolidation function.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -45,7 +45,7 @@ public enum ConsolidationFunctionType {
     /** Last value consolidation function. */
     LAST {
         /**
-         * getConsolFun.
+         * Returns the last recorded value as the consolidation function.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -56,7 +56,7 @@ public enum ConsolidationFunctionType {
     /** Holt-Winters prediction consolidation function. */
     HWPREDICT {
         /**
-         * getConsolFun.
+         * The Holt-Winters predictor has no consolidation function; always throws.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -67,7 +67,7 @@ public enum ConsolidationFunctionType {
     /** Seasonal consolidation function. */
     SEASONAL {
         /**
-         * getConsolFun.
+         * The seasonal predictor has no consolidation function; always throws.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -78,7 +78,7 @@ public enum ConsolidationFunctionType {
     /** Deviation prediction consolidation function. */
     DEVPREDICT {
         /**
-         * getConsolFun.
+         * The deviation predictor has no consolidation function; always throws.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -89,7 +89,7 @@ public enum ConsolidationFunctionType {
     /** Deviation seasonal consolidation function. */
     DEVSEASONAL {
         /**
-         * getConsolFun.
+         * The seasonal deviation predictor has no consolidation function; always throws.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -100,7 +100,7 @@ public enum ConsolidationFunctionType {
     /** Failures consolidation function. */
     FAILURES {
         /**
-         * getConsolFun.
+         * The failure predictor has no consolidation function; always throws.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -111,7 +111,7 @@ public enum ConsolidationFunctionType {
     /** Multiply Holt-Winters prediction consolidation function. */
     MHWPREDICT {
         /**
-         * getConsolFun.
+         * The modified Holt-Winters predictor has no consolidation function; always throws.
          */
         @Override
         public ConsolFun getConsolFun() {
@@ -120,7 +120,7 @@ public enum ConsolidationFunctionType {
     };
 
     /**
-     * getConsolFun().
+     * Returns the I2P JRobin consolidation function this type stands for.
      * @return the I2P JRobin ConsolFun this type stands for, or an implementation that throws UnsupportedOperationException for types JRobin does not support
      */
     public abstract ConsolFun getConsolFun();

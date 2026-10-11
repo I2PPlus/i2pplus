@@ -27,7 +27,7 @@ public class TooManyStreamsException extends I2PException {
     }
 
     /**
-     * TooManyStreamsException.
+     * Creates an exception with no detail message.
      */
     public TooManyStreamsException() {
         super();

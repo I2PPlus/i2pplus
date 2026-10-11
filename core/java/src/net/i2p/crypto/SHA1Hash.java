@@ -37,7 +37,7 @@ public class SHA1Hash extends SimpleDataStructure {
     private int _cachedHashCode;
 
     /**
-     * HASH_LENGTH.
+     * Number of bytes in a SHA-1 hash.
      */
     public static final int HASH_LENGTH = SHA1.HASH_LENGTH;
 

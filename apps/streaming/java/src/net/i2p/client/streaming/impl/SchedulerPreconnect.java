@@ -26,7 +26,7 @@ import net.i2p.I2PAppContext;
 class SchedulerPreconnect extends SchedulerImpl {
 
     /**
-     * SchedulerPreconnect.
+     * Passes the context on to the shared scheduler base.
      * @param ctx the application context whose clock, logging and rate statistics
                           the inherited scheduler uses for the connect delay timer
      */

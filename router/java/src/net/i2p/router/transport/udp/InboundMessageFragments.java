@@ -26,7 +26,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
     private static final int DECAY_PERIOD = 10*1000;
 
     /**
-     * InboundMessageFragments.
+     * Creates the message receiver and registers the fragment reassembly stats.
      *
      * @param ctx our router context
      * @param outbound the outbound fragment pool to hand completed messages to
@@ -142,7 +142,8 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
          */
         public long value;
         /**
-         * ModifiableLong.
+         * Wraps a single mutable long so it can be updated inside a collection
+         * without holding a lock.
          *
          * @param val the starting count or timestamp this wrapper holds
          */

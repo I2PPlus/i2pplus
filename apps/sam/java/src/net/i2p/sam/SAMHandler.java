@@ -25,31 +25,31 @@ import net.i2p.util.Log;
 abstract class SAMHandler implements Runnable, Handler {
 
     /**
-     * _log.
+     * Log scoped to this handler's class.
      */
     protected final Log _log;
 
     /**
-     * thread.
+     * Thread running the SAM protocol loop for this connection.
      */
     protected I2PAppThread thread;
     /**
-     * bridge.
+     * Router bridge this handler routes sessions over.
      */
     protected final SAMBridge bridge;
 
     private final Object socketWLock = new Object(); // Guards writings on socket
     /**
-     * socket.
+     * Client channel this handler reads commands from.
      */
     protected final SocketChannel socket;
 
     /**
-     * verMajor.
+     * Major version this handler was negotiated at.
      */
     public final int verMajor;
     /**
-     * verMinor.
+     * Minor version this handler was negotiated at.
      */
     public final int verMinor;
 
@@ -57,11 +57,11 @@ abstract class SAMHandler implements Runnable, Handler {
     protected final Properties i2cpProps;
 
     /**
-     * stopLock.
+     * Monitor guarding the stop flag.
      */
     protected final Object stopLock = new Object();
     /**
-     * stopHandler.
+     * Whether shutdown has been requested for this handler.
      */
     protected boolean stopHandler;
 

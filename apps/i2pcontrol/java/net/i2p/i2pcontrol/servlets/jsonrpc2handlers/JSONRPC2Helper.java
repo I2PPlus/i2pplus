@@ -21,11 +21,11 @@ import net.i2p.i2pcontrol.security.SecurityManager;
  */
 public class JSONRPC2Helper {
     /**
-     * USE_NO_AUTH.
-     */
+     * Token value marking a handler call as needing no authentication.
+ */
     public final static Boolean USE_NO_AUTH = false;
     /**
-     * USE_AUTH.
+     * Token value marking a handler call as needing authentication.
      */
     public final static Boolean USE_AUTH = true;
 
@@ -92,7 +92,7 @@ public class JSONRPC2Helper {
 
     /**
      * Will check incoming parameters to make sure they contain a valid token.
-     * @param req - Parameters of incoming request
+     * @param params - Parameters of incoming request
      * @return null if everything is fine, JSONRPC2Error for any corresponding error.
      */
     private JSONRPC2Error validateToken(Map<String, Object> params) {

@@ -106,7 +106,7 @@ public class ConfigNetHelper extends HelperBase {
     }
 
     /**
-     * This should always be the actual internal SSU port, as UDPTransport udpates
+     * This should always be the actual internal SSU port, as UDPTransport updates
      * the config when it changes.
      * @return the configured SSU port
      */

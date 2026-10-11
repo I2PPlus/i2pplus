@@ -151,7 +151,7 @@ class BuildReplyHandler {
     }
 
     /**
-     * Decrypt the record (removing the layers of reply encyption) and read out the status
+     * Decrypt the record (removing the layers of reply encryption) and read out the status
      *
      * Note that this layer-decrypts the build records in-place.
      * Do not call this more than once for a given message.

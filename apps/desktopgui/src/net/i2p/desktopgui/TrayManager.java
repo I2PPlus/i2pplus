@@ -37,11 +37,11 @@ import net.i2p.util.SystemVersion;
 abstract class TrayManager {
 
     /**
-     * _appContext.
+     * The router context the tray manager runs in.
      */
     protected final I2PAppContext _appContext;
     /**
-     * _useSwing.
+     * True to build Swing menu items, false for plain AWT.
      */
     protected final boolean _useSwing;
     ///The tray area, or null if unsupported
@@ -49,7 +49,7 @@ abstract class TrayManager {
     ///Our tray icon, or null if unsupported
     protected TrayIcon trayIcon;
     /**
-     * _showNotifications.
+     * Whether tray notifications are currently shown, defaults to true.
      */
     protected volatile boolean _showNotifications;
     /**
@@ -74,7 +74,7 @@ abstract class TrayManager {
     private static final String WIN_ICON = "itoopie_white_24.png";
     private static final String LIN_ICON = "logo.png";
     /**
-     * PROP_NOTIFICATIONS.
+     * Config key holding the tray notification preference.
      */
     protected static final String PROP_NOTIFICATIONS = "desktopgui.showNotifications";
 

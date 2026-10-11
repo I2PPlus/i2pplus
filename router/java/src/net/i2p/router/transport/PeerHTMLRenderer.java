@@ -296,7 +296,7 @@ public class PeerHTMLRenderer {
     }
 
     /**
-     * Translate
+     * Looks up the console translation of a string in this renderer's bundle.
      */
     private final String _t(String s) {return Translate.getString(s, _context, BUNDLE_NAME);}
 }

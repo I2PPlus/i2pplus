@@ -358,7 +358,7 @@ public class I2PAppContext {
 
     /**
      * This is the installation dir, often referred to as $I2P.
-     * Applilcations should consider this directory read-only and never
+     * Applications should consider this directory read-only and never
      * attempt to write to it.
      * It may actually be read-only on a multi-user installation.
      * The config files in this directory are templates for user

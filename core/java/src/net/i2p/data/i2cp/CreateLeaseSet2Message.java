@@ -176,7 +176,7 @@ public class CreateLeaseSet2Message extends CreateLeaseSetMessage {
     }
 
     /**
-     * Type.
+     * Returns this message's I2CP type number.
      * @return the type
      */
     @Override

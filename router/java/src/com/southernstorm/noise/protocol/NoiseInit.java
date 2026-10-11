@@ -166,37 +166,37 @@ public class NoiseInit {
             }
 
             /**
-             * getPrefix.
+             * Reports whether this is the Noise or NoisePSK family.
              * @return the noise protocol family prefix, "Noise" or "NoisePSK"
              */
             public String getPrefix() { return prefix; }
             /**
-             * getPatternID.
+             * Reports which handshake pattern this protocol name selected.
              * @return the pattern name as it appeared in the protocol name, e.g. "XX" or "XK"
              */
             public String getPatternID() { return patternId; }
             /**
-             * getProtocolName.
+             * Reports the full protocol name this entry was parsed from.
              * @return the full underscore-separated protocol name, e.g. "Noise_XKaes2gcm"
              */
             public String getProtocolName() { return protoName; }
             /**
-             * getDH.
+             * Reports which Diffie-Hellman method this protocol uses.
              * @return the Diffie-Hellman method named by the protocol name, e.g. "25519" or "MLKEM768"
              */
             public String getDH() { return dh; }
             /**
-             * getCipher.
+             * Reports which AEAD cipher this protocol uses.
              * @return the AEAD cipher named by the protocol name, e.g. "chacha20poly1305"
              */
             public String getCipher() { return scipher; }
             /**
-             * getHash.
+             * Reports which hash function this protocol uses.
              * @return the hash function named by the protocol name, e.g. "SHA256" or "SHA512"
              */
             public String getHash() { return shash; }
             /**
-             * getPattern.
+             * Reports the message and flag tokens of the handshake pattern.
              * @return the message and flag tokens making up the handshake pattern
              */
             public short[] getPattern() { return pattern; }

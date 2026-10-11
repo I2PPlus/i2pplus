@@ -94,7 +94,8 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
         private final byte[] _encrypted;
 
         /**
-         * ReceiveJob.
+         * Holds the encrypted gateway message so it can be handed to the
+         * receiver once the job queue reaches it.
          */
         public ReceiveJob(RouterContext ctx, byte[] data) {
             super(ctx);

@@ -23,13 +23,13 @@ import java.io.InputStream;
  */
 public class CreateSessionMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type number identifying a session creation request.
      */
     public static final int MESSAGE_TYPE = 1;
     private SessionConfig _sessionConfig;
 
     /**
-     * CreateSessionMessage.
+     * Carries the given session configuration to the router.
      *
      * @param config the session properties to send to the router in this message
      */
@@ -38,7 +38,7 @@ public class CreateSessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * CreateSessionMessage.
+     * Creates a message with an empty session configuration.
      */
     public CreateSessionMessage() {
         _sessionConfig = new SessionConfig();
@@ -91,7 +91,7 @@ public class CreateSessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Reports this message's I2CP type number.
      * @return the type
      */
     @Override

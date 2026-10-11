@@ -16,7 +16,7 @@ class DummyHandler implements Checker, Updater {
     private final ConsoleUpdateManager _mgr;
 
     /**
-     * DummyHandler.
+     * Creates a handler that serves dummy update checks only.
      * @param ctx router context handed to the runner as the runner's owner
      * @param mgr update manager notified when the dummy run finishes or fails
      */
@@ -53,7 +53,7 @@ class DummyHandler implements Checker, Updater {
         private final long _delay;
 
         /**
-         * DummyRunner.
+         * Creates a runner that sleeps for the requested time, then reports failure.
          */
         public DummyRunner(RouterContext ctx, ConsoleUpdateManager mgr, long maxTime) {
             super(ctx, mgr, UpdateType.TYPE_DUMMY, Collections.<URI> emptyList());
@@ -67,7 +67,7 @@ class DummyHandler implements Checker, Updater {
         public UpdateMethod getMethod() { return UpdateMethod.METHOD_DUMMY; }
 
         /**
-         * update.
+         * Sleeps for the configured delay, then reports the run as failed.
          */
         @Override
         protected void update() {

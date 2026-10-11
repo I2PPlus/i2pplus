@@ -53,7 +53,7 @@ public final class PrioritySendPool {
     private volatile int _droppedCount;
 
     /**
-     * PrioritySendPool.
+     * Sets the capacity, never below one, and sizes the backing list to match.
      *
      * @param capacity the maximum number of live messages, clamped up to a minimum of 1
      */

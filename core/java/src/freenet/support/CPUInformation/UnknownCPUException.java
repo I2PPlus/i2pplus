@@ -17,14 +17,14 @@ public class UnknownCPUException extends RuntimeException {
     private static final long serialVersionUID = 5166144274582583742L;
 
     /**
-     * UnknownCPUException.
+     * Raise the failure with no detail beyond the type.
      */
     public UnknownCPUException() {
         super();
     }
 
     /**
-     * UnknownCPUException.
+     * Raise the failure, naming why the CPU type is unknown.
      * @param message human readable reason the CPU type could not be determined
      */
     public UnknownCPUException(String message) {

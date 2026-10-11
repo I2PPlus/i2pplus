@@ -39,7 +39,7 @@ public class SSDPSearchRequest extends SSDPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * SSDPSearchRequest.
+     * Build an M-SEARCH announcing the given search target and wait time.
      *
      * @param serachTarget the search target to advertise in the ST header, e.g. a device type
      * @param mx the MX maximum wait time in seconds advertised to the responders
@@ -54,7 +54,7 @@ public class SSDPSearchRequest extends SSDPRequest {
     }
 
     /**
-     * SSDPSearchRequest.
+     * Build an M-SEARCH for the given search target at the default wait time.
      *
      * @param serachTarget the search target to advertise, using the default MX wait time
      */
@@ -63,7 +63,7 @@ public class SSDPSearchRequest extends SSDPRequest {
     }
 
     /**
-     * SSDPSearchRequest.
+     * Build an M-SEARCH for the root device, the usual first discovery step.
      */
     public SSDPSearchRequest() {
         this(ST.ROOT_DEVICE);
@@ -74,7 +74,7 @@ public class SSDPSearchRequest extends SSDPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * setLocalAddress.
+     * Aim the search at the SSDP multicast group, v4 or v6 by bind address.
      *
      * @param bindAddr the local address to bind to; an IPv6 address selects the IPv6 group
      */

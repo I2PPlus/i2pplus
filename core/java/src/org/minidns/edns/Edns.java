@@ -57,11 +57,11 @@ public class Edns {
         }
 
         /**
-         * asInt.
+         * Numeric EDNS option code carried on the wire.
          */
         public final int asInt;
         /**
-         * clazz.
+         * Option class registered for that code, or null for an unknown one.
          */
         public final Class<? extends EdnsOption> clazz;
 
@@ -71,7 +71,7 @@ public class Edns {
         }
 
         /**
-         * from.
+         * Looks up the registered option for a numeric EDNS option code.
          *
          * @param optionCode the numeric EDNS option code to look up
          * @return the matching OptionCode, or UNKNOWN if no option is registered
@@ -164,7 +164,7 @@ public class Edns {
     }
 
     /**
-     * getEdnsOption.
+     * Finds an EDNS option by code in the variable part.
      *
      * @param <O> the option type the caller expects, so the unchecked cast to it
      *            is checked at the call site
@@ -227,7 +227,7 @@ public class Edns {
     }
 
     /**
-     * toString.
+     * Renders the request as EDNS with its options on one line.
      */
     @Override
     public String toString() {

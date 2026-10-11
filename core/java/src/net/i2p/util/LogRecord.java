@@ -21,7 +21,7 @@ class LogRecord {
     private final Throwable _throwable;
 
     /**
-     * LogRecord.
+     * Captures one log entry, stamping it with the current time.
      *
      * @param src the class the entry was logged from
      * @param name the display name of the logger that wrote the entry

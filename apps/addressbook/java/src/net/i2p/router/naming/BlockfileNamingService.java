@@ -2020,7 +2020,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Same as DataHelper.writeProperties, UTF-8, unsorted,
      * except that values may up to 4K bytes.
      *
-     * @param props source may be null
+     * @param p source may be null
      * @throws DataFormatException if any key string is over 255 bytes long,
      *                             if any value string is over 4096 bytes long, or if the total length
      *                             (not including the two length bytes) is greater than 65535 bytes.

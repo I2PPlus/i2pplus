@@ -30,7 +30,7 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
     private static final long RUN_DELAY = 10 * (long) 60 * 1000;
 
     /**
-     * NewsTimerTask.
+     * Schedules the recurring news check and runs the first one now.
      * @param ctx the router context, whose simple timer and random source schedule the recurring check
      * @param mgr the update manager consulted to decide whether a fetch or an install is warranted
      */
@@ -50,7 +50,7 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
     }
 
     /**
-     * timeReached.
+     * Re-arms the check, fetching news or resuming an install when warranted.
      */
     public void timeReached() {
         schedule(RUN_DELAY);
@@ -122,7 +122,7 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
      */
     private class Fetcher extends I2PAppThread {
         /**
-         * Fetcher.
+         * Creates a daemon thread named News Fetcher.
          */
         public Fetcher() {
             super("News Fetcher");
@@ -130,7 +130,7 @@ class NewsTimerTask extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         * run.
+         * Fetches the news, then kicks off a devSU3 check if one is due.
          */
         public void run() {
             // blocking

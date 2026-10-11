@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type number of a variable LeaseSet request.
      */
     public static final int MESSAGE_TYPE = 37;
     private SessionId _sessionId;
@@ -39,7 +39,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     private static final String MIN_VERSION = "0.9.7";
 
     /**
-     * RequestVariableLeaseSetMessage.
+     * Creates an empty LeaseSet request with no endpoints.
      */
     public RequestVariableLeaseSetMessage() {
         _endpoints = new ArrayList<>(6);
@@ -82,7 +82,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Endpoints.
+     * Counts the tunnels in this LeaseSet.
      * @return the endpoints
      */
     public int getEndpoints() {
@@ -90,7 +90,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Endpoint.
+     * Gets the tunnel at a position in this LeaseSet.
      * @param endpoint the zero-based position in the list, 0 to getEndpoints() - 1
      * @return the endpoint
      */
@@ -160,7 +160,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Reports this message as a variable LeaseSet request.
      * @return the type
      */
     @Override

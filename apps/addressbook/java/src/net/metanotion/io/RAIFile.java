@@ -19,7 +19,7 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
     private final boolean w;
 
     /**
-     * Constructor.
+     * Wraps an open file, treating it as readable and writable.
      *
      * @param file the underlying file
      * @throws FileNotFoundException if the file cannot be opened

@@ -17,14 +17,14 @@ import java.io.IOException;
 public class SOCKSException extends IOException {
 
     /**
-     * SOCKSException.
+     * Creates a SOCKS failure with no detail message.
      */
     public SOCKSException() {
         super();
     }
 
     /**
-     * SOCKSException.
+     * Creates a SOCKS failure carrying only a detail message.
      *
      * @param s detail message naming the SOCKS reply code or failure reason
      */

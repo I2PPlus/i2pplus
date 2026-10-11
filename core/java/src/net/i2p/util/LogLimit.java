@@ -18,7 +18,7 @@ class LogLimit {
     private int _limit;
 
     /**
-     * LogLimit.
+     * Binds a minimum priority level to every log under the given root name.
      *
      * @param name the root log name this override applies to, matched by class hierarchy
      * @param limit the minimum priority level, from {@link Log#toLevelString}, that

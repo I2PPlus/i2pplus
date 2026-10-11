@@ -105,7 +105,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final Object DUMMY = Integer.valueOf(0);
 
     /**
-     * CommSystemFacadeImpl.
+     * Build the transport manager, GeoIP database and address lookup services.
      *
      * @param context the router context, used to build the transport manager,
      *                GeoIP database and rDNS/country lookup services
@@ -979,7 +979,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     private class Timestamper extends SimpleTimer2.TimedEvent {
         /**
-         * Timestamper.
+         * Create the clock-skew updater, scheduled to repeat.
          */
         public Timestamper() { super(_context.simpleTimer2()); }
         /**
@@ -1011,7 +1011,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         private static final long LONG_DELAY = 90*1000L;
 
         /**
-         * NetMonitor.
+         * Create the connectivity poller, firing immediately.
          */
         public NetMonitor() {super(_context.simpleTimer2(), 0);}
 

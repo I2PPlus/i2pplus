@@ -126,9 +126,9 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Creates new DataProcessor object for the given time duration. The given duration will be
-     * substracted from current time.
+     * subtracted from current time.
      *
-     * @param d duration to substract.
+     * @param d duration to subtract.
      */
     public DataProcessor(TemporalAmount d) {
         Instant now = Instant.now();
@@ -159,7 +159,7 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * getPool.
+     * Return the RRD database pool, null when none is configured.
      */
     @Override
     public RrdDbPool getPool() {
@@ -252,7 +252,7 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * getTimeZone.
+     * Return the time zone timestamps are interpreted in.
      */
     @Override
     public TimeZone getTimeZone() {
@@ -260,7 +260,7 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * setTimeZone.
+     * Set the time zone timestamps are interpreted in.
      */
     @Override
     public void setTimeZone(TimeZone tz) {
@@ -1217,7 +1217,7 @@ public class DataProcessor implements DataHolder {
         }
     }
     /**
-     * Format
+     * Right-pad a string with spaces to the requested length.
      */
 
     private static String format(String s, int length) {

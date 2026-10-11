@@ -23,8 +23,8 @@ public class OutputStreamBuffer implements Buffer {
 	}
 
 	/**
-	 * @throws UnsupportedOperationException always
 	 * @return the input stream
+	 * @throws UnsupportedOperationException always
 	 */
 	@Override
 	public InputStream getInputStream() {

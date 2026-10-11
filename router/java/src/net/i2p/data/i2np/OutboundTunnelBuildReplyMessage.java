@@ -14,11 +14,11 @@ import net.i2p.I2PAppContext;
  */
 public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     /**
-     * MESSAGE_TYPE.
+     * I2NP message type code for an outbound tunnel build reply.
      */
     public static final int MESSAGE_TYPE = 26;
     /**
-     * SHORT_RECORD_SIZE.
+     * Record size used here, identical to the short form in {@link ShortTunnelBuildMessage}.
      */
     public static final int SHORT_RECORD_SIZE = ShortTunnelBuildMessage.SHORT_RECORD_SIZE;
 
@@ -32,7 +32,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
     }
 
     /**
-     * OutboundTunnelBuildReplyMessage.
+     * Creates a reply holding the given number of encrypted records.
      *
      * @param context the I2P app context
      * @param records the number of encrypted records to allocate

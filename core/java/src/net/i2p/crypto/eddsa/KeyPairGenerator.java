@@ -44,7 +44,7 @@ public class KeyPairGenerator extends KeyPairGeneratorSpi {
     public KeyPairGenerator() {}
 
     /**
-     * DEFAULT_KEYSIZE.
+     * Key size in bits used when initialize() supplies no strength.
      */
     protected static final int DEFAULT_KEYSIZE = 256;
     /**

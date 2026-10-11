@@ -20,7 +20,7 @@ import java.util.Locale;
 public abstract class XnLabel extends ReservedLdhLabel {
 
     /**
-     * XnLabel.
+     * Stores the label in its ACE punycode form as a reserved LDH label.
      *
      * @param label the reserved LDH label, already in its internal ACE (punycode) form
      */

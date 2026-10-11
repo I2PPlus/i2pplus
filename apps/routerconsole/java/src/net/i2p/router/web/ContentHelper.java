@@ -18,7 +18,7 @@ public class ContentHelper extends HelperBase {
     public ContentHelper() {}
 
     /**
-     * _page.
+     * Absolute path of the content file to include, empty until set.
      */
     protected String _page;
     private int _maxLines;
@@ -33,7 +33,7 @@ public class ContentHelper extends HelperBase {
      */
     public void setPage(String page) { _page = page; }
     /**
-     * setStartAtBeginning.
+     * Chooses which end of the file to keep when trimming to maxLines.
      *
      * @param moo parsed as a boolean: true keeps the first lines of the file,
      *            false (the default) keeps the last
@@ -54,7 +54,7 @@ public class ContentHelper extends HelperBase {
     }
 
     /**
-     * setMaxLines.
+     * Limits how many lines of the file are read in.
      *
      * @param lines the maximum number of lines to keep, parsed as an integer;
      *              null or any non-numeric value means unlimited

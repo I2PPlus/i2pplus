@@ -32,7 +32,7 @@ class SingleLookupJob extends JobImpl {
     public static final int MAX_TO_FOLLOW = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 90 ? 6 : 12;
 
     /**
-     * SingleLookupJob.
+     * Stores the reply whose router hashes this job will look up.
      *
      * @param ctx the router context
      * @param dsrm the search reply naming the router hashes to follow up on

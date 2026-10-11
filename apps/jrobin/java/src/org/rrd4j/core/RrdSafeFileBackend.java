@@ -68,7 +68,7 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
     }
 
     /**
-     * close.
+     * Releases the exclusive file lock, if held, then closes the underlying file.
      *
      * @throws java.io.IOException if any.
      */
@@ -86,7 +86,7 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
     }
 
     /**
-     * getLockInfo.
+     * Returns a human readable summary of the file locking counters.
      *
      * @return a {@link java.lang.String} object.
      */

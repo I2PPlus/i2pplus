@@ -317,7 +317,7 @@ public abstract class RrdBackendFactory implements Closeable {
         }
 
         /**
-         * clear.
+         * Closes the wrapped backend before clearing the cached instance.
          */
         @Override
         public void clear() {
@@ -332,24 +332,24 @@ public abstract class RrdBackendFactory implements Closeable {
     private final ReferenceQueue<RrdDb> refQueue = new ReferenceQueue<>();
 
     /**
-     * name.
+     * Storage name this factory reports to RrdDb.
      */
     protected final String name;
     /**
-     * cachingAllowed.
+     * Whether this factory's backends may cache data in memory.
      */
     protected final boolean cachingAllowed;
     /**
-     * scheme.
+     * URI scheme this factory's storage URIs start with.
      */
     protected final String scheme;
     /**
-     * validateHeader.
+     * Whether opened files must carry the RRD header.
      */
     protected final boolean validateHeader;
 
     /**
-     * RrdBackendFactory.
+     * Reads the storage settings off the subclass's backend annotation.
      */
     protected RrdBackendFactory() {
         RrdBackendAnnotation annotation = getClass().getAnnotation(RrdBackendAnnotation.class);
@@ -395,7 +395,7 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-     * getRootUri.
+     * Builds the root URI for this factory's scheme.
      *
      * @return the root URI formed from this factory's scheme, or an exception if
      *         the scheme is not a legal URI scheme
@@ -409,7 +409,7 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-     * canStore.
+     * Tests whether this factory recognises a storage URI.
      *
      * @param uri the candidate storage URI to test against this factory
      * @return false unless a subclass overrides this to recognise its own URIs
@@ -528,7 +528,7 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-     * open.
+     * Opens the backend serving a storage path.
      *
      * @param path the storage path, relative to this factory's root URI
      * @param readOnly true to open the storage for reading only, false to allow

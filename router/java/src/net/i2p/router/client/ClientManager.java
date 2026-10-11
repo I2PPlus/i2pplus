@@ -468,11 +468,11 @@ class ClientManager {
      * Distribute message to a local or remote destination.
      *
      * @param sender non-null
-     * @param msgId the router's ID for this message
-     * @param messageNonce the client's ID for this message
      * @param fromDest source destination
      * @param toDest target destination
      * @param payload the message payload
+     * @param msgId the router's ID for this message
+     * @param messageNonce the client's ID for this message
      * @param expiration message expiration
      * @param flags not used for local delivery
      */
@@ -664,7 +664,7 @@ class ClientManager {
     }
 
     /**
-     * Unsynchronized
+     * Looks up a client's runner without holding the lock.
      *
      * @param dest the destination
      * @return the runner, or null
@@ -698,7 +698,7 @@ class ClientManager {
     }
 
     /**
-     * Unsynchronized
+     * Looks up a client's runner by hash without holding the lock.
      * @return the runner
      */
     private ClientConnectionRunner getRunner(Hash destHash) {
@@ -738,7 +738,7 @@ class ClientManager {
     Set<Destination> getRunnerDestinations() {return Collections.unmodifiableSet(_runners.keySet());}
 
     /**
-     * Unused
+     * Reports abuse on one destination, or on every local destination.
      *
      * @param dest null for all local destinations
      * @param reason the abuse reason

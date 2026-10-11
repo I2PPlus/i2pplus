@@ -28,7 +28,7 @@ import net.i2p.I2PAppContext;
  */
 class SchedulerClosed extends SchedulerImpl {
     /**
-     * SchedulerClosed.
+     * Creates the closed-connection scheduler for the given application context.
      *
      * @param ctx the context supplying the router, client and clock services
      */

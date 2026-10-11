@@ -62,7 +62,7 @@ public class EventLogHelper extends FormHandler {
     private static final long[] _times = { 0, DAY, 7*DAY, 30*DAY, 90*DAY, 365*DAY };
 
     /**
-     * EventLogHelper.
+     * Prepares the helper with an empty, pre-sized event translation map.
      */
     public EventLogHelper() {
         super();
@@ -70,7 +70,7 @@ public class EventLogHelper extends FormHandler {
     }
 
     /**
-     * processForm.
+     * Does nothing; the event log page submits no form.
      */
     @Override
     protected void processForm() {

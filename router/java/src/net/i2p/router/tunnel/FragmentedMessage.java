@@ -36,7 +36,7 @@ class FragmentedMessage {
     private static final int MAX_FRAGMENT_SIZE = 996;
 
     /**
-     * FragmentedMessage.
+     * Starts an empty reassembly buffer for one message id.
      *
      * @param ctx the context supplying the clock and log used by this message
      * @param messageId the id that ties the fragments of one message together

@@ -466,8 +466,8 @@ public class Log {
      * is subject to change or removal w/o notice.
      * NOT a supported API.
      *
-     * @param desc the objects naming the resource whose close() is being called
      * @param level level at which to log
+     * @param desc the objects naming the resource whose close() is being called
      * @since 0.9.8
      */
     public void logCloseLoop(int level, Object... desc) {

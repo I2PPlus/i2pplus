@@ -385,13 +385,13 @@ public class NativeBigInteger extends BigInteger {
      * Calculate (base ^ exponent) % modulus.
      *
      * @param base
-     * big endian twos complement representation of the base (but it must be positive)
+     *             big endian twos complement representation of the base (but it must be positive)
      *
      * @param exponent
-     * big endian twos complement representation of the exponent
+     *                 big endian twos complement representation of the exponent
      *
      * @param modulus
-     * big endian twos complement representation of the modulus
+     *                big endian twos complement representation of the modulus
      *
      * @return big endian twos complement representation of (base ^ exponent) % modulus
      * @throws ArithmeticException if modulus &lt;= 0 (since libjbigi version 3)
@@ -403,13 +403,13 @@ public class NativeBigInteger extends BigInteger {
      * Constant Time.
      *
      * @param base
-     * big endian twos complement representation of the base (but it must be positive)
+     *             big endian twos complement representation of the base (but it must be positive)
      *
      * @param exponent
-     * big endian twos complement representation of the exponent
+     *                 big endian twos complement representation of the exponent
      *
      * @param modulus
-     * big endian twos complement representation of the modulus
+     *                big endian twos complement representation of the modulus
      *
      * @return big endian twos complement representation of (base ^ exponent) % modulus
      * @throws ArithmeticException if modulus &lt;= 0
@@ -590,8 +590,8 @@ public class NativeBigInteger extends BigInteger {
     /**
      * Compute base^exponent mod m using the native library.
      *
-     * @param m must be postive
-     * @param exponent must be postive
+     * @param exponent must be positive
+     * @param m must be positive
      * @throws ArithmeticException if m &lt;= 0 or exponent &lt;=0
      */
     @Override
@@ -607,8 +607,8 @@ public class NativeBigInteger extends BigInteger {
     /**
      * Compute base^exponent mod m in constant time using the native library.
      *
-     * @param exponent must be postive
-     * @param m must be postive and odd
+     * @param exponent must be positive
+     * @param m must be positive and odd
      * @return this value raised to the exponent modulo m, falling back to the
      *         variable-time computation when constant-time native code is unavailable
      * @throws ArithmeticException if m &lt;= 0 or m is even or exponent &lt;=0
@@ -813,7 +813,7 @@ public class NativeBigInteger extends BigInteger {
     }
 
     /**
-     * <p>Try loading it from an explictly build jbigi.dll / libjbigi.so first, before
+     * <p>Try loading it from an explicitly build jbigi.dll / libjbigi.so first, before
      * looking into a jbigi.jar for any other libraries.</p>
      *
      * @return true if it was loaded successfully, else false

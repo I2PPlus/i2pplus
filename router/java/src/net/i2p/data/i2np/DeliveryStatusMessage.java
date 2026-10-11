@@ -18,7 +18,7 @@ import net.i2p.data.DataHelper;
  */
 public class DeliveryStatusMessage extends FastI2NPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2NP message type number identifying a delivery status reply.
      */
     public final static int MESSAGE_TYPE = 10;
     private long _id;

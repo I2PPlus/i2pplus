@@ -22,13 +22,13 @@ import net.i2p.data.DataFormatException;
 class SAMRawSession extends SAMMessageSession {
 
     /**
-     * RAW_SIZE_MAX.
+     * Largest datagram this session will send, in bytes; larger is rejected.
      */
     public static final int RAW_SIZE_MAX = 32*1024;
 
     // FIXME make final after fixing SAMv3RawSession override
     /**
-     * recv.
+     * Receiver handed the raw bytes arriving from the tunnel.
      */
     protected SAMRawReceiver recv;
 

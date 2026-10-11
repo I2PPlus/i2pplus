@@ -15,7 +15,7 @@ import java.util.List;
 public class RouterCommandLine extends net.i2p.util.CommandLine {
 
     /**
-     * RCLASSES.
+     * Classes the router scans at startup to see whether to load them.
      */
     protected static final List<String> RCLASSES = Collections.unmodifiableList(Arrays.asList(new String[] { // NOSONAR S3878
         "com.maxmind.geoip2.DatabaseReader",
@@ -38,7 +38,7 @@ public class RouterCommandLine extends net.i2p.util.CommandLine {
     }));
 
     /**
-     * RouterCommandLine.
+     * Instances do nothing; the entry point is the static main.
      */
     protected RouterCommandLine() {}
 

@@ -64,9 +64,9 @@ class ProfileOrganizerRenderer {
 
     /**
      * Creates a new ProfileOrganizerRenderer
-     * @param fragmentKeys when true, rows carry a data-key attribute for the contentonly fragment mode
      * @param organizer the organizer holding the peer profiles and throttling data to render
      * @param context the router context supplying console translations
+     * @param fragmentKeys when true, rows carry a data-key attribute for the contentonly fragment mode
      */
     public ProfileOrganizerRenderer(ProfileOrganizer organizer, RouterContext context, boolean fragmentKeys) {
         _context = context;
@@ -258,7 +258,7 @@ class ProfileOrganizerRenderer {
      * and stays byte-for-byte identical to previous versions.
      *
      * @param out the writer to render to
-     * @param order the selected profiles
+     * @param sel the selected profiles
      * @throws IOException if an I/O error occurs
      * @since 0.9.70+
      */

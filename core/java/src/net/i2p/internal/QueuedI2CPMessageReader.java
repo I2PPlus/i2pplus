@@ -294,7 +294,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
             }
         }
 
-/**
+    /**
      *  Account for a worker leaving, whatever the reason, and uphold the invariant
      *  that a registered reader always has a worker. The check and the restart happen
      *  in one critical section so a concurrent registration cannot be missed.

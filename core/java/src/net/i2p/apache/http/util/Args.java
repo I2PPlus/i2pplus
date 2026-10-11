@@ -40,8 +40,8 @@ public class Args {
      *
      * @param argument the argument to check
      * @param name the argument name
-     * @return the argument if not null
      * @param <T> the argument type
+     * @return the argument if not null
      */
     public static <T> T notNull(final T argument, final String name) {
         if (argument == null) {

@@ -1087,7 +1087,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
     }
 
     /**
-     * destroy.
+     * Marks this state destroyed and destroys the symmetric state and keys.
      */
     @Override
     public synchronized void destroy() {

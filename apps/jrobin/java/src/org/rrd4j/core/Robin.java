@@ -105,7 +105,7 @@ public interface Robin extends RrdUpdater<Robin> {
     RrdAllocator getRrdAllocator();
 
     /**
-     * update.
+     * Writes a full row of values into storage.
      *
      * @param newValues an array of double.
      * @throws java.io.IOException if any.
@@ -113,7 +113,7 @@ public interface Robin extends RrdUpdater<Robin> {
     void update(double[] newValues) throws IOException;
 
     /**
-     * dump.
+     * Renders the current contents as text.
      *
      * @return a {@link java.lang.String} object.
      * @throws java.io.IOException if any.
@@ -121,7 +121,7 @@ public interface Robin extends RrdUpdater<Robin> {
     String dump() throws IOException;
 
     /**
-     * store.
+     * Appends a single value at the current row pointer.
      *
      * @param newValue a double.
      * @throws java.io.IOException if any.
@@ -129,7 +129,7 @@ public interface Robin extends RrdUpdater<Robin> {
     void store(double newValue) throws IOException;
 
     /**
-     * bulkStore.
+     * Appends one value repeatedly, for bulk updates.
      *
      * @param newValue a double.
      * @param bulkCount a int.
@@ -138,7 +138,7 @@ public interface Robin extends RrdUpdater<Robin> {
     void bulkStore(double newValue, int bulkCount) throws IOException;
 
     /**
-     * getValues.
+     * Reads a run of values starting at a row index.
      *
      * @param index a int.
      * @param count a int.

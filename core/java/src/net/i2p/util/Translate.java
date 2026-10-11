@@ -119,7 +119,7 @@ public abstract class Translate {
     }
 
     /**
-     *  Varargs
+     *  Varargs form, accepting any number of values substituted for the {0}, {1}, ... placeholders.
      *
      *  @param s the string to be translated, containing {0}, {1}, ... placeholders
      *  @param ctx the application context, which supplies the language and country

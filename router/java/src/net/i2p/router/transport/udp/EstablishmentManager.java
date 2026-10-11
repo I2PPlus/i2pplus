@@ -421,7 +421,7 @@ public class EstablishmentManager {
     private static final int MIN_TOKENS = SystemVersion.isSlow() ? 64 : 128;
     private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
     /**
-     * IB_TOKEN_EXPIRATION.
+     * How long an inbound token stays valid, in milliseconds.
      */
     public static final long IB_TOKEN_EXPIRATION = 60*60L*1000L;
     private static final long MAX_SKEW = 2*60L*1000L;
@@ -704,9 +704,9 @@ public class EstablishmentManager {
      * True when the global deferred queue is at capacity and this peer does
      * not already have a queue we could append to.
      *
+     * @param peerAlreadyQueued true if this peer already has a deferred queue
      * @param queuedOutboundSize the global deferred queue count
      * @param maxQueued the global queue cap
-     * @param peerAlreadyQueued true if this peer already has a deferred queue
      * @return true to reject the message
      * @since 0.9.71
      */

@@ -30,7 +30,7 @@ import net.i2p.util.SimpleByteCache;
 public abstract class HMACGenerator {
 
     /**
-     * HMACGenerator.
+     * Initializes nothing; subclasses are called through it implicitly.
      */
     public HMACGenerator() {}
 

@@ -194,8 +194,8 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
     /**
      * Routing key for the specified date, not today's
      *
-     * @param time Java time
      * @param origKey the key to be modified into a routing key
+     * @param time Java time
      * @return the routing key
      * @since 0.9.28
      */

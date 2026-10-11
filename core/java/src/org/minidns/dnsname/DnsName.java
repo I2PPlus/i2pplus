@@ -62,17 +62,17 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     static final int MAX_DNSNAME_LENGTH_IN_OCTETS = 255;
 
     /**
-     * MAX_LABELS.
+     * Largest number of labels a DNS name may carry.
      */
     public static final int MAX_LABELS = 128;
 
     /**
-     * ROOT.
+     * The root name, written as a lone dot.
      */
     public static final DnsName ROOT = new DnsName(".");
 
     /**
-     * IN_ADDR_ARPA.
+     * The reverse lookup zone for IPv4 addresses.
      */
     public static final DnsName IN_ADDR_ARPA = new DnsName("in-addr.arpa");
 
@@ -310,7 +310,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * asIdn.
+     * Decodes the ACE form into Unicode, caching the result.
      *
      * @return the Unicode form of this name, decoded from its ACE representation
      */
@@ -342,7 +342,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * getHostpartLabel.
+     * Fetches the label at the far left of this name.
      *
      * @return the leftmost label of this name, which is its host part
      */
@@ -364,7 +364,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * size.
+     * Computes the encoded length of this name, caching the result.
      *
      * @return the length in octets this name occupies in wire format, counting each label's length
      *         prefix and the terminating root byte
@@ -383,7 +383,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     private transient String safeToStringRepresentation;
 
     /**
-     * toString.
+     * Renders this name in dotted presentation format.
      */
     @Override
     public String toString() {
@@ -411,7 +411,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * from.
+     * Wraps a name given in presentation format.
      *
      * @param name the domain name in presentation format, which is converted to ACE
      * @return the DNS name wrapping that presentation form
@@ -421,7 +421,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * from.
+     * Wraps a name given in presentation format.
      *
      * @param name the domain name in presentation format, which is converted to ACE
      * @return the DNS name wrapping that presentation form
@@ -453,7 +453,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * from.
+     * Places one text label directly under the given parent name.
      *
      * @param child the text of the single label to place directly under parent
      * @param parent the DNS name supplying the labels to the right of the child
@@ -465,7 +465,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * from.
+     * Places one label directly under the given parent name.
      *
      * @param child the label to place directly under parent
      * @param parent the DNS name supplying the labels to the right of the child
@@ -481,7 +481,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * from.
+     * Places a two-label run under the given parent name.
      *
      * @param grandchild the label to place directly under child
      * @param child the label to place between grandchild and parent
@@ -499,7 +499,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * from.
+     * Joins any number of names into a single one with a dot between them.
      *
      * @param nameComponents the DNS names to concatenate, ordered leftmost (child) to rightmost (parent)
      * @return the single DNS name formed by joining the components with a dot
@@ -523,7 +523,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * from.
+     * Builds a name from labels supplied top-level first.
      *
      * @param parts the labels in reverse order, so parts[0] is the top-level domain label
      * @return the DNS name made of those labels, caching a lowercase variant of each
@@ -536,7 +536,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
 
     /**
      * Parse a domain name starting at the current offset and moving the input
-     * stream pointer past this domain name (even if cross references occure).
+     * stream pointer past this domain name (even if cross references occur).
      *
      * @param dis  The input stream.
      * @param data The raw data (for cross references).
@@ -596,7 +596,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * compareTo.
+     * Orders names by their ACE form.
      */
     @Override
     public int compareTo(DnsName other) {
@@ -604,7 +604,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * equals.
+     * Compares two names by their encoded bytes.
      */
     @Override
     public boolean equals(Object other) {
@@ -621,7 +621,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * hashCode.
+     * Hashes the encoded bytes, caching the result.
      */
     @Override
     public int hashCode() {
@@ -633,7 +633,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * isDirectChildOf.
+     * Tests whether exactly one label of this name sits above the given parent.
      *
      * @param parent the candidate ancestor name to compare this name against
      * @return true if this name carries exactly one label more than parent and shares its remaining labels
@@ -653,7 +653,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * isChildOf.
+     * Tests whether this name sits below the given parent at any depth.
      *
      * @param parent the candidate ancestor name to test this name against
      * @return true if this name ends with parent's labels at any depth, so it may be a grandchild or further down
@@ -672,7 +672,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * getLabelCount.
+     * Counts the labels of this name, forcing them to be parsed first.
      *
      * @return the number of labels in this name, where the root label on its own counts as zero
      */
@@ -693,7 +693,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * getLabel.
+     * Fetches one label by its index in the reversed array.
      *
      * @param labelNum the index into the reversed label array, so 0 is the top-level domain label
      * @return the label at that index of the reversed array
@@ -715,7 +715,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * stripToLabels.
+     * Discards labels to the left, keeping only the rightmost few.
      *
      * @param labelCount how many of the rightmost labels to keep, from 0 for the root up to {@link #getLabelCount()}
      * @return a name built from that many labels, this name itself when it is already that short, and the root at 0
@@ -758,7 +758,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
     }
 
     /**
-     * isRootLabel.
+     * Tests whether this name is the root, empty or a lone dot.
      *
      * @return true if this name is the root, written either as an empty string or as a lone dot
      */

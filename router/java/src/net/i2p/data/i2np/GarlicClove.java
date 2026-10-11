@@ -41,7 +41,7 @@ public class GarlicClove extends DataStructureImpl {
     private Certificate _certificate;
 
     /**
-     * GarlicClove.
+     * Creates an empty clove with no id until one is read or set.
      *
      * @param context the app context used to read messages and to log
      */

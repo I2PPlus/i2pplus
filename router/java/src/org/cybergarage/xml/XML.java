@@ -32,11 +32,11 @@ public class XML {
     public XML() {}
 
     /**
-     * DEFAULT_CONTENT_TYPE.
+     * Content type applied to XML payloads sent by UPnP and SOAP responses.
      */
     public static final String DEFAULT_CONTENT_TYPE = "text/xml; charset=\"utf-8\"";
     /**
-     * DEFAULT_CONTENT_LANGUAGE.
+     * Language tag applied to XML payloads when none is specified.
      */
     public static final String DEFAULT_CONTENT_LANGUAGE = "en";
     /**

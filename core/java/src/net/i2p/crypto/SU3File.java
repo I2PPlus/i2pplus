@@ -342,7 +342,7 @@ public class SU3File {
     }
 
     /**
-     * Throws if verify vails.
+     * Throws if verify fails.
      */
     private void verifyHeader(InputStream in) throws IOException, DataFormatException {
         byte[] magic = new byte[MAGIC_BYTES.length];

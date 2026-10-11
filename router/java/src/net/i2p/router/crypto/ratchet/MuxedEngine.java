@@ -29,9 +29,9 @@ final class MuxedEngine {
     /**
      * Decrypt the message with the given private keys
      *
+     * @param data the encrypted CloveSet to decrypt
      * @param elgKey must be ElG, non-null
      * @param ecKey must be EC, non-null
-     * @param data the encrypted CloveSet to decrypt
      * @param keyManager holds the session key material and ratchet preference
      * @return decrypted data or null on failure
      * @throws DataFormatException if the underlying garlic parse fails and cannot be

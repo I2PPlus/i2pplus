@@ -57,7 +57,7 @@ class PluginUpdateRunner extends UpdateRunner {
     private static final String XPI2P = "app.xpi2p";
     private static final String ZIP = XPI2P + ".zip";
     /**
-     * PLUGIN_DIR.
+     * Directory plugins are installed into, relative to the router install.
      */
     public static final String PLUGIN_DIR = PluginStarter.PLUGIN_DIR;
     private static final String PROP_ALLOW_NEW_KEYS = "routerconsole.allowUntrustedPlugins";
@@ -114,7 +114,7 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     * update.
+     * Download and install the plugin from the single configured URI.
      */
     @Override
     protected void update() {
@@ -654,7 +654,7 @@ class PluginUpdateRunner extends UpdateRunner {
     }
 
     /**
-     * transferFailed.
+     * Give up on this attempt: delete the partial download and report the failure.
      */
     @Override
     public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {

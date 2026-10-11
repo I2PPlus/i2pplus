@@ -445,7 +445,7 @@ public class RouterInfo extends DatabaseEntry {
     /**
      * Is this a hidden node?
      *
-     * @return true if either 'H' is in the capbilities, or router identity contains a hidden cert.
+     * @return true if either 'H' is in the capabilities, or router identity contains a hidden cert.
      */
     public boolean isHidden() {
         return (getCapabilities().indexOf(CAPABILITY_HIDDEN) >= 0) ||

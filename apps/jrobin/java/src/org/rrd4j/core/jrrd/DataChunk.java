@@ -100,7 +100,7 @@ public class DataChunk {
     }
 
     /**
-     * getStart.
+     * Returns the row offset of this chunk's first row.
      *
      * @return the row number offset of this chunk's first row, relative to the current row
      */
@@ -109,7 +109,7 @@ public class DataChunk {
     }
 
     /**
-     * getEnd.
+     * Returns the row offset just past this chunk's last row.
      *
      * @return the row number offset just past this chunk's last row, relative to the current row
      */
@@ -118,7 +118,7 @@ public class DataChunk {
     }
 
     /**
-     * getStep.
+     * Returns the seconds between consecutive rows in this chunk.
      *
      * @return the number of seconds between consecutive rows in this chunk
      */
@@ -127,7 +127,7 @@ public class DataChunk {
     }
 
     /**
-     * getDsCount.
+     * Returns the number of datasources held per row.
      *
      * @return the number of datasources held per row in this chunk
      */

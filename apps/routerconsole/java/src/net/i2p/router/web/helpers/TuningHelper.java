@@ -35,7 +35,7 @@ public class TuningHelper extends HelperBase {
     private String _nonce;
 
     /**
-     * setNonce.
+     * Records the CSRF nonce embedded in the rendered tuning form.
      * @param nonce the console CSRF nonce to embed in the hidden field of the
      *              rendered tuning form
      */

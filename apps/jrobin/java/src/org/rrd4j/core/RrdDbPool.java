@@ -80,7 +80,7 @@ public class RrdDbPool {
         }
 
         /**
-         * toString.
+         * Formats the uri, adding the count and db only when not a placeholder.
          */
         @Override
         public String toString() {

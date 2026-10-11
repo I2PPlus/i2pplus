@@ -47,15 +47,15 @@ class OutboundNTCP2State implements EstablishState {
     private long _peerSkew;
 
     /**
-     * KEY_SIZE.
+     * Static key length in bytes (32).
      */
     public static final int KEY_SIZE = 32;
     /**
-     * MAC_SIZE.
+     * MAC length in bytes, appended to each encrypted block (16).
      */
     public static final int MAC_SIZE = 16;
     /**
-     * IV_SIZE.
+     * IV length in bytes, taken from the tail of the static key (16).
      */
     public static final int IV_SIZE = 16;
     /** Options block size in bytes. */
@@ -76,7 +76,7 @@ class OutboundNTCP2State implements EstablishState {
     // SipHash KDF things
     private static final byte[] ZEROLEN = new byte[0];
     /**
-     * ZEROKEY.
+     * All-zero key marking a static key or IV as unset.
      */
     public static final byte[] ZEROKEY = new byte[KEY_SIZE];
     /** For SipHash keygen. */

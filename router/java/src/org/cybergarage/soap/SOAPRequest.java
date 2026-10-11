@@ -44,7 +44,7 @@ public class SOAPRequest extends HTTPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * SOAPRequest.
+     * Creates a POST request carrying the SOAP content type.
      */
     public SOAPRequest() {
         setContentType(SOAP.CONTENT_TYPE);
@@ -52,7 +52,7 @@ public class SOAPRequest extends HTTPRequest {
     }
 
     /**
-     * SOAPRequest.
+     * Adopts the headers and body of an existing HTTP request.
      *
      * @param httpReq the HTTP request whose headers and body this SOAP request copies
      */
@@ -210,7 +210,7 @@ public class SOAPRequest extends HTTPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * print.
+     * Writes the request and its root element to the debug log.
      */
     public void print() {
         Debug.message(toString());

@@ -360,7 +360,7 @@ public class SidebarHelper extends HelperBase {
         public String getMessage() {return msg;}
 
         /**
-         * toString.
+         * Renders the state and its localized description for debug output.
          */
         @Override
         public String toString() {return "(" + state + "; " + msg + ')';}
@@ -1019,7 +1019,8 @@ public class SidebarHelper extends HelperBase {
         private final String snark = _t("I2PSnark");
 
         /**
-         * compare.
+         * Orders two clients by type (HostChecker, chat, snark, server, client, ping),
+         * falling back to a locale-aware name collation.
          */
         @Override
         public int compare(Destination lhs, Destination rhs) {

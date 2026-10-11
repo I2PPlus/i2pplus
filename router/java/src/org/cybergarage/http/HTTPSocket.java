@@ -52,7 +52,7 @@ public class HTTPSocket {
     }
 
     /**
-     * getSocket.
+     * Returns the socket this object wraps.
      *
      * @return the wrapped java.net.Socket
      */

@@ -147,7 +147,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * setPeriodCount.
+     * Sets how many periods the graph spans.
      *
      * @param str period count in minutes; non-numeric text is ignored and numbers
      *            are clamped to MIN_C..MAX_C
@@ -179,7 +179,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * setShowEvents.
+     * Chooses between plotting individual events and plotting averages.
      *
      * @param b true to plot individual events, false to plot averages; an absent,
      *          empty or unrecognised value leaves the current mode in force
@@ -218,7 +218,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * setHeight.
+     * Sets the image height in pixels.
      *
      * @param str image height in pixels; non-numeric text is ignored and numbers
      *            are clamped to MIN_Y..MAX_Y
@@ -239,7 +239,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * setWidth.
+     * Sets the image width in pixels.
      *
      * @param str image width in pixels; non-numeric text is ignored and numbers
      *            are clamped to MIN_X..MAX_X
@@ -260,7 +260,7 @@ public class GraphHelper extends FormHandler {
     }
 
     /**
-     * setRefreshDelay.
+     * Sets how often the graph refreshes, in seconds.
      *
      * @param str refresh delay in seconds; a positive value is raised to
      *            MIN_REFRESH, zero or negative selects never refresh, and
@@ -927,7 +927,7 @@ public class GraphHelper extends FormHandler {
      */
     private static class AlphaComparator implements Comparator<GraphListener>, Serializable {
         /**
-         * compare.
+         * Orders listeners by rate group name, with Router first.
          */
         @Override
         public int compare(GraphListener l, GraphListener r) {

@@ -23,7 +23,7 @@ public class Pair implements Comparable<Pair> {
     public final BigInteger dist;
 
     /**
-     * Pair.
+     * Holds the two routers and their Kademlia distance.
      *
      * @param ri1 the first router of the pair
      * @param ri2 the second router of the pair

@@ -37,14 +37,14 @@ public class SubscriptionResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * SubscriptionResponse.
+     * Creates an empty response naming this library as the server.
      */
     public SubscriptionResponse() {
         setServer(UPnP.getServerName());
     }
 
     /**
-     * SubscriptionResponse.
+     * Wraps the response received from the subscriber.
      *
      * @param httpRes the response received from the subscriber, holding the headers
      */
@@ -57,7 +57,7 @@ public class SubscriptionResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setResponse.
+     * Sets the status code and clears the body length.
      *
      * @param code the HTTP status code to record, sent with an empty body
      */
@@ -71,7 +71,7 @@ public class SubscriptionResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setErrorResponse.
+     * Sets the error status code and clears the body length.
      *
      * @param code the HTTP error status code to record, sent with an empty body
      */
@@ -85,7 +85,7 @@ public class SubscriptionResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setSID.
+     * Writes the subscription identifier to the SID header.
      *
      * @param id the bare subscription identifier to publish in the SID header
      */
@@ -94,7 +94,7 @@ public class SubscriptionResponse extends HTTPResponse {
     }
 
     /**
-     * getSID.
+     * Returns the subscription identifier from the SID header.
      *
      * @return the subscription identifier from the SID header, or the empty string when absent
      */
@@ -107,7 +107,7 @@ public class SubscriptionResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setTimeout.
+     * Writes the subscription lifetime to the TIMEOUT header.
      *
      * @param value the subscription lifetime in seconds, or INFINITE_VALUE for unlimited
      */
@@ -116,7 +116,7 @@ public class SubscriptionResponse extends HTTPResponse {
     }
 
     /**
-     * getTimeout.
+     * Returns the subscription lifetime from the TIMEOUT header.
      *
      * @return the subscription lifetime in seconds from the TIMEOUT header, or INFINITE_VALUE
      *         when the header is absent or unparseable

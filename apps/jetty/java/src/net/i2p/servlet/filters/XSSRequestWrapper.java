@@ -27,7 +27,7 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     private static final String NOFILTER = "nofilter_";
 
     /**
-     * XSSRequestWrapper.
+     * Wraps a request so its parameters and headers are filtered of XSS payloads.
      *
      * @param servletRequest the request being wrapped, whose parameters and headers are filtered
      */

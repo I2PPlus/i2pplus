@@ -26,7 +26,7 @@ public class I2CPMessageHandler {
     public I2CPMessageHandler() {}
 
     /**
-     * This is huge. Mainly to catch a completly bogus response, possibly not an I2CP socket.
+     * This is huge. Mainly to catch a completely bogus response, possibly not an I2CP socket.
      *
      * @since 0.9.11
      */

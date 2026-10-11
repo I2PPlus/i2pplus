@@ -29,7 +29,7 @@ public class ForwardPort {
 	private final int hashCode;
 
 	/**
-	 * ForwardPort.
+	 * Records one interface, protocol and port to forward, and its hash.
 	 *
 	 * @param name name of the interface the port belongs to, e.g. "opennet"
 	 * @param isIP6 true for an IPv6 port, false for IPv4
@@ -45,7 +45,7 @@ public class ForwardPort {
 	}
 
 	/**
-	 * hashCode.
+	 * Returns the name, family, protocol and port combined.
 	 */
 	@Override
 	public int hashCode() {
@@ -53,7 +53,7 @@ public class ForwardPort {
 	}
 
 	/**
-	 * equals.
+	 * Compares name, family, protocol and port against another port.
 	 */
 	@Override
 	public boolean equals(Object o) {

@@ -550,7 +550,7 @@ public final class DSAEngine {
      *
      * Warning, nonstandard for EdDSA, double-hashes, not recommended.
      *
-     * @param verifyingKey Java key
+     * @param pubKey Java key
      * @return true if valid, false otherwise
      * @throws GeneralSecurityException if algorithm unvailable or on other errors
      * @since 0.9.9

@@ -22,7 +22,7 @@ import net.metanotion.util.skiplist.SkipSpan;
 public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIterator<K, V> {
 
     /**
-     * Constructor.
+     * Positions the underlying index at the starting key.
      *
      * @param ss the span to iterate from
      * @param index starting position

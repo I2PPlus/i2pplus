@@ -76,7 +76,7 @@ public class IdenticonUtil {
 	 * Current implementation uses first four bytes of SHA1(int(mask(ip))+salt)
 	 * where mask(ip) uses inetMask to remove unwanted bits from IP address.
 	 * Also, since salt is a string for convenience sake, int(mask(ip)) is
-	 * converetd into a string and combined with inetSalt prior to hashing.
+	 * converted into a string and combined with inetSalt prior to hashing.
 	 * </p>
 	 *
 	 * @param inetAddr

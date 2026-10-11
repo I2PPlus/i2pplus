@@ -125,7 +125,7 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * getDataSourcesName.
+     * Returns the names of the data sources defined in the database header.
      *
      * @return a {@link java.util.Set} object.
      */

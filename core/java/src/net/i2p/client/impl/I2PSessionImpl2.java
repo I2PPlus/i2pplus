@@ -46,7 +46,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /** One MessageState object per message in the process of being sent */
     protected final Map<Long, MessageState> _sendingStates;
     /**
-     * _sendMessageNonce.
+     * Source of the per-message replay nonces sent to the router.
      */
     protected final AtomicLong _sendMessageNonce;
     /** Max # seconds to wait for confirmation of the message send */
@@ -131,7 +131,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     private class RemoveExpired extends SimpleTimer2.TimedEvent {
 
         /**
-         * RemoveExpired.
+         * Register the expiry sweep on the shared timer.
          */
         public RemoveExpired() {super(_context.simpleTimer2(), REMOVE_EXPIRED_TIME);}
 

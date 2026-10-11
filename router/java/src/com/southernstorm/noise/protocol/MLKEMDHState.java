@@ -41,7 +41,7 @@ class MLKEMDHState implements DHState, Cloneable {
     }
 
     /**
-     *  Internal
+     *  Selects the ML-KEM parameter set from the handshake pattern and allocates the key buffers.
      */
     private MLKEMDHState(boolean isAlice, KeyFactory hdh, NoiseInit.PatternID patternId)
     {

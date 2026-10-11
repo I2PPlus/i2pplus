@@ -61,13 +61,13 @@ public class PeerHelper extends HelperBase {
     private static final String THINSP = " / ";
 
     /**
-     * PeerHelper.
+     * Default constructor for the console peer summary helper.
      */
     public PeerHelper() {
         // TODO
     }
     /**
-     * setSort.
+     * Parses the decimal sort order, falling back to 0 when absent or invalid.
      * @param flags the decimal sort order requested by the console page; null or unparseable text falls back to 0, the default ordering
      */
     public void setSort(String flags) {
@@ -78,7 +78,7 @@ public class PeerHelper extends HelperBase {
     }
 
     /**
-     * setUrlBase.
+     * Stores the console URL prefix that rendered peer links are built from.
      * @param base the console URL prefix that the rendered links are built from, ending in a path separator
      */
     public void setUrlBase(String base) {_urlBase = base;}
@@ -943,14 +943,14 @@ public class PeerHelper extends HelperBase {
     private static class AlphaComparator extends PeerComparator {
         private static final AlphaComparator _instance = new AlphaComparator();
         /**
-         * instance.
+         * Returns the shared comparator, ordering connections by remote peer hash.
          */
         public static final AlphaComparator instance() {return _instance;}
     }
 
     private static class PeerComparator implements Comparator<NTCPConnection>, Serializable {
         /**
-         * compare.
+         * Orders two connections by their remote peer's router hash.
          */
         @Override
         public int compare(NTCPConnection l, NTCPConnection r) {

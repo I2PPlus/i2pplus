@@ -617,10 +617,10 @@ final class SSU2Util {
      *
      * @param ctx the application context, providing the DSA service
      * @param prologue the protocol-specific prologue prepended to the signed buffer
-     * @param data if desired, leave room at end for sig
-     * @param datalen the length of the data to be signed
      * @param h to be included in sig, not included in data
      * @param h2 may be null, to be included in sig, not included in data
+     * @param data if desired, leave room at end for sig
+     * @param datalen the length of the data to be signed
      * @param spk the signing key
      * @return null on failure
      */

@@ -37,7 +37,7 @@ class ConnThrottler {
     private boolean _isRunning;
 
     /**
-     * Constructor.
+     * Applies the limits and starts the cleaner that expires throttled peers.
      * @param max per-peer max, 0 for unlimited
      * @param totalMax for all peers, 0 for unlimited
      * @param period check window (ms)

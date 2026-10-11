@@ -21,7 +21,7 @@ public class LkupResult implements LookupResult {
     }
 
     /**
-     * Deferred.
+     * Holds the deferred result code, carrying only the nonce of the pending reply.
      * @param nonce the nonce to carry on the deferred reply
      */
     LkupResult(int nonce) {

@@ -340,7 +340,6 @@ public class PcapWriter implements Closeable, Flushable {
      * Calculate the lowest sequence number that has been acked through.
      *
      * @param pkt the packet containing ack information
-     * @param con the connection
      * @return the lowest acked-through sequence number (at least 0)
      */
     private static long getLowestAckedThrough(Packet pkt) {

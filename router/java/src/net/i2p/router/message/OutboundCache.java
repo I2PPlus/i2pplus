@@ -423,7 +423,7 @@ public class OutboundCache {
      */
     private class OCMOSJCacheCleaner extends SimpleTimer2.TimedEvent {
         /**
-         * OCMOSJCacheCleaner.
+         * Schedules the cleanup event on the router's simple timer.
          */
         public OCMOSJCacheCleaner() { super(_context.simpleTimer2()); }
         /**

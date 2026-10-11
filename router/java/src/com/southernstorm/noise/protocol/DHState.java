@@ -68,7 +68,7 @@ public interface DHState extends Destroyable, Cloneable {
     /**
      * Sets the private key for this object.
      *
-     * @param key The buffer containing the [rivate key.
+     * @param key The buffer containing the private key.
      * @param offset The first offset in the buffer that contains the key.
      *
      *               If this object previously held only a public key, then

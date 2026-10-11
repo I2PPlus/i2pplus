@@ -56,7 +56,7 @@ public class DnsMessage {
      *
      * @see <a href=
      *      "http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6">
-     *      IANA Domain Name System (DNS) Paramters - DNS RCODEs</a>
+     *      IANA Domain Name System (DNS) Parameters - DNS RCODEs</a>
      * @see <a href="http://tools.ietf.org/html/rfc6895#section-2.3">RFC 6895 § 2.3</a>
      */
     public enum RESPONSE_CODE {
@@ -154,7 +154,7 @@ public class DnsMessage {
      *
      * @see <a href=
      *      "http://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-5">
-     *      IANA Domain Name System (DNS) Paramters - DNS OpCodes</a>
+     *      IANA Domain Name System (DNS) Parameters - DNS OpCodes</a>
      */
     public enum OPCODE {
         /** Standard query */
@@ -746,7 +746,7 @@ public class DnsMessage {
     private String toStringCache;
 
     /**
-     * toString.
+     * Renders the whole message, caching the result for later calls.
      */
     @Override
     public String toString() {
@@ -927,7 +927,7 @@ public class DnsMessage {
     private transient Integer hashCodeCache;
 
     /**
-     * hashCode.
+     * Hashes the serialized byte representation, caching the computed value.
      */
     @Override
     public int hashCode() {
@@ -1054,7 +1054,7 @@ public class DnsMessage {
     }
 
     /**
-     * equals.
+     * Compares the serialized wire form against another message.
      */
     @Override
     public boolean equals(Object other) {
@@ -1227,7 +1227,7 @@ public class DnsMessage {
         /**
          * Set the recursion desired flag on this message.
          *
-         * @param recursionDesired The new recusrion setting.
+         * @param recursionDesired The new recursion setting.
          * @return a reference to this builder.
          */
         public Builder setRecursionDesired(boolean recursionDesired) {
@@ -1555,7 +1555,7 @@ public class DnsMessage {
         }
 
         /**
-         * toString.
+         * Renders the builder's accumulated state as a readable message summary.
          */
         @Override
         public String toString() {

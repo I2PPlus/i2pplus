@@ -24,7 +24,7 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
     private static final int FLOOD_PEERS = 2 * FloodfillNetworkDatabaseFacade.MAX_TO_FLOOD;
 
     /**
-     * FloodfillRouterInfoFloodJob.
+     * Stores the network database and the log the flood runs under.
      *
      * @param context the router context whose clock, profile organizer and log manager this job uses
      * @param facade the network database whose local RouterInfo is to be flooded

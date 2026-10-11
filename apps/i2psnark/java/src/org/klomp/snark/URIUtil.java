@@ -60,8 +60,8 @@ public class URIUtil {
      * <p>Somewhat oddly, this encodes all chars &gt;= 0x80 if buf is null, (strict RFC 2396) but
      * only the control, space, and special chars if buf is non-null.
      *
-     * @param path The path the encode
      * @param buf StringBuilder to encode path into (or null)
+     * @param path The path the encode
      * @return The StringBuilder or null if no substitutions required.
      */
     public static StringBuilder encodePath(StringBuilder buf, String path) {

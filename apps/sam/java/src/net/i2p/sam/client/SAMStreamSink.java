@@ -80,7 +80,7 @@ public class SAMStreamSink {
     private static final int V3DGPORT=9999;
 
     /**
-     * main.
+     * Command line entry point, connecting to a SAM bridge and writing streams to disk.
      * @param args the command line: getopt flags, then the destination file and sink dir
      */
     public static void main(String[] args) {
@@ -176,7 +176,7 @@ public class SAMStreamSink {
     }
 
     /**
-     * SAMStreamSink.
+     * Holds the SAM bridge connection that received streams are written from.
      * @param ctx the I2P context
      * @param samHost the hostname of the SAM bridge
      * @param samPort the port of the SAM bridge
@@ -195,7 +195,7 @@ public class SAMStreamSink {
     }
 
     /**
-     * startup.
+     * Connects to the bridge, handshakes, and starts the receiving threads.
      * @param version the SAM protocol version to handshake with, e.g. "3.3"
      * @param isSSL true to use TLS when connecting to the SAM bridge
      * @param mode the stream mode constant, optionally plus MASTER
@@ -274,7 +274,7 @@ public class SAMStreamSink {
         private final int _mode;
 
         /**
-         * DGRcvr.
+         * Thread receiving datagrams sent to the SAM datagram port.
          */
         public DGRcvr(int mode) {
             super("SAM-DGRX");
@@ -282,7 +282,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * run.
+         * Receives datagrams and writes them to the first active sink.
          */
         public void run() {
             DatagramSocket dg = null;
@@ -338,7 +338,7 @@ public class SAMStreamSink {
         private final Properties _opts;
 
         /**
-         * FwdRcvr.
+         * Thread accepting forwarded connections from the SAM forwarding port.
          */
         public FwdRcvr(boolean isSSL, Properties opts) {
             super("SAM-FwdRX");
@@ -347,7 +347,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * run.
+         * Accepts forwarded connections and streams their data to the sink.
          */
         public void run() {
             try {
@@ -413,7 +413,7 @@ public class SAMStreamSink {
         private final OutputStream _out;
 
         /**
-         * Pinger.
+         * Thread sending the SAM keepalive PING to the bridge.
          */
         public Pinger(OutputStream out) {
             super("SAM-SinkPing");
@@ -422,7 +422,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * run.
+         * Sends a PING to the bridge about every 127 seconds.
          */
         public void run() {
             while (true) {
@@ -445,12 +445,12 @@ public class SAMStreamSink {
     private class SinkEventHandler extends SAMEventHandler {
 
         /**
-         * _out.
+         * Stream to the SAM bridge, used to answer keepalives.
          */
         protected final OutputStream _out;
 
         /**
-         * SinkEventHandler.
+         * Remember the bridge output stream for the event replies.
          */
         public SinkEventHandler(I2PAppContext ctx, OutputStream out) {
             super(ctx);
@@ -458,7 +458,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * streamClosedReceived.
+         * Closes the sink file and records the connection lifetime.
          */
         @Override
         public void streamClosedReceived(String result, String id, String message) {
@@ -476,7 +476,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * streamDataReceived.
+         * Appends the received stream data to the sink file.
          */
         @Override
         public void streamDataReceived(String id, byte[] data, int offset, int length) {
@@ -492,7 +492,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * streamConnectedReceived.
+         * Opens a sink file for a newly connected stream.
          */
         @Override
         public void streamConnectedReceived(String dest, String id) {
@@ -510,7 +510,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * pingReceived.
+         * Answers a bridge keepalive with a matching PONG.
          */
         @Override
         public void pingReceived(String data) {
@@ -527,7 +527,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * datagramReceived.
+         * Appends the received datagram to the first open sink.
          */
         @Override
         public void datagramReceived(String dest, byte[] data, int offset, int length, int fromPort, int toPort) {
@@ -544,7 +544,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * rawReceived.
+         * Appends the received raw datagram to the first open sink.
          */
         @Override
         public void rawReceived(byte[] data, int offset, int length, int fromPort, int toPort, int protocol) {
@@ -574,7 +574,7 @@ public class SAMStreamSink {
         }
 
         /**
-         * streamStatusReceived.
+         * Opens the sink once the bridge confirms the stream connection.
          */
         @Override
         public void streamStatusReceived(String result, String id, String message) {
@@ -875,7 +875,7 @@ public class SAMStreamSink {
         private final OutputStream _out;
 
         /**
-         * Sink.
+         * Opens the sink file and starts the connection lifetime statistics.
          */
         public Sink(String conId, String remDest) throws IOException {
             _connectionId = conId;
@@ -907,7 +907,7 @@ public class SAMStreamSink {
         public String getDestination() { return _remoteDestination; }
 
         /**
-         * closed.
+         * Marks the sink closed and closes its output file.
          */
         public void closed() {
             if (_closed) return;
@@ -921,7 +921,7 @@ public class SAMStreamSink {
             }
         }
         /**
-         * received.
+         * Appends incoming data to the sink file.
          */
         public void received(byte[] data, int offset, int len) {
             if (_closed) return;

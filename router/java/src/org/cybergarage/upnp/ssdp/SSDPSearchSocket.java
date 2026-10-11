@@ -78,7 +78,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     //	Constructor
     ////////////////////////////////////////////////
     /**
-     * open.
+     * Opens the socket joined to the IPv4 SSDP multicast group.
      *
      * @param bindAddr the IPv4 local address to send multicast packets from
      * @return true if and only if it open the socket
@@ -89,7 +89,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * open.
+     * Opens the socket joined to the IPv6 SSDP multicast group.
      *
      * @param bindAddr the IPv6 local address to send multicast packets from
      * @return true if and only if it open the socket
@@ -100,7 +100,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * open.
+     * Opens the socket on the given local address and multicast group.
      *
      * @param bind the local address or hostname to send multicast packets from
      * @param multicast the destination multicast address, which must be of the same IP version as bind
@@ -119,7 +119,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * open.
+     * Opens the socket, picking the IP version from the bind hostname.
      *
      * @param bindAddr the hostname of the interface to use for sending multicast packet
      * @return true if and only if it open the socket
@@ -142,7 +142,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     private ListenerList deviceSearchListenerList = new ListenerList();
 
     /**
-     * addSearchListener.
+     * Registers a listener for incoming device searches.
      *
      * @param listener the listener notified for every received search request
      */
@@ -151,7 +151,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * removeSearchListener.
+     * Unregisters a previously added search listener.
      *
      * @param listener the listener to stop notifying
      */
@@ -160,7 +160,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * performSearchListener.
+     * Hands a received search request to every registered listener.
      *
      * @param ssdpPacket the received search request to hand to every registered listener
      */
@@ -179,7 +179,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     private Thread deviceSearchThread = null;
 
     /**
-     * run.
+     * Receives and dispatches search packets until the thread is replaced.
      */
     public void run() {
         Thread thisThread = Thread.currentThread();
@@ -204,7 +204,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * start.
+     * Launches the receive thread under a name naming the multicast group.
      */
     public void start() {
         StringBuffer name = new StringBuffer("Cyber.SSDPSearchSocket/");
@@ -223,7 +223,7 @@ public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * stop.
+     * Closes the socket and unhooks the receive thread.
      */
     public void stop() {
         // Thanks for Mikael Hakman (04/20/05)

@@ -32,14 +32,14 @@ import java.io.*;
  */
 public class InvalidDescriptionException extends Exception {
     /**
-     * InvalidDescriptionException.
+     * Creates a description exception with no detail message.
      */
     public InvalidDescriptionException() {
         super();
     }
 
     /**
-     * InvalidDescriptionException.
+     * Creates a description exception carrying a detail message.
      *
      * @param s the detail message describing why the description is invalid
      */
@@ -48,7 +48,7 @@ public class InvalidDescriptionException extends Exception {
     }
 
     /**
-     * InvalidDescriptionException.
+     * Creates a description exception naming the offending file.
      *
      * @param s the detail message describing why the description is invalid
      * @param file the description file whose contents failed to parse, appended to the message
@@ -58,7 +58,7 @@ public class InvalidDescriptionException extends Exception {
     }
 
     /**
-     * InvalidDescriptionException.
+     * Creates a description exception reusing a parse failure's message.
      *
      * @param e the parse failure whose message is reused as the detail message
      */

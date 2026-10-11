@@ -13,7 +13,7 @@ public class TunnelBuildReplyMessage extends TunnelBuildMessageBase {
     public static final int MESSAGE_TYPE = 22;
 
     /**
-     * TunnelBuildReplyMessage.
+     * Passes the context on with the standard eight-record count.
      *
      * @param context the I2P app context, used for message ID generation
      */

@@ -72,10 +72,10 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      * Caller must then check getState() and build a
      * Retry or Session Created in response.
      *
-     * @param packet with all header encryption removed,
-     *               either a SessionRequest OR a TokenRequest.
      * @param ctx the router context
      * @param transport the UDP transport this inbound handshake belongs to
+     * @param packet with all header encryption removed,
+     *               either a SessionRequest OR a TokenRequest.
      * @throws GeneralSecurityException if the connection IDs in the packet are identical
      */
     public InboundEstablishState2(RouterContext ctx, UDPTransport transport,

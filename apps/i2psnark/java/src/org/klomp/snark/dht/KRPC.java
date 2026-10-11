@@ -224,8 +224,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Create the DHT instance sharing state.
      *
-     * @param baseName generally "i2psnark"
      * @param ctx the I2P context, supplying the log manager, random source and router
+     * @param baseName generally "i2psnark"
      * @param session the I2P session the DHT messages are sent over
      * @param shared the KRPC instance whose routing table, tracker, and blacklist are shared with
      *               this instance, or null for a standalone instance; a TorrentKRPC passes the main
@@ -1907,10 +1907,10 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
          * Either wait on this object with a timeout, or use non-null Runnables. Any sent data to be
          * remembered may be stored by setSentObject(). Reply object may be in getReplyObject().
          *
-         * @param onReply must be fast, otherwise set to null and wait on this UNUSED
-         * @param onTimeout must be fast, otherwise set to null and wait on this UNUSED
          * @param mID the message ID of the query being awaited
          * @param nInfo the node the query was sent to, and whose reply is credited
+         * @param onReply must be fast, otherwise set to null and wait on this UNUSED
+         * @param onTimeout must be fast, otherwise set to null and wait on this UNUSED
          */
         public ReplyWaiter(MsgID mID, NodeInfo nInfo, Runnable onReply, Runnable onTimeout) {
             super(SimpleTimer2.getInstance(), DEFAULT_QUERY_TIMEOUT);

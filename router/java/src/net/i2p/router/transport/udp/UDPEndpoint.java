@@ -163,7 +163,7 @@ class UDPEndpoint implements SocketListener {
     public UDPSender getSender() { return _sender; }
 
     /**
-     * Add the packet to the outobund queue to be sent ASAP (as allowed by
+     * Add the packet to the outbound queue to be sent ASAP (as allowed by
      * the bandwidth limiter)
      * BLOCKING if queue is full.
      *

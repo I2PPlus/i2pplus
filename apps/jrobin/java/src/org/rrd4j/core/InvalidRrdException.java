@@ -10,7 +10,7 @@ public class InvalidRrdException extends RrdException {
     private static final long serialVersionUID = 1L;
 
     /**
-     * InvalidRrdException.
+     * Reports corruption found in an RRD, with no underlying cause.
      *
      * @param message the detail message naming the corruption found
      */
@@ -19,7 +19,7 @@ public class InvalidRrdException extends RrdException {
     }
 
     /**
-     * InvalidRrdException.
+     * Reports corruption found in an RRD, keeping the failure that caused it.
      *
      * @param message the detail message naming the corruption found
      * @param cause the underlying failure that made the RRD unreadable

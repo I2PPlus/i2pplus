@@ -78,7 +78,7 @@ public class SHA3Digest
     }
 
     /**
-     * getAlgorithmName.
+     * Names the digest by family and output size, e.g. "SHA3-256".
      */
     public String getAlgorithmName()
     {
@@ -86,7 +86,7 @@ public class SHA3Digest
     }
 
     /**
-     * doFinal.
+     * Pad the sponge and squeeze out the digest.
      */
     public int doFinal(byte[] out, int outOff)
     {
@@ -99,7 +99,7 @@ public class SHA3Digest
      * TODO Possible API change to support partial-byte suffixes.
      */
     /**
-     * doFinal.
+     * Pad and squeeze out the digest for a message ending mid-byte.
      */
     protected int doFinal(byte[] out, int outOff, byte partialByte, int partialBits)
     {

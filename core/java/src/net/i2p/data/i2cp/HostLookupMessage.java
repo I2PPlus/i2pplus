@@ -22,7 +22,7 @@ import java.io.InputStream;
  */
 public class HostLookupMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type number of a host or hash lookup request.
      */
     public static final int MESSAGE_TYPE = 38;
 
@@ -34,18 +34,18 @@ public class HostLookupMessage extends I2CPMessageImpl {
     private SessionId _sessionId;
 
     /**
-     * LOOKUP_HASH.
+     * Lookup type value asking for the Destination behind a hash.
      */
     public static final int LOOKUP_HASH = 0;
     /**
-     * LOOKUP_HOST.
+     * Lookup type value asking for the HostName behind a Destination.
      */
     public static final int LOOKUP_HOST = 1;
 
     private static final long MAX_INT = (1L << 32) - 1;
 
     /**
-     * HostLookupMessage.
+     * Creates a lookup request with no target, type or session set.
      */
     public HostLookupMessage() {}
 
@@ -206,7 +206,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Reports this message as a host lookup request.
      * @return the type
      */
     @Override

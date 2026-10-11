@@ -29,7 +29,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     private InetAddress[] binds = null;
 
     /**
-     * SSDPNotifySocketList.
+     * Creates an empty socket list with no explicit bind addresses.
      */
     public SSDPNotifySocketList() {}
 
@@ -48,7 +48,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     ////////////////////////////////////////////////
 
     /**
-     * getSSDPNotifySocket.
+     * Returns the notify socket at the given index.
      *
      * @param n the zero-based index of the socket in this list
      * @return the notify socket bound to that address
@@ -62,7 +62,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     ////////////////////////////////////////////////
 
     /**
-     * setControlPoint.
+     * Hands the control point to every socket in this list.
      *
      * @param ctrlPoint the control point handed to every socket in this list
      */
@@ -79,7 +79,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     ////////////////////////////////////////////////
 
     /**
-     * open.
+     * Opens a notify socket per bind address.
      *
      * @return true once the sockets are opened, even if some bind addresses failed
      */
@@ -113,7 +113,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     }
 
     /**
-     * close.
+     * Closes every socket in this list and empties it.
      */
     public void close() {
         int nSockets = size();
@@ -129,7 +129,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     ////////////////////////////////////////////////
 
     /**
-     * start.
+     * Starts the notification thread on every socket in this list.
      */
     public void start() {
         int nSockets = size();
@@ -140,7 +140,7 @@ public class SSDPNotifySocketList extends Vector<SSDPNotifySocket> {
     }
 
     /**
-     * stop.
+     * Stops the notification thread on every socket in this list.
      */
     public void stop() {
         int nSockets = size();

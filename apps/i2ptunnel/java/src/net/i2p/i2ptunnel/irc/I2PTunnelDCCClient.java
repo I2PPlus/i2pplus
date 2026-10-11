@@ -164,7 +164,8 @@ public class I2PTunnelDCCClient extends I2PTunnelClientBase {
         }
 
         /**
-         * run.
+         * Brackets the superclass transfer with connect start/stop events and
+         * extends the inbound expiry on either side.
          */
         @Override
         public void run() {

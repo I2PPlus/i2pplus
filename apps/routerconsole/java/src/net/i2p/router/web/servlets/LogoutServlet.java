@@ -15,7 +15,7 @@ import net.i2p.util.Log;
  */
 public class LogoutServlet extends HttpServlet {
 /**
- * Constructor.
+ * Explicit no-arg constructor, as the servlet container requires.
  */
 public LogoutServlet() {
 }

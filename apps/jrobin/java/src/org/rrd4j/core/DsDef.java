@@ -44,7 +44,7 @@ public class DsDef {
      * @param dsName Data source name.
      * @param dsType Data source type. Valid values are "COUNTER", "GAUGE", "DERIVE" and "ABSOLUTE"
      *               (these string constants are conveniently defined in the {@link org.rrd4j.DsType} class).
-     * @param heartbeat Hearbeat
+     * @param heartbeat seconds between writes of unknown or NaN values
      * @param minValue Minimal value. Use <code>Double.NaN</code> if unknown.
      * @param maxValue Maximal value. Use <code>Double.NaN</code> if unknown.
      */
@@ -152,7 +152,7 @@ public class DsDef {
     }
 
     /**
-     * hashCode.
+     * Hashes the data source name alone, matching equals().
      */
     @Override
     public int hashCode() {

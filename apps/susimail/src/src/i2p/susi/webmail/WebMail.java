@@ -232,15 +232,15 @@ public class WebMail extends HttpServlet {
     /** Config key: leave mail on the server. */
     static final String CONFIG_LEAVE_ON_SERVER = "pop3.leave.on.server";
     /**
-     * CONFIG_BACKGROUND_CHECK.
+     * Property key enabling the background POP3 check for new mail.
      */
     public static final String CONFIG_BACKGROUND_CHECK = "pop3.check.enable";
     /**
-     * CONFIG_CHECK_MINUTES.
+     * Property key setting the interval between background POP3 checks, in minutes.
      */
     public static final String CONFIG_CHECK_MINUTES = "pop3.check.interval.minutes";
     /**
-     * CONFIG_IDLE_SECONDS.
+     * Property key setting the POP3 idle timeout, in seconds.
      */
     public static final String CONFIG_IDLE_SECONDS = "pop3.idle.timeout.seconds";
     private static final String CONFIG_DEBUG = "debug";
@@ -274,7 +274,7 @@ public class WebMail extends HttpServlet {
         /** @since 0.9.70+ */
         private String _sessionKey;
         /**
-         * List.
+         * Attachments staged for this session, cleared and deleted together.
          */
         public ArrayList<Attachment> attachments; // TODO Map of UIDL to List
         /**
@@ -287,19 +287,19 @@ public class WebMail extends HttpServlet {
         private final List<String> nonces;
         private static final int MAX_NONCES = 15;
         /**
-         * log.
+         * Log scoped to this session's requests.
          */
         public final Log log;
         /**
-         * lastError.
+         * Cached error text from the last render, to avoid repeating it.
          */
         public String lastError = "";
         /**
-         * lastInfo.
+         * Cached informational text from the last render, to avoid repeating it.
          */
         public String lastInfo = "";
         /**
-         * lastNotice.
+         * Status message slot for the session, alongside lastError and lastInfo.
          */
         public String lastNotice = "";
 
@@ -423,7 +423,7 @@ public class WebMail extends HttpServlet {
     }
 
     /**
-     * safeEquals.
+     * Compares two strings, counting null as equal only to null.
      *
      * @param a one of the two strings to compare, may be null
      * @param b the string compared against a, may be null
@@ -950,7 +950,7 @@ public class WebMail extends HttpServlet {
         public LoadWaiter(SessionObject so, MailCache mc) {_so = so; _mc = mc;}
 
         /**
-         * foundNewMail.
+         * Merge any newly arrived UIDLs into the folder and wake the waiter.
          */
         @Override
         /**
@@ -1734,7 +1734,6 @@ public class WebMail extends HttpServlet {
      * @param sessionObject
      * @param page the current page
      * @param request
-     * @param return the new page
      */
     private static int processFolderButtons(SessionObject sessionObject, int page, RequestWrapper request) {
         if (buttonPressed(request, PREVPAGE)) {
@@ -3057,7 +3056,7 @@ public class WebMail extends HttpServlet {
         }
 
         /**
-         * run.
+         * Hands the queued draft to the SMTP relay and records the outcome.
          */
         @Override
         /**
@@ -3870,7 +3869,7 @@ public class WebMail extends HttpServlet {
      * @param out
      * @param sessionObject
      * @param reallyDelete was the delete button pushed, if so, show the really delete? message
-     * @param allowHtml allow display of text/html parts
+     * @param allowHTML allow display of text/html parts
      */
     private static void showMessage(PrintWriter out, SessionObject sessionObject, MailCache mc,
                                     String showUIDL, boolean reallyDelete, HtmlMode allowHTML) {

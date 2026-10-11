@@ -185,7 +185,7 @@ public class MessageWrapper {
         public final RatchetSessionTag rtag;
 
         /**
-         * OneTimeSession.
+         * Builds an ElGamal session, leaving the ratchet tag null.
          *
          * @param key the session key
          * @param tag the session tag for ElGamal

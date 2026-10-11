@@ -34,7 +34,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     private ElGamalParameterSpec elSpec;
 
     /**
-     * ElGamalPublicKeyImpl.
+     * Adopts the y value and parameters of an ElGamal key spec.
      *
      * @param spec the ElGamal public key spec
      */
@@ -44,7 +44,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * ElGamalPublicKeyImpl.
+     * Adopts the y value and parameters of a DH key spec.
      *
      * @param spec the DH public key spec
      */
@@ -54,7 +54,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * ElGamalPublicKeyImpl.
+     * Copies an existing ElGamal public key.
      *
      * @param key the ElGamal public key to copy
      */
@@ -64,7 +64,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * ElGamalPublicKeyImpl.
+     * Copies an existing DH public key into ElGamal form.
      *
      * @param key the DH public key to copy
      */
@@ -74,7 +74,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * ElGamalPublicKeyImpl.
+     * Builds a key from a bare public value and its parameters.
      *
      * @param y the public value y = g^x mod p
      * @param elSpec the ElGamal parameters
@@ -85,7 +85,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * ElGamalPublicKeyImpl.
+     * Rejects X.509 encoding, which is not implemented here.
      *
      * @param spec the X.509 key spec
      * @throws InvalidKeySpecException always, not yet implemented
@@ -95,7 +95,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Algorithm.
+     * Names the ElGamal algorithm this key belongs to.
      * @return the algorithm
      */
     @Override
@@ -104,7 +104,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Format.
+     * Names the X.509 encoding this key serialises to.
      * @return the format
      */
     @Override
@@ -113,7 +113,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Encoded.
+     * Serialises p, g and y into the X.509 SubjectPublicKeyInfo form.
      * @return the encoded
      */
     @Override
@@ -187,7 +187,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Parameters.
+     * Fetches the ElGamal group parameters.
      * @return the parameters
      */
     @Override
@@ -196,7 +196,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
     }
 
     /**
-     * Params.
+     * Wraps the same group parameters in a fresh DH spec.
      * @return the params
      */
     @Override

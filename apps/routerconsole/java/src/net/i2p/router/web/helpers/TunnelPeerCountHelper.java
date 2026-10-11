@@ -12,7 +12,7 @@ import net.i2p.util.Log;
  */
 public class TunnelPeerCountHelper extends HelperBase {
     /**
-     * TunnelPeerCountHelper.
+     * Creates a helper for the tunnel peer count page.
      */
     public TunnelPeerCountHelper() { /* nop */ }
 

@@ -35,84 +35,84 @@ public class SOAP {
     public SOAP() {}
 
     /**
-     * ENVELOPE.
+     * Name of the SOAP Envelope element.
      */
     public static final String ENVELOPE = "Envelope";
     /**
-     * BODY.
+     * Name of the SOAP Body element.
      */
     public static final String BODY = "Body";
     /**
-     * RESPONSE.
+     * Name of the SOAP Response element.
      */
     public static final String RESPONSE = "Response";
     /**
-     * FAULT.
+     * Name of the SOAP Fault element.
      */
     public static final String FAULT = "Fault";
     /**
-     * FAULT_CODE.
+     * Name of the faultcode element inside a Fault.
      */
     public static final String FAULT_CODE = "faultcode";
     /**
-     * FAULT_STRING.
+     * Name of the faultstring element inside a Fault.
      */
     public static final String FAULT_STRING = "faultstring";
     /**
-     * FAULTACTOR.
+     * Name of the faultactor element inside a Fault.
      */
     public static final String FAULTACTOR = "faultactor";
     /**
-     * DETAIL.
+     * Name of the detail element inside a Fault.
      */
     public static final String DETAIL = "detail";
 
     /**
-     * RESULTSTATUS.
+     * Name of the UPnP ResultStatus element.
      */
     public static final String RESULTSTATUS = "ResultStatus";
     /**
-     * UPNP_ERROR.
+     * Name of the UPnP error element.
      */
     public static final String UPNP_ERROR = "UPnPError";
     /**
-     * ERROR_CODE.
+     * Name of the UPnP error code element.
      */
     public static final String ERROR_CODE = "errorCode";
     /**
-     * ERROR_DESCRIPTION.
+     * Name of the UPnP error description element.
      */
     public static final String ERROR_DESCRIPTION = "errorDescription";
 
     // public static final String XMLNS = "SOAP-ENV";
     /**
-     * XMLNS.
+     * Short prefix declared for the SOAP envelope namespace.
      */
     public static final String XMLNS = "s";
     /**
-     * METHODNS.
+     * Short prefix declared for the SOAP method-call namespace.
      */
     public static final String METHODNS = "u";
     /**
-     * DELIM.
+     * Separator between a namespace prefix and the element name.
      */
     public static final String DELIM = ":";
 
     /**
-     * XMLNS_URL.
+     * Namespace URL declared for the SOAP envelope.
      */
     public static final String XMLNS_URL = "http://schemas.xmlsoap.org/soap/envelope/";
     /**
-     * ENCSTYLE_URL.
+     * Encoding style URL declared on the SOAP envelope.
      */
     public static final String ENCSTYLE_URL = "http://schemas.xmlsoap.org/soap/encoding/";
 
     /**
-     * CONTENT_TYPE.
+     * Content-Type sent with a SOAP message.
      */
     public static final String CONTENT_TYPE = "text/xml; charset=\"utf-8\"";
     /**
-     * VERSION_HEADER.
+     * XML declaration prefixing every SOAP message sent.
      */
     public static final String VERSION_HEADER = "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
 
@@ -121,7 +121,7 @@ public class SOAP {
     ////////////////////////////////////////////////
 
     /**
-     * createEnvelopeBodyNode.
+     * Builds an empty SOAP envelope with a Body child.
      *
      * @return the SOAP Envelope element, carrying an empty Body child, ready to
      *         have a SOAP Action element added to it
@@ -146,7 +146,7 @@ public class SOAP {
     private static Parser xmlParser;
 
     /**
-     * setXMLParser.
+     * Installs the shared XML parser used to parse SOAP messages.
      *
      * @param parser the parser to install as the shared XML parser used by this
      *               class when it has to parse a SOAP message itself
@@ -156,7 +156,7 @@ public class SOAP {
     }
 
     /**
-     * getXMLParser.
+     * Returns the shared XML parser.
      *
      * @return the shared XML parser installed by setXMLParser, or null if none
      *         has been set

@@ -55,9 +55,9 @@ class SOCKS4aServer extends SOCKSServer {
      * SOCKS VER field has been stripped from the input stream of the
      * client socket.
      *
+     * @param ctx application context, passed to the SOCKSServer superclass
      * @param clientSock client socket
      * @param props non-null
-     * @param ctx application context, passed to the SOCKSServer superclass
      */
     public SOCKS4aServer(I2PAppContext ctx, Socket clientSock, Properties props) {
         super(ctx, clientSock, props);

@@ -38,12 +38,12 @@ public class USN {
     public USN() {}
 
     /**
-     * ROOTDEVICE.
+     * The USN suffix naming the root device.
      */
     public static final String ROOTDEVICE = "upnp:rootdevice";
 
     /**
-     * isRootDevice.
+     * Tests whether a USN string names the root device.
      *
      * @param usnValue a USN string of the form "uuid::upnp:rootdevice"
      * @return true if the value names the root device, false for a null value or another device type
@@ -54,7 +54,7 @@ public class USN {
     }
 
     /**
-     * getUDN.
+     * Extracts the UDN portion of a USN string, the part before the "::" separator.
      *
      * @param usnValue a USN string of the form "uuid::&lt;type&gt;"
      * @return the UDN portion before the "::" separator, or the trimmed whole value when there is none

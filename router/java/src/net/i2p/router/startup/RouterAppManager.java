@@ -31,7 +31,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
     private final ConcurrentHashMap<ClientApp, String[]> _clients;
 
     /**
-     * RouterAppManager.
+     * Opens the client map and registers a shutdown task.
      *
      * @param ctx router context supplying the log manager and shutdown task registration
      */

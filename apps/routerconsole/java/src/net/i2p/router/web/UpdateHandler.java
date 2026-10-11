@@ -23,11 +23,11 @@ import net.i2p.util.Log;
  */
 public class UpdateHandler {
     /**
-     * _context.
+     * Router context backing this handler's update pages.
      */
     protected RouterContext _context;
     /**
-     * _log.
+     * Log scoped to this handler's class.
      */
     protected Log _log;
     private String _action;
@@ -43,12 +43,12 @@ public class UpdateHandler {
     public void storeSession(HttpSession session) { _session = session; }
 
     /**
-     * UpdateHandler.
+     * Binds the router context taken from the servlet context.
      */
     public UpdateHandler() {this(ContextHelper.getContext(null));}
 
     /**
-     * UpdateHandler.
+     * Binds the given router context and takes its log from it.
      *
      * @param ctx router context whose log manager backs this handler
      */
@@ -94,7 +94,7 @@ public class UpdateHandler {
     }
 
     /**
-     * setUpdateNonce.
+     * Records the submitted nonce and re-checks the pending action.
      *
      * @param nonce the nonce submitted by the form, checked against the issued one
      */

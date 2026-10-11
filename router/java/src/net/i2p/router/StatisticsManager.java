@@ -43,7 +43,7 @@ public class StatisticsManager {
     private final DecimalFormat _pct;
 
     /**
-     * StatisticsManager.
+     * Captures the router context and prepares the number and percentage formatters.
      *
      * @param context the router context supplying the identity, rates and config
      */

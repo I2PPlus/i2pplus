@@ -33,7 +33,7 @@ abstract class LogWriter implements Runnable {
     /** Timestamp of last config reread */
     private volatile long _lastReadConfig;
     /**
-     * _manager.
+     * The log manager owning this writer and its context.
      */
     protected final LogManager _manager;
 
@@ -212,7 +212,7 @@ abstract class LogWriter implements Runnable {
     private static final String ROUTER_BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     * gettext
+     * Choose the singular or plural form for a translated count.
      *
      * @since 0.9.3
      */

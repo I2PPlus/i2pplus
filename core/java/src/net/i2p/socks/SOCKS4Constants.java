@@ -35,11 +35,11 @@ public class SOCKS4Constants {
         public Command() {}
 
         /**
-         * CONNECT.
+         * Command code asking the proxy to open a TCP connection.
          */
         public static final int CONNECT = 0x01;
         /**
-         * BIND.
+         * Command code asking the proxy to listen for an inbound connection.
          */
         public static final int BIND = 0x02;
     }
@@ -56,11 +56,11 @@ public class SOCKS4Constants {
         public Reply() {}
 
         /**
-         * SUCCEEDED.
+         * Reply code reporting the request was granted.
          */
         public static final int SUCCEEDED = 0x5a;
         /**
-         * CONNECTION_REFUSED.
+         * Reply code reporting the target connection was refused or failed.
          */
         public static final int CONNECTION_REFUSED = 0x5b;
     }

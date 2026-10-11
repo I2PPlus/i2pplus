@@ -27,7 +27,7 @@ class UpdateHandler implements Updater {
     protected final ConsoleUpdateManager _mgr;
 
     /**
-     * UpdateHandler.
+     * Stores the context and the manager that owns the update runner.
      * @param ctx router context used to read the proxy setting and to run the download
      * @param mgr update manager that owns the runner and receives progress notifications
      */

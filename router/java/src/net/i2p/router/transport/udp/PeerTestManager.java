@@ -413,7 +413,7 @@ class PeerTestManager {
     /** How long after msg 4 we may send msg 6 without having seen msg 5. @since 0.9.71+ */
     private static final long SYMNAT_GRACE = 5000;
 
-/**
+    /**
      *  Which retransmit (if any) the ContinueTimer should make.  Pure decision
      *  logic, with the test state passed in as scalars so it is testable without
      *  a running test.

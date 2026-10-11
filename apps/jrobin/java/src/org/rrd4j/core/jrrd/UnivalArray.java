@@ -28,7 +28,7 @@ class UnivalArray {
     }
 
     /**
-     * getLong.
+     * Reads the long stored at the slot the enum's ordinal selects.
      *
      * @param e a {@link java.lang.Enum} object.
      * @return a long.
@@ -40,7 +40,7 @@ class UnivalArray {
     }
 
     /**
-     * getDouble.
+     * Reads the double stored at the slot the enum's ordinal selects.
      *
      * @param e a {@link java.lang.Enum} object.
      * @return a double.

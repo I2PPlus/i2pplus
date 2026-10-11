@@ -756,8 +756,6 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param initialSocketData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
      *                 Will synchronize on slock when removing.
-     * @param onTimeout May be null. If non-null and no data (except initial data) was received,
-     *                  it will be run before closing s.
      * @param onFail Trumps onTimeout
      * @param shouldStart should thread be started in constructor (bad, false recommended)
      */
@@ -778,12 +776,12 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param onTimeout May be null. If non-null and no data (except initial data) was received,
      *                  it will be run before closing s.
      * @param onFail Trumps onTimeout
-     * @param shouldStart should thread be started in constructor (bad, false recommended)
      * @param keepAliveI2P Do not close the I2P socket when done.
      * @param keepAliveSocket Do not close the local socket when done.
      *                        For client side only; must be false for server side.
      *                        NO data will be forwarded from the socket to the i2psocket other than
      *                        initialI2PData if this is true.
+     * @param shouldStart should thread be started in constructor (bad, false recommended)
      */
     private I2PTunnelRunner(Socket s, I2PSocket i2ps, Object slock, byte[] initialI2PData,
                             byte[] initialSocketData, List<I2PSocket> sockList, Runnable onTimeout,
@@ -1808,7 +1806,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     }
 
     /**
-     * run.
+     * Serves one connection: writes the buffered request, starts the forwarders
+     * and keeps them going, reconnecting if the upstream returns nothing.
      */
     @Override
     public void run() {
@@ -2193,7 +2192,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
         }
 
         /**
-         * run.
+         * Pumps bytes between one socket and the I2P stream until either side closes.
          */
         @Override
         public void run() {

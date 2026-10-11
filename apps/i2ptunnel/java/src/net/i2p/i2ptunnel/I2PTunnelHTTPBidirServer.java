@@ -26,10 +26,10 @@ import net.i2p.util.EventDispatcher;
   * Useful for applications requiring both server and client HTTP capabilities
   * through I2P, such as web applications making external API calls.
   * </p>
-   *
-   * @see I2PTunnelHTTPServer
-   * @see I2PTunnelHTTPBidirProxy
-   */
+  *
+  * @see I2PTunnelHTTPServer
+  * @see I2PTunnelHTTPBidirProxy
+  */
   public class I2PTunnelHTTPBidirServer extends I2PTunnelHTTPServer {
 
      /**

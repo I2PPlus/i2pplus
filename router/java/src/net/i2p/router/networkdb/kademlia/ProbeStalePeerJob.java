@@ -53,7 +53,7 @@ class ProbeStalePeerJob extends JobImpl {
     private static final int STARTUP_BURST_CYCLES = 3;
 
     /**
-     * Constructor.
+     * Stores the facade and logger, and empties the per-peer probe cooldown map.
      * @param ctx the router context
      * @param facade the floodfill network database facade
      */

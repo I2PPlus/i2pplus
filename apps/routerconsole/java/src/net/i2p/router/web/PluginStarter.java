@@ -52,25 +52,25 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
  */
 public class PluginStarter implements Runnable {
     /**
-     * _context.
+     * The router context the plugins are started in.
      */
     protected RouterContext _context;
     private static final String CONFIG_FILE = "plugins.config";
     /**
-     * PREFIX.
+     * Prefix of every plugin property key.
      */
     public static final String PREFIX = "plugin.";
     // false, true, or deleted
     /**
-     * ENABLED.
+     * Suffix of the property recording whether a plugin starts at load.
      */
     public static final String ENABLED = ".startOnLoad";
     /**
-     * DELETED.
+     * Value of the enabled property marking a plugin as deleted.
      */
     public static final String DELETED = "deleted";
     /**
-     * PLUGIN_DIR.
+     * Directory under the router base holding the installed plugins.
      */
     public static final String PLUGIN_DIR = "plugins";
     private static final String[] STANDARD_WEBAPPS = { "i2psnark", "i2ptunnel", "imagegen", "susidns",
@@ -153,7 +153,7 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     * threaded
+     * Starts the plugin update on a daemon thread, so the caller does not block.
      * @param ctx router context to check and fetch the plugins with
      * @since 0.8.13, public since 0.9.33, was package private
      */
@@ -163,21 +163,21 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     * thread
+     * Runnable wrapper that updates every installed plugin.
      * @since 0.8.13
      */
     private static class PluginUpdater implements Runnable {
         private final RouterContext _ctx;
 
         /**
-         * PluginUpdater.
+         * Hold the context the update runs against.
          */
         public PluginUpdater(RouterContext ctx) {
             _ctx = ctx;
         }
 
         /**
-         * run.
+         * Runs the update.
          */
         @Override
         public void run() {
@@ -186,7 +186,7 @@ public class PluginStarter implements Runnable {
     }
 
     /**
-     * inline
+     * Fetches and restarts the installed plugins in the calling thread.
      * @since 0.8.13
      */
     private static void updateAll(RouterContext ctx, boolean delay) {
@@ -1078,7 +1078,7 @@ public class PluginStarter implements Runnable {
         }
 
         /**
-         * cancel.
+         * Deregisters this client from the plugin when the timer is cancelled.
          */
         @Override
         public boolean cancel() {
@@ -1088,7 +1088,7 @@ public class PluginStarter implements Runnable {
         }
 
         /**
-         * timeReached.
+         * Deregisters this client from the plugin when the timer fires.
          */
         @Override
         public void timeReached() {

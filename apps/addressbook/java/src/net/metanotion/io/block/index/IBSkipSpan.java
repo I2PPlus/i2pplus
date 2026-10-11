@@ -228,7 +228,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
     }
 
     /**
-     * Constructor.
+     * Opens the span on the given page and chains the remaining span pages of the list.
      *
      * @param bf the block file
      * @param bsl the B-skip list
@@ -308,8 +308,8 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
     }
 
     /**
-         * Does not call super, we always store first key here
-         */
+     * Does not call super, we always store first key here
+     */
     @Override
     public K firstKey() {
         return this.firstKey;

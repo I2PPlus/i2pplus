@@ -52,7 +52,7 @@ private static final boolean VALIDATE = true;
     public final String label;
 
     /**
-     * DnsLabel.
+     * Stores one label, rejecting any longer than 63 octets.
      *
      * @param label presentation-format text of one label, checked against the 63-octet limit
      */
@@ -101,7 +101,7 @@ private static final boolean VALIDATE = true;
     private transient String safeToStringRepresentation;
 
     /**
-     * toString.
+     * Render the label with every character outside the LDH set escaped.
      */
     @Override
     public final String toString() {
@@ -126,7 +126,7 @@ private static final boolean VALIDATE = true;
     }
 
     /**
-     * equals.
+     * Compare the label text against another label.
      */
     @Override
     public final boolean equals(Object other) {
@@ -138,7 +138,7 @@ private static final boolean VALIDATE = true;
     }
 
     /**
-     * hashCode.
+     * Hash the label text.
      */
     @Override
     public final int hashCode() {
@@ -179,7 +179,7 @@ private static final boolean VALIDATE = true;
     }
 
     /**
-     * compareTo.
+     * Order labels case-insensitively, ignoring letter case.
      */
     @Override
     public final int compareTo(DnsLabel other) {

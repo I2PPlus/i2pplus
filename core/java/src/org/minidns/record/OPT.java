@@ -30,19 +30,19 @@ import java.util.List;
 public class OPT extends Data {
 
     /**
-     * variablePart.
+     * EDNS options this record carries, stored unmodifiable.
      */
     public final List<EdnsOption> variablePart;
 
     /**
-     * OPT.
+     * Creates an OPT pseudo-record carrying no options.
      */
     public OPT() {
         this(Collections.<EdnsOption>emptyList());
     }
 
     /**
-     * OPT.
+     * Creates an OPT pseudo-record carrying the given EDNS options.
      *
      * @param variablePart the EDNS options this record carries, stored unmodifiable
      */
@@ -51,7 +51,7 @@ public class OPT extends Data {
     }
 
     /**
-     * parse.
+     * Reads the EDNS options from a bounded stretch of the message.
      *
      * @param dis the stream to read the option payload from
      * @param payloadLength the number of option payload bytes the record declares, which bounds the reads
@@ -82,7 +82,7 @@ public class OPT extends Data {
     }
 
     /**
-     * getType.
+     * Reports this record as the OPT pseudo-record type.
      */
     @Override
     public TYPE getType() {
@@ -90,7 +90,7 @@ public class OPT extends Data {
     }
 
     /**
-     * serialize.
+     * Writes each EDNS option to the wire in order.
      */
     @Override
     protected void serialize(DataOutputStream dos) throws IOException {

@@ -246,8 +246,8 @@ public final class Record<D extends Data> {
          * Create a new record type.
          *
          * @param <D> The class for this type.
-         * @param dataClass The class for this type.
          * @param value The binary value of this type.
+         * @param dataClass The class for this type.
          */
         <D extends Data> TYPE(int value, Class<D> dataClass) {
             this.value = value;
@@ -304,7 +304,7 @@ public final class Record<D extends Data> {
     public enum CLASS {
 
         /**
-         * The Internet class. This is the most common class used by todays DNS systems.
+         * The Internet class. This is the most common class used by today's DNS systems.
          */
         IN(1),
 

@@ -23,26 +23,26 @@ import java.io.InputStream;
  */
 public class SessionStatusMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type of a session status report.
      */
     public static final int MESSAGE_TYPE = 20;
     private SessionId _sessionId;
     private int _status;
 
     /**
-     * STATUS_DESTROYED.
+     * Status code reporting that the session was destroyed.
      */
     public static final int STATUS_DESTROYED = 0;
     /**
-     * STATUS_CREATED.
+     * Status code reporting that the session was created.
      */
     public static final int STATUS_CREATED = 1;
     /**
-     * STATUS_UPDATED.
+     * Status code reporting that the session was updated.
      */
     public static final int STATUS_UPDATED = 2;
     /**
-     * STATUS_INVALID.
+     * Status code reporting that the session is invalid.
      */
     public static final int STATUS_INVALID = 3;
 
@@ -61,7 +61,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     public static final int STATUS_DUP_DEST = 5;
 
     /**
-     * SessionStatusMessage.
+     * Creates a message reporting the invalid status.
      */
     public SessionStatusMessage() {
         setStatus(STATUS_INVALID);
@@ -94,7 +94,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Status.
+     * Returns the reported session status.
      * @return the status
      */
     public int getStatus() {
@@ -145,7 +145,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Returns the I2CP message type of this message.
      * @return the type
      */
     @Override

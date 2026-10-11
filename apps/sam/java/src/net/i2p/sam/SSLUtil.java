@@ -85,7 +85,7 @@ class SSLUtil {
     /**
      *  Call out to keytool to create a new keystore with a keypair in it.
      *
-     *  @param name used in CNAME
+     *  @param ks used in CNAME
      *  @param opts in/out, updated if rv is true, must contain PROP_KEY_ALIAS
      *  @return success, if true, opts will have password properties added to be saved
      */

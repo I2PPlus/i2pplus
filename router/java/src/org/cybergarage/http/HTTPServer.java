@@ -39,23 +39,23 @@ public class HTTPServer implements Runnable {
     public static final String NAME = "CyberHTTP";
 
     /**
-     * VERSION.
+     * Version of this HTTP server implementation.
      */
     public static final String VERSION = "1.0";
     /**
-     * DEFAULT_PORT.
+     * Port the server listens on when none is given.
      */
     public static final int DEFAULT_PORT = 80;
 
     /**
-     * Default timeout connection for HTTP comunication
+     * Default timeout connection for HTTP communication
      *
      * @since 1.8
      */
     public static final int DEFAULT_TIMEOUT = 10 * 1000; // I2P fix
 
     /**
-     * getName.
+     * Builds the Server response header value from OS and library names.
      * @return the Server response header value, built as the OS name and version
      *         followed by the CyberHTTP name and version
      */
@@ -81,7 +81,7 @@ public class HTTPServer implements Runnable {
 
     /**
      * Store the current TCP timeout value The variable should be accessed by getter and setter
-     * metho
+     * methods
      */
     protected int timeout = DEFAULT_TIMEOUT;
 
@@ -264,7 +264,7 @@ public class HTTPServer implements Runnable {
     private Thread httpServerThread = null;
 
     /**
-     * run.
+     * Serves queued requests while this thread owns the server.
      */
     public void run() {
         if (isOpened() == false) {

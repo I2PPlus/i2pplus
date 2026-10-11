@@ -26,14 +26,14 @@ import net.i2p.util.OrderedProperties;
  */
 public class GetDateMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type ID written to the wire header.
      */
     public static final int MESSAGE_TYPE = 32;
     private String _version;
     private Properties _options;
 
     /**
-     * GetDateMessage.
+     * Builds an empty time request; used by I2CP deserialization.
      */
     public GetDateMessage() {
         super();
@@ -124,7 +124,7 @@ public class GetDateMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * I2CP message type sent for this message.
      * @return the type
      */
     @Override

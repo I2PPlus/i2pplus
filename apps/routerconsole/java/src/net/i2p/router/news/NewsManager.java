@@ -52,7 +52,7 @@ public class NewsManager implements ClientApp {
      */
 
     /**
-     * APP_NAME.
+     * ClientApp name this manager registers under with the update manager.
      */
     public static final String APP_NAME = "news";
     private static final String BUNDLE_NAME = "net.i2p.router.news.messages";
@@ -61,9 +61,9 @@ public class NewsManager implements ClientApp {
      * Create a news manager and mark it initialized; no news is fetched until
      * the client app is started.
      *
-     * @param args ignored
      * @param ctx the application context supplying the log manager and config
      * @param listener the client app manager to notify when a new news bundle arrives
+     * @param args ignored
      */
     public NewsManager(I2PAppContext ctx, ClientAppManager listener, String[] args) {
         _context = ctx;

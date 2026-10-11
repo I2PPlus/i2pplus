@@ -15,20 +15,20 @@ import java.io.InputStream;
  */
 public class DestLookupMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type code for a destination lookup request.
      */
     public static final int MESSAGE_TYPE = 34;
     private Hash _hash;
 
     /**
-     * DestLookupMessage.
+     * Creates an empty message, to be filled in from the stream on read.
      */
     public DestLookupMessage() {
         super();
     }
 
     /**
-     * DestLookupMessage.
+     * Creates a message asking the router to resolve a destination hash.
      * @param h the destination hash the router is asked to look up
      */
     public DestLookupMessage(Hash h) {
@@ -36,7 +36,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Hash.
+     * Returns the destination hash the router is asked to resolve.
      * @return the hash
      */
     public Hash getHash() {
@@ -65,7 +65,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Returns the I2CP message type code for this message.
      * @return the type
      */
     @Override

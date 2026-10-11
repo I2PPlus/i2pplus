@@ -18,11 +18,11 @@ public class TransportBid {
     private int _latencyMs;
     private Transport _transport;
     /**
-     * TRANSIENT_FAIL.
+     * Sentinel cost a transport bids when it cannot deliver the message right now.
      */
     public static final int TRANSIENT_FAIL = 999999;
     /**
-     * TransportBid.
+     * Creates a bid with no latency cost yet, marked by a negative bid value.
      */
     public TransportBid() {_latencyMs = -1;}
 

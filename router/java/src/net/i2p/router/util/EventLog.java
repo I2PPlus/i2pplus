@@ -53,87 +53,87 @@ public class EventLog {
     /** For convenience, not required. */
     public static final String ABORTED = "aborted";
     /**
-     * BECAME_FLOODFILL.
+     * Event recorded when floodfill is enabled on this router.
      */
     public static final String BECAME_FLOODFILL = "becameFloodfill";
     /**
-     * CHANGE_IP.
+     * Event recorded when the externally visible IP address changed.
      */
     public static final String CHANGE_IP = "changeIP";
     /**
-     * CHANGE_PORT.
+     * Event recorded when the externally visible port changed.
      */
     public static final String CHANGE_PORT = "changePort";
     /**
-     * CLOCK_SHIFT.
+     * Event recorded when the clock moved by over a minute, with the offset in ms.
      */
     public static final String CLOCK_SHIFT = "clockShift";
     /**
-     * CRASHED.
+     * Event recorded when the previous run ended in a crash.
      */
     public static final String CRASHED = "crashed";
     /**
-     * CRITICAL.
+     * Event recorded for a critical router error.
      */
     public static final String CRITICAL = "critical";
     /**
-     * DEADLOCK.
+     * Event recorded when the deadlock detector finds blocked threads.
      */
     public static final String DEADLOCK = "deadlock";
     /**
-     * INSTALLED.
+     * Event recorded when a new router version is installed.
      */
     public static final String INSTALLED = "installed";
     /**
-     * INSTALL_FAILED.
+     * Event recorded when an update install attempt fails.
      */
     public static final String INSTALL_FAILED = "installFailed";
     /**
-     * NETWORK.
+     * Event recorded when the router gains or loses connectivity to the network.
      */
     public static final String NETWORK = "network";
     /**
-     * NEW_IDENT.
+     * Event recorded when a new router identity is created.
      */
     public static final String NEW_IDENT = "newIdent";
     /**
-     * NOT_FLOODFILL.
+     * Event recorded when floodfill is disabled on this router.
      */
     public static final String NOT_FLOODFILL = "disabledFloodfill";
     /**
-     * OOM.
+     * Event recorded when the JVM runs out of memory.
      */
     public static final String OOM = "oom";
     /**
-     * REACHABILITY.
+     * Event recorded when reachability changes, as old then new status.
      */
     public static final String REACHABILITY = "reachability";
     /**
-     * REKEYED.
+     * Event recorded when the router identity is rekeyed, with its new hash.
      */
     public static final String REKEYED = "rekeyed";
     /**
-     * RESEED.
+     * Event recorded when reseeding acquires router infos, with the count.
      */
     public static final String RESEED = "reseed";
     /**
-     * SOFT_RESTART.
+     * Event recorded when the router performs a soft restart.
      */
     public static final String SOFT_RESTART = "softRestart";
     /**
-     * STARTED.
+     * Event recorded at startup with the running version.
      */
     public static final String STARTED = "started";
     /**
-     * STOPPED.
+     * Event recorded at shutdown with the exit reason.
      */
     public static final String STOPPED = "stopped";
     /**
-     * UPDATED.
+     * Event recorded at startup when the version differs from the last run.
      */
     public static final String UPDATED = "updated";
     /**
-     * WATCHDOG.
+     * Event recorded when the watchdog warns of a stall.
      */
     public static final String WATCHDOG = "watchdog";
 
@@ -161,8 +161,8 @@ public class EventLog {
     /**
      * Event log for the given file, which should be absolute.
      *
-     * @param file should be absolute
      * @param ctx router context, supplying the clock used to timestamp each event
+     * @param file should be absolute
      */
     public EventLog(I2PAppContext ctx, File file) {
         _context = ctx;

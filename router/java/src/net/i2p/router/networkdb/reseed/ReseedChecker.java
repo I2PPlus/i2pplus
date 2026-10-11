@@ -42,7 +42,7 @@ public class ReseedChecker {
     private static final long RESEED_MIN_DOWNTIME = 7*24*60*60*1000L;
 
     /**
-     * Constructor.
+     * Opens a log for this router's reseed checker.
      *
      * @param context the router context
      */

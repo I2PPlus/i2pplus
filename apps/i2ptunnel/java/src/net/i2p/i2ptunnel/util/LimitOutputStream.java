@@ -45,7 +45,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     }
 
     /**
-     * write.
+     * Buffers the single byte and writes it through the bulk method.
      */
     @Override
     public void write(int c) throws IOException {

@@ -764,7 +764,7 @@ class SAMv3Handler extends SAMv1Handler
     }
 
     /**
-     * notifyStreamIncomingConnection.
+     * Tells the SAM client a new stream connection arrived, naming the ports when requested.
      * @param d the destination of the incoming connection
      * @param fromPort the remote port the connection arrived on
      * @param toPort the local port the connection was accepted on

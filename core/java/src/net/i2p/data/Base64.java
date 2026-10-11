@@ -340,7 +340,7 @@ public class Base64 {
 ******/
 
     /**
-     * Alphabet.
+     * Appends the encoding of the significant source bytes to buf, using alpha.
      * @param alpha alphabet
      */
     private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte[] alpha) {
@@ -548,7 +548,7 @@ public class Base64 {
     /**
      * Decodes data from Base64 notation and
      * returns it as a string.
-     * Equivlaent to calling
+     * Equivalent to calling
      * <code>new String( decode( s ) )</code>
      *
      * As of 0.9.14, decodes as UTF-8. Prior to that, it used the platform's encoding.

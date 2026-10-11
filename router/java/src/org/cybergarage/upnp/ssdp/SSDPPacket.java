@@ -40,7 +40,7 @@ public class SSDPPacket {
     ////////////////////////////////////////////////
 
     /**
-     * SSDPPacket.
+     * Wraps a received SSDP datagram without copying its bytes.
      *
      * @param buf the buffer holding the received datagram, wrapped rather than copied
      * @param length how many bytes of buf this packet spans, in bytes
@@ -56,7 +56,7 @@ public class SSDPPacket {
     private DatagramPacket dgmPacket = null;
 
     /**
-     * getDatagramPacket.
+     * Returns the underlying datagram.
      *
      * @return the wrapped DatagramPacket carrying this SSDP message
      */
@@ -71,7 +71,7 @@ public class SSDPPacket {
     private String localAddr = "";
 
     /**
-     * setLocalAddress.
+     * Records the local IP address that received this datagram.
      *
      * @param addr the local IP address that received the datagram
      */
@@ -80,7 +80,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getLocalAddress.
+     * Returns the local IP address that received this datagram.
      *
      * @return the local IP address that received this datagram
      */
@@ -95,7 +95,7 @@ public class SSDPPacket {
     private long timeStamp;
 
     /**
-     * setTimeStamp.
+     * Records when this datagram was received.
      *
      * @param value the receipt time in milliseconds since the epoch
      */
@@ -104,7 +104,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getTimeStamp.
+     * Returns when this datagram was received.
      *
      * @return when this datagram was received, in milliseconds since the epoch, or 0
      */
@@ -117,7 +117,7 @@ public class SSDPPacket {
     ////////////////////////////////////////////////
 
     /**
-     * getRemoteInetAddress.
+     * Returns the address this datagram was sent from.
      *
      * @return the InetAddress this datagram was sent from
      */
@@ -126,7 +126,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getRemoteAddress.
+     * Returns the IP address this datagram was sent from.
      *
      * @return the IP address string this datagram was sent from
      */
@@ -136,7 +136,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getRemotePort.
+     * Returns the UDP port this datagram was sent from.
      *
      * @return the UDP port number this datagram was sent from
      */
@@ -149,12 +149,12 @@ public class SSDPPacket {
     ////////////////////////////////////////////////
 
     /**
-     * packetBytes.
+     * Cached copy of the message bytes, filled in by the first read of the data.
      */
     public byte[] packetBytes = null;
 
     /**
-     * getData.
+     * Returns the message bytes, caching them on the first call.
      *
      * @return the UTF-8 message bytes of this datagram, cached in packetBytes once read
      */
@@ -174,7 +174,7 @@ public class SSDPPacket {
     ////////////////////////////////////////////////
 
     /**
-     * getHost.
+     * Returns the HOST header value.
      *
      * @return the HOST header value, or an empty string if the message carries none
      */
@@ -183,7 +183,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getCacheControl.
+     * Returns the CACHE-CONTROL header value.
      *
      * @return the CACHE-CONTROL header value, or an empty string if the message
      *         carries none
@@ -193,7 +193,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getLocation.
+     * Returns the LOCATION header value.
      *
      * @return the LOCATION header value, or an empty string if the message carries none
      */
@@ -202,7 +202,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getMAN.
+     * Returns the MAN header value.
      *
      * @return the MAN header value, or an empty string if the message carries none
      */
@@ -211,7 +211,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getST.
+     * Returns the ST header value.
      *
      * @return the ST header value, or an empty string if the message carries none
      */
@@ -220,7 +220,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getNT.
+     * Returns the NT header value.
      *
      * @return the NT header value, or an empty string if the message carries none
      */
@@ -229,7 +229,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getNTS.
+     * Returns the NTS header value.
      *
      * @return the NTS header value, or an empty string if the message carries none
      */
@@ -238,7 +238,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getServer.
+     * Returns the SERVER header value.
      *
      * @return the SERVER header value, or an empty string if the message carries none
      */
@@ -247,7 +247,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getUSN.
+     * Returns the USN header value.
      *
      * @return the USN header value, or an empty string if the message carries none
      */
@@ -256,7 +256,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getMX.
+     * Returns the MX header as a number of seconds.
      *
      * @return the MX header in seconds, or 0 if it is missing or unparseable
      */
@@ -269,7 +269,7 @@ public class SSDPPacket {
     ////////////////////////////////////////////////
 
     /**
-     * getHostInetAddress.
+     * Resolves the HOST header to an address.
      *
      * @return the InetAddress named in the HOST header, or the loopback address if
      *         that header carries no port
@@ -293,7 +293,7 @@ public class SSDPPacket {
     ////////////////////////////////////////////////
 
     /**
-     * isRootDevice.
+     * Returns whether NT, ST or USN identifies the root device.
      *
      * @return true if the NT, ST or USN header identifies this as the root device
      */
@@ -305,7 +305,7 @@ public class SSDPPacket {
     }
 
     /**
-     * isDiscover.
+     * Returns whether this is a discover advertisement.
      *
      * @return true if the MAN header carries the discover advertisement
      */
@@ -314,7 +314,7 @@ public class SSDPPacket {
     }
 
     /**
-     * isAlive.
+     * Returns whether this is an ssdp:alive advertisement.
      *
      * @return true if the NTS header is ssdp:alive
      */
@@ -323,7 +323,7 @@ public class SSDPPacket {
     }
 
     /**
-     * isByeBye.
+     * Returns whether this is an ssdp:byebye advertisement.
      *
      * @return true if the NTS header is ssdp:byebye
      */
@@ -332,7 +332,7 @@ public class SSDPPacket {
     }
 
     /**
-     * getLeaseTime.
+     * Returns the advertised lease duration.
      *
      * @return the lease time in seconds, or 0 if the CACHE-CONTROL header carries no
      *         usable max-age
@@ -346,7 +346,7 @@ public class SSDPPacket {
     ////////////////////////////////////////////////
 
     /**
-     * toString.
+     * Renders the raw message text.
      */
     public String toString() {
         return new String(getData(), StandardCharsets.UTF_8);

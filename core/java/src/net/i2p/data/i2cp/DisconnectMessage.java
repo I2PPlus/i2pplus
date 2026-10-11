@@ -24,18 +24,18 @@ import java.io.InputStream;
  */
 public class DisconnectMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type ID written to the wire header.
      */
     public static final int MESSAGE_TYPE = 30;
     private String _reason;
 
     /**
-     * DisconnectMessage.
+     * Builds the disconnect with no reason; used by I2CP deserialization.
      */
     public DisconnectMessage() { /* required for I2CP deserialization */ }
 
     /**
-     * Reason.
+     * Reason the client gave for closing the session.
      * @return the reason
      */
     public String getReason() {
@@ -75,7 +75,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * I2CP message type sent for this message.
      * @return the type
      */
     @Override

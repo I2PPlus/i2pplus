@@ -33,7 +33,7 @@ public final class UNKNOWN extends Data {
     }
 
     /**
-     * getType.
+     * Return the record type this payload was read under.
      */
     @Override
     public TYPE getType() {
@@ -41,7 +41,7 @@ public final class UNKNOWN extends Data {
     }
 
     /**
-     * serialize.
+     * Write the retained payload bytes verbatim to the stream.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -49,7 +49,7 @@ public final class UNKNOWN extends Data {
     }
 
     /**
-     * parse.
+     * Read the payload of a record whose type this library does not support.
      */
     /**
      * Parse an unknown record from a stream.

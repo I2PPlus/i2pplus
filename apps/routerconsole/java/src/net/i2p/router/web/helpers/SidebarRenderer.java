@@ -175,7 +175,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderHelpAndFAQHTML.
+     * Renders the collapsible Help and FAQ link section.
      * @return the section markup
      */
     public String renderHelpAndFAQHTML() {
@@ -440,7 +440,7 @@ class SidebarRenderer {
     });
 
     /**
-     * renderClockHTML.
+     * Renders the volatile clock element showing the current time.
      * @return the section markup
      */
     public String renderClockHTML() {
@@ -625,7 +625,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderAdvancedHTML.
+     * Renders the collapsible Advanced Configuration link section.
      * @return the section markup
      */
     public String renderAdvancedHTML() {
@@ -718,7 +718,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderRouterInfoHTML.
+     * Renders the general section, headed by the local router identity.
      * @return the section markup, empty when no helper is bound
      */
     public String renderRouterInfoHTML() {
@@ -754,7 +754,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderShortRouterInfoHTML.
+     * Renders the compact router summary table for the general section.
      * @return the section markup, empty when no helper is bound
      */
     public String renderShortRouterInfoHTML() {
@@ -871,7 +871,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderNetworkReachabilityHTML.
+     * Renders the reachability section, including shutdown and restart countdowns.
      * @return the section markup, empty when no helper is bound
      */
     public String renderNetworkReachabilityHTML() {
@@ -989,7 +989,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderUpdateStatusHTML.
+     * Renders the update section, or nothing while no update is pending.
      * @return the section markup
      */
     public String renderUpdateStatusHTML() {
@@ -1012,7 +1012,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderRestartStatusHTML.
+     * Renders the helper's restart status markup verbatim.
      * @return the section markup, empty when no helper is bound
      */
     public String renderRestartStatusHTML() {
@@ -1021,7 +1021,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderPeersHTML.
+     * Renders the peer counts section, expanded in advanced mode.
      * @return the section markup, empty when no helper is bound
      */
     public String renderPeersHTML() {
@@ -1126,7 +1126,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderFirewallAndReseedStatusHTML.
+     * Renders the helper's firewall and reseed status markup.
      * @return the section markup, empty when no helper is bound
      */
     public String renderFirewallAndReseedStatusHTML() {
@@ -1135,7 +1135,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderBandwidthHTML.
+     * Renders the collapsible bandwidth allocation section.
      * @return the section markup, empty when no helper is bound
      */
     public String renderBandwidthHTML() {
@@ -1305,7 +1305,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderTunnelsHTML.
+     * Renders the tunnel counts section, split by direction and client use.
      * @return the section markup, empty when no helper is bound
      */
     public String renderTunnelsHTML() {
@@ -1440,7 +1440,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderCongestionHTML.
+     * Renders the collapsible job queue lag section.
      * @return the section markup, empty when no helper is bound
      */
     public String renderCongestionHTML() {
@@ -1541,7 +1541,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderTunnelStatusHTML.
+     * Renders the per-category tunnel build status summary.
      * @return the section markup, empty when no helper is bound
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
@@ -1580,7 +1580,7 @@ class SidebarRenderer {
     }
 
     /**
-     * renderDestinationsHTML.
+     * Renders the helper's destination section markup.
      * @return the section markup, empty when no helper is bound
      */
     public String renderDestinationsHTML() {

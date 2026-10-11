@@ -15,7 +15,7 @@ import java.io.InputStream;
  */
 public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type number identifying a bandwidth limit query.
      */
     public static final int MESSAGE_TYPE = 8;
 
@@ -43,7 +43,7 @@ public class GetBandwidthLimitsMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Reports this message's I2CP type number.
      * @return the type
      */
     @Override

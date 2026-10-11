@@ -54,7 +54,7 @@ public abstract class GettextResource extends ResourceBundle {
 
 
     /**
-     * verbose.
+     * Set true to trace catalog lookup decisions to standard output.
      */
     public static boolean verbose = false;
 

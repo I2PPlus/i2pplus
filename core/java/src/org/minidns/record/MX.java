@@ -55,7 +55,7 @@ public class MX extends Data {
     }
 
     /**
-     * MX.
+     * Builds a record from a preference and a textual exchanger name.
      * @param priority the MX preference, lower values being tried first
      * @param name the mail exchanger, converted from presentation form
      */
@@ -64,7 +64,7 @@ public class MX extends Data {
     }
 
     /**
-     * MX.
+     * Builds a record from a preference and an exchanger name.
      * @param priority the MX preference, lower values being tried first
      * @param name the mail exchanger that receives the mail
      */
@@ -75,7 +75,7 @@ public class MX extends Data {
     }
 
     /**
-     * serialize.
+     * Writes the preference and exchanger name to the stream.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -84,7 +84,7 @@ public class MX extends Data {
     }
 
     /**
-     * toString.
+     * Renders the preference and exchanger as presentation text.
      */
     @Override
     public String toString() {
@@ -92,7 +92,7 @@ public class MX extends Data {
     }
 
     /**
-     * getType.
+     * Reports the MX record type.
      */
     @Override
     public TYPE getType() {

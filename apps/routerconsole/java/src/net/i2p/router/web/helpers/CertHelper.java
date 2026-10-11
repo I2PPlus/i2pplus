@@ -17,7 +17,7 @@ import net.i2p.util.Log;
 public class CertHelper extends HelperBase {
 
     /**
-     *  Constructor.
+     *  Creates the helper that renders the local SSL certificate summary.
      */
     public CertHelper() {}
 

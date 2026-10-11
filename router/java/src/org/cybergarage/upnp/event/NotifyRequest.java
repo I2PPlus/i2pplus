@@ -44,12 +44,12 @@ public class NotifyRequest extends SOAPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * NotifyRequest.
+     * Creates an empty GENA notification request.
      */
     public NotifyRequest() {}
 
     /**
-     * NotifyRequest.
+     * Creates a notification request whose headers come from a received NOTIFY.
      *
      * @param httpReq the received NOTIFY request supplying the headers to parse
      */
@@ -62,7 +62,7 @@ public class NotifyRequest extends SOAPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * setNT.
+     * Sets the notification type header.
      *
      * @param value the event notification type to send, normally {@link NT#EVENT}
      */
@@ -75,7 +75,7 @@ public class NotifyRequest extends SOAPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * setNTS.
+     * Sets the notification sub-type header.
      *
      * @param value the notification sub-type to send, {@link NTS#PROPCHANGE} for a
               property change and {@link NTS#ALIVE} or {@link NTS#BYEBYE} for an advertisement
@@ -89,7 +89,7 @@ public class NotifyRequest extends SOAPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * setSID.
+     * Sets the subscription identifier, adding the required {@code uuid:} prefix.
      *
      * @param id the subscription identifier to send, wrapped in the
               {@code uuid:} prefix the SID header requires
@@ -99,7 +99,7 @@ public class NotifyRequest extends SOAPRequest {
     }
 
     /**
-     * getSID.
+     * Gets the subscription identifier with its {@code uuid:} prefix stripped.
      *
      * @return the bare subscription identifier with the {@code uuid:} prefix
      *         stripped, or "" when the request carries no SID header
@@ -113,7 +113,7 @@ public class NotifyRequest extends SOAPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * setSEQ.
+     * Sets the event sequence number, wrapping it at 32 bits.
      *
      * @param value the event sequence number to send, which wraps
               at 32 bits as the GENA specification requires
@@ -123,7 +123,7 @@ public class NotifyRequest extends SOAPRequest {
     }
 
     /**
-     * getSEQ.
+     * Gets the event sequence number from the header.
      *
      * @return the event sequence number from the header, or 0 when absent or
      *         not parseable as a decimal integer
@@ -137,7 +137,7 @@ public class NotifyRequest extends SOAPRequest {
     ////////////////////////////////////////////////
 
     /**
-     * setRequest.
+     * Fills in the NOTIFY method, URI, headers and property set for one change.
      *
      * @param sub the subscriber to notify, supplying the delivery URL,
               host, port, path, subscription identifier and event counter
@@ -210,7 +210,7 @@ public class NotifyRequest extends SOAPRequest {
 
     // Thanks for Giordano Sassaroli <sassarol@cefriel.it> (09/08/03)
     /**
-     * getPropertyList.
+     * Reads the changed variables carried in the notification body.
      *
      * @return the changed variables carried in the body, or an empty list when
      *         the request has no envelope or no properties to report

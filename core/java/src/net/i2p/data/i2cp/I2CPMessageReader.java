@@ -30,20 +30,20 @@ import java.util.concurrent.atomic.AtomicLong;
 public class I2CPMessageReader {
     private InputStream _stream;
     /**
-     * _listener.
+     * Listener notified of incoming messages, read errors and disconnects.
      */
     protected I2CPMessageEventListener _listener;
     /**
-     * _reader.
+     * Runnable doing the reading, owned by the reader thread.
      */
     protected I2CPMessageReaderRunner _reader;
     /**
-     * _readerThread.
+     * Thread running the read loop.
      */
     protected Thread _readerThread;
 
     /**
-     * __readerId.
+     * Source of the unique suffix each reader thread name carries.
      */
     protected static final AtomicLong __readerId = new AtomicLong();
 
@@ -141,11 +141,11 @@ public class I2CPMessageReader {
      */
     protected class I2CPMessageReaderRunner implements Runnable {
         /**
-         * _doRun.
+         * Whether the read loop should keep reading.
          */
         protected volatile boolean _doRun;
         /**
-         * _stayAlive.
+         * Whether the reader thread should stay alive past the last message.
          */
         protected volatile boolean _stayAlive;
         private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(I2CPMessageReader.class);

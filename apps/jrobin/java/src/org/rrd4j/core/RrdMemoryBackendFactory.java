@@ -27,7 +27,7 @@ public class RrdMemoryBackendFactory extends RrdBackendFactory {
     public RrdMemoryBackendFactory() {}
 
     /**
-     * backends.
+     * Open RRD buffers by RRD ID, held until delete() removes them.
      */
     protected final Map<String, AtomicReference<ByteBuffer>> backends = new ConcurrentHashMap<>();
 
@@ -43,7 +43,7 @@ public class RrdMemoryBackendFactory extends RrdBackendFactory {
     }
 
     /**
-     * canStore.
+     * Accepts only URIs whose scheme matches this backend's memory scheme.
      */
     @Override
     public boolean canStore(URI uri) {

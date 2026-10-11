@@ -35,7 +35,7 @@ public class SecureDirectory extends File {
     }
 
     /**
-     * SecureDirectory.
+     * Records whether mkdir should make this path group-accessible rather than owner-only.
      *
      * @param pathname the path
      * @param groupPerms true to create the directory group-accessible (770)
@@ -57,7 +57,7 @@ public class SecureDirectory extends File {
     }
 
     /**
-     * SecureDirectory.
+     * Records whether mkdir should make this child path group-accessible rather than owner-only.
      *
      * @param parent the parent path
      * @param child the child name
@@ -79,7 +79,7 @@ public class SecureDirectory extends File {
     }
 
     /**
-     * SecureDirectory.
+     * Records whether mkdir should make this child directory group-accessible rather than owner-only.
      *
      * @param parent the parent directory
      * @param child the child name

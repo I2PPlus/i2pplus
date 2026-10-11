@@ -34,7 +34,7 @@ public class ProfilesHelper extends HelperBase {
                                            };
 
     /**
-     * setFull.
+     * Parses the requested tier number, ignoring anything unparsable or out of range.
      *
      * @param f the profile tier to show, 0 for all, clamped to 0-4 when it parses
      */

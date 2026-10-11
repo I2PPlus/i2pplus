@@ -24,11 +24,11 @@ public class RingRenderer {
     /** Mode: health (green/yellow/red), activity (blue/cyan) */
     public static final String MODE_HEALTH = "health";
     /**
-     * MODE_ACTIVITY.
+     * Ring mode colouring the arc by how recently the peer was seen.
      */
     public static final String MODE_ACTIVITY = "activity";
     /**
-     * MODE_LATENCY.
+     * Ring mode colouring the arc by the peer's transport latency.
      */
     public static final String MODE_LATENCY = "latency";
     /** Mode: dual-arc ratio (green + red arcs showing a proportion) */
@@ -368,7 +368,7 @@ public class RingRenderer {
         public final String cssClass;
 
         /**
-         * RingSection.
+         * Holds one arc's share of the ring and the CSS class colouring it.
          *
          * @param value the proportion of the ring this arc covers, normalized with
          *              the other sections to sum to 1.0 at render time

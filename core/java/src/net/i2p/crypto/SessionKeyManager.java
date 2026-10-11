@@ -55,7 +55,7 @@ public class SessionKeyManager {
 
     /**
      * Retrieve the session key currently associated with encryption to the target.
-     * Generates a new session and session key if not previously exising.
+     * Generates a new session and session key if not previously existing.
      *
      * @param target the destination to start or continue a session with
      * @return non-null

@@ -23,14 +23,14 @@ import java.io.InputStream;
  */
 public class ReconfigureSessionMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type number identifying a session reconfiguration request.
      */
     public static final int MESSAGE_TYPE = 2;
     private SessionId _sessionId;
     private SessionConfig _sessionConfig;
 
     /**
-     * ReconfigureSessionMessage.
+     * Creates an empty message, for I2CP deserialization.
      */
     public ReconfigureSessionMessage() { /* required for I2CP deserialization */ }
 
@@ -110,7 +110,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Reports this message's I2CP type number.
      * @return the type
      */
     @Override

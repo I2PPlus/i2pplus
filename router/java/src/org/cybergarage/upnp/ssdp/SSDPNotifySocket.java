@@ -13,7 +13,7 @@ import org.cybergarage.upnp.*;
 import org.cybergarage.util.Debug;
 
 /**
- * This class identifies a SSDP socket only for <b>notifing packet</b>.
+ * This class identifies a SSDP socket only for <b>notifying packet</b>.
  *
  * @author Satoshi "skonno" Konno
  * @author Stefano "Kismet" Lenzi
@@ -27,7 +27,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
     ////////////////////////////////////////////////
 
     /**
-     * SSDPNotifySocket.
+     * Opens a notification socket bound to one local address.
      *
      * @param bindAddr the local address the socket is bound to, which also decides
      *                 whether an IPv4 or IPv6 multicast group is joined
@@ -55,7 +55,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
     private ControlPoint controlPoint = null;
 
     /**
-     * setControlPoint.
+     * Attaches the control point that receives notifications from this socket.
      *
      * @param ctrlp the control point that should receive the notifications sent
      *              through this socket, or null to detach the current one
@@ -65,7 +65,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * getControlPoint.
+     * Gets the attached control point.
      *
      * @return the control point set by setControlPoint, or null if none is set
      */
@@ -77,7 +77,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
      * This method send a {@link SSDPNotifyRequest} over {@link SSDPNotifySocket}
      *
      * @param req the {@link SSDPNotifyRequest} to send
-     * @return true if and only if the trasmission succeced<br>
+     * @return true if and only if the transmission succeeded<br>
      *         Because it rely on UDP doesn't mean that it's also received
      */
     public boolean post(SSDPNotifyRequest req) {
@@ -96,7 +96,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
     private Thread deviceNotifyThread = null;
 
     /**
-     * run.
+     * Receives multicast notifications and forwards them to the control point.
      */
     public void run() {
         Thread thisThread = Thread.currentThread();
@@ -125,7 +125,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * start.
+     * Starts the thread that receives notifications on this socket.
      */
     public void start() {
         StringBuffer name = new StringBuffer("Cyber.SSDPNotifySocket/");
@@ -142,7 +142,7 @@ public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
     }
 
     /**
-     * stop.
+     * Stops the receiving thread and closes the socket.
      */
     public void stop() {
         close();

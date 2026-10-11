@@ -64,22 +64,22 @@ public class Daemon {
      * subscribed address books listed in subscriptions.
      *
      * @param master
-     * The master AddressBook. This address book is never overwritten, so it is safe
-     * for the user to write to. It is only merged to the published addressbook. May be null.
+     *               The master AddressBook. This address book is never overwritten, so it is safe
+     *               for the user to write to. It is only merged to the published addressbook. May be null.
      *
      * @param router
-     * The router AddressBook. This is the address book read by client applications.
+     *               The router AddressBook. This is the address book read by client applications.
      *
      * @param published
-     * The published AddressBook. This address book is published on the user's eepsite
-     * so that others may subscribe to it. May be null. If non-null, overwrite with the
-     * new addressbook.
+     *                  The published AddressBook. This address book is published on the user's eepsite
+     *                  so that others may subscribe to it. May be null. If non-null, overwrite with the
+     *                  new addressbook.
      *
      * @param subscriptions
-     * A SubscriptionList listing the remote address books to update from.
+     *                      A SubscriptionList listing the remote address books to update from.
      *
      * @param log
-     * The log to write changes and conflicts to. May be null.
+     *            The log to write changes and conflicts to. May be null.
      */
     public static void update(AddressBook master, AddressBook router,
         File published, SubscriptionList subscriptions, Log log) {
@@ -98,18 +98,18 @@ public class Daemon {
      * Merging of the "master" addressbook is NOT supported.
      *
      * @param router
-     * The NamingService to update, generally the root NamingService from the context.
+     *               The NamingService to update, generally the root NamingService from the context.
      *
      * @param published
-     * The published AddressBook. This address book is published on the user's eepsite
-     * so that others may subscribe to it. May be null. If non-null, overwrite with the
-     * new addressbook.
+     *                  The published AddressBook. This address book is published on the user's eepsite
+     *                  so that others may subscribe to it. May be null. If non-null, overwrite with the
+     *                  new addressbook.
      *
      * @param subscriptions
-     * A SubscriptionList listing the remote address books to update from.
+     *                      A SubscriptionList listing the remote address books to update from.
      *
      * @param log
-     * The log to write changes and conflicts to. May be null.
+     *            The log to write changes and conflicts to. May be null.
      * @since 0.8.7
      */
     public static void update(NamingService router, File published, SubscriptionList subscriptions, Log log) {
@@ -680,9 +680,9 @@ public class Daemon {
      * Run an update, using the Map settings to provide the parameters.
      *
      * @param settings
-     * A Map containg the parameters needed by update.
+     *                 A Map containg the parameters needed by update.
      * @param home
-     * The directory containing addressbook's configuration files.
+     *             The directory containing addressbook's configuration files.
      */
     public static void update(Map<String, String> settings, String home) {
         File published = null;
@@ -769,9 +769,9 @@ public class Daemon {
      * hours, as configured in the settings file.
      *
      * @param args
-     * Command line arguments. If there are any arguments provided,
-     * the first is taken as addressbook's home directory, and the
-     * others are ignored.
+     *             Command line arguments. If there are any arguments provided,
+     *             the first is taken as addressbook's home directory, and the
+     *             others are ignored.
      */
     public static void main(String[] args) {
         Daemon daemon = new Daemon();
@@ -802,10 +802,10 @@ public class Daemon {
      * thread by DaemonThread.
      *
      * @param args
-     * the command line arguments; when non-empty, args[0] names the addressbook
-     * home directory, resolved against the router directory if not an absolute
-     * path. May be null or empty, in which case the current working directory
-     * is used.
+     *             the command line arguments; when non-empty, args[0] names the addressbook
+     *             home directory, resolved against the router directory if not an absolute
+     *             path. May be null or empty, in which case the current working directory
+     *             is used.
      */
     public void run(String[] args) {
         _running = true;

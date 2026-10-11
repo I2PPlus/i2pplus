@@ -22,35 +22,35 @@ public class NewsEntry implements Comparable<NewsEntry> {
     public NewsEntry() {}
 
     /**
-     * title.
+     * Headline text of the news item.
      */
     public String title;
     /**
-     * link.
+     * URL the headline links to.
      */
     public String link;
     /**
-     * id.
+     * Feed-assigned identifier for the item.
      */
     public String id;
     /**
-     * updated.
+     * Publication time in milliseconds since the epoch.
      */
     public long updated;
     /**
-     * summary.
+     * Short synopsis shown in the headline list.
      */
     public String summary;
     /**
-     * content.
+     * Body text of the item, in the markup named by contentType.
      */
     public String content;
     /**
-     * content.
+     * Markup language of the content field, as an attribute of it.
      */
     public String contentType; // attribute of content
     /**
-     * author.
+     * Display name of the item's author, a subnode of the author node.
      */
     public String authorName;  // subnode of author
 
@@ -65,7 +65,7 @@ public class NewsEntry implements Comparable<NewsEntry> {
     }
 
     /**
-     * equals.
+     * Treats two entries as equal when they share an update time.
      */
     @Override
     public boolean equals(Object o) {

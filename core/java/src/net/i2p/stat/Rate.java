@@ -320,7 +320,7 @@ public class Rate {
     }
 
     /**
-     * In current (partial) period, what is the total value acrued through all events?
+     * In current (partial) period, what is the total value accrued through all events?
      *
      * @return the current period's total value
      */
@@ -347,7 +347,7 @@ public class Rate {
     }
 
     /**
-     * In the last full period, what was the total value acrued through all events?
+     * In the last full period, what was the total value accrued through all events?
      *
      * @return the total value accrued in the last full period
      */
@@ -374,7 +374,7 @@ public class Rate {
     }
 
     /**
-     * What was the max total value acrued in any period?
+     * What was the max total value accrued in any period?
      *
      * @return the extreme total value
      */
@@ -384,7 +384,7 @@ public class Rate {
 
     /**
      * When the max(totalValue) was achieved, how many events occurred in that period?
-     * Note that this is not necesarily the highest event count; that isn't tracked.
+     * Note that this is not necessarily the highest event count; that isn't tracked.
      * @return the extreme event count
      */
     public long getExtremeEventCount() {

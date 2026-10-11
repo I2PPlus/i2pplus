@@ -80,14 +80,14 @@ public class SessionConfig extends DataStructureImpl {
     private static final long OFFSET_VALIDITY = 3 * (long) 60 * 1000;
 
     /**
-     * SessionConfig.
+     * Create a session configuration with no destination chosen yet.
      */
     public SessionConfig() {
         this(null);
     }
 
     /**
-     * SessionConfig.
+     * Create a session configuration stamped with the current creation time.
      *
      * @param dest the destination this session connects to, or null if not chosen yet
      */
@@ -150,7 +150,7 @@ public class SessionConfig extends DataStructureImpl {
     }
 
     /**
-     * Signature.
+     * Return the signature authenticating this session authorization, or null.
      * @return the signature
      */
     public Signature getSignature() {

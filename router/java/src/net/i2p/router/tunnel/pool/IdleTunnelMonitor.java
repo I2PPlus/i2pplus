@@ -70,7 +70,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
     private volatile boolean _isShutdown = false;
 
     /**
-     * Constructor.
+     * Starts the scan timer and registers the dropped-tunnel stat.
      *
      * @param ctx the context supplying the timers, dispatcher, log and stat manager
      */

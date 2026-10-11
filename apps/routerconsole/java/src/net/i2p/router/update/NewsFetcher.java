@@ -88,7 +88,7 @@ class NewsFetcher extends UpdateRunner {
     private static final long DEFAULT_TIMEOUT = (long) 60*1000;
 
     /**
-     * NewsFetcher.
+     * Fetches from the first source that succeeds, using the default timeout.
      *
      * @param ctx the router context, supplying the router and temp directories
      * @param mgr the manager notified of progress, failure and completion
@@ -120,7 +120,7 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     * run.
+     * Runs one fetch, reporting failure and completion to the manager.
      */
     @Override
     public void run() {
@@ -134,7 +134,7 @@ class NewsFetcher extends UpdateRunner {
     }
 
     /**
-     * fetchNews.
+     * Downloads the news feed, optionally through the HTTP proxy.
      */
     public void fetchNews() {
         boolean shouldProxy = _context.getProperty(ConfigUpdateHandler.PROP_SHOULD_PROXY_NEWS, ConfigUpdateHandler.DEFAULT_SHOULD_PROXY_NEWS);
@@ -465,7 +465,7 @@ class NewsFetcher extends UpdateRunner {
         // TODO
     }
     /**
-     *  Overriden to get the last-modified header
+     *  Overridden to get the last-modified header
      */
     @Override
     public void headerReceived(String url, int attemptNum, String key, String val) {
@@ -550,7 +550,7 @@ class NewsFetcher extends UpdateRunner {
      *  Process the fetched su3 news file _tempFile.
      *  Handles 3 types of contained files: xml.gz (preferred), xml, and html (old format fake xml)
      *
-     *  @return the temp file contining the HTML-format news.xml
+     *  @return the temp file containing the HTML-format news.xml
      *  @since 0.9.17
      */
     private File processSU3() throws IOException {

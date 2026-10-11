@@ -12,43 +12,43 @@ public class Location {
     public Location() {}
 
     /**
-     * countryCode.
+     * Two-letter ISO country code of the queried address.
      */
     public String countryCode;
     /**
-     * countryName.
+     * Country name of the queried address.
      */
     public String countryName;
     /**
-     * region.
+     * State, province or region name of the queried address.
      */
     public String region;
     /**
-     * city.
+     * City name of the queried address.
      */
     public String city;
     /**
-     * postalCode.
+     * Postal code of the queried address.
      */
     public String postalCode;
     /**
-     * latitude.
+     * Latitude of the queried address, in degrees.
      */
     public float latitude;
     /**
-     * longitude.
+     * Longitude of the queried address, in degrees.
      */
     public float longitude;
     /**
-     * dma_code.
+     * Designated market area code of the queried address.
      */
     public int dma_code;
     /**
-     * area_code.
+     * Telephone area code of the queried address.
      */
     public int area_code;
     /**
-     * metro_code.
+     * Metro area code of the queried address.
      */
     public int metro_code;
 

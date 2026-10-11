@@ -51,7 +51,8 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     private final KillTimer _killTimer;
     private final long _destroyedOn;
     /**
-     * _wantACKSendSince.
+     * Redeclares the base class field: zero means no termination ACK is owed,
+     * nonzero is when one first became due.
      */
     protected volatile long _wantACKSendSince;
     // This is the mode we are in.

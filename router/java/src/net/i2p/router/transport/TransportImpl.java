@@ -464,8 +464,8 @@ public abstract class TransportImpl implements Transport {
      *
      * @param msg message in question
      * @param sendSuccessful true if the peer received it
-     * @param msToSend how long it took to transfer the data to the peer
      * @param allowRequeue true if we should try other transports if available
+     * @param msToSend how long it took to transfer the data to the peer
      */
     protected void afterSend(OutNetMessage msg, boolean sendSuccessful, boolean allowRequeue, long msToSend) {
         if (msg.getTarget() == null) return; // early exit if no target
@@ -1229,8 +1229,8 @@ public abstract class TransportImpl implements Transport {
     /**
      *  IP of the peer from the last connection (in or out, any transport).
      *
-     *  @param ip IPv4 or IPv6, non-null
      *  @param peer the router hash the address was last seen for
+     *  @param ip IPv4 or IPv6, non-null
      */
     public void setIP(Hash peer, byte[] ip) {
         byte[] old;
@@ -1357,7 +1357,8 @@ public abstract class TransportImpl implements Transport {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     *  Translate
+     *  Looks the string up in the web messages bundle, returning s itself if
+     *  there is no translation
      *  @param s the string to be translated
      *  @return the translated string, or s itself when there is no translation
      *  @since 0.9.8 moved from transports

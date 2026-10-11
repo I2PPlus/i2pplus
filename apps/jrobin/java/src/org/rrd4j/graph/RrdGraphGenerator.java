@@ -161,7 +161,7 @@ class RrdGraphGenerator {
         }
     }
     /**
-     * Gator
+     * Draws the vertical graph signature along the left edge.
      */
 
     private void gator() {
@@ -1069,7 +1069,7 @@ class RrdGraphGenerator {
         return getFontHeight(RrdGraphConstants.FONTTAG_LEGEND) * RrdGraphConstants.LEGEND_BOX;
     }
     /**
-     * Xtr
+     * Converts timestamps to pixel coordinates, duplicating each step.
      */
 
     private double[] xtr(long[] timestamps) {
@@ -1104,7 +1104,7 @@ class RrdGraphGenerator {
         return x;
     }
     /**
-     * Ytr
+     * Converts values to pixel coordinates, duplicating each step.
      */
 
     private double[] ytr(double[] values) {

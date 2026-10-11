@@ -15,7 +15,7 @@ public class MLKEMGenerator
     private final SecureRandom sr;
 
     /**
-     * MLKEMGenerator.
+     * Creates a generator that draws its randomness from the given source.
      *
      * @param random the source of randomness the KEM engine is initialized from
      */
@@ -25,7 +25,7 @@ public class MLKEMGenerator
     }
 
     /**
-     * generateEncapsulated.
+     * Draws 32 fresh random bytes and encapsulates a shared secret for the recipient.
      *
      * @param recipientKey the recipient's ML-KEM public key, from which the parameter set and
      *                     engine are taken
@@ -45,7 +45,7 @@ public class MLKEMGenerator
         return new SecretWithEncapsulationImpl(kemEncrypt[0], kemEncrypt[1]);
     }
     /**
-     * internalGenerateEncapsulated.
+     * Encapsulates a secret using the supplied randomness instead of drawing fresh bytes.
      *
      * @param recipientKey the recipient's ML-KEM public key, from which the parameter set and
      *                     engine are taken

@@ -31,7 +31,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     private static final long serialVersionUID = 1L;
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type of a lease set request.
      */
     public static final int MESSAGE_TYPE = 21;
     private SessionId _sessionId;
@@ -40,7 +40,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     private Date _end;
 
     /**
-     * RequestLeaseSetMessage.
+     * Creates a request with an empty endpoint list.
      */
     public RequestLeaseSetMessage() {
         _endpoints = new ArrayList<>(6);
@@ -74,7 +74,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Endpoints.
+     * Returns the number of tunnels in the request.
      * @return the endpoints
      */
     public int getEndpoints() {
@@ -82,7 +82,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Router.
+     * Returns the router identity of one of the requested tunnels.
      * @param endpoint index into the endpoint list; out of range returns null
      * @return the router
      */
@@ -188,7 +188,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Returns the I2CP message type of this message.
      * @return the type
      */
     @Override
@@ -213,7 +213,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         private final transient TunnelId _tunnelId;
 
         /**
-         * TunnelEndpoint.
+         * One requested tunnel, pairing a router with one of its tunnel ids.
          */
         public TunnelEndpoint(Hash router, TunnelId id) {
             _router = router;
@@ -221,7 +221,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
         }
 
         /**
-         * Router.
+         * Returns the router identity of this tunnel.
          * @return the router
          */
         public Hash getRouter() {

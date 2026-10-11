@@ -26,7 +26,7 @@ import org.eclipse.jetty.server.Server;
  *
  * Init parameters:
  * <ul>
- * <li>CSSPath - absolue URL of CSS to reference, starting with /, defaults to console theme
+ * <li>CSSPath - absolute URL of CSS to reference, starting with /, defaults to console theme
  * <li>name - webapp or plugin name, will be translated with bundle, e.g. SusiMail
  * <li>bundle - package of translation bundle, e.g. net.i2p.susimail.web.messages
  * </ul>
@@ -178,11 +178,11 @@ public class ErrorServlet extends HttpServlet {
      * This supports 403, 404, and 500+.
      * Output HTML that goes inside the div.
      *
+     * @param out where the HTML is written
      * @param errorCode e.g. 404
      * @param errorMsg non-null, may be empty, already HTML-escaped
      * @param errorURI non-null, may be empty, already HTML-escaped
      * @param errorCause may be null
-     * @param out where the HTML is written
      */
     protected void outputMessage(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
         String themePath = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/";

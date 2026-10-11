@@ -25,13 +25,13 @@ package com.google.zxing;
 public final class WriterException extends Exception {
 
   /**
-   * WriterException.
+   * Creates an exception with neither a message nor a cause.
    */
   public WriterException() {
   }
 
   /**
-   * WriterException.
+   * Creates an exception carrying the reason encoding failed.
    *
    * @param message the reason encoding failed, carried as the exception detail message
    */
@@ -40,7 +40,7 @@ public final class WriterException extends Exception {
   }
 
   /**
-   * WriterException.
+   * Creates an exception wrapping the error that stopped encoding.
    *
    * @param cause the underlying error that stopped encoding
    */

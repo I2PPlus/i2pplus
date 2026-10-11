@@ -220,8 +220,8 @@ class I2CPMessageProducer {
      * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
      * @param payload the unencrypted message data
      * @param tag unused - no end-to-end crypto
-     * @param tags unused - no end-to-end crypto
      * @param key unused - no end-to-end crypto
+     * @param tags unused - no end-to-end crypto
      * @param newKey unused - no end-to-end crypto
      * @param expires message expiration in milliseconds since the epoch, 0 for none
      * @throws I2PSessionException if the payload is null or the message cannot be queued
@@ -446,9 +446,9 @@ class I2CPMessageProducer {
      * This method is misnamed, it does not create the LeaseSet,
      * the caller does that.
      *
-     * @param signingPriv unused for LS2 lease sets
      * @param session the session on whose behalf the LeaseSet is created
      * @param leaseSet the LeaseSet to send, of type 0, 1 or 3
+     * @param signingPriv unused for LS2 lease sets
      * @param privs the private keys to encrypt the LeaseSet with, the first
      *              entry being the signing key for type 0 and 1 LeaseSets
      * @throws I2PSessionException if the session is closed
@@ -482,8 +482,8 @@ class I2CPMessageProducer {
     /**
      * Update number of tunnels
      *
-     * @param tunnels 0 for original configured number
      * @param session the session to reconfigure
+     * @param tunnels 0 for original configured number
      * @throws I2PSessionException if the session configuration cannot be signed
      */
     public void updateTunnels(I2PSessionImpl session, int tunnels) throws I2PSessionException {

@@ -36,12 +36,12 @@ public class MAN {
     public MAN() {}
 
     /**
-     * DISCOVER.
+     * Token identifying the SSDP discovery namespace in a MAN header.
      */
     public static final String DISCOVER = "ssdp:discover";
 
     /**
-     * isDiscover.
+     * Tests whether a MAN header value carries the SSDP discover token.
      * @param value MAN header value, compared bare or wrapped in double quotes
      * @return true if the value carries the SSDP discover token
      */

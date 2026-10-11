@@ -70,7 +70,7 @@ public final class CryptixAESKeyCache {
         final int[][] Kd;
 
         /**
-         * KeyCacheEntry.
+         * Allocates the round-key schedules for standard AES.
          */
         public KeyCacheEntry() {
             Ke = new int[ROUNDS + 1][BC];

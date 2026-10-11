@@ -187,7 +187,7 @@ class RRDFile implements Constants {
     }
 
     /**
-     * Alignment.
+     * Byte alignment this file was mapped with.
      * @return the alignment
      */
     int getAlignment() {
@@ -195,7 +195,7 @@ class RRDFile implements Constants {
     }
 
     /**
-     * Double.
+     * Reads a big-endian 8-byte float at the read position.
      * @return the double
      */
     double readDouble() {
@@ -203,7 +203,7 @@ class RRDFile implements Constants {
     }
 
     /**
-     * Int.
+     * Reads a 4-byte integer at the read position.
      * @return the next 4-byte integer at the read position
      */
     int readInt() {
@@ -211,7 +211,7 @@ class RRDFile implements Constants {
     }
 
     /**
-     * Long.
+     * Reads a long, narrowed to int, honouring this file's long size.
      * @return the long
      */
     int readLong() {
@@ -223,7 +223,7 @@ class RRDFile implements Constants {
     }
 
     /**
-     * String.
+     * Reads a fixed-width NUL-padded UTF-8 field.
      * @param maxLength the fixed field width to read, NUL padding included
      * @return the next fixed-width field decoded as UTF-8, with the NUL padding trimmed
      */
@@ -267,7 +267,7 @@ class RRDFile implements Constants {
     }
 
     /**
-     * Position.
+     * Reports the current read position.
      * @return the position
      */
     long info() {
@@ -346,7 +346,7 @@ class RRDFile implements Constants {
     }
 
     /**
-     * seek.
+     * Moves the read position to an absolute offset.
      * @param position the absolute byte offset to read from next
      */
     public void seek(long position) {
@@ -354,7 +354,7 @@ class RRDFile implements Constants {
     }
 
     /**
-     * seekToEndOfFile.
+     * Moves the read position to the end of the mapped region.
      */
     public void seekToEndOfFile() {
         mappedByteBuffer.position(mappedByteBuffer.limit());

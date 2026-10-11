@@ -32,7 +32,7 @@ import org.cybergarage.upnp.control.*;
  */
 public class StateVariableData extends NodeData {
     /**
-     * StateVariableData.
+     * Creates a variable with no value, listener or response attached.
      */
     public StateVariableData() {}
 
@@ -43,7 +43,7 @@ public class StateVariableData extends NodeData {
     private String value = "";
 
     /**
-     * getValue.
+     * Fetches the value this variable currently holds.
      *
      * @return the current value, empty until a query response supplies one
      */
@@ -52,7 +52,7 @@ public class StateVariableData extends NodeData {
     }
 
     /**
-     * setValue.
+     * Records the value this variable holds.
      *
      * @param value the value to hold for this variable
      */
@@ -67,7 +67,7 @@ public class StateVariableData extends NodeData {
     private QueryListener queryListener = null;
 
     /**
-     * getQueryListener.
+     * Fetches the listener notified when this variable is queried.
      *
      * @return the listener notified when this variable is queried, or null if
      *         none is registered
@@ -77,7 +77,7 @@ public class StateVariableData extends NodeData {
     }
 
     /**
-     * setQueryListener.
+     * Registers the listener notified on each query of this variable.
      *
      * @param queryListener the listener to notify on each query
      */
@@ -92,7 +92,7 @@ public class StateVariableData extends NodeData {
     private QueryResponse queryRes = null;
 
     /**
-     * getQueryResponse.
+     * Fetches the response to the last query of this variable.
      *
      * @return the response from the last query, or null if never queried
      */
@@ -101,7 +101,7 @@ public class StateVariableData extends NodeData {
     }
 
     /**
-     * setQueryResponse.
+     * Retains a response to the last query of this variable.
      *
      * @param res the response to retain for this variable
      */

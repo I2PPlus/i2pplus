@@ -691,7 +691,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     // start UpdateManager interface
 
     /**
-     * Call once for each type/method pair.
+     * Add the Updater to the set consulted for each update type and method.
      */
     @Override
     public void register(Updater updater, UpdateType type, UpdateMethod method, int priority) {
@@ -720,7 +720,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * unregister.
+     * Remove the Updater previously registered for the type and method.
      */
     @Override
     public void unregister(Updater updater, UpdateType type, UpdateMethod method) {
@@ -730,7 +730,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * register.
+     * Add the Checker to the set consulted for each update type and method.
      */
     @Override
     public void register(Checker updater, UpdateType type, UpdateMethod method, int priority) {
@@ -740,7 +740,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * unregister.
+     * Remove the Checker previously registered for the type and method.
      */
     @Override
     public void unregister(Checker updater, UpdateType type, UpdateMethod method) {
@@ -786,7 +786,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     /**
      * Called by the Checker, either after check() was called, or it found out on its own.
-     * Checkers must use this method if there are multiple UpdateMethods discoverd simultaneously.
+     * Checkers must use this method if there are multiple UpdateMethods discovered simultaneously.
      *
      * @param newsSource who told us
      * @param id plugin name for plugins, ignored otherwise
@@ -1009,7 +1009,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * notifyProgress.
+     * Publish the download status text and progress bar to the console.
      */
     @Override
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize) {
@@ -1303,7 +1303,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * Is there a reason we can't download the update?
      * @param type the UpdateType of this request
      * @param id id of this request
-     * @return translated contraint or null
+     * @return translated constraint or null
      * @since 0.9.9
      */
     public String getUpdateConstraint(UpdateType type, String id) {
@@ -1499,11 +1499,11 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private class StatusCleaner extends SimpleTimer2.TimedEvent {
         private final String _msg;
         /**
-         * StatusCleaner.
+         * Clears the status message once it has been displayed long enough.
          */
         public StatusCleaner(String msg) {_msg = msg;}
         /**
-         * timeReached.
+         * Clears the message if no newer update has replaced it.
          */
         public void timeReached() {
             if (_msg.equals(getStatus())) {updateStatus("");}
@@ -1511,11 +1511,12 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     }
 
     /**
-     * Failsafe
+     * Periodically drops checkers and downloaders whose tasks stopped running.
      */
     private class TaskCleaner extends SimpleTimer2.TimedEvent {
         /**
-         * timeReached.
+         * Reschedules itself, then evicts the checkers and downloaders
+         * whose task is no longer running.
          */
         public void timeReached() {
             schedule(TASK_CLEANER_TIME);
@@ -1547,24 +1548,24 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     private static class RegisteredUpdater implements Comparable<RegisteredUpdater> {
         /**
-         * updater.
+         * The Updater this registration invokes.
          */
         public final Updater updater;
         /**
-         * type.
+         * The update type this registration serves.
          */
         public final UpdateType type;
         /**
-         * method.
+         * The update method this registration was made for.
          */
         public final UpdateMethod method;
         /**
-         * priority.
+         * Higher priorities are consulted first.
          */
         public final int priority;
 
         /**
-         * RegisteredUpdater.
+         * Record an Updater for the given type, method and priority.
          */
         public RegisteredUpdater(Updater u, UpdateType t, UpdateMethod m, int priority) {
             updater = u; type = t; method = m; this.priority = priority;
@@ -1585,7 +1586,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int hashCode() {return updater.hashCode() ^ type.hashCode() ^ method.hashCode();}
 
         /**
-         * equals.
+         * Compares the updater, type and method only.
          */
         @Override
         public boolean equals(Object o) {
@@ -1595,7 +1596,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * toString.
+         * Identifies the updater class, type, method and priority for logging.
          */
         @Override
         public String toString() {
@@ -1608,24 +1609,24 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     private static class RegisteredChecker implements Comparable<RegisteredChecker> {
         /**
-         * checker.
+         * The Checker this registration invokes.
          */
         public final Checker checker;
         /**
-         * type.
+         * The update type this registration serves.
          */
         public final UpdateType type;
         /**
-         * method.
+         * The update method this registration was made for.
          */
         public final UpdateMethod method;
         /**
-         * priority.
+         * Higher priorities are consulted first.
          */
         public final int priority;
 
         /**
-         * RegisteredChecker.
+         * Record a Checker for the given type, method and priority.
          */
         public RegisteredChecker(Checker u, UpdateType t, UpdateMethod m, int priority) {
             checker = u; type = t; method = m; this.priority = priority;
@@ -1646,7 +1647,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int hashCode() {return checker.hashCode() ^ type.hashCode() ^ method.hashCode();}
 
         /**
-         * equals.
+         * Compares the checker, type and method only.
          */
         @Override
         public boolean equals(Object o) {
@@ -1656,7 +1657,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * toString.
+         * Identifies the checker class, type, method and priority for logging.
          */
         @Override
         public String toString() {
@@ -1669,16 +1670,16 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      */
     private static class UpdateItem {
         /**
-         * type.
+         * The update type this item identifies.
          */
         public final UpdateType type;
         /**
-         * id.
+         * The plugin name, or an empty string for non-plugin updates.
          */
         public final String id;
 
         /**
-         * UpdateItem.
+         * Identify an installed update by type and plugin name.
          */
         public UpdateItem(UpdateType t, String id) {
             type = t;
@@ -1693,7 +1694,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int hashCode() {return type.hashCode() ^ id.hashCode();}
 
         /**
-         * equals.
+         * Compares the type and id only.
          */
         @Override
         public boolean equals(Object o) {
@@ -1703,7 +1704,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * toString.
+         * Returns the type, with the plugin name appended when there is one.
          */
         @Override
         public String toString() {
@@ -1714,17 +1715,17 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     private static class Version implements Comparable<Version> {
         /**
-         * versionStr.
+         * The version string, either a number or an ISO date.
          */
         public final String versionStr;
 
         /**
-         * Version.
+         * Wrap the version string for comparison and display.
          */
         public Version(String version) {this.versionStr = version;}
 
         /**
-         * compareTo.
+         * Orders versions oldest to newest.
          */
         public int compareTo(Version r) {return VersionComparator.comp(versionStr, r.versionStr);}
 
@@ -1736,13 +1737,13 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int hashCode() {return versionStr.hashCode();}
 
         /**
-         * equals.
+         * Compares the version strings.
          */
         @Override
         public boolean equals(Object o) {return (o instanceof Version) && versionStr.equals(((Version)o).versionStr);}
 
         /**
-         * toString.
+         * Renders the version, formatting a 13-character string as a date.
          */
         @Override
         public String toString() {
@@ -1756,15 +1757,15 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     private static class VersionAvailable extends Version {
         /**
-         * minVersion.
+         * The oldest installed version that can update to this one.
          */
         public final String minVersion;
         /**
-         * sourceMap.
+         * Where the update can be fetched from, keyed by update method.
          */
         public final ConcurrentHashMap<UpdateMethod, List<URI>> sourceMap;
         /**
-         * constraint.
+         * Why the update cannot be downloaded, or null when it can.
          */
         public volatile String constraint;
 
@@ -1789,7 +1790,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         }
 
         /**
-         * equals.
+         * Also requires the argument to be a VersionAvailable.
          */
         @Override
         public boolean equals(Object o) {return super.equals(o) && (o instanceof VersionAvailable);}
@@ -1802,7 +1803,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         public int hashCode() {return super.hashCode();} // findbugs
 
         /**
-         * toString.
+         * Renders the version with its sources and any download constraint.
          */
         @Override
         public String toString() {

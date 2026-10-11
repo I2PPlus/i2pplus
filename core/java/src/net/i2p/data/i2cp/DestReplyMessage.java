@@ -21,21 +21,21 @@ import java.io.InputStream;
  */
 public class DestReplyMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type number of a destination lookup reply.
      */
     public static final int MESSAGE_TYPE = 35;
     private Destination _dest;
     private Hash _hash;
 
     /**
-     * DestReplyMessage.
+     * Creates a reply carrying no destination, for a failed lookup.
      */
     public DestReplyMessage() {
         super();
     }
 
     /**
-     * DestReplyMessage.
+     * Creates a reply naming the destination the lookup resolved to.
      * @param d the destination the lookup resolved to, or null if this reply reports a failure
      */
     public DestReplyMessage(Destination d) {
@@ -52,7 +52,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Destination.
+     * Gets the destination this reply resolved to.
      * @return the destination
      */
     public Destination getDestination() {
@@ -110,7 +110,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Reports this message as a destination lookup reply.
      * @return the type
      */
     @Override

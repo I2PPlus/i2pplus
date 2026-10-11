@@ -69,7 +69,7 @@ import net.i2p.util.Log;
  */
 class Packet {
     /**
-     * _session.
+     * Session the packet travels over, set at construction.
      */
     protected final I2PSession _session;
     private long _sendStreamId;
@@ -77,7 +77,7 @@ class Packet {
     private long _sequenceNum;
     private long _ackThrough;
     /**
-     * _nacks.
+     * Sequence numbers the sender has not had acknowledged.
      */
     protected long[] _nacks;
     private int _resendDelay;
@@ -86,7 +86,7 @@ class Packet {
     private boolean _sigVerified;
     // the next four are set only if the flags say so
     /**
-     * _optionSignature.
+     * Destination's signature on the packet, when that option is included.
      */
     protected Signature _optionSignature;
     /**
@@ -96,22 +96,22 @@ class Packet {
      */
     private int _optionSigLen;
     /**
-     * _optionFrom.
+     * Sending destination, when that option is included.
      */
     protected Destination _optionFrom;
     private int _optionDelay;
     private int _optionMaxSize;
     // following 3 for ofline sigs
     /**
-     * _transientExpires.
+     * When the offline signature's transient key stops being valid.
      */
     protected long _transientExpires;
     /**
-     * _offlineSignature.
+     * Destination's signature made with the transient key of an offline block.
      */
     protected Signature _offlineSignature;
     /**
-     * _transientSigningPublicKey.
+     * Ephemeral signing public key taken from the offline signing block.
      */
     protected SigningPublicKey _transientSigningPublicKey;
     // ports
@@ -126,7 +126,7 @@ class Packet {
     public static final long STREAM_ID_UNKNOWN = 0L;
 
     /**
-     * MAX_STREAM_ID.
+     * Largest stream ID the 32-bit field can carry.
      */
     public static final long MAX_STREAM_ID = 0xFFFFFFFFL;
 
@@ -204,15 +204,15 @@ class Packet {
      */
     public static final int DEFAULT_MAX_SIZE = 32*1024;
     /**
-     * MAX_DELAY_REQUEST.
+     * Largest delay in milliseconds a peer may request before being choked.
      */
     protected static final int MAX_DELAY_REQUEST = 65535;
     /**
-     * MIN_DELAY_CHOKE.
+     * Delay request at or above which the peer is treated as choked.
      */
     public static final int MIN_DELAY_CHOKE = 60001;
     /**
-     * SEND_DELAY_CHOKE.
+     * Delay sent to a choked peer, asking it to pause roughly a minute.
      */
     public static final int SEND_DELAY_CHOKE = 61000;
 
@@ -350,7 +350,7 @@ class Packet {
     public void setResendDelay(int numSeconds) {_resendDelay = numSeconds;}
 
     /**
-     * MAX_PAYLOAD_SIZE.
+     * Largest payload a streaming packet may carry, in bytes.
      */
     public static final int MAX_PAYLOAD_SIZE = 32*1024;
 

@@ -231,8 +231,8 @@ public interface TunnelManagerFacade extends Service {
      * @param dest alias destination, which gets its own pools flagged as aliased
      * @param settings settings for the alias pools, retained under the primary hash
      * @param existingClient primary destination whose tunnels are being shared
-     * @throws IllegalArgumentException if not
      * @return success
+     * @throws IllegalArgumentException if not
      * @since 0.9.21
      */
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient);

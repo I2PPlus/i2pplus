@@ -41,7 +41,7 @@ class StoreState {
     private volatile long _started;
 
     /**
-     * StoreState.
+     * Starts a store tracking no skipped peers.
      *
      * @param ctx the router context supplying the clock used to time the store
      * @param key the DatabaseEntry hash being stored

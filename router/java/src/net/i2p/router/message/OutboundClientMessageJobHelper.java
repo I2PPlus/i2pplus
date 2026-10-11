@@ -76,7 +76,14 @@ class OutboundClientMessageJobHelper {
      * same payload (including expiration and unique id) in different garlics (down different tunnels).
      * This is called from OCMOSJ.
      *
+     * @param ctx the router context
+     * @param replyToken the reply token
+     * @param expiration the message expiration
+     * @param recipientPK the recipient public key
      * @param dataClove may be null for ECIES-layer ack
+     * @param from the sender hash
+     * @param dest the destination
+     * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param tagsToSendOverride if &gt; 0, use this instead of skm's default
      * @param lowTagsOverride if &gt; 0, use this instead of skm's default
      * @param wrappedKey for ElGamal, non-null with null data, output parameter
@@ -84,17 +91,10 @@ class OutboundClientMessageJobHelper {
      * @param wrappedTags for ElGamal, output parameter that will be filled with the sessionTags used,
      *                    may be null for ECIES
      *
-     * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param requireAck if true, bundle replyToken in an ack clove
      * @param bundledReplyLeaseSet may be null; if non-null, put it in a clove
      * @param callback only for ECIES, may be null
      * @return garlic, or null if no tunnels were found (or other errors)
-     * @param ctx the router context
-     * @param replyToken the reply token
-     * @param expiration the message expiration
-     * @param recipientPK the recipient public key
-     * @param from the sender hash
-     * @param dest the destination
      */
     static GarlicMessage createGarlicMessage(RouterContext ctx, long replyToken, long expiration, PublicKey recipientPK,
                                              PayloadGarlicConfig dataClove, Hash from, Destination dest, TunnelInfo replyTunnel,

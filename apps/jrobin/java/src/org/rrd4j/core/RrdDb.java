@@ -1105,7 +1105,8 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     }
 
     /**
-     * findMatchingArchive.
+     * Picks the archive best able to serve the request, preferring a full over a partial
+     * time-range match and then the closest step to the requested resolution.
      *
      * @param request a {@link org.rrd4j.core.FetchRequest} object.
      * @return a {@link org.rrd4j.core.Archive} object.
@@ -1272,7 +1273,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     }
 
     /**
-     * Datasources.
+     * Returns the data sources declared by this RRD.
      * @return the datasources
      */
     Datasource[] getDatasources() {
@@ -1280,7 +1281,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     }
 
     /**
-     * Archives.
+     * Returns the round robin archives holding the consolidated data.
      * @return the archives
      */
     Archive[] getArchives() {
@@ -1673,7 +1674,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     }
 
     /**
-     * getInfo.
+     * Returns the free-form informational string stored in the RRD header.
      *
      * @return a {@link java.lang.String} object.
      * @throws java.io.IOException if any.
@@ -1683,7 +1684,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     }
 
     /**
-     * setInfo.
+     * Replaces the free-form informational string stored in the RRD header.
      *
      * @param info a {@link java.lang.String} object.
      * @throws java.io.IOException if any.

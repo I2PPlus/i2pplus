@@ -418,7 +418,7 @@ class SAMStreamSession implements SAMMessageSess {
     }
 
     /**
-     *  Unsupported
+     * Sending bytes is not supported in a STREAM or MASTER session; always throws.
      *  @throws I2PSessionException always
      *  @since 0.9.25 moved from subclass SAMv3StreamSession to implement SAMMessageSess
      */
@@ -427,7 +427,7 @@ class SAMStreamSession implements SAMMessageSess {
     }
 
     /**
-     *  Unsupported
+     * Sending bytes is not supported in a STREAM or MASTER session; always throws.
      *  @throws I2PSessionException always
      *  @since 0.9.25
      */
@@ -597,7 +597,7 @@ class SAMStreamSession implements SAMMessageSess {
         }
 
         /**
-         * run.
+         * Accepts incoming connections and serves them until the session closes.
          */
         public void run() {
             if (_log.shouldDebug())
@@ -762,7 +762,7 @@ class SAMStreamSession implements SAMMessageSess {
         }
 
         /**
-         * run.
+         * Reads from the socket, forwarding bytes to the client until it ends.
          */
         @Override
         public void run() {
@@ -826,7 +826,7 @@ class SAMStreamSession implements SAMMessageSess {
         protected static abstract class StreamSender implements Runnable {
 
             /**
-             * _id.
+             * Stream id assigned by the client for this sender.
              */
             protected final int _id;
             /**
@@ -847,35 +847,35 @@ class SAMStreamSession implements SAMMessageSess {
 	}
 
         /**
-	 * Send bytes through the SAM STREAM session socket sender
-	 *
-	 * @param in Data input stream
-	 * @param size Count of bytes to send
-	 * @throws IOException if the client didnt provide enough data
-	 */
+         * Send bytes through the SAM STREAM session socket sender
+         *
+         * @param in Data input stream
+         * @param size Count of bytes to send
+         * @throws IOException if the client didnt provide enough data
+         */
         public abstract void sendBytes ( InputStream in, int size ) throws IOException;
 
 
         /**
-	 * Stop a SAM STREAM session socket sender thread immediately
-	 *
-	 */
+         * Stop a SAM STREAM session socket sender thread immediately
+         *
+         */
         public abstract void stopRunning();
 
         /**
-	 * Stop a SAM STREAM session socket sender gracefully: stop the
-	 * sender thread once all pending data has been sent.
-	 */
+         * Stop a SAM STREAM session socket sender gracefully: stop the
+         * sender thread once all pending data has been sent.
+         */
         public abstract void shutDownGracefully();
 
         /**
-         * run().
+         * Writes the sender's queued payloads to the peer; each subclass implements it.
          */
         public abstract void run();
     }
 
     /**
-     * newStreamSender.
+     * Creates the sender that writes this socket's outgoing data.
      *
      * @param s the I2PSocket the sender writes to
      * @param id the stream id assigned by the client
@@ -972,7 +972,7 @@ class SAMStreamSession implements SAMMessageSess {
         }
 
         /**
-         * run.
+         * Writes queued payloads to the peer until the sender is stopped.
          */
         @Override
         public void run() {

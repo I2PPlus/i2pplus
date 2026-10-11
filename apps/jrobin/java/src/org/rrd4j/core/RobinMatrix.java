@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Class to represent archive values for a single datasource. Robin class is the heart of the
  * so-called "round robin database" concept. Basically, each Robin object is a fixed length array of
- * double values. Each double value reperesents consolidated, archived value for the specific
+ * double values. Each double value represents consolidated, archived value for the specific
  * timestamp. When the underlying array of double values gets completely filled, new values will
  * replace the oldest ones.
  *
@@ -81,7 +81,7 @@ class RobinMatrix implements Robin {
     }
 
     /**
-     * update.
+     * Stores one complete set of row values and rewinds the write pointer.
      *
      * @param newValues an array of double.
      * @throws java.io.IOException if any.
@@ -126,7 +126,7 @@ class RobinMatrix implements Robin {
     }
 
     /**
-     * dump.
+     * Renders the stored rows as a single line of formatted values.
      *
      * @return a {@link java.lang.String} object.
      * @throws java.io.IOException if any.

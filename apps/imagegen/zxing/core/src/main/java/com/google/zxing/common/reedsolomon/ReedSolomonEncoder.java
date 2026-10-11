@@ -31,7 +31,7 @@ public final class ReedSolomonEncoder {
   private final List<GenericGFPoly> cachedGenerators;
 
   /**
-   * ReedSolomonEncoder.
+   * Creates an encoder that computes parity symbols over the given Galois field.
    *
    * @param field the Galois field over which the parity symbols are computed
    */
@@ -55,7 +55,7 @@ public final class ReedSolomonEncoder {
   }
 
   /**
-   * encode.
+   * Appends error correction parity bytes to the end of the message block.
    *
    * @param toEncode the message block to encode, with room for the appended parity bytes
    * @param ecBytes the number of error correction bytes to append, greater than zero

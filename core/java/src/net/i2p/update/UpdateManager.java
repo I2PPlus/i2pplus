@@ -217,8 +217,8 @@ public interface UpdateManager {
      * An available update may still have a constraint or lack sources.
      *
      * @param type the UpdateType of this request
-     * @param maxWait max time to block
      * @param id id of this request
+     * @param maxWait max time to block
      * @return new version or null if nothing newer is available
      * @since 0.9.21
      */
@@ -292,8 +292,8 @@ public interface UpdateManager {
      * If returns true, then call isUpdateInProgress() in a loop
      *
      * @param type the UpdateType of this request
-     * @param maxTime not honored by all Updaters
      * @param id id of this request
+     * @param maxTime not honored by all Updaters
      * @return true if task started
      * @since 0.9.21
      */

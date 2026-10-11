@@ -92,7 +92,7 @@ public class ArgumentList extends Vector<Argument> {
     }
 
     /**
-     * Set all the Argument which are Input Argoument to the given value in the argument list
+     * Set all the Argument which are Input Argument to the given value in the argument list
      *
      * @param inArgList the argument list containing input values
      */
@@ -111,7 +111,7 @@ public class ArgumentList extends Vector<Argument> {
     }
 
     /**
-     * Set all the Argument which are Output Argoument to the given value in the argument list
+     * Set all the Argument which are Output Argument to the given value in the argument list
      *
      * @param outArgList the argument list containing output values
      */

@@ -54,8 +54,8 @@ public abstract class TunnelBuildMessageBase extends I2NPMessageImpl {
 
     /**
      * Store a build record.
-     * @param record may be null
      * @param index the zero-based position of the record in the record array
+     * @param record may be null
      */
     public void setRecord(int index, EncryptedBuildRecord record) {_records[index] = record;}
 

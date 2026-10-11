@@ -227,7 +227,7 @@ public class DatabaseReader implements Closeable {
     }
 
     /**
-     * country.
+     * Looks up the two-letter ISO country code recorded for an address.
      *
      * @param ipAddress IPv4 or IPv6 address
      * @return the two-letter ISO country code, or null if the address has no country record

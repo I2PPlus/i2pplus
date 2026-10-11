@@ -15,7 +15,7 @@ import net.i2p.util.SystemVersion;
  * I2PCtrl.js if the config directory is missing from the relative directory it's using,
  * and if any migrations is needed, I2PCtrl.js will do that part.
  *
- * In the future BB might have flavors or plugins whichs would be apps normally distributed
+ * In the future BB might have flavors or plugins which would be apps normally distributed
  * with default install of i2p, and other plugins available. I2PCtrl.js will manage these
  * since it's closer to the end-user via browser options and GUI.
  *

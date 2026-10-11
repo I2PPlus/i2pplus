@@ -14,13 +14,13 @@ public class ReseedHandler extends HelperBase {
     private HttpSession _session;
 
     /**
-     * ReseedHandler.
+     * Uses the current console router context.
      */
     public ReseedHandler() {
         this(ContextHelper.getContext(null));
     }
     /**
-     * ReseedHandler.
+     * Binds the handler to the router context owning the reseed checker.
      *
      * @param ctx the router context whose reseed checker this handler triggers
      */

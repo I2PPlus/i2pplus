@@ -168,7 +168,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     * run.
+     * Starts graph generation, disabling the app if it fails before registration.
      */
     @Override
     public void run() {
@@ -1381,7 +1381,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     * stop.
+     * Shuts down the health watchdog and the scheduler, unregistering the app.
      *
      * <p>The watchdog goes first: it is the task that would notice the sync task
      * hanging, so it has to be shut down before the thing it watches, not after.

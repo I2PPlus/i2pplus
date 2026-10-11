@@ -1065,7 +1065,7 @@ public class NTCPConnection implements Closeable {
     }
 
     /**
-     *  Whether the seralized RouterInfo block actually fits in the frame.
+     *  Whether the serialized RouterInfo block actually fits in the frame.
      *
      *  <p>This is the authoritative check after the 1024-byte estimate in
      *  {@link #canSendRouterInfoBlock}.
@@ -2049,12 +2049,12 @@ public class NTCPConnection implements Closeable {
      *
      * Caller MUST call recvEncryptedI2NP() after, for any remaining bytes in receive buffer
      *
-     * @param clockSkew OUR clock minus BOB's clock in seconds (may be negative, obviously, but |val| should
-     *                  be under 1 minute)
      * @param sender use to send to Bob
      * @param receiver use to receive from Bob
      * @param sip_ab 24 bytes to init SipHash to Bob
      * @param sip_ba 24 bytes to init SipHash from Bob
+     * @param clockSkew OUR clock minus BOB's clock in seconds (may be negative, obviously, but |val| should
+     *                  be under 1 minute)
      * @since 0.9.36
      */
     synchronized void finishOutboundEstablishment(CipherState sender, CipherState receiver,
@@ -2076,12 +2076,12 @@ public class NTCPConnection implements Closeable {
      *
      * Caller MUST call recvEncryptedI2NP() after, for any remaining bytes in receive buffer
      *
-     * @param clockSkew OUR clock minus ALICE's clock in seconds (may be negative, obviously, but |val| should
-     *                  be under 1 minute)
      * @param sender use to send to Alice
      * @param receiver use to receive from Alice
      * @param sip_ba 24 bytes to init SipHash to Alice
      * @param sip_ab 24 bytes to init SipHash from Alice
+     * @param clockSkew OUR clock minus ALICE's clock in seconds (may be negative, obviously, but |val| should
+     *                  be under 1 minute)
      * @param hisPadding may be null
      * @since 0.9.36
      */
@@ -2138,11 +2138,11 @@ public class NTCPConnection implements Closeable {
     /**
      * We are Alice or Bob. NTCP2 only.
      *
-     * @param clockSkew the clock skew in seconds; a positive value means our clock is ahead
      * @param sender use to send
      * @param receiver use to receive
      * @param sip_send 24 bytes to init SipHash out
      * @param sip_recv 24 bytes to init SipHash in
+     * @param clockSkew the clock skew in seconds; a positive value means our clock is ahead
      * @since 0.9.36
      */
     private synchronized void finishEstablishment(CipherState sender, CipherState receiver,

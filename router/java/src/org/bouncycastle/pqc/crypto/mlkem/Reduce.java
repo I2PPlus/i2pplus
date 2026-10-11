@@ -16,7 +16,7 @@ class Reduce
     }
 
     /**
-     * montgomeryReduce.
+     * Scales a wide value down into the Montgomery representation.
      *
      * @param a the value to reduce, wide enough to hold the intermediate product
      * @return a scaled down into the Montgomery representation, as a short
@@ -34,7 +34,7 @@ class Reduce
     }
 
     /**
-     * barretReduce.
+     * Barrett-reduces a coefficient into the range -q/2 to q/2.
      *
      * @param a the coefficient to centre into the range -q/2 to q/2
      * @return the reduced coefficient, as a short
@@ -50,7 +50,7 @@ class Reduce
     }
 
     /**
-     * conditionalSubQ.
+     * Adds q to a negative coefficient to make it non-negative.
      *
      * @param a the coefficient that may need q subtracting to become non-negative
      * @return a if it was already non-negative, otherwise a plus q, as a short

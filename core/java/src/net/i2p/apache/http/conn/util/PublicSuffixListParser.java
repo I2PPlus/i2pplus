@@ -43,7 +43,7 @@ public final class PublicSuffixListParser {
     private static final int MAX_LINE_LEN = 256;
 
     /**
-     * PublicSuffixListParser.
+     * Creates a parser for the public suffix list file format.
      */
     public PublicSuffixListParser() {
     }

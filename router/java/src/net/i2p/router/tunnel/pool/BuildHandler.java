@@ -473,7 +473,8 @@ public class BuildHandler implements Runnable {
     public static void setMaxQueue(int val) { _maxQueue = Math.max(16, Math.min(2048, val)); }
 
     /**
-     * BuildHandler.
+     * Wires up the pool manager, executor and ban logger, and registers the
+     * tunnel build rate stats.
      * @param ctx the router context supplying properties, logging and statistics
      * @param manager the pool manager this handler reports build failures and successes to
      * @param exec the executor that runs the build passes this handler queues work for

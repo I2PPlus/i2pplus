@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * <p><b>IMPLEMENTATION NOTE</b>: Although all the concrete classes in this
  * package implement the {@link Cloneable} interface, it is important to note
- * here that such an operation, for those algorithms that use an underlting
+ * here that such an operation, for those algorithms that use an underlying
  * symmetric key block cipher, <b>DOES NOT</b> clone any session key material
  * that may have been used in initialising the source PRNG (the instance to be
  * cloned). Instead a clone of an already initialised PRNG, that uses and

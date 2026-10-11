@@ -34,7 +34,7 @@ import java.util.Properties;
 class RequestVariableLeaseSetMessageHandler extends RequestLeaseSetMessageHandler {
 
     /**
-     * RequestVariableLeaseSetMessageHandler.
+     * Sets up the handler for the variable-lease-set message type.
      *
      * @param context application context shared with the rest of the I2CP handler chain
      */

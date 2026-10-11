@@ -30,7 +30,7 @@ public class RouterInfoHandler implements RequestHandler {
     private final RouterContext _context;
 
     /**
-     * RouterInfoHandler.
+     * Retains the router context and helper used to build the reply.
      * @param ctx router context the handler reads version, uptime and transport state from
      * @param helper resolves the localized strings and version data used in the reply
      */

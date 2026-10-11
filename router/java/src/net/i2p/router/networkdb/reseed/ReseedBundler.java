@@ -47,7 +47,7 @@ public class ReseedBundler {
     private static final String MIN_VERSION = "0.9.64";
 
     /**
-     * ReseedBundler.
+     * Holds the router context used for netDb lookups and temp file access.
      *
      * @param ctx the router context used to reach netDb, commSystem, and the temp directory
      */

@@ -27,7 +27,7 @@ JScrollPane
 	extends Component
 {
 	/**
-	 * Constructor.
+	 * Empty body; the contained component is ignored in this no-op build.
 	 * @param p the component to contain
 	 */
 	public

@@ -107,10 +107,10 @@ class ConfigParser {
      * use map instead, and write the result to where file should have been.
      *
      * @param file
-     * A File to attempt to parse.
+     *            A File to attempt to parse.
      *
      * @param map
-     * A Map containing values to use as defaults.
+     *            A Map containing values to use as defaults.
      *
      * @return A Map containing the key, value pairs from file, or if file cannot be read, map.
      */

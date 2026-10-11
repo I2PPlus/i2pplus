@@ -22,7 +22,7 @@ class IterativeFollowupJob extends SingleSearchJob {
     private final IterativeSearchJob _search;
 
     /**
-     * IterativeFollowupJob.
+     * Queries one peer for a single key on behalf of an iterative search.
      * @param ctx the router context the lookup runs against
      * @param key the hash being looked up, passed to the SingleSearchJob superclass
      * @param to the peer to query directly for that key, passed to the SingleSearchJob superclass

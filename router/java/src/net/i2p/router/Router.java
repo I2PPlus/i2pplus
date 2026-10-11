@@ -312,7 +312,7 @@ public class Router implements RouterClock.ClockShiftListener {
         String userDir = (!isPortable) ? WorkingDir.getWorkingDir(envProps, migrateFiles) : PortableWorkingDir.getWorkingDir(envProps);
         /**
          * Use the router.config file specified in the router.configLocation property (default "router.config")
-         * if it is an abolute path, otherwise look in the userDir returned by getWorkingDir replace relative
+         * if it is an absolute path, otherwise look in the userDir returned by getWorkingDir replace relative
          * path with absolute
          */
         File cf = new File(_configFilename);
@@ -2120,11 +2120,11 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     * PROP_BANDWIDTH_SHARE_PERCENTAGE.
+     * Property naming the share of our bandwidth that tunnels may consume.
      */
     public static final String PROP_BANDWIDTH_SHARE_PERCENTAGE = "router.sharePercentage";
     /**
-     * DEFAULT_SHARE_PERCENTAGE.
+     * Default share, as a percentage of the configured bandwidth limits.
      */
     public static final int DEFAULT_SHARE_PERCENTAGE = 90;
 

@@ -41,7 +41,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     private static final int IDLEN_BYTE = 3;
 
     /**
-     * EdDSAPublicKey.
+     * Takes the public point A and its curve parameters from the spec.
      *
      * @param spec the public key specification
      */

@@ -39,7 +39,7 @@ public class SOAPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * SOAPResponse.
+     * Creates an empty response carrying a fresh SOAP envelope body.
      */
     public SOAPResponse() {
         setRootNode(SOAP.createEnvelopeBodyNode());
@@ -47,7 +47,8 @@ public class SOAPResponse extends HTTPResponse {
     }
 
     /**
-     * SOAPResponse.
+     * Copies the connection state of an HTTP response, replacing its payload
+     * with an empty SOAP envelope.
      * @param httpRes the response to copy the connection state from; its payload
      *                is discarded and replaced with an empty SOAP envelope
      */
@@ -58,7 +59,7 @@ public class SOAPResponse extends HTTPResponse {
     }
 
     /**
-     * SOAPResponse.
+     * Adopts the envelope node of another SOAP response.
      * @param soapRes the response whose envelope node is adopted, not copied, by
      *                this one
      */
@@ -239,7 +240,7 @@ public class SOAPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * print.
+     * Writes the response to the debug log, as text or as its root element.
      */
     public void print() {
         Debug.message(toString());

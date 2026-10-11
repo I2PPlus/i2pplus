@@ -25,7 +25,7 @@ public class StatsGenerator {
     private final RouterContext _context;
 
     /**
-     * StatsGenerator.
+     * Hold the router context whose StatManager supplies the stats.
      *
      * @param context the router context whose StatManager supplies the stats
      */
@@ -103,7 +103,7 @@ public class StatsGenerator {
     }
 
     /**
-     * generateStatsPage.
+     * Render the stats page as HTML.
      * @param out where the HTML is written
      * @param showAll true to include the saturation and per-period extremes that
      *                are hidden in the default view
@@ -329,7 +329,7 @@ public class StatsGenerator {
      */
     private class AlphaComparator implements Comparator<String> {
         /**
-         * compare.
+         * Order the router sections first, then the translated section names.
          */
         @Override
         public int compare(String lhs, String rhs) {

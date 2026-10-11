@@ -380,7 +380,7 @@ public class HomeHelper extends HelperBase {
     private static final String SS = Character.toString(S);
 
     /**
-     * Context.
+     * Parse the config string into the set of apps to offer.
      * @param ctx context
      * @param config the configuration
      * @return collection of apps
@@ -415,7 +415,7 @@ public class HomeHelper extends HelperBase {
     }
 
     /**
-     * Context.
+     * Write the app list back out to the named property.
      * @param ctx context
      * @param prop the property name
      * @param apps the apps to save
@@ -540,7 +540,7 @@ public class HomeHelper extends HelperBase {
     /** ignore case, current locale */
     private static class AppComparator implements Comparator<App>, Serializable {
         /**
-         * compare.
+         * Order apps by name, ignoring case and the current locale.
          */
         @Override
         public int compare(App l, App r) {return l.name.toLowerCase().compareTo(r.name.toLowerCase());}

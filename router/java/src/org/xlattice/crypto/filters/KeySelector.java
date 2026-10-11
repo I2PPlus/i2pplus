@@ -151,7 +151,7 @@ public class KeySelector {
 
     private final static int TWO_UP_15 = 32 * 1024;
 
-/**
+    /**
      * Creates a key selector for a Bloom filter with specified parameters.
      *
      * <p>This constructor initializes both bit and word selectors with the
@@ -287,7 +287,7 @@ public class KeySelector {
             }
         }
     }
-/**
+    /**
      * Generic implementation of WordSelector for extracting word offsets from cryptographic keys.
      *
      * <p>This implementation uses a variable stride algorithm to extract k word
@@ -317,8 +317,8 @@ public class KeySelector {
      public class GenericWordSelector implements WordSelector {
          /** Default constructor. */
          public GenericWordSelector() {}
-         /**
-          * Extracts k word offsets from key data using variable stride algorithm.
+        /**
+         * Extracts k word offsets from key data using variable stride algorithm.
          *
          * <p>This method processes the key data to calculate word positions
          * for Bloom filter operations. Each word offset represents the starting

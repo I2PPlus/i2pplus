@@ -28,7 +28,7 @@ import java.util.Date;
  */
 public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
-     * MESSAGE_TYPE.
+     * The I2CP message type number for an expiry-timed send request.
      */
     public static final int MESSAGE_TYPE = 36;
     private final DateAndFlags _daf;
@@ -185,7 +185,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     }
 
     /**
-     * Type.
+     * Returns the I2CP message type number for this message.
      * @return the type
      */
     @Override

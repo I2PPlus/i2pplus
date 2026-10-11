@@ -85,7 +85,7 @@ public class FloodfillPeerSelector extends PeerSelector {
     }
 
     /**
-     * FloodfillPeerSelector.
+     * Binds the facade and prepares the ban logger.
      * @param ctx the router context
      * @param facade the network database to select peers from
      */
@@ -155,8 +155,8 @@ public class FloodfillPeerSelector extends PeerSelector {
      * List is not sorted and not shuffled.
      * Returns new list, may be modified.
      *
-     * @param _kbuckets now unused
      * @param toIgnore can be null
+     * @param _kbuckets now unused
      * @return all floodfills not banlisted forever and not flagged unreachable.
      */
     List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets) {
@@ -208,7 +208,6 @@ public class FloodfillPeerSelector extends PeerSelector {
      *
      * List will not include our own hash. Returns new list, may be modified.
      *
-     * @return floodfills closest to the key that are not banlisted forever
      * @param key the ROUTING key (NOT the original key)
      * @param maxNumRouters max to return
      * @param kbuckets now unused
@@ -220,6 +219,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      *                 Group 2: No store or lookup failure in a little while or
      *                 success newer than failure
      *                 Group 3: All others
+     * @return floodfills closest to the key that are not banlisted forever
      */
     List<Hash> selectFloodfillParticipants(Hash key, int maxNumRouters, KBucketSet<Hash> kbuckets) {
         Set<Hash> ignore = Collections.singleton(_context.routerHash());

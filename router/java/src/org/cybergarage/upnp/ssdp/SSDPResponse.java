@@ -38,14 +38,14 @@ public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * SSDPResponse.
+     * Creates an empty response declaring HTTP 1.1.
      */
     public SSDPResponse() {
         setVersion(HTTP.VERSION_11);
     }
 
     /**
-     * SSDPResponse.
+     * Creates a response whose headers are parsed from a stream.
      *
      * @param in the response stream to parse the headers from
      */
@@ -58,7 +58,7 @@ public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setST.
+     * Sets the search target header.
      *
      * @param value the search target, identifying which service answered
      */
@@ -67,7 +67,7 @@ public class SSDPResponse extends HTTPResponse {
     }
 
     /**
-     * getST.
+     * Gets the search target header.
      *
      * @return the ST header, or null if this response carries none
      */
@@ -80,7 +80,7 @@ public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setLocation.
+     * Sets the Location header to a device description URL.
      *
      * @param value the URL of the device description document that was searched
      */
@@ -89,7 +89,7 @@ public class SSDPResponse extends HTTPResponse {
     }
 
     /**
-     * getLocation.
+     * Gets the Location header.
      *
      * @return the Location header, or null if this response carries none
      */
@@ -102,7 +102,7 @@ public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setUSN.
+     * Sets the unique service name header.
      *
      * @param value the unique service name identifying the answering device
      */
@@ -111,7 +111,7 @@ public class SSDPResponse extends HTTPResponse {
     }
 
     /**
-     * getUSN.
+     * Gets the unique service name header.
      *
      * @return the USN header, or null if this response carries none
      */
@@ -124,7 +124,7 @@ public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setMYNAME.
+     * Sets the MYNAME header, Intel's friendly-name extension.
      *
      * @param value the friendly device name, for Intel's MYNAME extension
      */
@@ -133,7 +133,7 @@ public class SSDPResponse extends HTTPResponse {
     }
 
     /**
-     * getMYNAME.
+     * Gets the MYNAME header.
      *
      * @return the MYNAME header, or null if this response carries none
      */
@@ -146,7 +146,7 @@ public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setLeaseTime.
+     * Sets the CACHE-CONTROL max-age header from a lifetime in seconds.
      *
      * @param len the advertisement lifetime in seconds, advertised as max-age
      */
@@ -155,7 +155,7 @@ public class SSDPResponse extends HTTPResponse {
     }
 
     /**
-     * getLeaseTime.
+     * Gets the advertisement lifetime from the CACHE-CONTROL header.
      *
      * @return the max-age value in seconds, 0 if the header is absent or unparsable
      */
@@ -169,7 +169,7 @@ public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * setBootId.
+     * Sets the boot identifier header.
      *
      * @param bootId the device's boot identifier, bumped on each reboot
      */
@@ -178,7 +178,7 @@ public class SSDPResponse extends HTTPResponse {
     }
 
     /**
-     * getBootId.
+     * Gets the boot identifier header.
      *
      * @return the BOOTID.UPNP.ORG value, 0 if this response carries none
      */
@@ -191,7 +191,7 @@ public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
 
     /**
-     * getHeader.
+     * Renders the whole response as a status line, headers and blank line.
      */
     public String getHeader() {
         StringBuffer str = new StringBuffer();

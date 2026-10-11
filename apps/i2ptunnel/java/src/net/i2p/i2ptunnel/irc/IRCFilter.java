@@ -59,10 +59,10 @@ abstract class IRCFilter {
      *
      * Modify or filter a single inbound line.
      *
-     * @param helper may be null
-     * @return the original or modified line, or null if it should be dropped.
      * @param s the single inbound line to filter, without its trailing newline
      * @param expectedPong holds the PONG token a three field PING expects back; reset on use
+     * @param helper may be null
+     * @return the original or modified line, or null if it should be dropped.
      */
     public static String inboundFilter(String s, StringBuffer expectedPong, DCCHelper helper) {
 

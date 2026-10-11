@@ -20,7 +20,7 @@ import net.i2p.util.Log;
 public class SAMDebugHelper extends HelperBase {
 
     /**
-     * SAMDebugHelper.
+     * Explicit no-arg constructor, as the console requires.
      */
     public SAMDebugHelper() {}
 

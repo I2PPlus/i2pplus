@@ -34,7 +34,7 @@ class SearchMessageSelector implements MessageSelector {
     private final SearchState _state;
 
     /**
-     * SearchMessageSelector.
+     * Claims a selector id and records the peer, deadline and search state.
      *
      * @param context the router context supplying the log and the search state
      * @param peer the router the search replies are expected from

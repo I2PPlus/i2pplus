@@ -82,7 +82,7 @@ public interface CipherState extends Destroyable, Cloneable {
      *                               encryption.  In that case, plaintextOffset must be identical to
      *                               ciphertextOffset.
      *
-     *                               There must be enough space in the ciphertext buffer to accomodate
+     *                               There must be enough space in the ciphertext buffer to accommodate
      *                               length + getMACLength() bytes of data starting at ciphertextOffset.
      */
     int encryptWithAd(byte[] ad, byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) throws ShortBufferException;
@@ -113,7 +113,7 @@ public interface CipherState extends Destroyable, Cloneable {
      *        encryption.  In that case, plaintextOffset must be identical to
      *        ciphertextOffset.
      *
-     *        There must be enough space in the ciphertext buffer to accomodate
+     *        There must be enough space in the ciphertext buffer to accommodate
      *        length + getMACLength() bytes of data starting at ciphertextOffset.
      */
     public int encryptWithAd(byte[] ad, int adOffset, int adLength, byte[] plaintext, int plaintextOffset,

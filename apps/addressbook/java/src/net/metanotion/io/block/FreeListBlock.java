@@ -39,7 +39,7 @@ private static final long MAGIC = 0x2366724c69737423L;  // "#frList#"
     private final RandomAccessInterface file;
 
     /**
-     * Constructor.
+     * Reads the free list recorded on disk and caches its branch offsets.
      *
      * @param file the backing store holding this block's disk page
      * @param startPage the disk page on which this block is stored

@@ -76,8 +76,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
     /**
      * Not supported for single-clove configs.
      *
-     * @throws UnsupportedOperationException always
      * @return the clove
+     * @throws UnsupportedOperationException always
      * @since 0.9.12
      */
     @Override

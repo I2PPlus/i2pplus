@@ -32,7 +32,7 @@ public class HealthHelper extends HelperBase {
     private Log _log;
 
     /**
-     * HealthHelper.
+     * Creates a helper bound to the currently selected router context.
      */
     public HealthHelper() {}
 

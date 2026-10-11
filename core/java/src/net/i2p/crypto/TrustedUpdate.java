@@ -52,7 +52,7 @@ public class TrustedUpdate {
 
     private static final int VERSION_BYTES = 16;
     /**
-     * HEADER_BYTES.
+     * Bytes preceding the version in an update file: a signature followed by a 16-byte version.
      */
     public static final int HEADER_BYTES = Signature.SIGNATURE_BYTES + VERSION_BYTES;
     private static final String PROP_TRUSTED_KEYS = "router.trustedUpdateKeys";
@@ -110,7 +110,7 @@ public class TrustedUpdate {
     }
 
     /**
-     * Keys.
+     * Returns the signing keys whose releases this router accepts, in an unmodifiable view.
      * @return the keys
      * @since 0.9.8, public since 0.9.14.1
      */

@@ -30,7 +30,7 @@ public class NewsHandler extends UpdateHandler implements Checker {
     private static final String PROP_BACKUP_NEWS_URL_SU3 = "router.backupNewsURL";
 
     /**
-     * NewsHandler.
+     * Creates the news update checker for the given update manager.
      *
      * @param ctx the router context for the news fetcher
      * @param mgr the update manager that runs the fetched update tasks

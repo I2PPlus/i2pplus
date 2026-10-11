@@ -82,7 +82,7 @@ class SAMv3DatagramServer implements Handler {
 	}
 
 	/**
-	 * send.
+	 * Writes one datagram to the channel at the given address.
 	 *
 	 * @param addr the destination to deliver the datagram to
 	 * @param msg the datagram to send, positioned at its first byte and consumed by this call
@@ -115,7 +115,7 @@ class SAMv3DatagramServer implements Handler {
 		private final DatagramChannel server;
 
 		/**
-		 * Listener.
+		 * Holds the channel this listener receives the SAM datagrams on.
 		 */
 		public Listener(DatagramChannel server)
 		{
@@ -123,7 +123,7 @@ class SAMv3DatagramServer implements Handler {
 		}
 
 		/**
-		 * run.
+		 * Registers the service port, then receives datagrams until interrupted.
 		 */
 		public void run() {
 			I2PAppContext.getGlobalContext().portMapper().register(PortMapper.SVC_SAM_UDP, _host, _port);
@@ -164,14 +164,14 @@ class SAMv3DatagramServer implements Handler {
 		private static final int MAX_LINE_LENGTH = 2*1024;
 
 		/**
-		 * MessageDispatcher.
+		 * Holds one received datagram for parsing and dispatch.
 		 */
 		public MessageDispatcher(byte[] buf) {
 			this.is = new ByteArrayInputStream(buf);
 		}
 
 		/**
-		 * run.
+		 * Parses one datagram's SAM header and hands the packet to its session.
 		 */
 		public void run() {
 			try {

@@ -9,11 +9,11 @@ import net.i2p.util.Log;
  */
 abstract class SchedulerImpl implements TaskScheduler {
     /**
-     * _context.
+     * Application context the scheduled connections live in.
      */
     protected final I2PAppContext _context;
     /**
-     * _log.
+     * Logger scoped to this scheduler class.
      */
     protected final Log _log;
 

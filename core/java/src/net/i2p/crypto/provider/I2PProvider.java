@@ -9,7 +9,7 @@ import java.security.Security;
  */
 public final class I2PProvider extends Provider {
     /**
-     * PROVIDER_NAME.
+     * Name this provider registers itself under in the JCA.
      */
     public static final String PROVIDER_NAME = "I2P";
     private static final String INFO = "I2P Security Provider v0.1, implementing" + "several algorithms used by I2P.";

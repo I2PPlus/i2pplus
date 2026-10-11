@@ -14,7 +14,7 @@ import java.io.IOException;
 public class SecureFile extends SecureDirectory {
 
     /**
-     * SecureFile.
+     * Wraps a path so the file is created with restricted permissions.
      *
      * @param pathname the path of the file to wrap
      */
@@ -23,7 +23,7 @@ public class SecureFile extends SecureDirectory {
     }
 
     /**
-     * SecureFile.
+     * Wraps a parent path and file name with restricted permissions.
      *
      * @param parent the path of the containing directory
      * @param child the name of the file within parent
@@ -33,7 +33,7 @@ public class SecureFile extends SecureDirectory {
     }
 
     /**
-     * SecureFile.
+     * Wraps a parent directory and file name with restricted permissions.
      *
      * @param parent the containing directory
      * @param child the name of the file within parent

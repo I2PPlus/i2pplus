@@ -173,7 +173,7 @@ class PacketBuilder2 {
         public final int num;
 
         /**
-         * Fragment.
+         * One fragment's slice of an outbound message, identified by its index.
          *
          * @param state the outbound message state
          * @param num fragment number within the message, {@code 0} for the first
@@ -979,8 +979,8 @@ class PacketBuilder2 {
      * or a rejection by Bob.
      * In-session, message 4.
      *
-     * @param charlieHash fake hash (all zeros) if rejected by bob
      * @param code peer test response code from Charlie, or Bob's rejection code
+     * @param charlieHash fake hash (all zeros) if rejected by bob
      * @param signedData flag + signed data
      * @param alice the destination session
      * @return ready to send packet, non-null
@@ -995,8 +995,8 @@ class PacketBuilder2 {
      * or a rejection by Bob.
      * In-session, message 4.
      *
-     * @param charlieHash fake hash (all zeros) if rejected by bob
      * @param code peer test response code from Charlie, or Bob's rejection code
+     * @param charlieHash fake hash (all zeros) if rejected by bob
      * @param signedData flag + signed data
      * @param riBlock to include, may be null
      * @param alice the destination session

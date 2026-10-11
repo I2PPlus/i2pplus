@@ -1730,7 +1730,7 @@ public class TunnelPool {
                   + " [" + toString() + "]");
     }
 
-/**
+    /**
      * Whether this tunnel's local path is unusable because we hold no transport
      * session to the peer we actually send through.
      *
@@ -4090,7 +4090,7 @@ public class TunnelPool {
         }
     }
 
-/**
+    /**
      * Count unexpired tunnels when all of them expire beyond the given
      * threshold.
      *

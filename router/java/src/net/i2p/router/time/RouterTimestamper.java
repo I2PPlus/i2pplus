@@ -48,23 +48,23 @@ public class RouterTimestamper extends Timestamper {
     private static final long MAX_WAIT_INITIALIZATION = 45*1000L;
 
     /**
-     * PROP_QUERY_FREQUENCY.
+     * Property key for the milliseconds between time queries.
      */
     public static final String PROP_QUERY_FREQUENCY = "time.queryFrequencyMs";
     /**
-     * PROP_SERVER_LIST.
+     * Property key naming the SNTP servers to query.
      */
     public static final String PROP_SERVER_LIST = "time.sntpServerList";
     /**
-     * PROP_DISABLED.
+     * Property key that turns time synchronization off.
      */
     public static final String PROP_DISABLED = "time.disabled";
     /**
-     * PROP_CONCURRING_SERVERS.
+     * Property key for how many SNTP servers are queried at once.
      */
     public static final String PROP_CONCURRING_SERVERS = "time.concurringServers";
     /**
-     * PROP_IP_COUNTRY.
+     * Property key holding the country of our last public IP address.
      */
     public static final String PROP_IP_COUNTRY = "i2np.lastCountry";
 

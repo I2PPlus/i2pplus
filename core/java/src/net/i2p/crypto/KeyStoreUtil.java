@@ -57,7 +57,7 @@ public final class KeyStoreUtil {
     private static boolean _blacklistLogged;
 
     /**
-     * DEFAULT_KEYSTORE_PASSWORD.
+     * Well-known JKS password used when no other is configured.
      */
     public static final String DEFAULT_KEYSTORE_PASSWORD = "changeit";
     private static final String DEFAULT_KEY_ALGORITHM = "RSA";

@@ -18,7 +18,7 @@ import net.i2p.I2PAppContext;
 
 import java.nio.charset.StandardCharsets;
 /**
- * Translate.
+ * Filters a reader, replacing the gettext-style tags described below as they are read.
  *
  * Strings are tagged with _("translateme")
  * or _("translate {0} me", "foo")

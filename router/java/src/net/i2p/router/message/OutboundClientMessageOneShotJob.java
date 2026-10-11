@@ -56,7 +56,7 @@ import net.i2p.util.Log;
  * <ul>
  * <li>Local performance and outbound bandwidth usage
  * <li>Streaming performance and reliability
- * <li>Overall network performace and connection congestion
+ * <li>Overall network performance and connection congestion
  * </ul>
  *
  * <p>

@@ -64,10 +64,10 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
      * <p>The fake info hash is the SHA1 of the URL, so downloading the same URL twice is
      * detected as a duplicate.
      *
-     * @param dataDir null to default to snark data directory
      * @param ctx the I2P application context supplying the logger
      * @param mgr the manager that owns this downloader
      * @param url the torrent file URL to fetch
+     * @param dataDir null to default to snark data directory
      */
     public FetchAndAdd(
             I2PAppContext ctx, SnarkManager mgr, String url, File dataDir) {

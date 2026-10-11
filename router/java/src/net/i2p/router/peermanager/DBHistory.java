@@ -45,7 +45,7 @@ public class DBHistory {
     private volatile long _lastCoalesce = System.currentTimeMillis();
 
     /**
-     * DBHistory.
+     * Creates the lookup and invalid-reply rate statistics for one peer.
      *
      * @param context the router context the rates and clock are taken from
      * @param statGroup the grouping applied to the two RateStats created here

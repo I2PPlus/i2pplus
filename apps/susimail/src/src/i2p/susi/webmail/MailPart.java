@@ -32,41 +32,41 @@ class MailPart {
 
     private static final OutputStream DUMMY_OUTPUT = new DummyOutputStream();
     /**
-     * headerLines.
+     * The raw header lines of this part, in the order they were received.
      */
     public final String[] headerLines;
     /** encoding non-null */
     public final String type;
     /**
-     * encoding.
+     * Content-Transfer-Encoding of this part, never null.
      */
     public final String encoding;
     /**
-     * name.
+     * The name parameter of the Content-Disposition header, or null.
      */
     public final String name;
     /**
-     * description.
+     * The Content-Description header, or null.
      */
     public final String description;
     /**
-     * disposition.
+     * The Content-Disposition header, or null when there is none.
      */
     public final String disposition;
     /**
-     * charset.
+     * The charset parameter of the Content-Type header, or null.
      */
     public final String charset;
     /**
-     * version.
+     * The version parameter of the Content-Type header, or null.
      */
     public final String version;
     /**
-     * multipart_type.
+     * The subtype of a multipart Content-Type, such as mixed or alternative.
      */
     public final String multipart_type;
     /**
-     * cid.
+     * The Content-ID used to reference this part from the HTML body.
      */
     public final String cid;
     /**
@@ -81,19 +81,19 @@ class MailPart {
     /** Always null, reserved for future use */
     public final String filename = null;
     /**
-     * parts.
+     * The sub-parts, when this part is a multipart container.
      */
     public final List<MailPart> parts;
     /**
-     * multipart.
+     * True when this part is a multipart container.
      */
     public final boolean multipart;
     /**
-     * message.
+     * True when this part is an embedded message.
      */
     public final boolean message;
     /**
-     * buffer.
+     * The shared mailbox buffer this part was parsed from.
      */
     public final Buffer buffer;
     private final Log _log;
@@ -465,7 +465,7 @@ class MailPart {
     private static String _t(String s, Object o) {return Messages.getString(s, o);}
 
     /**
-     * toString.
+     * Renders the part metadata for debugging.
      */
     @Override
     /**

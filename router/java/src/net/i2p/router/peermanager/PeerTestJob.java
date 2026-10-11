@@ -62,19 +62,19 @@ public class PeerTestJob extends JobImpl {
     /** Default delay between peer tests. */
     private static final long DEFAULT_PEER_TEST_DELAY = 5*60*1000L;
     /**
-     * PROP_PEER_TEST_DELAY.
+     * Property key setting the pause before a peer test starts.
      */
     public static final String PROP_PEER_TEST_DELAY = "router.peerTestDelay";
     /** Default number of peers to test concurrently. */
     private static final int DEFAULT_PEER_TEST_CONCURRENCY = 1;
     /**
-     * PROP_PEER_TEST_CONCURRENCY.
+     * Property key setting how many peers are tested at once.
      */
     public static final String PROP_PEER_TEST_CONCURRENCY = "router.peerTestConcurrency";
     /** Default timeout in milliseconds. */
     private static final int DEFAULT_PEER_TEST_TIMEOUT = 10000;
     /**
-     * PROP_PEER_TEST_TIMEOUT.
+     * Property key setting how long a peer test may take, in milliseconds.
      */
     public static final String PROP_PEER_TEST_TIMEOUT = "router.peerTestTimeout";
 
@@ -635,7 +635,7 @@ public class PeerTestJob extends JobImpl {
         private boolean _matchFound;
 
         /**
-         * ReplySelector.
+         * Records the peer, nonce and expiry this outstanding test expects.
          */
         public ReplySelector(Hash peer, long nonce, long expiration) {
             _nonce = nonce;
@@ -783,7 +783,7 @@ public class PeerTestJob extends JobImpl {
         private final TunnelInfo _sendTunnel;
 
         /**
-         * PeerReplyFoundJob.
+         * Starts the clock when the tested peer's reply arrived.
          */
         public PeerReplyFoundJob(RouterContext context, RouterInfo peer, TunnelInfo replyTunnel, TunnelInfo sendTunnel) {
             super(context);
@@ -885,7 +885,7 @@ public class PeerTestJob extends JobImpl {
         private final ReplySelector _selector;
 
         /**
-         * PeerReplyTimeoutJob.
+         * Schedules timeout handling when no reply arrived in time.
          */
         public PeerReplyTimeoutJob(RouterContext context, RouterInfo peer, TunnelInfo replyTunnel, TunnelInfo sendTunnel, ReplySelector sel) {
             super(context);

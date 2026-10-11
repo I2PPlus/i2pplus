@@ -12,7 +12,7 @@ import org.rrd4j.graph.DownSampler;
 public class LargestTriangleThreeBucketsTime extends DownSampleImpl {
 
     /**
-     * LargestTriangleThreeBucketsTime.
+     * Builds a downsampler that reduces a time series to the requested point count.
      *
      * @param threshold the number of points to downsize the series to
      */
@@ -21,7 +21,7 @@ public class LargestTriangleThreeBucketsTime extends DownSampleImpl {
     }
 
     /**
-     * downsizeImpl.
+     * Keeps the largest-area point of each time bucket, preserving the series shape.
      */
     @Override
     public DataSet downsizeImpl(DownSampler.DataSet sampled, long[] timestamps, double[] values) {

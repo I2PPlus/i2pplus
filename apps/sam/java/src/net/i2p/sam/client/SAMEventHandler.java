@@ -24,7 +24,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     private final Map<String,String> _namingReplies = new HashMap<>();
 
     /**
-     * SAMEventHandler.
+     * Binds the log this handler reports unhandled messages to.
      * @param ctx the context whose log manager supplies the logger for this handler
      */
     public SAMEventHandler(I2PAppContext ctx) {
@@ -32,7 +32,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     }
 
     /**
-     * helloReplyReceived.
+     * Records the HELLO outcome and version, then wakes any waiter.
      */
     @Override
     public void helloReplyReceived(boolean ok, String version) {
@@ -64,7 +64,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     }
 
     /**
-     * namingReplyReceived.
+     * Files a naming reply under its name, value on success and result otherwise.
      */
     @Override
     public void namingReplyReceived(String name, String result, String value, String msg) {
@@ -78,7 +78,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     }
 
     /**
-     * streamStatusReceived.
+     * Records the session status result, then wakes any waiter.
      */
     @Override
     public void streamStatusReceived(String result, String id, String message) {
@@ -92,7 +92,7 @@ public class SAMEventHandler extends SAMClientEventListenerImpl {
     }
 
     /**
-     * unknownMessageReceived.
+     * Logs a message this handler has no handling for.
      */
     @Override
     public void unknownMessageReceived(String major, String minor, Properties params) {

@@ -48,7 +48,7 @@ public abstract class EdnsOption {
     }
 
     /**
-     * EdnsOption.
+     * Build an option whose code is taken from the subclass's option code.
      *
      * @param optionData the raw option payload; its length becomes the option length
      */
@@ -81,7 +81,9 @@ public abstract class EdnsOption {
     private volatile String toStringCache;
 
     /**
-     * toString.
+     * Returns the cached string form, computing it from {@link #toStringInternal} on first use.
+     *
+     * @return the string form of this option
      */
     @Override
     public final String toString() {

@@ -84,8 +84,6 @@ class SAMv2StreamSession extends SAMStreamSession {
      * @throws DataFormatException if the destination is not valid
      * @throws SAMInvalidDirectionException if trying to connect through a
      *                                      receive-only session
-     * @throws SAMInvalidDirectionException if trying to connect through a
-     *                                      receive-only session
      */
     @Override
     public boolean connect(int id, String dest, Properties props)
@@ -139,7 +137,7 @@ class SAMv2StreamSession extends SAMStreamSession {
         }
 
         /**
-         * run.
+         * Connects the socket to the destination, then writes to it until closed.
          */
         public void run() {
             if (_log.shouldDebug()) _log.debug("run() called for socket connector " + id);
@@ -190,7 +188,7 @@ class SAMv2StreamSession extends SAMStreamSession {
     }
 
     /**
-     * newSAMStreamSessionSocketReader.
+     * Creates the version 2 socket reader for this session.
      */
     @Override
     protected SAMStreamSessionSocketReader newSAMStreamSessionSocketReader(I2PSocket s, int id) throws IOException {
@@ -292,7 +290,7 @@ class SAMv2StreamSession extends SAMStreamSession {
         }
 
         /**
-         * run.
+         * Pumps pending outgoing data to the peer until the stream shuts down.
          */
         @Override
         public void run() {
@@ -384,15 +382,15 @@ class SAMv2StreamSession extends SAMStreamSession {
      */
     public class SAMv2StreamSessionSocketReader extends SAMv1StreamSessionSocketReader {
         /**
-         * nolimit.
+         * True when the receive byte cap is not enforced.
          */
         protected boolean nolimit;
         /**
-         * limit.
+         * Maximum bytes the reader may take before it blocks.
          */
         protected long limit;
         /**
-         * totalReceived.
+         * Bytes received from the peer so far on this stream.
          */
         protected long totalReceived;
 
@@ -408,7 +406,7 @@ class SAMv2StreamSession extends SAMStreamSession {
         }
 
         /**
-         * setLimit.
+         * Applies a new receive byte cap and wakes a blocked reader.
          * @param limit the number of bytes the reader may take before it blocks
          * @param nolimit true to drop the byte cap entirely, false to enforce the limit
          */
@@ -423,7 +421,7 @@ class SAMv2StreamSession extends SAMStreamSession {
         }
 
         /**
-         * run.
+         * Reads from the socket and forwards the data to the client connection.
          */
         @Override
         public void run() {

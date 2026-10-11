@@ -31,7 +31,7 @@ public class ConfigurationManager {
 
 
     /**
-     * ConfigurationManager.
+     * Chooses the config filename for the plugin or webapp case, then reads it.
      *
      * @param ctx the application context supplying the log manager
      * @param dir the directory the configuration file is read from
@@ -102,7 +102,7 @@ public class ConfigurationManager {
     /**
      * Try to parse the input as 'key=value',
      * where value will (in order) be parsed as integer/boolean/string.
-     * @param str
+     * @param input
      */
     private void parseConfigStr(Properties input) {
         for (Entry<Object, Object> entry : input.entrySet()) {

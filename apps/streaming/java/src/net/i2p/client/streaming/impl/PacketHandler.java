@@ -56,7 +56,7 @@ class PacketHandler {
         () -> new SimpleDateFormat("HH:mm:ss.SSS", Locale.US));
 
     /**
-     * PacketHandler.
+     * Stores the context and manager, and opens the logger for the class.
      *
      * @param ctx the app context used for logging, properties and packet verification
      * @param mgr the connection manager whose connections dispatch inbound packets

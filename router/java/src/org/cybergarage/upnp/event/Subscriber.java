@@ -37,7 +37,7 @@ public class Subscriber {
     ////////////////////////////////////////////////
 
     /**
-     * Subscriber.
+     * Creates a subscription that is renewed as of now.
      */
     public Subscriber() {
         renew();
@@ -50,7 +50,7 @@ public class Subscriber {
     private String SID = null;
 
     /**
-     * getSID.
+     * Returns the subscription ID.
      *
      * @return the subscription ID assigned by the service, null until one is set
      */
@@ -59,7 +59,7 @@ public class Subscriber {
     }
 
     /**
-     * setSID.
+     * Records the subscription ID.
      *
      * @param sid the subscription ID the service issued
      */
@@ -74,7 +74,7 @@ public class Subscriber {
     private String ifAddr = "";
 
     /**
-     * setInterfaceAddress.
+     * Records the local interface address notifications go out from.
      *
      * @param addr the local interface address notifications are sent from
      */
@@ -83,7 +83,7 @@ public class Subscriber {
     }
 
     /**
-     * getInterfaceAddress.
+     * Returns the local interface address.
      *
      * @return the local interface address, empty until one is set
      */
@@ -98,7 +98,7 @@ public class Subscriber {
     private String deliveryURL = "";
 
     /**
-     * getDeliveryURL.
+     * Returns the callback URL notifications are POSTed to.
      *
      * @return the callback URL notifications are POSTed to, empty until one is set
      */
@@ -107,7 +107,7 @@ public class Subscriber {
     }
 
     /**
-     * setDeliveryURL.
+     * Records the callback URL and caches its host, path and port.
      *
      * @param deliveryURL the callback URL to POST to, also split into the cached host, path and
               port; an unparsable URL leaves those at their defaults
@@ -129,7 +129,7 @@ public class Subscriber {
     private int deliveryPort = 0;
 
     /**
-     * getDeliveryHost.
+     * Returns the host parsed from the delivery URL.
      *
      * @return the host parsed out of the delivery URL, empty until one is set
      */
@@ -138,7 +138,7 @@ public class Subscriber {
     }
 
     /**
-     * getDeliveryPath.
+     * Returns the path parsed from the delivery URL.
      *
      * @return the path parsed out of the delivery URL, empty until one is set
      */
@@ -147,7 +147,7 @@ public class Subscriber {
     }
 
     /**
-     * getDeliveryPort.
+     * Returns the port parsed from the delivery URL.
      *
      * @return the port parsed out of the delivery URL, 0 until one is set
      */
@@ -162,7 +162,7 @@ public class Subscriber {
     private long timeOut = 0;
 
     /**
-     * getTimeOut.
+     * Returns the subscription duration.
      *
      * @return the subscription duration in seconds, or {@link Subscription#INFINITE_VALUE} for none
      */
@@ -171,7 +171,7 @@ public class Subscriber {
     }
 
     /**
-     * setTimeOut.
+     * Records how long the subscription lasts.
      *
      * @param value the duration in seconds from now, or INFINITE_VALUE for no expiry
      */
@@ -180,7 +180,7 @@ public class Subscriber {
     }
 
     /**
-     * isExpired.
+     * Returns whether the subscription duration has run out.
      *
      * @return true once the timeout has elapsed, false if it is infinite or still unexpired
      */
@@ -204,7 +204,7 @@ public class Subscriber {
     private long subscriptionTime = 0;
 
     /**
-     * getSubscriptionTime.
+     * Returns when the subscription was last renewed.
      *
      * @return when the subscription was last renewed, in milliseconds since the epoch
      */
@@ -213,7 +213,7 @@ public class Subscriber {
     }
 
     /**
-     * setSubscriptionTime.
+     * Records when the subscription started.
      *
      * @param time when the subscription starts, in milliseconds since the epoch
      */
@@ -228,7 +228,7 @@ public class Subscriber {
     private long notifyCount = 0;
 
     /**
-     * getNotifyCount.
+     * Returns the notification count since the last renewal.
      *
      * @return the notification count since the last renewal, which wraps to 1 rather than overflow
      */
@@ -237,7 +237,7 @@ public class Subscriber {
     }
 
     /**
-     * setNotifyCount.
+     * Records the notification count.
      *
      * @param cnt the notification count to record, as zeroed again by renew()
      */
@@ -246,7 +246,7 @@ public class Subscriber {
     }
 
     /**
-     * incrementNotifyCount.
+     * Increments the notification count, wrapping back to 1 at the maximum.
      */
     public void incrementNotifyCount() {
         if (notifyCount == Long.MAX_VALUE) {
@@ -261,7 +261,7 @@ public class Subscriber {
     ////////////////////////////////////////////////
 
     /**
-     * renew.
+     * Restarts the subscription clock and zeroes the notification count.
      */
     public void renew() {
         setSubscriptionTime(System.currentTimeMillis());

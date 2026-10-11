@@ -31,7 +31,7 @@ import net.i2p.I2PAppContext;
 class SchedulerConnecting extends SchedulerImpl {
 
     /**
-     * SchedulerConnecting.
+     * Passes the context on to the shared scheduler base.
      *
      * @param ctx the I2P app context supplying the clock and logger
      */

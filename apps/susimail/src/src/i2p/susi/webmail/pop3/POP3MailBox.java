@@ -343,7 +343,7 @@ public class POP3MailBox implements NewMailListener {
     }
 
     /**
-     * Timestamp.
+     * Records the current time as the last activity.
      *
      * @since 0.9.13
      */
@@ -801,8 +801,7 @@ public class POP3MailBox implements NewMailListener {
      * Sets lastError to the FIRST error.
      * Caller must sync.
      *
-     * @param cmd command to send
-     * @param rcvLines lines to receive
+     * @param cmds command to send
      * @return true if ALL received lines were successful (+OK)
      * @throws IOException
      * @since 0.9.13

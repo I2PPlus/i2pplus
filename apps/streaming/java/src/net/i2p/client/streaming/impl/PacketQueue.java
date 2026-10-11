@@ -55,7 +55,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
     private int _sendDupMsgSizeCnt;
 
     /**
-     * PacketQueue.
+     * Opens the log, creates the status map and starts expiring old entries.
      *
      * @param context the application context, used for logging
      * @param timer timer used to schedule removal of expired status entries

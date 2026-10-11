@@ -23,7 +23,7 @@ public class ResultsTextPane extends JTextPane {
      * Method to append String into the current document
      *
      * @param paramTextStr
-     * String to be inserted into the document
+     *                        String to be inserted into the document
      */
     public void append(String paramTextStr) {
         try {

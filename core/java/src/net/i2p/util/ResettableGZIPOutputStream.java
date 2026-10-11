@@ -37,7 +37,7 @@ public class ResettableGZIPOutputStream extends DeflaterOutputStream {
     }
 
     /**
-     * Reinitialze everything so we can write a brand new gzip output stream
+     * Reinitialize everything so we can write a brand new gzip output stream
      * again.
      */
     public void reset() {

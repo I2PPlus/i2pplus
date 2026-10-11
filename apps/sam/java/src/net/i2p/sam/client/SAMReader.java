@@ -25,7 +25,7 @@ public class SAMReader {
     private static final AtomicInteger _count = new AtomicInteger();
 
     /**
-     * SAMReader.
+     * Reads a SAM protocol stream and passes each message to a listener.
      *
      * @param context the router context used to obtain the class log
      * @param samIn the stream positioned at the start of a SAM protocol stream
@@ -38,7 +38,7 @@ public class SAMReader {
     }
 
     /**
-     * startReading.
+     * Starts the thread that reads and parses the SAM stream.
      */
     public synchronized void startReading() {
         if (_live)
@@ -50,7 +50,7 @@ public class SAMReader {
     }
 
     /**
-     * stopReading.
+     * Stops the reader thread and closes the underlying stream.
      */
     public synchronized void stopReading() {
         _live = false;
@@ -67,11 +67,11 @@ public class SAMReader {
      */
     public interface SAMClientEventListener {
         /**
-         * SESSION_STATUS_OK.
+         * Session creation succeeded.
          */
         public static final String SESSION_STATUS_OK = "OK";
         /**
-         * SESSION_STATUS_DUPLICATE_DEST.
+         * Session creation failed because the destination is already in use.
          */
         public static final String SESSION_STATUS_DUPLICATE_DEST = "DUPLICATE_DEST";
         /**
@@ -79,16 +79,16 @@ public class SAMReader {
          */
         public static final String SESSION_STATUS_I2P_ERROR = "I2P_ERROR";
         /**
-         * SESSION_STATUS_INVALID_KEY.
+         * Session creation failed because the supplied private key is invalid.
          */
         public static final String SESSION_STATUS_INVALID_KEY = "INVALID_KEY";
 
         /**
-         * STREAM_STATUS_OK.
+         * Stream connect succeeded.
          */
         public static final String STREAM_STATUS_OK = "OK";
         /**
-         * STREAM_STATUS_CANT_REACH_PEER.
+         * Stream connect failed because the peer could not be reached.
          */
         public static final String STREAM_STATUS_CANT_REACH_PEER = "CANT_REACH_PEER";
         /**
@@ -96,20 +96,20 @@ public class SAMReader {
          */
         public static final String STREAM_STATUS_I2P_ERROR = "I2P_ERROR";
         /**
-         * STREAM_STATUS_INVALID_KEY.
+         * Stream connect failed because the private key is invalid.
          */
         public static final String STREAM_STATUS_INVALID_KEY = "INVALID_KEY";
         /**
-         * STREAM_STATUS_TIMEOUT.
+         * Stream connect failed because the lease expired before it was established.
          */
         public static final String STREAM_STATUS_TIMEOUT = "TIMEOUT";
 
         /**
-         * STREAM_CLOSED_OK.
+         * Stream closed normally.
          */
         public static final String STREAM_CLOSED_OK = "OK";
         /**
-         * STREAM_CLOSED_CANT_REACH_PEER.
+         * Stream closed because the peer became unreachable.
          */
         public static final String STREAM_CLOSED_CANT_REACH_PEER = "CANT_REACH_PEER";
         /**
@@ -117,24 +117,24 @@ public class SAMReader {
          */
         public static final String STREAM_CLOSED_I2P_ERROR = "I2P_ERROR";
         /**
-         * STREAM_CLOSED_PEER_NOT_FOUND.
+         * Stream closed because the destination was no longer known to the router.
          */
         public static final String STREAM_CLOSED_PEER_NOT_FOUND = "PEER_NOT_FOUND";
         /**
-         * STREAM_CLOSED_TIMEOUT.
+         * Stream closed because the lease expired.
          */
         public static final String STREAM_CLOSED_TIMEOUT = "CLOSED";
 
         /**
-         * NAMING_REPLY_OK.
+         * Naming lookup succeeded.
          */
         public static final String NAMING_REPLY_OK = "OK";
         /**
-         * NAMING_REPLY_INVALID_KEY.
+         * Naming lookup failed because the private key is invalid.
          */
         public static final String NAMING_REPLY_INVALID_KEY = "INVALID_KEY";
         /**
-         * NAMING_REPLY_KEY_NOT_FOUND.
+         * Naming lookup failed because no key matches the requested name.
          */
         public static final String NAMING_REPLY_KEY_NOT_FOUND = "KEY_NOT_FOUND";
 
@@ -248,7 +248,7 @@ public class SAMReader {
 
     private class Runner implements Runnable {
         /**
-         * run.
+         * Reads SAM lines off the stream and dispatches them until stopped.
          */
         public void run() {
             Properties params = new Properties();

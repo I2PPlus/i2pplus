@@ -244,7 +244,7 @@ public class NSEC3 extends Data {
     }
 
     /**
-     * getSalt.
+     * Returns a defensive copy of the salt prepended to the owner name.
      *
      * @return a copy of the salt prepended to the owner name before hashing
      */
@@ -253,7 +253,7 @@ public class NSEC3 extends Data {
     }
 
     /**
-     * getSaltLength.
+     * Returns the number of salt bytes carried by this record.
      *
      * @return the number of salt bytes, from 0 to 255
      */
@@ -262,7 +262,7 @@ public class NSEC3 extends Data {
     }
 
     /**
-     * getNextHashed.
+     * Returns a defensive copy of the next owner name in hash order.
      *
      * @return a copy of the next existing owner name in hash order
      */
@@ -288,7 +288,7 @@ public class NSEC3 extends Data {
     private DnsLabel nextHashedDnsLabelCache;
 
     /**
-     * getNextHashedDnsLabel.
+     * Returns the next hashed owner name as a DNS label, decoding the cached Base32 form.
      *
      * @return the next hashed owner name as a DNS label, cached after the first call
      */

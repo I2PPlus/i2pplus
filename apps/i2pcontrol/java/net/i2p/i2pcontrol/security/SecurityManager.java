@@ -33,7 +33,7 @@ import org.mindrot.jbcrypt.BCrypt;
  */
 public class SecurityManager {
     /**
-     * DEFAULT_AUTH_PASSWORD.
+     * Seed password stored when no auth.password has been configured yet.
      */
     public final static String DEFAULT_AUTH_PASSWORD = "itoopie";
     private final HashMap<String, AuthToken> authTokens;
@@ -46,8 +46,8 @@ public class SecurityManager {
      * Create the security manager and start the sweeper that expires auth
      * tokens; no token store is loaded here.
      *
-     * @param ksp may be null (if webapp); currently unused, kept for the API
      * @param ctx the application context supplying the logger, random source and SHA-256 generator
+     * @param ksp may be null (if webapp); currently unused, kept for the API
      * @param conf the configuration manager holding the persisted salt and password hash
      */
     public SecurityManager(I2PAppContext ctx, KeyStoreProvider ksp, ConfigurationManager conf) {
@@ -104,7 +104,7 @@ public class SecurityManager {
     }
 
     /**
-     * Hash input one time with SHA-256, return Base64 encdoded string.
+     * Hash input one time with SHA-256, return Base64 encoded string.
      * @param string the value to hash, read as UTF-8 bytes before hashing
      * @return Base64 encoded string
      */
@@ -207,7 +207,7 @@ public class SecurityManager {
         }
 
         /**
-         * timeReached.
+         * Drops every expired token from the store, then schedules the next pass.
          */
         public void timeReached() {
             _log.debug("Starting cleanup job..");

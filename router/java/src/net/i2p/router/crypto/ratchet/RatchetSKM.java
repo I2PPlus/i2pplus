@@ -449,9 +449,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Outbound.
-     *
-     * Retrieve the next available session tag and key for sending a message to the target.
+     * Takes the next outbound session tag and key for sending a message to the target.
      *
      * If this returns null, no session is set up yet, and a New Session message should be sent.
      *
@@ -614,10 +612,9 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     }
 
     /**
-     * Inbound.
+     * Determines whether a session key was received for the given session tag.
      *
-     * Determine if we have received a session key associated with the given session tag,
-     * and if so, discard it and return the decryption
+     * If one was, it is discarded and returned along with the decryption
      * key it was received with (via tagsReceived(...)).  returns null if no session key
      * matches
      *
@@ -1595,7 +1592,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
 
         /**
-         * A timer that we will cancel when we send someting.
+         * A timer that we will cancel when we send something.
          * Side effect - binds this session to the supplied destination.
          *
          * @param d the far-end Destination for this PublicKey if known, or null

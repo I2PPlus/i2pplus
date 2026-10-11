@@ -59,7 +59,7 @@ public class ConfigNetHandler extends FormHandler {
     private static final String PROP_HIDDEN = Router.PROP_HIDDEN_HIDDEN; // see Router for other choice
 
     /**
-     * processForm.
+     * Applies the submitted form, saving when a save was requested.
      */
     @Override
     protected void processForm() {
@@ -89,7 +89,7 @@ public class ConfigNetHandler extends FormHandler {
      */
     public void setEnableloadtesting(String moo) { }
     /**
-     * setUdpAutoIP.
+     * Set the UDP address detection mode and whether the address is withheld.
      * @param mode comma-separated list of IP address detection sources to use
      *             ("local", "upnp", "ssu"), "fixed" to use the manually entered
      *             address, or "hidden" to withhold our address from the NetDb

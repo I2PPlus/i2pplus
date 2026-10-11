@@ -2321,7 +2321,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Send a commment request message to the peer, if he supports it.
+     * Send a comment request message to the peer, if he supports it.
      *
      * @param peer the connection to ask for comments; needs the comment extension advertised
      * @since 0.9.31
@@ -2604,7 +2604,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     }
 
     /**
-     * Convenience
+     * Returns the shared torrent utility this coordinator was built with.
      *
      * @return the util
      * @since 0.9.2

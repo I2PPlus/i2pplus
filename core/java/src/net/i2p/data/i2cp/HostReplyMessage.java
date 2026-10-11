@@ -241,7 +241,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * Returns this message's I2CP type ID.
      * @return the type
      */
     @Override

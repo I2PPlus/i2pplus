@@ -105,7 +105,7 @@ class UPnPManager {
     private static final String UDP_PORT_NAME = "UDP";
 
     /**
-     * UPnPManager.
+     * Set up UPnP discovery and hold the transport manager to notify.
      *
      * @param context router context supplying properties, logging, and the SSDP/HTTP ports
      * @param manager transport manager notified of the port mappings UPnP discovers
@@ -444,7 +444,7 @@ class UPnPManager {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     * Translate
+     * Look up a translation key in the router web message bundle.
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);

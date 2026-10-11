@@ -727,7 +727,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Receive a connection reply.
      *
-     * @param lifetime ms
+     * @param waiter ms
      */
     private void receiveConnection(ReplyWaiter waiter, byte[] payload) {
         Tracker tr = waiter.getSentTo();
@@ -926,7 +926,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         private final Set<Hash> peers;
 
         /**
-         * Success.
+         * Builds a successful response from the tracker's swarm statistics.
          *
          * @param interval seconds the tracker asks us to wait before the next announce
          * @param seeds number of complete peers the tracker reports in the swarm
@@ -942,7 +942,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         }
 
         /**
-         * Failure.
+         * Builds a response holding only the tracker's error, with no peers.
          *
          * @param errorMsg the tracker supplied reason the announce did not succeed
          */

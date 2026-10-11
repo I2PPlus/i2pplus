@@ -1259,8 +1259,8 @@ public class UDPTransport extends TransportImpl {
     /**
      * The MTU for the socket interface.
      * To be used as the "large" MTU.
-     * @return limited to range PeerState.MIN_MTU to PeerState.LARGE_MTU.
      * @param ipv6 true for IPv6, false for IPv4
+     * @return limited to range PeerState.MIN_MTU to PeerState.LARGE_MTU.
      * @since 0.9.2, public since 0.9.31
      */
     public int getMTU(boolean ipv6) {
@@ -1272,8 +1272,8 @@ public class UDPTransport extends TransportImpl {
      * The SSU2 MTU for the socket interface.
      * To be used as the "large" MTU.
      *
-     * @return limited to range PeerState2.MIN_MTU to PeerState2.LARGE_MTU, or 0 if unavailable
      * @param ipv6 true for IPv6, false for IPv4
+     * @return limited to range PeerState2.MIN_MTU to PeerState2.LARGE_MTU, or 0 if unavailable
      * @since 0.9.55
      */
     public int getSSU2MTU(boolean ipv6) {

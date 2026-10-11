@@ -292,7 +292,7 @@ public class Util {
      * </pre>
      *
      * @param atStyleTimeSpec at-style time specification. For the complete explanation of the
-     *     syntax allowed see RRDTool's <code>rrdfetch</code> man page.
+     *                        syntax allowed see RRDTool's <code>rrdfetch</code> man page.
      * @return timestamp in seconds since epoch.
      */
     public static long getTimestamp(String atStyleTimeSpec) {
@@ -309,11 +309,11 @@ public class Util {
      * </pre>
      *
      * @param atStyleTimeSpec1 Starting at-style time specification. For the complete explanation of
-     *     the syntax allowed see RRDTool's <code>rrdfetch</code> man page.
+     *                         the syntax allowed see RRDTool's <code>rrdfetch</code> man page.
      * @param atStyleTimeSpec2 Ending at-style time specification. For the complete explanation of
-     *     the syntax allowed see RRDTool's <code>rrdfetch</code> man page.
+     *                         the syntax allowed see RRDTool's <code>rrdfetch</code> man page.
      * @return An array of two longs representing starting and ending timestamp in seconds since
-     *     epoch.
+     *         epoch.
      */
     public static long[] getTimestamps(String atStyleTimeSpec1, String atStyleTimeSpec2) {
         TimeSpec timeSpec1 = new TimeParser(atStyleTimeSpec1).parse();
@@ -589,7 +589,7 @@ public class Util {
         private static final ErrorHandler eh =
                 new ErrorHandler() {
                     /**
-                     * Error
+                     * Rethrows a recoverable parse error rather than continuing.
                      */
                     public void error(SAXParseException exception) throws SAXException {
                         throw exception;
@@ -1015,10 +1015,10 @@ public class Util {
     /**
      * Equivalent of the C-style sprintf function.
      *
+     * @param l a {@link java.util.Locale} object.
      * @param format Format string
      * @param args Arbitrary list of arguments
      * @return Formatted string
-     * @param l a {@link java.util.Locale} object.
      */
     public static String sprintf(Locale l, String format, Object... args) {
         String fmt = SPRINTF_PATTERN.matcher(format).replaceAll("$1%$2$3");

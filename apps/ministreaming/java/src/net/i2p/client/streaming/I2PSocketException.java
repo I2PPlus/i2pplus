@@ -140,7 +140,7 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     * Translated
+     * Looks up the message in the exception's translation bundle.
      * @return the localized message
      */
     @Override
@@ -152,7 +152,7 @@ public class I2PSocketException extends SocketException {
     }
 
     /**
-     * Translate
+     * Looks a string up in this class's translation bundle.
      */
     private static String _t(String s) {
         return Translate.getString(s, I2PAppContext.getGlobalContext(), BUNDLE_NAME);

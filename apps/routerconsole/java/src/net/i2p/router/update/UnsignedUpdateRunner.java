@@ -20,7 +20,7 @@ import net.i2p.util.RFC822Date;
 class UnsignedUpdateRunner extends UpdateRunner {
 
     /**
-     * UnsignedUpdateRunner.
+     * Sets up an unsigned router update against the first of the given mirrors.
      *
      * @param ctx the router context the update runs in
      * @param mgr the manager notified of task progress and failure

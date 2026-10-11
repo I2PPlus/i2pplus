@@ -757,8 +757,8 @@ class BasicServlet extends HttpServlet {
      * Copy bytes from input stream to output stream.
      *
      * @param in the input stream to read from
-     * @param out the output stream to write to
      * @param skip the number of bytes to skip before copying
+     * @param out the output stream to write to
      * @param len the number of bytes to copy, or -1 for all remaining bytes
      * @throws IOException if an I/O error occurs
      */

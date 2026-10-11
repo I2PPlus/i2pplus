@@ -18,7 +18,7 @@ class TimeoutPipedOutputStream extends PipedOutputStream {
     private final TimeoutPipedInputStream sink;
 
     /**
-     * TimeoutPipedOutputStream.
+     * Connects this stream to the timeout-aware pipe that will read it.
      * @param snk the pipe to feed, which also gets notified when this stream closes
      * @throws IOException if the sink is already connected to another output stream
      */

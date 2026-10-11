@@ -17,7 +17,7 @@ public class Util
     }
 
     /**
-     * clone.
+     * Copy an array into an independent one.
      *
      * @param a the array to copy
      * @return an independent copy of the array
@@ -28,7 +28,7 @@ public class Util
     }
 
     /**
-     * concatenate.
+     * Join several arrays back to back into a new one.
      *
      * @param arrays the arrays to join, in order
      * @return a new array holding every input array back to back
@@ -54,7 +54,7 @@ public class Util
     }
 
     /**
-     * concatenate.
+     * Join two arrays back to back into a new one.
      *
      * @param a the array placed first
      * @param b the array placed second
@@ -68,7 +68,7 @@ public class Util
     }
 
     /**
-     * append.
+     * Extend an array by one byte at the end.
      *
      * @param a the array to extend
      * @param b the byte to place in the new last position
@@ -82,7 +82,7 @@ public class Util
     }
 
     /**
-     * constantTimeAreEqual.
+     * Compare two arrays without leaking where they differ.
      *
      * @param a the first array to compare
      * @param b the second array to compare

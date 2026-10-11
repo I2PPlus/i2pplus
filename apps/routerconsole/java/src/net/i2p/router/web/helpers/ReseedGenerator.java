@@ -18,7 +18,7 @@ public class ReseedGenerator extends HelperBase {
     public ReseedGenerator() {}
 
     /**
-     * createZip.
+     * Bundles 200 eligible router infos into a fresh i2preseed.zip.
      *
      * @return the newly written i2preseed.zip file
      * @throws IOException if the reseed directory or the zip cannot be written

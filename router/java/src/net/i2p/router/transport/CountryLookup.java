@@ -98,7 +98,7 @@ public class CountryLookup {
     private class QueueAll extends SimpleTimer2.TimedEvent {
         private boolean _firstRun = true;
         /**
-         * QueueAll.
+         * Creates a one-shot timer for queueing every known router.
          */
         public QueueAll() { super(_context.simpleTimer2()); }
         /**
@@ -128,7 +128,7 @@ public class CountryLookup {
 
     private class Lookup extends SimpleTimer2.TimedEvent {
         /**
-         * Lookup.
+         * Creates a timer that re-arms the GeoIP lookup.
          */
         public Lookup() { super(_context.simpleTimer2()); }
         /**
@@ -148,7 +148,7 @@ public class CountryLookup {
     private class LookupThread extends I2PThread {
 
         /**
-         * LookupThread.
+         * Creates a daemon thread named GeoIP Lookup.
          */
         public LookupThread() {
             super("GeoIP Lookup");

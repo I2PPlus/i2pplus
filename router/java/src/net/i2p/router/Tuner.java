@@ -1640,11 +1640,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          */
         public final int defaultValue;
         /**
-         * Minimum.
+         * Lowest value this param may be tuned to.
          */
         public final int min;
         /**
-         * Maximum.
+         * Highest value this param may be tuned to.
          */
         public final int max;
         /** Adjustment step size. */

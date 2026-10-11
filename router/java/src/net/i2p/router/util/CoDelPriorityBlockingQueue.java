@@ -375,7 +375,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * Apply CoDel control to the given entry, dropping if needed.
      *
      * @param rv may be null
-     * @return rv or a subequent entry or null if dropped
+     * @return rv or a subsequent entry or null if dropped
      */
 
     private E codel(E rv) {

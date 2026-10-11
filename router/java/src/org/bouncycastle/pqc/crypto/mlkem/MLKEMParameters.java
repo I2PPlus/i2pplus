@@ -34,7 +34,7 @@ public class MLKEMParameters
     }
 
     /**
-     * getName.
+     * Return the standardized parameter-set name.
      *
      * @return the standardized name, for example ML-KEM-1024
      */
@@ -44,7 +44,7 @@ public class MLKEMParameters
     }
 
     /**
-     * getEngine.
+     * Create an ML-KEM engine for this parameter set.
      *
      * @return a new engine sized for this parameter set's K value
      */
@@ -54,7 +54,7 @@ public class MLKEMParameters
     }
 
     /**
-     * getSessionKeySize.
+     * Return the encapsulated shared-secret size.
      *
      * @return the size of the encapsulated shared secret in bytes
      */

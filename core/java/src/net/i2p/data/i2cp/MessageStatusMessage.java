@@ -24,7 +24,7 @@ import java.io.OutputStream;
  */
 public class MessageStatusMessage extends I2CPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2CP message type ID written to the wire header.
      */
     public static final int MESSAGE_TYPE = 22;
     private int _sessionId;
@@ -39,7 +39,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     public static final int STATUS_AVAILABLE = 0;
 
     /**
-     * STATUS_SEND_ACCEPTED.
+     * The router accepted the message for delivery, without guaranteeing success.
      */
     public static final int STATUS_SEND_ACCEPTED = 1;
 
@@ -265,7 +265,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Status.
+     * Status code describing what happened to the message.
      * @return the status
      */
     public int getStatus() {
@@ -320,7 +320,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Size.
+     * Size of the message payload as counted by the router.
      * @return the size
      */
     public long getSize() {
@@ -424,7 +424,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     }
 
     /**
-     * Type.
+     * I2CP message type sent for this message.
      * @return the type
      */
     @Override

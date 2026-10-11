@@ -11,27 +11,27 @@ public class Field implements Serializable {
     private static final long serialVersionUID = 8746587465875676L;
 
     /**
-     * ZERO.
+     * The field's additive identity.
      */
     public final FieldElement ZERO;
     /**
-     * ONE.
+     * The field's multiplicative identity.
      */
     public final FieldElement ONE;
     /**
-     * TWO.
+     * The field element two.
      */
     public final FieldElement TWO;
     /**
-     * FOUR.
+     * The field element four.
      */
     public final FieldElement FOUR;
     /**
-     * FIVE.
+     * The field element five.
      */
     public final FieldElement FIVE;
     /**
-     * EIGHT.
+     * The field element eight.
      */
     public final FieldElement EIGHT;
 

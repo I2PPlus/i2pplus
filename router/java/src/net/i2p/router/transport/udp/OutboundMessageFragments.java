@@ -71,7 +71,7 @@ class OutboundMessageFragments {
     private BitSet _consumed = new BitSet();
 
     /**
-     * OutboundMessageFragments.
+     * Registers the transport's send-rate and memory statistics.
      *
      * @param ctx the router context, whose stat manager registers this transport's send rate stats
      * @param transport the UDP transport that owns the peer states and the packet pusher

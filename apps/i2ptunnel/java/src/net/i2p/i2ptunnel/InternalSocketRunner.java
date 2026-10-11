@@ -32,7 +32,7 @@ class InternalSocketRunner extends I2PAppThread {
     }
 
     /**
-     * run.
+     * Accepts internal sockets in a loop until closed, handing each to the tunnel client.
      */
     @Override
     public final void run() {

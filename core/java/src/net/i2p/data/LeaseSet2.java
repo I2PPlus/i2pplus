@@ -376,7 +376,7 @@ public class LeaseSet2 extends LeaseSet {
     public void setBlindedHash(Hash bh) {_blindedHash = bh;}
 
     /**
-     * The orignal blinded hash, where this came from.
+     * The original blinded hash, where this came from.
      *
      * @return null if unknown or not previously blinded
      */

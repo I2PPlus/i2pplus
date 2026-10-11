@@ -52,8 +52,8 @@ public class Comment implements Comparable<Comment> {
      *
      * @param text may be null, will be truncated to max length, newlines replaced with spaces
      * @param name may be null, will be truncated to max length, newlines and commas removed
-     * @param time java time (ms)
      * @param rating 0-5
+     * @param time java time (ms)
      * @param isMine whether this comment is from the local user
      */
     public Comment(String text, String name, int rating, long time, boolean isMine) {

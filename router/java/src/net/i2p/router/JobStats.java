@@ -275,7 +275,7 @@ public class JobStats {
     }
 
     /**
-     * RecentStats.
+     * Totals over the most recent runs of one job type.
      */
     public static class RecentStats {
 /** Number of runs */

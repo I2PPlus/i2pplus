@@ -78,7 +78,7 @@ class PeerManager {
     private static final long ADDRESS_REFRESH_TIMEOUT_MS = 30 * 1000L;
 
     /**
-     * TRACKED_CAPS.
+     * Capability letters the manager indexes its per-capability peer sets by.
      */
     public static final String TRACKED_CAPS = "" +
         FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL +

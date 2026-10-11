@@ -143,7 +143,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     public boolean isRunning() { return _isRunning; }
 
     /**
-     * shutdown.
+     * Clears the running flag and interrupts any update in progress.
      */
     public void shutdown() {
         _isRunning = false;
@@ -151,13 +151,13 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     }
 
     /**
-     * Type.
+     * Returns what kind of update this runner handles.
      * @return the type
      */
     public UpdateType getType() { return _type; }
 
     /**
-     * Method.
+     * Returns how the update is fetched, such as HTTP or torrent.
      * @return the method
      */
     public UpdateMethod getMethod() { return _method; }
@@ -177,7 +177,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     // end UpdateTask methods
 
     /**
-     * run.
+     * Runs the update, reporting any failure to the update manager.
      */
     @Override
     public void run() {

@@ -57,19 +57,19 @@ public class LogManager implements Flushable {
      */
     public static final char DATE = 'd';
     /**
-     * CLASS.
+     * Format placeholder that expands to the logging class name.
      */
     public static final char CLASS = 'c';
     /**
-     * THREAD.
+     * Format placeholder that expands to the logging thread name.
      */
     public static final char THREAD = 't';
     /**
-     * PRIORITY.
+     * Format placeholder that expands to the log record's priority.
      */
     public static final char PRIORITY = 'p';
     /**
-     * MESSAGE.
+     * Format placeholder that expands to the log record's message.
      */
     public static final char MESSAGE = 'm';
 
@@ -153,7 +153,7 @@ public class LogManager implements Flushable {
      */
     // TODO: Sync time format for router and wrapper logs and dates in router log messages (currently 3 different formats)
     /**
-     * DEFAULT_DATEFORMAT.
+     * Date pattern used when none is configured.
      */
     public static final String DEFAULT_DATEFORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
 

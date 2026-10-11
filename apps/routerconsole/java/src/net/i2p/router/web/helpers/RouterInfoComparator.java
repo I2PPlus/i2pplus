@@ -14,7 +14,7 @@ import net.i2p.data.router.RouterInfo;
 class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
      private static final long serialVersionUID = 1;
      /**
-      * _instance.
+      * Shared stateless instance; this comparator holds no state.
       */
      public static final RouterInfoComparator _instance = new RouterInfoComparator();
 

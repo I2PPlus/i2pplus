@@ -298,7 +298,7 @@ class NTCP2Payload {
         private final int type;
 
         /**
-         * Block.
+         * Stores the type byte written as the block's first header byte.
          * @param ttype the block type byte, written as the first header byte
          */
         public Block(int ttype) {
@@ -362,7 +362,7 @@ class NTCP2Payload {
         private final boolean f;
 
         /**
-         * RIBlock.
+         * Serializes the RouterInfo and records whether the receiver should flood it.
          * @param ri the RouterInfo to serialize into the block
          * @param flood true to set the flag byte asking the receiver to flood it
          */
@@ -493,7 +493,7 @@ class NTCP2Payload {
         private final long now;
 
         /**
-         * DateTimeBlock.
+         * Captures the current clock time for the timestamp the block carries.
          * @param ctx clock source for the timestamp the block carries
          */
         public DateTimeBlock(I2PAppContext ctx) {
@@ -525,7 +525,7 @@ class NTCP2Payload {
         private final byte[] opts;
 
         /**
-         * OptionsBlock.
+         * Holds the option bytes, copied into the block verbatim.
          * @param options the option bytes, copied into the block verbatim
          */
         public OptionsBlock(byte[] options) {
@@ -558,7 +558,7 @@ class NTCP2Payload {
         private final long rcvd;
 
         /**
-         * TerminationBlock.
+         * Records the termination reason code and the peer's received frame count.
          * @param reason termination reason code (0-255)
          * @param lastReceived count of valid frames the peer has received from us
          */

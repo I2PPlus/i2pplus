@@ -28,7 +28,7 @@ import org.json.simple.JsonObject;
  *             <li>{@code error} An object with:
  *                 <ul>
  *                     <li>{@code code} An integer indicating the error type.
- *                     <li>{@code message} A brief error messsage.
+ *                     <li>{@code message} A brief error message.
  *                     <li>{@code data} Optional error data.
  *                 </ul>
  *             <li>{@code id} The request identifier. If it couldn't be

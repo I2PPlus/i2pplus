@@ -9,28 +9,28 @@ package org.cybergarage.upnp;
 public interface RootDescription {
 
     /**
-     * ROOT_ELEMENT.
+     * Name of the XML element wrapping a UPnP device description.
      */
     public final String ROOT_ELEMENT = "root";
     /**
-     * ROOT_ELEMENT_NAMESPACE.
+     * Namespace URI qualifying the root element.
      */
     public final String ROOT_ELEMENT_NAMESPACE = "urn:schemas-upnp-org:device-1-0";
 
     /**
-     * SPECVERSION_ELEMENT.
+     * Name of the element carrying the specification version.
      */
     public final String SPECVERSION_ELEMENT = "specVersion";
     /**
-     * MAJOR_ELEMENT.
+     * Name of the element holding the major version number.
      */
     public final String MAJOR_ELEMENT = "major";
     /**
-     * MINOR_ELEMENT.
+     * Name of the element holding the minor version number.
      */
     public final String MINOR_ELEMENT = "minor";
     /**
-     * SERVICE_LIST_ELEMENT.
+     * Name of the element wrapping the device's service list.
      */
     public final String SERVICE_LIST_ELEMENT = "serviceList";
 }

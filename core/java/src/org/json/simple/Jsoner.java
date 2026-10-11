@@ -560,7 +560,6 @@ public class Jsoner {
 	/** Serialize values to JSON and write them to the provided writer based on behavior flags.
 	 * @param jsonSerializable represents the object that should be serialized to a string in JSON format.
 	 * @param writableDestination represents where the resulting JSON text is written to.
-	 * @param replacement represents what is serialized instead of a non-JSON value when replacements are allowed.
 	 * @param flags represents the allowances and restrictions on serialization.
 	 * @throws IOException if the writableDestination encounters an I/O problem.
 	 * @throws IllegalArgumentException if the jsonSerializable isn't serializable in JSON.

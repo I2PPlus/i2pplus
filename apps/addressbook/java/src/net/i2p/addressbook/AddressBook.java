@@ -124,8 +124,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * The resulting map is modifiable and may be a merge target.
      *
      * @param file
-     * A File pointing at a file with lines in the format "key=value",
-     * where key is a human readable name, and value is a base64 i2p destination.
+     *             A File pointing at a file with lines in the format "key=value",
+     *             where key is a human readable name, and value is a base64 i2p destination.
      */
     public AddressBook(File file) {
         this.location = file.toString();
@@ -339,7 +339,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     /**
      * Write the contents of this AddressBook out to the File file. If the file
-     * cannot be writen to, this method will silently fail.
+     * cannot be written to, this method will silently fail.
      *
      * @param file The file to write the contents of this AddressBook too.
      *
@@ -360,7 +360,7 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     /**
      * Write this AddressBook out to the file it was read from. Requires that
      * AddressBook was constructed from a file on the local filesystem. If the
-     * file cannot be writen to, this method will silently fail.
+     * file cannot be written to, this method will silently fail.
      *
      * @throws IllegalStateException if this was not created with the File constructor.
      */

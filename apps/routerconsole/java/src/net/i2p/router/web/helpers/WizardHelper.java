@@ -23,11 +23,11 @@ public class WizardHelper extends HelperBase {
     public WizardHelper() {}
 
     /**
-     * PROP_COMPLETE.
+     * Session property recording that the welcome wizard already ran.
      */
     public static final String PROP_COMPLETE = "routerconsole.welcomeWizardComplete";
     /**
-     * BW_SCALE.
+     * Fraction of the measured bandwidth applied to the limiter settings.
      */
     public static final float BW_SCALE = 0.75f; // scale bw test results by this for limiter settings
     private static final float MIN_DOWN_BW = 32.0f; // KBps
@@ -305,15 +305,15 @@ public class WizardHelper extends HelperBase {
         private String _detail;
         private Map<String, Object> _results;
         /**
-         * reportSummary.
+         * Store the progress line the speed test reports.
          */
         public synchronized void reportSummary(String str) {_summary = str;}
         /**
-         * reportDetail.
+         * Store the detail text the speed test reports.
          */
         public synchronized void reportDetail(String str) {_detail = str;}
         /**
-         * complete.
+         * Store the final results, marking the run finished.
          */
         public synchronized void complete(Map<String, Object> results) {_results = results;}
         /**

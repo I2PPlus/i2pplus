@@ -181,11 +181,11 @@ public class RouterConsoleRunner implements RouterApp {
      * @param ctx the router context
      * @param mgr the client app manager to register with, or null for a standalone run
      * @param args second arg may be a comma-separated list of bind addresses,
-     * for example ::1,127.0.0.1
-     * On XP, the other order (127.0.0.1,::1) fails the IPV6 bind,
-     * because 127.0.0.1 will bind ::1 also. But even though it's bound
-     * to both, we can't connect to [::1]:7657 for some reason.
-     * So the wise choice is ::1,127.0.0.1
+     *             for example ::1,127.0.0.1
+     *             On XP, the other order (127.0.0.1,::1) fails the IPV6 bind,
+     *             because 127.0.0.1 will bind ::1 also. But even though it's bound
+     *             to both, we can't connect to [::1]:7657 for some reason.
+     *             So the wise choice is ::1,127.0.0.1
      */
     public RouterConsoleRunner(RouterContext ctx, ClientAppManager mgr, String[] args) {
         _context = ctx;

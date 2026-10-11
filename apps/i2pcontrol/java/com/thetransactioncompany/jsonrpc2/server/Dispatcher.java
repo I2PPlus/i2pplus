@@ -194,7 +194,7 @@ public class Dispatcher implements RequestHandler, NotificationHandler {
      * non-standard "xProcTime" attribute to the JSON-RPC 2.0 response.
      * Reporting is disabled by default.
      *
-     * @param enable {@code true} to enable proccessing time reporting,
+     * @param enable {@code true} to enable processing time reporting,
      *               {@code false} to disable it.
      */
     public void reportProcTime(final boolean enable) {reportProcTime = enable;}

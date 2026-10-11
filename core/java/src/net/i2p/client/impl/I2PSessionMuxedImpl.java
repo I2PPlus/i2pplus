@@ -463,7 +463,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
         public final int toPort;
 
         /**
-         * MsgData.
+         * Carries the message id, size, protocol and port fields hidden in the gzip header.
          */
         public MsgData(int i, int s, int p, int f, int t) {
             id = i;

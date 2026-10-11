@@ -27,7 +27,7 @@ public class MLKEMKeyGenerationParameters
     }
 
     /**
-     * getParameters.
+     * Returns the ML-KEM parameter set selected for key generation.
      *
      * @return the ML-KEM parameter set these generation parameters were built with
      */

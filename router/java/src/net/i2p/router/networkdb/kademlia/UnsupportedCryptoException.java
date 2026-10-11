@@ -9,7 +9,7 @@ package net.i2p.router.networkdb.kademlia;
 public class UnsupportedCryptoException extends IllegalArgumentException {
 
     /**
-     * UnsupportedCryptoException.
+     * Builds an exception from the message naming the unverifiable signature type.
      *
      * @param msg the message naming the signature type that could not be verified
      */
@@ -18,7 +18,7 @@ public class UnsupportedCryptoException extends IllegalArgumentException {
     }
 
     /**
-     * UnsupportedCryptoException.
+     * Builds an exception with the cause that made the signature type unavailable.
      *
      * @param msg the message naming the signature type that could not be verified
      * @param t the underlying failure that made the signature type unavailable

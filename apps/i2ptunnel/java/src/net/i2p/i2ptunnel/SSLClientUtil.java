@@ -115,7 +115,7 @@ public class SSLClientUtil {
     /**
      * Create a new keystore with a keypair in it.
      *
-     * @param name used in CNAME
+     * @param ks used in CNAME
      * @param opts in/out, updated if rv is true, must contain PROP_KEY_ALIAS
      * @param optPfx add this prefix when getting/setting options
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.

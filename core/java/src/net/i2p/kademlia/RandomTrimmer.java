@@ -19,7 +19,7 @@ public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrim
     private final int _max;
 
     /**
-     * Constructor
+     * Retains the context and the bucket size limit.
      * @param ctx the context
      * @param max the max entries
      */

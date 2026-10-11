@@ -12,15 +12,15 @@ public class Region {
 	public Region() {}
 
 	/**
-	 * countryCode.
+	 * Two-letter ISO country code, empty when the address is out of range.
 	 */
 	public String countryCode;
 	/**
-	 * countryName.
+	 * Country name looked up alongside the country code.
 	 */
 	public String countryName;
 	/**
-	 * region.
+	 * Two-letter state or province code, empty outside the US and Canada.
 	 */
     /** Region or state code. */
     public String region;

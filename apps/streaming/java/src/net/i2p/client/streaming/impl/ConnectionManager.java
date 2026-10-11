@@ -2117,7 +2117,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         private final boolean silent;
 
         /**
-         * Reason.
+         * Record a rejection reason that logs at WARN on every occurrence.
          *
          * @param text description
          * @param secs seconds for the Retry-After header
@@ -2127,13 +2127,13 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         }
 
         /**
-         * Reason.
+         * Record a rejection reason, optionally suppressing its WARN log.
          *
          * @param text description
          * @param secs seconds for the Retry-After header
-         * @param silent if true, suppress the per-rejection WARN log. Used for
-         *               repeated rejections of an already-temp-banned dest so a hammering
-         *               peer doesn't spam the log on every SYN.
+         * @param silentFlags if true, suppress the per-rejection WARN log. Used for
+         *                    repeated rejections of an already-temp-banned dest so a hammering
+         *                    peer doesn't spam the log on every SYN.
          */
         public Reason(String text, int secs, boolean silentFlags) {
             txt = text; seconds = secs; silent = silentFlags;
@@ -2930,7 +2930,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         private final PingNotifier _notifier;
 
         /**
-         * PingFailed.
+         * Create the timeout event for one outstanding ping.
          */
         public PingFailed(Long id, PingNotifier notifier) {
             super(_timer.getSharedTimer());

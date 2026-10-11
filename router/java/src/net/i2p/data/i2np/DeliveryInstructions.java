@@ -29,19 +29,19 @@ public class DeliveryInstructions extends DataStructureImpl {
     /** 0-3, set by delivery mode constants */
     private int _deliveryMode;
     /**
-     * DELIVERY_MODE_LOCAL.
+     * Delivery mode keeping the message on this router.
      */
     public final static int DELIVERY_MODE_LOCAL = 0;
     /**
-     * DELIVERY_MODE_DESTINATION.
+     * Delivery mode sending the message to a destination's client.
      */
     public final static int DELIVERY_MODE_DESTINATION = 1;
     /**
-     * DELIVERY_MODE_ROUTER.
+     * Delivery mode sending the message to a router's transport.
      */
     public final static int DELIVERY_MODE_ROUTER = 2;
     /**
-     * DELIVERY_MODE_TUNNEL.
+     * Delivery mode sending the message into a named tunnel.
      */
     public final static int DELIVERY_MODE_TUNNEL = 3;
     /** Hash of the destination for DESTINATION mode */
@@ -93,7 +93,7 @@ public class DeliveryInstructions extends DataStructureImpl {
     }
 
     /**
-     * DeliveryInstructions.
+     * Creates instructions with an unset delivery mode of -1.
      */
     public DeliveryInstructions() {
         _deliveryMode = -1;

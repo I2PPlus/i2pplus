@@ -49,7 +49,7 @@ class ExpireLeasesJob extends JobImpl {
     private static final long STALE_EXPIRED_MS = 5 * 60 * 1000L;
 
     /**
-     * ExpireLeasesJob.
+     * Opens the job log and remembers the facade whose leasesets are expired.
      *
      * @param ctx the router context supplying the clock, log manager and job queue
      * @param facade the network database whose leasesets this job expires and refreshes

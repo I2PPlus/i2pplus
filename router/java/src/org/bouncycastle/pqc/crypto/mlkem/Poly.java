@@ -15,7 +15,7 @@ class Poly
     private Symmetric symmetric;
 
     /**
-     * Poly.
+     * Creates a zeroed polynomial and caches the engine's Kyber parameters.
      * @param engine the engine supplying the Kyber parameters, RNG and symmetric primitives
      */
     public Poly(MLKEMEngine engine)
@@ -29,7 +29,7 @@ class Poly
     }
 
     /**
-     * getCoeffIndex.
+     * Reads one coefficient out of the backing array.
      * @param i the coefficient index, 0 to KyberN-1
      * @return the coefficient at that index
      */
@@ -39,7 +39,7 @@ class Poly
     }
 
     /**
-     * getCoeffs.
+     * Exposes the backing coefficient array itself, not a copy.
      * @return the backing coefficient array, shared rather than copied
      */
     public short[] getCoeffs()
@@ -48,7 +48,7 @@ class Poly
     }
 
     /**
-     * setCoeffIndex.
+     * Overwrites one coefficient in the backing array.
      * @param i the coefficient index, 0 to KyberN-1
      * @param val the replacement coefficient
      */
@@ -58,7 +58,7 @@ class Poly
     }
 
     /**
-     * setCoeffs.
+     * Adopts a new backing array, storing the caller's reference.
      * @param coeffs the new backing array, adopted by reference and not copied
      */
     public void setCoeffs(short[] coeffs)
@@ -67,7 +67,7 @@ class Poly
     }
 
     /**
-     * polyNtt.
+     * Transforms into the NTT domain and reduces the result.
      */
     public void polyNtt()
     {
@@ -76,7 +76,7 @@ class Poly
     }
 
     /**
-     * polyInverseNttToMont.
+     * Transforms back out of the NTT domain, leaving it unreduced.
      */
     public void polyInverseNttToMont()
     {
@@ -84,7 +84,7 @@ class Poly
     }
 
     /**
-     * reduce.
+     * Barrett-reduces every coefficient modulo q.
      */
     public void reduce()
     {
@@ -96,7 +96,7 @@ class Poly
     }
 
     /**
-     * baseMultMontgomery.
+     * Multiplies two NTT-domain polynomials into a third, in Montgomery form.
      * @param r the polynomial receiving the product, in Montgomery form
      * @param a the first multiplicand, in the number-theoretic transform domain
      * @param b the second multiplicand, in the number-theoretic transform domain
@@ -118,7 +118,7 @@ class Poly
     }
 
     /**
-     * addCoeffs.
+     * Adds another polynomial in place, coefficient by coefficient.
      * @param b the polynomial added coefficient-wise to this one
      */
     public void addCoeffs(Poly b)
@@ -131,7 +131,7 @@ class Poly
     }
 
     /**
-     * convertToMont.
+     * Maps every coefficient into the Montgomery domain.
      */
     public void convertToMont()
     {
@@ -144,7 +144,7 @@ class Poly
     }
 
     /**
-     * compressPoly.
+     * Encodes to the compressed representation, reducing coefficients first.
      * @return the lossy compressed encoding, polyCompressedBytes long
      */
     public byte[] compressPoly()
@@ -233,7 +233,7 @@ class Poly
     }
 
     /**
-     * decompressPoly.
+     * Decodes a compressed representation into this polynomial's coefficients.
      * @param compressedPolyCipherText the compressed encoding to decode into this polynomial
      */
     public void decompressPoly(byte[] compressedPolyCipherText)
@@ -278,7 +278,7 @@ class Poly
     }
 
     /**
-     * toBytes.
+     * Packs the coefficients into their 12-bit wire encoding.
      * @return the coefficients packed little-endian into KyberPolyBytes bytes
      */
     public byte[] toBytes()
@@ -300,7 +300,7 @@ class Poly
     }
 
     /**
-     * fromBytes.
+     * Loads coefficients from their 12-bit packed wire encoding.
      * @param inpBytes the packed coefficients to load, low 12 bits of each 2-byte group
      */
     public void fromBytes(byte[] inpBytes)
@@ -324,7 +324,7 @@ class Poly
     }
 
     /**
-     * toMsg.
+     * Packs the coefficients into a one-bit-per-coefficient message.
      * @return the coefficients packed as one bit each, KyberN/8 bytes long
      */
     public byte[] toMsg()
@@ -354,7 +354,7 @@ class Poly
     }
 
     /**
-     * fromMsg.
+     * Expands a one-bit-per-coefficient message into coefficients.
      * @param msg the one-bit-per-coefficient message, exactly KyberN/8 bytes
      */
     public void fromMsg(byte[] msg)
@@ -376,7 +376,7 @@ class Poly
     }
 
     /**
-     * conditionalSubQ.
+     * Subtracts q from any coefficient that is not already reduced.
      */
     public void conditionalSubQ()
     {
@@ -412,7 +412,7 @@ class Poly
     }
 
     /**
-     * polySubtract.
+     * Subtracts another polynomial from this one, in place.
      * @param b the polynomial subtracted coefficient-wise from this one
      */
     public void polySubtract(Poly b)
@@ -425,7 +425,7 @@ class Poly
     }
 
     /**
-     * toString.
+     * Renders the coefficients as a bracketed, comma-separated list.
      */
     public String toString()
     {

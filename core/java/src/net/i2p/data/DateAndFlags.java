@@ -53,7 +53,7 @@ public class DateAndFlags extends DataStructureImpl {
     }
 
     /**
-     * Date.
+     * Stores the date as milliseconds since the epoch.
      * @param date the date, truncated to the six wire bytes by writeDate()
      * @param flags 0 - 65535
      */

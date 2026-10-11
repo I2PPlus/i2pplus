@@ -451,7 +451,7 @@ class UDPAddress {
     /**
      * The MTU to use for this address.
      *
-     * @return 0 if unset or invalid; recitified via MTU.rectify()
+     * @return 0 if unset or invalid; rectified via MTU.rectify()
      * @since 0.9.2
      */
     int getMTU() {

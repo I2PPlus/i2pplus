@@ -17,13 +17,13 @@ import net.i2p.data.DataHelper;
  */
 public class GarlicMessage extends FastI2NPMessageImpl {
     /**
-     * MESSAGE_TYPE.
+     * I2NP message type code for a garlic message.
      */
     public final static int MESSAGE_TYPE = 11;
     private byte[] _data;
 
     /**
-     * GarlicMessage.
+     * Creates an empty garlic message, to be filled in on read.
      * @param context the app context supplying the log, the clock that stamps the
                              expiry and the random source for message ids
      */

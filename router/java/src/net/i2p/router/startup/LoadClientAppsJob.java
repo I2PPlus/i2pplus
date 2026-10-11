@@ -25,7 +25,7 @@ public class LoadClientAppsJob extends JobImpl {
     private static boolean _loaded = false;
 
     /**
-     * LoadClientAppsJob.
+     * Creates the job that loads and starts the configured client apps.
      *
      * @param ctx the router context supplying the client app config and the log
      */
@@ -82,7 +82,7 @@ public class LoadClientAppsJob extends JobImpl {
      */
     public static class DelayedRunClient extends SimpleTimer2.TimedEvent {
         /**
-         * _ctx.
+         * The router context used to start the app when this event fires.
          */
         protected final RouterContext _ctx;
         private final String _className;
@@ -320,7 +320,7 @@ public class LoadClientAppsJob extends JobImpl {
         private final ClassLoader _cl;
 
         /**
-         * RunApp.
+         * Creates the runnable that loads and starts one client application class.
          */
         public RunApp(String className, String appName, String[] args, RouterContext ctx, Log log, ClassLoader cl) {
             _className = className;

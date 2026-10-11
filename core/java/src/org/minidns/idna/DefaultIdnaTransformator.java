@@ -15,7 +15,7 @@ import org.minidns.dnsname.DnsName;
 import java.net.IDN;
 
 /**
- * DefaultIdnaTransformator.
+ * IDNA transformator backed by {@link java.net.IDN}, with a root-label workaround.
  */
 public class DefaultIdnaTransformator implements IdnaTransformator {
 
@@ -26,7 +26,8 @@ public class DefaultIdnaTransformator implements IdnaTransformator {
     public DefaultIdnaTransformator() {}
 
     /**
-     * toASCII.
+     * Converts a domain name to its ASCII (punycode) form, passing a bare dot through
+     * unchanged because some IDN implementations reject it.
      */
     @Override
     public String toASCII(String input) {
@@ -41,7 +42,7 @@ public class DefaultIdnaTransformator implements IdnaTransformator {
     }
 
     /**
-     * toUnicode.
+     * Converts an ASCII (punycode) domain name back to its Unicode form.
      */
     @Override
     public String toUnicode(String input) {

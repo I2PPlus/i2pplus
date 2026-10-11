@@ -59,8 +59,8 @@ public class Message {
      * useful if user wants to initialize the message, and then continue to
      * populate it later. This method is unused currently.
      *
-     * @param iParamSize byte array size
      * @param baParamBody message body byte array
+     * @param iParamSize byte array size
      */
     public void setBody(byte[] baParamBody, int iParamSize) {
         _yaBody = new byte[iParamSize];

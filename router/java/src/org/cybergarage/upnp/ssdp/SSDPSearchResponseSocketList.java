@@ -27,7 +27,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     private InetAddress[] binds = null;
 
     /**
-     * SSDPSearchResponseSocketList.
+     * Creates an empty list of SSDP search response sockets.
      */
     public SSDPSearchResponseSocketList() {}
 
@@ -48,7 +48,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     ////////////////////////////////////////////////
 
     /**
-     * setControlPoint.
+     * Sets the control point every socket in the list reports to.
      * @param ctrlPoint the control point every socket in the list reports to
      */
     public void setControlPoint(ControlPoint ctrlPoint) {
@@ -64,7 +64,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     ////////////////////////////////////////////////
 
     /**
-     * getSSDPSearchResponseSocket.
+     * Gets the response socket at a position in the list.
      * @param n the zero-based position in the list
      * @return the response socket at that position
      */
@@ -77,7 +77,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     ////////////////////////////////////////////////
 
     /**
-     * open.
+     * Opens a response socket per bound interface on the given port.
      * @param port the port every response socket is opened on
      * @return false if a socket could not be opened, after closing and clearing the list
      */
@@ -112,7 +112,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     }
 
     /**
-     * open.
+     * Opens a response socket per bound interface on the default port.
      * @return false if a socket could not be opened, after closing and clearing the list
      */
     public boolean open() {
@@ -120,7 +120,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     }
 
     /**
-     * close.
+     * Closes every response socket and empties the list.
      */
     public void close() {
         int nSockets = size();
@@ -136,7 +136,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     ////////////////////////////////////////////////
 
     /**
-     * start.
+     * Starts the listener thread of every response socket.
      */
     public void start() {
         int nSockets = size();
@@ -147,7 +147,7 @@ public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocke
     }
 
     /**
-     * stop.
+     * Stops the listener thread of every response socket.
      */
     public void stop() {
         int nSockets = size();

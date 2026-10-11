@@ -56,10 +56,10 @@ class WebPeer extends Peer implements EepGet.StatusListener {
      * Outgoing connection. Creates a disconnected peer given a PeerID, your own id and the relevant
      * MetaInfo.
      *
-     * @param uri must be http with .i2p host
-     * @param metainfo non-null
      * @param coord the coordinator that owns this web seed connection
+     * @param uri must be http with .i2p host
      * @param peerID the 20-byte peer id this seed publishes
+     * @param metainfo non-null
      */
     public WebPeer(PeerCoordinator coord, URI uri, PeerID peerID, MetaInfo metainfo) {
         super(peerID, null, null, metainfo);
