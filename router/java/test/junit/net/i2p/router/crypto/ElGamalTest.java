@@ -284,15 +284,4 @@ public class ElGamalTest extends TestCase {
         }
     }
 
-    /****
-     * Package private, move back to net.i2p.crypto if we want to test it
-     * public void testYKGen(){
-     * RandomSource.getInstance().nextBoolean();
-     * I2PAppContext context = I2PAppContext.getGlobalContext();
-     * YKGenerator ykgen = new YKGenerator(context);
-     * for (int i = 0; i < 5; i++) {
-     * ykgen.getNextYK();
-     * }
-     * }
-     * ***/
 }

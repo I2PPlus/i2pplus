@@ -451,31 +451,10 @@ public class KeySelector {
      * @since 0.8.11 out parameters added
      */
     public void getOffsets (byte[] key, int off, int len, int[] bitOffset, int[] wordOffset) {
-        // skip these checks for speed
-        //if (key == null) {
-        //    throw new IllegalArgumentException("null key");
-        //}
-        //if (len < 20) {
-        //    throw new IllegalArgumentException(
-        //        "key must be at least 20 bytes long");
-        //}
-//      // DEBUG
-//      System.out.println("KeySelector.getOffsets for "
-//                                          + BloomSHA1.keyToString(b));
-//      // END
         bitSel.getBitSelectors(key, off, len, bitOffset);
         wordSel.getWordSelectors(key, off, len, wordOffset);
     }
 
-/*****
-    // DEBUG METHODS ////////////////////////////////////////////////
-    String itoh(int i) {
-        return BloomSHA1.itoh(i);
-    }
-    String btoh(byte b) {
-        return BloomSHA1.btoh(b);
-    }
-*****/
 }
 
 

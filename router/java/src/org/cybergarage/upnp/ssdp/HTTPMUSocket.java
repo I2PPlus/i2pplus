@@ -83,20 +83,6 @@ public class HTTPMUSocket {
      * @return the local address string
      */
     public String getLocalAddress() {
-        /**** I2P fix
-         * if (ssdpMultiGroup == null || ssdpMultiIf == null)
-         * return "";
-         * InetAddress mcastAddr = ssdpMultiGroup.getAddress();
-         * Enumeration<InetAddress> addrs = ssdpMultiIf.getInetAddresses();
-         * while (addrs.hasMoreElements()) {
-         * InetAddress addr = addrs.nextElement();
-         * if (mcastAddr instanceof Inet6Address && addr instanceof Inet6Address)
-         * return addr.getHostAddress();
-         * if (mcastAddr instanceof Inet4Address && addr instanceof Inet4Address)
-         * return addr.getHostAddress();
-         * }
-         * return "";
-         * ***/
         if (_bindAddress == null) return "";
         return _bindAddress.getHostAddress();
     }

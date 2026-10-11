@@ -455,40 +455,4 @@ public class BloomSHA1 {
         return falsePositives(count);
     }
 
- /*****
-    // DEBUG METHODS
-    public static String keyToString(byte[] key) {
-        StringBuilder sb = new StringBuilder().append(key[0]);
-        for (int i = 1; i < key.length; i++) {
-            sb.append(".").append(Integer.toString(key[i], 16));
-        }
-        return sb.toString();
-    }
- *****/
-
-    /** convert 64-bit integer to hex String */
-/*****
-    public static String ltoh (long i) {
-        StringBuilder sb = new StringBuilder().append("#")
-                                .append(Long.toString(i, 16));
-        return sb.toString();
-    }
- *****/
-
-    /** convert 32-bit integer to String */
-/*****
-    public static String itoh (int i) {
-        StringBuilder sb = new StringBuilder().append("#")
-                                .append(Integer.toString(i, 16));
-        return sb.toString();
-    }
- *****/
-
-    /** convert single byte to String */
-/*****
-    public static String btoh (byte b) {
-        int i = 0xff & b;
-        return itoh(i);
-    }
- *****/
 }

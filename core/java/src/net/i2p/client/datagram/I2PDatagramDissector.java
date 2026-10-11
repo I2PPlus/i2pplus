@@ -170,21 +170,6 @@ public final class I2PDatagramDissector {
      * @return The Destination of the I2P repliable datagram sender
      */
     public Destination extractSender() {
-        /****
-         * if (this.rxDest == null)
-         * return null;
-         * Destination retDest = new Destination();
-         * try {
-         * retDest.fromByteArray(this.rxDest.toByteArray());
-         * } catch (DataFormatException e) {
-         * Log log = I2PAppContext.getGlobalContext().logManager().getLog(I2PDatagramDissector.class);
-         * log.error("Caught DataFormatException", e);
-         * return null;
-         * }
-         *
-         * return retDest;
-         * ***/
-        // dests are no longer modifiable
         return rxDest;
     }
 

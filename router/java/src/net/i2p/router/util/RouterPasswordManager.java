@@ -90,14 +90,6 @@ public class RouterPasswordManager extends PasswordManager {
             // obfuscation of plaintext passwords
             Map<String, String> toAdd = new HashMap<>(5);
             List<String> toDel = new ArrayList<>(5);
-         /****
-            for (int i = 0; i < MIGRATE_FROM.length; i++) {
-                if ((pw = _context.getProperty(MIGRATE_FROM[i])) != null) {
-                    toAdd.put(MIGRATE_TO[i], Base64.encode(DataHelper.getUTF8(pw)));
-                    toDel.add(MIGRATE_FROM[i]);
-                }
-            }
-          ****/
             toDel.add(PROP_I2CP_OLD_USER);
             toDel.add(PROP_I2CP_OLD_PW);
             toAdd.put(PROP_MIGRATED, "true");

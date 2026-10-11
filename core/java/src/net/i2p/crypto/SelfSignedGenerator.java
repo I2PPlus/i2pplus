@@ -402,17 +402,6 @@ public final class SelfSignedGenerator {
         idx = intToASN1(cb, idx, sigbytes.length + 1);
         cb[idx++] = 0;
         System.arraycopy(sigbytes, 0, cb, idx, sigbytes.length);
-
-        /****
-         * if (DEBUG) {
-         * System.out.println("CRL Sig OID");
-         * System.out.println(HexDump.dump(sigoid));
-         * System.out.println("CRL Signature");
-         * System.out.println(HexDump.dump(sigbytes));
-         * System.out.println("Whole CRL");
-         * System.out.println(HexDump.dump(cb));
-         * }
-         * ***/
         ByteArrayInputStream bais = new ByteArrayInputStream(cb);
 
         X509CRL rv;
@@ -1063,18 +1052,6 @@ public final class SelfSignedGenerator {
         } else {
             usage();
         }
-        /****
-         * try {
-         * int i = 0;
-         * for (SigType t : java.util.EnumSet.allOf(SigType.class)) {
-         * if (t.isAvailable())
-         * test("test" + i, t);
-         * i++;
-         * }
-         * } catch (Exception e) {
-         * e.printStackTrace();
-         * }
-         * ***/
     }
 
     private static void usage() {
@@ -1083,29 +1060,5 @@ public final class SelfSignedGenerator {
                         + " keystore.ks localhost\n"
                         + "       selfsignedgenerator renew  [-p keystorepw] publicKeyFile.crt keystore.ks");
     }
-    /****
-     * private static final void test(String name, SigType type) throws Exception {
-     * Object[] rv = generate("cname@example.com", "ou", "o", null, "st", "c", 3652, type);
-     * //PublicKey jpub = (PublicKey) rv[0];
-     * PrivateKey jpriv = (PrivateKey) rv[1];
-     * X509Certificate cert = (X509Certificate) rv[2];
-     * X509CRL crl = (X509CRL) rv[3];
-     * File ks = new File(name + ".ks");
-     * List<X509Certificate> certs = new ArrayList<>(1);
-     * certs.add(cert);
-     * KeyStoreUtil.storePrivateKey(ks, "changeit", "foo", "foobar", jpriv, certs);
-     * System.out.println("Private key saved to " + ks + " with alias foo, password foobar, keystore password changeit");
-     * File cf = new File(name + ".crt");
-     * CertUtil.saveCert(cert, cf);
-     * System.out.println("Certificate saved to " + cf);
-     * File pf = new File(name + ".priv");
-     * FileOutputStream pfs = new SecureFileOutputStream(pf);
-     * KeyStoreUtil.exportPrivateKey(ks, "changeit", "foo", "foobar", pfs);
-     * pfs.close();
-     * System.out.println("Private key saved to " + pf);
-     * File cr = new File(name + ".crl");
-     * CertUtil.saveCRL(crl, cr);
-     * System.out.println("CRL saved to " + cr);
-     * }
-     * ***/
+
 }

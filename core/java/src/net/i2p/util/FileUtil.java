@@ -489,7 +489,6 @@ public class FileUtil {
     public static void main(String[] args) {
         if ((args == null) || (args.length < 2)) {
             System.err.println("Usage: delete path | copy source dest | rename from to | unzip path.zip");
-            // testRmdir();
         } else if ("delete".equals(args[0])) {
             boolean deleted = FileUtil.rmdir(args[1], false);
             if (!deleted) System.err.println("Error deleting [" + args[1] + "]");
@@ -513,16 +512,4 @@ public class FileUtil {
         }
     }
 
-    /*****
-     * private static void testRmdir() {
-     * File t = new File("rmdirTest/test/subdir/blah");
-     * boolean created = t.mkdirs();
-     * if (!t.exists()) throw new RuntimeException("Unable to create test");
-     * boolean deleted = FileUtil.rmdir("rmdirTest", false);
-     * if (!deleted)
-     * System.err.println("FAIL: unable to delete rmdirTest");
-     * else
-     * System.out.println("PASS: rmdirTest deleted");
-     * }
-     * ****/
 }
