@@ -4,8 +4,6 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/**************************************************************************/
-
 /**
  * This object represents the definition of a long option in the Java port
  * of GNU getopt.  An array of LongOpt objects is passed to the Getopt
@@ -20,8 +18,6 @@ import java.util.ResourceBundle;
  */
 public class LongOpt extends Object
 {
-
-/**************************************************************************/
 
 /*
  * Class Variables
@@ -44,8 +40,6 @@ public class LongOpt extends Object
  * value indicates that the option takes an argument that is optional.
  */
     public static final int OPTIONAL_ARGUMENT = 2;
-
-/**************************************************************************/
 
 /*
  * Instance Variables
@@ -82,8 +76,6 @@ public class LongOpt extends Object
     private ResourceBundle _messages = ResourceBundle.getBundle(
                             "gnu/getopt/MessagesBundle", Locale.getDefault());
 
-/**************************************************************************/
-
 /*
  * Constructors
  */
@@ -119,8 +111,6 @@ public class LongOpt extends Object
         this.val = val;
     }
 
-/**************************************************************************/
-
 /**
  * Returns the name of this LongOpt as a String
  *
@@ -132,8 +122,6 @@ public class LongOpt extends Object
         return (name);
     }
 
-/**************************************************************************/
-
 /**
  * Returns the value set for the 'has_arg' field for this long option
  *
@@ -144,8 +132,6 @@ public class LongOpt extends Object
     {
         return (has_arg);
     }
-
-/**************************************************************************/
 
 /**
  * Returns the value of the 'flag' field for this long option
@@ -168,8 +154,6 @@ public class LongOpt extends Object
     {
         return (val);
     }
-
-/**************************************************************************/
 
 } // Class LongOpt
 

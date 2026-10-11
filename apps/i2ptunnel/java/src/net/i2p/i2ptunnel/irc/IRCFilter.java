@@ -55,7 +55,7 @@ abstract class IRCFilter {
         _allowedInbound = new HashSet<>(Arrays.asList(allowedCommands));
     }
 
-    /*************************************************************************
+    /**
      *
      * Modify or filter a single inbound line.
      *
@@ -279,7 +279,7 @@ abstract class IRCFilter {
         _allowedOutbound = new HashSet<>(Arrays.asList(allowedCommands));
     }
 
-    /*************************************************************************
+    /**
      *
      * Modify or filter a single outbound line.
      *

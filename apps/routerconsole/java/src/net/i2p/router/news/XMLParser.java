@@ -1,18 +1,13 @@
 package net.i2p.router.news;
 
-/******************************************************************
+/*
  * Contains code modified from JaxpParser:
- *
  * CyberXML for Java
- *
  * Copyright (C) Satoshi Konno 2004
- *
  * Author: Markus Thurner (http://thoean.com)
  *
  * Contains code modified from Node:
- *
  * CyberXML for Java
- *
  * Copyright (C) Satoshi Konno 2002
  * ****************************************************************
  */

@@ -4,8 +4,6 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-/**************************************************************************/
-
 /**
  * This is a Java port of GNU getopt, a class for parsing command line
  * arguments passed to programs.  It it based on the C getopt() functions
@@ -352,8 +350,6 @@ import java.util.ResourceBundle;
 public class Getopt extends Object
 {
 
-/**************************************************************************/
-
 /*
  * Class Variables
  */
@@ -395,8 +391,6 @@ public class Getopt extends Object
  * selects this mode of operation.
  */
     protected static final int RETURN_IN_ORDER = 3;
-
-/**************************************************************************/
 
 /*
  * Instance Variables
@@ -519,8 +513,6 @@ public class Getopt extends Object
     private ResourceBundle _messages = ResourceBundle.getBundle(
                            "gnu/getopt/MessagesBundle", Locale.getDefault());
 
-/**************************************************************************/
-
 /*
  * Constructors
  */
@@ -539,8 +531,6 @@ public class Getopt extends Object
         this(progname, argv, optstring, null, false);
     }
 
-/**************************************************************************/
-
 /**
  * Construct a Getopt instance with given input data that is capable of
  * parsing long options as well as short.
@@ -556,8 +546,6 @@ public class Getopt extends Object
     {
         this(progname, argv, optstring, long_options, false);
     }
-
-/**************************************************************************/
 
 /**
  * Construct a Getopt instance with given input data that is capable of
@@ -622,8 +610,6 @@ public class Getopt extends Object
         }
     }
 
-/**************************************************************************/
-
 /*
  * Instance Methods
  */
@@ -645,8 +631,6 @@ public class Getopt extends Object
         this.optstring = optstring;
     }
 
-/**************************************************************************/
-
 /**
  * optind it the index in ARGV of the next element to be scanned.
  * This is used for communication to and from the caller
@@ -666,8 +650,6 @@ public class Getopt extends Object
         return (optind);
     }
 
-/**************************************************************************/
-
 /**
  * This method allows the optind index to be set manually.  Normally this
  * is not necessary (and incorrect usage of this method can lead to serious
@@ -681,8 +663,6 @@ public class Getopt extends Object
     {
         this.optind = optind;
     }
-
-/**************************************************************************/
 
 /**
  * Since in GNU getopt() the argument vector is passed back in to the
@@ -698,8 +678,6 @@ public class Getopt extends Object
     {
         this.argv = argv;
     }
-
-/**************************************************************************/
 
 /**
  * For communication from `getopt' to the caller.
@@ -717,8 +695,6 @@ public class Getopt extends Object
         return (optarg);
     }
 
-/**************************************************************************/
-
 /**
  * Normally Getopt will print a message to the standard error when an
  * invalid option is encountered.  This can be suppressed (or re-enabled)
@@ -733,8 +709,6 @@ public class Getopt extends Object
         this.opterr = opterr;
     }
 
-/**************************************************************************/
-
 /**
  * When getopt() encounters an invalid option, it stores the value of that
  * option in optopt which can be retrieved with this method.  There is
@@ -748,8 +722,6 @@ public class Getopt extends Object
         return (optopt);
     }
 
-/**************************************************************************/
-
 /**
  * Returns the index into the array of long options (NOT argv) representing
  * the long option that was found.
@@ -761,8 +733,6 @@ public class Getopt extends Object
     {
         return (longind);
     }
-
-/**************************************************************************/
 
 /**
  * Exchange the shorter segment with the far end of the longer segment.
@@ -822,8 +792,6 @@ public class Getopt extends Object
         first_nonopt += (optind - last_nonopt);
         last_nonopt = optind;
     }
-
-/**************************************************************************/
 
 /**
  * Check to see if an option is a valid long option.  Called by getopt().
@@ -982,8 +950,6 @@ public class Getopt extends Object
 
         return (0);
     }
-
-/**************************************************************************/
 
 /**
  * This method returns a char that is the current option that has been
