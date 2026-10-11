@@ -1265,7 +1265,7 @@ class ConstantPool {
         /**
          * Creates an empty index group with no tag groups built.
          */
-        IndexGroup() {}
+        public IndexGroup() {}
         private Index[] indexByTag = new Index[CONSTANT_Limit];
         private Index[] indexByTagGroup;
         private int[]   untypedFirstIndexByTag;
