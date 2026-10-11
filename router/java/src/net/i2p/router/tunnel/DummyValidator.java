@@ -10,7 +10,7 @@ class DummyValidator implements IVValidator {
     /**
      * The shared DummyValidator instance.
      *
-     * @return the instance
+     * @return the shared stateless instance
      */
     public static DummyValidator getInstance() { return _instance; }
     private DummyValidator() {}

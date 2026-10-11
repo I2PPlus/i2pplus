@@ -15,10 +15,11 @@ public interface Checker {
      * {@link UpdateManager} - the overload taking a sourceMap when more
      * than one update method was found at once.
      *
-     * @param type update type
-     * @param method update method
+     * @param type the kind of update to look for, e.g. {@link UpdateType#ROUTER_SIGNED}
+     * @param method the transport to fetch it over, e.g. {@link UpdateMethod#HTTP}
      * @param id plugin name or ignored
-     * @param currentVersion current version
+     * @param currentVersion the running version, compared against the remote
+     *                       one so an equal or older release is not offered
      * @param maxTime how long you have
      * @return active task or null if unable to check
      */

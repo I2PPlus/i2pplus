@@ -66,7 +66,7 @@ public class Question {
      *
      * @param name the DNS name
      * @param type the record type
-     * @param clazz the class
+     * @param clazz the class, usually IN (internet); must not be null
      * @param unicastQuery true for unicast query
      */
     public Question(DnsName name, TYPE type, CLASS clazz, boolean unicastQuery) {

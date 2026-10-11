@@ -35,7 +35,7 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the receiver is its own dispatcher
      */
     @Override
     public void attachEventDispatcher(EventDispatcher ev) {
@@ -43,7 +43,7 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the receiver is its own dispatcher
      */
     @Override
     public void detachEventDispatcher(EventDispatcher ev) {
@@ -54,8 +54,8 @@ public abstract class EventReceiver implements EventDispatcher {
     public abstract void notifyEvent(String eventName, Object args);
 
     /**
-     * @return the event value
-     * @throws UnsupportedOperationException always
+     * @return never returns, as a receiver stores no event values
+     * @throws UnsupportedOperationException always; a receiver stores no event values
      */
     @Override
     public Object getEventValue(String name) {
@@ -63,8 +63,8 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     * @return the events
-     * @throws UnsupportedOperationException always
+     * @return never returns, as the receiver registers no event names
+     * @throws UnsupportedOperationException always; the registry is never populated
      */
     @Override
     public Set<String> getEvents() {
@@ -72,7 +72,7 @@ public abstract class EventReceiver implements EventDispatcher {
     }
 
     /**
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; there is nothing to ignore
      */
     @Override
     public void ignoreEvents() {
@@ -83,7 +83,7 @@ public abstract class EventReceiver implements EventDispatcher {
     public void unIgnoreEvents() {}
 
     /**
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; a receiver cannot block on an event
      */
     @Override
     public Object waitEventValue(String name) {

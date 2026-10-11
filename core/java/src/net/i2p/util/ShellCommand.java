@@ -50,7 +50,7 @@ public class ShellCommand {
 
         /**
          * @param shellCommand either a String or a String[] (since 0.8.3)
-         * @param result out parameter
+         * @param result holder for the exit status, written when the thread runs
          */
         CommandThread(Object shellCommand, Result result) {
             super("ShellCommand Executor");

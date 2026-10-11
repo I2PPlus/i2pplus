@@ -27,7 +27,7 @@ public class I2PClientFactory {
      * Create a new instance of the appropriate I2PClient with a specific context
      *
      * @param context the I2PAppContext to use
-     * @return client implementation
+     * @return a new {@link I2PClientImpl} bound to that context
      */
     public static I2PClient createClient(I2PAppContext context) {
         if (context == null) {
@@ -39,7 +39,7 @@ public class I2PClientFactory {
     /**
      * Create a new instance of the appropriate I2PClient
      *
-     * @return client implementation
+     * @return a new {@link I2PClientImpl} bound to the global context
      */
     public static I2PClient createClient() {
         return new I2PClientImpl();

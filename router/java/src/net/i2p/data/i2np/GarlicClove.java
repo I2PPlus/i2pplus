@@ -52,7 +52,7 @@ public class GarlicClove extends DataStructureImpl {
 
     /**
      * How and where to deliver this clove.
-     * @return the instructions
+     * @return the delivery instructions, or null until set
      */
     public DeliveryInstructions getInstructions() { return _instructions; }
     /**
@@ -62,7 +62,7 @@ public class GarlicClove extends DataStructureImpl {
     public void setInstructions(DeliveryInstructions instr) { _instructions = instr; }
     /**
      * The message payload wrapped in this clove.
-     * @return the data
+     * @return the wrapped I2NP message, or null until set
      */
     public I2NPMessage getData() { return _msg; }
     /**
@@ -82,7 +82,7 @@ public class GarlicClove extends DataStructureImpl {
     public void setCloveId(long id) { _cloveId = id; }
     /**
      * Time after which this clove expires.
-     * @return the expiration
+     * @return the expiry time in ms since the epoch, 0 when unset
      */
     public long getExpiration() { return _expiration; }
     /**
@@ -92,7 +92,7 @@ public class GarlicClove extends DataStructureImpl {
     public void setExpiration(long exp) { _expiration = exp; }
     /**
      * Certificate authorizing delivery of this clove.
-     * @return the certificate
+     * @return the authorizing certificate, or null when none was set
      */
     public Certificate getCertificate() { return _certificate; }
     /**
@@ -104,7 +104,8 @@ public class GarlicClove extends DataStructureImpl {
     /**
      * Read the clove from a stream; not supported.
      * @deprecated unused, use byte array method to avoid copying
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the byte array overload is
+     *                                       used instead
      */
     @Deprecated
     public void readBytes(InputStream in) {
@@ -114,7 +115,8 @@ public class GarlicClove extends DataStructureImpl {
     /**
      * Write the clove to a stream; not supported.
      * @deprecated unused, use byte array method to avoid copying
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the byte array overload is
+     *                                       used instead
      */
     @Deprecated
     public void writeBytes(OutputStream out) {
@@ -125,7 +127,7 @@ public class GarlicClove extends DataStructureImpl {
      * Read the clove from a byte array.
      * @param source the array holding the serialized clove
      * @param offset the offset into source at which the clove starts
-     * @return length read
+     * @return the bytes consumed, from offset through the end of the certificate
      * @throws DataFormatException if the delivery instructions, message or
      *                             certificate cannot be parsed
      */
@@ -177,7 +179,7 @@ public class GarlicClove extends DataStructureImpl {
     /**
      * Serialized clove.
      *
-     * @return serialized clove
+     * @return the clove in standard (non-ratchet) format, sized by estimateSize()
      */
     @Override
     public byte[] toByteArray() {
@@ -202,7 +204,7 @@ public class GarlicClove extends DataStructureImpl {
      *
      * @param tgt the array the clove is written into
      * @param offset the offset into tgt at which to start writing
-     * @return new offset
+     * @return the offset just past the ratchet-format clove
      * @since 0.9.44
      */
     public int writeBytesRatchet(byte[] tgt, int offset) {

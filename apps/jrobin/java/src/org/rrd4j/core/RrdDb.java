@@ -234,7 +234,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
          * Internal method used to memorize the pool, without generating a loop
          *
          * @param pool the pool the database will belong to; the pool-use flag is left off
-         * @return the Builder
+         * @return this same builder, so that calls can be chained
          */
         Builder setPoolInternal(RrdDbPool pool) {
             this.pool = pool;
@@ -345,7 +345,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     /**
      * Create a new builder for constructing RrdDb instances.
      *
-     * @return a Builder
+     * @return a new builder whose pool defaults to the shared {@link RrdDbPool}
      */
     public static Builder getBuilder() {
         return new Builder();
@@ -1110,7 +1110,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @param request a {@link org.rrd4j.core.FetchRequest} object.
      * @return a {@link org.rrd4j.core.Archive} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException declared but never thrown; matching reads in-memory metadata only
      */
     public Archive findMatchingArchive(FetchRequest request) throws IOException {
         ConsolFun consolFun = request.getConsolFun();
@@ -1274,7 +1274,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
 
     /**
      * Returns the data sources declared by this RRD.
-     * @return the datasources
+     * @return the data source objects, in the order declared by the {@link RrdDef}
      */
     Datasource[] getDatasources() {
         return datasources;
@@ -1282,7 +1282,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
 
     /**
      * Returns the round robin archives holding the consolidated data.
-     * @return the archives
+     * @return the round robin archives, in the order declared by the {@link RrdDef}
      */
     Archive[] getArchives() {
         return archives;
@@ -1398,7 +1398,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * Returns time of last update operation as timestamp (in seconds).
      *
      * @return Last update time (in seconds).
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the value cannot be read from the backend
      */
     public synchronized long getLastUpdateTime() throws IOException {
         return header.getLastUpdateTime();
@@ -1419,8 +1419,10 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * RrdDb rrd2 = new RrdDb(def);
      * </pre>
      *
-     * @return RRD definition.
-     * @throws java.io.IOException if any.
+     * @return a newly built RRD definition holding this RRD's path, header, data
+     *         sources and archives
+     * @throws java.io.IOException if the header, data source or archive values
+     *                             cannot be read from the backend
      */
     public synchronized RrdDef getRrdDef() throws IOException {
         // set header
@@ -1677,7 +1679,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * Returns the free-form informational string stored in the RRD header.
      *
      * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the signature cannot be read from the backend
      */
     public synchronized String getInfo() throws IOException {
         return header.getInfo();
@@ -1687,7 +1689,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * Replaces the free-form informational string stored in the RRD header.
      *
      * @param info a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the signature cannot be written to the backend
      */
     public synchronized void setInfo(String info) throws IOException {
         header.setInfo(info);

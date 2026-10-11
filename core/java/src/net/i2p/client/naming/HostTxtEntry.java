@@ -77,7 +77,7 @@ public class HostTxtEntry {
     /**
      * Create a new host text entry with name and destination, no properties.
      *
-     * @param name the hostname
+     * @param name the hostname, null for a 'remove' entry
      * @param dest the Base64 destination
      */
     public HostTxtEntry(String name, String dest) {
@@ -87,7 +87,7 @@ public class HostTxtEntry {
     /**
      * Create a new host text entry with name, destination, and serialized properties.
      *
-     * @param name the hostname
+     * @param name the hostname, null for a 'remove' entry
      * @param dest the Base64 destination
      * @param sprops line part after the #!, non-null
      * @throws IllegalArgumentException on dup key in sprops and other errors
@@ -109,7 +109,7 @@ public class HostTxtEntry {
     /**
      * Create a new host text entry with optional properties.
      *
-     * @param name the hostname
+     * @param name the hostname, null for a 'remove' entry
      * @param dest the Base64 destination
      * @param props may be null
      */
@@ -122,7 +122,7 @@ public class HostTxtEntry {
     /**
      * The hostname mapped by this entry, or null for a 'remove' entry.
      *
-     * @return the hostname
+     * @return the hostname, or null for a 'remove' entry
      */
     public String getName() {
         return name;

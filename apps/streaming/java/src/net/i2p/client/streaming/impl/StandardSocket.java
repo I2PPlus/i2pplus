@@ -46,7 +46,8 @@ public class StandardSocket extends Socket {
 
     /**
      * Binding is not supported.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the I2PSocket is supplied at
+     *                                       construction, so there is nothing to bind
      */
     @Override
     public void bind(SocketAddress bindpoint) {
@@ -69,7 +70,8 @@ public class StandardSocket extends Socket {
 
     /**
      * Connecting is not supported.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the I2PSocket is supplied at
+     *                                       construction, so there is nothing to connect
      */
     @Override
     public void connect(SocketAddress endpoint) {
@@ -78,7 +80,8 @@ public class StandardSocket extends Socket {
 
     /**
      * Connecting is not supported.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the I2PSocket is supplied at
+     *                                       construction, so there is nothing to connect
      */
     @Override
     public void connect(SocketAddress endpoint, int timeout) {
@@ -294,7 +297,7 @@ public class StandardSocket extends Socket {
 
     /**
      * Whether closed.
-     * @return whether closed
+     * @return true once close() has run, false on a live wrapper
      */
     @Override
     public boolean isClosed() {
@@ -303,7 +306,7 @@ public class StandardSocket extends Socket {
 
     /**
      * Whether connected.
-     * @return whether connected
+     * @return true until close() has run, since the I2PSocket arrives connected
      */
     @Override
     public boolean isConnected() {
@@ -330,7 +333,8 @@ public class StandardSocket extends Socket {
 
     /**
      * Urgent data is not supported.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the underlying I2PSocket has
+     *                                       no urgent-data channel
      */
     @Override
     public void sendUrgentData(int data) {

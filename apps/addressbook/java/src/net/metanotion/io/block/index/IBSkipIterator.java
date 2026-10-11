@@ -25,7 +25,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
      * Positions the underlying index at the starting key.
      *
      * @param ss the span to iterate from
-     * @param index starting position
+     * @param index the 0-based key position within ss to start at
      */
     public IBSkipIterator(SkipSpan<K, V> ss, int index) {
         super(ss, index);
@@ -34,7 +34,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
     /**
      * @return the next value, and advances the index
      * @throws NoSuchElementException if the iterator is past the last value
-     * @throws RuntimeException on IOE
+     * @throws RuntimeException wrapping any IOException from loading the span
      */
     @Override
     public V next() {
@@ -71,7 +71,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
      * The key. Does NOT advance the index.
      * @return the key for which the value will be returned in the subsequent call to next()
      * @throws NoSuchElementException if the iterator is past the last key
-     * @throws RuntimeException on IOE
+     * @throws RuntimeException wrapping any IOException from loading the span
      */
     @Override
     public K nextKey() {
@@ -91,7 +91,7 @@ public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIter
     /**
      * @return the previous value, and decrements the index
      * @throws NoSuchElementException if the iterator is before the first value
-     * @throws RuntimeException on IOE
+     * @throws RuntimeException wrapping any IOException from loading the span
      */
     @Override
     public V previous() {

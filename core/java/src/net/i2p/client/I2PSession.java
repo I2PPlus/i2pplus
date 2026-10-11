@@ -50,7 +50,7 @@ public interface I2PSession {
       * @param dest location to send the message
       * @param payload body of the message to be sent (unencrypted)
       * @return whether it was accepted by the router for delivery or not
-      * @throws I2PSessionException on error
+      * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
       */
      public boolean sendMessage(Destination dest, byte[] payload) throws I2PSessionException;
 
@@ -65,8 +65,8 @@ public interface I2PSession {
       * @param payload body of the message to be sent (unencrypted)
       * @param offset offset into the payload
       * @param size number of bytes to send
-      * @return success
-      * @throws I2PSessionException on error
+      * @return whether the router accepted the message for delivery
+      * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
       */
      public boolean sendMessage(Destination dest, byte[] payload, int offset, int size) throws I2PSessionException;
 
@@ -75,11 +75,11 @@ public interface I2PSession {
      *
      * @param dest location to send the message
      * @param payload body of the message to be sent (unencrypted)
-     * @param proto protocol number
-     * @param fromport source port
-     * @param toport destination port
-     * @return success
-     * @throws I2PSessionException on error
+     * @param proto 1-254, or 0 for unset; 255 disallowed
+     * @param fromport source port, 1-65535 or 0 for unset
+     * @param toport destination port, 1-65535 or 0 for unset
+     * @return whether the router accepted the message for delivery
+     * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
      * @since 0.7.1
      */
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException;
@@ -114,8 +114,8 @@ public interface I2PSession {
      *                 the contents of the set is ignored during the call, but afterwards it contains a set of SessionTag
      *                 objects that were sent along side the given keyUsed.
      *
-     * @return success
-     * @throws I2PSessionException on error
+     * @return whether the router accepted the message for delivery
+     * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
      */
     public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException;
 
@@ -126,10 +126,10 @@ public interface I2PSession {
      * @param payload body of the message to be sent (unencrypted)
      * @param offset offset into the payload
      * @param size number of bytes to send
-     * @param keyUsed UNUSED, IGNORED.
-     * @param tagsSent UNUSED, IGNORED.
-     * @return success
-     * @throws I2PSessionException on error
+     * @param keyUsed UNUSED, IGNORED, as end-to-end crypto is disabled
+     * @param tagsSent UNUSED, IGNORED, as end-to-end crypto is disabled
+     * @return whether the router accepted the message for delivery
+     * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException;
 
@@ -140,11 +140,11 @@ public interface I2PSession {
      * @param payload body of the message to be sent (unencrypted)
      * @param offset offset into the payload
      * @param size number of bytes to send
-     * @param keyUsed UNUSED, IGNORED.
-     * @param tagsSent UNUSED, IGNORED.
+     * @param keyUsed UNUSED, IGNORED, as end-to-end crypto is disabled
+     * @param tagsSent UNUSED, IGNORED, as end-to-end crypto is disabled
      * @param expire absolute expiration timestamp, NOT interval from now
-     * @return success
-     * @throws I2PSessionException on error
+     * @return whether the router accepted the message for delivery
+     * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
      * @since 0.7.1
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire) throws I2PSessionException;
@@ -157,8 +157,8 @@ public interface I2PSession {
      * @param payload body of the message to be sent (unencrypted)
      * @param offset offset into the payload
      * @param size number of bytes to send
-     * @param keyUsed UNUSED, IGNORED.
-     * @param tagsSent UNUSED, IGNORED.
+     * @param keyUsed UNUSED, IGNORED, as end-to-end crypto is disabled
+     * @param tagsSent UNUSED, IGNORED, as end-to-end crypto is disabled
      * @param proto 1-254 or 0 for unset; recommended:
      *              I2PSession.PROTO_UNSPECIFIED
      *              I2PSession.PROTO_STREAMING
@@ -167,8 +167,8 @@ public interface I2PSession {
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
-     * @return success
-     * @throws I2PSessionException on error
+     * @return whether the router accepted the message for delivery
+     * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
      * @since 0.7.1
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, int proto, int fromPort, int toPort) throws I2PSessionException;
@@ -181,8 +181,8 @@ public interface I2PSession {
      * @param payload body of the message to be sent (unencrypted)
      * @param offset offset into the payload
      * @param size number of bytes to send
-     * @param keyUsed UNUSED, IGNORED.
-     * @param tagsSent UNUSED, IGNORED.
+     * @param keyUsed UNUSED, IGNORED, as end-to-end crypto is disabled
+     * @param tagsSent UNUSED, IGNORED, as end-to-end crypto is disabled
      * @param expire absolute expiration timestamp, NOT interval from now
      * @param proto 1-254 or 0 for unset; recommended:
      *              I2PSession.PROTO_UNSPECIFIED
@@ -192,8 +192,8 @@ public interface I2PSession {
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
-     * @return success
-     * @throws I2PSessionException on error
+     * @return whether the router accepted the message for delivery
+     * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
      * @since 0.8.4
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire, int proto, int fromPort, int toPort) throws I2PSessionException;
@@ -206,8 +206,8 @@ public interface I2PSession {
      * @param payload body of the message to be sent (unencrypted)
      * @param offset offset into the payload
      * @param size number of bytes to send
-     * @param keyUsed UNUSED, IGNORED.
-     * @param tagsSent UNUSED, IGNORED.
+     * @param keyUsed UNUSED, IGNORED, as end-to-end crypto is disabled
+     * @param tagsSent UNUSED, IGNORED, as end-to-end crypto is disabled
      * @param expire absolute expiration timestamp, NOT interval from now
      * @param proto 1-254 or 0 for unset; recommended:
      *              I2PSession.PROTO_UNSPECIFIED
@@ -217,9 +217,9 @@ public interface I2PSession {
      *
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
-     * @param flags message flags
-     * @return success
-     * @throws I2PSessionException on error
+     * @param flags packed {@link SendMessageOptions} bits to send with the message
+     * @return whether the router accepted the message for delivery
+     * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
      * @since 0.8.4
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire, int proto, int fromPort, int toPort, int flags) throws I2PSessionException;
@@ -241,8 +241,8 @@ public interface I2PSession {
      * @param fromPort 1-65535 or 0 for unset
      * @param toPort 1-65535 or 0 for unset
      * @param options to be passed to the router
-     * @return success
-     * @throws I2PSessionException on error
+     * @return whether the router accepted the message for delivery
+     * @throws I2PSessionException if the session is not open or closed, or the write queue stays full
      * @since 0.9.2
      */
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, int proto, int fromPort, int toPort, SendMessageOptions options) throws I2PSessionException;
@@ -282,7 +282,7 @@ public interface I2PSession {
      *
      * @param msgId message to fetch
      * @return unencrypted body of the message, or null if not found
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException declared but never thrown; failures return null instead
      */
      public byte[] receiveMessage(int msgId) throws I2PSessionException;
 
@@ -303,8 +303,8 @@ public interface I2PSession {
      * Unused. Not fully implemented.
      *
      * @param msgId message that was abusive (or -1 for not message related)
-     * @param severity how abusive
-     * @throws I2PSessionException on error
+     * @param severity abuse rating from 1 (mildest) to 100 (worst)
+     * @throws I2PSessionException if the session is not open or closed
      */
      public void reportAbuse(int msgId, int severity) throws I2PSessionException;
 
@@ -320,7 +320,7 @@ public interface I2PSession {
     /**
      * Tear down the session and release any resources.
      *
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException declared but never thrown; errors are logged instead
      */
      public void destroySession() throws I2PSessionException;
 
@@ -330,7 +330,8 @@ public interface I2PSession {
      * @param privateKeyStream null for transient, if non-null must have same encryption keys as primary session
      * @param opts subsession options if any, may be null
      * @return a new subsession, non-null
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException if the router does not support sub-sessions, or
+     *                             a sub-session request is pending or the same key was already added
      * @since 0.9.21
      */
     public I2PSession addSubsession(InputStream privateKeyStream, Properties opts) throws I2PSessionException;
@@ -357,7 +358,8 @@ public interface I2PSession {
      * Connecting a subsession will automatically connect the primary session
      * if not previously connected.
      *
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException if the router cannot be reached or the session
+     *                             closes mid-connect, or the calling thread is interrupted
      */
      public void connect() throws I2PSessionException;
 
@@ -430,7 +432,7 @@ public interface I2PSession {
      *
      * @param h the hash to look up
      * @return the Destination, or null on failure
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException if the calling thread is interrupted while waiting
      */
      public Destination lookupDest(Hash h) throws I2PSessionException;
 
@@ -439,9 +441,9 @@ public interface I2PSession {
       * Blocking.
       *
       * @param h the hash to look up
-      * @param maxWait ms
+      * @param maxWait milliseconds to wait for the router's reply before giving up
       * @return null on failure
-      * @throws I2PSessionException on error
+      * @throws I2PSessionException if the calling thread is interrupted while waiting
       * @since 0.8.3
       */
      public Destination lookupDest(Hash h, long maxWait) throws I2PSessionException;
@@ -497,7 +499,7 @@ public interface I2PSession {
       *
       * @param name the hostname to look up
       * @return the Destination, or null on failure
-      * @throws I2PSessionException on error
+      * @throws I2PSessionException if the calling thread is interrupted while waiting
       * @since 0.9.11
       */
      public Destination lookupDest(String name) throws I2PSessionException;
@@ -507,9 +509,9 @@ public interface I2PSession {
       * Blocking. See above for details.
       *
       * @param name the hostname to look up
-      * @param maxWait ms
+      * @param maxWait milliseconds to wait for the router's reply before giving up
       * @return null on failure
-      * @throws I2PSessionException on error
+      * @throws I2PSessionException if the calling thread is interrupted while waiting
       * @since 0.9.11
       */
      public Destination lookupDest(String name, long maxWait) throws I2PSessionException;
@@ -520,9 +522,9 @@ public interface I2PSession {
      * Same as lookupDest() but with a failure code in the return value
      *
      * @param name the hostname to look up
-     * @param maxWait ms
+     * @param maxWait milliseconds to wait for the router's reply before giving up
      * @return non-null
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException if the calling thread is interrupted while waiting
      * @since 0.9.43
      */
      public LookupResult lookupDest2(String name, long maxWait) throws I2PSessionException;
@@ -534,10 +536,10 @@ public interface I2PSession {
      * the result code will be something other than RESULT_DEFERRED, and the callback will NOT be called.
      *
      * @param h the hash to look up
-     * @param maxWait ms
+     * @param maxWait milliseconds to wait for the router's reply before giving up
      * @param callback to return the result, non-null
      * @return non-null. If result code is RESULT_DEFERRED, callback will be called later
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException if the router predates 0.9.11 and has no HostLookup
      * @since 0.9.67
      */
      public LookupResult lookupDest(Hash h, long maxWait, LookupCallback callback) throws I2PSessionException;
@@ -549,10 +551,10 @@ public interface I2PSession {
       * the result code will be something other than RESULT_DEFERRED, and the callback will NOT be called.
       *
       * @param name the hostname to look up
-      * @param maxWait ms
+      * @param maxWait milliseconds to wait for the router's reply before giving up
       * @param callback to return the result, non-null
       * @return non-null. If result code is RESULT_DEFERRED, callback will be called later
-      * @throws I2PSessionException on error
+      * @throws I2PSessionException if the router predates 0.9.11 and has no HostLookup
       * @since 0.9.67
       */
      public LookupResult lookupDest(String name, long maxWait, LookupCallback callback) throws I2PSessionException;
@@ -571,7 +573,7 @@ public interface I2PSession {
      * Current bandwidth limits; blocks until the response arrives.
      *
      * @return int array of [inbound, outbound] Bps, or null on error
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException if the calling thread is interrupted while waiting
      * @since 0.8.3
      */
      public int[] bandwidthLimits() throws I2PSessionException;
@@ -580,7 +582,7 @@ public interface I2PSession {
      * Send blinding info to the router.
      *
      * @param bd the blind data
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException if the router predates 0.9.43 and has no BlindingInfo
      * @since 0.9.43
      */
      public void sendBlindingInfo(BlindData bd) throws I2PSessionException;
@@ -624,8 +626,8 @@ public interface I2PSession {
      /**
       * removes the specified listener (only)
       *
-      * @param proto protocol number
-      * @param port port number
+      * @param proto 1-254, or PROTO_ANY (0) to match any protocol
+      * @param port 1-65535, or PORT_ANY (0) to match any port
       * @since 0.7.1
       */
      public void removeListener(int proto, int port);

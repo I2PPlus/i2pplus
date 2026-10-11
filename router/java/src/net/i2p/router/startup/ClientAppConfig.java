@@ -114,9 +114,9 @@ public class ClientAppConfig {
      *
      * @param cl the class name
      * @param client the display name
-     * @param a the arguments
+     * @param a the startup argument string handed to the client
      * @param d the startup delay in ms
-     * @param dis whether disabled
+     * @param dis true to keep the app from starting with the router
      */
     public ClientAppConfig(String cl, String client, String a, long d, boolean dis) {
         this(cl, client, a, d, dis, null, null, null);
@@ -127,10 +127,10 @@ public class ClientAppConfig {
      *
      * @param cl the class name
      * @param client the display name
-     * @param a the arguments
+     * @param a the startup argument string handed to the client
      * @param d the startup delay in ms
-     * @param dis whether disabled
-     * @param cp the classpath
+     * @param dis true to keep the app from starting with the router
+     * @param cp extra classpath entries for the client's class loader, or null
      * @param sa the stop arguments
      * @param ua the uninstall arguments
      * @since 0.7.12
@@ -463,7 +463,8 @@ public class ClientAppConfig {
      * otherwise the file will be saved with the remaining configs.
      *
      * @param cac the client app config to delete
-     * @return success
+     * @return true if the config was removed, leaving the file deleted when it
+     *         was the last one or rewritten with the remainder otherwise
      * @throws IllegalArgumentException if cac has a null configfile
      * @throws IOException if the file cannot be read or written
      * @since 0.9.42

@@ -271,20 +271,23 @@ abstract class EstablishBase implements EstablishState {
 
     /**
      * Fail the handshake. Caller must synch.
-     * @param reason failure description
+     * @param reason the text logged with the warning and returned by
+     *               {@link #getFailReason}
      */
     protected void fail(String reason) { fail(reason, null); }
 
     /**
      * Fail the handshake with exception. Caller must synch.
-     * @param reason failure description
+     * @param reason the text logged with the warning and returned by
+     *               {@link #getFailReason}
      * @param e the exception cause, may be null
      */
     protected void fail(String reason, Exception e) { fail(reason, e, false); }
 
     /**
      * Fail the handshake optionally suppressing skew stat. Caller must synch.
-     * @param reason failure description
+     * @param reason the text logged with the warning and returned by
+     *               {@link #getFailReason}
      * @param e the exception cause, may be null
      * @param bySkew true to suppress the skew stat, as when we caused the skew ourselves
      */
@@ -367,14 +370,14 @@ abstract class EstablishBase implements EstablishState {
 
         /**
          * The NTCP 2 version.
-         * @return the version
+         * @return 1, the NTCP 2 protocol version number
          */
         public int getVersion() { return 1; }
 
         /**
          * Reject any data received after the handshake verified.
          *
-         * @throws IllegalStateException always
+         * @throws IllegalStateException always; the state is already verified
          */
         @Override
         public void receive(ByteBuffer src) {
@@ -384,7 +387,7 @@ abstract class EstablishBase implements EstablishState {
         /**
          * Reject handshake preparation after verification.
          *
-         * @throws IllegalStateException always
+         * @throws IllegalStateException always; the state is already verified
          */
         @Override
         public void prepareOutbound() {
@@ -413,14 +416,14 @@ abstract class EstablishBase implements EstablishState {
 
         /**
          * The NTCP 2 version.
-         * @return the version
+         * @return 1, the NTCP 2 protocol version number
          */
         public int getVersion() { return 1; }
 
         /**
          * Reject any data received after the handshake failed.
          *
-         * @throws IllegalStateException always
+         * @throws IllegalStateException always; the state is already corrupt
          */
         @Override
         public void receive(ByteBuffer src) {
@@ -430,7 +433,7 @@ abstract class EstablishBase implements EstablishState {
         /**
          * Reject handshake preparation after failure.
          *
-         * @throws IllegalStateException always
+         * @throws IllegalStateException always; the state is already corrupt
          */
         @Override
         public void prepareOutbound() {
@@ -449,7 +452,7 @@ abstract class EstablishBase implements EstablishState {
      *  Use this only in static initializers.
      *  It does not translate!
      *  @param s the string to mark for translation
-     *  @return s
+     *  @return s, unchanged; the marker works by naming the literal
      */
     protected static final String _x(String s) { // NOSONAR S1845 i18n marker convention
         return s;

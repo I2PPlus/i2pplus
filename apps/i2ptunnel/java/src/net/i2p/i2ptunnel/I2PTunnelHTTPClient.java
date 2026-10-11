@@ -336,7 +336,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * or open the local socket. You MUST call startRunning() for that.
      *
      * @param localPort the local port to bind to
-     * @param l logging instance
+     * @param l the logger inherited from the parent tunnel
      * @param sockMgr the existing socket manager
      * @param tunnel the parent I2PTunnel instance
      * @param notifyThis event dispatcher for notifications
@@ -356,7 +356,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * or open the local socket. You MUST call startRunning() for that.
      *
      * @param localPort the local port to bind to
-     * @param l logging instance
+     * @param l the logger inherited from the parent tunnel
      * @param ownDest whether to use our own destination
      * @param wwwProxy comma-separated list of outproxy URLs to forward through,
      *                 or null for no outproxying
@@ -1971,7 +1971,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * read returns -1 on FIN (peer closed), times out when still open, or
      * yields a pipelined byte which is pushed back so it is not lost.
      *
-     * @param s      browser-facing socket
+     * @param s      the browser-facing socket, which may be null
      * @param reader the request reader wrapping a PushbackInputStream
      * @param method HTTP method, or null
      * @return true if the peer has closed (or the socket is unusable)
@@ -2238,7 +2238,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * slot's generation, so a completion that races teardown is refused and
      * its permit released by this thread instead of leaking.
      *
-     * @param dest remote destination
+     * @param dest the destination to warm; its hash keys the per-dest connection permit
      * @param port remote port (0 = default)
      * @param emptyBudget connect attempt budget for the secondary
      * @param requestId logging prefix id
@@ -2307,7 +2307,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Shared by the {@code reconnect()} and {@code reconnectPair()} legs of
      * the callback so both paths get identical backoff and stop conditions.
      *
-     * @param dest remote destination
+     * @param dest the destination to open the fresh socket to
      * @param port remote port (0 = default)
      * @param emptyBudget max connect attempts for this request
      * @param requestId logging prefix id
@@ -2464,7 +2464,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     /**
      * Write the HTML form that prompts the user to save an address helper destination.
      *
-     * @param destination the hostname
+     * @param destination the hostname echoed into the hidden form field, the page
+     *                    text, and the IDN-decoded lookup
      * @since 0.8.7
      */
     private void writeHelperSaveForm(OutputStream outs, String destination, String ahelperKey,
@@ -2836,7 +2837,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
      * Naming service lookups can block on NetDB searches or network fetches
      * for minutes if the destination isn't cached locally.
      *
-     * @param hostname to resolve
+     * @param hostname the name passed to the naming service; may be an IDN or b32 address
      * @param timeoutMs maximum time to wait
      * @return resolved Destination or null if lookup failed or timed out
      * @since 0.9.70+

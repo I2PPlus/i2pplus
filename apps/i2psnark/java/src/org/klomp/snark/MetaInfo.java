@@ -570,7 +570,8 @@ public class MetaInfo {
     /**
      * Is it a private torrent?
      *
-     * @return whether private
+     * @return true if the private flag is present and set; false if it is absent
+     *         or explicitly 0
      * @since 0.9
      */
     public boolean isPrivate() {
@@ -590,7 +591,7 @@ public class MetaInfo {
     /**
      * Returns a list of lists of file name hierarchies or null if it is a single name. It has the
      * same size as the list returned by getLengths().
-     * @return the files
+     * @return the per-file name hierarchies, or null for a single-file torrent
      */
     public List<List<String>> getFiles() {
         return files;
@@ -647,7 +648,8 @@ public class MetaInfo {
      * boundary maps to the following file. Single-file torrents always return 0.
      *
      * @param pos torrent byte offset
-     * @return file index
+     * @return the index into {@link #getFiles()} and {@link #getLengths()}, which
+     *         is the file count if the position is past the end
      */
     int fileIndex(long pos) {
         long[] ends = fileEnds();
@@ -693,7 +695,7 @@ public class MetaInfo {
     /**
      * Returns a list of Longs indication the size of the individual files, or null if it is a
      * single file. It has the same size as the list returned by getFiles().
-     * @return the lengths
+     * @return the file sizes in bytes, or null if it is a single file
      */
     public List<Long> getLengths() {
         return lengths;
@@ -702,7 +704,7 @@ public class MetaInfo {
     /**
      * The comment string or null. Not available for locally-created torrents.
      *
-     * @return the comment
+     * @return the comment, or null if the torrent carries none
      * @since 0.9.7
      */
     public String getComment() {
@@ -1049,7 +1051,7 @@ public class MetaInfo {
      * Command-line utility to inspect and optionally modify torrent file metadata.
      * Usage: MetaInfo [-a announceURL] [-c created-by] [-m comment] [-w webseed-url]* file.torrent [file2.torrent...]
      *
-     * @param args command-line arguments
+     * @param args the options in {@code Usage} above, followed by the torrent files
      * @since 0.8.5
      */
     public static void main(String[] args) {

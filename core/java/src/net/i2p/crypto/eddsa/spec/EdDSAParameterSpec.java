@@ -54,7 +54,7 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
     /**
      * Returns the curve used by this parameter specification.
      *
-     * @return the curve
+     * @return the curve parameters this spec was built with, never null
      */
     public Curve getCurve() {
         return curve;

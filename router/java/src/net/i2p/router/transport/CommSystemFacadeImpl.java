@@ -361,7 +361,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Whether the comm system is running.
-     * @return whether running
+     * @return true if start() has been called and not stopped or restarted
      * @since 0.9.53
      */
     @Override
@@ -456,7 +456,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * Whether the given peer is backlogged.
      *
-     * @return whether backlogged
+     * @return true if we have messages queued for the peer, awaiting responses
      */
     @Override
     public boolean isBacklogged(Hash peer) {
@@ -465,7 +465,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Whether the given peer is established.
-     * @return whether established
+     * @return true if the transport session to the peer is up
      */
     @Override
     public boolean isEstablished(Hash peer) {
@@ -492,7 +492,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Whether we are currently connecting to the given peer.
-     * @return whether connecting
+     * @return true if a connection attempt to the peer is in progress
      */
     @Override
     public boolean isConnecting(Hash peer) {
@@ -540,7 +540,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * The status of the communication system.
      *
-     * @return the status
+     * @return most recent error messages, most recent first
      * @since 0.9.20
      */
     @Override
@@ -550,7 +550,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * The current network status.
-     * @return the status
+     * @return the router reachability status
      * @since 0.9.20
      */
     @Override
@@ -831,7 +831,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Are they in a strict country
-     * @param peer peer Hash
+     * @param peer hash of the peer to look up
      * @return whether in strict country
      * @since 0.9.16
      */
@@ -840,7 +840,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Are they in a strict country
-     * @param ri RouterInfo
+     * @param ri RouterInfo of the peer, used for IP extraction
      * @return whether in strict country
      * @since 0.9.16
      */
@@ -870,7 +870,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Full name for a country code.
-     * @param c country code
+     * @param c the two letter country code to resolve
      * @return full name or the code if unknown
      */
     @Override
@@ -921,7 +921,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Renders HTML for a peer with optional extended info.
      * Uses cached RouterInfo, country info, and reverse lookup cache.
      *
-     * @param peer Peer Hash
+     * @param peer hash of the peer to render
      * @param extended Whether to show extended capabilities
      * @return HTML snippet representing peer
      * @since 0.9.71+
@@ -940,7 +940,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Renders the peer's capability HTML block.
      * Caches data and removes unnecessary repeated computation.
      *
-     * @param peer Peer Hash
+     * @param peer hash of the peer to render
      * @param inline If true, render inline without table wrapper
      * @return HTML snippet of peer capabilities
      * @since 0.9.71+
@@ -950,7 +950,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /**
      * Is everything disabled for testing?
-     * @return whether dummy
+     * @return true if the {@code i2np.disable} property is set
      * @since 0.8.13
      */
     @Override

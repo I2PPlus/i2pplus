@@ -465,7 +465,8 @@ public abstract class Addresses {
 /**
  * Converts IPv6 to compressed form per RFC 5952. IPv4 returned unchanged.
  *
- * @param host the hostname
+ * @param host the address to compress, an IPv6 literal containing ':' or an
+ *             IPv4 literal returned unchanged
  * @return canonical string representation, or "null" for null input
  * @since 0.9.57
  */
@@ -733,7 +734,7 @@ public abstract class Addresses {
     /**
      * Checks if the host is a valid IPv4 address.
      *
-     * @param host the hostname
+     * @param host the string to test, not resolved or looked up
      * @return true if IPv4 address
      * @since 0.9.34
      */
@@ -744,7 +745,7 @@ public abstract class Addresses {
     /**
      * Checks if the host is a valid IPv6 address.
      *
-     * @param host the hostname
+     * @param host the string to test, not resolved or looked up
      * @return true if IPv6 address
      * @since 0.9.34
      */
@@ -755,7 +756,7 @@ public abstract class Addresses {
     /**
      * Checks if the host is a valid IP address (IPv4 or IPv6).
      *
-     * @param host the hostname
+     * @param host the string to test, not resolved or looked up
      * @return true if either IPv4 or IPv6
      * @since 0.9.34
      */

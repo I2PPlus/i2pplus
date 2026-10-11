@@ -110,8 +110,8 @@ public abstract class HelperBase {
     /**
      * Translate a string with two parameters.
      * @param s string to be translated containing {0} and {1}
-     * @param o first parameter
-     * @param o2 second parameter
+     * @param o substituted for {0} in the string to be translated
+     * @param o2 substituted for {1} in the string to be translated
      * @return the translated string
      * @since 0.7.14
      */
@@ -121,8 +121,8 @@ public abstract class HelperBase {
 
     /**
      * Translate a string with plural forms (ngettext).
-     * @param s singular form
-     * @param p plural form
+     * @param s singular message key, used when n is 1
+     * @param p plural message key, used when n is not 1
      * @param n the count to determine which form to use
      * @return the translated string
      * @since 0.7.14
@@ -136,7 +136,7 @@ public abstract class HelperBase {
      * Use this only in static initializers.
      * It does not translate!
      * @param s the string to mark
-     * @return s
+     * @return s, unchanged and untranslated
      */
     public static String _x(String s) {
         return s;

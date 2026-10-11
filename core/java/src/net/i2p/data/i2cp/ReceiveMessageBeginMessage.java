@@ -123,7 +123,7 @@ public class ReceiveMessageBeginMessage extends I2CPMessageImpl {
 
     /**
      * Reports this message's I2CP type number.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, 6
      */
     @Override
     public int getType() {

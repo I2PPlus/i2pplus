@@ -30,7 +30,7 @@ public class StringBuilderWriter extends Writer {
      * Append a character.
      *
      * @param c the character to append
-     * @return this writer
+     * @return this writer, for chaining
      */
     @Override
     public Writer append(char c) {
@@ -42,7 +42,7 @@ public class StringBuilderWriter extends Writer {
      * Append a character sequence.
      *
      * @param str the character sequence to append
-     * @return this writer
+     * @return this writer, for chaining
      */
     @Override
     public Writer append(CharSequence str) {
@@ -56,7 +56,7 @@ public class StringBuilderWriter extends Writer {
      * @param str the character sequence
      * @param off the start offset
      * @param len the number of characters
-     * @return this writer
+     * @return this writer, for chaining
      */
     @Override
     public Writer append(CharSequence str, int off, int len) {
@@ -130,7 +130,7 @@ public class StringBuilderWriter extends Writer {
     /**
      * Get the underlying StringBuilder.
      *
-     * @return the StringBuilder
+     * @return the builder holding everything written so far, never null
      */
     public StringBuilder getBuilder() { return buf; }
 

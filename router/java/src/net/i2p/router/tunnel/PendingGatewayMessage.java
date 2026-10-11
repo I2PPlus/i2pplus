@@ -84,7 +84,7 @@ class PendingGatewayMessage implements CDQEntry {
 
     /**
      *  The index into the data to be sent.
-     *  @return the offset
+     *  @return the index of the next byte to send, 0 when the whole message is unsent
      */
     public int getOffset() { return _offset; }
 

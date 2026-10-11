@@ -91,11 +91,11 @@ class InboundMessageState implements CDQEntry {
     /**
      * Receives and stores a fragment.
      * @param data the buffer holding the fragment payload
-     *  @param off index in data at which this fragment starts
-     *  @param len number of fragment bytes to copy out of data
-     *  @param fragmentNum zero-based position of this fragment in the message
-     *  @param isLast true if this fragment completes the message
-     *  @return true if successful, false if corrupt or invalid
+     * @param off index in data at which this fragment starts
+     * @param len number of fragment bytes to copy out of data
+     * @param fragmentNum zero-based position of this fragment in the message
+     * @param isLast true if this fragment completes the message
+     * @return true if successful, false if corrupt or invalid
      */
     public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) {
         synchronized(lock) {
@@ -145,7 +145,7 @@ class InboundMessageState implements CDQEntry {
     /**
      * Returns whether the specified fragment has been received.
      * @param fragmentNum zero-based position of the fragment in the message
-     *  @return whether fragment is present
+     * @return whether fragment is present
      */
     public boolean hasFragment(int fragmentNum) {
         synchronized(lock) {

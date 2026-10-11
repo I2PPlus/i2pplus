@@ -45,10 +45,10 @@ public class EepHead extends EepGet {
      * Create a new EepHead to fetch HTTP response headers from the given URL.
      *
      * @param ctx         I2P app context
-     * @param proxyHost   proxy hostname
-     * @param proxyPort   proxy port
+     * @param proxyHost   hostname of the eepproxy to fetch through; empty for no proxy
+     * @param proxyPort   eepproxy port, 0 when no proxy is used
      * @param numRetries  number of retries on failure
-     * @param url         target URL
+     * @param url         absolute URL to send the HEAD request to
      */
     public EepHead(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String url) {
         super(ctx, true, proxyHost, proxyPort, numRetries, -1, -1, null, _dummyStream, url, true, null, null);

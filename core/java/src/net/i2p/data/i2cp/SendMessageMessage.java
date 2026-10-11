@@ -72,7 +72,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     /**
      * Session ID the message is being sent to.
      *
-     * @return the SessionId
+     * @return the session this message belongs to
      */
     public synchronized SessionId getSessionId() {
         return _sessionId;
@@ -102,7 +102,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     /**
      * Destination the message is being sent to.
      *
-     * @return the Destination
+     * @return the peer the message is addressed to, or null if unset
      */
     public synchronized Destination getDestination() {
         return _destination;
@@ -121,7 +121,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     /**
      * Message payload being sent.
      *
-     * @return the Payload
+     * @return the data to deliver to the destination, or null if unset
      */
     public synchronized Payload getPayload() {
         return _payload;
@@ -189,7 +189,7 @@ public class SendMessageMessage extends I2CPMessageImpl {
     /**
      * Serialization is not supported for this message.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; use writeMessage instead
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

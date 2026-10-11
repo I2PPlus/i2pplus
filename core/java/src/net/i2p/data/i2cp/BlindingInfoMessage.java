@@ -89,7 +89,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     /**
      * HASH not supported by router and may not be useful
      *
-     * @param h the hash
+     * @param h destination {@link Hash}, must be non-null
      * @param id the session ID
      * @param expiration ms from now or 0 for forever
      * @param authType 0 (none), 1 (DH), 3 (PSK)
@@ -110,7 +110,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     /**
      * HOST not supported by router and may not be useful
      *
-     * @param h hostname
+     * @param h endpoint hostname, must be non-null
      * @param id the session ID
      * @param expiration ms from now or 0 for forever
      * @param authType 0 (none), 1 (DH), 3 (PSK)
@@ -131,7 +131,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
     /**
      * Creates a BlindingInfoMessage for a destination.
      *
-     * @param d the destination
+     * @param d the destination being blinded, must be non-null
      * @param id the session ID
      * @param expiration ms from now or 0 for forever
      * @param authType 0 (none), 1 (DH), 3 (PSK)

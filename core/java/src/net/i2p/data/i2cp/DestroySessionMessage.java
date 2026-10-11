@@ -91,7 +91,7 @@ public class DestroySessionMessage extends I2CPMessageImpl {
 
     /**
      * Returns the I2CP message type code for this message.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, 3
      */
     @Override
     public int getType() {

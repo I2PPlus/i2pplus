@@ -415,7 +415,7 @@ public class Storage implements Closeable {
      *
      * @param tempDir the configured staging directory, or null
      * @param baseName the torrent's base name
-     * @param metainfo the torrent
+     * @param metainfo the torrent supplying the info hash that names the subdirectory
      * @return the per-torrent staging dir, or null
      * @since 0.9.71+
      */
@@ -522,7 +522,7 @@ public class Storage implements Closeable {
      *
      * @param base the data folder or file
      * @param unreadable paths that exist but could not be read, may be empty
-     * @return the message
+     * @return a user-facing error string; names the unreadable paths when there are any
      * @since 0.9.71+
      */
     static String noDataMessage(File base, List<String> unreadable) {
@@ -735,7 +735,7 @@ public class Storage implements Closeable {
     /**
      * Has the storage changed since instantiation?
      *
-     * @return whether changed
+     * @return true once any setter has flagged the storage as needing a save
      * @since 0.8.5
      */
     public boolean isChanged() {
@@ -784,7 +784,7 @@ public class Storage implements Closeable {
     /**
      * File checking in progress.
      *
-     * @return whether checking
+     * @return true while checkCreateFiles() holds the check, cleared in a finally
      * @since 0.9.3
      */
     public boolean isChecking() {
@@ -808,7 +808,7 @@ public class Storage implements Closeable {
     /**
      * Disk allocation (ballooning) in progress. Always false on Windows.
      *
-     * @return whether allocating
+     * @return true while at least one file is still ballooned
      * @since 0.9.3
      */
     public boolean isAllocating() {
@@ -915,7 +915,8 @@ public class Storage implements Closeable {
      * The priority of the file at the index.
      *
      * @param fileIndex as obtained from indexOf
-     * @return the priority
+     * @return a PRIORITY_* constant, or normal when the torrent is complete or
+     *         the index is out of range
      * @since 0.8.1
      */
     public int getPriority(int fileIndex) {
@@ -1345,7 +1346,8 @@ public class Storage implements Closeable {
      * Doesn't really reopen the file descriptors for a restart. Just does an existence check but no
      * length check or data reverification
      *
-     * @throws IOException on fail
+     * @throws IOException if the storage was never checked, or a vanished data
+     *                     file cannot be recreated
      */
     public void reopen() throws IOException {
         if (_torrentFiles.isEmpty()) {
@@ -1563,7 +1565,8 @@ public class Storage implements Closeable {
      * Note that filtering each path element individually may lead to things going in the wrong
      * place if there are duplicates in intermediate path elements after filtering.
      *
-     * @param names path elements
+     * @param names the unfiltered path elements, each passed through the name
+     *              filter in turn
      */
     private File createFileFromNames(File base, List<String> names, boolean areFilesPublic)
             throws IOException {
@@ -1609,9 +1612,10 @@ public class Storage implements Closeable {
      * Builds a file path under the given base from filtered path elements,
      * without creating anything on disk.
      *
-     * @param base a directory
-     * @param names path elements
-     * @return the File
+     * @param base the directory the path is built under
+     * @param names the unfiltered path elements, each passed through the name
+     *              filter in turn
+     * @return the composed File, which does not exist on disk
      * @since 0.9.71+
      */
     private File buildFilePath(File base, List<String> names) {
@@ -1647,7 +1651,7 @@ public class Storage implements Closeable {
     /**
      * The base file or directory.
      *
-     * @return the File
+     * @return the base this storage was opened with
      * @since 0.9.15
      */
     public File getBase() {
@@ -2144,7 +2148,7 @@ public class Storage implements Closeable {
      * @param piece the zero-based index of the piece
      * @param off the offset within the piece where the returned data starts, in bytes
      * @param len the number of piece bytes to return
-     * @return the piece
+     * @return the requested bytes, or null when the piece is not held yet
      * @throws IOException if the piece cannot be read from storage
      */
     public ByteArray getPiece(int piece, int off, int len) throws IOException {
@@ -2640,7 +2644,7 @@ public class Storage implements Closeable {
      * Read a piece, or part of one, into the buffer.
      *
      * @param piece the piece index
-     * @param bs the buffer
+     * @param bs the destination the piece bytes are copied into
      * @param off the offset within the piece
      * @param length the number of bytes to read
      * @param closeAfterRead if true, close each file handle as soon as the read that used it
@@ -2856,7 +2860,7 @@ public class Storage implements Closeable {
          * @param finalFile the data-directory location
          * @param workFile the staging-dir location, or null when the file is
          *                 already in the data directory
-         * @param len expected length
+         * @param len the file's byte length, which maps pieces onto it
          * @param padding whether this is a BEP 47 padding placeholder
          * @since 0.9.71+
          */

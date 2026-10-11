@@ -361,7 +361,7 @@ public class EdDSAEngine extends Signature {
      * </pre>
      *
      * @param data the message to be signed
-     * @return the signature
+     * @return the R and S components, 2 * b/4 bytes long
      * @throws SignatureException if update() already called
      * @see #ONE_SHOT_MODE
      * @since 0.9.25
@@ -384,7 +384,7 @@ public class EdDSAEngine extends Signature {
      * @param data byte array containing the message to be signed
      * @param off the start of the message inside data
      * @param len the length of the message
-     * @return the signature
+     * @return the R and S components, 2 * b/4 bytes long
      * @throws SignatureException if update() already called
      * @see #ONE_SHOT_MODE
      * @since 0.9.25

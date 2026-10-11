@@ -519,7 +519,7 @@ public class StatManager {
      * Misnamed, as it returns a FrequencyStat, not a Frequency.
      *
      * @param name the stat name
-     * @return the frequency
+     * @return the FrequencyStat, or null if no stat of that name is registered
      */
     public FrequencyStat getFrequency(String name) {
         return _frequencyStats.get(name);
@@ -529,7 +529,7 @@ public class StatManager {
      * Misnamed, as it returns a RateStat, not a Rate.
      *
      * @param name the stat name
-     * @return the rate
+     * @return the RateStat, or null if no stat of that name is registered
      */
     public RateStat getRate(String name) {
         return _rateStats.get(name);

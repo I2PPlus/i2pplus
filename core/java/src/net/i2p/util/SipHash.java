@@ -32,8 +32,8 @@ public abstract class SipHash {
      *
      * @param data non-null
      * @param off the index in data at which the hashed region begins
-     *  @param len the number of bytes to hash, counting from off
-     *  @return the 64-bit SipHash-2-4 digest of that region under this JVM's random keys
+     * @param len the number of bytes to hash, counting from off
+     * @return the 64-bit SipHash-2-4 digest of that region under this JVM's random keys
      */
     public static long digest(byte[] data, int off, int len) {
         return SipHashInline.hash24(K0, K1, data, off, len);

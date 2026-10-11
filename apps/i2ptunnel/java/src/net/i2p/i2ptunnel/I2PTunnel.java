@@ -134,7 +134,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * New standard constructor in router, with back ref to tc
      *
      * @param tc may be null
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if the arguments are unparseable, name
+     *                                  more than one command, or the trailing
+     *                                  command file does not exist
      * @since 0.9.48
      */
     public I2PTunnel(TunnelController tc) {
@@ -144,8 +146,10 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * See usage() for options
      *
-     * @param args command-line arguments
-     * @throws IllegalArgumentException on error
+     * @param args the CLI arguments, parsed per usage()
+     * @throws IllegalArgumentException if the arguments are unparseable, name
+     *                                  more than one command, or the trailing
+     *                                  command file does not exist
      */
     public I2PTunnel(String[] args) {
         this(args, null);
@@ -154,9 +158,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * See usage() for options
      *
-     * @param args command-line arguments
+     * @param args the CLI arguments, parsed per usage()
      * @param lsnr may be null
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if the arguments are unparseable, name
+     *                                  more than one command, or the trailing
+     *                                  command file does not exist
      */
     public I2PTunnel(String[] args, ConnectionEventListener lsnr) {
         this(args, lsnr, null);
@@ -711,7 +717,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * Same args as runServer
      * (we should stop duplicating all this code...)
      *
-     * @param args command arguments
+     * @param args host, port and privkeyfile, exactly as runServer takes them
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
@@ -1222,7 +1228,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Streamr server
      *
-     * @param args {port, privkeyfile}
+     * @param args exactly two: the port and the private key file, which is
+     *             resolved against the config dir when not absolute
      * @param l logger to receive events and output
      * @throws IllegalArgumentException on config problem
      */
@@ -1266,7 +1273,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      * Event "configResult" = "ok" or "error" after the configuration has been specified
      *
-     * @param args {hostname, portNumber}
+     * @param args an optional leading -s for SSL, then the I2CP host and port
      * @param l logger to receive events and output
      */
     private void runConfig(String[] args, Logging l) {
@@ -1300,7 +1307,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /**
      * Specify the i2cp username and password
      *
-     * @param args {username, password}
+     * @param args exactly two: the I2CP username and password
      * @param l logger to receive events and output
      * @since 0.9.11
      */
@@ -1341,7 +1348,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      * Event "listen_onResult" = "ok" or "error" after the interface has been specified
      *
-     * @param args {hostname}
+     * @param args exactly one: the interface hostname or IP to bind to
      * @param l logger to receive events and output
      */
     public void runListenOn(String[] args, Logging l) {
@@ -1360,7 +1367,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      * Event "read_timeoutResult" = "ok" or "error" after the interface has been specified
      *
-     * @param args {hostname}
+     * @param args exactly one: the read timeout in ms; negative waits forever
      * @param l logger to receive events and output
      */
     public void runReadTimeout(String[] args, Logging l) {
@@ -1534,7 +1541,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      * Event "runResult" = "ok" or "error" after the closing is complete
      *
-     * @param args {filename}
+     * @param args exactly one: the path to a file of commands, one per line
      * @param l logger to receive events and output
      */
     private void runRun(String[] args, Logging l) {

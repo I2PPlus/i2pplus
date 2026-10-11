@@ -33,7 +33,7 @@ public class Messages {
     /**
      * Get a translated string with a parameter.
      * @param s the message key
-     * @param o the parameter
+     * @param o substituted for {0} in the message key
      * @return the translated string
      */
     public static String getString(String s, Object o) {
@@ -43,8 +43,8 @@ public class Messages {
     /**
      * Get a translated string with two parameters.
      * @param s the message key
-     * @param o first param
-     * @param o2 second param
+     * @param o substituted for {0} in the message key
+     * @param o2 substituted for {1} in the message key
      * @return the translated string
      */
     public static String getString(String s, Object o, Object o2) {
@@ -53,9 +53,9 @@ public class Messages {
 
     /**
      * Get a translated pluralized string based on a count.
-     * @param n the count
-     * @param s singular form
-     * @param p plural form
+     * @param n how many, selecting the form; also substituted for {0}
+     * @param s singular message key, used when n is 1
+     * @param p plural message key, used when n is not 1
      * @return the translated string
      */
     public static String getString(int n, String s, String p) {

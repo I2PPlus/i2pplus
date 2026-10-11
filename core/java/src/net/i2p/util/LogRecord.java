@@ -43,7 +43,7 @@ class LogRecord {
     /**
      * Time the record was created.
      *
-     * @return the date
+     * @return the creation time in ms on the router clock
      */
     public long getDate() {
         return _date;
@@ -52,7 +52,7 @@ class LogRecord {
     /**
      * Class the record is from.
      *
-     * @return the source
+     * @return the Class&lt;?&gt; the entry was logged from
      */
     public Class<?> getSource() {
         return _source;
@@ -79,7 +79,7 @@ class LogRecord {
     /**
      * Log priority of the record.
      *
-     * @return the priority
+     * @return one of the Log.WARN-style priority constants
      */
     public int getPriority() {
         return _priority;
@@ -88,7 +88,7 @@ class LogRecord {
     /**
      * Message text.
      *
-     * @return the message
+     * @return the unformatted message text
      */
     public String getMessage() {
         return _message;
@@ -97,7 +97,7 @@ class LogRecord {
     /**
      * Throwable attached to the record, if any.
      *
-     * @return the throwable
+     * @return the associated exception, or null when the entry carries none
      */
     public Throwable getThrowable() {
         return _throwable;

@@ -419,7 +419,7 @@ public interface Transport {
     /**
      * Number of peers.
      *
-     * @return peer count
+     * @return the number of peers this transport knows of, established or not
      */
     public int countPeers();
     /**
@@ -492,9 +492,9 @@ public interface Transport {
 
     /**
      * Render the transport status HTML to the given writer.
-     * @param out writer
-     * @param urlBase base URL
-     * @param sortFlags flags
+     * @param out writer the status HTML is rendered into
+     * @param urlBase base URL for the links embedded in the HTML
+     * @param sortFlags flags controlling sorting and display options
      * @throws IOException if the status HTML cannot be written to the writer
      */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException;
@@ -534,7 +534,7 @@ public interface Transport {
 
     /**
      * Whether the given peer is backlogged.
-     * @param peer peer hash
+     * @param peer hash of the peer to check
      * @return true if backlogged
      */
     public boolean isBacklogged(Hash peer);
@@ -561,13 +561,13 @@ public interface Transport {
 
     /**
      * Whether the given peer is unreachable.
-     * @param peer peer hash
+     * @param peer hash of the peer to check
      * @return true if unreachable
      */
     public boolean isUnreachable(Hash peer);
     /**
      * Whether the given peer is established.
-     * @param peer peer hash
+     * @param peer hash of the peer to check
      * @return true if established
      */
     public boolean isEstablished(Hash peer);

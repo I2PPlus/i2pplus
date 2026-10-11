@@ -458,7 +458,7 @@ public class TunnelControllerGroup implements ClientApp {
      * as we do not want to instantiate TCG too early. Android must do null
      * checks on the return value.
      *
-     * @return the instance
+     * @return the shared group, or null in RouterContext before the router starts it
      * @throws IllegalArgumentException if unable to load from i2ptunnel.config
      */
     public static TunnelControllerGroup getInstance() {
@@ -484,7 +484,7 @@ public class TunnelControllerGroup implements ClientApp {
      * want to instantiate TCG too early.
      *
      * @param ctx the context the instance is built against, replacing a stale Android one
-     * @return the instance
+     * @return the shared group, or null in RouterContext before the router starts it
      * @throws IllegalArgumentException if unable to load from i2ptunnel.config
      * @since 0.9.41
      */
@@ -600,7 +600,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * Retrieves the application context the group was created with.
-     * @return the context
+     * @return the context this group was built against
      * @since 0.9.49
      */
     public I2PAppContext getContext() {
@@ -639,7 +639,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * ClientApp interface
-     * @return the state
+     * @return the current client app state
      * @since 0.9.4
      */
     @Override
@@ -678,7 +678,7 @@ public class TunnelControllerGroup implements ClientApp {
     /**
      * Change the client app state and notify the manager.
      * @param state the new state
-     * @param e optional cause
+     * @param e cause of the change, null if there is none
      */
     private synchronized void changeState(ClientAppState state, Exception e) {
         _state = state;

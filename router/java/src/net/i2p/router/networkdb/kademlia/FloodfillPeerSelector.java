@@ -142,7 +142,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      * List is not sorted and not shuffled.
      * Returns new list, may be modified.
      *
-     * @param kbuckets now unused
+     * @param kbuckets unused, retained for signature compatibility; null is accepted
      * @return all floodfills not banlisted forever.
      */
     List<Hash> selectFloodfillParticipants(KBucketSet<Hash> kbuckets) {
@@ -156,7 +156,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      * Returns new list, may be modified.
      *
      * @param toIgnore can be null
-     * @param _kbuckets now unused
+     * @param _kbuckets unused, retained for signature compatibility; null is accepted
      * @return all floodfills not banlisted forever and not flagged unreachable.
      */
     List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets) {
@@ -210,7 +210,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      *
      * @param key the ROUTING key (NOT the original key)
      * @param maxNumRouters max to return
-     * @param kbuckets now unused
+     * @param kbuckets unused, retained for signature compatibility; null is accepted
      *
      *                 Sorted by closest to the key if &gt; maxNumRouters, otherwise not
      *                 The list is in 3 groups - sorted by routing key within each group.
@@ -253,7 +253,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      * @param key the ROUTING key (NOT the original key)
      * @param howMany the maximum number of peers to return
      * @param toIgnore can be null
-     * @param kbuckets now unused
+     * @param kbuckets unused, retained for signature compatibility; null is accepted
      * @return the selected peers, ordered best first, never null
      */
     List<Hash> selectFloodfillParticipants(Hash key, int howMany, Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
@@ -280,7 +280,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      *
      * @param key the ROUTING key (NOT the original key)
      * @param toIgnore can be null
-     * @param kbuckets now unused
+     * @param kbuckets unused, retained for signature compatibility; null is accepted
      */
     private List<Hash> selectFloodfillParticipantsIncludingUs(Hash key, int howMany, Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
         List<Hash> sorted = buildFloodfillCandidates(toIgnore);
@@ -618,7 +618,7 @@ public class FloodfillPeerSelector extends PeerSelector {
      *
      * @param entry the peer hash
      * @param info the peer's RouterInfo, may be null
-     * @param now current time
+     * @param now current time in milliseconds
      * @return GOOD, OK, or BAD
      * @since 0.9.71+
      */

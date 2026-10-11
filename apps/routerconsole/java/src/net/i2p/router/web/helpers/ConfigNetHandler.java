@@ -70,22 +70,22 @@ public class ConfigNetHandler extends FormHandler {
 
     /**
      * Set that the user wants to save.
-     * @param moo ignored
+     * @param moo a placeholder for the setter signature; the value is never read
      */
     public void setSave(String moo) { _saveRequested = true; }
     /**
      * Set that the user wants to require introducers.
-     * @param moo ignored
+     * @param moo a placeholder for the setter signature; the value is never read
      */
     public void setRequireIntroductions(String moo) { _requireIntroductions = true; }
     /**
      * Set that the user wants dynamic keys.
-     * @param moo ignored
+     * @param moo a placeholder for the setter signature; the value is never read
      */
     public void setDynamicKeys(String moo) { _dynamicKeys = true; }
     /**
      * Enable load testing.
-     * @param moo ignored
+     * @param moo a placeholder for the setter signature; the value is never read
      */
     public void setEnableloadtesting(String moo) { }
     /**
@@ -115,32 +115,33 @@ public class ConfigNetHandler extends FormHandler {
 
     /**
      * Set that the user wants UPnP enabled.
-     * @param moo ignored
+     * @param moo a placeholder for the setter signature; the value is never read
      */
     public void setUpnp(String moo) { _upnp = true; }
     /**
      * Set that the user wants laptop mode enabled.
-     * @param moo ignored
+     * @param moo a placeholder for the setter signature; the value is never read
      */
     public void setLaptop(String moo) { _laptop = true; }
 
     /**
      * Set whether IPv4 is firewalled.
-     * @param moo ignored
+     * @param moo a placeholder for the setter signature; the value is never read
      * @since 0.9.20
      */
     public void setIPv4Firewalled(String moo) { _ipv4Firewalled = true; }
 
     /**
      * Set whether IPv6 is firewalled.
-     * @param moo ignored
+     * @param moo a placeholder for the setter signature; the value is never read
      * @since 0.9.28
      */
     public void setIPv6Firewalled(String moo) { _ipv6Firewalled = true; }
 
     /**
      * Set the NTCP hostname.
-     * @param host the hostname
+     * @param host the hostname to store, trimmed of surrounding whitespace;
+     *             null stores null
      */
     public void setNtcphost(String host) {
         _ntcpHostname = (host != null ? host.trim() : null);
@@ -154,7 +155,8 @@ public class ConfigNetHandler extends FormHandler {
     }
     /**
      * Set the first UDP host.
-     * @param host the hostname
+     * @param host the hostname to store, trimmed of surrounding whitespace;
+     *             null stores null
      */
     public void setUdpHost1(String host) {
         _udpHost1 = (host != null ? host.trim() : null);
@@ -184,7 +186,8 @@ public class ConfigNetHandler extends FormHandler {
 
     /**
      * Set the share percentage.
-     * @param pct the percentage
+     * @param pct the percentage to store, trimmed of surrounding whitespace;
+     *            null leaves the percentage out of the pending changes
      */
     public void setSharePercentage(String pct) {
         _sharePct = (pct != null ? pct.trim() : null);
@@ -192,7 +195,7 @@ public class ConfigNetHandler extends FormHandler {
 
     /**
      * Set rates-only mode (skip IP/transport changes).
-     * @param foo ignored
+     * @param foo a placeholder for the setter signature; the value is never read
      * @since 0.8.12
      */
     public void setRatesOnly(String foo) {
@@ -510,7 +513,8 @@ public class ConfigNetHandler extends FormHandler {
 
     /**
      * Do basic verification of address here to prevent problems later
-     * @return valid
+     * @return true if the address parses and is publicly routable; false adds a
+     *         form error describing which check failed
      * @since 0.8.9
      */
     private boolean verifyAddress(String addr) {
@@ -547,7 +551,8 @@ public class ConfigNetHandler extends FormHandler {
     static final int DEF_BURST_TIME = 20;
 
     /**
-     * @return changed
+     * @return true if any rate or share property was staged in the pending
+     *         changes map, meaning a restart is needed to apply it
      */
     private boolean updateRates() {
         boolean updated = false;

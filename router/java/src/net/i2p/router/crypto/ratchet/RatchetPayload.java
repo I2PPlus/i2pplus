@@ -41,7 +41,7 @@ class RatchetPayload {
     public interface PayloadCallback {
         /**
          * Receive a datetime block.
-         * @param time the timestamp
+         * @param time the peer's expiry timestamp, in ms since the epoch
          * @throws DataFormatException on bad data
          */
         public void gotDateTime(long time) throws DataFormatException;
@@ -86,7 +86,7 @@ class RatchetPayload {
          * Receive an ACK block.
          *
          * @param id the key ID
-         * @param n the count
+         * @param n the message count acknowledged for that key
          * @since 0.9.46
          */
         public void gotAck(int id, int n);
@@ -285,7 +285,7 @@ class RatchetPayload {
          *
          * @param tgt the buffer the 3 byte header and the block data are written into
          * @param off the offset in tgt where the header starts
-         * @return new offset
+         * @return the offset just past the block data written to tgt
          */
         public int write(byte[] tgt, int off) {
             tgt[off++] = (byte) type;
@@ -317,8 +317,8 @@ class RatchetPayload {
          * Write the block data.
          *
          * @param tgt the target buffer
-         * @param off the offset
-         * @return new offset
+         * @param off the offset in tgt where the block data starts
+         * @return the offset just past the data written to tgt
          */
         public abstract int writeData(byte[] tgt, int off);
 
@@ -429,7 +429,7 @@ class RatchetPayload {
         /**
          * Timestamp carried by this block.
          *
-         * @param time the timestamp
+         * @param time the expiry in ms since the epoch; divided by 1000 on the wire
          */
         public DateTimeBlock(long time) {
             super(BLOCK_DATETIME);
@@ -439,7 +439,7 @@ class RatchetPayload {
         /**
          * Set the timestamp, for reuse.
          *
-         * @param time the timestamp
+         * @param time the expiry in ms since the epoch; divided by 1000 on the wire
          * @since 0.9.71+
          */
         void setTime(long time) {

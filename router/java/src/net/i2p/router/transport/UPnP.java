@@ -1338,7 +1338,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * This always requests that the external port == the internal port, for now.
      * Blocking!
-     * @return success
+     * @return true if the NAT accepted the mapping; false if there is no NAT, no
+     *         matching service, or the device rejected the action
      */
     private boolean addMapping(String protocol, int port, String description, ForwardPort fp) {
         Service service;
@@ -1364,7 +1365,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * This always requests that the external port == the internal port, for now.
      * Blocking!
      *
-     * @return success
+     * @return true if the device accepted the AddPortMapping action; false if
+     *         the device has no such action or rejects the request
      * @since 0.9.50 split out from above
      */
     private boolean addMappingV4(Service service, String protocol, int port, String description, ForwardPort fp) {
@@ -1453,7 +1455,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * Blocking!
      *
      * @param service WANIPv6FirewallControl
-     * @return success
+     * @return true if the device accepted the AddPinhole action; false if it
+     *         does not support pinholing or rejects the request
      * @since 0.9.50
      */
     private boolean addMappingV6(Service service, int port, IPv6ForwardPort fp) {
@@ -1634,7 +1637,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 
     /**
      * Removes a mapping through the matching NAT service, blocking on the action.
-     * @return success
+     * @return true if the mapping was removed; false if there is no NAT or no
+     *         matching service for the address family
      */
     private boolean removeMapping(String protocol, int port, ForwardPort fp, boolean noLog) {
         Service service;
@@ -1661,7 +1665,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * Removes an IPv4 port mapping.
      *
-     * @return success
+     * @return true if the device accepted the DeletePortMapping action; false
+     *         if it has no such action or rejects the request
      * @since 0.9.50 split out from above
      */
     private boolean removeMappingV4(Service service, String protocol, int port, ForwardPort fp, boolean noLog) {
@@ -1695,7 +1700,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
     /**
      * Removes an IPv6 port mapping.
      *
-     * @return success
+     * @return true if the device accepted the DeletePinhole action; false if it
+     *         does not support pinholing or rejects the request
      * @since 0.9.50
      */
     private boolean removeMappingV6(Service service, String protocol, int port, IPv6ForwardPort fp, boolean noLog) {
@@ -1746,7 +1752,8 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
      * Registers a callback when the given ports change.
      * non-blocking
      * @param ports non-null
-     * @param cb in UPnPManager
+     * @param cb the callback replaced; replacing a different one is logged as an
+     *           error, and may be null to unregister
      */
     public void onChangePublicPorts(Set<ForwardPort> ports, ForwardPortCallback cb) {
         Set<ForwardPort> portsToDumpNow = null;

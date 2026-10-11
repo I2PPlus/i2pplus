@@ -3583,8 +3583,8 @@ if (!on) {
 
     /**
      * Whether the other side is choking us.
-     *  @return if choked
-     *  @since 0.9.29
+     * @return if choked
+     * @since 0.9.29
      */
     public boolean isChoked() {return _isChoked;}
 

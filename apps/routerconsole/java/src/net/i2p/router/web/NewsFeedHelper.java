@@ -28,7 +28,7 @@ public class NewsFeedHelper extends HelperBase {
 
     /**
      * Less than or equal to zero means all.
-     *  @param limit less than or equal to zero means all
+     * @param limit less than or equal to zero means all
      */
     public void setLimit(int limit) {_limit = limit;}
     /**

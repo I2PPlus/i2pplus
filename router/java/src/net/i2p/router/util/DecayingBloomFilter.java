@@ -411,8 +411,8 @@ public class DecayingBloomFilter {
      * Add a byte array entry at the specified offset and length
      *
      * @param entry the entry data
-     * @param off the offset
-     * @param len the length
+     * @param off index in entry of the first byte to filter
+     * @param len number of bytes to filter, must equal _entryBytes
      * @return true if the entry added is a duplicate
      */
     public boolean add(byte[] entry, int off, int len) {

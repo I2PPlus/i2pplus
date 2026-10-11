@@ -84,8 +84,8 @@ class MessageState {
     /**
      * Process a message status from the router and notify the listener.
      *
-     *  @param status one of the MessageStatusMessage status codes the
-     *                router reported for this message
+     * @param status one of the MessageStatusMessage status codes the
+     *               router reported for this message
      */
     public void receive(int status) {
         State oldState;
@@ -104,7 +104,7 @@ class MessageState {
     /**
      * Message ID assigned to this message.
      *
-     *  @param id the message ID the router assigned to the sent message
+     * @param id the message ID the router assigned to the sent message
      */
     public void setMessageId(MessageId id) {
         _id = id;

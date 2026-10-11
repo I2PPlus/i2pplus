@@ -52,7 +52,7 @@ public class SetDateMessage extends I2CPMessageImpl {
 
     /**
      * Returns the sender's clock reading carried by this message.
-     * @return the date
+     * @return the sender's clock reading, never null
      */
     public Date getDate() {
         return _date;
@@ -114,7 +114,7 @@ public class SetDateMessage extends I2CPMessageImpl {
 
     /**
      * Returns the I2CP message type code for this message.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, 33
      */
     @Override
     public int getType() {

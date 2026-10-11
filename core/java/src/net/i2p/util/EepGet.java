@@ -470,7 +470,8 @@ public class EepGet {
      *
      * As of 0.9.45, supports https and redirect to https
      *
-     * @param args command-line arguments
+     * @param args command-line arguments, parsed by this method against the
+     *             usage above
      */
     public static void main(String[] args) {
         String proxyHost = "127.0.0.1";

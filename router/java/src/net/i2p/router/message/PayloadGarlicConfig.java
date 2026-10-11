@@ -28,7 +28,7 @@ public class PayloadGarlicConfig extends GarlicConfig {
     /**
      * Create a garlic config wrapping the given I2NP message payload.
      *
-     * @param cert the certificate
+     * @param cert signing certificate identifying the destination this block is for
      * @param id the message ID
      * @param expiration the expiration time
      * @param di the delivery instructions
@@ -56,7 +56,7 @@ public class PayloadGarlicConfig extends GarlicConfig {
     /**
      * Not supported for single-clove configs.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as a single-clove block holds no nested cloves
      * @since 0.9.12
      */
     @Override
@@ -67,7 +67,7 @@ public class PayloadGarlicConfig extends GarlicConfig {
     /**
      * Return zero, as this is a single-clove config.
      *
-     * @return zero
+     * @return 0, as a single-clove block never nests
      * @since 0.9.12
      */
     @Override
@@ -76,8 +76,8 @@ public class PayloadGarlicConfig extends GarlicConfig {
     /**
      * Not supported for single-clove configs.
      *
-     * @return the clove
-     * @throws UnsupportedOperationException always
+     * @return never returns, as a single-clove block holds no nested cloves
+     * @throws UnsupportedOperationException always, as a single-clove block holds no nested cloves
      * @since 0.9.12
      */
     @Override

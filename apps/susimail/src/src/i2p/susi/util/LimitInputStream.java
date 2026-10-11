@@ -28,7 +28,7 @@ public class LimitInputStream extends CountingInputStream {
     /**
      * Return the number of bytes available, limited by the remaining quota.
      *
-     * @return bytes available
+     * @return the number of readable bytes, capped by the remaining quota
      * @throws IOException on I/O error
      */
     @Override

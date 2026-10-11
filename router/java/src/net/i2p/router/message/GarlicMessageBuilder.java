@@ -49,7 +49,7 @@ public class GarlicMessageBuilder {
     /**
      *  ELGAMAL_2048 only; returns false for others
      *
-     *  @param ctx scope
+     *  @param ctx the RouterContext supplying the log and session key manager
      *  @param key the ElGamal 2048 recipient key the tags are decided for
      *  @param local non-null; do not use this method for the router's SessionKeyManager
      *  @param minTagOverride 0 for no override, &gt; 0 to override SKM's settings
@@ -72,7 +72,7 @@ public class GarlicMessageBuilder {
     /**
      * ELGAMAL_2048 only.
      *
-     * @param ctx scope
+     * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
@@ -83,7 +83,8 @@ public class GarlicMessageBuilder {
      *
      * @param skm non-null
      * @return null if expired
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if the recipient is null or carries no public
+     *                                  key, or is not ELGAMAL_2048
      */
     public static GarlicMessage buildMessage(RouterContext ctx, GarlicConfig config, SessionKey wrappedKey, Set<SessionTag> wrappedTags,
                                              SessionKeyManager skm) {
@@ -94,7 +95,7 @@ public class GarlicMessageBuilder {
      * ELGAMAL_2048 only
      * Called by OCMJH
      *
-     * @param ctx scope
+     * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
@@ -107,7 +108,8 @@ public class GarlicMessageBuilder {
                                equipped to confirm delivery and call skm.tagsAcked() or skm.failTags() later.
      * @param skm non-null
      * @return null if expired
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if the recipient is null or carries no public
+     *                                  key, or is not ELGAMAL_2048
      */
     public static GarlicMessage buildMessage(RouterContext ctx, GarlicConfig config, SessionKey wrappedKey, Set<SessionTag> wrappedTags,
                                              int numTagsToDeliver, SessionKeyManager skm) {
@@ -118,7 +120,7 @@ public class GarlicMessageBuilder {
      * ELGAMAL_2048 only.
      * Called by netdb and above.
      *
-     * @param ctx scope
+     * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
      * @param wrappedKey non-null with null data,
      *                   output parameter that will be filled with the SessionKey used
@@ -130,10 +132,12 @@ public class GarlicMessageBuilder {
                                Set to zero to disable tag delivery. You must set to zero if you are not
                                equipped to confirm delivery and call skm.tagsAcked() or failTags() later.
                                If this is always 0, it forces ElGamal every time.
-     * @param lowTagsThreshold the threshold
+     * @param lowTagsThreshold the available-tag count below which the session key
+     *                         manager considers tags low enough to send
      * @param skm non-null
      * @return null if expired
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if the recipient is null or carries no public
+     *                                  key, or is not ELGAMAL_2048
      */
     public static GarlicMessage buildMessage(RouterContext ctx, GarlicConfig config, SessionKey wrappedKey, Set<SessionTag> wrappedTags,
                                              int numTagsToDeliver, int lowTagsThreshold, SessionKeyManager skm) {
@@ -182,7 +186,7 @@ public class GarlicMessageBuilder {
      *  Used by TestJob, and directly above,
      *  and by MessageWrapper for encrypting DatabaseLookupMessages and DSM/DSRM replies.
      *
-     * @param ctx scope
+     * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
      * @param wrappedTags New tags to be sent along with the message.
      *                    200 max enforced at receiver; null OK
@@ -193,7 +197,8 @@ public class GarlicMessageBuilder {
      * @param encryptKey sessionKey used to encrypt the current message, non-null
      * @param encryptTag sessionTag used to encrypt the current message, null to force ElG
      * @return null if expired
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if the config is null, or a clove in it is not
+     *                                  a PayloadGarlicConfig
      */
     public static GarlicMessage buildMessage(RouterContext ctx, GarlicConfig config, Set<SessionTag> wrappedTags,
                                              PublicKey target, SessionKey encryptKey, SessionTag encryptTag) {
@@ -233,7 +238,7 @@ public class GarlicMessageBuilder {
      *  Used by TestJob,
      *  and by MessageWrapper for encrypting DatabaseLookupMessages and DSM/DSRM replies.
      *
-     * @param ctx scope
+     * @param ctx the RouterContext supplying the log and ElGamal/AES engine
      * @param config how/what to wrap
      * @param encryptKey sessionKey used to encrypt the current message, non-null
      * @param encryptTag sessionTag used to encrypt the current message, non-null
@@ -259,7 +264,7 @@ public class GarlicMessageBuilder {
      * ECIES_X25519 and PQ only.
      * Called by OCMJH only.
      *
-     * @param ctx scope
+     * @param ctx the RouterContext supplying the log and ECIES engine
      * @param config how/what to wrap, must have key set with setRecipientPublicKey()
      * @param from the local destination whose LeaseSet keys supply the private key
      * @param to the remote destination the message is addressed to, whose keys
@@ -267,7 +272,7 @@ public class GarlicMessageBuilder {
      * @param skm the session key manager holding that ratchet session
      * @param callback may be null
      * @return null if expired or on other errors
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if the recipient key type is outside the EC/PQ set
      * @since 0.9.44
      */
     static GarlicMessage buildECIESMessage(RouterContext ctx, GarlicConfig config,
@@ -330,10 +335,10 @@ public class GarlicMessageBuilder {
      * ECIES_X25519 only. PQ not supported.
      * Called by MessageWrapper only.
      *
-     * @param ctx scope
+     * @param ctx the RouterContext supplying the log and ECIES engine
      * @param config how/what to wrap, must have key set with setRecipientPublicKey()
      * @return the encrypted GarlicMessage, or null if the ECIES encrypt failed
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if the recipient key type is outside the EC/PQ set
      * @since 0.9.48
      */
     public static GarlicMessage buildECIESMessage(RouterContext ctx, GarlicConfig config) {
@@ -367,7 +372,8 @@ public class GarlicMessageBuilder {
      * It contains the number of cloves, followed by each clove,
      * followed by a certificate, ID, and expiration date.
      *
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if a clove is not a PayloadGarlicConfig, or
+     *                                  the clove set cannot be serialized
      */
     private static byte[] buildCloveSet(RouterContext ctx, GarlicConfig config) {
         ByteArrayStream baos;
@@ -430,7 +436,7 @@ public class GarlicMessageBuilder {
      * ID and expiration, and the CloveSet does not contain
      * a unique certificate, ID, or expiration date.
      *
-     * @throws IllegalArgumentException on error
+     * @throws IllegalArgumentException if a clove is not a PayloadGarlicConfig
      * @since 0.9.44
      */
     private static CloveSet buildECIESCloveSet(RouterContext ctx, GarlicConfig config) {

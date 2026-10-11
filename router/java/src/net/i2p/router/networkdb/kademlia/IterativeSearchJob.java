@@ -182,7 +182,7 @@ public class IterativeSearchJob extends FloodSearchJob {
      * and the family option kept as the String it is.
      *
      * @param ctx the router context
-     * @param peer the candidate
+     * @param peer hash of the candidate to fingerprint
      * @param mask byte count to match
      * @since 0.9.71+
      */
@@ -313,7 +313,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     private int _maxConcurrent;
     /**
      * The default _maxConcurrent
-     * @return whether slow
+     * @return 4 on a slow system, otherwise 16
      */
     private static volatile int _maxConcurrentDefault = SystemVersion.isSlow() ? 4 : 16;
 

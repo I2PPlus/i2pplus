@@ -402,7 +402,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Stage recorded for a thread id.
          *
-         * @param id thread id
+         * @param id 1-based MXBean thread id from the current sample
          * @return index into {@link #CPU_STAGES}, or {@link #NO_STAGE} /
          *         {@link #UNRESOLVED}
          */
@@ -414,7 +414,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Record the stage a thread id belongs to.
          *
-         * @param id    thread id
+         * @param id    1-based MXBean thread id from the current sample
          * @param stage {@link #CPU_STAGES} index, {@link #NO_STAGE} or
          *              {@link #UNRESOLVED}
          */
@@ -430,7 +430,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * CPU nanoseconds recorded at the previous sample.
          *
-         * @param id thread id
+         * @param id 1-based MXBean thread id from the current sample
          * @return the baseline, or {@link #NO_CPU} when there is none
          */
         long cpuOf(long id) {
@@ -441,7 +441,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Record the CPU nanoseconds for this sample.
          *
-         * @param id  thread id
+         * @param id  1-based MXBean thread id from the current sample
          * @param cpu nanoseconds, as returned by the MXBean
          */
         void setCpu(long id, long cpu) {
@@ -1228,7 +1228,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *  says why.
      *
      * @param param the param that failed
-     * @param e     the failure
+     * @param e     the exception the cycle handler swallowed
      * @since 0.9.71+
      */
     private void noteParamUpdateFailure(TunableParam param, Exception e) {
@@ -1448,7 +1448,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * A snapshot of one subsystem's health for display.
          *
-         * @param name subsystem identifier
+         * @param name subsystem key from {@link #SUB_ROUTER} and its siblings
          * @param label human-readable subsystem label
          * @param score health score, clamped into 0.0-1.0
          * @param details metric labels behind the score, or null for none
@@ -1829,7 +1829,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
  * @param defaultMax maximum allowed value
  * @param defaultStep tuning step size
  * @param statName router stat name for observed feedback
- * @param ctx router context
+ * @param ctx router context; dereferenced here, so it must not be null
          */
         protected BaseParam(String name, String description, String subsystem,
                             int defaultMin, int defaultMax,
@@ -1841,13 +1841,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * A tunable parameter with the given name, description and subsystem.
          *
          * @param name internal property key
-         * @param description human-readable label
+         * @param description human-readable label shown in Tuner UI
          * @param subsystem subsystem identifier (e.g. "i2ptunnel", "streaming")
          * @param defaultMin minimum allowed value
          * @param defaultMax maximum allowed value
          * @param defaultStep tuning step size
          * @param statName router stat name for observed feedback
-         * @param ctx router context
+         * @param ctx router context; dereferenced here, so it must not be null
          * @param autotune autotune config, or null for shared
          */
         protected BaseParam(String name, String description, String subsystem,
@@ -1868,13 +1868,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * zero or negative, falls back to {@link #getRuntimeValue()}.
          *
          * @param name internal property key
-         * @param description human-readable label
-         * @param subsystem subsystem identifier
+         * @param description human-readable label shown in Tuner UI
+         * @param subsystem subsystem identifier (e.g. "i2ptunnel", "streaming")
          * @param defaultMin minimum allowed value
          * @param defaultMax maximum allowed value
          * @param defaultStep tuning step size
          * @param statName router stat name for observed feedback
-         * @param ctx router context
+         * @param ctx router context; dereferenced here, so it must not be null
          * @param autotune autotune config, or null for shared
          * @param defaultValue the code-level default value, or 0 to use runtime default
          * @since 0.9.71+
@@ -1997,27 +1997,27 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         public String getName() { return _name; }
         /**
          * Param description.
-         * @return the description
+         * @return the label the tuning page renders for this param
          */
         public String getDescription() { return _description; }
         /**
          * Subsystem name.
-         * @return the subsystem
+         * @return the {@code SUB_*} group this param is scored under
          */
         public String getSubsystem() { return _subsystem; }
         /**
          * Minimum value.
-         * @return the min
+         * @return the live lower bound, after autotune.config overrides
          */
         public int getMin() { return _min; }
         /**
          * Maximum value.
-         * @return the max
+         * @return the live upper bound, after autotune.config overrides
          */
         public int getMax() { return _max; }
         /**
          * Step size.
-         * @return the step
+         * @return the live increment, after autotune.config overrides
          */
         public int getStep() { return _step; }
         /**
@@ -2035,7 +2035,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Current share bandwidth in bytes per second.
          * Useful for params whose ranges should scale with bandwidth.
          *
-         * @param ctx router context
+         * @param ctx router context supplying the configured share bandwidth
          * @return the share bps
          * @since 0.9.70+
          */
@@ -2047,7 +2047,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default min — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultMin.
          *
-         * @param ctx router context
+         * @param ctx router context passed by refreshRanges, for bandwidth-scaled
+         *            overrides
          * @return the default min
          * @since 0.9.70+
          */
@@ -2057,7 +2058,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default max — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultMax.
          *
-         * @param ctx router context
+         * @param ctx router context passed by refreshRanges, for bandwidth-scaled
+         *            overrides
          * @return the default max
          * @since 0.9.70+
          */
@@ -2066,7 +2068,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Transit bandwidth threshold for "heavy" — 80% of configured share bandwidth.
          * Replaces the old hardcoded 50 KB/s which was far too low for any real router.
-         * @param ctx router context
+         * @param ctx router context supplying the configured share bandwidth
          * @return the heavy transit threshold
          * @since 0.9.70+
          */
@@ -2076,7 +2078,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Transit bandwidth threshold for "sustained heavy" — 50% of configured share.
-         * @param ctx router context
+         * @param ctx router context supplying the configured share bandwidth
          * @return the sustained heavy transit threshold
          * @since 0.9.70+
          */
@@ -2088,7 +2090,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default step — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultStep.
          *
-         * @param ctx router context
+         * @param ctx router context passed by refreshRanges, for bandwidth-scaled
+         *            overrides
          * @return the default step
          * @since 0.9.70+
          */
@@ -2103,7 +2106,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * persisted value to the new range if it was set before a code
          * change lowered the max.
          *
-         * @param ctx router context
+         * @param ctx router context, forwarded to the range overrides below
          * @since 0.9.70+
          */
         public void refreshRanges(RouterContext ctx) {
@@ -2149,7 +2152,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *  reported once per param at DEBUG, and WARN stays free for things
          *  that actually need attention.
          *
-         * @param ctx router context
+         * @param ctx router context, unused here; kept for symmetry with
+         *            refreshRanges
          * @since 0.9.70+
          */
         public void refreshDefault(RouterContext ctx) {
@@ -2544,7 +2548,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP reader pool utilization (0.0-1.0).
-         * @param ctx router context
+         * @param ctx router context supplying the NTCP transport to read
          * @return the reader utilization
          * @since 0.9.70+
          */
@@ -2555,7 +2559,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP writer pool utilization (0.0-1.0).
-         * @param ctx router context
+         * @param ctx router context supplying the NTCP transport to read
          * @return the writer utilization
          * @since 0.9.70+
          */
@@ -2566,7 +2570,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP send finisher pool utilization (0.0-1.0).
-         * @param ctx router context
+         * @param ctx router context supplying the NTCP transport to read
          * @return the send finisher utilization
          * @since 0.9.70+
          */
@@ -2577,7 +2581,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * UDP packet handler pool utilization (0.0-1.0).
-         * @param ctx router context
+         * @param ctx router context supplying the UDP transport to read
          * @return the packet handler utilization
          * @since 0.9.70+
          */
@@ -2588,7 +2592,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * UDP message receiver pool utilization (0.0-1.0).
-         * @param ctx router context
+         * @param ctx router context supplying the UDP transport to read
          * @return the message receiver utilization
          * @since 0.9.70+
          */
@@ -2599,7 +2603,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Tunnel pumper pool utilization (0.0-1.0).
-         * @param ctx router context
+         * @param ctx router context, unused here; the pumper pool is read statically
          * @return the pumper utilization
          * @since 0.9.70+
          */
@@ -9842,7 +9846,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param current current percent value
      * @param min minimum allowed value
      * @param max maximum allowed value
-     * @param step adjustment increment
+     * @param step the adjustment increment, doubled on a backed-up queue and
+     *             subtracted in full on slow lookups
      * @param lookupsSlow true when successful lookups average &gt; 5000ms
      * @param queueBackedUp true when the pending-lookup queue averages high
      * @param dropsHappening true when queue-full drops occurred recently
@@ -11708,8 +11713,8 @@ protected int computeTarget(double observed) {
      * </ul>
      *
      * @param current      current pool size
-     * @param min          floor
-     * @param max          ceiling
+     * @param min          the floor the shrink branch stops at
+     * @param max          the ceiling every growth branch clamps to
      * @param queueDepth   60s avg of i2ptunnel.serverHandler.queueDepth, or NaN
      * @param active       60s avg of i2ptunnel.serverHandler.active, or NaN
      * @param blockingTime 60s avg of i2ptunnel.serverHandler.blockingHandleTime, or NaN
@@ -12140,8 +12145,8 @@ protected int computeTarget(double observed) {
      *
      * @param current  the window in effect, ms
      * @param observed stall events in this cycle
-     * @param minMs    floor, ms
-     * @param maxMs    ceiling, ms
+     * @param minMs    the floor in ms; a negative value is raised to 0
+     * @param maxMs    the ceiling in ms; the returned window never exceeds it
      * @return the next window, ms
      * @since 0.9.71+
      */
@@ -12232,8 +12237,9 @@ protected int computeTarget(double observed) {
      * 16 floor. {@code min} remains only the external setter clamp.
      *
      * @param current    current queue capacity
-     * @param min        floor
-     * @param max        ceiling
+     * @param min        the setter's lower clamp, unused here; the idle floor
+     *                   sets the low end instead
+     * @param max        the ceiling every growth branch clamps to
      * @param queueDepth 60s avg of i2ptunnel.serverHandler.queueDepth, or NaN
      * @param jobLag     60s avg of jobQueue.jobLag, or NaN
      * @return the new queue capacity
@@ -12576,7 +12582,7 @@ protected int computeTarget(double observed) {
         /**
          * System health
          *
-         * @param ctx router context
+         * @param ctx router context supplying uptime and the stats the score reads
          */
         SystemHealth(RouterContext ctx) {
             _ctx = ctx;

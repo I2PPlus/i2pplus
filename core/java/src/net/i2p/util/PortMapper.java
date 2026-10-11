@@ -197,7 +197,7 @@ public class PortMapper {
      * the URL will be included in getEepsites()
      *
      * @param service the service name
-     * @param host the hostname
+     * @param host the hostname to map the service to
      * @param port &gt; 0
      * @return success, false if already registered
      * @since 0.9.21
@@ -265,7 +265,7 @@ public class PortMapper {
      * The registered port for a service
      *
      * @param service the service name
-     * @param def default
+     * @param def value to return when the service is unregistered
      * @return def if not registered
      */
     public int getPort(String service, int def) {
@@ -279,7 +279,7 @@ public class PortMapper {
      * Will return "127.0.0.1" if the service was registered without a host.
      *
      * @param service the registered service name to look up
-     * @param def default
+     * @param def value to return when the service is unregistered
      * @return def if not registered
      * @since 0.9.21
      */
@@ -298,7 +298,7 @@ public class PortMapper {
      * If it was not registered with a wildcard address, it will return the registered host.
      *
      * @param service the registered service name to look up
-     * @param def default
+     * @param def value to return for an unregistered service or a wildcard with no usable IP
      * @return def if not registered
      * @since 0.9.24
      */

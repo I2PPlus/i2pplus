@@ -114,7 +114,7 @@ class NetDbRenderer {
     public static final int LS_LOOKUP_WAIT = 10 * 1000;
     /**
      * Whether the router is a floodfill.
-     * @return whether floodfill
+     * @return true if this router is a floodfill
      */
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
     /**
@@ -235,7 +235,7 @@ class NetDbRenderer {
      * @param ssuCapabilities optional SSU capability characters to match
      * @param transport optional transport style (e.g., "NTCP", "SSU")
      * @param cost optional cost value to filter router addresses
-     * @param introducerCount unused
+     * @param introducerCount ignored, retained for signature compatibility
      * @throws IOException if writing fails
      */
     public void renderRouterInfoHTML(Writer out, int pageSize, int page, String routerPrefix, String version,
@@ -409,7 +409,7 @@ class NetDbRenderer {
     /**
      * Writes a message indicating no routers matched the search criteria.
      *
-     * @param buf output buffer
+     * @param buf buffer the "no routers matched" HTML is appended to
      * @param routerPrefix optional router hash prefix
      * @param version optional version string
      * @param country optional country code
@@ -455,7 +455,7 @@ class NetDbRenderer {
     /**
      * Renders pagination controls.
      *
-     * @param buf output buffer
+     * @param buf buffer the pagination HTML is appended to
      * @param ubuf URL parameters for links
      * @param page current page (0-based)
      * @param pageSize results per page
@@ -891,7 +891,7 @@ class NetDbRenderer {
     /**
      * Renders a single LeaseSet as HTML.
      *
-     * @param buf output buffer
+     * @param buf buffer the LeaseSet HTML is appended to
      * @param ls the LeaseSet to render
      * @param debug if true, include debug info like distance
      * @param now current time for expiry calculation
@@ -1095,7 +1095,7 @@ class NetDbRenderer {
      * @param out Writer to output HTML
      * @param pageSize number of routers per page
      * @param page zero-based page index
-     * @param mode rendering mode:
+     * @param mode selects which view to render:
      *             0 = summary charts,
      *             1 = full router infos,
      *             2 = compact router infos,
@@ -1551,7 +1551,7 @@ class NetDbRenderer {
     /**
      * Renders a single RouterInfo as HTML.
      *
-     * @param buf output buffer
+     * @param buf buffer the router HTML is appended to
      * @param routerInfo the router to render
      * @param isLocalRouter true if this is the local router
      */
@@ -1562,7 +1562,7 @@ class NetDbRenderer {
     /**
      * Renders a single RouterInfo as HTML with optional pre-resolved reverse DNS lookups.
      *
-     * @param buf output buffer
+     * @param buf buffer the router HTML is appended to
      * @param routerInfo the router to render
      * @param isLocalRouter true if this is the local router
      * @param rdnsLookups map of IP to hostname for reverse DNS, may be null
@@ -1938,7 +1938,7 @@ class NetDbRenderer {
  * <p>The netdb listing streams progressively, so an exception escaping a
  * single render would truncate the rest of the page with no way to re-render.
  *
- * @param sb output buffer
+ * @param sb buffer the router HTML is appended to
  * @param ri the router to render
  * @param isLocalRouter true if this is the local router
  * @param rdnsLookups map of IP to hostname for reverse DNS, may be null
@@ -1965,7 +1965,7 @@ class NetDbRenderer {
      *
      * @param routerInfos collection of routers to render
      * @param isLocalRouter true if rendering the local router
-     * @return concatenated HTML
+     * @return the rendered HTML for every router, in input order
      */
     public String renderRouterInfosInParallel(Collection<RouterInfo> routerInfos, boolean isLocalRouter) {
         if (routerInfos.size() > BATCH_SIZE) {

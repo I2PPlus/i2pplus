@@ -35,7 +35,7 @@ public class AddressBean {
 
     /**
      * Constructs an AddressBean with hostname and base64 encoded destination.
-     * @param name the hostname
+     * @param name the ASCII (Punycode) hostname
      * @param destination the base64 encoded destination
      */
     public AddressBean(String name, String destination) {
@@ -44,7 +44,7 @@ public class AddressBean {
 
     /**
      * Constructs an AddressBean with hostname and destination object.
-     * @param name the hostname
+     * @param name the ASCII (Punycode) hostname
      * @param destination the {@link Destination} being published
      * @since 0.9.66
      */
@@ -54,7 +54,7 @@ public class AddressBean {
 
     /**
      * Constructs an AddressBean with hostname and destination as byte array.
-     * @param name the hostname
+     * @param name the ASCII (Punycode) hostname
      * @param destination the 387-byte destination being published
      * @since 0.9.66
      */
@@ -74,7 +74,7 @@ public class AddressBean {
 
     /**
      * The ASCII (Punycode) name
-     * @return the hostname
+     * @return the name exactly as supplied, not Punycode-decoded
      */
     public String getName() {return name;}
 
@@ -370,7 +370,7 @@ public class AddressBean {
      * Translate a string with one parameter.
      *
      * @param s the string to translate
-     * @param o the parameter
+     * @param o the value substituted for the {0} placeholder in s
      * @return the translated string
      */
     private static String _t(String s, Object o) {return Messages.getString(s, o);}

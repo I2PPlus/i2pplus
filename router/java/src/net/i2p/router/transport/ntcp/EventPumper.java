@@ -138,7 +138,7 @@ class EventPumper implements Runnable {
      * As the number of connections grows, we should try to make this happen
      * less frequently (or not at all), but while the connection count is small,
      * the time to iterate across them to check a few flags shouldn't be a problem.
-     * @return whether slow
+     * @return true if the runtime is slow enough to throttle the failsafe iteration
      */
     private static final boolean IS_SLOW = SystemVersion.isSlow();
     private static volatile long _failsafeIterationFreq = 2 * 1000L;
@@ -306,7 +306,7 @@ class EventPumper implements Runnable {
 
     /**
      * Selector can take quite a while to close after calling stopPumping()
-     * @return whether alive
+     * @return true until stopPumping() is called and the selector has closed
      */
     public boolean isAlive() {
         return _alive || (_selector != null && _selector.isOpen());
@@ -564,7 +564,7 @@ class EventPumper implements Runnable {
      * @param loopCountSinceLastRate  total iterations in the window
      * @param idleLoopCountSinceLastRate  no-work iterations in the window
      * @param lastLoopRateUpdate  timestamp of the previous window start
-     * @param now  current time
+     * @param now  current time in milliseconds, the end of the window
      * @since 0.9.71+
      */
     private void updateLoopRateStats(int loopCountSinceLastRate, int idleLoopCountSinceLastRate,

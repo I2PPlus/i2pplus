@@ -495,7 +495,7 @@ public class IndexBean {
     /**
      * Reload the controller configuration from disk for all tunnels.
      *
-     * @return success message
+     * @return a translated, check-marked confirmation for the message queue
      */
     private String reloadConfig() {
         _group.reloadControllers();
@@ -2227,7 +2227,8 @@ public class IndexBean {
      * suitable for use in a TunnelController.  This will replace (not add to)
      * any existing parameters, so this should return a comprehensive mapping.
      *
-     * @return the config
+     * @return the full property set to hand a TunnelController, with the
+     *         destination already resolved from the tunnel
      */
     private Properties getConfig() {
         // This is easier than requiring TunnelConfig to talk to
@@ -2263,8 +2264,8 @@ public class IndexBean {
     }
 
     /** translate (ngettext)
-     * @param s singular form
-     * @param p plural form
+     * @param s the message in its singular form, used when n is 1
+     * @param p the message in its plural form, used when n is anything else
      * @param n the count deciding the form
      * @return s if n is 1, else p
      * @since 0.9.7

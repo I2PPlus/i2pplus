@@ -724,7 +724,7 @@ public class PeerState {
      *
      * @param firstArming true if no retransmit timer is currently armed
      * @param fastRetransmit whether fast retransmit is active
-     * @param now current clock
+     * @param now the current clock reading in milliseconds
      * @param rto the current smoothed retransmit timeout
      * @return the fire time to arm, or -1L to leave the timer unchanged
      * @since 0.9.71+
@@ -793,7 +793,8 @@ public class PeerState {
      * iteration is sufficient for the delay heuristic, avoiding per-volley
      * PriorityBlockingQueue iterator allocation.
      *
-     * @param now current time
+     * @param now the current clock reading in milliseconds, used to age
+     *            messages out of the queue
      * @return messages to send, or null if none ready
      * @since 0.9.70+
      */
@@ -2271,7 +2272,7 @@ public class PeerState {
     /**
      * Whether the peer is dead or its outbound queue is backlogged.
      *
-     * @return whether backlogged
+     * @return true if the peer is dead or its outbound queue is full
      * @since 0.9.3
      */
     public boolean isBacklogged() {return _dead || _outboundQueue.isBacklogged();}

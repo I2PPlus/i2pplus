@@ -768,7 +768,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         /**
          * Record a failed store for the given peer.
          *
-         * @param ctx router context
+         * @param ctx router context whose profile manager records the failure
          * @param peer the floodfill peer whose flood failed, whose profile is penalized
          */
         public FloodFailedJob(RouterContext ctx, Hash peer) {
@@ -791,7 +791,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         /**
          * Record a successful store for the given peer.
          *
-         * @param ctx router context
+         * @param ctx router context whose profile manager records the success
          * @param peer the floodfill peer
          */
         public FloodSuccessJob(RouterContext ctx, Hash peer) {
@@ -1280,9 +1280,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         /**
          * Job to drop the peer after a lookup timeout.
          *
-         * @param ctx router context
+         * @param ctx router context the job runs against
          * @param peer the floodfill peer that timed out responding to a lookup
-         * @param _info unused
+         * @param _info accepted for symmetry with the found job, then dropped
          */
         public DropLookupFailedJob(RouterContext ctx, Hash peer, RouterInfo _info) {
             super(ctx);
@@ -1311,7 +1311,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         /**
          * Job to verify a failing peer after a successful lookup.
          *
-         * @param ctx router context
+         * @param ctx router context the job runs against
          * @param peer the floodfill peer that returned the same RouterInfo we already had
          * @param info the stored RouterInfo for comparison
          */

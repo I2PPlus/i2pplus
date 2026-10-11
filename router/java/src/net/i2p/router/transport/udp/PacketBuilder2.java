@@ -951,8 +951,9 @@ class PacketBuilder2 {
      * Build a packet as Alice to Charlie.
      * Out-of-session, message 6.
      *
-     * @param toIP Charlie's address
-     * @param toPort Charlie's port
+     * @param toIP Charlie's IP, taken from the introducer that gave us Bob's
+     *             current address; may be an IPv6 address
+     * @param toPort Charlie's port, from that same introducer
      * @param introKey static introduction key used to encrypt the packet
      * @param sendID our connection ID
      * @param rcvID Charlie's connection ID
@@ -1024,8 +1025,8 @@ class PacketBuilder2 {
      * Build a packet as Charlie to Alice.
      * Out-of-session, messages 5 and 7.
      *
-     * @param aliceIP Alice's address
-     * @param alicePort Alice's port
+     * @param aliceIP Alice's IP, taken from the peer test we are replying to
+     * @param alicePort Alice's port, from that same peer test
      * @param introKey static introduction key used to encrypt the packet
      * @param firstSend {@code true} for message 5, {@code false} for the message 7 retry
      * @param sendID our connection ID

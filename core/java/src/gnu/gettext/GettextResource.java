@@ -61,7 +61,7 @@ public abstract class GettextResource extends ResourceBundle {
   /**
    * Like gettext(catalog,msgid), except that it returns <CODE>null</CODE>
    * when no translation was found.
-   * @return the textnull
+   * @return the translation, or null when none is found
    */
     private static String gettextnull (ResourceBundle catalog, String msgid) {
         try {
@@ -82,7 +82,7 @@ public abstract class GettextResource extends ResourceBundle {
      * Look up a translated string.
      * @param catalog the ResourceBundle holding the translated message catalogs
      * @param msgid the untranslated key, echoed back when no translation exists
-     * @return the text
+     * @return the translation of msgid, or msgid itself when none exists
      */
     public static String gettext (ResourceBundle catalog, String msgid) {
         String result = gettextnull(catalog,msgid);

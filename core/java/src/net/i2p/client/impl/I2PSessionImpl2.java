@@ -154,7 +154,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
 
     /**
      * Wait this long for the router to accept a sent message, in ms.
-     * @return the timeout
+     * @return milliseconds to wait for the router to accept the message
      */
     protected long getTimeout() {return SEND_TIMEOUT;}
 
@@ -187,7 +187,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Return whether compression should be used.
      *
      * @param size the uncompressed message size in bytes, compared to 66
-     * @return whether compress
+     * @return true if the message should be compressed before sending
      */
     protected boolean shouldCompress(int size) {
         if (size <= DONT_COMPRESS_SIZE) {return false;}
@@ -202,9 +202,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * which demultiplexes by protocol and port.
      *
      * @param lsnr the listener
-     * @param proto unused
-     * @param port unused
-     * @throws UnsupportedOperationException always
+     * @param proto ignored - this implementation registers no listeners
+     * @param port ignored - this implementation registers no listeners
+     * @throws UnsupportedOperationException always, as listeners are unsupported here
      */
     @Override
     public void addSessionListener(I2PSessionListener lsnr, int proto, int port) {
@@ -215,9 +215,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Not supported by this implementation - use I2PSessionMuxedImpl.
      *
      * @param l the listener
-     * @param proto unused
-     * @param port unused
-     * @throws UnsupportedOperationException always
+     * @param proto ignored - this implementation registers no listeners
+     * @param port ignored - this implementation registers no listeners
+     * @throws UnsupportedOperationException always, as listeners are unsupported here
      */
     @Override
     public void addMuxedSessionListener(I2PSessionMuxedListener l, int proto, int port) {
@@ -227,9 +227,9 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Remove a registered listener.
      * Not supported by this implementation - nothing is ever registered here.
      *
-     * @param proto unused
-     * @param port unused
-     * @throws UnsupportedOperationException always
+     * @param proto ignored - nothing is ever registered here
+     * @param port ignored - nothing is ever registered here
+     * @throws UnsupportedOperationException always, as no listener is ever registered
      */
     @Override
     public void removeListener(int proto, int port) {
@@ -240,7 +240,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Not supported by this implementation - use I2PSessionMuxedImpl.
      *
      * @return false always
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as muxed sends are unsupported here
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int proto, int fromport, int toport) throws I2PSessionException {
@@ -251,7 +251,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Not supported by this implementation - use I2PSessionMuxedImpl.
      *
      * @return false always
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as muxed sends are unsupported here
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent,
@@ -263,7 +263,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Not supported by this implementation - use I2PSessionMuxedImpl.
      *
      * @return false always
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as muxed sends are unsupported here
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
@@ -275,7 +275,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Not supported by this implementation - use I2PSessionMuxedImpl.
      *
      * @return false always
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as muxed sends are unsupported here
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expire,
@@ -287,7 +287,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Not supported by this implementation - use I2PSessionMuxedImpl.
      *
      * @return false always
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as muxed sends are unsupported here
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size,
@@ -299,7 +299,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Not supported by this implementation - use I2PSessionMuxedImpl.
      *
      * @return -1 always
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as muxed sends are unsupported here
      */
     @Override
     public long sendMessage(Destination dest, byte[] payload, int offset, int size,
@@ -318,7 +318,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Send an I2CP message. No end-to-end crypto is done, so any key or tags
      * are ignored; this delegates to the no-effort/best-effort send below.
      *
-     * @return success
+     * @return whether the router accepted the message for delivery
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size) throws I2PSessionException {
@@ -331,7 +331,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
-     * @return success
+     * @return whether the router accepted the message for delivery
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent) throws I2PSessionException {
@@ -343,7 +343,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
-     * @return success
+     * @return whether the router accepted the message for delivery
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent)
@@ -356,7 +356,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
-     * @return success
+     * @return whether the router accepted the message for delivery
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires)
@@ -418,12 +418,12 @@ class I2PSessionImpl2 extends I2PSessionImpl {
     /**
      * Send a message with best effort delivery.
      *
-     * @param dest the destination
+     * @param dest the remote destination to send to
      * @param payload the message bytes to deliver
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
-     * @param expires expiration time
-     * @return success
+     * @param expires expiration time in ms since the epoch, 0 for the router default
+     * @return whether the router accepted the message for delivery
      * @throws I2PSessionException if the wait for the router's status update is interrupted
      */
     protected boolean sendBestEffort(Destination dest, byte[] payload, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires) throws I2PSessionException {
@@ -434,11 +434,11 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * TODO - Don't need to save MessageState since actuallyWait is false...
      * But for now just use sendNoEffort() instead.
      *
-     * @param dest the destination
+     * @param dest the remote destination to send to
      * @param payload the message bytes to deliver
-     * @param expires expiration time
+     * @param expires expiration time in ms since the epoch, 0 for the router default
      * @param flags to be passed to the router
-     * @return success
+     * @return whether the router accepted the message for delivery
      * @throws I2PSessionException if the wait for the router's status update is interrupted
      * @since 0.8.4
      */
@@ -555,7 +555,7 @@ class I2PSessionImpl2 extends I2PSessionImpl {
      * Reconnect the I2CP session. Called by the superclass whenever it wants
      * to reconnect; overridden to also clear out the message state.
      *
-     * @return success
+     * @return whether the session was reconnected
      */
     @Override
     protected boolean reconnect() {

@@ -33,13 +33,14 @@ interface SSU2Sender {
     /**
      * Remote port.
      *
-     * @return remote port
+     * @return the port in the 1-65535 range
      */
     int getRemotePort();
     /**
      * Maximum transmission unit.
      *
-     * @return MTU
+     * @return the largest payload size to build packets to, between
+     *         {@link PeerState2#MIN_MTU} and {@link PeerState2#MAX_MTU}
      */
     int getMTU();
     /**
@@ -58,7 +59,7 @@ interface SSU2Sender {
     /**
      * Cipher to use when sending.
      *
-     * @return send cipher
+     * @return the cipher state; the caller must sync on it while encrypting
      */
     CipherState getSendCipher();
     /**
@@ -76,7 +77,8 @@ interface SSU2Sender {
     /**
      * Reason the connection was destroyed.
      *
-     * @param reason destroy reason
+     * @param reason the {@link SSU2Util} termination code, echoed to the peer in
+     *               a SessionDestroy and ignored once destroyed
      */
     void setDestroyReason(int reason);
     /**
@@ -94,8 +96,8 @@ interface SSU2Sender {
     /**
      * Records that a set of fragments was sent.
      *
-     * @param pktNum packet number
-     * @param length fragment length
+     * @param pktNum the packet number the fragments were sent under
+     * @param length the total payload length those fragments add up to
      * @param fragments fragment list
      */
     void fragmentsSent(long pktNum, int length, List<PacketBuilder2.Fragment> fragments);

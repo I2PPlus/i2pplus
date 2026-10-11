@@ -116,7 +116,7 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Certificate for this identity.
      *
-     * @return the certificate
+     * @return the certificate authorizing this identity's keys
      */
     public Certificate getCertificate() {
         return _certificate;
@@ -227,7 +227,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Padding bytes for key alignment.
      *
-     * @return the padding
+     * @return the stored padding, null when none was set, otherwise the
+     *         compressed form when more than one block was stored
      * @since 0.9.16
      */
     public byte[] getPadding() {
@@ -259,7 +260,8 @@ public class KeysAndCert extends DataStructureImpl {
     /**
      * Is there compressible padding?
      *
-     * @return whether compressible
+     * @return true when more than one padding block was stored, so the padding
+     *         can be recompressed on write
      * @since 0.9.66
      */
     public boolean isCompressible() {
@@ -453,7 +455,8 @@ public class KeysAndCert extends DataStructureImpl {
      * Throws IllegalStateException if keys and cert are not initialized,
      * as of 0.9.12. Prior to that, returned null.
      *
-     * @return the hash
+     * @return the SHA-256 of the serialized keys and cert, cached after the
+     *         first calculation
      * @throws IllegalStateException if keys and cert are not initialized
      */
     public Hash getHash() {

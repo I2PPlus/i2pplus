@@ -309,7 +309,7 @@ class ClientManager {
      * Remove only the following session. Does not remove the runner if it has more.
      *
      * @param id the session ID
-     * @param dest the destination
+     * @param dest the destination whose registration this session holds
      * @since 0.9.21
      */
     public void unregisterSession(SessionId id, Destination dest) {
@@ -340,7 +340,7 @@ class ClientManager {
      * Caller must call runner.disconnectClient() on failure.
      *
      * @param runner the connection claiming the destination
-     * @param dest the destination
+     * @param dest the destination being claimed; must not already be registered
      * @return SessionStatusMessage return code, 1 for success, != 1 for failure
      */
     public int destinationEstablished(ClientConnectionRunner runner, Destination dest) {
@@ -414,7 +414,8 @@ class ClientManager {
      * Declare that we're going to publish a meta LS for this destination.
      * Must be called before publishing the leaseset.
      *
-     * @param dest the destination
+     * @param dest the destination the meta LeaseSet will be published under;
+     *             must not already be registered
      * @throws I2PSessionException on duplicate dest
      * @since 0.9.41
      */
@@ -433,7 +434,7 @@ class ClientManager {
     /**
      * Declare that we're no longer going to publish a meta LS for this destination.
      *
-     * @param dest the destination
+     * @param dest the destination to stop publishing a meta LeaseSet for
      * @since 0.9.41
      */
     public void unregisterMetaDest(Destination dest) {
@@ -468,12 +469,14 @@ class ClientManager {
      * Distribute message to a local or remote destination.
      *
      * @param sender non-null
-     * @param fromDest source destination
-     * @param toDest target destination
+     * @param fromDest the sending client's own destination, which must be
+     *                 registered for the remote path
+     * @param toDest the destination being sent to; a local one is delivered inline
      * @param payload the message payload
      * @param msgId the router's ID for this message
      * @param messageNonce the client's ID for this message
-     * @param expiration message expiration
+     * @param expiration the expiry deadline carried into the queued message,
+     *                   only used on the remote path
      * @param flags not used for local delivery
      */
     void distributeMessage(ClientConnectionRunner sender, Destination fromDest, Destination toDest, Payload payload,
@@ -666,7 +669,7 @@ class ClientManager {
     /**
      * Looks up a client's runner without holding the lock.
      *
-     * @param dest the destination
+     * @param dest the destination key, as opposed to the hash overload
      * @return the runner, or null
      */
     ClientConnectionRunner getRunner(Destination dest) {return _runners.get(dest);}
@@ -674,7 +677,7 @@ class ClientManager {
     /**
      * Return the client's current config, or null if not connected
      *
-     * @param dest the destination
+     * @param dest the destination whose session config is wanted
      * @return the SessionConfig, or null
      */
     public SessionConfig getClientSessionConfig(Destination dest) {
@@ -699,7 +702,7 @@ class ClientManager {
 
     /**
      * Looks up a client's runner by hash without holding the lock.
-     * @return the runner
+     * @return the runner registered under that hash, or null
      */
     private ClientConnectionRunner getRunner(Hash destHash) {
         if (destHash == null) {return null;}

@@ -17,7 +17,8 @@ public class LogConsoleBuffer {
      * Uses default limit from LogManager.
      * As of 0.8.8, limit is not checked at runtime.
      *
-     * @param context unused
+     * @param context unused; kept so callers can build this from a context
+     *                without consulting LogManager themselves
      */
     public LogConsoleBuffer(I2PAppContext context) {
         this(LogManager.DEFAULT_CONSOLEBUFFERSIZE);
@@ -61,7 +62,7 @@ public class LogConsoleBuffer {
      * earlier.  All values are strings with no formatting (as they are written
      * in the logs)
      *
-     * @return oldest first
+     * @return the buffered lines, oldest first; empty if nothing is buffered
      */
     public List<String> getMostRecentMessages() {
         return _buffer.getMessageStrings();
@@ -72,7 +73,7 @@ public class LogConsoleBuffer {
      * earlier.  All values are strings with no formatting (as they are written
      * in the logs)
      *
-     * @return oldest first
+     * @return the buffered critical lines, oldest first; empty if none are buffered
      */
     public List<String> getMostRecentCriticalMessages() {
         return _critBuffer.getMessageStrings();
@@ -83,7 +84,7 @@ public class LogConsoleBuffer {
      * earlier.  All values are strings with no formatting (as they are written
      * in the logs)
      *
-     * @return oldest first
+     * @return the buffer itself, oldest first, for incremental reads by the UI
      * @since 0.9.46
      */
     public UIMessages getUIMessages() {
@@ -95,7 +96,7 @@ public class LogConsoleBuffer {
      * earlier.  All values are strings with no formatting (as they are written
      * in the logs)
      *
-     * @return oldest first
+     * @return the critical buffer itself, oldest first, for incremental reads
      * @since 0.9.46
      */
     public UIMessages getCriticalUIMessages() {

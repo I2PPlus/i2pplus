@@ -147,7 +147,7 @@ public class LeaseSet extends DatabaseEntry {
 
     /**
      * Same as getEarliestLeaseDate()
-     * @return the date
+     * @return milliseconds since the epoch of the earliest lease expiry
      */
     @Override
     public long getDate() {
@@ -310,7 +310,7 @@ public class LeaseSet extends DatabaseEntry {
      * Lease at the given index.
      *
      * @param index the lease index
-     * @return the lease
+     * @return the decrypted lease when encrypted, otherwise the stored one
      */
     public Lease getLease(int index) {
         if (isEncrypted()) {

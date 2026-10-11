@@ -157,7 +157,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     /**
      * Signature type of this private key.
      *
-     * @return the type
+     * @return the {@link SigType} this key was created with
      * @since 0.9.8
      */
     public SigType getType() {
@@ -180,7 +180,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      *
      * @param alpha the secret data
      * @return the blinded private key
-     * @throws UnsupportedOperationException unless supported
+     * @throws UnsupportedOperationException never thrown; see IllegalArgumentException
      * @since 0.9.38
      */
     public SigningPrivateKey blind(SigningPrivateKey alpha) {
@@ -220,7 +220,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
     /**
      * Whether this key has been destroyed.
      *
-     * @return whether destroyed
+     * @return true if destroy() has cleared the key data, or it was never set
      * @since 0.9.40
      */
     @Override

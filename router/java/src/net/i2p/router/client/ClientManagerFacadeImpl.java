@@ -92,7 +92,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     /**
      * Whether the client manager is running.
      *
-     * @return whether alive
+     * @return true if the manager exists and is running
      */
     @Override
     public boolean isAlive() {return _manager != null && _manager.isAlive();}
@@ -240,7 +240,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * Determine if the destination specified is managed locally.  This call DOES block.
      *
      * @param dest Destination to be checked
-     * @return whether local
+     * @return true if a local client is running for that destination
      */
     public boolean isLocal(Destination dest) {
         if (_manager != null) {return _manager.isLocal(dest);}
@@ -252,7 +252,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      * Determine if the destination specified is managed locally.  This call DOES block.
      *
      * @param destHash Hash of Destination to be checked
-     * @return whether local
+     * @return true if a local client is running for that destination
      */
     @Override
     public boolean isLocal(Hash destHash) {

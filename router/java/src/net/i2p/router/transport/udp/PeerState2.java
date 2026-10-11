@@ -258,7 +258,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * The version.
      *
-     * @return the version
+     * @return 2, as this class implements SSU2
      */
     @Override
     public int getVersion() {return 2;}
@@ -375,7 +375,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
      * to incorporate SSU2-specific _sentMessages cleanup and SessionConfirmed
      * retransmit logic.
      *
-     * @param now current time
+     * @param now current time in ms, used as the expiry base for the messages
+     *            that are allocated here
      * @return messages to send, or null if none ready
      * @since 0.9.70+
      */
@@ -615,7 +616,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * From different than expected source IP/port
      *
-     * @param from source address
+     * @param from source address the packet did not come from; a mismatch
+     *             causes the packet to be dropped
      * @param packet fully encrypted, header and body decryption will be done here
      * @since 0.9.55
      */

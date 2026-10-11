@@ -266,7 +266,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * Status code describing what happened to the message.
-     * @return the status
+     * @return one of the STATUS_* constants
      */
     public int getStatus() {
         return _status;
@@ -284,7 +284,8 @@ public class MessageStatusMessage extends I2CPMessageImpl {
     /**
      * Is the status code a success status code?
      *
-     * @return whether successful
+     * @return true for STATUS_SEND_GUARANTEED_SUCCESS, STATUS_SEND_BEST_EFFORT_SUCCESS,
+     *         STATUS_SEND_SUCCESS_LOCAL, STATUS_SEND_ACCEPTED or STATUS_AVAILABLE
      * @since 0.9.5
      */
     public boolean isSuccessful() {
@@ -295,7 +296,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
      * Is the status code a success status code?
      *
      * @param status one of the STATUS_* constants to classify
-     * @return whether successful
+     * @return true for the five STATUS_* success codes, false otherwise
      * @since 0.9.5
      */
     public static boolean isSuccessful(int status) {
@@ -321,7 +322,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * Size of the message payload as counted by the router.
-     * @return the size
+     * @return the payload size in bytes
      */
     public long getSize() {
         return _size;
@@ -338,7 +339,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * This is the client's ID for the message
-     * @return the nonce
+     * @return the client-chosen nonce for this message
      */
     public long getNonce() {
         return _nonce;
@@ -425,7 +426,7 @@ public class MessageStatusMessage extends I2CPMessageImpl {
 
     /**
      * I2CP message type sent for this message.
-     * @return the type
+     * @return the fixed MESSAGE_TYPE of this class
      */
     @Override
     public int getType() {

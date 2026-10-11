@@ -663,7 +663,7 @@ public class ProfileOrganizer {
 
     /**
      * Check if current router is firewalled to adjust peer selection thresholds
-     * @return whether firewalled
+     * @return true if the comm system reports FIREWALLED or REJECT_UNSOLICITED
      */
     private boolean isFirewalled() {
         CommSystemFacade.Status status = _context.commSystem().getStatus();
@@ -3347,7 +3347,8 @@ public class ProfileOrganizer {
      * which would reject too many peers on stale RouterInfo.
      *
      * @param peers tier to scan; must be a field map so the starved warning can name it
-     * @param howMany peers requested
+     * @param howMany total peers the caller wants held in matches across the whole
+     *                cascade, not this tier alone
      * @param toExclude live exclusion set, mutated with peers rejected by a hard gate
      * @param matches output set, already holding any previously selected peers
      * @param randomKey sub-tier slice key, or null to skip slicing
@@ -3745,7 +3746,7 @@ public class ProfileOrganizer {
      * {@link #isSelectable(Hash, double)} with a value fetched once per scan.
      *
      * @param peer hash of the peer to judge
-     * @return whether selectable
+     * @return true if the peer passes every selection gate
      */
     public boolean isSelectable(Hash peer) {
         try {
@@ -3759,7 +3760,7 @@ public class ProfileOrganizer {
      * Whether the given peer is eligible for selection.
      *
      * @param buildSuccess the build success ratio, fetched once per scan
-     * @return whether selectable
+     * @return true if the peer passes every selection gate
      */
     private boolean isSelectable(Hash peer, double buildSuccess) {
         NetworkDatabaseFacade netDb = _context.netDb();
@@ -4599,7 +4600,7 @@ public class ProfileOrganizer {
      * @param fastTarget the fast-tier size wanted
      * @param highCap the high-capacity-tier size achieved
      * @param highCapTarget the high-capacity-tier size wanted
-     * @param examined candidates walked
+     * @param examined candidates walked, including those rejected by a gate
      * @param alreadyTiered candidates skipped because already in both tiers
      * @param heldNoAddress candidates that cleared every gate except having no usable address
      * @return a single line naming the shortfall and its causes
@@ -5085,7 +5086,8 @@ public class ProfileOrganizer {
      *
      * @param previousStrikes strike count before this failure (0 if none)
      * @param lastStrikeTime time of the previous strike (0 if none)
-     * @param now current time
+     * @param now the current clock reading in milliseconds, compared against
+     *            DEMOTE_STRIKE_DECAY_MS
      * @return the new strike count, at least 1
      * @since 0.9.71+
      */

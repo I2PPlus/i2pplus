@@ -611,8 +611,8 @@ public class PeerTestJob extends JobImpl {
          * Reads only precomputed fields, so the sort performs no lock
          * acquisition at all.
          *
-         * @param a first candidate
-         * @param b second candidate
+         * @param a the candidate on the left of the comparison
+         * @param b the candidate on the right of the comparison
          * @return negative if a sorts first
          * @since 0.9.71+
          */
@@ -651,13 +651,15 @@ public class PeerTestJob extends JobImpl {
         /**
          * Expiration time of this reply match.
          *
-         * @return the expiration
+         * @return the time in milliseconds after which this selector stops
+         *         matching replies to the outstanding test
          */
         public long getExpiration() { return _expiration; }
         /**
          * Whether the message matches this test.
          *
-         * @return whether match
+         * @return true only for a DeliveryStatusMessage whose message ID equals
+         *         the nonce this test is waiting on
          */
         public boolean isMatch(I2NPMessage message) {
             if (message.getType() != DeliveryStatusMessage.MESSAGE_TYPE) {

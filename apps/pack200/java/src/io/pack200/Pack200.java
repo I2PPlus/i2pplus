@@ -548,8 +548,9 @@ public abstract class Pack200 {
          * Takes a JarFile and converts it into a Pack200 archive.
          * <p>
          * Closes its input but not its output.  (Pack200 archives are appendable.)
-         * @param in a JarFile
-         * @param out an OutputStream
+         * @param in the JAR file to pack; it is closed by this call
+         * @param out the Pack200 archive stream to write; it is left open, since
+         *            Pack200 archives are appendable
          * @throws    IOException if an error is encountered.
          */
         void pack(JarFile in, OutputStream out) throws IOException;
@@ -564,8 +565,9 @@ public abstract class Pack200 {
          *
          * @see #MODIFICATION_TIME
          * @see #DEFLATE_HINT
-         * @param in a JarInputStream
-         * @param out an OutputStream
+         * @param in the JAR stream to pack; it is closed by this call
+         * @param out the Pack200 archive stream to write; it is left open, since
+         *            Pack200 archives are appendable
          * @throws    IOException if an error is encountered.
          */
         void pack(JarInputStream in, OutputStream out) throws IOException;
@@ -664,8 +666,8 @@ public abstract class Pack200 {
          * method described below.
          * <p>
          * Closes its input but not its output.  (The output can accumulate more elements.)
-         * @param in an InputStream.
-         * @param out a JarOutputStream.
+         * @param in the Pack200 stream to read to the end; it is closed by this call
+         * @param out the JAR stream the decoded entries are appended to; it is left open
          * @throws    IOException if an error is encountered.
          */
         void unpack(InputStream in, JarOutputStream out) throws IOException;
@@ -675,8 +677,8 @@ public abstract class Pack200 {
          * a JarOutputStream.
          * <p>
          * Does not close its output.  (The output can accumulate more elements.)
-         * @param in a File.
-         * @param out a JarOutputStream.
+         * @param in the Pack200 archive file to read
+         * @param out the JAR stream the decoded entries are appended to; it is left open
          * @throws    IOException if an error is encountered.
          */
         void unpack(File in, JarOutputStream out) throws IOException;

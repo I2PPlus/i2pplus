@@ -1471,7 +1471,7 @@ public class GraphGenerator implements Runnable, ClientApp {
 
     /**
      * List of GraphListener instances
-     * @return the listeners
+     * @return the registered listeners, empty if none
      * @since 0.9.33
      */
     public List<GraphListener> getListeners() { return _listeners; }
@@ -1587,7 +1587,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * @param end number of periods before now to end at
      * @param showCredit if true, show the I2P+ credit line
      * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     * @return success
+     * @return true on success, false if the stat is not currently renderable
      * @throws IOException if rendering fails
      * @since 0.9.70+
      */
@@ -1697,7 +1697,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      * @param end number of periods before now to end at
      * @param showCredit if true, show the I2P+ credit line
      * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     * @return success
+     * @return true on success, false if the stat is not currently renderable
      * @throws IOException if rendering fails
      */
     private boolean locked_renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
@@ -1776,7 +1776,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
      * @param periodCount number of time periods to display, or -1 for default
      * @param end number of periods before now to end at
      * @param showCredit if true, show the I2P+ credit line
-     * @return success
+     * @return true on success, false if the stat is not currently renderable
      * @throws IOException if rendering fails
      */
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
@@ -1800,7 +1800,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
      * @param end number of periods before now to end at
      * @param showCredit if true, show the I2P+ credit line
      * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     * @return success
+     * @return true on success, false if the stat is not currently renderable
      * @throws IOException if rendering fails
      * @since 0.9.70+
      */
@@ -1903,7 +1903,7 @@ GraphListener lsnr = _listenerByRate.get(rate);
      * @param end number of periods before now to end at
      * @param showCredit if true, show the I2P+ credit line
      * @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
-     * @return success
+     * @return true on success, false if the stat is not currently renderable
      * @throws IOException if rendering fails
      */
     private boolean locked_renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
@@ -1948,7 +1948,8 @@ GraphListener lsnr = _listenerByRate.get(rate);
      * <p>A token that is not statName.period, names an unknown stat or carries a
      * non-numeric period is skipped rather than failing the sync tick.
      *
-     * @param specs statName.period,statName.period,statName.period
+     * @param specs a comma-separated list of statName.period tokens; malformed
+     *              tokens are skipped rather than failing the sync tick
      * @return list of Rate objects
      * @since 0.9.33
      */

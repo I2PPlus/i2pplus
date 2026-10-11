@@ -159,7 +159,7 @@ public abstract class NamingService {
      * Returns true always.
      *
      * @param p the properties to set
-     * @return success
+     * @return always true; the properties are ignored
      * @since 0.8.7
      */
     public boolean setConfiguration(Properties p) {
@@ -194,7 +194,7 @@ public abstract class NamingService {
      * Only for chaining-capable NamingServices. Add to end of the list.
      *
      * @param ns the naming service to add
-     * @return success
+     * @return as {@link #addNamingService(NamingService, boolean)} with head false
      * @since 0.8.7
      */
     public boolean addNamingService(NamingService ns) {
@@ -207,8 +207,8 @@ public abstract class NamingService {
      * Subclasses implementing chaining should override.
      *
      * @param ns the naming service to add
-     * @param head or tail
-     * @return success
+     * @param head true to prepend to the chain, false to append
+     * @return true if ns was chained in; this base implementation always returns false
      * @since 0.8.7
      */
     public boolean addNamingService(NamingService ns, boolean head) {
@@ -221,7 +221,7 @@ public abstract class NamingService {
      * Subclasses implementing chaining should override.
      *
      * @param ns the naming service to remove
-     * @return success
+     * @return true if ns was chained out; this base implementation always returns false
      * @since 0.8.7
      */
     public boolean removeNamingService(NamingService ns) {
@@ -258,7 +258,7 @@ public abstract class NamingService {
      * Warning - This obviously brings the whole database into memory,
      * so use is discouraged.
      *
-     * @return all mappings
+     * @return every stored hostname mapped to its Destination
      *         or empty Map if none;
      *         Returned Map is not necessarily sorted, implementation dependent
      *
@@ -404,7 +404,7 @@ public abstract class NamingService {
      *
      * @param hostname the host name to map to the destination, overwriting any existing entry
      * @param d the destination for the hostname
-     * @return success
+     * @return true if the entry was stored
      * @since 0.8.7
      */
     public boolean put(String hostname, Destination d) {
@@ -419,7 +419,8 @@ public abstract class NamingService {
      * @param hostname the host name to map to the destination, overwriting any existing entry
      * @param d the destination for the hostname
      * @param options NamingService-specific, can be null
-     * @return success
+     * @return true if the entry was stored; this base implementation always
+     *         returns false
      * @since 0.8.7
      */
     public boolean put(String hostname, Destination d, Properties options) {
@@ -433,7 +434,7 @@ public abstract class NamingService {
      *
      * @param hostname the host name to map to the destination, which must not already be present
      * @param d the destination for the hostname
-     * @return success
+     * @return true if no entry existed and the new one was stored
      * @since 0.8.7
      */
     public boolean putIfAbsent(String hostname, Destination d) {
@@ -448,7 +449,8 @@ public abstract class NamingService {
      * @param hostname the host name to map to the destination, which must not already be present
      * @param d the destination for the hostname
      * @param options NamingService-specific, can be null
-     * @return success
+     * @return true if no entry existed and the new one was stored; this base
+     *         implementation always returns false
      * @since 0.8.7
      */
     public boolean putIfAbsent(String hostname, Destination d, Properties options) {
@@ -481,7 +483,8 @@ public abstract class NamingService {
      * @param hostname the host name whose existing entry is to be updated
      * @param d may be null if only options are changing
      * @param options NamingService-specific, can be null
-     * @return success
+     * @return true if an existing entry was updated; this base implementation
+     *         always returns false
      * @since 0.8.7
      */
     public boolean update(String hostname, Destination d, Properties options) {
@@ -704,7 +707,7 @@ public abstract class NamingService {
      *
      * @param hostname the host name whose existing entry is to be extended
      * @param d the destination to add
-     * @return success
+     * @return true if d was added to the hostname's entry
      * @since 0.9.26
      */
     public boolean addDestination(String hostname, Destination d) {
@@ -719,7 +722,8 @@ public abstract class NamingService {
      * @param hostname the host name whose existing entry is to be extended
      * @param d the destination to add
      * @param options NamingService-specific, may be null
-     * @return success
+     * @return as putIfAbsent(), so d is added only when the hostname has no
+     *         entry yet
      * @since 0.9.26
      */
     public boolean addDestination(String hostname, Destination d, Properties options) {

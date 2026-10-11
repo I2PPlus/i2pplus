@@ -286,7 +286,7 @@ public void addData(long value) {
      * otherwise null
      *
      * @param period ms
-     * @return the Rate
+     * @return the Rate whose period equals this one exactly, or null
      */
     public Rate getRate(long period) {
         for (Rate r : _rates) {
@@ -405,7 +405,7 @@ public void addData(long value) {
      * This RateStat must already be created, with the specified rate entries constructed - this
      * merely loads them with data.
      *
-     * @param props the properties
+     * @param props the properties holding the prefixed rate entries to read
      * @param prefix prefix to the property entries (should NOT end with a period)
      * @param treatAsCurrent if true, we'll treat the loaded data as if no time has
      *                       elapsed since it was written out, but if it is false, we'll

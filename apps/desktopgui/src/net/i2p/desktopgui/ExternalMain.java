@@ -174,12 +174,12 @@ public class ExternalMain implements ClientApp, NotificationService {
     /**
      * Send a notification to the user.
      *
-     * @param source unsupported
-     * @param category unsupported
-     * @param priority unsupported
+     * @param source ignored; the tray message takes no source
+     * @param category ignored; the tray message takes no category
+     * @param priority the Log.WARN-style level mapped to the tray message type
      * @param title for the popup, translated
-     * @param message translated
-     * @param path unsupported
+     * @param message the popup body text, translated
+     * @param path ignored; the tray popup takes no icon path
      * @return 0, or -1 on failure
      */
     @Override

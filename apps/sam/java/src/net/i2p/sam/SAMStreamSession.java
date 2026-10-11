@@ -340,8 +340,8 @@ class SAMStreamSession implements SAMMessageSess {
     /**
      * Send bytes through a SAM STREAM session.
      *
-     * @param id Stream Id
-     * @param in Datastream input
+     * @param id stream id the bytes are sent on
+     * @param in supplies the bytes to send; exactly size bytes are read from it
      * @param size Count of bytes to send
      * @return True if the data was queued for sending, false otherwise
      * @throws IOException if the bytes cannot be read from in or written to the
@@ -395,7 +395,7 @@ class SAMStreamSession implements SAMMessageSess {
     /**
      * Is the underlying streaming socket manager destroyed?
      *
-     * @return whether destroyed
+     * @return true if the underlying socket manager has been destroyed
      * @since 0.9.61
      */
     public boolean isDestroyed() { return socketMgr.isDestroyed(); }
@@ -403,7 +403,7 @@ class SAMStreamSession implements SAMMessageSess {
     /**
      * Close a connection managed by the SAM STREAM session.
      *
-     * @param id Connection id
+     * @param id connection id of the handler to remove
      * @return true on success
      */
     public boolean closeConnection(int id) {
@@ -419,8 +419,8 @@ class SAMStreamSession implements SAMMessageSess {
 
     /**
      * Sending bytes is not supported in a STREAM or MASTER session; always throws.
-     *  @throws I2PSessionException always
-     *  @since 0.9.25 moved from subclass SAMv3StreamSession to implement SAMMessageSess
+     * @throws I2PSessionException always, since sending bytes is unsupported
+     * @since 0.9.25 moved from subclass SAMv3StreamSession to implement SAMMessageSess
      */
     public boolean sendBytes(String s, byte[] b, int pr, int fp, int tp) throws I2PSessionException {
         throw new I2PSessionException("Unsupported in STREAM or MASTER session");
@@ -428,8 +428,8 @@ class SAMStreamSession implements SAMMessageSess {
 
     /**
      * Sending bytes is not supported in a STREAM or MASTER session; always throws.
-     *  @throws I2PSessionException always
-     *  @since 0.9.25
+     * @throws I2PSessionException always, since sending bytes is unsupported
+     * @since 0.9.25
      */
     public boolean sendBytes(String s, byte[] b, int pr, int fp, int tp,
                              boolean sendLeaseSet, int sendTags,
@@ -655,7 +655,7 @@ class SAMStreamSession implements SAMMessageSess {
      * Set a receive limit for a stream.
      * Protocol v1 does not support this.
      *
-     * @param id Stream id
+     * @param id stream id the limit would apply to; ignored
      * @param limit the receive limit
      * @param nolimit true for no limit
      * @return always false

@@ -36,7 +36,7 @@ public class SOCKSException extends IOException {
      * Create a new SOCKS exception with a message and cause.
      *
      * @param s the detail message
-     * @param t the cause
+     * @param t the cause, wrapped as the exception's cause
      * @since 0.9.27
      */
     public SOCKSException(String s, Throwable t) {

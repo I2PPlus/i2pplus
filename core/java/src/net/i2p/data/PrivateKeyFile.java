@@ -491,7 +491,7 @@ public class PrivateKeyFile {
      *  Create a new PrivateKeyFile with a destination and keys.
      *
      *  @param file the key file
-     *  @param dest the destination
+     *  @param dest the destination the keys belong to; its signing key type must match spk
      *  @param pk the private key
      *  @param spk the signing private key
      *  @throws IllegalArgumentException on mismatch of spubkey and spk types
@@ -513,7 +513,7 @@ public class PrivateKeyFile {
      *  @param file the key file
      *  @param pubkey the public key
      *  @param spubkey the signing public key
-     *  @param cert the certificate
+     *  @param cert the certificate to install in the destination
      *  @param pk the private key
      *  @param spk the signing private key
      *  @throws IllegalArgumentException on mismatch of spubkey and spk types
@@ -535,7 +535,7 @@ public class PrivateKeyFile {
      *  @param file the key file
      *  @param pubkey the public key
      *  @param spubkey the signing public key
-     *  @param cert the certificate
+     *  @param cert the certificate to install in the destination
      *  @param pk the private key
      *  @param spk the signing private key
      *  @param padding null OK, must be non-null if spubkey length &lt; 128
@@ -584,7 +584,7 @@ public class PrivateKeyFile {
      *  Also reads in the file to get the privKey and signingPrivKey,
      *  which aren't available from I2PClient.
      *
-     *  @return the destination
+     *  @return the destination for this key file, creating it if the file does not exist
      *  @throws I2PException if creation fails
      *  @throws IOException if file operations fail
      */
@@ -599,7 +599,7 @@ public class PrivateKeyFile {
      *  which aren't available from I2PClient.
      *
      *  @param type the signature type to use
-     *  @return the destination
+     *  @return the destination for this key file, creating it if the file does not exist
      *  @throws I2PException if creation fails
      *  @throws IOException if file operations fail
      *  @since 0.9.26
@@ -695,7 +695,7 @@ public class PrivateKeyFile {
      *  If the destination is not set, read it in from the file.
      *  Also sets the local privKey and signingPrivKey.
      *
-     *  @return the destination
+     *  @return the destination, reading it from the file if it is not already set
      *  @throws I2PSessionException if reading fails
      *  @throws IOException if file operations fail
      *  @throws DataFormatException if data is malformed
@@ -725,7 +725,7 @@ public class PrivateKeyFile {
     /**
      *  Destination for this key file.
      *
-     *  @param d the destination
+     *  @param d the destination to associate with this key file
      */
     public void setDestination(Destination d) {
         this.dest = d;
@@ -736,7 +736,7 @@ public class PrivateKeyFile {
      * Side effect - creates new Destination object.
      *
      * @param t the certificate type
-     * @return the certificate
+     * @return the new certificate installed in a replacement destination
      */
     public Certificate setCertType(int t) {
         if (this.dest == null) throw new IllegalArgumentException("Dest is null");
@@ -756,7 +756,7 @@ public class PrivateKeyFile {
      * Side effect - creates new Destination object.
      *
      * @param type the signature type
-     * @return the certificate
+     * @return the new key certificate installed in a replacement destination
      * @since 0.9.12
      */
     public Certificate setKeyCert(SigType type) {
@@ -793,7 +793,7 @@ public class PrivateKeyFile {
      * Sign this dest by dest found in pkf2 - caller must also call write().
      *
      * @param pkf2 the signing key file
-     * @return the certificate
+     * @return the new signed certificate, or null if pkf2 has no destination
      */
     public Certificate setSignedCert(PrivateKeyFile pkf2) {
         Certificate c = setCertType(Certificate.CERTIFICATE_TYPE_SIGNED);
@@ -1009,7 +1009,7 @@ public class PrivateKeyFile {
      *
      *  NOTE this will fail for Destinations containing random padding for the enc. key
      *
-     *  @return success
+     *  @return true if both key pairs match, false otherwise
      *  @since 0.9.16
      */
     public boolean validateKeyPairs() {

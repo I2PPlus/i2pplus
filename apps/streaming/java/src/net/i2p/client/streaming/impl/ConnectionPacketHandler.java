@@ -356,7 +356,7 @@ class ConnectionPacketHandler {
     /**
      * Process the acks in a received packet, and adjust our window and RTT.
      *
-     * @param con the connection
+     * @param con the connection whose window and RTT are adjusted; may be null
      * @param ackThrough the highest ACKed sequence number
      * @param nacks the NACKed sequence numbers, may be null
      * @param packet the received packet
@@ -458,7 +458,7 @@ class ConnectionPacketHandler {
      * This either does nothing or increases the window; it never decreases it.
      * Decreasing is done in Connection.ResendPacketEvent.retransmit().
      *
-     * @param con the connection
+     * @param con the connection whose window is adjusted
      * @param isNew was it a new packet? false for ack-only
      * @param sequenceNum 0 for ack-only
      * @param numResends number of resent packets in this ACK
@@ -601,11 +601,11 @@ class ConnectionPacketHandler {
      * which is the probability that the old random gate would have
      * incremented.
      *
-     * @param accum current accumulator
+     * @param accum the 16.16 fixed-point accumulator so far
      * @param effAcked effective number of packets ACKed this round
      * @param caFactor congestion-avoidance growth divisor
      * @param windowSize current congestion window
-     * @return updated accumulator
+     * @return the accumulator including this round's credit
      * @since 0.9.71+
      */
     static long caGrowthCredit(long accum, int effAcked, int caFactor, int windowSize) {
@@ -616,7 +616,7 @@ class ConnectionPacketHandler {
     /**
      * Whole-packet increments harvested from the fixed-point accumulator.
      *
-     * @param accum accumulated credit
+     * @param accum the fixed-point credit accumulated so far
      * @return number of whole window increments
      * @since 0.9.71+
      */
@@ -628,7 +628,7 @@ class ConnectionPacketHandler {
      * Fractional remainder after harvesting whole increments; carries
      * over into the next ACK event.
      *
-     * @param accum accumulated credit
+     * @param accum the fixed-point credit accumulated so far
      * @return fractional remainder in [0, 1048575]
      * @since 0.9.71+
      */
@@ -745,7 +745,7 @@ class ConnectionPacketHandler {
      * Verify the signature if necessary.
      *
      * @param packet the packet whose signature is checked
-     * @param con the connection
+     * @param con the connection the packet arrived on; supplies the remote peer and key
      * @throws I2PException if the signature was necessary and it was invalid
      */
     private void verifySignature(Packet packet, Connection con) throws I2PException {
@@ -776,7 +776,7 @@ class ConnectionPacketHandler {
      * Determine if a packet should keep the connection choked.
      * Used for testing the unchoking decision logic.
      *
-     * @param con the connection
+     * @param con the connection whose choked state is being decided
      * @param seqNum the packet sequence number
      * @param payloadSize the packet payload size
      * @return true if the connection should remain choked

@@ -304,7 +304,7 @@ public abstract class SystemVersion {
     /**
      * Whether the OS is Windows.
      *
-     * @return whether windows
+     * @return true when os.name starts with "Win", resolved once at class load
      */
     public static boolean isWindows() {
         return _isWin;
@@ -313,7 +313,7 @@ public abstract class SystemVersion {
     /**
      * Whether the OS is Mac.
      *
-     * @return whether mac
+     * @return true when os.name starts with "Mac", resolved once at class load
      */
     public static boolean isMac() {
         return _isMac;
@@ -322,7 +322,7 @@ public abstract class SystemVersion {
     /**
      * Whether the OS is Android.
      *
-     * @return whether android
+     * @return true when java.vendor contains "Android"
      */
     public static boolean isAndroid() {
         return _isAndroid;
@@ -330,7 +330,7 @@ public abstract class SystemVersion {
 
     /**
      * Apache Harmony JVM, or Android
-     * @return whether apache
+     * @return true when java.vendor starts with "Apache", or on Android
      */
     public static boolean isApache() {
         return _isApache || _isAndroid;
@@ -347,7 +347,7 @@ public abstract class SystemVersion {
     /**
      * True if Gentoo.
      *
-     * @return whether gentoo
+     * @return true when os.version names gentoo or a hardened kernel
      * @since 0.9.23
      */
     public static boolean isGentoo() {
@@ -398,7 +398,9 @@ public abstract class SystemVersion {
      * Our best guess on whether this is a slow architecture / OS / JVM,
      * using some simple heuristics.
      *
-     * @return whether slow
+     * @return the cached verdict, OR-ed with a live core count, native big
+     *         integer, and heap size check that is suppressed by the override
+     *         property
      * @since 0.9.30
      */
     public static boolean isSlow() {
@@ -669,7 +671,7 @@ public abstract class SystemVersion {
     /**
      * Whether running as a service under either platform.
      *
-     * @return whether service
+     * @return true for a Linux daemon user or a Tanuki wrapper on Windows
      * @since 0.9.46
      */
     public static boolean isService() {

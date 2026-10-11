@@ -501,7 +501,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * I2CP host from the config
      *
-     * @return the host
+     * @return configured host name, or a placeholder for logging if not applicable
      * @since 0.9.7 was in loadConfig()
      */
     private String getHost() {
@@ -515,7 +515,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * I2CP port from the config
      *
-     * @return the port
+     * @return configured port, 0 if not applicable, or {@link #LISTEN_PORT} if unparseable
      * @since 0.9.7 was in loadConfig()
      */
     private int getPort() {
@@ -709,7 +709,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Does this session have offline and transient keys?
      *
-     * @return whether offline
+     * @return true if the session was created from an offline-signed destination
      * @since 0.9.38
      */
     @Override
@@ -930,7 +930,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Wait for a SetDate response from the router.
      *
-     * @throws InterruptedException if interrupted
+     * @throws InterruptedException if the calling thread is interrupted while waiting
      * @throws IOException on I/O error
      * @since 0.9.11 moved from connect()
      */
@@ -1146,7 +1146,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * even when intended for a subsession, so we must take special care:
      * SessionStatusMessage
      *
-     * @param reader unused
+     * @param reader ignored, the session already holds its own connection
      */
     @Override
     public void messageReceived(I2CPMessageReader reader, I2CPMessage message) {
@@ -1211,7 +1211,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * As of 0.9.41, does NOT call sessionlistener.disconnected(),
      * the I2CPMessageReader will call disconnected() also.
      *
-     * @param reader unused
+     * @param reader ignored, only the error is used
      * @param error non-null
      */
     @Override
@@ -1314,7 +1314,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Has the session been closed (or not yet connected)?
      * False when open and during transitions. Synchronized.
-     * @return whether closed
+     * @return true if the session is closed or not yet connected
      */
     @Override
     public boolean isClosed() {
@@ -1524,7 +1524,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Receive notification that the I2CP connection was disconnected.
      * Calls sessionlistener.disconnected()
      *
-     * @param reader unused
+     * @param reader ignored, the session tracks its own connection
      */
     @Override
     public void disconnected(I2CPMessageReader reader) {disconnect();}
@@ -1864,7 +1864,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /**
      * Blocking. Waits a max of 10 seconds by default.
      *
-     * @param maxWait ms
+     * @param maxWait milliseconds to wait for the router's reply before giving up
      * @return null on failure
      * @since 0.8.3
      */
@@ -1941,7 +1941,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Ask the router to lookup a Destination by host name.
      * Blocking. See above for details.
      *
-     * @param maxWait ms
+     * @param maxWait milliseconds to wait for the router's reply before giving up
      * @return null on failure
      * @since 0.9.11
      */
@@ -1957,7 +1957,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Blocking. See above for details.
      * Same as lookupDest() but with a failure code in the return value
      *
-     * @param maxWait ms
+     * @param maxWait milliseconds to wait for the router's reply before giving up
      * @return non-null
      * @since 0.9.43
      */
@@ -1980,7 +1980,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * Blocking. See above for details.
      *
      * @param name the hostname to look up
-     * @param maxWait ms
+     * @param maxWait milliseconds to wait for the router's reply before giving up
      * @return null on failure
      * @since 0.9.11
      */
@@ -2031,7 +2031,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * If the result is cached or there is an immediate failure,
      * the result code will be something other than RESULT_DEFERRED, and the callback will NOT be called.
      *
-     * @param maxWait ms
+     * @param maxWait milliseconds to wait for the router's reply before giving up
      * @param callback to return the result, non-null
      * @return non-null. If result code is RESULT_DEFERRED, callback will be called later
      * @since 0.9.67
@@ -2078,7 +2078,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * If the result is cached or there is an immediate failure,
      * the result code will be something other than RESULT_DEFERRED, and the callback will NOT be called.
      *
-     * @param maxWait ms
+     * @param maxWait milliseconds to wait for the router's reply before giving up
      * @param callback to return the result, non-null
      * @return non-null. If result code is RESULT_DEFERRED, callback will be called later
      * @since 0.9.67

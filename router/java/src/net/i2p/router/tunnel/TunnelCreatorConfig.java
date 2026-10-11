@@ -276,14 +276,14 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * How many hops are there in the tunnel?
      * INCLUDING US.
      * i.e. one more than the TunnelCreatorConfig length.
-     * @return the length
+     * @return the number of hops, counting ourselves as one
      */
     public int getLength() {return _config.length;}
 
     /**
      * The tunnel pool options.
      *
-     * @return the options
+     * @return null, no pool options are supported
      */
     public Properties getOptions() {return null;}
 
@@ -292,7 +292,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * hop 0.
      *
      * @param hop the hop number, gateway is 0
-     * @return the config
+     * @return the config for that hop, non-null
      */
     public HopConfig getConfig(int hop) {return _config[hop];}
 
@@ -360,7 +360,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     /**
      * The tunnel expiration, in ms since the epoch.
      *
-     * @return the expiration
+     * @return the time the tunnel expires, in ms since the epoch
      */
     public long getExpiration() {return _expiration;}
     /**

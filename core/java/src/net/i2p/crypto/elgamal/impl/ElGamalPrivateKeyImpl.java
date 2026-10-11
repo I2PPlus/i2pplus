@@ -101,7 +101,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /**
      * The algorithm name, "ElGamal".
      *
-     * @return The algorithm.
+     * @return the algorithm name, always "ElGamal"
      */
     @Override
     public String getAlgorithm() {
@@ -111,7 +111,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /**
      * The encoding format produced by getEncoded().
      *
-     * @return The format.
+     * @return the encoding format name, always "PKCS#8"
      */
     @Override
     public String getFormat() {
@@ -187,7 +187,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /**
      * The ElGamal parameters for this key.
      *
-     * @return The parameters.
+     * @return the ElGamal group this key belongs to
      */
     @Override
     public ElGamalParameterSpec getParameters() {
@@ -197,7 +197,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /**
      * The parameters for this key.
      *
-     * @return The params.
+     * @return the ElGamal group as a DH parameter spec, discarding the ElGamal extras
      */
     @Override
     public DHParameterSpec getParams() {
@@ -207,7 +207,7 @@ public class ElGamalPrivateKeyImpl implements ElGamalPrivateKey, DHPrivateKey {
     /**
      * The private exponent.
      *
-     * @return The x.
+     * @return the private exponent x
      */
     @Override
     public BigInteger getX() {

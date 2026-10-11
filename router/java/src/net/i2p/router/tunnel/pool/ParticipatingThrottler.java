@@ -134,62 +134,62 @@ public class ParticipatingThrottler {
 
     /**
      * The participating minimum limit.
-     * @return min limit
+     * @return tunnels per peer below which throttling never applies
      */
     public static int getParticipatingMinLimit() { return _minLimit; }
     /**
      * The participating minimum limit.
-     * @param val min limit
+     * @param val tunnels per peer below which throttling never applies, clamped to 20-500
      */
     public static void setParticipatingMinLimit(int val) { _minLimit = Math.max(20, Math.min(500, val)); }
     /**
      * The participating maximum limit.
-     * @return max limit
+     * @return tunnels per peer at which throttling is at full strength
      */
     public static int getParticipatingMaxLimit() { return _maxLimit; }
     /**
      * The participating maximum limit.
-     * @param val max limit
+     * @param val tunnels per peer at which throttling is at full strength, clamped to 50-1000
      */
     public static void setParticipatingMaxLimit(int val) { _maxLimit = Math.max(50, Math.min(1000, val)); }
     /**
      * The participating percent limit.
-     * @return pct limit
+     * @return max percentage of a peer's tunnels that may participate
      */
     public static int getParticipatingPctLimit() { return _percentLimit; }
     /**
      * The participating percent limit.
-     * @param val pct limit
+     * @param val max percentage of a peer's tunnels that may participate, clamped to 5-100
      */
     public static void setParticipatingPctLimit(int val) { _percentLimit = Math.max(5, Math.min(100, val)); }
     /**
      * The rejection threshold.
-     * @return reject threshold
+     * @return count/limit ratio percentage at which rejection starts
      */
     public static int getRejectThreshold() { return _rejectThreshold; }
     /**
      * The rejection threshold.
-     * @param val reject threshold
+     * @param val count/limit ratio percentage at which rejection starts, clamped to 30-100
      */
     public static void setRejectThreshold(int val) { _rejectThreshold = Math.max(30, Math.min(100, val)); }
     /**
      * The rejection steepness.
-     * @return reject steepness
+     * @return how fast rejection probability ramps past the threshold; 100 is linear
      */
     public static int getRejectSteepness() { return _rejectSteepness; }
     /**
      * The rejection steepness.
-     * @param val reject steepness
+     * @param val how fast rejection probability ramps past the threshold, clamped to 100-500
      */
     public static void setRejectSteepness(int val) { _rejectSteepness = Math.max(100, Math.min(500, val)); }
     /**
      * The load weight.
-     * @return load weight
+     * @return how much system load inflates the effective ratio, as a percentage
      */
     public static int getLoadWeight() { return _loadWeight; }
     /**
      * The load weight.
-     * @param val load weight
+     * @param val how much system load inflates the effective ratio, clamped to 0-300
      */
     public static void setLoadWeight(int val) { _loadWeight = Math.max(0, Math.min(300, val)); }
     // Cleanup interval in ms - 90 seconds
@@ -585,7 +585,7 @@ public class ParticipatingThrottler {
      * @param version router software version string
      * @param isCompressible true if RouterInfo data is compressible (potentially suspicious)
      * @param shouldDisconnect whether to disconnect after banning
-     * @param h router hash
+     * @param h hash of the router being evaluated
      * @param isBanned true if already banned
      * @param caps router capabilities string
      * @return true if the router should be dropped (banned), false otherwise
@@ -611,7 +611,7 @@ public class ParticipatingThrottler {
      * @param version router version string
      * @param isLU true if router is low share and unreachable
      * @param shouldBlockOldRouters whether to block old routers
-     * @param h router hash
+     * @param h hash of the router being evaluated
      * @param shouldDisconnect whether to disconnect after banning
      * @param isBanned true if already banned
      * @param caps router capabilities string
@@ -646,7 +646,7 @@ public class ParticipatingThrottler {
      * @param isUnreachable true if router is unreachable
      * @param isFast true if router has high bandwidth
      * @param shouldBlockOldRouters whether to block old routers
-     * @param h router hash
+     * @param h hash of the router being evaluated
      * @param shouldDisconnect whether to disconnect after banning
      * @param isBanned true if already banned
      * @param caps router capabilities string
@@ -677,7 +677,7 @@ public class ParticipatingThrottler {
      * @param isFast true if router is high bandwidth
      * @param isLowShare true if router is low bandwidth
      * @param isUnreachable true if router is unreachable
-     * @param h router hash
+     * @param h hash of the router being evaluated
      * @param caps router capabilities string
      * @param isBanned true if router is already banned
      * @param bantime ban duration in milliseconds
@@ -840,10 +840,10 @@ public class ParticipatingThrottler {
     /**
      * Handles excessive tunnel request counts by banning and scheduling disconnect.
      *
-     * @param h router hash
+     * @param h hash of the router requesting too many tunnels
      * @param caps router capabilities string
      * @param count current participation count
-     * @param limit participation limit
+     * @param limit maximum allowed participation
      * @param bantime ban duration in milliseconds
      * @param ri the router info for IP extraction and logging
      */

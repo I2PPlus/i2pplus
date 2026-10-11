@@ -1144,7 +1144,7 @@ public class TestJob extends JobImpl {
      * @param candidate the partner the round would use, may be null
      * @param excluded the partner that must not be reused, may be null
      * @return true when the candidate may be used
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static boolean usablePartner(TunnelInfo candidate, TunnelInfo excluded) {
         return candidate != null && candidate != excluded;
@@ -1169,7 +1169,7 @@ public class TestJob extends JobImpl {
      * pass even if this passed the wrong flag.
      *
      * @param outTunnel the tunnel the round was sent through, may be null
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static void recordTestRoundBytes(TunnelInfo outTunnel) {
         // Typed as TunnelInfo, so this needs the instanceof guard the
@@ -1195,7 +1195,7 @@ public class TestJob extends JobImpl {
      *                       0 if never
      * @param nowMs current time in ms
      * @return true when the traffic is recent enough to shield a test failure
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     static boolean isRecentDataTransfer(long lastTransferMs, long nowMs) {
         if (lastTransferMs <= 0) {return false;}
@@ -1663,14 +1663,14 @@ public class TestJob extends JobImpl {
 
     /**
      * Whether the tunnel config has non-zero tunnel IDs at hop 0, i.e. the
-     *  tunnel is fully built and can carry a test message.  Outbound tunnels
-     *  only have a send tunnel ID at hop 0 (the gateway), inbound tunnels only
-     *  a receive tunnel ID.  Any failure reading the IDs (not yet built) is
-     *  treated as not ready; the caller logs the debug detail.
+     * tunnel is fully built and can carry a test message.  Outbound tunnels
+     * only have a send tunnel ID at hop 0 (the gateway), inbound tunnels only
+     * a receive tunnel ID.  Any failure reading the IDs (not yet built) is
+     * treated as not ready; the caller logs the debug detail.
      *
-     *  @param cfg the tunnel config, never null
-     *  @return true if the applicable hop-0 ID is non-zero
-     *  @since 0.9.71+
+     * @param cfg the tunnel config, never null
+     * @return true if the applicable hop-0 ID is non-zero
+     * @since 0.9.71+
      */
     static boolean hasValidTunnelIds(PooledTunnelCreatorConfig cfg) {
         try {

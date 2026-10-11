@@ -23,9 +23,9 @@ public interface ScalarOps extends Serializable {
     /**
      * $r = (a * b + c) \bmod l$
      *
-     * @param a a scalar
-     * @param b a scalar
-     * @param c a scalar
+     * @param a the first multiplicand, a scalar in little-endian form
+     * @param b the second multiplicand, a scalar in little-endian form
+     * @param c the addend, a scalar in little-endian form
      * @return $(a*b + c) \bmod l$
      */
     public byte[] multiplyAndAdd(byte[] a, byte[] b, byte[] c);

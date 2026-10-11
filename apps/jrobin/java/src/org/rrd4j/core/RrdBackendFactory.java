@@ -212,7 +212,7 @@ public abstract class RrdBackendFactory implements Closeable {
     /**
      * Return the current active factories as a stream.
      *
-     * @return the Stream
+     * @return a stream over the active factories, in registration order
      * @since 3.7
      */
     public static synchronized Stream<RrdBackendFactory> getActiveFactories() {
@@ -269,7 +269,7 @@ public abstract class RrdBackendFactory implements Closeable {
      * like an URI and to URL-encode the path.
      *
      * @param rrdpath a file URI that can be a Windows path
-     * @return an URI
+     * @return the URI, or a file: URI when the path is really a Windows path
      */
     public static URI buildGenericUri(String rrdpath) {
         Matcher urimatcher = URIPATTERN.matcher(rrdpath);
@@ -543,7 +543,7 @@ public abstract class RrdBackendFactory implements Closeable {
      *
      * @param rrdDb the pool database the backend is registered against, so it can
      *              be told when the backend is closed
-     * @param path Storage path
+     * @param path File system path of the RRD storage.
      * @param readOnly True, if the storage should be accessed in read/only mode. False otherwise.
      * @return Backend object which handles all I/O operations for the given storage path
      * @throws java.io.IOException Thrown in case of I/O error.
@@ -560,7 +560,7 @@ public abstract class RrdBackendFactory implements Closeable {
      *
      * @param rrdDb the pool database the backend is registered against, so it
      *              can be told when the backend is closed
-     * @param uri Storage uri
+     * @param uri Storage uri, resolved to a path by {@link #getPath(URI)}.
      * @param readOnly True, if the storage should be accessed in read/only mode. False otherwise.
      * @return Backend object which handles all I/O operations for the given storage path
      * @throws java.io.IOException Thrown in case of I/O error.
@@ -575,7 +575,7 @@ public abstract class RrdBackendFactory implements Closeable {
     /**
      * Determines if a storage with the given path already exists.
      *
-     * @param path Storage path
+     * @param path File system path to probe for.
      * @return a boolean.
      * @throws java.io.IOException in case of I/O error.
      */
@@ -584,7 +584,7 @@ public abstract class RrdBackendFactory implements Closeable {
     /**
      * Determines if a storage with the given URI already exists.
      *
-     * @param uri Storage URI.
+     * @param uri Storage URI, resolved to a path by {@link #getPath(URI)}.
      * @return a boolean.
      * @throws java.io.IOException in case of I/O error.
      */
@@ -595,7 +595,8 @@ public abstract class RrdBackendFactory implements Closeable {
     /**
      * Determines if the header should be validated.
      *
-     * @param path Storage path
+     * @param path File system path the decision applies to; the answer does not
+     *             depend on it.
      * @return a boolean.
      */
     protected boolean shouldValidateHeader(String path) {
@@ -605,7 +606,7 @@ public abstract class RrdBackendFactory implements Closeable {
     /**
      * Determines if the header should be validated.
      *
-     * @param uri Storage URI
+     * @param uri Storage URI, resolved to a path before the check.
      * @return a boolean.
      */
     protected boolean shouldValidateHeader(URI uri) {

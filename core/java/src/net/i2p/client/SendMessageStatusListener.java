@@ -16,7 +16,7 @@ public interface SendMessageStatusListener {
      * previously sent with I2PSession.sendMessage().
      * Multiple calls for a single message ID are possible.
      *
-     * @param session session notifying
+     * @param session session notifying the status change
      * @param msgId message number returned from a previous sendMessage() call
      * @param status of the message, as defined in MessageStatusMessage and this class.
      */

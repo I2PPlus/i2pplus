@@ -303,7 +303,7 @@ public class PeerProfile {
     /**
      * Is this peer active at the moment (sending/receiving messages within the last 10 minutes)
      *
-     * @param now current time
+     * @param now the current clock reading in milliseconds
      * @return true if active
      * @since 0.9.58
      */
@@ -369,7 +369,7 @@ public class PeerProfile {
      *
      * @param period must be one of the periods in the RateStat constructors below
      *               (5*60*1000 or 60*60*1000)
-     * @param now current time
+     * @param now the current clock reading in milliseconds
      * @return true if active
      * @since 0.9.58
      */
@@ -417,14 +417,14 @@ public class PeerProfile {
     /**
      * When did we last send to this peer successfully?
      *
-     * @return the timestamp
+     * @return milliseconds since the epoch, or 0 if never
      */
     public long getLastSendSuccessful() {return _lastSentToSuccessfully;}
 
     /**
      * When we last sent to this peer successfully.
      *
-     * @param when the timestamp
+     * @param when milliseconds since the epoch
      */
     public void setLastSendSuccessful(long when) {_lastSentToSuccessfully = when;}
 
@@ -600,28 +600,28 @@ public class PeerProfile {
     /**
      * When did we last have a problem sending to this peer?
      *
-     * @return the timestamp
+     * @return milliseconds since the epoch, or 0 if never
      */
     public long getLastSendFailed() {return _lastFailedSend;}
 
     /**
      * When we last had a problem sending to this peer.
      *
-     * @param when the timestamp
+     * @param when milliseconds since the epoch
      */
     public void setLastSendFailed(long when) {_lastFailedSend = when;}
 
     /**
      * When did we last hear from the peer?
      *
-     * @return the timestamp
+     * @return milliseconds since the epoch, or 0 if never
      */
     public long getLastHeardFrom() {return _lastHeardFrom;}
 
     /**
      * When we last heard from the peer.
      *
-     * @param when the timestamp
+     * @param when milliseconds since the epoch
      */
     public void setLastHeardFrom(long when) {_lastHeardFrom = when;}
 
@@ -670,7 +670,7 @@ public class PeerProfile {
     /**
      * The tunnel history.
      *
-     * @param history the TunnelHistory
+     * @param history the TunnelHistory to hold, retrieved by getTunnelHistory()
      */
     public synchronized void setTunnelHistory(TunnelHistory history) {_tunnelHistory = history;}
 
@@ -710,7 +710,7 @@ public class PeerProfile {
     /**
      * The DB history.
      *
-     * @param hist the DBHistory
+     * @param hist the DBHistory to hold, retrieved by getDBHistory()
      */
     public synchronized void setDBHistory(DBHistory hist) {_dbHistory = hist;}
 
@@ -834,7 +834,7 @@ public class PeerProfile {
     /**
      * The timestamp of the last capacity bonus update.
      *
-     * @param ts the timestamp
+     * @param ts milliseconds since the epoch of the last capacity bonus update
      */
     void setCapacityBonusLastUpdate(long ts) {_capacityBonusLastUpdate = ts;}
 
@@ -915,7 +915,7 @@ public class PeerProfile {
     /**
      * The timestamp of the last tunnel test time average update.
      *
-     * @param ts the timestamp
+     * @param ts milliseconds since the epoch of the last tunnel test time average update
      */
     void setTunnelTestTimeAvgLastUpdate(long ts) {_tunnelTestTimeAvgLastUpdate = ts;}
 
@@ -1160,7 +1160,7 @@ public class PeerProfile {
     /**
      * Store the timestamp of the last throughput update.
      *
-     * @param ts the timestamp
+     * @param ts milliseconds since the epoch of the last throughput update
      */
     void setLastThroughputUpdate(long ts) {_lastThroughputUpdate = ts;}
 
@@ -1174,7 +1174,7 @@ public class PeerProfile {
     /**
      * Store the timestamp of the last test start.
      *
-     * @param ts the timestamp
+     * @param ts milliseconds since the epoch of the last test start
      */
     void setLastTestStarted(long ts) {_lastTestStarted = ts;}
 

@@ -181,7 +181,7 @@ public class TransportManager implements TransportEventListener {
     /**
      * Manager for all enabled transports.
      *
-     * @param context router context
+     * @param context the context whose transports this manager will create and own
      */
     public TransportManager(RouterContext context) {
         _context = context;
@@ -214,7 +214,8 @@ public class TransportManager implements TransportEventListener {
      * Detect system settings and log warnings.
      * ref: https://docs.oracle.com/javase/8/docs/api/java/net/doc-files/net-properties.html
      *
-     * @return whether proxied
+     * @return true if a system proxy is configured, which disables UPnP; also
+     *         logs the warning explaining why
      * @since 0.9.47
      */
     private boolean isProxied() {
@@ -396,7 +397,7 @@ public class TransportManager implements TransportEventListener {
     /**
      * Whether the NTCP transport is enabled.
      *
-     * @param ctx context
+     * @param ctx the context to read the NTCP enable property from
      * @return true if NTCP enabled
      */
     public static boolean isNTCPEnabled(RouterContext ctx) {
@@ -639,7 +640,7 @@ public class TransportManager implements TransportEventListener {
     /**
      * The registered transport for the given style.
      *
-     * @param style transport style
+     * @param style a transport style, e.g. {@link Transport#STYLE_SSU}
      * @return the transport for the given style or null
      */
     Transport getTransport(String style) {
@@ -775,7 +776,7 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Whether any transport is backlogged to the given peer.
-     * @param peer peer hash
+     * @param peer the peer's {@link RouterIdentity} hash
      * @return true if any transport is backlogged to peer
      */
     boolean isBacklogged(Hash peer) {
@@ -788,7 +789,7 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * Whether any transport has an established connection to the given peer.
-     * @param peer peer hash
+     * @param peer the peer's {@link RouterIdentity} hash
      * @return true if any transport has an established connection
      */
     boolean isEstablished(Hash peer) {
@@ -988,7 +989,7 @@ public class TransportManager implements TransportEventListener {
         /**
          * Hash code combining style, port, and IP.
          *
-         * @return hash code
+         * @return the XOR of the style hash, the port and the IP hash
          */
         @Override
         public int hashCode() {
@@ -1016,7 +1017,8 @@ public class TransportManager implements TransportEventListener {
     /**
      * Include the published port, or the requested port, for each transport
      * which we will pass along to UPnP
-     * @return the ports
+     * @return one {@link Port} per transport style and address family that is
+     *         listening, un-firewalled and not disabled; empty when we are hidden
      */
     private Set<Port> getPorts() {
         Set<Port> rv = new HashSet<>(4);
@@ -1379,7 +1381,7 @@ public class TransportManager implements TransportEventListener {
      * Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.
      *  It does not translate!
-     * @return s
+     * @return s, unchanged; the marker works by naming the literal
      */
     private static final String _x(String s) {
         return s;

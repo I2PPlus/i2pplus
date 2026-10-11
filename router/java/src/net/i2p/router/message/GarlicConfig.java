@@ -38,7 +38,7 @@ class GarlicConfig {
     /**
      * Creates a new GarlicConfig
      *
-     * @param cert the certificate
+     * @param cert the certificate, as carried into getCertificate()
      * @param id the unique ID
      * @param expiration the expiration time
      * @param di the delivery instructions
@@ -51,7 +51,7 @@ class GarlicConfig {
      * Creates a new GarlicConfig with existing clove configs
      *
      * @param cloveConfigs the list of clove configs
-     * @param cert the certificate
+     * @param cert the certificate, as carried into getCertificate()
      * @param id the unique ID
      * @param expiration the expiration time
      * @param di the delivery instructions
@@ -102,7 +102,7 @@ class GarlicConfig {
     /**
      * Certificate for the getRecipient() to pay for their processing
      *
-     * @return the certificate
+     * @return the certificate passed to the constructor, possibly null
      */
     public Certificate getCertificate() { return _cert; }
 

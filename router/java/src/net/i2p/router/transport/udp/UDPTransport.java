@@ -1752,7 +1752,7 @@ public class UDPTransport extends TransportImpl {
      * Whether the reported host differs from the current external host.
      *
      * @param externalListenHost current external host, may be null
-     * @param ourIP reported host
+     * @param ourIP host address the peer reported for us
      * @return true if the host differs
      * @since 0.9.71+
      */
@@ -1766,7 +1766,7 @@ public class UDPTransport extends TransportImpl {
      * takes precedence over any report and is never overwritten.
      *
      * @param externalListenPort current external listen port
-     * @param ourPort reported port
+     * @param ourPort port the peer reported for us
      * @param configuredExternalPort externally configured port, 0 if none
      * @return true if the reported port must be persisted
      * @since 0.9.71+
@@ -2609,7 +2609,7 @@ public class UDPTransport extends TransportImpl {
      * @param addr validated target SSU address
      * @param cost the target's address cost
      * @param weAreFirewalled status computed by {@link #isFirewalled()}
-     * @return the bid
+     * @return the bid to send, higher values being preferred by the peer
      */
     private TransportBid selectBid(RouterAddress addr, int cost, boolean weAreFirewalled) {
         if (alwaysPreferUDP()) {
@@ -3750,7 +3750,7 @@ public class UDPTransport extends TransportImpl {
     /**
      * Whether the peer for the given destination is backlogged.
      *
-     * @return whether backlogged
+     * @return true if messages are queued for the peer, awaiting responses
      * @since 0.9.3
      */
     @Override
@@ -4147,7 +4147,7 @@ if (_alive)
      * longer by flooring the cutoff at {@code firewalledMin}.
      *
      * @param now current time ms
-     * @param timeout tier timeout
+     * @param timeout idle timeout for this tier, in ms
      * @param weAreFirewalled true for lenient firewalled behavior
      * @param firewalledMin minimum timeout when firewalled
      * @return the inactivity cutoff; peers idle before it are expirable
@@ -4229,7 +4229,7 @@ if (_alive)
      * pass, so pings are spread out over the short loop.
      *
      * @param runCount current expire-loop run counter
-     * @param peerHash peer's hashCode
+     * @param peerHash the peer's hashCode, to place it in a slice
      * @return true if this peer is scheduled for a keepalive ping
      * @since 0.9.71+
      */

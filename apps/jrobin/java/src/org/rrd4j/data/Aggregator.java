@@ -36,9 +36,10 @@ class Aggregator {
     /**
      * Calculates aggregations for time range.
      *
-     * @param tStart start time
-     * @param tEnd end time
-     * @return calculated aggregations
+     * @param tStart start of the range, in seconds since the Unix epoch
+     * @param tEnd end of the range, in seconds since the Unix epoch
+     * @return the min, max, first, last, total and time-weighted average over the
+     *         range; all fields are NaN if no sample fell inside it
      * @deprecated Use {@link org.rrd4j.data.Variable} instead
      */
     @Deprecated
@@ -86,8 +87,8 @@ class Aggregator {
     /**
      * Calculates percentile value for data in time range.
      *
-     * @param tStart start time
-     * @param tEnd end time
+     * @param tStart start of the range, in seconds since the Unix epoch
+     * @param tEnd end of the range, in seconds since the Unix epoch
      * @param percentile percentile to calculate (0-100)
      * @return percentile value
      */

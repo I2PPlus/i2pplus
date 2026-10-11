@@ -66,7 +66,7 @@ public class MetaLease extends Lease {
     /**
      * Cost value for this lease.
      *
-     * @return the cost
+     * @return the cost value, a raw int with no unit of its own
      */
     public int getCost() {
         return _cost;
@@ -85,7 +85,7 @@ public class MetaLease extends Lease {
     /**
      * Type identifier for this lease.
      *
-     * @return the type
+     * @return the tunnel type identifier, a raw int
      */
     public int getType() {
         return _type;
@@ -104,7 +104,8 @@ public class MetaLease extends Lease {
     /**
      * UnsupportedOperationException always.
      * @return the tunnel id
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as a meta lease has no tunnel
+              of its own
      */
     @Override
     public TunnelId getTunnelId() {
@@ -113,7 +114,8 @@ public class MetaLease extends Lease {
 
     /**
      * UnsupportedOperationException always.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as a meta lease has no tunnel
+              of its own
      */
     @Override
     public void setTunnelId(TunnelId id) {

@@ -91,7 +91,7 @@ public abstract class RrdBackend {
     /**
      * Get the factory for this backend.
      *
-     * @return the factory
+     * @return the factory that supplies this backend's URI and caching policy
      */
     public RrdBackendFactory getFactory() {
         return factory;
@@ -100,7 +100,7 @@ public abstract class RrdBackend {
     /**
      * Returns path to the storage.
      *
-     * @return Storage path
+     * @return the storage path this backend was opened with
      */
     public String getPath() {
         return path;
@@ -118,7 +118,7 @@ public abstract class RrdBackend {
     /**
      * Writes an array of bytes to the underlying storage starting from the given storage offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param b Array of bytes that should be copied to the underlying storage
      * @throws java.io.IOException Thrown in case of I/O error
      */
@@ -127,7 +127,7 @@ public abstract class RrdBackend {
     /**
      * Reads an array of bytes from the underlying storage starting from the given storage offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param b Array which receives bytes from the underlying storage
      * @throws java.io.IOException Thrown in case of I/O error
      */
@@ -189,7 +189,7 @@ public abstract class RrdBackend {
     /**
      * Reads all RRD bytes from the underlying storage.
      *
-     * @return RRD bytes
+     * @return every RRD byte, read from offset 0 into a buffer sized by getLength()
      * @throws java.io.IOException Thrown in case of I/O error
      */
     public final byte[] readAll() throws IOException {
@@ -201,7 +201,7 @@ public abstract class RrdBackend {
     /**
      * Writes a short value to the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param value Short value to write.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -215,7 +215,7 @@ public abstract class RrdBackend {
     /**
      * Writes an integer value to the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param value Integer value to write.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -226,7 +226,7 @@ public abstract class RrdBackend {
     /**
      * Writes a long value to the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param value Long value to write.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -237,7 +237,7 @@ public abstract class RrdBackend {
     /**
      * Writes a double value to the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param value Double value to write.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -248,7 +248,7 @@ public abstract class RrdBackend {
     /**
      * Writes multiple copies of a double value to the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param value Double value to write.
      * @param count Number of times to write the value.
      * @throws java.io.IOException Thrown in case of I/O error.
@@ -273,7 +273,7 @@ public abstract class RrdBackend {
     /**
      * Writes an array of double values to the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param values Array of double values to write.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -298,7 +298,7 @@ public abstract class RrdBackend {
     /**
      * Writes a string to the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param value String value to write.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -340,7 +340,7 @@ public abstract class RrdBackend {
     /**
      * Writes a string to the underlying storage at the given offset with a fixed length.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param value String value to write.
      * @param length Fixed length for the string storage.
      * @throws java.io.IOException Thrown in case of I/O error.
@@ -361,7 +361,7 @@ public abstract class RrdBackend {
     /**
      * Reads a short value from the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @return The short value read from storage.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -374,7 +374,7 @@ public abstract class RrdBackend {
     /**
      * Reads an integer value from the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @return The integer value read from storage.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -387,7 +387,7 @@ public abstract class RrdBackend {
     /**
      * Reads a long value from the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @return The long value read from storage.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -400,7 +400,7 @@ public abstract class RrdBackend {
     /**
      * Reads a double value from the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @return The double value read from storage.
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -413,7 +413,7 @@ public abstract class RrdBackend {
     /**
      * Reads an array of double values from the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @param count Number of double values to read.
      * @return Array of double values read from storage.
      * @throws java.io.IOException Thrown in case of I/O error.
@@ -455,7 +455,7 @@ public abstract class RrdBackend {
     /**
      * Reads a string from the underlying storage at the given offset.
      *
-     * @param offset Storage offset.
+     * @param offset Byte offset into the RRD storage.
      * @return The string value read from storage.
      * @throws java.io.IOException Thrown in case of I/O error.
      */

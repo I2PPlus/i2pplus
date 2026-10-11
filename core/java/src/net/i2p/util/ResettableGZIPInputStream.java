@@ -155,7 +155,8 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
-     * @return the remaining
+     * @return uncompressed bytes still buffered, or 0 if the inflater has been
+     *         closed
      * @since 0.8.9
      */
     public long getRemaining() {
@@ -170,7 +171,8 @@ public class ResettableGZIPInputStream extends InflaterInputStream {
     /**
      * Moved from i2ptunnel HTTPResponseOutputStream.InternalGZIPInputStream
      *
-     * @return the finished
+     * @return true once the whole stream has been inflated, false if the
+     *         inflater has been closed
      * @since 0.8.9
      */
     public boolean getFinished() {

@@ -104,7 +104,7 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     /**
      * Get the payload carried by this message.
      *
-     * @return the payload
+     * @return the payload to deliver to the session, or null if not yet set
      */
     public synchronized Payload getPayload() {
         return _payload;
@@ -133,7 +133,8 @@ public class MessagePayloadMessage extends I2CPMessageImpl {
     }
 
     /**
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as this message is read-only
+              once constructed
      */
     @Override
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

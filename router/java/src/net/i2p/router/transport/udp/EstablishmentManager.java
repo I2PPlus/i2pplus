@@ -329,7 +329,7 @@ public class EstablishmentManager {
     /**
      * Whether to emit an inbound give-up report now, counting any skipped.
      *
-     * @param now current time
+     * @param now current time in milliseconds
      * @return true if the caller should log; false if the event was only counted
      * @since 0.9.71+
      */
@@ -817,7 +817,7 @@ public class EstablishmentManager {
      *
      * @param lastSentTime the time we last sent, 0 if never
      * @param timeoutMs the per-message timeout
-     * @param now current time
+     * @param now current time in milliseconds
      * @return true if a message was sent and has been unanswered too long
      * @since 0.9.71
      */
@@ -833,7 +833,7 @@ public class EstablishmentManager {
      * @param expired true if the state's lifetime is exhausted
      * @param lastSentTime the time we last sent, 0 if never
      * @param timeoutMs the per-message timeout
-     * @param now current time
+     * @param now current time in milliseconds
      * @return true to process the state as expired
      * @since 0.9.71
      */
@@ -845,7 +845,7 @@ public class EstablishmentManager {
      * Is the state due to send now (its next send time has arrived)?
      *
      * @param nextSendTime the scheduled send time
-     * @param now current time
+     * @param now current time in milliseconds
      * @return true if the send is due
      * @since 0.9.71
      */
@@ -2137,7 +2137,9 @@ public class EstablishmentManager {
      *
      * SSU 2
      *
-     * @param state charlie
+     * @param state the outbound state to walk through the introducers of; must be
+     *              an {@link OutboundEstablishState2} with at least one valid v2
+     *              introducer
      */
     private void handlePendingIntro(OutboundEstablishState state) {
         long nonce = state.getIntroNonce();
@@ -2271,7 +2273,8 @@ public class EstablishmentManager {
      * SSU 2 only.
      *
      * @param charlie must be SSU2
-     * @return success
+     * @return true if the RelayRequest was queued; false if we have no address to
+     *         send from or the payload could not be signed or written
      * @since 0.9.55
      */
     private boolean sendRelayRequest(long tag, PeerState2 bob, OutboundEstablishState charlie) {
@@ -2516,8 +2519,8 @@ public class EstablishmentManager {
      *
      * @param cb payload callback results
      * @param rcvConnID connection ID this packet was sent to
-     * @param now receive time
-     * @param id sender
+     * @param now the packet receipt time in milliseconds
+     * @param id the {@link RemoteHostId} of the sending peer
      * @return true if all checks pass
      */
     private boolean isValidHolePunchResponse(HPCallback cb, long rcvConnID, long now, RemoteHostId id) {
@@ -2553,7 +2556,7 @@ public class EstablishmentManager {
     /**
      * Find the outbound establish state this HolePunch belongs to.
      *
-     * @param id sender
+     * @param id the {@link RemoteHostId} of the sending peer
      * @param nonce the nonce from the validated response
      * @return the state, or null if unknown
      */
@@ -2625,7 +2628,7 @@ public class EstablishmentManager {
      * introduction data.
      *
      * @param state the outbound establish state
-     * @param reason ban reason
+     * @param reason the human-readable cause recorded in the banlist and the ban log
      * @param banDuration ban duration in ms
      */
     private void banAndFailState(OutboundEstablishState state, String reason, long banDuration) {
@@ -2695,7 +2698,7 @@ public class EstablishmentManager {
      * @param state2 SSU2-specific state
      * @param data the signed portion of the response
      * @param port the validated port
-     * @param now receive time
+     * @param now the packet receipt time in milliseconds
      * @param token the token from the end of the full response
      */
     private void updateHolePunchState(OutboundEstablishState state, OutboundEstablishState2 state2, byte[] data, int port, long now, long token) {
@@ -3135,7 +3138,7 @@ public class EstablishmentManager {
     /**
      * Check if an outbound SSU handshake is in progress for the given peer.
      *
-     * @param dest router hash
+     * @param dest the remote RouterIdentity hash, as stored in the outbound-by-hash map
      * @return true if we are currently trying to establish an outbound connection
      */
     public boolean isConnecting(Hash dest) {

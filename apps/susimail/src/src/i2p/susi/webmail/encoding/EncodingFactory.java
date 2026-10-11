@@ -44,7 +44,7 @@ public class EncodingFactory {
 	 *
 	 * @param name name of encoding (e.g. quoted-printable)
 	 *
-	 * @return Encoder instance
+	 * @return the matching encoder, or null if the name is unknown
 	 */
 	public static Encoding getEncoding( String name )
 	{

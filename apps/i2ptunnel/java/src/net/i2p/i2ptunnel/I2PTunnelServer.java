@@ -136,7 +136,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  When the cap is reached, new connections are rejected promptly (HTTP: 503) instead of
      *  being queued behind a saturated pool. This is the last-resort governor under duress;
      *  normal operation should not reach it. Key: tunnel.N.option.i2ptunnel.server.maxConnections
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public static final String PROP_MAX_CONNECTIONS = "i2ptunnel.server.maxConnections";
 
@@ -144,7 +144,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Config key to override the socket read timeout in ms; 0 (default) = shut down silent
      *  connections promptly (HTTP server falls back to SERVER_READ_TIMEOUT_GET).
      *  Key: tunnel.N.option.i2ptunnel.server.readTimeout
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public static final String PROP_READ_TIMEOUT = "i2ptunnel.server.readTimeout";
 
@@ -166,7 +166,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Config key to override the outbound write timeout in ms (0 = use the streaming
      *  default, which can be the full 120s disconnect timeout with no ACK progress).
      *  Key: tunnel.N.option.i2ptunnel.server.writeTimeout
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public static final String PROP_WRITE_TIMEOUT = "i2ptunnel.server.writeTimeout";
 
@@ -176,7 +176,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  i2ptunnel.serverHandler.threads budget; unset or &lt; 2 follows the
      *  Tuner-managed default (i2ptunnel.server.threads).
      *  Key: tunnel.N.option.i2ptunnel.server.threads
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     public static final String PROP_SERVER_THREADS = "i2ptunnel.server.threads";
     private static final long RECONNECT_DELAY_2MIN = 120 * 1000L;
@@ -192,20 +192,20 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Concurrent inbound connection cap, 0 = unlimited. Read from PROP_MAX_CONNECTIONS.
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile int _maxConnections;
 
     /**
      * Active connection count used by the gate above.
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private final AtomicInteger _activeConnections = new AtomicInteger();
 
     /**
      * Per-tunnel server handler pool cap, -1 = Tuner-managed default.
      *  Read from PROP_SERVER_THREADS; re-applied live in optionsUpdated().
-     *  @since 0.9.71+
+     * @since 0.9.71+
      */
     private volatile int _serverThreadOverride = -1;
 
