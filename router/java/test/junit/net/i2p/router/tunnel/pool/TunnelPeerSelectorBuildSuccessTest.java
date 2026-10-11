@@ -1,12 +1,16 @@
 package net.i2p.router.tunnel.pool;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Assume;
 import org.junit.Test;
 
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
+import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.peermanager.TunnelHistory;
 
 /**
  * Unit tests for the build-success-gated decision functions in
@@ -27,9 +31,28 @@ import net.i2p.router.RouterTestHelper;
  */
 public class TunnelPeerSelectorBuildSuccessTest {
 
-    private static final double ATTACK = TunnelPeerSelector.ATTACK_THRESHOLD;
-    private static final long STARTUP_MS = TunnelPeerSelector.STARTUP_WARNING_SUPPRESS_MS;
-    private static final long HOUR_MS = 60 * 60 * 1000L;
+private static final double ATTACK = TunnelPeerSelector.ATTACK_THRESHOLD;
+  private static final long STARTUP_MS = TunnelPeerSelector.STARTUP_WARNING_SUPPRESS_MS;
+  private static final long HOUR_MS = 60 * 60 * 1000L;
+  private static final long MINUTE = 60 * 1000L;
+  /** Fixed "now" for the pure signal checks; never actually read from a clock. */
+  private static final long NOW = 1000L * 60 * 60 * 24;
+
+  /**
+   * Minimal PeerProfile stub exposing only the four facts the pre-qualification
+   * signal check reads.
+   */
+  private static PeerProfile profile(long lastHeardFrom, long lastSendSuccessful,
+                                     long lastTested, double acceptanceRatio) {
+      PeerProfile p = mock(PeerProfile.class);
+      when(p.getLastHeardFrom()).thenReturn(lastHeardFrom);
+      when(p.getLastSendSuccessful()).thenReturn(lastSendSuccessful);
+      when(p.getTunnelAcceptanceRatio()).thenReturn(acceptanceRatio);
+      TunnelHistory th = mock(TunnelHistory.class);
+      when(th.getLastTestedSuccessfully()).thenReturn(lastTested);
+      when(p.getTunnelHistory()).thenReturn(th);
+      return p;
+  }
 
     // ---------- relaxedExcludeCaps ----------
 
@@ -189,17 +212,21 @@ public class TunnelPeerSelectorBuildSuccessTest {
     }
 
     @Test
-    public void testShouldPreQual_StressSkips() {
-        // below ATTACK_THRESHOLD (<40% build success) pre-qual is skipped
-        assertFalse(TunnelPeerSelector.shouldPreQual(false, false, ATTACK - 0.01));
-        assertFalse(TunnelPeerSelector.shouldPreQual(false, false, 0.2));
-        assertFalse(TunnelPeerSelector.shouldPreQual(false, false, 0.0));
+    public void testShouldPreQual_StressStillPreQuals() {
+        // Below ATTACK_THRESHOLD pre-qual used to switch off, admitting peers
+        // with no connectivity evidence; those peers timed out, depressing build
+        // success further and keeping it off. The gate now stays on and the bar
+        // rises instead (requiredSignalQuality), so it must stay true here.
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, ATTACK - 0.01));
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, 0.2));
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, 0.0));
     }
 
     @Test
     public void testShouldPreQual_ThresholdBoundary() {
-        // AT threshold: pre-qual stays active at and above, skips strictly below
-        assertFalse(TunnelPeerSelector.shouldPreQual(false, false, ATTACK - 0.001));
+        // The threshold no longer gates this predicate at all: it is true on
+        // both sides of ATTACK_THRESHOLD, and below it only the evidence bar moves.
+        assertTrue(TunnelPeerSelector.shouldPreQual(false, false, ATTACK - 0.001));
         assertTrue(TunnelPeerSelector.shouldPreQual(false, false, ATTACK));
         assertTrue(TunnelPeerSelector.shouldPreQual(false, false, ATTACK + 0.001));
     }
@@ -208,6 +235,119 @@ public class TunnelPeerSelectorBuildSuccessTest {
     public void testShouldPreQual_NaNIsConservative() {
         // missing data is not an attack: keep pre-qual active
         assertTrue(TunnelPeerSelector.shouldPreQual(false, false, Double.NaN));
+    }
+
+    // ---------- requiredSignalQuality ----------
+
+    @Test
+    public void testRequiredSignalQuality_HealthyIsRelaxed() {
+        assertEquals(TunnelPeerSelector.QUALITY_RELAXED,
+                     TunnelPeerSelector.requiredSignalQuality(0.85));
+        assertEquals(TunnelPeerSelector.QUALITY_RELAXED,
+                     TunnelPeerSelector.requiredSignalQuality(ATTACK + 0.001));
+    }
+
+    @Test
+    public void testRequiredSignalQuality_StressIsStrict() {
+        // at and below the threshold the bar rises, it does not fall away
+        assertEquals(TunnelPeerSelector.QUALITY_STRICT,
+                     TunnelPeerSelector.requiredSignalQuality(ATTACK));
+        assertEquals(TunnelPeerSelector.QUALITY_STRICT,
+                     TunnelPeerSelector.requiredSignalQuality(ATTACK - 0.001));
+        assertEquals(TunnelPeerSelector.QUALITY_STRICT,
+                     TunnelPeerSelector.requiredSignalQuality(0.2));
+        assertEquals(TunnelPeerSelector.QUALITY_STRICT,
+                     TunnelPeerSelector.requiredSignalQuality(0.0));
+    }
+
+    @Test
+    public void testRequiredSignalQuality_NaNTreatedHealthy() {
+        // missing data is not an attack
+        assertEquals(TunnelPeerSelector.QUALITY_RELAXED,
+                     TunnelPeerSelector.requiredSignalQuality(Double.NaN));
+    }
+
+    // ---------- hasConnectivitySignal at each quality ----------
+
+    @Test
+    public void testStrictQuality_AcceptsRecentTest() {
+        // a successful tunnel test inside the window is strong evidence
+        assertTrue(TunnelPeerSelector.hasConnectivitySignal(
+                profile(0, 0, NOW - 2 * 60 * MINUTE, 0.0), NOW, 4 * 60 * MINUTE,
+                false, TunnelPeerSelector.QUALITY_STRICT));
+    }
+
+    @Test
+    public void testStrictQuality_RejectsStaleTest() {
+        // outside the window the strict bar rejects it, even though the relaxed
+        // bar would also reject this one; pins that strict is never looser
+        assertFalse(TunnelPeerSelector.hasConnectivitySignal(
+                profile(0, 0, NOW - 5 * 60 * MINUTE, 0.0), NOW, 4 * 60 * MINUTE,
+                false, TunnelPeerSelector.QUALITY_STRICT));
+    }
+
+    @Test
+    public void testStrictQuality_RejectsRecentContactAlone() {
+        // recently heard from is accepted when relaxed but NOT when strict:
+        // sending us traffic does not prove the peer accepts a build request
+        assertTrue(TunnelPeerSelector.hasConnectivitySignal(
+                profile(NOW - 10 * MINUTE, 0, 0, 0.0), NOW, 4 * 60 * MINUTE,
+                false, TunnelPeerSelector.QUALITY_RELAXED));
+        assertFalse(TunnelPeerSelector.hasConnectivitySignal(
+                profile(NOW - 10 * MINUTE, 0, 0, 0.0), NOW, 4 * 60 * MINUTE,
+                false, TunnelPeerSelector.QUALITY_STRICT));
+    }
+
+    @Test
+    public void testStrictQuality_RelaxedAcceptsOldAcceptanceRatio() {
+        // An acceptance ratio with NO recent test is relaxed-only evidence: the
+        // relaxed bar falls back to the ratio when nothing fresher exists, while
+        // the strict bar requires an actual recent test and rejects it. The test
+        // timestamp here is deliberately older than the activity window.
+        PeerProfile p = profile(0, 0, NOW - 5 * 60 * MINUTE, 0.7);
+        assertTrue(TunnelPeerSelector.hasConnectivitySignal(
+                p, NOW, 4 * 60 * MINUTE, false, TunnelPeerSelector.QUALITY_RELAXED));
+        assertFalse(TunnelPeerSelector.hasConnectivitySignal(
+                p, NOW, 4 * 60 * MINUTE, false, TunnelPeerSelector.QUALITY_STRICT));
+    }
+
+    @Test
+    public void testStrictQuality_SessionAlwaysPasses() {
+        // a live session is proof enough at either bar, whatever the profile says
+        assertTrue(TunnelPeerSelector.hasConnectivitySignal(
+                profile(0, 0, 0, 0.0), NOW, 4 * 60 * MINUTE,
+                true, TunnelPeerSelector.QUALITY_STRICT));
+        assertTrue(TunnelPeerSelector.hasConnectivitySignal(
+                profile(0, 0, 0, 0.0), NOW, 4 * 60 * MINUTE,
+                true, TunnelPeerSelector.QUALITY_RELAXED));
+    }
+
+    @Test
+    public void testStrictQuality_NullProfileFails() {
+        // no profile and no session is never enough
+        assertFalse(TunnelPeerSelector.hasConnectivitySignal(
+                null, NOW, 4 * 60 * MINUTE, false, TunnelPeerSelector.QUALITY_STRICT));
+        assertFalse(TunnelPeerSelector.hasConnectivitySignal(
+                null, NOW, 4 * 60 * MINUTE, false, TunnelPeerSelector.QUALITY_RELAXED));
+    }
+
+    @Test
+    public void testStrictQuality_IsNeverLooserThanRelaxed() {
+        // the invariant that breaks the feedback loop: for every profile shape,
+        // strict must not accept anything relaxed rejects
+        long[] offsets = {0, MINUTE, 5 * MINUTE, 60 * MINUTE, 30 * 60 * MINUTE};
+        double[] ratios = {0.0, 0.4, 0.5, 0.7, 1.0};
+        for (long off : offsets) {
+            for (double ratio : ratios) {
+                PeerProfile p = profile(off, off, off, ratio);
+                boolean relaxed = TunnelPeerSelector.hasConnectivitySignal(
+                        p, NOW, 4 * 60 * MINUTE, false, TunnelPeerSelector.QUALITY_RELAXED);
+                boolean strict = TunnelPeerSelector.hasConnectivitySignal(
+                        p, NOW, 4 * 60 * MINUTE, false, TunnelPeerSelector.QUALITY_STRICT);
+                assertTrue("strict accepted what relaxed rejected at offset " + off +
+                           " ratio " + ratio, relaxed || !strict);
+            }
+        }
     }
 
     // ---------- context smoke tests ----------
