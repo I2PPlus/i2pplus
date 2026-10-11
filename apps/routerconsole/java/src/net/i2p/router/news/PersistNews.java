@@ -220,7 +220,8 @@ class PersistNews {
      *
      * @param ctx the router context
      * @param entry the news entry to delete
-     * @return success
+     * @return true if the file was deleted; false if entry has no id or the
+     *         file is already gone
      */
     public static boolean delete(I2PAppContext ctx, NewsEntry entry) {
         String id = entry.id;

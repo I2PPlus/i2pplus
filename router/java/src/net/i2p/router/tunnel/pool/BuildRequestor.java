@@ -222,7 +222,7 @@ public abstract class BuildRequestor {
      * Assigns tunnel IDs to each hop in the configuration.
      * For zero-hop tunnels, dummy IDs are assigned to maintain consistency.
      *
-     * @param ctx router context
+     * @param ctx the router context supplying the new tunnel IDs
      * @param cfg tunnel configuration to prepare
      */
     private static void prepare(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
@@ -256,7 +256,7 @@ public abstract class BuildRequestor {
     /**
      * Initiates a tunnel build request.
      *
-     * @param ctx   router context
+     * @param ctx   the router context issuing the build
      * @param cfg   tunnel configuration (must have ReplyMessageId set)
      * @param exec  executor to notify on completion
      * @param firstHopTimeout  adaptive first-hop timeout ms (from BuildExecutor stats)

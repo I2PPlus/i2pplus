@@ -42,7 +42,7 @@ public abstract class ByteBufferBackend extends RrdBackend {
      *
      * @param offset Starting file offset
      * @param b Bytes to be written.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the backend is read-only
      * @throws java.lang.IllegalArgumentException if offset is bigger that the possible mapping
      *                                            position (2GiB).
      */

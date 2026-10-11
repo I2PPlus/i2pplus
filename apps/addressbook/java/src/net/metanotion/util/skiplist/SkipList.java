@@ -40,7 +40,7 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
     /**
      * Create a new skip list.
      *
-     * @param span span size
+     * @param span the maximum number of entries per span, 1 to SkipSpan.MAX_SIZE
      * @throws IllegalArgumentException if size too big or too small
      */
     public SkipList(int span) {

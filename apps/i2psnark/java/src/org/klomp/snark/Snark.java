@@ -83,8 +83,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @param peerCoordinatorSet the peer coordinator set
      * @param connectionAcceptor the connection acceptor
      * @param rootDir the root data directory
-     * @throws RuntimeException via fatal()
-     * @throws RouterException via fatalRouter()
+     * @throws RuntimeException if the storage for the torrent cannot be created
+     * @throws RouterException if the torrent cannot be bound to I2P
      */
     public Snark(
             I2PSnarkUtil util,
@@ -127,8 +127,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @param connectionAcceptor the connection acceptor
      * @param rootDir the root data directory
      * @param baseFile if null, use rootDir/torrentName; if non-null, use it instead
-     * @throws RuntimeException via fatal()
-     * @throws RouterException via fatalRouter()
+     * @throws RuntimeException if the storage for the torrent cannot be created
+     * @throws RouterException if the torrent cannot be bound to I2P
      * @since 0.9.11
      */
     public Snark(
@@ -254,8 +254,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @param connectionAcceptor the connection acceptor
      * @param ignored used to be autostart
      * @param rootDir the root data directory
-     * @throws RuntimeException via fatal()
-     * @throws RouterException via fatalRouter()
+     * @throws RuntimeException if the storage for the torrent cannot be created
+     * @throws RouterException if the torrent cannot be bound to I2P
      * @since 0.8.4, removed in 0.9.36, restored in 0.9.45 with boolean param now ignored
      */
     protected Snark(
@@ -292,8 +292,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @param peerCoordinatorSet the peer coordinator set
      * @param connectionAcceptor the connection acceptor
      * @param rootDir the root data directory
-     * @throws RuntimeException via fatal()
-     * @throws RouterException via fatalRouter()
+     * @throws RuntimeException if the storage for the torrent cannot be created
+     * @throws RouterException if the torrent cannot be bound to I2P
      * @since 0.8.4
      */
     public Snark(
@@ -426,8 +426,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * torrent without metainfo and possibly with a partial data location on disk, and a
      * restart would fail again on the leftover files.
      *
-     * @throws RuntimeException via fatal()
-     * @throws RouterException via fatalRouter()
+     * @throws RouterException if the router cannot be reached or no session can be
+     *                         created for the torrent's listening destination
      */
     public synchronized void startTorrent() {
         if (!stopped) {
@@ -989,7 +989,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * The peer count.
      *
-     * @return peer count
+     * @return connected peers, 0 if the coordinator has not been created yet
      */
     public int getPeerCount() {
         PeerCoordinator coord = coordinator;
@@ -1353,8 +1353,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Aborts program abnormally.
      *
-     * @param s the message
-     * @throws RuntimeException always
+     * @param s the failure text logged and reported to the CompleteListener
+     * @throws RuntimeException always, after stopping the torrent and notifying
+     *                          the CompleteListener
      */
     private void fatal(String s) throws RuntimeException {
         fatal(s, null);
@@ -1364,9 +1365,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * Aborts program abnormally: logs the failure, stops the torrent, tells the
      * CompleteListener, and throws.
      *
-     * @param s the message
+     * @param s the failure text logged and reported to the CompleteListener
      * @param t the cause, may be null
-     * @throws RuntimeException always
+     * @throws RuntimeException always, after stopping the torrent and notifying
+     *                          the CompleteListener
      */
     private void fatal(String s, Throwable t) throws RuntimeException {
         _log.error(s, t);
@@ -1383,7 +1385,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Throws a unique exception class to blame the router that can be caught by SnarkManager
      *
-     * @throws RouterException always
+     * @throws RouterException always, after logging the failure, stopping the torrent
+     *                         and notifying the CompleteListener
      * @since 0.9.46
      */
     private void fatalRouter(String s, Throwable t) throws RouterException {
@@ -1408,7 +1411,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         /**
          * With message only.
          *
-         * @param s error message
+         * @param s the reason the torrent was stopped, reported to the caller
          */
         public RouterException(String s) {
             super(s);
@@ -1417,8 +1420,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         /**
          * With message and cause.
          *
-         * @param s error message
-         * @param t cause
+         * @param s the reason the torrent was stopped, reported to the caller
+         * @param t the underlying exception or error, may be null
          */
         public RouterException(String s, Throwable t) {
             super(s, t);
@@ -1433,7 +1436,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * Called when the PeerCoordinator got the MetaInfo via magnet. CoordinatorListener. Create the
      * storage, tell SnarkManager, and give the storage back to the coordinator.
      *
-     * @throws RuntimeException via fatal()
+     * @throws RuntimeException if the data location cannot be created for the
+     *                          metainfo that arrived
      * @since 0.8.4
      */
     @Override
@@ -1747,7 +1751,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Is the given hash banned?
      *
-     * @param h the hash
+     * @param h the peer's destination hash, counted as bad up to the acceptor's limit
      * @return true if banned
      * @since 0.9.71
      */
@@ -1758,7 +1762,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     /**
      * Ban the given hash.
      *
-     * @param h the hash
+     * @param h the peer's destination hash to count against the acceptor's limit
      * @since 0.9.71
      */
     public void ban(Hash h) {

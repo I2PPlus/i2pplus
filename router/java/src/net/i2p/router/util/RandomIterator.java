@@ -63,7 +63,8 @@ public class RandomIterator<E> implements Iterator<E> {
      * See, for instance,
      * <a href="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" title="http://www.qbrundage.com/michaelb/pubs/essays/random_number_generation" target="_blank">http://www.qbrundage.com/michaelb/pubs/e&#8230;</a>
      * for some implementations, which are faster than java.util.Random.
-     * @return the instance
+     * @return the shared Random, which the JVM may substitute a faster
+     *         implementation for on this platform
      */
     private final Random rand = RandomSource.getInstance();
 
@@ -166,7 +167,7 @@ public class RandomIterator<E> implements Iterator<E> {
     /**
      * Removal is not supported.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as this iterator is not mutable
      */
     public void remove() {
         throw new UnsupportedOperationException();

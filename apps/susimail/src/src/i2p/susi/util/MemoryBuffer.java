@@ -37,7 +37,7 @@ public class MemoryBuffer implements Buffer {
 	/**
 	 * Get an InputStream for the buffered data.
 	 *
-	 * @return new ByteArrayInputStream
+	 * @return a stream over the buffered bytes, positioned at the start
 	 * @throws IOException if no data has been written
 	 */
 	@Override

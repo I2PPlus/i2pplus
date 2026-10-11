@@ -121,7 +121,8 @@ public class TunnelConfig {
     }
     /**
      * The type of tunnel.
-     * @return the type
+     * @return the internal tunnel type, one of the values set by
+     *         {@link #setType(String)}
      */
     public String getType() {
         return _type;
@@ -998,7 +999,8 @@ public class TunnelConfig {
      * suitable for use in a TunnelController.  This will replace (not add to)
      * any existing parameters, so this should return a comprehensive mapping.
      *
-     * @return the config
+     * @return a new {@link Properties} holding the settings for a
+     *         TunnelController, replacing rather than merging any existing ones
      */
     public Properties getConfig() {
         Properties config = new Properties();
@@ -1627,7 +1629,8 @@ public class TunnelConfig {
     /**
      * Update tunnel quantities for the provided config from this TunnelConfig.
      *
-     * @param config the configuration
+     * @param config the properties to write into; a quantity is only set when it
+     *               has been given a non-negative value
      */
     public void updateTunnelQuantities(Properties config) {
         if (_tunnelQuantity >= 0) {

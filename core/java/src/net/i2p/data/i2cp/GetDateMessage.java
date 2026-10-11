@@ -125,7 +125,7 @@ public class GetDateMessage extends I2CPMessageImpl {
 
     /**
      * I2CP message type sent for this message.
-     * @return the type
+     * @return the I2CP type number of this message
      */
     @Override
     public int getType() {

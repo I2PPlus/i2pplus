@@ -280,7 +280,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
      * Mark a string for extraction by xgettext and translation.
      * Use this only in static initializers.
      * It does not translate!
-     * @return s
+     * @return the string unchanged, present only so xgettext can extract it
      * @since 0.8.7
      */
     private static final String _x(String s) {

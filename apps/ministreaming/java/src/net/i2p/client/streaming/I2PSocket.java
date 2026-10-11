@@ -58,7 +58,7 @@ public interface I2PSocket extends Closeable {
     /**
      * Returns the socket's configuration.
      *
-     * @return socket's configuration
+     * @return the I2PSocketOptions governing this socket
      */
     public I2PSocketOptions getOptions();
     /**

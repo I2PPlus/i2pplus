@@ -97,7 +97,7 @@ public abstract class FieldElement implements Serializable {
     /**
      * Divides this field element by another one.
      *
-     * @param val the divisor
+     * @param val the divisor; it must be non-zero, since it is inverted
      * @return this element divided by val
      */
     public FieldElement divide(FieldElement val) {
@@ -107,7 +107,7 @@ public abstract class FieldElement implements Serializable {
     /**
      * Multiplies this field element by another one.
      *
-     * @param val the multiplier
+     * @param val the field element to multiply by; implementations cast it to their own type
      * @return the product of this element and val
      */
     public abstract FieldElement multiply(FieldElement val);

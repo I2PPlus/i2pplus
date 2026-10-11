@@ -573,8 +573,8 @@ public class BCrypt {
 	 * Perform the "enhanced key schedule" step described by
 	 * Provos and Mazieres in "A Future-Adaptable Password Scheme"
 	 * http://www.openbsd.org/papers/bcrypt-paper.ps
-	 * @param data	salt information
-	 * @param key	password information
+	 * @param data	salt information, consumed cyclically
+	 * @param key	password information, consumed cyclically
 	 */
 	private void ekskey(byte data[], byte key[]) {
 		int i;

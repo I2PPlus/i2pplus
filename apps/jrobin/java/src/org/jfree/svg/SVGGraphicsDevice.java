@@ -15,7 +15,7 @@ public class SVGGraphicsDevice extends GraphicsDevice {
     /**
      * Creates a new instance.
      *
-     * @param id the identifier
+     * @param id the device id, returned unchanged by getIDString()
      * @param defaultConfig the default configuration.
      */
     public SVGGraphicsDevice(String id, GraphicsConfiguration defaultConfig) {

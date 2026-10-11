@@ -1085,7 +1085,7 @@ public class BuildHandler implements Runnable {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name used for logging and identification
          */
         @Override
         public String getName() {return "Defer Tunnel Join Processing";}
@@ -1144,7 +1144,7 @@ public class BuildHandler implements Runnable {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name used for logging and identification
          */
         @Override
         public String getName() {return "Timeout Locating Peer for Tunnel Join";}
@@ -1893,7 +1893,7 @@ public class BuildHandler implements Runnable {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name used for logging and identification
          */
         @Override
         public String getName() {return "Receive Tunnel Build Message";}
@@ -1912,7 +1912,7 @@ public class BuildHandler implements Runnable {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name used for logging and identification
          */
         @Override
         public String getName() {return "Receive Tunnel Build Reply Message";}
@@ -1932,7 +1932,7 @@ public class BuildHandler implements Runnable {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name used for logging and identification
          */
         @Override
         public String getName() {return "Build Request Send Failed";}

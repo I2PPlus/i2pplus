@@ -105,7 +105,7 @@ public class Frequency {
     /**
      * How many events have occurred within the lifetime of this stat?
      *
-     * @return event count
+     * @return event count since this stat was created
      */
     public synchronized long getEventCount() {
         return _count;

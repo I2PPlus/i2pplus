@@ -125,7 +125,8 @@ class PumpedTunnelGateway extends TunnelGateway {
      * Outbound gateways use an unbounded priority queue;
      * inbound gateways use a bounded blocking queue.
      *
-     * @param context RouterContext
+     * @param context RouterContext supplying the stat manager and clock the
+     *                gateway queues are built against
      * @param preprocessor QueuePreprocessor responsible for preprocessing messages
      * @param sender Sender responsible for encrypting and delivering messages
      * @param receiver Receiver that consumes encrypted messages for forwarding

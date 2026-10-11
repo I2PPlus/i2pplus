@@ -64,7 +64,8 @@ class SearchReplyJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the fixed label "Process Kademlia Search Reply", used to identify
+     *         this job in logs and job statistics
      */
     public String getName() { return "Process Kademlia Search Reply"; }
 

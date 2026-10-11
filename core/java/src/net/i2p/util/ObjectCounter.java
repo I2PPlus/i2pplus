@@ -66,7 +66,7 @@ public class ObjectCounter<K> implements Serializable {
      * How many times this object has been counted, without changing the count.
      *
      * @param h the object whose count is to be read; 0 if it has never been counted
-     * @return current count
+     * @return the count so far, 0 if the object has never been counted
      */
     public int count(K h) {
         AtomicInteger i = this.map.get(h);

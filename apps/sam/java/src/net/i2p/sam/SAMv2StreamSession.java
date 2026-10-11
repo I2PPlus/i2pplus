@@ -178,7 +178,7 @@ class SAMv2StreamSession extends SAMStreamSession {
      * the I2PSocket's buffer)
      *
      * @param s I2PSocket
-     * @param id Socket ID
+     * @param id the caller's own socket id, passed through to the sender
      * @return v2StreamSender
      * @throws IOException if the socket's output stream cannot be obtained
      */
@@ -355,7 +355,7 @@ class SAMv2StreamSession extends SAMStreamSession {
     /**
      * Set a receive limit on a stream.
      *
-     * @param id Stream id
+     * @param id the SAM stream id whose reader gets the limit
      * @param limit the receive limit in bytes
      * @param nolimit true for unlimited
      * @return true if the limit was set, false if the reader was not found

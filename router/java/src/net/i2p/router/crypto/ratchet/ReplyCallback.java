@@ -10,7 +10,8 @@ public interface ReplyCallback {
     /**
      *  When does this callback expire?
      *
-     *  @return java time
+     *  @return when the callback expires, in milliseconds since the context
+     *          clock's epoch
      */
     public long getExpiration();
 

@@ -87,9 +87,9 @@ public interface UpdateManager {
      * Called by the Checker, either after check() was called, or it found out on its own.
      * Use this if there is only one UpdateMethod; otherwise use the Map method below.
      *
-     * @param task update task
+     * @param task the running check or download this report concerns
      * @param newsSource who told us
-     * @param type update type
+     * @param type the UpdateType selecting which update is being reported on
      * @param id plugin name for plugins, ignored otherwise
      * @param method How to get the new version
      * @param updateSources Where to get the new version
@@ -103,9 +103,9 @@ public interface UpdateManager {
      * Called by the Checker, either after check() was called, or it found out on its own.
      * Checkers must use this method if there are multiple UpdateMethods discoverd simultaneously.
      *
-     * @param task update task
+     * @param task the running check or download this report concerns
      * @param newsSource who told us
-     * @param type update type
+     * @param type the UpdateType selecting which update is being reported on
      * @param id plugin name for plugins, ignored otherwise
      * @param sourceMap Mapping of methods to sources
      * @param newVersion The new version available
@@ -120,9 +120,9 @@ public interface UpdateManager {
      * The manager should notify the user.
      * Called by the Checker, either after check() was called, or it found out on its own.
      *
-     * @param task update task
+     * @param task the running check or download this report concerns
      * @param newsSource who told us
-     * @param type update type
+     * @param type the UpdateType selecting which update is being reported on
      * @param id plugin name for plugins, ignored otherwise
      * @param newVersion The new version available
      * @param message A translated message to be displayed to the user, non-null
@@ -133,7 +133,7 @@ public interface UpdateManager {
     /**
      * Called by the Checker after check() was called and all notifyVersionAvailable() callbacks are finished
      *
-     * @param task update task
+     * @param task the running check or download this report concerns
      * @param newer notifyVersionAvailable was called
      * @param success check succeeded (newer or not)
      */
@@ -142,26 +142,26 @@ public interface UpdateManager {
     /**
      * Notify of progress update.
      *
-     * @param task update task
-     * @param status status message
+     * @param task the running check or download this report concerns
+     * @param status translated message to show to the user, may contain HTML
      */
     public void notifyProgress(UpdateTask task, String status);
 
     /**
      * Notify of progress update with size information.
      *
-     * @param task update task
-     * @param status status message
-     * @param downloaded bytes downloaded
-     * @param totalSize total size
+     * @param task the running check or download this report concerns
+     * @param status translated message to show to the user, may contain HTML
+     * @param downloaded bytes received so far, for the progress bar
+     * @param totalSize expected total bytes, for the progress bar
      */
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize);
 
     /**
      * Not necessarily the end if there are more URIs to try.
      *
-     * @param task update task
-     * @param reason failure reason
+     * @param task the running check or download this report concerns
+     * @param reason a short translated description of what went wrong
      * @param t may be null
      */
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t);
@@ -169,8 +169,8 @@ public interface UpdateManager {
     /**
      * The task has finished and failed.
      *
-     * @param task update task
-     * @param reason failure reason
+     * @param task the running check or download this report concerns
+     * @param reason a short translated description of what went wrong
      * @param t may be null
      */
     public void notifyTaskFailed(UpdateTask task, String reason, Throwable t);
@@ -181,7 +181,7 @@ public interface UpdateManager {
      * Caller should delete the file upon return, unless it will share it with others,
      * e.g. on a torrent.
      *
-     * @param task update task
+     * @param task the running check or download this report concerns
      * @param actualVersion may be higher (or lower?) than the version requested
      * @param file a valid format for the task's UpdateType
      * @return true if valid, false if corrupt
@@ -310,7 +310,7 @@ public interface UpdateManager {
     /**
      * Tell the UpdateManager that a version is already installed.
      *
-     * @param type update type
+     * @param type the UpdateType whose installed version is being recorded or cleared
      * @param id subtype for plugins, or ""
      * @param version null to remove from installed
      * @since 0.9.45

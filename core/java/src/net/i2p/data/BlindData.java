@@ -105,7 +105,7 @@ public class BlindData {
      * Creates a new BlindData instance for the given destination.
      *
      * @param ctx the application context
-     * @param dest the destination
+     * @param dest the destination, whose signing public key is the one blinded; must be non-null
      * @param blindType the type of blinded signature
      * @param secret may be null or zero-length
      * @throws IllegalArgumentException on various errors
@@ -118,7 +118,7 @@ public class BlindData {
      * Creates a new BlindData instance for the given destination with authentication.
      *
      * @param ctx the application context
-     * @param dest the destination
+     * @param dest the destination, whose signing public key is the one blinded; must be non-null
      * @param blindType the type of blinded signature
      * @param secret may be null or zero-length
      * @param authType the authentication type

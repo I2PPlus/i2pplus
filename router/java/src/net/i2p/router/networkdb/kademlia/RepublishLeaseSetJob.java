@@ -1090,7 +1090,7 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     /**
      * The destination hash this job publishes for.
-     * @return destination hash
+     * @return the hash of the destination whose LeaseSet this job publishes
      */
     Hash getDestHash() {return _dest;}
 
@@ -1230,7 +1230,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     /**
      * Look up the tunnel nickname for a destination.
      *
-     * @param d the destination
+     * @param d the destination whose tunnel nickname is wanted
      * @return tunnel nickname if configured, or the short base32 hash as fallback
      */
     public String getTunnelName(Destination d) {

@@ -193,7 +193,8 @@ class MailCache {
      * Move a mail to another MailCache, neither may be DIR_DRAFTS
      * @param uidl the UIDL of the mail to move
      * @param toMC the cache receiving the mail
-     * @return success
+     * @return true if the mail was moved, false if either cache holds drafts or the
+     *         mail has no body or its file is missing
      * @since 0.9.35
      */
     public boolean moveTo(String uidl, MailCache toMC) {
@@ -242,7 +243,7 @@ class MailCache {
 
     /**
      * Is loadFromDisk in progress?
-     * @return whether loading
+     * @return true if loadFromDisk() is running
      * @since 0.9.35
      */
     public synchronized boolean isLoading() {
@@ -251,7 +252,7 @@ class MailCache {
 
     /**
      * Has loadFromDisk completed?
-     * @return whether loaded
+     * @return true if loadFromDisk() has completed
      * @since 0.9.35
      */
     public synchronized boolean isLoaded() {
@@ -652,7 +653,7 @@ class MailCache {
         /**
          * @param m the mail to fetch
          * @param hOnly if true, fetch headers only
-         * @param buffer destination buffer
+         * @param buffer the buffer the fetched message is written into
          */
         public POP3Request(Mail m, boolean hOnly, Buffer buffer) {
             mail = m;

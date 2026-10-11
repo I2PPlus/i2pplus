@@ -67,7 +67,7 @@ interface EstablishState {
 
     /**
      * Release resources on timeout.
-     * @param reason failure description
+     * @param reason the text logged with the warning and returned by getFailReason()
      * @param e may be null
      * @since 0.9.16
      */

@@ -759,7 +759,7 @@ class ProfileOrganizerRenderer {
      * @param buf the buffer to append to
      * @param count peers in the tier
      * @param known total profiles known to this selection
-     * @param label ring label
+     * @param label ring label, already translated, drawn on the ring itself
      * @param singular singular tooltip template ({0} placeholder)
      * @param plural plural tooltip template ({0} placeholder)
      * @since 0.9.70+
@@ -1304,9 +1304,9 @@ class ProfileOrganizerRenderer {
     /**
      * Translate with plural support
      *
-     * @param s singular form
-     * @param p plural form
-     * @param n the count
+     * @param s singular string, may contain {0} for the count
+     * @param p plural string, may contain {0} for the count
+     * @param n the count, used to choose between s and p
      * @return translated string
      * @since 0.8.5
      */

@@ -1055,12 +1055,12 @@ public abstract class TransportImpl implements Transport {
     /**
      * Whether the given peer is backlogged.
      *
-     * @return whether backlogged
+     * @return false; this base class has no notion of backlogs
      */
     public boolean isBacklogged(Hash peer) {return false;}
     /**
      * Whether the given peer is established.
-     * @return whether established
+     * @return false; only a real transport reports established sessions
      */
     public boolean isEstablished(Hash peer) {return false;}
 
@@ -1085,7 +1085,8 @@ public abstract class TransportImpl implements Transport {
 
     /**
      * Whether the given peer is unreachable.
-     * @return whether unreachable
+     * @return true if the peer is in the unreachable cache and was not the
+     *         last peer reached, false if it is reachable
      */
     public boolean isUnreachable(Hash peer) {
         if (peer == _lastReachablePeer) {return false;}

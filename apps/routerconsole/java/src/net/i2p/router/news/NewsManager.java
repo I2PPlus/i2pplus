@@ -63,7 +63,8 @@ public class NewsManager implements ClientApp {
      *
      * @param ctx the application context supplying the log manager and config
      * @param listener the client app manager to notify when a new news bundle arrives
-     * @param args ignored
+     * @param args unused; the only caller passes null, since news is read from
+     *             docs/news.xml rather than supplied as an argument
      */
     public NewsManager(I2PAppContext ctx, ClientAppManager listener, String[] args) {
         _context = ctx;
@@ -146,17 +147,20 @@ public class NewsManager implements ClientApp {
 
     /**
      * ClientApp interface
-     * @param args ignored
+     * @param args unused; the {@link ClientApp} contract allows stopArgs from
+     *             clients.config, but shutdown only sets the state to STOPPED
      */
     @Override
     public synchronized void shutdown(String[] args) {changeState(STOPPED);}
     /**
-     * @return the state
+     * @return the current {@link ClientAppState}, {@code INITIALIZED} once
+     *         constructed and {@code STARTING}, {@code RUNNING} or
+     *         {@code STOPPED} thereafter
      */
     @Override
     public ClientAppState getState() {return _state;}
     /**
-     * @return the name
+     * @return the app name {@code news}, the key this app is registered under
      */
     @Override
     public String getName() {return APP_NAME;}

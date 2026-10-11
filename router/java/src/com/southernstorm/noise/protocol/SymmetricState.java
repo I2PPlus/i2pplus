@@ -478,7 +478,7 @@ class SymmetricState implements Destroyable, Cloneable {
 
     /**
      * I2P for getting chaining key for siphash calculation
-     * @return a copy
+     * @return a copy of the current chaining key, so callers cannot modify the state
      */
     public byte[] getChainingKey() {
         byte[] rv = new byte[ck.length];

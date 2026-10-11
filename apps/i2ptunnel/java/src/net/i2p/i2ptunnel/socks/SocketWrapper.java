@@ -127,7 +127,7 @@ class SocketWrapper implements I2PSocket {
     }
 
     /**
-     * @return whether closed
+     * @return true if the wrapped outproxy socket is closed
      */
     public boolean isClosed() {
         return socket.isClosed();

@@ -150,7 +150,8 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     /**
      * Inflater statistic
-     * @return the remaining
+     * @return the number of inflated bytes still buffered inside the inflater,
+     *         or 0 if the inflater is unavailable
      */
     public long getRemaining() {
         try {
@@ -163,7 +164,8 @@ public class GunzipOutputStream extends InflaterOutputStream {
 
     /**
      * Inflater statistic
-     * @return the finished
+     * @return true if the inflater has finished decompressing the compressed
+     *         input; also true if the inflater is unavailable
      */
     public boolean getFinished() {
         try {

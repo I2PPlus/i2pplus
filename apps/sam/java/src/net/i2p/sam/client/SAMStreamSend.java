@@ -511,7 +511,8 @@ public class SAMStreamSend {
          */
         public String getConnectionId() { return _connectionId; }
         /**
-         * @return the destination
+         * @return the remote destination read from the dest file, or null before
+         *         the connection is opened
          */
         public String getDestination() { return _remoteDestination; }
 

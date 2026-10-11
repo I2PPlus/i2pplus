@@ -104,8 +104,8 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
     /**
      * Verify the hostname against the certificate.
      *
-     * @param host the hostname
-     * @param cert the certificate
+     * @param host the DNS name or IP literal to match against the certificate
+     * @param cert the server certificate that must be valid for host
      * @throws SSLException if verification fails
      */
     public final void verify(
@@ -351,7 +351,7 @@ public final class DefaultHostnameVerifier implements HostnameVerifier {
     /**
      * Extract subject alternative names from the certificate.
      *
-     * @param cert the certificate
+     * @param cert the certificate to read the subject alternative names from
      * @param subjectType the subject type (DNS or IP)
      * @return the list of subject alternative names, or null
      */

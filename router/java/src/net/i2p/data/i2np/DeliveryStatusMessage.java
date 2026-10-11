@@ -113,7 +113,8 @@ public class DeliveryStatusMessage extends FastI2NPMessageImpl {
 
     /**
      * The I2NP message type of a delivery status message.
-     * @return the type
+     * @return the constant {@link #MESSAGE_TYPE} ({@code 10}), which is the
+     *         wire type identifying this message as a delivery status message
      */
     public int getType() { return MESSAGE_TYPE; }
 

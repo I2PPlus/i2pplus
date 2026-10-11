@@ -206,7 +206,8 @@ public class NoiseInit {
              * hashing the protocol name. Returned as a copy so a restarted handshake
              * cannot corrupt the state this pattern holds for the next one.
              *
-             * @return a copy
+             * @return a fresh copy of the pattern's initial chaining key, which the
+             *         caller may mix into without disturbing this pattern
              */
             public byte[] getInitialCK() { return Arrays.copyOf(ck, ck.length); }
 
@@ -215,7 +216,8 @@ public class NoiseInit {
              * chain starts from, before any handshake message is mixed in. Returned
              * as a copy so a restarted handshake cannot corrupt this pattern's state.
              *
-             * @return a copy
+             * @return a fresh copy of the pattern's initial handshake hash, which the
+             *         caller may mix into without disturbing this pattern
              */
             public byte[] getInitialH() { return Arrays.copyOf(h, h.length); }
 

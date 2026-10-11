@@ -38,7 +38,8 @@ class FloodfillRouterInfoFloodJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the fixed label "Distribute Local RouterInfo to Floodfills", used
+     *         to identify this job in logs and job statistics
      */
     public String getName() { return "Distribute Local RouterInfo to Floodfills"; }
 

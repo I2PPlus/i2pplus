@@ -902,7 +902,8 @@ public class SAMStreamSink {
          */
         public String getConnectionId() { return _connectionId; }
         /**
-         * @return the destination
+         * @return the remote destination string reported when this connection was
+         *         established, which is used only for logging
          */
         public String getDestination() { return _remoteDestination; }
 

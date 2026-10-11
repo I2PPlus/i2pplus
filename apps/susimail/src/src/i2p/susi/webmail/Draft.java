@@ -91,7 +91,7 @@ class Draft extends Mail {
 	/**
 	 * Includes size of attachments
 	 *
-	 * @return the size
+	 * @return body plus attachment size in bytes
 	 * @since 0.9.62
 	 */
 	@Override

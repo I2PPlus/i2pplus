@@ -39,7 +39,7 @@ public class Points implements Comparable<Points> {
     /**
      * Total points accumulated.
      *
-     * @return the points
+     * @return the accumulated score, positive for penalties and negative for credits
      * @since 0.9.38
      */
     public double getPoints() {
@@ -49,7 +49,8 @@ public class Points implements Comparable<Points> {
     /**
      * Reasons accumulated with the points.
      *
-     * @return the reasons
+     * @return the live list of accumulated reason strings, each one the signed
+     *         amount formatted to two decimals, a colon, and the reason text
      * @since 0.9.38
      */
     public List<String> getReasons() {

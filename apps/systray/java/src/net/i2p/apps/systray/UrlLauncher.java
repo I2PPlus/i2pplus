@@ -524,7 +524,7 @@ public class UrlLauncher implements ClientApp {
 
     /**
      * ClientApp interface
-     * @return the name
+     * @return the name this application registers with the router, always {@code UrlLauncher}
      * @since 0.9.18
      */
     @Override

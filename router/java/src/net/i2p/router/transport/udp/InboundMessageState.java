@@ -157,7 +157,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns true if all fragments up to last have been received.
-     * @return whether complete
+     * @return true if every fragment up to the last one has arrived
      */
     public boolean isComplete() {
         synchronized(lock) {
@@ -169,7 +169,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns true if message has expired (received more than 10s ago).
-     * @return whether expired
+     * @return true if more than MAX_RECEIVE_TIME has elapsed since the first fragment
      */
     public boolean isExpired() {
         return _context.clock().now() > _receiveBegin + MAX_RECEIVE_TIME;
@@ -177,7 +177,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * Returns the message lifetime in milliseconds.
-     * @return the lifetime
+     * @return milliseconds elapsed since the first fragment arrived
      */
     public long getLifetime() {
         return _context.clock().now() - _receiveBegin;
@@ -211,7 +211,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * The Hash of the sender.
-     * @return the from
+     * @return hash of the sending peer, as taken from the session
      */
     public Hash getFrom() { return _from; }
 
@@ -335,7 +335,7 @@ class InboundMessageState implements CDQEntry {
 
     /**
      * The array of fragments, throws if already released.
-     * @return the fragments
+     * @return the fragment array, indexed by fragment number
      */
     public ByteArray[] getFragments() {
         synchronized(lock) {

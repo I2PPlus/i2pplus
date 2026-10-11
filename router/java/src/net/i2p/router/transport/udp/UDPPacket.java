@@ -167,7 +167,7 @@ class UDPPacket implements CDPQEntry {
     /**
      * Packet sequence number.
      *
-     * @return sequence number
+     * @return the outbound packet's sequence number, counting up from zero
      */
     @Override
     public long getSeqNum() {

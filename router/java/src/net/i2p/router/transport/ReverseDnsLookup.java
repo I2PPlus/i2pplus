@@ -526,7 +526,8 @@ public class ReverseDnsLookup {
 
         /**
          * The cached hostname for the entry.
-         * @return the hostname
+         * @return the resolved host name, or {@code "unknown"} if the lookup
+         *         resolved none
          */
         public String getHostname() {
             return hostname;
@@ -534,7 +535,8 @@ public class ReverseDnsLookup {
 
         /**
          * The timestamp when the entry was cached.
-         * @return the timestamp
+         * @return the epoch milliseconds at which the entry was cached, used to
+         *         expire it
          */
         public long getTimestamp() {
             return timestamp;

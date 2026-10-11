@@ -605,7 +605,8 @@ public class StatManager {
      * Save memory by not creating stats unless they are required for router operation.
      * For backward compatibility of any external clients, always returns false if not in router context.
      *
-     * @param statName ignored
+     * @param statName stat being registered; the decision applies to every
+     *                 name, so none is examined
      * @return true if the stat should be ignored.
      */
     public boolean ignoreStat(String statName) {

@@ -70,7 +70,7 @@ class SSU2Bitfield {
     /**
      * The current offset.
      *
-     * @return the offset
+     * @return the message number the lowest bit represents
      */
     public long getOffset() {return offset;}
 

@@ -244,7 +244,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * Throws {@link IOException} — the master session does not handle
      * datagram data directly; use a DATAGRAM subsession instead.
      *
-     * @throws IOException always
+     * @throws IOException always, on every call
      */
     public void receiveDatagramBytes(Destination sender, byte[] data, int proto,
                                      int fromPort, int toPort) throws IOException {
@@ -258,7 +258,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
      * Throws {@link IOException} — the master session does not handle
      * raw data directly; use a RAW subsession instead.
      *
-     * @throws IOException always
+     * @throws IOException always, on every call
      */
     public void receiveRawBytes(byte[] data, int proto, int fromPort, int toPort) throws IOException {
         throw new IOException("master session");
@@ -341,7 +341,7 @@ class MasterSession extends SAMv3StreamSession implements SAMDatagramReceiver, S
          * Called when an I2P error occurs.
          *
          * @param session the session that reported the error
-         * @param message error description
+         * @param message human-readable description of the failure, logged
          * @param error the exception, if any
          */
         public void errorOccurred(I2PSession session, String message,

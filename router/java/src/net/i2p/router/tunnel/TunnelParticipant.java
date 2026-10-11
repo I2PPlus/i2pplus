@@ -143,7 +143,7 @@ class TunnelParticipant {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the name this job is listed under in the job queue
          */
         public String getName() {
             return "Verify Next Hop Info Found";
@@ -362,7 +362,7 @@ class TunnelParticipant {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the name this job is listed under in the job queue
          */
         public String getName() {
             return "Participant send after lookup";
@@ -410,7 +410,7 @@ class TunnelParticipant {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the name this job is listed under in the job queue
          */
         public String getName() {
             return "Participant Next Hop Lookup Timeout";

@@ -29,7 +29,7 @@ public class IrcOutboundFilter implements Runnable {
      * @param lcl the local socket
      * @param rem the remote I2P socket
      * @param pong buffer for expected PONG responses
-     * @param log the logger
+     * @param log logger used for filter messages
      */
     public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log) {
         this(lcl, rem, pong, log, null);
@@ -41,7 +41,7 @@ public class IrcOutboundFilter implements Runnable {
      * @param lcl the local socket
      * @param rem the remote I2P socket
      * @param pong buffer for expected PONG responses
-     * @param log the logger
+     * @param log logger used for filter messages
      * @param helper may be null
      * @since 0.8.9
      */

@@ -72,7 +72,7 @@ public class WizardHandler extends FormHandler {
 
     /**
      *  Modified from ConfigNetHandler
-     *  @return changed
+     *  @return true if any bandwidth, share or burst setting was written
      */
     private boolean updateRates(Map<String, String> changes) {
         boolean updated = false;

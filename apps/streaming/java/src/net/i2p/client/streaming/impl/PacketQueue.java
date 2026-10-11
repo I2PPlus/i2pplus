@@ -302,7 +302,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
      * previously sent with I2PSession.sendMessage().
      * Multiple calls for a single message ID are possible.
      *
-     * @param session session notifying
+     * @param session the session reporting the new status, not otherwise consulted
      * @param msgId message number returned from a previous sendMessage() call
      * @param status of the message, as defined in MessageStatusMessage and this class.
      * @since 0.9.14

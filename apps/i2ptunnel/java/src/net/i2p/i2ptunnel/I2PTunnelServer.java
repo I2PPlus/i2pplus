@@ -1436,7 +1436,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  @param from hash of the peer's destination for local address binding
      *  @param remoteHost the target host to connect to
      *  @param remotePort the target port to connect to
-     *  @param forceNonSSL override config
+     *  @param forceNonSSL true to skip SSL even when the SSL option is set
      *  @since 0.9.50
      */
     private Socket getSocket(Hash from, InetAddress remoteHost, int remotePort, boolean forceNonSSL) throws IOException {

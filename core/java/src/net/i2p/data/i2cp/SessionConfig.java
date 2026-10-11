@@ -109,7 +109,7 @@ public class SessionConfig extends DataStructureImpl {
      * Determine when this session was authorized by the destination (so we can
      * prevent replay attacks)
      *
-     * @return Date
+     * @return the time the destination authorized this session, or null if never set
      */
     public Date getCreationDate() {
         return _creationDate;
@@ -151,7 +151,7 @@ public class SessionConfig extends DataStructureImpl {
 
     /**
      * Return the signature authenticating this session authorization, or null.
-     * @return the signature
+     * @return the signature over the session authorization, or null if none was set
      */
     public Signature getSignature() {
         return _signature;

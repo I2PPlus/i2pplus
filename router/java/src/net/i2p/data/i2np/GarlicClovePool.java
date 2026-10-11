@@ -64,14 +64,14 @@ public class GarlicClovePool {
     /**
      * Current number of available cloves in the pool.
      *
-     * @return available count
+     * @return the number of cloves the pool can currently hand out
      */
     public synchronized int available() {return available;}
 
     /**
      * Maximum capacity of the pool.
      *
-     * @return capacity
+     * @return the most cloves the pool can hold at once
      */
     public int capacity() {return pool.length;}
 }

@@ -24,7 +24,7 @@ public class SevenBit extends Encoding {
 	}
 
 	/**
-	 * @throws EncodingException always
+	 * @throws EncodingException always; 7bit decodes but has no encoder
 	 */
 	public String encode(byte[] in) throws EncodingException {
 		throw new EncodingException("unsupported");
@@ -53,7 +53,7 @@ public class SevenBit extends Encoding {
 
 	/**
 	 * We don't do any 8-bit checks like we do for decode(byte[])
-	 * @return in, unchanged
+	 * @return the buffer unchanged, without the 8-bit check decode(byte[]) makes
 	 */
 	@Override
 	public Buffer decode(Buffer in) {

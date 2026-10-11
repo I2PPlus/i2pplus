@@ -84,8 +84,8 @@ public interface Robin extends RrdUpdater<Robin> {
      * be outside of <code>[minValue, maxValue]</code> interval (inclusive) will be silently
      * replaced with <code>NaN</code>.
      *
-     * @param minValue lower boundary
-     * @param maxValue upper boundary
+     * @param minValue inclusive lower bound; values below it become NaN
+     * @param maxValue inclusive upper bound; values above it become NaN
      * @throws java.io.IOException Thrown in case of I/O error
      */
     void filterValues(double minValue, double maxValue) throws IOException;
@@ -108,7 +108,7 @@ public interface Robin extends RrdUpdater<Robin> {
      * Writes a full row of values into storage.
      *
      * @param newValues an array of double.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException Thrown in case of I/O error
      */
     void update(double[] newValues) throws IOException;
 
@@ -116,7 +116,7 @@ public interface Robin extends RrdUpdater<Robin> {
      * Renders the current contents as text.
      *
      * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException Thrown in case of I/O error
      */
     String dump() throws IOException;
 
@@ -124,7 +124,7 @@ public interface Robin extends RrdUpdater<Robin> {
      * Appends a single value at the current row pointer.
      *
      * @param newValue a double.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException Thrown in case of I/O error
      */
     void store(double newValue) throws IOException;
 
@@ -133,7 +133,7 @@ public interface Robin extends RrdUpdater<Robin> {
      *
      * @param newValue a double.
      * @param bulkCount a int.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException Thrown in case of I/O error
      */
     void bulkStore(double newValue, int bulkCount) throws IOException;
 
@@ -143,7 +143,7 @@ public interface Robin extends RrdUpdater<Robin> {
      * @param index a int.
      * @param count a int.
      * @return an array of double.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException Thrown in case of I/O error
      */
     double[] getValues(int index, int count) throws IOException;
 }

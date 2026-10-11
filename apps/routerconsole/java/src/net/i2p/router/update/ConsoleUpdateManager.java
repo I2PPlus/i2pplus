@@ -101,7 +101,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * then registers itself with the client app manager.
      * @param ctx router context supplying the update policy, timers and logging
      * @param listener client app manager to register this with and to notify of state changes
-     * @param args ignored
+     * @param args command line arguments, unused
      */
     public ConsoleUpdateManager(RouterContext ctx, ClientAppManager listener, String[] args) {
         _context = ctx;
@@ -226,7 +226,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
 
     /**
      * ClientApp interface
-     * @param args ignored
+     * @param args command line arguments, unused
      * @since 0.9.12
      */
     @Override
@@ -1316,7 +1316,8 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
      * Process sud, su2, or su3.
      * Only for router updates.
      *
-     * @return success
+     * @return true if the file verified and was staged for install at next
+     *         restart, false if verification or the copy failed
      * @since 0.9.9
      */
     private boolean handleRouterFile(URI uri, String actualVersion, File f, UpdateType updateType) {

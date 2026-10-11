@@ -571,7 +571,7 @@ public final class DnsName extends SafeCharSequence implements Serializable, Com
      * @param offset the index into data at which this domain name starts
      * @param jumps  The list of jumps (by now).
      * @return The parsed domain name.
-     * @throws IllegalStateException on cycles.
+     * @throws IllegalStateException if the compression pointers form a cycle.
      */
     @SuppressWarnings("NonApiType")
     private static DnsName parse(byte[] data, int offset, HashSet<Integer> jumps) throws IllegalStateException {

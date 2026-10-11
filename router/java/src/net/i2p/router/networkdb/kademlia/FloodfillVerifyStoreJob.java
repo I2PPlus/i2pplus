@@ -577,7 +577,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
     /**
      * Is the entry at least as new as what we published?
      *
-     * @param entry peer-supplied entry
+     * @param entry entry the floodfill returned, compared against what we published
      * @return true if fresh enough to count as success
      */
     private boolean isFresh(DatabaseEntry entry) {

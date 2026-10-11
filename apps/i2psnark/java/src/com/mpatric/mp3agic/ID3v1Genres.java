@@ -157,7 +157,7 @@ public final class ID3v1Genres {
     /**
      * Match provided description against genres, ignoring case.
      *
-     * @param description genre description
+     * @param description the genre text to look for, matched without regard to case
      * @return matching genre index or -1
      */
     public static int matchGenreDescription(String description) {

@@ -54,7 +54,9 @@ public class RadialGradientPaintKey {
      * Tests this instance for equality with an arbitrary object.
      *
      * @param obj the object to test ({@code null} permitted).
-     * @return A boolean.
+     * @return {@code true} if {@code obj} is this instance or another
+     *         {@code RadialGradientPaintKey} whose paint matches on centre point,
+     *         focus point, colors and fractions.
      */
     @Override
     public boolean equals(Object obj) {

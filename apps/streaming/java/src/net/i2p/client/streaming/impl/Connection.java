@@ -1194,7 +1194,7 @@ class Connection {
 
     /**
      *  Constructor for this connection.
-     *  @param ctx router context
+     *  @param ctx application context supplying the clock, logger and stats
      *  @param manager the owning connection manager
      *  @param session the I2P session this connection runs over
      *  @param chooser scheduler used for delayed connects
@@ -1646,7 +1646,7 @@ class Connection {
      * write attempt.
      *
      * @param lastWarnTime last timestamp the WARN was emitted, 0 if never
-     * @param now          current time
+     * @param now          router clock time in milliseconds
      * @param minIntervalMs minimum ms between WARNs (the persist delay itself)
      * @return true if the WARN should be emitted
      * @since 0.9.71+
@@ -1954,7 +1954,7 @@ class Connection {
 
      * on the rising edge of a verdict.
      *
-     * @param verdict current evaluation
+     * @param verdict the StallState just computed, compared against the last one
      * @since 0.9.71+
      */
     private void reportStallState(StallState verdict) {
@@ -3317,7 +3317,7 @@ class Connection {
     /**
      * I2P session for this connection.
      *
-     * @return the session
+     * @return the I2PSession this connection sends and receives over
      */
     public I2PSession getSession() {return _session;}
 
@@ -3583,7 +3583,7 @@ if (!on) {
 
     /**
      * Whether the other side is choking us.
-     * @return if choked
+     * @return true if the remote has advertised a zero window
      * @since 0.9.29
      */
     public boolean isChoked() {return _isChoked;}
@@ -3622,7 +3622,7 @@ if (!on) {
     /**
      * Timestamp when this connection was created.
      *
-     * @return creation timestamp
+     * @return router clock time in milliseconds at construction
      */
     public long getCreatedOn() {return _createdOn;}
 

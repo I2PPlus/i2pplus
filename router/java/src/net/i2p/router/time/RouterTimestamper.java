@@ -138,7 +138,7 @@ public class RouterTimestamper extends Timestamper {
      * NTP server at the given index in the configured list.
      *
      * @param index zero-based position within the configured server list
-     * @return the server
+     * @return the NTP server address at that position in the configured list
      */
     public String getServer(int index) {
         synchronized (_servers) {
@@ -156,7 +156,8 @@ public class RouterTimestamper extends Timestamper {
     /**
      * Whether NTP is disabled.
      *
-     * @return whether disabled
+     * @return true when NTP is switched off at startup, either by configuration
+     *         or because the VM comm system is in use
      */
     public boolean getIsDisabled() { return _disabled; }
 
@@ -188,7 +189,7 @@ public class RouterTimestamper extends Timestamper {
      * Time update listener at the given index.
      *
      * @param index zero-based position within the registered listener list
-     * @return the listener
+     * @return the registered time update listener at that position
      */
     public UpdateListener getListener(int index) {
             return _listeners.get(index);

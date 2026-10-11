@@ -37,7 +37,8 @@ public class HashDistance {
      * prefer {@link #compare(Hash, Hash, Hash, Hash)}.
      * @param targetKey one of the two hashes whose XOR distance is wanted
      * @param routerInQuestion the other of the two hashes
-     * @return the distance
+     * @return the unsigned XOR of the two hashes, as a BigInteger over all
+     *         256 bits
      */
     public static BigInteger getDistance(Hash targetKey, Hash routerInQuestion) {
         byte[] diff = DataHelper.xor(routerInQuestion.getData(), targetKey.getData());

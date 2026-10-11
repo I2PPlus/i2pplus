@@ -496,7 +496,8 @@ public class NetDbHelper extends FormHandler {
     /**
      * Return the currently selected NetDb tab index.
      *
-     * @return the tab
+     * @return the index into the navigation bar's title and link arrays for
+     *         the tab this request belongs to, or 0 if it belongs to none
      * @since 0.9.1
      */
     private int getTab() {

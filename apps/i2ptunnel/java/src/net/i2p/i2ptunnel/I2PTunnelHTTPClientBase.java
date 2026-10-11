@@ -289,7 +289,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      * Update the cache and note if failed.
      *
-     * @param proxy which
+     * @param proxy the outproxy name to record, or null to note nothing
      * @param host clearnet hostname targeted
      * @param isSSL set to FALSE for ConnectClient
      * @param ok success or failure
@@ -346,7 +346,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      *
      * @param localPort the local port to bind to
      * @param ownDest whether to use our own destination
-     * @param l logging instance
+     * @param l the Logging instance this tunnel's status messages are sent to
      * @param notifyThis event dispatcher for notifications
      * @param handlerName the handler name
      * @param tunnel the parent I2PTunnel instance
@@ -370,7 +370,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * It is used to add a client to an existing socket manager.
      *
      * @param localPort the local port to bind to
-     * @param l logging instance
+     * @param l the Logging instance this tunnel's status messages are sent to
      * @param sktMgr the existing socket manager
      * @param tunnel the parent I2PTunnel instance
      * @param notifyThis event dispatcher for notifications
@@ -445,7 +445,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         private final BitSet counts;
 
         /**
-         * @param exp expiration time
+         * @param exp the time in milliseconds after which the nonce is no longer
+         *            accepted, as an absolute Clock.now() timestamp
          */
         public NonceInfo(long exp) {
             expires = exp;
@@ -453,12 +454,14 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
         }
 
         /**
-         * @return the expires
+         * @return the time in milliseconds after which this nonce is no longer
+         *         accepted, as passed to the constructor
          */
         public long getExpires() {return expires;}
 
         /**
-         * @return whether valid
+         * @return AUTH_GOOD when the nonce has not expired and this nonce count has
+         *         not been seen before, otherwise AUTH_BAD or AUTH_STALE
          */
         public AuthResult isValid(int nc) {
             if (nc <= 0) {return AuthResult.AUTH_BAD;}
@@ -656,7 +659,9 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
      * @param requestId the unique request identifier for logging
      * @param method GET, POST, etc.
      * @param authorization may be null, the full auth line e.g. "Basic lskjlksjf"
-     * @return success
+     * @return AUTH_GOOD when no authorization is required or the supplied
+     *         credentials were accepted, otherwise AUTH_BAD when they were
+     *         rejected or AUTH_BAD_REQ when the auth line was malformed
      */
     protected AuthResult authorize(Socket s, long requestId, String method, String authorization) {
         String authRequired = getTunnel().getClientOptions().getProperty(PROP_AUTH);
@@ -1109,7 +1114,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     /**
      * The Base 64 of 40 bytes: (now, sha256 of (now, proxy nonce))
      *
-     * @return the nonce
+     * @return the Base 64 digest, which is also registered as a valid nonce
      */
     private String getNonce() {
         byte[] b = new byte[DataHelper.DATE_LENGTH + PROXYNONCE_BYTES];

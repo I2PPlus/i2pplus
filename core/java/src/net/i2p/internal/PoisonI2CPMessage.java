@@ -29,7 +29,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
      *  Reading this message always fails.
      *
      *  @deprecated don't do this
-     *  @throws I2CPMessageException always
+     *  @throws I2CPMessageException always, as reading this message is not supported
      */
     @Deprecated
     @Override
@@ -41,7 +41,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
      *  Writing this message always fails.
      *
      *  @deprecated don't do this
-     *  @throws I2CPMessageException always
+     *  @throws I2CPMessageException always, as writing this message is not supported
      */
     @Deprecated
     @Override
@@ -52,7 +52,7 @@ public class PoisonI2CPMessage extends I2CPMessageImpl {
     /**
      * Type of this message.
      *
-     * @return the type
+     * @return the PoisonI2CPMessage type
      */
     @Override
     public int getType() {

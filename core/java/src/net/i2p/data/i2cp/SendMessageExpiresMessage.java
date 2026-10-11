@@ -86,7 +86,8 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      * The Date object is created here, it is not cached.
      * Use getExpirationTime() if you only need the long value.
-     * @return the expiration
+     * @return the absolute date after which the message should be discarded,
+     *         built fresh from the wire timestamp on every call and never null
      */
     public Date getExpiration() {
         return _daf.getDate();
@@ -124,7 +125,8 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
     /**
      * Message flags.
      *
-     * @return the flags
+     * @return the application-specific flag bitmask from the trailing two wire
+     *         bytes, in the range 0 to 65535
      * @since 0.8.4
      */
     public int getFlags() {
@@ -186,7 +188,7 @@ public class SendMessageExpiresMessage extends SendMessageMessage {
 
     /**
      * Returns the I2CP message type number for this message.
-     * @return the type
+     * @return the I2CP message type number 36 assigned to this message class
      */
     @Override
     public int getType() {

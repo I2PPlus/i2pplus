@@ -108,7 +108,8 @@ public class FileUtil {
      * @param zipfile the zip archive to extract
      * @param targetDir the directory the entries are written under, with any
      *                  missing parent directories created as needed
-     * @param logLevel Log.WARN, etc.
+     * @param logLevel severity threshold for extraction progress messages;
+     *                 messages at or below this level are printed
      * @return true if it was copied successfully
      * @since 0.9.7
      */

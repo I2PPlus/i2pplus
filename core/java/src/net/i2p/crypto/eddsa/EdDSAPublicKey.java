@@ -64,7 +64,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     /**
      * The reported algorithm name for all EdDSA keys.
      *
-     * @return The algorithm.
+     * @return the JCA algorithm name shared by all EdDSA keys, "EdDSA"
      */
     @Override
     public String getAlgorithm() {
@@ -74,7 +74,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     /**
      * The encoding format of the key.
      *
-     * @return The format.
+     * @return the JCA key encoding format, always "X.509"
      */
     @Override
     public String getFormat() {
@@ -228,7 +228,7 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
     /**
      * The EdDSA domain parameters for the key.
      *
-     * @return The params.
+     * @return the EdDSAParameterSpec naming the curve and hash algorithm
      */
     @Override
     public EdDSAParameterSpec getParams() {

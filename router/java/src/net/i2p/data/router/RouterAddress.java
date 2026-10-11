@@ -136,7 +136,8 @@ public class RouterAddress extends DataStructureImpl {
     /**
      * Transport option value for the given key.
      * @param opt the transport option name to look up, such as "host" or "port"
-     * @return the option
+     * @return the value of the named transport option, or null if no such
+     *         option is present
      * @since 0.8.13
      */
     public String getOption(String opt) {

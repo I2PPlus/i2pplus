@@ -78,7 +78,9 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
 
     /**
      *  Parameter names starting with "nofilter_" will not be filtered.
-     * @return the parameter
+     * @return the value submitted for this parameter once it has been checked
+     *         against the whitelist, or null if the parameter is absent or its
+     *         value did not match and was dropped
      */
     @Override
     public String getParameter(String parameter) {
@@ -113,7 +115,9 @@ public class XSSRequestWrapper extends HttpServletRequestWrapper {
     }
 
     /**
-     * @return the header
+     * @return the value of the named header once it has been checked against the
+     *         whitelist, or null if the header is absent or its value did not
+     *         match and was dropped
      */
     @Override
     public String getHeader(String name) {

@@ -84,7 +84,8 @@ public class NamingServiceBean extends AddressbookBean {
 
     /**
      * {@inheritDoc}
-     * @return whether prefiltered
+     * @return true when the entries came back already filtered by the naming
+     *         service, so callers must not filter or paginate them again
      */
     @Override
     protected boolean isPrefiltered() {
@@ -214,7 +215,8 @@ public class NamingServiceBean extends AddressbookBean {
     /**
      * Get the NamingService for the current file name, or the root NamingService.
      *
-     * @return the NamingService
+     * @return the book matching the current file name, falling back to the root
+     *         naming service when no book in the tree matches
      */
     private NamingService getNamingService() {
         NamingService root = _context.namingService();
@@ -468,7 +470,8 @@ public class NamingServiceBean extends AddressbookBean {
      * {@inheritDoc}
      * Returns the entries with blacklist filtering and the current filter,
      * search, and pagination applied, loading or reusing the cached load.
-     * @return the entries
+     * @return the filtered, searched, and paginated entries, or null if no load
+     *         has succeeded yet
      */
     @Override
     public AddressBean[] getEntries() {

@@ -32,7 +32,7 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
      *
      * Allocated bandwidth value is retrieved from config or set to reasonable default.
      *
-     * @param context RouterContext
+     * @param context the router context supplying the bandwidth allocation
      * @param preprocessor QueuePreprocessor for the gateway
      * @param sender Encrypting Sender for fragments
      * @param receiver Receiving entity consuming encrypted messages

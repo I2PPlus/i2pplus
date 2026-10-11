@@ -280,7 +280,7 @@ public class LeaseSet2 extends LeaseSet {
 
     /**
      * Checks if this leaseset uses offline keys.
-     * @return whether offline
+     * @return true if the leaseset is signed with transient offline keys
      */
     public boolean isOffline() {return (_flags & FLAG_OFFLINE_KEYS) != 0;}
 
@@ -302,7 +302,8 @@ public class LeaseSet2 extends LeaseSet {
     /**
      * Destination must be previously set.
      *
-     * @param expires absolute ms
+     * @param expires when the offline signature stops being valid, in milliseconds
+     *                since the epoch
      * @param transientSPK the key that will sign the leaseset
      * @param offlineSig the signature by the spk in the destination
      * @return success, false if verify failed or expired
@@ -320,7 +321,8 @@ public class LeaseSet2 extends LeaseSet {
     /**
      * Generate a Signature to pass to setOfflineSignature()
      *
-     * @param expires absolute ms
+     * @param expires when the offline signature stops being valid, in milliseconds
+     *                since the epoch; the signature covers whole seconds only
      * @param transientSPK the key that will sign the leaseset
      * @param priv the private signing key for the destination
      * @return null on error
@@ -670,7 +672,8 @@ public class LeaseSet2 extends LeaseSet {
      * Verify with the SPK in the dest for online sigs.
      * Verify with the SPK in the offline sig section for offline sigs.
      *
-     * @return valid
+     * @return true if a non-RSA signature is present and verifies against the
+     *         online or offline signing key as appropriate
      */
     @Override
     public boolean verifySignature() {

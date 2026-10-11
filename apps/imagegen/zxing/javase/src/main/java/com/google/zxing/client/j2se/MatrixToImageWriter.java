@@ -52,7 +52,7 @@ public final class MatrixToImageWriter {
    * As {@link #toBufferedImage(BitMatrix)}, but allows customization of the output.
    *
    * @param matrix {@link BitMatrix} to write
-   * @param config output configuration
+   * @param config the {@link MatrixToImageConfig} supplying the colors and color model
    * @return {@link BufferedImage} representation of the input
    */
   public static BufferedImage toBufferedImage(BitMatrix matrix, MatrixToImageConfig config) {
@@ -74,7 +74,7 @@ public final class MatrixToImageWriter {
 
   /**
    * @param matrix {@link BitMatrix} to write
-   * @param format image format
+   * @param format the ImageIO format name, e.g. PNG
    * @param file file {@link File} to write image to
    * @throws IOException if writes to the file fail
    * @deprecated use {@link #writeToPath(BitMatrix, String, Path)}
@@ -88,7 +88,7 @@ public final class MatrixToImageWriter {
    * Writes a {@link BitMatrix} to a file with default configuration.
    *
    * @param matrix {@link BitMatrix} to write
-   * @param format image format
+   * @param format the ImageIO format name, e.g. PNG
    * @param file file {@link Path} to write image to
    * @throws IOException if writes to the stream fail
    * @see #toBufferedImage(BitMatrix)
@@ -99,9 +99,9 @@ public final class MatrixToImageWriter {
 
   /**
    * @param matrix {@link BitMatrix} to write
-   * @param format image format
+   * @param format the ImageIO format name, e.g. PNG
    * @param file file {@link File} to write image to
-   * @param config output configuration
+   * @param config the {@link MatrixToImageConfig} supplying the colors and color model
    * @throws IOException if writes to the file fail
    * @deprecated use {@link #writeToPath(BitMatrix, String, Path, MatrixToImageConfig)}
    */
@@ -115,9 +115,9 @@ public final class MatrixToImageWriter {
    * As {@link #writeToFile(BitMatrix, String, File)}, but allows customization of the output.
    *
    * @param matrix {@link BitMatrix} to write
-   * @param format image format
+   * @param format the ImageIO format name, e.g. PNG
    * @param file file {@link Path} to write image to
-   * @param config output configuration
+   * @param config the {@link MatrixToImageConfig} supplying the colors and color model
    * @throws IOException if writes to the file fail
    */
   public static void writeToPath(BitMatrix matrix, String format, Path file, MatrixToImageConfig config)
@@ -132,7 +132,7 @@ public final class MatrixToImageWriter {
    * Writes a {@link BitMatrix} to a stream with default configuration.
    *
    * @param matrix {@link BitMatrix} to write
-   * @param format image format
+   * @param format the ImageIO format name, e.g. PNG
    * @param stream {@link OutputStream} to write image to
    * @throws IOException if writes to the stream fail
    * @see #toBufferedImage(BitMatrix)
@@ -145,9 +145,9 @@ public final class MatrixToImageWriter {
    * As {@link #writeToStream(BitMatrix, String, OutputStream)}, but allows customization of the output.
    *
    * @param matrix {@link BitMatrix} to write
-   * @param format image format
+   * @param format the ImageIO format name, e.g. PNG
    * @param stream {@link OutputStream} to write image to
-   * @param config output configuration
+   * @param config the {@link MatrixToImageConfig} supplying the colors and color model
    * @throws IOException if writes to the stream fail
    */
   public static void writeToStream(BitMatrix matrix, String format, OutputStream stream, MatrixToImageConfig config)

@@ -31,7 +31,7 @@ JCheckBox
 
     /**
      * Checkbox label.
-     * @param str checkbox label
+     * @param str the text shown beside the box
      */
     public
     JCheckBox(
@@ -42,7 +42,7 @@ JCheckBox
 
     /**
      * Selection state.
-     * @param b selection state
+     * @param b true to mark the box as checked
      */
     public void
     setSelected(
@@ -53,7 +53,7 @@ JCheckBox
 
     /**
      * Selection state.
-     * @return selection state
+     * @return true if the box is currently checked
      */
     public boolean
     isSelected()

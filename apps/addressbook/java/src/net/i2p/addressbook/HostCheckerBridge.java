@@ -21,7 +21,7 @@ public class HostCheckerBridge {
     /**
      * Get singleton HostChecker instance
      * This should be set by Daemon.java to avoid duplicate instances
-     * @return the instance
+     * @return the shared HostChecker, or null before Daemon sets it
      */
     public static HostChecker getInstance() {
         synchronized (lock) {

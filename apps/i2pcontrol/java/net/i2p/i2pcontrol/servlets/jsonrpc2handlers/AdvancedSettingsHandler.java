@@ -24,7 +24,7 @@ public class AdvancedSettingsHandler implements RequestHandler {
 
     /**
      * Constructor for advanced settings handler.
-     * @param ctx router context
+     * @param ctx router context the settings are read from
      * @param helper JSON-RPC helper instance
      */
     public AdvancedSettingsHandler(RouterContext ctx, JSONRPC2Helper helper) {

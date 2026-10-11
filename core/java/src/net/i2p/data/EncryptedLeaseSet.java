@@ -435,7 +435,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * This is the hash of the signing public key type and the signing public key.
      * Throws IllegalStateException if not initialized.
      *
-     * @return the hash
+     * @return the hash of the signing public key's type and key, not the destination hash
      * @throws IllegalStateException if the signing key is not set
      */
     @Override
@@ -769,7 +769,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     /**
      * The HKDF input (no per-client auth)
      *
-     * @param ctx the context
+     * @param ctx the context supplying the router and client keys used to derive the subcredential
      * @return 36 bytes
      * @since 0.9.39
      */
@@ -902,7 +902,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * Must call setDestination() prior to this if attempting decryption.
      * Must call setClientKey() prior to this if attempting decryption.
      *
-     * @return valid
+     * @return true if the signature is valid, false if it does not verify
      */
     @Override
     public boolean verifySignature() {
@@ -915,7 +915,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
      * Must call setDestination() prior to this if attempting decryption.
      *
      * @param clientKey PrivateKey for DH or PSK, or null if none
-     * @return valid
+     * @return true if the signature is valid, false if it does not verify
      * @since 0.9.41
      */
     public boolean verifySignature(PrivateKey clientKey) {

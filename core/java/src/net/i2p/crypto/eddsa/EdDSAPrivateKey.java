@@ -71,7 +71,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     /**
      * The reported algorithm name for all EdDSA keys.
      *
-     * @return The algorithm.
+     * @return the algorithm name {@code EdDSA}, the same for every curve
      */
     @Override
     public String getAlgorithm() {
@@ -81,7 +81,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     /**
      * The encoding format of the key.
      *
-     * @return The format.
+     * @return the encoding name {@code PKCS#8}, matching {@link #getEncoded()}
      */
     @Override
     public String getFormat() {
@@ -267,7 +267,7 @@ public class EdDSAPrivateKey implements EdDSAKey, PrivateKey {
     /**
      * The EdDSA domain parameters for the key.
      *
-     * @return The params.
+     * @return the curve parameters this key was built with, never null
      */
     @Override
     public EdDSAParameterSpec getParams() {

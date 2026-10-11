@@ -20,7 +20,7 @@ public class TorrentKRPC extends KRPC {
     /**
      * Create a DHT instance on a torrent's transient destination.
      *
-     * @param ctx application context
+     * @param ctx the application context owning the session and logging
      * @param shared the main DHT instance, whose routing table, tracker, and blacklist are
      *               shared; must be started already
      * @param session the transient session of the torrents' destination

@@ -1094,7 +1094,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Key "beginWith": start here in the iteration
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
-     * @return the entries
+     * @return the matching hostnames mapped to their destinations
      */
     @Override
     public Map<String, Destination> getEntries(Properties options) {
@@ -1420,7 +1420,7 @@ public class BlockfileNamingService extends DummyNamingService {
      *                Key "beginWith": start here in the iteration
      *                Don't use both startsWith and beginWith.
      *                Search, startsWith, and beginWith values must be lower case.
-     * @return the names
+     * @return the hostnames matching the filters, never null
      * @since 0.9.20
      */
     @Override
@@ -1634,7 +1634,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * This does not prevent adding b32. Caller must check.
      *
      * @param options NamingService-specific, may be null
-     * @return success
+     * @return true if the destination was added to the entry
      * @since 0.9.26
      */
     @Override
@@ -1727,7 +1727,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Continuously validate anything we read in.
      * Queue anything invalid to be removed at the end of the operation.
      * Caller must sync!
-     * @return valid
+     * @return true if the entry is well-formed and has a usable destination
      */
     private boolean validate(String key, DestEntry de, String listname) {
         if (key == null)
@@ -1827,7 +1827,7 @@ public class BlockfileNamingService extends DummyNamingService {
     private static class PropertiesSerializer implements Serializer<Properties> {
         /**
          * A format error on the properties is non-fatal (returns an empty properties)
-         * @return the bytes
+         * @return the serialized properties, or two zero bytes on a format error
          */
         public byte[] getBytes(Properties p) {
             try {
@@ -1902,7 +1902,7 @@ public class BlockfileNamingService extends DummyNamingService {
         /**
          * A format error on the properties is non-fatal (only the properties are lost)
          * A format error on the destination is fatal
-         * @return the bytes
+         * @return the serialized entry, or just its empty properties on a format error
          */
         @Override
         public byte[] getBytes(DestEntry de) {
@@ -1951,7 +1951,7 @@ public class BlockfileNamingService extends DummyNamingService {
 
         /**
          * Serialize a DestEntry to bytes, including the destination list if present.
-         * @return the bytes
+         * @return the serialized entry, prefixed by its destination count
          */
         @Override
         public byte[] getBytes(DestEntry de) {
@@ -2054,7 +2054,7 @@ public class BlockfileNamingService extends DummyNamingService {
      * Throws DataFormatException on duplicate key
      *
      * @param in stream to read the mapping from
-     * @return a Properties
+     * @return the properties read, UTF-8 and unsorted
      * @throws DataFormatException if the format is invalid
      * @throws IOException if there is a problem reading the data
      * @since 0.9.26

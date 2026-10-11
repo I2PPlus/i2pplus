@@ -145,7 +145,8 @@ public class SingleFileNamingService extends NamingService {
      * and stops when it finds a match.
      *
      * @param host case-sensitive; caller should convert to lower case
-     * @return the key
+     * @return the base64 destination key mapped to that hostname in the hosts
+     *         file, or null if the file holds no such entry
      */
     @SuppressWarnings("PMD.AvoidBranchingStatementAsLastInLoop")
     private String getKey(String host) throws IOException {

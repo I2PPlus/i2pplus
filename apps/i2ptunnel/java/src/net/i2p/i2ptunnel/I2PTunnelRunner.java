@@ -262,7 +262,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param lastRequestWriteMs epoch-ms of the most recent request-side
      *                           write upstream, 0 if none
      * @param firstByteMs epoch-ms of the first response byte, 0 if none yet
-     * @param nowMs current epoch-ms
+     * @param nowMs current epoch-ms, comparable with lastRequestWriteMs
      * @param timeoutMs deadline window in ms; non-positive disables it
      * @return true if the deadline expired with no response byte
      * @since 0.9.71+
@@ -280,7 +280,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * truncation to zero.
      *
      * @param state non-null {@code long[2]} bucket, updated in place
-     * @param now current epoch-ms
+     * @param now current epoch-ms, the base for the refill delta
      * @return the same state array
      * @since 0.9.71+
      */
@@ -299,7 +299,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * Insufficient balance leaves the bucket unchanged and returns false.
      *
      * @param state non-null {@code long[2]} bucket, updated in place when consumed
-     * @param now current epoch-ms
+     * @param now current epoch-ms, forwarded to the refill
      * @param costTokens whole tokens to consume (1 = single open, 2 = dual-race)
      * @return true if the budget allowed the open
      * @since 0.9.71+
@@ -756,7 +756,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * @param initialSocketData may be null
      * @param sockList may be null. Caller must add i2ps to the list! It will be removed here on completion.
      *                 Will synchronize on slock when removing.
-     * @param onFail Trumps onTimeout
+     * @param onFail run when the transfer ends early; takes precedence over onTimeout
      * @param shouldStart should thread be started in constructor (bad, false recommended)
      */
     private I2PTunnelRunner(Socket s, I2PSocket i2ps, Object slock, byte[] initialI2PData,
@@ -775,7 +775,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      *                 Will synchronize on slock when removing.
      * @param onTimeout May be null. If non-null and no data (except initial data) was received,
      *                  it will be run before closing s.
-     * @param onFail Trumps onTimeout
+     * @param onFail run when the transfer ends early; takes precedence over onTimeout
      * @param keepAliveI2P Do not close the I2P socket when done.
      * @param keepAliveSocket Do not close the local socket when done.
      *                        For client side only; must be false for server side.
@@ -1195,7 +1195,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
     /**
      * Whether {@code [start, end)} is a {@code Range:} header line (not the request line).
      *
-     * @param data request bytes
+     * @param data the request bytes, including the request line
      * @param start first byte of the line
      * @param end one past the line (including CRLF)
      * @return true if the line starts with {@code Range:} ignoring ASCII case
@@ -1723,7 +1723,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
      * instead of an indefinite hang. At most one close per request attempt;
      * a subsequent re-send re-arms via {@link #noteRequestWritten()}.
      *
-     * @param nowMs current epoch-ms
+     * @param nowMs current epoch-ms, from System.currentTimeMillis()
      * @return true if the socket was closed by this call
      * @since 0.9.71+
      */
@@ -2316,7 +2316,7 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
 
         /**
          *
-         * @return the failure
+         * @return the exception that ended this direction, or null if it ran to completion
          */
          public Exception getFailure() {return _failure;}
     }

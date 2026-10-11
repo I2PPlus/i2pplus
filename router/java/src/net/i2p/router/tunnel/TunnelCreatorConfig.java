@@ -511,7 +511,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
                 /**
                  * The name of this job.
                  *
-                 * @return the name
+                 * @return the fixed descriptive name {@code "TunnelCreatorConfig profile update"}
+                 *         of the job that writes the per-peer throughput profiles
                  */
                 @Override
                 public String getName() { return "TunnelCreatorConfig profile update"; }

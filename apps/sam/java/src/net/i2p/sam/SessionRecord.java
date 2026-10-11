@@ -29,7 +29,7 @@ class SessionRecord {
 	 * Create a new session record.
 	 *
 	 * @param dest base64-encoded destination
-	 * @param props session properties
+	 * @param props the session properties, copied into this record
 	 * @param handler the SAM handler for this session
 	 */
 	public SessionRecord( String dest, Properties props, SAMv3Handler handler )
@@ -97,7 +97,8 @@ class SessionRecord {
 	/**
 	 * Get the SAM handler for this session.
 	 *
-	 * @return the handler
+	 * @return the SAMv3Handler this record was created with, which is whatever
+	 *         handler the caller's constructor argument supplied
 	 */
 	public SAMv3Handler getHandler()
 	{

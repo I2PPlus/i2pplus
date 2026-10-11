@@ -99,7 +99,7 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     * @param capability case-insensitive
+     * @param capability the address capability letter, matched without regard to case
      * @return non-null unmodifiable set
      */
     public Set<Hash> getPeersByCapability(char capability) {
@@ -108,8 +108,8 @@ public class PeerManagerFacadeImpl implements PeerManagerFacade {
     }
 
     /**
-     * @param capability case-insensitive
-     * @return how many
+     * @param capability the address capability letter, matched without regard to case
+     * @return the number of profiles advertising that capability
      * @since 0.9.45
      */
     public int countPeersByCapability(char capability) {

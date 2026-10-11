@@ -82,7 +82,7 @@ public class HostsTxtNamingService extends MetaNamingService {
     /**
      * All services aggregated, unless options contains
      * the property "file", in which case only for that file
-     * @return the names
+     * @return the hostnames from the selected file, or from every service if no file is named
      */
     @Override
     public Set<String> getNames(Properties options) {

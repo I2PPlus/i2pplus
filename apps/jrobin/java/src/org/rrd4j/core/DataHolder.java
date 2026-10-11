@@ -174,7 +174,7 @@ public interface DataHolder {
      * Polish Notation (RPN).
      *
      * @param name Source name
-     * @param rpnExpression RPN expression.
+     * @param rpnExpression the expression in Reverse Polish Notation.
      */
     void datasource(String name, String rpnExpression);
 

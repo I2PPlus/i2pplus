@@ -252,7 +252,9 @@ public class DataHelper {
      * As of 0.9.18, throws DataFormatException on duplicate key
      *
      * @param rawStream stream to read the mapping from
-     * @return an OrderedProperties
+     * @return an {@link net.i2p.util.OrderedProperties} holding the pairs read
+     *         from the stream, whose key set and entry set iterate in
+     *         lexicographical key order rather than stream order
      * @throws DataFormatException if the format is invalid
      * @throws IOException if there is a problem reading the data
      */
@@ -464,7 +466,7 @@ public class DataHelper {
      * @param target returned array as specified in data structure spec
      * @param offset starting offset in target
      * @param props source may be null
-     * @return new offset
+     * @return the offset just past the last byte written, ready for the next field
      * @throws DataFormatException if any string is over 255 bytes long, or if the total length
      *                             (not including the two length bytes) is greater than 65535 bytes.
      * @throws IOException never thrown here; declared because the ByteArrayStream
@@ -512,8 +514,8 @@ public class DataHelper {
      *
      * @param source byte array holding the UTF-8 encoded props, in readProperties() format
      * @param offset starting offset in source
-     * @param target returned Properties
-     * @return new offset
+     * @param target the {@link Properties} to fill in; it is not read
+     * @return the offset just past the last byte consumed, ready for the next field
      * @throws DataFormatException if the data is malformed
      */
     public static int fromProperties(byte[] source, int offset, Properties target) throws DataFormatException {
@@ -859,7 +861,7 @@ public class DataHelper {
      *
      * @param rawStream stream to read from
      * @param numBytes number of bytes to read and format into a number, 1 to 8
-     * @return number
+     * @return the value, interpreted as an unsigned big-endian integer
      * @throws DataFormatException if negative (only possible if numBytes = 8) (since 0.8.12)
      * @throws EOFException since 0.8.2, if there aren't enough bytes to read the number
      * @throws IOException if there is an IO error reading the number
@@ -1304,7 +1306,7 @@ public class DataHelper {
      *
      * @param lhs first byte array, may be null
      * @param rhs second byte array, may be null
-     * @return Arrays.equals(lhs, rhs)
+     * @return true if the two arrays hold the same bytes, treating two nulls as equal
      */
     public static final boolean eq(byte[] lhs, byte[] rhs) {
         return Arrays.equals(lhs, rhs);
@@ -1487,7 +1489,7 @@ public class DataHelper {
      * Calculate the hashcode of the object, using 0 for null
      *
      * @param obj the object, may be null
-     * @return hash code
+     * @return the value of {@code Object.hashCode()}, or 0 for null
      */
     public static int hashCode(Object obj) {
         if (obj == null) {
@@ -1500,7 +1502,7 @@ public class DataHelper {
      * Calculate the hashcode of the date, using 0 for null
      *
      * @param obj the date, may be null
-     * @return hash code
+     * @return the low 32 bits of the time in milliseconds, or 0 for null
      */
     public static int hashCode(Date obj) {
         if (obj == null) {
@@ -1513,7 +1515,7 @@ public class DataHelper {
      * Calculate the hashcode of the byte array, using 0 for null
      *
      * @param b byte array, may be null
-     * @return hash code
+     * @return a hash of the contents, using only the first 32 bytes for longer arrays
      */
     public static int hashCode(byte[] b) {
         // Java 5 now has its own method, and the old way
@@ -1536,7 +1538,7 @@ public class DataHelper {
      * Calculate the hashcode of the collection, using 0 for null
      *
      * @param col the collection, may be null
-     * @return hash code
+     * @return an order-dependent hash of the elements, or 0 for null
      */
     public static int hashCode(Collection<?> col) {
         if (col == null) {
@@ -1606,7 +1608,7 @@ public class DataHelper {
      *
      * @param in the input stream
      * @param target byte array filled with target.length bytes
-     * @return target.length
+     * @return the number of bytes read, which is always the full {@code target.length}
      * @throws EOFException if the full length is not read (since 0.9.27)
      * @throws IOException if an I/O error occurs
      */
@@ -2500,7 +2502,8 @@ public class DataHelper {
      * @param s non-null
      * @param regex non-null, don't forget to enclose multiple choices with []
      * @return the array of strings
-     * @throws java.util.regex.PatternSyntaxException unchecked
+     * @throws java.util.regex.PatternSyntaxException unchecked, if the regex is
+     *                                                not a valid pattern
      * @since 0.9.24
      */
     public static String[] split(String s, String regex) {
@@ -2518,9 +2521,12 @@ public class DataHelper {
      *
      * @param s non-null
      * @param regex non-null, don't forget to enclose multiple choices with []
-     * @param limit result threshold
+     * @param limit passed through to {@code String.split()}: a positive value caps
+     *              the number of results, zero leaves the result uncapped,
+     *              and a negative value keeps trailing empty strings
      * @return the array of strings
-     * @throws java.util.regex.PatternSyntaxException unchecked
+     * @throws java.util.regex.PatternSyntaxException unchecked, if the regex is
+     *                                                not a valid pattern
      * @since 0.9.24
      */
     public static String[] split(String s, String regex, int limit) {

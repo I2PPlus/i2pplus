@@ -155,7 +155,7 @@ public class HostInterface {
      * @param ipfilter bitmask of IPV4_BITMASK, IPV6_BITMASK and LOCAL_BITMASK; with
      *                 LOCAL_BITMASK clear, loopback addresses are skipped
      * @param interfaces names of the network interfaces to inspect, or null for all
-     * @return InetAddress[]
+     * @return InetAddress[] the addresses found, possibly empty
      * @since 1.8.0
      */
     public static final InetAddress[] getInetAddress(int ipfilter, String[] interfaces) {

@@ -291,7 +291,7 @@ public class StatisticsManager {
     /**
      * Render the status in HTML. Intentionally a no-op.
      *
-     * @param out the writer
+     * @param out accepted and left untouched, since this implementation renders nothing
      */
     public void renderStatusHTML(Writer out) { /* No-op - intentionally empty */ }
 }

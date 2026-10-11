@@ -327,7 +327,7 @@ public class Certificate extends DataStructureImpl {
     /**
      * Up-convert this to a KeyCertificate
      *
-     * @return the KeyCertificate
+     * @return a new KeyCertificate wrapping this certificate's payload
      * @throws DataFormatException if cert type != CERTIFICATE_TYPE_KEY
      * @since 0.9.12
      */

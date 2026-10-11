@@ -44,7 +44,7 @@ class FloodOnlyLookupTimeoutJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the fixed descriptive name {@code "Timeout NetDb FloodSearch"} of this job
      */
     public String getName() { return "Timeout NetDb FloodSearch"; }
 }

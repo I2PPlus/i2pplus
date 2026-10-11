@@ -91,7 +91,7 @@ public class RrdDef {
      * <p>The will be transformed internally to an URI using the default backend factory.
      *
      * @param path URI to new RRD.
-     * @param step RRD step.
+     * @param step RRD step in seconds, must be positive.
      */
     public RrdDef(String path, long step) {
         this(path);
@@ -105,7 +105,7 @@ public class RrdDef {
      * Creates new RRD definition object with the given path and step.
      *
      * @param uri URI to new RRD.
-     * @param step RRD step.
+     * @param step RRD step in seconds, must be positive.
      */
     public RrdDef(URI uri, long step) {
         this(uri);
@@ -122,7 +122,7 @@ public class RrdDef {
      *
      * @param path Path to new RRD.
      * @param startTime RRD starting timestamp.
-     * @param step RRD step.
+     * @param step RRD step in seconds, must be positive.
      */
     public RrdDef(String path, long startTime, long step) {
         this(path, step);
@@ -137,7 +137,7 @@ public class RrdDef {
      *
      * @param uri URI to new RRD.
      * @param startTime RRD starting timestamp.
-     * @param step RRD step.
+     * @param step RRD step in seconds, must be positive.
      */
     public RrdDef(URI uri, long startTime, long step) {
         this(uri, step);
@@ -154,7 +154,7 @@ public class RrdDef {
      *
      * @param path Path to new RRD.
      * @param startTime RRD starting timestamp.
-     * @param step RRD step.
+     * @param step RRD step in seconds, must be positive.
      * @param version RRD's file version.
      */
     public RrdDef(String path, long startTime, long step, int version) {
@@ -170,7 +170,7 @@ public class RrdDef {
      *
      * @param uri URI to new RRD.
      * @param startTime RRD starting timestamp.
-     * @param step RRD step.
+     * @param step RRD step in seconds, must be positive.
      * @param version RRD's file version.
      */
     public RrdDef(URI uri, long startTime, long step, int version) {
@@ -222,7 +222,7 @@ public class RrdDef {
     /**
      * Returns time step for the RRD that will be created.
      *
-     * @return RRD step
+     * @return RRD step in seconds
      */
     public long getStep() {
         return step;
@@ -231,7 +231,7 @@ public class RrdDef {
     /**
      * Returns the RRD file version
      *
-     * @return the version
+     * @return the RRD file format version
      */
     public int getVersion() {
         return version;
@@ -260,7 +260,7 @@ public class RrdDef {
     /**
      * Sets RRD's starting timestamp.
      *
-     * @param startTime Starting timestamp.
+     * @param startTime RRD starting timestamp in seconds since the epoch, not negative.
      */
     public void setStartTime(long startTime) {
         this.startTime = startTime;
@@ -269,7 +269,7 @@ public class RrdDef {
     /**
      * Sets RRD's starting timestamp.
      *
-     * @param date starting date
+     * @param date starting date, converted to a timestamp
      */
     public void setStartTime(Date date) {
         this.startTime = Util.getTimestamp(date);
@@ -278,7 +278,7 @@ public class RrdDef {
     /**
      * Sets RRD's starting timestamp.
      *
-     * @param gc starting date
+     * @param gc starting date, converted to a timestamp
      */
     public void setStartTime(Calendar gc) {
         this.startTime = Util.getTimestamp(gc);
@@ -305,7 +305,7 @@ public class RrdDef {
     /**
      * Adds single datasource definition represented with object of class <code>DsDef</code>.
      *
-     * @param dsDef Datasource definition.
+     * @param dsDef Datasource definition to add, which must not already be present.
      */
     public void addDatasource(DsDef dsDef) {
         if (dsDefs.contains(dsDef)) {
@@ -417,7 +417,7 @@ public class RrdDef {
     /**
      * Adds single archive definition represented with object of class <code>ArcDef</code>.
      *
-     * @param arcDef Archive definition.
+     * @param arcDef Archive definition to add.
      * @throws java.lang.IllegalArgumentException Thrown if archive with the same consolidation
      *                                            function and the same number of steps is already added.
      */
@@ -446,7 +446,7 @@ public class RrdDef {
      * number of steps and rows. For the complete explanation of all archive definition parameters
      * see RRDTool's <a href="../../../../man/rrdcreate.html" target="man">rrdcreate man page</a>.
      *
-     * @param consolFun Consolidation function.
+     * @param consolFun Consolidation function, must not duplicate an existing archive.
      * @param xff X-files factor. Valid values are between 0 and 1.
      * @param steps Number of archive steps
      * @param rows Number of archive rows
@@ -627,7 +627,7 @@ public class RrdDef {
      * Searches the archive definitions for a matching consolidation and step count.
      * @param consolFun the consolidation function of the wanted archive
      * @param steps the step count of the wanted archive
-     * @return the archive
+     * @return the matching archive definition
      */
     ArcDef findArchive(ConsolFun consolFun, int steps) {
         for (ArcDef arcDef : arcDefs) {
@@ -644,7 +644,7 @@ public class RrdDef {
      *
      * <p>It use a format compatible with previous RRD4J's version, using a path, instead of an URI.
      *
-     * @param out Output stream
+     * @param out Output stream to write the XML template to
      */
     public void exportXmlTemplate(OutputStream out) {
         exportXmlTemplate(out, true);
@@ -657,7 +657,7 @@ public class RrdDef {
      * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous
      * RRD4J's versions, using a path, instead of an URI.
      *
-     * @param out Output stream
+     * @param out Output stream to write the XML template to
      * @param compatible Compatible with previous versions.
      */
     public void exportXmlTemplate(OutputStream out, boolean compatible) {
@@ -673,7 +673,7 @@ public class RrdDef {
      * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous
      * RRD4J's versions, using a path, instead of an URI.
      *
-     * @param xml XML writer
+     * @param xml XML writer to emit the template through, not closed here
      * @param compatible Compatible with previous versions.
      */
     public void exportXmlTemplate(XmlWriter xml, boolean compatible) {
@@ -748,7 +748,7 @@ public class RrdDef {
      * <p>It use a format compatible with previous RRD4J's version, using a path, instead of an URI.
      *
      * @param filePath Path to the file
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the file cannot be written.
      */
     public void exportXmlTemplate(String filePath) throws IOException {
         exportXmlTemplate(filePath, true);
@@ -763,7 +763,7 @@ public class RrdDef {
      *
      * @param filePath Path to the file
      * @param compatible Compatible with previous versions.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the file cannot be written.
      */
     public void exportXmlTemplate(String filePath, boolean compatible) throws IOException {
         FileOutputStream out = new FileOutputStream(filePath, false);
@@ -894,7 +894,7 @@ public class RrdDef {
     /**
      * Tests whether any data source is defined.
      *
-     * @return a boolean.
+     * @return true if at least one datasource is defined
      */
     public boolean hasDatasources() {
         return !dsDefs.isEmpty();
@@ -903,7 +903,7 @@ public class RrdDef {
     /**
      * Tests whether any archive is defined.
      *
-     * @return a boolean.
+     * @return true if at least one archive (consolidation source) is defined
      */
     public boolean hasArchives() {
         return !arcDefs.isEmpty();

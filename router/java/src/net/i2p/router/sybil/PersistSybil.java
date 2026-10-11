@@ -226,7 +226,7 @@ public class PersistSybil {
      * Delete the file for a particular date
      *
      * @param date the timestamp for the file
-     * @return success
+     * @return true if the file was deleted
      */
     public synchronized boolean delete(long date) {
         File dir = new File(_context.getConfigDir(), DIR);

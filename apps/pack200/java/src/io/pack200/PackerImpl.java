@@ -74,8 +74,9 @@ public class PackerImpl  extends TLGlobals implements Pack200.Packer {
      * Takes a JarFile and converts into a pack-stream.
      * <p>
      * Closes its input but not its output.  (Pack200 archives are appendable.)
-     * @param in a JarFile
-     * @param out an OutputStream
+     * @param in the JarFile to read entries from; closed by this call
+     * @param out the stream the pack200 data is written to, left open so
+     *            further archives can be appended
      * @exception IOException if an error is encountered.
      */
     public synchronized void pack(JarFile in, OutputStream out) throws IOException {
@@ -103,8 +104,9 @@ public class PackerImpl  extends TLGlobals implements Pack200.Packer {
      *
      * @see #MODIFICATION_TIME
      * @see #DEFLATE_HINT
-     * @param in a JarInputStream
-     * @param out an OutputStream
+     * @param in the JarInputStream to read entries from; closed by this call
+     * @param out the stream the pack200 data is written to, left open so
+     *            further archives can be appended
      * @exception IOException if an error is encountered.
      */
     public synchronized void pack(JarInputStream in, OutputStream out) throws IOException {

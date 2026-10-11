@@ -1064,7 +1064,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     /**
      * Illegal during handshake - date/time is only in the options, not a separate payload.
      *
-     * @param time the timestamp
+     * @param time ignored, since the payload is never parsed during the handshake
      * @since 0.9.36
      */
     public void gotDateTime(long time) {

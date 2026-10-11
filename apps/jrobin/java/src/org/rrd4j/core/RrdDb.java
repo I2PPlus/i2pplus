@@ -1496,7 +1496,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      * Returns index of Archive object with the given consolidation function and the number of
      * steps. Exception is thrown if such archive could not be found.
      *
-     * @param consolFun Consolidation function
+     * @param consolFun the consolidation function to match
      * @param steps Number of archive steps
      * @return Requested Archive object
      * @throws java.io.IOException Thrown in case of I/O error
@@ -1513,7 +1513,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     /**
      * Returns Archive object with the given consolidation function and the number of steps.
      *
-     * @param consolFun Consolidation function
+     * @param consolFun the consolidation function to match
      * @param steps Number of archive steps
      * @return Requested Archive object or null if no such archive could be found
      * @throws java.io.IOException Thrown in case of I/O error

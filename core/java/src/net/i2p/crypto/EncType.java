@@ -142,7 +142,7 @@ public enum EncType {
 
     /**
      *
-     * @param transformation algorithm/mode/padding
+     * @param transformation full JCE transformation string, e.g. "EC/None/NoPadding"
      */
     EncType(
             int cod,
@@ -213,7 +213,8 @@ public enum EncType {
     /**
      * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *
-     * @return the params
+     * @return the algorithm's parameter spec, ECParameterSpec for ECDSA or
+     *         DSAParameterSpec for DSA
      * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {

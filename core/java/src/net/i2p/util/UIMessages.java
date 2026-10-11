@@ -75,7 +75,7 @@ public class UIMessages {
      * Newest last, or empty list.
      * Provide id of last one back to clearThrough().
      *
-     * @return a copy
+     * @return a new list of the retained messages, newest last; empty if none
      */
     public synchronized List<Message> getMessages() {
         if (_messages.peekLast() == null) return Collections.emptyList();
@@ -145,7 +145,7 @@ public class UIMessages {
     /**
      * Check if there are any messages.
      *
-     * @return whether empty
+     * @return true if no messages remain, false otherwise
      * @since 0.9.46
      */
     public synchronized boolean isEmpty() {

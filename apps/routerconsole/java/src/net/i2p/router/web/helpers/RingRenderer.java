@@ -428,7 +428,7 @@ public class RingRenderer {
      * Render a multi-section ring cell.
      *
      * @param sections array of sections (values normalized to sum 1.0)
-     * @param value    center text
+     * @param value    the text drawn in the center of the ring, HTML-escaped
      * @param label    label below the center text
      * @param details  tooltip lines, or null/empty to omit
      * @return HTML for the ring-cell div
@@ -455,7 +455,9 @@ public class RingRenderer {
      *
      * @param score      0.0–1.0 (never negative here)
      * @param collecting true if data is still being gathered
-     * @param mode       color mode
+     * @param mode       selects the colour ramp: MODE_ACTIVITY blue/cyan/gray,
+     *                   MODE_NEUTRAL green/yellow/cyan, MODE_ANOMALY and the
+     *                   default modes green/yellow/red, by descending score
      * @return CSS class name
      */
     static String getColorClass(double score, boolean collecting, String mode) {

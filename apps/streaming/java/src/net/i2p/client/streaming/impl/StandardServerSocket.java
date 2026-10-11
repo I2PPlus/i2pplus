@@ -55,7 +55,7 @@ class StandardServerSocket extends ServerSocket {
 
     /**
      * Binding is not supported.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as an I2P server socket has no local address
      */
     @Override
     public void bind(SocketAddress endpoint) {
@@ -64,7 +64,7 @@ class StandardServerSocket extends ServerSocket {
 
     /**
      * Binding is not supported.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as an I2P server socket has no local address
      */
     @Override
     public void bind(SocketAddress endpoint, int backlog) {

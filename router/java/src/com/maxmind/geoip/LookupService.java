@@ -517,7 +517,7 @@ public class LookupService {
      * I2P -
      * Write all IPv4 address ranges for the given country to out.
      *
-     * @param country two-letter case-insensitive
+     * @param country ISO two-letter code, matched case-insensitively
      * @param out caller must close
      * @throws IOException if a range line cannot be written to out
      * @since 0.9.48
@@ -570,7 +570,7 @@ public class LookupService {
 
         /**
          * Recursive, depth first
-         * @param ip big endian
+         * @param ip the IPv4 address being walked, packed big endian
          */
         private void walk(int offset, int ip, int depth) throws IOException {
             if (offset >= _dbs0) {

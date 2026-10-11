@@ -166,7 +166,8 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     /**
      * Applies the decided quantity to one pool's own session, if it changed.
      *
-     * @param td the pool
+     * @param td the pool whose applied quantity is compared and, if it
+     *           differs, the new one is written to
      * @param live whether the pool has a running torrent
      * @param peers peers connected across the pool's torrents
      */
@@ -183,7 +184,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      * Connected peers belonging to torrents assigned to a pool, so each pool's tunnel count is
      * driven by its own members rather than by the whole client.
      *
-     * @param td the pool
+     * @param td the pool whose assigned torrents are scanned
      * @return peers connected across the pool's torrents
      */
     private int peersIn(TorrentDest td, int poolIndex) {
@@ -297,7 +298,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      * Apply a quantity to one pool's own session. Each pool is floored independently, so this
      * never writes to the shared session or to any sibling pool.
      *
-     * @param td the pool
+     * @param td the pool whose own session receives the new quantity
      * @param target the new quantity in each direction
      * @param increased whether this is a growth, for logging
      */

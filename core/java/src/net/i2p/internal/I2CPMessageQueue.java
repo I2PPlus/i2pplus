@@ -88,7 +88,7 @@ public abstract class I2CPMessageQueue implements Closeable {
     /**
      * Receive a message, blocking until one is available.
      *
-     * @return message
+     * @return the next message from the router, waiting indefinitely if none is queued
      * @throws InterruptedException if the calling thread is interrupted while
      *                              waiting for a message to arrive
      */

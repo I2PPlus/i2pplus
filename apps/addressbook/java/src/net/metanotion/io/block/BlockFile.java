@@ -142,10 +142,10 @@ public class BlockFile implements Closeable {
      * This will allocate additional continuation pages as necessary.
      *
      * @param data data to write
-     * @param page current page
+     * @param page index of the page to start writing at
      * @param curPageOff in (current) and out (new) parameter at index 0
      * @param nextPage in (current) and out (new) parameter at index 0
-     * @return current page
+     * @return index of the page the write finished on
      * @throws IOException if an I/O error occurs
      */
     public int writeMultiPageData(byte[] data, int page, int[] curPageOff, int[] nextPage) throws IOException {
@@ -187,10 +187,10 @@ public class BlockFile implements Closeable {
      * Read bytes from multiple pages.
      *
      * @param arr fill this array fully with data
-     * @param page current page
+     * @param page index of the page to start reading at
      * @param curPageOff in (current) and out (new) parameter at index 0
      * @param nextPage in (current) and out (new) parameter at index 0
-     * @return current page
+     * @return index of the page the read finished on
      * @throws IOException if an I/O error occurs or not enough pages to read
      */
     public int readMultiPageData(byte[] arr, int page, int[] curPageOff, int[] nextPage) throws IOException {
@@ -227,10 +227,10 @@ public class BlockFile implements Closeable {
      * The same as readMultiPageData() without returning a result
      *
      * @param length number of bytes to skip
-     * @param page current page
+     * @param page index of the page the skip starts at
      * @param curPageOff in (current) and out (new) parameter at index 0
      * @param nextPage in (current) and out (new) parameter at index 0
-     * @return current page
+     * @return index of the page the skip finished on
      * @throws IOException if an I/O error occurs or not enough pages to skip
      */
     public int skipMultiPageBytes(int length, int page, int[] curPageOff, int[] nextPage) throws IOException {

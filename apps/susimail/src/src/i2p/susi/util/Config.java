@@ -101,7 +101,7 @@ public class Config {
 	/**
 	 * Returns the properties, sorted, WITHOUT the prefix
 	 *
-	 * @return the properties
+	 * @return the sorted properties, with the config prefix stripped
 	 * @since 0.9.13
 	 */
 	public synchronized static Properties getProperties() {

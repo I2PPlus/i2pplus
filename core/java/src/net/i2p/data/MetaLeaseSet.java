@@ -57,7 +57,7 @@ public class MetaLeaseSet extends LeaseSet2 {
 
     /**
      * UnsupportedOperationException always.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as a MetaLeaseSet carries no encryption keys
      */
     @Override
     public void setEncryptionKey(PublicKey key) {
@@ -66,7 +66,7 @@ public class MetaLeaseSet extends LeaseSet2 {
 
     /**
      * UnsupportedOperationException always.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as a MetaLeaseSet carries no encryption keys
      */
     @Override
     public void addEncryptionKey(PublicKey key) {

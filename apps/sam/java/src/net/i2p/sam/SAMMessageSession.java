@@ -133,7 +133,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
     /**
      * Send bytes through a SAM message-based session.
      *
-     * @param dest Destination
+     * @param dest destination to send to, as base64, a .b32.i2p name or a hostname
      * @param data Bytes to be sent
      *
      * @return True if the data was sent, false otherwise
@@ -147,7 +147,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * Actually send bytes through the SAM message-based session I2PSession
      * (er...).
      *
-     * @param dest Destination
+     * @param dest destination to send to, as base64, a .b32.i2p name or a hostname
      * @param data Bytes to be sent
      * @param proto I2CP protocol
      * @param fromPort I2CP from port
@@ -174,7 +174,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
      * using per-message extended options.
      * For efficiency, use the method without all the extra options if they are all defaults.
      *
-     * @param dest Destination
+     * @param dest destination to send to, as base64, a .b32.i2p name or a hostname
      * @param data Bytes to be sent
      * @param proto I2CP protocol
      * @param fromPort I2CP from port
@@ -249,7 +249,7 @@ abstract class SAMMessageSession implements SAMMessageSess {
     /**
      * Handle a new received message.
      *
-     * @param msg Message payload
+     * @param msg the received datagram payload, passed on to the handler
      * @param proto I2CP protocol
      * @param fromPort I2CP from port
      * @param toPort I2CP to port
@@ -324,7 +324,8 @@ abstract class SAMMessageSession implements SAMMessageSess {
 
         /**
          * The session.
-         * @return the session
+         * @return the I2PSession this handler was constructed around, either a
+         *         newly created and connected one or an existing one passed in
          * @since 0.9.25
          */
         public final I2PSession getSession() {

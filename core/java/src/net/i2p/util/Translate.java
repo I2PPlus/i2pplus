@@ -145,7 +145,7 @@ public abstract class Translate {
      *  Use GNU ngettext
      *  For .po file format see http://www.gnu.org/software/gettext/manual/gettext.html.gz#Translating-plural-forms
      *
-     *  @param n how many
+     *  @param n item count; 1 selects the singular, anything else the plural
      *  @param s singluar string, optionally with {0} e.g. "one tunnel"
      *  @param p plural string optionally with {0} e.g. "{0} tunnels"
      *  @param ctx the application context, which supplies the language and country
@@ -270,7 +270,8 @@ public abstract class Translate {
      *  Uses translation if available, then JVM Locale.getDisplayLanguage() if available, else default param.
      *
      *  @param langCode two- or three-letter lower-case
-     *  @param dflt e.g. "English"
+     *  @param dflt name returned untranslated when no bundle entry or JVM
+     *              display name is available
      *  @param ctx the application context, which supplies the current language
      *  @param bun base name of the resource bundle to translate in, e.g. "routerconsole"
      *  @return the display language

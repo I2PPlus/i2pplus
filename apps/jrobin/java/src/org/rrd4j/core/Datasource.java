@@ -128,7 +128,7 @@ public class Datasource implements RrdUpdater<Datasource> {
     /**
      * Returns datasource type (GAUGE, COUNTER, DERIVE, ABSOLUTE).
      *
-     * @return Datasource type.
+     * @return Datasource type, one of GAUGE, COUNTER, DERIVE or ABSOLUTE.
      * @throws java.io.IOException Thrown in case of I/O error
      */
     public DsType getType() throws IOException {
@@ -138,7 +138,7 @@ public class Datasource implements RrdUpdater<Datasource> {
     /**
      * Returns datasource heartbeat
      *
-     * @return Datasource heartbeat
+     * @return Datasource heartbeat, in seconds
      * @throws java.io.IOException Thrown in case of I/O error
      */
     public long getHeartbeat() throws IOException {
@@ -408,7 +408,7 @@ public class Datasource implements RrdUpdater<Datasource> {
      * Setter for the field <code>dsType</code>.
      *
      * @param newDsType a {@link org.rrd4j.DsType} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the RRD file cannot be written.
      */
     public void setDsType(DsType newDsType) throws IOException {
         // set datasource type

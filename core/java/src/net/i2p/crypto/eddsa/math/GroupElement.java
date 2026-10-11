@@ -339,7 +339,7 @@ public class GroupElement implements Serializable {
     /**
      * The curve of the group element.
      *
-     * @return The curve.
+     * @return the twisted Edwards curve this point is an element of
      */
     public Curve getCurve() {
         return this.curve;
@@ -348,7 +348,7 @@ public class GroupElement implements Serializable {
     /**
      * The representation of the group element.
      *
-     * @return The representation.
+     * @return the projective representation this point is currently held in
      */
     public Representation getRepresentation() {
         return this.repr;
@@ -922,8 +922,9 @@ public class GroupElement implements Serializable {
      * Method is package private only so that tests run.
      *
      * @param pos $= i/2$ for $i$ in $\{0, 2, 4,..., 62\}$
-     * @param b $= r_i$
-     * @return the GroupElement
+     * @param b $= r_i$, the signed lookup-table window, negative when the
+     *          corresponding bit of the scalar is set
+     * @return $16^i r_i B$ in precomputed representation
      */
     GroupElement select(final int pos, final int b) {
         // Is r_i negative?
@@ -957,7 +958,7 @@ public class GroupElement implements Serializable {
      *     $a[31] \le 127$
      *
      * @param a $= a[0]+256*a[1]+\dots+256^{31} a[31]$
-     * @return the GroupElement
+     * @return $a * B$ as a group element
      */
     public GroupElement scalarMultiply(final byte[] a) {
         GroupElement t;
@@ -1038,7 +1039,7 @@ public class GroupElement implements Serializable {
      * @param aPoint in P3 representation.
      * @param a $= a[0]+256*a[1]+\dots+256^{31} a[31]$
      * @param b $= b[0]+256*b[1]+\dots+256^{31} b[31]$
-     * @return the GroupElement
+     * @return $a * A + b * B$, with $A$ aPoint and $B$ this point
      */
     public GroupElement doubleScalarMultiplyVariableTime(final GroupElement aPoint, final byte[] a, final byte[] b) {
         // TODO-CR BR: A check that this is the base point is needed.

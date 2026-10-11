@@ -39,7 +39,8 @@ class SubSession extends I2PSessionMuxedImpl {
      * Must be a I2PSessionMuxedImpl.
      * @param primary must be a I2PSessionMuxedImpl
      * @param destKeyStream location from which to read keys
-     * @param options session options
+     * @param options session options passed through to the parent session,
+     *                null to use the System properties
      * @throws I2PSessionException if the generated signing key is identical to the
      *                             primary session's
      */
@@ -53,7 +54,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Unsupported in a subsession.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as a subsession cannot hold subsessions
      */
     @Override
     public I2PSession addSubsession(InputStream destKeyStream, Properties opts) throws I2PSessionException {
@@ -149,7 +150,7 @@ class SubSession extends I2PSessionMuxedImpl {
     /**
      * Has the session been closed (or not yet connected)?
      * False when open and during transitions.
-     * @return whether closed
+     * @return true if this subsession or its primary has been closed
      */
     @Override
     public boolean isClosed() {

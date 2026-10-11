@@ -1149,7 +1149,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
 
     /**
      * I2P for getting chaining key for siphash calc
-     * @return a copy
+     * @return a copy of the current chaining key, not the internal array
      */
     public byte[] getChainingKey() {
         return symmetric.getChainingKey();

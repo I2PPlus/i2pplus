@@ -50,7 +50,7 @@ class FilterDefinition {
     /**
      * The per-destination thresholds parsed from the definition file.
      *
-     * @return the elements
+     * @return the array as parsed, not a copy
      */
     FilterDefinitionElement[] getElements() {
         return elements;
@@ -59,7 +59,7 @@ class FilterDefinition {
     /**
      * The loggers invoked when a destination's threshold is reached.
      *
-     * @return the recorders
+     * @return the recorder array as parsed, not a copy
      */
     Recorder[] getRecorders() {
         return recorders;

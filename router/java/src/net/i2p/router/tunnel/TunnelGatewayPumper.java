@@ -152,7 +152,7 @@ class TunnelGatewayPumper implements Runnable {
 
     /**
      * Resize the running instance's queue.
-     * @param newCapacity new capacity
+     * @param newCapacity desired queue depth; outside 64 to 4096 the resize is ignored
      * @since 0.9.70+
      */
     public static void resizeRunningQueue(int newCapacity) {
@@ -190,7 +190,7 @@ class TunnelGatewayPumper implements Runnable {
      * The pumper pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
      *
-     * @return the utilization
+     * @return active pumpers divided by pool size, or NaN if none are running
      * @since 0.9.70+
      */
     public static double getUtilization() {

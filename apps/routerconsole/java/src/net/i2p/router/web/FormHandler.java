@@ -242,7 +242,7 @@ public abstract class FormHandler {
     /**
      * Store the output writer for inline form processing.
      *
-     * @param out the writer
+     * @param out the writer inline form processing writes its output to
      * @since 0.9.38
      */
     public void storeWriter(Writer out) {_out = out;}
@@ -358,7 +358,8 @@ public abstract class FormHandler {
     /**
      * Display everything, wrap it in a div for consistent presentation
      *
-     * @return the HTML
+     * @return the queued errors and notices wrapped in a div, or an empty
+     *         string if there are none
      */
     public String getAllMessages() {
         validate();
@@ -384,7 +385,8 @@ public abstract class FormHandler {
      * Display any error messages (processing the form if it hasn't
      * been yet)
      *
-     * @return the HTML
+     * @return an unordered list of the queued error messages, or an empty
+     *         string if there are none
      */
     public String getErrors() {
         validate();
@@ -396,7 +398,8 @@ public abstract class FormHandler {
      * Display any non-error messages (processing the form if it hasn't
      * been yet)
      *
-     * @return the HTML
+     * @return an unordered list of the queued notice messages, or an empty
+     *         string if there are none
      */
     public String getNotices() {
         validate();
@@ -528,7 +531,7 @@ public abstract class FormHandler {
      * Use this only in static initializers.
      * It does not translate!
      * @param s the string to mark
-     * @return s
+     * @return the string unchanged; marking it is what lets xgettext find it
      */
     public static String _x(String s) {return s;}
 
@@ -552,7 +555,7 @@ public abstract class FormHandler {
 
         /**
          * Returns the message text.
-         * @return the text
+         * @return the message text as it was queued, not HTML-escaped
          */
         public String getText() {
             return text;

@@ -73,7 +73,7 @@ public class ContentHelper extends HelperBase {
     /**
      * Return the raw text of the resolved page file.
      *
-     * @return the content
+     * @return the file text, or an empty string if it cannot be read
      */
     public String getContent() {
         String str = FileUtil.readTextFile(filename(), _maxLines, _startAtBeginning);

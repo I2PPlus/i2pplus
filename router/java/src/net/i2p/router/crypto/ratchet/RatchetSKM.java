@@ -193,7 +193,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * Not supported for this key manager.
      *
      * @return the current key
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public SessionKey getCurrentKey(PublicKey target) {
@@ -204,7 +204,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
      * Not supported for this key manager.
      *
      * @return the current or new key
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public SessionKey getCurrentOrNewKey(PublicKey target) {
@@ -214,7 +214,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public void createSession(PublicKey target, SessionKey key) {
@@ -441,7 +441,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public SessionTag consumeNextAvailableTag(PublicKey target, SessionKey key) {
@@ -543,7 +543,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public TagSetHandle tagsDelivered(PublicKey target, SessionKey key, Set<SessionTag> sessionTags) {
@@ -553,7 +553,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public void failTags(PublicKey target, SessionKey key, TagSetHandle ts) {
@@ -563,7 +563,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public void tagsAcked(PublicKey target, SessionKey key, TagSetHandle ts) {
@@ -573,7 +573,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags) {
@@ -583,7 +583,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public void tagsReceived(SessionKey key, Set<SessionTag> sessionTags, long expire) {
@@ -604,7 +604,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     /**
      * Not supported for this key manager.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the ratchet key manager does not support this
      */
     @Override
     public SessionKey consumeTag(SessionTag tag) {
@@ -1125,7 +1125,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
          * For outbound (NSR rcvd by Alice), sets session to transition to ES mode outbound.
          * For inbound (NSR sent by Bob), sets up inbound ES tagset.
          *
-         * @param state current state
+         * @param state the handshake state to advance, whose role decides the direction
          * @param callback only for inbound (NSR sent by Bob), may be null
          */
         void updateSession(HandshakeState state, ReplyCallback callback, SplitKeys split) {

@@ -125,7 +125,8 @@ public class NavHelper implements NavService, ClientApp {
 
     /**
      * For HomeHelper. 32x32 icon paths.
-     * @param ctx unused
+     * @param ctx unused; the app list is built in the constructor, not from this
+     *            context
      * @return non-null, possibly empty, unsorted
      */
     public List<App> getClientApps(I2PAppContext ctx) {

@@ -29,14 +29,14 @@ public interface UpdateTask {
     /**
      *  Get the update type.
      *
-     *  @return update type
+     *  @return what is being updated, as one of the UpdateType constants
      */
     public UpdateType getType();
 
     /**
      *  Get the update method.
      *
-     *  @return update method
+     *  @return how the update is retrieved, as one of the UpdateMethod constants
      */
     public UpdateMethod getMethod();
 
@@ -44,14 +44,14 @@ public interface UpdateTask {
      *  The current URI being checked or downloaded from.
      *  Can change if there are multiple URIs to try.
      *
-     *  @return current URI
+     *  @return the URI being checked or downloaded from at the moment
      */
     public URI getURI();
 
     /**
      *  Valid for plugins
      *
-     *  @return plugin ID
+     *  @return the identifier of the plugin being updated, empty if this is not a plugin update
      */
     public String getID();
 }

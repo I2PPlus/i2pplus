@@ -114,7 +114,7 @@ public class I2PSocketAddress extends SocketAddress {
      * Does a naming service lookup to resolve the dest if this was created unresolved
      * or if the resolution failed in the constructor.
      * If unresolved, this may take several seconds for b32.
-     * @return the address
+     * @return the resolved destination, or null if the lookup failed
      */
     public synchronized Destination getAddress() {
         if (_dest == null)

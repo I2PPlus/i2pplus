@@ -33,7 +33,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
 
     /**
      * The raw message data.
-     * @return the data
+     * @return the raw garlic payload bytes, or null if never set
      */
     public byte[] getData() {
         return _data;
@@ -80,7 +80,7 @@ public class GarlicMessage extends FastI2NPMessageImpl {
 
     /**
      * The I2NP message type of a garlic message.
-     * @return the type
+     * @return the I2NP message type number, for dispatch
      */
     public int getType() { return MESSAGE_TYPE; }
 

@@ -64,7 +64,7 @@ import net.i2p.util.EventDispatcher;
      * this tunnel.
      *
      * @param destination I2P destination to send to; null for send-to-anyone
-     * @param l logging facility
+     * @param l the logging facility used for this tunnel's output
      * @param notifyThis event dispatcher for notifications
      * @param tunnel the parent tunnel, supplying the context and I2CP options
      * @throws IllegalArgumentException if the I2CP configuration is so broken

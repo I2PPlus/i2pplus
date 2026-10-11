@@ -180,7 +180,8 @@ interface PeerListener {
     /**
      * Retrieves the shared torrent utility.
      *
-     * @return the util
+     * @return the shared {@link I2PSnarkUtil} for this torrent, used to reach
+     *         the context and the peer banning and comment settings
      * @since 0.9.2
      */
     public I2PSnarkUtil getUtil();
@@ -206,7 +207,7 @@ interface PeerListener {
     /**
      * Is the given hash banned?
      *
-     * @param h the hash
+     * @param h the torrent's info hash, checked against the ban list
      * @return true if banned
      * @since 0.9.71
      */
@@ -215,7 +216,7 @@ interface PeerListener {
     /**
      * Ban the given hash.
      *
-     * @param h the hash
+     * @param h the torrent's info hash to add to the ban list
      * @since 0.9.71
      */
     public void ban(Hash h);

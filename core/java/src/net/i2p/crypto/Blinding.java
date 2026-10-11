@@ -322,8 +322,8 @@ public final class Blinding {
     /**
      * Command-line tool for encoding/decoding b32 addresses.
      *
-     * @param args command-line arguments
-     * @throws Exception on error
+     * @param args the sole command-line argument, a b32 address to decode
+     * @throws Exception if the argument is not a valid b32 address
      */
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {

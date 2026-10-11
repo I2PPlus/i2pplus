@@ -64,7 +64,7 @@ public class ArcDef {
     /**
      * Returns consolidation function.
      *
-     * @return Consolidation function.
+     * @return the consolidation function for this archive.
      */
     public ConsolFun getConsolFun() {
         return consolFun;

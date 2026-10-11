@@ -883,7 +883,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Whether the manager is in the process of stopping.
      *
-     * @return whether stopping
+     * @return true from the moment {@link #stop()} is entered, false while still running
      * @since 0.9.1
      */
     public boolean isStopping() {
@@ -909,7 +909,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * ClientApp method. Doesn't matter, we are only registering.
      *
-     * @return INITIALIZED always.
+     * @return ClientAppState.INITIALIZED, the manager never enters another state
      * @since 0.9.30
      */
     @Override
@@ -920,7 +920,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * ClientApp method.
      *
-     * @return the name
+     * @return "i2psnark", identifying this client app in logs and to the
+     *         router console
      * @since 0.9.30
      */
     @Override
@@ -1108,7 +1109,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * The current time as bold UTC "dd/MM HH:mm:ss" HTML, prefixed to each queued message.
      *
-     * @return the timestamp
+     * @return the formatted time in bold HTML, not a bare number
      */
     public String getTime() {
         long now = System.currentTimeMillis();
@@ -3196,7 +3197,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * PROP_BROWSER_API_HOSTS config. Does not check the enable flag.
      *
      * @param host remote address string from the request
-     * @return whether allowed
+     * @return true for loopback, or for a host resolving to PROP_BROWSER_API_HOSTS; false for an
+     *         unresolvable or unlisted address
      * @since 0.9.71+
      */
     public boolean isBrowserApiHost(String host) {
@@ -3366,7 +3368,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Snapshot of the loaded torrents as an unmodifiable collection.
      *
-     * @return the torrents
+     * @return a live unmodifiable view of the loaded torrents, empty if none are loaded
      * @since 0.9.4
      */
     public Collection<Snark> getTorrents() {
@@ -3476,8 +3478,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param filename the absolute path to save the metainfo to, generally ending in ".torrent"
      * @param baseFile may be null, if so look in dataDir
      * @param dontAutoStart must be false, AND running=true or null in metadata, to start
-     * @return success
-     * @throws RuntimeException via Snark.fatal()
+     * @return true if the torrent is now loaded, false if the metainfo file is unreadable
+     *         or a torrent with that name is already running
+     * @throws RuntimeException if the storage for the torrent cannot be created
      */
     private boolean addTorrent(String filename, File baseFile, boolean dontAutoStart) {
         return addTorrent(filename, baseFile, dontAutoStart, null);
@@ -3490,8 +3493,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param baseFile may be null, if so look in dataDir
      * @param dontAutoStart must be false, AND running=true or null in metadata, to start
      * @param dataDir must exist, or null to default to snark data directory
-     * @return success
-     * @throws RuntimeException via Snark.fatal()
+     * @return true if the torrent is now loaded, false if the metainfo file is unreadable
+     *         or a torrent with that name is already running
+     * @throws RuntimeException if the storage for the torrent cannot be created
      * @since 0.9.17
      */
     private boolean addTorrent(
@@ -3760,7 +3764,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param trackerURL may be null
      * @param updateStatus should we save this magnet to metadata, to persist it across restarts,
      *                     in case we don't get the metadata before shutdown?
-     * @throws RuntimeException via Snark.fatal()
+     * @throws RuntimeException if the data location for the magnet cannot be created
      * @since 0.8.4
      */
     public void addMagnet(String name, byte[] ih, String trackerURL, boolean updateStatus) {
@@ -3777,7 +3781,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param updateStatus should we save this magnet to metadata, to persist it across restarts,
      *                     in case we don't get the metadata before shutdown?
      * @param dataDir must exist, or null to default to snark data directory
-     * @throws RuntimeException via Snark.fatal()
+     * @throws RuntimeException if the data location for the magnet cannot be created
      * @since 0.9.17
      */
     public void addMagnet(
@@ -3798,7 +3802,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param dataDir must exist, or null to default to snark data directory
      * @param listener to intercept callbacks, should pass through to this
      * @return the new Snark or null on failure
-     * @throws RuntimeException via Snark.fatal()
+     * @throws RuntimeException if the data location for the magnet cannot be created
      * @since 0.9.4
      */
     public Snark addMagnet(
@@ -4122,7 +4126,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Hex string overload for convenience.
      *
      * @param hex 40-char hex infohash (case-insensitive)
-     * @param timeoutMs max wait
+     * @param timeoutMs max time to wait for metadata (e.g. 60_000 for 1 min, 3_600_000 for 60 min)
      * @return name or null
      * @since 0.9.71+
      */
@@ -4455,7 +4459,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Add and start a FetchAndAdd task. Remove it with deleteMagnet().
      *
      * @param torrent must be instanceof FetchAndAdd
-     * @throws RuntimeException via Snark.fatal()?
+     * @throws RuntimeException if the downloader cannot reach I2P
      * @since 0.9.1
      */
     public void addDownloader(Snark torrent) {
@@ -4488,8 +4492,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *                 generate a name from the metainfo.
      * @param baseFile may be null, if so look in rootDataDir
      * @param dontAutoStart true to add the torrent without starting it
-     * @return success
-     * @throws RuntimeException via Snark.fatal()
+     * @return true if the torrent is now loaded, false if the metainfo could not be saved
+     * @throws RuntimeException if the storage for the torrent cannot be created
      * @throws IOException declared for API compatibility; a write failure is reported
      *                     as a queued message and a false return
      * @since 0.8.4
@@ -4576,8 +4580,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param filename the absolute path to save the metainfo to, generally ending in ".torrent",
      *                 which is also the name of the torrent Must be a filesystem-safe name.
      * @param dataDir must exist, or null to default to snark data directory
-     * @return success
-     * @throws RuntimeException via Snark.fatal()
+     * @return true if the file was copied and the torrent added
+     * @throws RuntimeException if the newly added torrent cannot be started;
+     *                          Snark.fatal() logs the failure and reports it to
+     *                          the CompleteListener before throwing
      * @throws IOException declared for API compatibility; a copy failure is reported
      *                     as a queued message and a false return
      * @since 0.8.4
@@ -6237,7 +6243,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * If not connected, thread it, otherwise inline
      *
      * @param infoHash info hash of the torrent to start
-     * @throws RuntimeException via Snark.fatal()
+     * @throws RuntimeException if the torrent cannot be started; Snark.fatal()
+     *                          logs the failure and reports it to the
+     *                          CompleteListener before throwing
      * @since 0.9.1
      */
     public void startTorrent(byte[] infoHash) {
@@ -6254,7 +6262,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * If not connected, thread it, otherwise inline
      *
      * @param snark the stopped torrent to start
-     * @throws RuntimeException via Snark.fatal()
+     * @throws RuntimeException if the torrent cannot be started; Snark.fatal()
+     *                          logs the failure and reports it to the
+     *                          CompleteListener before throwing
      * @since 0.9.23
      */
     public void startTorrent(Snark snark) {

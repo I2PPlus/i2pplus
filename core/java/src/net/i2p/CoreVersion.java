@@ -52,7 +52,7 @@ public class CoreVersion {
     /**
      * For Vuze.
      *
-     * @return VERSION
+     * @return the full version string, as required by Vuze
      * @since 0.9.19
      */
     public static String getVersion() {
@@ -61,7 +61,8 @@ public class CoreVersion {
 
     /**
      * Entry point for CLI version display.
-     * @param args ignored
+     * @param args command line arguments, unused; the version is always
+     *             printed for both the core and the published API
      */
     public static void main(String[] args) {
         System.out.println("I2P+ Core version: " + VERSION);

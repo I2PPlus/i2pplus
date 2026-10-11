@@ -274,7 +274,7 @@ public abstract class TransportUtil {
     /**
      * Whether the address is an in-network Yggdrasil address.
      * @param addr the address to classify
-     * @return whether yggdrasil
+     * @return true if the host string matches the Yggdrasil overlay pattern
      * @since 0.9.49
      */
     public static boolean isYggdrasil(RouterAddress addr) {

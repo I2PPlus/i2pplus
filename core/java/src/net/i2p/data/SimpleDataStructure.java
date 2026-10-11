@@ -89,7 +89,8 @@ public abstract class SimpleDataStructure implements DataStructure {
      * structure, and breaks the hashCode contract of any subclass that caches
      * a hash of the data.
      *
-     * @return the data
+     * @return the backing array, always exactly {@link #length()} long or null
+     *         before the data has been set
      */
     public byte[] getData() {
         return _data;

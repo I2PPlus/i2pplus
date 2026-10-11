@@ -53,7 +53,9 @@ public final class GradientPaintKey {
      * Checks this instance for equality with an arbitrary object.
      *
      * @param obj the object to test against ({@code null} permitted).
-     * @return A boolean.
+     * @return {@code true} if {@code obj} is this instance or another
+     *         {@code GradientPaintKey} whose paint matches on both colors, both
+     *         points, transparency and cycleness.
      */
     @Override
     public boolean equals(Object obj) {

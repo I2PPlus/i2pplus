@@ -224,7 +224,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      *
      *  @param key the key to store the value under
      *  @param val the value
-     *  @param sl the SkipList
+     *  @param sl the list to bump and split
      *  @return the new span if it caused a split, else null if it went in this span
      */
     public SkipSpan<K, V> put(K key, V val, SkipList<K, V> sl)  {
@@ -278,7 +278,7 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
      *  Remove a key-value pair from this span.
      *
      *  @param key the key whose entry is to be deleted
-     *  @param sl the SkipList
+     *  @param sl the list to shrink if this span empties out
      *  @return An array of two objects or null.
      *          rv[0] is the removed object.
      *          rv[1] is the deleted SkipSpan if the removed object was the last in the SkipSpan.

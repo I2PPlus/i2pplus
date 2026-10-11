@@ -454,7 +454,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Whether the peer is connected.
      *
-     * @return whether connected
+     * @return true if the connection to this peer is still up
      */
     @Override
     public boolean isConnected() {
@@ -485,7 +485,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Whether we are interested.
      *
-     * @return whether interested
+     * @return false always; a web seed publishes no bitfield
      */
     @Override
     public boolean isInterested() {
@@ -495,7 +495,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Whether the peer is interesting.
      *
-     * @return whether interesting
+     * @return true if we want anything more from this peer
      */
     @Override
     public boolean isInteresting() {
@@ -511,7 +511,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Whether we are choking.
      *
-     * @return whether choking
+     * @return false always; we never block a web seed
      */
     @Override
     public boolean isChoking() {
@@ -521,7 +521,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Whether we are choked.
      *
-     * @return whether choked
+     * @return false always; choke messages are ignored
      */
     @Override
     public boolean isChoked() {
@@ -573,7 +573,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Whether the peer completed the torrent.
      *
-     * @return whether completed
+     * @return true always; a web seed is finished as soon as it connects
      */
     @Override
     public boolean isCompleted() {
@@ -608,7 +608,7 @@ class WebPeer extends Peer implements EepGet.StatusListener {
     /**
      * Should we request this many bytes?
      *
-     * @return whether request
+     * @return true if the coordinator allows this peer to request that many bytes
      * @since 0.9.62
      */
     @Override

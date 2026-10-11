@@ -8,7 +8,7 @@ public interface CryptoServiceProperties
 {
     /**
      * Return the security level in bits.
-     * @return security level
+     * @return security level in bits
      */
     int bitsOfSecurity();
 
@@ -20,7 +20,8 @@ public interface CryptoServiceProperties
 
     /**
      * Return the purpose of the cryptographic service.
-     * @return service purpose
+     * @return what the service is for: agreement, encryption, decryption, key
+     *         generation, signing, verifying, authentication, a PRF, or any
      */
     CryptoServicePurpose getPurpose();
 

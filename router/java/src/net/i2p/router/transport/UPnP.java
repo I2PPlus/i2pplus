@@ -2048,7 +2048,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
         /**
          * Expiration time of the pinhole.
          *
-         * @param expires absolute time
+         * @param expires the expiry as an absolute time, or 0 for no expiry
          */
         public synchronized void setExpiration(long expires) { _expires = expires; }
 

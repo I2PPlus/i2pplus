@@ -51,7 +51,7 @@ public class ConfigStatsHandler extends FormHandler {
 
     /**
      * Turns on full statistics collection; the argument is the form's checkbox value.
-     * @param foo ignored
+     * @param foo the form's checkbox value; only its presence matters here
      */
     public void setIsFull(String foo) { _isFull = true; }
 

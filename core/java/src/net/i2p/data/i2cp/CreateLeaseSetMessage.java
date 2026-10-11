@@ -268,7 +268,8 @@ public class CreateLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Returns the I2CP message type number for this message.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, identifying this as a CreateLeaseSet
+     *         message to the peer
      */
     @Override
     public int getType() {

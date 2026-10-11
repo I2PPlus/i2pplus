@@ -32,7 +32,7 @@ public enum SigAlgo {
     /**
      * The name of this signature algorithm.
      *
-     * @return The name.
+     * @return the algorithm name this constant was declared with, such as {@code EdDSA}
      */
     public String getName() {
         return name;

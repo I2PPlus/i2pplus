@@ -642,7 +642,7 @@ class ConnectionAcceptor implements Runnable {
     /**
      * Is the given hash banned?
      *
-     * @param h the hash
+     * @param h destination hash being tested
      * @return true if banned
      * @since 0.9.71
      */
@@ -653,7 +653,7 @@ class ConnectionAcceptor implements Runnable {
     /**
      * Ban the given hash.
      *
-     * @param h the hash
+     * @param h destination hash to count as bad
      * @since 0.9.71
      */
     public void ban(Hash h) {

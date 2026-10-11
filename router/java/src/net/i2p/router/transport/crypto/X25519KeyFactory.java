@@ -207,7 +207,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * Returns the last created instance.
-     * @return the instance
+     * @return the most recently constructed factory, or null if none has been created yet
      * @since 0.9.70+
      */
     public static X25519KeyFactory getInstance() { return lastInstance; }
@@ -244,7 +244,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
 
     /**
      * Returns the current number of precalc keys queued.
-     * @return the size
+     * @return how many prebuilt keypairs are waiting to be handed out, which counts keypairs
+     *         rather than bytes and may be zero
      * @since 0.9.70+
      */
     public int getSize() { return _keys.size(); }
@@ -315,7 +316,8 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
     /**
      * Pulls a prebuilt keypair from the queue,
      * or if not available, construct a new one.
-     * @return the keys
+     * @return an X25519 keypair for local ephemeral Diffie-Hellman use, either taken from
+     *         the precalculation queue or newly generated
      */
     public KeyPair getKeys() {
         _context.statManager().addRateData("crypto.XDHUsed", 1);

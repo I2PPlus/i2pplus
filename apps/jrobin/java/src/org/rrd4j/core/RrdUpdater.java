@@ -23,7 +23,7 @@ interface RrdUpdater<T extends RrdUpdater<T>> {
      * Copies this updater's state into the given one.
      *
      * @param updater a {@link org.rrd4j.core.RrdUpdater} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the state cannot be read from the backend
      */
     void copyStateTo(T updater) throws IOException;
 

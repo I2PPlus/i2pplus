@@ -11,7 +11,7 @@ public interface Serializer<T> {
     /**
      * o).
      * @param o the object to serialize
-     * @return the bytes
+     * @return the given object's serialized form as a byte array
      */
     public byte[] getBytes(T o);
     /**

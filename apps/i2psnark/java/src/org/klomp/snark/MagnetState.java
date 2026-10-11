@@ -93,7 +93,7 @@ class MagnetState {
     /**
      * Returns the MetaInfo for this magnet state.
      *
-     * @return the MetaInfo
+     * @return the MetaInfo built from the gathered pieces
      * @throws IllegalArgumentException if not complete
      */
     public MetaInfo getMetaInfo() {

@@ -169,7 +169,7 @@ public class MetaNamingService extends DummyNamingService {
 
     /**
      * All services aggregated
-     * @return the entries
+     * @return the hostname to destination mapping merged from every delegate service
      */
     @Override
     public Map<String, Destination> getEntries(Properties options) {
@@ -197,7 +197,7 @@ public class MetaNamingService extends DummyNamingService {
 
     /**
      * All services aggregated
-     * @return the names
+     * @return the hostnames known to every delegate service, merged into one set
      */
     @Override
     public Set<String> getNames(Properties options) {

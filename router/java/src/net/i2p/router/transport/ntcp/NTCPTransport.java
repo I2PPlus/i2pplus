@@ -1389,7 +1389,7 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Whether the pumper thread is alive.
-     * @return whether alive
+     * @return true if the transport's pumper thread is running
      */
     public boolean isAlive() {return _pumper.isAlive();}
 

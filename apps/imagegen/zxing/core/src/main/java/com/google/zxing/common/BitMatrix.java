@@ -207,7 +207,8 @@ public final class BitMatrix implements Cloneable {
    * Exclusive-or (XOR): Flip the bit in this {@code BitMatrix} if the corresponding
    * mask bit is set.
    *
-   * @param mask XOR mask
+   * @param mask the matrix to XOR in, which must have the same width, height
+   *             and row size as this one
    */
   public void xor(BitMatrix mask) {
     if (width != mask.width || height != mask.height || rowSize != mask.rowSize) {

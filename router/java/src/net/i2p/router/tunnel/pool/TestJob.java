@@ -757,7 +757,7 @@ public class TestJob extends JobImpl {
 
     /**
      *  Base max queued tests value, read from PROP or static default.
-     *  @param ctx router context
+     *  @param ctx the router context whose configuration supplies the limit
      *  @return configured base max queued tests
      */
     private static int getBaseMaxQueuedTests(RouterContext ctx) {
@@ -3120,7 +3120,7 @@ public class TestJob extends JobImpl {
     /**
      * The name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue
      */
     @Override
     public String getName() {
@@ -4294,8 +4294,8 @@ public class TestJob extends JobImpl {
      * @param sendProcessingMs average transport.sendProcessingTime, NaN if unknown
      * @param outLen outbound tunnel length, &lt;= 0 if no outbound tunnel
      * @param replyLen reply tunnel length, &lt;= 0 if no reply tunnel
-     * @param minPeriod minTestPeriod config
-     * @param maxPeriod maxTestPeriod config
+     * @param minPeriod the configured minTestPeriod, the lower clamp in ms
+     * @param maxPeriod the configured maxTestPeriod, the upper clamp in ms
      * @return the failure window in ms
      * @since 0.9.70+
      */
@@ -4350,7 +4350,7 @@ public class TestJob extends JobImpl {
      *  Floored at a fixed minimum so a genuinely slow peer is still demoted on a
      *  fast network.
      *
-     *  @param ctx router context
+     *  @param ctx the router context whose configuration supplies the limit
      *  @return demotion threshold in ms
      *  @since 0.9.70+
      */
@@ -4621,7 +4621,7 @@ public class TestJob extends JobImpl {
         /**
          * Job name for the test-timeout event.
          *
-         * @return the name
+         * @return the name this job is listed under in the job queue
          */
         @Override public String getName() { return "Timeout Tunnel Test"; }
 

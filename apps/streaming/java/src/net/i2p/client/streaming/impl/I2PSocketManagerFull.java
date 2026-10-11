@@ -170,7 +170,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * No longer supported, throws UnsupportedOperationException.
      * @deprecated use 4-arg constructor
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; this overload has no
+     *                                       implementation and never initialises the manager
      */
     @Deprecated
     public void init(I2PAppContext context, I2PSession session, Properties opts, String name) {
@@ -833,7 +834,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     /**
      * Has the socket manager been destroyed?
      *
-     * @return whether destroyed
+     * @return true once destroySocketManager() has completed; the flag is set at
+     *         the start of that method, so it also guards against a second destroy
      * @since 0.9.9
      */
     public boolean isDestroyed() {
@@ -857,7 +859,8 @@ public class I2PSocketManagerFull implements I2PSocketManager {
 
     /**
      * For logging / diagnostics only
-     * @return the name
+     * @return the name this manager was constructed with, suffixed with a sequence number
+     *         that distinguishes concurrent managers
      */
     public String getName() { return _name; }
 

@@ -39,7 +39,8 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the external UDP hostname.
-     * @return the hostname
+     * @return the configured external host, which may list several entries
+     *         separated by commas, semicolons or whitespace; empty if unset
      */
     public String getUdphostname() {
         return _context.getProperty(UDPTransport.PROP_EXTERNAL_HOST, "");
@@ -47,7 +48,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the NTCP hostname.
-     * @return the hostname
+     * @return the configured NTCP host; empty if unset
      */
     public String getNtcphostname() {
         return _context.getProperty(PROP_I2NP_NTCP_HOSTNAME, "");
@@ -55,7 +56,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the NTCP port.
-     * @return the port
+     * @return the configured NTCP port, unparsed; empty if unset
      */
     public String getNtcpport() {
         return _context.getProperty(PROP_I2NP_NTCP_PORT, "");
@@ -253,7 +254,8 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the set of addresses.
-     * @return the addresses
+     * @return every address the router publishes, including IPv6 but
+     *         excluding local and IPv6 temporary addresses
      */
     public Set<String> getAddresses() {
         // exclude local, include IPv6, exclude IPv6 temporary
@@ -301,7 +303,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the inbound rate as a decimal.
-     * @return decimal
+     * @return the inbound rate in kB/s, where kB is 1000 bytes, rounded to a whole number
      */
     public String getInboundRate() {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getInboundKBytesPerSecond() * 1.024f));
@@ -309,7 +311,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the outbound rate as a decimal.
-     * @return decimal
+     * @return the outbound rate in kB/s, where kB is 1000 bytes, rounded to a whole number
      */
     public String getOutboundRate() {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getOutboundKBytesPerSecond() * 1.024f));
@@ -317,7 +319,8 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the inbound burst rate in bits as a decimal.
-     * @return decimal
+     * @return an HTML fragment showing the inbound burst rate in bps alongside
+     *         the monthly data transfer it would allow
      */
     public String getInboundBurstRateBits() {
         return kbytesToBits(_context.bandwidthLimiter().getInboundBurstKBytesPerSecond());
@@ -325,7 +328,8 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the outbound burst rate in bits as a decimal.
-     * @return decimal
+     * @return an HTML fragment showing the outbound burst rate in bps alongside
+     *         the monthly data transfer it would allow
      */
     public String getOutboundBurstRateBits() {
         return kbytesToBits(_context.bandwidthLimiter().getOutboundBurstKBytesPerSecond());
@@ -333,7 +337,8 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the share rate in bits as a decimal.
-     * @return decimal
+     * @return an HTML fragment showing the share rate in bps alongside the
+     *         monthly data transfer it would allow
      */
     public String getShareRateBits() {
         return kbytesToBits(getShareBandwidth());
@@ -341,7 +346,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the share rate in megabits as a decimal.
-     * @return decimal
+     * @return the share bandwidth in megabits per second, to two decimal places
      */
     public String getShareRateMegabits() {
         float megabits = getShareBandwidth() / 1024f * 8;
@@ -360,7 +365,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the inbound burst rate as a decimal.
-     * @return decimal
+     * @return the inbound burst rate in kB/s, where kB is 1000 bytes, rounded to a whole number
      */
     public String getInboundBurstRate() {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getInboundBurstKBytesPerSecond() * 1.024f));
@@ -368,7 +373,7 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the outbound burst rate as a decimal.
-     * @return decimal
+     * @return the outbound burst rate in kB/s, where kB is 1000 bytes, rounded to a whole number
      */
     public String getOutboundBurstRate() {
         return Integer.toString(Math.round(_context.bandwidthLimiter().getOutboundBurstKBytesPerSecond() * 1.024f));
@@ -424,7 +429,8 @@ public class ConfigNetHelper extends HelperBase {
 
     /**
      * Get the share percentage selection box HTML.
-     * @return the HTML
+     * @return the select element for the share percentage, with the current
+     *         percentage marked as the selected option
      */
     public String getSharePercentageBox() {
         int pct = (int) (100 * _context.router().getSharePercentage());

@@ -344,7 +344,7 @@ class Mail {
      * line in text to the recipients list.
      *
      * @param recipients collects the addresses parsed from text
-     * @param text comma-separated
+     * @param text the comma-separated address line to split and parse
      * @param ok will be returned
      * @return true if ALL e-mail addresses are valid AND the in parameter was true
      */

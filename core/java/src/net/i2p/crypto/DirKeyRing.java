@@ -44,7 +44,7 @@ public class DirKeyRing implements KeyRing {
      *
      * @param keyName the key name, also the expected certificate CN
      * @param scope the directory under the keyring base
-     * @param type unused
+     * @param type ignored; this ring is read-only and keys are not filtered by signature type
      * @return null if file doesn't exist, throws on all other errors
      */
     @Override

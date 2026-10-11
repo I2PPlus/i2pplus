@@ -181,7 +181,9 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * and for a RouterInfo it will be in the past.
      * Either way, it's a timestamp.
      *
-     * @return the timestamp
+     * @return the date this entry takes effect, in milliseconds since the epoch: the
+     *         expiration of the earliest lease for a LeaseSet, the publication time for a
+     *         RouterInfo
      * @since 0.8.2
      */
     public abstract long getDate();
@@ -351,7 +353,7 @@ public abstract class DatabaseEntry extends DataStructureImpl {
      * This is the same as isValid() in RouterInfo
      * or verifySignature() in LeaseSet.
      *
-     * @return valid
+     * @return true if the entry carries a signature that verifies over its own data
      * @since public since 0.9.47, was protected
      */
     public boolean verifySignature() {

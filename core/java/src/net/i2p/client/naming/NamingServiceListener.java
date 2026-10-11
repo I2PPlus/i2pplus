@@ -23,7 +23,7 @@ public interface NamingServiceListener {
      *
      * @param ns the naming service
      * @param hostname the name the new entry maps, as registered with the service
-     * @param dest the destination
+     * @param dest the destination the new hostname entry resolves to
      * @param options NamingService-specific, can be null
      */
     public void entryAdded(NamingService ns, String hostname, Destination dest, Properties options);

@@ -81,7 +81,7 @@ public class ClientMessage {
      * Retrieve the payload of the message.  All ClientMessage objects should have
      * a payload
      *
-     * @return the payload
+     * @return the payload carried by this message, never null
      */
     public Payload getPayload() { return _payload; }
 
@@ -90,7 +90,7 @@ public class ClientMessage {
      * Valid for outbound; null for inbound.
      * If null, use getDestinationHash()
      *
-     * @return the destination
+     * @return the resolved destination, or null if only the hash is known
      */
     public Destination getDestination() { return _destination; }
 
@@ -137,7 +137,7 @@ public class ClientMessage {
      * Expiration requested by the client that sent the message.  This will only be available
      * for locally originated messages.
      *
-     * @return the expiration
+     * @return expiry as milliseconds since the epoch, or 0 for none
      */
     public long getExpiration() { return _expiration; }
 
@@ -145,7 +145,7 @@ public class ClientMessage {
      * Flags requested by the client that sent the message.  This will only be available
      * for locally originated messages.
      *
-     * @return the flags
+     * @return the client's bitmask of delivery options, 0 if none set
      * @since 0.8.4
      */
     public int getFlags() { return _flags; }

@@ -20,7 +20,7 @@ public class RrdGraph implements RrdGraphConstants {
     /**
      * Creates graph from the corresponding {@link org.rrd4j.graph.RrdGraphDef} object.
      *
-     * @param gdef Graph definition
+     * @param gdef the graph definition to render
      * @throws java.io.IOException Thrown in case of I/O error
      */
     public RrdGraph(RrdGraphDef gdef) throws IOException {
@@ -30,7 +30,7 @@ public class RrdGraph implements RrdGraphConstants {
     /**
      * Create graph from a custom image worker
      *
-     * @param gdef Graph definition
+     * @param gdef the graph definition to render
      * @param worker the image worker painting the graph, replacing the default one
      * @throws IOException Thrown in case of I/O error
      */
@@ -47,7 +47,7 @@ public class RrdGraph implements RrdGraphConstants {
      * <p>The ImageWriter type and ImageWriteParam settings have priority other the RrdGraphDef
      * settings.
      *
-     * @param gdef Graph definition
+     * @param gdef the graph definition to render
      * @param writer the ImageWriter that encodes the graph
      * @param param the encoder settings applied by that writer
      * @throws IOException Thrown in case of I/O error
@@ -105,7 +105,7 @@ public class RrdGraph implements RrdGraphConstants {
     /**
      * Renders this graph onto graphing device
      *
-     * @param g Graphics handle
+     * @param g Graphics to paint the already-rendered image onto
      */
     public void render(Graphics g) {
         byte[] imageData = getRrdGraphInfo().getBytes();

@@ -266,8 +266,8 @@ public class HomeHelper extends HelperBase {
     public boolean shouldShowSearch() {return _context.getBooleanProperty(PROP_SEARCH);}
 
     /**
-     * Whether advanced.
-     * @return whether advanced
+     * Whether the console is in advanced mode.
+     * @return true if i2pconsole.advanced is set
      */
     @Override
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
@@ -381,8 +381,8 @@ public class HomeHelper extends HelperBase {
 
     /**
      * Parse the config string into the set of apps to offer.
-     * @param ctx context
-     * @param config the configuration
+     * @param ctx context used to translate app names and descriptions
+     * @param config the configuration, four S-separated fields per app
      * @return collection of apps
      */
     static Collection<App> buildApps(RouterContext ctx, String config) {
@@ -416,7 +416,7 @@ public class HomeHelper extends HelperBase {
 
     /**
      * Write the app list back out to the named property.
-     * @param ctx context
+     * @param ctx context whose property store receives the value
      * @param prop the property name
      * @param apps the apps to save
      * @param full whether to save full data

@@ -649,7 +649,8 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      * The registered name of this tunnel group, for the ClientApp interface.
-     * @return the name
+     * @return the constant {@code "i2ptunnel"} under which this group is
+     *         registered with the ClientApp manager, distinct from the display name
      * @since 0.9.4
      */
     @Override

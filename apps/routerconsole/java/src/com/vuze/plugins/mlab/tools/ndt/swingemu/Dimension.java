@@ -27,8 +27,8 @@ public class Dimension {
 	/**
 	 * Constructs a Dimension with the given width and height.
 	 *
-	 * @param x the width
-	 * @param y the height
+	 * @param x the width; this no-op stub records nothing
+	 * @param y the height; this no-op stub records nothing
 	 */
 	public Dimension( int x, int y ){}
 }

@@ -31,7 +31,7 @@ public class ContentOnly {
     /**
      * True when the request asks for fragment rendering.
      *
-     * @param req the request
+     * @param req request whose contentonly parameter is inspected
      * @return true iff the contentonly parameter is present and non-empty
      */
     public static boolean isContentOnly(HttpServletRequest req) {
@@ -43,7 +43,7 @@ public class ContentOnly {
      * The sanitized set of requested element ids. Splits the parameter on
      * commas and whitespace and keeps only ids matching [A-Za-z0-9_-].
      *
-     * @param req the request
+     * @param req request whose contentonly parameter supplies the ids
      * @return the requested ids, or an empty set
      */
     public static Set<String> requestedIds(HttpServletRequest req) {
@@ -62,7 +62,7 @@ public class ContentOnly {
     /**
      * Whether the named element must be rendered for this request.
      *
-     * @param req the request
+     * @param req request whose contentonly parameter gates the rendering
      * @param id the element id
      * @return true for full-page requests, and for fragment requests that include the id
      */

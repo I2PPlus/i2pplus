@@ -27,7 +27,7 @@ public interface NotificationService {
      * @param category may be null, probably unused
      * @param priority higher is higher, Log.INFO etc. recommended, probably unused
      * @param title for the popup, translated
-     * @param message translated
+     * @param message body text of the notification, translated
      * @param path in console for more information, starting with /, must be URL-escaped, or null
      * @return an ID to use with cancel() or update(), or -1 on failure
      */
@@ -37,7 +37,7 @@ public interface NotificationService {
      * Cancel a notification if possible.
      *
      * @param id as received from notify()
-     * @return success
+     * @return true if the notification was cancelled
      */
     public boolean cancel(int id);
 
@@ -46,9 +46,9 @@ public interface NotificationService {
      *
      * @param id as received from notify()
      * @param title for the popup, translated
-     * @param message translated
+     * @param message body text of the notification, translated
      * @param path in console starting with /, must be URL-escaped, or null
-     * @return success
+     * @return true if the notification was updated
      */
     public boolean update(int id, String title, String message, String path);
 }

@@ -27,7 +27,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
      * @param subscriptions
      *            List of Subscription objects that represent address books.
      * @param delay the minimum delay since last fetched for the iterator to actually fetch
-     * @param proxyHost proxy hostname
+     * @param proxyHost proxy hostname, null for no proxy
      * @param proxyPort proxy port number
      */
     public SubscriptionIterator(List<Subscription> subscriptions, long delay, String proxyHost, int proxyPort) {
@@ -69,7 +69,7 @@ class SubscriptionIterator implements Iterator<AddressBook> {
     /**
      * Not supported.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException if remove() is called on this iterator
      */
     @Override
     public void remove() {

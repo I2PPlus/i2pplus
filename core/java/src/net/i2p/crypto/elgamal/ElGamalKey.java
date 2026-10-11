@@ -24,7 +24,7 @@ public interface ElGamalKey extends DHKey {
     /**
      * The ElGamal parameters for this key.
      *
-     * @return The parameters.
+     * @return the ElGamal group parameters this key belongs to
      */
     public ElGamalParameterSpec getParameters();
 }

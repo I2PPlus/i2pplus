@@ -25,7 +25,7 @@ abstract class Source {
     /**
      * Returns the source name.
      *
-     * @return the name
+     * @return the source name, as passed to the constructor
      */
     String getName() {
         return name;
@@ -70,7 +70,7 @@ abstract class Source {
     /**
      * @param tStart start of the aggregation window, in seconds since the epoch
      * @param tEnd end of the aggregation window, in seconds since the epoch
-     * @return the Aggregates
+     * @return the Aggregates computed over the window
      * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
      *             with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
@@ -84,7 +84,7 @@ abstract class Source {
      * @param tStart start of the percentile window, in seconds since the epoch
      * @param tEnd end of the percentile window, in seconds since the epoch
      * @param percentile the percentile to compute, from 0.0 through 100.0
-     * @return the percentile
+     * @return the value at that percentile within the window
      * @deprecated This method is deprecated. Uses instance of {@link
      *             org.rrd4j.data.Variable.PERCENTILE}, used with {@link
      *             org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}

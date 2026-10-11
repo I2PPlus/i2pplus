@@ -15,7 +15,7 @@ public class DummyNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseFacad
     /**
      * Create a segmentor backed by a dummy network database facade.
      *
-     * @param ctx the context
+     * @param ctx router context handed to the dummy facade it wraps
      */
     public DummyNetworkDatabaseSegmentor(RouterContext ctx) {
         _fndb = new DummyNetworkDatabaseFacade(ctx);

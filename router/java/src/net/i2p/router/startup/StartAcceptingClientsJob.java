@@ -25,7 +25,8 @@ class StartAcceptingClientsJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the fixed label "Start Accepting Clients", used to identify this job
+     *         in logs and job statistics
      */
     public String getName() { return "Start Accepting Clients"; }
 

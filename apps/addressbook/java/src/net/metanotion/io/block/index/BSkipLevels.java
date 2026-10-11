@@ -56,9 +56,10 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
      * BSkipLevel in the skiplist after the constructor, unless it's a new empty
      * level and init() was previously called.
      *
-     * @param bf the BlockFile
+     * @param bf the BlockFile that owns the page this level is read from
      * @param levelPage the page number of this level
-     * @param bsl the BSkipList
+     * @param bsl the BSkipList this level is registered in, for its levelHash
+     *            and spanHash caches
      * @throws IOException if an I/O error occurs
      */
     @SuppressWarnings("unchecked")
@@ -181,7 +182,7 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
     /**
      * Initialize a new BSkipLevels page on disk.
      *
-     * @param bf the BlockFile
+     * @param bf the BlockFile that the page is allocated from
      * @param page the page number
      * @param spanPage the span page number
      * @param maxHeight the maximum height
@@ -241,8 +242,8 @@ public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<
      * Create a new instance of this level type.
      *
      * @param levels the number of levels
-     * @param ss the SkipSpan
-     * @param sl the SkipList
+     * @param ss the SkipSpan whose page this level is built above
+     * @param sl the SkipList that owns this level
      * @return a new BSkipLevels instance
      */
     @Override

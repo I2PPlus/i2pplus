@@ -94,7 +94,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Returns the last created instance.
      *
-     * @return the instance
+     * @return the most recently constructed factory, or null if none has been created yet
      * @since 0.9.70+
      */
     public static MLKEMKeyFactory getInstance() { return lastInstance; }
@@ -134,7 +134,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Returns the current number of precalc keys queued.
      *
-     * @return the size
+     * @return the number of prebuilt keypairs currently waiting in the pool
      * @since 0.9.70+
      */
     public int getSize() { return _keys.size(); }
@@ -235,7 +235,8 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
     /**
      * Pulls a prebuilt keypair from the queue,
      * or if not available, construct a new one.
-     * @return the keys
+     * @return an ML-KEM keypair, taken from the prebuilt pool when one was
+     *         available and generated on demand otherwise, never null
      */
     @Override
     public KeyPair getKeys() {

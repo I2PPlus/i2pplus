@@ -34,7 +34,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      *
      * @param levels the number of levels to create
      * @param ss the SkipSpan to use
-     * @param sl the SkipList
+     * @param sl accepted for signature compatibility with the other levels, unused
      * @return a new SkipLevels instance
      */
     public SkipLevels<K, V> newInstance(int levels, SkipSpan<K, V> ss, SkipList<K, V> sl) {
@@ -166,7 +166,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      *
      * @param start the starting level
      * @param key the key of the entry to remove
-     * @param sl the SkipList
+     * @param sl the owning SkipList, passed down and used for the head pointer
      * @return An array of two objects or null.
      *         rv[0] is the removed object.
      *         rv[1] is the deleted SkipLevels if the removed object was the last in the SkipLevels,
@@ -262,7 +262,7 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
      * @param start the starting level
      * @param key the key to map to the value, replacing any existing entry
      * @param val the value
-     * @param sl the SkipList
+     * @param sl the owning SkipList, which supplies the random column height
      * @return the new level if it caused a split and we made a new level,
      *         and the new level is taller than our level;
      *         else null if it went in an existing level or the new level is our height or less.

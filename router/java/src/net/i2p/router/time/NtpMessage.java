@@ -368,7 +368,7 @@ class NtpMessage {
      * 2036-compliant as of 0.9.50
      *
      * @param array 8 bytes starting at pointer
-     * @param pointer the offset
+     * @param pointer the index in array where the timestamp begins
      * @return the time since 1900 (NOT Java time)
      */
     private static double decodeTimestamp(byte[] array, int pointer) {
@@ -392,7 +392,7 @@ class NtpMessage {
      * Timestamps after Feb. 2104 will be encoded as Feb. 2104.
      *
      * @param array output 8 bytes starting at pointer
-     * @param pointer the offset
+     * @param pointer the index in array where the timestamp is written
      * @param timestamp the time to encode (since 1900, NOT Java time)
      */
     public static void encodeTimestamp(byte[] array, int pointer, double timestamp) {

@@ -72,7 +72,7 @@ public final class CertUtil {
      *
      * @param cert the certificate to save
      * @param file the file to write to
-     * @return success
+     * @return true if the file was written, false on an encoding or IO error
      * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     public static boolean saveCert(Certificate cert, File file) {
@@ -202,8 +202,8 @@ public final class CertUtil {
      *
      * Warning - unsupported in Android (no javax.naming), returns null.
      *
-     * @param cert the certificate
-     * @param type e.g. "CN"
+     * @param cert certificate whose subject X500Principal is searched
+     * @param type the DN attribute to read, e.g. "CN"
      * @return the subject value
      */
     public static String getSubjectValue(X509Certificate cert, String type) {
@@ -216,8 +216,8 @@ public final class CertUtil {
      *
      * Warning - unsupported in Android (no javax.naming), returns null.
      *
-     * @param cert the certificate
-     * @param type e.g. "CN"
+     * @param cert certificate whose issuer X500Principal is searched
+     * @param type the DN attribute to read, e.g. "CN"
      * @return the issuer value
      * @since 0.9.24
      */
@@ -232,7 +232,7 @@ public final class CertUtil {
      * Warning - unsupported in Android (no javax.naming), returns null.
      *
      * @param p the X500Principal
-     * @param type e.g. "CN"
+     * @param type the DN attribute to read, e.g. "CN"
      * @return the attribute value, or null if absent, p is null, or on Android
      */
     private static String getValue(X500Principal p, String type) {
@@ -430,7 +430,7 @@ public final class CertUtil {
      *
      * @param crl the CRL to save
      * @param file the file to write to
-     * @return success
+     * @return true if the file was written, false on a CRL or IO error
      * @since 0.9.25
      */
     public static boolean saveCRL(X509CRL crl, File file) {
@@ -485,7 +485,7 @@ public final class CertUtil {
      * This loads the CRLs from disk.
      * For efficiency, call loadCRLs() and then pass to isRevoked().
      *
-     * @param ctx the context
+     * @param ctx context used to locate and parse the CRLs
      * @param cert the certificate to check
      * @return true if revoked
      * @since 0.9.25
@@ -607,7 +607,8 @@ public final class CertUtil {
 
     /**
      * For testing purposes.
-     * @param args command-line arguments
+     * @param args a command verb followed by a file path; args[0] selects
+     *             the operation and args[1] is the file it is applied to
      */
     public static final void main(String[] args) {
         if (args.length < 2) {

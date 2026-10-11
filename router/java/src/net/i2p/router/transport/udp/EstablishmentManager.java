@@ -1538,7 +1538,7 @@ public class EstablishmentManager {
      * Rate limited to MAX_TERMINATIONS per peer every FAILSAFE_INTERVAL
      *
      * @param fromPacket header already decrypted, must be session or token request
-     * @param terminationCode nonzero
+     * @param terminationCode SSU2 reason code placed in the Retry packet
      * @since 0.9.57
      */
     private void sendTerminationPacket(RemoteHostId to, UDPPacket fromPacket, int terminationCode) {
@@ -3104,8 +3104,8 @@ public class EstablishmentManager {
      * Remember a token that can be used later to connect to the peer
      *
      * @param peer the peer's address and port, which keys the stored token
-     * @param token nonzero
-     * @param expires absolute time
+     * @param token nonzero token value to store
+     * @param expires absolute expiry as milliseconds since the epoch
      * @since 0.9.54
      */
     public void addOutboundToken(RemoteHostId peer, long token, long expires) {

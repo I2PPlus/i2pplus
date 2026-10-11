@@ -256,8 +256,8 @@ public class RandomSource extends SecureRandom implements EntropyHarvester {
     /**
      * XORs the seed into buf
      *
-     * @param f absolute path
-     * @return success
+     * @param f the seed file to read; its first {@code buf.length} bytes are XORed in
+     * @return true if the file was read, even if it held fewer than {@code buf.length} bytes
      */
     private static final boolean seedFromFile(File f, byte[] buf) {
         if (f.exists()) {

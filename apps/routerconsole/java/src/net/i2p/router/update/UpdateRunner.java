@@ -69,9 +69,9 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     /**
      * Uses router version for partial checks
      *
-     * @param ctx router context
-     * @param mgr update manager
-     * @param type update type
+     * @param ctx the router context supplying the logger and temp directory
+     * @param mgr the update manager notified of progress and results
+     * @param type what is being updated, as an UpdateType constant
      * @param uris list of update URIs
      */
     public UpdateRunner(RouterContext ctx, ConsoleUpdateManager mgr, UpdateType type, List<URI> uris) {
@@ -81,10 +81,10 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     /**
      * Uses router version for partial checks
      *
-     * @param ctx router context
-     * @param mgr update manager
-     * @param type update type
-     * @param method update method
+     * @param ctx the router context supplying the logger and temp directory
+     * @param mgr the update manager notified of progress and results
+     * @param type what is being updated, as an UpdateType constant
+     * @param method how to fetch the update, as an UpdateMethod constant
      * @param uris list of update URIs
      * @since 0.9.9
      */
@@ -96,9 +96,9 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     /**
      * Constructor with explicit current version.
      *
-     * @param ctx router context
-     * @param mgr update manager
-     * @param type update type
+     * @param ctx the router context supplying the logger and temp directory
+     * @param mgr the update manager notified of progress and results
+     * @param type what is being updated, as an UpdateType constant
      * @param uris list of update URIs
      * @param currentVersion used for partial checks
      * @since 0.9.7
@@ -111,9 +111,9 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     /**
      * Full constructor.
      *
-     * @param ctx router context
-     * @param mgr update manager
-     * @param type update type
+     * @param ctx the router context supplying the logger and temp directory
+     * @param mgr the update manager notified of progress and results
+     * @param type what is being updated, as an UpdateType constant
      * @param method HTTP, HTTP_CLEARNET, or HTTPS_CLEARNET
      * @param uris list of update URIs
      * @param currentVersion used for partial checks
@@ -138,7 +138,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
 
     /**
      * Whether running.
-     * @return whether running
+     * @return true while an update is in progress
      */
     public boolean isRunning() { return _isRunning; }
 
@@ -152,13 +152,13 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
 
     /**
      * Returns what kind of update this runner handles.
-     * @return the type
+     * @return the UpdateType this runner was created for
      */
     public UpdateType getType() { return _type; }
 
     /**
      * Returns how the update is fetched, such as HTTP or torrent.
-     * @return the method
+     * @return the UpdateMethod this runner was created for
      */
     public UpdateMethod getMethod() { return _method; }
 
@@ -380,7 +380,7 @@ class UpdateRunner extends I2PAppThread implements UpdateTask, EepGet.StatusList
     /**
      * Wrap a URL in an anchor tag for display.
      * @param url the URL to link to
-     * @return the HTML
+     * @return the anchor-tagged HTML for that URL
      */
     protected static String linkify(String url) {return ConsoleUpdateManager.linkify(url);}
 

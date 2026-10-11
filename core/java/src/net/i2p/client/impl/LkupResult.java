@@ -31,8 +31,10 @@ public class LkupResult implements LookupResult {
     /**
      * Full constructor.
      *
-     * @param code result code
-     * @param dest destination
+     * @param code zero for success, nonzero for failure, or
+     *             RESULT_DEFERRED for a reply still pending
+     * @param dest destination found by the lookup, or null on failure or
+     *             while deferred
      * @param nonce the nonce of the reply this result answers
      */
     LkupResult(int code, Destination dest, int nonce) {

@@ -95,7 +95,7 @@ public interface I2NPMessage {
     /**
      * Return the unique identifier for this type of I2NP message, as defined in
      * the I2NP spec
-     * @return the type
+     * @return the message type number, as defined in the I2NP spec
      */
     public int getType();
 

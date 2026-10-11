@@ -41,7 +41,7 @@ class LogLimit {
     /**
      * Priority limit applied to matching logs.
      *
-     * @return the limit
+     * @return the minimum priority level that logs under the root name emit
      */
     public int getLimit() {
         return _limit;

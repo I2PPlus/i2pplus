@@ -318,7 +318,8 @@ public class TunnelPoolSettings {
      * Other destinations that use the same tunnel (or null if exploratory).
      * Modifiable, concurrent, not a copy
      *
-     * @return the aliases
+     * @return the live alias set, modifiable and concurrent, or null for an
+     *         exploratory pool
      * @since 0.9.21
      */
     public Set<Hash> getAliases() {

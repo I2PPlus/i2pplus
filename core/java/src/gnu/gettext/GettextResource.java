@@ -73,7 +73,7 @@ public abstract class GettextResource extends ResourceBundle {
 
   /**
    * Returns the translation of <VAR>msgid</VAR>.
-   * @param catalog a ResourceBundle
+   * @param catalog the ResourceBundle holding the translated message catalogs
    * @param msgid the key string to be translated, an ASCII string
    * @return the translation of <VAR>msgid</VAR>, or <VAR>msgid</VAR> if
    *         none is found
@@ -212,7 +212,7 @@ public abstract class GettextResource extends ResourceBundle {
   /**
    * Returns the plural form for <VAR>n</VAR> of the translation of
    * <VAR>msgid</VAR>.
-   * @param catalog a ResourceBundle
+   * @param catalog the ResourceBundle holding the translated message catalogs
    * @param msgid the key string to be translated, an ASCII string
    * @param msgid_plural its English plural form
    * @param n the item count that selects the singular or the plural form
@@ -233,7 +233,7 @@ public abstract class GettextResource extends ResourceBundle {
   /**
    * Returns the translation of <VAR>msgid</VAR> in the context of
    * <VAR>msgctxt</VAR>.
-   * @param catalog a ResourceBundle
+   * @param catalog the ResourceBundle holding the translated message catalogs
    * @param msgctxt the context for the key string, an ASCII string
    * @param msgid the key string to be translated, an ASCII string
    * @return the translation of <VAR>msgid</VAR>, or <VAR>msgid</VAR> if
@@ -249,7 +249,7 @@ public abstract class GettextResource extends ResourceBundle {
   /**
    * Returns the plural form for <VAR>n</VAR> of the translation of
    * <VAR>msgid</VAR> in the context of <VAR>msgctxt</VAR>.
-   * @param catalog a ResourceBundle
+   * @param catalog the ResourceBundle holding the translated message catalogs
    * @param msgctxt the context for the key string, an ASCII string
    * @param msgid the key string to be translated, an ASCII string
    * @param msgid_plural its English plural form

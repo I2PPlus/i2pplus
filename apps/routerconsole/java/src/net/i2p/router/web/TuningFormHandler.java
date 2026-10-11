@@ -4273,7 +4273,8 @@ public class TuningFormHandler extends FormHandler {
 
     /**
      * Get the Tuner instance via the UDP transport.
-     * @return the tuner
+     * @return the UDP transport's {@link Tuner}, or null if the router context,
+     *         comm system, or UDP transport is not available
      */
     private Tuner getTuner() {
         if (_context == null) return null;

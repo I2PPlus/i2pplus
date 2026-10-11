@@ -188,7 +188,8 @@ class TrackerInfo {
     /**
      * One big string of concatenated 32-byte hashes
      *
-     * @return the peers
+     * @return a peer for each whole 32-byte hash in the array, skipping any that fail to
+     *         parse as a peer ID; a trailing partial hash is ignored
      * @since 0.8.1
      */
     private static Set<Peer> getPeers(
@@ -216,7 +217,7 @@ class TrackerInfo {
     /**
      * From Hash to Peer
      *
-     * @return the peers
+     * @return a peer for each hash, empty if {@code hashes} is null
      * @since 0.9.14
      */
     private static Set<Peer> getPeers(

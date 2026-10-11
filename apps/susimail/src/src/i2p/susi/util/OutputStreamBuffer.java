@@ -23,8 +23,10 @@ public class OutputStreamBuffer implements Buffer {
 	}
 
 	/**
-	 * @return the input stream
-	 * @throws UnsupportedOperationException always
+	 * This class only forwards writes to the wrapped stream, so it exposes no
+	 * readable data of its own.
+	 *
+	 * @throws UnsupportedOperationException always, since there is nothing to read
 	 */
 	@Override
 	public InputStream getInputStream() {
@@ -32,7 +34,7 @@ public class OutputStreamBuffer implements Buffer {
 	}
 
 	/**
-	 * @return the OutputStream
+	 * @return the same OutputStream that was passed to the constructor
 	 */
 	@Override
 	public OutputStream getOutputStream() {
@@ -48,7 +50,7 @@ public class OutputStreamBuffer implements Buffer {
 	/**
 	 * Close the output stream.
 	 *
-	 * @param success ignored
+	 * @param success ignored; the stream is closed unconditionally
 	 */
 	public void writeComplete(boolean success) {
 		try { _out.close(); } catch (IOException ioe) { /* ignored */ }

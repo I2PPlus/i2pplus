@@ -179,7 +179,7 @@ class LogRecordFormatter {
      * Use this only in static initializers.
      * It does not translate!
      *
-     * @return s
+     * @return the string, unchanged and untranslated
      */
     private static String _x(String s) {
         return s;

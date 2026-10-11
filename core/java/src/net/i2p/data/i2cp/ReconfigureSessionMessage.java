@@ -111,7 +111,7 @@ public class ReconfigureSessionMessage extends I2CPMessageImpl {
 
     /**
      * Reports this message's I2CP type number.
-     * @return the type
+     * @return ReconfigureSessionMessage's I2CP type number, for dispatch
      */
     @Override
     public int getType() {

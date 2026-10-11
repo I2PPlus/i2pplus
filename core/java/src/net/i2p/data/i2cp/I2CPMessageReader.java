@@ -83,7 +83,8 @@ public class I2CPMessageReader {
 
     /**
      * Current message event listener.
-     * @return the listener
+     * @return the listener passed to the constructor or {@link #setListener}, notified of
+     *         messages, errors and disconnects read from the stream
      */
     public I2CPMessageEventListener getListener() {
         return _listener;

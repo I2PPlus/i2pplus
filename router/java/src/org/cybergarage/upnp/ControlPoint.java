@@ -1229,7 +1229,8 @@ public class ControlPoint implements HTTPRequestListener {
     /**
      * Set the user-defined data.
      *
-     * @param data user-defined data
+     * @param data the object to store and hand back from {@code getUserData()},
+     *             may be null
      */
     public void setUserData(Object data) {
         userData = data;
@@ -1238,7 +1239,7 @@ public class ControlPoint implements HTTPRequestListener {
     /**
      * Get the user-defined data.
      *
-     * @return user-defined data
+     * @return whatever was passed to {@code setUserData()}, or null if unset
      */
     public Object getUserData() {
         return userData;

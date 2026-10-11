@@ -76,7 +76,7 @@ class ClientListenerRunner implements Runnable {
      * A ServerSocket for this listener.
      * Split out so it can be overridden for SSL.
      *
-     * @return the ServerSocket
+     * @return the socket this listener is bound to
      * @throws IOException if the socket cannot be created
      * @since 0.8.3
      */
@@ -178,7 +178,7 @@ class ClientListenerRunner implements Runnable {
     /**
      * Just so unit tests don't NPE, where the router could be null.
      *
-     * @return whether alive
+     * @return true if the router is running, or absent entirely so unit tests do not NPE
      * @since 0.9.20
      */
     private boolean isAlive() {

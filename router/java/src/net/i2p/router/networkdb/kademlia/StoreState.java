@@ -79,13 +79,13 @@ class StoreState {
     /**
      * The DatabaseEntry hash target.
      *
-     * @return the target
+     * @return the DatabaseEntry hash being stored
      */
     public Hash getTarget() { return _key; }
     /**
      * The data being stored.
      *
-     * @return the data
+     * @return the DatabaseEntry to be sent to each peer that stores the target
      */
     public DatabaseEntry getData() { return _data; }
 
@@ -104,7 +104,7 @@ class StoreState {
      * The peers attempted OR skipped.
      * DOES include skipped peers.
      * Use getAttemptedCount for the number of attempts.
-     * @return the attempted
+     * @return a copy of the peers attempted so far, including skipped peers
      */
     public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
@@ -130,7 +130,8 @@ class StoreState {
      * Return a successful peer (a random one if more than one was successful)
      * or null.
      *
-     * @return the successful
+     * @return one of the peers that stored the entry, chosen at random when
+     *         more than one did, or null if none has yet
      * @since 0.9.53 formerly returned a copy of the Set
      */
     public Hash getSuccessful() {

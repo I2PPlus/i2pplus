@@ -50,7 +50,8 @@ public class ReadBuffer implements Buffer {
 
     /**
      * @return the output stream
-     * @throws IllegalStateException always
+     * @throws IllegalStateException always; this buffer is read-only and wraps a
+     *                               fixed byte array, so it has nowhere to write
      * @since 0.9.34
      */
     @Override
@@ -73,7 +74,7 @@ public class ReadBuffer implements Buffer {
 
     /**
      * Always valid
-     * @return the length
+     * @return the number of bytes in the window, as given to the constructor
      */
     public int getLength() {
         return length;
@@ -81,7 +82,8 @@ public class ReadBuffer implements Buffer {
 
     /**
      * Always valid
-     * @return the offset
+     * @return the index in the backing array where the window starts, as given
+     *         to the constructor
      */
     public int getOffset() {
         return offset;

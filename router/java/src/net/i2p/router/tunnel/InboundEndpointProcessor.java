@@ -35,13 +35,15 @@ class InboundEndpointProcessor {
     /**
      * The destination this inbound tunnel was created for.
      *
-     * @return the destination
+     * @return the destination hash this inbound tunnel serves, or null for
+     *         exploratory tunnels
      */
     public Hash getDestination() { return _config.getDestination(); }
     /**
      * The tunnel creator config for this endpoint.
      *
-     * @return the config
+     * @return the config passed to the constructor, describing the inbound
+     *         tunnel this processor belongs to
      */
     public TunnelCreatorConfig getConfig() { return _config; }
 

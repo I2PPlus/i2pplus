@@ -33,7 +33,7 @@ public class EightBit extends Encoding {
 	 * since it's in memory already, but that's not much of a win.
 	 * ref: https://stackoverflow.com/questions/29510178/how-to-handle-1000-character-lines-in-8bit-mime
 	 *
-	 * @throws EncodingException always
+	 * @throws EncodingException always; 8bit encoding is not supported
 	 */
 	public String encode(byte[] in) throws EncodingException {
 		throw new EncodingException("unsupported");
@@ -45,7 +45,7 @@ public class EightBit extends Encoding {
 	}
 
 	/**
-	 * @return in unchanged
+	 * @return the same buffer, unchanged
 	 */
 	@Override
 	public Buffer decode(Buffer in) {

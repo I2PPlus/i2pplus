@@ -61,7 +61,9 @@ public class PortableWorkingDir {
      * Only call this once on router invocation.
      * Caller should store the return value for future reference.
      *
-     * @param envProps environment properties
+     * @param envProps launcher's environment, read for i2p.dir.config and
+     *                 i2p.dir.base; may be null, in which case System properties
+     *                 are consulted instead
      * @return the working directory path
      */
     public static String getWorkingDir(Properties envProps) {

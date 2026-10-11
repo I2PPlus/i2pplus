@@ -135,7 +135,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The SSU 2 version of the peer.
-     * @return the version
+     * @return the peer's SSU version, 1 for SSU1
      * @since 0.9.54
      */
     public int getVersion() { return _peer.getVersion(); }
@@ -151,7 +151,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The message.
-     * @return the message
+     * @return the OutNetMessage this state tracks
      */
     public OutNetMessage getMessage() { return _message; }
 
@@ -170,7 +170,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The NACK count.
-     * @return the nacks
+     * @return the nacks received since the last ACK
      * @since 0.9.49
      */
     public int getNACKs() { return _nacks.get(); }
@@ -185,13 +185,13 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The peer.
-     * @return the peer
+     * @return the PeerState the message was sent to
      */
     public PeerState getPeer() { return _peer; }
 
     /**
      * Whether the message has expired.
-     * @return whether expired
+     * @return true if the expiration is before the current time
      */
     public boolean isExpired() {
         return _expiration < _context.clock().now();
@@ -200,7 +200,7 @@ class OutboundMessageState implements CDPQEntry {
     /**
      * Whether the message has expired at the given time.
      * @param now the current time in milliseconds since the epoch to test against
-     * @return whether expired
+     * @return true if the expiration is before the given time
      * @since 0.9.38
      */
     public boolean isExpired(long now) {
@@ -209,7 +209,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * Whether all fragments have been acked.
-     * @return whether complete
+     * @return true when the ack bitmask has no bits left set
      */
     public synchronized boolean isComplete() {
         return _fragmentAcks == 0;
@@ -377,7 +377,7 @@ class OutboundMessageState implements CDPQEntry {
 
     /**
      * The lifetime.
-     * @return the lifetime
+     * @return ms elapsed since the message was created
      */
     public long getLifetime() { return _context.clock().now() - _startedOn; }
 
@@ -454,7 +454,7 @@ class OutboundMessageState implements CDPQEntry {
      * Example: If push counts are 1 1 1 0 0, this will only send the last two fragments,
      * even if any of the first three need to be retransmitted.
      *
-     * @param toSend out parameter
+     * @param toSend list the added fragments are appended to
      * @return the number of Fragments added
      * @since 0.9.49
      */

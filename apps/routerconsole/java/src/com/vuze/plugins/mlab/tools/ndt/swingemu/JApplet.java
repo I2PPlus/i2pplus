@@ -66,7 +66,7 @@ public class JApplet extends JFrame{
 
     /**
      * Status text.
-     * @param str status text
+     * @param str the status text, which this stub discards
      */
     public void
     showStatus(

@@ -38,7 +38,7 @@ public class RouterVersion {
     /**
      * Print the router and core version strings.
      *
-     * @param args ignored
+     * @param args ignored; this utility takes no command-line arguments
      */
     public static void main(String[] args) {
         System.out.println("I2P+ Router version: " + FULL_VERSION); // NOSONAR CLI tool

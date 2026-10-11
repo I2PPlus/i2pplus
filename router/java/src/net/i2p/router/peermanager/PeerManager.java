@@ -240,7 +240,7 @@ class PeerManager {
 
     /**
      * @param cutoff only store if most recent activity is newer than this (absolute time)
-     * @return success
+     * @return true if the profile was written to disk, false if it was skipped
      */
     private boolean storeProfile(Hash peer, long cutoff) {
         PeerProfile prof = _organizer.getProfile(peer);
@@ -520,8 +520,8 @@ class PeerManager {
     /**
      * Every tracked peer advertising a capability.
      *
-     * @param capability case-insensitive
-     * @return non-null unmodifiable set
+     * @param capability the advertised capability letter, matched case-insensitively
+     * @return an unmodifiable set, empty if no peer advertises it
      */
     public Set<Hash> getPeersByCapability(char capability) {
         Set<Hash> peers = locked_getPeers(capability);
@@ -532,8 +532,8 @@ class PeerManager {
     /**
      * How many tracked peers advertise a capability.
      *
-     * @param capability case-insensitive
-     * @return how many
+     * @param capability the advertised capability letter, matched case-insensitively
+     * @return the number of tracked peers advertising it, 0 if none
      * @since 0.9.45
      */
     public int countPeersByCapability(char capability) {

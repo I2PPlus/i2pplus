@@ -28,7 +28,7 @@ public interface MessageSelector {
      * Until the lock is removed, take care to keep it simple.
      *
      * @param message the received message to test against this selector
-     * @return whether match
+     * @return true if the received message is one this selector was waiting for
      */
     public boolean isMatch(I2NPMessage message);
 
@@ -48,7 +48,7 @@ public interface MessageSelector {
      * the job specified by OutNetMessage.getOnFailedReplyJob()
      * will be run for every OutNetMessage associated with this selector
      * (by OutboundMessageRegistry).
-     * @return the expiration
+     * @return the number of milliseconds since the epoch at which to stop searching
      */
     public long getExpiration();
 }

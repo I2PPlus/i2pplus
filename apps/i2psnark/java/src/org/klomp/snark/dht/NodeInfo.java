@@ -181,7 +181,7 @@ class NodeInfo extends SimpleDataStructure {
     /**
      * Verify the NID matches the Hash. See generateNID() for requirements.
      *
-     * @throws IllegalArgumentException on mismatch
+     * @throws IllegalArgumentException if the NID does not match the hash, per generateNID()
      */
     private void verify() {
         if (!KRPC.SECURE_NID) return;
@@ -218,7 +218,7 @@ class NodeInfo extends SimpleDataStructure {
     /**
      * The hash.
      *
-     * @return the hash
+     * @return the hash this node is identified by
      */
     public Hash getHash() {
         return this.hash;
@@ -249,7 +249,7 @@ class NodeInfo extends SimpleDataStructure {
     /**
      * The port.
      *
-     * @return the port
+     * @return the UDP port this node was last heard from on
      */
     public int getPort() {
         return this.port;

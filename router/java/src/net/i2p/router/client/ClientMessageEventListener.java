@@ -369,7 +369,8 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
      * Side effect - disconnects session if not authorized.
      *
      * @param props contains i2cp.username and i2cp.password, may be null
-     * @return success
+     * @return true if the session is authorized; false if authentication is
+     *         enforced and failed, which disconnects the client
      * @since 0.9.11
      */
     private boolean checkAuth(Properties props) {

@@ -37,7 +37,7 @@ public class VariableTunnelBuildMessage extends TunnelBuildMessage {
 
     /**
      * I2NP message type 23 for variable-record tunnel build requests.
-     * @return the type
+     * @return the message type constant, 23
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }

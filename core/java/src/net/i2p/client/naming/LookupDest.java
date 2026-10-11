@@ -84,7 +84,7 @@ public class LookupDest {
     /**
      * Any hostname, but this is for long-format b32
      *
-     * @param ctx the context
+     * @param ctx the context to read the I2CP client options from
      * @param hostname a "b33" hostname, 64+ chars ending with ".b32.i2p"
      * @return the destination, or null on failure
      * @throws I2PSessionException if the I2CP session cannot be created or connected
@@ -108,7 +108,9 @@ public class LookupDest {
     /**
      * I2CP options from the context.
      *
-     * @return the opts
+     * @return a fresh Properties holding the I2CP host, port, SSL, user, and
+     *         password settings from the context, empty when the context is a
+     *         router context and has no I2CP client settings to copy
      * @since 0.9.40 split out from above
      */
     private static Properties getOpts(I2PAppContext ctx) {

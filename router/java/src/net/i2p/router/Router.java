@@ -174,7 +174,7 @@ public class Router implements RouterClock.ClockShiftListener {
     /**
      * Whether advanced mode is enabled.
      *
-     * @return whether advanced
+     * @return true if advanced mode is enabled
      */
     public boolean isAdvanced() {return getContext().getBooleanProperty(PROP_ADVANCED);}
     private static final String ORIGINAL_TIMEZONE_ID;
@@ -613,7 +613,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * This uses System time, NOT context time, so context clock shifts will
      * not affect it. This is important if NTP fails and the
      * clock then shifts from a SSU peer source just after startup.
-     * @return the uptime
+     * @return the uptime in milliseconds since the router started
      */
     public long getUptime() {
         if (_started <= 0) {return 1000;} // racing on startup
@@ -764,7 +764,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * Caller must synchronize
      *
      * @param ctx will be null at startup when called from constructor
-     * @return the config
+     * @return the settings read from that file, empty if the file does not exist
      */
     private static Properties getConfig(RouterContext ctx, String filename) {
         Log log = null;
@@ -1334,7 +1334,7 @@ public class Router implements RouterClock.ClockShiftListener {
      * This checks the config only. We don't check the current RI
      * due to deadlocks.
      *
-     * @return whether hidden
+     * @return true if the router is hidden
      */
     public boolean isHidden() {
         if (_context.getBooleanProperty(PROP_HIDDEN)) {return true;}
@@ -1903,7 +1903,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      * @param name setting to add/change/remove before saving
      * @param value if non-null, updated value; if null, setting will be removed
-     * @return success
+     * @return true if the config file was written
      * @since 0.8.13
      */
     public boolean saveConfig(String name, String value) {
@@ -1921,7 +1921,7 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      * @param toAdd settings to add/change before saving, may be null or empty
      * @param toRemove settings to remove before saving, may be null or empty
-     * @return success
+     * @return true if the config file was written
      * @since 0.8.13
      */
     @SuppressWarnings({"unchecked", "rawtypes" })

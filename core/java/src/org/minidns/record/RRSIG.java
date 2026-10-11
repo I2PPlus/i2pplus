@@ -248,7 +248,7 @@ public class RRSIG extends Data {
     /**
      * Retrieve the type of this record.
      *
-     * @return TYPE.RRSIG.
+     * @return TYPE.RRSIG, constant for every instance of this record type.
      */
     @Override
     public TYPE getType() {

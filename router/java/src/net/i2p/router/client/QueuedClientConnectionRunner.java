@@ -118,7 +118,8 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
     /**
      * The client version.
      *
-     * @return CoreVersion.PUBLISHED_VERSION
+     * @return always the published core version; the client version is fixed and
+     *         cannot be set
      * @since 0.9.7
      */
     @Override

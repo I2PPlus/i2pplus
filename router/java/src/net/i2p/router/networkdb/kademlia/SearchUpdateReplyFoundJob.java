@@ -79,7 +79,8 @@ class SearchUpdateReplyFoundJob extends JobImpl implements ReplyJob {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the fixed label "Update Kademlia Search Reply Found " (note the
+     *         trailing space), used to identify this job in logs and statistics
      */
     @Override
     public String getName() { return "Update Kademlia Search Reply Found "; }

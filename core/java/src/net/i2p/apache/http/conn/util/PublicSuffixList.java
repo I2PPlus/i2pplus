@@ -56,7 +56,7 @@ public final class PublicSuffixList {
 
     /**
      * Return the suffix rules.
-     * @return the rules
+     * @return the unmodifiable list of domain suffix rules given to the constructor
      */
     public List<String> getRules() {
         return rules;
@@ -64,7 +64,7 @@ public final class PublicSuffixList {
 
     /**
      * Return the exception rules.
-     * @return the exceptions
+     * @return the unmodifiable list of exception rules given to the constructor
      */
     public List<String> getExceptions() {
         return exceptions;

@@ -28,7 +28,7 @@ public interface PeerManagerFacade extends Service {
      * Count of peers with the given capability.
      *
      * @param capability the capability code to match, e.g. {@code 'f'} for floodfill
-     * @return the count
+     * @return the number of known peers advertising that capability
      */
     public int countPeersByCapability(char capability);
 /**

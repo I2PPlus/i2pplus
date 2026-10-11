@@ -474,7 +474,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Returns the torrent name.
      *
-     * @return the name
+     * @return the torrent's display name, taken from the torrent file unless the
+     *         completion listener renamed it
      */
     public String getName() {
         return snark.getName();

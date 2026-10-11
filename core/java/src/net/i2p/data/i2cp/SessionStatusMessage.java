@@ -95,7 +95,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
 
     /**
      * Returns the reported session status.
-     * @return the status
+     * @return one of the STATUS_* constants describing the session's state
      */
     public int getStatus() {
         return _status;
@@ -146,7 +146,7 @@ public class SessionStatusMessage extends I2CPMessageImpl {
 
     /**
      * Returns the I2CP message type of this message.
-     * @return the type
+     * @return SessionStatusMessage's I2CP type number, for dispatch
      */
     @Override
     public int getType() {

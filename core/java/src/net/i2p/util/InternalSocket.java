@@ -51,7 +51,8 @@ public class InternalSocket extends Socket {
      *  @param host the host requested, which is only honoured for the loopback
      *              names inside a running router
      *  @param port &gt; 0
-     *  @return the socket
+     *  @return an {@link InternalSocket} when running under a router and the host is a
+     *          loopback name, otherwise a TCP {@link Socket} to the host and port
      *  @throws IOException if neither an internal socket nor a TCP socket to the
      *                      given host and port can be opened
      */
@@ -124,7 +125,7 @@ public class InternalSocket extends Socket {
 
     /**
      * True if either stream is null.
-     * @return whether closed
+     * @return true once either stream has been shut down
      */
     @Override
     public synchronized boolean isClosed() {
@@ -199,7 +200,7 @@ public class InternalSocket extends Socket {
 
     /**
      * Supported as of 0.9.33, prior to that threw UnsupportedOperationException
-     * @return whether connected
+     * @return true unless both streams are shut down; a plain socket is never "connected"
      */
     @Override
     public synchronized boolean isConnected() {

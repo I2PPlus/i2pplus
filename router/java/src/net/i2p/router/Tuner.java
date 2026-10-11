@@ -1992,7 +1992,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Param name.
-         * @return the name
+         * @return the internal property key this param is registered under,
+         *         which also forms the prefix of its min, max, step, value, and
+         *         default properties
          */
         public String getName() { return _name; }
         /**

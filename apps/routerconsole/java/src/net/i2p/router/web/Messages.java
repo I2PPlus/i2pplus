@@ -86,8 +86,11 @@ public class Messages extends Translate {
      * by langCode, using the current language.
      * Uses translation if available, then JVM Locale.getDisplayLanguage() if available, else default param.
      *
-     * @param langCode two-letter lower-case
-     * @param dflt e.g. "English"
+     * @param langCode two-letter lower-case language code whose name is wanted,
+     *                 e.g. "en"
+     * @param dflt returned untranslated when the current language is "en", when
+     *             the bundle has no entry for it, or when the JVM has no display
+     *             name for langCode in the current language
      * @param ctx supplies the language to display the name in
      * @return the display language
      * @since 0.9.5

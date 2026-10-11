@@ -47,7 +47,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
      *
      * @param app the client application to track and start
      * @param args the args that were used to instantiate the app, non-null, may be zero-length
-     * @return success
+     * @return true if the app started; false if startup() threw, in which case it is dropped again
      * @throws IllegalArgumentException if already added
      */
     public boolean addAndStart(ClientApp app, String[] args) {

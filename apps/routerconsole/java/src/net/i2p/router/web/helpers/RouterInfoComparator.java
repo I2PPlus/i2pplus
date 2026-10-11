@@ -26,7 +26,7 @@ class RouterInfoComparator implements Comparator<RouterInfo>, Serializable {
 
      /**
       * Thread safe, no state
-      * @return the instance
+      * @return the shared stateless comparator instance
       */
      public static RouterInfoComparator getInstance() { return _instance; }
 

@@ -126,7 +126,8 @@ public class Base32 {
 
     /**
      * Run the Base32 command-line utility.
-     * @param args command-line arguments
+     * @param args the subcommand and its operands, as documented by the usage
+     *             message printed when args is empty
      */
     public static void main(String[] args) {
         if (args.length == 0) {

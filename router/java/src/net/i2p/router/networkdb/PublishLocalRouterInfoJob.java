@@ -70,7 +70,7 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue
      */
     public String getName() { return "Publish Local RouterInfo"; }
 
@@ -165,7 +165,8 @@ public class PublishLocalRouterInfoJob extends JobImpl {
     /**
      * Delay until the next RouterInfo publish.
      *
-     * @return the delay
+     * @return how long to wait before publishing again, in milliseconds, randomised within a
+     *         third of {@code PUBLISH_DELAY} and then divided by four
      */
     public long getDelay() {
         long rv = (PUBLISH_DELAY * 2 / 3) + getContext().random().nextLong(PUBLISH_DELAY / 3);

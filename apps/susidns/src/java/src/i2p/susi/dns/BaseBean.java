@@ -190,7 +190,7 @@ public class BaseBean {
 
     /**
      * Get the action.
-     * @return the action
+     * @return the action requested by the current request
      * @since 0.9.13 moved from subclasses
      */
     public String getAction() {return action;}
@@ -238,7 +238,7 @@ public class BaseBean {
     /**
      * Translate a string with one parameter.
      * @param s the string to translate
-     * @param o the parameter
+     * @param o the value substituted for the placeholder in s
      * @return the translated string
      * @since 0.9.13 moved from subclasses
      */
@@ -258,7 +258,7 @@ public class BaseBean {
      * Translate a string with plural form (ngettext).
      * @param s the singular form
      * @param p the plural form
-     * @param n the count
+     * @param n the number of items, which selects the singular or plural form
      * @return the translated string
      * @since 0.9.13 moved from subclasses
      */

@@ -969,7 +969,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue
      */
     @Override
     public String getName() {return "Start Iterative Search";}

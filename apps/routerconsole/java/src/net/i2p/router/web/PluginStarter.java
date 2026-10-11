@@ -1280,7 +1280,7 @@ public class PluginStarter implements Runnable {
 
     /**
      * translate a string
-     * @return the text
+     * @return the translated text for s
      * @since 0.9.30
      */
     private static String gettext(String s, Object o, I2PAppContext ctx) {

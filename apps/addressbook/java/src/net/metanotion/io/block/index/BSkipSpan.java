@@ -125,7 +125,7 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     /**
      * Free a chain of continuation pages
      * @param curPage the first page to be freed, if 0 this does nothing.
-     * @return number freed
+     * @return the number of pages freed
      */
     private int freeContinuationPages(int curPage) throws IOException {
         int rv = 0;
@@ -250,8 +250,8 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
      * @param <X> the key type
      * @param <Y> the value type
      * @param bss the BSkipSpan to load into
-     * @param bf the BlockFile
-     * @param bsl the BSkipList
+     * @param bf the BlockFile this span is stored in
+     * @param bsl the BSkipList this span belongs to
      * @param spanPage the page number
      * @param key the key serializer
      * @param val the value serializer
@@ -270,8 +270,8 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
      * @param <X> the key type
      * @param <Y> the value type
      * @param bss the BSkipSpan to load into
-     * @param bf the BlockFile
-     * @param bsl the BSkipList
+     * @param bf the BlockFile this span is stored in
+     * @param bsl the BSkipList this span belongs to
      * @param spanPage the page number
      * @param key the key serializer
      * @param val the value serializer
@@ -426,8 +426,8 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     /**
      * Create a new BSkipSpan with the given BlockFile and BSkipList.
      *
-     * @param bf the BlockFile
-     * @param bsl the BSkipList
+     * @param bf the BlockFile this span is stored in
+     * @param bsl the BSkipList this span belongs to
      */
     protected BSkipSpan(BlockFile bf, BSkipList<K, V> bsl) {
         this.bf = bf;
@@ -437,8 +437,8 @@ public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V
     /**
      * Create a BSkipSpan and load its data from disk.
      *
-     * @param bf the BlockFile
-     * @param bsl the BSkipList
+     * @param bf the BlockFile this span is stored in
+     * @param bsl the BSkipList this span belongs to
      * @param spanPage the page number of this span
      * @param key the key serializer
      * @param val the value serializer

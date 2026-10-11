@@ -225,7 +225,8 @@ public interface I2PSocketManager {
     /**
      * For logging / diagnostics only
      *
-     * @return the name
+     * @return the label reported for this manager in logs and console output,
+     *         as set by setName()
      */
     public String getName();
 
@@ -243,7 +244,7 @@ public interface I2PSocketManager {
      * @param session the session the manager is to use for all its connections
      * @param opts the properties the factory would otherwise have read from a config file
      * @param name the display name the factory would otherwise have read from a config file
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; this interface has no body
      * @deprecated nothing calls this; build the manager with
      *             I2PSocketManagerFactory.createManager().
      */
@@ -284,7 +285,7 @@ public interface I2PSocketManager {
      * Like connect() but returns a real Socket, and throws only IOE,
      * for easier porting of apps.
      *
-     * @param peer the destination
+     * @param peer destination to connect to
      * @return a connected Socket
      * @throws IOException on I/O error
      * @since 0.8.4
@@ -295,7 +296,7 @@ public interface I2PSocketManager {
      * Like connect() but returns a real Socket, and throws only IOE,
      * for easier porting of apps.
      *
-     * @param peer the destination
+     * @param peer destination to connect to
      * @param timeout ms if &gt; 0, forces blocking (disables connectDelay)
      * @return a connected Socket
      * @throws IOException on I/O error

@@ -121,7 +121,7 @@ public class Sample {
     /**
      * Returns sample timestamp (in seconds, without milliseconds).
      *
-     * @return Sample timestamp.
+     * @return the sample time in seconds since the epoch, milliseconds truncated
      */
     public long getTime() {
         return time;
@@ -234,7 +234,7 @@ public class Sample {
     /**
      * Dumps sample content using the syntax of RRDTool's update command.
      *
-     * @return Sample dump.
+     * @return the sample as an RRDTool update command line
      */
     public String dump() {
         StringBuilder buffer = new StringBuilder("update \"");

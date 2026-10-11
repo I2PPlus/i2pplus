@@ -79,7 +79,7 @@ class PeerTestState {
 
     /**
      * Return the test nonce identifier.
-     * @return the nonce
+     * @return the nonce identifying this test, as supplied to the constructor
      */
     public long getNonce() { return _testNonce; }
 

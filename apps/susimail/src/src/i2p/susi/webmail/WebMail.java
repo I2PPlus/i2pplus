@@ -944,8 +944,8 @@ public class WebMail extends HttpServlet {
         private final MailCache _mc;
 
         /**
-         * @param so session state
-         * @param mc mail cache
+         * @param so the session waiting on the disk load, notified when it finishes
+         * @param mc the cache supplying the UIDLs that just arrived on disk
          */
         public LoadWaiter(SessionObject so, MailCache mc) {_so = so; _mc = mc;}
 
@@ -977,7 +977,7 @@ public class WebMail extends HttpServlet {
         private final POP3MailBox _mb;
 
         /**
-         * @param so session state
+         * @param so the session waiting on the mailbox connection attempt
          */
         public ConnectWaiter(SessionObject so) {_so = so; _mb = _so.mailbox;}
 
@@ -1392,7 +1392,8 @@ public class WebMail extends HttpServlet {
     /**
      * @param sessionObject
      * @param request
-     * @return new state
+     * @return the state to render next: {@link State#AUTH} if the connection was lost,
+     *         otherwise the incoming state unchanged
      */
     private static State processGenericButtons(SessionObject sessionObject, RequestWrapper request, State state) {
         if (buttonPressed(request, REFRESH)) {
@@ -1905,7 +1906,8 @@ public class WebMail extends HttpServlet {
      * Either mobile or text browser
      * Copied from net.i2p.router.web.CSSHelper
      * @param ua null ok
-     * @return whether mobile
+     * @return true if the user agent is a small-screen or text browser, false
+     *         for a null agent or a full browser
      * @since 0.9.7
      */
     private static boolean isMobile(String ua) {
@@ -2629,7 +2631,8 @@ public class WebMail extends HttpServlet {
      * @param sessionObject
      * @param response
      * @param isRaw if true, don't zip it
-     * @return success
+     * @return true if the part was written to the response, false if the part was
+     *         null or the write threw an IOException
      */
     private static boolean sendAttachment(SessionObject sessionObject, MailPart part, HttpServletResponse response, boolean isRaw) {
         boolean shown = false;
@@ -2730,7 +2733,8 @@ public class WebMail extends HttpServlet {
      *
      * @param sessionObject
      * @param response
-     * @return success
+     * @return true if the message was copied to the response, false if it has no
+     *         body or the copy threw an IOException
      * @since 0.9.18
      */
     private static boolean sendMailSaveAs(SessionObject sessionObject, Mail mail,
@@ -2873,7 +2877,8 @@ public class WebMail extends HttpServlet {
      * Write out the draft.
      *
      * @param sessionObject only for error messages.
-     * @return success
+     * @return true if the draft was written to the Drafts folder, false if there is
+     *         no Drafts folder or the write failed
      * @since 0.9.35
      */
     private static boolean saveDraft(SessionObject sessionObject, String uidl, StringBuilder draft) {
@@ -2923,7 +2928,8 @@ public class WebMail extends HttpServlet {
      * suitable for writing out as a Draft.
      *
      * @param sessionObject only for error messages. All data is in the draft.
-     * @return success
+     * @return true if the message passed validation and was handed to the SMTP
+     *         client, false if any check failed and no send was attempted
      */
     private static boolean sendMail(SessionObject sessionObject, Draft draft) {
         boolean ok = true;

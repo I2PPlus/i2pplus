@@ -44,7 +44,7 @@ class SubscriptionList implements Iterable<AddressBook> {
      *            "url=lastfetched".
      * @param delay the minimum delay since last fetched for the iterator to actually fetch
      * @param defaultSubs default subscription file
-     * @param proxyHost proxy hostname
+     * @param proxyHost proxy hostname, null for no proxy
      * @param proxyPort proxy port number
      */
     public SubscriptionList(File locationsFile, File etagsFile,
@@ -106,7 +106,7 @@ class SubscriptionList implements Iterable<AddressBook> {
      * Return an iterator over the AddressBooks represented by the Subscriptions
      * in this SubscriptionList.
      *
-     * @return A SubscriptionIterator.
+     * @return an iterator over the AddressBooks of every subscription
      */
     @Override
     public SubscriptionIterator iterator() {

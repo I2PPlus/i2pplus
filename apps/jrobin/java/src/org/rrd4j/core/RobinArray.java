@@ -45,7 +45,7 @@ class RobinArray implements Robin {
      * Getter for the field <code>values</code>.
      *
      * @return an array of double.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the backing file cannot be read.
      */
     public double[] getValues() throws IOException {
         return getValues(0, rows);
@@ -84,7 +84,7 @@ class RobinArray implements Robin {
      * Writes a full row of values into the archive.
      *
      * @param newValues an array of double.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the backing file cannot be read.
      */
     public void update(double[] newValues) throws IOException {
         assert rows == newValues.length
@@ -121,7 +121,7 @@ class RobinArray implements Robin {
      * Renders the current row and values as text.
      *
      * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the backing file cannot be read.
      */
     public String dump() throws IOException {
         StringBuilder buffer = new StringBuilder("Robin " + pointer.get() + "/" + rows + ": ");
@@ -181,7 +181,8 @@ class RobinArray implements Robin {
     /**
      * Counts the rows this array stores.
      *
-     * @return a int.
+     * @return the fixed capacity, so that valid row indexes run from 0 to this
+     *         value exclusive
      */
     public int getSize() {
         return rows;

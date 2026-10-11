@@ -86,7 +86,8 @@ class SearchMessageSelector implements MessageSelector {
     /**
      * Absolute time when this selector stops matching.
      *
-     * @return the expiration
+     * @return the time in milliseconds after the epoch at which matching stops,
+     *         taken from the expiration passed to the constructor
      */
     @Override
     public long getExpiration() { return _exp; }
@@ -94,7 +95,9 @@ class SearchMessageSelector implements MessageSelector {
     /**
      * Whether the message is a store for the searched key.
      *
-     * @return whether match
+     * @return true for a DatabaseStoreMessage carrying the searched key, or a
+     *         DatabaseSearchReplyMessage from the queried peer for that key; either
+     *         match records the hit in {@code _found}
      */
     public boolean isMatch(I2NPMessage message) {
         int type = message.getType();

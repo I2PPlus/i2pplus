@@ -428,7 +428,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Keys to explore.
      *
-     * @return unmodifiable set
+     * @return an unmodifiable set, empty until the database is initialized
      */
     public Set<Hash> getExploreKeys() {
         if (!_initialized || isClientDb()) {return Collections.emptySet();}
@@ -739,7 +739,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Size of the KBucketSet. The KBucketSet contains RIs only.
      *
-     * @return the size
+     * @return the number of RIs in the KBucketSet, or 0 before it is built
      */
     protected int getKBucketSetSize() {
         return _kb == null ? 0 : _kb.size();
@@ -770,7 +770,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * All cached BlindData.
      *
-     * @return the blindData
+     * @return every BlindData held in the blind cache
      */
     @Override
     public List<BlindData> getBlindData() {
@@ -1400,7 +1400,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         /**
          * Job name.
          *
-         * @return the name
+         * @return the name shown for this job in the job queue and in logs
          */
         @Override
         public String getName() { return "NetDb capability purge"; }
@@ -1431,7 +1431,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Whether the router is on the permanent blocklist.
      *
-     * @return permanentlyBlocklisted
+     * @return true if the Banlist holds the key with no expiry
      */
     private boolean isPermanentlyBlocklisted(Hash key) {
         return _context.banlist().isBanlistedForever(key);
@@ -1440,7 +1440,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Whether the router is on the hostile blocklist.
      *
-     * @return hostileBlocklisted
+     * @return true if the Banlist holds the key as hostile
      */
     private boolean isHostileBlocklisted(Hash key) {
         return _context.banlist().isBanlistedHostile(key);
@@ -1739,7 +1739,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         /**
          * Job name.
          *
-         * @return the name
+         * @return the name shown for this job in the job queue and in logs
          */
         @Override
         public String getName() { return "Republish LeaseSets (batch)"; }
@@ -1870,7 +1870,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     /**
      * Time of the last successful RI publication.
      *
-     * @return the lastRouterInfoPublishTime
+     * @return ms since the epoch of the last successful publication, 0 if never
      */
     @Override
     public long getLastRouterInfoPublishTime() {return _lastRIPublishTime;}
@@ -1988,7 +1988,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param leaseSet the LeaseSet instance to validate
      * @param earliest earliest relevant date
      * @param latest latest relevant date
-     * @param now current time
+     * @param now current time in ms, from the router clock
      * @param idShort shortened destination ID for logs and messages
      * @return a descriptive reason why the LeaseSet is expired, or null
      */
@@ -2021,7 +2021,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @param leaseSet the LeaseSet instance to validate
      * @param type the LeaseSet type
      * @param latest latest relevant date
-     * @param now current time
+     * @param now current time in ms, from the router clock
      * @param idShort shortened destination ID for logs and messages
      * @return a descriptive reason why the LeaseSet is rejected, or null
      */
@@ -3145,7 +3145,7 @@ return false;
     /**
      * LeaseSets published by this router's clients.
      *
-     * @return the clientLeases
+     * @return the local LeaseSets, or null before the database is initialized
      * @since 0.9.64+
      */
     @Override
@@ -3164,7 +3164,8 @@ return false;
     /**
      * LeaseSets published to the network.
      *
-     * @return the publishedLeases
+     * @return the local LeaseSets that shouldPublishLeaseSet approves, or null
+     *         before the database is initialized
      * @since 0.9.64+
      */
     @Override
@@ -3185,7 +3186,8 @@ return false;
     /**
      * LeaseSets not published to the network.
      *
-     * @return the unpublishedLeases
+     * @return the local LeaseSets that shouldPublishLeaseSet rejects, or null
+     *         before the database is initialized
      * @since 0.9.64+
      */
     @Override
@@ -3206,7 +3208,7 @@ return false;
     /**
      * LeaseSets stored in the floodfill database.
      *
-     * @return the floodfillLeases
+     * @return the stored LeaseSets, or null before the database is initialized
      */
     @Override
     public Set<LeaseSet> getFloodfillLeases() {
@@ -3221,7 +3223,8 @@ return false;
     /**
      * RouterInfos stored in the database.
      *
-     * @return the routers
+     * @return the stored RouterInfos, empty in client mode, or null before
+     *         the database is initialized
      */
     @Override
     public Set<RouterInfo> getRouters() {
@@ -3335,7 +3338,7 @@ return false;
     /**
      * Negative cache until restart
      *
-     * @param dest the destination
+     * @param dest the Destination to remember as unreachable until restart
      */
     void failPermanently(Destination dest) {_negativeCache.failPermanently(dest);}
 
@@ -3554,7 +3557,8 @@ return false;
         /**
          * Job name.
          *
-         * @return the name
+         * @return the fixed label "Refresh client LeaseSets", used to identify
+         *         this job in logs and job statistics
          */
         @Override
         public String getName() { return "Refresh client LeaseSets"; }

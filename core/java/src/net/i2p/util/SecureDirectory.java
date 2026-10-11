@@ -37,7 +37,7 @@ public class SecureDirectory extends File {
     /**
      * Records whether mkdir should make this path group-accessible rather than owner-only.
      *
-     * @param pathname the path
+     * @param pathname the directory to create if absent and lock down
      * @param groupPerms true to create the directory group-accessible (770)
      *                   instead of owner-only (700)
      * @since 0.9.71+

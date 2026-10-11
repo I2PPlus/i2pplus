@@ -97,7 +97,7 @@ class I2PSocketFull implements I2PSocket {
 
     /**
      * Underlying connection.
-     * @return the connection
+     * @return the Connection carrying this socket's packets
      */
     Connection getConnection() { return _connection; }
 

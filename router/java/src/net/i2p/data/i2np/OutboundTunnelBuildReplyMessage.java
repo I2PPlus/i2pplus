@@ -63,7 +63,7 @@ public class OutboundTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     /**
      * I2NP message type of an outbound tunnel build reply.
-     * @return the type
+     * @return the I2NP message type ID, always {@link #MESSAGE_TYPE}
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }

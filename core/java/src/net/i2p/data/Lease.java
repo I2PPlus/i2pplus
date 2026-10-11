@@ -116,7 +116,7 @@ public class Lease extends DataStructureImpl {
     /**
      * Tunnel on the gateway to communicate with
      *
-     * @return tunnel ID
+     * @return the tunnel on the gateway, or null if none is set
      */
     public TunnelId getTunnelId() {
         return _tunnelId;
@@ -125,7 +125,7 @@ public class Lease extends DataStructureImpl {
     /**
      * Configure the tunnel on the gateway to communicate with
      *
-     * @param id tunnel ID
+     * @param id the tunnel on the gateway to communicate with; null clears it
      */
     public void setTunnelId(TunnelId id) {
         _tunnelId = id;
@@ -134,7 +134,7 @@ public class Lease extends DataStructureImpl {
     /**
      * Convenience wrapper, prefer getEndTime() for new code.
      *
-     * @return end date
+     * @return when the lease expires, as a Date
      */
     public Date getEndDate() {
         return Date.from(Instant.ofEpochMilli(_end));
@@ -143,7 +143,8 @@ public class Lease extends DataStructureImpl {
     /**
      * Convenience wrapper, prefer the long overload for new code.
      *
-     * @param date end date
+     * @param date when the lease expires; converted to the millisecond value
+     *             stored in the lease
      */
     public void setEndDate(Date date) {
         _end = date.getTime();

@@ -56,7 +56,8 @@ public class LinearGradientPaintKey {
      * Tests this instance for equality with an arbitrary object.
      *
      * @param obj the object to test ({@code null} permitted).
-     * @return A boolean.
+     * @return true if {@code obj} is a {@code LinearGradientPaintKey} whose
+     *         paint has the same start point, end point, colors and fractions
      */
     @Override
     public boolean equals(Object obj) {

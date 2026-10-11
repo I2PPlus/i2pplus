@@ -128,7 +128,7 @@ public class PeerID implements Comparable<PeerID> {
     /**
      * Returns the port number.
      *
-     * @return the port
+     * @return the TCP port this peer is reachable on
      */
     public int getPort() {
         return port;

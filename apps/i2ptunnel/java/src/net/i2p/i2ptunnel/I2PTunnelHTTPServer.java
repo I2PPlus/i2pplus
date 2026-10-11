@@ -541,7 +541,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *
      * @param lastReadNanos Sender#getLastReadNanos(); 0 or negative if the
      *                      worker has not started the copy yet
-     * @param nowNanos current System.nanoTime()
+     * @param nowNanos the current System.nanoTime(), same base as lastReadNanos
      * @param stallNs stall window in nanoseconds; &lt;= 0 disables
      * @return true if the watchdog should close the streams and finish
      * @since 0.9.71+
@@ -1614,7 +1614,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /**
      * Classify the request's Connection header value.
      *
-     * @param headers request headers
+     * @param headers the parsed request headers, searched for a Connection entry
      * @return CONN_NONE, CONN_KEEPALIVE, CONN_UPGRADE, or CONN_CLOSE
      */
     static int getConnectionType(Map<String, List<String>> headers) {
@@ -2788,8 +2788,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          * below 1 MB/s, and M/s above, so a rate never reads as a bare number
          * with an ambiguous "kbps" that is easy to mistake for bits per second.
          *
-         * @param bytes bytes transferred
-         * @param secs elapsed seconds
+         * @param bytes total bytes transferred, negative if the count is not trusted
+         * @param secs elapsed seconds; a value of 0 or less formats as "0.0B/s"
          * @return formatted rate, e.g. {@code 60.6K/s}; "0.0B/s" if secs &lt;= 0
          * @since 0.9.71+
          */
@@ -3146,7 +3146,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * @param ctx I2P app context for clock and timeout
      * @param initialTimeout timeout for the first line read
      * @return the parsed header multimap
-     * @throws SocketTimeoutException on timeout
+     * @throws SocketTimeoutException if the first line read exceeds initialTimeout
      * @throws EOFException on unexpected EOF
      * @throws LineTooLongException if a line, total, or count exceeds limits
      * @throws RequestTooLongException if the request line is too long
@@ -3239,7 +3239,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      * Warning - 8KB line length limit as of 0.7.13, @throws IOException if exceeded
      * Warning - not UTF-8
      *
-     * @param buf output
+     * @param buf StringBuilder the line is appended to, without its newline
      * @param timeout throws SocketTimeoutException immediately if zero or negative
      * @throws SocketTimeoutException if timeout is reached before newline
      * @throws EOFException if EOF is reached before newline
@@ -3303,7 +3303,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static class LineTooLongException extends IOException {
         /**
-         * @param s detail message
+         * @param s detail message passed to IOException
          */
         public LineTooLongException(String s) {super(s);}
     }
@@ -3313,7 +3313,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static class RequestTooLongException extends IOException {
         /**
-         * @param s detail message
+         * @param s detail message passed to IOException
          */
         public RequestTooLongException(String s) {super(s);}
     }
@@ -3323,7 +3323,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     private static class BadRequestException extends IOException {
         /**
-         * @param s detail message
+         * @param s detail message passed to IOException
          */
         public BadRequestException(String s) {super(s);}
     }

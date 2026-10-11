@@ -71,7 +71,7 @@ public interface DataStore {
      *
      * @param key non-null
      * @param data non-null
-     * @return success
+     * @return true if the entry was stored in the Kademlia structure
      * @since 0.9.64
      */
     public boolean forcePut(Hash key, DatabaseEntry data);
@@ -100,7 +100,7 @@ public interface DataStore {
     /**
      * All entries in the data store.
      *
-     * @return the entries
+     * @return every entry currently held, as a live collection
      * @since 0.8.3
      */
     public Collection<DatabaseEntry> getEntries();

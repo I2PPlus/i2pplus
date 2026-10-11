@@ -877,7 +877,7 @@ class Packet {
      * Determine whether the signature on the data is valid.
      * Packet MUST have a FROM option or will return false.
      *
-     * @param ctx Application context
+     * @param ctx the context supplying the DSA engine and logger
      * @param buffer data to validate with signature, or null to use our own buffer.
      * @return true if the signature exists and validates against the data,
      *         false otherwise.
@@ -890,7 +890,7 @@ class Packet {
     /**
      * Determine whether the signature on the data is valid.
      *
-     * @param ctx Application context
+     * @param ctx the context supplying the DSA engine and logger
      * @param altSPK Signing key to verify with, ONLY if there is no FROM field in this packet.
      *               May be the SPK from a FROM field or offline sig field from a previous packet on this connection.
      *               Ignored if this packet contains a FROM option block.
@@ -924,7 +924,7 @@ class Packet {
      * Check the offline signature block, which the session key signs over the
      * expiry and the transient key.
      *
-     * @param ctx application context
+     * @param ctx the context supplying the clock and logger
      * @param spk the session's signing key, non-null
      * @return true if the offline signature is present, unexpired and valid
      */
@@ -953,7 +953,7 @@ class Packet {
      * Split out of {@link #verifySignature} so that one is only about picking
      * the key to verify with.
      *
-     * @param ctx application context
+     * @param ctx the context supplying the DSA engine and logger
      * @param spk the key that signed the packet, non-null
      * @param buffer scratch space to rebuild in, may be null
      * @return true if the signature is valid
@@ -1012,7 +1012,7 @@ class Packet {
     }
 
     /**
-     * @param ctx application context
+     * @param ctx the context supplying the logger
      * @param spk the key with the unusable type, non-null
      */
     private void logNoKeyType(I2PAppContext ctx, SigningPublicKey spk) {

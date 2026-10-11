@@ -48,7 +48,8 @@ class SSLSocketChannel extends SocketChannel {
      *
      * @param remote the remote address to connect to (ignored)
      * @return true (never reached)
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the wrapper is built around
+     *                                       an already-connected socket and has no address to connect to
      */
     public boolean connect(SocketAddress remote) {
         throw new UnsupportedOperationException();
@@ -93,7 +94,7 @@ class SSLSocketChannel extends SocketChannel {
     /**
      * Shut down the input stream of the underlying SSL socket.
      *
-     * @return this channel
+     * @return this channel, for chaining
      * @throws IOException if an I/O error occurs
      */
     public SocketChannel shutdownInput() throws IOException {
@@ -104,7 +105,7 @@ class SSLSocketChannel extends SocketChannel {
     /**
      * Shut down the output stream of the underlying SSL socket.
      *
-     * @return this channel
+     * @return this channel, for chaining
      * @throws IOException if an I/O error occurs
      */
     public SocketChannel shutdownOutput() throws IOException {
@@ -118,7 +119,7 @@ class SSLSocketChannel extends SocketChannel {
      * @param name the socket option name (ignored)
      * @param value the socket option value (ignored)
      * @param <T> the type of the socket option value
-     * @return this channel
+     * @return this channel, so the ignored option still chains
      */
     public <T> SocketChannel setOption(SocketOption<T> name, T value) {
         return this;
@@ -129,7 +130,8 @@ class SSLSocketChannel extends SocketChannel {
      *
      * @param local the socket address to bind to (ignored)
      * @return this channel (never returned)
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the wrapper carries an
+     *                                       already-bound socket and cannot bind another local address
      */
     public SocketChannel bind(SocketAddress local) {
         throw new UnsupportedOperationException();
@@ -164,7 +166,8 @@ class SSLSocketChannel extends SocketChannel {
      * @param offset the offset in the buffer array (ignored)
      * @param length the number of buffers to use (ignored)
      * @return the number of bytes read (never reached)
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; reads are performed one
+     *                                       buffer at a time, since a scatter read cannot be expressed on a stream
      */
     public long read(ByteBuffer[] srcs, int offset, int length) {
         throw new UnsupportedOperationException();
@@ -197,7 +200,8 @@ class SSLSocketChannel extends SocketChannel {
      * @param offset the offset in the buffer array (ignored)
      * @param length the number of buffers to use (ignored)
      * @return the number of bytes written (never reached)
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; writes are performed one
+     *                                       buffer at a time, since a gather write cannot be expressed on a stream
      */
     public long write(ByteBuffer[] srcs, int offset, int length) {
         throw new UnsupportedOperationException();

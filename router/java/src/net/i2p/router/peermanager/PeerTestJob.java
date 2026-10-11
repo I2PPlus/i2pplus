@@ -262,7 +262,8 @@ public class PeerTestJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue and the logs,
+     *         "Test Peers"
      */
     public String getName() { return "Test Peers"; }
 
@@ -797,7 +798,8 @@ public class PeerTestJob extends JobImpl {
         /**
          * Name of this job.
          *
-         * @return the name
+         * @return the name this job is listed under in the job queue and the logs,
+         *         "Verify Peer Test"
          */
         public String getName() { return "Verify Peer Test"; }
         /**
@@ -899,7 +901,8 @@ public class PeerTestJob extends JobImpl {
         /**
          * Name of this job.
          *
-         * @return the name
+         * @return the name this job is listed under in the job queue and the logs,
+         *         "Timeout Peer Test"
          */
         public String getName() { return "Timeout Peer Test"; }
         private boolean getShouldFailPeer() { return true; }

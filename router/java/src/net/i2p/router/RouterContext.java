@@ -503,7 +503,8 @@ public class RouterContext extends I2PAppContext {
      * Tie in the router's config as properties, as well as whatever the
      * I2PAppContext says.
      *
-     * @return the property
+     * @return the value of the named property, taken from router.config when set and
+     *         otherwise from the app context, or null if neither defines it
      */
     @Override
     public String getProperty(String propName) {
@@ -517,7 +518,8 @@ public class RouterContext extends I2PAppContext {
      * Tie in the router's config as properties, as well as whatever the
      * I2PAppContext says.
      *
-     * @return the property
+     * @return the value of the named property, taken from router.config when set and
+     *         otherwise from the app context, or defaultVal if neither defines it
      */
     @Override
     public String getProperty(String propName, String defaultVal) {
@@ -530,7 +532,8 @@ public class RouterContext extends I2PAppContext {
 
     /**
      * Return an int with an int default
-     * @return the property
+     * @return the value of the named property parsed as an int, or defaultVal if it is
+     *         unset or does not parse as an integer
      */
     @Override
     public int getProperty(String propName, int defaultVal) {
@@ -550,7 +553,8 @@ public class RouterContext extends I2PAppContext {
     /**
      * Return a long with a long default
      *
-     * @return the property
+     * @return the value of the named property parsed as a long, or defaultVal if it is
+     *         unset or does not parse as a long
      * @since 0.9.4
      */
     @Override
@@ -668,7 +672,7 @@ public class RouterContext extends I2PAppContext {
     /**
      * The RouterAppManager.
      *
-     * @return the manager
+     * @return the RouterAppManager holding this router's client applications
      * @since 0.9.4
      */
     @Override
@@ -680,7 +684,8 @@ public class RouterContext extends I2PAppContext {
      * The RouterAppManager.
      * For convenience, same as clientAppManager(), no cast required
      *
-     * @return the manager
+     * @return the same RouterAppManager that clientAppManager() returns, already typed
+     *         as the router-specific subclass
      * @since 0.9.11
      */
     public RouterAppManager routerAppManager() {

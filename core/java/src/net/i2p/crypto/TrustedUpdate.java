@@ -111,7 +111,8 @@ public class TrustedUpdate {
 
     /**
      * Returns the signing keys whose releases this router accepts, in an unmodifiable view.
-     * @return the keys
+     * @return the trusted signing public keys, each mapped to its owner name,
+     *         which may be empty when the key was supplied without one
      * @since 0.9.8, public since 0.9.14.1
      */
     public Map<SigningPublicKey, String> getKeys() {

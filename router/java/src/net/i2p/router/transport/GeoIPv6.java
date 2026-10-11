@@ -166,8 +166,8 @@ public class GeoIPv6 {
     *
     * SLOW. For preprocessing only!
     *
-    * @return success
-    */
+    * @return true if the merged database was written, false on an I/O error
+     */
     private static boolean compressGeoIPv6CSVFiles(List<File> inFiles, File outFile) {
         boolean DEBUG = false;
         List<V6Entry> entries = new ArrayList<>(20000);

@@ -31,7 +31,7 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
      * Rejects a null span, then starts iterating at the given index.
      *
      * @param ss the span to iterate over
-     * @param index starting position
+     * @param index the zero-based entry index to start iterating from
      */
     public SkipIterator(SkipSpan<K, V> ss, int index) {
         if(ss==null) { throw new NullPointerException(); }

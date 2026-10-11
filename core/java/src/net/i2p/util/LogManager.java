@@ -345,7 +345,7 @@ public class LogManager implements Flushable {
      * Log for the given class.
      *
      * @param cls the class to get the log for
-     * @return the log
+     * @return the shared Log instance scoped to that class
      */
     public final Log getLog(Class<?> cls) {
         return getLog(cls, null);
@@ -355,7 +355,7 @@ public class LogManager implements Flushable {
      * Log with the given name.
      *
      * @param name the scope suffix distinguishing this log from other logs in the same manager
-     * @return the log
+     * @return the shared Log instance scoped to that name
      */
     public final Log getLog(String name) {
         return getLog(null, name);
@@ -366,7 +366,7 @@ public class LogManager implements Flushable {
      *
      * @param cls the class (may be null)
      * @param name the scope suffix, or null to scope the log by class name alone
-     * @return the log
+     * @return the shared Log instance for that class and scope, created if it does not exist yet
      */
     public final Log getLog(Class<?> cls, String name) {
         String scope = Log.getScope(name, cls);
@@ -761,7 +761,7 @@ public class LogManager implements Flushable {
      * Return a mapping of the explicit overrides - path prefix to (text
      * formatted) limit.
      *
-     * @return the limits
+     * @return the explicit overrides, keyed by path prefix, with text-formatted limits
      */
     public Properties getLimits() {
         Properties rv = new Properties();
@@ -897,7 +897,7 @@ public class LogManager implements Flushable {
     /**
      * Check if gzip compression should be used for rotated log files.
      *
-     * @return whether gzip
+     * @return true if rotated log files should be gzip compressed
      * @since 0.9.56, public since 0.9.57, was pkg private
      */
     public boolean shouldGzip() {

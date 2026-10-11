@@ -688,7 +688,8 @@ public class SybilRenderer {
     /**
      * Render the floodfill pairwise distance table.
      *
-     * @param pairs sorted
+     * @param pairs the closest floodfill pairs, sorted by ascending hash distance
+     *              and capped at PAIRMAX; the loop breaks once MIN_CLOSE is passed
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
     private synchronized void renderPairDistance(Writer out, StringBuilder buf, List<Pair> pairs, double avg) throws IOException {
@@ -983,7 +984,8 @@ public class SybilRenderer {
 
     /**
      * Render routers closer than MIN_CLOSE up to MAX routers
-     * @param us HTML escaped
+     * @param us the reference hash distances are measured from, or null to omit
+     *           the distance row
      * @param ris sorted, closest first
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -1065,7 +1067,8 @@ public class SybilRenderer {
      * to prevent vulnerabilities
      *
      * @param us ROUTING KEY or null
-     * @param full ignored
+     * @param full unused; vestigial, every caller passes false and the body
+     *             never reads it
      * @return distance to us if non-null, else 0
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")

@@ -170,7 +170,8 @@ public class DecayingHashSet extends DecayingBloomFilter {
     /**
      * The entry cap currently in force, across both buffers.
      *
-     * @return the cap
+     * @return the maximum number of entries held across both buffers before a
+     *         decay is triggered
      * @since 0.9.71+
      */
     public int getMaxEntries() { return _maxEntries; }

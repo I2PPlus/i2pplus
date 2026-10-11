@@ -512,10 +512,10 @@ public class Getopt extends Object
  */
     protected String progname;
 
-/**
- * The localized strings are kept in a separate file
- * @return the bundle
- */
+    /**
+     * The localized strings are kept in a separate file
+     * @return the ResourceBundle holding the localized error and usage strings
+     */
     private ResourceBundle _messages = ResourceBundle.getBundle(
                            "gnu/getopt/MessagesBundle", Locale.getDefault());
 

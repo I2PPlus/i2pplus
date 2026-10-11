@@ -56,7 +56,8 @@ class RefreshRoutersJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue and the logs,
+     *         "Refresh NetDb Routers"
      */
     @Override
     public String getName() {

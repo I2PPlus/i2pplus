@@ -34,7 +34,7 @@ public class HeaderLine extends Encoding {
 	public static final String NAME = "HEADERLINE";
 
 	/**
-	 * @return the name
+	 * @return the constant {@link #NAME}, "HEADERLINE"
 	 */
 	@Override
 	public String getName() {

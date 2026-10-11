@@ -44,7 +44,7 @@ class ConnThrottler {
      * @param throttlePeriod how long to ban a peer (ms)
      * @param totalThrottlePeriod how long to ban all peers (ms)
      * @param action name to note in log
-     * @param log the logger
+     * @param log logger that logs the throttling action
      */
     public ConnThrottler(int max, int totalMax, long period,
                          long throttlePeriod, long totalThrottlePeriod, String action, Log log) {

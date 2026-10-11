@@ -275,7 +275,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * The context this utility is bound to.
      *
-     * @return the context
+     * @return the I2PAppContext this utility was constructed with
      * @since 0.9.1
      */
     public I2PAppContext getContext() {
@@ -334,7 +334,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * This updates ALL the session options (not just the bw) and tells the router
      *
-     * @param limit KBps
+     * @param limit maximum upload bandwidth per torrent in KB/s
      */
     public void setMaxUpBW(int limit) {
         _maxUpBW = limit;
@@ -406,7 +406,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Is the given destination hash banned?
      *
-     * @param h the hash
+     * @param h destination hash being tested
      * @return true if banned
      * @since 0.9.71+
      */
@@ -418,7 +418,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Ban the given destination hash for the given period.
      * Does not remove any existing ban of the same hash.
      *
-     * @param h the hash
+     * @param h destination hash to ban
      * @param period the ban period in milliseconds
      * @since 0.9.71+
      */
@@ -466,7 +466,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * A copy of the I2CP options.
      *
-     * @return a copy
+     * @return a copy of the live option map, safe to modify
      */
     public Map<String, String> getI2CPOptions() {
         synchronized (_opts) {
@@ -513,7 +513,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * The maximum upload bandwidth per torrent.
      *
-     * @return KBps
+     * @return maximum upload bandwidth per torrent in KB/s
      */
     public int getMaxUpBW() {
         return _maxUpBW;
@@ -1127,7 +1127,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * stands out on the console's tunnels page. Local only; not shared with trackers or the DHT.
      *
      * @param name the torrent name
-     * @return the nickname
+     * @return the derived nickname, never null
      * @since 0.9.71+
      */
     static String getNickname(String name) {
@@ -1248,7 +1248,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * TorrentDest only when a second torrent joins the pool.
      *
      * @param poolNum the sequential pool number, assigned when the pool destination was created
-     * @return the nickname
+     * @return the pool nickname, never null
      */
     static String getPoolNickname(int poolNum) {
         return "I2PSnark - Pool " + poolNum;
@@ -1424,7 +1424,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * is disabled or the torrent has no destination.
      *
      * @param ih the torrent's info hash
-     * @return the destination
+     * @return the torrent's own destination, or the shared one
      * @since 0.9.71+
      */
     Destination getMyDestination(byte[] ih) {
@@ -1538,7 +1538,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether the shared I2CP session is up.
      *
-     * @return whether connected
+     * @return true if a session manager has been created for the shared session
      */
     public boolean connected() {
         return _manager != null;
@@ -1547,7 +1547,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether an I2CP connection attempt is in progress.
      *
-     * @return whether connecting
+     * @return true if no manager exists yet but a connection attempt is underway
      * @since 0.9.1
      */
     public boolean isConnecting() {
@@ -1859,7 +1859,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param url the URL to fetch
      * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      * @param retries if &lt; 0, set timeout to a few seconds
-     * @param initialSize buffer size
+     * @param initialSize initial capacity of the output buffer, in bytes
      * @param maxSize fails if greater
      * @return null on error
      * @since 0.9.4
@@ -1904,7 +1904,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param url the URL to fetch
      * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      * @param retries if &lt; 0, set timeout to a few seconds
-     * @param initialSize buffer size
+     * @param initialSize initial capacity of the output buffer, in bytes
      * @param maxSize fails if greater
      * @param ih the torrent's info hash
      *           <p>When the torrent has no destination of its own - which is every torrent while

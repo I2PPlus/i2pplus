@@ -69,7 +69,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
      * The peer hash at the given index.
      *
      * @param index the position of the wanted peer hash in the reply list
-     * @return the reply
+     * @return the router hash found at that index in the reply list
      */
     public Hash getReply(int index) { return _peerHashes.get(index); }
     /**
@@ -153,7 +153,7 @@ public class DatabaseSearchReplyMessage extends FastI2NPMessageImpl {
     /**
      * The message type.
      *
-     * @return the type
+     * @return the I2NP message type ID, always {@link #MESSAGE_TYPE}
      */
     public int getType() { return MESSAGE_TYPE; }
 

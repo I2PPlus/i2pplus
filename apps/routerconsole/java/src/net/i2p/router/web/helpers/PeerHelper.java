@@ -168,7 +168,7 @@ public class PeerHelper extends HelperBase {
     /**
      * Return the currently selected tab index.
      *
-     * @return the tab
+     * @return the tab index matching the current transport
      * @since 0.9.38
      */
     private int getTab() {
@@ -592,8 +592,8 @@ public class PeerHelper extends HelperBase {
     /**
      * Whether an NTCP connection is recent enough to render.
      *
-     * @param con the connection
-     * @param peerCount total established connections
+     * @param con the NTCP connection being considered for display
+     * @param peerCount the number of established connections, which selects the idle cutoff
      * @param now the current time
      * @return true when the connection is rendered
      * @since 0.9.70+
@@ -608,7 +608,7 @@ public class PeerHelper extends HelperBase {
      * Whether an SSU peer is recent enough to render.
      *
      * @param peer the SSU peer state whose last receive time is tested
-     * @param peerCount total peers
+     * @param peerCount the total peer count, which selects the idle cutoff
      * @param now the current time
      * @return true when the peer is rendered
      * @since 0.9.70+

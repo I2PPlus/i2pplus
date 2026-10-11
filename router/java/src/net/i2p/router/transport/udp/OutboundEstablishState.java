@@ -261,7 +261,7 @@ class OutboundEstablishState {
     /**
      * Round-trip time estimate.
      *
-     * @return the RTT
+     * @return round-trip time in milliseconds, measured during the handshake
      */
     synchronized int getRTT() { return _rtt; }
 

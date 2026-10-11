@@ -144,8 +144,8 @@ public class BandwidthManager implements BandwidthListener {
     /**
      * Should we request this many bytes?
      *
-     * @param peer ignored
-     * @return whether request
+     * @param peer ignored; both rate limiters are consulted regardless
+     * @return true if both the request and download limiters accept it
      */
     @Override
     public boolean shouldRequest(Peer peer, int size) {

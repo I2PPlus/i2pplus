@@ -542,7 +542,7 @@ public class RrdToolkit {
      * This method is not RRD related, but might come handy to create a quick list of all RRD files
      * in the given directory.
      *
-     * @param directory Source directory
+     * @param directory the directory to search; it must exist, else an RrdException
      * @param extension File extension (like ".rrd", ".jrb", ".rrd.jrb")
      * @param resursive true if all subdirectories should be traversed for the same extension, false
      *                  otherwise

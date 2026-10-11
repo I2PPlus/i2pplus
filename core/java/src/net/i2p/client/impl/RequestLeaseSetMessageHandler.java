@@ -818,7 +818,8 @@ class RequestLeaseSetMessageHandler extends HandlerImpl {
     /**
      * Non-null [type:]b64[,[type:]b64]...
      * @param spkl non-null [type:]b64[,[type:]b64]...
-     * @param privKeys out parameter
+     * @param privKeys the list the parsed keys are appended to; entries that
+     *                 fail to parse are logged and skipped
      * @param allowedTypes list of allowed encryption types
      * @since 0.9.39
      */

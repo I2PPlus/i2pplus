@@ -255,7 +255,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * The I2PSocket of this connection, or null if never connected.
      *
-     * @return the socket
+     * @return the socket backing this connection, or null if never connected
      */
     I2PSocket getI2PSocket() {
         return sock;
@@ -816,7 +816,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Returns the number of bytes that have been downloaded. Can be reset to zero with <code>
      * resetCounters()</code> which is called every CHECK_PERIOD by PeerCheckerTask.
-     * @return the downloaded
+     * @return the downloaded byte count since the last counter reset
      */
     public long getDownloaded() {
         return downloaded.get();
@@ -825,7 +825,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Returns the number of bytes that have been uploaded. Can be reset to zero with <code>
      * resetCounters()</code> which is called every CHECK_PERIOD by PeerCheckerTask.
-     * @return the uploaded
+     * @return the uploaded byte count since the last counter reset
      */
     public long getUploaded() {
         return uploaded.get();
@@ -852,7 +852,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
     /**
      * Should we send this many bytes? Do NOT call uploaded() after this.
      *
-     * @return whether send
+     * @return true if the bandwidth listener allows the send, which is then counted
      * @since 0.9.62
      */
     public boolean shouldSend(int size) {
@@ -871,7 +871,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      * Should we request this many bytes?
      *
      * @param size the number of bytes about to be requested
-     * @return whether request
+     * @return true if the bandwidth listener allows this peer to request them
      * @since 0.9.62
      */
     public boolean shouldRequest(int size) {
@@ -888,7 +888,7 @@ public class Peer implements Comparable<Peer>, BandwidthListener {
      *
      * @param peer the peer the callback was invoked for
      * @param size the requested size in bytes
-     * @return whether request
+     * @return true only if peer is this peer and the listener allows the request
      * @since 0.9.62
      */
     public boolean shouldRequest(Peer peer, int size) {

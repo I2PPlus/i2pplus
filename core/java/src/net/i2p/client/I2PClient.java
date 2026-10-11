@@ -122,7 +122,7 @@ public interface I2PClient {
      * Caller must close stream.
      *
      * @param destKeyStream stream to write the destination and keys to
-     * @return new destination
+     * @return the new destination, whose keys have been written to the stream
      * @throws I2PException on I2P protocol error
      * @throws IOException on IO error
      */
@@ -139,7 +139,7 @@ public interface I2PClient {
      * @param destKeyStream location to write out the destination, PrivateKey, and SigningPrivateKey,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      * @param type the signature type for the destination
-     * @return new destination
+     * @return the new destination, whose keys have been written to the stream
      * @throws I2PException on I2P protocol error
      * @throws IOException on IO error
      * @since 0.9.12

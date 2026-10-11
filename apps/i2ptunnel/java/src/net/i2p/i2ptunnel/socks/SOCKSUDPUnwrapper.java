@@ -47,9 +47,12 @@ public class SOCKSUDPUnwrapper implements Source, Sink {
     /**
      *
      *  May throw RuntimeException from underlying sink
-     *  @param ignoredFrom ignored
+     *  @param ignoredFrom unused; the SOCKS header in the data supplies the
+     *                     destination instead, as this unwrapper never sends
+     *                     from itself
      *  @param fromPort will be passed along
-     *  @param toPort ignored
+     *  @param toPort the UDP port to send to, taken from the SOCKS header
+     *                rather than from this argument
      *  @throws RuntimeException if the downstream sink fails to send the unwrapped data
      *  @since 0.9.53 added fromPort and toPort parameters
      */

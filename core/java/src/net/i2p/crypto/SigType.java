@@ -327,7 +327,8 @@ public enum SigType {
     /**
      * The elliptic curve ECParameterSpec for ECDSA; DSAParameterSpec for DSA
      *
-     * @return the params
+     * @return the domain parameters this signature type was created with, an
+     *         ECParameterSpec for ECDSA or a DSAParameterSpec for DSA
      * @throws InvalidParameterSpecException if the algorithm is not available on this JVM.
      */
     public AlgorithmParameterSpec getParams() throws InvalidParameterSpecException {

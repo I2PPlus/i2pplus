@@ -518,7 +518,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Returns the flag that controls whether or not this object will observe the {@code
      * KEY_STROKE_CONTROL} rendering hint. The default value is {@code true}.
      *
-     * @return A boolean.
+     * @return {@code true} if the {@code KEY_STROKE_CONTROL} rendering hint is
+     *         honoured, which it is by default.
      * @see #setCheckStrokeControlHint(boolean)
      * @since 2.0
      */
@@ -1929,7 +1930,9 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param rect a rectangle (in device space).
      * @param s the shape to test; the current transform is applied to it first.
      * @param onStroke test the stroked outline only?
-     * @return A boolean.
+     * @return {@code true} if the rectangle intersects the transformed shape,
+     *         testing the stroked outline when {@code onStroke} is {@code true}
+     *         and the interior otherwise.
      */
     @Override
     public boolean hit(Rectangle rect, Shape s, boolean onStroke) {

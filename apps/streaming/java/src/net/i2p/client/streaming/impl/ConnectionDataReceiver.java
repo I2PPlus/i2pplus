@@ -63,7 +63,7 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      *
      * Probably should have a configuration option for this.
      *
-     * @return !flush
+     * @return true while the outbound window is full, so nothing should be flushed yet
      */
     public boolean writeInProcess() {
         return _connection.getUnackedPacketsSent() >= _connection.getOptions().getWindowSize();

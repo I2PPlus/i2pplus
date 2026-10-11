@@ -37,7 +37,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
 
     /**
      * Returns the destination hash the router is asked to resolve.
-     * @return the hash
+     * @return the 32-byte destination hash the router is asked to resolve
      */
     public Hash getHash() {
         return _hash;
@@ -66,7 +66,7 @@ public class DestLookupMessage extends I2CPMessageImpl {
 
     /**
      * Returns the I2CP message type code for this message.
-     * @return the type
+     * @return DestLookupMessage's I2CP type code, for dispatch
      */
     @Override
     public int getType() {

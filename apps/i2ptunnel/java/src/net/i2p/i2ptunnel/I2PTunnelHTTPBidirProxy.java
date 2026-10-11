@@ -15,7 +15,7 @@ public class I2PTunnelHTTPBidirProxy extends I2PTunnelHTTPClient implements Runn
      * or open the local socket. You MUST call startRunning() for that.
      *
      * @param localPort the local port to bind to
-     * @param l logging instance
+     * @param l the logger the tunnel and its listeners write through
      * @param sockMgr the I2P socket manager
      * @param tunnel the I2P tunnel
      * @param notifyThis the event dispatcher for notifications

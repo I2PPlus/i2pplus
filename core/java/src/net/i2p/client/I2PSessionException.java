@@ -21,8 +21,8 @@ public class I2PSessionException extends I2PException {
     /**
      * Create a new session exception with a message and cause.
      *
-     * @param msg message
-     * @param t cause
+     * @param msg the detail message describing why the session failed
+     * @param t the underlying cause of the failure
      */
     public I2PSessionException(String msg, Throwable t) {
         super(msg, t);
@@ -31,7 +31,7 @@ public class I2PSessionException extends I2PException {
     /**
      * Create a new session exception with a message.
      *
-     * @param msg message
+     * @param msg the detail message describing why the session failed
      */
     public I2PSessionException(String msg) {
         super(msg);

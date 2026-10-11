@@ -36,7 +36,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
 
     /**
      * Reason the client gave for closing the session.
-     * @return the reason
+     * @return the reason text, or null if the message was built without one
      */
     public String getReason() {
         return _reason;
@@ -76,7 +76,7 @@ public class DisconnectMessage extends I2CPMessageImpl {
 
     /**
      * I2CP message type sent for this message.
-     * @return the type
+     * @return the I2CP message type ID, always {@link #MESSAGE_TYPE}
      */
     @Override
     public int getType() {

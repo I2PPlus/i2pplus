@@ -65,7 +65,7 @@ public class HexDump {
      * Dump a byte array through a stream.
      *
      * @param data Data to be dumped
-     * @param out  Output stream
+     * @param out  receives the dump as offset, hex and printable-ASCII columns; not closed or flushed
      * @throws java.io.IOException if the write fails
      */
     public static void dump(byte[] data, OutputStream out) throws IOException {
@@ -78,7 +78,7 @@ public class HexDump {
      * @param data Data to be dumped
      * @param off  Offset from the beginning of <code>data</code>
      * @param len  Number of bytes of <code>data</code> to be dumped
-     * @param out  Output stream
+     * @param out  receives the dump; not closed or flushed
      * @throws IOException if the output stream rejects any of the writes making up the dump
      */
     public static void dump(byte[] data, int off, int len, OutputStream out) throws IOException {

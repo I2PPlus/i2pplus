@@ -64,7 +64,7 @@ class InboundMessageFragments /*implements UDPTransport.PartialACKSource */{
 
     /**
      * Whether the receiver is alive.
-     * @return whether alive
+     * @return true until shutdown() has been called
      */
     public boolean isAlive() {return _alive;}
 

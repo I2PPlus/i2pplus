@@ -138,7 +138,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * Applies only to future connections;
      * calling this does not affect existing connections.
      *
-     * @param ms in ms
+     * @param ms the idle timeout in ms; zero or negative means forever
      */
     public void setReadTimeout(long ms) { readTimeout = ms; }
 
@@ -152,7 +152,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      * Prior to that, default was 5 minutes, but did not work
      * due to streaming bugs.
      *
-     * @return in ms
+     * @return the idle timeout in ms; zero or negative means forever
      */
     public long getReadTimeout() { return readTimeout; }
 

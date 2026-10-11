@@ -83,7 +83,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Counts the tunnels in this LeaseSet.
-     * @return the endpoints
+     * @return the number of tunnels in the LeaseSet
      */
     public int getEndpoints() {
         return _endpoints.size();
@@ -92,7 +92,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
     /**
      * Gets the tunnel at a position in this LeaseSet.
      * @param endpoint the zero-based position in the list, 0 to getEndpoints() - 1
-     * @return the endpoint
+     * @return the tunnel at that position, or null if out of range
      */
     public Lease getEndpoint(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
@@ -161,7 +161,7 @@ public class RequestVariableLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Reports this message as a variable LeaseSet request.
-     * @return the type
+     * @return RequestVariableLeaseSetMessage's I2CP type number, for dispatch
      */
     @Override
     public int getType() {

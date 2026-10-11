@@ -19,7 +19,7 @@ interface SAMDatagramReceiver {
     /**
      * Send a byte array to a SAM client.
      *
-     * @param sender Destination
+     * @param sender the destination the datagram arrived from
      * @param data Byte array to be received
      * @param proto I2CP protocol
      * @param fromPort I2CP from port

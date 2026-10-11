@@ -383,7 +383,7 @@ public class GraphListener implements RateSummaryListener {
      * Recording now stops on its own - the ledger drift grows - and the heal ladder
      * reopens or rebuilds the handle when it can.
      *
-     * @param t the failure
+     * @param t the write failure, counted toward the consecutive-error limit
      */
     private void noteWriteFailure(Throwable t) {
         int errors = ++_consecutiveErrors;
@@ -489,7 +489,7 @@ public class GraphListener implements RateSummaryListener {
      * 999ms into a step the listener already stored look newer than it is, and the
      * write would then be rejected by the archive as non-monotonic.
      *
-     * @param timestampMs wall-clock ms
+     * @param timestampMs wall-clock ms, not monotonic time
      * @return the same instant truncated down to a whole second, in ms
      * @since 0.9.71+
      */
@@ -651,7 +651,7 @@ public class GraphListener implements RateSummaryListener {
      * listener was never registered for, so it is lost and the drift has to say so.
      * Baselineing afterwards would quietly forgive it.
      *
-     * @return success
+     * @return true if the database was opened and the summary listener registered
      */
     public boolean startListening() {
         _attachedMs = System.currentTimeMillis();

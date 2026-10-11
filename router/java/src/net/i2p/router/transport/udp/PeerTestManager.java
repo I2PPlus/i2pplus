@@ -422,7 +422,7 @@ class PeerTestManager {
      *  @param charlieTime when msg 5 was received, or 0
      *  @param charliePort Charlie's reported port, or {@link #PENDING_PORT} if firewalled
      *  @param haveCharlieIntroKey whether msg 4 supplied Charlie's intro key
-     *  @param now current time
+     *  @param now the current time, in milliseconds
      *  @return {@link #ACTION_NONE}, {@link #ACTION_SEND_BOB} or {@link #ACTION_SEND_CHARLIE}
      *  @since 0.9.71+
      */

@@ -40,7 +40,7 @@ public class VariableTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     /**
      * I2NP message type 24 for variable-record tunnel build replies.
-     * @return the type
+     * @return the message type constant, 24
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }

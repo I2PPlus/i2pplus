@@ -64,7 +64,8 @@ class I2PClientMessageHandlerMap {
     /**
      * Return the handler for the given type.
      * @param messageTypeId the I2CP message type id to look up
-     * @return the handler
+     * @return the handler registered for that message type, or null if the id is
+     *         out of range or has no handler
      */
     public I2CPMessageHandler getHandler(int messageTypeId) {
         if ((messageTypeId < 0) || (messageTypeId >= _handlers.length)) return null;

@@ -60,7 +60,9 @@ public class TunnelGatewayMessage extends FastI2NPMessageImpl {
      *
      * Note that if you change the expiration on the embedded message it will
      * mess up the checksum of this message, so don't do that.
-     * @return the message
+     * @return the message carried onward through the tunnel, held as an
+     *         {@link UnknownI2NPMessage} when this instance was read at the
+     *         IBGW, or null once this message has been written out
      */
     public I2NPMessage getMessage() {return _msg;}
 

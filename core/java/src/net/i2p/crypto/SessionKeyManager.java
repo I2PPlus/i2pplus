@@ -36,7 +36,8 @@ public class SessionKeyManager {
      * A dummy SessionKeyManager for testing or for passing to
      * ElGamalAESEngine.decrypt()
      *
-     * @param context unused
+     * @param context application context, accepted but ignored by this base
+     *                implementation, which manages no sessions
      */
     public SessionKeyManager(I2PAppContext context) { // nop
     }

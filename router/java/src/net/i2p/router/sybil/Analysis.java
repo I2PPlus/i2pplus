@@ -574,7 +574,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * @param ris the list of router infos to analyze
      * @param points map to accumulate sybil points
      * @param pairs out parameter, sorted list of close router pairs
-     * @return average distance
+     * @return the mean pairwise XOR distance across the routers analyzed
      * @since 0.9.38 split out from renderPairDistance()
      */
     public double calculatePairDistance(List<RouterInfo> ris, Map<Hash, Points> points, List<Pair> pairs) {
@@ -1266,7 +1266,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
      * Build the version comparison report.
      *
      * @param us the local router hash
-     * @param usName HTML escaped
+     * @param usName the local router's display name, already HTML escaped
      * @param ris will be re-sorted in place
      * @param points map of points per hash
      * @since 0.9.38 split out from renderRouterInfoHTML()

@@ -56,7 +56,7 @@ public class ShortTunnelBuildMessage extends TunnelBuildMessage {
 
     /**
      *  I2NP message type of a short tunnel build message.
-     *  @return the type
+     *  @return the I2NP message type number, for dispatch
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }

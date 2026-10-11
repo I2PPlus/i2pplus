@@ -1202,7 +1202,7 @@ public class TrackerClient implements Runnable {
      * longer deferral after a good response, plus random jitter so scrapes
      * from many torrents to a shared tracker do not fire in lockstep.
      *
-     * @param tr the tracker
+     * @param tr the tracker record whose nextScrapeTime is set
      * @param good true if the last response reported a non-zero swarm size
      */
     private void scheduleNextScrape(TCTracker tr, boolean good) {
@@ -1521,7 +1521,7 @@ public class TrackerClient implements Runnable {
     /**
      * Scrape for swarm composition from a tracker, BEP 15 (UDP) or BEP 48 (HTTP).
      *
-     * @param tr the tracker
+     * @param tr the tracker record, whose isUDP flag selects the BEP 15 or BEP 48 path
      * @return the scrape result, or null on failure
      * @throws IOException on HTTP scrape failure
      */
@@ -1555,7 +1555,7 @@ public class TrackerClient implements Runnable {
      * Scrape for swarm composition from an HTTP tracker, BEP 48: the last path segment of the
      * announce URL is replaced with "scrape" and any query string is dropped.
      *
-     * @param tr the tracker
+     * @param tr the tracker record, supplying the announce URL and the host name
      * @param infoHash the hex info hash
      * @return the scrape result, or null on failure
      * @throws IOException on fetch or parse failure
@@ -1869,7 +1869,7 @@ public class TrackerClient implements Runnable {
     /**
      * Clamp the tracker interval to the minimum and record it.
      *
-     * @param tr the tracker
+     * @param tr the tracker record whose interval is clamped and recorded
      * @param info the announce response
      */
     private void updateInterval(TCTracker tr, TrackerInfo info) {

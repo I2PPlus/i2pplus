@@ -224,13 +224,13 @@ abstract class TrayManager {
 
     /**
      * Build a popup menu, adding callbacks to the different items.
-     * @return popup menu
+     * @return the AWT menu to install on the tray icon
      */
     protected abstract PopupMenu getMainMenu();
 
     /**
      * Build a popup menu, adding callbacks to the different items.
-     * @return popup menu
+     * @return the Swing menu to install, for the headless-capable path
      * @since 0.9.26
      */
     protected abstract JPopupMenu getSwingMainMenu();
@@ -266,8 +266,8 @@ abstract class TrayManager {
      *
      *  @param priority severity of the message, tested against the Log level constants to pick the tray balloon type
      *  @param title for the popup, translated
-     *  @param message translated
-     *  @param path unsupported
+     *  @param message translated, shown as the body of the tray balloon
+     *  @param path unsupported; the AWT API takes no path, so it is ignored
      *  @return 0, or -1 on failure
      */
     public int displayMessage(int priority, String title, String message, String path) {

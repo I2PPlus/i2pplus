@@ -45,7 +45,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Render the transport status section of the router console page.
      *
-     * @param out destination writer
+     * @param out receives the HTML for this transport's status section
      * @param urlBase base URL for links, may be null
      * @param sortFlags flags controlling sort order
      * @throws IOException on write error
@@ -54,7 +54,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Render the transport status section of the router console page with default flags.
      *
-     * @param out destination writer
+     * @param out receives the HTML for this transport's status section
      * @throws IOException on write error
      */
     public void renderStatusHTML(Writer out) throws IOException { renderStatusHTML(out, null, 0); }
@@ -120,7 +120,8 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Determine under what conditions we are remotely reachable.
      *
-     * @return the status
+     * @return the reachability {@link Status}, {@link Status#OK} unless an
+     *         implementation overrides this
      * @since 0.9.20
      */
     public Status getStatus() { return Status.OK; }
@@ -169,7 +170,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Get the IP address associated with the given destination.
      *
-     * @param dest destination hash
+     * @param dest the destination hash to resolve; no entry means null is returned
      * @return IP address bytes or null if unknown
      */
     public byte[] getIP(Hash dest) { return null; }
@@ -370,7 +371,7 @@ public abstract class CommSystemFacade implements Service {
     /**
      * Whether this is a dummy implementation with no real transports.
      *
-     * @return whether dummy
+     * @return true for this base implementation, which carries no transports
      * @since 0.8.13
      */
     public boolean isDummy() { return true; }

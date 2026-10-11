@@ -32,7 +32,7 @@ public class I2PSimpleClient implements I2PClient {
      * This method is not supported.
      *
      * @deprecated Don't do this
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as this method is unsupported
      */
     @Deprecated
     @Override
@@ -44,7 +44,7 @@ public class I2PSimpleClient implements I2PClient {
      * This method is not supported.
      *
      * @deprecated Don't do this
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as this method is unsupported
      * @since 0.9.12
      */
     @Deprecated
@@ -57,7 +57,7 @@ public class I2PSimpleClient implements I2PClient {
      * This method is not supported.
      *
      * @deprecated Don't do this
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, as this method is unsupported
      */
     @Deprecated
     @Override
@@ -83,7 +83,7 @@ public class I2PSimpleClient implements I2PClient {
      * @param context the application context
      * @param options set of options to configure the router with
      * @return the new session
-     * @throws I2PSessionException on error
+     * @throws I2PSessionException if the session cannot be created
      */
     public I2PSession createSession(I2PAppContext context, Properties options) throws I2PSessionException {
         return new I2PSimpleSession(context, options);

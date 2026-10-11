@@ -657,7 +657,7 @@ public class HostChecker {
      * If LeaseSet lookup succeeds, we don't overwrite the result with failed ping/eephead
      *
      * @param hostname hostname to test
-     * @return ping result
+     * @return the result recorded for this host, blacklisted hosts never pinged
      */
     public PingResult testDestination(String hostname) {
         if (isHostBlacklisted(hostname)) {
@@ -1362,7 +1362,7 @@ public class HostChecker {
 
     /**
      * Get destination for a hostname from naming service
-     * @return the destination
+     * @return the destination, or null if the naming service has no entry
      */
     private Destination getDestination(String hostname) {
         return _namingService.lookup(hostname);
@@ -1640,7 +1640,7 @@ public class HostChecker {
     /**
      * Get category for a hostname
      * @param hostname the host to look up, as spelled in the categories file
-     * @return the category
+     * @return the category name, or null if the host is uncategorized
      */
     public String getCategory(String hostname) {
         return _hostCategories.get(hostname);
@@ -2356,7 +2356,7 @@ public class HostChecker {
     /**
      * Test method
      *
-     * @param args ignored
+     * @param args command line arguments, unused
      * @throws Exception if the test run cannot be started or stopped
      */
     public static void main(String[] args) throws Exception {

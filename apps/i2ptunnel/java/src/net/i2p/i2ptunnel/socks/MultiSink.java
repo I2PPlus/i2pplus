@@ -35,9 +35,9 @@ public class MultiSink<S extends Sink> implements Source, Sink {
      *
      * May throw RuntimeException from underlying sinks
      *
-     * @param from passed along
-     * @param fromPort passed along
-     * @param toPort passed along
+     * @param from sending destination, passed along to the sink, may be null
+     * @param fromPort source port, passed along to the sink
+     * @param toPort port selecting which sink receives the data
      * @throws RuntimeException if the sink selected by toPort fails to send the data
      * @since 0.9.53 added fromPort and toPort parameters
      */

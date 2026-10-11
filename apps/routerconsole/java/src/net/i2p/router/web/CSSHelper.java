@@ -235,7 +235,8 @@ public class CSSHelper extends HelperBase {
     /**
      * Get current CSRF nonce, rotating every 5 minutes.
      * Keeps 2 previous nonces for backward compatibility (multi-tab, slow clients).
-     * @return the nonce
+     * @return the current CSRF token, replaced with a fresh one once the
+     *         rotation interval has elapsed
      * @since 0.9.4
      */
     public static synchronized String getNonce() {

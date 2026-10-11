@@ -593,7 +593,8 @@ public class SAMBridge implements Runnable, ClientApp {
     /**
      * Report the constant service name, without the listen address.
      *
-     * @return "SAM", always
+     * @return "SAM", the registration key for this bridge, never null and not
+     *         translated
      * @since 0.9.6
      */
     public String getName() {

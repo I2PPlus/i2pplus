@@ -170,7 +170,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * a caller always gets a usable set even when the exclusion set covers
      * most of the tier.
      *
-     * @param settings pool settings
+     * @param settings the pool's settings, supplying tunnel length, variance,
+     *                 depth, bandwidth and IP restriction for this selection
      * @param excludeFirstHops first-hop peers already targeted by concurrent
      *                         builds in the same dispatch batch, may be null
      * @return ordered hops, endpoint first; empty when nothing usable exists
@@ -201,7 +202,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Select peers for a new tunnel.  Delegates to
      * {@link #selectPeers(TunnelPoolSettings, Set)} with a null exclusion set.
      *
-     * @param settings pool settings
+     * @param settings the pool's settings, supplying tunnel length, variance,
+     *                 depth, bandwidth and IP restriction for this selection
      * @return ordered hops, endpoint first; empty when nothing usable exists
      */
     private List<Hash> selectPeersBase(TunnelPoolSettings settings) {
@@ -353,7 +355,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * selection.  The retry is what turns "all chosen peers were unusable"
      * from a wasted build cycle into a usable tunnel.
      *
-     * @param settings pool settings
+     * @param settings the pool's settings, supplying tunnel length, variance,
+     *                 depth, bandwidth and IP restriction for this selection
      * @param length tunnel length being built
      * @param params shared selection parameters
      * @param ex live exclusions, mutated so a retry cannot re-pick rejects
@@ -1227,7 +1230,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * seven candidates are ever examined and the remaining nine attempts —
      * plus the degraded-candidate fallback behind them — never run.
      *
-     * @param params selection parameters
+     * @param params the tier cascade flags, held constant across every refill
      * @param randomKey random key for Fast tier sub-tiering
      * @param ex exclusion set (ejected peer added by caller)
      * @param matches empty set to populate with a fresh batch
@@ -1686,7 +1689,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Smallest tunnel the pool will accept: the configured length minus any
      * negative variance, never below zero.  Pure decision — no side effects.
      *
-     * @param settings pool settings
+     * @param settings the pool's settings, supplying tunnel length, variance,
+     *                 depth, bandwidth and IP restriction for this selection
      * @return minimum hop count for this pool
      * @since 0.9.71+
      */
@@ -2109,8 +2113,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * responders (recent successful participation), then acceptance ratio,
      * slow tunnel-test latency, activity recency, and latency.
      *
-     * @param p1 first peer
-     * @param p2 second peer
+     * @param p1 peer on the left of the comparison
+     * @param p2 peer on the right of the comparison
      * @param exclude peers to deprioritize, or null
      * @param prof1 first peer's profile, or null
      * @param prof2 second peer's profile, or null
@@ -2166,8 +2170,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /**
      * Excluded peers sort last; two excluded peers compare equal.
      *
-     * @param p1 first peer
-     * @param p2 second peer
+     * @param p1 peer on the left of the comparison
+     * @param p2 peer on the right of the comparison
      * @param exclude peers to deprioritize, or null
      * @return negative, zero, or positive
      * @since 0.9.71+ (extracted from peerQualityComparator)
@@ -2394,7 +2398,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
          * Passing peers are cached in {@code _allowed} so subsequent
          * contains() calls for the same Hash skip the global cache lookup.
          *
-         * @param o a Hash
+         * @param o the candidate peer hash, as passed by Set.contains()
          * @return true if peer should be excluded
          */
         public boolean contains(Object o) {
@@ -2446,7 +2450,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
          * Passing peers are cached in {@code _allowed} so subsequent
          * contains() calls for the same Hash skip the global cache lookup.
          *
-         * @param o a Hash
+         * @param o the candidate peer hash, as passed by Set.contains()
          * @return true if peer should be excluded
          */
         public boolean contains(Object o) {

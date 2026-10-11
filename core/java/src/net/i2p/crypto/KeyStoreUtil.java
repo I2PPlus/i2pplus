@@ -160,7 +160,7 @@ public final class KeyStoreUtil {
      *
      * @param ksFile may be null
      * @param password may be null
-     * @return success
+     * @return the keystore, loaded from ksFile if it existed and otherwise newly initialized
      * @throws GeneralSecurityException if keystore operations fail
      * @throws IOException if file operations fail
      */
@@ -235,7 +235,7 @@ public final class KeyStoreUtil {
      * Load all X509 Certs from a key store File into a KeyStore
      * Note that each call reinitializes the KeyStore
      *
-     * @return success
+     * @return true if the file was loaded, false if it is missing or cannot be read
      * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     private static boolean loadCerts(File file, KeyStore ks) {
@@ -289,8 +289,8 @@ public final class KeyStoreUtil {
      *
      * If a cert isn't valid, it will probably cause bigger problems later when it's used.
      *
-     * @param f keystore file
-     * @param ksPW keystore password
+     * @param f the keystore file to read the certificates from
+     * @param ksPW the keystore password, which must not be null
      * @param expiresWithin ms if cert expires within this long, we will log a warning, e.g. 180*24*60*60*1000L
      * @return true if all are good, false if we logged something
      * @since 0.9.34
@@ -505,7 +505,8 @@ public final class KeyStoreUtil {
      * @param file the file to read the certificate from
      * @param alias the keystore entry name to store the certificate under
      * @param ks the keystore to add the certificate to
-     * @return success
+     * @return true if the certificate was read and added, false if it is revoked,
+     *         expired, not yet valid, or cannot be parsed
      * @since 0.8.2, moved from SSLEepGet in 0.9.9
      */
     public static boolean addCert(File file, String alias, KeyStore ks) {
@@ -522,7 +523,8 @@ public final class KeyStoreUtil {
      * @param alias the keystore entry name to store the certificate under
      * @param ks the keystore to add the certificate to
      * @param cs may be null; if non-null, check for revocation
-     * @return success
+     * @return true if the certificate was read and added, false if it is revoked,
+     *         expired, not yet valid, or cannot be parsed
      * @since 0.9.25
      */
     public static boolean addCert(File file, String alias, KeyStore ks, CertStore cs) {
@@ -578,10 +580,10 @@ public final class KeyStoreUtil {
      * @param ks path to the keystore
      * @param alias the name of the key
      * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param keyPW the key password, must be at least 6 characters
      *
-     * @return success
+     * @return true if the key was generated and stored, false if it already exists or creation failed
      * @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
      */
     public static boolean createKeys(File ks, String alias, String cname, String ou, String keyPW) {
@@ -608,10 +610,10 @@ public final class KeyStoreUtil {
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param keyPW the key password, must be at least 6 characters
      *
-     * @return success
+     * @return true if the key was generated and stored, false if it already exists or creation failed
      * @since 0.9.34 added altNames param
      */
     public static boolean createKeys(
@@ -636,13 +638,13 @@ public final class KeyStoreUtil {
      * @param ksPW the keystore password
      * @param alias the name of the key
      * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param validDays e.g. 3652 (10 years)
      * @param keyAlg e.g. DSA , RSA, EC
      * @param keySize e.g. 1024
      * @param keyPW the key password, must be at least 6 characters
      *
-     * @return success
+     * @return true if the key was generated and stored, false if it already exists or creation failed
      * @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
      */
     public static boolean createKeys(
@@ -673,13 +675,13 @@ public final class KeyStoreUtil {
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param validDays e.g. 3652 (10 years)
      * @param keyAlg e.g. DSA , RSA, EC
      * @param keySize e.g. 1024
      * @param keyPW the key password, must be at least 6 characters
      *
-     * @return success
+     * @return true if the key was generated and stored, false if it already exists or creation failed
      * @since 0.9.34 added altNames param
      */
     public static boolean createKeys(
@@ -731,7 +733,7 @@ public final class KeyStoreUtil {
      * @param ksPW the keystore password
      * @param alias the name of the key
      * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param validDays e.g. 3652 (10 years)
      * @param keyAlg e.g. DSA , RSA, EC
      * @param keySize e.g. 1024
@@ -785,7 +787,7 @@ public final class KeyStoreUtil {
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param validDays e.g. 3652 (10 years)
      * @param keyAlg e.g. DSA , RSA, EC
      * @param keySize e.g. 1024
@@ -846,7 +848,7 @@ public final class KeyStoreUtil {
      * @param ksPW the keystore password
      * @param alias the name of the key
      * @param cname e.g. localhost. Must be a hostname or email address. IP addresses will not be correctly encoded.
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param validDays e.g. 3652 (10 years)
      * @param type the signature algorithm to generate the keypair for
      * @param keyPW the key password, must be at least 6 characters
@@ -890,7 +892,7 @@ public final class KeyStoreUtil {
      * @param altNames the Subject Alternative Names. May be null. May contain hostnames and/or IP addresses.
      *                 cname, localhost, 127.0.0.1, and ::1 will be automatically added.
      *
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param validDays e.g. 3652 (10 years)
      * @param type the signature algorithm to generate the keypair for
      * @param keyPW the key password, must be at least 6 characters
@@ -941,13 +943,13 @@ public final class KeyStoreUtil {
      * @param ksPW the keystore password
      * @param alias the name of the key
      * @param cname e.g. randomstuff.console.i2p.net
-     * @param ou e.g. console
+     * @param ou the organizational unit of the certificate subject, e.g. console
      * @param validDays e.g. 3652 (10 years)
      * @param keyAlg e.g. DSA , RSA, EC
      * @param keySize e.g. 1024
      * @param keyPW the key password, must be at least 6 characters
      *
-     * @return success
+     * @return true if the key was generated and stored, false if it already exists or creation failed
      * @since 0.8.3, consolidated from RouterConsoleRunner and SSLClientListenerRunner in 0.9.9
      */
     private static boolean createKeysCLI(
@@ -1285,8 +1287,9 @@ public final class KeyStoreUtil {
      * @param ks path to the keystore
      * @param ksPW the keystore password, may be null
      * @param alias the name of the key
-     * @param certFile output
-     * @return success
+     * @param certFile the file to write the Base64-encoded certificate to
+     * @return true if the certificate was written, false if the alias was not found
+     *         or the file could not be written
      * @since 0.8.3 moved from SSLClientListenerRunner in 0.9.9
      */
     public static boolean exportCert(File ks, String ksPW, String alias, File certFile) {

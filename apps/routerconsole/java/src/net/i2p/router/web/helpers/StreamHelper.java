@@ -42,7 +42,8 @@ public class StreamHelper extends HelperBase {
 
     /**
      * Gets the direction filter applied to the streams table.
-     * @return the direction
+     * @return the configured direction, either "inbound" or "outbound", or empty when no
+     *         filter is set and the combined table is rendered
      */
     public String getDirection() { return _direction != null ? _direction : ""; }
     /**

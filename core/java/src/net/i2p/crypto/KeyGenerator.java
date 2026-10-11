@@ -127,7 +127,7 @@ public final class KeyGenerator {
      * Warning - SLOW
      *
      * @param salt 16 bytes
-     * @param passphrase the password
+     * @param passphrase the password bytes, appended whole after the 16-byte salt prefix
      * @param rounds iteration count (1000 for legacy, 1000000 for current)
      * @return derived key
      */

@@ -84,7 +84,7 @@ public class Clock implements Timestamper.UpdateListener {
     /**
      * This is a dummy, see RouterClock and RouterTimestamper for the real thing
      *
-     * @return the timestamper
+     * @return a newly built dummy timestamper, as the base Clock keeps none
      */
     public Timestamper getTimestamper() {
         return new Timestamper();
@@ -93,7 +93,8 @@ public class Clock implements Timestamper.UpdateListener {
     /**
      * Fetch the log on demand to avoid circular dependencies (logging uses the clock).
      *
-     * @return the log
+     * @return the log for this class, fetched from the context's LogManager on
+     *         each call
      */
     protected Log getLog() {
         return _context.logManager().getLog(Clock.class);
@@ -207,7 +208,7 @@ public class Clock implements Timestamper.UpdateListener {
     /**
      * Warning - overridden in RouterClock
      *
-     * @param stratum ignored
+     * @param stratum the reference clock's stratum, discarded here and used only by {@code RouterClock}
      * @since 0.7.12
      */
     @Override

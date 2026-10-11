@@ -12,14 +12,15 @@ public interface ID3v1 {
     /**
      * Get track number.
      *
-     * @return track number
+     * @return the track number as text, or null when the tag does not carry one
      */
     String getTrack();
 
     /**
      * Set track number.
      *
-     * @param track track number
+     * @param track the track number; only digits are written out, and a null
+     *              value downgrades the tag to the ID3v1.0 layout
      */
     void setTrack(String track);
 
@@ -40,14 +41,15 @@ public interface ID3v1 {
     /**
      * Get song title.
      *
-     * @return song title
+     * @return the title text, trimmed of the padding an unset field carries
      */
     String getTitle();
 
     /**
      * Set song title.
      *
-     * @param title song title
+     * @param title the title text; anything past 30 bytes is discarded when the
+     *              tag is written
      */
     void setTitle(String title);
 
@@ -68,7 +70,7 @@ public interface ID3v1 {
     /**
      * Get year.
      *
-     * @return year
+     * @return the release year as text, or null when the tag does not carry one
      */
     String getYear();
 
@@ -82,28 +84,30 @@ public interface ID3v1 {
     /**
      * Get genre number.
      *
-     * @return genre number
+     * @return the numeric genre code, which indexes the ID3v1Genres table
      */
     int getGenre();
 
     /**
      * Set genre number.
      *
-     * @param genre genre number
+     * @param genre the numeric genre code; a code outside the ID3v1Genres table
+     *              is written as-is and reads back as an unknown genre
      */
     void setGenre(int genre);
 
     /**
      * Get genre description.
      *
-     * @return genre description
+     * @return the name the genre code maps to, or "Unknown" if the code falls
+     *         outside the ID3v1Genres table
      */
     String getGenreDescription();
 
     /**
      * Get comment.
      *
-     * @return comment
+     * @return the free-text comment, or null when the tag does not carry one
      */
     String getComment();
 

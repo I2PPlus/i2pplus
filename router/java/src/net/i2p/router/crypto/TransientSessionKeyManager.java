@@ -1147,7 +1147,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          * For inbound: when the TagSet will expire; for outbound: creation time
-         * @return the date
+         * @return that timestamp in milliseconds since the epoch, as passed to
+         *         the constructor
          */
         public long getDate() {
             return _date;
@@ -1201,7 +1202,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
 
         /**
          * For outbound only.
-         * @return the acked
+         * @return true if setAcked() has been called, meaning the peer has
+         *         acknowledged using these tags
          */
         public boolean getAcked() { return _acked; }
 

@@ -51,7 +51,7 @@ public final class ImageElement {
     /**
      * Returns a string representation of this object, primarily for debugging purposes.
      *
-     * @return A string.
+     * @return A string describing this element's href and image, for debugging purposes.
      */
     @Override
     public String toString() {

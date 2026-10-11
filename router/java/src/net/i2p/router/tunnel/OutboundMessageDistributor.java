@@ -124,7 +124,8 @@ class OutboundMessageDistributor {
     /**
      * Throttle msgs to unconnected routers after we hit
      * the limit of new routers in a given time period.
-     * @return whether drop
+     * @return true if the throttle has been exceeded and the message should
+     *         be dropped, false to pass it on
      * @since 0.9.12
      */
     private boolean shouldDrop(Hash target) {

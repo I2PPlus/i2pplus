@@ -19,7 +19,7 @@ public class Copy {
     /**
      * Copy the file named by the first argument to the second.
      *
-     * @param args [from] [to]
+     * @param args [from] [to]: the source file then the destination, both required
      */
     public static void main(String[] args) {
         FileUtil.copy(args[0], args[1], true);

@@ -465,7 +465,7 @@ public interface RrdGraphConstants {
      * leaves a space you can see at small sizes.
      *
      * @param dot ink length of one dot
-     * @param width stroke width
+     * @param width the stroke width the gap must clear
      * @return the gap to use when a theme states none
      * @since 0.9.71
      */

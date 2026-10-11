@@ -71,7 +71,8 @@ class StartExplorersJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue and the logs,
+     *         "Start NetDb Explorers"
      */
     @Override
     public String getName() {
@@ -179,10 +180,10 @@ class StartExplorersJob extends JobImpl {
      * Dynamically determines the number of explorations to run based on system state.
      * Also respects configured overrides from context properties.
      *
-     * @param ctx router context
+     * @param ctx router context, read for the exploreBuckets property override
      * @param datastoreSize number of known peers in the data store
-     * @param lag maximum lag of job queue
-     * @param msgDelay message delay
+     * @param lag maximum lag of job queue, in ms
+     * @param msgDelay current message delay, in ms
      * @param highLoad whether the system is deemed under high load
      * @return number of explorations to run this cycle
      */
@@ -233,7 +234,7 @@ class StartExplorersJob extends JobImpl {
     /**
      * Schedules the next job run based on current load and configured delay properties.
      *
-     * @param ctx router context
+     * @param ctx router context, read for the exploreDelay property override
      * @param lag current max lag in ms
      * @param msgDelay current message delay in ms
      * @param highLoad whether the system is under high load

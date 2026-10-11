@@ -97,7 +97,8 @@ public class BuildTime {
      * The earliest it could possibly be right now.
      * Latest of the build time minus a day, or a hardcoded time.
      *
-     * @return the time
+     * @return the earliest build time in milliseconds since the epoch that
+     *         could still be genuine
      */
     public static long getEarliestTime() {
         return _earliestTime;
@@ -107,7 +108,8 @@ public class BuildTime {
      * The latest it could possibly be right now.
      * Hardcoded.
      *
-     * @return the time
+     * @return the latest build time in milliseconds since the epoch that
+     *         could still be genuine
      */
     public static long getLatestTime() {
         return _latestTime;
@@ -162,7 +164,7 @@ public class BuildTime {
 
     /**
      * Run the BuildTime command-line utility.
-     * @param args command-line arguments
+     * @param args ignored; this utility takes no command-line arguments
      */
     public static void main(String[] args) {
         System.out.println("Hard earliest: " + Instant.ofEpochMilli(EARLIEST_LONG));

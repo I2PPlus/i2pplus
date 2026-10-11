@@ -35,7 +35,7 @@ public class ConfigAdvancedHandler extends FormHandler {
 
     /**
      * Set whether to save configuration.
-     * @param moo ignored
+     * @param moo ignored; the value only marks saving as enabled
      */
     public void setShouldsave(String moo) { _shouldSave = true; }
 

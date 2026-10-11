@@ -170,7 +170,8 @@ class PacketHandler {
     /**
      * The handler status string.
      *
-     * @return the status
+     * @return a summary listing how many handlers are currently active, followed
+     *         by one "handler i" entry per handler in the pool
      */
     String getHandlerStatus() {
         StringBuilder rv = new StringBuilder();

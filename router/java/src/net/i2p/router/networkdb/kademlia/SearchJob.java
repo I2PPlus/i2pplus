@@ -290,7 +290,7 @@ public class SearchJob extends JobImpl {
     /**
      * True if the data is already locally stored
      *
-     * @return whether local
+     * @return true if the target is already in the local data store
      */
     private boolean isLocal() {return _facade.getDataStore().isKnown(_state.getTarget());}
 
@@ -583,7 +583,9 @@ public class SearchJob extends JobImpl {
      * @param expiration when the search should stop
      * @param peer unused here; see ExploreJob extension
      *
-     * @return a DatabaseLookupMessage
+     * @return the message to send to the peer; the base implementation always
+     *         throws, while ExploreJob returns a lookup message for the search
+     *         key, wrapped for encryption when the reply tunnel requires it
      */
     protected I2NPMessage buildMessage(TunnelId replyTunnelId, Hash replyGateway, long expiration, RouterInfo peer) {
         throw new UnsupportedOperationException("See ExploreJob");
@@ -902,7 +904,7 @@ public class SearchJob extends JobImpl {
          *
          * @param onFind success callback
          * @param onFail failure callback
-         * @param expiration deadline
+         * @param expiration when the search expires, on the context clock
          * @param isLease whether target is a LeaseSet
          */
         public Search(Job onFind, Job onFail, long expiration, boolean isLease) {

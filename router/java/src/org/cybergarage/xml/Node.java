@@ -53,7 +53,7 @@ public class Node {
     /**
      * Creates a Node with namespace and name.
      *
-     * @param ns namespace prefix
+     * @param ns the namespace prefix to prepend to name
      * @param name name to set for the node
      */
     public Node(String ns, String name) {
@@ -132,7 +132,7 @@ public class Node {
     /**
      * Sets the namespace and name of this node.
      *
-     * @param ns namespace prefix
+     * @param ns the namespace prefix to prepend to name
      * @param name name to set for the node
      */
     public void setName(String ns, String name) {

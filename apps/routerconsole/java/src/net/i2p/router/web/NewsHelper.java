@@ -282,7 +282,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      * If we haven't downloaded news yet, use the translated initial news file
-     * @return the content
+     * @return up to three entries no older than 60 days
      */
     @Override
     public String getContent() {

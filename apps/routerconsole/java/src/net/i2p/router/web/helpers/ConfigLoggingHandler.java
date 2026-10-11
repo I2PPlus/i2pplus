@@ -83,7 +83,7 @@ public class ConfigLoggingHandler extends FormHandler {
 
     /**
      * Set whether to compress log files.
-     * @param foo ignored
+     * @param foo the submitted value, ignored; compression is always enabled
      * @since 0.9.57
      */
     public void setLogcompress(String foo) {

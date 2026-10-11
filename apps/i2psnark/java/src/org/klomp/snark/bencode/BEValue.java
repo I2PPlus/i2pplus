@@ -78,7 +78,7 @@ public class BEValue {
      * Returns this BEValue as a byte[]. This operation only succeeds when the BEValue is actually a
      * byte[], otherwise it will throw a InvalidBEncodingException.
      *
-     * @return the bytes
+     * @return the stored array itself, not a copy of it
      * @throws InvalidBEncodingException if the value is not a byte array
      */
     public byte[] getBytes() throws InvalidBEncodingException {
@@ -121,7 +121,7 @@ public class BEValue {
      * Number, otherwise it will throw a InvalidBEncodingException. The returned long is the result
      * of <code>Number.longValue()</code>.
      *
-     * @return the long
+     * @return the value narrowed by {@link Number#longValue()}
      * @throws InvalidBEncodingException if the value is not a Number
      */
     public long getLong() throws InvalidBEncodingException {

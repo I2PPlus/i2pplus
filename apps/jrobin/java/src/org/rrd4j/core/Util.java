@@ -91,7 +91,7 @@ public class Util {
      *
      * <p><code>(System.currentTimeMillis() + 500L) / 1000L</code>
      *
-     * @return Current timestamp
+     * @return Current timestamp in seconds, rounded to the nearest whole second
      */
     public static long getTime() {
         return (System.currentTimeMillis() + 500L) / 1000L;
@@ -114,7 +114,7 @@ public class Util {
      *
      * @param timestamp Timestamp in seconds
      * @param step Step in seconds
-     * @return "Rounded" timestamp
+     * @return the timestamp floored to a multiple of step
      */
     public static long normalize(long timestamp, long step) {
         return timestamp - timestamp % step;
@@ -124,8 +124,8 @@ public class Util {
      * Returns the greater of two double values, but treats NaN as the smallest possible value. Note
      * that <code>Math.max()</code> behaves differently for NaN arguments.
      *
-     * @param x an argument
-     * @param y another argument
+     * @param x the first value, which loses to y when it is NaN
+     * @param y the second value, which loses to x when it is NaN
      * @return the lager of arguments
      */
     public static double max(double x, double y) {
@@ -136,8 +136,8 @@ public class Util {
      * Returns the smaller of two double values, but treats NaN as the greatest possible value. Note
      * that <code>Math.min()</code> behaves differently for NaN arguments.
      *
-     * @param x an argument
-     * @param y another argument
+     * @param x the first value, which loses to y when it is NaN
+     * @param y the second value, which loses to x when it is NaN
      * @return the smaller of arguments
      */
     public static double min(double x, double y) {
@@ -256,12 +256,12 @@ public class Util {
      *
      * <p>The date is resolved in the current time zone
      *
-     * @param year calendar year
-     * @param month Month (zero-based)
+     * @param year full year number, such as 2024
+     * @param month zero-based month, 0 for January through 11 for December
      * @param day Day in month
      * @param hour hour of day, 0-23
      * @param min minute within the hour, 0-59
-     * @return Corresponding timestamp
+     * @return unix epoch timestamp, resolved in the current time zone
      */
     public static long getTimestamp(int year, int month, int day, int hour, int min) {
         Calendar calendar = Calendar.getInstance();
@@ -275,10 +275,10 @@ public class Util {
      *
      * <p>The date is resolved in the current time zone
      *
-     * @param year calendar year
-     * @param month Month (zero-based)
+     * @param year full year number, such as 2024
+     * @param month zero-based month, 0 for January through 11 for December
      * @param day Day in month
-     * @return Corresponding timestamp
+     * @return unix epoch timestamp for midnight in the current time zone
      */
     public static long getTimestamp(int year, int month, int day) {
         return Util.getTimestamp(year, month, day, 0, 0);

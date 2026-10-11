@@ -97,7 +97,7 @@ public class XmlWriter implements AutoCloseable {
      * time zone {@link ZoneId}
      *
      * @param zid the time zone the returned writer renders time stamps in
-     * @return the XmlWriter
+     * @return a new writer sharing this one's stream, unused otherwise
      */
     public XmlWriter withTimeZone(ZoneId zid) {
         if (indent.length() != 0 || !openTags.isEmpty()) {
@@ -111,7 +111,7 @@ public class XmlWriter implements AutoCloseable {
      * Return a new {@link XmlWriter} that will format time stamp using this {@link ZoneId}
      *
      * @param doubleFormatter the formatter the returned writer renders DS values with
-     * @return the XmlWriter
+     * @return a new writer sharing this one's stream, unused otherwise
      */
     public XmlWriter withDoubleFormatter(DoubleFormater doubleFormatter) {
         if (indent.length() != 0 || !openTags.isEmpty()) {

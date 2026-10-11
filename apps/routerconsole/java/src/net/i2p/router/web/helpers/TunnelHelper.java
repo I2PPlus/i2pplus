@@ -47,7 +47,8 @@ public class TunnelHelper extends HelperBase {
     /**
      * Report whether the console is in advanced mode.
      *
-     * @return whether advanced
+     * @return the value of the routerconsole.advanced property, which enables the
+     *         extra pages the full console shows
      */
     @Override
     public boolean isAdvanced() {

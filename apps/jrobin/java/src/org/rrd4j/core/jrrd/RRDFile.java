@@ -196,7 +196,7 @@ class RRDFile implements Constants {
 
     /**
      * Reads a big-endian 8-byte float at the read position.
-     * @return the double
+     * @return the big-endian double read from the mapped file, advancing the position by 8 bytes
      */
     double readDouble() {
         return mappedByteBuffer.getDouble();
@@ -212,7 +212,7 @@ class RRDFile implements Constants {
 
     /**
      * Reads a long, narrowed to int, honouring this file's long size.
-     * @return the long
+     * @return the value read from the mapped file, narrowed to an int
      */
     int readLong() {
         if (longSize == 4) {

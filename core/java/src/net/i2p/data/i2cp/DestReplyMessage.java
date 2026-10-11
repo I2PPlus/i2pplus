@@ -53,7 +53,8 @@ public class DestReplyMessage extends I2CPMessageImpl {
 
     /**
      * Gets the destination this reply resolved to.
-     * @return the destination
+     * @return the full destination the lookup resolved to, or null if this reply carries
+     *         only a hash or reports a failure with an empty payload
      */
     public Destination getDestination() {
         return _dest;
@@ -62,7 +63,8 @@ public class DestReplyMessage extends I2CPMessageImpl {
     /**
      * Gets the hash of the destination.
      *
-     * @return the hash
+     * @return the hash copied from the request, identifying which lookup failed, or null
+     *         if this reply carries a full destination or an empty payload
      * @since 0.8.3
      */
     public Hash getHash() {
@@ -111,7 +113,7 @@ public class DestReplyMessage extends I2CPMessageImpl {
 
     /**
      * Reports this message as a destination lookup reply.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, the I2CP message type number of a lookup reply
      */
     @Override
     public int getType() {

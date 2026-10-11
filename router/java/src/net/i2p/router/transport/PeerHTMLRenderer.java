@@ -58,7 +58,7 @@ public class PeerHTMLRenderer {
      * Renders HTML for a peer with optional extended info.
      * Uses cached RouterInfo, country info, and reverse lookup cache.
      *
-     * @param peer Peer Hash
+     * @param peer the hash of the peer to render
      * @param extended Whether to show extended capabilities
      * @return HTML snippet representing peer
      */
@@ -159,7 +159,7 @@ public class PeerHTMLRenderer {
      * Renders the peer's capability HTML block.
      * Caches data and removes unnecessary repeated computation.
      *
-     * @param peer Peer Hash
+     * @param peer the hash of the peer whose capabilities are being rendered
      * @param inline If true, render inline without table wrapper
      * @return HTML snippet of peer capabilities
      */

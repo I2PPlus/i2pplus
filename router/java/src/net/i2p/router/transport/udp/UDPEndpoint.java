@@ -36,7 +36,7 @@ class UDPEndpoint implements SocketListener {
      * socket is opened here, so the address family flags are decided from
      * {@code bindAddress} alone; a null address means a dual-stack wildcard.
      *
-     * @param ctx router context
+     * @param ctx router context supplying the clock and property source
      * @param transport may be null for unit testing ONLY
      * @param listenPort -1 or the requested port, may not be honored
      * @param bindAddress null ok
@@ -158,7 +158,7 @@ class UDPEndpoint implements SocketListener {
     /**
      * The UDP sender.
      *
-     * @return the sender
+     * @return the UDPSender thread pool that transmits outbound packets
      */
     public UDPSender getSender() { return _sender; }
 

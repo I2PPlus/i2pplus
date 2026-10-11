@@ -561,7 +561,8 @@ public class MetaInfo {
     /**
      * Returns the requested name for the file or toplevel directory. If it is a toplevel directory
      * name getFiles() will return a non-null List of file name hierarchy name.
-     * @return the name
+     * @return the name the torrent requests for the file, or for the toplevel
+     *         directory when {@link #getFiles()} returns a file hierarchy
      */
     public String getName() {
         return name;

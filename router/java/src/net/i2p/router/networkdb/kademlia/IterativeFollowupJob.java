@@ -36,7 +36,7 @@ class IterativeFollowupJob extends SingleSearchJob {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue
      */
     @Override
     public String getName() { return "Start DbStoreReplyMsg Iterative Search"; }

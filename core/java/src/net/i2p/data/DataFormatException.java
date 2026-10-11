@@ -21,7 +21,7 @@ public class DataFormatException extends I2PException {
     /**
      * Detail message.
      * @param msg the detail message
-     * @param t the cause
+     * @param t the cause, retrievable with {@link #getCause()}
      */
     public DataFormatException(String msg, Throwable t) {
         super(msg, t);

@@ -54,7 +54,9 @@ public class I2PSocketException extends SocketException {
     /**
      * For programmatic action based on specific failure code
      *
-     * @return the status
+     * @return the failure code, either a {@code MessageStatusMessage} status
+     *         supplied to the integer constructor or {@code -1} when the
+     *         exception was constructed from a message alone
      */
     public int getStatus() {
         return _status;

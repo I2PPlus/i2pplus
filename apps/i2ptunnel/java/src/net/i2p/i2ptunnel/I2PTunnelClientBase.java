@@ -870,7 +870,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * taken per failure to decide whether another leg is worthwhile.
      *
      * @param dest The destination to connect to, non-null
-     * @param opt Socket options
+     * @param opt the socket options, passed to the connection manager for the
+     *            attempt
      * @param deadlineMs absolute wall-clock deadline in ms since the epoch,
      *                   or {@link #NO_DEADLINE} for no shared budget
      * @return a new I2PSocket
@@ -1588,7 +1589,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      * Does nothing if open is already false.
      * Sets open = false but does not notifyAll().
      *
-     * @return success
+     * @return true if the tunnel is closed, or false if connections were still
+     *         active and the close was refused
      */
     public boolean close(boolean forced) {
         I2PTunnel t = getTunnel();

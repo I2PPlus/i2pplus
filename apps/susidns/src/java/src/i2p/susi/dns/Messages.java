@@ -34,7 +34,7 @@ public class Messages {
      * Translate a string with one parameter.
      *
      * @param key the message key
-     * @param o the parameter
+     * @param o the value substituted into the translated message
      * @return the translated string
      * @since 0.9.11
      */
@@ -56,7 +56,7 @@ public class Messages {
      * Translate a string with one parameter (static).
      *
      * @param s the message key
-     * @param o the parameter
+     * @param o the value substituted into the translated message
      * @return the translated string
      */
     public static String getString(String s, Object o) {
@@ -78,7 +78,7 @@ public class Messages {
     /**
      * Translate a string with plural form (ngettext).
      *
-     * @param n the count
+     * @param n the count that selects the singular or the plural form
      * @param s the singular form
      * @param p the plural form
      * @return the translated string

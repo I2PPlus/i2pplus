@@ -254,7 +254,8 @@ class FragmentedMessage {
     /**
      * Whether this message has been released after completion.
      *
-     * @return the released
+     * @return true once every fragment has been written out to the caller's buffer, after
+     *         which this message must not be read again
      */
     public boolean getReleased() { return _completed; }
 

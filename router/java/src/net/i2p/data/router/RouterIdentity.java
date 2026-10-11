@@ -40,7 +40,7 @@ public class RouterIdentity extends KeysAndCert {
      *
      * Not recommended for direct use.
      * Use of RouterInfo.isHidden() (which calls this) is preferred.
-     * @return whether hidden
+     * @return true if the certificate type limits this router's reachability
      */
     public boolean isHidden() {
         return (_certificate != null) && (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_HIDDEN);

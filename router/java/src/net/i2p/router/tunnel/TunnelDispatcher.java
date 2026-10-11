@@ -1269,7 +1269,7 @@ public class TunnelDispatcher implements Service {
      * outbound capacity.
      *
      * @param loc location in tunnel (IBGP, PARTICIPANT, OBEP)
-     * @param type message type
+     * @param type I2NP message type, reported in the drop log only
      * @param length message size in bytes
      * @param bwe per-tunnel bandwidth estimator (may be null)
      * @return true to drop, false to accept

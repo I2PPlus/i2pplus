@@ -221,12 +221,12 @@ public class Main implements RouterApp, NotificationService {
     /**
      * Send a notification to the user.
      *
-     * @param source unsupported
-     * @param category unsupported
-     * @param priority unsupported
+     * @param source ignored, the tray implementation does not use it
+     * @param category ignored, the tray implementation does not use it
+     * @param priority passed to TrayManager.displayMessage as the notice level
      * @param title for the popup, translated
-     * @param message translated
-     * @param path unsupported
+     * @param message translated, shown as the body of the tray balloon
+     * @param path icon path handed to the tray, may be null
      * @return 0, or -1 on failure
      */
     @Override

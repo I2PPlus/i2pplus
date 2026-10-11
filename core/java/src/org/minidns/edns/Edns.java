@@ -273,7 +273,7 @@ public class Edns {
          * Sets the UDP payload size.
          *
          * @param udpPayloadSize the UDP payload size
-         * @return this builder
+         * @return this builder, so that calls can be chained
          * @throws IllegalArgumentException if the payload size is greater than 65536
          */
         public Builder setUdpPayloadSize(int udpPayloadSize) {
@@ -288,7 +288,7 @@ public class Edns {
          * Sets the DNSSEC OK flag.
          *
          * @param dnssecOk whether DNSSEC OK flag should be set
-         * @return this builder
+         * @return this builder, so that calls can be chained
          */
         public Builder setDnssecOk(boolean dnssecOk) {
             this.dnssecOk = dnssecOk;
@@ -298,7 +298,7 @@ public class Edns {
         /**
          * Sets the DNSSEC OK flag to true.
          *
-         * @return this builder
+         * @return this builder, so that calls can be chained
          */
         public Builder setDnssecOk() {
             dnssecOk = true;
@@ -309,7 +309,7 @@ public class Edns {
          * Adds an EDNS option.
          *
          * @param ednsOption the EDNS option to add
-         * @return this builder
+         * @return this builder, so that calls can be chained
          */
         public Builder addEdnsOption(EdnsOption ednsOption) {
             if (variablePart == null) {

@@ -64,7 +64,7 @@ public class CryptoCheck {
 
     /**
      * Return whether unlimited strength is available.
-     * @return whether unlimited
+     * @return true if the JCE permits AES keys of 256 bits or more
      */
     public static boolean isUnlimited() {
         return _isUnlimited;

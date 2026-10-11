@@ -77,7 +77,7 @@ class DHTNodes {
     /**
      * Number of known nodes, not total net size.
      *
-     * @return known nodes
+     * @return the size of the known-node map, not the Kademlia table
      */
     public int size() {
         return _nodeMap.size();

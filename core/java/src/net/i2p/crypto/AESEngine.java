@@ -193,8 +193,8 @@ public class AESEngine {
      *
      * @param payload data to encrypt
      * @param inIndex starting index in payload
-     * @param sessionKey unused
-     * @param out output buffer
+     * @param sessionKey the private session key, unused because this base class only copies
+     * @param out buffer receiving the copy, filled from {@code outIndex} to its end
      * @param outIndex starting index in output
      */
     public void encryptBlock(byte[] payload, int inIndex, SessionKey sessionKey, byte[] out, int outIndex) {
@@ -204,10 +204,10 @@ public class AESEngine {
     /**
      * This just copies payload to rv, see extension for the real thing.
      *
-     * @param payload encrypted data
+     * @param payload encrypted data, copied through unchanged by this base class
      * @param inIndex starting index in payload
      * @param sessionKey private session key
-     * @param rv output buffer
+     * @param rv buffer receiving the copy, filled from {@code outIndex} to its end
      * @param outIndex starting index in output
      */
     public void decryptBlock(byte[] payload, int inIndex, SessionKey sessionKey, byte[] rv, int outIndex) {
@@ -224,7 +224,7 @@ public class AESEngine {
      * @param context I2P application context
      * @param curSize current data size
      * @param minPaddedSize minimum padded size
-     * @return padding bytes
+     * @return random bytes to append, as many as {@link #getPaddingSize} requires
      * @since 0.9.38 moved from ElGamalAESEngine
      */
     public static final byte[] getPadding(I2PAppContext context, int curSize, long minPaddedSize) {

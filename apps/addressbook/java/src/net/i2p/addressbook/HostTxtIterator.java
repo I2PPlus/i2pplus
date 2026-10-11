@@ -99,7 +99,7 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
     /**
      * Not supported.
      *
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; this iterator cannot remove
      */
     public void remove() {throw new UnsupportedOperationException();}
 

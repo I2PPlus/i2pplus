@@ -62,8 +62,8 @@ public class RrdMemoryBackendFactory extends RrdBackendFactory {
     /**
      * Removes the storage with the given ID from the memory.
      *
-     * @param id Storage ID
-     * @return a boolean.
+     * @param id Storage ID, the key this factory registered the storage under
+     * @return true if a storage was removed, false if the ID was unknown
      */
     public boolean delete(String id) {
         if (backends.containsKey(id)) {

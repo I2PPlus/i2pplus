@@ -694,7 +694,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param nInfo the peer to announce to
      * @param maxWait the maximum time to wait (ms) or 0 to return immediately.
      * @param isSeed true if seed, false if leech
-     * @return success
+     * @return true if the peer replied with a pong, or - when maxWait was 0 -
+     *         true as soon as the announce was queued without waiting
      */
     private boolean announce(byte[] ih, NodeInfo nInfo, long maxWait, boolean isSeed) {
         InfoHash iHash = new InfoHash(ih);
@@ -976,7 +977,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      *
      * @param nInfo who to send it to
      * @param msgID the message ID to respond to
-     * @return success
+     * @return true if the response was queued for delivery to the peer
      */
     private boolean sendPong(NodeInfo nInfo, MsgID msgID) {
         if (_log.shouldDebug()) {
@@ -994,7 +995,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param nInfo who to send it to
      * @param msgID the message ID to respond to
      * @param ids the concatenated 54-byte node infos
-     * @return success
+     * @return true if the response was queued for delivery to the peer
      */
     private boolean sendNodes(NodeInfo nInfo, MsgID msgID, byte[] ids) {
         return sendNodes(nInfo, msgID, null, ids);
@@ -1007,7 +1008,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param msgID the message ID to respond to
      * @param token the token to include, or null for find_node responses
      * @param ids the concatenated 54-byte node infos
-     * @return success
+     * @return true if the response was queued for delivery to the peer
      */
     private boolean sendNodes(NodeInfo nInfo, MsgID msgID, Token token, byte[] ids) {
         return sendNodes(nInfo, msgID, token, ids, null, null);
@@ -1022,7 +1023,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param ids the concatenated 54-byte node infos
      * @param bFsd 256-byte seed filter, null to omit
      * @param bFpe 256-byte peer filter, null to omit
-     * @return success
+     * @return true if the response was queued for delivery to the peer
      */
     private boolean sendNodes(
             NodeInfo nInfo, MsgID msgID, Token token, byte[] ids, byte[] bFsd, byte[] bFpe) {
@@ -1052,7 +1053,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param peers the list of peer hashes to send
      * @param bFsd 256-byte seed filter, null to omit
      * @param bFpe 256-byte peer filter, null to omit
-     * @return success
+     * @return true if the response was queued for delivery to the peer
      */
     private boolean sendPeers(
             NodeInfo nInfo, MsgID msgID, Token token, List<byte[]> peers, byte[] bFsd, byte[] bFpe) {
@@ -1145,7 +1146,8 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param nInfo who to send it to
      * @param msgID the message ID to respond to
      * @param map the bencoded response message
-     * @return success
+     * @return true if the message was queued for delivery to the peer; false if
+     *         it was dropped as self-addressed or as having no destination
      */
     @SuppressWarnings("unchecked")
     private boolean sendResponse(NodeInfo nInfo, MsgID msgID, Map<String, Object> map) {
@@ -1185,7 +1187,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
 
      *
      * @param nInfo the node to look up
-     * @return success
+     * @return true if a destination was resolved and cached on the node
      */
     private boolean lookupDest(NodeInfo nInfo) {
         if (_log.shouldInfo()) {
@@ -1220,7 +1222,9 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * @param toPort the port to send to
      * @param map the bencoded message to send
      * @param repliable true for all but announce
-     * @return success
+     * @return true if the datagram was handed to the session for delivery;
+     *         false if the session is closed, the target is ourselves, or the
+     *         send failed
      */
     private boolean sendMessage(
             Destination dest, int toPort, Map<String, Object> map, boolean repliable) {
@@ -1769,7 +1773,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
      * Receive concatenated 54-byte NodeInfos and return as a list. Adds all received nodeinfos
      * to our DHT.
      *
-     * @param nInfo the sender
+     * @param nInfo the peer the node list arrived from, used for logging only
      * @param ids the concatenated node info bytes
      * @return list of node infos
      * @throws InvalidBEncodingException if the data is malformed
@@ -1815,7 +1819,7 @@ public class KRPC implements I2PSessionMuxedListener, DHT {
     /**
      * Receive 32-byte hashes as peer list.
      *
-     * @param nInfo the sender
+     * @param nInfo the peer the hash list arrived from, used for logging only
      * @param peers the list of peer hash values
      * @return list of peer hashes
      * @throws InvalidBEncodingException if the data is malformed

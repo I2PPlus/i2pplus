@@ -192,7 +192,7 @@ private static final boolean VALIDATE = true;
     /**
      * Create a DnsLabel from a string.
      * @param label the label string
-     * @return the DnsLabel
+     * @return a {@link LdhLabel} if the string is a well-formed LDH label, and a {@link NonLdhLabel} otherwise
      */
     public static DnsLabel from(String label) {
         if (label == null || label.isEmpty()) {

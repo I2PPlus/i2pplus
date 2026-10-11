@@ -211,7 +211,7 @@ public class HTTP {
      * Creates a request host URL from host and port.
      *
      * @param host host name or IP address
-     * @param port port number
+     * @param port the port to append, used as given with no default substituted
      * @return URL string in format "http://host:port"
      */
     public static final String getRequestHostURL(String host, int port) {

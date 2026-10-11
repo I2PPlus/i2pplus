@@ -94,11 +94,11 @@ public final class GraphicsUtils {
     /**
      * Creates a polygon from the specified {@code x} and {@code y} coordinate arrays.
      *
-     * @param xPoints the x-points.
-     * @param yPoints the y-points.
+     * @param xPoints the x-coordinates, read up to index {@code nPoints - 1}
+     * @param yPoints the y-coordinates, read up to index {@code nPoints - 1}
      * @param nPoints the number of points to use for the polyline.
-     * @param close closed?
-     * @return A polygon.
+     * @param close true to draw a line back to the first point
+     * @return the polygon as a path.
      */
     public static GeneralPath createPolygon(
             int[] xPoints, int[] yPoints, int nPoints, boolean close) {

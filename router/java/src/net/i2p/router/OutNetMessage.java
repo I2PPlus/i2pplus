@@ -136,7 +136,8 @@ public class OutNetMessage implements CDPQEntry {
      * Stamp the message's progress.
      * Only useful if log level is INFO or DEBUG
      *
-     * @param eventName what occurred
+     * @param eventName the label this stamp is filed under; reusing a name overwrites its
+     *                  earlier time and appends a duplicate to the order list
      */
     public void timestamp(String eventName) {
         if (_shouldTimestamp) {
@@ -169,7 +170,8 @@ public class OutNetMessage implements CDPQEntry {
      * Specifies the message to be sent.
      * Generally non-null but may be null in special cases.
      *
-     * @return the message
+     * @return the I2NP message to be sent, or null for the registry-only placeholder, in which
+     *         case the message type, ID and size are all zero
      */
     public I2NPMessage getMessage() {return _message;}
 
@@ -225,7 +227,8 @@ public class OutNetMessage implements CDPQEntry {
      * priority.  Higher priority messages should be delivered before lower
      * priority ones, though some algorithm may be used to avoid starvation.
      *
-     * @return the priority
+     * @return the delivery priority, one of the {@code PRIORITY_} constants, where higher
+     *         numbers are delivered first
      */
     public int getPriority() {return _priority;}
 

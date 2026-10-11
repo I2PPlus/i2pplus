@@ -156,9 +156,9 @@ public final class Reader implements Closeable {
      * I2P -
      * Write all IPv4 address ranges for the given country to out.
      *
-     * @param country two-letter upper-case
+     * @param country the ISO 3166-1 alpha-2 code, upper case
      * @param out caller must close
-     * @throws IOException on error
+     * @throws IOException if the database cannot be read or the output cannot be written
      * @since 0.9.48
      */
     public void countryToIP(String country, Writer out) throws IOException {
@@ -182,7 +182,7 @@ public final class Reader implements Closeable {
         /**
          * Write all IPv4 address ranges for the given country to out.
          *
-         * @param country two-letter upper-case
+         * @param country the ISO 3166-1 alpha-2 code, upper case
          */
         public Walker(String country, Writer out) throws IOException {
             _country = country;
@@ -205,7 +205,7 @@ public final class Reader implements Closeable {
 
         /**
          * Recursive, depth first
-         * @param ip big endian
+         * @param ip the IPv4 prefix walked so far, packed into the high bits of an int
          */
         private void walk(int record, int ip, int depth) throws IOException {
             if (record == _nodeCount) {

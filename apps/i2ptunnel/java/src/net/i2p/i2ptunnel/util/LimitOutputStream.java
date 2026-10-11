@@ -65,7 +65,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
 
     /**
      * Whether setDone() has already run, so the done callback cannot fire twice.
-     * @return whether done
+     * @return true if setDone() has already run
      */
     protected boolean isDone() { return _isDone; }
 

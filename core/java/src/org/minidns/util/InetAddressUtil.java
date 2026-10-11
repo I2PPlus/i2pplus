@@ -33,7 +33,8 @@ public class InetAddressUtil {
      * Creates an Inet4Address from the given CharSequence.
      *
      * @param cs the CharSequence containing the IPv4 address
-     * @return the Inet4Address
+     * @return an {@link Inet4Address} built from the four octets of {@code cs} as
+     *         its raw address bytes, with no hostname set
      * @throws IllegalArgumentException if the input is not a valid IPv4 address
      */
     public static Inet4Address ipv4From(CharSequence cs) {
@@ -61,7 +62,8 @@ public class InetAddressUtil {
      * Creates an Inet6Address from the given CharSequence.
      *
      * @param cs the CharSequence containing the IPv6 address
-     * @return the Inet6Address
+     * @return an {@link Inet6Address} built from the hexadecimal groups of
+     *         {@code cs} as raw address bytes, with no hostname set
      * @throws IllegalArgumentException if the input is not a valid IPv6 address
      */
     public static Inet6Address ipv6From(CharSequence cs) {

@@ -163,7 +163,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Current CSRF nonce, rotating every 5 minutes.
      *
-     * @return the nonce
+     * @return the current CSRF nonce, rotated every NONCE_ROTATION_MS
      * @since 0.9.70+
      */
     private synchronized long getNonce() {
@@ -389,7 +389,7 @@ public class I2PSnarkServlet extends BasicServlet {
  * only shared field it reads (_resourceBase) is volatile.
  *
  * @param pathInContext should always start with /
- * @return the resource
+ * @return the resolved file, or null if it does not exist
  */
     @Override
     public File getResource(String pathInContext) {
@@ -2230,7 +2230,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Search torrents for matching terms
      *
      * @param search non-null
-     * @param snarks unmodified
+     * @param snarks torrents to search; not modified
      * @return null if no valid search, or matching torrents in same order, empty if no match
      * @since 0.9.58
      */
@@ -2855,8 +2855,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * Handles adding a torrent from a URL or magnet link.
      *
      * @param newURL the URL or magnet link string
-     * @param dataDir data directory for torrents
-     * @param reqw wrapped request
+     * @param dataDir directory the new torrent's files are created under
+     * @param reqw the wrapped request, read for the nofilter_ parameters
      */
     private void handleAddURL(String newURL, File dataDir, RequestWrapper reqw) {
         String newDir = reqw.getParameter("nofilter_newDir");
@@ -2938,8 +2938,8 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Handles adding a torrent from a file path.
      *
-     * @param newURL file path to .torrent file
-     * @param dataDir data directory
+     * @param newURL file path to .torrent file, file:// prefix tolerated
+     * @param dataDir directory the torrent's storage is resolved against
      */
     private void handleAddFromFilePath(String newURL, File dataDir) {
         if (newURL.startsWith("file://")) {
@@ -3614,8 +3614,8 @@ public class I2PSnarkServlet extends BasicServlet {
      * {@link #getQueryString} emits, so the redirect target can never
      * be an attacker-supplied URL.
      *
-     * @param req the request
-     * @param resp the response
+     * @param req request whose URL supplies the redirect target
+     * @param resp response the 302 is written to
      * @param p the query string, may be null or empty
      * @throws IOException on write failure
      * @since 0.9.5
@@ -3643,7 +3643,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Process tracker form submission.
      *
      * @param action the tracker action to perform, as submitted by the form
-     * @param req the request
+     * @param req the request carrying the submitted tracker parameters
      */
     private void processTrackerForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save tracker configuration"))) {
@@ -3725,7 +3725,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Process torrent create filter form submission.
      *
      * @param action the tracker action to perform, as submitted by the form
-     * @param req the request
+     * @param req the request carrying the submitted tracker parameters
      */
     private void processTorrentCreateFilterForm(String action, HttpServletRequest req) {
         if (action.equals(_t("Delete selected")) || action.equals(_t("Save Filter Configuration"))) {
@@ -4314,9 +4314,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param snark the torrent whose state and peers are being rendered
      * @param curPeers current connected peers
      * @param knownPeers total known peers
-     * @param downBps download speed
-     * @param upBps upload speed
-     * @param isRunning running state
+     * @param downBps current download rate in bytes per second
+     * @param upBps current upload rate in bytes per second
+     * @param isRunning true if the torrent is started
      * @param remaining data left to download
      * @param needed data needed for completion
      * @param noThinsp spacing control flag
@@ -5577,7 +5577,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * assembly stays allocation-light; only the directory display name is
      * passed in. Extracted from getListHTML.
      *
-     * @param buf target buffer
+     * @param buf StringBuilder the markup is appended to
      * @param directory decoded directory display name for the page title,
      *                  escaped here; may be empty
      * @since 0.9.71+
@@ -5639,7 +5639,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Renders the error table shown when the requested path within the torrent
      * does not exist on disk. Extracted from getListHTML.
      *
-     * @param buf target buffer
+     * @param buf StringBuilder the markup is appended to
      * @param r the missing resource path
      * @param base the encoded base URL
      * @param tName the torrent name, escaped here
@@ -5660,7 +5660,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * torrent. Static: no servlet state required beyond the parameters.
      * Extracted from getListHTML.
      *
-     * @param buf target buffer
+     * @param buf StringBuilder the markup is appended to
      * @param base the encoded base URL with trailing slash
      * @param tName the torrent name, escaped here
      * @param mime the non-null media MIME type
@@ -5774,11 +5774,11 @@ public class I2PSnarkServlet extends BasicServlet {
      * click. Shared by all sortable columns of the file table; dedupes four
      * identical link/icon sequences in getListHTML.
      *
-     * @param buf target buffer
+     * @param buf StringBuilder the link markup is appended to
      * @param base the encoded base URL
      * @param icon icon name (without extension)
      * @param label accessible text for the icon
-     * @param tooltip hover text
+     * @param tooltip text for the title attribute
      * @param nextSort precomputed next sort key
      * @param id anchor id, or null for none
      * @since 0.9.71+
@@ -5862,7 +5862,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * hasCompleteAudio is evaluated once per view and passed in, replacing two
      * recursive walks. Extracted from getListHTML.
      *
-     * @param buf target buffer
+     * @param buf StringBuilder the markup is appended to
      * @param base the encoded base URL with trailing slash
      * @param sortParam current sort key, may be null
      * @param decodedBase the decoded base URL
@@ -5910,7 +5910,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param ec comments enabled globally
      * @param esc comments enabled for this torrent
      * @param tabLabel translated label for the section tab
-     * @param buf target buffer
+     * @param buf StringBuilder the markup is appended to
      * @since 0.9.71+
      */
     private void renderCommentsSection(Snark snark, boolean er, boolean ec, boolean esc,
@@ -6462,7 +6462,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Whether the MIME type is audio.
      *
      * @param mime non-null
-     * @return whether audio
+     * @return true for browser-playable audio, excluding playlists
      * @since 0.9.44
      */
     private static boolean isAudio(String mime) {
@@ -6476,7 +6476,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Whether the MIME type is video.
      *
      * @param mime non-null
-     * @return whether video
+     * @return true for browser-playable video, excluding the excluded types
      * @since 0.9.44
      */
     private static boolean isVideo(String mime) {
@@ -6592,7 +6592,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Append playlist entries in m3u format to buf.
      * Recursive.
      *
-     * @param buf out parameter
+     * @param buf StringBuilder the m3u lines are appended to
      * @param reqURL encoded, WITH trailing slash
      * @since 0.9.44
      */
@@ -6822,7 +6822,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Extracted from displayComments.
      *
      * @param ctx non-null rendering context
-     * @param buf target buffer
+     * @param buf StringBuilder the markup is appended to
      * @since 0.9.71+
      */
     private void renderCommentsHeader(CommentsContext ctx, StringBuilder buf) {
@@ -7100,7 +7100,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Save file priority changes for a torrent.
      *
-     * @param snark the torrent
+     * @param snark torrent the change applies to
      * @param postParams the form params
      */
     private void savePriorities(Snark snark, Map<String, String[]> postParams) {
@@ -7128,7 +7128,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Save comment changes for a torrent.
      *
-     * @param snark the torrent
+     * @param snark torrent the change applies to
      * @param postParams the form params
      */
     private void saveComments(Snark snark, Map<String, String[]> postParams) {
@@ -7146,7 +7146,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Delete comments for a torrent.
      *
-     * @param snark the torrent
+     * @param snark torrent the change applies to
      * @param postParams the form params
      */
     private void deleteComments(Snark snark, Map<String, String[]> postParams) {
@@ -7169,7 +7169,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Save comment enabled setting for a torrent.
      *
-     * @param snark the torrent
+     * @param snark torrent the change applies to
      * @param postParams the form params
      */
     private void saveCommentsSetting(Snark snark, Map<String, String[]> postParams) {
@@ -7182,7 +7182,7 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * @param snark non-null
      * @param base the base path
-     * @param buf output buffer
+     * @param buf StringBuilder the edit section is appended to
      */
     private void displayTorrentEdit(Snark snark, String base, StringBuilder buf) {
         if (snark == null) {return;}
@@ -7731,7 +7731,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Whether the user agent cannot handle collapsible panels.
      *
-     * @param req the request
+     * @param req request whose user-agent header is inspected
      * @return true if panels should not be collapsed
      */
     static boolean noCollapsePanels(HttpServletRequest req) {
@@ -7802,7 +7802,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Whether we are running in standalone mode.
      *
-     * @return whether standalone
+     * @return true if there is no router context to connect through
      * @since 0.9.54+
      */
     boolean isStandalone() {

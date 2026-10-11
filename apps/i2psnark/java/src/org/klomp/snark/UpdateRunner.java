@@ -66,7 +66,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * Whether the runner is running.
      *
-     * @return whether running
+     * @return true while the update task is in progress, false once it has
+     *         finished or been shut down
      */
     @Override
     public boolean isRunning() {
@@ -85,7 +86,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * The type.
      *
-     * @return the type
+     * @return the {@link UpdateType} this runner was created for, telling the
+     *         manager which kind of update the torrent delivers
      */
     @Override
     public UpdateType getType() {
@@ -95,7 +97,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * The method.
      *
-     * @return the method
+     * @return {@link UpdateMethod#TORRENT}, the only method this runner uses
      */
     @Override
     public UpdateMethod getMethod() {
@@ -389,7 +391,7 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * Add a message from the torrent to the console.
      *
-     * @param snark the torrent
+     * @param snark the Snark instance whose saved comments are returned
      */
     @Override
     public CommentSet getSavedComments(Snark snark) {
@@ -399,8 +401,8 @@ class UpdateRunner implements UpdateTask, CompleteListener {
     /**
      * Save comments for the torrent.
      *
-     * @param snark the torrent
-     * @param comments to save
+     * @param snark the Snark instance whose torrent lock is held
+     * @param comments the comment set to write out while the lock is held
      */
     @Override
     public void locked_saveComments(Snark snark, CommentSet comments) {

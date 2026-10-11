@@ -1487,7 +1487,7 @@ class GraphRenderer {
      *
      * @param dot ink length of one dot; zero asks for solid gridlines
      * @param gap space after the dot, or zero to derive it from the stroke width
-     * @return the stroke
+     * @return a 1-pixel-wide dashed stroke, or a solid one when dot is zero
      */
     private static Stroke gridStroke(float dot, float gap) {
         return RrdGraphConstants.gridStroke(1f, dot, gap);
@@ -1867,7 +1867,7 @@ class GraphRenderer {
              * Sets when the plotted window begins.
              *
              * @param v window start, in wall-clock ms
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder start(long v) { start = v; return this; }
 
@@ -1875,7 +1875,7 @@ class GraphRenderer {
              * Sets when the plotted window ends.
              *
              * @param v window end, in wall-clock ms
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder end(long v) { end = v; return this; }
 
@@ -1883,7 +1883,7 @@ class GraphRenderer {
              * Sets the archive step the window is measured in.
              *
              * @param v the rate's period in ms, which is also the archive step
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder period(long v) { period = v; return this; }
 
@@ -1891,7 +1891,7 @@ class GraphRenderer {
              * Sets the frame width.
              *
              * @param v frame width in pixels
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder width(int v) { width = v; return this; }
 
@@ -1899,7 +1899,7 @@ class GraphRenderer {
              * Sets the frame height.
              *
              * @param v frame height in pixels
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder height(int v) { height = v; return this; }
 
@@ -1907,7 +1907,7 @@ class GraphRenderer {
              * Sets how many periods the window covers.
              *
              * @param v periods in the window
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder periodCount(int v) { periodCount = v; return this; }
 
@@ -1915,7 +1915,7 @@ class GraphRenderer {
              * Selects the theme the frame is drawn in.
              *
              * @param v console theme name every colour, font and width is read from
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder theme(String v) { theme = v; return this; }
 
@@ -1923,7 +1923,7 @@ class GraphRenderer {
              * Chooses whether the legend, and everything drawn with it, is omitted.
              *
              * @param v true to omit the legend and everything drawn with it
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder hideLegend(boolean v) { hideLegend = v; return this; }
 
@@ -1931,7 +1931,7 @@ class GraphRenderer {
              * Chooses whether the grid lines are omitted.
              *
              * @param v true to omit the grid lines
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder hideGrid(boolean v) { hideGrid = v; return this; }
 
@@ -1939,7 +1939,7 @@ class GraphRenderer {
              * Chooses whether the title derived from the stat name is omitted.
              *
              * @param v true to omit the title derived from the stat name
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder hideTitle(boolean v) { hideTitle = v; return this; }
 
@@ -1947,7 +1947,7 @@ class GraphRenderer {
              * Chooses whether the event count is plotted instead of the stat.
              *
              * @param v true to plot the event count instead of the stat itself
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder showEvents(boolean v) { showEvents = v; return this; }
 
@@ -1955,7 +1955,7 @@ class GraphRenderer {
              * Chooses whether rrd4j's signature line is kept.
              *
              * @param v true to keep rrd4j's signature line
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder showCredit(boolean v) { showCredit = v; return this; }
 
@@ -1963,7 +1963,7 @@ class GraphRenderer {
              * Chooses whether each router restart is ruled off.
              *
              * @param v true to rule off each router restart inside the window
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder showRestarts(boolean v) { showRestarts = v; return this; }
 
@@ -1971,7 +1971,7 @@ class GraphRenderer {
              * Sets the title, replacing the one derived from the stat name.
              *
              * @param v title to draw, or null to derive one from the stat name
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder titleOverride(String v) { titleOverride = v; return this; }
 
@@ -1979,7 +1979,7 @@ class GraphRenderer {
              * Sets the rate this pass plots.
              *
              * @param v the tracked rate, for its period, stat name and description
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder rate(Rate v) { rate = v; return this; }
 
@@ -1987,7 +1987,7 @@ class GraphRenderer {
              * Plot a list of extra series alongside the primary.
              *
              * @param v extra series to plot on the same graph, or null/empty for none
-             * @return this builder
+             * @return this builder, for chaining calls
              * @since 0.9.71+
              */
             Builder extras(List<GraphListener> v) { extras = v; return this; }
@@ -1996,7 +1996,7 @@ class GraphRenderer {
              * Draw the primary as a line rather than as a filled area.
              *
              * @param v true to draw the primary as a line instead of a filled area
-             * @return this builder
+             * @return this builder, for chaining calls
              * @since 0.9.71+
              */
             Builder allLines(boolean v) { allLines = v; return this; }
@@ -2005,7 +2005,7 @@ class GraphRenderer {
              * Draw every series as a filled path under a thin line.
              *
              * @param v render every series as a filled path under a thin line
-             * @return this builder
+             * @return this builder, for chaining calls
              * @since 0.9.71+
              */
             Builder fillSeries(boolean v) { fillSeries = v; return this; }
@@ -2014,7 +2014,7 @@ class GraphRenderer {
              * Plot one extra series alongside the primary, wrapped into the extras list.
              *
              * @param v single extra series to plot on the same graph, or null
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder lsnr2(GraphListener v) {
                 extras = (v == null) ? null : java.util.Collections.singletonList(v);
@@ -2025,7 +2025,7 @@ class GraphRenderer {
              * Label the axis and the dates in UTC.
              *
              * @param v true to label the axis and the dates in UTC
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder useUtc(boolean v) { useUtc = v; return this; }
 
@@ -2033,7 +2033,7 @@ class GraphRenderer {
              * Interpolate between samples instead of stepping.
              *
              * @param v true to interpolate between samples instead of stepping
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder smooth(boolean v) { smooth = v; return this; }
 
@@ -2041,7 +2041,7 @@ class GraphRenderer {
              * Ask for the plot metadata rather than a drawing.
              *
              * @param v true to emit JSON
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder meta(boolean v) { meta = v; return this; }
 
@@ -2049,7 +2049,7 @@ class GraphRenderer {
              * Keep the historical zero-floored y-axis.
              *
              * @param v true to keep the historical zero-floored y-axis
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder forceZero(boolean v) { forceZero = v; return this; }
 
@@ -2057,7 +2057,7 @@ class GraphRenderer {
              * Select the fonts and the translated title for one language.
              *
              * @param v active UI language code
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder lang(String v) { lang = v; return this; }
 
@@ -2065,7 +2065,7 @@ class GraphRenderer {
              * Name the listener whose RRD this pass plots.
              *
              * @param v the listener holding the RRD to plot
-             * @return this builder
+             * @return this builder, for chaining calls
              */
             Builder listener(GraphListener v) { listener = v; return this; }
 

@@ -85,7 +85,10 @@ public class StatHelper extends HelperBase {
 
     /**
      * Retrieve peer profile or stats based on usage
-     * @return the profile
+     * @return the HTML for the requested peer's profile: the "No peer
+     *         specified" notice if none was given, the full profile for a
+     *         complete destination hash, the first profile whose hash starts
+     *         with the given prefix, or a "Peer profile unavailable" message
      */
     public String getProfile() {
         if (_peer == null || _peer.length() <= 0) {
@@ -105,7 +108,9 @@ public class StatHelper extends HelperBase {
 
     /**
      * Get stats page as string or write to output stream
-     * @return the stats
+     * @return the rendered stats page, or an empty string when an output
+     *         stream was supplied and the page was written there instead; an
+     *         error message if generation failed
      */
     public String getStats() {
         StatsGenerator gen = new StatsGenerator(_context);

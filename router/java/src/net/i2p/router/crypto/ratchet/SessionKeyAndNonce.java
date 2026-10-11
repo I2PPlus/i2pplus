@@ -60,7 +60,8 @@ class SessionKeyAndNonce extends SessionKey {
 
     /**
      * For ES, else 0
-     * @return the nonce
+     * @return the message nonce in the range 0 to 65535 that this session key
+     *         is paired with, or 0 when no established session key is held yet
      */
     public int getNonce() {
         return _nonce;

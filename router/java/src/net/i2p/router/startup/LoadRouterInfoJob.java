@@ -59,7 +59,8 @@ class LoadRouterInfoJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue and the logs,
+     *         "Load Local RouterInfo"
      */
     @Override
     public String getName() { return "Load Local RouterInfo"; }
@@ -241,7 +242,8 @@ class LoadRouterInfoJob extends JobImpl {
     /**
      * Does our RI ElGamal private key length match the configuration?
      * If not, return true.
-     * @return whether rebuild
+     * @return true if the ElGamal key length disagrees with the configured
+     *         exponent, so the RouterInfo must be rebuilt; at most once ever
      * @since 0.9.8
      */
     private boolean shouldRebuild(PrivateKey privkey) {

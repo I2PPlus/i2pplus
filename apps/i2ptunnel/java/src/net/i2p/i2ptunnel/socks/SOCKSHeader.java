@@ -134,7 +134,7 @@ public class SOCKSHeader {
     /**
      * Return the header bytes as parsed, for writing back to a datagram.
      *
-     * @return the bytes
+     * @return the header bytes as parsed, not a copy
      */
     public byte[] getBytes() {
         return header;

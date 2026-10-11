@@ -140,7 +140,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * CoDel priority blocking queue with explicit target and interval.
      *
      * @param ctx the I2P application context
-     * @param name for stats
+     * @param name the queue's short name, used as the stat name prefix
      * @param initialCapacity the initial capacity for the priority queue
      * @param target the CoDel target delay in ms
      * @param interval the CoDel interval in ms
@@ -154,7 +154,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * called "Average queue delay (ms)", indistinguishable from one another.
      *
      * @param queueName the queue's short name, as used in its stat names
-     * @return the description
+     * @return the stat description, which names the queue so that queues sharing
+     *         this measure are distinguishable on the tuning page
      * @since 0.9.71+
      */
     public static String delayDescription(String queueName) {
@@ -170,7 +171,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *
      * @param queueName the queue's short name, as used in its stat names
      * @param priority the CoDel priority band
-     * @return the description
+     * @return the stat description, naming both the queue and the priority band
+     *         so their drop-delay graphs are distinguishable
      * @since 0.9.71+
      */
     public static String dropDescription(String queueName, int priority) {
@@ -305,7 +307,8 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      * Has the head of the queue been waiting too long,
      * or is the queue too big?
      *
-     * @return whether backlogged
+     * @return true if the head has waited out the backlog delay, the queue is
+     *         already dropping, or the backlog size limit has been reached
      */
     @Override
     public synchronized boolean isBacklogged() {

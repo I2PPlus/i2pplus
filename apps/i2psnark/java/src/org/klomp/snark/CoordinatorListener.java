@@ -60,7 +60,7 @@ interface CoordinatorListener {
     /**
      * Is the given hash banned?
      *
-     * @param h the hash
+     * @param h the torrent's info hash, checked against the ban list
      * @return true if banned
      * @since 0.9.71
      */
@@ -69,7 +69,7 @@ interface CoordinatorListener {
     /**
      * Ban the given hash.
      *
-     * @param h the hash
+     * @param h the torrent's info hash to add to the ban list
      * @since 0.9.71
      */
     public void ban(Hash h);

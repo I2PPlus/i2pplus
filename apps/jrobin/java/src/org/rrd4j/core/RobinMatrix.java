@@ -84,7 +84,7 @@ class RobinMatrix implements Robin {
      * Stores one complete set of row values and rewinds the write pointer.
      *
      * @param newValues an array of double.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException Thrown in case of I/O error
      */
     public void update(double[] newValues) throws IOException {
         assert rows == newValues.length
@@ -129,7 +129,7 @@ class RobinMatrix implements Robin {
      * Renders the stored rows as a single line of formatted values.
      *
      * @return a {@link java.lang.String} object.
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException Thrown in case of I/O error
      */
     public String dump() throws IOException {
         StringBuilder buffer = new StringBuilder("Robin " + pointer.get() + "/" + rows + ": ");

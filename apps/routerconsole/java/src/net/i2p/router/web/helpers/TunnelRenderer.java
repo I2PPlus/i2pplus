@@ -1631,8 +1631,8 @@ class TunnelRenderer {
      * and reverse-lookup domain. The callers append the data cells and
      * the row terminator.
      *
-     * @param sb target buffer
-     * @param h peer hash
+     * @param sb the buffer the identity cells are appended to
+     * @param h the hash of the peer being rendered
      * @param hB64 base64 of the peer hash for the netdb link
      * @param truncHash short hash label
      * @param version router version, may be null

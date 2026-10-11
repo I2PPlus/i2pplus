@@ -57,7 +57,8 @@ class PeerSelectionCriteria {
     /**
      * Purpose for which the peers will be used
      *
-     * @return the purpose
+     * @return a {@link #PURPOSE_TEST} constant naming why the selected peers
+     *         will be used, or 0 if no purpose has been set
      */
     public int getPurpose() { return _purpose; }
     /**

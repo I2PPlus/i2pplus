@@ -399,7 +399,7 @@ public final class ECIESAEADEngine {
     /**
      * Verify the encryption type is supported by this engine.
      *
-     * @throws IllegalArgumentException if unsupported
+     * @throws IllegalArgumentException if type is not one this engine handles
      * @since 0.9.67
      */
     private static void checkType(EncType type) {

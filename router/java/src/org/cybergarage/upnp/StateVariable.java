@@ -37,7 +37,7 @@ public class StateVariable extends NodeData {
     /**
      * Gets the service node this state variable belongs to.
      *
-     * @return service node
+     * @return the enclosing service node, or null if none has been set
      */
     public Node getServiceNode() {
         return serviceNode;
@@ -46,7 +46,7 @@ public class StateVariable extends NodeData {
     /**
      * Sets service node this state variable belongs to.
      *
-     * @param n service node
+     * @param n the node to record as the enclosing service
      */
     void setServiceNode(Node n) {
         serviceNode = n;

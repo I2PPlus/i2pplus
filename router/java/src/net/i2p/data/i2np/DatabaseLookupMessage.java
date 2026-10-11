@@ -104,7 +104,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
      *  Lookup message for the given context.
      *
      *  @param context the application context the message is created for
-     *  @param locallyCreated ignored
+     *  @param locallyCreated ignored; this constructor always behaves the same
      */
     public DatabaseLookupMessage(I2PAppContext context, boolean locallyCreated) {
         super(context);
@@ -156,7 +156,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      * Contains the router who requested this lookup
      *
-     * @return the from
+     * @return the hash of the router that requested this lookup
      */
     public Hash getFrom() { return _fromHash; }
 
@@ -589,7 +589,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     /**
      * The message type.
      *
-     * @return the type
+     * @return the DatabaseLookupMessage message type constant
      */
     public int getType() { return MESSAGE_TYPE; }
 

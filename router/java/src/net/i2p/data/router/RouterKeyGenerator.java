@@ -195,7 +195,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * Routing key for the specified date, not today's
      *
      * @param origKey the key to be modified into a routing key
-     * @param time Java time
+     * @param time epoch milliseconds naming the day to derive the key for
      * @return the routing key
      * @since 0.9.28
      */
@@ -214,7 +214,7 @@ public class RouterKeyGenerator extends RoutingKeyGenerator {
      * Generate a modified (yet consistent) hash from the origKey by generating the
      * SHA256 of the targetKey with the specified modData appended to it
      *
-     * @return the key
+     * @return the modified hash, computed over {@code origKey} followed by the modifier
      * @throws IllegalArgumentException if origKey is null
      */
     private static Hash getKey(Hash origKey, byte[] modData) {

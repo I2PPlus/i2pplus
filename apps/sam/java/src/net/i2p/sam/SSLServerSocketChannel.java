@@ -60,7 +60,8 @@ class SSLServerSocketChannel extends ServerSocketChannel {
      * @param local the socket address to bind to (ignored)
      * @param backlog the backlog length (ignored)
      * @return this channel (never returned)
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the wrapper carries an
+     *                                       already-bound server socket and cannot bind another local address
      */
     public ServerSocketChannel bind(SocketAddress local, int backlog) {
         throw new UnsupportedOperationException();
@@ -72,7 +73,7 @@ class SSLServerSocketChannel extends ServerSocketChannel {
      * @param name the socket option name (ignored)
      * @param value the socket option value (ignored)
      * @param <T> the type of the socket option value
-     * @return this channel
+     * @return this channel, so the ignored option still chains
      */
     public <T> ServerSocketChannel setOption(SocketOption<T> name, T value) {
         return this;

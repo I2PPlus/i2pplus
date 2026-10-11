@@ -173,7 +173,7 @@ public class HostCheckHandler extends GzipHandler
      * Strip [] and port from a host header
      *
      * @param host the HTTP Host header non-null
-     * @return the host
+     * @return the host with IPv6 brackets and any port removed
      */
     private static String getHost(String host) {
         if (host.startsWith("[")) {
@@ -321,7 +321,7 @@ public class HostCheckHandler extends GzipHandler
 
     /**
      * Check if host is localhost/loopback
-     * @return whether localhost
+     * @return true if the host resolves to a loopback address
      */
     private static boolean isLocalhost(String host) {
         if (host == null) return false;

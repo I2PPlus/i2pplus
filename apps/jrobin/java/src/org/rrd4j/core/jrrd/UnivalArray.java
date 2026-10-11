@@ -31,7 +31,8 @@ class UnivalArray {
      * Reads the long stored at the slot the enum's ordinal selects.
      *
      * @param e a {@link java.lang.Enum} object.
-     * @return a long.
+     * @return the value from that slot, widened to 64 bits when the file uses
+     *         32-bit longs
      */
     public long getLong(Enum<?> e) {
         buffer.position(8 * e.ordinal());
@@ -43,7 +44,7 @@ class UnivalArray {
      * Reads the double stored at the slot the enum's ordinal selects.
      *
      * @param e a {@link java.lang.Enum} object.
-     * @return a double.
+     * @return the eight-byte floating point value stored at that slot
      */
     public double getDouble(Enum<?> e) {
         buffer.position(8 * e.ordinal());

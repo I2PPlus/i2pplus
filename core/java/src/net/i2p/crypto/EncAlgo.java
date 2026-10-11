@@ -41,7 +41,9 @@ public enum EncAlgo {
     /**
      * The name of this encryption algorithm.
      *
-     * @return The name.
+     * @return the algorithm name this constant was declared with, such as
+     *         {@code ECIES-MLKEM}, which is not always the same as the constant's own
+     *         identifier
      */
     public String getName() {
         return name;

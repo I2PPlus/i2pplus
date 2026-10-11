@@ -24,7 +24,8 @@ class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the fixed label "Direct Lookup Match", used to identify this job in
+     *         logs and job statistics
      */
     @Override
     public String getName() { return "Direct Lookup Match"; }

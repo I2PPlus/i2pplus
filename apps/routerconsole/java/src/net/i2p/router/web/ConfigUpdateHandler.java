@@ -342,13 +342,13 @@ public class ConfigUpdateHandler extends FormHandler {
     public void setZipURL(String url) {_zipURL = url;}
     /**
      *  Set whether to fetch news through proxy.
-     *  @param foo ignored
+     *  @param foo ignored; the value only marks the setting as enabled
      *  @since 0.9.9
      */
     public void setNewsThroughProxy(String foo) {_newsThroughProxy = true;}
     /**
      *  Set whether to update development SU3 builds.
-     *  @param foo ignored
+     *  @param foo ignored; the value only marks the setting as enabled
      *  @since 0.9.20
      */
     public void setUpdateDevSU3(String foo) {_updateDevSU3  = true;}

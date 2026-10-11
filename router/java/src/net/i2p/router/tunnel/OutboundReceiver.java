@@ -104,7 +104,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name {@code Send to OBGW after Lookup}, which the job
+         *         queue uses to key this job's statistics
          */
         public String getName() { return "Send to OBGW after Lookup"; }
 
@@ -142,7 +143,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name {@code Timeout OBGW Lookup}, which the job queue
+         *         uses to key this job's statistics
          */
         public String getName() { return "Timeout OBGW Lookup"; }
 
@@ -173,7 +175,8 @@ class OutboundReceiver implements TunnelGateway.Receiver {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name {@code OBGW Send Failure}, which the job queue
+         *         uses to key this job's statistics
          */
         public String getName() { return "OBGW Send Failure"; }
 

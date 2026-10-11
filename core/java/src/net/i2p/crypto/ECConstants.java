@@ -375,8 +375,8 @@ final class ECConstants {
      * There is no ECParameterSpec.equals().
      * Needed to load family keys on Android via SigUtil.fromJavaKey().
      *
-     * @param s1 first spec
-     * @param s2 second spec
+     * @param s1 the spec being compared; null is tolerated only if {@code s2} is also null
+     * @param s2 the spec being compared; null is tolerated only if {@code s1} is also null
      * @return true if equal
      * @since 0.9.55
      */

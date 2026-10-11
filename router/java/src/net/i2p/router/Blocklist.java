@@ -121,7 +121,7 @@ public class Blocklist {
      * Limits of transient (in-memory) blocklists.
      * Note that it's impossible to prevent clogging up
      * the tables by a determined attacker, esp. on IPv6
-     * @return whether slow
+     * @return whether the limits below are halved on a slow system
      */
     private static final int MAX_IPV4_SINGLES = SystemVersion.isSlow() ? 2048 : 8192;
     private static final int MAX_IPV6_SINGLES = SystemVersion.isSlow() ? 1024 : 4096;
@@ -704,7 +704,7 @@ public class Blocklist {
         final Hash peer;
 
         /**
-         * @param c the comment
+         * @param c the free-text note carried over into the ban reason, may be null
          * @param h the router hash (may be null)
          * @param i1 the starting IP
          * @param i2 the ending IP
@@ -1013,7 +1013,8 @@ public class Blocklist {
 
     /**
      * Will not contain duplicates.
-     * @return the addresses
+     * @return the peer's IP addresses with duplicates removed, empty if the
+     *         RouterInfo is not held locally
      */
     private List<byte[]> getAddresses(Hash peer) {
         RouterInfo pinfo = _context.netDb().lookupRouterInfoLocally(peer);
@@ -1024,7 +1025,8 @@ public class Blocklist {
     /**
      * Will not contain duplicates.
      *
-     * @return the addresses
+     * @return the addresses published in the RouterInfo, IPv6 ones only when
+     *         this router has IPv6 enabled, with duplicates removed
      * @since 0.9.29
      */
     private List<byte[]> getAddresses(RouterInfo pinfo) {
@@ -1118,7 +1120,7 @@ public class Blocklist {
      * First check the single-IP list. Then do a binary search through the in-memory range list which
      * is a sorted array of longs. The array is sorted in signed order, but we don't care.
      * Each long is ((from << 32) | to)
-     * @return whether blocklisted
+     * @return true if the IP is on a single-IP, country, permanent or Tor list
      */
     private synchronized boolean isBlocklisted(int ip) {
         if (isOnSingleList(ip)) {return true;}
@@ -1492,7 +1494,7 @@ public class Blocklist {
      * Mark a string for extraction by xgettext and translation.
      * Use this only in static initializers. It does not translate!
      *
-     * @return s
+     * @return the string unchanged; marking it is what lets xgettext find it
      */
     private static final String _x(String s) {return s;}
 

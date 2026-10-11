@@ -95,7 +95,7 @@ public class PersistentDataStore extends TransientDataStore {
      * Creates a new persistent data store.
      *
      * @param ctx the router context
-     * @param dbDir relative path
+     * @param dbDir directory name resolved under the router directory
      * @param facade the network database facade
      * @throws IOException if the database directory cannot be created or accessed
      */
@@ -226,7 +226,7 @@ public class PersistentDataStore extends TransientDataStore {
      *
      * @param key non-null
      * @param data non-null
-     * @return success
+     * @return true if the entry was stored in the Kademlia structure
      * @since 0.9.64
      */
     @Override
@@ -686,7 +686,8 @@ public class PersistentDataStore extends TransientDataStore {
         /**
          * Check if the netdb directory or any subdirectory has been modified
          * since the last scan, or if we need to check for reseed.
-         * @return whether scan
+         * @return true if the netdb directory or a subdirectory has changed, the
+         *         stored routers are too few, or a reseed is due
          */
         private boolean shouldScan() {
             long lastMod = _dbDir.lastModified();

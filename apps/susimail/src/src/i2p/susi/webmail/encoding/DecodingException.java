@@ -12,7 +12,7 @@ public class DecodingException extends IOException {
 	/**
 	 * Constructs a DecodingException with the specified detail message.
 	 *
-	 * @param msg detail message
+	 * @param msg message describing why decoding failed
 	 */
 	public DecodingException( String msg ) {
 		super( msg );
@@ -21,7 +21,7 @@ public class DecodingException extends IOException {
 	/**
 	 * Constructs a DecodingException with the specified detail message and cause.
 	 *
-	 * @param msg detail message
+	 * @param msg message describing why decoding failed
 	 * @param cause the underlying exception that made decoding fail
 	 * @since 0.9.34
 	 */

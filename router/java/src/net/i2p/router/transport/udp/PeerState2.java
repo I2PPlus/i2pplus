@@ -1494,7 +1494,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     /**
      * Flag byte to be sent in header
      *
-     * @return the flags
+     * @return the header flag byte, {@code 0x01} when the send window has under
+     *         a third of its capacity left and an immediate ack is requested,
+     *         otherwise {@code 0}
      * @since 0.9.56, public since 0.9.57 for SSU2Sender interface
      */
     public byte getFlags() {return shouldRequestImmediateAck() ? (byte) 0x01 : 0;}

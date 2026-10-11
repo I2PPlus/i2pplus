@@ -105,7 +105,8 @@ class InboundGatewayReceiver implements TunnelGateway.Receiver {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the name this job is listed under in the job queue and the logs,
+         *         "Lookup IBGW First Hop"
          */
         public String getName() { return "Lookup IBGW First Hop"; }
 

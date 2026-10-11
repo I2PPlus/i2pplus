@@ -76,9 +76,9 @@ public class I2PSink implements Sink {
     /**
      * Sends data to the fixed destination configured in the constructor.
      *
-     * @param src ignored
+     * @param src ignored; the destination is fixed by the constructor
      * @param fromPort I2CP source port, 0-65535
-     * @param ignToPort ignored
+     * @param ignToPort ignored; the destination port is fixed by the constructor
      * @param data the data to send
      * @throws RuntimeException if the session is closed
      * @since 0.9.53 added fromPort and toPort parameters, breaking change, sorry

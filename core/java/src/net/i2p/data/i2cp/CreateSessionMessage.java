@@ -92,7 +92,7 @@ public class CreateSessionMessage extends I2CPMessageImpl {
 
     /**
      * Reports this message's I2CP type number.
-     * @return the type
+     * @return the I2CP type number of this message
      */
     @Override
     public int getType() {

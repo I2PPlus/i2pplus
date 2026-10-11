@@ -123,7 +123,8 @@ public class EdDSAPrivateKeySpec implements KeySpec {
     /**
      * Return the clamped hash of the seed, H(k), from which the scalar a is derived.
      *
-     * @return the hash
+     * @return the clamped hash of the seed, 2*bd8 bytes with the low bits of
+     *         the first byte cleared and bit 6 of the last byte set
      */
     public byte[] getH() {
         return h;

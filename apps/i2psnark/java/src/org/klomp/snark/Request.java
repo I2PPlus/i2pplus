@@ -73,7 +73,7 @@ class Request {
     /**
      * The piece number this Request is for
      *
-     * @return the piece
+     * @return the index of the piece this request covers
      * @since 0.9.1
      */
     public int getPiece() {
@@ -110,7 +110,7 @@ class Request {
     /**
      * A string representation of the request.
      *
-     * @return "(piece,off,len)"
+     * @return "(piece,off,len)" as the toString() form
      */
     @Override
     public String toString() {

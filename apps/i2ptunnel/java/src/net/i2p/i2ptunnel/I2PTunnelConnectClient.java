@@ -66,7 +66,7 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
      * or open the local socket. You MUST call startRunning() for that.
      *
      * @param localPort the local port to bind to
-     * @param l logging instance
+     * @param l the Logging instance this tunnel's status messages are sent to
      * @param ownDest whether to use our own destination
      * @param wwwProxy the outproxy destinations, separated by commas or spaces, or null for none
      * @param notifyThis event dispatcher for notifications
@@ -151,7 +151,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
     }
 
     /**
-     * @return the realm
+     * @return {@link #AUTH_REALM}, the realm this client sends in its Digest
+     *         authentication challenge to the proxy
      * @since 0.9.4
      */
     protected String getRealm() {

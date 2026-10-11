@@ -96,7 +96,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
 
     /**
      * Names the ElGamal algorithm this key belongs to.
-     * @return the algorithm
+     * @return the JCA algorithm name for this key, always "ElGamal"
      */
     @Override
     public String getAlgorithm() {
@@ -105,7 +105,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
 
     /**
      * Names the X.509 encoding this key serialises to.
-     * @return the format
+     * @return the JCA key format name for this key, always "X.509"
      */
     @Override
     public String getFormat() {
@@ -114,7 +114,8 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
 
     /**
      * Serialises p, g and y into the X.509 SubjectPublicKeyInfo form.
-     * @return the encoded
+     * @return the X.509 SubjectPublicKeyInfo encoding, a DER sequence holding
+     *         p, g and y
      */
     @Override
     public byte[] getEncoded() {
@@ -188,7 +189,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
 
     /**
      * Fetches the ElGamal group parameters.
-     * @return the parameters
+     * @return the ElGamal group parameters this key was built with, never null
      */
     @Override
     public ElGamalParameterSpec getParameters() {
@@ -197,7 +198,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
 
     /**
      * Wraps the same group parameters in a fresh DH spec.
-     * @return the params
+     * @return a newly built DH spec carrying the same prime p and generator g
      */
     @Override
     public DHParameterSpec getParams() {
@@ -206,7 +207,7 @@ public class ElGamalPublicKeyImpl implements ElGamalPublicKey, DHPublicKey {
 
     /**
      * The public value y = g^x mod p.
-     * @return the y
+     * @return the public value y = g^x mod p, never null
      */
     @Override
     public BigInteger getY() {

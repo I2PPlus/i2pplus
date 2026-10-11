@@ -102,8 +102,9 @@ public class DataProcessor implements DataHolder {
      * that case, the class will try to find optimal ending date based on the last update time of
      * RRD files processed with the {@link #processData()} method.
      *
-     * @param d1 Starting date
-     * @param d2 Ending date
+     * @param d1 start of the range, in seconds since the epoch
+     * @param d2 end of the range, in seconds since the epoch; null leaves the end
+     *           to be chosen from the last update time of the processed files
      */
     public DataProcessor(Date d1, Date d2) {
         this(Util.getTimestamp(d1), d2 != null ? Util.getTimestamp(d2) : 0);
@@ -918,7 +919,7 @@ public class DataProcessor implements DataHolder {
      * #getTimestampsPerPixel()} method.
      *
      * @param sourceName Datasource name
-     * @param pixelCount Graph width
+     * @param pixelCount graph width in pixels, retained for later calls
      * @return Per-pixel datasource values
      * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated
      *                                            (method {@link #processData()} was not called)
@@ -968,7 +969,7 @@ public class DataProcessor implements DataHolder {
      * Calculates timestamps which correspond to individual pixels on the graph. It also set the
      * timestampsPerPixel value.
      *
-     * @param pixelCount Graph width
+     * @param pixelCount graph width in pixels, retained for later calls
      * @return Array of timestamps
      */
     public long[] getTimestampsPerPixel(int pixelCount) {
@@ -1230,7 +1231,7 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Ending timestamp.
-     * @param time ending timestamp
+     * @param time end of the range, in seconds since the epoch
      */
     @Override
     public void setEndTime(long time) {
@@ -1239,7 +1240,7 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Ending timestamp.
-     * @return ending timestamp
+     * @return end of the range, in seconds since the epoch
      */
     @Override
     public long getEndTime() {
@@ -1248,7 +1249,7 @@ public class DataProcessor implements DataHolder {
 
     /**
      * Starting timestamp.
-     * @param time starting timestamp
+     * @param time start of the range, in seconds since the epoch
      */
     @Override
     public void setStartTime(long time) {

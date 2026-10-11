@@ -138,7 +138,7 @@ public class DataChunk {
     /**
      * Getter for the field <code>data</code>.
      *
-     * @return the data
+     * @return the stored values, one row per timestamp
      */
     public double[][] getData() {
         return data;

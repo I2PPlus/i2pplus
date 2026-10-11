@@ -116,7 +116,7 @@ public final class ByteCache extends TryCache<ByteArray> {
      *
      * @param cacheSize the number of entries to hold, trimmed as needed to stay under MAX_CACHE
      * @param size the byte length of every cached entry, raised to at least 1 and used as the cache key
-     * @return the instance
+     * @return the shared cache for that entry size, creating it if needed
      */
     @SuppressWarnings("PMD.SingletonClassReturningNewInstance")
     public static ByteCache getInstance(int cacheSize, int size) {

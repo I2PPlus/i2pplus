@@ -64,8 +64,8 @@ public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     /**
      * Create SSDP search socket list.
      *
-     * @param binds Bind addresses
-     * @param port Port number
+     * @param binds the local addresses each search socket binds to
+     * @param port the port the search sockets send from
      * @param multicastIPv4 IPv4 multicast address
      * @param multicastIPv6 IPv6 multicast address
      */

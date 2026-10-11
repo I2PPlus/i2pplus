@@ -237,7 +237,7 @@ public final class SVGHints {
      * of view of the external package, rather than SVG-specific.
      *
      * @param key the hint key to test
-     * @return A boolean.
+     * @return {@code true} if the key begins a grouping element in the SVG output.
      * @since 1.8
      */
     public static boolean isBeginGroupKey(RenderingHints.Key key) {
@@ -292,7 +292,7 @@ public final class SVGHints {
      * of the external package, rather than SVG-specific.
      *
      * @param key the hint key to test
-     * @return A boolean.
+     * @return {@code true} if the key ends a grouping element in the SVG output.
      * @since 1.8
      */
     public static boolean isEndGroupKey(RenderingHints.Key key) {
@@ -347,7 +347,7 @@ public final class SVGHints {
      * point of view of the external package, rather than SVG-specific.
      *
      * @param key the hint key to test
-     * @return A boolean.
+     * @return {@code true} if the key requests an element title in the SVG output.
      * @since 1.9
      */
     public static boolean isElementTitleKey(RenderingHints.Key key) {
@@ -362,7 +362,8 @@ public final class SVGHints {
      * <br>
      * The Orson Charts library can be found at http://www.object-refinery.com/orsoncharts/
      *
-     * @return A boolean.
+     * @return {@code true} if {@code com.orsoncharts.Chart3DHints.KEY_BEGIN_ELEMENT}
+     *         could be read.
      * @since 1.8
      */
     private static boolean isOrsonChartsOnClasspath() {
@@ -377,7 +378,8 @@ public final class SVGHints {
      * <p>The JFreeChart library can be found at <a href="http://www.jfree.org/jfreechart/">
      * http://www.jfree.org/jfreechart/</a>.
      *
-     * @return A boolean.
+     * @return {@code true} if {@code org.jfree.chart.ChartHints.KEY_BEGIN_ELEMENT}
+     *         could be read.
      * @since 2.0
      */
     private static boolean isJFreeChartOnClasspath() {
@@ -440,7 +442,7 @@ public final class SVGHints {
          * {@code false} otherwise.
          *
          * @param val the value.
-         * @return A boolean.
+         * @return {@code true} if the value is one of those accepted by this key.
          */
         @Override
         public boolean isCompatibleValue(Object val) {

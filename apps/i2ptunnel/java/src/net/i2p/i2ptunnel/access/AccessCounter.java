@@ -27,7 +27,8 @@ class AccessCounter {
     /**
      * records that a connection attempt was made
      *
-     * @param now the current time
+     * @param now the current time in milliseconds, as returned by
+     *            net.i2p.util.Clock.now(), stored as this access's timestamp
      */
     void recordAccess(long now) {
         accesses.add(now);
@@ -37,7 +38,9 @@ class AccessCounter {
      * Check if the given threshold has been breached.
      *
      * @param threshold definition of a threshold
-     * @param now current time
+     * @param now the current time in milliseconds, as returned by
+     *            net.i2p.util.Clock.now(), used to age recorded accesses
+     *            against the threshold's window
      * @return true if the given threshold has been breached
      */
     boolean isBreached(Threshold threshold, long now) {

@@ -144,7 +144,7 @@ public class MessageHistory {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name shown in job queue listings and logs
          */
         public String getName() { return "Reinitialize Message History"; }
     }
@@ -603,7 +603,8 @@ public class MessageHistory {
     /**
      * Prettify the hash by doing a base64 and returning the first 6 characters
      *
-     * @return the name
+     * @return the first 6 characters of the hash in base64 form, or "UNKNOWN" if the
+     *         hash is null and "INVALID" if it cannot be encoded
      */
     private static final String getName(Hash router) {
         if (router == null) return "UNKNOWN";
@@ -674,7 +675,8 @@ public class MessageHistory {
         /**
          * The name of this job.
          *
-         * @return the name
+         * @return the job name shown in job queue listings and logs, suffixed with
+         *         "(disabled)" while message history logging is turned off
          */
         public String getName() { return _doLog ? "Message Debug Log" : "Message Debug Log (disabled)"; }
         /**

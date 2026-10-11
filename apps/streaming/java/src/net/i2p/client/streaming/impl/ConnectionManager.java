@@ -91,7 +91,7 @@ class ConnectionManager {
      * A value of 0 (never warned, or pruned) always logs.
      *
      * @param lastWarnTime last timestamp the WARN was emitted for this dest, 0 if never
-     * @param now          current time
+     * @param now          router clock time in milliseconds
      * @param cooldownMs   length of the cooldown window that arms the WARN
      * @return true if the WARN should be emitted
      * @since 0.9.71+
@@ -751,7 +751,7 @@ class ConnectionManager {
 
     /**
      * The stored trigger description for an active temp-ban, if any.
-     * @param h dest hash
+     * @param h destination hash to look up
      * @return the recorded reason, or null if none stored
      * @since 0.9.71+
      */
@@ -1880,7 +1880,7 @@ class ConnectionManager {
      * connection delay, otherwise it returns immediately.
      *
      * @param peer Destination to contact, non-null
-     * @param opts Connection's options
+     * @param opts connection options, never null
      * @param session generally the session from the constructor, but could be a subsession
      * @return new connection, or null if we have exceeded our limit
      */
@@ -2119,7 +2119,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         /**
          * Record a rejection reason that logs at WARN on every occurrence.
          *
-         * @param text description
+         * @param text text recorded as the reason and returned by toString()
          * @param secs seconds for the Retry-After header
          */
         public Reason(String text, int secs) {
@@ -2129,7 +2129,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
         /**
          * Record a rejection reason, optionally suppressing its WARN log.
          *
-         * @param text description
+         * @param text text recorded as the reason and returned by toString()
          * @param secs seconds for the Retry-After header
          * @param silentFlags if true, suppress the per-rejection WARN log. Used for
          *                    repeated rejections of an already-temp-banned dest so a hammering
@@ -2147,7 +2147,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
 
         /**
          * Seconds for the Retry-After header.
-         * @return the seconds
+         * @return the Retry-After delay in seconds, 0 for none
          */
         public int getSeconds() { return seconds; }
 
@@ -2295,18 +2295,18 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * This is the primary session only
      *
-     * @return the session
+     * @return the primary session passed to the constructor, not a subsession
      */
     public I2PSession getSession() { return _session; }
 
     /**
      * Update opts from share.
-     * @param con the connection
+     * @param con the connection whose options are being refreshed
      */
     public void updateOptsFromShare(Connection con) { _tcbShare.updateOptsFromShare(con); }
     /**
      * Update share opts.
-     * @param con the connection
+     * @param con the connection whose options are being refreshed
      */
     public void updateShareOpts(Connection con) { _tcbShare.updateShareOpts(con); }
     /**
@@ -2657,7 +2657,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Ping the destination and wait for a pong.
      *
-     * @param peer the destination
+     * @param peer the resolved destination to ping
      * @param timeoutMs greater than zero
      * @return true if pong received
      */
@@ -2668,7 +2668,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Ping the destination and wait for a pong.
      *
-     * @param peer the destination
+     * @param peer the resolved destination to ping
      * @param fromPort the source port
      * @param toPort the destination port
      * @param timeoutMs greater than zero
@@ -2682,7 +2682,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Ping the destination, optionally waiting for a pong.
      *
-     * @param peer the destination
+     * @param peer the resolved destination to ping
      * @param fromPort the source port
      * @param toPort the destination port
      * @param timeoutMs greater than zero
@@ -2697,7 +2697,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Ping the destination, optionally waiting for a pong.
      *
-     * @param peer the destination
+     * @param peer the resolved destination to ping
      * @param fromPort the source port
      * @param toPort the destination port
      * @param timeoutMs greater than zero
@@ -2745,7 +2745,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Ping the destination with a payload and wait for the pong.
      *
-     * @param peer the destination
+     * @param peer the resolved destination to ping
      * @param fromPort the source port
      * @param toPort the destination port
      * @param timeoutMs greater than zero
@@ -2798,7 +2798,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Ping the destination through a specific subsession, waiting for the pong.
      *
-     * @param peer the destination
+     * @param peer the resolved destination to ping
      * @param session the subsession to use (must not be null)
      * @param fromPort the source port
      * @param toPort the destination port
@@ -2813,7 +2813,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Ping the destination through a specific subsession, optionally blocking.
      *
-     * @param peer the destination
+     * @param peer the resolved destination to ping
      * @param session the subsession to use (must not be null)
      * @param fromPort the source port
      * @param toPort the destination port
@@ -2860,7 +2860,7 @@ public Connection connect(Destination peer, ConnectionOptions opts, I2PSession s
     /**
      * Ping the destination with a payload through a specific subsession.
      *
-     * @param peer the destination
+     * @param peer the resolved destination to ping
      * @param session the subsession to use (must not be null)
      * @param fromPort the source port
      * @param toPort the destination port

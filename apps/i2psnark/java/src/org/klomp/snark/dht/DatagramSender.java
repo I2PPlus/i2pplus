@@ -29,7 +29,7 @@ public final class DatagramSender {
      * @param fromPort the port to send from
      * @param toPort the port to send to
      * @param repliable true for a repliable datagram (PROTO_DATAGRAM), false for raw
-     * @return success
+     * @return true if the session accepted the datagram for delivery
      * @throws I2PSessionException on session failure
      */
     public static boolean send(

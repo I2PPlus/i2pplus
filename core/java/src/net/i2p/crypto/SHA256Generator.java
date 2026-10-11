@@ -55,13 +55,14 @@ public final class SHA256Generator {
 
     /**
      * Accept and ignore the context, for construction compatibility.
-     * @param context unused
+     * @param context accepted but never read; the generator keeps no reference to it
      */
     public SHA256Generator(I2PAppContext context) {}
 
     /**
      * Return the global SHA-256 generator.
-     * @return the instance
+     * @return the generator bound to the global I2PAppContext, created on first
+     *         call if it does not exist yet
      */
     public static final SHA256Generator getInstance() {
         return I2PAppContext.getGlobalContext().sha();
@@ -83,7 +84,8 @@ public final class SHA256Generator {
      * @param source what to hash
      * @param start the starting offset
      * @param len the length to hash
-     * @return the hash
+     * @return a {@link Hash} wrapping the 32-byte SHA-256 digest of the requested
+     *         bytes
      */
     public final Hash calculateHash(byte[] source, int start, int len) {
         MessageDigest digest = acquire();

@@ -65,7 +65,8 @@ public class BitField {
      * For CompleteBitField. All methods except size() must be overridden.
      *
      * @param size the number of bits in the bit field
-     * @param dummy ignored
+     * @param dummy an ignored marker, here only to tell this constructor
+     *              apart from the one taking a byte array
      * @since 0.9.71
      */
     protected BitField(int size, int dummy) {

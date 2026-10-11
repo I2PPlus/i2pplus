@@ -412,8 +412,8 @@ public class Reseeder {
          * @param url the full URL that failed
          * @param bytesTransferred bytes transferred before failure
          * @param bytesRemaining bytes remaining when failed
-         * @param currentAttempt attempt number
-         * @param numRetries retries remaining
+         * @param currentAttempt attempt number, as EepGet counts it
+         * @param numRetries retries remaining, always 0 because readURL() runs EepGet with none
          * @param cause the exception that caused the failure
          */
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {

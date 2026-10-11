@@ -66,7 +66,7 @@ class SingleLookupJob extends JobImpl {
     /**
      * Name of this job.
      *
-     * @return the name
+     * @return the name this job is listed under in the job queue
      */
     public String getName() { return "Process DbStoreReplyMsg"; }
 }

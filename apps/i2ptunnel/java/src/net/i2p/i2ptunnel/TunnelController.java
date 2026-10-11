@@ -333,7 +333,8 @@ public class TunnelController implements Logging {
      * The I2PTunnel
      *
      * for advanced plugin usage
-     * @return the tunnel
+     * @return the I2PTunnel client built around this controller, which holds the I2CP
+     *         session and runs the tunnel on {@link #startTunnel()}
      */
     public I2PTunnel getTunnel() {
         return _tunnel;
@@ -341,7 +342,7 @@ public class TunnelController implements Logging {
 
     /**
      * Create a new private key, if no filename is specified or creation fails.
-     * @return success
+     * @return true if the key file already existed or a new one was written
      */
     private boolean createPrivateKey() {
         I2PClient client = I2PClientFactory.createClient();
@@ -406,7 +407,8 @@ public class TunnelController implements Logging {
      * Does nothing unless option OPT_ALT_PKF is set with the privkey file name.
      * Does nothing if the file already exists.
      *
-     * @return success
+     * @return true if the alternate key file already existed or a new one was
+     *         written, false if the option or signature type disallows it
      */
     private boolean createAltPrivateKey() {
         if (PREFERRED_SIGTYPE == SigType.DSA_SHA1)
@@ -1313,7 +1315,7 @@ public class TunnelController implements Logging {
     /**
      * Absolute path to filter definition file
      *
-     * @return the filter
+     * @return the configured filter definition path, or null if no filter is set
      */
     public String getFilter() { return _config.getProperty(PROP_FILTER); }
 

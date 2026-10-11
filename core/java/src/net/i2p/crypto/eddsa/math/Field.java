@@ -58,7 +58,7 @@ public class Field implements Serializable {
      *
      * @param b the bit length
      * @param q the field prime
-     * @param enc the encoding
+     * @param enc the Encoding that converts field elements to and from bytes
      */
     public Field(int b, byte[] q, Encoding enc) {
         this.b = b;
@@ -129,7 +129,7 @@ public class Field implements Serializable {
     /**
      * Return the encoding for field elements, which converts them to and from bytes.
      *
-     * @return the encoding
+     * @return the Encoding that converts field elements to and from bytes
      */
     public Encoding getEncoding() {
         return enc;

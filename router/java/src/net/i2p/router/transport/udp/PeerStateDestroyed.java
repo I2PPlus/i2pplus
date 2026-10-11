@@ -248,7 +248,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     /**
      * The flags byte.
      *
-     * @return the flags
+     * @return zero, as a destroyed session sends no packets
      */
     public byte getFlags() { return 0; }
 

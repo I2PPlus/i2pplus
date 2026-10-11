@@ -359,7 +359,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Returns the first element of the sorted folder.
 	 *
-	 * @return First element.
+	 * @return the first element in sort order, or null if the folder is empty
 	 */
 	public synchronized O getFirstElement()
 	{
@@ -369,7 +369,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Returns the last element of the sorted folder.
 	 *
-	 * @return Last element.
+	 * @return the last element in sort order, or null if the folder is empty
 	 */
 	public synchronized O getLastElement()
 	{
@@ -434,7 +434,7 @@ public class Folder<O extends Object> {
 	/**
 	 * Retrieves element at index i.
 	 *
-	 * @param i the index
+	 * @param i the index into the backing array, counting from zero
 	 * @return the element, or null if empty
 	 */
 	private O getElement( int i )

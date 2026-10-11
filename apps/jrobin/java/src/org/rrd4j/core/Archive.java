@@ -88,7 +88,7 @@ public class Archive implements RrdUpdater<Archive> {
      * Create an archive by importing from XML data.
      * @param parentDb the parent RRD database
      * @param reader data importer for XML restore
-     * @param arcIndex archive index
+     * @param arcIndex which archive definition in the XML to import
      * @throws java.io.IOException if an I/O error occurs
      */
     Archive(RrdDb parentDb, DataImporter reader, int arcIndex) throws IOException {
@@ -307,7 +307,7 @@ public class Archive implements RrdUpdater<Archive> {
      * Returns the underlying archive state object. Each datasource has its corresponding ArcState
      * object (archive states are managed independently for each RRD datasource).
      *
-     * @param dsIndex Datasource index
+     * @param dsIndex which datasource's archive state to return
      * @return Underlying archive state object
      */
     public ArcState getArcState(int dsIndex) {

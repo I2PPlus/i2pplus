@@ -189,7 +189,8 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
     /**
      * Whether this key has been destroyed.
      *
-     * @return whether destroyed
+     * @return true if {@link #destroy()} has run and the key data has been
+     *         zeroed, false while the key is still usable
      * @since 0.9.40
      */
     @Override

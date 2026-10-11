@@ -77,8 +77,8 @@ public class UnpackerImpl extends TLGlobals implements Pack200.Unpacker {
      * to a file and pass the File object, in the alternate method described below.
      * <p>
      * Closes its input but not its output.  (The output can accumulate more elements.)
-     * @param in an InputStream.
-     * @param out a JarOutputStream.
+     * @param in the packed stream to read, which is closed before returning
+     * @param out the jar stream to write, which is left open
      * @exception IOException if an error is encountered.
      */
     public synchronized void unpack(InputStream in, JarOutputStream out) throws IOException {
@@ -117,8 +117,8 @@ public class UnpackerImpl extends TLGlobals implements Pack200.Unpacker {
      * Takes an input File containing the pack file, and generates a JarOutputStream.
      * <p>
      * Does not close its output.  (The output can accumulate more elements.)
-     * @param in a File.
-     * @param out a JarOutputStream.
+     * @param in the pack file to read
+     * @param out the jar stream to write, which is left open
      * @exception IOException if an error is encountered.
      */
     public synchronized void unpack(File in, JarOutputStream out) throws IOException {

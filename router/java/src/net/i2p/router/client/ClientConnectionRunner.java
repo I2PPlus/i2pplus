@@ -771,7 +771,7 @@ class ClientConnectionRunner {
      *
      * Do not use for status = STATUS_SEND_ACCEPTED; use ackSendMessage() for that.
      *
-     * @param dest the client
+     * @param dest the client whose session is notified; no notification if it has none
      * @param id the router's ID for this message
      * @param messageNonce the client's ID for this message, greater than zero
      * @param status see I2CP MessageStatusMessage for success/failure codes
@@ -865,7 +865,7 @@ class ClientConnectionRunner {
      * Disconnect the client with the given reason and log level.
      *
      * @param reason will be truncated to 255 bytes
-     * @param logLevel e.g. Log.WARN
+     * @param logLevel accepted but never read; the disconnect is logged at WARN
      * @since 0.8.2
      */
     void disconnectClient(String reason, int logLevel) {
@@ -960,7 +960,7 @@ class ClientConnectionRunner {
      * @param toDest non-null
      * @param fromDest generally null when from remote, non-null if from local
      * @param payload the payload to deliver
-     * @return success
+     * @return true if the client was told about the message
      */
     boolean receiveMessage(Destination toDest, Destination fromDest, Payload payload) {
         if (_dead) {return false;}
@@ -977,7 +977,7 @@ class ClientConnectionRunner {
      * @param toHash non-null
      * @param fromDest generally null when from remote, non-null if from local
      * @param payload the payload to deliver
-     * @return success
+     * @return true if a session existed for {@code toHash} and the client was told
      * @since 0.9.21
      */
     boolean receiveMessage(Hash toHash, Destination fromDest, Payload payload) {

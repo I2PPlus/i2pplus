@@ -57,7 +57,7 @@ public class CloveSet {
 
     /**
      * Get the certificate.
-     * @return the certificate
+     * @return the certificate that signed this garlic message
      */
     public Certificate getCertificate() { return _cert; }
 

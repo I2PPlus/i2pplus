@@ -21,7 +21,7 @@ public class I2NPMessageException extends I2PException {
      * Create an exception with a message and cause
      *
      * @param message the detail message
-     * @param parent the cause
+     * @param parent the cause of the failure, may be null
      */
     public I2NPMessageException(String message, Throwable parent) {
         super(message, parent);

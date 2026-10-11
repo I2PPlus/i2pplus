@@ -378,7 +378,7 @@ public class TuningHelper extends HelperBase {
 
     /**
      * Main content: editable tables of tunable params with sparklines.
-     * @return the tuning
+     * @return the tuning tables as HTML, or a notice if auto-tuning is unavailable
      */
     public String getTuning() {
         Tuner tuner = getTuner();

@@ -109,7 +109,8 @@ public class FetchRequest {
     /**
      * Returns consolidation function to be used during the fetch process.
      *
-     * @return Consolidation function.
+     * @return the ConsolFun used to consolidate fetched archive rows, never
+     *         null as the constructor rejects one
      */
     public ConsolFun getConsolFun() {
         return consolFun;

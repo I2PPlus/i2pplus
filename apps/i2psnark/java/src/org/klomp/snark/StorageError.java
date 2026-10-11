@@ -131,7 +131,9 @@ public enum StorageError {
      * exception text for unclassified errors.
      *
      * @param ioe the storage error
-     * @return the description
+     * @return the classification's own text when the message could be matched, otherwise the
+     *         raw message prefixed with "I/O error", or just that prefix if the message is
+     *         null
      * @since 0.9.71+
      */
     public static String describe(IOException ioe) {

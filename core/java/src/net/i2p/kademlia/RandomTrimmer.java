@@ -20,7 +20,7 @@ public class RandomTrimmer<T extends SimpleDataStructure> implements KBucketTrim
 
     /**
      * Retains the context and the bucket size limit.
-     * @param ctx the context
+     * @param ctx the context, used for its {@code random()} source when picking an entry to drop
      * @param max the max entries
      */
     public RandomTrimmer(I2PAppContext ctx, int max) {
