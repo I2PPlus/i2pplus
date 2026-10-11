@@ -63,8 +63,8 @@ public class Messages {
      * translate a string with two parameters
      *
      * @param s string to be translated containing {0} and {1}
-     * @param o1 first parameter
-     * @param o2 second parameter
+     * @param o1 substituted for {0}
+     * @param o2 substituted for {1}
      * @return the translated string
      * @since 0.9.26
      */

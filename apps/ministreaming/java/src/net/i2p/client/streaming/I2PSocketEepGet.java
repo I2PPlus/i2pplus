@@ -242,7 +242,7 @@ public class I2PSocketEepGet extends EepGet {
      * super doesn't strip the http://host from the GET line
      * which hoses some servers (opentracker)
      * HTTP proxy was kind enough to do this for us
-     * @return the request
+     * @return the HTTP request line and headers, with the scheme and host stripped from the GET line
      */
     @Override
     protected String getRequest() throws IOException {

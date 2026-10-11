@@ -77,7 +77,8 @@ class ExpireRoutersJob extends JobImpl {
      * routerInfo publish dates, excluding ones that we are connected to,
      * so that they can be failed
      *
-     * @return number removed
+     * @return how many routers were failed and removed, 0 if the netdb is
+     *         small, we are disconnected, or the system is lagging
      */
     private int expireKeys() {
         // go through the database directly for efficiency

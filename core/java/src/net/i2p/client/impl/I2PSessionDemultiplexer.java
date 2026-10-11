@@ -35,7 +35,7 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     /**
      * Create a new demultiplexer.
      *
-     * @param ctx context
+     * @param ctx supplies the log
      */
     public I2PSessionDemultiplexer(I2PAppContext ctx) {
         _log = ctx.logManager().getLog(I2PSessionDemultiplexer.class);
@@ -93,8 +93,9 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
     /**
      * Convert a protocol number to a human-readable string.
      *
-     * @param proto protocol number
-     * @return human-readable protocol name
+     * @param proto an {@link net.i2p.client.I2PSession} protocol number, or 0
+     *              for any
+     * @return human-readable protocol name, or null if unrecognised
      */
     public static String protocolNumberToString(int proto) {
         switch (proto) {

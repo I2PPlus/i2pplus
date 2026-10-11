@@ -75,7 +75,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Returns the number of tunnels in the request.
-     * @return the endpoints
+     * @return the count of router/tunnel pairs requested
      */
     public int getEndpoints() {
         return _endpoints.size();
@@ -84,7 +84,8 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
     /**
      * Returns the router identity of one of the requested tunnels.
      * @param endpoint index into the endpoint list; out of range returns null
-     * @return the router
+     * @return the identity hash of the tunnel's gateway, or null if the index
+     *         is out of range
      */
     public Hash getRouter(int endpoint) {
         if ((endpoint < 0) || (_endpoints.size() <= endpoint)) {
@@ -189,7 +190,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     /**
      * Returns the I2CP message type of this message.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, 21
      */
     @Override
     public int getType() {
@@ -222,7 +223,7 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
         /**
          * Returns the router identity of this tunnel.
-         * @return the router
+         * @return the identity hash of this tunnel's gateway
          */
         public Hash getRouter() {
             return _router;

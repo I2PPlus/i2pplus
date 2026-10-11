@@ -89,8 +89,8 @@ class MessageReceiver {
     /**
      * Message receiver pool utilization as a ratio (0.0-1.0).
      * Returns NaN if not started.
-     *
-     * @return the utilization
+     * @return in-flight messages divided by receiver threads, or NaN before
+     *         any thread is running
      * @since 0.9.70+
      */
     public double getUtilization() {

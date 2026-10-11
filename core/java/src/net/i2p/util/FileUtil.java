@@ -300,7 +300,7 @@ public class FileUtil {
      * Caller must close streams
      *
      * @throws IOException on unpack error or if the library is unavailable.
-     *                  Will not throw ClassNotFoundException.
+     *                     Will not throw ClassNotFoundException.
      * @throws java.lang.reflect.InvocationTargetException on duplicate zip entries in the packed jar
      * @since 0.8.1
      */

@@ -88,8 +88,10 @@ class PersistentMailCache {
      * @param host IMAP host, part of the directory name
      * @param port IMAP port, part of the directory name
      * @param user mail account name, part of the directory name
-     * @param pass ignored
-     * @param folder e.g. DIR_FOLDER
+     * @param pass not used; the cache is keyed on account name alone
+     * @param folder on-disk maildir name, one of the {@code DIRS} values,
+     *               e.g. {@code DIR_FOLDER}; only DIR_DRAFTS gets an
+     *               attachment directory
      * @throws IOException if the cache directory cannot be created
      */
     public PersistentMailCache(I2PAppContext ctx, String host, int port, String user, String pass, String folder) throws IOException {
@@ -199,7 +201,8 @@ class PersistentMailCache {
      *
      * @param mail the mail to populate, matched on its uidl
      * @param headerOnly true to load just the header, false to load the body too
-     * @return success
+     * @return true if the mail was populated; false if no file exists for the
+     *         uidl or it could not be read
      */
     public boolean getMail(Mail mail, boolean headerOnly) {
         synchronized(_lock) {return locked_getMail(mail, headerOnly);}
@@ -248,7 +251,9 @@ class PersistentMailCache {
      * as a header-only file. An existing file is left alone.
      *
      * @param mail the mail to save
-     * @return success
+     * @return true if the file is on disk, either just written or already
+     *         present; false if the mail carries neither body nor header, or
+     *         the write failed
      */
     public boolean saveMail(Mail mail) {
         synchronized(_lock) {return locked_saveMail(mail);}
@@ -365,7 +370,8 @@ class PersistentMailCache {
     /**
      * Save data to disk.
      *
-     * @return success
+     * @return true if the buffer was written in full; false on an IOException,
+     *         which also leaves the buffer marked incomplete
      */
     private boolean write(Buffer rb, File f) {
         InputStream in = null;

@@ -77,7 +77,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
     /**
      * Create a new muxed session.
      *
-     * @param ctx context
+     * @param ctx the application context whose router is to be used
      * @param destKeyStream stream containing the private key data,
      *                      format is specified in {@link net.i2p.data.PrivateKeyFile PrivateKeyFile}
      *
@@ -189,7 +189,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
-     * @return success
+     * @return true unless the router reported a failed send status
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, long expires) throws I2PSessionException {
@@ -201,7 +201,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      * @param keyUsed unused - no end-to-end crypto
      * @param tagsSent unused - no end-to-end crypto
-     * @return success
+     * @return true unless the router reported a failed send status
      */
     @Override
     public boolean sendMessage(Destination dest, byte[] payload, int offset, int size, SessionKey keyUsed, Set<SessionTag> tagsSent, int proto, int fromport, int toport) throws I2PSessionException {
@@ -221,7 +221,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
-     *  @return success
+     *  @return true unless the router reported a failed send status
      *  @since 0.7.1
      */
     @Override
@@ -243,7 +243,7 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      *  @param fromPort 1-65535 or 0 for unset
      *  @param toPort 1-65535 or 0 for unset
      *  @param flags to be passed to the router
-     *  @return success
+     *  @return true unless the router reported a failed send status
      *  @since 0.8.4
      */
     @Override
@@ -340,7 +340,8 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
      * Store a received payload message and notify the client that it is
      * available, including the protocol and ports it arrived on.
      *
-     * @param msg the message
+     * @param msg the received payload, whose data must be at least 10 bytes for
+     *            the gzip header
      */
     @Override
     public void addNewMessage(MessagePayloadMessage msg) {

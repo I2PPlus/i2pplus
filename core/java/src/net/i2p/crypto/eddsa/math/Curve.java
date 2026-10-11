@@ -52,7 +52,7 @@ public class Curve implements Serializable {
     /**
      * Return the field this curve is defined over.
      *
-     * @return the field
+     * @return the prime field, which carries q as its modulus
      */
     public Field getField() {
         return f;

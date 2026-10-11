@@ -130,7 +130,7 @@ public class ProfilesHelper extends HelperBase {
     /**
      * Return the currently selected profiles tab index.
      *
-     * @return the tab
+     * @return 0 for the short view, 1 for the full view
      * @since 0.9.1
      */
     private int getTab() {

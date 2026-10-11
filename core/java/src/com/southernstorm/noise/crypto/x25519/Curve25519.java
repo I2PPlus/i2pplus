@@ -328,7 +328,7 @@ public final class Curve25519 {
      * Raise x to the power of (2^250 - 1).
      *
      * @param result The result.  Must not overlap with x.
-     * @param x The argument.
+     * @param x The base, as ten 26-bit limbs of a value modulo 2^255 - 19.
      */
     private void pow250(int[] result, int[] x) {
         int i, j;
@@ -368,7 +368,8 @@ public final class Curve25519 {
      * Computes the reciprocal of a number modulo 2^255 - 19.
      *
      * @param result The result.  Must not overlap with x.
-     * @param x The argument.
+     * @param x The value to invert, as ten 26-bit limbs of a number modulo
+     *          2^255 - 19; must be non-zero.
      */
     private void recip(int[] result, int[] x) {
         // The reciprocal is the same as x ^ (p - 2) where p = 2^255 - 19.

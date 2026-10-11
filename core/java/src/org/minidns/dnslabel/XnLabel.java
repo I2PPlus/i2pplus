@@ -32,7 +32,7 @@ public abstract class XnLabel extends ReservedLdhLabel {
      * Create an LdhLabel from an internal (ACE) representation.
      *
      * @param label the ACE label
-     * @return the LdhLabel
+     * @return an {@link ALabel}, or a {@link FakeALabel} if the label decodes to itself
      */
     protected static LdhLabel fromInternal(String label) {
         assert isIdnAcePrefixed(label);

@@ -43,7 +43,7 @@ public final class HMAC256Generator extends HMACGenerator {
     /**
      * Create a new HMAC256Generator.
      *
-     * @param context unused
+     * @param context not read; the generator keeps no reference to it
      */
     public HMAC256Generator(I2PAppContext context) {
         super();
@@ -71,8 +71,8 @@ public final class HMAC256Generator extends HMACGenerator {
      * @param data the data to calculate the HMAC over
      * @param offset offset into data
      * @param length number of bytes to include
-     * @param target output buffer
-     * @param targetOffset offset into target
+     * @param target receives the 32 byte MAC, so it needs 32 bytes of room
+     * @param targetOffset where in target to write the MAC
      * @throws UnsupportedOperationException if the JVM does not support it
      * @throws IllegalArgumentException for bad key or target too small
      * @since 0.9.38

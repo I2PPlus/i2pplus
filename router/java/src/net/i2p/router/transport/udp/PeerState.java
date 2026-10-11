@@ -1677,7 +1677,7 @@ public class PeerState {
      * @param current the current {@code _concurrentMessagesAllowed}
      * @param queued how many messages are currently in {@code _outboundQueue}
      * @param randomInt a uniform draw in [0, {@link #INIT_CONCURRENT_MSGS}); only
-     *         consumed when {@code rtt <= 0}, pass 0 otherwise
+     *                  consumed when {@code rtt <= 0}, pass 0 otherwise
      * @return the new concurrent-message limit
      * @since 0.9.71+
      */

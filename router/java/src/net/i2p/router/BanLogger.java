@@ -558,7 +558,7 @@ public class BanLogger {
      *
      * @param hash Router hash (non-null)
      * @param reason reason from the ban
-     * @param durationMs ban duration
+     * @param durationMs ban length in milliseconds; zero or less logs it as FOREVER
      * @since 0.9.70+
      */
     private void fetchRouterInfo(Hash hash, String reason, long durationMs) {

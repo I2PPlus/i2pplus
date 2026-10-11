@@ -48,14 +48,14 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     /**
      * I2NP message type of a short tunnel build reply, never sent.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, 999
      */
     @Override
     public int getType() { return MESSAGE_TYPE; }
 
     /**
      *  Unsupported; the reply is never deserialized.
-     *  @throws UnsupportedOperationException always
+     *  @throws UnsupportedOperationException always, nothing constructs this from wire data
      */
     @Override
     public void readMessage(byte[] data, int offset, int dataSize, int type) throws I2NPMessageException {
@@ -64,7 +64,7 @@ public class ShortTunnelBuildReplyMessage extends TunnelBuildReplyMessage {
 
     /**
      *  Unsupported; the reply is never serialized.
-     *  @throws UnsupportedOperationException always
+     *  @throws UnsupportedOperationException always, nothing puts this type on the wire
      */
     @Override
     protected int writeMessageBody(byte[] out, int curIndex) throws I2NPMessageException {

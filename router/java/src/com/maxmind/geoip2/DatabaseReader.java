@@ -254,7 +254,8 @@ public class DatabaseReader implements Closeable {
      * I2P -
      * Write all IPv4 address ranges for the given country to out.
      *
-     * @param country two-letter case-insensitive
+     * @param country ISO 3166-1 alpha-2 code, matched case-insensitively
+     *                here and upper-cased before the lookup
      * @param out caller must close
      * @throws IOException if the database cannot be read or the write to out fails
      * @since 0.9.48

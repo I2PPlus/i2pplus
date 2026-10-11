@@ -28,8 +28,8 @@ public class BoxLayout {
     /**
      * Create a new BoxLayout.
      *
-     * @param c the component to lay out
-     * @param i the axis
+     * @param c the component to lay out, ignored by this stub
+     * @param i the axis, one of X_AXIS or Y_AXIS, also ignored
      */
     public BoxLayout(Component c, int i ) {}
 }

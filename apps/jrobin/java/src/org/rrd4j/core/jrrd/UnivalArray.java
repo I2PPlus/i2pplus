@@ -15,7 +15,7 @@ class UnivalArray {
     /**
      * Read an UnivalArray from a rrd native file at the current position
      *
-     * @param file the RRdFile
+     * @param file the RRdFile, read from its current position after aligning
      * @param size the numer of elements in the array
      */
     public UnivalArray(RRDFile file, int size) {

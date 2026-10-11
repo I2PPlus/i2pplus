@@ -287,7 +287,8 @@ public class TunnelPool {
      *  {@link #MAX_ADAPTIVE_TEST_MULTIPLIER} so a persistently slow path cannot
      *  widen the window without bound and mask genuinely dead tunnels.
      *
-     * @param mult     current multiplier
+     * @param mult     current multiplier, 1.0 up to
+     *                 {@link #MAX_ADAPTIVE_TEST_MULTIPLIER}
      * @param avgMs    rolling average test duration, ms
      * @return the updated multiplier
      * @since 0.9.71+
@@ -4332,7 +4333,8 @@ public class TunnelPool {
 
     /**
      * Check if the LeaseSet is expiring soon (within 1 minute).
-     * @param now current time
+     * @param now milliseconds since the epoch, from
+     *            {@link net.i2p.util.Clock#now()}
      * @return true if refresh should be forced
      */
     boolean isExpiringSoon(long now) {
@@ -6054,7 +6056,8 @@ public class TunnelPool {
      *  decay is now asymmetric (three consecutive healthy cycles) precisely so
      *  that a single recovered reading does not snap the window back.
      *
-     * @param ctx router context
+     * @param ctx supplies the peer profile organizer and the Tuner's peer
+     *            supply count
      * @since 0.9.71+
      */
     private void relaxWindowForStarvation(RouterContext ctx) {

@@ -274,7 +274,8 @@ public class FamilyKeyCrypto {
          *
          * @param n family name
          * @param s signature string
-         * @param r verification result
+         * @param r the outcome, {@link Result#RI_KEY} or
+         *          {@link Result#STORED_KEY} for a success
          */
         public Verified(String n, String s, Result r) {
             name = n; sig = s; result = r;

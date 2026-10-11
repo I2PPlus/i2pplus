@@ -1250,7 +1250,7 @@ public class ProfileOrganizer {
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet mutable set tracking already-selected subnets
      * @param preferUnproven if true, prioritize peers with no tunnel
-     * test history so they accumulate profiling data
+     *                       test history so they accumulate profiling data
      */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                     int mask, MaskedIPSet ipSet, boolean preferUnproven) {
@@ -1477,9 +1477,9 @@ public class ProfileOrganizer {
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet subnets already represented in this tunnel, consulted only
-     * when mask is non-zero
+     *              when mask is non-zero
      * @param preferUnproven if true, prioritize peers with no tunnel test history
-     * so they accumulate profiling data through exploratory builds
+     *                       so they accumulate profiling data through exploratory builds
      */
      private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                       int mask, MaskedIPSet ipSet, double buildSuccess, boolean preferUnproven) {
@@ -2070,7 +2070,7 @@ public class ProfileOrganizer {
      * Pure decision — no context access, safe for unit tests.
      *
      * @param profile profile to test; its expiration window is picked from its
-     * the newest activity timestamp
+     *                the newest activity timestamp
      * @param now current time in ms
      * @param expireActive active-tier window in ms
      * @param expirePassive passive-tier window in ms
@@ -2246,11 +2246,11 @@ public class ProfileOrganizer {
      * excluded. Pure decision — no context access, safe for unit tests.
      *
      * @param boundaryRttMs the fast-tier RTT boundary from the last reorganize
-     * ({@link #_thresholdRTT}); its own scaling amplifies the
-     * typical pool latency so the ceiling tracks the network
+     *                      ({@link #_thresholdRTT}); its own scaling amplifies the
+     *                      typical pool latency so the ceiling tracks the network
      * @return the selection ceiling in ms; never below {@link #AUTO_RTT_FLOOR_MS}
-     * and never above {@link #AUTO_RTT_CAP_MS}. A boundary at or below 0
-     * (no measurement yet) returns the floor so nothing is over-trimmed.
+     *         and never above {@link #AUTO_RTT_CAP_MS}. A boundary at or below 0
+     *         (no measurement yet) returns the floor so nothing is over-trimmed.
      * @since 0.9.71+
      */
     static long computeFastRttCeiling(double boundaryRttMs) {
@@ -2499,7 +2499,7 @@ public class ProfileOrganizer {
      * @param buildSuccess the build success ratio in [0.0, 1.0]
      * @param now current time in ms
      * @param highCap whether restoring the high-cap tier (loss-demotion
-     * gate instead of loss probation)
+     *                gate instead of loss probation)
      * @return whether the peer may be restored
      * @since 0.9.71+
      */
@@ -2661,7 +2661,7 @@ public class ProfileOrganizer {
      * The scan is over a primitive array the sort above already walked.
      *
      * @param capacities the capacities; the caller holds them sorted, but the
-     * count does not depend on their order
+     *                   count does not depend on their order
      * @param meanCapacity the mean to compare against
      * @return the number of entries greater than the mean, never negative
      * @since 0.9.71+
@@ -2802,9 +2802,9 @@ public class ProfileOrganizer {
      * @param highCapPeers the current high-cap tier map
      * @param activeThreshold the activity window cutoff (now - 48h)
      * @param fastPeerLimit fast tier size at or below which its members keep
-     * eviction protection; above it, fast members are evictable like any other
+     *                      eviction protection; above it, fast members are evictable like any other
      * @param highCapacityLimit high-cap tier size at or below which its members
-     * keep eviction protection; above it, high-cap members are evictable
+     *                          keep eviction protection; above it, high-cap members are evictable
      * @return whether the profile may be evicted
      * @since 0.9.71+
      */
@@ -4116,7 +4116,7 @@ public class ProfileOrganizer {
      * active peer count, neither of which changes during a pass, so the caller
      * fetches them once for the whole scan.
      *
-* <p>A promotion whose RouterInfo is older than
+     * <p>A promotion whose RouterInfo is older than
      * {@link #PROP_ROUTERINFO_REFRESH_AGE_MS} and which has no proof of life is
      * held back, leaving the peer out of the tier — see
      * {@link #holdPromotionForRefresh}. No lookup is issued on its behalf, so a
@@ -4149,7 +4149,7 @@ public class ProfileOrganizer {
      * @param maxFast maximum fast peers
      * @param maxHighCap maximum high-capacity peers
      * @return true only if promotion was held because the RouterInfo has no
-     * usable transport address; false for every other outcome
+     *         usable transport address; false for every other outcome
      * @since 0.9.71+
      */
     private boolean lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess,

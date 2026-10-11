@@ -74,7 +74,7 @@ public class JettyXmlConfigurationParser
      *  Return the value for the first node with the name set,
      *  e.g. [Set name="name"]value[/Set]
      *  @param node the node whose descendants are searched for the Set
-     *  @param name case insensitive
+     *  @param name matched case-insensitively against a Set's name attribute
      *  @return the text of the first Set node matching name, or null if none
      */
     public static String getValue(Node node, String name) {
@@ -102,9 +102,10 @@ public class JettyXmlConfigurationParser
      *  Return the value for the first node with the name set,
      *  e.g. [Set name="name"]value[/Set]
      *  @param node the node whose descendants are searched for the Set
-     *  @param name case insensitive
+     *  @param name matched case-insensitively against a Set's name attribute
      *  @param value the text to store as the new content of the matched Set
-     *  @return success
+     *  @return true if a matching Set was found and rewritten, false if the
+     *          search reached the leaves without a match
      */
     public static boolean setValue(Node node, String name, String value) {
         String nameLC = name.toLowerCase(Locale.US);

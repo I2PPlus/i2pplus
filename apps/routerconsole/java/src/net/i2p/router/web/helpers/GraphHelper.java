@@ -367,7 +367,8 @@ public class GraphHelper extends FormHandler {
      * The thumbnail list for the graphs page, one anchor-wrapped image per enabled
      * stat plus a tile per active group.
      *
-     * @return the images
+     * @return the markup for the thumbnails, or the empty string when graphs
+     *         are not available
      */
     public String getImages() {
         GraphGenerator ss = GraphGenerator.instance(_context);
@@ -711,7 +712,8 @@ public class GraphHelper extends FormHandler {
     /**
      * The graph display configuration form posted to /graphs.
      *
-     * @return the form
+     * @return the form markup, or the empty string when graphs are not
+     *         available
      */
     public String getForm() {
         GraphGenerator ss = GraphGenerator.instance(_context);

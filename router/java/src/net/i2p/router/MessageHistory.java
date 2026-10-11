@@ -153,7 +153,7 @@ public class MessageHistory {
      * The local router has joined the given tunnel operating in the given state.
      *
      * @param state {"free inbound", "allocated inbound", "inactive inbound", "outbound", "participant", "pending"}
-     * @param tunnel tunnel joined
+     * @param tunnel the tunnel that was joined; a null value logs nothing
      */
     public void tunnelJoined(String state, TunnelInfo tunnel) {
         if (!_doLog) return;
@@ -165,7 +165,7 @@ public class MessageHistory {
      * The local router has joined the given tunnel operating in the given state.
      *
      * @param state {"free inbound", "allocated inbound", "inactive inbound", "outbound", "participant", "pending"}
-     * @param tunnel tunnel joined
+     * @param tunnel the tunnel that was joined; a null value logs nothing
      */
     public void tunnelJoined(String state, HopConfig tunnel) {
         if (!_doLog) return;
@@ -201,8 +201,8 @@ public class MessageHistory {
      *
      * @param messageId the message ID
      * @param tunnelId the tunnel ID
-     * @param toTunnel the tunnel
-     * @param toPeer the peer
+     * @param toTunnel the ID of the tunnel the message is being forwarded to
+     * @param toPeer the gateway peer, which may be null for a null-hop tunnel
      * @param type the message type being sent
      */
     public void tunnelDispatched(long messageId, long tunnelId, long toTunnel, Hash toPeer, String type) {
@@ -229,7 +229,7 @@ public class MessageHistory {
     /**
      * The local router has detected a failure in the given tunnel
      *
-     * @param tunnel tunnel failed
+     * @param tunnel the tunnel that failed; a null value logs nothing
      */
     public void tunnelFailed(TunnelId tunnel) {
         if (!_doLog) return;
@@ -275,7 +275,7 @@ public class MessageHistory {
      * Note that a router rejected our request to participate in a tunnel.
      *
      * @param peer the router that refused to take part
-     * @param msg the message
+     * @param msg the rejection message reported by the peer
      */
     public void tunnelParticipantRejected(Hash peer, String msg) {
         if (!_doLog) return;
@@ -368,7 +368,7 @@ public class MessageHistory {
     /**
      * There was an error processing the given message that was received
      *
-     * @param messageId message received
+     * @param messageId the ID of the message whose processing failed
      * @param messageType type of message received
      * @param error error message related to the processing of the message
      */
@@ -503,7 +503,7 @@ public class MessageHistory {
      * Note that we received a fragment of a tunneled message.
      *
      * @param messageId message ID the fragment belongs to
-     * @param fragmentId fragment index
+     * @param fragmentId the index of this fragment within the message, not a message ID
      * @param status status object for the fragment
      */
     public void receiveTunnelFragment(long messageId, int fragmentId, Object status) {
@@ -539,7 +539,7 @@ public class MessageHistory {
      * @param numFragments number of fragments
      * @param totalLength total length of the message
      * @param messageIds the fragment message IDs
-     * @param msg additional info
+     * @param msg extra text appended to the entry, or null to omit it
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, String msg) {
@@ -561,7 +561,7 @@ public class MessageHistory {
      * @param totalLength total length of the message
      * @param messageIds the fragment message IDs
      * @param tunnel tunnel the fragments were sent on
-     * @param msg additional info
+     * @param msg extra text appended to the entry, or null to omit it
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public void fragmentMessage(long messageId, int numFragments, int totalLength, List<Long> messageIds, Object tunnel, String msg) {

@@ -94,7 +94,7 @@ public class DsDef {
     /**
      * Returns source heartbeat.
      *
-     * @return Source heartbeat.
+     * @return Source heartbeat in seconds.
      */
     public long getHeartbeat() {
         return heartbeat;

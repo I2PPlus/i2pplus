@@ -110,9 +110,10 @@ class OutboundNTCP2State implements EstablishState {
 
     /**
      * Create a new outbound NTCP2 state.
-     * @param ctx router context
-     * @param transport NTCP transport
-     * @param con connection
+     * @param ctx supplies the log and the ban logger
+     * @param transport supplies the XDH factory and the transport settings
+     * @param con the connection being established; supplies the remote
+     *            address, the protocol version, and the peer hash
      * @throws IllegalArgumentException on bad address in the connection
      */
     public OutboundNTCP2State(RouterContext ctx, NTCPTransport transport, NTCPConnection con) {
@@ -578,19 +579,22 @@ class OutboundNTCP2State implements EstablishState {
     public synchronized void close(String reason, Exception e) {fail(reason, e);}
     /**
      * Fail the handshake with the given reason.
-     * @param reason failure description
+     * @param reason stored as the fail reason and reported by
+     *               {@link #getFailReason()}
      */
     protected void fail(String reason) {fail(reason, null);}
     /**
      * Fail the handshake with the given reason and exception.
-     * @param reason failure description
+     * @param reason stored as the fail reason and reported by
+     *               {@link #getFailReason()}
      * @param e the exception cause, may be null
      */
     protected void fail(String reason, Exception e) {fail(reason, e, false);}
 
     /**
      * Fail the handshake, optionally skew-related.
-     * @param reason failure description
+     * @param reason stored as the fail reason and reported by
+     *               {@link #getFailReason()}
      * @param e the exception cause, may be null
      * @param bySkew true to suppress the skew stat, as when we caused the skew ourselves
      */

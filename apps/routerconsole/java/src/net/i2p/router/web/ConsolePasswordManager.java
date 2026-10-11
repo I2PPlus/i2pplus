@@ -212,8 +212,9 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      * @param realm The full realm, e.g. routerconsole.auth.i2prouter, etc.
      * @param subrealm unused (for backward compatibility)
      * @param user non-null, non-empty, already trimmed
-     * @param pw plain text
-     * @return if saved
+     * @param pw the plain text password to hash
+     * @return true if the PBKDF2 entry reached router.config; false if the
+     *         JCE provider rejects PBKDF2 or the key spec
      */
     public boolean saveMD5(String realm, String subrealm, String user, String pw) {
         // Upgrade to PBKDF2 on save
@@ -227,8 +228,9 @@ public class ConsolePasswordManager extends RouterPasswordManager {
      * @param realm The full realm
      * @param subrealm unused for PBKDF2
      * @param user non-null, non-empty
-     * @param pw plain text
-     * @return if saved
+     * @param pw the plain text password to hash
+     * @return true if the PBKDF2 entry reached router.config; false if the
+     *         JCE provider rejects PBKDF2 or the key spec
      * @since 0.9.70+
      */
     private boolean savePBKDF2(String realm, String subrealm, String user, String pw) {

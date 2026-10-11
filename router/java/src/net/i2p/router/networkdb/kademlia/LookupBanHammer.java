@@ -85,7 +85,7 @@ class LookupBanHammer {
 
     /**
      * Record a lookup and check if the requester should be banned.
-     * @param key requester Hash
+     * @param key the requesting peer's router hash, one half of the identity a ban is recorded against
      * @param id reply tunnel, or null for direct
      * @return true if currently banned
      */

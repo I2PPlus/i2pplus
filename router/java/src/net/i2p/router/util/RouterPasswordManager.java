@@ -111,7 +111,7 @@ public class RouterPasswordManager extends PasswordManager {
      *  @param realm e.g. i2cp, routerconsole, etc.
      *  @param user null or "" for no user, already trimmed
      *  @param pw plain text, already trimmed
-     *  @return success
+     *  @return true if the hashed entry was written to router.config
      */
     public boolean save(String realm, String user, String pw) {
         return saveHash(realm, user, pw);
@@ -124,7 +124,7 @@ public class RouterPasswordManager extends PasswordManager {
      *  @param realm e.g. i2cp, routerconsole, etc.
      *  @param user null or "" for no user, already trimmed
      *  @param pw plain text, already trimmed
-     *  @return success
+     *  @return true if the plain entry was written to router.config
      */
     public boolean savePlain(String realm, String user, String pw) {
         String pfx = realm;
@@ -146,7 +146,7 @@ public class RouterPasswordManager extends PasswordManager {
      *  @param realm e.g. i2cp, routerconsole, etc.
      *  @param user null or "" for no user, already trimmed
      *  @param pw plain text, already trimmed
-     *  @return success
+     *  @return true if the base64 entry was written to router.config
      */
     public boolean saveB64(String realm, String user, String pw) {
         String pfx = realm;
@@ -169,7 +169,7 @@ public class RouterPasswordManager extends PasswordManager {
      *  @param realm e.g. i2cp, routerconsole, etc.
      *  @param user null or "" for no user, already trimmed
      *  @param pw plain text, already trimmed
-     *  @return success
+     *  @return true if the hashed entry was written to router.config
      */
     public boolean saveHash(String realm, String user, String pw) {
         String pfx = realm;
@@ -190,7 +190,7 @@ public class RouterPasswordManager extends PasswordManager {
      *
      *  @param realm e.g. i2cp, routerconsole, etc.
      *  @param user null or "" for no user, already trimmed
-     *  @return success
+     *  @return true if every stored password form for the prefix was deleted
      */
     public boolean remove(String realm, String user) {
         String pfx = realm;

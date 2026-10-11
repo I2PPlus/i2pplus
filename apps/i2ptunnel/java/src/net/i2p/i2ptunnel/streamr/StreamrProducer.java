@@ -19,7 +19,7 @@ public class StreamrProducer extends I2PTunnelUDPServerBase {
      * @param port local UDP port to listen on
      * @param privkey I2P private key file for the destination
      * @param privkeyname name of the private key
-     * @param l logging facility
+     * @param l the logging facility passed on to the superclass
      * @param notifyThis event dispatcher for notifications
      * @param tunnel the owning I2PTunnel, which supplies the client options and context
      * @since 0.9.53

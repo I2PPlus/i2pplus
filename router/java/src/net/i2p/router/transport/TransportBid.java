@@ -41,7 +41,7 @@ public class TransportBid {
 
     /**
      * Specifies the transport that offered this bid
-     * @return the transport
+     * @return the transport making the bid, or null if not yet recorded
      */
     public Transport getTransport() {return _transport;}
     /**

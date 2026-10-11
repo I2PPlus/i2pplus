@@ -122,7 +122,8 @@ public class UrlLauncher implements ClientApp {
      * Prevent bad user experience by waiting for the server to be there
      * before launching the browser.
      *
-     * @return success
+     * @return true once the socket connects, false if the retries run out or
+     *         the URL cannot be parsed
      */
     private static boolean waitForServer(String urlString) {
         URI url;
@@ -513,7 +514,7 @@ public class UrlLauncher implements ClientApp {
 
     /**
      * ClientApp interface
-     * @return the state
+     * @return the tracked application state
      * @since 0.9.18
      */
     @Override

@@ -188,7 +188,7 @@ class RRDFile implements Constants {
 
     /**
      * Byte alignment this file was mapped with.
-     * @return the alignment
+     * @return 4 for 32 bit RRDs, 8 for 64 bit ones
      */
     int getAlignment() {
         return alignment;
@@ -268,7 +268,7 @@ class RRDFile implements Constants {
 
     /**
      * Reports the current read position.
-     * @return the position
+     * @return the byte offset of the next read in the mapped file
      */
     long info() {
         return mappedByteBuffer.position();

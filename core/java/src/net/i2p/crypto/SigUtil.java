@@ -914,7 +914,7 @@ public final class SigUtil {
      *
      * @param asn the ASN.1 encoded signature or public key to decode
      * @param len the nominal length of each BigInteger the encoding holds
-     * @return two BigIntegers
+     * @return the R and S integers, each of {@code len} bytes
      * @throws SignatureException if the encoding does not hold the two integers
      *                            of the expected length
      * @since 0.9.25

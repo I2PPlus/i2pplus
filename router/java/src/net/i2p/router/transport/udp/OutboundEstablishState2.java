@@ -1011,7 +1011,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
      *  Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.
      *  It does not translate!
-     *  @return s
+     *  @return the string unchanged and untranslated
      *  @since 0.9.57
      */
     private static final String _x(String s) {

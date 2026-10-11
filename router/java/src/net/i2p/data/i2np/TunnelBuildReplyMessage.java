@@ -34,7 +34,7 @@ public class TunnelBuildReplyMessage extends TunnelBuildMessageBase {
 
     /**
      * The I2NP message type of a build reply.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, 22
      */
     public int getType() { return MESSAGE_TYPE; }
 

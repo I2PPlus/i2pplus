@@ -1484,7 +1484,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public Set<Hash> getAccessList() {return _accessList;}
     /**
      * Destinations refused outright, consulted when blacklisting is enabled.
-     * @return the blacklist
+     * @return the set as held, without copying; null unless
+     *         {@link #isBlacklistEnabled()} is true
      */
     public Set<Hash> getBlacklist() {return _blackList;}
 

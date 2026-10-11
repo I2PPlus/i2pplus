@@ -123,7 +123,8 @@ public class IdenticonUtil {
 	 *            will be used to determine the value.
 	 * @param remoteAddr
 	 *            HTTP requester's IP address. Optional if code was specified.
-	 * @return the code
+	 * @return the identicon code, or 0 if the input could not be parsed or
+	 *         resolved
 	 */
 	public static int getIdenticonCode(String codeParam, String remoteAddr) {
 		int code = 0;

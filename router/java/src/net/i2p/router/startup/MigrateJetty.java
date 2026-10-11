@@ -181,7 +181,8 @@ abstract class MigrateJetty {
 
     /**
      * Backup a file with given suffix
-     * @return success
+     * @return true if the copy succeeded, or if there was nothing to copy; false
+     *         if the copy failed
      */
     private static boolean backupFile(File from, String suffix) {
         if (!from.exists())

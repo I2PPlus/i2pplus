@@ -492,13 +492,13 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * sure that this happens.
      *
      * @param minorUnit Minor grid unit. Minor grid, major grid and label units can be one of the
-     *     following constants defined in {@link org.rrd4j.graph.RrdGraphConstants}: {@link
-     *     org.rrd4j.graph.RrdGraphConstants#SECOND SECOND}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#MINUTE MINUTE}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#HOUR HOUR}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#DAY DAY}, {@link org.rrd4j.graph.RrdGraphConstants#WEEK
-     *     WEEK}, {@link org.rrd4j.graph.RrdGraphConstants#MONTH MONTH}, {@link
-     *     org.rrd4j.graph.RrdGraphConstants#YEAR YEAR}.
+     *                  following constants defined in {@link org.rrd4j.graph.RrdGraphConstants}: {@link
+     *                  org.rrd4j.graph.RrdGraphConstants#SECOND SECOND}, {@link
+     *                  org.rrd4j.graph.RrdGraphConstants#MINUTE MINUTE}, {@link
+     *                  org.rrd4j.graph.RrdGraphConstants#HOUR HOUR}, {@link
+     *                  org.rrd4j.graph.RrdGraphConstants#DAY DAY}, {@link org.rrd4j.graph.RrdGraphConstants#WEEK
+     *                  WEEK}, {@link org.rrd4j.graph.RrdGraphConstants#MONTH MONTH}, {@link
+     *                  org.rrd4j.graph.RrdGraphConstants#YEAR YEAR}.
      * @param minorUnitCount Number of minor grid units between minor grid lines.
      * @param majorUnit Major grid unit.
      * @param majorUnitCount Number of major grid units between major grid lines.
@@ -783,7 +783,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * </pre>
      *
      * @param imageInfo Image info format. Use %s placeholder for filename, %d placeholder for image
-     *     width and height.
+     *                  width and height.
      */
     public void setImageInfo(String imageInfo) {
         this.imageInfo = imageInfo;

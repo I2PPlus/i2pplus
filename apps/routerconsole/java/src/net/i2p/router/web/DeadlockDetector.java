@@ -133,7 +133,7 @@ public class DeadlockDetector extends SimpleTimer2.TimedEvent {
     /**
      * Return the results of the last test. Does not run a new test.
      *
-     * @return whether deadlocked
+     * @return the last recorded result, false before any test has run
      * @since 0.9.56
      */
     public static boolean isDeadlocked() {

@@ -115,7 +115,8 @@ public class Comment implements Comparable<Comment> {
     /**
      * Returns the comment timestamp in java time (milliseconds since epoch).
      *
-     * @return the timestamp
+     * @return the scaled offset timestamp, or 0 if the stored value is below
+     *         the base offset
      */
     public long getTime() {
         return (time * TIME_SHRINK) + TIME_OFFSET;

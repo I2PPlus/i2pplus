@@ -176,7 +176,7 @@ public final class PrioritySendPool {
 
     /**
      * The configured pool capacity.
-     * @return the capacity
+     * @return how many messages the pool holds before further offers start evicting
      */
     public int getCapacity() {
         return _capacity;

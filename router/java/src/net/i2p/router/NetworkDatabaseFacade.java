@@ -257,14 +257,14 @@ public abstract class NetworkDatabaseFacade implements Service {
     /**
      * Number of known routers.
      *
-     * @return the count
+     * @return the count, 0 in this do-nothing base implementation
      */
     public int getKnownRouters() {return 0;}
 
     /**
      * Number of known LeaseSets.
      *
-     * @return the count
+     * @return the count, 0 in this do-nothing base implementation
      */
     public int getKnownLeaseSets() {return 0;}
 

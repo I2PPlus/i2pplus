@@ -749,7 +749,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @param rrdPath Path to a RRD file which will be created
      * @param externalPath Path to an external file which should be imported, with an optional
-     *     <code>xml:/</code> or <code>rrdtool:/</code> prefix.
+     *                     <code>xml:/</code> or <code>rrdtool:/</code> prefix.
      * @throws java.io.IOException Thrown in case of I/O error
      * @deprecated Use the builder instead.
      */
@@ -811,7 +811,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @param uri Path to a RRD file which will be created
      * @param externalPath Path to an external file which should be imported, with an optional
-     *     <code>xml:/</code> or <code>rrdtool:/</code> prefix.
+     *                     <code>xml:/</code> or <code>rrdtool:/</code> prefix.
      * @throws java.io.IOException Thrown in case of I/O error
      * @deprecated Use the builder instead.
      */
@@ -869,7 +869,7 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
      *
      * @param rrdPath Path to RRD which will be created
      * @param externalPath Path to an external file which should be imported, with an optional
-     *     <code>xml:/</code> or <code>rrdtool:/</code> prefix.
+     *                     <code>xml:/</code> or <code>rrdtool:/</code> prefix.
      * @param factory Backend factory which will be used to create storage (backend) for this RRD.
      * @throws java.io.IOException Thrown in case of I/O error
      * @see RrdBackendFactory

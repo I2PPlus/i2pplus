@@ -65,7 +65,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     /**
      * Reports how serious the abuse was judged to be.
-     * @return the severity
+     * @return the reported severity level
      */
     public AbuseSeverity getSeverity() {
         return _severity;
@@ -82,7 +82,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     /**
      * Reports which category of misbehaviour was observed.
-     * @return the reason
+     * @return the free-text category string
      */
     public AbuseReason getReason() {
         return _reason;
@@ -160,7 +160,7 @@ public class ReportAbuseMessage extends I2CPMessageImpl {
 
     /**
      * Reports this message's I2CP type number.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, 29
      */
     @Override
     public int getType() {

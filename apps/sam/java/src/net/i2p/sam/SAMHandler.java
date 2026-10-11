@@ -222,7 +222,7 @@ abstract class SAMHandler implements Runnable, Handler {
     /**
      * Get the channel of the socket connected to the SAM client
      *
-     * @return channel
+     * @return the client socket, or null before it is accepted
      */
     protected final SocketChannel getClientSocket() {
         return socket;

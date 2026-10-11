@@ -77,7 +77,7 @@ class SearchState {
     /**
      * The search target.
      *
-     * @return the target
+     * @return the hash being searched for
      */
     public Hash getTarget() {return _searchKey;}
     /**
@@ -93,7 +93,7 @@ class SearchState {
     /**
      * Copy of the pending peers.
      *
-     * @return the pending
+     * @return a snapshot safe to iterate without holding the lock
      */
     public Set<Hash> getPending() {
         synchronized (_pendingPeers) {
@@ -103,7 +103,7 @@ class SearchState {
     /**
      * Copy of the attempted peers.
      *
-     * @return the attempted
+     * @return a snapshot safe to iterate without holding the lock
      */
     public Set<Hash> getAttempted() {
         synchronized (_attemptedPeers) {
@@ -158,7 +158,7 @@ class SearchState {
     /**
      * Copy of the successful peers.
      *
-     * @return the successful
+     * @return a snapshot safe to iterate without holding the lock
      */
     public Set<Hash> getSuccessful() {
         synchronized (_successfulPeers) {
@@ -168,7 +168,7 @@ class SearchState {
     /**
      * Copy of the failed peers.
      *
-     * @return the failed
+     * @return a snapshot safe to iterate without holding the lock
      */
     public Set<Hash> getFailed() {
         synchronized (_failedPeers) {
@@ -217,7 +217,7 @@ class SearchState {
     /**
      * Checks if this search state has been aborted.
      *
-     * @return whether aborted
+     * @return true once {@link #abort()} has been called
      * @since 0.9.16
      */
     public boolean isAborted() {return _aborted;}

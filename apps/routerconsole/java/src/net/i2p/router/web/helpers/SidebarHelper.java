@@ -248,7 +248,9 @@ public class SidebarHelper extends HelperBase {
      * Retrieve the shortened 4 character ident for the router located within
      * the current JVM at the given context.
      *
-     * @return the ident
+     * @return the first 4 base64 characters of the router hash, or the
+     *         {@code "[no router]"} / {@code "[unknown]"} placeholder when no
+     *         local router is running
      */
     public String getIdent() {
         if (_context == null) {return "[no router]";}
@@ -259,14 +261,15 @@ public class SidebarHelper extends HelperBase {
     /**
      * Retrieve the version number of the router.
      *
-     * @return the version
+     * @return {@link RouterVersion#FULL_VERSION}
      */
     public String getVersion() {return RouterVersion.FULL_VERSION;}
 
     /**
      * Retrieve a pretty printed uptime count (ala 4d or 7h or 39m)
      *
-     * @return the uptime
+     * @return the formatted duration, or the {@code "[no router]"} /
+     *         {@code "[not up]"} placeholder when no router is running
      */
     public String getUptime() {
         if (_context == null) {return "[no router]";}
@@ -332,7 +335,9 @@ public class SidebarHelper extends HelperBase {
          * Create a network state message
          *
          * @param state the reachability state
-         * @param msg   localized description
+         * @param msg   text already localized by the caller, which may be a
+         *              {@link java.text.MessageFormat} pattern such as
+         *              "Clock Skew of {0}"
          */
         NetworkStateMessage(NetworkState state, String msg) {setMessage(state, msg);}
 
@@ -340,7 +345,9 @@ public class SidebarHelper extends HelperBase {
          * Update the state and message
          *
          * @param state the reachability state
-         * @param msg   localized description
+         * @param msg   text already localized by the caller, which may be a
+         *              {@link java.text.MessageFormat} pattern such as
+         *              "Clock Skew of {0}"
          */
         public void setMessage(NetworkState state, String msg) {
             this.state = state;
@@ -476,7 +483,7 @@ public class SidebarHelper extends HelperBase {
 
     /**
      * Retrieve amount of used memory.
-     * @return the memory
+     * @return a display string of {@code "used / total M"}, both in MiB
      * @since 0.9.32 uncommented
      */
     @SuppressWarnings("PMD.UnsynchronizedStaticFormatter")
@@ -1065,7 +1072,8 @@ public class SidebarHelper extends HelperBase {
      * Look up the translated display name for a client destination,
      * checking SessionConfig first then TunnelPoolSettings.
      *
-     * @param d client destination
+     * @param d the destination whose name is wanted, looked up by its
+     *          {@link Destination#calculateHash()} hash
      * @return translated tunnel name or base32 fallback
      */
     private String getTunnelName(Destination d) {
@@ -1662,8 +1670,9 @@ public class SidebarHelper extends HelperBase {
     /**
      * Save the summary bar section order to router config
      *
-     * @param ctx      router context
-     * @param page     page identifier
+     * @param ctx      the context whose router config receives the setting
+     * @param page     appended to {@code PROP_SUMMARYBAR} to form the config
+     *                 key, so a wrong value silently stores a second setting
      * @param sections ordered map of section index to section id
      */
     static void saveSummaryBarSections(RouterContext ctx, String page, Map<Integer, String> sections) {

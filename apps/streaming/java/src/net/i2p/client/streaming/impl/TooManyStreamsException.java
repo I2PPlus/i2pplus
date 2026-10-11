@@ -11,7 +11,7 @@ public class TooManyStreamsException extends I2PException {
      * Creates a new TooManyStreamsException with a message and a cause.
      *
      * @param message the detail message
-     * @param parent the cause
+     * @param parent the underlying failure that led to the stream limit being hit
      */
     public TooManyStreamsException(String message, Throwable parent) {
         super(message, parent);

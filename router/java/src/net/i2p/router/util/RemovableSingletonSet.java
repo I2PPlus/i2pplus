@@ -53,7 +53,7 @@ public class RemovableSingletonSet<E> extends AbstractSet<E> {
     /**
      * Whether the set is empty.
      *
-     * @return whether empty
+     * @return true once the sole element has been removed or cleared
      */
     @Override
     public boolean isEmpty() {

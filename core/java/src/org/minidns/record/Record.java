@@ -597,7 +597,8 @@ public final class Record<D extends Data> {
 
     /**
      * Check if this record answers a given query.
-     * @param q The query.
+     * @param q The query; its type and class match when equal to that value
+     *          or to ANY
      * @return True if this record is a valid answer.
      */
     public boolean isAnswer(Question q) {

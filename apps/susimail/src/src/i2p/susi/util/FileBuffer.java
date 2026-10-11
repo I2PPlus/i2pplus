@@ -59,7 +59,7 @@ public class FileBuffer implements Buffer {
   * Get an InputStream for the file, skipping to the offset if needed.
   * Caller must call readComplete().
   *
-	 * @return new FileInputStream
+	 * @return a stream positioned at the offset, reusing the open one
 	 * @throws IOException on I/O error
 	 */
 	public synchronized InputStream getInputStream() throws IOException {
@@ -75,7 +75,7 @@ public class FileBuffer implements Buffer {
   * Get an OutputStream for the file.
   * Caller must call writeComplete().
   *
-	 * @return new SecureFileOutputStream
+	 * @return a file output stream, reusing the open one
 	 * @throws IOException on I/O error
 	 */
 	public synchronized OutputStream getOutputStream() throws IOException {
@@ -87,7 +87,7 @@ public class FileBuffer implements Buffer {
 	/**
 	 * Close the input stream.
 	 *
-	 * @param success ignored
+	 * @param success whether the read succeeded; the stream is closed either way
 	 */
 	public synchronized void readComplete(boolean success) {
 		if (_is != null) {

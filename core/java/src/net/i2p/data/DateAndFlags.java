@@ -84,7 +84,7 @@ public class DateAndFlags extends DataStructureImpl {
     /**
      * The Date object is created here, it is not cached.
      * Use getTime() if you only need the long value.
-     * @return the date
+     * @return a fresh Date, built from the millisecond timestamp on each call
      */
     public Date getDate() {
         return Date.from(Instant.ofEpochMilli(_date));

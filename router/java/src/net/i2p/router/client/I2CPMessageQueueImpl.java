@@ -79,7 +79,7 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     /**
      * Receive a message, blocking until one is available
      *
-     * @return message
+     * @return the next message removed from the inbound side of the queue
      */
     public I2CPMessage take() throws InterruptedException {return _in.take();}
 

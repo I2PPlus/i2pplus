@@ -968,7 +968,7 @@ public class I2PAppContext {
      * The context's synchronized clock, which is kept context specific only to
      * enable simulators to play with clock skew among different instances.
      *
-     * @return the clock
+     * @return the context's Clock, initialized on the first call and shared by every caller
      */
     public Clock clock() {
         if (!_clockInitialized)

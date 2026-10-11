@@ -655,7 +655,7 @@ public class RequestThrottler {
 
     /**
      * Checks if router has high bandwidth capabilities.
-     * @return whether fast
+     * @return true if the router advertises BW256, BW512 or unbounded bandwidth
      */
     private boolean isFast(RouterInfo ri) {
         if (ri == null) return false;

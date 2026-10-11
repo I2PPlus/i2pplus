@@ -82,7 +82,7 @@ class OutboundClientMessageJobHelper {
      * @param recipientPK the recipient public key
      * @param dataClove may be null for ECIES-layer ack
      * @param from the sender hash
-     * @param dest the destination
+     * @param dest the remote destination the message is addressed to
      * @param replyTunnel non-null if requireAck is true or bundledReplyLeaseSet is non-null
      * @param tagsToSendOverride if &gt; 0, use this instead of skm's default
      * @param lowTagsOverride if &gt; 0, use this instead of skm's default

@@ -79,7 +79,8 @@ public abstract class ZipFileComment {
 
     /**
      * go backwards from the end
-     * @return the comment
+     * @return the UTF-8 comment stored after the last end-of-central-directory
+     *         record
      */
     private static String getComment(byte[] buffer) throws IOException {
         for (int i = buffer.length - BLOCK_LEN; i >= 0; i--) {

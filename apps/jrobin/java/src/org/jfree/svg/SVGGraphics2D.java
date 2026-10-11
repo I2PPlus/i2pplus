@@ -674,7 +674,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * target device and the antialias hint setting." We don't have a means to implement that
      * accurately since we must specify a fixed width.
      *
-     * @return The width.
+     * @return the stroke width, in user units, used when the AWT stroke has zero width
      * @since 1.9
      */
     public double getZeroStrokeWidth() {
@@ -1655,7 +1655,7 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Returns the font metrics for the specified font.
      *
-     * @param f the font.
+     * @param f the font to measure; the metrics come from an offscreen 10x10 image.
      * @return The font metrics.
      */
     @Override
@@ -1688,8 +1688,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * strings (this is completely optional though).
      *
      * @param str the string ({@code null} not permitted).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the text baseline origin.
+     * @param y the user-space y-coordinate of the text baseline origin.
      * @see #drawString(java.lang.String, float, float)
      */
     @Override
@@ -1705,8 +1705,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * strings (this is completely optional though).
      *
      * @param str the string ({@code null} not permitted).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the text baseline origin.
+     * @param y the user-space y-coordinate of the text baseline origin.
      */
     @Override
     public void drawString(String str, float x, float y) {
@@ -1757,8 +1757,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * #drawString(AttributedCharacterIterator, float, float)}.
      *
      * @param iterator an iterator for the characters.
-     * @param x the x-coordinate.
-     * @param y the x-coordinate.
+     * @param x the user-space x-coordinate of the text baseline origin.
+     * @param y the user-space y-coordinate of the text baseline origin.
      */
     @Override
     public void drawString(AttributedCharacterIterator iterator, int x, int y) {
@@ -1769,8 +1769,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws a string of attributed characters at {@code (x, y)}.
      *
      * @param iterator an iterator over the characters ({@code null} not permitted).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the text baseline origin.
+     * @param y the user-space y-coordinate of the text baseline origin.
      */
     @Override
     public void drawString(AttributedCharacterIterator iterator, float x, float y) {
@@ -1793,8 +1793,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws the specified glyph vector at the location {@code (x, y)}.
      *
      * @param g the glyph vector ({@code null} not permitted).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate at which to place the glyph outline origin.
+     * @param y the user-space y-coordinate at which to place the glyph outline origin.
      */
     @Override
     public void drawGlyphVector(GlyphVector g, float x, float y) {
@@ -1805,8 +1805,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Applies the translation {@code (tx, ty)}. This call is delegated to {@link #translate(double,
      * double)}.
      *
-     * @param tx the x-translation.
-     * @param ty the y-translation.
+     * @param tx the horizontal translation in user units, applied to later drawing.
+     * @param ty the vertical translation in user units, applied to later drawing.
      * @see #translate(double, double)
      */
     @Override
@@ -1817,8 +1817,8 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Applies the translation {@code (tx, ty)}.
      *
-     * @param tx the x-translation.
-     * @param ty the y-translation.
+     * @param tx the horizontal translation in user units, applied to later drawing.
+     * @param ty the vertical translation in user units, applied to later drawing.
      */
     @Override
     public void translate(double tx, double ty) {
@@ -1843,8 +1843,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Applies a rotation (anti-clockwise) about {@code (x, y)}.
      *
      * @param theta the rotation angle (in radians).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the centre of rotation.
+     * @param y the user-space y-coordinate of the centre of rotation.
      */
     @Override
     public void rotate(double theta, double x, double y) {
@@ -1927,7 +1927,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * interior, if {@code onStroke} is {@code false}, otherwise the stroked outline of the shape).
      *
      * @param rect a rectangle (in device space).
-     * @param s the shape.
+     * @param s the shape to test; the current transform is applied to it first.
      * @param onStroke test the stroked outline only?
      * @return A boolean.
      */
@@ -1957,7 +1957,7 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Does nothing in this {@code SVGGraphics2D} implementation.
      *
-     * @param c ignored
+     * @param c the colour to XOR with - ignored, SVG output has no XOR mode
      */
     @Override
     public void setXORMode(Color c) {
@@ -2119,8 +2119,8 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Clips to the intersection of the current clipping region and the specified rectangle.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the rectangle.
+     * @param y the user-space y-coordinate of the top edge of the rectangle.
      * @param width the horizontal extent of the rectangle to intersect with the current clip.
      * @param height the vertical extent of that rectangle.
      */
@@ -2133,8 +2133,8 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Sets the user clipping region to the specified rectangle.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the new clip region.
+     * @param y the user-space y-coordinate of the top edge of the new clip region.
      * @param width the horizontal extent of the new user clip.
      * @param height the vertical extent of that rectangle.
      * @see #getClip()
@@ -2167,8 +2167,8 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Fills the specified rectangle with the current {@code paint}.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the rectangle.
+     * @param y the user-space y-coordinate of the top edge of the rectangle.
      * @param width the rectangle width.
      * @param height the rectangle height.
      */
@@ -2182,8 +2182,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Clears the specified rectangle by filling it with the current background color. If the
      * background color is {@code null}, this method will do nothing.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the region.
+     * @param y the user-space y-coordinate of the top edge of the region.
      * @param width the horizontal extent of the region to clear with the background color.
      * @param height the vertical extent of that region.
      * @see #getBackground()
@@ -2202,12 +2202,12 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Draws a rectangle with rounded corners using the current {@code paint} and {@code stroke}.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the bounding rectangle.
+     * @param y the user-space y-coordinate of the top edge of the bounding rectangle.
      * @param width the horizontal extent of the bounding rectangle, the rounded corners included.
      * @param height the vertical extent of that bounding rectangle.
-     * @param arcWidth the arc-width.
-     * @param arcHeight the arc-height.
+     * @param arcWidth the horizontal diameter of each corner arc, not its radius.
+     * @param arcHeight the vertical diameter of each corner arc, not its radius.
      * @see #fillRoundRect(int, int, int, int, int, int)
      */
     @Override
@@ -2219,12 +2219,12 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Fills a rectangle with rounded corners using the current {@code paint}.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the bounding rectangle.
+     * @param y the user-space y-coordinate of the top edge of the bounding rectangle.
      * @param width the horizontal extent of the bounding rectangle, the rounded corners included.
      * @param height the vertical extent of that bounding rectangle.
-     * @param arcWidth the arc-width.
-     * @param arcHeight the arc-height.
+     * @param arcWidth the horizontal diameter of each corner arc, not its radius.
+     * @param arcHeight the vertical diameter of each corner arc, not its radius.
      * @see #drawRoundRect(int, int, int, int, int, int)
      */
     @Override
@@ -2237,8 +2237,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws an oval framed by the rectangle {@code (x, y, width, height)} using the current {@code
      * paint} and {@code stroke}.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the oval's frame.
+     * @param y the user-space y-coordinate of the top edge of the oval's frame.
      * @param width the horizontal extent of the frame the oval is inscribed in, not a radius.
      * @param height the vertical extent of that frame.
      * @see #fillOval(int, int, int, int)
@@ -2252,8 +2252,8 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Fills an oval framed by the rectangle {@code (x, y, width, height)}.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the oval's frame.
+     * @param y the user-space y-coordinate of the top edge of the oval's frame.
      * @param width the horizontal extent of the frame the oval is inscribed in, not a radius.
      * @param height the vertical extent of that frame.
      * @see #drawOval(int, int, int, int)
@@ -2269,8 +2269,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * startAngle} and continuing through {@code arcAngle} degrees using the current {@code paint}
      * and {@code stroke}.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the arc's frame.
+     * @param y the user-space y-coordinate of the top edge of the arc's frame.
      * @param width the horizontal extent of the frame the arc is inscribed in, not a radius.
      * @param height the vertical extent of that frame.
      * @param startAngle the start angle in degrees, 0 = 3 o'clock.
@@ -2287,8 +2287,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Fills an arc contained within the rectangle {@code (x, y, width, height)}, starting at {@code
      * startAngle} and continuing through {@code arcAngle} degrees, using the current {@code paint}.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the arc's frame.
+     * @param y the user-space y-coordinate of the top edge of the arc's frame.
      * @param width the horizontal extent of the frame the arc is inscribed in, not a radius.
      * @param height the vertical extent of that frame.
      * @param startAngle the start angle in degrees, 0 = 3 o'clock.
@@ -2304,8 +2304,10 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Draws the specified multi-segment line using the current {@code paint} and {@code stroke}.
      *
-     * @param xPoints the x-points.
-     * @param yPoints the y-points.
+     * @param xPoints the user-space x-coordinates of the vertices; only the first
+     *                {@code nPoints} entries are read
+     * @param yPoints the user-space y-coordinates of the vertices; only the first
+     *                {@code nPoints} entries are read
      * @param nPoints the number of points to use for the polyline.
      */
     @Override
@@ -2317,8 +2319,10 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Draws the specified polygon using the current {@code paint} and {@code stroke}.
      *
-     * @param xPoints the x-points.
-     * @param yPoints the y-points.
+     * @param xPoints the user-space x-coordinates of the vertices; only the first
+     *                {@code nPoints} entries are read
+     * @param yPoints the user-space y-coordinates of the vertices; only the first
+     *                {@code nPoints} entries are read
      * @param nPoints the number of points to use for the polygon.
      * @see #fillPolygon(int[], int[], int)
      */
@@ -2331,8 +2335,10 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Fills the specified polygon using the current {@code paint}.
      *
-     * @param xPoints the x-points.
-     * @param yPoints the y-points.
+     * @param xPoints the user-space x-coordinates of the vertices; only the first
+     *                {@code nPoints} entries are read
+     * @param yPoints the user-space y-coordinates of the vertices; only the first
+     *                {@code nPoints} entries are read
      * @param nPoints the number of points to use for the polygon.
      * @see #drawPolygon(int[], int[], int)
      */
@@ -2374,9 +2380,9 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws an image at the location {@code (x, y)}. Note that the {@code observer} is ignored.
      *
      * @param img the image ({@code null} permitted...method will do nothing).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
-     * @param observer ignored.
+     * @param x the user-space x-coordinate of the top left corner of the image.
+     * @param y the user-space y-coordinate of the top left corner of the image.
+     * @param observer an ImageObserver; SVG output is synchronous, so it is never notified.
      * @return {@code true} if there is no more drawing to be done.
      */
     @Override
@@ -2400,11 +2406,11 @@ public final class SVGGraphics2D extends Graphics2D {
      * observer} is ignored (it is not useful in this context).
      *
      * @param img the image ({@code null} permitted...draws nothing).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
-     * @param w the width.
-     * @param h the height.
-     * @param observer ignored.
+     * @param x the user-space x-coordinate of the left edge of the target rectangle.
+     * @param y the user-space y-coordinate of the top edge of the target rectangle.
+     * @param w the width of the target rectangle, which the image is scaled to fit.
+     * @param h the height of the target rectangle, which the image is scaled to fit.
+     * @param observer an ImageObserver; SVG output is synchronous, so it is never notified.
      * @return {@code true} if there is no more drawing to be done.
      */
     @Override
@@ -2487,10 +2493,10 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws an image at the location {@code (x, y)}. Note that the {@code observer} is ignored.
      *
      * @param img the image ({@code null} permitted...draws nothing).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the top left corner of the image.
+     * @param y the user-space y-coordinate of the top left corner of the image.
      * @param bgcolor the background color ({@code null} permitted).
-     * @param observer ignored.
+     * @param observer an ImageObserver; SVG output is synchronous, so it is never notified.
      * @return {@code true} if there is no more drawing to be done.
      */
     @Override
@@ -2513,13 +2519,13 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws an image to the rectangle {@code (x, y, w, h)} (scaling it if required), first filling
      * the background with the specified color. Note that the {@code observer} is ignored.
      *
-     * @param img the image.
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
-     * @param w the width.
-     * @param h the height.
+     * @param img the image to scale into the target rectangle.
+     * @param x the user-space x-coordinate of the left edge of the target rectangle.
+     * @param y the user-space y-coordinate of the top edge of the target rectangle.
+     * @param w the width of the target rectangle, which the image is scaled to fit.
+     * @param h the height of the target rectangle, which the image is scaled to fit.
      * @param bgcolor the background color ({@code null} permitted).
-     * @param observer ignored.
+     * @param observer an ImageObserver; SVG output is synchronous, so it is never notified.
      * @return {@code true} if the image is drawn.
      */
     @Override
@@ -2537,7 +2543,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * the destination rectangle {@code (dx1, dy1, dx2, dy2)}. Note that the {@code observer} is
      * ignored.
      *
-     * @param img the image.
+     * @param img the image the source rectangle is read from.
      * @param dx1 the x-coordinate for the top left of the destination.
      * @param dy1 the y-coordinate for the top left of the destination.
      * @param dx2 the x-coordinate for the bottom right of the destination.
@@ -2574,7 +2580,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * cleared by filling it with the specified {@code bgcolor}. Note that the {@code observer} is
      * ignored.
      *
-     * @param img the image.
+     * @param img the image the source rectangle is read from.
      * @param dx1 the x-coordinate for the top left of the destination.
      * @param dy1 the y-coordinate for the top left of the destination.
      * @param dx2 the x-coordinate for the bottom right of the destination.
@@ -2584,7 +2590,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param sx2 the x-coordinate for the bottom right of the source.
      * @param sy2 the y-coordinate for the bottom right of the source.
      * @param bgcolor the background color ({@code null} permitted).
-     * @param observer ignored.
+     * @param observer an ImageObserver; SVG output is synchronous, so it is never notified.
      * @return {@code true} if the image is drawn.
      */
     @Override
@@ -2611,7 +2617,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws the rendered image. If {@code img} is {@code null} this method does nothing.
      *
      * @param img the image ({@code null} permitted).
-     * @param xform the transform.
+     * @param xform the transform mapping image space to user space ({@code null} permitted).
      */
     @Override
     public void drawRenderedImage(RenderedImage img, AffineTransform xform) {
@@ -2626,7 +2632,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws the renderable image.
      *
      * @param img the renderable image.
-     * @param xform the transform.
+     * @param xform the transform mapping image space to user space ({@code null} permitted).
      */
     @Override
     public void drawRenderableImage(RenderableImage img, AffineTransform xform) {
@@ -2637,7 +2643,7 @@ public final class SVGGraphics2D extends Graphics2D {
     /**
      * Draws an image with the specified transform. Note that the {@code observer} is ignored.
      *
-     * @param img the image.
+     * @param img the image to draw ({@code null} permitted...draws nothing).
      * @param xform the transform ({@code null} permitted).
      * @param obs the image observer (ignored).
      * @return {@code true} if the image is drawn.
@@ -2659,10 +2665,10 @@ public final class SVGGraphics2D extends Graphics2D {
      * Draws the image resulting from applying the {@code BufferedImageOp} to the specified image at
      * the location {@code (x, y)}.
      *
-     * @param img the image.
+     * @param img the image to filter and draw.
      * @param op the operation ({@code null} permitted).
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the top left corner of the filtered image.
+     * @param y the user-space y-coordinate of the top left corner of the filtered image.
      */
     @Override
     public void drawImage(BufferedImage img, BufferedImageOp op, int x, int y) {
@@ -2677,8 +2683,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * This method does nothing. The operation assumes that the output is in bitmap form, which is
      * not the case for SVG, so we silently ignore this method call.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x ignored; SVG output has no raster buffer to copy from.
+     * @param y ignored; SVG output has no raster buffer to copy from.
      * @param width the width of the area.
      * @param height the height of the area.
      * @param dx the delta x.
@@ -3359,7 +3365,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * written to the DEFS element in the SVG.
      *
      * @param id the reference id.
-     * @param paint the gradient.
+     * @param paint the {@link GradientPaint} supplying the two points, stops and fractions.
      * @return The SVG element.
      */
     private String getLinearGradientElement(String id, GradientPaint paint) {
@@ -3399,7 +3405,7 @@ public final class SVGGraphics2D extends Graphics2D {
      * written to the DEFS element in the SVG.
      *
      * @param id the reference id.
-     * @param paint the gradient.
+     * @param paint the {@link LinearGradientPaint} supplying the two points, stops and fractions.
      * @return The SVG element.
      */
     private String getLinearGradientElement(String id, LinearGradientPaint paint) {
@@ -3545,8 +3551,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * SVGGraphics2D#drawRect(int, int, int, int)} and {@link SVGGraphics2D#fillRect(int, int, int,
      * int)} methods.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the rectangle.
+     * @param y the user-space y-coordinate of the top edge of the rectangle.
      * @param width the horizontal extent to store in the reusable rectangle.
      * @param height the vertical extent to store in the reusable rectangle.
      */
@@ -3563,8 +3569,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * {@link #drawRoundRect(int, int, int, int, int, int)} and {@link #fillRoundRect(int, int, int,
      * int, int, int)} methods.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the bounding rectangle.
+     * @param y the user-space y-coordinate of the top edge of the bounding rectangle.
      * @param width the horizontal extent of the bounding rectangle, the rounded corners included.
      * @param height the vertical extent of that bounding rectangle.
      * @param arcWidth the arc width.
@@ -3582,8 +3588,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Sets the attributes of the reusable {@link Arc2D} object that is used by {@link #drawArc(int,
      * int, int, int, int, int)} and {@link #fillArc(int, int, int, int, int, int)} methods.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the arc's frame.
+     * @param y the user-space y-coordinate of the top edge of the arc's frame.
      * @param width the horizontal extent of the frame the arc is inscribed in, not a radius.
      * @param height the vertical extent of that frame.
      * @param startAngle the start angle in degrees, 0 = 3 o'clock.
@@ -3601,8 +3607,8 @@ public final class SVGGraphics2D extends Graphics2D {
      * Sets the attributes of the reusable {@link Ellipse2D} object that is used by the {@link
      * #drawOval(int, int, int, int)} and {@link #fillOval(int, int, int, int)} methods.
      *
-     * @param x the x-coordinate.
-     * @param y the y-coordinate.
+     * @param x the user-space x-coordinate of the left edge of the oval's frame.
+     * @param y the user-space y-coordinate of the top edge of the oval's frame.
      * @param width the horizontal extent of the frame the oval is inscribed in, not a radius.
      * @param height the vertical extent of that frame.
      */

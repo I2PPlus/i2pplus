@@ -70,7 +70,7 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
     /**
      * Releases the exclusive file lock, if held, then closes the underlying file.
      *
-     * @throws java.io.IOException if any.
+     * @throws java.io.IOException if the lock cannot be released or the file cannot be closed.
      */
     @Override
     public void close() throws IOException {

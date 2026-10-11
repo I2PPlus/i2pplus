@@ -192,7 +192,8 @@ public class KBucketSet<T extends SimpleDataStructure> {
      * No lock required.
      * FIXME will split the closest buckets too far if B &gt; 1 and K &lt; 2**B
      * Won't ever really happen and if it does it still works.
-     * @return whether split
+     * @return true if the bucket is over BUCKET_SIZE and its range covers more
+     *         than one key
      */
     private boolean shouldSplit(KBucket<T> b) {
         return b.getRangeBegin() != b.getRangeEnd() && b.getKeyCount() > BUCKET_SIZE;

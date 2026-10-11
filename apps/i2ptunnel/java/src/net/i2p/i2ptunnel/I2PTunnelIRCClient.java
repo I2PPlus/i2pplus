@@ -476,7 +476,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
     }
 
     /**
-     * @return whether enabled
+     * @return true if the DCC option was set on this client
      */
     @Override
     public boolean isEnabled() {

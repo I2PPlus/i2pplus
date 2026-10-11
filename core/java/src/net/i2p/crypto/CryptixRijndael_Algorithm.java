@@ -216,7 +216,7 @@ public final class CryptixRijndael_Algorithm {
      * Convenience method to encrypt exactly one block of plaintext, assuming
      * Rijndael's default block size (128-bit).
      *
-     * @param  in         The plaintext.
+     * @param  in         The plaintext; must hold at least 16 bytes past inOffset.
      * @param  result     The resulting ciphertext.
      * @param  inOffset   Index of in from which to start considering data.
      * @param  outOffset  Index in result at which to start writing data.
@@ -283,7 +283,7 @@ public final class CryptixRijndael_Algorithm {
      * Convenience method to decrypt exactly one block of plaintext, assuming
      * Rijndael's default block size (128-bit).
      *
-     * @param  in         The ciphertext.
+     * @param  in         The ciphertext; must hold at least 16 bytes past inOffset.
      * @param  result     The resulting ciphertext.
      * @param  inOffset   Index of in from which to start considering data.
      * @param  outOffset  Index in result at which to start writing data.
@@ -459,7 +459,7 @@ public final class CryptixRijndael_Algorithm {
     /**
      * Encrypt exactly one block of plaintext.
      *
-     * @param  in         The plaintext.
+     * @param  in         The plaintext; must hold at least 16 bytes past inOffset.
      * @param  result     The resulting ciphertext.
      * @param  inOffset   Index of in from which to start considering data.
      * @param  outOffset  Index in result at which to start writing data.
@@ -513,7 +513,7 @@ public final class CryptixRijndael_Algorithm {
     /**
      * Decrypt exactly one block of ciphertext.
      *
-     * @param  in         The ciphertext.
+     * @param  in         The ciphertext; must hold at least 16 bytes past inOffset.
      * @param  result     The resulting ciphertext.
      * @param  inOffset   Index of in from which to start considering data.
      * @param  outOffset  Index in result at which to start writing data.

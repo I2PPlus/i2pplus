@@ -30,7 +30,7 @@ public class ActionList extends Vector<Action> {
     /**
      * Gets the action at the specified index.
      *
-     * @param n the index
+     * @param n a position in this vector
      * @return the action at the specified index
      */
     public Action getAction(int n) {

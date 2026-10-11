@@ -49,7 +49,7 @@ public class ArgumentList extends Vector<Argument> {
     /**
      * Get an argument by index.
      *
-     * @param n the index
+     * @param n the zero-based position in the list
      * @return the argument at that index
      */
     public Argument getArgument(int n) {

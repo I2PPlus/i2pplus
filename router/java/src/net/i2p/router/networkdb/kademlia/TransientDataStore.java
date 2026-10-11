@@ -70,7 +70,7 @@ class TransientDataStore implements DataStore {
     /**
      * Whether the data store is initialized.
      *
-     * @return whether initialized
+     * @return always true, an in-memory store has nothing to initialize
      */
     @Override
     public boolean isInitialized() {return true;}
@@ -117,7 +117,7 @@ class TransientDataStore implements DataStore {
 
     /**
      * For PersistentDataStore only - don't use here.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, this store has no persistence layer
      */
     @Override
     public DatabaseEntry get(Hash key, boolean persist) {
@@ -138,7 +138,7 @@ class TransientDataStore implements DataStore {
     /**
      * Whether the data store contains the key.
      *
-     * @return whether known
+     * @return true if an entry is held for {@code key}
      */
     @Override
     public boolean isKnown(Hash key) {
@@ -158,7 +158,7 @@ class TransientDataStore implements DataStore {
 
     /**
      * For PersistentDataStore only - don't use here.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, this store has no persistence layer
      */
     public boolean put(Hash key, DatabaseEntry data, boolean persist) {
         throw new UnsupportedOperationException();
@@ -166,7 +166,8 @@ class TransientDataStore implements DataStore {
 
     /**
      * @param data must be validated before here
-     * @return success
+     * @return true only if the entry was stored; false for null data, a
+     *         banned RouterInfo, or an entry older than the one held
      */
     public boolean put(Hash key, DatabaseEntry data) {
         if (data == null) return false;
@@ -306,7 +307,7 @@ class TransientDataStore implements DataStore {
      *
      * @param key non-null
      * @param data non-null
-     * @return success
+     * @return always true, the entry replaces any existing one
      * @since 0.9.64
      */
     @Override
@@ -333,7 +334,7 @@ class TransientDataStore implements DataStore {
 
     /**
      * For PersistentDataStore only - don't use here.
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always, this store has no persistence layer
      */
     public DatabaseEntry remove(Hash key, boolean persist) {
         throw new UnsupportedOperationException();

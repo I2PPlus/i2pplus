@@ -203,7 +203,7 @@ public class Base64 {
     /**
      * Command-line tool for encoding and decoding Base64.
      *
-     * @param args command-line arguments
+     * @param args a subcommand and its arguments; empty prints the help
      */
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -341,7 +341,7 @@ public class Base64 {
 
     /**
      * Appends the encoding of the significant source bytes to buf, using alpha.
-     * @param alpha alphabet
+     * @param alpha the 64 character alphabet to index, plus its '=' padding
      */
     private static void encode3to4(byte[] source, int srcOffset, int numSigBytes, StringBuilder buf, byte[] alpha) {
 

@@ -471,6 +471,8 @@ public final class ElGamalAESEngine {
      * no less than the paddedSize parameter, but may be more.  This method uses the
      * ElGamal+AES algorithm in the data structure spec.
      *
+     * Unused externally, only called by below (i.e. newKey is always null)
+     *
      * @param data the plaintext to encrypt
      * @param target public key to which the data should be encrypted, must be ELGAMAL_2048.
      *               May be null if key and currentTag are non-null.
@@ -486,8 +488,6 @@ public final class ElGamalAESEngine {
      *
      * @return the encrypted data, at least paddedSize bytes and up to 514 bytes larger
      * @throws IllegalArgumentException on bad target EncType
-     *
-     *                               Unused externally, only called by below (i.e. newKey is always null)
      */
     public byte[] encrypt(byte[] data, PublicKey target, SessionKey key, Set<SessionTag> tagsForDelivery,
                                  SessionTag currentTag, SessionKey newKey, long paddedSize) {

@@ -112,7 +112,8 @@ public class POP3MailBox implements NewMailListener {
      * retrieves header from pop3 server (with TOP command and RETR as fallback)
      * Caller must sync.
      *
-     * @param id message id
+     * @param id the 1-based message number from 1 to the mailbox size;
+     *           out of range sets lastError
      * @return Byte buffer containing header data or null
      */
     private Buffer getHeader(int id) {
@@ -203,7 +204,8 @@ public class POP3MailBox implements NewMailListener {
      * retrieve message body from pop3 server (via RETR command)
      * Caller must sync.
      *
-     * @param id message id
+     * @param id the 1-based message number from 1 to the mailbox size;
+     *           out of range sets lastError
      * @return the buffer containing body data or null
      */
     private Buffer getBody(int id, Buffer buffer) {
@@ -300,7 +302,7 @@ public class POP3MailBox implements NewMailListener {
      * Get cached size of a message (via previous LIST command).
      * Caller must sync.
      *
-     * @param id message id
+     * @param id the 1-based message number whose LIST size is wanted
      * @return Message size in bytes or 0 if not found
      */
     private int getSize(int id) {
@@ -683,7 +685,7 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      * Leaves socket connected. Caller must close on IOE.
      *
-     * @return success
+     * @return true if every command was sent and received an OK reply
      * @throws IOException
      * @since 0.9.34 pulled out of connect()
      */
@@ -718,7 +720,9 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      * Leaves socket connected. Caller must close on IOE.
      *
-     * @param noWait fire-and-forget mode
+     * @param noWait true to send each DELE and drop it from the pending set
+     *               without waiting for a reply; false to batch them and
+     *               wait, pruning only if the connection survives
      * @throws IOException
      * @since 0.9.35 pulled out of delete()
      */
@@ -968,7 +972,8 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      *
      * @return the lines or null on error
-     * @throws IOException on timeout
+     * @throws IOException if the server goes 2 minutes without
+     *                     sending the terminating dot
      * @since 0.9.13
      */
     private List<String> sendCmdNl(String cmd) throws IOException {
@@ -1021,7 +1026,8 @@ public class POP3MailBox implements NewMailListener {
      * Caller must sync.
      *
      * @return the lines non-null
-     * @throws IOException on timeout
+     * @throws IOException if the server goes 2 minutes without
+     *                     sending the terminating dot
      * @since 0.9.13
      */
     private List<String> getResultNl() throws IOException {

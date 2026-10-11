@@ -785,7 +785,7 @@ public class EepGet {
          * @see #bytesTransferred
          * @param url the address whose fetch attempt failed
          * @param bytesTransferred bytes received so far, counted across every
-         *                       attempt and including response headers
+         *                         attempt and including response headers
          * @param bytesRemaining bytes still owed, or -1 if unknown
          * @param currentAttempt zero-based index of the attempt that failed
          * @param numRetries total attempts this fetch is allowed
@@ -798,7 +798,7 @@ public class EepGet {
          * @see #bytesTransferred
          * @param url the address whose transfer failed
          * @param bytesTransferred bytes received so far, counted across every
-         *                       attempt and including response headers
+         *                         attempt and including response headers
          * @param bytesRemaining bytes still owed, or -1 if unknown
          * @param currentAttempt zero-based index of the attempt that failed
          */

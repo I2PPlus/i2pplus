@@ -77,8 +77,8 @@ public abstract class I2CPMessageImpl implements I2CPMessage {
      * Read in the payload part of the message (after the initial 4 byte size and 1
      * byte type)
      *
-     * @param buf InputStream
-     * @param size payload size
+     * @param buf positioned just past the 4 byte size and 1 byte type header
+     * @param size how many payload bytes remain to be read
      * @throws I2CPMessageException if the message format is invalid
      * @throws IOException if there's an error reading from the stream
      */

@@ -833,7 +833,7 @@ class Connection {
      * configured budget — so the proxy can emit the "Website Unreachable" page sooner.
      *
      * @param measuredRttMs a recent round-trip time for this peer in ms, or &lt;=0 when no
-     *          RTT evidence is available (never measured, no cache entry)
+     *                      RTT evidence is available (never measured, no cache entry)
      * @param initialRtoMs  the configured initial RTO (i2p.streaming.initialRTO) in ms
      * @return the fixed inter-SYN retransmit interval (ms) to use
      * @since 0.9.70+ evidence-gated and RTT-aware SYN pacing
@@ -2245,7 +2245,7 @@ class Connection {
      *
      * @param totalSends total send attempts incl. resends (PacketLocal.getNumSends())
      * @param softResends of those, resends tagged as soft-failure-triggered
-     *         (PacketLocal.getNumSoftResends())
+     *                    (PacketLocal.getNumSoftResends())
      * @param maxResends configured per-packet retransmit budget (&gt; 0)
      * @return true if the non-soft send attempts exceed the budget
      * @since 0.9.71+
@@ -2299,7 +2299,7 @@ class Connection {
      *
      * @param totalSends total SYN send attempts incl. resends (PacketLocal.getNumSends())
      * @param softResends of those, resends tagged as soft-failure-triggered
-     *         (PacketLocal.getNumSoftResends())
+     *                    (PacketLocal.getNumSoftResends())
      * @param maxSynSends per-connection SYN give-up budget (getMaxSynSends())
      * @return true if the non-soft SYN send attempts exceed the budget
      * @since 0.9.71+

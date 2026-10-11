@@ -13,7 +13,7 @@ class OutboundSender implements TunnelGateway.Sender {
     /**
      * Binds the given context and config, creating the outbound gateway processor.
      *
-     * @param ctx the context
+     * @param ctx the application context, handed to the outbound gateway processor
      * @param config the tunnel creator config
      */
     public OutboundSender(I2PAppContext ctx, TunnelCreatorConfig config) {

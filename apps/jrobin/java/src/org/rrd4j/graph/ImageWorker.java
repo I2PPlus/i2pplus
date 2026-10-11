@@ -498,7 +498,7 @@ public abstract class ImageWorker {
     /**
      * Widens integral coordinates for the spline, which works in double precision.
      *
-     * @param iv source coordinates
+     * @param iv source coordinates, one per spline point
      * @return the values widened to double
      */
     private static double[] toDouble(int[] iv) {
@@ -595,8 +595,8 @@ public abstract class ImageWorker {
      * @param imageSource the image source
      * @param x the x coordinate
      * @param y the y coordinate
-     * @param w the width
-     * @param h the height
+     * @param w the width the source is scaled to, and the subimage width
+     * @param h the height the source is scaled to, and the subimage height
      * @throws IOException if an I/O error occurs
      */
     void loadImage(RrdGraphDef.ImageSource imageSource, int x, int y, int w, int h)

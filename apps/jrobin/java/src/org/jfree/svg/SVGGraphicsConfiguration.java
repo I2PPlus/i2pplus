@@ -97,7 +97,7 @@ public class SVGGraphicsConfiguration extends GraphicsConfiguration {
     /**
      * Returns the bounds for this configuration.
      *
-     * @return The bounds.
+     * @return The width and height configured for this device.
      */
     @Override
     public Rectangle getBounds() {

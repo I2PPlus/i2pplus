@@ -709,7 +709,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * Use this only in static initializers.
      * It does not translate!
      *
-     * @return s
+     * @return s unchanged, so xgettext still sees the literal in the source
      */
     private static final String _x(String s) {return s;}
 

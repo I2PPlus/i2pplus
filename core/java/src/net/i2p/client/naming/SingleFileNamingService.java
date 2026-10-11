@@ -367,7 +367,8 @@ public class SingleFileNamingService extends NamingService {
      *                ("[0-9]" allowed)
      *                Key "skip": number of matching entries to skip
      *                Key "limit": maximum number of matching entries to return
-     * @return the entries
+     * @return the matching hostname to destination pairs, empty when the file
+     *         does not exist
      * @since 0.9.71+
      */
     @Override

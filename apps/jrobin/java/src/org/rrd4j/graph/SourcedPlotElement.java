@@ -89,7 +89,7 @@ class SourcedPlotElement extends PlotElement {
     /**
      * Get the values.
      *
-     * @return the values
+     * @return the backing array itself, not a copy
      */
     double[] getValues() {
         return values;

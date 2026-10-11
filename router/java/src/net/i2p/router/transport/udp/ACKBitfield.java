@@ -9,7 +9,7 @@ interface ACKBitfield {
     /**
      * The message ID this is partially ACKing.
      *
-     * @return message ID
+     * @return the 32 bit message ID from the session's outbound sequence
      */
     public long getMessageId();
 

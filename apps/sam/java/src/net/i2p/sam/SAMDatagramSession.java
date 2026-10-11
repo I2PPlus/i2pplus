@@ -97,7 +97,7 @@ class SAMDatagramSession extends SAMMessageSession {
     /**
      * Send bytes through a SAM DATAGRAM session.
      *
-     * @param dest Destination
+     * @param dest the .b32.i2p address to send to
      * @param data Bytes to be sent
      * @param proto ignored, will always use PROTO_DATAGRAM (17)
      *

@@ -36,7 +36,7 @@ class IdleTunnelMonitor extends SimpleTimer2.TimedEvent {
 
     /**
      * The dispatcher, fetching from context if not yet initialized.
-     * @return the dispatcher
+     * @return the transit tunnel dispatcher, cached here after the first lookup
      */
     private TunnelDispatcher getDispatcher() {
         if (_dispatcher == null) {

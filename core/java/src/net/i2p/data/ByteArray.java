@@ -55,7 +55,8 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     /**
      * Returns the underlying byte array.
      *
-     * @return the data
+     * @return the backing array itself, not a copy; mutating it changes what
+     *         this object holds
      */
     public byte[] getData() {
         return _data;
@@ -94,7 +95,7 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
     /**
      * Returns the offset into the byte array.
      *
-     * @return the offset
+     * @return the index of the first live byte within {@link #getData()}
      */
     public int getOffset() {
         return _offset;

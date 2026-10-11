@@ -112,7 +112,7 @@ public class I2PSource implements Source {
         /**
          *  Always throws, since the muxed variant must be used.
          *
-         *  @throws IllegalStateException always
+         *  @throws IllegalStateException unconditionally, with the message "muxed"
          */
         public void messageAvailable(I2PSession sess, int id, long size) {
             throw new IllegalStateException("muxed");

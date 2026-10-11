@@ -73,7 +73,8 @@ public class LeaseSetKeys {
     /**
      * Client with a single key
      *
-     * @param dest unused
+     * @param dest not read; the LeaseSetKeys constructor shares its
+     *             signature with the server-side variant
      * @param revocationKey unused, may be null
      * @param decryptionKey non-null
      */
@@ -103,7 +104,8 @@ public class LeaseSetKeys {
      * The ONLY valid combinations are X25519 + ElG or X25519 + (MLKEM512 OR MLKEM768 OR MLKEM1024).
      * Other combinations will throw IllegalArgumentException.
      *
-     * @param dest unused
+     * @param dest not read; the LeaseSetKeys constructor shares its
+     *             signature with the server-side variant
      * @param revocationKey unused, may be null
      * @param decryptionKeys non-null, non-empty
      * @throws IllegalArgumentException if the list is empty, holds two keys of the same
@@ -194,7 +196,7 @@ public class LeaseSetKeys {
      * Do we support this type of encryption?
      *
      * @param type the encryption type to test; true comes back when a key of that type is present
-     * @return whether supported
+     * @return true if a key of that type is held; false for an unrecognized type
      * @since 0.9.44
      */
     public boolean isSupported(EncType type) {

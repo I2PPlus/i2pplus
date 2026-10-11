@@ -41,7 +41,7 @@ abstract class ExcluderBase implements Set<Hash> {
      * Automatically check if peer is allowed
      * and add the Hash to the set if not.
      *
-     * @param o a Hash
+     * @param o a peer hash to look up in the underlying set
      * @return true if peer should be excluded
      */
     @Override
@@ -75,7 +75,7 @@ abstract class ExcluderBase implements Set<Hash> {
     /**
      * Whether the underlying set is empty.
      *
-     * @return whether empty
+     * @return true if nothing is currently excluded
      */
     public boolean isEmpty() {return s.isEmpty();}
     /**

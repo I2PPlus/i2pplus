@@ -555,7 +555,7 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
      * Packs flags into the given byte array.
      *
      * @param bytes the byte array to pack flags into
-     * @param i the offset
+     * @param i the offset in bytes where the flags byte goes
      */
     protected abstract void packFlags(byte[] bytes, int i);
 

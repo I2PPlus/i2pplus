@@ -74,7 +74,7 @@ class RebuildRouterInfoJob extends JobImpl {
     /**
      * Rebuild the router info and keys.
      *
-     * @param alreadyRunning unused
+     * @param alreadyRunning carried along on the recursive retries but never read
      */
     void rebuildRouterInfo(boolean alreadyRunning) {
         _log.debug("Rebuilding the new router info");

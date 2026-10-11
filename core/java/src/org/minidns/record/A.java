@@ -39,10 +39,10 @@ public class A extends InternetAddressRR<Inet4Address> {
 
     /**
      * Create A record from four octets.
-     * @param q1 first octet
-     * @param q2 second octet
-     * @param q3 third octet
-     * @param q4 fourth octet
+     * @param q1 the most significant octet, 0-255; another value throws
+     * @param q2 the next octet, 0-255; another value throws
+     * @param q3 the next octet, 0-255; another value throws
+     * @param q4 the least significant octet, 0-255; another value throws
      */
     public A(int q1, int q2, int q3, int q4) {
         super(new byte[] {(byte) q1, (byte) q2, (byte) q3, (byte) q4});

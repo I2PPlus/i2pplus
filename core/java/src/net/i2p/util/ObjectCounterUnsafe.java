@@ -74,7 +74,7 @@ public class ObjectCounterUnsafe<K> {
      * Look up the current count for one key.
      *
      * @param h the object whose count is looked up
-     * @return current count
+     * @return the count recorded for the key, or 0 if it has never been added
      */
     public int count(K h) {
         Int i = map.get(h);

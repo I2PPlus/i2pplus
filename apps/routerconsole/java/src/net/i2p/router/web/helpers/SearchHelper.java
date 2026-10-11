@@ -84,7 +84,7 @@ public class SearchHelper extends HelperBase {
 
     /**
      * Builds the HTML select element listing configured engines, or a notice if none.
-     * @return the selector
+     * @return the select markup, or the "no engines" notice
      */
     public String getSelector() {
         buildEngineMap();

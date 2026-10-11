@@ -278,7 +278,7 @@ public class DatabaseStoreMessage extends FastI2NPMessageImpl {
     /**
      * The message type.
      *
-     * @return the type
+     * @return the I2NP message type ID, {@link #MESSAGE_TYPE}
      */
     public int getType() {return MESSAGE_TYPE;}
 

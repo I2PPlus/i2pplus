@@ -365,7 +365,8 @@ public class I2PDefaultServlet extends DefaultServlet {
     }
 
     /**
-     * @return the resource
+     * @return the resource for the path, or the first extension alias that
+     *         resolves when the aliases init parameter is "true", else null
      */
     @Override
     public Resource getResource(String path) {

@@ -504,7 +504,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Returns the current number of connected peers.
      *
-     * @return peer count
+     * @return the number of currently connected peers
      */
     public int getPeers() {
         int rv = peers.size();
@@ -597,7 +597,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Should we send this many bytes? Do NOT call uploaded() if this returns true.
      *
-     * @return whether send
+     * @return whether the bandwidth allowance permits sending that many bytes
      * @since 0.9.62
      */
     @Override
@@ -612,7 +612,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Should we request this many bytes?
      *
-     * @return whether request
+     * @return whether the bandwidth allowance permits requesting that many bytes
      * @since 0.9.62
      */
     @Override
@@ -812,7 +812,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * The info hash for this torrent.
      *
-     * @return info hash
+     * @return the torrent hash used for magnet and peer exchange lookups
      */
     public byte[] getInfoHash() {
         return infohash;
@@ -2509,7 +2509,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Uploaders whether interested or not Use this for per-torrent limits.
      *
-     * @return current
+     * @return the uploader count, capped at the connected peer count
      * @since 0.8.4
      */
     public int getUploaders() {
@@ -2527,7 +2527,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Uploaders, interested only. Use this to calculate the global total, so that unchoked but
      * uninterested peers don't count against the global limit.
      *
-     * @return current
+     * @return the interested-uploader count, capped at the connected peer count
      * @since 0.9.28
      */
     public int getInterestedUploaders() {
@@ -2545,7 +2545,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
      * Record the uploader and interested-uploader counts.
      *
      * @param upl whether interested or not
-     * @param inter interested only
+     * @param inter the interested-only subset of that count, also capped at the maximum
      * @since 0.9.28
      */
     public void setUploaders(int upl, int inter) {
@@ -2585,7 +2585,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * The current value.
      *
-     * @return current
+     * @return the number of peers that are interested but choked
      * @since 0.9.28
      */
     public int getInterestedAndChoking() {
@@ -2606,7 +2606,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Returns the shared torrent utility this coordinator was built with.
      *
-     * @return the util
+     * @return the shared I2PSnarkUtil, common to every torrent in this router
      * @since 0.9.2
      */
     @Override
@@ -2641,7 +2641,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Is a web peer banned?
      *
-     * @param host the hostname
+     * @param host the host name to look up in the web peer ban map
      * @return whether web peer banned
      * @since 0.9.49
      */
@@ -2664,7 +2664,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Is the given hash banned?
      *
-     * @param h the hash
+     * @param h the torrent's info hash, checked against the ban list and bad-tracker count
      * @return true if banned
      * @since 0.9.71
      */
@@ -2675,7 +2675,7 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
     /**
      * Ban the given hash.
      *
-     * @param h the hash
+     * @param h the torrent's info hash to add to the ban list
      * @since 0.9.71
      */
     public void ban(Hash h) {

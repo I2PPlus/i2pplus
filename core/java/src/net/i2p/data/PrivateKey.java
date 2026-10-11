@@ -130,7 +130,7 @@ public class PrivateKey extends SimpleDataStructure implements Destroyable {
      * Private key of the default type from a string of base64 data.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
-     *         on a prior instance of PrivateKey)
+     *                   on a prior instance of PrivateKey)
      * @throws DataFormatException if the data is not valid
      */
     public PrivateKey(String base64Data) throws DataFormatException {

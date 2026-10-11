@@ -162,7 +162,7 @@ public class I2PTunnelDCCServer extends I2PTunnelServer {
      *
      * @param ip local irc client IP
      * @param port local irc client port
-     * @param type ignored
+     * @param type ignored; the overload always lets the router pick the I2P port
      * @return i2p port or -1 on error
      */
     public int newOutgoing(byte[] ip, int port, String type) {

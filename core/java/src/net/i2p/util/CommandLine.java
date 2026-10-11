@@ -59,7 +59,7 @@ public class CommandLine {
     /**
      * Entry point for command line utilities.
      *
-     * @param args command arguments
+     * @param args a subcommand naming a class to run; empty prints the usage
      */
     public static void main(String[] args) {
         if (args.length > 0) {
@@ -72,7 +72,8 @@ public class CommandLine {
     /**
      * Will only return if command not found.
      *
-     * @param args command arguments
+     * @param args a subcommand, optionally followed by its own arguments, which
+     *             are passed through to the matching class's main
      * @param classes list of classes to search
      */
     protected static void exec(String[] args, List<String> classes) {

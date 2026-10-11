@@ -189,7 +189,7 @@ public class PublicKey extends SimpleDataStructure {
      * Public key from a string of base64 data. ElGamal only.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
-     *         on a prior instance of PublicKey
+     *                   on a prior instance of PublicKey
      * @throws net.i2p.data.DataFormatException if the data is malformed
      */
     public PublicKey(String base64Data) throws DataFormatException {

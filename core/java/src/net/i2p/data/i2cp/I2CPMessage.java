@@ -54,7 +54,7 @@ public interface I2CPMessage {
      * Write the current message to the output stream as a full message following
      * the specification from the I2CP definition.
      *
-     * @param out OutputStream
+     * @param out receives the length, type and payload, in that order
      * @throws I2CPMessageException if the current object doesn't have sufficient data
      *                              to write a properly formatted message.
      *

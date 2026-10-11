@@ -34,7 +34,7 @@ public class DataMessage extends FastI2NPMessageImpl {
     /**
      * Payload data.
      *
-     * @return the data
+     * @return the payload bytes, or null if no payload was set
      */
     public byte[] getData() {
         return _data;

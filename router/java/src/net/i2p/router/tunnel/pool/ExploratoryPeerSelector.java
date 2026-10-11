@@ -100,9 +100,9 @@ import net.i2p.util.SystemVersion;
      * Out: OBGW .. middle .. closest .. us
      *
      * @return ordered list of Hash objects (one per peer) specifying what order
-     * they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     * the local router in the list.  Never null; an empty list means
-     * no peers could be selected.
+     *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
+     *         the local router in the list.  Never null; an empty list means
+     *         no peers could be selected.
      */
     @Override
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
@@ -159,7 +159,7 @@ import net.i2p.util.SystemVersion;
      * @param length the desired tunnel length
      * @param includeCooldowns whether to exclude peers on selection cooldown
      * @return ordered list of Hash objects (ENDPOINT FIRST), or null if no
-     * peers are available or checkTunnel fails
+     *         peers are available or checkTunnel fails
      */
     private List<Hash> selectPeersInternal(TunnelPoolSettings settings, int length,
                                           boolean includeCooldowns) {
@@ -178,7 +178,7 @@ import net.i2p.util.SystemVersion;
      * @param includeCooldowns whether to exclude peers on selection cooldown
      * @param alsoExclude peers to exclude on top of the usual set, or null
      * @return ordered list of Hash objects (ENDPOINT FIRST), or null if no peers are
-     * available or checkTunnel fails
+     *         available or checkTunnel fails
      * @since 0.9.71+
      */
     private List<Hash> selectPeersInternal(TunnelPoolSettings settings, int length,

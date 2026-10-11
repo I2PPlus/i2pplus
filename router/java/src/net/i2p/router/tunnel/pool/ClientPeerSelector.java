@@ -149,9 +149,9 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * Out: OBGW .. middle .. closest .. us
      *
      * @return ordered list of Hash objects (one per peer) specifying what order
-     * they should appear in a tunnel (ENDPOINT FIRST).  This includes
-     * the local router in the list.  Never null; an empty list means
-     * no peers could be selected.
+     *         they should appear in a tunnel (ENDPOINT FIRST).  This includes
+     *         the local router in the list.  Never null; an empty list means
+     *         no peers could be selected.
      */
     public List<Hash> selectPeers(TunnelPoolSettings settings) {
         return selectPeers(settings, null);
@@ -172,7 +172,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      *
      * @param settings pool settings
      * @param excludeFirstHops first-hop peers already targeted by concurrent
-     * builds in the same dispatch batch, may be null
+     *                         builds in the same dispatch batch, may be null
      * @return ordered hops, endpoint first; empty when nothing usable exists
      * @since 0.9.71+
      */
@@ -540,7 +540,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * and unknown pools (negative count) never relax.
      *
      * @param usableTunnels usable tunnels in this pool, or -1 when the pool
-     * is unknown
+     *                      is unknown
      * @param length tunnel length being selected for
      * @return true when cooldowns should apply to the first hop only
      * @since 0.9.71+
@@ -672,7 +672,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      *
      * @param lastHopExclude wrapped exclusions (closest-hop / OBEP role checks)
      * @param rawExclude the unwrapped exclusion set, used only for the final
-     * recovery pass when the wrapper excluded every candidate
+     *                   recovery pass when the wrapper excluded every candidate
      * @return false to abort the selection
      */
     private boolean selectLastHop(TunnelPoolSettings settings, int length, SelectionParams params,
@@ -1706,7 +1706,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * @param rv the selected peers, reordered and filtered in place
      * @param isInbound true for a client pool tunnel, false for the exploratory pool
      * @return the finalized peer list with this router inserted at the inbound or
-     * outbound end, or an empty list if the tunnel check failed
+     *         outbound end, or an empty list if the tunnel check failed
      */
     List<Hash> finalizeSelection(TunnelPoolSettings settings, List<Hash> rv, boolean isInbound) {
         if (isInbound) {rv.add(0, ctx.routerHash());}
@@ -1944,7 +1944,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
      * introduce a per-pool duplicate).
      *
      * @param excludePeers peers to exclude because they are already active
-     * in this destination's tunnels
+     *                     in this destination's tunnels
      * @return eligible proven candidates for hop swaps, never null
      */
     private List<Hash> provenCandidates(Set<Hash> excludePeers) {

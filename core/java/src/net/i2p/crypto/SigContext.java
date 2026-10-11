@@ -42,7 +42,7 @@ public enum SigContext {
      * The AlgorithmParameterSpec.
      * Pass this as an argument in setParameter()
      * to the Blake sign/verify engines.
-     * @return the spec
+     * @return the spec wrapping this context's personalization string
      */
     public SigContextSpec getSpec() {
         return spec;

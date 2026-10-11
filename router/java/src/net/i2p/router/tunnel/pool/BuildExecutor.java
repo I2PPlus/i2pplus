@@ -261,7 +261,7 @@ public class BuildExecutor implements Runnable {
     public static void setFirstHopFailureCooldownMs(long ms) { _firstHopCooldownMs = Math.max(60_000, Math.min(600_000, ms)); }
     /**
      * The first-hop failure threshold count.
-     * @return the threshold
+     * @return the failure count, 1-10, that triggers a first-hop cooldown
      * @since 0.9.71+
      */
     public static int getFirstHopFailureThreshold() { return _firstHopFailureThreshold; }
@@ -341,7 +341,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      * The pool failure threshold.
-     * @return the threshold
+     * @return the consecutive failure count, 1-20, that triggers pool backoff
      * @since 0.9.70+
      */
     public static int getPoolFailureThreshold() { return _consecutiveFailureThreshold; }
@@ -717,7 +717,7 @@ public class BuildExecutor implements Runnable {
      *  timeout statistics, so the counts are a true per-direction sample.
      *
      * @param cfg the tunnel that was being built, may be null
-     * @param result the outcome
+     * @param result the outcome, bucketed by {@link #buildOutcomeEvent(Result)}
      * @since 0.9.71+
      */
     private void recordBuildDirection(PooledTunnelCreatorConfig cfg, Result result) {
@@ -1534,7 +1534,7 @@ public class BuildExecutor implements Runnable {
     /**
      * Human-readable elapsed time for diagnostic log output.
      *
-     * @param ms elapsed milliseconds
+     * @param ms elapsed milliseconds, truncated to whole seconds or minutes
      * @return a compact duration such as "412s", "8m" or "2h"
      * @since 0.9.71+
      */

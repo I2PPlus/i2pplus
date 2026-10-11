@@ -115,7 +115,8 @@ public class EventLogHelper extends FormHandler {
 
     /**
      * Get the form.
-     * @return the form
+     * @return always the empty string, as required by the JSP getter
+     *         convention; the markup is written to the response writer
      */
     public String getForm() {
         // too hard to use the standard formhandler.jsi / FormHandler.java session nonces
@@ -163,7 +164,7 @@ public class EventLogHelper extends FormHandler {
     }
 
     /**
-     * @param age seconds
+     * @param age lookback window in seconds; 0 renders as "All events"
      */
     private void writeOption(long age) throws IOException {
          _out.write("<option value=\"");
@@ -181,7 +182,7 @@ public class EventLogHelper extends FormHandler {
 
     /**
      * Get the events.
-     * @return the events
+     * @return the filtered events rendered as HTML
      */
     public String getEvents() {
         EventLog ev = _context.router().eventLog();

@@ -1092,7 +1092,7 @@ class RrdGraphGenerator {
      * on a zero-width edge, leaving no horizontal room for a curve to cross. The smoothed
      * renderer needs the undoubled positions so a transition spans the pixels between samples.
      *
-     * @param timestamps sample timestamps
+     * @param timestamps sample timestamps, one per data point and not pre-doubled
      * @return one pixel x per timestamp
      * @since 0.9.71
      */

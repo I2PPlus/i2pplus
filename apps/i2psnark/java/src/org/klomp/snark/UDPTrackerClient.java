@@ -577,7 +577,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Resend the stored payload
      *
-     * @return success
+     * @return true if the datagram was handed to the session for sending
      */
     private boolean resend(ReplyWaiter w, long toWait) {
         // per the design (see class javadoc), all requests are repliable, responses are raw
@@ -596,7 +596,9 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
      *
      * @param dest may be null, returns false
      * @param repliable true for conn request, false for announce
-     * @return success
+     * @return true if the session accepted the datagram; false when not
+     *         running, when the payload cannot be wrapped in a Datagram2 or
+     *         Datagram3, or when the send is rejected
      */
     private boolean sendMessage(Destination dest, int toPort, byte[] payload, boolean repliable) {
         if (!_isRunning) {
@@ -727,7 +729,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     /**
      * Receive a connection reply.
      *
-     * @param waiter ms
+     * @param waiter the outstanding request this reply answers
      */
     private void receiveConnection(ReplyWaiter waiter, byte[] payload) {
         Tracker tr = waiter.getSentTo();
@@ -957,7 +959,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * The peers.
          *
-         * @return the peers
+         * @return the peer hashes, as parsed from the tracker reply
          */
         public Set<Hash> getPeers() {
             return peers;
@@ -1146,7 +1148,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * Store the connection ID and expiration.
          *
-         * @param lifetime ms
+         * @param lifetime milliseconds from now until the ID expires
          */
         public synchronized void setConnection(long cid, long lifetime) {
             this.cid = Long.valueOf(cid);
@@ -1265,7 +1267,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         /**
          * The payload.
          *
-         * @return the payload
+         * @return the already-built datagram, as sent or as to be resent
          */
         public byte[] getPayload() {
             return data;

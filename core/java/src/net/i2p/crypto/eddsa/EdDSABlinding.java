@@ -35,7 +35,7 @@ public final class EdDSABlinding {
      * @param key must be SigType EdDSA_SHA512_Ed25519
      * @param alpha generated from hash of secret data
      * @return the blinded public key
-     * @throws UnsupportedOperationException unless supported
+     * @throws UnsupportedOperationException for an unsupported group representation
      */
     public static EdDSAPublicKey blind(EdDSAPublicKey key, EdDSAPrivateKey alpha) {
         GroupElement a = key.getA();
@@ -54,7 +54,7 @@ public final class EdDSABlinding {
      * @param key must be SigType EdDSA_SHA512_Ed25519
      * @param alpha generated from hash of secret data
      * @return the blinded private key
-     * @throws UnsupportedOperationException unless supported
+     * @throws UnsupportedOperationException for an unsupported curve
      */
     public static EdDSAPrivateKey blind(EdDSAPrivateKey key, EdDSAPrivateKey alpha) {
         byte[] a = key.geta();
@@ -77,7 +77,7 @@ public final class EdDSABlinding {
      * @param key must be SigType EdDSA_SHA512_Ed25519
      * @param alpha generated from hash of secret data
      * @return the unblinded private key
-     * @throws UnsupportedOperationException unless supported
+     * @throws UnsupportedOperationException always; unblinding is unimplemented
      */
     public static EdDSAPrivateKey unblind(EdDSAPrivateKey key, EdDSAPrivateKey alpha) {
         throw new UnsupportedOperationException();

@@ -70,7 +70,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
      * Divide by a BigInteger.
      *
      * @param val the value to divide by
-     * @return the quotient
+     * @return the quotient, reduced to the range 0 to q-1
      */
     public FieldElement divide(BigInteger val) {
         return new BigIntegerFieldElement(f, bi.divide(val)).mod(f.getQ());
@@ -100,7 +100,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
     /**
      * Return this field element modulo m.
      *
-     * @param m the modulus
+     * @param m the modulus, in practice the field prime {@code f.getQ()}
      * @return this element reduced modulo m
      */
     public FieldElement mod(FieldElement m) {
@@ -110,8 +110,8 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
     /**
      * Return this field element to the power e modulo m.
      *
-     * @param e the exponent
-     * @param m the modulus
+     * @param e the exponent, which must not be negative
+     * @param m the modulus, in practice the field prime {@code f.getQ()}
      * @return this element raised to the power e, modulo m
      */
     public FieldElement modPow(FieldElement e, FieldElement m) {
@@ -121,7 +121,7 @@ public class BigIntegerFieldElement extends FieldElement implements Serializable
     /**
      * Return this field element to the power e.
      *
-     * @param e the exponent
+     * @param e the exponent, which must not be negative
      * @return this element raised to the power e, reduced modulo the field's q
      */
     public FieldElement pow(FieldElement e) {

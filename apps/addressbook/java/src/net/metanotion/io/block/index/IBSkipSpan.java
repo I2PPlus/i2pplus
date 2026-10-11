@@ -144,7 +144,7 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
 
     /**
      * Linear search through the span in the file for the value.
-     * @return the data
+     * @return the value stored under {@code key}, or null if not found
      */
     private V getData(K key) throws IOException {
         seekData();
@@ -318,7 +318,8 @@ public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K,
     /**
      * Load whole span from file, do the operation, flush out, then null out in-memory data again.
      * This is called only via SkipList.find()
-     * @return the span
+     * @return the span carrying the matching key, with search[0] set to its
+     *         index, or the empty span if the key is absent
      */
     @Override
     public SkipSpan<K, V> getSpan(K key, int[] search) {

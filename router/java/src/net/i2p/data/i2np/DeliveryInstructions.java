@@ -194,7 +194,7 @@ public class DeliveryInstructions extends DataStructureImpl {
 
     /**
      * Not supported, use readBytes(byte[], int)
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the stream form is not implemented
      */
     public void readBytes(InputStream in) {
         throw new UnsupportedOperationException();
@@ -348,7 +348,7 @@ public class DeliveryInstructions extends DataStructureImpl {
 
     /**
      * Not supported, use writeBytes(byte[], int)
-     * @throws UnsupportedOperationException always
+     * @throws UnsupportedOperationException always; the stream form is not implemented
      */
     public void writeBytes(OutputStream out) {
         throw new UnsupportedOperationException();
@@ -372,7 +372,7 @@ public class DeliveryInstructions extends DataStructureImpl {
 
     /**
      * Size of the serialized delivery instructions in bytes.
-     * @return the size
+     * @return the flags byte plus any mode-specific fields
      */
     public int getSize() {
         return 1 + getAdditionalInfoSize(); // flags +
@@ -519,7 +519,7 @@ public class DeliveryInstructions extends DataStructureImpl {
 
         /**
          * Local delivery serializes to a single flag byte.
-         * @return the size
+         * @return always 1
          */
         @Override
         public int getSize() {

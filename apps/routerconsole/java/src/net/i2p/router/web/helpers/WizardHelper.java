@@ -191,7 +191,7 @@ public class WizardHelper extends HelperBase {
      * To populate form with.
      * Uses the test result if available, else the current setting
      * Adapted from ConfigNetHelper.
-     * @return decimal KBytes/sec
+     * @return the inbound bandwidth limit in decimal KB/sec, rounded to an integer
      */
     public String getInboundBurstRate() {
         float bw;
@@ -205,7 +205,7 @@ public class WizardHelper extends HelperBase {
      * To populate form with.
      * Uses the test result if available, else the current setting
      * Adapted from ConfigNetHelper.
-     * @return decimal KBytes/sec
+     * @return the outbound bandwidth limit in decimal KB/sec, rounded to an integer
      */
     public String getOutboundBurstRate() {
         float bw;
@@ -217,7 +217,7 @@ public class WizardHelper extends HelperBase {
 
     /**
      * Copied from ConfigNetHelper.
-     * @return decimal
+     * @return the inbound burst rate in bits per second and the per-month maximum
      */
     public String getInboundBurstRateBits() {
         return kbytesToBits(_context.bandwidthLimiter().getInboundBurstKBytesPerSecond());
@@ -225,7 +225,7 @@ public class WizardHelper extends HelperBase {
 
     /**
      * Copied from ConfigNetHelper.
-     * @return decimal
+     * @return the outbound burst rate in bits per second and the per-month maximum
      */
     public String getOutboundBurstRateBits() {
         return kbytesToBits(_context.bandwidthLimiter().getOutboundBurstKBytesPerSecond());
@@ -233,14 +233,14 @@ public class WizardHelper extends HelperBase {
 
     /**
      * Copied from ConfigNetHelper.
-     * @return decimal
+     * @return the shared bandwidth in bits per second and the per-month maximum
      */
     public String getShareRateBits() {return kbytesToBits(getShareBandwidth());}
 
     /**
      * Copied from ConfigNetHelper.
-     * @param kbytes binary K
-     * @return decimal
+     * @param kbytes the bandwidth in KB/sec, where 1 KB is 1024 bytes
+     * @return the rate in bits per second, plus the per-month byte maximum
      */
     private String kbytesToBits(float kbytes) {
         return DataHelper.formatSize2Decimal((long) (kbytes * (8 * 1024))) + _t("bits per second") +
@@ -268,7 +268,7 @@ public class WizardHelper extends HelperBase {
 
     /**
      * Start the test. Called from the Handler.
-     * @return success
+     * @return whether the test was started; false if one is already running
      */
     synchronized boolean startNDT() {
         if (_mlab.isRunning() || _listener != null && !_listener.isComplete()) {
@@ -287,7 +287,7 @@ public class WizardHelper extends HelperBase {
 
     /**
      * Cancel the test. Called from the Handler.
-     * @return success
+     * @return whether a running test was cancelled
      */
     synchronized boolean cancelNDT() {
         if (!_mlab.isRunning()) {return false;}
@@ -317,19 +317,19 @@ public class WizardHelper extends HelperBase {
          */
         public synchronized void complete(Map<String, Object> results) {_results = results;}
         /**
-         * @return whether complete
+         * @return whether the run has finished and stored its results
          */
         public synchronized boolean isComplete() {return _results != null;}
         /**
-         * @return the summary
+         * @return the progress line reported by the test, or null before it starts
          */
         public synchronized String getSummary() {return _summary;}
         /**
-         * @return the detail
+         * @return the detail text reported by the test, or null before it starts
          */
         public synchronized String getDetail() {return _detail;}
         /**
-         * @return the results
+         * @return the result map, or null until the run completes
          */
         public synchronized Map<String, Object> getResults() {return _results;}
     }

@@ -53,7 +53,8 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      * Create a BSkipList from a BlockFile.
      *
      * @param spanSize the size of spans
-     * @param bf the BlockFile
+     * @param bf the backing file; the skiplist header and spans are read
+     *           from and written to its pages
      * @param skipPage the page number of this skiplist
      * @param key the key serializer
      * @param val the value serializer
@@ -67,7 +68,8 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
      * Create a BSkipList from a BlockFile.
      *
      * @param spanSize the size of spans
-     * @param bf the BlockFile
+     * @param bf the backing file; the skiplist header and spans are read
+     *           from and written to its pages
      * @param skipPage the page number of this skiplist
      * @param key the key serializer
      * @param val the value serializer
@@ -182,7 +184,8 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     /**
      * Initialize a new skiplist on disk.
      *
-     * @param bf the BlockFile
+     * @param bf the backing file; the skiplist header and spans are read
+     *           from and written to its pages
      * @param page the page number for the skiplist header
      * @param spanSize the span size to use
      * @throws IOException if an I/O error occurs
@@ -224,7 +227,8 @@ public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V
     /**
      * Get an iterator over all entries in this skiplist.
      *
-     * @return a SkipIterator
+     * @return a cached iterator when {@code fileOnly} is false, otherwise an
+     *         {@link IBSkipIterator} that reads spans from disk
      */
     @Override
     public SkipIterator<K, V> iterator() {

@@ -49,31 +49,36 @@ public class ConfigUIHandler extends FormHandler {
     /**
      * Sets the save flag for configuration changes.
      *
-     * @param moo ignored
+     * @param moo the JSP form value; any string, including null, enables the
+     *            save
      */
     public void setShouldsave(String moo) {_shouldSave = true;}
     /**
      * Enables universal theming support.
      *
-     * @param baa ignored
+     * @param baa the JSP form value; any string, including null, enables
+     *            universal theming
      */
     public void setUniversalTheming(String baa) {_universalTheming = true;}
     /**
      * Forces the mobile console interface.
      *
-     * @param baa ignored
+     * @param baa the JSP form value; any string, including null, forces the
+     *            mobile console
      */
     public void setForceMobileConsole(String baa) {_forceMobileConsole = true;}
     /**
      * Enables embedded application display.
      *
-     * @param baa ignored
+     * @param baa the JSP form value; any string, including null, enables
+     *            embedded application display
      */
     public void setEmbedApps(String baa) {_embedApps = true;}
     /**
      * Enables Sora font usage.
      *
-     * @param baa ignored
+     * @param baa the JSP form value; any string, including null, enables the
+     *            Sora font
      */
     public void setUseSoraFont(String baa) {_useSoraFont = true;}
     /**

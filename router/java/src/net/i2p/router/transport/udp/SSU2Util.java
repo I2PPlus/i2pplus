@@ -351,7 +351,7 @@ final class SSU2Util {
      * @param ctx the application context, for the clock and DSA service
      * @param h to be included in sig, not included in data
      * @param h2 may be null, to be included in sig, not included in data
-     * @param role unused
+     * @param role accepted but never read; any value is ignored
      * @param nonce the peer's nonce, written into the signed data
      * @param ip may be null
      * @param port the peer's UDP port number, written into the data only if ip is non-null

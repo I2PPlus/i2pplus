@@ -139,7 +139,7 @@ public class SigningPrivateKey extends SimpleDataStructure implements Destroyabl
      * Signing private key from a string of base64 data.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
-     *         on a prior instance of SigningPrivateKey
+     *                   on a prior instance of SigningPrivateKey
      * @throws DataFormatException if the string is not valid base64, or does not
      *                             decode to the key length required by the default signature type
      */

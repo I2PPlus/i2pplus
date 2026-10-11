@@ -330,7 +330,8 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * This will force creation of DB stats
      *
-     * @param responseTimeMs duration
+     * @param responseTimeMs the measured send duration in milliseconds, used
+     *                       as both the value and the event time
      */
     @Override
     public void dbStoreSent(Hash peer, long responseTimeMs) {

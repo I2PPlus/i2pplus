@@ -904,7 +904,8 @@ public class NTCPTransport extends TransportImpl {
      * AND we have a public IPv6 address.
      *
      * @param addr may be null, returns false
-     * @return whether valid
+     * @return true only for a publicly routable address; a 16-byte address
+     *         additionally requires that we hold a public IPv6
      * @since 0.9.8
      */
     private boolean isValid(byte[] addr) {
@@ -932,7 +933,8 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Whether an established connection exists to the given peer.
-     * @return whether established
+     * @return true if the connection is not closed and has completed the
+     *         handshake
      */
     @Override
     public boolean isEstablished(Hash dest) {
@@ -942,7 +944,8 @@ public class NTCPTransport extends TransportImpl {
 
     /**
      * Whether a connection attempt is in progress to the given peer.
-     * @return whether connecting
+     * @return true if the connection is not closed and has not completed the
+     *         handshake
      */
     @Override
     public boolean isConnecting(Hash dest) {
@@ -953,7 +956,8 @@ public class NTCPTransport extends TransportImpl {
     /**
      * Whether the connection to the given peer is backlogged.
      *
-     * @return whether backlogged
+     * @return true if the connection is established, has been up at least 15
+     *         seconds, and the bandwidth limiter flags its outbound queue
      */
     @Override
     public boolean isBacklogged(Hash dest) {
@@ -1154,7 +1158,7 @@ public class NTCPTransport extends TransportImpl {
      * something long-delayed. To be fixed in next version of NTCP.
      *
      * @param hxhi using first 8 bytes only
-     * @return valid
+     * @return true if these 8 bytes have not been seen in the last 10 minutes
      * @since 0.9.12
      */
     boolean isHXHIValid(byte[] hxhi) {
@@ -2663,7 +2667,7 @@ public class NTCPTransport extends TransportImpl {
         /**
          * The transport this bid is for.
          *
-         * @return the transport
+         * @return the enclosing {@link NTCPTransport} instance
          */
         @Override
         public Transport getTransport() {return NTCPTransport.this;}

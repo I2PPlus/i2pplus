@@ -207,9 +207,11 @@ public class SimpleBandwidthEstimator implements BandwidthEstimator {
     /**
      * Applies an exponential weighted moving average (EWMA) filter to the bandwidth estimate.
      *
-     * @param a previous estimate
-     * @param b new measurement
-     * @return filtered estimate
+     * @param a the previous estimate in bytes per millisecond, weighted by
+     *          {@code decayFactor - 1}
+     * @param b the new measurement in bytes per millisecond, weight 1
+     * @return the filtered estimate, with the weight of {@code a} set by the
+     *         decay factor snapshotted at construction
      */
     private float westwood_do_filter(float a, float b) {
         return (((_localDecayFactor - 1) * a) + b) / _localDecayFactor;

@@ -430,7 +430,7 @@ public class I2PSSLSocketFactory {
      * Read in the country file and add all TLDs to the list.
      * It would almost be easier just to add all possible 26*26 two-letter codes.
      *
-     * @param tlds out parameter
+     * @param tlds list that collects each lowercased TLD read from the country file
      * @since 0.9.20 adapted from GeoIP.loadCountryFile()
      */
     private static void addCountries(I2PAppContext ctx, List<String> tlds) {

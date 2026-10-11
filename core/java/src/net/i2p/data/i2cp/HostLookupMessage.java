@@ -207,7 +207,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
 
     /**
      * Reports this message as a host lookup request.
-     * @return the type
+     * @return {@link #MESSAGE_TYPE}, 38
      */
     @Override
     public int getType() {

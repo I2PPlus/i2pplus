@@ -19,8 +19,8 @@ import net.i2p.data.Destination;
 interface SAMStreamReceiver {
     /**
      * Sends the result of a stream send operation
-     * @param id Stream ID
-     * @param result information
+     * @param id the stream connection ID the answer belongs to
+     * @param result the result code sent to the client, such as OK or TIMEOUT
      * @param bufferState state of the buffer
      * @throws IOException if writing to the client socket fails
      */
@@ -28,7 +28,7 @@ interface SAMStreamReceiver {
 
     /**
      * Notifies that the outwards buffer is free for writing
-     * @param id stream ID
+     * @param id the stream connection ID whose send buffer has drained
      * @throws IOException if writing to the client socket fails
      */
     public void notifyStreamSendBufferFree( int id ) throws IOException;
@@ -37,7 +37,7 @@ interface SAMStreamReceiver {
      * Notify about a new incoming connection
      *
      * @param id New connection id
-     * @param dest Destination
+     * @param dest Destination sent to the client in base64 form
      * @throws IOException if writing to the client socket fails
      */
     public void notifyStreamIncomingConnection ( int id, Destination dest ) throws IOException;
@@ -46,8 +46,8 @@ interface SAMStreamReceiver {
      * Notify about a new outgoing connection
      *
      * @param id New connection id
-     * @param result message result
-     * @param msg Message
+     * @param result status code sent in the STREAM STATUS reply
+     * @param msg Message, may be null
      * @throws IOException if writing to the client socket fails
      */
     public void notifyStreamOutgoingConnection(int id, String result, String msg) throws IOException;
@@ -55,7 +55,7 @@ interface SAMStreamReceiver {
     /**
      * Transmit a byte array from I2P to a SAM client.
      *
-     * @param id Connection id
+     * @param id Connection id the bytes were received on
      * @param data Byte array to be received
      * @throws IOException if writing to the client socket fails
      */
@@ -65,7 +65,7 @@ interface SAMStreamReceiver {
      * Notify that a connection has been closed
      * FIXME: this interface should be cleaner
      *
-     * @param id Connection id
+     * @param id Connection id that was closed
      * @param result Disconnection reason ("OK" or something else)
      * @param msg Error message, if any
      * @throws IOException if writing to the client socket fails

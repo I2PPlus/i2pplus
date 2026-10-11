@@ -157,7 +157,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     /**
      * Returns a snapshot of all active SyntheticREDQueue instances.
      *
-     * @return the instances
+     * @return the instances still strongly reachable, as the rest are held
+     *         weakly
      * @since 0.9.70+
      */
     public static List<SyntheticREDQueue> getInstances() {

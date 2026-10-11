@@ -242,7 +242,7 @@ class PartialPiece implements Comparable<PartialPiece> {
     /**
      * Returns the length of the piece in bytes.
      *
-     * @return piece length
+     * @return the piece length; the last piece of a torrent may be shorter
      * @since 0.9.1
      */
     public int getLength() {
@@ -302,7 +302,7 @@ class PartialPiece implements Comparable<PartialPiece> {
      * Computes and returns the SHA1 hash of the complete piece data. Caller must ensure piece
      * completeness and synchronize before calling.
      *
-     * @return the hash
+     * @return the 20 byte SHA1 of the piece data
      * @throws IOException if data is incomplete or read fails
      * @since 0.9.1
      */

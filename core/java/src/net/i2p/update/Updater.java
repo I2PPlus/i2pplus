@@ -15,8 +15,8 @@ public interface Updater {
      * Start a download and return a handle to the download task.
      * Should not block.
      *
-     * @param type update type
-     * @param method update method
+     * @param type selects what is being fetched, e.g. {@link UpdateType#ROUTER_SIGNED}
+     * @param method how it is fetched, e.g. {@link UpdateMethod#HTTP} over I2P
      * @param updateSources Where to get the new version from
      * @param id plugin name or ignored
      * @param newVersion new version to download

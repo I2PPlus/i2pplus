@@ -19,7 +19,7 @@ public interface IdenticonRenderer {
 	 *            identicon code
 	 * @param size
 	 *            image size
-	 * @return identicon image
+	 * @return the rendered image, of exactly {@code size} by {@code size}
 	 */
 	public BufferedImage render(int code, int size);
 
@@ -30,7 +30,7 @@ public interface IdenticonRenderer {
 	 *            identicon code
 	 * @param size
 	 *            image size
-	 * @return identicon image
+	 * @return the rendered image, of exactly {@code size} by {@code size}
 	 */
 	public BufferedImage render(BigInteger code, int size);
 }

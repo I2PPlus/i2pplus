@@ -609,7 +609,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * @param payload Buffer containing the payload to add to the
      *                handshake message; can be null if there is no payload.
      * @param payloadOffset Offset into the payload buffer of the
-     *               first payload buffer.
+     *                      first payload buffer.
      * @param payloadLength Length of the payload in bytes.
      *
      * @return The length of the data written to the message buffer.
@@ -827,7 +827,7 @@ public static final String PATTERN_ID_XKHFS_512_SSU2 = "XKhfs512-SSU2";
      * @param messageLength The length of the incoming message.
      * @param payload Buffer that will be populated with the message payload.
      * @param payloadOffset Offset of the first byte in the
-     *               payload buffer to be populated with payload data.
+     *                      payload buffer to be populated with payload data.
      *
      * @return The length of the payload.
      *

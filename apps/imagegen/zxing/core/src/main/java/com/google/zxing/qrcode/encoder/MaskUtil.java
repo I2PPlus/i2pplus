@@ -39,7 +39,7 @@ final class MaskUtil {
    * give penalty to them. Example: 00000 or 11111.
    *
    * @param matrix the byte matrix
-   * @return the penalty
+   * @return N1 (3) points for each run of five or more same-colored cells
    */
   static int applyMaskPenaltyRule1(ByteMatrix matrix) {
     return applyMaskPenaltyRule1Internal(matrix, true) + applyMaskPenaltyRule1Internal(matrix, false);
@@ -51,7 +51,7 @@ final class MaskUtil {
    * penalty proportional to (M-1)x(N-1), because this is the number of 2x2 blocks inside such a block.
    *
    * @param matrix the byte matrix
-   * @return the penalty
+   * @return N2 (3) points for each solid 2x2 block of one color
    */
   static int applyMaskPenaltyRule2(ByteMatrix matrix) {
     int penalty = 0;
@@ -76,7 +76,7 @@ final class MaskUtil {
    * find patterns like 000010111010000, we give penalty once.
    *
    * @param matrix the byte matrix
-   * @return the penalty
+   * @return N3 (40) points for each 1:1:3:1:1 or 4:1:1:3:1:1 pattern
    */
   static int applyMaskPenaltyRule3(ByteMatrix matrix) {
     int numPenalties = 0;
@@ -140,7 +140,7 @@ final class MaskUtil {
    * penalty if the ratio is far from 50%. It gives 10 penalty for 5% distance.
    *
    * @param matrix the byte matrix
-   * @return the penalty
+   * @return N4 (10) points per 5% the dark-module ratio deviates from 50%
    */
   static int applyMaskPenaltyRule4(ByteMatrix matrix) {
     int numDarkCells = 0;

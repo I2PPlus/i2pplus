@@ -40,7 +40,7 @@ abstract class FilterDefinitionElement {
     /**
      * The access limit applied to the destinations this element names.
      *
-     * @return the threshold
+     * @return the connection count and window both are enforced over
      */
     Threshold getThreshold() {
         return threshold;

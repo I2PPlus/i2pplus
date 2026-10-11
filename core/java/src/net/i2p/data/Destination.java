@@ -111,7 +111,7 @@ public class Destination extends KeysAndCert {
      * Pull from cache or return new
      *
      * @param in the input stream
-     * @return the destination
+     * @return the destination read from the stream, shared with any instance already cached under the same signing key
      * @throws DataFormatException if data is invalid
      * @throws IOException if an I/O error occurs
      * @since 0.9.9

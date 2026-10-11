@@ -221,9 +221,9 @@ public class Sample {
      * </pre>
      *
      * @param timeAndValues String made by concatenating sample timestamp with corresponding data
-     *     source values delimited with colons. For example:<br>
-     *     <code>1005234132:12.2:35.6:U:24.5</code><br>
-     *     <code>NOW:12.2:35.6:U:24.5</code>
+     *                      source values delimited with colons. For example:<br>
+     *                      <code>1005234132:12.2:35.6:U:24.5</code><br>
+     *                      <code>NOW:12.2:35.6:U:24.5</code>
      * @throws java.io.IOException Thrown in case of I/O error.
      */
     public void setAndUpdate(String timeAndValues) throws IOException {

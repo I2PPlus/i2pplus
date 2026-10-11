@@ -17,7 +17,7 @@ public interface KeyFactory {
     /**
      * The keys for this destination.
      *
-     * @return the keys
+     * @return the key pair for the destination being built, a matching public and private key, recycled from the factory's prebuilt queue when one is available
      */
     public KeyPair getKeys();
 }

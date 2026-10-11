@@ -84,7 +84,7 @@ public class TunnelRemovalEvent {
     /**
      * Return the event timestamp.
      *
-     * @return the timestamp
+     * @return the time in milliseconds since the epoch when the event was created
      */
     public long getTimestamp() {
         return _timestamp;

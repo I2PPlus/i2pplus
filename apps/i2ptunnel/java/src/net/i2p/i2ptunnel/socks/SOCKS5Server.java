@@ -75,7 +75,8 @@ class SOCKS5Server extends SOCKSServer {
      * client socket.
      *
      * @param ctx the context to run the tunnel in
-     * @param clientSock client socket
+     * @param clientSock the accepted socket, positioned just past the version
+     *                   and command bytes already consumed
      * @param props non-null
      */
     public SOCKS5Server(I2PAppContext ctx, Socket clientSock, Properties props) {

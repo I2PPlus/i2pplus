@@ -15,7 +15,7 @@ public class RandomIfOldTrimmer<T extends SimpleDataStructure> extends RandomTri
     /**
      * Create a trimmer that only trims a bucket that hasn't changed in 5 minutes.
      *
-     * @param ctx the context
+     * @param ctx the application context, supplying the clock used to decide staleness
      * @param max maximum bucket size
      */
     public RandomIfOldTrimmer(I2PAppContext ctx, int max) {

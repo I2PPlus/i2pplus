@@ -9,7 +9,7 @@ public interface ReadCounter {
 
     /**
      * The total number of bytes that have been read or skipped
-     * @return the read
+     * @return the cumulative byte count
      */
     public long getRead();
 }

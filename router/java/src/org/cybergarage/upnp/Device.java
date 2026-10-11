@@ -2732,7 +2732,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     /**
      * Attaches caller-defined data to this device's node.
      *
-     * @param data user-defined data
+     * @param data any object; only read back by {@link #getUserData()}
      */
     public void setUserData(Object data) {
         userData = data;
@@ -2741,7 +2741,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     /**
      * Gets the caller-defined data attached to this device's node.
      *
-     * @return user-defined data
+     * @return whatever was passed to {@link #setUserData(Object)}, or null if
+     *         none was
      */
     public Object getUserData() {
         return userData;

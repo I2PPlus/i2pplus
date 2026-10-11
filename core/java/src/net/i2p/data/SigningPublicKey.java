@@ -180,7 +180,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      * Signing public key from a string of base64 data.
      *
      * @param base64Data a string of base64 data (the output of .toBase64() called
-     *         on a prior instance of SigningPublicKey
+     *                   on a prior instance of SigningPublicKey
      * @throws DataFormatException if the base64 cannot be decoded or the decoded bytes are not
      *                             a key of the length the signature type requires
      */
@@ -317,7 +317,7 @@ public class SigningPublicKey extends SimpleDataStructure {
      *
      * @param alpha the secret data
      * @return the blinded public key
-     * @throws UnsupportedOperationException unless supported
+     * @throws UnsupportedOperationException for an unsupported group representation
      * @since 0.9.38
      */
     public SigningPublicKey blind(SigningPrivateKey alpha) {

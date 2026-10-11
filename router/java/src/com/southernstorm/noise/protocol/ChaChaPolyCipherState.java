@@ -87,8 +87,8 @@ public class ChaChaPolyCipherState implements CipherState {
      * I2P add off/len
      *
      * @param ad The associated data for the packet.
-     * @param off offset
-     * @param len length
+     * @param off where in ad the associated data starts
+     * @param len how many bytes of ad to absorb, all of them when ad is non-null
      * @since 0.9.54 added off/len
      */
     private void setup(byte[] ad, int off, int len) {

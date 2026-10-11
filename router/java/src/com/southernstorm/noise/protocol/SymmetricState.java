@@ -448,11 +448,11 @@ class SymmetricState implements Destroyable, Cloneable {
      * @param output1 The first output buffer.
      * @param output1Offset Offset into the first output buffer.
      * @param output1Length Length of the first output which can be
-     *               less than the hash length.
+     *                      less than the hash length.
      * @param output2 The second output buffer.
      * @param output2Offset Offset into the second output buffer.
      * @param output2Length Length of the second output which can be
-     *               less than the hash length.
+     *                      less than the hash length.
      */
     private void hkdf(byte[] key, int keyOffset, int keyLength,
                       byte[] data, int dataOffset, int dataLength,
