@@ -4,7 +4,7 @@ package org.bouncycastle.crypto;
  * Extended interface for message digests with additional functionality.
  * Extends the basic Digest interface with byte length information.
  */
-public interface ExtendedDigest 
+public interface ExtendedDigest
     extends Digest
 {
     /**

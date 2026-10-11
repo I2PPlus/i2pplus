@@ -15,11 +15,11 @@ public enum CryptoServicePurpose
     /** Key generation */
     KEYGEN,
     /** Signing operation (for signatures and digests) */
-    SIGNING,         
+    SIGNING,
     /** Verification operation */
     VERIFYING,
     /** Authentication operation (for MACs and digests) */
-    AUTHENTICATION,  
+    AUTHENTICATION,
     /** Verification operation */
     VERIFICATION,
     /** Pseudo-random function */
