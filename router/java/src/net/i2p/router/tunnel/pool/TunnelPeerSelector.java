@@ -975,21 +975,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             }
         }
 
-        // Pre-qualification: reject peers with zero connectivity signal.
+        // Pre-qualification: reject peers with no usable connectivity signal.
         // Peers that have never been tested, heard from, or connected to
         // will waste tunnel builds and test cycles.  This is always active
-        // for client pools (skipped for exploratory, during startup, and
-        // while under stress — see shouldPreQual).  Use a 30-minute activity
-        // window for heard-from/sent-to checks (wider than the old 10-minute
-        // window) to avoid starving peer selection when the network is
-        // sparse or under load.
+        // for client pools (skipped only for exploratory and during startup);
+        // under stress the bar rises rather than switching off, so a collapse
+        // cannot admit the unproven peers that caused it (see
+        // requiredSignalQuality).
         if (shouldPreQual(isExploratory, isInStartupGracePeriod(ctx), buildSuccess)) {
             boolean established = ctx.commSystem().isEstablished(peerHash);
-            // Connected peers always pass; others need profile evidence of
-            // connectivity within the activity window (see hasConnectivitySignal).
-            if (!established &&
-                (profile == null || !hasConnectivitySignal(profile, ctx.clock().now(),
-                                                           getActivityWindow(ctx)))) {
+            if (!hasConnectivitySignal(profile, ctx.clock().now(), getActivityWindow(ctx),
+                                       established, requiredSignalQuality(buildSuccess))) {
                 return "no-signal";
             }
         }
@@ -1056,24 +1052,107 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /**
      * Whether strict client-pool pre-qualification should be applied to a
-     * candidate peer.  Never for exploratory selections, never during the
-     * startup grace period, and never while the network is under stress
-     * (build success below {@link #ATTACK_THRESHOLD}) — a pool collapse is
-     * made worse by rejecting candidates that merely lack recent activity,
-     * and the exploratory pools already select without pre-qual.  A NaN
-     * success ratio is treated as "missing data is not an attack", so
-     * pre-qualification stays active.  Pure decision — no context access,
-     * safe for unit tests.
+     * candidate peer.  Never for exploratory selections and never during the
+     * startup grace period; otherwise always.
+     *
+     * <p>This used to also switch off below {@link #ATTACK_THRESHOLD}, on the
+     * reasoning that a pool collapse is worsened by rejecting candidates that
+     * merely lack recent activity.  That reasoning inverted the problem:
+     * switching off admitted peers with no connectivity evidence at all, those
+     * peers timed out, and the resulting drop in build success held the switch
+     * off — a self-sustaining loop.  The bar now rises under stress instead
+     * (see {@link #requiredSignalQuality}), so this predicate no longer reads
+     * {@code buildSuccess} at all.  A NaN success ratio is likewise irrelevant
+     * here.  Pure decision — no context access, safe for unit tests.
      *
      * @param isExploratory true for exploratory selections
      * @param inStartupGrace true while the router is in its startup grace period
-     * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
+     * @param buildSuccess unused; retained so callers and tests keep one signature
      * @return true if strict pre-qualification should run
      * @since 0.9.71+
      */
     static boolean shouldPreQual(boolean isExploratory, boolean inStartupGrace, double buildSuccess) {
-        return !isExploratory && !inStartupGrace &&
-               (Double.isNaN(buildSuccess) || buildSuccess >= ATTACK_THRESHOLD);
+        return !isExploratory && !inStartupGrace;
+    }
+
+    /**
+     * Which quality of connectivity evidence a candidate must show to be
+     * pre-qualified, as a function of how well tunnel building is going.
+     *
+     * <p>This replaces the previous all-or-nothing switch that disabled
+     * pre-qualification entirely once build success fell below
+     * {@link #ATTACK_THRESHOLD}.  That switch was self-defeating: the peers it
+     * admitted were precisely the ones with no connectivity evidence, so they
+     * timed out, which depressed build success further and kept the switch off.
+     * A live observation of that loop: builds expiring as
+     * {@code Hop1.establishedSilent}, far ends classified
+     * {@code FarEndUnknown} at roughly 5:1 over {@code FarEndUnreachable}, and
+     * build success oscillating in the 29-46% band directly beneath the
+     * threshold.
+     *
+     * <p>Under stress the bar is raised, not lowered.  {@link #QUALITY_STRICT}
+     * accepts only a recent successful test or a live transport session — the
+     * evidence that a peer is actually reachable — whereas
+     * {@link #QUALITY_RELAXED} additionally accepts mere recent contact or an
+     * old favourable acceptance ratio.  Requiring <em>more</em> proof when
+     * builds are failing is the correct response: a collapse means the
+     * marginal peer we can still reach is worth more than the marginal peer we
+     * merely hope is reachable.
+     *
+     * <p>Exploratory pools and the startup grace period never pre-qualify at
+     * all, so they do not consult this.
+     *
+     * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
+     * @return {@link #QUALITY_STRICT} when build success is at or below
+     *         {@link #ATTACK_THRESHOLD}, otherwise {@link #QUALITY_RELAXED}
+     * @since 0.9.71+
+     */
+    static int requiredSignalQuality(double buildSuccess) {
+        return (Double.isNaN(buildSuccess) || buildSuccess > ATTACK_THRESHOLD)
+               ? QUALITY_RELAXED : QUALITY_STRICT;
+    }
+
+    /** Minimum evidence bar when builds are healthy. @since 0.9.71+ */
+    static final int QUALITY_RELAXED = 0;
+    /**
+     * Minimum evidence bar under stress: a live session or a recent successful
+     * tunnel test. @since 0.9.71+
+     */
+    static final int QUALITY_STRICT = 1;
+
+    /**
+     * Pre-qualification signal check at the given strictness.
+     *
+     * <p>At {@link #QUALITY_RELAXED} this is exactly {@link
+     * #hasConnectivitySignal(PeerProfile, long, long)}: recent contact, a
+     * recent successful test, or any favourable acceptance history.
+     *
+     * <p>At {@link #QUALITY_STRICT} only the two strong signals count — a
+     * successful tunnel test inside the activity window, or a live transport
+     * session (passed in by the caller, which already knows it).  Recent
+     * contact alone is not enough: a peer that is merely sending us traffic
+     * is not thereby known to accept an inbound build request, which is what
+     * this gate is protecting against.
+     *
+     * <p>Pure decision — no context access, safe for unit tests.
+     *
+     * @param profile the peer profile, may be null when no session is live
+     * @param now current time in milliseconds
+     * @param activityWindow the dynamic activity window in milliseconds
+     * @param established whether a live transport session exists for the peer
+     * @param quality one of {@link #QUALITY_RELAXED}, {@link #QUALITY_STRICT}
+     * @return true if the profile shows enough connectivity signal
+     * @since 0.9.71+
+     */
+    static boolean hasConnectivitySignal(PeerProfile profile, long now, long activityWindow,
+                                         boolean established, int quality) {
+        if (established) {return true;}
+        if (profile == null) {return false;}
+        if (quality >= QUALITY_STRICT) {
+            long lastTested = profile.getTunnelHistory().getLastTestedSuccessfully();
+            return lastTested > 0 && now - lastTested < activityWindow;
+        }
+        return hasConnectivitySignal(profile, now, activityWindow);
     }
 
     /**
