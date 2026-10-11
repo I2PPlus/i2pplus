@@ -246,43 +246,16 @@ public class KeySelector {
                 curByte = curBit / 8;
                 int bitsUnused = ((curByte + 1) * 8) - curBit;    // left in byte
 
-//              // DEBUG
-//              System.out.println (
-//                  "this byte = " + btoh(b[curByte])
-//                  + ", next byte = " + btoh(b[curByte + 1])
-//                  + "; curBit=" + curBit + ", curByte= " + curByte
-//                  + ", bitsUnused=" + bitsUnused);
-//              // END
                 if (bitsUnused > 5) {
                     bitOffset[j] = ((0xff & b[curByte])
                                         >> (bitsUnused - 5)) & UNMASK[5];
-//                  // DEBUG
-//                  System.out.println(
-//                      "    before shifting: " + btoh(b[curByte])
-//                  + "\n    after shifting:  "
-//                          + itoh( (0xff & b[curByte]) >> (bitsUnused - 5))
-//                  + "\n    mask:            " + itoh(UNMASK[5]) );
-//                  // END
                 } else if (bitsUnused == 5) {
                     bitOffset[j] = b[curByte] & UNMASK[5];
                 } else {
                     bitOffset[j] = (b[curByte]          & UNMASK[bitsUnused])
                               | (((0xff & b[curByte + 1]) >> 3)
                                                         &   MASK[bitsUnused]);
-//                  // DEBUG
-//                  System.out.println(
-//                    "    contribution from first byte:  "
-//                    + itoh(b[curByte] & UNMASK[bitsUnused])
-//                + "\n    second byte: " + btoh(b[curByte + 1])
-//                + "\n    shifted:     " + itoh((0xff & b[curByte + 1]) >> 3)
-//                + "\n    mask:        " + itoh(MASK[bitsUnused])
-//                + "\n    contribution from second byte: "
-//                    + itoh((0xff & b[curByte + 1] >> 3) & MASK[bitsUnused]));
-//                  // END
                 }
-//              // DEBUG
-//              System.out.println ("    bitOffset[j] = " + bitOffset[j]);
-//              // END
                 curBit += 5;
             }
         }
@@ -345,17 +318,6 @@ public class KeySelector {
                 curByte = curBit / 8;
                 int bitsUnused = ((curByte + 1) * 8) - curBit;    // left in byte
 
-//              // DEBUG
-//              System.out.println (
-//                  "curr 3 bytes: " + btoh(b[curByte])
-//                  + (curByte < 19 ?
-//                      " " + btoh(b[curByte + 1]) : "")
-//                  + (curByte < 18 ?
-//                      " " + btoh(b[curByte + 2]) : "")
-//                  + "; curBit=" + curBit + ", curByte= " + curByte
-//                  + ", bitsUnused=" + bitsUnused);
-//              // END
-
                 if (bitsUnused > stride) {
                     // the value is entirely within the current byte
                     wordOffset[j] = ((0xff & b[curByte])
@@ -368,21 +330,11 @@ public class KeySelector {
                     // value occupies more than one byte
                     // bits from first byte, right-aligned in result
                     wordOffset[j] = b[curByte] & UNMASK[bitsUnused];
-//                  // DEBUG
-//                  System.out.println("    first byte contributes "
-//                          + itoh(wordOffset[j]));
-//                  // END
                     // bits from second byte
                     int bitsToGet = stride - bitsUnused;
                     if (bitsToGet >= 8) {
                         // 8 bits from second byte
                         wordOffset[j] |= (0xff & b[curByte + 1]) << bitsUnused;
-//                      // DEBUG
-//                      System.out.println("    second byte contributes "
-//                          + itoh(
-//                          (0xff & b[curByte + 1]) << bitsUnused
-//                      ));
-//                      // END
 
                         // bits from third byte
                         bitsToGet -= 8;
@@ -392,35 +344,14 @@ public class KeySelector {
                             wordOffset[j] |=
                                 ((0xff & b[curByte + 2]) >> (8 - bitsToGet))
                                                     << (stride - bitsToGet);
-//                          // DEBUG
-//                          System.out.println("    third byte contributes "
-//                              + itoh(
-//                              (((0xff & b[curByte + 2]) >> (8 - bitsToGet))
-//                                                  << (stride - bitsToGet))
-//                              ));
-//                          // END
                         }
                     } else {
                         // all remaining bits are within second byte
                         wordOffset[j] |= ((b[curByte + 1] >> (8 - bitsToGet))
                                             & UNMASK[bitsToGet])
                                                 << bitsUnused;
-//                      // DEBUG
-//                      System.out.println("    second byte contributes "
-//                          + itoh(
-//                          ((b[curByte + 1] >> (8 - bitsToGet))
-//                              & UNMASK[bitsToGet])
-//                                      << bitsUnused
-//                          ));
-//                      // END
                     }
                 }
-//              // DEBUG
-//              System.out.println (
-//                  "    wordOffset[" + j + "] = " + wordOffset[j]
-//                  + ", "                     + itoh(wordOffset[j])
-//              );
-//              // END
                 curBit += stride;
             }
         }
