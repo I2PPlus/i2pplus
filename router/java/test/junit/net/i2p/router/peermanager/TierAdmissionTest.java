@@ -111,4 +111,98 @@ public class TierAdmissionTest {
         assertTrue("eviction must apply acceptance to both tiers",
                    ProfileOrganizer.EVICTION_REQUIRES_ACCEPTANCE_BOTH_TIERS);
     }
+
+    // ---------------- eviction reason precedence ----------------
+
+    /**
+     * A poor accepter is evicted when the tier can afford the turnover.
+     *
+     * <p>This is the path the live counters could not confirm: an all-zero
+     * acceptance count is indistinguishable from a broken predicate, so the
+     * predicate is pinned directly rather than inferred from the console.
+     */
+    @Test
+    public void testLowAcceptanceEvictsWhenSoftPurgeIsAllowed() {
+        assertEquals(ProfileOrganizer.PurgeReason.ACCEPTANCE,
+                     ProfileOrganizer.purgeReasonFor(false, false, true, true,
+                                                      false, false, true));
+    }
+
+    /**
+     * The same peer is kept when the tier is below the threshold, which is the
+     * whole purpose of the guard - a starved tier must not be turned over.
+     */
+    @Test
+    public void testLowAcceptanceIsKeptWhenSoftPurgeIsBlocked() {
+        assertNull("a starved tier must keep a merely poor accepter",
+                   ProfileOrganizer.purgeReasonFor(false, false, true, false,
+                                                   false, false, true));
+    }
+
+    /**
+     * The categorical reasons apply at any tier size, including a starved one.
+     *
+     * <p>These are not judgements about performance; a banned or unreachable
+     * peer is never a valid member whatever the tier size, so withholding its
+     * eviction only leaves it selectable for another cycle.
+     */
+    @Test
+    public void testCategoricalReasonsApplyEvenWhenSoftPurgeIsBlocked() {
+        assertEquals(ProfileOrganizer.PurgeReason.BANNED,
+                     ProfileOrganizer.purgeReasonFor(true, false, true, false,
+                                                      true, true, true));
+        assertEquals(ProfileOrganizer.PurgeReason.UNREACHABLE,
+                     ProfileOrganizer.purgeReasonFor(false, true, true, false,
+                                                      true, true, true));
+        assertEquals(ProfileOrganizer.PurgeReason.NOT_CAPABLE,
+                     ProfileOrganizer.purgeReasonFor(false, false, false, false,
+                                                      true, true, true));
+    }
+
+    /**
+     * Reason precedence is a reporting decision, not six independent checks: the
+     * most actionable fact wins so the counter names something an operator can
+     * act on rather than whichever test happened to be evaluated last.
+     */
+    @Test
+    public void testReasonsAreReportedInPrecedenceOrder() {
+        assertEquals("banned outranks everything",
+                     ProfileOrganizer.PurgeReason.BANNED,
+                     ProfileOrganizer.purgeReasonFor(true, true, false, true, true, true, true));
+        assertEquals("unreachable outranks not-capable",
+                     ProfileOrganizer.PurgeReason.UNREACHABLE,
+                     ProfileOrganizer.purgeReasonFor(false, true, false, true, true, true, true));
+        assertEquals("not-capable outranks the soft reasons",
+                     ProfileOrganizer.PurgeReason.NOT_CAPABLE,
+                     ProfileOrganizer.purgeReasonFor(false, false, false, true, true, true, true));
+        assertEquals("failures outrank acceptance, being the stronger signal",
+                     ProfileOrganizer.PurgeReason.FAILURES,
+                     ProfileOrganizer.purgeReasonFor(false, false, true, true, true, true, true));
+    }
+
+    /**
+     * A healthy peer is left alone, which is what keeps the purge from shrinking
+     * a healthy tier for no reason.
+     */
+    @Test
+    public void testHealthyPeerIsKept() {
+        assertNull(ProfileOrganizer.purgeReasonFor(false, false, true, true,
+                                                    false, false, false));
+        assertNull("and is kept even when the tier is below the threshold",
+                   ProfileOrganizer.purgeReasonFor(false, false, true, false,
+                                                   false, false, false));
+    }
+
+    /**
+     * Loss probation counts as a soft reason alongside recent failures; both
+     * feed the same outcome so the two are not silently unequal.
+     */
+    @Test
+    public void testLossProbationIsASoftReason() {
+        assertEquals(ProfileOrganizer.PurgeReason.FAILURES,
+                     ProfileOrganizer.purgeReasonFor(false, false, true, true,
+                                                      false, true, false));
+        assertNull(ProfileOrganizer.purgeReasonFor(false, false, true, false,
+                                                    false, true, false));
+    }
 }

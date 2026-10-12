@@ -2394,7 +2394,7 @@ public class ProfileOrganizer {
             // by the fill may be the very peer this pass is about to reject.
             // Purging afterwards would empty the tier and leave it empty until
             // the next cycle, which is a net shrink rather than a turnover.
-            purgeUnusableFromTiers(now, buildSuccess);
+            purgeUnusableFromTiers(now, buildSuccess, profileCount);
 
             // Step 6: Fallback to ensure minimum fast peers
             int added = fillFastTierFallbacks(now, newStrictCapacityOrder, buildSuccess);
@@ -2873,7 +2873,7 @@ public class ProfileOrganizer {
      * Purges peers with recent tunnel failures or in loss probation from the
      * fast and high-capacity tiers.  Must be called with the write lock held.
      */
-    private void purgeUnusableFromTiers(long now, double buildSuccess) {
+    private void purgeUnusableFromTiers(long now, double buildSuccess, int profileCount) {
         // Rebuild clears tiers, so this catches peers admitted via lockedPromoteProfileToTiers()
         // that subsequently developed failures during this reorganize window.
         //
@@ -2883,7 +2883,11 @@ public class ProfileOrganizer {
         // be small only leaves it selectable for another cycle. The soft reasons -
         // recent failures, loss probation, poor acceptance - are the ones that
         // genuinely risk emptying a starved tier, so those stay gated.
-        int threshold = softPurgeThreshold(_profileCount);
+        // This cycle's count, not the _profileCount field: that field is assigned
+        // near the end of the same cycle, so reading it here saw zero on the first
+        // reorganize after a restart - which closed the soft-purge guard entirely
+        // for that cycle and, more generally, lagged the count by one cycle.
+        int threshold = softPurgeThreshold(profileCount);
         boolean fastSoft = _fastPeers.size() >= threshold;
         boolean highCapSoft = _highCapacityPeers.size() >= threshold;
         Map<PurgeReason, Integer> reasons = new EnumMap<>(PurgeReason.class);
@@ -2901,15 +2905,32 @@ public class ProfileOrganizer {
      *
      * @since 0.9.71+
      */
-    private enum PurgeReason {
+    enum PurgeReason {
+        /** On the banlist, so never selectable again. Applies at any tier size. */
         BANNED("banned"),
+        /** The transport cannot currently reach it. Applies at any tier size. */
         UNREACHABLE("unreachable"),
+        /** No longer qualifies for this tier's bandwidth class. Applies at any tier size. */
         NOT_CAPABLE("notCapable"),
+        /** Sustained recent build or test failures, or inside loss probation. Soft. */
         FAILURES("failures"),
+        /** Declines too many of our tunnel requests. Soft. */
         ACCEPTANCE("acceptance");
 
+        /** Stat-name suffix for this reason; stable so cycles are comparable. */
         private final String key;
+
+        /**
+         * @param k the stat-name suffix to use for this reason
+         */
         PurgeReason(String k) {key = k;}
+
+        /**
+         * The stat-name suffix identifying this reason.
+         *
+         * @return the lowercase key used in {@code peer.tierEvicted.<key>}
+         * @since 0.9.71+
+         */
         String getKey() {return key;}
     }
 
@@ -3017,6 +3038,47 @@ public class ProfileOrganizer {
      *                     by a network-wide event
      * @since 0.9.71+
      */
+    /**
+     * Why a peer listed in a tier should be evicted, or null to keep it.
+     *
+     * <p>Extracted from {@link #purgeUnusableFromMap} so the precedence and the
+     * gating are testable without a router context. The order is a precedence,
+     * not a set of independent checks: a banned peer is reported as banned even
+     * if it is also unreachable, because that is the most actionable fact about
+     * it and the one an operator greps for.
+     *
+     * <p>The three categorical reasons apply at any tier size. The two soft ones
+     * require {@code softEvictionAllowed}, which the caller derives from the
+     * population-scaled threshold, so a starved tier keeps peers that are merely
+     * underperforming while still losing the ones that must not be there at all.
+     *
+     * <p>Pure decision — no context access, safe for unit tests.
+     *
+     * @param banned               the peer is banlisted
+     * @param unreachable          the transport reports the peer unreachable
+     * @param tierCapable          the peer still meets its tier's bandwidth class
+     * @param softEvictionAllowed  whether the tier is above the soft-purge threshold
+     * @param hasRecentFailures    the peer has sustained recent build/test failures
+     * @param inLossProbation      the peer is inside its loss-probation window
+     * @param lowAcceptance        the peer's tunnel acceptance is below the bar
+     * @return the reason to evict for, or null to leave the peer in place
+     * @since 0.9.71+
+     */
+    static PurgeReason purgeReasonFor(boolean banned, boolean unreachable, boolean tierCapable,
+                                      boolean softEvictionAllowed, boolean hasRecentFailures,
+                                      boolean inLossProbation, boolean lowAcceptance) {
+        if (banned) {return PurgeReason.BANNED;}
+        if (unreachable) {return PurgeReason.UNREACHABLE;}
+        if (!tierCapable) {return PurgeReason.NOT_CAPABLE;}
+        if (softEvictionAllowed && (hasRecentFailures || inLossProbation)) {
+            return PurgeReason.FAILURES;
+        }
+        if (EVICTION_REQUIRES_ACCEPTANCE_BOTH_TIERS && softEvictionAllowed && lowAcceptance) {
+            return PurgeReason.ACCEPTANCE;
+        }
+        return null;
+    }
+
     private void purgeUnusableFromMap(Map<Hash, PeerProfile> tier, String tierName, long now,
                                       double buildSuccess, boolean allowSoftEviction,
                                       Map<PurgeReason, Integer> reasons) {
@@ -3025,20 +3087,14 @@ public class ProfileOrganizer {
         while (it.hasNext()) {
             PeerProfile profile = it.next().getValue();
             Hash peer = profile.getPeer();
-            PurgeReason reason = null;
-            if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) {
-                reason = PurgeReason.BANNED;
-            } else if (_context.commSystem() != null && _context.commSystem().wasUnreachable(peer)) {
-                reason = PurgeReason.UNREACHABLE;
-            } else if (isFast ? !isFastTierCapable(peer) : !isHighBandwidthCapable(peer)) {
-                reason = PurgeReason.NOT_CAPABLE;
-            } else if (allowSoftEviction &&
-                       (hasRecentTunnelFailures(profile) || inLossProbation(profile, now))) {
-                reason = PurgeReason.FAILURES;
-            } else if (EVICTION_REQUIRES_ACCEPTANCE_BOTH_TIERS && allowSoftEviction &&
-                       isLowTunnelAcceptance(profile, buildSuccess, now)) {
-                reason = PurgeReason.ACCEPTANCE;
-            }
+            PurgeReason reason = purgeReasonFor(
+                    _context.banlist() != null && _context.banlist().isBanlisted(peer),
+                    _context.commSystem() != null && _context.commSystem().wasUnreachable(peer),
+                    isFast ? isFastTierCapable(peer) : isHighBandwidthCapable(peer),
+                    allowSoftEviction,
+                    hasRecentTunnelFailures(profile),
+                    inLossProbation(profile, now),
+                    isLowTunnelAcceptance(profile, buildSuccess, now));
             if (reason != null) {
                 if (_log.shouldDebug()) {
                     _log.debug("Purging peer [" + peer.toBase32().substring(0, 6) +
