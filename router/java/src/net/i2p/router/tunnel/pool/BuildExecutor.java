@@ -642,12 +642,11 @@ public class BuildExecutor implements Runnable {
             statMgr.createRequiredRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
             statMgr.createRequiredRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
         }
-        // Counts gateway non-replies that caused an immediate fast/high-cap
-        // eviction.  Paired with tunnel.tierExpire* this shows whether the
-        // contacted hop or a later hop is what fails.
-        statMgr.createRequiredRateStat("tunnel.firstHopUnreachableDemoted",
-                                        "First-hop peers evicted immediately for not answering a build request",
-                                        "Tunnels [Participating]", RATES);
+        // tunnel.firstHopUnreachableDemoted moved to ProfileOrganizer: it counts
+        // every immediate tier eviction, and the pre-connect probe sweep in
+        // TunnelPeerSelector reaches the same eviction by a different route. Counting
+        // only this one left the stat reading zero while the evictions it names were
+        // still happening.
     }
 
     /**
@@ -1951,7 +1950,6 @@ public class BuildExecutor implements Runnable {
                 // than before, but not exempt.
                 if (indicting) {
                     _context.profileOrganizer().demoteIfUnreachableNow(peer);
-                    _context.statManager().addRateData("tunnel.firstHopUnreachableDemoted", 1);
                 }
                 // Keep the strike counter running so the 3rd failure still
                 // installs the longer demoteIfUnreachable cooldown.
