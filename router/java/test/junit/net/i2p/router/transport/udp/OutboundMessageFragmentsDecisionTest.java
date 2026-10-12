@@ -81,8 +81,14 @@ public class OutboundMessageFragmentsDecisionTest {
     /** One peer asking for a long wait must not stall the pool past the ceiling. */
     @Test
     public void testRoundWaitIsCapped() {
-        assertEquals(500, OutboundMessageFragments.roundWaitMs(UNSET));
-        assertEquals(500, OutboundMessageFragments.roundWaitMs(99999));
+        // Asserted against the constant in force, not a literal: MAX_WAIT_MS is
+        // SystemVersion.isSlow() ? 1000 : 500, and the test JVM has no native
+        // BigInteger loaded, so isSlow() is true there and a hardcoded 500
+        // fails.
+        assertEquals(OutboundMessageFragments.MAX_WAIT_MS,
+                     OutboundMessageFragments.roundWaitMs(UNSET));
+        assertEquals(OutboundMessageFragments.MAX_WAIT_MS,
+                     OutboundMessageFragments.roundWaitMs(99999));
     }
 
     /**

@@ -44,7 +44,17 @@ class OutboundMessageFragments {
      * Maximum number of times to send a packet before failing it.
      */
     static final int MAX_VOLLEYS = 10;
-    private static final int MAX_WAIT = SystemVersion.isSlow() ? 1000 : 500;
+    /**
+     * Ceiling on any wait taken here, so one peer reporting a long delay cannot
+     * stall the pool.
+     *
+     * <p>Doubled on a host {@link SystemVersion#isSlow()}, where the extra
+     * millisecond buys nothing but headroom. Package-visible so tests assert
+     * against the value in force rather than a literal: hardcoding it made
+     * {@code OutboundMessageFragmentsDecisionTest} pass only on a host with
+     * native BigInteger loaded, and fail everywhere else.
+     */
+    static final int MAX_WAIT_MS = SystemVersion.isSlow() ? 1000 : 500;
     /**
      * Floor on any wait taken here.
      *
@@ -249,7 +259,7 @@ class OutboundMessageFragments {
     /**
      * Fetch all the packets for a message volley.
      *
-     * <p>Blocks while no peer can send, then gives up after at most {@link #MAX_WAIT}
+     * <p>Blocks while no peer can send, then gives up after at most {@link #MAX_WAIT_MS}
      * rather than waiting indefinitely, so this returns even when nothing became sendable.
      *
      * <p>NOT thread-safe. Called by the PacketPusher thread only.
@@ -537,7 +547,7 @@ class OutboundMessageFragments {
      * How long to block after a full round allocated nothing.
      *
      * <p>Always at least {@link #MIN_WAIT_MS}, so a round that produced nothing cannot turn
-     * into a spin, and never more than {@link #MAX_WAIT}, so one peer reporting a long delay
+     * into a spin, and never more than {@link #MAX_WAIT_MS}, so one peer reporting a long delay
      * cannot stall the pool.
      *
      * @param roundMin result of folding every peer's delay this round
@@ -545,13 +555,13 @@ class OutboundMessageFragments {
      * @since 0.9.71+
      */
     static int roundWaitMs(int roundMin) {
-        return Math.min(Math.max(roundMin, MIN_WAIT_MS), MAX_WAIT);
+        return Math.min(Math.max(roundMin, MIN_WAIT_MS), MAX_WAIT_MS);
     }
 
 private void waitForMessages() {
     synchronized (_waitLock) {
         try {
-            _waitLock.wait(MAX_WAIT);
+            _waitLock.wait(MAX_WAIT_MS);
         } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             if (_log.shouldDebug()) {
