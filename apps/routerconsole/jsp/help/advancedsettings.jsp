@@ -477,13 +477,10 @@
 <tr><td><%=intl._t("Maximum tunnel test period in milliseconds. Tunnel tests never wait longer than this for a reply, even on high-latency paths. [Default is 50000 (50 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.ghostPeer.timeoutThreshold={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Number of tunnel build timeouts before a peer is marked as a ghost (blacklisted for tunnel participation). Higher values tolerate more transient failures. [Default is 3]")%></td></tr>
+<tr><td><%=intl._t("Number of tunnel build timeouts before a peer is marked as a ghost (excluded from tunnel participation). Higher values tolerate more transient failures. [Default is 1]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.ghostPeer.cooldownMs={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Cooldown period in milliseconds before a ghost-marked peer can be considered for tunnel participation again. Shorter values allow faster peer reuse. [Default is 180000 (3 minutes)]")%></td></tr>
-
-<tr class=config><th>i2p.tunnel.ghostPeer.attackCooldownMs={n} <span class=plus>I2P+</span></th></tr>
-<tr><td><%=intl._t("Cooldown period in milliseconds for ghost-marked peers during attack mode. Longer cooldowns limit exposure to potentially malicious peers during high-stress periods. [Default is 300000 (5 minutes)]")%></td></tr>
+<tr><td><%=intl._t("Cooldown period in milliseconds before a ghost-marked peer can be promoted into the tunnel peer tiers again. Shorter values return recovered peers to service faster. [Default is 90000 (90 seconds)]")%></td></tr>
 
 <tr class=config><th>i2p.tunnel.requestThrottle.minLimit={n} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("Minimum number of incoming tunnel build requests accepted per peer per clean window. Prevents starving peers during low-traffic periods. [Default is 10]")%></td></tr>

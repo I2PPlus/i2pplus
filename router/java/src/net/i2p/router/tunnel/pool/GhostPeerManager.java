@@ -14,16 +14,33 @@ import net.i2p.util.Log;
 /**
  * Temporarily excludes unresponsive peers from tunnel build selection.
  *
- * A peer is excluded only after
+ * <p>A peer is excluded only after
  * {@code i2p.tunnel.ghostPeer.timeoutThreshold} consecutive timeouts
- * (strikes); earlier timeouts are tracked so they escalate the cooldown once
- * the threshold is reached, but they do not exclude the peer on their own.
- * The base ghost period (120–300s) is short; legitimate peers recover
- * quickly via {@link #recordSuccess}.  Peers that keep timing out after the
- * mark expires escalate: each repeat timeout within {@link #OFFENSE_DECAY_MS}
- * doubles the next cooldown, capped at {@link #MAX_ESCALATION_SHIFT} doublings
- * (4× base), so a silently dead peer cannot keep eating one build per pool per
- * cooldown window.
+ * (strikes); earlier timeouts are tracked but do not exclude the peer on their
+ * own.
+ *
+ * <p>The exclusion is flat and short — {@link #DEFAULT_COOLDOWN_MS}, with no
+ * escalation for repeat timeouts.
+ *
+ * <p>Escalation was removed because it bought nothing. The cooldown this mark
+ * governs is not the one that keeps a failed peer out of selection:
+ * {@code TunnelPeerSelector.FIRST_HOP_FAIL_COOLDOWN_MS} is five minutes, and
+ * {@code ProfileOrganizer.passesBasicGates} tests it directly, so a peer that
+ * failed as a first hop is already excluded from tier promotion for five
+ * minutes regardless. Every ghost cooldown the router can express — 120s, 300s,
+ * or the 240s an escalation produced — sat inside that window. Doubling it on a
+ * repeat timeout therefore excluded the peer from more than it already was,
+ * while making the mark outlive the build burst it was written to cover, which
+ * is the only thing it is uniquely positioned to do: the mark also gates
+ * promotion in roles the first-hop cooldown does not cover, and a recovered
+ * peer should be back in those roles within a minute or two.
+ *
+ * <p>What a silently dead peer is protected by is eviction, not escalation.
+ * {@code BuildExecutor.penalizeTimeout} demotes the contacted hop from the
+ * fast and high-cap tiers on the same failure, and the three-strike
+ * {@code demoteIfUnreachable} still runs for the failures that do not indict
+ * the peer. A peer that is dead leaves the candidate set on evidence, not on a
+ * timer.
  *
  * <p>Tracked marks are hard-bounded at {@link #MAX_TRACKED_PEERS} (expired
  * marks evicted first, then those nearest to expiry), and the *active*
@@ -32,7 +49,8 @@ import net.i2p.util.Log;
  * burst of timeouts can exclude enough of the reachable set that tier selection
  * returns no candidates at all — the exclusion list starves the very selection
  * it is meant to protect.  Deactivation keeps {@code offenses} and
- * {@code markedAt}, so escalation resumes if the peer times out again.
+ * {@code markedAt}, so the strike history survives and a peer that times out
+ * again still counts toward {@code timeoutThreshold}.
  *
  * <p>The active exclusion count is cached so {@link #getGhostCount()} is a
  * volatile read on the hot path instead of a full map scan; its sweep deadline
@@ -46,23 +64,24 @@ public class GhostPeerManager {
     private final RouterContext _context;
     private final ConcurrentHashMap<Hash, GhostMark> _ghostMarks;
 
-    private static int getTimeoutThreshold(RouterContext ctx) {
+/**
+ * Default exclusion length. Long enough to sit out the burst of builds that
+ * follows one failure, short enough that a peer proven live by a later
+ * success is back in tier rotation within a minute or two.
+ *
+ * @since 0.9.71+
+ */
+static final int DEFAULT_COOLDOWN_MS = 90 * 1000;
+
+private static int getTimeoutThreshold(RouterContext ctx) {
         return ctx.getProperty("i2p.tunnel.ghostPeer.timeoutThreshold", 1);
     }
 
-    private static long getCooldownMs(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.ghostPeer.cooldownMs", 300*1000);
+private static long getCooldownMs(RouterContext ctx) {
+        return ctx.getProperty("i2p.tunnel.ghostPeer.cooldownMs", DEFAULT_COOLDOWN_MS);
     }
 
-    private static long getAttackCooldownMs(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.ghostPeer.attackCooldownMs", 120*1000);
-    }
-
-    private static long getActiveCooldownMs(RouterContext ctx, double buildSuccess) {
-        return isUnderAttack(buildSuccess) ? getAttackCooldownMs(ctx) : getCooldownMs(ctx);
-    }
-
-    private static boolean isUnderAttack(double buildSuccess) {
+private static boolean isUnderAttack(double buildSuccess) {
         return buildSuccess < ProfileOrganizer.ATTACK_THRESHOLD;
     }
 
@@ -73,29 +92,19 @@ public class GhostPeerManager {
     static final int MAX_TRACKED_PEERS = 1024;
 
     /**
-     * Window in which repeat timeouts escalate the next cooldown.  After this
-     * long without a fresh timeout the offense count decays to zero, so a peer
-     * that recovered and later has one bad day starts over at the base period.
-     * @since 0.9.71+
-     */
-    static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
-
-    /**
-     * Maximum escalation shift: base × 2 = 2× base (600s normal, 240s under
-     * attack).
-     *
-     * <p>Lowered from 2 (4× base, so 20 minutes) to 1. Every mark rests on a single
-     * build timeout attributed to the contacted hop, and a timeout has at least three
-     * causes we cannot separate: the hop did not answer, the hop answered and the reply
-     * was lost on the reply path, or the request never reached it. Measured over 8h, 44.9%
-     * of builds timed out while the contacted hop was typically heard from within a
-     * minute, so most marks rest on unverified blame and the penalty should be
-     * conservative. 20 minutes out of a roughly 6000-peer pool is a large exclusion to
-     * impose on that evidence.
-     *
-     * @since 0.9.71+
-     */
-    static final int MAX_ESCALATION_SHIFT = 1;
+ * Window in which repeat timeouts keep counting toward
+ * {@code i2p.tunnel.ghostPeer.timeoutThreshold}. After this long without a
+ * fresh timeout the strike count resets, so a peer that recovered and later has
+ * one bad day starts the count over rather than being excluded on its first
+ * strike.
+ *
+ * <p>This no longer governs a cooldown — the exclusion is flat
+ * ({@link #DEFAULT_COOLDOWN_MS}) — but it still governs whether a timeout is a
+ * first strike or a repeat one when the threshold is above 1.
+ *
+ * @since 0.9.71+
+ */
+static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
 
     private static final long GHOST_WARN_INTERVAL_MS = 60 * 1000L;
 
@@ -204,9 +213,8 @@ public class GhostPeerManager {
      * at least 1); earlier strikes are recorded without excluding it, so the
      * configured sensitivity actually gates selection.  The exclusion expiry
      * is snapshotted at mark time so a later state change doesn't extend or
-     * shorten an active exclusion; a fresh timeout, however, is new evidence
-     * and re-marks the peer with an escalated cooldown when it has offended
-     * before (see {@link #escalationCooldownMs(long, int)}).  Re-marking also
+     * shorten an active exclusion; a fresh timeout is new evidence and re-marks
+     * the peer for a fresh {@link #DEFAULT_COOLDOWN_MS}.  Re-marking also
      * repairs the old stale-entry hole where an expired, never-pruned entry
      * made {@code putIfAbsent} silently no-op and left the peer unmarked.
      *
@@ -217,7 +225,7 @@ public class GhostPeerManager {
 
         final long now = _context.clock().now();
         final double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        final long baseCooldown = getActiveCooldownMs(_context, buildSuccess);
+        final long cooldown = getCooldownMs(_context);
         final boolean underAttack = isUnderAttack(buildSuccess);
         final int threshold = Math.max(1, getTimeoutThreshold(_context));
         GhostMark mark;
@@ -234,18 +242,14 @@ public class GhostPeerManager {
             int offenses = cur == null ? 0
                 : nextOffenses(cur.offenses, cur.markedAt, now, OFFENSE_DECAY_MS);
             if (offenses < threshold - 1) {
-                // Sub-threshold strike: track it for escalation without
+                // Sub-threshold strike: counted toward the threshold without
                 // excluding the peer.  An exclusion already in force is never
                 // revoked by a later write — its expiry was snapshotted when
                 // the peer earned it.
                 long until = cur != null && now < cur.until ? cur.until : 0L;
                 mark = new GhostMark(until, offenses, now);
             } else {
-                // strikes = offenses + 1; shift so the first strike at or above
-                // the threshold gets the base cooldown (T=1: shift == offenses).
-                int shift = Math.max(0, offenses - (threshold - 1));
-                mark = new GhostMark(now + escalationCooldownMs(baseCooldown, shift),
-                                     offenses, now);
+                mark = new GhostMark(now + cooldown, offenses, now);
             }
             boolean wasActive = cur != null && now < cur.until;
             _ghostMarks.put(peer, mark);
@@ -292,23 +296,6 @@ public class GhostPeerManager {
     }
 
     /**
-     * Escalating ghost cooldown: base doubled per offense, capped at
-     * {@link #MAX_ESCALATION_SHIFT} doublings (4× base).  Pure helper.
-     *
-     * @param baseMs cooldown for a first offense (ms)
-     * @param offenses repeat timeouts within the decay window, &lt;= 0 means base
-     * @return cooldown for this mark (ms)
-     * @since 0.9.71+
-     */
-    static long escalationCooldownMs(long baseMs, int offenses) {
-        if (baseMs <= 0 || offenses <= 0) {
-            return baseMs;
-        }
-        int shift = Math.min(offenses, MAX_ESCALATION_SHIFT);
-        return baseMs << shift;
-    }
-
-    /**
      * Debug detail plus the once-per-minute warn summary.  Caller must hold
      * {@code this} — the warn path both reads and writes the rate-limit stamp,
      * and callers are already inside the section that owns the map mutation, so
@@ -317,7 +304,7 @@ public class GhostPeerManager {
      * @param now the caller's view of the clock, reused instead of re-reading it
      */
     private void logGhostMarkLocked(Hash peer, boolean underAttack, long cooldownMs,
-                                    int offenses, long now) {
+                                     int offenses, long now) {
         if (_log.shouldDebug()) {
             _log.debug("Peer [" + peer.toBase64().substring(0, 6) + "] marked as ghost for " +
                        cooldownMs / 1000 + "s" +
@@ -467,9 +454,9 @@ public class GhostPeerManager {
 
     /**
      * Check if a peer should be excluded from tunnel selection.
-     * Expired marks are left in place (not evicted) so their offense
-     * history survives for escalation; they report {@code false} here and
-     * count as inactive in {@link #getGhostCount()}.
+     * Expired marks are left in place (not evicted) so their strike count
+     * survives toward {@code i2p.tunnel.ghostPeer.timeoutThreshold}; they
+     * report {@code false} here and count as inactive in {@link #getGhostCount()}.
      *
      * @param peer the router hash to test
      * @return true if the peer is a ghost and should be skipped

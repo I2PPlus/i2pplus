@@ -21,7 +21,8 @@ import net.i2p.util.LogManager;
 /**
  * Tests for GhostPeerManager:
  * - peers are excluded only after the timeout threshold
- * - exclusions expire after the cooldown, shorter under stress
+ * - exclusions expire after one flat cooldown, in every build-success state
+ * - repeat timeouts never lengthen that cooldown
  * - the cooldown is snapshotted at mark time (state changes don't extend it)
  * - success and clearGhost release the peer
  * - the router itself is never tracked
@@ -44,14 +45,14 @@ public class GhostPeerManagerTest {
         _ctx = mock(RouterContext.class);
         when(_ctx.getConfigDir()).thenReturn(_tmpDir);
         when(_ctx.getProperty(anyString(), anyString())).thenReturn(new File(_tmpDir, "logger.config").getAbsolutePath());
-        // Defaults mirror the real ones: timeout threshold 1, cooldown 300s
-        // (120s under stress, which getTunnelBuildSuccess() toggles).
-        // Note: the cooldown literals in GhostPeerManager are ints, so the
+        // Defaults mirror the real ones: timeout threshold 1, cooldown 90s.
+        // There is no attack-mode cooldown and no escalation, so one property
+        // covers the exclusion length.
+        // Note: the cooldown literal in GhostPeerManager is an int, so the
         // (String, int) overload is the one that matters here.
         when(_ctx.getProperty(anyString(), anyInt())).thenAnswer(inv -> {
             String key = inv.getArgument(0);
-            if ("i2p.tunnel.ghostPeer.attackCooldownMs".equals(key)) {return 120_000;}
-            if ("i2p.tunnel.ghostPeer.cooldownMs".equals(key)) {return 300_000;}
+            if ("i2p.tunnel.ghostPeer.cooldownMs".equals(key)) {return 90_000;}
             return 1; // i2p.tunnel.ghostPeer.timeoutThreshold
         });
         LogManager lm = new LogManager(_ctx);
@@ -67,7 +68,8 @@ public class GhostPeerManagerTest {
 
         _organizer = mock(ProfileOrganizer.class);
         when(_ctx.profileOrganizer()).thenReturn(_organizer);
-        // Normal mode by default (build success above the attack threshold)
+        // Above the attack threshold; build success no longer changes the
+        // cooldown, it only annotates the log line.
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
 
         _mgr = new GhostPeerManager(_ctx);
@@ -112,45 +114,39 @@ public class GhostPeerManagerTest {
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
 
-        when(_clock.now()).thenReturn(NOW + 200_000L); // normal cooldown is 300s
+        when(_clock.now()).thenReturn(NOW + 60_000L); // cooldown is 90s
         assertTrue("still excluded mid-cooldown", _mgr.isGhost(hash(1)));
 
-        when(_clock.now()).thenReturn(NOW + 301_000L);
+        when(_clock.now()).thenReturn(NOW + 91_000L);
         assertFalse("released after cooldown", _mgr.isGhost(hash(1)));
         assertEquals(0, _mgr.getGhostCount());
     }
 
     @Test
-    public void testStressCooldownIsShorter() {
+    public void testCooldownIsFlatUnderStress() {
+        // Build success no longer changes the exclusion length. It used to drop
+        // it to 120s under attack and escalate to 240s on a repeat; now every
+        // state gets the same window.
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2); // below attack threshold
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
 
         when(_clock.now()).thenReturn(NOW + 60_000L);
-        assertTrue("still excluded before 120s", _mgr.isGhost(hash(1)));
+        assertTrue("still excluded before 90s", _mgr.isGhost(hash(1)));
 
-        when(_clock.now()).thenReturn(NOW + 121_000L);
-        assertFalse("released after 120s stress cooldown", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(NOW + 91_000L);
+        assertFalse("released after the same 90s stress cooldown", _mgr.isGhost(hash(1)));
     }
 
     @Test
     public void testCooldownSnapshottedAtMarkTime() {
-        // marked under stress (120s)...
-        when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
+        // Marked while build success is healthy...
         _mgr.recordTimeout(hash(1));
         assertTrue(_mgr.isGhost(hash(1)));
-        // ...network recovers mid-cooldown: the 120s grant must not be extended to 300s
-        when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
-        when(_clock.now()).thenReturn(NOW + 121_000L);
-        assertFalse("released per the cooldown at mark time", _mgr.isGhost(hash(1)));
-
-        // and the reverse: a normal (300s) mark must not be shortened by stress
-        when(_clock.now()).thenReturn(NOW);
-        when(_organizer.getTunnelBuildSuccess()).thenReturn(0.9);
-        _mgr.recordTimeout(hash(2));
+        // ...and the grant must not be extended by a later state change.
         when(_organizer.getTunnelBuildSuccess()).thenReturn(0.2);
-        when(_clock.now()).thenReturn(NOW + 200_000L);
-        assertTrue("300s grant respected", _mgr.isGhost(hash(2)));
+        when(_clock.now()).thenReturn(NOW + 91_000L);
+        assertFalse("released per the cooldown at mark time", _mgr.isGhost(hash(1)));
     }
 
     @Test
@@ -182,54 +178,55 @@ public class GhostPeerManagerTest {
         assertEquals(0, _mgr.getGhostCount());
     }
 
-    // --- repeat-offense escalation (0.9.71+) ---
+    // --- flat cooldown: no escalation for repeat timeouts ---
 
     @Test
-    public void testRepeatTimeoutEscalatesCooldown() {
-        _mgr.recordTimeout(hash(1)); // first offense: base 300s
-        when(_clock.now()).thenReturn(NOW + 301_000L);
-        assertFalse("base cooldown expired", _mgr.isGhost(hash(1)));
+    public void testRepeatTimeoutDoesNotExtendCooldown() {
+        // The regression this pins: a repeat timeout used to double the cooldown
+        // (2x base, capped). The mark is now a flat rebuff, and every one of
+        // those windows sat inside the 5-minute first-hop cooldown that
+        // passesBasicGates tests anyway, so the doubling bought no extra
+        // protection — it only outlived the build burst it was written to cover.
+        _mgr.recordTimeout(hash(1));
+        when(_clock.now()).thenReturn(NOW + 91_000L);
+        assertFalse("first cooldown expired", _mgr.isGhost(hash(1)));
 
-        _mgr.recordTimeout(hash(1)); // second offense within the decay window
-        // escalated to 2x base (600s) from the repeat mark time
-        when(_clock.now()).thenReturn(NOW + 301_000L + 599_000L);
-        assertTrue("2x cooldown respected", _mgr.isGhost(hash(1)));
-        when(_clock.now()).thenReturn(NOW + 301_000L + 601_000L);
-        assertFalse("2x cooldown released", _mgr.isGhost(hash(1)));
+        _mgr.recordTimeout(hash(1)); // second offense, well inside the decay window
+        when(_clock.now()).thenReturn(NOW + 91_000L + 60_000L);
+        assertTrue("re-marked", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(NOW + 91_000L + 91_000L);
+        assertFalse("repeat mark released after the same flat cooldown",
+                    _mgr.isGhost(hash(1)));
     }
 
     @Test
-    public void testEscalationCappedAtTwoX() {
-        _mgr.recordTimeout(hash(1)); // offense 0: 300s
-        when(_clock.now()).thenReturn(NOW + 301_000L);
-        _mgr.recordTimeout(hash(1)); // offense 1: 600s (cap)
-        when(_clock.now()).thenReturn(NOW + 301_000L + 601_000L);
-        _mgr.recordTimeout(hash(1)); // offense 2: still 600s (capped)
-        long markAt = NOW + 301_000L + 601_000L;
-        when(_clock.now()).thenReturn(markAt + 599_000L);
-        assertTrue("2x cooldown respected", _mgr.isGhost(hash(1)));
-        when(_clock.now()).thenReturn(markAt + 601_000L);
-        assertFalse("2x cooldown released", _mgr.isGhost(hash(1)));
-
-        // further offenses stay at the cap, never grow unbounded
-        when(_clock.now()).thenReturn(markAt + 601_000L);
-        _mgr.recordTimeout(hash(1));
-        long cappedAt = markAt + 601_000L;
-        when(_clock.now()).thenReturn(cappedAt + 599_000L);
-        assertTrue("still capped at 2x", _mgr.isGhost(hash(1)));
-        when(_clock.now()).thenReturn(cappedAt + 601_000L);
-        assertFalse("capped cooldown released", _mgr.isGhost(hash(1)));
+    public void testManyRepeatTimeoutsNeverGrowTheCooldown() {
+        // Six repeats inside the decay window must all grant the same window;
+        // the old cap was 2x base, and nothing here may exceed 1x.
+        long at = NOW;
+        for (int i = 0; i < 6; i++) {
+            at += 91_000L;
+            when(_clock.now()).thenReturn(at);
+            _mgr.recordTimeout(hash(1));
+        }
+        when(_clock.now()).thenReturn(at + 89_000L);
+        assertTrue("still excluded just before the flat cooldown ends",
+                   _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(at + 91_000L);
+        assertFalse("released after exactly one cooldown, not six",
+                    _mgr.isGhost(hash(1)));
     }
 
     @Test
     public void testOffenseDecaysAfterWindow() {
-        _mgr.recordTimeout(hash(1)); // first offense: 300s
-        // repeat much later than OFFENSE_DECAY_MS: history decayed, base again
+        _mgr.recordTimeout(hash(1));
+        // repeat much later than OFFENSE_DECAY_MS: history decayed, strike 0 again
         when(_clock.now()).thenReturn(NOW + GhostPeerManager.OFFENSE_DECAY_MS + 1_000L);
         assertFalse("original mark expired", _mgr.isGhost(hash(1)));
         _mgr.recordTimeout(hash(1));
-        when(_clock.now()).thenReturn(NOW + GhostPeerManager.OFFENSE_DECAY_MS + 301_000L);
-        assertFalse("decayed repeat gets base 300s again", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(NOW + GhostPeerManager.OFFENSE_DECAY_MS + 91_000L);
+        assertFalse("decayed repeat released after the flat cooldown",
+                    _mgr.isGhost(hash(1)));
     }
 
     @Test
@@ -237,9 +234,9 @@ public class GhostPeerManagerTest {
         _mgr.recordTimeout(hash(1));
         _mgr.recordSuccess(hash(1));
         when(_clock.now()).thenReturn(NOW + 1_000L);
-        _mgr.recordTimeout(hash(1)); // proven live since: back to base 300s
-        when(_clock.now()).thenReturn(NOW + 301_000L);
-        assertFalse("success reset escalation", _mgr.isGhost(hash(1)));
+        _mgr.recordTimeout(hash(1)); // proven live since: a first strike again
+        when(_clock.now()).thenReturn(NOW + 1_000L + 91_000L);
+        assertFalse("success reset the strike count", _mgr.isGhost(hash(1)));
     }
 
     @Test
@@ -263,7 +260,6 @@ public class GhostPeerManagerTest {
     private void stubThresholdAndCooldown(final int threshold, final int cooldownMs) {
         when(_ctx.getProperty(anyString(), anyInt())).thenAnswer(inv -> {
             String key = inv.getArgument(0);
-            if ("i2p.tunnel.ghostPeer.attackCooldownMs".equals(key)) {return 120_000;}
             if ("i2p.tunnel.ghostPeer.cooldownMs".equals(key)) {return cooldownMs;}
             if ("i2p.tunnel.ghostPeer.timeoutThreshold".equals(key)) {return threshold;}
             return 1;
@@ -273,7 +269,7 @@ public class GhostPeerManagerTest {
 
     @Test
     public void testThresholdTwoTracksButDoesNotExcludeFirstStrike() {
-        stubThresholdAndCooldown(2, 300_000);
+        stubThresholdAndCooldown(2, 90_000);
         assertEquals(2, _mgr.getThreshold());
 
         _mgr.recordTimeout(hash(1));
@@ -322,17 +318,17 @@ public class GhostPeerManagerTest {
 
     @Test
     public void testGhostCountCacheFollowsStaggeredExpiry() {
-        _mgr.recordTimeout(hash(1));                       // expires NOW + 300s
-        when(_clock.now()).thenReturn(NOW + 100_000L);
-        _mgr.recordTimeout(hash(2));                       // expires NOW + 400s
+        _mgr.recordTimeout(hash(1));                       // expires NOW + 90s
+        when(_clock.now()).thenReturn(NOW + 30_000L);
+        _mgr.recordTimeout(hash(2));                       // expires NOW + 120s
         assertEquals(2, _mgr.getGhostCount());
 
         // the cached due-time is the earliest expiry: the first lapse forces
         // a rescan and leaves only the second mark active
-        when(_clock.now()).thenReturn(NOW + 301_000L);
+        when(_clock.now()).thenReturn(NOW + 91_000L);
         assertEquals(1, _mgr.getGhostCount());
 
-        when(_clock.now()).thenReturn(NOW + 401_000L);
+        when(_clock.now()).thenReturn(NOW + 121_000L);
         assertEquals(0, _mgr.getGhostCount());
     }
 
@@ -366,17 +362,18 @@ public class GhostPeerManagerTest {
         assertTrue("protected (furthest from lapsing)",
                    _mgr.isGhost(distinctHash(GhostPeerManager.MAX_ACTIVE_GHOSTS - 1)));
 
-        // Re-marking the dropped peer must still see its original offense: this
-        // is its second strike inside the decay window, so the cooldown doubles.
-        // A cap that dropped the history instead would grant the base 300s here.
+        // Re-marking the dropped peer must still see its original strike: this is
+        // its second strike inside the decay window. A cap that dropped the
+        // history instead would treat this as a first strike.
         long at = NOW + GhostPeerManager.MAX_ACTIVE_GHOSTS;
         when(_clock.now()).thenReturn(at);
         _mgr.recordTimeout(distinctHash(0));
         assertTrue("re-marked", _mgr.isGhost(distinctHash(0)));
-        when(_clock.now()).thenReturn(at + 599_000L);
-        assertTrue("2x cooldown respected", _mgr.isGhost(distinctHash(0)));
-        when(_clock.now()).thenReturn(at + 601_000L);
-        assertFalse("2x cooldown released", _mgr.isGhost(distinctHash(0)));
+        when(_clock.now()).thenReturn(at + 89_000L);
+        assertTrue("still excluded just before the flat cooldown ends",
+                   _mgr.isGhost(distinctHash(0)));
+        when(_clock.now()).thenReturn(at + 91_000L);
+        assertFalse("released after the same flat cooldown", _mgr.isGhost(distinctHash(0)));
     }
 
     @Test
@@ -400,11 +397,18 @@ public class GhostPeerManagerTest {
         _mgr.recordTimeout(distinctHash(40));
         assertEquals(20, _mgr.getGhostCount());
 
-        // ...but that re-mark is a second timeout, so only its own cooldown
-        // escalates past the base while every other mark has lapsed
-        when(_clock.now()).thenReturn(NOW + 301_000L);
-        assertEquals(1, _mgr.getGhostCount());
-        when(_clock.now()).thenReturn(NOW + 601_000L);
+        // A later re-mark pushes only that peer's expiry forward by one flat
+        // cooldown; the other 19 lapse on schedule. (Re-marking at the same
+        // instant would leave every mark expiring together, which is correct but
+        // would not distinguish a moved expiry from an unchanged one.)
+        when(_clock.now()).thenReturn(NOW + 30_000L);
+        _mgr.recordTimeout(distinctHash(40));
+        assertEquals(20, _mgr.getGhostCount());
+
+        when(_clock.now()).thenReturn(NOW + 91_000L);
+        assertEquals("only the re-marked peer survives its fresh window", 1,
+                     _mgr.getGhostCount());
+        when(_clock.now()).thenReturn(NOW + 121_000L);
         assertEquals(0, _mgr.getGhostCount());
     }
 
@@ -422,19 +426,6 @@ public class GhostPeerManagerTest {
         // idempotent: re-bucketing an already bucketed deadline never moves it
         assertEquals(GhostPeerManager.bucketDue(1_001L),
                      GhostPeerManager.bucketDue(GhostPeerManager.bucketDue(1_001L)));
-    }
-
-    @Test
-    public void testEscalationCooldownHelper() {
-        assertEquals(300_000L, GhostPeerManager.escalationCooldownMs(300_000L, 0));
-        assertEquals(300_000L, GhostPeerManager.escalationCooldownMs(300_000L, -1));
-        assertEquals(600_000L, GhostPeerManager.escalationCooldownMs(300_000L, 1));
-        // Capped at 2x base since MAX_ESCALATION_SHIFT fell from 2 to 1: every mark
-        // rests on one build timeout whose attribution we cannot verify, so the
-        // exclusion is held to 600s rather than 1200s.
-        assertEquals(600_000L, GhostPeerManager.escalationCooldownMs(300_000L, 2));
-        assertEquals(600_000L, GhostPeerManager.escalationCooldownMs(300_000L, 99));
-        assertEquals(0L, GhostPeerManager.escalationCooldownMs(0L, 5));
     }
 
     @Test
