@@ -2870,12 +2870,40 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Purges peers with recent tunnel failures or in loss probation from the
-     * fast and high-capacity tiers.  Must be called with the write lock held.
+     * Evicts peers that stopped qualifying since the tiers were last rebuilt.
+     *
+     * <p>This is a within-window catch, not the mechanism that turns the tiers
+     * over. The rebuild at step 4 clears both tiers and repopulates them through
+     * {@link #lockedPromoteProfileToTiers}, which applies acceptance, congestion,
+     * loss-probation and excessive-failure gates to every peer it admits. A peer
+     * that is already disqualified therefore never survives the rebuild, and the
+     * only thing left for this pass to remove is a peer that qualified at rebuild
+     * time and stopped qualifying during the reorg window that followed.
+     *
+     * <p>The consequence for anyone reading the stats: with the rebuild doing the
+     * filtering, every reason counts near zero in steady state, and that is the
+     * expected reading rather than evidence that a gate is inert. An all-zero
+     * {@code peer.tierEvicted.*} series over many cycles means "nothing degraded
+     * mid-window", not "eviction is disabled". The gates this pass duplicates are
+     * still load-bearing, but they live in the promotion path.
+     *
+     * <p>Two reasons have no promotion-path counterpart and so are this pass's
+     * own: {@link PurgeReason#UNREACHABLE}, which tests a momentary transport flag
+     * that promotion never reads, and {@link PurgeReason#BANNED}, which promotion
+     * covers only through {@link #passesBasicGates}. Those two are the ones to
+     * watch when diagnosing.
+     *
+     * <p>Must be called with the write lock held.
+     *
+     * @param now current time in ms
+     * @param buildSuccess the build success ratio, which relaxes the acceptance threshold under stress
+     * @param profileCount this cycle's profile count, which sets the soft-purge threshold
+     * @since 0.9.71+
      */
     private void purgeUnusableFromTiers(long now, double buildSuccess, int profileCount) {
-        // Rebuild clears tiers, so this catches peers admitted via lockedPromoteProfileToTiers()
-        // that subsequently developed failures during this reorganize window.
+        // Catches peers admitted by lockedPromoteProfileToTiers() that developed
+        // failures during this reorganize window; see the javadoc for why the
+        // steady-state counts here are near zero.
         //
         // The size guard applies only to the soft reasons. A peer that is banned,
         // unreachable, or no longer bandwidth-capable is never a valid member at
@@ -3018,27 +3046,6 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Removes peers with recent tunnel failures, loss probation, or poor tunnel
-     * acceptance from the given tier map.  Must be called with the write lock
-     * held.
-     *
-     * <p>Acceptance is an eviction criterion for <em>both</em> tiers, even though
-     * high-capacity admission ignores it. A peer that declines too many of our
-     * build requests is wasted work whichever tier lists it, and leaving such
-     * peers listed in the fast tier in particular means they keep being offered
-     * as a first hop. Admission stays permissive so high capacity remains a deep
-     * reservoir; this is what stops that permissiveness from accumulating poor
-     * accepters.
-     *
-     * @param tier the tier map to purge
-     * @param tierName "fast" or "high-cap" for the log message
-     * @param now current time in ms
-     * @param buildSuccess the build success ratio, which relaxes the acceptance
-     *                     threshold under stress so the tiers cannot be emptied
-     *                     by a network-wide event
-     * @since 0.9.71+
-     */
-    /**
      * Why a peer listed in a tier should be evicted, or null to keep it.
      *
      * <p>Extracted from {@link #purgeUnusableFromMap} so the precedence and the
@@ -3079,6 +3086,33 @@ public class ProfileOrganizer {
         return null;
     }
 
+    /**
+     * Evicts every peer in one tier map that {@link #purgeReasonFor} rejects.
+     *
+     * <p>Acceptance is an eviction criterion for <em>both</em> tiers, even where
+     * high-capacity admission ignores it. A peer that declines too many of our
+     * build requests is wasted work whichever tier lists it, and leaving such a
+     * peer listed in the fast tier in particular means it keeps being offered as
+     * a first hop. Admission is the permissive side of that trade; this is what
+     * stops the permissiveness from accumulating poor accepters.
+     *
+     * <p>Only {@code PurgeReason.BANNED} and {@code PurgeReason.UNREACHABLE} can
+     * be first to fire here for a peer the rebuild had already admitted; the
+     * other three are re-checks of gates the rebuild applied. See
+     * {@link #purgeUnusableFromTiers} for why that makes the steady-state counts
+     * near zero.
+     *
+     * @param tier the tier map to purge, mutated in place
+     * @param tierName "fast" or "high-cap" for the log message
+     * @param now current time in ms
+     * @param buildSuccess the build success ratio in [0.0, 1.0], which relaxes the
+     *                     acceptance threshold under stress so the tiers cannot be
+     *                     emptied by a network-wide event
+     * @param allowSoftEviction whether this tier is above
+     *                           {@link #softPurgeThreshold(int)}, gating the soft reasons
+     * @param reasons tally shared with the other tier's pass, accumulated in place
+     * @since 0.9.71+
+     */
     private void purgeUnusableFromMap(Map<Hash, PeerProfile> tier, String tierName, long now,
                                       double buildSuccess, boolean allowSoftEviction,
                                       Map<PurgeReason, Integer> reasons) {
