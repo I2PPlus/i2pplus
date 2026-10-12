@@ -70,7 +70,9 @@ class PacketHandler {
         _handlers = new CopyOnWriteArrayList<>();
 
         _context.statManager().createRateStat("udp.destroyedInvalidSkew", "Session destroyed (bad skew)", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRateStat("udp.blockedPacketBytes", "Inbound packets blocked (bytes)", "Transport [UDP]", UDPTransport.RATES);
+        // Removed: udp.blockedPacketBytes (no emission). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here was measured.
     }
 
     /**

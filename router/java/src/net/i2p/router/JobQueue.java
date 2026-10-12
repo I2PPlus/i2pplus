@@ -164,7 +164,9 @@ public class JobQueue {
         _context.statManager().createRequiredRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
         _context.statManager().createRequiredRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.testJobCount", "Number of TestJob instances in queue", "JobQueue", RATES);
-        _context.statManager().createRateStat("jobQueue.testJobHardLimit", "TestJob hard limit events", "JobQueue", RATES);
+        // Removed: jobQueue.testJobHardLimit (already documented in GraphGroups as removed from the console). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here was measured.
         // following are for JobQueueRunner
         _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", RATES);
         _context.statManager().createRequiredRateStat("jobQueue.jobRunSlow", "Duration of jobs that take over a second (ms)", "JobQueue", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });

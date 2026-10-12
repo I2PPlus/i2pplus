@@ -49,7 +49,9 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
         context.statManager().createRequiredRateStat("netDb.storeLeaseSetHandled", "Number of LeaseSet store messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
         context.statManager().createRequiredRateStat("netDb.storeRouterInfoHandled", "Number of RouterInfo store messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
         context.statManager().createRequiredRateStat("netDb.storeRecvTime", "Time to handle the local store part of a DbStore", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
-        context.statManager().createRateStat("netDb.storeLocalLeaseSetAttempt", "Number of attempted local LeaseSet store messages", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        // Removed: netDb.storeLocalLeaseSetAttempt was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
     }
 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {

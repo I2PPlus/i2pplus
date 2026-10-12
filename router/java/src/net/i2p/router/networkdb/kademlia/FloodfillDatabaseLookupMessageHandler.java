@@ -61,9 +61,15 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context.statManager().createRequiredRateStat("netDb.lookupsMatched", "Successful NetDb lookups", "NetworkDatabase", RATES);
         _context.statManager().createRequiredRateStat("netDb.lookupsMatchedLeaseSet", "Successful NetDb LeaseSet lookups", "NetworkDatabase", RATES);
         _context.statManager().createRateStat("netDb.lookupsMatchedReceivedPublished", "Successful NetDb lookups (published to us)", "NetworkDatabase", RATES);
-        _context.statManager().createRateStat("netDb.lookupsMatchedLocalClosest", "NetDb lookups received for local data (closest peer)", "NetworkDatabase", RATES);
-        _context.statManager().createRateStat("netDb.lookupsMatchedLocalNotClosest", "NetDb lookups received for local data (not closest peer)", "NetworkDatabase", RATES);
-        _context.statManager().createRateStat("netDb.lookupsMatchedRemoteNotClosest", "NetDb lookups received for remote data (not closest peer)", "NetworkDatabase", RATES);
+        // Removed: netDb.lookupsMatchedLocalClosest (no emission; sendClosest delegates to super and the caller does not distinguish). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here was measured.
+        // Removed: netDb.lookupsMatchedLocalNotClosest (same). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here was measured.
+        // Removed: netDb.lookupsMatchedRemoteNotClosest (same). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here was measured.
     }
 
     /**

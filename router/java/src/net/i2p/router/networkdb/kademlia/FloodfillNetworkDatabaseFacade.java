@@ -170,8 +170,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _context.statManager().createRequiredRateStat("netDb.failedRetries", "Additional queries for failed Iterative search", "NetworkDatabase", rate);
         _context.statManager().createRequiredRateStat("netDb.successRetries", "Additional queries for successful Iterative search", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.searchMessageCount", "Total number of messages for all searches sent", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.searchReplyValidated", "Validated NetDb search replies", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.searchReplyNotValidated", "Unvalidated NetDb search replies", "NetworkDatabase", rate);
+        // Removed: netDb.searchReplyValidated (no emission; read by the Tuner, which therefore saw an absent stat). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
+        // Removed: netDb.searchReplyNotValidated (same). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
         _context.statManager().createRateStat("netDb.searchReplyValidationSkipped", "Skipped NetDb search replies (unreliable peers)", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.republishQuantity", "Number of peers we need to send a found LeaseSet to", "NetworkDatabase", rate);
         // for ISJ
@@ -179,7 +183,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // late reply grace period cache
         _context.statManager().createRateStat("netDb.lateReplyCacheSize", "Size of late reply grace period cache", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.lateReplyTimedOut", "Timed out peers added to late reply cache", "NetworkDatabase", rate);
-        _context.statManager().createRateStat("netDb.clientSubDbExploratoryDrop", "Client subDb expl. drop (missing dest)", "NetworkDatabase", rate);
+        // Removed: netDb.clientSubDbExploratoryDrop (no emission). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
         _context.statManager().createRateStat("netDb.clientSubDbExploratoryFallback", "Client subDb expl. fallback to main NetDb", "NetworkDatabase", rate);
         // No need to start the FloodfillMonitorJob for client subDb.
         if (isClientDb()) {_ffMonitor = null; _probeStalePeerJob = null; _contactRefreshJob = null; _introducerLookupJob = null;}

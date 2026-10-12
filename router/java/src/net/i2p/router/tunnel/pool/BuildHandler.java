@@ -495,13 +495,17 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.corruptBuildReply", "Corrupt tunnel build replies received", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropConnLimits", "Dropped not rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropDecryptFail", "Dropped tunnel build (decryption failed)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.handleRemaining", "Waiting inbound requests after 1 pass", "Tunnels [Participating]", RATES);
+        // Removed: tunnel.handleRemaining (the loop it described is gone). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
         ctx.statManager().createRequiredRateStat("tunnel.nextHopLookupTimeout", "Timeout for next hop lookup (ms)", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionBandwidth", "Received tunnel build rejection (bandwidth overload)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionCritical", "Received tunnel build rejection (critical failure)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionProbabalistic", "Received tunnel build rejection probabalistically", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.receiveRejectionTransient", "Received tunnel build rejection (transient overload)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.reject.30", "Rejected a tunnel (bandwidth overload)", "Tunnels [Participating]", RATES);
+        // Removed: tunnel.reject.30 (dotted name is a refactor artefact). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
         ctx.statManager().createRequiredRateStat("tunnel.rejectConnLimits", "Rejected tunnel build (connection limits)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectFuture", "Rejected tunnel build (time in future)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
@@ -518,7 +522,9 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.dropLoadBacklog", "Pending request count when dropped", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropLoad", "Delay before dropping request (ms)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropLoadDelay", "Delay before abandoning request (ms)", "Tunnels [Participating]", RATES);
-        ctx.statManager().createRequiredRateStat("tunnel.dropLoadProactiveAbort", "Allowed requests during load", "Tunnels [Participating]", RATES);
+        // Removed: tunnel.dropLoadProactiveAbort (name and description do not match each other). It was never emitted, so it read as an
+        // absent stat rather than a zero one, and every graph, Tuner rule and health
+        // check that referenced it silently no-oped. Nothing here ever measured.
         ctx.statManager().createRequiredRateStat("tunnel.dropLoadProactive", "Delay estimate when dropped (ms)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropLookupThrottle", "Dropped tunnel build (hop lookup limit)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.pendingLookupQueue", "Pending lookup queue size", "Tunnels [Participating]", RATES);
