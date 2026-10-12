@@ -79,6 +79,35 @@ function syncLocalStorageWithURL() {
 }
 
 /**
+ * Applies a fetched graph page fragment to the live document.
+ * @function applyGraphFragment
+ * @param {HTMLElement} temp - Detached div holding the parsed fragment
+ * @param {string} newHref - URL to push into history once the update lands
+ * @returns {boolean} True if the document was updated, false if the fragment
+ *   lacked the elements the page needs and was ignored
+ */
+function applyGraphFragment(temp, newHref) {
+  // A fragment can arrive without the graph: the stat may have no data, or the
+  // request may have been served an error page. Touching graphImage or the
+  // options blindly threw here, and the throw escaped the promise chain as an
+  // uncaught TypeError because it ran before the .catch() below could see it.
+  const newImg = temp.querySelector("#graphSingle");
+  const newOpts = temp.querySelector("#graphopts");
+  const graphopts = document.getElementById("graphopts");
+  if (!graphImage || !newImg || !newOpts || !graphopts) {
+    console.warn("graphSingle: fragment missing expected elements, update ignored");
+    return false;
+  }
+
+  graphImage.src = newImg.src;
+  graphopts.innerHTML = newOpts.innerHTML;
+  history.pushState(null, "", newHref);
+  syncLocalStorageWithURL();
+  initCss();
+  return true;
+}
+
+/**
  * Sets up click delegation for graph option links, handling legend toggling
  * and graph updates via fetch.
  * @function initButtons
@@ -109,20 +138,7 @@ function initButtons() {
           .then(data => {
             const temp = document.createElement("div");
             temp.innerHTML = data;
-
-            // Update the graph image
-            const updatedImgSrc = temp.querySelector("#graphSingle").src;
-            graphImage.src = updatedImgSrc;
-
-            // Update the graph options
-            const graphopts = document.getElementById("graphopts");
-            const updatedOpts = temp.querySelector("#graphopts").innerHTML;
-            graphopts.innerHTML = updatedOpts;
-
-            // Update the address bar
-            history.pushState(null, "", newHref);
-            syncLocalStorageWithURL();
-            initCss();
+            applyGraphFragment(temp, newHref);
           })
           .catch(error => console.error("Error updating graph: ", error));
       } else {
@@ -132,20 +148,7 @@ function initButtons() {
           .then(data => {
             const temp = document.createElement("div");
             temp.innerHTML = data;
-
-            // Update the graph image
-            const updatedImgSrc = temp.querySelector("#graphSingle").src;
-            graphImage.src = updatedImgSrc;
-
-            // Update the graph options
-            const graphopts = document.getElementById("graphopts");
-            const updatedOpts = temp.querySelector("#graphopts").innerHTML;
-            graphopts.innerHTML = updatedOpts;
-
-            // Update the address bar
-            history.pushState(null, "", adjustedHref);
-            syncLocalStorageWithURL();
-            initCss();
+            applyGraphFragment(temp, adjustedHref);
           })
           .catch(error => console.error("Error updating graph: ", error));
       }
@@ -192,6 +195,9 @@ function refreshGraph() {
   if (graphRefreshInterval > 0) {
     var graph = document.getElementById("single");
     graphImage = document.getElementById("graphSingle");
+    // No image means no graph to refresh. The interval below dereferences
+    // graphImage on every tick, so bail out here rather than at the first tick.
+    if (!graphImage) {return;}
 
     function updateGraphURL() {
       var currentImgSrc = graphImage.src;
@@ -246,6 +252,12 @@ document.addEventListener("DOMContentLoaded", () => {
   graphImage = document.getElementById("graphSingle");
   initButtons();
   progressx.hide();
-  graphImage.onload = function() {initCss();}
+  // The page can legitimately render without a graph — an unknown stat name, or
+  // a stat with nothing to plot — so #graphSingle is not guaranteed to exist.
+  // Assigning onload through a null graphImage threw an uncaught TypeError and
+  // aborted the rest of this handler, so refreshGraph() never ran either.
+  if (graphImage) {
+    graphImage.onload = function() {initCss();};
+  }
   refreshGraph();
 });
