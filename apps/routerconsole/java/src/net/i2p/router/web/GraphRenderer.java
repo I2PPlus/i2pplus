@@ -1513,6 +1513,12 @@ class GraphRenderer {
         list.add(new java.util.AbstractMap.SimpleEntry<>("router.", "[Router] "));
         list.add(new java.util.AbstractMap.SimpleEntry<>("bw.", "[Router] "));
         list.add(new java.util.AbstractMap.SimpleEntry<>("Bandwidth usage", "[Router] Bandwidth Usage"));
+        // Must precede the tunnel.build prefix below, which matches this name and
+        // concatenates the remainder verbatim — "tunnel.buildSuccessAvg" became
+        // "[Tunnel] Build" + "SuccessAvg", which configureTitle() then rendered as
+        // "Build SuccessAverage" via its blanket " Avg" -> "Average" rule. Keying on the
+        // whole stat name consumes it before that prefix is reached.
+        list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.buildSuccessAvg", "[Tunnel] Build Success Average"));
         list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.build", "[Tunnel] Build"));
         list.add(new java.util.AbstractMap.SimpleEntry<>("tunnel.", "[Tunnel] "));
         list.add(new java.util.AbstractMap.SimpleEntry<>("netDb.", "[NetDb] "));

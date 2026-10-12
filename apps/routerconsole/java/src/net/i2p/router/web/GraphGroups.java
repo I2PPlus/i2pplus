@@ -138,6 +138,19 @@ public final class GraphGroups {
         g.put("buildRejectReceived", Arrays.asList(
                 "tunnel.receiveRejectionProbabalistic", "tunnel.receiveRejectionTransient"));
 
+        // Build outcomes per direction: what succeeded against what failed. Both
+        // members are event counts over the same period, so they share an axis and the
+        // frame answers "how many builds landed" for one direction at a time.
+        //
+        // Deliberately separate frames for the two directions rather than one
+        // four-line comparison: MAX_SERIES is two, and inbound and outbound fail by
+        // different routes, so a chart that let them be read against each other would
+        // invite exactly the comparison the aggregate cannot support.
+        g.put("buildInboundOutcome", Arrays.asList(
+                "tunnel.buildInboundSucceeded", "tunnel.buildInboundFailed"));
+        g.put("buildOutboundOutcome", Arrays.asList(
+                "tunnel.buildOutboundSucceeded", "tunnel.buildOutboundFailed"));
+
         // Build success split by direction, both percentages over the same 0-100
         // scale and both computed from the sliding window in BuildExecutor, so they
         // reconcile with tunnel.buildSuccessRate and are directly comparable to it.
@@ -285,7 +298,9 @@ public final class GraphGroups {
         t.put("jobQueueDepth", "Scheduled Jobs");
         t.put("jobLoadEvents", "Load Events");
         t.put("buildRejectReceived", "Build Rejections Received");
-        t.put("buildSuccessByDirection", "Inbound / Outbound Build Success Average");
+        t.put("buildInboundOutcome", "Inbound Build Success");
+        t.put("buildOutboundOutcome", "Outbound Build Success");
+        t.put("buildSuccessByDirection", "Build Success Average (Combined)");
         t.put("buildRejectBanned", "Builds Refused as Banned");
         t.put("netDbLookupTime", "Lookup Time");
         t.put("udpRto", "UDP Retransmission Timeouts");
@@ -331,6 +346,8 @@ public final class GraphGroups {
         subsystems.put("jobQueueDepth", "Jobs");
         subsystems.put("jobLoadEvents", "Jobs");
         subsystems.put("buildRejectReceived", "Tunnel");
+        subsystems.put("buildInboundOutcome", "Tunnel");
+        subsystems.put("buildOutboundOutcome", "Tunnel");
         subsystems.put("buildSuccessByDirection", "Tunnel");
         subsystems.put("buildRejectBanned", "Tunnel");
         subsystems.put("netDbLookupTime", "NetDb");
