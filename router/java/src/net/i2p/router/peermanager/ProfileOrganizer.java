@@ -455,13 +455,14 @@ public class ProfileOrganizer {
 
     /** Minimum tunnel acceptance ratio (40%) to remain in high-capacity/fast tiers */
     private static final double MIN_TUNNEL_ACCEPTANCE_RATIO = 0.4;
-    /** Minimum tunnel requests for statistical confidence */
     /**
      * Lifetime requests a peer needs before its acceptance ratio may exclude it.
      *
      * <p>Package-visible because the tiers apply different floors to it and the
-     * boundary between "judged" and "not judged" is exactly the difference; see
-     * {@link TierAdmissionFloorTest}.
+     * boundary between "judged" and "not judged" is exactly the difference. The
+     * high-capacity tier passes this value and the fast tier passes one, so the
+     * same counts give opposite answers on the two; {@code TierAdmissionFloorTest}
+     * pins that boundary.
      *
      * @since 0.9.70+
      */

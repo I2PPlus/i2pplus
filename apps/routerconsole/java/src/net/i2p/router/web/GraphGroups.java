@@ -151,6 +151,34 @@ public final class GraphGroups {
         g.put("buildOutboundOutcome", Arrays.asList(
                 "tunnel.buildOutboundSucceeded", "tunnel.buildOutboundFailed"));
 
+        // Peer-dependent build outcomes against each other: what the peer did with
+        // our request, as opposed to what the network did with it. Success against
+        // rejection isolates the peer's contribution - a build that timed out says
+        // about as much about the path as about the hop, so timeoutRate stays on its
+        // own graph and the two here are the pair that name a peer's behaviour.
+        //
+        // Both are percentages over the same window and the same denominator, so
+        // they share an axis, and together they do not sum to 100: the remainder is
+        // buildTimeoutRate, which is plotted separately on purpose.
+        g.put("buildOutcomeRate", Arrays.asList(
+                "tunnel.buildSuccessRate", "tunnel.buildFailureRate"));
+
+        // Low-level bandwidth in each direction. Both are already enabled by
+        // default, so this consolidates two existing tiles into one rather than
+        // adding a frame, and leaves the message-level bw.sendBps/bw.receiveBps
+        // pair to the legacy bw.combined special case.
+        g.put("bwLowLevelRate", Arrays.asList(
+                "bw.sendRate", "bw.recvRate"));
+
+        // Executor depth against the threads draining it. The pair says whether a
+        // backlog is capacity or saturation, which neither figure carries alone: a
+        // deep queue with free threads is a stall, a deep queue with threads maxed
+        // is load. Mirrors the existing i2ptunnel*Threads groups.
+        g.put("rdnsExecutor", Arrays.asList(
+                "rdns.executor.queueSize", "rdns.executor.threads"));
+        g.put("ntcpSendFinisher", Arrays.asList(
+                "ntcp.sendFinisher.queueSize", "ntcp.sendFinisher.threads"));
+
         // Build success split by direction, both percentages over the same 0-100
         // scale and both computed from the sliding window in BuildExecutor, so they
         // reconcile with tunnel.buildSuccessRate and are directly comparable to it.
@@ -301,6 +329,10 @@ public final class GraphGroups {
         t.put("buildInboundOutcome", "Inbound Build Success");
         t.put("buildOutboundOutcome", "Outbound Build Success");
         t.put("buildSuccessByDirection", "Build Success Average (Combined)");
+        t.put("buildOutcomeRate", "Build Success and Rejection Rates");
+        t.put("bwLowLevelRate", "Low-Level Bandwidth");
+        t.put("rdnsExecutor", "rDNS Executor");
+        t.put("ntcpSendFinisher", "NTCP Send Finisher");
         t.put("buildRejectBanned", "Builds Refused as Banned");
         t.put("netDbLookupTime", "Lookup Time");
         t.put("udpRto", "UDP Retransmission Timeouts");
@@ -349,6 +381,10 @@ public final class GraphGroups {
         subsystems.put("buildInboundOutcome", "Tunnel");
         subsystems.put("buildOutboundOutcome", "Tunnel");
         subsystems.put("buildSuccessByDirection", "Tunnel");
+        subsystems.put("buildOutcomeRate", "Tunnel");
+        subsystems.put("bwLowLevelRate", "Router");
+        subsystems.put("rdnsExecutor", "Router");
+        subsystems.put("ntcpSendFinisher", "NTCP");
         subsystems.put("buildRejectBanned", "Tunnel");
         subsystems.put("netDbLookupTime", "NetDb");
         subsystems.put("leaseSetLookupTime", "NetDb");
