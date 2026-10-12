@@ -2513,27 +2513,106 @@ public class TestJob extends JobImpl {
      * @return the prioritized order; never null, same elements
      * @since 0.9.71+
      */
-    static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
-        List<PendingTest> out = new ArrayList<PendingTest>(scan.size());
-        List<PendingTest> lastChance = new ArrayList<PendingTest>();
-        for (PendingTest p : scan) {
-            if (p != null && p.cfg != null && p.cfg.isLastChanceAdmitted(now)) {
-                lastChance.add(p);
-            } else if (p != null) {
-                out.add(p);
-            }
-        }
-        if (!lastChance.isEmpty()) {
-            Collections.sort(lastChance, new Comparator<PendingTest>() {
-                @Override
-                public int compare(PendingTest a, PendingTest b) {
-                    return Long.compare(a.cfg.getExpiration(), b.cfg.getExpiration());
-                }
-            });
-            out.addAll(0, lastChance);
-        }
-        return out;
-    }
+static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now) {
+          return prioritizeBatch(scan, now, null);
+      }
+
+      /**
+       * Reorder one scan: last-chance candidates first (soonest expiry), then
+       * the rest by peer tier.
+       *
+       * @param scan the popped candidates, in buffer order
+       * @param now the current time
+       * @param ctx router context used to read peer tiers; may be null, in which
+       *            case tier ordering is skipped and buffer order is preserved
+       * @return the prioritized order; never null, same elements
+       * @since 0.9.71+
+       */
+      static List<PendingTest> prioritizeBatch(List<PendingTest> scan, long now, RouterContext ctx) {
+          List<PendingTest> out = new ArrayList<PendingTest>(scan.size());
+          List<PendingTest> lastChance = new ArrayList<PendingTest>();
+          List<PendingTest> ordinary = new ArrayList<PendingTest>();
+          for (PendingTest p : scan) {
+              if (p != null && p.cfg != null && p.cfg.isLastChanceAdmitted(now)) {
+                  lastChance.add(p);
+              } else if (p != null) {
+                  ordinary.add(p);
+              }
+          }
+          if (!lastChance.isEmpty()) {
+              Collections.sort(lastChance, new Comparator<PendingTest>() {
+                  @Override
+                  public int compare(PendingTest a, PendingTest b) {
+                      return Long.compare(a.cfg.getExpiration(), b.cfg.getExpiration());
+                  }
+              });
+          }
+          // Within the ordinary candidates, dispatch order follows peer tier:
+          // fast first, then high-capacity, then everything else. A first test
+          // is what promotes a peer into the fast tier, so dispatching by tier
+          // is what keeps that tier populated - without it, a peer that has
+          // just been promoted waits behind whatever was queued first and the
+          // tier is decided by buffer order rather than by merit. Observed as
+          // first-test denials running at ~71/min against a dispatch budget far
+          // smaller than the backlog, so the order candidates are served in is
+          // what decides which ones get tested at all.
+          //
+          // Stable within each tier: the comparator returns 0 for equals, so
+          // FIFO still holds among candidates of equal merit and this ordering
+          // alone cannot starve the untiered tail.
+          if (ctx != null && ordinary.size() > 1) {
+              final RouterContext rctx = ctx;
+              Collections.sort(ordinary, new Comparator<PendingTest>() {
+                  @Override
+                  public int compare(PendingTest a, PendingTest b) {
+                      return Integer.compare(tierRank(a, rctx),
+                                             tierRank(b, rctx));
+                  }
+              });
+          }
+          out.addAll(lastChance);
+          out.addAll(ordinary);
+          return out;
+      }
+
+      /**
+       * Tier rank of a candidate's first hop, best first: {@code 0} fast,
+       * {@code 1} high-capacity, {@code 2} untiered.
+       *
+       * <p>Reads the tier live from the profile rather than from a snapshot, so
+       * a promotion that lands while a candidate waits is reflected without the
+       * buffer having to be rewritten.
+       *
+       * <p>Only the first hop is consulted: it is the peer the test's probe
+       * reaches first, so its quality decides whether the tunnel is worth
+       * testing promptly. Deeper hops sit behind peers this router has not yet
+       * spoken to on this build.
+       *
+       * <p>Without a context, or for a candidate whose config has no readable
+       * peer array, the candidate ranks untiered rather than being dropped from
+       * the batch.
+       *
+       * @param p the candidate
+       * @param ctx router context, may be null
+       * @return the rank
+       * @since 0.9.71+
+       */
+      static int tierRank(PendingTest p, RouterContext ctx) {
+          if (p == null || p.cfg == null || ctx == null) {return 2;}
+          try {
+              if (p.cfg.getLength() < 1) {return 2;}
+              Hash first = p.cfg.getPeer(0);
+              if (first == null) {return 2;}
+              ProfileOrganizer po = ctx.profileOrganizer();
+              if (po.isFast(first)) {return 0;}
+              if (po.isHighCapacity(first)) {return 1;}
+              return 2;
+          } catch (RuntimeException e) {
+              // An unsized peer array throws here. Treat as untiered rather
+              // than dropping the candidate from the batch.
+              return 2;
+          }
+      }
 
     /**
      * Rate-limited INFO line for a batch denial, so the reason a backlog is
@@ -2588,7 +2667,7 @@ public class TestJob extends JobImpl {
             }
         }
         long now = ctx.clock().now();
-        List<PendingTest> batch = prioritizeBatch(scan, now);
+        List<PendingTest> batch = prioritizeBatch(scan, now, ctx);
         int dispatched = 0;
         for (int i = 0; i < batch.size(); i++) {
             PendingTest p = batch.get(i);
