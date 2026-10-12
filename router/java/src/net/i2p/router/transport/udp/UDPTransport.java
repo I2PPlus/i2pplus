@@ -1909,6 +1909,23 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     * When {@link #getEstimatedRTT(Hash)} was measured, on the router clock.
+     *
+     * <p>Always {@link #RTT_TIME_CURRENT}: SSU refreshes a session's RTT on
+     * every acknowledgement, so whatever this returns was measured by traffic
+     * the session is carrying now. There is no reading here that can go stale
+     * while a session is alive, which is the property NTCP2 lacks.
+     *
+     * @param peer the peer to report on
+     * @return {@link #RTT_TIME_CURRENT}, always
+     * @since 0.9.71+
+     */
+    @Override
+    public long getEstimatedRTTTime(Hash peer) {
+        return RTT_TIME_CURRENT;
+    }
+
+    /**
      * Peer state by SSU2 connection ID.
      *
      * @param rcvConnID the receive connection ID of the session

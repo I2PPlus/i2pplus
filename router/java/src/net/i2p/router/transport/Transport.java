@@ -216,6 +216,45 @@ public interface Transport {
      */
     default int getEstimatedRTT(Hash peer) {return 0;}
 
+    /**
+     * When {@link #getEstimatedRTT(Hash)} last measured this peer, on the router
+     * clock.
+     *
+     * <p>A transport that measures once per session and then holds the number -
+     * NTCP2, whose only round trip is its handshake - returns the handshake time,
+     * not the present. Reporting {@code now} instead would let a reading hours
+     * old pass as fresh and keep resetting the profile's staleness window, which
+     * is what stops it from ever expiring.
+     *
+     * <p>A transport whose reading is refreshed by ongoing traffic, such as SSU2
+     * on acknowledgement, has nothing to report: the value it returns is current
+     * by construction, and it returns {@link #RTT_TIME_CURRENT}.
+     *
+     * @param peer the peer to look up
+     * @return the timestamp of the measurement in ms, {@link #RTT_TIME_CURRENT}
+     *         when the reading is always current, or {@link #RTT_TIME_UNKNOWN}
+     *         when the transport does not track one
+     * @since 0.9.71+
+     */
+    default long getEstimatedRTTTime(Hash peer) {return RTT_TIME_UNKNOWN;}
+
+    /**
+     * Sentinel for {@link #getEstimatedRTTTime(Hash)} meaning the transport's
+     * reading is refreshed by live traffic and is never out of date.
+     *
+     * @since 0.9.71+
+     */
+    long RTT_TIME_CURRENT = -1L;
+
+    /**
+     * Sentinel for {@link #getEstimatedRTTTime(Hash)} meaning the transport does
+     * not record when it measured. Callers must then treat the reading as
+     * current, which preserves the pre-existing behaviour.
+     *
+     * @since 0.9.71+
+     */
+    long RTT_TIME_UNKNOWN = -2L;
+
     /** Start accepting connections. */
     public void startListening();
     /** Stop accepting connections. */

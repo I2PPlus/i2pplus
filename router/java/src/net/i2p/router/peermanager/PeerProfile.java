@@ -524,12 +524,21 @@ public class PeerProfile {
      * than damped: {@link #getFirstHopRtt} has declared it unknown, so averaging
      * toward it would let expired evidence drag a fresh measurement back.
      *
+     * <p>A sample older than the one already held is discarded outright. This is
+     * the single choke point every measurement passes through - the sampling pass,
+     * the pre-connect probe and the handshake recorder all land here - so the
+     * rule cannot be bypassed by a caller that forgot it. Without it a transport
+     * whose reading is old but not yet expired re-submits that same old number
+     * each cycle, which both drags the average back toward one stale sample and
+     * pushes the timestamp forward, so the staleness window never opens.
+     *
      * @param rtt   measured round trip time in ms, 0 if unmeasured
-     * @param when  timestamp of the measurement
+     * @param when  timestamp of the measurement; must not predate the value held
      * @since 0.9.71+
      */
     public void setFirstHopRtt(int rtt, long when) {
         if (rtt <= 0) {return;}
+        if (_firstHopRtt > 0 && _firstHopRttTime > 0 && when < _firstHopRttTime) {return;}
         boolean stale = _firstHopRtt > 0 && _firstHopRttTime > 0 &&
                         when - _firstHopRttTime >= FIRST_HOP_RTT_VALIDITY_MS;
         _firstHopRtt = (int) (stale ? rtt : dampLatency(_firstHopRtt, rtt));

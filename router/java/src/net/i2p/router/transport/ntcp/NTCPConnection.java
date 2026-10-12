@@ -38,6 +38,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.BanLogger;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
+import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.ntcp.NTCP2Payload.Block;
 import net.i2p.router.util.PriBlockingQueue;
 import net.i2p.util.Addresses;
@@ -163,6 +164,18 @@ public class NTCPConnection implements Closeable {
      * @since 0.9.71+
      */
     private volatile int _establishmentRtt;
+
+    /**
+     * When {@link #_establishmentRtt} was measured, on the router clock, so a
+     * reader can tell a handshake-time reading from a current one.
+     *
+     * <p>Kept beside the value rather than derived from session age, so the
+     * measurement's timestamp is the handshake's own and cannot drift if the
+     * reader is called at a different moment.
+     *
+     * @since 0.9.71+
+     */
+    private volatile long _establishmentRttTime;
     private long _lastRateUpdated;
     /**
      * Last time "ntcp.writeBufs.size" was recorded, to throttle the per-frame
@@ -624,12 +637,28 @@ public class NTCPConnection implements Closeable {
    * @param rttMs measured round trip time in ms; values of 0 or less are ignored
    * @since 0.9.71+
    */
-  void noteEstablishmentRtt(int rttMs) {
-    synchronized (this) {
-      if (!shouldRecordEstablishmentRtt(_establishmentRtt, rttMs)) return;
-      _establishmentRtt = rttMs;
-    }
-  }
+void noteEstablishmentRtt(int rttMs) {
+     synchronized (this) {
+       if (!shouldRecordEstablishmentRtt(_establishmentRtt, rttMs)) return;
+       _establishmentRtt = rttMs;
+       // Stamped here, where the handshake is the thing being measured, so
+       // NTCPTransport can report when this reading was taken instead of letting
+       // a caller stamp the present onto a value that may be hours old.
+       _establishmentRttTime = _context.clock().now();
+     }
+   }
+
+   /**
+    * When {@link #getEstimatedRTT()} was measured, on the router clock.
+    *
+    * @return the handshake completion time in ms, or
+    *         {@code Transport.RTT_TIME_UNKNOWN} before establishment has
+    *         supplied a reading
+    * @since 0.9.71+
+    */
+   public long getEstimatedRTTTime() {
+     return (_establishmentRttTime > 0) ? _establishmentRttTime : Transport.RTT_TIME_UNKNOWN;
+   }
 
   /**
    * Whether a candidate handshake timing should become this session's recorded

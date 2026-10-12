@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -198,6 +199,17 @@ public class ProfileOrganizer {
     private final Map<Hash, PeerProfile> _highCapacityPeers;
     private final Map<Hash, PeerProfile> _wellIntegratedPeers;
     private final Map<Hash, PeerProfile> _notFailingPeers;
+    /**
+     * Every tier this object retains, in a fixed order, so a pass that must read
+     * the whole retained population walks one collection instead of repeating
+     * itself per map.
+     *
+     * <p>Assigned in the constructor once all four maps exist. The maps are
+     * themselves final and are never replaced, so this never needs rebuilding.
+     *
+     * @since 0.9.71+
+     */
+    private final List<Map<Hash, PeerProfile>> _allTiers;
     private final List<Hash> _notFailingPeersList;
     /** Peers demoted via demoteIfUnreachable — excluded from promotion for TUNNEL_DEMOTION_COOLDOWN_MS */
     private final ConcurrentHashMap<Hash, Long> _demotedPeers = new ConcurrentHashMap<>(64);
@@ -460,6 +472,43 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private static final int MIN_FAST_QUALITY_COUNT = 500;
+    /**
+     * Upper bound on the soft-purge tier size, in peers.
+     *
+     * <p>Caps {@link #softPurgeThreshold(int)} so that on a large network the
+     * threshold stays reachable rather than scaling without limit.
+     *
+     * @since 0.9.71+
+     */
+    static final int MAX_SOFT_PURGE_FLOOR = 100;
+
+    /**
+     * Whether high-capacity <em>admission</em> requires acceptable tunnel
+     * acceptance. False: high capacity is the reservoir the fast tier is seeded
+     * from, so requiring acceptance here would filter it by the same criterion
+     * that empties the fast tier, leaving nothing to seed from.
+     *
+     * @since 0.9.71+
+     */
+    static final boolean HIGH_CAP_ADMISSION_REQUIRES_ACCEPTANCE = false;
+
+    /**
+     * Whether fast-tier admission requires acceptable tunnel acceptance. True:
+     * the fast tier is the selective tier, and a peer that declines most of our
+     * build requests is wasted work wherever it is listed.
+     *
+     * @since 0.9.71+
+     */
+    static final boolean FAST_ADMISSION_REQUIRES_ACCEPTANCE = true;
+
+    /**
+     * Whether acceptance-based eviction applies to both tiers. True: admission
+     * is permissive and eviction is what keeps poor accepters from
+     * accumulating, so the two must disagree on admission and agree on eviction.
+     *
+     * @since 0.9.71+
+     */
+    static final boolean EVICTION_REQUIRES_ACCEPTANCE_BOTH_TIERS = true;
 
     /** Config property for the loss ratio above which a peer is demoted from fast/high-cap tiers. */
     public static final String PROP_LOSSY_THRESHOLD = "profileOrganizer.lossyThreshold";
@@ -654,6 +703,8 @@ public class ProfileOrganizer {
         _persistenceHelper = new ProfilePersistenceHelper(_context);
         _strictCapacityOrder = new TreeSet<>(_comp);
         _wellIntegratedPeers = new HashMap<>(1024);
+        _allTiers = Arrays.asList(_fastPeers, _highCapacityPeers,
+                                  _wellIntegratedPeers, _notFailingPeers);
 
         _context.statManager().createRateStat("peer.profileCoalesceTime", "Time to coalesce peer stats (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profilePlaceTime", "Time to sort peers into tiers (ms)", "Peers", RATES);
@@ -1794,6 +1845,7 @@ public class ProfileOrganizer {
               releaseReadLock();
           }
           publishBaselines(baselines);
+          publishLatencyCoverage();
         // One stat sample per cycle carrying the cycle mean, not one per sampled
         // peer: the rate's consumers (console, jrobin) plot the average, so only
         // the within-cycle spread is lost.
@@ -1927,7 +1979,137 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Bounded random sample of the tier peers for RTT measurement, capped at
+     * Scale a calibrated baseline into the latency a peer may sit under and
+     * still count as low latency.
+     *
+     * <p>The baseline is the mean of a style's fastest samples, so it is a
+     * measure of where a transport's population <em>starts</em>, not where it
+     * ends. Judging a peer against the raw baseline rejects the entire body of
+     * an otherwise fast transport: with a 43ms baseline every peer above 43ms
+     * is disqualified, which is a far stricter bar than
+     * {@link #_lowLatencyBaselineMultiple} describes and the opposite of the
+     * widening this bound is supposed to provide.
+     *
+     * <p>Saturates rather than wraps, so an extreme baseline cannot overflow into
+     * a negative bound that would read as "unknown" and silently disable the
+     * check, nor a small positive one that would reject the whole population.
+     *
+     * @param baselineMs the calibrated baseline in ms, or a non-positive value
+     *                   meaning that style has no calibrated opinion yet
+     * @return the qualifying threshold in ms, or a non-positive value when
+     *         {@code baselineMs} carries no opinion
+     * @since 0.9.71+
+     */
+    /**
+     * Report how much of each tier holds a current first-hop RTT.
+     *
+     * <p>This is the question the other stats cannot answer. Tier size says how
+     * many peers exist, and the baseline stats say how many samples fed the
+     * floor, but neither says how many peers hold a reading that is still
+     * inside the validity window - a tier can be fully counted and largely
+     * unmeasured while looking identical to a healthy one from outside.
+     *
+     * <p>Reported as a count against nothing rather than a ratio, because a ratio
+     * computed over a shrinking tier flatters itself.
+     *
+     * @since 0.9.71+
+     */
+    private void publishLatencyCoverage() {
+        long now = _context.clock().now();
+        int fast = 0, fastWithRtt = 0, highCap = 0, highCapWithRtt = 0;
+        getReadLock();
+        try {
+            for (PeerProfile profile : _fastPeers.values()) {
+                fast++;
+                if (profile.getFirstHopRtt(now) > 0) {fastWithRtt++;}
+            }
+            for (PeerProfile profile : _highCapacityPeers.values()) {
+                highCap++;
+                if (profile.getFirstHopRtt(now) > 0) {highCapWithRtt++;}
+            }
+        } finally {
+            releaseReadLock();
+        }
+        // Registered at the point of use for the same reason as the baseline
+        // stats: a name StatManager has never been told about is dropped, so a
+        // name registered only in the constructor would silently publish
+        // nothing. Both are idempotent.
+        StatManager sm = _context.statManager();
+        sm.createRequiredRateStat("peer.fastTierWithRtt",
+                                  "Fast-tier peers holding a current first-hop RTT",
+                                  "Peers", RATES);
+        sm.createRequiredRateStat("peer.highCapWithRtt",
+                                  "High-capacity peers holding a current first-hop RTT",
+                                  "Peers", RATES);
+        sm.addRateData("peer.fastTierWithRtt", fastWithRtt, 60L * 1000);
+        sm.addRateData("peer.highCapWithRtt", highCapWithRtt, 60L * 1000);
+        if (_log.shouldInfo() && fast > 0) {
+            _log.info("Latency coverage: fast tier " + fastWithRtt + "/" + fast +
+                      ", high capacity " + highCapWithRtt + "/" + highCap);
+        }
+    }
+
+    private long applyBaselineMultiple(long baselineMs) {
+        return applyBaselineMultiple(baselineMs, _lowLatencyBaselineMultiple);
+    }
+
+    /**
+     * Scale a calibrated baseline into the latency a peer may sit under and
+     * still count as low latency.
+     *
+     * <p>Pure arithmetic, extracted so the overflow and sentinel rules can be
+     * exercised without a router context.
+     *
+     * @param baselineMs the calibrated baseline in ms
+     * @param multiple   how many times it may be exceeded; values of 1 or less
+     *                   return the baseline unscaled
+     * @return the qualifying threshold in ms, or {@code baselineMs} unchanged
+     *         when it carries no opinion
+     * @since 0.9.71+
+     */
+    static long applyBaselineMultiple(long baselineMs, int multiple) {
+        if (baselineMs <= 0) {return baselineMs;}
+        if (multiple <= 1) {return baselineMs;}
+        long threshold = baselineMs * multiple;
+        if (threshold < baselineMs || threshold < 0) {return Long.MAX_VALUE;}
+        return threshold;
+    }
+
+    /**
+     * The qualifying latency threshold for a peer, from the calibrated baseline
+     * of the transport that measured it.
+     *
+     * <p>This is what the profile actually compares against - the baseline scaled
+     * by {@link #PROP_LOW_LATENCY_MULTIPLE} - as opposed to
+     * {@link #getCalibratedLatencyFloorMs(Hash)}, which returns the unscaled
+     * baseline that {@code peer.latencyBaseline.*} reports.
+     *
+     * @param peer the peer to look up
+     * @return the qualifying threshold in ms, or -1 if unknown
+     * @since 0.9.71+
+     */
+    long getCalibratedLatencyThresholdMs(Hash peer) {
+        return applyBaselineMultiple(getCalibratedLatencyFloorMs(peer));
+    }
+
+    /**
+     * The qualifying latency threshold for the fast cohort, from the cohort
+     * baseline of its fastest members.
+     *
+     * <p>Scaled on the same terms as {@link #getCalibratedLatencyThresholdMs(Hash)}
+     * so the two bounds stay comparable; a cohort mean and a transport baseline
+     * are the same kind of quantity and neither is a cutoff on its own.
+     *
+     * @return the qualifying threshold in ms, or a non-positive value when the
+     *         cohort has too few measured peers to hold an opinion
+     * @since 0.9.71+
+     */
+    long getCohortLatencyThresholdMs() {
+        return applyBaselineMultiple((long) getAverageLowLatencyRTT());
+    }
+
+    /**
+     * Bounded random sample of the retained peers for RTT measurement, capped at
      * {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} with a rotated start so successive
      * cycles do not always read the same prefix.
      *
@@ -1935,25 +2117,32 @@ public class ProfileOrganizer {
      * session, not an accumulator: a peer missed this cycle is measured in a
      * later one.
      *
+     * <p>Covers every tier the Organizer retains, not just the two the fast tier
+     * is drawn from. A profile outside the fast and high-capacity tiers can still
+     * hold the only current measurement of a peer that later qualifies, and
+     * reading the tiers it can currently be selected from would leave its
+     * latency unmeasured until something promoted it - at which point the first
+     * hop is chosen on no evidence at all. There is no larger population to read:
+     * profiles are retained only in these maps, so this is the whole of what
+     * exists.
+     *
      * @return the sampled profiles, at most {@link #sampleFirstHopRttLimit(int)}
      * @since 0.9.71+
      */
     private List<PeerProfile> sampleTierPeers() {
-        int fast = _fastPeers.size();
-        int highCap = _highCapacityPeers.size();
-        int total = fast + highCap;
+        int total = _fastPeers.size() + _highCapacityPeers.size()
+                  + _wellIntegratedPeers.size() + _notFailingPeers.size();
         int limit = sampleFirstHopRttLimit(total);
         List<PeerProfile> sample = new ArrayList<>(Math.min(limit, total));
         if (total == 0) return sample;
         int offset = ThreadLocalRandom.current().nextInt(total);
         int idx = 0;
-        for (PeerProfile profile : _fastPeers.values()) {
+        for (Map<Hash, PeerProfile> tier : _allTiers) {
+            for (PeerProfile profile : tier.values()) {
+                if (sample.size() >= limit) break;
+                if (((idx++ - offset) % total + total) % total < limit) sample.add(profile);
+            }
             if (sample.size() >= limit) break;
-            if (((idx++ - offset) % total + total) % total < limit) sample.add(profile);
-        }
-        for (PeerProfile profile : _highCapacityPeers.values()) {
-            if (sample.size() >= limit) break;
-            if (((idx++ - offset) % total + total) % total < limit) sample.add(profile);
         }
         return sample;
     }
@@ -1982,16 +2171,31 @@ public class ProfileOrganizer {
         Hash peer = profile.getPeer();
         if (peer == null) {return 0;}
         int best = 0;
+        Transport bestTransport = null;
         for (Transport transport : transports) {
             int rtt = transport.getEstimatedRTT(peer);
-            if (rtt > best) {best = rtt;}
+            if (rtt > best) {
+                best = rtt;
+                bestTransport = transport;
+            }
         }
         if (best <= 0) {return 0;}
+        // The winning transport says when it measured. Stamping `now` instead
+        // would present a handshake-time reading as current on every cycle, which
+        // both damps the stored value toward one stale sample and holds the
+        // profile's staleness window open so the reading never expires.
+        long measured = (bestTransport != null)
+                            ? bestTransport.getEstimatedRTTTime(peer)
+                            : Transport.RTT_TIME_UNKNOWN;
+        if (measured == Transport.RTT_TIME_UNKNOWN || measured == Transport.RTT_TIME_CURRENT ||
+            measured <= 0) {
+            measured = now;
+        }
         // Through the single recorder, so the sampling pass and the pre-connect
         // path damp and re-derive identically. The stat is deliberately not added
         // here: the caller reports one cycle aggregate rather than one sample per
         // peer, and adding both would count the same measurement twice.
-        recordFirstHopRtt(profile, best, now);
+        recordFirstHopRtt(profile, best, measured);
         return best;
     }
 
@@ -2183,14 +2387,20 @@ public class ProfileOrganizer {
             // reported belong to this cycle and to no other.
             recordRouterInfoRefreshStats();
 
-            // Step 5: Fallback to ensure minimum fast peers
+            // Step 5: Purge peers with recent tunnel failures, loss probation, or
+            // poor tunnel acceptance from fast/high-cap tiers. This runs before
+            // the fills, not after: acceptance is an eviction criterion for both
+            // tiers while high-capacity admission ignores it, so a peer admitted
+            // by the fill may be the very peer this pass is about to reject.
+            // Purging afterwards would empty the tier and leave it empty until
+            // the next cycle, which is a net shrink rather than a turnover.
+            purgeUnusableFromTiers(now, buildSuccess);
+
+            // Step 6: Fallback to ensure minimum fast peers
             int added = fillFastTierFallbacks(now, newStrictCapacityOrder, buildSuccess);
 
-            // Step 6: Fallback to ensure minimum high-capacity peers
+            // Step 6a: Fallback to ensure minimum high-capacity peers
             int highCapAdded = fillHighCapFallback(now, newStrictCapacityOrder, buildSuccess);
-
-            // Step 6a: Purge peers with recent tunnel failures from fast/high-cap tiers.
-            purgeUnusableFromTiers(now);
 
             // Step 6c: Fallback to preserved pre-reorganize peers if rebuild shrunk tiers too much.
             restorePreservedPeers(now, oldFastPeers, oldHighCapPeers, buildSuccess);
@@ -2393,22 +2603,50 @@ public class ProfileOrganizer {
      * <p>
      * No side effects — safe to evaluate without holding locks.
      *
-     * @param profile the candidate profile
-     * @param buildSuccess the build success ratio in [0.0, 1.0]
-     * @param now current time in ms
+     * <p>Tunnel acceptance is required by the fast-tier passes and not by the
+     * high-capacity pass. The two tiers do different jobs: high capacity is the
+     * reservoir the fast tier is seeded from, so gating it on acceptance leaves
+     * no deep supply to draw on — when a fast peer demotes, the peers beside it
+     * in high capacity have already been filtered by the same criterion. High
+     * capacity therefore admits any provably alive peer of the right bandwidth
+     * class, and acceptance decides fast-tier membership only. A poor accepter
+     * is still evicted from high capacity, so the reservoir turns over rather
+     * than accumulating them.
+     *
+     * @param profile            the candidate profile
+     * @param buildSuccess       the build success ratio in [0.0, 1.0]
+     * @param now                current time in ms
+     * @param requireAcceptance  whether the peer must also have acceptable tunnel
+     *                           acceptance; false admits by capacity and
+     *                           liveness alone
      * @return whether the peer passes the tier gates
      * @since 0.9.71+
      */
-    boolean passesTierGates(PeerProfile profile, double buildSuccess, long now) {
+    boolean passesTierGates(PeerProfile profile, double buildSuccess, long now,
+                            boolean requireAcceptance) {
         // Use basic gates instead of isSelectable to avoid stale RouterInfo
         // proof-of-life filtering peers that were already vetted at tier entry.
         // The profile is already in hand, so the failure check takes it directly
         // rather than re-probing the map.
-        return passesBasicGates(profile.getPeer()) &&
-               !isExcessiveLifetimeFailure(profile) &&
-               !isLowTunnelAcceptance(profile, buildSuccess, now) &&
-               !hasRecentTunnelFailures(profile) &&
-               !inLossProbation(profile, now);
+        if (!passesBasicGates(profile.getPeer())) {return false;}
+        if (isExcessiveLifetimeFailure(profile)) {return false;}
+        if (requireAcceptance && isLowTunnelAcceptance(profile, buildSuccess, now)) {return false;}
+        if (hasRecentTunnelFailures(profile)) {return false;}
+        return !inLossProbation(profile, now);
+    }
+
+    /**
+     * Common gate for the fast-tier fill passes, which always require acceptable
+     * tunnel acceptance.
+     *
+     * @param profile      the candidate profile
+     * @param buildSuccess the build success ratio in [0.0, 1.0]
+     * @param now          current time in ms
+     * @return whether the peer passes the fast-tier gates
+     * @since 0.9.71+
+     */
+    boolean passesTierGates(PeerProfile profile, double buildSuccess, long now) {
+        return passesTierGates(profile, buildSuccess, now, true);
     }
 
     /**
@@ -2510,8 +2748,27 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private boolean isEligibleForTierFill(PeerProfile profile, double buildSuccess, long now, long activeCutoff) {
+        return isEligibleForTierFill(profile, buildSuccess, now, activeCutoff,
+                                      FAST_ADMISSION_REQUIRES_ACCEPTANCE);
+    }
+
+    /**
+     * Whether a peer may be admitted to a tier by a fill pass.
+     *
+     * @param profile           the candidate profile
+     * @param buildSuccess      the build success ratio in [0.0, 1.0]
+     * @param now               current time in ms
+     * @param activeCutoff      peers without activity at or after this are skipped
+     * @param requireAcceptance whether acceptable tunnel acceptance is required;
+     *                          false for the high-capacity reservoir, which admits
+     *                          by capacity and liveness alone
+     * @return whether the peer may be admitted
+     * @since 0.9.71+
+     */
+    private boolean isEligibleForTierFill(PeerProfile profile, double buildSuccess, long now,
+                                          long activeCutoff, boolean requireAcceptance) {
         if (profile.getPeer().equals(_us)) return false;
-        if (!passesTierGates(profile, buildSuccess, now)) return false;
+        if (!passesTierGates(profile, buildSuccess, now, requireAcceptance)) return false;
         // Require recent activity — don't fill fast tier with stale peers
         return hasRecentTierActivity(profile, activeCutoff);
     }
@@ -2602,7 +2859,7 @@ public class ProfileOrganizer {
             for (PeerProfile profile : activeProfiles) {
                 if (_highCapacityPeers.size() >= minHighCap) break;
                 if (isHighBandwidthCapable(profile.getPeer()) &&
-                    isEligibleForTierFill(profile, buildSuccess, now, activeCutoff)) {
+                    isEligibleForTierFill(profile, buildSuccess, now, activeCutoff, HIGH_CAP_ADMISSION_REQUIRES_ACCEPTANCE)) {
                     _highCapacityPeers.put(profile.getPeer(), profile);
                     clearLossIfReadmitted(profile);
                     highCapAdded++;
@@ -2616,47 +2873,180 @@ public class ProfileOrganizer {
      * Purges peers with recent tunnel failures or in loss probation from the
      * fast and high-capacity tiers.  Must be called with the write lock held.
      */
-    private void purgeUnusableFromTiers(long now) {
+    private void purgeUnusableFromTiers(long now, double buildSuccess) {
         // Rebuild clears tiers, so this catches peers admitted via lockedPromoteProfileToTiers()
         // that subsequently developed failures during this reorganize window.
-        if (_fastQualityCount >= MIN_FAST_QUALITY_COUNT) {
-            purgeUnusableFromMap(_fastPeers, "fast", now);
+        //
+        // The size guard applies only to the soft reasons. A peer that is banned,
+        // unreachable, or no longer bandwidth-capable is never a valid member at
+        // any tier size, so withholding its eviction because the tier happens to
+        // be small only leaves it selectable for another cycle. The soft reasons -
+        // recent failures, loss probation, poor acceptance - are the ones that
+        // genuinely risk emptying a starved tier, so those stay gated.
+        int threshold = softPurgeThreshold(_profileCount);
+        boolean fastSoft = _fastPeers.size() >= threshold;
+        boolean highCapSoft = _highCapacityPeers.size() >= threshold;
+        Map<PurgeReason, Integer> reasons = new EnumMap<>(PurgeReason.class);
+        purgeUnusableFromMap(_fastPeers, "fast", now, buildSuccess, fastSoft, reasons);
+        purgeUnusableFromMap(_highCapacityPeers, "high-cap", now, buildSuccess, highCapSoft, reasons);
+        publishPurgeReasonStats(reasons, fastSoft, highCapSoft, threshold);
+    }
+
+    /**
+     * Why a peer was evicted from a tier.
+     *
+     * <p>Carries a stable lowercase key for the stat name. The whole point of
+     * counting these is to compare them across cycles, and a message that embeds
+     * a peer hash or a peer count would make every cycle a new stat name.
+     *
+     * @since 0.9.71+
+     */
+    private enum PurgeReason {
+        BANNED("banned"),
+        UNREACHABLE("unreachable"),
+        NOT_CAPABLE("notCapable"),
+        FAILURES("failures"),
+        ACCEPTANCE("acceptance");
+
+        private final String key;
+        PurgeReason(String k) {key = k;}
+        String getKey() {return key;}
+    }
+
+    /**
+     * Publish per-reason eviction counts for this reorganize cycle.
+     *
+     * <p>Registered at the point of use, as with the other tier stats: StatManager
+     * drops a name it has never been told about, so a name registered only in the
+     * constructor would publish nothing at all. All five are registered every
+     * cycle whether or not that reason fired, so a zero can be told apart from a
+     * stat that is not reporting.
+     *
+     * @param reasons     counts accumulated by both tier passes, keyed by reason
+     * @param fastSoft    whether the fast tier was above the soft-purge threshold
+     * @param highCapSoft whether the high-capacity tier was above it
+     * @param threshold   the threshold in force, so a sudden stop is explicable
+     * @since 0.9.71+
+     */
+    private void publishPurgeReasonStats(Map<PurgeReason, Integer> reasons, boolean fastSoft,
+                                         boolean highCapSoft, int threshold) {
+        StatManager sm = _context.statManager();
+        for (PurgeReason r : PurgeReason.values()) {
+            sm.createRequiredRateStat("peer.tierEvicted." + r.getKey(),
+                                      "Tier peers evicted for " + r.getKey() + " this cycle",
+                                      "Peers", RATES);
+            Integer n = reasons.get(r);
+            sm.addRateData("peer.tierEvicted." + r.getKey(), n != null ? n.intValue() : 0,
+                           60L * 1000);
         }
-        if (_highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT) {
-            purgeUnusableFromMap(_highCapacityPeers, "high-cap", now);
+        // A tier silently below the threshold evicts nothing for the soft reasons,
+        // which reads identically to "nothing was bad" unless it is published too.
+        sm.createRequiredRateStat("peer.tierEvicted.softPurgeActive",
+                                  "1 when both tiers were above the soft-purge threshold",
+                                  "Tiers", RATES);
+        sm.addRateData("peer.tierEvicted.softPurgeActive",
+                       (fastSoft ? 1 : 0) + (highCapSoft ? 1 : 0), 60L * 1000);
+        if (_log.shouldInfo()) {
+            _log.info("Tier eviction: banned " + count(reasons, PurgeReason.BANNED) +
+                      ", unreachable " + count(reasons, PurgeReason.UNREACHABLE) +
+                      ", not-capable " + count(reasons, PurgeReason.NOT_CAPABLE) +
+                      ", failures " + count(reasons, PurgeReason.FAILURES) +
+                      ", acceptance " + count(reasons, PurgeReason.ACCEPTANCE) +
+                      " (soft purge threshold " + threshold + ")");
         }
     }
 
     /**
-     * Removes peers with recent tunnel failures or in loss probation from
-     * the given tier map.  Must be called with the write lock held.
+     * Count of one eviction reason in this cycle's tally.
+     *
+     * @param reasons the tally
+     * @param reason  the reason to read
+     * @return the count, zero if that reason never fired
+     * @since 0.9.71+
+     */
+    private static int count(Map<PurgeReason, Integer> reasons, PurgeReason reason) {
+        Integer n = reasons.get(reason);
+        return (n != null) ? n.intValue() : 0;
+    }
+
+    /**
+     * The smallest tier size at which peers may be evicted for a soft reason.
+     *
+     * <p>Scaled to the number of known profiles rather than fixed, because a fixed
+     * count means different things at different network sizes: demanding 500
+     * peers of a 5,000-profile network is a real constraint, while demanding the
+     * same of an 800-profile network is simply unreachable, which silently
+     * disables the eviction entirely and lets the tier decay one-way.
+     *
+     * <p>One tenth of the known profiles, capped at {@link #MAX_SOFT_PURGE_FLOOR}:
+     * the fraction keeps the requirement proportionate on small networks, and the
+     * cap stops it becoming so large on a big one that no tier ever qualifies.
+     * Below roughly {@code MAX_SOFT_PURGE_FLOOR * 10} profiles the cap is not
+     * reached, so a small router is held to the proportionate bar.
+     *
+     * <p>Pure decision — no context access, safe for unit tests.
+     *
+     * @param knownProfiles the number of profiles the router knows about
+     * @return the minimum tier size at which soft eviction applies; no size
+     *         qualifies when the population is unknown
+     * @since 0.9.71+
+     */
+    static int softPurgeThreshold(int knownProfiles) {
+        if (knownProfiles <= 0) {return Integer.MAX_VALUE;}
+        return Math.min(knownProfiles / 10, MAX_SOFT_PURGE_FLOOR);
+    }
+
+    /**
+     * Removes peers with recent tunnel failures, loss probation, or poor tunnel
+     * acceptance from the given tier map.  Must be called with the write lock
+     * held.
+     *
+     * <p>Acceptance is an eviction criterion for <em>both</em> tiers, even though
+     * high-capacity admission ignores it. A peer that declines too many of our
+     * build requests is wasted work whichever tier lists it, and leaving such
+     * peers listed in the fast tier in particular means they keep being offered
+     * as a first hop. Admission stays permissive so high capacity remains a deep
+     * reservoir; this is what stops that permissiveness from accumulating poor
+     * accepters.
      *
      * @param tier the tier map to purge
      * @param tierName "fast" or "high-cap" for the log message
      * @param now current time in ms
+     * @param buildSuccess the build success ratio, which relaxes the acceptance
+     *                     threshold under stress so the tiers cannot be emptied
+     *                     by a network-wide event
+     * @since 0.9.71+
      */
-    private void purgeUnusableFromMap(Map<Hash, PeerProfile> tier, String tierName, long now) {
+    private void purgeUnusableFromMap(Map<Hash, PeerProfile> tier, String tierName, long now,
+                                      double buildSuccess, boolean allowSoftEviction,
+                                      Map<PurgeReason, Integer> reasons) {
         boolean isFast = (tier == _fastPeers);
         Iterator<Map.Entry<Hash, PeerProfile>> it = tier.entrySet().iterator();
         while (it.hasNext()) {
             PeerProfile profile = it.next().getValue();
             Hash peer = profile.getPeer();
-            String reason = null;
+            PurgeReason reason = null;
             if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) {
-                reason = "banned";
+                reason = PurgeReason.BANNED;
             } else if (_context.commSystem() != null && _context.commSystem().wasUnreachable(peer)) {
-                reason = "unreachable";
+                reason = PurgeReason.UNREACHABLE;
             } else if (isFast ? !isFastTierCapable(peer) : !isHighBandwidthCapable(peer)) {
-                reason = "not tier-capable (bw tier or caps)";
-            } else if (hasRecentTunnelFailures(profile) || inLossProbation(profile, now)) {
-                reason = "recent tunnel failures";
+                reason = PurgeReason.NOT_CAPABLE;
+            } else if (allowSoftEviction &&
+                       (hasRecentTunnelFailures(profile) || inLossProbation(profile, now))) {
+                reason = PurgeReason.FAILURES;
+            } else if (EVICTION_REQUIRES_ACCEPTANCE_BOTH_TIERS && allowSoftEviction &&
+                       isLowTunnelAcceptance(profile, buildSuccess, now)) {
+                reason = PurgeReason.ACCEPTANCE;
             }
             if (reason != null) {
                 if (_log.shouldDebug()) {
                     _log.debug("Purging peer [" + peer.toBase32().substring(0, 6) +
-                               "] from " + tierName + " tier: " + reason);
+                               "] from " + tierName + " tier: " + reason.getKey());
                 }
                 it.remove();
+                Integer n = reasons.get(reason);
+                reasons.put(reason, Integer.valueOf(n != null ? n.intValue() + 1 : 1));
                 if (isFast && isQualityFastPeer(profile, _highCapacityPeers))
                     _fastQualityCount--;
             }
@@ -2696,14 +3086,19 @@ public class ProfileOrganizer {
      * @return whether the peer may be restored
      * @since 0.9.71+
      */
-    private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, PeerProfile> tier,
-                                         double buildSuccess, long now, boolean highCap) {
+private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, PeerProfile> tier,
+                                          double buildSuccess, long now, boolean highCap) {
         if (tier.containsKey(peer)) return false;
         // Use basic gates instead of isSelectable to avoid stale RouterInfo
         // proof-of-life filtering peers that were already vetted at tier entry.
         if (!passesBasicGates(peer) || isExcessiveLifetimeFailure(profile)) return false;
         if (hasRecentTunnelFailures(profile)) return false;
         if (highCap ? hasHighLoss(profile, now) : inLossProbation(profile, now)) return false;
+        // Acceptance is checked for both tiers here even though high-capacity
+        // admission ignores it. Admission is deliberately permissive so the tier
+        // is a deep reservoir; eviction is what keeps poor accepters out. A
+        // restoration path that skipped the check would reinstate on the next
+        // cycle exactly the peers eviction just removed.
         return !isLowTunnelAcceptance(profile, buildSuccess, now);
     }
 
@@ -2779,11 +3174,18 @@ public class ProfileOrganizer {
     private int countQualityPeers(long now, double buildSuccess) {
         int qualityCount = 0;
         long recentCutoff = now - 24 * 60 * 60 * 1000L; // 24 hours
+        // Each peer counted at most once. The tiers overlap - high capacity is a
+        // superset of fast in practice - so a peer listed in both must be visited
+        // once, not twice. Deduping on tier membership rather than on latency
+        // keeps the number stable: latency flags arrive and change over time, so
+        // a flag-keyed dedup would make this count drift as measurement arrives
+        // rather than only as peers do.
         for (PeerProfile profile : _fastPeers.values()) {
             if (isQualityPeer(profile, recentCutoff, buildSuccess)) qualityCount++;
         }
-        for (PeerProfile profile : _highCapacityPeers.values()) {
-            if (!profile.isLowLatency() && isQualityPeer(profile, recentCutoff, buildSuccess)) qualityCount++;
+        for (Map.Entry<Hash, PeerProfile> e : _highCapacityPeers.entrySet()) {
+            if (_fastPeers.containsKey(e.getKey())) {continue;}
+            if (isQualityPeer(e.getValue(), recentCutoff, buildSuccess)) qualityCount++;
         }
         return qualityCount;
     }
@@ -5013,16 +5415,16 @@ public class ProfileOrganizer {
         Long calibrated = null;
         Hash peer = profile.getPeer();
         if (peer != null) {
-            long floor = getCalibratedLatencyFloorMs(peer);
-            if (floor > 0) {calibrated = Long.valueOf(floor);}
+            long threshold = getCalibratedLatencyThresholdMs(peer);
+            if (threshold > 0) {calibrated = Long.valueOf(threshold);}
         }
         // The cohort floor rides alongside: it is already recomputed this cycle
         // and applies to every peer we would be judging, so supplying it costs
         // nothing and keeps both bounds decided at one point. It can only remove a
         // peer the absolute rule had already accepted.
         Long cohort = null;
-        long cohortFloor = (long) getAverageLowLatencyRTT();
-        if (cohortFloor > 0) {cohort = Long.valueOf(cohortFloor);}
+        long cohortThreshold = getCohortLatencyThresholdMs();
+        if (cohortThreshold > 0) {cohort = Long.valueOf(cohortThreshold);}
         profile.recalculateLowLatency(calibrated, cohort);
     }
 

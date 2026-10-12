@@ -1091,11 +1091,35 @@ public Collection<NTCPConnection> getPeers() {
    * @since 0.9.71+
    */
   @Override
-  public int getEstimatedRTT(Hash peer) {
-    if (peer == null) return 0;
-    NTCPConnection con = _conByIdent.get(peer);
-    return (con != null) ? con.getEstimatedRTT() : 0;
-  }
+public int getEstimatedRTT(Hash peer) {
+     if (peer == null) return 0;
+     NTCPConnection con = _conByIdent.get(peer);
+     return (con != null) ? con.getEstimatedRTT() : 0;
+   }
+
+   /**
+    * When {@link #getEstimatedRTT(Hash)} was measured for this peer.
+    *
+    * <p>NTCP2 has no acknowledgement to refresh its reading, so the value is
+    * the handshake's for the life of the session and this reports when that
+    * handshake completed. A caller that stamps the present onto the value
+    * instead would keep a day-old measurement looking fresh and would hold the
+    * profile's staleness window open indefinitely.
+    *
+    * @param peer the peer to report on
+    * @return the handshake completion time in ms, or {@link #RTT_TIME_UNKNOWN}
+    *         if there is no session or it has not established
+    * @since 0.9.71+
+    */
+   @Override
+   public long getEstimatedRTTTime(Hash peer) {
+     if (peer == null) return RTT_TIME_UNKNOWN;
+     NTCPConnection con = _conByIdent.get(peer);
+     long when = (con != null) ? con.getEstimatedRTTTime() : RTT_TIME_UNKNOWN;
+     // A session with no recorded time has not supplied a reading, which
+     // getEstimatedRTT(Hash) reports as 0 rather than as a measurement.
+     return (con == null || con.getEstimatedRTT() <= 0) ? RTT_TIME_UNKNOWN : when;
+   }
 
     /**
      * Connected peers.

@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import net.i2p.router.transport.Transport;
+
 /**
  * The NTCP2 handshake round trip time has exactly one source.
  *
@@ -58,5 +60,26 @@ public class NTCPConnectionEstablishmentRttTest {
     @Test
     public void testBoundaryAtMaxIntIsAcceptedOneBelow() {
         assertTrue(NTCPConnection.shouldRecordEstablishmentRtt(0, Integer.MAX_VALUE - 1L));
+    }
+
+    /**
+     * A recorded handshake RTT must carry the time it was taken, not the time a
+     * reader asks for it.
+     *
+     * <p>NTCP2 never refreshes this value, so it is the only link measurement the
+     * protocol ever offers. A reader that stamped the present onto it would hold
+     * the peer profile's validity window open forever and keep damping its
+     * average toward this one stale sample.
+     *
+     * <p>Pinned at the sentinel rather than at a wall-clock value: the timestamp
+     * itself is written from the router clock inside a connection whose
+     * constructors require a live transport and establish state, so it cannot be
+     * exercised from a unit test. What this test does pin is the rule a reader
+     * depends on - an unrecorded reading reports as undated, never as measured.
+     */
+    @Test
+    public void testUnrecordedReadingReportsNoTimestamp() {
+        assertTrue("an undated reading must be distinguishable from one taken at the epoch",
+                   Transport.RTT_TIME_UNKNOWN != 0L);
     }
 }

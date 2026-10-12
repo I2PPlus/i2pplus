@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.crypto.EncType;
+import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
@@ -219,9 +220,24 @@ protected void changeState(State state) {
           // Guarded against a null connection (the established-from-construction
           // state) and against a zero-length interval.
           if (state == State.VERIFIED && _con != null) {
-              _con.noteEstablishmentRtt(
-                      (int) Math.min(Integer.MAX_VALUE,
-                                     _context.clock().now() - _con.getCreated()));
+              long measuredAt = _context.clock().now();
+              int rtt = (int) Math.min(Integer.MAX_VALUE, measuredAt - _con.getCreated());
+              _con.noteEstablishmentRtt(rtt);
+              // Hand the sample straight to the peer profile as well. This is the
+              // one moment a NTCP2 link cost is known, and NTCP2 has no later
+              // measurement to refresh it, so waiting for a periodic sampling pass
+              // means the profile holds nothing until that pass happens to reach
+              // this peer - and even then only stamped with when the pass ran
+              // rather than when the handshake did. Recorded here the sample
+              // carries its own age and the profile can let it expire honestly.
+              //
+              // Recorded through the Organizer rather than the profile so the
+              // calibrated bounds are consulted at one point, and so a transport
+              // is not reaching into peer-management state directly.
+              Hash peer = _con.getRemotePeer().calculateHash();
+              if (!peer.equals(_context.routerHash())) {
+                  _context.profileOrganizer().noteFirstHopRtt(peer, rtt, measuredAt);
+              }
           }
       }
 
