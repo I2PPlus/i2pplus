@@ -999,11 +999,72 @@ public class PeerProfile {
      *
      * @since 0.9.70
      */
-    void recalculateLowLatency() {
+void recalculateLowLatency() {
+          recalculateLowLatency(null);
+      }
+
+    /**
+     * Recompute the low-latency flag, optionally against a calibrated
+     * per-transport floor instead of the absolute one.
+     *
+     * <p>This remains the single low-latency decision; the calibrated floor only
+     * supplies an alternative bar and never a separate verdict. It is
+     * deliberately one-directional: the floor is derived from measured link
+     * latencies across all peers, and nothing about this peer's tier membership
+     * feeds back into it, so no cycle can tighten the bar in response to the
+     * tiers that bar itself produces.
+     *
+     * <p>A null or negative {@code calibratedFloorMs} means the transport has no
+     * calibrated opinion yet, and the absolute rule applies unchanged - so on a
+     * cold router the behaviour here is identical to it being absent.
+     *
+     * @param calibratedFloorMs the transport's calibrated floor in ms, or
+     *                          -1/null when unknown
+     * @since 0.9.71+
+     */
+    void recalculateLowLatency(Long calibratedFloorMs) {
+        recalculateLowLatency(calibratedFloorMs, null);
+      }
+
+    /**
+     * Recompute the low-latency flag against the calibrated bounds.
+     *
+     * <p>This remains the single low-latency decision; the calibrated values only
+     * supply alternative bars and never a separate verdict. It is deliberately
+     * one-directional: the floors are derived from measured link latencies across
+     * all peers, and nothing about this peer's tier membership feeds back into
+     * them, so no cycle can tighten a bar in response to the tiers that bar
+     * itself produces.
+     *
+     * <p>A null or negative value means that bound has no calibrated opinion yet
+     * and is skipped, leaving the absolute rule to decide alone. On a cold router
+     * both are null, so behaviour is identical to their absence.
+     *
+     * <p>Both calibrated bounds can only ever widen the absolute rule, never
+     * narrow it: the Organizer clamps the transport floor to at least
+     * {@code LOW_LATENCY_FLOOR_MS / multiple}, and the cohort floor is applied
+     * only where the absolute rule already agreed.
+     *
+     * @param calibratedFloorMs the transport's calibrated floor in ms, or null
+     * @param cohortFloorMs     the fast-cohort floor in ms, or null
+     * @since 0.9.71+
+     */
+    void recalculateLowLatency(Long calibratedFloorMs, Long cohortFloorMs) {
         Boolean low = getLowLatencyForFirstHopRtt(_context.clock().now(),
                                                   LOW_LATENCY_CEILING_MS);
         if (low == null) {return;}
         _lowLatency = low.booleanValue();
+        // The absolute ceiling above still rejects outright; a calibrated bound
+        // only ever removes a peer the absolute rule had already accepted.
+        if (!_lowLatency) {return;}
+        if (calibratedFloorMs != null && calibratedFloorMs > 0 &&
+            _firstHopRtt > calibratedFloorMs) {
+            _lowLatency = Boolean.FALSE;
+            return;
+        }
+        if (cohortFloorMs != null && cohortFloorMs > 0 && _firstHopRtt > cohortFloorMs) {
+            _lowLatency = Boolean.FALSE;
+        }
     }
 
     /**
