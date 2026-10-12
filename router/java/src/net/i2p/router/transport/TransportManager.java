@@ -706,6 +706,10 @@ public class TransportManager implements TransportEventListener {
      * peer reachable over both NTCP and UDP counts on each. The transports maintain
      * this by summing two such counts, matching how {@link #countActivePeers()} is
      * built, so the two are directly comparable.
+     *
+     * @return the number of peers sent to in the last minute, summed across every
+     *         transport, and so a peer reachable over two of them counted twice
+     * @since 0.9.71+
      */
     int countActiveSendPeers() {
         int peers = 0;

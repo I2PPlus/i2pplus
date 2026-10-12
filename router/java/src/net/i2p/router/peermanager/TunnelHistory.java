@@ -254,7 +254,7 @@ public class TunnelHistory {
      *
      * @since 0.9.71+
      */
-    private static final long DECAY_INTERVAL_MS = 8 * 60 * 60 * 1000L;
+    static final long DECAY_INTERVAL_MS = 8 * 60 * 60 * 1000L;
     private static final long DECAY_NUMERATOR = 3;
     private static final long DECAY_DENOMINATOR = 4;
 

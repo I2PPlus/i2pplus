@@ -225,7 +225,7 @@ public class ProfileOrganizer {
      *
      * @since 0.9.71+
      */
-    private static final long TIER_FILL_DEBOUNCE_MS = 5 * 1000L;
+    static final long TIER_FILL_DEBOUNCE_MS = 5 * 1000L;
     private final Map<Hash, PeerProfile> _wellIntegratedPeers;
     private final Map<Hash, PeerProfile> _notFailingPeers;
     /**
@@ -456,7 +456,16 @@ public class ProfileOrganizer {
     /** Minimum tunnel acceptance ratio (40%) to remain in high-capacity/fast tiers */
     private static final double MIN_TUNNEL_ACCEPTANCE_RATIO = 0.4;
     /** Minimum tunnel requests for statistical confidence */
-    private static final int MIN_TUNNEL_REQUESTS = 50;
+    /**
+     * Lifetime requests a peer needs before its acceptance ratio may exclude it.
+     *
+     * <p>Package-visible because the tiers apply different floors to it and the
+     * boundary between "judged" and "not judged" is exactly the difference; see
+     * {@link TierAdmissionFloorTest}.
+     *
+     * @since 0.9.70+
+     */
+    static final int MIN_TUNNEL_REQUESTS = 50;
     /** Cooldown period (ms) after demotion before peer can be re-promoted */
     private static final long TUNNEL_DEMOTION_COOLDOWN_MS = 10 * 60 * 1000L; // 10 minutes
     /**

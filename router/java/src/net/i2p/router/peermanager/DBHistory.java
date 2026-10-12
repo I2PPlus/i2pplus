@@ -274,6 +274,13 @@ public class DBHistory {
         decayCounter(_unpromptedDbStoreOld, "unpromptedDbStoreOld");
     }
 
+    /**
+     * Coalesce the rate statistics and decay the lookup and store counters.
+     *
+     * <p>Mirrors {@link TunnelHistory#coalesceStats()}: the RateStats are folded
+     * unconditionally, and the lifetime counters only once
+     * {@link #decayLifetimeCounters(long)} finds its interval has elapsed.
+     */
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats");}
         _failedLookupRate.coalesceStats();
