@@ -375,6 +375,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public int countActivePeers() { return _manager.countActivePeers(); }
 
     /**
+     * {@inheritDoc}
+     *
+     * <p>The javadoc on this method said "in the last minute" already, while
+     * {@link #countActivePeers()} above it says five. Only the latter is inaccurate:
+     * every transport's active window is sixty seconds. The send-only count is the
+     * one this declares, per transport.
+     */
+    @Override
+    public int countActiveSendPeers() { return _manager.countActiveSendPeers(); }
+
+    /**
      * Whether we have capacity to handle an inbound message at the given percentage.
      */
     @Override

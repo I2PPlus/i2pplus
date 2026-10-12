@@ -155,6 +155,14 @@ class PumpedTunnelGateway extends TunnelGateway {
                         CoDelPriorityBlockingQueue.delayDescription("OBGW"),
                         "Tunnels [Participating]",
                         new long[] { 60*1000, 10*60*1000, 60*60*1000 });
+                    // codel.IBGW.delay is live even though no source file names it literally.
+                    // The inbound gateway builds a CoDelBlockingQueue(context, "IBGW"), which
+                    // composes "codel." + name + ".delay" at construction and emits it on every
+                    // dequeue. A grep for the literal therefore finds no emitter and reports the
+                    // stat dead - it was removed on that basis once, which silently discarded
+                    // every inbound queue-delay measurement. Pair it with OBGW above: the two
+                    // queues are the same class family on the two directions, and neither name
+                    // is ever written out in full.
                     context.statManager().createRequiredRateStat("codel.IBGW.delay",
                         CoDelPriorityBlockingQueue.delayDescription("IBGW"),
                         "Tunnels [Participating]",

@@ -75,6 +75,19 @@ public abstract class CommSystemFacade implements Service {
     public abstract int countActivePeers();
 
     /**
+     * How many peers we have sent a message to in the last minute.
+     *
+     * <p>Narrower than {@link #countActivePeers()} in both respects that matter: send
+     * only, and a one-minute window rather than the transport's active window. The
+     * pair answers different questions - how many peers we can reach against how many
+     * we are actually driving traffic to right now.
+     *
+     * @return the number of peers sent to in the last minute
+     * @since 0.9.71+
+     */
+    public abstract int countActiveSendPeers();
+
+    /**
      * Report whether inbound bandwidth has capacity for the given percentage load.
      *
      * @param pct percentage of bandwidth currently in use

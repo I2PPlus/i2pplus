@@ -280,6 +280,11 @@ public class UDPSender {
                         }
                         _context.statManager().addRateData("udp.pushTime", packet.getLifetime());
                         _context.statManager().addRateData("udp.sendPacketSize", size);
+                        // Registered at construction, never recorded: the depth of the
+                        // queue we are draining was invisible on a router whose send path
+                        // is the thing that stalls. Read per packet so the figure tracks
+                        // the queue rather than sampling it on some other clock.
+                        _context.statManager().addRateData("udp.sendQueueSize", _outboundQueue.size());
                     } catch (IOException ioe) {
                         String ipaddress = packet.getPacket().getAddress().toString().replace("/", "");
                         if (_log.shouldWarn()) {

@@ -189,7 +189,12 @@ public class TransportManager implements TransportEventListener {
         _banLogger = new BanLogger();
         _banLogger.initialize(context);
         _context.statManager().createRateStat("transport.banlistOnUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
-        _context.statManager().createRateStat("transport.banlistOnUsupportedSigType", "Add peer to banlist (unsupported signature type)", "Transport", RATES);
+        _context.statManager().// Spelling fixed from "Usupported" to "Unsupported". Two call sites below emit the
+        // correctly spelled name, so both were being dropped by StatManager for a name
+        // that had never been registered, and this counter sat at zero through every
+        // signature-type banlisting. Keep this spelling and the emission spelling in
+        // step: a single-character divergence here is invisible from the console.
+        createRateStat("transport.banlistOnUnsupportedSigType", "Add peer to banlist (unsupported signature type)", "Transport", RATES);
         _context.statManager().createRateStat("transport.noBidsYetNotAllUnreachable", "Add peer to banlist (unreachable on any transport)", "Transport", RATES);
         _context.statManager().createRateStat("transport.bidFailBanlisted", "Failed to bid on message (banlisted peer)", "Transport", RATES);
         _context.statManager().createRateStat("transport.bidFailSelf", "Failed to bid on message (self as target)", "Transport", RATES);
@@ -690,6 +695,22 @@ public class TransportManager implements TransportEventListener {
         int peers = 0;
         for (Transport t : _transports.values()) {
             peers += t.countActivePeers();
+        }
+        return peers;
+    }
+
+    /**
+     *  How many peers we have sent to in the last minute, summed across transports.
+     *
+     * <p>Each transport owns the window, so this is a strict sum and not a union: a
+     * peer reachable over both NTCP and UDP counts on each. The transports maintain
+     * this by summing two such counts, matching how {@link #countActivePeers()} is
+     * built, so the two are directly comparable.
+     */
+    int countActiveSendPeers() {
+        int peers = 0;
+        for (Transport t : _transports.values()) {
+            peers += t.countActiveSendPeers();
         }
         return peers;
     }
