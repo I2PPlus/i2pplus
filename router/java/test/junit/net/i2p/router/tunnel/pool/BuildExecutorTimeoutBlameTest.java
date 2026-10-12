@@ -8,9 +8,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.i2p.data.Hash;
+import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterTestHelper;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.peermanager.ProfileOrganizer;
 
 /**
  * A timed-out build may only penalize the hop the build request was
@@ -91,5 +93,144 @@ public class BuildExecutorTimeoutBlameTest {
         exec.penalizeTimeout(cfg);
 
         verify(ghost, never()).recordTimeout(any(Hash.class));
+    }
+
+    // --- immediate tier eviction follows the ghost-charge verdict ---
+
+    /**
+     * What one {@code penalizeTimeout} did to the contacted hop: whether it was
+     * charged a ghost mark, whether it was evicted from the tiers immediately,
+     * and whether the 3-strike path was still run.
+     */
+    private static final class Verdict {
+        final boolean charged;
+        final boolean evicted;
+        final boolean strikeRun;
+        Verdict(boolean charged, boolean evicted, boolean strikeRun) {
+            this.charged = charged;
+            this.evicted = evicted;
+            this.strikeRun = strikeRun;
+        }
+    }
+
+    private static void setField(String name, Object value) {
+        try {
+            java.lang.reflect.Field f = RouterContext.class.getDeclaredField(name);
+            f.setAccessible(true);
+            f.set(_ctx, value);
+        } catch (Exception e) {
+            throw new IllegalStateException("cannot set " + name, e);
+        }
+    }
+
+    /**
+     * Runs a Mockito verification and reports whether it held, so a test can
+     * compare two independent verifications rather than asserting one at a time.
+     *
+     * @param verification the {@code verify(...)} call to attempt
+     * @return true if the verification passed, false if Mockito rejected it
+     */
+    private static boolean called(Runnable verification) {
+        try {
+            verification.run();
+            return true;
+        } catch (AssertionError e) {
+            return false;
+        }
+    }
+
+    /**
+     * Runs one {@code penalizeTimeout} with every peer in the same transport
+     * state and reports what happened to the contacted hop.
+     *
+     * @param unreachable whether the transport reports the peer unreachable
+     * @param established whether the transport holds a session with the peer
+     * @param connecting whether the transport is still handshaking
+     * @return the verdict for the contacted hop
+     */
+    private static Verdict penalizeWith(boolean unreachable, boolean established,
+                                       boolean connecting) {
+        ProfileOrganizer org = mock(ProfileOrganizer.class);
+        GhostPeerManager ghost = mock(GhostPeerManager.class);
+        CommSystemFacade priorComm = _ctx.commSystem();
+        ProfileOrganizer priorOrg = _ctx.profileOrganizer();
+        Hash ibgw = hash(1), mid = hash(2), end = hash(3);
+        try {
+            CommSystemFacade stub = mock(CommSystemFacade.class);
+            when(stub.wasUnreachable(any(Hash.class))).thenReturn(unreachable);
+            when(stub.isEstablished(any(Hash.class))).thenReturn(established);
+            when(stub.isConnecting(any(Hash.class))).thenReturn(connecting);
+            setField("_commSystem", stub);
+            setField("_profileOrganizer", org);
+            newExecutor(ghost).penalizeTimeout(buildConfig(true, ibgw, mid, end));
+            return new Verdict(
+                    called(() -> verify(ghost).recordTimeout(ibgw)),
+                    called(() -> verify(org).demoteIfUnreachableNow(ibgw)),
+                    called(() -> verify(org).demoteIfUnreachable(ibgw)));
+        } finally {
+            setField("_commSystem", priorComm);
+            setField("_profileOrganizer", priorOrg);
+        }
+    }
+
+    @Test
+    public void testUnreachableHopStillEvictedImmediately() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        assertTrue("unreachable contacted hop is a real failure and is still evicted",
+                   penalizeWith(true, false, false).evicted);
+    }
+
+    @Test
+    public void testPlainReachableHopStillEvictedImmediately() {
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        assertTrue("a reachable contacted hop remains the best explanation and is evicted",
+                   penalizeWith(false, false, false).evicted);
+    }
+
+    @Test
+    public void testEstablishedSilentHopNotEvictedImmediately() {
+        // The regression this pins: established-but-silent was exempt from the
+        // ghost charge, yet still evicted from the tiers. The heavier penalty was
+        // applied to exactly the bucket the lighter one had cleared, and that
+        // bucket was the common one (~27.7/min against ~4.3/min unreachable) —
+        // 19,124 of 19,241 demotions in a 5.5 h run.
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        Verdict v = penalizeWith(false, true, false);
+        assertFalse("established-but-silent must not be evicted from the tiers", v.evicted);
+        assertFalse("established-but-silent must not be ghost-charged", v.charged);
+    }
+
+    @Test
+    public void testEstablishedSilentHopStillAccruesStrike() {
+        // Skipping the immediate eviction must not exempt the peer: the 3-strike
+        // path still runs, so a peer that keeps failing this way is evicted on
+        // its third failure rather than never.
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        assertTrue("the 3-strike demotion path must still run",
+                   penalizeWith(false, true, false).strikeRun);
+    }
+
+    @Test
+    public void testEvictionVerdictMatchesGhostChargeVerdict() {
+        // The two penalties are the same accusation at two severities. If they
+        // can disagree, the router charges or evicts on evidence the other
+        // rejected. Asserted across every transport state the classifier knows.
+        Assume.assumeTrue("No RouterContext available", _ctx != null);
+        boolean[][] states = {
+            {false, false, true},   // established but silent
+            {false, false, false},  // plain reachable
+            {false, true,  false},  // handshake unfinished
+            {true,  false, false},  // unreachable
+            {true,  true,  false},  // unreachable, outranks established
+        };
+        for (boolean[] s : states) {
+            Verdict v = penalizeWith(s[0], s[1], s[2]);
+            assertEquals("ghost charge and tier eviction must agree for "
+                         + "unreachable=" + s[0] + " established=" + s[1]
+                         + " connecting=" + s[2],
+                         v.charged, v.evicted);
+            assertTrue("the strike path must run for every state",
+                       v.strikeRun);
+        }
     }
 }

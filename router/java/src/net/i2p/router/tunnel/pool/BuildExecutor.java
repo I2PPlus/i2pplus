@@ -622,6 +622,13 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Failed"), "Outbound builds failed", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat(buildDirectionStat(true, "TimedOut"), "Inbound builds timed out", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat(buildDirectionStat(false, "TimedOut"), "Outbound builds timed out", "Tunnels", RATES);
+        // Per-direction success rates, computed from the same sliding window as
+        // tunnel.buildSuccessRate so all three carry identical smoothing and the
+        // two directions reconcile with the aggregate. The aggregate alone cannot
+        // answer whether inbound or outbound is the failing direction, and the two
+        // do not fail for the same reasons; see buildDirectionStat.
+        _context.statManager().createRequiredRateStat(buildDirectionStat(true, "SuccessRate"), "Inbound build success rate (0-100)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat(buildDirectionStat(false, "SuccessRate"), "Outbound build success rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildTimeout", "Build timed out (count)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildReject", "Build rejected (count)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildNoTunnels", "Build returned NO_TUNNELS (count)", "Tunnels", RATES);
@@ -703,7 +710,7 @@ public class BuildExecutor implements Runnable {
      *  directions, and they do not fail for the same reasons.
      *
      * @param inbound true for an inbound tunnel build
-     * @param event Attempted, Succeeded, Failed or TimedOut
+     * @param event Attempted, Succeeded, Failed, TimedOut or SuccessRate
      * @return the stat name
      * @since 0.9.71+
      */
@@ -744,13 +751,80 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
-     * Update success/failure/timeout counters and calculate adaptive timeout
+     * Bit marking a window entry as an inbound build.
+     *
+     * <p>Packed into the same byte as the result ordinal so one write records both
+     * and a concurrent reader can never see a result attributed to the wrong
+     * direction. {@link Result} has nine values, so ordinals 0-8 leave the top
+     * bit free.
      */
-    private void updateBuildStats(Result result) {
+    private static final int INBOUND_BIT = 0x80;
+
+    /**
+     * Mask selecting the result ordinal out of a packed entry.
+     *
+     * <p>An explicit mask rather than {@code ~INBOUND_BIT}: the complement of
+     * {@code 0x80} keeps every high bit set, and applying it to the sign-extended
+     * {@code byte} leaves bit 7 in place, so an inbound entry indexed
+     * {@link Result#values()} at a negative ordinal and threw
+     * {@link ArrayIndexOutOfBoundsException} on the build path.
+     */
+    private static final int RESULT_MASK = 0x7F;
+
+    /**
+     * Pack a build outcome and its direction into one window entry.
+     *
+     * <p>Pure decision — no state, safe for unit tests.
+     *
+     * @param result the build outcome
+     * @param inbound whether the build was inbound
+     * @return the packed window entry
+     * @since 0.9.71+
+     */
+    static byte windowEntry(Result result, boolean inbound) {
+        return (byte)(result.ordinal() | (inbound ? INBOUND_BIT : 0));
+    }
+
+    /**
+     * The outcome recorded in a window entry.
+     *
+     * @param entry a packed entry from {@link #windowEntry}
+     * @return the build outcome
+     * @since 0.9.71+
+     */
+    static Result windowResult(byte entry) {
+        return Result.values()[entry & RESULT_MASK];
+    }
+
+    /**
+     * Whether a window entry is an inbound build.
+     *
+     * @param entry a packed entry from {@link #windowEntry}
+     * @return true if the build was inbound
+     * @since 0.9.71+
+     */
+    static boolean windowInbound(byte entry) {
+        return (entry & INBOUND_BIT) != 0;
+    }
+
+    /**
+     * Update success/failure/timeout counters and calculate adaptive timeout.
+     *
+     * <p>The per-direction success rates and the aggregate are all computed from
+     * this one window in this one pass. That is deliberate: smoothing computed
+     * separately would give each rate its own sampling noise, and a per-direction
+     * rate that does not reconcile with the aggregate it is meant to be compared
+     * against cannot be compared at all. Sharing the window also makes the
+     * per-direction rates sum to the aggregate by construction.
+     *
+     * @param result the build outcome
+     * @param inbound whether the build was inbound
+     */
+    private void updateBuildStats(Result result, boolean inbound) {
         StatManager sm = _context.statManager();
-        // Record result in sliding window
+        // Record result and direction together in the sliding window
         int idx = _windowWriteIndex.getAndIncrement() % WINDOW_SIZE;
-        _buildResults[idx] = (byte) result.ordinal();
+        _buildResults[idx] = windowEntry(result, inbound);
         // Also track legacy counters for backward-compatible stat emission
         if (result == Result.SUCCESS) {
             _buildSuccessCount.incrementAndGet();
@@ -763,15 +837,36 @@ public class BuildExecutor implements Runnable {
         int count = Math.min(_windowWriteIndex.get(), WINDOW_SIZE);
         if (count > 0) {
             int successes = 0, timeouts = 0, failures = 0;
+            int inTotal = 0, inSuccess = 0, outTotal = 0, outSuccess = 0;
             for (int i = 0; i < count; i++) {
-                byte r = _buildResults[i];
-                if (r == Result.SUCCESS.ordinal()) successes++;
-                else if (r == Result.TIMEOUT.ordinal()) timeouts++;
-                else if (r != 0) failures++;
+                byte entry = _buildResults[i];
+                Result r = windowResult(entry);
+                if (windowInbound(entry)) {
+                    inTotal++;
+                    if (r == Result.SUCCESS) { inSuccess++; }
+                } else {
+                    outTotal++;
+                    if (r == Result.SUCCESS) { outSuccess++; }
+                }
+                if (r == Result.SUCCESS) successes++;
+                else if (r == Result.TIMEOUT) timeouts++;
+                else if (r != Result.SUCCESS) failures++;
             }
             sm.addRateData("tunnel.buildSuccessRate", (successes * 100) / count, 0);
             sm.addRateData("tunnel.buildFailureRate", ((long) failures * 100) / count, 0);
             sm.addRateData("tunnel.buildTimeoutRate", ((long) timeouts * 100) / count, 0);
+            // Emitted only once the window holds builds of that direction. A zero
+            // would read as "0% successful" rather than "nothing to measure yet",
+            // which are very different facts and only the second one is true of a
+            // router that has built in one direction only so far.
+            if (inTotal > 0) {
+                sm.addRateData(buildDirectionStat(true, "SuccessRate"),
+                               (inSuccess * 100) / inTotal, 0);
+            }
+            if (outTotal > 0) {
+                sm.addRateData(buildDirectionStat(false, "SuccessRate"),
+                               (outSuccess * 100) / outTotal, 0);
+            }
         }
         // Recalculate adaptive timeout every 50 builds (smooth window, no counter reset)
         if (_windowWriteIndex.get() % 50 == 0 && _windowWriteIndex.get() >= 50) {
@@ -1747,7 +1842,7 @@ public class BuildExecutor implements Runnable {
                         }
                     }
                 }
-                updateBuildStats(Result.TIMEOUT);
+                updateBuildStats(Result.TIMEOUT, cfg.isInbound());
                 recordBuildDirection(cfg, Result.TIMEOUT);
                 if (cfg.getDestination() == null) {
                     _context.statManager().addRateData("tunnel.buildExploratoryExpire", 1);
@@ -1828,37 +1923,39 @@ public class BuildExecutor implements Runnable {
             if (peer.equals(contacted)) {
                 didNotReply(cfg.getReplyMessageId(), peer);
                 _context.profileManager().tunnelTimedOut(peer);
-                // Record timeout for ghost peer detection, but only when the
-                // contacted hop's state actually indicts it.  A hop that is
-                // established yet silent accepted our connection and then went
-                // quiet: the request may have been dropped inside the peer, or
-                // the reply may have been lost on the return path.  Neither is
-                // evidence against the peer, and this bucket is the largest
-                // single cause of expired builds (Hop1.establishedSilent,
-                // ~27.7/min against ~4.3/min unreachable), so charging it was
-                // excluding good peers at scale and feeding the exclusion back
-                // into selection.  See shouldChargeGhostMark.
-                if (_ghostPeerManager != null && shouldChargeGhostMark(cfg, contacted)) {
+                // One verdict, two penalties. A ghost mark and an immediate tier
+                // eviction are the same accusation at two severities, so they must
+                // rest on the same evidence: charging a peer that
+                // shouldChargeGhostMark clears, while evicting it from the tiers
+                // anyway, penalises it twice for a failure the code has already
+                // judged unverified — and the eviction is the heavier of the two.
+                // Established-but-silent was measured at ~27.7/min against
+                // ~4.3/min unreachable, so that inversion was the common case, not
+                // the exception: it produced 19,124 of the 19,241 tier demotions in
+                // a 5.5 h run, turning the fast tier over roughly twice an hour
+                // while quality peers fell 69%.
+                boolean indicting = shouldChargeGhostMark(cfg, contacted);
+                if (_ghostPeerManager != null && indicting) {
                     _ghostPeerManager.recordTimeout(peer);
                 }
-                // Immediate tier eviction.  The contacted hop is the gateway:
-                // the build is already lost, so this is a definitive signal for
-                // this role specifically, and the peer leaves the fast/high-cap
-                // tiers now rather than after the strike threshold.
+                // Immediate tier eviction for the same verified failures. The
+                // contacted hop is the gateway, so when the failure does indict it
+                // the peer leaves the fast/high-cap tiers now rather than after
+                // the strike threshold, and the ghost mark keeps it out of the
+                // tiers via the promotion gate in the meantime.
                 //
-                // demoteIfUnreachable needs DEMOTE_STRIKE_THRESHOLD (3)
-                // consecutive first-hop non-replies, so a peer could absorb two
-                // dead builds and still be drawn from the high-cap tier for the
-                // third.  Re-selection was the problem that threshold was added
-                // to prevent.  demoteIfUnreachableNow evicts on this failure and
-                // the ghost mark above (threshold 1, 5 min) keeps it out of the
-                // tiers via the promotion gate, so eviction is immediate
-                // without becoming a re-promotion loop.
-                _context.profileOrganizer().demoteIfUnreachableNow(peer);
+                // demoteIfUnreachable below stays ungated and carries the cases
+                // this leaves: it needs DEMOTE_STRIKE_THRESHOLD (3) consecutive
+                // first-hop non-replies, so a peer that keeps failing the
+                // unverified way is still evicted a third of the time — slower
+                // than before, but not exempt.
+                if (indicting) {
+                    _context.profileOrganizer().demoteIfUnreachableNow(peer);
+                    _context.statManager().addRateData("tunnel.firstHopUnreachableDemoted", 1);
+                }
                 // Keep the strike counter running so the 3rd failure still
                 // installs the longer demoteIfUnreachable cooldown.
                 _context.profileOrganizer().demoteIfUnreachable(peer);
-                _context.statManager().addRateData("tunnel.firstHopUnreachableDemoted", 1);
             }
         }
     }
@@ -2700,7 +2797,7 @@ public class BuildExecutor implements Runnable {
          */
         if (result == Result.SUCCESS ||
             (buildTime >= 50 && !firstHopFailure)) {
-            updateBuildStats(result);
+            updateBuildStats(result, cfg.isInbound());
         }
         if (result == Result.SUCCESS) {
             _firstHopSuccessCount.incrementAndGet();
