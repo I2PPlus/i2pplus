@@ -142,6 +142,27 @@ public class NTCPConnection implements Closeable {
     private final AtomicInteger _messagesWritten = new AtomicInteger();
     private long _lastSendTime;
     private long _lastReceiveTime;
+    /**
+     * Round trip time of the handshake that established this session, in ms, or
+     * 0 when it has not been measured.
+     *
+     * <p>Both NTCP2 establishment paths already compute this to derive clock
+     * skew - {@code now - getCreated()} at the point the peer's timestamp
+     * arrives - but discarded it, so the transport had no latency to report and
+     * {@link net.i2p.router.transport.Transport#getEstimatedRTT} answered 0 for
+     * every NTCP2 peer. With that answer, every consumer of a direct-link
+     * latency reading stayed empty: the profile's first-hop RTT was never
+     * populated, and the low-latency flag never turned on for NTCP2 peers.
+     *
+     * <p>Measured once, at establishment, and never updated afterwards: it
+     * describes the handshake this session was built on, and the profile-level
+     * smoothing in {@code PeerProfile.setFirstHopRtt} is what carries it
+     * forward. Recorded here rather than derived by the reader, so the value
+     * has exactly one source per session.
+     *
+     * @since 0.9.71+
+     */
+    private volatile int _establishmentRtt;
     private long _lastRateUpdated;
     /**
      * Last time "ntcp.writeBufs.size" was recorded, to throttle the per-frame
@@ -575,6 +596,60 @@ public class NTCPConnection implements Closeable {
      *  @return time since creation in ms
      */
     public long getTimeSinceCreated() { return _context.clock().now()-_created; }
+
+  /**
+   * Round trip time of the handshake that established this session.
+   *
+   * <p>Recorded once when establishment completes, from the same
+   * {@code now - getCreated()} interval the clock-skew calculation already
+   * performs, and not refreshed for the life of the session. The session's
+   * current latency is a question for the transport's own estimator; this is
+   * the cost of getting the link up, which is what a profile's first-hop RTT
+   * is recorded as.
+   *
+   * @return the handshake round trip time in ms, or 0 if not yet established
+   * @since 0.9.71+
+   */
+  public int getEstimatedRTT() { return _establishmentRtt; }
+
+  /**
+   * Record the handshake round trip time, once the establishment completes.
+   *
+   * <p>First writer wins. Both establishment directions converge here, so
+   * whichever observes VERIFIED first supplies the sample and a late second
+   * observation cannot overwrite it - the value has exactly one source per
+   * session, and re-deriving it later would make the same session's latency
+   * depend on read timing.
+   *
+   * @param rttMs measured round trip time in ms; values of 0 or less are ignored
+   * @since 0.9.71+
+   */
+  void noteEstablishmentRtt(int rttMs) {
+    synchronized (this) {
+      if (!shouldRecordEstablishmentRtt(_establishmentRtt, rttMs)) return;
+      _establishmentRtt = rttMs;
+    }
+  }
+
+  /**
+   * Whether a candidate handshake timing should become this session's recorded
+   * latency.
+   *
+   * <p>Extracted as a pure predicate so the rule is testable without a router
+   * context and a live socket. Two rejections, both about not inventing a
+   * measurement: a non-positive interval means the clock did not advance, and
+   * an already-recorded value means this session's latency already has a source.
+   *
+   * @param existingRttMs the value already recorded, 0 if none
+   * @param candidateRttMs the newly measured interval
+   * @return true if the candidate should be recorded
+   * @since 0.9.71+
+   */
+  static boolean shouldRecordEstablishmentRtt(int existingRttMs, long candidateRttMs) {
+    if (candidateRttMs <= 0) return false;
+    if (candidateRttMs >= Integer.MAX_VALUE) return false;
+    return existingRttMs <= 0;
+  }
 
     /**
      * Time since connection creation in milliseconds.

@@ -204,13 +204,26 @@ abstract class EstablishBase implements EstablishState {
      * Change the handshake state and update completion/corruption flags.
      * @param state the new state
      */
-    protected void changeState(State state) {
-        synchronized (_stateLock) {
-            _state = state;
-            _isCorrupt.set(state == State.CORRUPT);
-            _isComplete.set(state == State.VERIFIED);
-        }
-    }
+protected void changeState(State state) {
+          synchronized (_stateLock) {
+              _state = state;
+              _isCorrupt.set(state == State.CORRUPT);
+              _isComplete.set(state == State.VERIFIED);
+          }
+          // Single point at which a handshake becomes usable, and therefore the
+          // single place the transport's latency is captured. Both NTCP2
+          // establishment directions reach VERIFIED through here, so recording
+          // the interval from connection creation - the same interval both
+          // paths already measure for clock skew - gives one sample per
+          // session without either direction having to remember to report.
+          // Guarded against a null connection (the established-from-construction
+          // state) and against a zero-length interval.
+          if (state == State.VERIFIED && _con != null) {
+              _con.noteEstablishmentRtt(
+                      (int) Math.min(Integer.MAX_VALUE,
+                                     _context.clock().now() - _con.getCreated()));
+          }
+      }
 
     /**
      * Parse the contents of the buffer as part of the handshake.

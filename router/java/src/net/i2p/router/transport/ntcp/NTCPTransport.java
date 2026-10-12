@@ -1068,9 +1068,34 @@ public class NTCPTransport extends TransportImpl {
      * @return not a copy, do not modify
      * @since 0.9.31
      */
-    public Collection<NTCPConnection> getPeers() {
-        return _conByIdent.values();
-    }
+public Collection<NTCPConnection> getPeers() {
+          return _conByIdent.values();
+      }
+
+  /**
+   * Round trip time measured for this peer during the NTCP2 handshake.
+   *
+   * <p>Answers from the session itself rather than from any estimate, so the
+   * value has exactly one source: {@link NTCPConnection#getEstimatedRTT()},
+   * written once when the handshake completes. Previously this inherited the
+   * interface default of 0, which meant no NTCP2 peer was ever considered to
+   * have a measured latency, and every profile first-hop RTT derived from a
+   * transport reading stayed empty.
+   *
+   * <p>Returns 0 when there is no session or the session has not finished
+   * establishing; callers already treat 0 as unknown rather than as an
+   * impossibly good peer.
+   *
+   * @param peer the peer to report on
+   * @return the measured handshake round trip time in ms, or 0 if unmeasured
+   * @since 0.9.71+
+   */
+  @Override
+  public int getEstimatedRTT(Hash peer) {
+    if (peer == null) return 0;
+    NTCPConnection con = _conByIdent.get(peer);
+    return (con != null) ? con.getEstimatedRTT() : 0;
+  }
 
     /**
      * Connected peers.
