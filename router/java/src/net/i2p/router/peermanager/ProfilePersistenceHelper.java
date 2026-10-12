@@ -26,6 +26,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.StatManager;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
@@ -84,6 +85,21 @@ class ProfilePersistenceHelper {
     private volatile int _storedProfileCount;
 
     private static final String STAT_STORED_PROFILES = "peer.storedProfileCount";
+
+    /**
+     * Profiles that loaded with a first-hop RTT still inside its validity
+     * window. A non-zero value here is the confirmation that a transport is
+     * actually supplying latency: without one, every profile would fall into
+     * {@link #STAT_LOADED_RTT_EXPIRED} or neither, and the fast tier would be
+     * seeded from persisted flags alone.
+     */
+    private static final String STAT_LOADED_WITH_RTT = "peer.loadedWithFirstHopRtt";
+
+    /** Profiles whose stored first-hop RTT had aged past the validity window. */
+    private static final String STAT_LOADED_RTT_EXPIRED = "peer.loadedFirstHopRttExpired";
+
+    /** Profiles that loaded carrying the persisted low-latency flag. */
+    private static final String STAT_LOADED_LOW_LATENCY = "peer.loadedLowLatency";
     private static final long[] RATES = {
         RateConstants.ONE_MINUTE,
         RateConstants.FIVE_MINUTES,
@@ -121,8 +137,14 @@ class ProfilePersistenceHelper {
     public ProfilePersistenceHelper(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(ProfilePersistenceHelper.class);
-        _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
-                "Stored on disk", "Peers", RATES);
+_context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
+                  "Stored on disk", "Peers", RATES);
+          _context.statManager().createRequiredRateStat(STAT_LOADED_WITH_RTT,
+                  "Profiles loaded with a usable first-hop RTT", "Peers", RATES);
+          _context.statManager().createRequiredRateStat(STAT_LOADED_RTT_EXPIRED,
+                  "Profiles loaded whose first-hop RTT has aged out", "Peers", RATES);
+          _context.statManager().createRequiredRateStat(STAT_LOADED_LOW_LATENCY,
+                  "Profiles loaded as low latency", "Peers", RATES);
         String dir = _context.getProperty(PROP_PEER_PROFILE_DIR, DEFAULT_PEER_PROFILE_DIR);
         _profileDir = new SecureDirectory(_context.getRouterDir(), dir);
         if (!_profileDir.exists()) {_profileDir.mkdirs();}
@@ -362,20 +384,44 @@ class ProfilePersistenceHelper {
         // Sort profiles by modification time (most recent first) to prioritize active peers
         Collections.sort(freshFiles, (f1, f2) -> Long.compare(f2.lastModified(), f1.lastModified()));
 
-        List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles.size()));
-        int count = 0;
-        for (File f : freshFiles) {
-            if (count >= LIMIT_PROFILES) {
-                // Delete least active profiles when over the limit
-                f.delete();
-                continue;
-            }
-            PeerProfile profile = readProfile(f, cutoff);
-            if (profile != null) {
-                profiles.add(profile);
-                count++;
-            }
-        }
+List<PeerProfile> profiles = new ArrayList<>(Math.min(LIMIT_PROFILES, freshFiles.size()));
+          int count = 0;
+          // Latency load audit. Without a transport that reports a measured
+          // round trip, firstHopRtt is absent from every stored profile and the
+          // split below reads zero/zero, which is indistinguishable from a load
+          // that worked. Recording it makes the signal observable: a healthy
+          // load puts peers in the first bucket, an expired one in the second.
+          int withRtt = 0, rttExpired = 0, lowLatency = 0;
+          long now = _context.clock().now();
+          for (File f : freshFiles) {
+              if (count >= LIMIT_PROFILES) {
+                  // Delete least active profiles when over the limit
+                  f.delete();
+                  continue;
+              }
+              PeerProfile profile = readProfile(f, cutoff);
+              if (profile != null) {
+                  if (profile.getFirstHopRtt(now) > 0) {
+                      withRtt++;
+                  } else if (profile.getFirstHopRttTime() > 0) {
+                      // A timestamp without a usable reading means the value
+                      // aged out past the validity window, not that it was
+                      // never measured.
+                      rttExpired++;
+                  }
+                  if (profile.isLowLatency()) {lowLatency++;}
+                  profiles.add(profile);
+                  count++;
+              }
+          }
+          StatManager sm = _context.statManager();
+          sm.addRateData(STAT_LOADED_WITH_RTT, withRtt, 60L * 1000);
+          sm.addRateData(STAT_LOADED_RTT_EXPIRED, rttExpired, 60L * 1000);
+          sm.addRateData(STAT_LOADED_LOW_LATENCY, lowLatency, 60L * 1000);
+          if (_log.shouldInfo() && (withRtt + rttExpired) > 0) {
+              _log.info("Loaded latency: " + withRtt + " profiles with a current first-hop RTT, " +
+                        rttExpired + " expired, " + lowLatency + " flagged low latency");
+          }
 
         long duration = System.currentTimeMillis() - start;
         if (_log.shouldInfo()) {_log.info("Loaded " + count + " peer profiles in " + duration + "ms");}

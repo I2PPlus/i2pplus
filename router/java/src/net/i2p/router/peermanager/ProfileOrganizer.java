@@ -43,6 +43,7 @@ import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
@@ -225,17 +226,54 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private volatile double _baselineRTT;
-    /**
-     * Average peer test response time across fast peers with data, computed
-     * during each reorganize.  Used by {@link PeerProfile#recalculateLowLatency()}
-     * to tighten the low-latency threshold to 1.5× the cohort average when the
-     * fast tier has sufficient data
-     * ({@value net.i2p.router.tunnel.pool.ClientPeerSelector#CROSS_POOL_DIVERSITY_THRESHOLD}).
-     *
-     * @since 0.9.71+
-     */
+/**
+       * Calibrated cohort latency floor across fast peers with data, computed
+       * during each reorganize by {@link #computeAverageLowLatencyRtt()} and
+       * read through {@link #getAverageLowLatencyRTT()}.
+       *
+       * <p>Previously documented as tightening the low-latency threshold to 1.5x
+       * the cohort average, but no caller ever consulted it: the value was
+       * recomputed every cycle and discarded. It is now calibrated as the mean of
+       * the fastest samples and applied as a second bound alongside the
+       * per-transport floor.
+       *
+       * @since 0.9.71+
+       */
     private volatile float _averageLowLatencyRTT;
     private final InverseCapacityComparator _comp;
+
+    /**
+     * Calibrated latency floor per transport style, in ms, published by
+     * {@link #sampleFirstHopRtts()} once a style has enough samples. Absent
+     * means that style has no calibrated opinion yet and the absolute rule
+     * applies unchanged. Immutable after publication, so reads are lock-free.
+     */
+    private final Map<String, Long> _rttBaselines = new ConcurrentHashMap<>();
+
+    /**
+     * How many times the calibrated floor a peer's latency may sit under and
+     * still count as low latency. Three is deliberately permissive: roughly half
+     * of all peers fall within two times a top-50 floor, so this admits the fast
+     * end of each transport's population and rejects the tail.
+     */
+    private static final int LOW_LATENCY_BASELINE_MULTIPLE_DEFAULT = 3;
+
+    /** Property key for the calibrated low-latency multiple. @since 0.9.71+ */
+    public static final String PROP_LOW_LATENCY_MULTIPLE =
+        "i2p.router.profileOrganizer.lowLatencyBaselineMultiple";
+
+    /**
+     * How many times the calibrated floor a peer's latency may sit under and
+     * still count as low latency, read once from
+     * {@link #PROP_LOW_LATENCY_MULTIPLE}. Three is deliberately permissive:
+     * roughly half of all peers fall within two times a top-50 floor, so this
+     * admits the fast end of each transport's population and rejects the tail.
+     *
+     * <p>Read at construction rather than per decision so the bar cannot shift
+     * underneath a cycle, and held at a sane minimum so a misconfigured value
+     * cannot make the floor vacuous.
+     */
+    private final int _lowLatencyBaselineMultiple;
 
     /**
      * Property key naming the fast tier's refill target.
@@ -604,9 +642,11 @@ public class ProfileOrganizer {
      * @param context the router context providing config, stats, and log access
      */
     public ProfileOrganizer(RouterContext context) {
-        _context = context;
-        _log = context.logManager().getLog(ProfileOrganizer.class);
-        _comp = new InverseCapacityComparator();
+          _context = context;
+          _log = context.logManager().getLog(ProfileOrganizer.class);
+          _lowLatencyBaselineMultiple = Math.max(1, context.getProperty(
+                  PROP_LOW_LATENCY_MULTIPLE, LOW_LATENCY_BASELINE_MULTIPLE_DEFAULT));
+          _comp = new InverseCapacityComparator();
         _fastPeers = new HashMap<>(1024);
         _highCapacityPeers = new HashMap<>(1024);
         _notFailingPeersList = new ArrayList<>(4096);
@@ -666,12 +706,12 @@ public class ProfileOrganizer {
      * @return true if the comm system reports FIREWALLED or REJECT_UNSOLICITED
      */
     private boolean isFirewalled() {
-        CommSystemFacade.Status status = _context.commSystem().getStatus();
-        return status != null && (status.toString().contains("FIREWALLED") ||
-                                status.toString().contains("REJECT_UNSOLICITED"));
-    }
+            CommSystemFacade.Status status = _context.commSystem().getStatus();
+            return status != null && (status.toString().contains("FIREWALLED") ||
+                                    status.toString().contains("REJECT_UNSOLICITED"));
+        }
 
-    private void getReadLock() {_reorganizeLock.readLock().lock();}
+      private void getReadLock() {_reorganizeLock.readLock().lock();}
     private boolean tryReadLock() {return _reorganizeLock.readLock().tryLock();}
     private void releaseReadLock() {_reorganizeLock.readLock().unlock();}
     private boolean tryWriteLock() {return _reorganizeLock.writeLock().tryLock();}
@@ -819,6 +859,26 @@ public class ProfileOrganizer {
 
         PeerProfile old = getProfile(peer);
         profile.coalesceStats();
+        // A profile loaded from disk arrives with both the latency measurement and
+        // the low-latency flag that measurement produced, but the two were written
+        // at different moments: the flag is a snapshot from the last time
+        // recalculateLowLatency() ran, which may be hours before the RTT it was
+        // derived from was written. Re-derive it from the loaded RTT so the two
+        // agree at load time.
+        //
+        // recalculateLowLatency() deliberately leaves the flag alone when the RTT
+        // has aged past its validity window, so this cannot clear a flag on the
+        // strength of a stale measurement - a profile that was low latency and no
+        // longer measurable keeps the verdict it was last given, which is the same
+        // reason the flag is persisted at all: to seed the fast tier before this
+        // router has measured anything itself.
+        //
+        // No calibrated floor is passed: at this point in startup the transport
+        // baselines describe the *previous* run, not this router's current links,
+        // and mixing the two would judge a freshly-loaded profile against a
+        // population it was not part of. The absolute rule applies until the first
+        // sampling cycle of this run publishes fresh baselines.
+        profile.recalculateLowLatency();
         if (!getWriteLock()) return old;
 
         try {
@@ -1699,27 +1759,41 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     int sampleFirstHopRtts() {
-        CommSystemFacade commSystem = _context.commSystem();
-        if (commSystem == null) {return 0;}
-        Collection<Transport> transports = commSystem.getTransports().values();
-        if (transports.isEmpty()) {return 0;}
-        long now = _context.clock().now();
-        int sampled = 0;
-        long rttSum = 0;
-        long rttCount = 0;
-        getReadLock();
-        try {
-            for (PeerProfile profile : sampleTierPeers()) {
-                int rtt = sampleFirstHopRtt(profile, transports, now);
-                if (rtt > 0) {
-                    sampled++;
-                    rttSum += rtt;
-                    rttCount++;
-                }
-            }
-        } finally {
-            releaseReadLock();
-        }
+          CommSystemFacade commSystem = _context.commSystem();
+          if (commSystem == null) {return 0;}
+          Collection<Transport> transports = commSystem.getTransports().values();
+          if (transports.isEmpty()) {return 0;}
+          long now = _context.clock().now();
+          int sampled = 0;
+          long rttSum = 0;
+          long rttCount = 0;
+          // Fresh baselines for this cycle, keyed by transport style. Built
+          // here rather than kept across cycles: a baseline is meant to describe
+          // the present, and carrying one forward would let a transient
+          // congestion moment keep setting the bar long after it passed.
+          //
+          // Fed only from the transport that supplied each peer's best reading,
+          // so a bucket describes peers actually served over that transport.
+          // Feeding every session would let a peer whose SSU2 path is better
+          // inflate the NTCP2 bucket, raising the NTCP2 bar and admitting links
+          // that are genuinely slow - the same mixing of populations the
+          // calibration exists to undo.
+          Map<String, ProtocolRttBaseline> baselines = new HashMap<>();
+          getReadLock();
+          try {
+              for (PeerProfile profile : sampleTierPeers()) {
+                  int rtt = sampleFirstHopRtt(profile, transports, now);
+                  if (rtt > 0) {
+                      sampled++;
+                      rttSum += rtt;
+                      rttCount++;
+                      feedBaseline(baselines, profile, transports);
+                  }
+              }
+          } finally {
+              releaseReadLock();
+          }
+          publishBaselines(baselines);
         // One stat sample per cycle carrying the cycle mean, not one per sampled
         // peer: the rate's consumers (console, jrobin) plot the average, so only
         // the within-cycle spread is lost.
@@ -1731,6 +1805,125 @@ public class ProfileOrganizer {
             _log.debug("Sampled first hop RTT for " + sampled + " tier peers");
         }
         return sampled;
+    }
+
+    /**
+     * Add this peer's best measured latency to its winning transport's baseline.
+     *
+     * <p>The same transport whose value {@link #sampleFirstHopRtt} recorded: the
+     * fastest of the peer's sessions. A peer with no readable latency contributes
+     * nothing, which is correct - a baseline describes measured links.
+     *
+     * @param baselines    per-style accumulators for this cycle
+     * @param profile      the sampled peer
+     * @param transports   live transports to query
+     * @since 0.9.71+
+     */
+    private void feedBaseline(Map<String, ProtocolRttBaseline> baselines,
+                              PeerProfile profile, Collection<Transport> transports) {
+        Hash peer = profile.getPeer();
+        if (peer == null || baselines == null) {return;}
+        String style = null;
+        int best = 0;
+        for (Transport transport : transports) {
+            int rtt = transport.getEstimatedRTT(peer);
+            if (rtt > best) {
+                best = rtt;
+                style = transport.getStyle();
+            }
+        }
+        if (best <= 0 || style == null) {return;}
+        ProtocolRttBaseline baseline = baselines.get(style);
+        if (baseline == null) {
+            baseline = new ProtocolRttBaseline();
+            baselines.put(style, baseline);
+        }
+        baseline.add(best);
+    }
+
+    /**
+     * Publish this cycle's baselines and report them as stats.
+     *
+     * <p>The stat is what makes the calibration observable rather than assumed:
+     * a baseline of 0 means the transport has not yet gathered enough samples,
+     * and the low-latency judgement is running on the absolute floor unchanged.
+     * Watching the sample count alongside the value is the check that a
+     * transport is actually supplying latency.
+     *
+     * @param baselines per-style accumulators built this cycle
+     * @since 0.9.71+
+     */
+    private void publishBaselines(Map<String, ProtocolRttBaseline> baselines) {
+        _rttBaselines.clear();
+        if (baselines == null || baselines.isEmpty()) {return;}
+        StatManager sm = _context.statManager();
+        for (Map.Entry<String, ProtocolRttBaseline> e : baselines.entrySet()) {
+            ProtocolRttBaseline b = e.getValue();
+            String style = e.getKey();
+            long clamped = b.getClampedBaselineMs(PeerProfile.LOW_LATENCY_FLOOR_MS,
+                                                  _lowLatencyBaselineMultiple);
+            // Registered here, immediately before first use, rather than in the
+            // constructor: transports are added after this object is built, so
+            // enumerating them at construction finds none, and StatManager
+            // silently drops names that were never registered - the calibration
+            // would publish nothing at all and look broken rather than
+            // unreported. createRequiredRateStat is idempotent, so re-registering
+            // an existing name each cycle is harmless.
+            sm.createRequiredRateStat("peer.latencyBaseline." + style,
+                                      "Calibrated latency floor for " + style + " (ms)",
+                                      "Peers", RATES);
+            sm.createRequiredRateStat("peer.latencySamples." + style,
+                                      "Samples backing the " + style + " latency floor",
+                                      "Peers", RATES);
+            if (clamped > 0) {
+                _rttBaselines.put(style, clamped);
+                sm.addRateData("peer.latencyBaseline." + style, clamped, 60L * 1000);
+            }
+            // Sample count reported even when unknown: a zero baseline with a
+            // growing count is the expected shape while a transport warms up.
+            sm.addRateData("peer.latencySamples." + style, b.getSampleCount(), 60L * 1000);
+        }
+    }
+
+    /**
+     * The calibrated latency floor for a transport style, or -1 when that
+     * transport has not gathered enough samples to have an opinion.
+     *
+     * <p>Callers must treat -1 as "no calibrated opinion" and fall back to the
+     * absolute rule, never as "this peer qualifies".
+     *
+     * @param style the transport style, e.g. "NTCP2" or "SSU2"
+     * @return the calibrated floor in ms, or -1 if unknown
+     * @since 0.9.71+
+     */
+    long getCalibratedLatencyFloorMs(String style) {
+        if (style == null) {return -1;}
+        Long floor = _rttBaselines.get(style);
+        return (floor == null) ? -1 : floor.longValue();
+    }
+
+    /**
+     * The calibrated latency floor for a peer, choosing the style of the
+     * transport that measured it.
+     *
+     * @param peer the peer to look up
+     * @return the calibrated floor in ms, or -1 if unknown
+     * @since 0.9.71+
+     */
+    long getCalibratedLatencyFloorMs(Hash peer) {
+        if (peer == null) {return -1;}
+        CommSystemFacade comm = _context.commSystem();
+        if (comm == null) {return -1;}
+        String style = null;
+        int best = 0;
+        for (Transport transport : comm.getTransports().values()) {
+            int rtt = transport.getEstimatedRTT(peer);
+            if (rtt > best) {
+                best = rtt;
+                style = transport.getStyle();
+            }
+        }
+        return (best <= 0) ? -1 : getCalibratedLatencyFloorMs(style);
     }
 
     /**
@@ -4698,31 +4891,53 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Immediately demote a peer from fast/high-cap tiers when a peer test
-     * shows it is no longer low-latency.  Called from PeerTestJob when a
-     * test result arrives that contradicts the peer's tier membership.
-     * Non-blocking — only acts if the peer is currently in those tiers.
+     * Immediately demote a peer from the fast tier when a peer test shows it is
+     * no longer low-latency.  Called from PeerTestJob when a test result
+     * arrives that contradicts the peer's tier membership.  Non-blocking — only
+     * acts if the peer is currently in the fast tier.
+     *
+     * <p>High-capacity membership is deliberately left alone. It is earned from
+     * capacity and throughput rather than latency, so a latency judgement does
+     * not speak to it; see the comment in the body.
      *
      * @param peer hash of the peer to demote
      * @since 0.9.71+
      */
     public void demoteIfNotLowLatency(Hash peer) {
-        if (!getWriteLock()) return;
-        try {
-            boolean inFast = _fastPeers.containsKey(peer);
-            boolean inHighCap = _highCapacityPeers.containsKey(peer);
-            if ((inFast || inHighCap) && !isLowLatency(peer)) {
-                if (_log.shouldInfo()) {
-                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
-                              "] from fast/high-cap tiers: no longer low-latency");
-                }
-                if (inFast) removeFastPeer(peer);
-                if (inHighCap) _highCapacityPeers.remove(peer);
-                promoteToFillTiers();
-            }
-        } finally {
-            releaseWriteLockAndRefresh();
-        }
+          if (!getWriteLock()) return;
+          try {
+              if (demotesFastTier(_fastPeers.containsKey(peer), isLowLatency(peer))) {
+                  if (_log.shouldInfo()) {
+                      _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                                "] from the fast tier: no longer low-latency");
+                  }
+                  removeFastPeer(peer);
+                  promoteToFillTiers();
+              }
+          } finally {
+              releaseWriteLockAndRefresh();
+          }
+      }
+
+    /**
+     * Whether losing the low-latency flag revokes membership of the fast tier.
+     *
+     * <p>Fast-tier membership is the latency promotion, so losing the flag
+     * revokes it. High-capacity membership is <em>not</em> revoked by this
+     * signal: it is earned from advertised capacity and sustained throughput, so
+     * a peer that has stopped being low latency has not stopped being high
+     * capacity. This method used to evict from both tiers, which with a
+     * calibrated per-transport floor meant a transport whose baseline rose
+     * during congestion could strip bandwidth-qualified peers out of the tier
+     * they had been admitted to.
+     *
+     * @param inFast      whether the peer is currently in the fast tier
+     * @param lowLatency  whether the peer still holds the low-latency flag
+     * @return true if the peer should leave the fast tier
+     * @since 0.9.71+
+     */
+    static boolean demotesFastTier(boolean inFast, boolean lowLatency) {
+        return inFast && !lowLatency;
     }
 
     /**
@@ -4791,7 +5006,24 @@ public class ProfileOrganizer {
         profile.setFirstHopRtt(rtt, when);
         // The one low-latency decision lives in PeerProfile; this only propagates
         // its answer to the field the tiers read.
-        profile.recalculateLowLatency();
+        //
+        // The calibrated floor is looked up here rather than inside the profile so
+        // that a profile never has to reach back into the Organizer: the
+        // measurement is the profile's, the transport's baseline is not.
+        Long calibrated = null;
+        Hash peer = profile.getPeer();
+        if (peer != null) {
+            long floor = getCalibratedLatencyFloorMs(peer);
+            if (floor > 0) {calibrated = Long.valueOf(floor);}
+        }
+        // The cohort floor rides alongside: it is already recomputed this cycle
+        // and applies to every peer we would be judging, so supplying it costs
+        // nothing and keeps both bounds decided at one point. It can only remove a
+        // peer the absolute rule had already accepted.
+        Long cohort = null;
+        long cohortFloor = (long) getAverageLowLatencyRTT();
+        if (cohortFloor > 0) {cohort = Long.valueOf(cohortFloor);}
+        profile.recalculateLowLatency(calibrated, cohort);
     }
 
     /**
@@ -5958,16 +6190,22 @@ public class ProfileOrganizer {
         _persistenceHelper.writeProfile(profile);
     }
 
-    /**
-     * Average peer test response time (ms) across fast peers with data,
-     * computed during each {@link #reorganize()}.
-     * Used by {@link PeerProfile#recalculateLowLatency()} as a self-tightening
-     * low-latency cap (1× the cohort average) when the fast tier has ≥ 300 peers.
-     * Falls back to a fixed 1.5× timeout cap for cold-start profiles.
-     *
-     * @return the average RTT in ms, 0 if fewer than 3 peers have data
-     * @since 0.9.71+
-     */
+/**
+       * Calibrated latency floor across fast peers with data, computed during each
+       * {@link #reorganize()} as the mean of the fastest samples rather than of the
+       * whole population.
+       *
+       * <p>This is a second bound on the low-latency judgement, not a second
+       * judgement: a peer must satisfy both the per-transport calibrated floor and
+       * this cohort floor. It is measured from peer-test response times, a
+       * different quantity from the direct-link RTT behind the per-transport
+       * floor, so the two are never averaged together and this one cannot stand
+       * in for the other.
+       *
+       * @return the cohort floor in ms, 0 when fewer than
+       *         {@link ProtocolRttBaseline#SAMPLES_FOR_BASELINE} peers have data
+       * @since 0.9.71+
+       */
     public float getAverageLowLatencyRTT() {
         return _averageLowLatencyRTT;
     }
@@ -5980,16 +6218,18 @@ public class ProfileOrganizer {
      * @since 0.9.71+
      */
     private float computeAverageLowLatencyRTT() {
-        long totalRTT = 0;
-        int count = 0;
+        // Calibrated the same way as the per-transport floors: the mean of the
+        // fastest samples rather than of the whole population, so it expresses an
+        // achievable floor and does not follow the mean upward as the network
+        // degrades. A mean over every peer would relax the bar precisely when
+        // quality matters most.
+        ProtocolRttBaseline baseline = new ProtocolRttBaseline();
         for (PeerProfile p : _fastPeers.values()) {
             float rtt = p.getPeerTestTimeAverage();
-            if (rtt > 0) {
-                totalRTT += rtt;
-                count++;
-            }
+            if (rtt > 0) {baseline.add((int) rtt);}
         }
-        return count >= 3 ? (float) totalRTT / count : 0;
-    }
+        long floor = baseline.getBaselineMs();
+        return (floor > 0) ? (float) floor : 0;
+      }
 
-}
+  }
