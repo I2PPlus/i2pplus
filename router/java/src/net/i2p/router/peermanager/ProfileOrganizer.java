@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -197,6 +198,34 @@ public class ProfileOrganizer {
         return removed;
     }
     private final Map<Hash, PeerProfile> _highCapacityPeers;
+
+    /**
+     * Skip reasons from the promotion scan in flight, reported by
+     * {@link #drainPromotionSkipTally()}.
+     *
+     * <p>Guarded by the write lock every caller already holds; see
+     * {@link #recordPromotionSkip}.
+     *
+     * @since 0.9.71+
+     */
+    private final Map<String, Integer> _promotionSkipTally = new LinkedHashMap<>();
+
+    /**
+     * When {@link #promoteToFillTiers()} last ran a full scan, in router time.
+     *
+     * @since 0.9.71+
+     */
+    private long _lastTierFillScan;
+
+    /**
+     * Shortest gap between two full tier-refill scans.
+     *
+     * <p>Well under the reorganise interval, so the debounce can never delay a
+     * refill past the next cycle that would have done it anyway.
+     *
+     * @since 0.9.71+
+     */
+    private static final long TIER_FILL_DEBOUNCE_MS = 5 * 1000L;
     private final Map<Hash, PeerProfile> _wellIntegratedPeers;
     private final Map<Hash, PeerProfile> _notFailingPeers;
     /**
@@ -734,6 +763,15 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.fastOrHighCapProfileCount",
                 "Number of fast or high-capacity peers", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.qualityPeerCount", "Peers with good acceptance + recent activity", "Peers", RATES);
+        // Immediate tier evictions, counted where the eviction happens rather than
+        // where it is decided. Two callers reach demoteIfUnreachableNow(): the build
+        // timeout path in BuildExecutor and the pre-connect probe sweep in
+        // TunnelPeerSelector. Registering and emitting it at the decision site counted
+        // only one of them, so the stat read zero for an entire run while the
+        // evictions it names were still occurring.
+        _context.statManager().createRequiredRateStat("tunnel.firstHopUnreachableDemoted",
+                "Peers evicted from the selection tiers as unreachable, with no strike accumulation",
+                "Tunnels [Participating]", RATES);
         // Profile files held on disk. Fed from CoalesceStatsEvent on its short cycle,
         // from the count the persistence helper tracks, so it rises as profiles are
         // stored and falls only when the retention rules delete a file.
@@ -2355,6 +2393,7 @@ public class ProfileOrganizer {
             int expiredCount = built.expiredCount;
             int profileCount = built.profileCount;
             double totalIntegration = built.totalIntegration;
+            long tCoalesce = System.currentTimeMillis();
 
             // Fetch once for the whole cycle; tier rebuild and quality counting
             // would otherwise re-read router statistics per profile.
@@ -2365,6 +2404,7 @@ public class ProfileOrganizer {
             double newIntegrationThreshold = numNotFailing > 0 ? totalIntegration / numNotFailing : 1.0d;
             double newCapacityThreshold = calculateCapacityThresholdFromSet(newStrictCapacityOrder, numNotFailing);
             double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder, now, newCapacityThreshold);
+            long tThreshold = System.currentTimeMillis();
 
             // Step 3: Snapshot the old tier memberships as the restore fallback, then
             // clear and rebuild. Keys only: a peer still in _notFailingPeers after
@@ -2381,11 +2421,24 @@ public class ProfileOrganizer {
 
             // Step 4: Reinsert all active profiles and assign tiers
             lockedRebuildTiers(newStrictCapacityOrder, buildSuccess);
+            long tPlace = System.currentTimeMillis();
+            _context.statManager().addRateData(
+                    "peer.profileCoalesceTime", tCoalesce - start);
+            _context.statManager().addRateData(
+                    "peer.profileThresholdTime", tThreshold - tCoalesce);
+            _context.statManager().addRateData(
+                    "peer.profilePlaceTime", tPlace - tThreshold);
 
             // Step 4a: Publish the promotion-deferral counters the rebuild opened
             // its cycle for. Read still under the write lock, so the numbers
             // reported belong to this cycle and to no other.
             recordRouterInfoRefreshStats();
+            if (_log.shouldInfo()) {
+                String skips = drainPromotionSkipTally();
+                if (!skips.isEmpty()) {
+                    _log.info("Rebuild promotion skips: " + skips);
+                }
+            }
 
             // Step 5: Purge peers with recent tunnel failures, loss probation, or
             // poor tunnel acceptance from fast/high-cap tiers. This runs before
@@ -2588,7 +2641,23 @@ public class ProfileOrganizer {
         // passes below drive the tiers back up to, so holding a promotion back
         // while the tier is under one would only compete with those passes.
         _refresher.beginCycle(getRouterInfoRefreshAgeMs(), minFast, minHighCap);
+        long now = _context.clock().now();
         for (PeerProfile profile : candidates) {
+            // Decay the acceptance and failure history here rather than in
+            // PeerProfile.coalesceStats(): that path coalesces the RateStats and runs
+            // updateValues() too, which is far more than this pass needs, and it is
+            // only reachable from the profile-load path — where the interval has not
+            // elapsed, so the decay never fired at all. A long-lived profile therefore
+            // kept a lifetime ratio that no amount of good behaviour since could
+            // repair. Walking the candidates on the reorganise cadence is what makes
+            // it live, and decayLifetimeCounters() early-returns on every pass but the
+            // one that crosses the interval, so the added cost is a volatile read.
+            if (profile.getTunnelHistory() != null) {
+                profile.getTunnelHistory().decayLifetimeCounters(now);
+            }
+            if (profile.getDBHistory() != null) {
+                profile.getDBHistory().decayLifetimeCounters(now);
+            }
             lockedPlaceProfile(profile, buildSuccess, minHighCap, maxFast, maxHighCap);
         }
     }
@@ -2630,7 +2699,7 @@ public class ProfileOrganizer {
         // rather than re-probing the map.
         if (!passesBasicGates(profile.getPeer())) {return false;}
         if (isExcessiveLifetimeFailure(profile)) {return false;}
-        if (requireAcceptance && isLowTunnelAcceptance(profile, buildSuccess, now)) {return false;}
+        if (requireAcceptance && isLowTunnelAcceptance(profile, buildSuccess, now, 1)) {return false;}
         if (hasRecentTunnelFailures(profile)) {return false;}
         return !inLossProbation(profile, now);
     }
@@ -3128,7 +3197,7 @@ public class ProfileOrganizer {
                     allowSoftEviction,
                     hasRecentTunnelFailures(profile),
                     inLossProbation(profile, now),
-                    isLowTunnelAcceptance(profile, buildSuccess, now));
+                    isLowTunnelAcceptance(profile, buildSuccess, now, 1));
             if (reason != null) {
                 if (_log.shouldDebug()) {
                     _log.debug("Purging peer [" + peer.toBase32().substring(0, 6) +
@@ -3189,7 +3258,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         // is a deep reservoir; eviction is what keeps poor accepters out. A
         // restoration path that skipped the check would reinstate on the next
         // cycle exactly the peers eviction just removed.
-        return !isLowTunnelAcceptance(profile, buildSuccess, now);
+        return !isLowTunnelAcceptance(profile, buildSuccess, now, 1);
     }
 
     /**
@@ -4865,6 +4934,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
 
         String skipReason = promotionSkipReason(profile, peer, buildSuccess, now);
         if (skipReason != null) {
+            recordPromotionSkip(skipReason);
             if (_log.shouldDebug()) {
                 _log.debug("Skipping peer [" + peer.toBase32().substring(0, 6) +
                            "] from promotion: " + skipReason +
@@ -4901,9 +4971,16 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         // High-capacity tier
         // High-cap means proven ability to host tunnels with X/P/O bandwidth.
         // Admission requires:
-        // - skipsPromotion() passed (acceptance ratio, loss, congestion)
+        // - the shared gates passed (loss, congestion, lifetime failures)
+        // - acceptance only once the peer has MIN_TUNNEL_REQUESTS samples. This is
+        //   the reservoir the fast tier seeds from, and judging a peer on fewer
+        //   requests than that is how good peers stayed out of it.
         // - isHighBandwidthCapable: X/P/O tier, no D/E/G caps
         // - Capacity above threshold, or room in the tier
+        if (isLowTunnelAcceptance(profile, buildSuccess, now, MIN_TUNNEL_REQUESTS)) {
+            recordPromotionSkip("lowTunnelAcceptance.highCap");
+            return false;
+        }
         boolean hcNeedsFilling = _highCapacityPeers.size() < minHighCap;
         boolean hcHasRoom = _highCapacityPeers.size() < maxHighCap;
         boolean hcTight = _highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT;
@@ -4924,6 +5001,13 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         // 1. High-cap responsive: already high-cap, low-latency or untested.
         // 2. Quality mode: all tests passing, active, proven throughput.
         // 3. Filling mode: speed-based or low-latency bypass.
+        // The fast tier keeps the strict acceptance floor high capacity dropped: it is
+        // the tier build selection actually draws from, so a peer that has declined
+        // 80% of a handful of requests has no business being offered.
+        if (isLowTunnelAcceptance(profile, buildSuccess, now, 1)) {
+            recordPromotionSkip("lowTunnelAcceptance.fast");
+            return false;
+        }
         if (!_fastPeers.containsKey(peer) && _fastPeers.size() < maxFast &&
             isFastTierCapable(peer)) {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
@@ -5130,6 +5214,44 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     }
 
     /**
+     * Counts one promotion skip against its reason.
+     *
+     * <p>The per-peer line stays at DEBUG because a single pass walks the whole
+     * capacity-ordered profile set — about 4,300 evaluations on the live router,
+     * several passes a minute. Logging each one at INFO would bury the log; the
+     * question being answered is which gate is doing the excluding, and that is a
+     * distribution rather than a list.
+     *
+     * <p>Not synchronised: every caller holds the write lock, and the tally is
+     * cleared by whichever scan is about to report it.
+     *
+     * @param reason the reason {@link #promotionSkipReason} returned
+     * @since 0.9.71+
+     */
+    private void recordPromotionSkip(String reason) {
+        Integer n = _promotionSkipTally.get(reason);
+        _promotionSkipTally.put(reason, Integer.valueOf(n != null ? n.intValue() + 1 : 1));
+    }
+
+    /**
+     * Formats the promotion skip tally and clears it.
+     *
+     * @return one line naming each reason and its count, or the empty string when
+     *         nothing was skipped since the last call
+     * @since 0.9.71+
+     */
+    private String drainPromotionSkipTally() {
+        if (_promotionSkipTally.isEmpty()) {return "";}
+        StringBuilder buf = new StringBuilder(128);
+        buf.append("Promotion skips:");
+        for (Map.Entry<String, Integer> e : _promotionSkipTally.entrySet()) {
+            buf.append(' ').append(e.getKey()).append('=').append(e.getValue());
+        }
+        _promotionSkipTally.clear();
+        return buf.toString();
+    }
+
+    /**
      * Whether the peer should be skipped for tier promotion: not selectable,
      * in a strict country, low tunnel acceptance, high-latency penalty,
      * congested, or in loss probation.  Mirrors the eligibility gates of
@@ -5177,7 +5299,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         boolean isStrictCountry = _context.commSystem() != null &&
                                   _context.commSystem().isInStrictCountry(peer);
         if (isStrictCountry) {return "strictCountry";}
-        if (isLowTunnelAcceptance(profile, buildSuccess, now)) {return "lowTunnelAcceptance";}
+        // Acceptance is deliberately NOT checked here. This gate is shared by both
+        // tiers, but they answer different questions: high capacity is the reservoir
+        // the fast tier is seeded from and needs depth, the fast tier is the one that
+        // should refuse thin evidence. A single shared check can only pick one, and
+        // picking the strict one is what emptied the reservoir. Each branch below
+        // applies its own floor instead.
         if (isCongestedPeer(peer)) {return "congested";}
         if (inLossProbation(profile, now)) {return "lossProbation";}
         return null;
@@ -5191,6 +5318,19 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     private void promoteToFillTiers() {
         // One network-database walk and one active-peer count for the whole scan.
         // Both are O(network), and the loop below runs once per profile.
+        //
+        // Debounced first. Every demotion calls this, and demotions arrive at tens
+        // per minute while the tier that lost a member is refilled in full by the
+        // next reorganise anyway (roughly every 75s on the live router). Scanning
+        // between reorganises therefore repeated a whole-network walk to fill a slot
+        // that the next cycle would have filled regardless. The gap is a floor, not
+        // a ceiling: a demotion arriving inside it still leaves the tier short, and
+        // the reorganise is what closes that, exactly as it did before.
+        long now = _context.clock().now();
+        if (now - _lastTierFillScan < TIER_FILL_DEBOUNCE_MS) {
+            return;
+        }
+        _lastTierFillScan = now;
         int known = _context.netDb().getKnownRouters();
         int active = _context.commSystem().countActivePeers();
         int fastTarget = getMaximumFastPeers(known, active);
@@ -5269,6 +5409,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                                            _fastPeers.size(), fastTarget,
                                            _highCapacityPeers.size(), highCapTarget,
                                            examined, alreadyTiered, heldNoAddress));
+        }
+        if (_log.shouldInfo()) {
+            String skips = drainPromotionSkipTally();
+            if (!skips.isEmpty()) {
+                _log.info(skips + " of " + examined + " examined");
+            }
         }
     }
 
@@ -5552,6 +5698,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
                     _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
                               "] from fast/high-cap tiers: unreachable");
                 }
+                _context.statManager().addRateData("tunnel.firstHopUnreachableDemoted", 1);
                 if (inFast) removeFastPeer(peer);
                 if (inHighCap) _highCapacityPeers.remove(peer);
                 promoteToFillTiers();
@@ -5913,10 +6060,42 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @param profile the peer profile
      * @param buildSuccess the tunnel build success ratio in [0.0, 1.0]
      * @param now current time in ms
+     * @param minRequestsForJudgement how many lifetime requests the peer needs before
+     *        its acceptance ratio is allowed to exclude it at all
      * @return whether low tunnel acceptance (true = exclude from fast/high-cap tiers)
      * @since 0.9.71+
      */
-    private boolean isLowTunnelAcceptance(PeerProfile profile, double buildSuccess, long now) {
+    /**
+     * Whether a peer's tunnel acceptance is bad enough to exclude it, given its
+     * counts and the sample floor the tier in question applies.
+     *
+     * <p>Pure decision — no context access, safe for unit tests. The tiers differ
+     * in the floor they pass, and that difference is the whole point: high capacity
+     * is the reservoir the fast tier seeds from and cannot afford to judge a peer on
+     * a handful of requests, while the fast tier is what build selection draws from
+     * and can. Both bars fall under stress, because a peer rejecting our requests
+     * during network-wide congestion has not demonstrated anything about itself.
+     *
+     * @param agreed lifetime requests the peer accepted
+     * @param rejected lifetime requests the peer declined
+     * @param minRequests samples required before acceptance may exclude at all
+     * @param highStress whether build success is below {@link #ATTACK_THRESHOLD}
+     * @return true if the peer should be excluded on acceptance
+     * @since 0.9.71+
+     */
+    static boolean excludedOnAcceptance(long agreed, long rejected, int minRequests,
+                                       boolean highStress) {
+        long total = agreed + rejected;
+        if (total <= 0) {return false;}
+        if (total < minRequests) {return false;}
+        double ratio = (double) agreed / total;
+        double bar = (total < MIN_TUNNEL_REQUESTS) ? 0.20 : MIN_TUNNEL_ACCEPTANCE_RATIO;
+        if (highStress) {bar = 0.10;}
+        return ratio < bar;
+    }
+
+    private boolean isLowTunnelAcceptance(PeerProfile profile, double buildSuccess, long now,
+                                         int minRequestsForJudgement) {
         TunnelHistory th = profile.getTunnelHistory();
         if (th == null) return false;
 
@@ -5938,6 +6117,12 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
         // wide congestion rather than their own limitations.
         boolean highStress = buildSuccess < ATTACK_THRESHOLD;
 
+        // Too few requests to judge is not a pass and not a fail, it is no evidence.
+        // Excluding here is how a peer was locked out on seven samples: 1 agreed,
+        // 6 rejected, a 14% ratio measured before it had a history at all.
+        if (!excludedOnAcceptance(agreed, rejected, minRequestsForJudgement, highStress)) {
+            return false;
+        }
         if (totalRequests < MIN_TUNNEL_REQUESTS) {
             return isLowAcceptanceLowSample(profile, ratio, highStress);
         }
@@ -6366,7 +6551,15 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
     /**
      * Ceiling on the high-capacity tier from the number of reachable peers.
      *
-     * <p>2x headroom, since high-cap is a broader category, never below {@code base}.
+     * <p>One per reachable peer, never below {@code base}.
+     *
+     * <p>Was {@code active * 2}. That asks for more members than there are peers to
+     * put in them: at 1221 active peers it set a target of 2442 for a tier that
+     * tops out around 700, so the target could never be met, the early return in
+     * {@link #promoteToFillTiers()} could never fire, and every demotion walked the
+     * whole capacity-ordered profile set looking for peers to seat in a tier that
+     * had already run out of candidates. A high-capacity member that is not
+     * reachable is not reservoir depth, it is a slot that cannot be used.
      *
      * @param active peers reachable over any transport
      * @param base floor to keep even when very few peers are reachable
@@ -6374,7 +6567,7 @@ private boolean isRestorableTierPeer(Hash peer, PeerProfile profile, Map<Hash, P
      * @since 0.9.71+
      */
     static int highCapActiveCap(int active, int base) {
-        return Math.max(active * 2, base);
+        return Math.max(active, base);
     }
 
     /**

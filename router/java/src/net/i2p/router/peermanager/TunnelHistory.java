@@ -242,9 +242,46 @@ public class TunnelHistory {
      */
     public RateStat getFailedRate() {return _failRate;}
 
-    private static final long DECAY_INTERVAL_MS = 15 * 60 * 1000L;
+    /**
+     * How often the lifetime counters decay, as a whole interval.
+     *
+     * <p>Eight hours, not fifteen minutes. At 3/4 per interval the shorter period
+     * made a peer forget its own record faster than it could accumulate one: 50
+     * accepted builds fell to 21 within an hour and 5 within four, so a *good*
+     * history decayed exactly as fast as a bad one. Eight hours gives a half-life
+     * near 5.6 hours, so an established record takes about 32 hours to fall to 1%
+     * and a peer's last few hours of behaviour dominate its ratio.
+     *
+     * @since 0.9.71+
+     */
+    private static final long DECAY_INTERVAL_MS = 8 * 60 * 60 * 1000L;
     private static final long DECAY_NUMERATOR = 3;
     private static final long DECAY_DENOMINATOR = 4;
+
+    /**
+     * Apply the lifetime-counter decay if its interval has elapsed.
+     *
+     * <p>Deliberately does not coalesce the {@link RateStat}s. Those are folded by
+     * {@link #coalesceStats()} on the caller's own cadence, and folding them again
+     * here would advance their windows twice as often as the statistic's consumers
+     * expect. A caller that only wants the decay — the tier reorganise walking every
+     * candidate — can call this cheaply: one volatile read and one comparison, with
+     * real work only on the pass that actually crosses the interval.
+     *
+     * <p>Must be called with the write lock held when called from the reorganise, so
+     * the tier membership being read and the counters being decayed are consistent.
+     *
+     * @param now current time in ms
+     * @since 0.9.71+
+     */
+    public void decayLifetimeCounters(long now) {
+        if (now - _lastCoalesce < DECAY_INTERVAL_MS) {return;}
+        _lastCoalesce = now;
+        decayCounter(_lifetimeAgreedTo, "lifetimeAgreedTo");
+        decayCounter(_lifetimeRejected, "lifetimeRejected");
+        decayCounter(_lifetimeTimedOut, "lifetimeTimedOut");
+        decayCounter(_lifetimeFailed, "lifetimeFailed");
+    }
 
     /**
      * Coalesce the rate statistics and periodically decay lifetime counters.
@@ -261,15 +298,7 @@ public class TunnelHistory {
         _rejectRate.coalesceStats();
         _failRate.coalesceStats();
 
-        long now = _context.clock().now();
-        long elapsed = now - _lastCoalesce;
-        if (elapsed >= DECAY_INTERVAL_MS) {
-            decayCounter(_lifetimeAgreedTo, "lifetimeAgreedTo");
-            decayCounter(_lifetimeRejected, "lifetimeRejected");
-            decayCounter(_lifetimeTimedOut, "lifetimeTimedOut");
-            decayCounter(_lifetimeFailed, "lifetimeFailed");
-            _lastCoalesce = now;
-        }
+        decayLifetimeCounters(_context.clock().now());
     }
 
     /** Apply decay to a counter. 3/4 per 15 min = ~1% after 4 hours. */

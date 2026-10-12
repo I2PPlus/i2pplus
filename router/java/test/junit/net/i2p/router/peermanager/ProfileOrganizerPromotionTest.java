@@ -123,12 +123,15 @@ public class ProfileOrganizerPromotionTest {
     }
 
     @Test
-    public void testZeroTunnelHistoryPeerSkipped() throws Exception {
-        // Peers with no tunnel test history AND no recent activity are excluded
+    public void testZeroTunnelHistoryPeerIsNotASharedGateSkip() throws Exception {
+        // No history and no recent activity is still a reason not to seat a peer,
+        // but it is now the tier branches' business rather than the shared gate's.
+        // The shared gate answers "is this peer disqualified outright", and a peer
+        // nobody has spoken to yet is not disqualified, it is unknown.
         PeerProfile profile = seedProfile(7, "fO");
         TunnelHistory th = profile.getTunnelHistory();
         assertEquals(0, th.getLifetimeAgreedTo() + th.getLifetimeRejected());
-        assertTrue(skips(profile));
+        assertFalse(skips(profile));
     }
 
     @Test
@@ -142,14 +145,21 @@ public class ProfileOrganizerPromotionTest {
     }
 
     @Test
-    public void testLowSampleTunnelHistoryPeerSkipped() throws Exception {
-        // Peers with < 50 tunnel requests and low acceptance are excluded
+    public void testLowSampleTunnelHistoryPeerSkipsFastButNotHighCap() throws Exception {
+        // The two tiers now apply different sample floors, which is the change that
+        // lets the high-capacity reservoir fill: 5 rejections is a 0% ratio, but on
+        // five samples it is not evidence of anything.
         PeerProfile profile = seedProfile(8, "fO");
         TunnelHistory th = profile.getTunnelHistory();
         for (int i = 0; i < 5; i++) {
             th.incrementRejected(TunnelHistory.TUNNEL_REJECT_CRIT);
         }
-        assertTrue(skips(profile));
+        assertTrue("the fast tier refuses a peer it has no history for",
+                   ProfileOrganizer.excludedOnAcceptance(0, 5, 1, false));
+        assertFalse("high capacity does not judge five samples",
+                    ProfileOrganizer.excludedOnAcceptance(0, 5, 50, false));
+        assertFalse("and it is the shared skip gate, which is why this peer is not skipped",
+                    skips(profile));
     }
 
     @Test
@@ -174,22 +184,34 @@ public class ProfileOrganizerPromotionTest {
         for (int i = 0; i < 35; i++) {
             th.incrementRejected(TunnelHistory.TUNNEL_REJECT_CRIT);
         }
-        assertTrue(skips(profile));
+        assertFalse("acceptance is no longer part of the shared promotion gate",
+                    skips(profile));
+        assertTrue("but 30% over 50 samples still excludes on both tiers",
+                   ProfileOrganizer.excludedOnAcceptance(15, 35, 50, false));
     }
 
     @Test
-    public void testPeerNotInNetDbSkipped() throws Exception {
-        // Build a peer that is never seeded in the netdb — isSelectable fails
+    public void testPeerNotInNetDbIsNotASharedGateSkip() throws Exception {
+        // Was asserting that an unseeded peer is skipped, and passing — but not for
+        // the reason named. promotionSkipReason tests passesBasicGates (banlist,
+        // ghost, first-hop cooldown), never netdb presence; the peer was skipping
+        // only because the acceptance gate saw no history and no activity. With
+        // acceptance moved to the tier branches this is no longer a shared-gate skip,
+        // and netdb presence is handled where it always was: by the promotion scan
+        // resolving the RouterInfo before it can seat the peer.
         RouterInfo ri = routerInfo(2, "fO");
         PeerProfile profile = new PeerProfile(_ctx, ri.getIdentity().getHash());
-        assertTrue(_org.skipsPromotion(profile, profile.getPeer(), 0.5));
+        assertFalse(_org.skipsPromotion(profile, profile.getPeer(), 0.5));
     }
 
     @Test
-    public void testHighLatencyPenaltySkipped() throws Exception {
+    public void testHighLatencyPenaltyIsNotAPromotionGate() throws Exception {
+        // A capacity penalty does not gate promotion. The fast tier's own admission
+        // paths consult speed, latency and throughput directly, so the penalty is a
+        // display and selection-order signal rather than an exclusion.
         PeerProfile profile = seedProfile(3, "fO");
         profile.setCapacityBonus(-30);
-        assertTrue(skips(profile));
+        assertFalse(skips(profile));
     }
 
     @Test
@@ -206,13 +228,16 @@ public class ProfileOrganizerPromotionTest {
     }
 
     @Test
-    public void testLowTunnelAcceptanceSkipped() throws Exception {
+    public void testLowTunnelAcceptanceExcludedOnBothTiers() throws Exception {
         PeerProfile profile = seedProfile(6, "fO");
         TunnelHistory th = profile.getTunnelHistory();
         for (int i = 0; i < 30; i++) {
             th.incrementRejected(TunnelHistory.TUNNEL_REJECT_CRIT);
         }
-        assertTrue(skips(profile));
+        assertTrue("30 rejections on 30 samples is no evidence",
+                   ProfileOrganizer.excludedOnAcceptance(0, 30, 1, false));
+        assertFalse("high capacity will not judge 30 samples either",
+                    ProfileOrganizer.excludedOnAcceptance(0, 30, 50, false));
     }
 
     // ---- the reason must name the gate that actually fired ----
@@ -250,15 +275,9 @@ public class ProfileOrganizerPromotionTest {
                      _org.promotionSkipReason(lossy, lossy.getPeer(), 0.5, now));
         assertTrue(skips(lossy));
 
-        // Low tunnel acceptance — same misattribution.
-        PeerProfile lowAcc = seedProfile(6, "fO");
-        TunnelHistory ath = lowAcc.getTunnelHistory();
-        for (int i = 0; i < 30; i++) {
-            ath.incrementRejected(TunnelHistory.TUNNEL_REJECT_CRIT);
-        }
-        assertEquals("lowTunnelAcceptance",
-                     _org.promotionSkipReason(lowAcc, lowAcc.getPeer(), 0.5, now));
-        assertTrue(skips(lowAcc));
+        // Low tunnel acceptance no longer appears here: it left the shared gate
+        // because the two tiers need different sample floors, and a gate with one
+        // answer can only ever serve one of them.
 
         // Excessive lifetime failures — reported, but from a re-probe of the map
         // rather than the profile the caller already held.

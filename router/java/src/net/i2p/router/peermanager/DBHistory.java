@@ -238,27 +238,48 @@ public class DBHistory {
      */
     public void setUnpromptedDbStoreOld(long num) {_unpromptedDbStoreOld.set(num);}
 
-    private static final long DECAY_INTERVAL_MS = 15 * 60 * 1000L;
+    /**
+     * How often the lookup and store counters decay, as a whole interval.
+     *
+     * <p>Eight hours, matching {@link
+     * net.i2p.router.peermanager.TunnelHistory#DECAY_INTERVAL_MS}. At fifteen minutes
+     * a peer forgot its own record faster than it could accumulate one, so a good
+     * history decayed as fast as a bad one.
+     *
+     * @since 0.9.71+
+     */
+    private static final long DECAY_INTERVAL_MS = 8 * 60 * 60 * 1000L;
     private static final long DECAY_NUMERATOR = 3;
     private static final long DECAY_DENOMINATOR = 4;
 
     /**
      * Coalesce the rate stats and periodically decay the counters.
      */
+    /**
+     * Apply the lookup and store counter decay if its interval has elapsed.
+     *
+     * <p>Does not coalesce the {@link RateStat}s, which stay on the caller's own
+     * cadence. See the method of the same name on {@link
+     * net.i2p.router.peermanager.TunnelHistory} for why that separation matters.
+     *
+     * @param now current time in ms
+     * @since 0.9.71+
+     */
+    public void decayLifetimeCounters(long now) {
+        if (now - _lastCoalesce < DECAY_INTERVAL_MS) {return;}
+        _lastCoalesce = now;
+        decayCounter(_failedLookups, "failedLookups");
+        decayCounter(_successfulLookups, "successfulLookups");
+        decayCounter(_unpromptedDbStoreNew, "unpromptedDbStoreNew");
+        decayCounter(_unpromptedDbStoreOld, "unpromptedDbStoreOld");
+    }
+
     public void coalesceStats() {
         if (_log.shouldDebug()) {_log.debug("Coalescing Profile Manager stats");}
         _failedLookupRate.coalesceStats();
         _invalidReplyRate.coalesceStats();
 
-        long now = System.currentTimeMillis();
-        long elapsed = now - _lastCoalesce;
-        if (elapsed >= DECAY_INTERVAL_MS) {
-            decayCounter(_failedLookups, "failedLookups");
-            decayCounter(_successfulLookups, "successfulLookups");
-            decayCounter(_unpromptedDbStoreNew, "unpromptedDbStoreNew");
-            decayCounter(_unpromptedDbStoreOld, "unpromptedDbStoreOld");
-            _lastCoalesce = now;
-        }
+        decayLifetimeCounters(System.currentTimeMillis());
     }
 
     /** Apply decay to a counter. Keeps the same rate as divide-by-3 hourly
