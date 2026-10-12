@@ -138,6 +138,19 @@ public final class GraphGroups {
         g.put("buildRejectReceived", Arrays.asList(
                 "tunnel.receiveRejectionProbabalistic", "tunnel.receiveRejectionTransient"));
 
+        // Build success split by direction, both percentages over the same 0-100
+        // scale and both computed from the sliding window in BuildExecutor, so they
+        // reconcile with tunnel.buildSuccessRate and are directly comparable to it.
+        // The aggregate mixes the two directions and cannot say which is failing —
+        // BuildExecutor.buildDirectionStat exists for that — and the directions do
+        // not fail for the same reasons. The per-direction *counters* (Succeeded
+        // against Failed) are deliberately not the frame: Failed is 5-7% against a
+        // 45% success line, so it draws flat on the baseline while TimedOut, the
+        // dominant failure at 37-50%, is absent entirely. That comparison belongs on
+        // the rate frame, and the counts stay individual graphs.
+        g.put("buildSuccessByDirection", Arrays.asList(
+                "tunnel.buildInboundSuccessRate", "tunnel.buildOutboundSuccessRate"));
+
         // Tunnel builds we refused locally because the next hop is banned. Distinct from
         // buildRejectReceived in direction and cause, so the two are separate frames.
         g.put("buildRejectBanned", Arrays.asList(
@@ -155,6 +168,39 @@ public final class GraphGroups {
         // than being averaged in with the steady-state figures.
         g.put("udpRto", Arrays.asList(
                 "udp.avgRTO", "udp.avgEffectiveRTO"));
+
+        // Time to establish a new session, by direction, both milliseconds and both
+        // drawn from the same EstablishmentManager rate set. An accepted handshake
+        // costs twice as much as one we initiated, which two separate graphs cannot
+        // show; that the inbound half dominates is a property of the network rather
+        // than of either direction, so it reads as one figure here.
+        //
+        // outboundEstablishSlow stays on its own graph: it counts sessions over 1s
+        // rather than measuring them, so it is a tail count against a mean.
+        g.put("udpEstablishTime", Arrays.asList(
+                "udp.inboundEstablishTime", "udp.outboundEstablishTime"));
+
+        // The same question on NTCP. Deliberately a separate frame from
+        // udpEstablishTime rather than a four-line comparison: the two transports
+        // establish against different crypto and are frequently not co-resident, so
+        // one of them reading flat says nothing about the other.
+        g.put("ntcpEstablishTime", Arrays.asList(
+                "ntcp.inboundEstablishTime", "ntcp.outboundEstablishTime"));
+
+        // The calibrated first-hop latency floor per transport, both milliseconds.
+        // These are the numbers the fast tier is actually judged against, and
+        // ProfileOrganizer widens each by lowLatencyBaselineMultiple rather than
+        // applying one threshold. On separate graphs a divergence between the
+        // transports is invisible until someone compares them by hand.
+        g.put("latencyBaseline", Arrays.asList(
+                "peer.latencyBaseline.NTCP", "peer.latencyBaseline.SSU"));
+
+        // The sample counts behind those floors, both counts. A baseline that has
+        // not met MIN_SAMPLES is reported as unknown rather than plotted, so the
+        // count is what says whether a baseline on the frame above is a measurement
+        // or a guess — which the value alone cannot convey.
+        g.put("latencySamples", Arrays.asList(
+                "peer.latencySamples.NTCP", "peer.latencySamples.SSU"));
 
         // Tuner CPU time per transport worker pool is deliberately NOT grouped. Each
         // pool is a percentage of a single core and only one or two are ever hot at
@@ -239,9 +285,14 @@ public final class GraphGroups {
         t.put("jobQueueDepth", "Scheduled Jobs");
         t.put("jobLoadEvents", "Load Events");
         t.put("buildRejectReceived", "Build Rejections Received");
+        t.put("buildSuccessByDirection", "Inbound / Outbound Build Success Average");
         t.put("buildRejectBanned", "Builds Refused as Banned");
         t.put("netDbLookupTime", "Lookup Time");
         t.put("udpRto", "UDP Retransmission Timeouts");
+        t.put("udpEstablishTime", "Session Establishment Time");
+        t.put("ntcpEstablishTime", "NTCP Connection Time");
+        t.put("latencyBaseline", "Calibrated Latency Floor");
+        t.put("latencySamples", "Latency Calibration Samples");
         t.put("tunnelCaches", "Caches");
         t.put("participatingBw", "Participating Bandwidth");
         t.put("codelDrop", "CoDel Drop Delay by Priority");
@@ -280,10 +331,15 @@ public final class GraphGroups {
         subsystems.put("jobQueueDepth", "Jobs");
         subsystems.put("jobLoadEvents", "Jobs");
         subsystems.put("buildRejectReceived", "Tunnel");
+        subsystems.put("buildSuccessByDirection", "Tunnel");
         subsystems.put("buildRejectBanned", "Tunnel");
         subsystems.put("netDbLookupTime", "NetDb");
         subsystems.put("leaseSetLookupTime", "NetDb");
         subsystems.put("udpRto", "Transport");
+        subsystems.put("udpEstablishTime", "Transport");
+        subsystems.put("ntcpEstablishTime", "Transport");
+        subsystems.put("latencyBaseline", "Peers");
+        subsystems.put("latencySamples", "Peers");
         subsystems.put("codelDrop", "Transport");
         subsystems.put("tunnelCaches", "Tunnel");
         subsystems.put("participatingBw", "Tunnel");

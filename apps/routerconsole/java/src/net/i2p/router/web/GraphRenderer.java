@@ -874,6 +874,8 @@ class GraphRenderer {
         m.put("router.uptime", new StatMeta(1000, true, false));
         m.put("tunnel.participatingTunnels", new StatMeta(1000, true, false));
         m.put("tunnel.buildSuccessAvg", new StatMeta(1000, false, true));
+        m.put("tunnel.buildInboundSuccessRate", new StatMeta(1000, false, true));
+        m.put("tunnel.buildOutboundSuccessRate", new StatMeta(1000, false, true));
         m.put("tunnel.buildSuccessRate", new StatMeta(1000, false, true));
         m.put("tunnel.testSuccessTime", new StatMeta(1000, false, true));
         m.put("jobQueue.jobLag", new StatMeta(1000, false, true));

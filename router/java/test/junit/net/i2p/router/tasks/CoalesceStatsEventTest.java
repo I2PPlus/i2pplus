@@ -40,7 +40,7 @@ public class CoalesceStatsEventTest {
         assertNotNull("router.gcPauseTime", sm.getRate("router.gcPauseTime"));
         assertNotNull("bw.sendRate", sm.getRate("bw.sendRate"));
         assertNotNull("bw.recvRate", sm.getRate("bw.recvRate"));
-        assertNotNull("tunnel.tunnelBuildSuccessAvg", sm.getRate("tunnel.tunnelBuildSuccessAvg"));
+        assertNotNull("tunnel.buildSuccessAvg", sm.getRate("tunnel.buildSuccessAvg"));
         event.cancel();
     }
 
