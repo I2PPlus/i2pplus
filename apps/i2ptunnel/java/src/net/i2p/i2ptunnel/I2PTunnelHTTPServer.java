@@ -1461,13 +1461,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             try {
                 socket.close();
             } catch (IOException ioe) { /* ignored */ }
+            // DataHelper.messageOf because getMessage() is null far more often than
+            // not - a stream that dies mid-read yields a message-less IOException,
+            // and dereferencing it here threw an NPE out of this catch block and
+            // replaced the diagnostic below with a stack trace.
+            final String exMsg = DataHelper.messageOf(ex);
             if (_log.shouldWarn())
-                if (ex.getMessage().indexOf("Name or service not known") >= 0) {
+                if (exMsg.indexOf("Name or service not known") >= 0) {
                     _log.warn("[HTTPServer] Request error: DNS error (blocked?) for: " +
-                              ex.getMessage().replace(": Name or service not known", "") +
+                              exMsg.replace(": Name or service not known", "") +
                               " "  + tunnelId + "\n* Client: " + peerB32);
                 } else {
-                    _log.warn("[HTTPServer] Request error: " + ex.getMessage() + " " + tunnelId +
+                    _log.warn("[HTTPServer] Request error: " + exMsg + " " + tunnelId +
                               "\n* Client: " + peerB32 +
                               "\n* Backend: " + getSocketString(socket.getLocalPort()) +
                               " (localport=" + socket.getLocalPort() + ")");
@@ -2867,16 +2872,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     _log.debug("[HTTPServer] Done sending " + _name + target);
                 }
             } catch (IOException ioe) {
-                if (ioe.getMessage() != null) {
-                    if (ioe.getMessage().indexOf("Input stream closed") >= 0 ||
-                        ioe.getMessage().indexOf("Input stream error") >= 0 ||
-                        ioe.getMessage().indexOf("Socket closed") >= 0 ||
-                        ioe.getMessage().indexOf("Interrupted") >= 0) {
-                        // client closed connection early, or thread interrupted for cancellation
-                            if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
-                    } else {
-                        if (_log != null && _log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
-                    }
+                // The outer null test is gone because DataHelper.messageOf never
+                // returns null: a message-less stream failure previously skipped
+                // this whole block and logged nothing at all, which is a silent
+                // failure rather than a quiet one.
+                final String sendErr = DataHelper.messageOf(ioe);
+                if (sendErr.indexOf("Input stream closed") >= 0 ||
+                    sendErr.indexOf("Input stream error") >= 0 ||
+                    sendErr.indexOf("Socket closed") >= 0 ||
+                    sendErr.indexOf("Interrupted") >= 0) {
+                    // client closed connection early, or thread interrupted for cancellation
+                    if (_log != null && _log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + sendErr);}
+                } else {
+                    if (_log != null && _log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + sendErr);}
                 }
                 synchronized(this) {_failure = ioe;}
             }

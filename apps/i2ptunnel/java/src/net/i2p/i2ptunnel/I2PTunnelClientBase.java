@@ -34,6 +34,7 @@ import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManagerFactory;
 import net.i2p.client.streaming.I2PSocketOptions;
+import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.util.EventDispatcher;
@@ -1285,9 +1286,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             synchronized (sockLock) {mySockets.clear();}
             if (open) {
                 String address = addr.getHostAddress();
-                String msg = ex.getMessage().replace("java.net.BindException: ", "");
+                // messageOf, not getMessage(): a bind failure on a closed or
+                // already-detached socket carries no message, and the old line threw
+                // NPE from inside its own catch, so an operator saw a stack trace
+                // instead of the bind reason.
+                String msg = DataHelper.messageOf(ex).replace("java.net.BindException: ", "");
                 msg = msg.replace("Address already used", "Address in use -> Ensure you only have one instance of I2P running");
-                _log.error("Error listening for connections on " + address + ":" + localPort + " -> " + ex.getMessage());
+                _log.error("Error listening for connections on " + address + ":" + localPort + " -> " + msg);
                 boolean wasStopped = close(true);
                 if (wasStopped) {
                     try {Thread.sleep(500);}

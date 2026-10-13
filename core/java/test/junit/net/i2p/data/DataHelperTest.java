@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.BindException;
+import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -263,4 +265,80 @@ public class DataHelperTest {
             return super.skip(Math.min(n, r.nextInt(4)));
         }
     }
+
+    // ---- messageOf: null-safe throwable messages ----
+
+    /** A message-less throwable must not produce the string "null". */
+    @Test
+    public void testMessageLessThrowableFallsBackToClassName() {
+        // The exact shape a stream produces when a peer resets mid-read.
+        IOException noMsg = new IOException();
+        assertNull("getMessage() really is null for this type", noMsg.getMessage());
+        assertEquals("IOException", DataHelper.messageOf(noMsg));
+        assertFalse("the log must say what failed, not 'null'",
+                    "null".equals(DataHelper.messageOf(noMsg)));
+    }
+
+    /** An ordinary message passes straight through, unstripped. */
+    @Test
+    public void testMessagePassesThroughUnchanged() {
+        assertEquals("boom", DataHelper.messageOf(new IOException("boom")));
+        assertEquals("spaces and : colons kept",
+                     DataHelper.messageOf(new IOException("spaces and : colons kept")));
+    }
+
+    /**
+     * An empty message is as useless as a null one, and would render as an empty
+     * log field. The class name is more informative than either.
+     */
+    @Test
+    public void testEmptyMessageFallsBackToClassName() {
+        assertEquals("IOException", DataHelper.messageOf(new IOException("")));
+    }
+
+    /** Subclasses report their own name, which is the point of the fallback. */
+    @Test
+    public void testSubclassNameIsReported() {
+        assertEquals("UnknownHostException",
+                     DataHelper.messageOf(new UnknownHostException()));
+        assertEquals("BindException",
+                     DataHelper.messageOf(new BindException()));
+    }
+
+    /** A null throwable yields the empty string rather than throwing. */
+    @Test
+    public void testNullThrowableYieldsEmptyString() {
+        assertEquals("", DataHelper.messageOf(null));
+    }
+
+    /**
+     * The four call sites all call {@code indexOf} on the result, so the contract
+     * is that the return is never null for any input - including the Throwable
+     * itself being null, which the callers already guard but callers further out
+     * do not.
+     */
+    @Test
+    public void testNeverReturnsNull() {
+        Throwable[] cases = {null, new IOException(), new IOException(""),
+                             new IOException("msg"), new OutOfMemoryError(),
+                             new RuntimeException(new IOException())};
+        for (Throwable t : cases) {
+            assertNotNull("must never return null for " + t, DataHelper.messageOf(t));
+        }
+    }
+
+    /**
+     * The DNS branch tests the return with indexOf("Name or service not known").
+     * A socket-level IOException must not match it, or every generic failure
+     * would be misreported as a DNS problem.
+     */
+    @Test
+    public void testDnsBranchDoesNotMatchGenericFailure() {
+        assertTrue(DataHelper.messageOf(new IOException("Name or service not known"))
+                   .indexOf("Name or service not known") >= 0);
+        assertFalse("a message-less socket failure is not a DNS failure",
+                    DataHelper.messageOf(new IOException())
+                    .indexOf("Name or service not known") >= 0);
+    }
+
 }

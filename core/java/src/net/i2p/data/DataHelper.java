@@ -2625,6 +2625,31 @@ public class DataHelper {
     }
 
     /**
+     * The throwable's message, never null.
+     *
+     * <p>{@link Throwable#getMessage()} returns null routinely, and not only for
+     * exotic exceptions: a stream that dies mid-read produces an
+     * {@link java.io.IOException} with no message at all. Four sites in the HTTP
+     * server and client tunnels called {@code getMessage().indexOf(...)} on it
+     * anyway, and each threw a {@link NullPointerException} from inside its own
+     * catch block - which replaced the diagnostic it was trying to log with a
+     * stack trace, and left the original failure unexplained.
+     *
+     * <p>Falls back to the throwable's class name, because "what failed" is
+     * recoverable from the type even when there is no message, whereas the bare
+     * string "null" would make two different failures read identically in a log.
+     *
+     * @param t the throwable, which may be null
+     * @return the message, or the simple class name when there is none, or the
+     *         empty string when the throwable itself is null
+     * @since 0.9.71+
+     */
+    public static String messageOf(Throwable t) {
+        if (t == null) {return "";}
+        String msg = t.getMessage();
+        return (msg != null && !msg.isEmpty()) ? msg : t.getClass().getSimpleName();
+    }
+    /**
      * Replace all instances of "from" with "to" in the StringBuilder buf.
      * Same as String.replace(), but in-memory with no object churn,
      * as long as "to" is equal size or smaller than "from", or buf has capacity.
