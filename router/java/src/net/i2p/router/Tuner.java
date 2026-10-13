@@ -4568,7 +4568,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         ConnectTimeoutMultiplierParam() {
             super("CONNECT_TIMEOUT_MULTIPLIER", "Connect timeout multiplier (30-200%)",
                   SUB_STREAMING,
-                  30, 200, 10, "stream.con.initialRTT.out", _context);
+                  30, 200, 10, "stream.rtt", _context);
         }
 
         /** Apply to Connection's static multiplier, clamped to [50,200]. */
@@ -4613,7 +4613,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         MaxInboundBufferParam() {
             super("i2p.streaming.maxInboundBuffer", "Max inbound buffer (bytes)",
                     SUB_STREAMING,
-                    8388608, 134217728, 8388608, "stream.chokeSizeBegin", _context, null, 8388608);
+                    8388608, 134217728, 8388608, "stream.con.lifetimeBytesReceived", _context, null, 8388608);
         }
 
         /** Apply the cap via I2PSocketManagerFull. */
@@ -4749,7 +4749,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("PASSIVE_FLUSH_DELAY", "Nagle flush delay (ms)",
                     SUB_STREAMING,
 
-                    50, 500, 50, "stream.con.sendMessageSize", _context, null, 50);
+                    50, 500, 50, "stream.rtt", _context, null, 50);
         }
 
         protected void applyValue(int value) {
@@ -4819,7 +4819,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxSlowStartWindow", "Streaming slow start cap",
                     SUB_STREAMING,
 
-                    128, 8192, 128, "stream.con.initialRTT.out", _context, null,
+                    128, 8192, 128, "stream.rtt", _context, null,
                     SystemVersion.isSlow() ? 1024 : 2048);
         }
 
@@ -5111,7 +5111,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                     // RTT, matching streaming's ABSOLUTE_MAX_WINDOW) is
                     // reached from the default in four four-step cycles
                     // (~20s), before health dampening.
-                    512, 8192, 512, "stream.con.initialRTT.out", _context, null,
+                    512, 8192, 512, "stream.rtt", _context, null,
                     SystemVersion.isSlow() ? 768 : 1024);
         }
 
@@ -7062,7 +7062,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxResendDelay", "Streaming max resend delay (ms)",
                   SUB_STREAMING,
 
-                  1000, 60000, 1000, "stream.con.initialRTT.out", _context);
+                  1000, 60000, 1000, "stream.rtt", _context);
         }
 
         protected void applyValue(int value) {
@@ -7121,7 +7121,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRetransmissions", "Streaming max retransmissions",
                   SUB_STREAMING,
 
-                  8, 128, 8, "stream.con.initialRTT.out", _context);
+                  8, 128, 8, "stream.rtt", _context);
         }
 
         protected void applyValue(int value) {
@@ -7186,7 +7186,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.minResendDelay", "Streaming min resend delay (ms)",
                   SUB_STREAMING,
 
-                  300, 5000, 100, "stream.con.initialRTT.out", _context);
+                  300, 5000, 100, "stream.rtt", _context);
         }
 
         protected void applyValue(int value) {
@@ -7429,7 +7429,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.slowStartGrowthRateFactor", "Streaming SS growth rate",
                   SUB_STREAMING,
 
-                  1, 4, 1, "stream.con.initialRTT.out", _context);
+                  1, 4, 1, "stream.rtt", _context);
         }
 
         protected void applyValue(int value) {
@@ -7644,7 +7644,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.maxRtt", "Streaming RTT cap (ms)",
                   SUB_STREAMING,
 
-                  5000, 60000, 1000, "stream.con.initialRTT.out", _context);
+                  5000, 60000, 1000, "stream.rtt", _context);
         }
 
         protected void applyValue(int value) {
@@ -7702,7 +7702,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.initialResendDelay", "Streaming initial resend delay (ms)",
                   SUB_STREAMING,
 
-                  100, 3000, 50, "stream.con.initialRTT.out", _context);
+                  100, 3000, 50, "stream.rtt", _context);
         }
 
         protected void applyValue(int value) {
@@ -7758,7 +7758,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.streaming.immediateAckDelay", "Streaming dup ACK delay (ms)",
                   SUB_STREAMING,
 
-                  1, 1000, 10, "stream.con.initialRTT.out", _context);
+                  1, 1000, 10, "stream.rtt", _context);
         }
 
         protected void applyValue(int value) {
