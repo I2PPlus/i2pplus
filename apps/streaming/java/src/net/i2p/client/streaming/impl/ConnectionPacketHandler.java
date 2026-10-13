@@ -4,6 +4,7 @@ import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.StatManager;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -36,6 +37,61 @@ class ConnectionPacketHandler {
      * preserves the graph with a fraction of the monitor traffic.
      */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
+
+    /**
+     * Register the live stream RTT and send-window stats.
+     *
+     * <p>Separated from the constructor so a test can register against a fresh
+     * {@link StatManager} without building a whole handler — the same shape as
+     * {@link ConnectionManager#registerRtxRatioStats(StatManager)}.
+     *
+     * <p>Both are {@code createRequiredRateStat} because StatManager silently
+     * discards data for a name it was never told about. That failure mode is
+     * invisible from the console: the stat reads "not present" rather than
+     * wrong, which is how {@code transport.banlistOnUsupportedSigType} sat at
+     * zero through every signature-type banlisting.
+     *
+     * @param sm stat manager to register with, non-null
+     * @since 0.9.71+
+     */
+    static void registerLiveStreamStats(StatManager sm) {
+        sm.createRequiredRateStat("stream.rtt",
+                "Current smoothed round trip time of a live stream (ms)", "Stream", RATES);
+        sm.createRequiredRateStat("stream.sendWindowSize",
+                "Current send window of a live stream (messages)", "Stream", RATES);
+    }
+
+    /**
+     * Whether this received message is the one that samples the receive-side
+     * size stat and, from it, the live stream RTT and send window.
+     *
+     * <p>One predicate for all three, because the live RTT and window are
+     * deliberately written inside the same block as the existing size sample:
+     * the cost stays two extra stat writes per sampled message rather than two
+     * per packet. Sharing the predicate is what stops the cadences drifting
+     * apart later — the mask alone would let a change to one silently leave the
+     * other per-packet.
+     *
+     * <p>Pure predicate — no state, no router, safe for unit tests.
+     *
+     * @param receiveMsgCount monotonically increasing count of messages this
+     *                        handler has accepted, 1-based
+     * @return true when this message is a sampling point
+     * @since 0.9.71+
+     */
+    static boolean shouldSampleLiveStreamStats(int receiveMsgCount) {
+        // TELEMETRY_SAMPLE_PERIOD is a power of two, so this is a single mask and
+        // cannot divide by zero or go negative. The power-of-two requirement is
+        // pinned by LiveStreamStatsCadenceTest; a non-power-of-two would silently
+        // make the cadence wrong rather than fail loudly.
+        // Guarded against non-positive input: the mask alone accepts 0 and every
+        // negative multiple of the period, which would emit on the very first packet
+        // and put a per-packet write on the hot path. The live path only ever passes
+        // a pre-incremented 1-based counter, so this costs one comparison on a
+        // branch that is never taken in practice.
+        return receiveMsgCount > 0
+                && (receiveMsgCount & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0;
+    }
     /** Sample counters for the per-packet size stats (one per call site). */
     private int _receiveMsgSizeCnt;
     private int _receiveDupMsgSizeCnt;
@@ -87,10 +143,7 @@ class ConnectionPacketHandler {
         // stream.sendWindowSize exists because lifetimeSendWindowSize is also a
         // close-time figure, so whether window tuning was working could not be observed
         // while a stream was live.
-        _context.statManager().createRequiredRateStat("stream.rtt",
-                "Current smoothed round trip time of a live stream (ms)", "Stream", RATES);
-        _context.statManager().createRequiredRateStat("stream.sendWindowSize",
-                "Current send window of a live stream (messages)", "Stream", RATES);
+        registerLiveStreamStats(_context.statManager());
         _context.statManager().createRequiredRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", RATES);
     }
@@ -220,7 +273,7 @@ class ConnectionPacketHandler {
             return;
         } // else we will call setChoking(false) below
 
-        if ((++_receiveMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0) {
+        if (shouldSampleLiveStreamStats(++_receiveMsgSizeCnt)) {
             _context.statManager().addRateData("stream.con.receiveMessageSize",
                                                packet.getPayloadSize() * (long) TELEMETRY_SAMPLE_PERIOD);
             // Sampled on the same gate, so this adds nothing to the hot path beyond the
