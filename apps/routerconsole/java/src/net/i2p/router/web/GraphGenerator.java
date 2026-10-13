@@ -1497,6 +1497,10 @@ public class GraphGenerator implements Runnable, ClientApp {
                                                    ",tunnel.buildOutboundFailed.60000" +
                                                    ",tunnel.testSuccessTime.60000" +
                                                    ",bw.recvRate.60000" +
+                                                   ",router.fastPeers.60000" +
+                                                   ",router.highCapacityPeers.60000" +
+                                                   ",bw.sendBps.60000" +
+                                                   ",bw.receiveBps.60000" +
                                                    ",tunnel.buildSuccessRate.60000" +
                                                    ",tunnel.buildFailureRate.60000" +
                                                    ",rdns.executor.queueSize.60000" +

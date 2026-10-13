@@ -88,6 +88,11 @@ public final class GraphGroups {
         // (netdb size, several times larger). router.integratedPeers, the floodfill
         // set, stays on its own graph: it is a membership count rather than a capability
         // tier, and pairing it with the two tiers made the frame answer two questions.
+        // The two selection tiers, separately. This absorbs what peerProfilesByTier
+        // drew: fastOrHighCapProfileCount is the union of the two tiers, and the union
+        // is derivable from having both of them, so a frame carrying both tiers and a
+        // union figure was repeating the same measurement twice. Both tiers here is
+        // the pair that carries information.
         g.put("peerCaps", Arrays.asList(
                 "router.fastPeers", "router.highCapacityPeers"));
 
@@ -96,12 +101,6 @@ public final class GraphGroups {
         // restart.
         g.put("peerStoredProfiles", Arrays.asList(
                 "peer.profileCount", "peer.storedProfileCount"));
-
-        // Tier membership. The fast line is the union of both tiers rather than fast
-        // alone, so it covers high-capacity as well; peer.fastPeerCount is fast only and
-        // stays an individual graph.
-        g.put("peerProfilesByTier", Arrays.asList(
-                "peer.fastOrHighCapProfileCount", "peer.highCapPeerCount"));
 
         // NTCP pumper loop rates. Both are per second as of the idle-rate normalisation;
         // before that the idle series published a raw five-second count and could not share
@@ -163,12 +162,18 @@ public final class GraphGroups {
         g.put("buildOutcomeRate", Arrays.asList(
                 "tunnel.buildSuccessRate", "tunnel.buildFailureRate"));
 
-        // Low-level bandwidth in each direction. Both are already enabled by
-        // default, so this consolidates two existing tiles into one rather than
-        // adding a frame, and leaves the message-level bw.sendBps/bw.receiveBps
-        // pair to the legacy bw.combined special case.
-        g.put("bwLowLevelRate", Arrays.asList(
-                "bw.sendRate", "bw.recvRate"));
+        // Message-level send against receive bandwidth, both bytes per second over
+        // the same window. The question is how much I2P is actually carrying in
+        // each direction, and neither direction is half the story: a floodfill
+        // serving reads sees a ratio far from any client tunnel's.
+        //
+        // Distinct from the legacy bw.combined frame, which draws the low-level
+        // bw.sendRate / bw.recvRate pair and stays where it is - viewstat.jsp
+        // resolves that name through its own fakeBw path before it reaches the
+        // registry, which is what keeps the sidebar minigraph working for an
+        // operator who has not switched grouping on.
+        g.put("bwMessageRate", Arrays.asList(
+                "bw.sendBps", "bw.receiveBps"));
 
         // Executor depth against the threads draining it. The pair says whether a
         // backlog is capacity or saturation, which neither figure carries alone: a
@@ -318,9 +323,8 @@ public final class GraphGroups {
         GROUPS = Collections.unmodifiableMap(g);
 
         Map<String, String> t = new LinkedHashMap<>();
-        t.put("peerCaps", "Capabilities");
+        t.put("peerCaps", "Profile Tiers");
         t.put("peerStoredProfiles", "Stored Profiles");
-        t.put("peerProfilesByTier", "Profile Tiers");
         t.put("ntcpPumper", "Pumper Loops");
         t.put("jobTiming", "Queue Timing");
         t.put("jobQueueDepth", "Scheduled Jobs");
@@ -330,7 +334,7 @@ public final class GraphGroups {
         t.put("buildOutboundOutcome", "Outbound Build Success");
         t.put("buildSuccessByDirection", "Build Success Average (Combined)");
         t.put("buildOutcomeRate", "Build Success and Rejection Rates");
-        t.put("bwLowLevelRate", "Low-Level Bandwidth");
+        t.put("bwMessageRate", "Message Bandwidth");
         t.put("rdnsExecutor", "rDNS Executor");
         t.put("ntcpSendFinisher", "NTCP Send Finisher");
         t.put("buildRejectBanned", "Builds Refused as Banned");
@@ -372,7 +376,6 @@ public final class GraphGroups {
         Map<String, String> subsystems = new LinkedHashMap<>();
         subsystems.put("peerCaps", "Peers");
         subsystems.put("peerStoredProfiles", "Peers");
-        subsystems.put("peerProfilesByTier", "Peers");
         subsystems.put("ntcpPumper", "NTCP");
         subsystems.put("jobTiming", "Jobs");
         subsystems.put("jobQueueDepth", "Jobs");
@@ -382,7 +385,7 @@ public final class GraphGroups {
         subsystems.put("buildOutboundOutcome", "Tunnel");
         subsystems.put("buildSuccessByDirection", "Tunnel");
         subsystems.put("buildOutcomeRate", "Tunnel");
-        subsystems.put("bwLowLevelRate", "Router");
+        subsystems.put("bwMessageRate", "Router");
         subsystems.put("rdnsExecutor", "Router");
         subsystems.put("ntcpSendFinisher", "NTCP");
         subsystems.put("buildRejectBanned", "Tunnel");
