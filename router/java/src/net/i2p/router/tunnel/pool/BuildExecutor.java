@@ -61,22 +61,119 @@ public class BuildExecutor implements Runnable {
     private static int score(TunnelPool p) {
         int active = p.getUsableTunnelCount();
         int target = Math.max(2, p.getSettings().getTotalQuantity());
-        int deficit = target - active;
-        // Tier 1: collapsed (0 usable) outranks everything.
-        if (active == 0) {return 1 << 20;}
-        // Tier 2: near-collapse (1-2 active) gets a large boost.
-        int s = active <= 2 ? (1 << 16) : 0;
-        // Tier 3: larger deficit builds sooner.
-        s += Math.max(0, deficit) * 100;
-        // Tier 4: paired balance — if this pool's pair is ahead, boost it.
         TunnelPool paired = p.getPairedPool();
-        if (paired != null) {
-            int pairActive = paired.getActiveTunnelCount();
-            int behind = pairActive - active;
-            if (behind > 0) {s += behind * 10;}
+        int pairActive = (paired != null) ? paired.getActiveTunnelCount() : active;
+        // nearExpiry comes from a published counter, so scoring stays O(1) per
+        // pool and never blocks on the pool lock.
+        return score(active, target, pairActive, p.getNearExpiryCount());
+    }
+
+    /**
+     * Counts wanting pools whose charge is expiry urgency rather than deficit.
+     *
+     * @param pools the pools wanting a build this cycle
+     * @return how many hold a lease inside the pre-build window
+     * @since 0.9.71+
+     */
+    private static int countExpiryUrgent(List<TunnelPool> pools) {
+        int urgent = 0;
+        for (TunnelPool p : pools) {
+            if (p.getNearExpiryCount() > 0) {urgent++;}
         }
+        return urgent;
+    }
+
+    /**
+     * Elevated ceiling when urgent demand cannot be served at the current one.
+     *  Pure, so the rule is testable without a router.
+     *
+     * <p>Elevates only for the urgent pool's own build plus headroom, bounded by
+     *  the ceiling's own maximum, and only when there is not already room under
+     *  it. An ordinary deficit does not elevate: that demand is served a pool
+     *  per cycle in score order, which is what keeps a busy router from
+     *  permanently raising its ceiling to service pools that are merely below
+     *  target.
+     *
+     * @param base the ceiling now in force
+     * @param urgent pools holding leases about to expire
+     * @param inProgress builds already in flight
+     * @return the ceiling to use, which may equal {@code base}
+     * @since 0.9.71+
+     */
+    static int elevateForUrgent(int base, int urgent, int inProgress) {
+        if (urgent <= 0) {return base;}
+        int need = inProgress + urgent;
+        if (need <= base) {return base;}
+        return Math.min(need, MAX_BUILD_CONCURRENCY);
+    }
+
+    /**
+     * Absolute ceiling on concurrent builds. Bounds elevation.
+     */
+    private static final int MAX_BUILD_CONCURRENCY = 96;
+
+    /**
+     * Pure form of the dispatch score, so the ordering can be pinned without
+     *  building pools.
+     *
+     * <p>Tiers, highest first:
+     * <ol>
+     * <li>collapsed (no usable tunnel) — a pool with no service at all;</li>
+     * <li>near-collapse (1-2 usable);</li>
+     * <li>leases about to expire;</li>
+     * <li>deficit against target;</li>
+     * <li>paired balance — the direction behind its pair.</li>
+     * </ol>
+     *
+     * <p>Expiry sits above deficit and below near-collapse deliberately. A pool
+     *  holding fewer tunnels than target but with hours on its leases can wait a
+     *  cycle; a pool whose leases lapse in the pre-build window is losing its
+     *  service in minutes and the replacement needs that same window to build.
+     *  It stays below near-collapse so a genuinely thin pool is never starved by
+     *  a merely time-urgent one.
+     *
+     * <p>The expiry bonus is capped at {@link #MAX_EXPIRY_BONUS} tunnels, so a
+     *  pool that keeps producing near-expiry tunnels cannot accumulate unbounded
+     *  priority — the urgency is consumed when the lease lapses.
+     *
+     * @param active usable tunnels in the pool
+     * @param target the pool's target quantity, already floored at 2
+     * @param pairedActive usable tunnels in the paired pool, for balance
+     * @param nearExpiry live tunnels inside the pre-build window
+     * @return the score, higher builds sooner
+     * @since 0.9.71+
+     */
+    static int score(int active, int target, int pairedActive, int nearExpiry) {
+        // Tier 1: collapsed (0 usable) outranks everything.
+        if (active <= 0) {return 1 << 20;}
+        int s = 0;
+        // Tier 2: near-collapse (1-2 active) gets a large boost.
+        if (active <= 2) {s += 1 << 16;}
+        // Tier 3: leases about to expire. Capped, and additive rather than a
+        // tier of its own, so priority tracks how much is expiring rather than
+        // becoming a fixed boost once any lease is close.
+        if (nearExpiry > 0) {s += Math.min(nearExpiry, MAX_EXPIRY_BONUS) * EXPIRY_BONUS_PER_TUNNEL;}
+        // Tier 4: larger deficit builds sooner.
+        s += Math.max(0, target - active) * 100;
+        // Tier 5: paired balance - if this pool's pair is ahead, boost it.
+        int behind = pairedActive - active;
+        if (behind > 0) {s += behind * 10;}
         return s;
     }
+
+    /**
+     * Tunnels near expiry at which the urgency bonus saturates. Beyond this,
+     *  counting more tunnels adds no priority, so one pool with a whole tier
+     *  about to lapse cannot outrank every other pool indefinitely.
+     */
+    private static final int MAX_EXPIRY_BONUS = 4;
+
+    /**
+     * Score per near-expiry tunnel. Below a near-collapsed pool's boost and
+     *  above the largest ordinary deficit for a small pool, so expiry lifts a
+     *  nearly-full pool above a thinly-covered one without inverting the two.
+     */
+    private static final int EXPIRY_BONUS_PER_TUNNEL = 5000;
 
     /**
      * Comparator for snapshotted {@code Object[2]} rows where
@@ -2176,6 +2273,22 @@ public class BuildExecutor implements Runnable {
                                   " buildingMap: " + _currentlyBuildingMap.size());
                     }
                     if (allowed > 0 && !wanted.isEmpty()) {
+                        // Elevate the ceiling when urgent demand cannot be served
+                        // at the current one. A pool whose leases lapse is losing
+                        // service in minutes and the replacement needs that same
+                        // window to build, so the ceiling rises rather than the
+                        // pool waiting for a later cycle.
+                        int urgentCount = countExpiryUrgent(wanted);
+                        int ceiling = elevateForUrgent(getAdaptiveMaxConcurrentBuilds(),
+                                                       urgentCount, _currentlyBuildingMap.size());
+                        if (ceiling > getAdaptiveMaxConcurrentBuilds()) {
+                            if (_log.shouldInfo()) {
+                                _log.info("Elevating build concurrency to " + ceiling +
+                                          " for " + urgentCount + " expiry-urgent pool(s)");
+                            }
+                            setMaxConcurrentBuilds(ceiling);
+                        }
+
                         // Snapshot scores before sorting to avoid TimSort crash from
                         // concurrent tunnel state changes during comparison (activeTunnelCount
                         // can change as TestJobs complete or tunnels expire mid-sort).

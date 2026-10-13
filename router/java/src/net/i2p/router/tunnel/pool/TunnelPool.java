@@ -5287,6 +5287,30 @@ public class TunnelPool {
      *  cancel replacement builds (deficit -= untestedCount), which would
      *  deadlock the pool at zero usable tunnels until natural expiry.
      */
+    /**
+     * Live tunnels whose lease is inside the pre-build window, published by the
+     *  last sweep so {@link net.i2p.router.tunnel.pool.BuildExecutor}'s dispatch
+     *  ordering can read it without taking the pool lock.
+     *
+     * <p>Published rather than computed on demand because the executor scores
+     *  every wanting pool on every dispatch cycle. Walking the pool's tunnels
+     *  per score would be O(tunnels x pools) per cycle, behind a lock the pool
+     *  needs for its own work. A count one sweep stale is the right trade: it
+     *  is refreshed on every sweep, and a pool that has just expired a tunnel
+     *  is already being told to build by the deficit term.
+     *
+     * @since 0.9.71+
+     */
+    private volatile int _nearExpiryCount;
+
+    /**
+     * Tunnels in this pool whose lease falls inside the pre-build window.
+     *
+     * @return count of near-expiry live tunnels as of the last sweep
+     * @since 0.9.71+
+     */
+    public int getNearExpiryCount() {return _nearExpiryCount;}
+
     private TunnelStats sweepExpiredAndCountTunnels(long now, long preBuildThreshold) {
         TunnelStats stats = new TunnelStats();
         _tunnelsLock.lock();
@@ -5335,7 +5359,13 @@ public class TunnelPool {
                     addStrandedTest(stats, (PooledTunnelCreatorConfig) t);
                 }
             }
-        } finally { _tunnelsLock.unlock(); }
+        } finally {
+            _tunnelsLock.unlock();
+            // Written outside the lock so a reader on the executor thread never
+            // blocks on the pool's lock to read a hint. The release above orders
+            // it after the sweep, so the counts appear together.
+            _nearExpiryCount = stats.nearExpiry;
+        }
         return stats;
     }
 
