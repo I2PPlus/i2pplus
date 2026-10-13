@@ -963,7 +963,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     public byte[] receiveMessage(int msgId) throws I2PSessionException {
         MessagePayloadMessage msg = _availableMessages.remove(Long.valueOf(msgId));
         if (msg == null) {
-            _log.error("Received [MsgID " + msgId + "] had no matches");
+            // WARN, not ERROR: a client asking for a message it no longer holds is a
+            // client-side race, not a router fault — typically a stream closed while
+            // a message was in flight, or a double read. At ERROR it produced 350 of
+            // the 354 error lines in a 75-minute window, which buried the four real
+            // faults behind it. The router did nothing wrong, and this says so.
+            if (_log.shouldWarn())
+                _log.warn(getPrefix() + "Received [MsgID " + msgId +
+                          "] not available — client requested a message no longer buffered");
             return null;
         }
         updateActivity();
