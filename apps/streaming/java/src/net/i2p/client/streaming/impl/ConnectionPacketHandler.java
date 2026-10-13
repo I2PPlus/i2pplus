@@ -73,6 +73,24 @@ class ConnectionPacketHandler {
         _context.statManager().createRequiredRateStat("stream.con.initialRTT.out", "RTT for the first packet of an outbound connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.receiveDuplicateSize", "Size of a duplicate message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.receiveMessageSize", "Size of a message received on a connection", "Stream", RATES);
+        // Live per-connection views of the two quantities the congestion tuner has to
+        // steer by, and previously could not see. Both are sampled on the existing
+        // receive telemetry gate rather than per packet, so the added cost is two stat
+        // writes per sixteen messages - the same order as the receiveMessageSize write
+        // directly above.
+        //
+        // stream.rtt exists because the only RTTs published were the setup samples
+        // (initialRTT.in / initialRTT.out) and lifetimeRTT, which is written once, when
+        // a stream closes. That left eleven tuner params steering off whichever figure
+        // happened to be published at setup.
+        //
+        // stream.sendWindowSize exists because lifetimeSendWindowSize is also a
+        // close-time figure, so whether window tuning was working could not be observed
+        // while a stream was live.
+        _context.statManager().createRequiredRateStat("stream.rtt",
+                "Current smoothed round trip time of a live stream (ms)", "Stream", RATES);
+        _context.statManager().createRequiredRateStat("stream.sendWindowSize",
+                "Current send window of a live stream (messages)", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
         _context.statManager().createRequiredRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", RATES);
     }
@@ -202,9 +220,27 @@ class ConnectionPacketHandler {
             return;
         } // else we will call setChoking(false) below
 
-        if ((++_receiveMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0)
+        if ((++_receiveMsgSizeCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0) {
             _context.statManager().addRateData("stream.con.receiveMessageSize",
                                                packet.getPayloadSize() * (long) TELEMETRY_SAMPLE_PERIOD);
+            // Sampled on the same gate, so this adds nothing to the hot path beyond the
+            // two writes themselves.
+            //
+            // Gated on isRTTEstablished() for the reason removeConnection() documents: a
+            // connection still inside its first RTT would otherwise report the options
+            // default rather than a measurement, dragging the live figure toward the
+            // floor and making the tuner's observed value look healthy when it is
+            // merely unmeasured.
+            //
+            // opts is null-checked because getOptions() is a plain accessor and a
+            // connection torn down between packets would make the whole read path throw
+            // for the sake of a metric.
+            ConnectionOptions opts = con.getOptions();
+            if (opts != null && opts.isRTTEstablished()) {
+                _context.statManager().addRateData("stream.rtt", opts.getRTT());
+                _context.statManager().addRateData("stream.sendWindowSize", opts.getWindowSize());
+            }
+        }
 
         boolean allowAck = true;
         // Whether the packet has the SYN flag set.
