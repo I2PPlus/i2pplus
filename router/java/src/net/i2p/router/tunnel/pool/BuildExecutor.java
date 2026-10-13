@@ -27,6 +27,7 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
@@ -1282,6 +1283,68 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     * Decide whether a build sitting in the building map has escaped its deadline.
+     *
+     * <p>An entry with no usable creation timestamp is expired rather than kept:
+     * there is nothing to age it against, so keeping it means it occupies a dispatch
+     * slot indefinitely. This is the predicate the expiry scan uses in place of the
+     * old inline test, which required a positive timestamp and therefore never
+     * expired such a build.
+     *
+     * @param created the first hop's creation time in ms, or a non-positive value
+     *                 when no caller ever stamped it
+     * @param now current time in ms
+     * @param adaptiveTimeout the deadline in ms this build was allowed; a
+     *                        non-positive value disables expiry rather than
+     *                        expiring everything at once
+     * @return true when the build must be evicted from the building map
+     * @since 0.9.71+
+     */
+    static boolean isBuildExpired(long created, long now, long adaptiveTimeout) {
+        if (adaptiveTimeout <= 0) { return false; }
+        if (created > 0) {
+            // A creation in the future (clock skew) ages to zero, never negative-
+            // expired, so it expires only once the deadline has genuinely passed.
+            return now >= created + adaptiveTimeout;
+        }
+        return true;
+    }
+
+    /**
+     * Subtract the builds still holding a slot from the dispatch budget.
+     *
+     * <p>Never returns a negative value: a caller that treated the result as a
+     * build count would dispatch none at all, and the pre-emergency path would
+     * then spin against a budget that can only recover by builds timing out.
+     *
+     * @param allowed the budget before this reduction, non-negative in practice
+     * @param concurrent builds still in the building map after expiry
+     * @return the remaining budget, at least zero
+     * @since 0.9.71+
+     */
+    static int applyConcurrentReduction(int allowed, int concurrent) {
+        int remaining = concurrent > 0 ? allowed - concurrent : allowed;
+        return remaining > 0 ? remaining : 0;
+    }
+
+    /**
+     * Record why an expiring build had previously been refused expiry.
+     *
+     * <p>The two reasons the old scan could veto were a first hop with no creation
+     * timestamp and a reply id already present in the recently-building map. Both
+     * vetoes are gone, so these counts are attribution only: a non-zero value in
+     * the next window says which one had been starving the budget.
+     *
+     * @param cfg the build being evicted
+     * @since 0.9.71+
+     */
+    private void countExpiryVeto(PooledTunnelCreatorConfig cfg) {
+        if (cfg.getConfig(0).getCreation() <= 0) {
+            _context.statManager().addRateData("tunnel.buildExpire.noCreation", 1);
+        }
+    }
+
+    /**
      * The concurrency ceiling for one throttle crossing: 20% off the current value,
      *  never below 60% of base.
      * <p>Scaling the current value rather than the base is what makes this a ramp. The
@@ -1392,7 +1455,9 @@ public class BuildExecutor implements Runnable {
      */
     /** Interval between emitted build-expiry reports. */
     private static final long BUILD_EXPIRY_LOG_INTERVAL_MS = 60 * 1000L;
+    private static final long BUDGET_EXHAUSTED_LOG_INTERVAL_MS = 60 * 1000L;
     private static final AtomicLong _lastBuildExpiryLog = new AtomicLong();
+    private static final AtomicLong _lastBudgetExhaustedLog = new AtomicLong();
     private static final AtomicLong _buildExpirySuppressed = new AtomicLong();
 
     /**
@@ -1507,6 +1572,27 @@ public class BuildExecutor implements Runnable {
             return false;
         }
         _lastBuildExpiryLog.set(now);
+        return true;
+    }
+
+    /**
+     * Rate-limit the exhausted-budget report.
+     *
+     * <p>The condition holds on every pass while the building map is full, so an
+     *  unthrottled line would emit one every dispatch tick. The state is sticky
+     *  enough that once a minute is more than enough to notice it, and the pass
+     *  itself already logs the map size and oldest build age for context.
+     *
+     * @param now current time in milliseconds
+     * @return true when the exhausted budget should be reported
+     * @since 0.9.71+
+     */
+    private boolean shouldLogBudgetExhausted(long now) {
+        long last = _lastBudgetExhaustedLog.get();
+        if (now - last < BUDGET_EXHAUSTED_LOG_INTERVAL_MS) {
+            return false;
+        }
+        _lastBudgetExhaustedLog.set(now);
         return true;
     }
 
@@ -1839,7 +1925,16 @@ public class BuildExecutor implements Runnable {
         /* Expire old build requests from currentlyBuilding map, move them to recentlyBuilding
          NOTE: cfg.getExpiration() includes TUNNEL stagger (0-300s), so comparing against it
          directly would make timeouts take 20-320s.
-         Use creation time + adaptiveTimeout for consistent 20s timeout regardless of stagger.
+         Use creation time + adaptiveTimeout for consistent timeout regardless of stagger.
+
+         Every entry that passes isBuildExpired() is evicted. Expiry used to be
+         conditional on two vetoes that could refuse it forever: a config whose
+         first hop had no creation timestamp, and a reply id already present in
+         _recentlyBuildingMap. A build held past its deadline subtracts from the
+         dispatch budget on every pass, so the vetoes walked the budget to zero
+         and starved every pool. Now the move to _recentlyBuildingMap is plain
+         bookkeeping and never gates the removal; the two veto reasons are counted
+         so a later window can say which one was firing.
          */
         // Invariant across the scan below: only length and direction vary per config
         final int cpuLoad = SystemVersion.getCPULoadAvg();
@@ -1847,27 +1942,33 @@ public class BuildExecutor implements Runnable {
         for (Iterator<PooledTunnelCreatorConfig> iter = _currentlyBuildingMap.values().iterator(); iter.hasNext(); ) {
             PooledTunnelCreatorConfig cfg = iter.next();
             long adaptiveTimeout = calculateAdaptiveTimeout(cfg, cpuLoad, rttFloor);
-            long created = cfg.getConfig(0).getCreation();
-            if (created > 0 && now - created >= adaptiveTimeout) {
-                PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg);
-                if (existingCfg == null) {
-                    iter.remove();
-                    if (expired == null) {
-                        expired = new ArrayList<>();
-                    }
-                    if (expiredTimeouts == null) {
-                        expiredTimeouts = new HashMap<>(8);
-                    }
-                    expired.add(cfg);
-                    // Remember the timeout actually used: with the load and RTT floor
-                    // hoisted, calculateAdaptiveTimeout() varies per config only by
-                    // length and outbound direction.
-                    expiredTimeouts.put(cfg.getReplyMessageId(), adaptiveTimeout);
-                }
+            if (!isBuildExpired(cfg.getConfig(0).getCreation(), now, adaptiveTimeout)) {
+                continue;
             }
+            countExpiryVeto(cfg);
+            Long key = Long.valueOf(cfg.getReplyMessageId());
+            boolean idCollision = _recentlyBuildingMap.containsKey(key);
+            _recentlyBuildingMap.put(key, cfg);
+            if (idCollision) {
+                _context.statManager().addRateData("tunnel.buildExpire.idCollision", 1);
+            }
+            iter.remove();
+            if (expired == null) {
+                expired = new ArrayList<>();
+            }
+            if (expiredTimeouts == null) {
+                expiredTimeouts = new HashMap<>(8);
+            }
+            expired.add(cfg);
+            // Remember the timeout actually used: with the load and RTT floor
+            // hoisted, calculateAdaptiveTimeout() varies per config only by
+            // length and outbound direction.
+            expiredTimeouts.put(key, adaptiveTimeout);
         }
 
-        // DIAGNOSTIC: report what allowed() found in the building map
+        // DIAGNOSTIC: report what allowed() found in the building map.
+        // Counted after the expiry scan so `concurrent` is the number still holding
+        // a slot; snapshotting it before subtracted the entries being evicted here.
         int concurrent = _currentlyBuildingMap.size();
         if (_log.shouldInfo() && concurrent > 0) {
             long now2 = _context.clock().now();
@@ -1878,7 +1979,10 @@ public class BuildExecutor implements Runnable {
                       " oldestAge: " + oldestAge + "ms" +
                       " adaptiveTimeout: " + _adaptiveTimeout + "ms");
         }
-        allowed -= concurrent;
+        allowed = applyConcurrentReduction(allowed, concurrent);
+        if (allowed == 0 && shouldLogBudgetExhausted(_context.clock().now())) {
+            _log.warn("Build dispatch budget exhausted -> No build may start. In flight: " + concurrent);
+        }
 
         if (expired != null) {
             for (PooledTunnelCreatorConfig cfg : expired) {
@@ -2976,7 +3080,19 @@ public class BuildExecutor implements Runnable {
      * @since 0.7.12
      */
     private boolean addToBuilding(PooledTunnelCreatorConfig cfg) {
-        return _currentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg) != null;
+        boolean refused = _currentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg) != null;
+        if (!refused) {
+            // Backfill the age the expiry scan depends on. A HopConfig that no
+            // caller stamped with setCreation() keeps the -1 its constructor gave
+            // it, and the old scan's `created > 0` guard then refused to expire the
+            // build at all, so it held a slot for the life of the router.
+            HopConfig first = cfg.getConfig(0);
+            if (first.getCreation() <= 0) {
+                first.setCreation(_context.clock().now());
+                _context.statManager().addRateData("tunnel.buildConfig.backfilledCreation", 1);
+            }
+        }
+        return refused;
     }
 
     /**
